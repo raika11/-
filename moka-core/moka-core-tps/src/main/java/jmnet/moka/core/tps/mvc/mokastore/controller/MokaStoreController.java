@@ -9,7 +9,6 @@ import java.io.File;
 import java.nio.file.Files;
 import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
@@ -40,12 +39,6 @@ public class MokaStoreController {
 
     @Autowired
     private UploadFileHelper uploadFileHelper;
-
-    @Value("${tps.upload.path.url}")
-    private String urlPathPrefix;
-
-    @Autowired
-    private ActionLogger actionLogger;
 
     /**
      * 파일 서비스

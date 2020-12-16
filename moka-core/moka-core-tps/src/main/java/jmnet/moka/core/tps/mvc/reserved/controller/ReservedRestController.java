@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.reserved.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -50,19 +52,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/reserveds")
 @Api(tags = {"예약어 API"})
-public class ReservedRestController {
+public class ReservedRestController extends AbstractCommonController {
 
-    @Autowired
-    private ReservedService reservedService;
+    private final ReservedService reservedService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public ReservedRestController(ReservedService reservedService) {
+        this.reservedService = reservedService;
+    }
 
     /**
      * 예약어목록조회
@@ -102,7 +98,7 @@ public class ReservedRestController {
     @ApiOperation(value = "예약어 상세조회")
     @GetMapping("/{reservedSeq}")
     public ResponseEntity<?> getReserved(
-            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
+            @ApiParam("예약어SEQ(필수)") @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         validData(reservedSeq, null);
@@ -198,7 +194,7 @@ public class ReservedRestController {
     @ApiOperation(value = "예약어수정")
     @PutMapping("/{reservedSeq}")
     public ResponseEntity<?> putReserved(
-            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq,
+            @ApiParam("예약어SEQ(필수)") @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq,
             @Valid ReservedDTO reservedDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -244,7 +240,7 @@ public class ReservedRestController {
     @ApiOperation(value = "예약어삭제")
     @DeleteMapping("/{reservedSeq}")
     public ResponseEntity<?> deleteReserved(
-            @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
+            @ApiParam("예약어SEQ(필수)") @PathVariable("reservedSeq") @Min(value = 0, message = "{tps.reserved.error.min.reservedSeq}") Long reservedSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
@@ -282,8 +278,10 @@ public class ReservedRestController {
      */
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{reservedId}/exists")
-    public ResponseEntity<?> duplicateCheckId(@PathVariable("reservedId")
-    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId, String domainId)
+    public ResponseEntity<?> duplicateCheckId(
+            @ApiParam("예약어아이디(필수)") @PathVariable("reservedId")
+            @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId,
+            @ApiParam("도메인아이디(필수)")String domainId)
             throws Exception {
 
         try {

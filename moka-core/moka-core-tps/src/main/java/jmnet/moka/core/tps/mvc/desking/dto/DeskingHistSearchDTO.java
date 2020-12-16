@@ -3,6 +3,8 @@ package jmnet.moka.core.tps.mvc.desking.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -29,41 +31,30 @@ import org.apache.ibatis.type.Alias;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
+@ApiModel("편집기사 히스토리 검색 DTO")
 public class DeskingHistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -2603971576163143861L;
 
-    /**
-     * 작업일자
-     */
+    @ApiModelProperty("작업일자")
     @DTODateTimeFormat
     private Date regDt;
 
-    /**
-     * 작업자ID
-     */
+    @ApiModelProperty("작업자ID")
     private String regId;
 
-    /**
-     * 컴포넌트 SEQ
-     */
+    @ApiModelProperty("컴포넌트 SEQ")
     @Min(value = 1, message = "{tps.deskinghist.error.min.componentSeq}")
     private Long componentSeq;
 
-    /**
-     * 데이타셋SEQ
-     */
+    @ApiModelProperty("데이타셋SEQ")
     private Long datasetSeq;
 
-    /**
-     * 상태 - SAVE(임시) / PUBLISH(전송)
-     */
+    @ApiModelProperty("상태 - SAVE(임시) / PUBLISH(전송)")
     @Builder.Default
     private EditStatusCode status = EditStatusCode.SAVE;
 
-    /**
-     * 컴포넌트 히스토리 SEQ
-     */
+    @ApiModelProperty("컴포넌트 히스토리 SEQ")
     private Long componentHistSeq;
 
     public DeskingHistSearchDTO() {

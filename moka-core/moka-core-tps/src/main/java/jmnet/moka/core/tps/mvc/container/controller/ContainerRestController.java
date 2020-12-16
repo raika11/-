@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.container.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -49,25 +51,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/containers")
 @Api(tags = {"컨테이너 API"})
-public class ContainerRestController {
+public class ContainerRestController extends AbstractCommonController {
 
-    @Autowired
-    private ContainerService containerService;
+    private final ContainerService containerService;
 
-    @Autowired
-    private RelationService relationService;
+    private final RelationService relationService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final PurgeHelper purgeHelper;
 
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private PurgeHelper purgeHelper;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public ContainerRestController(ContainerService containerService, RelationService relationService, PurgeHelper purgeHelper) {
+        this.containerService = containerService;
+        this.relationService = relationService;
+        this.purgeHelper = purgeHelper;
+    }
 
     /**
      * 컨테이너 목록조회
@@ -104,7 +100,7 @@ public class ContainerRestController {
     @ApiOperation(value = "컨테이너 상세조회")
     @GetMapping("/{containerSeq}")
     public ResponseEntity<?> getContainer(
-            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
+            @ApiParam("컨테이너 일련번호(필수)") @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
@@ -113,7 +109,7 @@ public class ContainerRestController {
         Container container = containerService
                 .findContainerBySeq(containerSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
@@ -141,7 +137,7 @@ public class ContainerRestController {
         if (containerDTO != null) {
             // url id와 json의 id가 동일한지 검사
             if (containerSeq > 0 && !containerSeq.equals(containerDTO.getContainerSeq())) {
-                String message = messageByLocale.get("tps.common.error.no-data");
+                String message = msg("tps.common.error.no-data");
                 invalidList.add(new InvalidDataDTO("matchId", message));
                 tpsLogger.fail(actionType, message, true);
             }
@@ -163,7 +159,7 @@ public class ContainerRestController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }
@@ -178,7 +174,7 @@ public class ContainerRestController {
      */
     @ApiOperation(value = "컨테이너 등록")
     @PostMapping
-    public ResponseEntity<?> postContainer(HttpServletRequest request, @Valid ContainerDTO containerDTO)
+    public ResponseEntity<?> postContainer(@Valid ContainerDTO containerDTO)
             throws Exception {
 
         // 데이타유효성검사.
@@ -192,14 +188,14 @@ public class ContainerRestController {
             // 결과리턴
             ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);
 
-            String message = messageByLocale.get("tps.common.success.insert", request);
+            String message = msg("tps.common.success.insert");
             ResultDTO<ContainerDTO> resultDto = new ResultDTO<ContainerDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO INSERT CONTAINER]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT CONTAINER]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.insert", request), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
 
     }
@@ -217,7 +213,7 @@ public class ContainerRestController {
     @ApiOperation(value = "컨테이너 수정")
     @PutMapping("/{containerSeq}")
     public ResponseEntity<?> putContainer(
-            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
+            @ApiParam("컨테이너 일련번호") @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq,
             @Valid ContainerDTO containerDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -229,7 +225,7 @@ public class ContainerRestController {
         Container orgContainer = containerService
                 .findContainerBySeq(containerSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.container.error.no-data");
+                    String message = msg("tps.container.error.no-data");
                     tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
@@ -245,14 +241,14 @@ public class ContainerRestController {
             // 결과리턴
             ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);
 
-            String message = messageByLocale.get("tps.common.success.update");
+            String message = msg("tps.common.success.update");
             ResultDTO<ContainerDTO> resultDto = new ResultDTO<ContainerDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE CONTAINER] seq: {} {}", containerDTO.getContainerSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE CONTAINER]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
+            throw new Exception(msg("tps.common.error.update"), e);
         }
     }
 
@@ -269,7 +265,7 @@ public class ContainerRestController {
     @ApiOperation(value = "컨테이너 삭제")
     @DeleteMapping("/{containerSeq}")
     public ResponseEntity<?> deleteContainer(
-            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq, Principal principal)
+            @ApiParam("컨테이너 일련번호") @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq, Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
         // 아이디체크
@@ -279,7 +275,7 @@ public class ContainerRestController {
         Container container = containerService
                 .findContainerBySeq(containerSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.DELETE, message, true);
                     return new NoDataException(message);
                 });
@@ -287,7 +283,7 @@ public class ContainerRestController {
 
         // 관련 데이터 확인
         if (relationService.hasRelations(containerSeq, MokaConstants.ITEM_CONTAINER)) {
-            String relMessage = messageByLocale.get("tps.common.error.delete.related");
+            String relMessage = msg("tps.common.error.delete.related");
             tpsLogger.fail(ActionType.DELETE, relMessage, true);
             throw new Exception(relMessage);
         }
@@ -297,7 +293,7 @@ public class ContainerRestController {
             containerService.deleteContainer(container, principal.getName());
 
             // 결과리턴
-            String message = messageByLocale.get("tps.common.success.delete");
+            String message = msg("tps.common.success.delete");
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -305,7 +301,7 @@ public class ContainerRestController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE CONTAINER] seq: {} {}", containerSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE CONTAINER]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.delete"), e);
+            throw new Exception(msg("tps.common.error.delete"), e);
         }
 
     }
@@ -320,14 +316,14 @@ public class ContainerRestController {
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{containerSeq}/has-relations")
     public ResponseEntity<?> hasRelationList(
-            @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
+            @ApiParam("컨테이너 일련번호") @PathVariable("containerSeq") @Min(value = 0, message = "{tps.container.error.min.containerSeq}") Long containerSeq)
             throws Exception {
 
         // 컨테이너 확인
         containerService
                 .findContainerBySeq(containerSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.SELECT, message, true);
                     return new NoDataException(message);
                 });
@@ -336,7 +332,7 @@ public class ContainerRestController {
             Boolean chkRels = relationService.hasRelations(containerSeq, MokaConstants.ITEM_TEMPLATE);
             String message = "";
             if (chkRels) {
-                message = messageByLocale.get("tps.common.success.has-relations");
+                message = msg("tps.common.success.has-relations");
             }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
@@ -345,7 +341,7 @@ public class ContainerRestController {
         } catch (Exception e) {
             log.error("[CONTAINER RELATION EXISTENCE CHECK FAILED] seq: {} {}", containerSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[CONTAINER RELATION EXISTENCE CHECK FAILEDE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
+            throw new Exception(msg("tps.common.error.has-relation"), e);
         }
     }
 

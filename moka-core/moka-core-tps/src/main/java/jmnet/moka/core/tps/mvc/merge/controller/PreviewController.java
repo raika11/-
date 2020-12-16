@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.merge.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
@@ -47,8 +48,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = {"미리보기 API"})
 public class PreviewController extends AbstractCommonController {
 
-    @Autowired
-    private MergeService mergeService;
+    private final MergeService mergeService;
+
+    public PreviewController(MergeService mergeService) {
+        this.mergeService = mergeService;
+    }
 
     /**
      * 페이지 미리보기
@@ -66,7 +70,8 @@ public class PreviewController extends AbstractCommonController {
      * @throws TemplateLoadException        tems 로딩오류
      */
     @PostMapping("/page")
-    public void perviewPage(HttpServletRequest request, HttpServletResponse response, @Valid PageDTO pageDto)
+    public void perviewPage(@ApiParam(hidden = true) HttpServletRequest request,
+            @ApiParam(hidden = true) HttpServletResponse response, @Valid PageDTO pageDto)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
@@ -111,7 +116,7 @@ public class PreviewController extends AbstractCommonController {
      * @throws TemplateLoadException        TMS 로드 실패
      */
     @GetMapping("/desking/page")
-    public void perviewDeskingPage(HttpServletRequest request, HttpServletResponse response, Long pageSeq, Principal principal)
+    public void perviewDeskingPage(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response, @ApiParam("페이지SEQ(필수)") Long pageSeq, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
         try {
@@ -135,7 +140,7 @@ public class PreviewController extends AbstractCommonController {
      * @throws Exception 예외
      */
     @GetMapping(value = "/desking/area")
-    public void getPreviewArea(HttpServletRequest request, HttpServletResponse response, Long areaSeq, Principal principal)
+    public void getPreviewArea(@ApiParam(hidden = true)HttpServletRequest request, @ApiParam(hidden = true)HttpServletResponse response, @ApiParam("편집영역 일련번호(필수)")Long areaSeq, @ApiParam(hidden = true)Principal principal)
             throws Exception {
         try {
             String html = mergeService.getMergeAreaWork(areaSeq, principal.getName());
@@ -164,7 +169,7 @@ public class PreviewController extends AbstractCommonController {
      * @throws TemplateLoadException        tems 로딩오류
      */
     @PostMapping("/article-page")
-    public void perviewArticlePage(HttpServletRequest request, HttpServletResponse response, @Valid ArticlePageDTO articlePageDto, Long totalId)
+    public void perviewArticlePage(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response, @Valid ArticlePageDTO articlePageDto, @ApiParam("서비스기사아이디(필수)")Long totalId)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 

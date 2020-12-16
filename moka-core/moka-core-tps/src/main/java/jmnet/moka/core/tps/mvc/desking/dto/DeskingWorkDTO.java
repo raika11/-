@@ -7,6 +7,8 @@ package jmnet.moka.core.tps.mvc.desking.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -32,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("편집기사워크 DTO")
 public class DeskingWorkDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,183 +42,115 @@ public class DeskingWorkDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<DeskingWorkDTO>>() {
     }.getType();
 
-    /**
-     * 일련번호
-     */
+    @ApiModelProperty("편집기사워크 일련번호")
     private Long seq;
 
-    /**
-     * 화면편집SEQ
-     */
+    @ApiModelProperty("화면편집SEQ")
     private Integer deskingSeq;
 
-    /**
-     * 데이터셋SEQ
-     */
+    @ApiModelProperty("데이터셋SEQ")
     private Long datasetSeq;
 
-    /**
-     * 서비스기사아이디
-     */
+    @ApiModelProperty("서비스기사아이디")
     private String contentId;
 
-    /**
-     * 부모 서비스기사아이디
-     */
+    @ApiModelProperty("부모 서비스기사아이디. 있을경우 관련기사")
     private String parentContentId;
 
-    /**
-     * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상
-     */
+    @ApiModelProperty("콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상")
     private String contentType;
 
-    /**
-     * 기사타입
-     */
+    @ApiModelProperty("기사타입")
     @Builder.Default
     private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
-    /**
-     * 출처
-     */
+    @ApiModelProperty("매체코드")
     private String sourceCode;
 
-    /**
-     * 콘텐트순서
-     */
+    @ApiModelProperty("콘텐트순서")
     @Builder.Default
     private Integer contentOrd = 1;
 
-    /**
-     * 관련순서
-     */
+    @ApiModelProperty("관련순서")
     @Builder.Default
     private Integer relOrd = 1;
 
-    /**
-     * 언어(기타코드)
-     */
+    @ApiModelProperty("언어(기타코드)")
     @Builder.Default
     private String lang = TpsConstants.DEFAULT_LANG;
 
-    /**
-     * 배부일시
-     */
+    @ApiModelProperty("배부일시")
     @DTODateTimeFormat
     private Date distDt;
 
-    /**
-     * 제목
-     */
+    @ApiModelProperty("제목")
     private String title;
 
-    /**
-     * 제목/부제목 위치
-     */
+    @ApiModelProperty("제목/부제목 위치")
     private String titleLoc;
 
-    /**
-     * 제목크기
-     */
+    @ApiModelProperty("제목크기")
     private String titleSize;
 
-    /**
-     * 부제목
-     */
+    @ApiModelProperty("부제목")
     private String subTitle;
 
-    /**
-     * Box 제목
-     */
+    @ApiModelProperty("Box 제목")
     private String nameplate;
 
-    /**
-     * Box Url
-     */
+    @ApiModelProperty("Box Url")
     private String nameplateUrl;
 
-    /**
-     * Box target
-     */
+    @ApiModelProperty("Box target")
     private String nameplateTarget;
 
-    /**
-     * 말머리
-     */
+    @ApiModelProperty("말머리")
     private String titlePrefix;
 
-    /**
-     * 말머리 위치
-     */
+    @ApiModelProperty("말머리 위치")
     private String titlePrefixLoc;
 
-    /**
-     * 발췌문
-     */
+    @ApiModelProperty("발췌문")
     private String bodyHead;
 
-    /**
-     * 링크URL
-     */
+    @ApiModelProperty("링크URL")
     private String linkUrl;
 
-    /**
-     * 링크TARGET
-     */
+    @ApiModelProperty("링크TARGET")
     private String linkTarget;
 
-    /**
-     * 썸네일파일명
-     */
+    @ApiModelProperty("썸네일파일명")
     private String thumbFileName;
 
-    /**
-     * 썸네일용량
-     */
+    @ApiModelProperty("썸네일용량")
     @Builder.Default
     private Integer thumbSize = 0;
 
-    /**
-     * 썸네일가로
-     */
+    @ApiModelProperty("썸네일가로")
     @Builder.Default
     private Integer thumbWidth = 0;
 
-    /**
-     * 썸네일세로
-     */
+    @ApiModelProperty("썸네일세로")
     @Builder.Default
     private Integer thumbHeight = 0;
 
-    /**
-     * 생성일시
-     */
+    @ApiModelProperty("생성일시")
     @DTODateTimeFormat
     private Date regDt;
 
-    /**
-     * 생성자
-     */
+    @ApiModelProperty("생성자")
     private String regId;
 
-    /**
-     * 이미지파일
-     */
+    @ApiModelProperty("이미지파일")
     @JsonIgnore
     private MultipartFile thumbnailFile;
 
-    /**
-     * 컴포넌트SEQ
-     */
+    @ApiModelProperty("컴포넌트SEQ")
     private Long componentSeq;
 
-    /**
-     * 영상URL
-     */
+    @ApiModelProperty("영상URL")
     private String vodUrl;
 
-    /**
-     * 아이콘파일명
-     */
+    @ApiModelProperty("아이콘파일명")
     private String iconFileName;
 }

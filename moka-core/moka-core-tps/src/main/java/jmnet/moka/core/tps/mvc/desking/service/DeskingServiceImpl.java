@@ -532,7 +532,7 @@ public class DeskingServiceImpl implements DeskingService {
     //    @Override
     //    @Transactional
     //    public void insertDeskingWork(DeskingWork appendDeskingWork, Long datasetSeq, String regId) {
-    //        // 1. 편집기사work 등록
+    //        // 1. 편집기사워크 등록
     //        appendDeskingWork.setDatasetSeq(datasetSeq);
     //        appendDeskingWork.setRegId(regId);
     //        appendDeskingWork.setRegDt(McpDate.now());
@@ -544,7 +544,7 @@ public class DeskingServiceImpl implements DeskingService {
     //        }
     //        log.debug("DESKING WORK APPEND seq: {}", appendSeq);
     //
-    //        // 2. 편집기사work 조회(JPQL)
+    //        // 2. 편집기사워크 조회(JPQL)
     //        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
     //                                                          .datasetSeq(datasetSeq)
     //                                                          .regId(regId)
@@ -552,7 +552,7 @@ public class DeskingServiceImpl implements DeskingService {
     //        List<DeskingWork> deskingList = deskingWorkRepository.findAllDeskingWork(search);
     //        List<DeskingWorkVO> deskingVOList = modelMapper.map(deskingList, DeskingWorkVO.TYPE); // DeskingWork -> DeskingWorkVO
 
-    // 편집기사work 목록 정렬변경
+    // 편집기사워크 목록 정렬변경
     //        boolean rel = !(appendDeskingWork.getParentTotalId() == null);  // 관련기사 여부
     //        for (DeskingWorkVO deskingWorkVO : deskingVOList) {
     //            DeskingWork deskingWork = modelMapper.map(deskingWorkVO, DeskingWork.class);
@@ -595,7 +595,7 @@ public class DeskingServiceImpl implements DeskingService {
         // 1. 순서변경할 목록 조회
         List<DeskingOrdDTO> ordDTOList = resortBeforeInsert(rel, insertdeskingList, datasetSeq, regId);
 
-        // 2. 편집기사work 등록
+        // 2. 편집기사워크 등록
         for (DeskingWorkDTO vo : insertdeskingList) {
             DeskingWork appendDeskingWork = modelMapper.map(vo, DeskingWork.class);
             appendDeskingWork.setDatasetSeq(datasetSeq);    // 이동할 경우, target의 datasetSeq값임.
@@ -826,7 +826,7 @@ public class DeskingServiceImpl implements DeskingService {
 
     //    @Override
     //    public void sortDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId) {
-    //        // 편집기사work 조회(JPQL)
+    //        // 편집기사워크 조회(JPQL)
     //        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
     //                                                          .datasetSeq(datasetSeq)
     //                                                          .regId(regId)
@@ -882,7 +882,7 @@ public class DeskingServiceImpl implements DeskingService {
 
     //    @Override
     //    public void sortBeforeDeleteDeskingWork(List<Long> deskingWorkSeqList, Long datasetSeq, String regId) {
-    //        // 편집기사work 조회(JPQL)
+    //        // 편집기사워크 조회(JPQL)
     //        DeskingWorkSearchDTO search = DeskingWorkSearchDTO.builder()
     //                                                          .datasetSeq(datasetSeq)
     //                                                          .regId(regId)

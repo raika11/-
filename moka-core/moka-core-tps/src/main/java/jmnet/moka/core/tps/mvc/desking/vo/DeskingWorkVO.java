@@ -3,6 +3,8 @@ package jmnet.moka.core.tps.mvc.desking.vo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -30,6 +32,7 @@ import org.apache.ibatis.type.Alias;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Alias("DeskingWorkVO")
+@ApiModel("편집기사워크 VO")
 public class DeskingWorkVO implements Serializable {
 
     private static final long serialVersionUID = -6662495708182386809L;
@@ -37,224 +40,152 @@ public class DeskingWorkVO implements Serializable {
     public static final Type TYPE = new TypeReference<List<DeskingWorkVO>>() {
     }.getType();
 
-    /**
-     * 일련번호
-     */
-    @Id
+    @ApiModelProperty("편집기사워크 일련번호")
     @Column(name = "SEQ", nullable = false)
     private Long seq;
 
-    /**
-     * 화면편집SEQ
-     */
+    @ApiModelProperty("화면편집SEQ")
     @Column(name = "DESKING_SEQ")
     private Long deskingSeq;
 
-    /**
-     * 데이터셋SEQ
-     */
+    @ApiModelProperty("데이터셋SEQ")
     @Column(name = "DATASET_SEQ")
     private Long datasetSeq;
 
-    /**
-     * 서비스기사아이디
-     */
+    @ApiModelProperty("서비스기사아이디")
     @Column(name = "CONTENT_ID")
     private String contentId;
 
-    /**
-     * 부모 서비스기사아이디
-     */
+    @ApiModelProperty("부모 서비스기사아이디. 있을경우 관련기사")
     @Column(name = "PARENT_CONTENT_ID")
     private String parentContentId;
 
-    /**
-     * 콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상
-     */
-    @Column(name = "CONTENT_TYPE", columnDefinition = "char")
+    @ApiModelProperty("콘텐츠타입-R:기본/P:포토/M:동영상/W:포토동영상")
+    @Column(name = "CONTENT_TYPE")
     private String contentType;
 
-    /**
-     * 기사타입
-     */
-    @Column(name = "ART_TYPE", columnDefinition = "char")
+    @ApiModelProperty("기사타입")
+    @Column(name = "ART_TYPE")
     @Builder.Default
     private String artType = TpsConstants.DEFAULT_ART_TYPE;
 
-    /**
-     * 출처
-     */
+    @ApiModelProperty("매체코드")
     @Column(name = "SOURCE_CODE")
     private String sourceCode;
 
-    /**
-     * 콘텐트순서
-     */
+    @ApiModelProperty("콘텐트순서")
     @Column(name = "CONTENT_ORD")
     @Builder.Default
     private Integer contentOrd = 1;
 
-    /**
-     * 관련순서
-     */
+    @ApiModelProperty("관련순서")
     @Column(name = "REL_ORD")
     @Builder.Default
     private Integer relOrd = 1;
 
-    /**
-     * 언어(기타코드)
-     */
+    @ApiModelProperty("언어(기타코드)")
     @Column(name = "LANG")
     @Builder.Default
     private String lang = TpsConstants.DEFAULT_LANG;
 
-    /**
-     * 배부일시
-     */
+    @ApiModelProperty("배부일시")
     @DTODateTimeFormat
     @Column(name = "DIST_DT")
     private Date distDt;
 
-    /**
-     * 제목
-     */
+    @ApiModelProperty("제목")
     @Column(name = "TITLE")
     private String title;
 
-    /**
-     * 제목/부제목 위치
-     */
+    @ApiModelProperty("제목/부제목 위치")
     @Column(name = "TITLE_LOC")
     private String titleLoc;
 
-    /**
-     * 제목크기
-     */
+    @ApiModelProperty("제목크기")
     @Column(name = "TITLE_SIZE")
     private String titleSize;
 
-    /**
-     * 부제목
-     */
+    @ApiModelProperty("부제목")
     @Column(name = "SUB_TITLE")
     private String subTitle;
 
-    /**
-     * Box 제목
-     */
+    @ApiModelProperty("Box 제목")
     @Column(name = "NAMEPLATE")
     private String nameplate;
 
-    /**
-     * Box Url
-     */
+    @ApiModelProperty("Box Url")
     @Column(name = "NAMEPLATE_URL")
     private String nameplateUrl;
 
-    /**
-     * Box target
-     */
+    @ApiModelProperty("Box target")
     @Column(name = "NAMEPLATE_TARGET")
     private String nameplateTarget;
 
-    /**
-     * 말머리
-     */
+    @ApiModelProperty("말머리")
     @Column(name = "TITLE_PREFIX")
     private String titlePrefix;
 
-    /**
-     * 말머리 위치
-     */
+    @ApiModelProperty("말머리 위치")
     @Column(name = "TITLE_PREFIX_LOC")
     private String titlePrefixLoc;
 
-    /**
-     * 발췌문
-     */
+    @ApiModelProperty("발췌문")
     @Column(name = "BODY_HEAD")
     private String bodyHead;
 
-    /**
-     * 링크URL
-     */
+    @ApiModelProperty("링크URL")
     @Column(name = "LINK_URL")
     private String linkUrl;
 
-    /**
-     * 링크TARGET
-     */
+    @ApiModelProperty("링크TARGET")
     @Column(name = "LINK_TARGET")
     private String linkTarget;
 
-    /**
-     * 썸네일파일명
-     */
+    @ApiModelProperty("썸네일파일명")
     @Column(name = "THUMB_FILE_NAME")
     private String thumbFileName;
 
-    /**
-     * 썸네일용량
-     */
+    @ApiModelProperty("썸네일용량")
     @Column(name = "THUMB_SIZE", nullable = false)
     @Builder.Default
     private Integer thumbSize = 0;
 
-    /**
-     * 썸네일가로
-     */
+    @ApiModelProperty("썸네일가로")
     @Column(name = "THUMB_WIDTH", nullable = false)
     @Builder.Default
     private Integer thumbWidth = 0;
 
-    /**
-     * 썸네일세로
-     */
+    @ApiModelProperty("썸네일세로")
     @Column(name = "THUMB_HEIGHT", nullable = false)
     @Builder.Default
     private Integer thumbHeight = 0;
 
-    /**
-     * 생성일시
-     */
+    @ApiModelProperty("생성일시")
     @DTODateTimeFormat
     @Column(name = "REG_DT")
     private Date regDt;
 
-    /**
-     * 생성자
-     */
+    @ApiModelProperty("생성자")
     @JsonIgnore
     @Column(name = "REG_ID")
     private String regId;
 
-    /**
-     * 영상URL
-     */
+    @ApiModelProperty("영상URL")
     @Column(name = "VOD_URL")
     private String vodUrl;
 
-    /**
-     * 아이콘파일명
-     */
+    @ApiModelProperty("아이콘파일명")
     @Column(name = "ICON_FILE_NAME")
     private String iconFileName;
 
-
-    /**
-     * 관련기사여부
-     */
+    @ApiModelProperty("관련기사여부")
     @Builder.Default
     private boolean rel = false;
 
-    /**
-     * 자식관련기사 목록
-     */
+    @ApiModelProperty("자식관련기사 목록")
     private List<Long> relSeqs;
 
-    /**
-     * 컴포넌트SEQ
-     */
+    @ApiModelProperty("컴포넌트SEQ")
     private Long componentSeq;
 
     /**

@@ -5,6 +5,8 @@
 package jmnet.moka.core.tps.mvc.history.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -33,32 +35,25 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
+@ApiModel("히스토리 검색조건 DTO")
 public class HistSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -6207554369251550982L;
 
-    /**
-     * SEQ
-     */
+    @ApiModelProperty("히스토리 일련번호")
     @Min(value = 1, message = "{tps.history.error.min.seq}")
     private Long seq;
 
-    /**
-     * SEQ의 유형 (PG:페이지, AP: 기사페이지, TP:템플릿, CT:컨테이너)
-     */
+    @ApiModelProperty("SEQ의 유형 (PG:페이지, AP: 기사페이지, TP:템플릿, CT:컨테이너)")
     @Pattern(regexp = "^(PG)|(AP)|(CT)|(TP)|()$", message = "{tps.history.error.pattern.seqType}")
     private String seqType;
 
-    /**
-     * 작업일자
-     */
+    @ApiModelProperty("작업일자")
     @DTODateTimeFormat
     private Date regDt;
 
     public HistSearchDTO() {
-        // 정렬 기본값을 설정
         super("regDt,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);

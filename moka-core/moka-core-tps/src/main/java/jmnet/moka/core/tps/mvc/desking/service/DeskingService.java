@@ -42,7 +42,7 @@ public interface DeskingService {
     boolean usedByDatasetSeq(Long datasetSeq);
 
     /**
-     * 컴포넌트Work 초기화(사용자의 work 모두삭제) 컴포넌트Work와 컴포넌트의 편집기사work 조회(편집영역 내의 모든 컴포넌트)
+     * 컴포넌트Work 초기화(사용자의 work 모두삭제) 컴포넌트Work와 컴포넌트의 편집기사워크 조회(편집영역 내의 모든 컴포넌트)
      *
      * @param search 검색조건
      * @return 편집컴포넌트 목록
@@ -52,26 +52,26 @@ public interface DeskingService {
     /**
      * 컴포넌트Work와 컴포넌트의 편집데이타 조회(단일 컴포넌트)
      *
-     * @param seq            컴포넌트work순번
-     * @param includeDesking 컴포넌트work의 편집기사work를 조회할지 말지 플래그. true시 조회
+     * @param seq            컴포넌트워크순번
+     * @param includeDesking 컴포넌트워크의 편집기사워크를 조회할지 말지 플래그. true시 조회
      * @return 편집컴포넌트
      */
     ComponentWorkVO findComponentWorkBySeq(Long seq, boolean includeDesking);
 
 
     /**
-     * 편집기사work 목록조회
+     * 편집기사워크 목록조회
      *
      * @param datasetSeq 데이타셋SEQ
      * @param regId      작업자
-     * @return 편집기사work 목록
+     * @return 편집기사워크 목록
      */
     List<DeskingWorkVO> findAllDeskingWork(Long datasetSeq, String regId);
 
     /**
      * 컴포넌트 임시저장 : ComponentHist에 status='SAVE', approvalYn='N'로 저장.
      *
-     * @param componentWorkVO 컴포넌트work정보
+     * @param componentWorkVO 컴포넌트워크정보
      * @param regId           작업자
      * @param templateSeq     템플릿순번
      * @throws NoDataException 데이터없음 예외
@@ -212,18 +212,18 @@ public interface DeskingService {
     //    public void insertDeskingWork(DeskingWork deskingWork, Long datasetSeq, String regId);
 
     /**
-     * 편집기사work 추가 및 편집기사목록 정렬
+     * 편집기사워크 추가 및 편집기사목록 정렬
      *
-     * @param insertdeskingList 추가할 편집기사work 목록
+     * @param insertdeskingList 추가할 편집기사워크 목록
      * @param datasetSeq        데이타셋순번
      * @param regId             작업자
      */
     void insertDeskingWorkList(List<DeskingWorkDTO> insertdeskingList, Long datasetSeq, String regId);
 
     /**
-     * 편집기사work  삭제(VO로 삭제. 관련기사도 삭제)
+     * 편집기사워크  삭제(VO로 삭제. 관련기사도 삭제)
      *
-     * @param deleteDeksingList 삭제할 편집기사work 목록
+     * @param deleteDeksingList 삭제할 편집기사워크 목록
      * @param datasetSeq        데이타셋순번
      * @param regId             작업자
      */
@@ -239,7 +239,7 @@ public interface DeskingService {
     List<DeskingOrdDTO> resortAfterDelete(Long datasetSeq, String regId);
 
     /**
-     * 편집기사work를 조회한다
+     * 편집기사워크를 조회한다
      *
      * @param seq 편집기사 아이디
      * @return 데스킹 워크
@@ -387,7 +387,7 @@ public interface DeskingService {
     //
 
     /**
-     * 히스토리를 불러와 컴포넌트work, 편집기사work에 저장한다.
+     * 히스토리를 불러와 컴포넌트워크, 편집기사워크에 저장한다.
      *
      * @param componentWorkSeq 컴포넌트 work SEQ
      * @param componentHistSeq 컴포넌트 히스토리 SEQ
@@ -405,12 +405,12 @@ public interface DeskingService {
     List<Desking> findByDatasetSeq(Long datasetSeq);
 
     /**
-     * 컴포넌트work의 템플릿수정
+     * 컴포넌트워크의 템플릿수정
      *
-     * @param componentWorkSeq 컴포넌트work
+     * @param componentWorkSeq 컴포넌트워크
      * @param templateSeq      템플릿순번
      * @param regId            작업자
-     * @return 컴포넌트work
+     * @return 컴포넌트워크
      */
     ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String regId)
             throws Exception;

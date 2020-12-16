@@ -38,16 +38,16 @@ public interface ComponentWorkMapper extends BaseMapper<ComponentWorkVO, Desking
     /**
      * 컴포넌트 조회
      *
-     * @param seq 컴포넌트work 순번
+     * @param seq 컴포넌트워크 순번
      * @return 컴포넌트wor
      */
     ComponentWorkVO findComponentWorkBySeq(Long seq);
 
     /**
-     * 편집영역내의 컴포넌트work 목록 조회
+     * 편집영역내의 컴포넌트워크 목록 조회
      *
      * @param map areaSeq:편집영역Seq regId: 작업자ID
-     * @return 컴포넌트work 목록
+     * @return 컴포넌트워크 목록
      */
     List<ComponentWorkVO> findComponentWorkByArea(Map<String, Object> map);
 

@@ -22,7 +22,7 @@ import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 public interface ComponentWorkService {
 
     /**
-     * 컴포넌트work 조회
+     * 컴포넌트워크 조회
      *
      * @param seq 순번
      * @return work컴포넌트
@@ -30,10 +30,10 @@ public interface ComponentWorkService {
     Optional<ComponentWork> findComponentWorkBySeq(Long seq);
 
     /**
-     * 컴포넌트work 업데이트
+     * 컴포넌트워크 업데이트
      *
-     * @param workVO 업데이트할 컴포넌트work VO
-     * @return 업데이트된 컴포넌트work
+     * @param workVO 업데이트할 컴포넌트워크 VO
+     * @return 업데이트된 컴포넌트워크
      * @throws NoDataException 데이터없음
      * @throws Exception       예외
      */
@@ -41,13 +41,13 @@ public interface ComponentWorkService {
             throws NoDataException, Exception;
 
     /**
-     * 컴포넌트work 스냅샷 업데이트
+     * 컴포넌트워크 스냅샷 업데이트
      *
-     * @param componentWorkSeq 컴포넌트work순번
+     * @param componentWorkSeq 컴포넌트워크순번
      * @param snapshotYn       스냅샷여부
      * @param snapshotBody     스냅샷HTML
      * @param regId            작업자
-     * @return 등록된 컴포넌트work
+     * @return 등록된 컴포넌트워크
      * @throws NoDataException 데이타없음
      * @throws Exception       예외
      */
@@ -55,9 +55,9 @@ public interface ComponentWorkService {
             throws NoDataException, Exception;
 
     /**
-     * 컴포넌트work 템플릿 업데이트
+     * 컴포넌트워크 템플릿 업데이트
      *
-     * @param componentWorkSeq 컴포넌트work순번
+     * @param componentWorkSeq 컴포넌트워크순번
      * @param templateSeq      템플릿순번
      * @param regId            작업자
      * @return
@@ -70,9 +70,9 @@ public interface ComponentWorkService {
     /**
      * 컴포넌트 히스토리에서 컴포넌트 정보 불러와서 업데이트
      *
-     * @param componentWorkSeq 컴포넌트work순번
+     * @param componentWorkSeq 컴포넌트워크순번
      * @param componentHist    컴포넌트 히스토리
-     * @return 수정된 컴포넌트work
+     * @return 수정된 컴포넌트워크
      */
     ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist)
             throws NoDataException;

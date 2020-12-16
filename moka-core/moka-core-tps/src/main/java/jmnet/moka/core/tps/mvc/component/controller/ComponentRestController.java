@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.component.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -107,13 +108,13 @@ public class ComponentRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 상세조회")
     @GetMapping("/{componentSeq}")
     public ResponseEntity<?> getComponent(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
         Component component = componentService
                 .findComponentBySeq(componentSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
@@ -129,7 +130,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO SELECT COMPONENT]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO SELECT COMPONENT]", e, true);
-            throw new Exception(messageByLocale.get("tps.component.error.select"), e);
+            throw new Exception(msg("tps.component.error.select"), e);
         }
     }
 
@@ -144,7 +145,7 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 등록")
     @PostMapping
-    public ResponseEntity<?> postComponent(@RequestBody @Valid ComponentDTO componentDTO)
+    public ResponseEntity<?> postComponent(@ApiParam("컴포넌트 정보")  @RequestBody @Valid ComponentDTO componentDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이터 유효성 검사
@@ -188,7 +189,7 @@ public class ComponentRestController extends AbstractCommonController {
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
 
-            String message = messageByLocale.get("tps.common.success.insert");
+            String message = msg("tps.common.success.insert");
             ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -196,7 +197,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO INSERT COMPONENT]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT COMPONENT]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
 
@@ -210,7 +211,7 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 멀티등록")
     @PostMapping("/all")
-    public ResponseEntity<?> postAllComponent(@Valid @RequestBody ValidList<ComponentDTO> validList)
+    public ResponseEntity<?> postAllComponent(@ApiParam("컴포넌트 목록") @Valid @RequestBody ValidList<ComponentDTO> validList)
             throws InvalidDataException, Exception {
 
         // 컴포넌트 목록 가져옴
@@ -249,7 +250,7 @@ public class ComponentRestController extends AbstractCommonController {
             resultList.setList(returnValDTO);
             resultList.setTotalCnt(returnValDTO.size());
 
-            String message = messageByLocale.get("tps.common.success.insert");
+            String message = msg("tps.common.success.insert");
             ResultDTO<ResultListDTO<ComponentDTO>> resultDTO = new ResultDTO<ResultListDTO<ComponentDTO>>(resultList, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -257,7 +258,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO INSERT COMPONENT]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT COMPONENT]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
 
@@ -274,8 +275,8 @@ public class ComponentRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 수정")
     @PutMapping("/{componentSeq}")
     public ResponseEntity<?> putComponent(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
-            @Valid @RequestBody ComponentDTO componentDTO)
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
+            @ApiParam("컴포넌트 정보") @Valid @RequestBody ComponentDTO componentDTO)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이터 유효성 검사
@@ -285,7 +286,7 @@ public class ComponentRestController extends AbstractCommonController {
         Component orgComponent = componentService
                 .findComponentBySeq(componentSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
@@ -333,7 +334,7 @@ public class ComponentRestController extends AbstractCommonController {
                     .getDomainId(), MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
 
             // 리턴
-            String message = messageByLocale.get("tps.common.success.update");
+            String message = msg("tps.common.success.update");
             ResultDTO<ComponentDTO> resultDTO = new ResultDTO<ComponentDTO>(returnValDTO, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -341,7 +342,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE COMPONENT] seq: {} {}", componentDTO.getComponentSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE COMPONENT]", e, true);
-            throw new Exception(messageByLocale.get("tps.coommon.error.update"), e);
+            throw new Exception(msg("tps.coommon.error.update"), e);
         }
     }
 
@@ -357,14 +358,15 @@ public class ComponentRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 복사")
     @PostMapping("/{componentSeq}/copy")
     public ResponseEntity<?> copyComponent(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq, String componentName)
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
+            @ApiParam("컴포넌트명") String componentName)
             throws InvalidDataException, Exception {
 
         // 조회
         Component component = componentService
                 .findComponentBySeq(componentSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.component.error.no-data");
+                    String message = msg("tps.component.error.no-data");
                     tpsLogger.fail(ActionType.INSERT, message, true);
                     return new NoDataException(message);
                 });
@@ -435,14 +437,14 @@ public class ComponentRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 삭제")
     @DeleteMapping("/{componentSeq}")
     public ResponseEntity<?> deleteComponent(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
         Component component = componentService
                 .findComponentBySeq(componentSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.DELETE, message, true);
                     return new NoDataException(message);
                 });
@@ -450,7 +452,7 @@ public class ComponentRestController extends AbstractCommonController {
         // 관련아이템 확인
         Boolean hasRels = relationService.hasRelations(componentSeq, MokaConstants.ITEM_COMPONENT);
         if (hasRels) {
-            String relMessage = messageByLocale.get("tps.common.error.delete.related");
+            String relMessage = msg("tps.common.error.delete.related");
             tpsLogger.fail(ActionType.DELETE, relMessage, true);
             throw new Exception(relMessage);
         }
@@ -459,7 +461,7 @@ public class ComponentRestController extends AbstractCommonController {
             // 컴포넌트 삭제
             componentService.deleteComponent(component);
 
-            String message = messageByLocale.get("tps.common.success.delete");
+            String message = msg("tps.common.success.delete");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -467,7 +469,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE COMPONENT] seq: {} {}", componentSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE COMPONENT]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.delete"), e);
+            throw new Exception(msg("tps.common.error.delete"), e);
         }
     }
 
@@ -481,7 +483,7 @@ public class ComponentRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 히스토리 목록조회")
     @GetMapping("/{componentSeq}/histories")
     public ResponseEntity<?> getHistoryList(@Valid @SearchParam SearchDTO search,
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq) {
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq) {
 
         // 페이징조건 설정 (order by seq desc)
         List<String> sort = new ArrayList<String>();
@@ -515,14 +517,14 @@ public class ComponentRestController extends AbstractCommonController {
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{componentSeq}/has-relations")
     public ResponseEntity<?> hasRelationList(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
         // 컴포넌트 확인
         componentService
                 .findComponentBySeq(componentSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.SELECT, message, true);
                     return new NoDataException(message);
                 });
@@ -532,7 +534,7 @@ public class ComponentRestController extends AbstractCommonController {
 
             String message = "";
             if (chkRels) {
-                message = messageByLocale.get("tps.common.success.has-relations");
+                message = msg("tps.common.success.has-relations");
             }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
@@ -541,7 +543,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[COMPONENT RELATION EXISTENCE CHECK FAILED] seq: {} {}", componentSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[COMPONENT RELATION EXISTENCE CHECK FAILEDE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
+            throw new Exception(msg("tps.common.error.has-relation"), e);
         }
     }
 
@@ -562,7 +564,7 @@ public class ComponentRestController extends AbstractCommonController {
                     .getDataType()
                     .equals("AUTO")) {
                 if (component.getDataset() == null) {
-                    String message = messageByLocale.get("tps.dataset.error.notnull.datasetSeq");
+                    String message = msg("tps.dataset.error.notnull.datasetSeq");
                     invalidList.add(new InvalidDataDTO("dataset", message));
                     tpsLogger.fail(actionType, message, true);
                 }
@@ -570,7 +572,7 @@ public class ComponentRestController extends AbstractCommonController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }

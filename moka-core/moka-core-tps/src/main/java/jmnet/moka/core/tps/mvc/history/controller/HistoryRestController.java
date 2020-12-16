@@ -12,6 +12,7 @@ package jmnet.moka.core.tps.mvc.history.controller;
  */
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -21,6 +22,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
@@ -43,19 +45,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping("/api/histories")
 @Api(tags = {"히스토리 API"})
-public class HistoryRestController {
+public class HistoryRestController extends AbstractCommonController {
 
-    @Autowired
-    private HistoryService historyService;
+    private final HistoryService historyService;
 
-    @Autowired
-    HistoryMapper historyMapper;
+    final HistoryMapper historyMapper;
 
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public HistoryRestController(HistoryService historyService, HistoryMapper historyMapper) {
+        this.historyService = historyService;
+        this.historyMapper = historyMapper;
+    }
 
     /**
      * 히스토리 목록조회
@@ -96,7 +95,7 @@ public class HistoryRestController {
      */
     @ApiOperation(value = "히스토리 상세조회")
     @GetMapping("/{histSeq}")
-    public ResponseEntity<?> getHistory(@PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
+    public ResponseEntity<?> getHistory(@ApiParam("히스토리 일련번호(필수)") @PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
             @Valid @SearchParam HistSearchDTO search)
             throws Exception {
 

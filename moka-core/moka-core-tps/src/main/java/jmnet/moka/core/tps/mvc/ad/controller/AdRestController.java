@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.ad.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,7 +27,7 @@ public class AdRestController {
     private AdService adService;
 
     @GetMapping
-    public ResponseEntity<?> getAds(HttpServletRequest request, @Valid @SearchParam AdSearchDTO search) {
+    public ResponseEntity<?> getAds(@ApiParam(hidden=true) HttpServletRequest request, @Valid @SearchParam AdSearchDTO search) {
 
         // 조회(mybatis)
         Long totalCount = adService.findListCount(search);

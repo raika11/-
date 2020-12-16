@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel("도메인 DTO")
 public class DomainDTO implements Serializable {
 
     private static final long serialVersionUID = 3926910123722632117L;
@@ -38,67 +41,47 @@ public class DomainDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<DomainDTO>>() {
     }.getType();
 
-    /**
-     * 도메인 아이디
-     */
+    @ApiModelProperty("도메인 아이디(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
-    /**
-     * 도메인 명
-     */
+    @ApiModelProperty("도메인명(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainName}")
     @Pattern(regexp = ".+", message = "{tps.domain.error.notnull.domainName}")
     @Length(min = 1, max = 64, message = "{tps.domain.error.length.domainName}")
     private String domainName;
 
-    /**
-     * 도메인 url
-     */
+    @ApiModelProperty("도메인url(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainUrl}")
     @Pattern(regexp = ".+", message = "{tps.domain.error.notnull.domainUrl}")
     @Length(min = 1, max = 512, message = "{tps.domain.error.length.domainUrl}")
     private String domainUrl;
 
-    /**
-     * 서비스 플랫폼 P : PC, M : 모바일
-     */
+    @ApiModelProperty("서비스 플랫폼 P : PC, M : 모바일(필수)")
     @NotNull(message = "{tps.domain.error.notnull.servicePlatform}")
     @Pattern(regexp = "[P|M]{1}$", message = "{tps.domain.error.notnull.servicePlatform}")
     private String servicePlatform;
 
-    /**
-     * 사용여부 Y : 예, N : 아니오
-     */
+    @ApiModelProperty("사용여부 Y : 예, N : 아니오(필수)")
     @NotNull(message = "{tps.domain.error.notnull.usedYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.domain.error.notnull.usedYn}")
     private String usedYn;
 
-    /**
-     * 언어
-     */
+    @ApiModelProperty("언어")
     @Length(min = 0, max = 3, message = "{tps.domain.error.length.lang}")
     private String lang;
 
-    /**
-     * api host
-     */
+    @ApiModelProperty("api host")
     private String apiHost;
 
-    /**
-     * api path
-     */
+    @ApiModelProperty("api path")
     private String apiPath;
 
-    /**
-     * api code id
-     */
+    @ApiModelProperty("api code id : apiHost + apiPath")
     private String apiCodeId;        // apiHost + apiPath
 
-    /**
-     * 도메인 상세 설명
-     */
+    @ApiModelProperty("도메인 상세 설명")
     private String description;
 
     public DomainItem toDomainItem() {

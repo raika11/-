@@ -5,6 +5,8 @@
 package jmnet.moka.core.tps.mvc.relation.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -29,33 +31,25 @@ import org.springframework.data.domain.Pageable;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
+@ApiModel("관련아이템 검색 DTO")
 public class RelationSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -5762199095013181372L;
 
-    /**
-     * 리턴 될 관련유형 (TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋)
-     */
+    @ApiModelProperty("리턴 될 관련유형 (TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋)")
     @Pattern(regexp = "^(PG)|(CT)|(CP)|(TP)|(AP)|(AD)|(TP)|(RS)$", message = "{tps.relation.error.pattern.relType}")
     private String relType;
 
-    /**
-     * SEQ
-     */
+    @ApiModelProperty("SEQ")
     @Min(value = 0, message = "{tps.relation.error.min.relSeq}")
     private Long relSeq;
 
-    /**
-     * SEQ의 유형 (TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋)
-     */
+    @ApiModelProperty("SEQ의 유형 (TP:템플릿, CP: 컴포넌트, AD:광고, CT:컨테이너, DS: 데이타셋)")
     @Pattern(regexp = "^(CT)|(CP)|(TP)|(AD)|(DS)|(DOMAIN)|()$", message = "{tps.common.error.invalid.relSeqType}")
     private String relSeqType;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private String domainId;
 

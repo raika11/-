@@ -10,6 +10,7 @@ package jmnet.moka.core.tps.mvc.special.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,8 +57,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/specials")
 @Api(tags = {"디지털 스페셜 API"})
 public class SpecialPageMgtRestController extends AbstractCommonController {
-    @Autowired
-    private SpecialPageMgtService specialPageMgtService;
+    private final SpecialPageMgtService specialPageMgtService;
+
+    public SpecialPageMgtRestController(SpecialPageMgtService specialPageMgtService) {
+        this.specialPageMgtService = specialPageMgtService;
+    }
 
     /**
      * 디지털스페셜 목록조회
@@ -93,7 +98,7 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
     @ApiOperation(value = "디지털스페셜 상세조회")
     @GetMapping("/{seqNo}")
     public ResponseEntity<?> getSpecialPageMgt(
-            @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo)
+            @ApiParam("디지털스페셜SEQ(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo)
             throws NoDataException {
 
         SpecialPageMgt specialPage = specialPageMgtService
@@ -119,7 +124,7 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
      * @throws Exception 예외
      */
     @ApiOperation(value = "디지털스페셜 등록")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postSpecialPageMgt(@Valid SpecialPageMgtDTO specialPageMgtDTO)
             throws Exception, InvalidDataException {
 
@@ -214,9 +219,9 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
      * @throws Exception 예외
      */
     @ApiOperation(value = "디지털스페셜 수정")
-    @PutMapping("/{seqNo}")
+    @PutMapping(value="/{seqNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> putSpecialPageMgt(
-            @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo,
+            @ApiParam("디지털스페셜SEQ(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo,
             @Valid SpecialPageMgtDTO specialPageMgtDTO)
             throws Exception {
 
@@ -269,7 +274,7 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
     @ApiOperation(value = "디지털스페셜 삭제")
     @DeleteMapping("/{seqNo}")
     public ResponseEntity<?> deleteSpecialPageMgt(
-            @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo)
+            @ApiParam("디지털스페셜SEQ(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo)
             throws Exception {
         // 1. 데이타 존재여부 검사
         SpecialPageMgt specialPageMgt = specialPageMgtService

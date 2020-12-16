@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -33,6 +35,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pageSeq")
+@ApiModel("페이지 DTO")
 public class PageDTO implements Serializable {
 
     private static final long serialVersionUID = 8547732591705087157L;
@@ -40,147 +43,94 @@ public class PageDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<PageDTO>>() {
     }.getType();
 
-    /**
-     * 페이지SEQ
-     */
+    @ApiModelProperty("페이지SEQ")
     @Min(value = 0, message = "{tps.page.error.min.pageSeq}")
     private Long pageSeq;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    /**
-     * 페이지명
-     */
+    @ApiModelProperty("페이지명(필수)")
     @NotNull(message = "{tps.page.error.notnull.pageName}")
     @Pattern(regexp = ".+", message = "{tps.page.error.pattern.pageName}")
     @Length(min = 1, max = 256, message = "{tps.page.error.length.pageName}")
     private String pageName;
 
-    /**
-     * 페이지서비스명
-     */
+    @ApiModelProperty("페이지서비스명")
     @Pattern(regexp = MokaConstants.PAGE_SERVICE_NAME_PATTERN, message = "{tps.page.error.pattern.pageServiceName}")
     @Length(max = 256, message = "{tps.page.error.length.pageServiceName}")
     private String pageServiceName;
 
-    /**
-     * 페이지표출명
-     */
+    @ApiModelProperty("페이지표출명")
     @Length(max = 256, message = "{tps.page.error.length.pageServiceName}")
     private String pageDisplayName;
 
-    /**
-     * 부모페이지
-     */
+    @ApiModelProperty("부모페이지")
     @ToString.Exclude
     private ParentPageDTO parent;
 
-    /**
-     * 페이지유형 text/html, application/json, text/javascript, text/plain, text/xml
-     */
+    @ApiModelProperty("페이지유형(필수)")
     @NotNull(message = "{tps.page.error.notnull.pageType}")
     @Pattern(regexp = ".+", message = "{tps.page.error.pattern.pageType}")
     @Length(min = 1, max = 24, message = "{tps.page.error.length.pageType}")
     @Builder.Default
     private String pageType = TpsConstants.PAGE_TYPE_HTML;
 
-    /**
-     * 페이지URL
-     */
+    @ApiModelProperty("페이지URL(필수)")
     @NotNull(message = "{tps.page.error.notnull.pageUrl}")
     @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.pageUrl}")
     @Length(min = 1, max = 512, message = "{tps.page.error.length.pageUrl}")
     private String pageUrl;
 
-    /**
-     * 페이지순서
-     */
+    @ApiModelProperty("페이지순서(필수)")
     @NotNull(message = "{tps.page.error.notnull.pageOrd}")
     @Min(value = 1, message = "{tps.page.error.min.pageOrd}")
     @Builder.Default
     private Integer pageOrd = 1;
 
-    /**
-     * 페이지본문
-     */
+    @ApiModelProperty("페이지 tems소스")
     @Builder.Default
     private String pageBody = "";
 
-    /**
-     * URL파라미터
-     */
+    @ApiModelProperty("URL파라미터")
     @Pattern(regexp = "^[a-zA-Z0-9,_\\-\\/]*$", message = "{tps.page.error.pattern.urlParam}")
     @Length(max = 64, message = "{tps.page.error.length.urlParam}")
     private String urlParam;
 
-    /**
-     * 사용여부
-     */
+    @ApiModelProperty("사용여부(필수)")
     @NotNull(message = "{tps.page.error.notnull.usedYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.usedYn}")
     @Builder.Default
     private String usedYn = MokaConstants.YES;
 
-    /**
-     * 파일여부
-     */
+    @ApiModelProperty("파일여부(필수)")
     @NotNull(message = "{tps.page.error.notnull.fileYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.fileYn}")
     @Builder.Default
     private String fileYn = MokaConstants.NO;
 
-    /**
-     * 키워드
-     */
+    @ApiModelProperty("키워드")
     @Length(max = 128, message = "{tps.page.error.len.kwd}")
     private String kwd;
 
-    /**
-     * 카테고리
-     */
+    @ApiModelProperty("카테고리")
     @Length(max = 256, message = "{tps.page.error.len.category}")
     private String category;
 
-    /**
-     * 상세정보
-     */
+    @ApiModelProperty("상세정보")
     @Length(max = 4000, message = "{tps.page.error.len.description}")
     private String description;
 
-    /**
-     * 이동여부
-     */
+    @ApiModelProperty("이동여부")
     @NotNull(message = "{tps.page.error.notnull.moveYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.page.error.pattern.moveYn}")
     @Builder.Default
     private String moveYn = MokaConstants.NO;
 
-    /**
-     * 이동URL
-     */
+    @ApiModelProperty("이동URL")
     @Length(max = 512, message = "{tps.page.error.len.moveUrl}")
     private String moveUrl;
-
-    // @Builder.Default
-    // private Set<PageRelationDTO> pageRelations = new LinkedHashSet<PageRelationDTO>();
-    //
-    // public void addPageRelation(PageRelationDTO relation) {
-    //
-    // if (relation.getPage() == null) {
-    // relation.setPage(this);
-    // return;
-    // }
-    //
-    // if (pageRelations.contains(relation)) {
-    // return;
-    // } else {
-    // this.pageRelations.add(relation);
-    // }
-    // }
 
     public PageItem toPageItem() {
         PageItem pageItem = new PageItem();

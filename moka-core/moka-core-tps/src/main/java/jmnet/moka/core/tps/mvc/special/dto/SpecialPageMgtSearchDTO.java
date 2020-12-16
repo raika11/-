@@ -8,6 +8,8 @@
 
 package jmnet.moka.core.tps.mvc.special.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -28,18 +30,15 @@ import lombok.Setter;
 @Getter
 @Builder
 @EqualsAndHashCode(callSuper = true)
+@ApiModel("디지털스페셜 검색 DTO")
 public class SpecialPageMgtSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 페이지코드
-     */
+    @ApiModelProperty("페이지코드")
     private String pageCd;
 
-    /**
-     * 사용여부
-     */
+    @ApiModelProperty("사용여부")
     private String usedYn;
 
     /**

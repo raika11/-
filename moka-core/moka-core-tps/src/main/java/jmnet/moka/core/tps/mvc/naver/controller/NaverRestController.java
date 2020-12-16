@@ -4,7 +4,9 @@
 
 package jmnet.moka.core.tps.mvc.naver.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -29,14 +31,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/naver")
+@Api(tags = {"네이버 API"})
 public class NaverRestController extends AbstractCommonController {
 
-    @Autowired
-    private NaverService naverService;
+    private final NaverService naverService;
+
+    public NaverRestController(NaverService naverService) {
+        this.naverService = naverService;
+    }
 
     @ApiOperation("네이버 스탠드 전송")
     @GetMapping("/stand")
-    public ResponseEntity<?> getPublishNaverStand(HttpServletRequest request, Long areaSeq)
+    public ResponseEntity<?> getPublishNaverStand(@ApiParam("편집영역 일련번호(필수)") Long areaSeq)
             throws Exception {
         try {
             naverService.publishNaverStand(areaSeq);
@@ -52,7 +58,7 @@ public class NaverRestController extends AbstractCommonController {
 
     @ApiOperation("네이버 채널 전송")
     @GetMapping("/channel")
-    public ResponseEntity<?> getPublishNaverChannel(HttpServletRequest request, Long areaSeq)
+    public ResponseEntity<?> getPublishNaverChannel(@ApiParam("편집영역 일련번호(필수)") Long areaSeq)
             throws Exception {
         try {
             naverService.publishNaverChannel(areaSeq);

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api")
-@Api(tags = "브라이트 코드 API")
+@Api(tags = "브라이트 코브 API")
 public class BrightRestController extends AbstractCommonController {
 
     @Value("${brightcove.jpod.folder-id}")

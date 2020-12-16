@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +45,6 @@ import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +66,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @Slf4j
 @RequestMapping("/api/desking")
-@Api(tags = {"테스킹 API"})
+@Api(tags = {"페이지편집 API"})
 public class DeskingRestController extends AbstractCommonController {
 
     private final DeskingService deskingService;
@@ -77,8 +77,7 @@ public class DeskingRestController extends AbstractCommonController {
 
     private final TemplateService templateService;
 
-    @Autowired
-    private RestTemplateHelper restTemplateHelper;
+    private final RestTemplateHelper restTemplateHelper;
 
     public DeskingRestController(DeskingService deskingService, AreaService areaService, UploadFileHelper uploadFileHelper,
             RestTemplateHelper restTemplateHelper, TemplateService templateService) {
@@ -90,17 +89,17 @@ public class DeskingRestController extends AbstractCommonController {
     }
 
     /**
-     * 편집영역의 모든 Work 초기화 및 컴포넌트Work 목록 조회
+     * 편집영역의 모든 Work 초기화 및 컴포넌트워크 목록 조회
      *
      * @param areaSeq   편집영역순번
      * @param principal 로그인 사용자 세션
      * @return Work 컴포넌트목록
      * @throws Exception 예외
      */
-    @ApiOperation(value = "편집영역의 모든 Work 초기화 및 컴포넌트Work 목록 조회")
+    @ApiOperation(value = "편집영역의 모든 Work 초기화 및 컴포넌트워크 목록 조회")
     @GetMapping("/{areaSeq}")
-    public ResponseEntity<?> getComponentWorkList(@PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq,
-            Principal principal)
+    public ResponseEntity<?> getComponentWorkList(@ApiParam("편집영역 일련번호(필수)") @PathVariable("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
@@ -152,10 +151,10 @@ public class DeskingRestController extends AbstractCommonController {
      * @throws NoDataException Work컴포넌트 정보가 없음
      * @throws Exception       기타예외
      */
-    @ApiOperation(value = "단일 컴포넌트Work 조회")
+    @ApiOperation(value = "단일 컴포넌트워크 조회")
     @GetMapping("/components/{componentWorkSeq}")
     public ResponseEntity<?> getComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq) {
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq) {
 
         // work조회
         ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
@@ -169,7 +168,7 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 컴포넌트 임시저장
      *
-     * @param componentWorkSeq 컴포넌트work SEQ
+     * @param componentWorkSeq 컴포넌트워크 SEQ
      * @param templateSeq      템플릿SEQ
      * @param principal        로그인사용자 세션
      * @return 등록된 편집 컴포넌트정보
@@ -178,12 +177,13 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 임시저장")
     @PostMapping("/components/save/{componentWorkSeq}")
     public ResponseEntity<?> postSaveComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Long templateSeq, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("템플릿 일련번호(네이버채널만 사용 그 외는 모두 null줄 것)") Long templateSeq,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
-            // 컴포넌트work 조회(편집기사work포함)
+            // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장
@@ -214,12 +214,14 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 전송")
     @PostMapping("/components/publish/{componentWorkSeq}")
     public ResponseEntity<?> postPublishComponentWork(HttpServletRequest request,
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, Long templateSeq, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("편집영역 일련번호(필수)") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq,
+            @ApiParam("템플릿 일련번호(네이버채널만 사용 그 외는 모두 null줄 것)") Long templateSeq,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
-            // 컴포넌트work 조회(편집기사work포함)
+            // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장
@@ -279,7 +281,7 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 컴포넌트 예약
      *
-     * @param componentWorkSeq 컴포넌트work SEQ
+     * @param componentWorkSeq 컴포넌트워크 SEQ
      * @param principal        로그인사용자 세션
      * @param reserveDt        예약시간
      * @return 등록된 편집 컴포넌트정보
@@ -288,12 +290,14 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 예약")
     @PostMapping("/components/reserve/{componentWorkSeq}")
     public ResponseEntity<?> postReserveComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Principal principal, Date reserveDt, Long templateSeq)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam(hidden=true) Principal principal,
+            @ApiParam("예약시간") Date reserveDt,
+            @ApiParam("템플릿 일련번호(네이버채널만 사용 그 외는 모두 null줄 것)") Long templateSeq)
             throws Exception {
 
         try {
-            // 컴포넌트work 조회(편집기사work포함)
+            // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO updateValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 예약, 편집기사 예약
@@ -317,7 +321,7 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 컴포넌트 예약
      *
-     * @param componentWorkSeq 컴포넌트work SEQ
+     * @param componentWorkSeq 컴포넌트워크 SEQ
      * @param principal        로그인사용자 세션
      * @return 등록된 편집 컴포넌트정보
      * @throws Exception
@@ -325,12 +329,12 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "컴포넌트 예약 삭제")
     @DeleteMapping("/components/reserve/{componentWorkSeq}")
     public ResponseEntity<?> deleteReserveComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
-            // 컴포넌트work 조회(편집기사work포함)
+            // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO updateValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 예약, 편집기사 예약
@@ -354,12 +358,12 @@ public class DeskingRestController extends AbstractCommonController {
     //    @ApiOperation(value = "컴포넌트 예약 존재여부")
     //    @GetMapping("/components/reserve/{componentWorkSeq}/exists")
     //    public ResponseEntity<?> getExistReserveComponentWork(
-    //            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-    //            Principal principal, Date reserveDt)
+    //            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+    //           @ApiParam(hidden=true) Principal principal, Date reserveDt)
     //            throws Exception {
     //
     //        try {
-    //            // 컴포넌트work 조회(편집기사work포함)
+    //            // 컴포넌트워크 조회(편집기사워크포함)
     //            ComponentWorkVO updateValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
     //
     //            // 컴포넌트 예약, 편집기사 예약
@@ -381,19 +385,20 @@ public class DeskingRestController extends AbstractCommonController {
     //    }
 
     /**
-     * 컴포넌트work 수정
+     * 컴포넌트워크 수정
      *
-     * @param componentWorkSeq 컴포넌트work 순번
+     * @param componentWorkSeq 컴포넌트워크 순번
      * @param componentWorkVO  컴포넌트 정보
      * @param principal        작업자
      * @return 컴포넌트 정보
      * @throws Exception 예외
      */
-    @ApiOperation(value = "컴포넌트work 수정(편집기사work 수정 제외. snapshot제외)")
+    @ApiOperation(value = "컴포넌트워크 수정(snapshot수정 안됨. 편집기사워크 수정 안됨 )")
     @PutMapping(value = "/components/{componentWorkSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @RequestBody @Valid ComponentWorkVO componentWorkVO, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("컴포넌트워크 정보") @RequestBody @Valid ComponentWorkVO componentWorkVO,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
@@ -418,20 +423,22 @@ public class DeskingRestController extends AbstractCommonController {
     }
 
     /**
-     * 컴포넌트work snapshot 수정
+     * 컴포넌트워크 snapshot 수정
      *
-     * @param componentWorkSeq 컴포넌트work 순번
+     * @param componentWorkSeq 컴포넌트워크 순번
      * @param snapshotYn       템플릿편집여부
      * @param snapshotBody     템플릿
      * @param principal        작업자
      * @return 컴포넌트 정보
      * @throws Exception 예외
      */
-    @ApiOperation(value = "컴포넌트work snapshot 수정")
+    @ApiOperation(value = "컴포넌트워크 snapshot 수정")
     @PutMapping("/components/{componentWorkSeq}/snapshot")
     public ResponseEntity<?> putSnapshotComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            String snapshotYn, String snapshotBody, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("HTML편집 여부") String snapshotYn,
+            @ApiParam("편집된 HTML") String snapshotBody,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
@@ -453,23 +460,24 @@ public class DeskingRestController extends AbstractCommonController {
     }
 
     /**
-     * 편집기사work 추가 (파일업로드 안됨. 멀티추가 가능)
+     * 편집기사워크 추가 (파일업로드 안됨. 멀티추가 가능)
      *
      * @param request          요청
      * @param componentWorkSeq work컴포넌트순번
      * @param datasetSeq       데이타셋순번
      * @param validList        등록할 편집기사 목록
      * @param principal        작업자
-     * @return 컴포넌트work
+     * @return 컴포넌트워크
      * @throws Exception 예외
      */
-    @ApiOperation(value = "편집기사work 추가 (파일업로드 안됨. 멀티추가 가능)")
+    @ApiOperation(value = "편집기사워크 추가 (파일업로드 안됨. 멀티추가 가능)")
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/list", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postDeskingWorkList(HttpServletRequest request,
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+            @ApiParam("편집기사워크 목록") @RequestBody @Valid ValidList<DeskingWorkDTO> validList,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
         try {
 
@@ -479,14 +487,10 @@ public class DeskingRestController extends AbstractCommonController {
                 // 스냅샷 수정
                 deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
-                // 편집기사work 추가 및 정렬
+                // 편집기사워크 추가 및 정렬
                 deskingService.insertDeskingWorkList(deskingWorkDTOList, datasetSeq, principal.getName());
-                //                for (DeskingWorkDTO appendDeskingWorkDTO : deskingWorkDTOList) {
-                //                    DeskingWork appendDeskingWork = modelMapper.map(appendDeskingWorkDTO, DeskingWork.class);
-                //                    deskingService.insertDeskingWork(appendDeskingWork, datasetSeq, principal.getName());
-                //                }
 
-                // 컴포넌트work 조회(편집기사사포함)
+                // 컴포넌트워크 조회(편집기사사포함)
                 ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
                 // 리턴값 설정
@@ -504,7 +508,7 @@ public class DeskingRestController extends AbstractCommonController {
     }
 
     /**
-     * 편집기사work 삭제 (파일업로드 안됨. 멀티삭제 가능. 관련기사포함 삭제)
+     * 편집기사워크 삭제 (파일업로드 안됨. 멀티삭제 가능. 관련기사포함 삭제)
      *
      * @param componentWorkSeq 컴포넌트워크아이디(사용안함)
      * @param datasetSeq       데이타셋순번(사용안함)
@@ -513,13 +517,14 @@ public class DeskingRestController extends AbstractCommonController {
      * @return work컴포넌트
      * @throws Exception 예외
      */
-    @ApiOperation(value = "편집기사work 삭제 (파일업로드 안됨. 멀티삭제 가능. 관련기사포함 삭제)")
+    @ApiOperation(value = "편집기사워크 삭제 (파일업로드 안됨. 멀티삭제 가능. 관련기사포함 삭제)")
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/delete", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDeskingWorkList(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @RequestBody @Valid ValidList<DeskingWorkVO> validList, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+            @ApiParam("삭제할 편집기사워크 목록") @RequestBody @Valid ValidList<DeskingWorkVO> validList,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
         try {
             List<DeskingWorkVO> deskingWorkVOList = validList.getList();
@@ -530,7 +535,7 @@ public class DeskingRestController extends AbstractCommonController {
             // work 편집기사 삭제 및 정렬
             deskingService.deleteDeskingWorkList(deskingWorkVOList, datasetSeq, principal.getName());
 
-            // 컴포넌트work 조회(편집기사사포함)
+            // 컴포넌트워크 조회(편집기사사포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 리턴값 설정
@@ -547,7 +552,7 @@ public class DeskingRestController extends AbstractCommonController {
 
 
     /**
-     * 편집기사work 수정(폼데이터)
+     * 편집기사워크 수정(폼데이터)
      *
      * @param deskingWorkDTO   데스킹워크DTO
      * @param componentWorkSeq 컴포넌트워크아이디
@@ -557,10 +562,13 @@ public class DeskingRestController extends AbstractCommonController {
      * @throws NoDataException      데이터없음
      * @throws Exception            그외 에러
      */
-    @ApiOperation(value = "편집기사work 수정")
+    @ApiOperation(value = "편집기사워크 수정")
     @PutMapping(path = "/components/{componentWorkSeq}/contents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> putDeskingWork(@Valid DeskingWorkDTO deskingWorkDTO, Principal principal,
-            @PathVariable("componentWorkSeq") Long componentWorkSeq, @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
+    public ResponseEntity<?> putDeskingWork(
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("편집기사워크") @Valid DeskingWorkDTO deskingWorkDTO,
+            @ApiParam(hidden=true) Principal principal,
+            @ApiParam("편집영역 일련번호(필수)") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이터 검증
@@ -645,9 +653,10 @@ public class DeskingRestController extends AbstractCommonController {
     @PutMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/sort", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putDeskingWorkListSort(HttpServletRequest request,
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @RequestBody @Valid ValidList<DeskingWorkVO> validList, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+            @ApiParam("정렬된 편집기사워크 목록") @RequestBody @Valid ValidList<DeskingWorkVO> validList,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
@@ -687,9 +696,9 @@ public class DeskingRestController extends AbstractCommonController {
     //     */
     //    @GetMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/hasOtherSaved")
     //    public ResponseEntity<?> hasOtherSaved(HttpServletRequest request,
-    //            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+    //            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
     //            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq, Integer interval,
-    //            Principal principal)
+    //           @ApiParam(hidden=true) Principal principal)
     //            throws Exception {
     //
     //        try {
@@ -721,12 +730,13 @@ public class DeskingRestController extends AbstractCommonController {
      * @throws Exception 예외
      */
     @ApiOperation(value = "더미기사 추가")
-    @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}")
+    @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postDeskingWork(HttpServletRequest request,
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq, @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO,
-            Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+            @ApiParam("편집영역 일련번호(필수)") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq,
+            @ApiParam("더미기사") @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
@@ -807,11 +817,12 @@ public class DeskingRestController extends AbstractCommonController {
     @PostMapping(value = "/components/{componentWorkSeq}/contents/{datasetSeq}/move", headers = {
             "content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postDeskingWorkListMove(HttpServletRequest request,
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long srcComponentWorkSeq,
-            @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long srcDatasetSeq,
-            @RequestBody @Valid ValidList<DeskingWorkDTO> validList, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+            @ApiParam("소스 컴포넌트워크 일련번호(필수)") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long srcComponentWorkSeq,
+            @ApiParam("소스 데이타셋 일련번호(필수)") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long srcDatasetSeq,
+            @ApiParam("이동할 편집기사 목록") @RequestBody @Valid ValidList<DeskingWorkDTO> validList,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {
@@ -867,7 +878,7 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "히스토리 조회(컴포넌트별)")
     @GetMapping("/components/histories/{componentSeq}")
     public ResponseEntity<?> getComponentHistoryList(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentSeq}") Long componentSeq,
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentSeq}") Long componentSeq,
             @Valid @SearchParam DeskingHistSearchDTO search)
             throws NoDataException, Exception {
 
@@ -902,7 +913,7 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "히스토리 상세조회")
     @GetMapping("/histories/{componentHistSeq}")
     public ResponseEntity<?> getDeskingHistory(
-            @PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq)
+            @ApiParam("컴포넌트 히스토리 일련번호(필수)") @PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq)
             throws Exception {
 
         try {
@@ -928,7 +939,7 @@ public class DeskingRestController extends AbstractCommonController {
     /**
      * 히스토리를 편집기사 워크로 등록 (파일업로드 안됨)
      *
-     * @param componentWorkSeq 컴포넌트work 아이디
+     * @param componentWorkSeq 컴포넌트워크 아이디
      * @param componentHistSeq 컴포넌트 히스토리 아이디
      * @return 결과
      * @throws NoDataException 데이터없음
@@ -937,9 +948,9 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "히스토리 불러오기")
     @PutMapping("/components/{componentWorkSeq}/history/{componentHistSeq}")
     public ResponseEntity<?> putDeskingWorkHistory(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentWorkSeq}") Long componentWorkSeq,
-            @PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq,
-            Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("컴포넌트 히스토리 일련번호(필수)") @PathVariable("componentHistSeq") @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq,
+            @ApiParam(hidden=true) Principal principal)
             throws NoDataException, Exception {
 
         try {
@@ -958,10 +969,10 @@ public class DeskingRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "단일 컴포넌트Work 템플릿 조회")
+    @ApiOperation(value = "단일 컴포넌트워크 템플릿 조회")
     @GetMapping("/components/{componentSeq}/template")
     public ResponseEntity<?> getTemplate(
-            @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq=}") Long componentSeq) {
+            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq=}") Long componentSeq) {
 
         TemplateVO returnValue = templateService.findTemplateByComponentHist(componentSeq);
 
@@ -970,11 +981,12 @@ public class DeskingRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "단일 컴포넌트Work 템플릿 수정")
+    @ApiOperation(value = "단일 컴포넌트워크 템플릿 수정")
     @PutMapping("/components/save/{componentWorkSeq}/template/{templateSeq}")
     public ResponseEntity<?> putTemplateComponentWork(
-            @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
-            Long templateSeq, Principal principal)
+            @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq") @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("템플릿 일련번호(필수)") Long templateSeq,
+            @ApiParam(hidden=true) Principal principal)
             throws Exception {
 
         try {

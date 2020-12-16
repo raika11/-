@@ -4,6 +4,8 @@
 package jmnet.moka.core.tps.mvc.reserved.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -29,50 +31,21 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 //@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
+@ApiModel("예약어 검색 DTO")
 public class ReservedSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1972229889422176779L;
 
-    /**
-     * 검색타입
-     */
-    private String searchType;
-
-    /**
-     * 검색어
-     */
-    private String keyword;
-
-    /**
-     * 총갯수 사용여부
-     */
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.useTotal}")
-    private String useTotal;
-
-    /**
-     * 총갯수
-     */
-    private Long total;
-
-    /**
-     * 검색결과 성공여부
-     */
-    private Integer returnValue;
-
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
-//    private String serviceType;
-
     // 검색 조건의 기본값을 설정
     public ReservedSearchDTO() {
         super("reservedSeq,desc");
-        useTotal = MokaConstants.YES;
-        searchType = TpsConstants.SEARCH_TYPE_ALL;
-        returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        super.setUseTotal(MokaConstants.YES);
+        super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
     }
 }

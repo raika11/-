@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -38,6 +40,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "artPageSeq")
+@ApiModel("기사페이지 DTO")
 public class ArticlePageDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,40 +48,28 @@ public class ArticlePageDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ArticlePageDTO>>() {
     }.getType();
 
-    /**
-     * 기사페이지SEQ
-     */
+    @ApiModelProperty("기사페이지SEQ")
     @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}")
     private Long artPageSeq;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    /**
-     * 기사페이지명
-     */
+    @ApiModelProperty("기사페이지명(필수)")
     @NotNull(message = "{tps.article-page.error.notnull.artPageName}")
     @Pattern(regexp = ".+", message = "{tps.article-page.error.pattern.artPageName}")
     @Length(min = 1, max = 128, message = "{tps.article-page.error.length.artPageName}")
     private String artPageName;
 
-    /**
-     * 서비스유형(기타코드)
-     */
+    @ApiModelProperty("서비스유형(기타코드)")
     @Length(max = 24, message = "{tps.article-page.error.length.artType}")
     private String artType;
 
-    /**
-     * 미리보기용 기사ID, 상세조회시에만 사용
-     */
+    @ApiModelProperty("미리보기용 기사ID, 상세조회시에만 사용")
     private Long previewTotalId;
 
-    /**
-     * 기사페이지본문
-     */
+    @ApiModelProperty("tems 소스")
     @Builder.Default
     private String artPageBody = "";
 

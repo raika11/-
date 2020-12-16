@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -38,47 +39,33 @@ public class ContainerDTO implements Serializable {
 
     public static final Type TYPE = new TypeReference<List<ContainerDTO>>() {}.getType();
 
-    /**
-     * 컨테이너SEQ
-     */
+    @ApiModelProperty("컨테이너SEQ")
     @Min(value = 0, message = "{tps.container.error.min.containerSeq}")
     private Long containerSeq;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    /**
-     * 컨테이너명
-     */
+    @ApiModelProperty("컨테이너명(필수)")
     @NotNull(message = "{tps.container.error.notnull.containerName}")
     @Pattern(regexp = ".+", message = "{tps.container.error.pattern.containerName}")
     @Length(min = 1, max = 128, message = "{tps.container.error.length.containerName}")
     private String containerName;
 
-    /**
-     * 컨테이너본문
-     */
+    @ApiModelProperty("컨테이너본문")
     @Builder.Default
     private String containerBody = "";
 
-    /**
-     * 페이지 관련갯수
-     */
+    @ApiModelProperty("페이지 관련갯수")
     @JsonIgnore
     private Long pageRelCount = (long)0;
 
-    /**
-     * 본문 관련갯수
-     */
+    @ApiModelProperty("기사페이지 관련갯수")
     @JsonIgnore
     private Long skinRelCount = (long)0;
 
-    /**
-     * 사용여부
-     */
+    @ApiModelProperty("사용여부")
     private String useYn = MokaConstants.NO;
 
     public void setPageRelCount(Long pageRelCount) {

@@ -16,6 +16,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
@@ -55,28 +56,23 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequestMapping("/api/templates")
 @Api(tags = {"템플릿 API"})
-public class TemplateRestController {
+public class TemplateRestController extends AbstractCommonController {
 
-    @Autowired
-    private TemplateService templateService;
+    private final TemplateService templateService;
 
-    @Autowired
-    private RelationService relationService;
+    private final RelationService relationService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final PurgeHelper purgeHelper;
 
-    @Autowired
-    private MessageByLocale messageByLocale;
+    private final UploadFileHelper uploadFileHelper;
 
-    @Autowired
-    private PurgeHelper purgeHelper;
-
-    @Autowired
-    private UploadFileHelper uploadFileHelper;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public TemplateRestController(TemplateService templateService, RelationService relationService, PurgeHelper purgeHelper,
+            UploadFileHelper uploadFileHelper) {
+        this.templateService = templateService;
+        this.relationService = relationService;
+        this.purgeHelper = purgeHelper;
+        this.uploadFileHelper = uploadFileHelper;
+    }
 
     /**
      * 템플릿 목록조회
@@ -110,7 +106,7 @@ public class TemplateRestController {
     @ApiOperation(value = "템플릿 상세조회")
     @GetMapping("/{templateSeq}")
     public ResponseEntity<?> getTemplate(
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+            @ApiParam("템플릿SEQ(필수)") @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws NoDataException {
 
         Template template = templateService
@@ -141,7 +137,7 @@ public class TemplateRestController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                  MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postTemplate(@Valid TemplateDTO templateDTO,
-            @RequestPart(value = "templateThumbnailFile", required = false) MultipartFile templateThumbnailFile)
+            @ApiParam("템플릿 미리보기 이미지파일") @RequestPart(value = "templateThumbnailFile", required = false) MultipartFile templateThumbnailFile)
             throws InvalidDataException, Exception {
 
         // 데이터 유효성 검사
@@ -205,7 +201,7 @@ public class TemplateRestController {
     @PutMapping(value = "/{templateSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                                           MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putTemplate(@Valid TemplateDTO templateDTO,
-            @ApiParam(value = "templateThumbnailFile") @RequestPart(value = "templateThumbnailFile", required = false)
+            @ApiParam("템플릿 미리보기 이미지파일") @RequestPart(value = "templateThumbnailFile", required = false)
                     MultipartFile templateThumbnailFile)
             throws NoDataException, InvalidDataException, Exception {
 
@@ -308,8 +304,9 @@ public class TemplateRestController {
     @ApiOperation(value = "템플릿 복사")
     @PostMapping("/{templateSeq}/copy")
     public ResponseEntity<?> copyTemplate(
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq, DomainSimpleDTO domain,
-            String templateName)
+            @ApiParam("템플릿SEQ(필수)") @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
+            @ApiParam("도메인(필수)") DomainSimpleDTO domain,
+            @ApiParam("복사할 템플릿명(필수)") String templateName)
             throws InvalidDataException, Exception {
 
         // 조회
@@ -340,7 +337,7 @@ public class TemplateRestController {
     @ApiOperation(value = "템플릿 삭제")
     @DeleteMapping("/{templateSeq}")
     public ResponseEntity<?> deleteTemplate(
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+            @ApiParam("템플릿SEQ(필수)") @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
@@ -393,7 +390,7 @@ public class TemplateRestController {
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{templateSeq}/has-relations")
     public ResponseEntity<?> hasRelationList(
-            @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
+            @ApiParam("템플릿SEQ(필수)") @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq)
             throws Exception {
 
         // 템플릿 확인

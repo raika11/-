@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.dataset.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -65,7 +67,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/datasets")
 @Api(tags = {"데이터셋 API"})
-public class DatasetRestController {
+public class DatasetRestController extends AbstractCommonController {
 
     @Autowired
     private DatasetService datasetService;
@@ -77,19 +79,10 @@ public class DatasetRestController {
     private RelationService relationService;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
     private ApiCodeHelper apiCodeHelper;
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Autowired
-    private TpsLogger tpsLogger;
 
     /**
      * 데이타셋정보 목록조회
@@ -131,13 +124,13 @@ public class DatasetRestController {
      */
     @ApiOperation(value = "데이타셋 상세조회")
     @GetMapping("/{datasetSeq}")
-    public ResponseEntity<?> getDataset(@PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq)
+    public ResponseEntity<?> getDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq)
             throws Exception {
 
         Dataset dataset = datasetService
                 .findDatasetBySeq(datasetSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
@@ -190,7 +183,7 @@ public class DatasetRestController {
                     .getHeader()
                     .getResultCode() == TpsConstants.HEADER_UNAUTHORIZED) {
                 log.error("FAIL TO LOAD DATASET PARAMETER INFO : %s", targetUrl);
-                throw new Exception(messageByLocale.get("tps.dataset.error.dps"));
+                throw new Exception(msg("tps.dataset.error.dps"));
             }
 
             String body = ResourceMapper
@@ -199,7 +192,7 @@ public class DatasetRestController {
             return body;
         } catch (Exception e) {
             log.error("FAIL TO LOAD DATASET PARAMETER INFO : %s", targetUrl, e);
-            throw new Exception(messageByLocale.get("tps.dataset.error.dps"), e);
+            throw new Exception(msg("tps.dataset.error.dps"), e);
         }
     }
 
@@ -245,14 +238,14 @@ public class DatasetRestController {
                 dto.setDataApiParamShape(getParameters(dto));
             }
 
-            String message = messageByLocale.get("tps.common.success.insert");
+            String message = msg("tps.common.success.insert");
             ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO INSERT DATASET]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT DATASET]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
 
@@ -270,7 +263,7 @@ public class DatasetRestController {
 
         if (datasetDTO != null) {
             if (!datasetSeq.equals(datasetDTO.getDatasetSeq())) {
-                String message = messageByLocale.get("tps.common.error.no-data");
+                String message = msg("tps.common.error.no-data");
                 invalidList.add(new InvalidDataDTO("matchId", message));
             }
 
@@ -280,7 +273,7 @@ public class DatasetRestController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }
@@ -295,7 +288,7 @@ public class DatasetRestController {
      */
     @ApiOperation(value = "데이타셋 수정")
     @PutMapping("/{datasetSeq}")
-    public ResponseEntity<?> putDataset(@PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+    public ResponseEntity<?> putDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
             @Valid DatasetDTO datasetDTO)
             throws Exception {
 
@@ -312,7 +305,7 @@ public class DatasetRestController {
             Dataset orgDataset = datasetService
                     .findDatasetBySeq(newDataset.getDatasetSeq())
                     .orElseThrow(() -> {
-                        String message = messageByLocale.get("tps.common.error.no-data");
+                        String message = msg("tps.common.error.no-data");
                         tpsLogger.fail(ActionType.UPDATE, message, true);
                         return new NoDataException(message);
                     });
@@ -338,14 +331,14 @@ public class DatasetRestController {
                 dto.setDataApiParamShape(getParameters(dto));
             }
 
-            String message = messageByLocale.get("tps.common.success.update");
+            String message = msg("tps.common.success.update");
             ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE DATASET] seq: {} {}", datasetDTO.getDatasetSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DATASET]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
+            throw new Exception(msg("tps.common.error.update"), e);
         }
 
     }
@@ -401,7 +394,7 @@ public class DatasetRestController {
             if (dto
                     .getHeader()
                     .getResultCode() == TpsConstants.HEADER_UNAUTHORIZED) {
-                String message = messageByLocale.get("tps.dataset.error.dps");
+                String message = msg("tps.dataset.error.dps");
                 ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(TpsConstants.HEADER_SERVER_ERROR, message);
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
             }
@@ -410,7 +403,7 @@ public class DatasetRestController {
         } catch (Exception e) {
             log.error("[FAIL TO LOAD API LIST] : %s", targetUrl, e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD API LIST]", e, true);
-            throw new Exception(messageByLocale.get("tps.dataset.error.dps"), e);
+            throw new Exception(msg("tps.dataset.error.dps"), e);
         }
     }
 
@@ -424,8 +417,8 @@ public class DatasetRestController {
      */
     @ApiOperation(value = "데이타셋 삭제")
     @DeleteMapping("/{datasetSeq}")
-    public ResponseEntity<?> deleteDataset(HttpServletRequest request,
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq)
+    public ResponseEntity<?> deleteDataset(
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq)
             throws Exception {
 
         // 1.1 아이디체크
@@ -435,7 +428,7 @@ public class DatasetRestController {
         datasetService
                 .findDatasetBySeq(datasetSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.DELETE, message, true);
                     return new NoDataException(message);
                 });
@@ -444,7 +437,7 @@ public class DatasetRestController {
 
             // 1.3. 관련데이타가 있는지 조사.
             if (datasetService.isRelated(datasetSeq)) {
-                String message = messageByLocale.get("tps.common.error.delete.related");
+                String message = msg("tps.common.error.delete.related");
                 ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(TpsConstants.HEADER_RELEATED_DATA, message);
                 tpsLogger.fail(ActionType.DELETE, message, true);
                 return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -454,14 +447,14 @@ public class DatasetRestController {
             datasetService.deleteDataset(datasetSeq);
 
             // 3. 결과리턴
-            String message = messageByLocale.get("tps.common.success.delete", request);
+            String message = msg("tps.common.success.delete");
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO DELETE DATASET] seq: {} {}", datasetSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE DATASET]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.delete", request), e);
+            throw new Exception(msg("tps.common.error.delete"), e);
         }
     }
 
@@ -476,14 +469,14 @@ public class DatasetRestController {
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{datasetSeq}/has-relations")
     public ResponseEntity<?> hasRelationList(
-            @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq)
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq)
             throws Exception {
 
         // 데이타셋 확인
         datasetService
                 .findDatasetBySeq(datasetSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.SELECT, message, true);
                     return new NoDataException(message);
                 });
@@ -493,7 +486,7 @@ public class DatasetRestController {
 
             String message = "";
             if (chkRels) {
-                message = messageByLocale.get("tps.common.success.has-relations");
+                message = msg("tps.common.success.has-relations");
             }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
@@ -502,7 +495,7 @@ public class DatasetRestController {
         } catch (Exception e) {
             log.error("[DATASET RELATION EXISTENCE CHECK FAILED] seq: {} {}", datasetSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[DATASET RELATION EXISTENCE CHECK FAILEDE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
+            throw new Exception(msg("tps.common.error.has-relation"), e);
         }
     }
 
@@ -517,14 +510,14 @@ public class DatasetRestController {
      */
     @ApiOperation(value = "데이타셋 복사")
     @PostMapping("/{datasetSeq}/copy")
-    public ResponseEntity<?> copyDataset(@PathVariable("datasetSeq") Long datasetSeq, String datasetName)
+    public ResponseEntity<?> copyDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") Long datasetSeq, @ApiParam("데이타셋명") String datasetName)
             throws InvalidDataException, Exception {
 
         // 조회
         Dataset dataset = datasetService
                 .findDatasetBySeq(datasetSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.INSERT, message, true);
                     return new NoDataException(message);
                 });

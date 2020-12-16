@@ -14,6 +14,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.articlepage.vo.ArticlePageVO;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentDTO;
@@ -46,19 +47,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping("/api/relations")
 @Api(tags = {"관련아이템 API"})
-public class RelationRestController {
+public class RelationRestController extends AbstractCommonController {
 
-    @Autowired
-    private RelationService relationService;
+    private final RelationService relationService;
 
-    @Autowired
-    private ModelMapper modelMapper;
 
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public RelationRestController(RelationService relationService) {
+        this.relationService = relationService;
+    }
 
     /**
      * 관련 아이템 목록조회
@@ -159,7 +155,7 @@ public class RelationRestController {
         } catch (Exception e) {
             log.error("[RELATION SELECT FAILED] seq: {} {} {}", search.getRelSeqType(), search.getRelSeq(), e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[RELATION SELECT FAILED]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
+            throw new Exception(msg("tps.common.error.has-relation"), e);
         }
     }
 

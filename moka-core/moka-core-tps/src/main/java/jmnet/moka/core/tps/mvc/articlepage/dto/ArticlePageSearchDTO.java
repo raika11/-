@@ -9,6 +9,8 @@
 package jmnet.moka.core.tps.mvc.articlepage.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -33,20 +35,17 @@ import org.hibernate.validator.constraints.Length;
 //@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 @Alias("ArticlePageSearchDTO")
+@ApiModel("기사페이지 검색 DTO")
 public class ArticlePageSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 3122658693342650030L;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("기사타입")
     @Length(max = 24, message = "{tps.article-page.error.length.artType}")
     private String artType;
 

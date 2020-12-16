@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -117,7 +118,7 @@ public class ArticlePageRestController extends AbstractCommonController {
     @ApiOperation(value = "기사페이지 상세조회")
     @GetMapping("/{artPageSeq}")
     public ResponseEntity<?> getArticlePage(
-            @PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
+            @ApiParam("기사페이지 일련번호") @PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
@@ -201,7 +202,7 @@ public class ArticlePageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "기사페이지 등록")
     @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postArticlePage(@RequestBody @Valid ArticlePageDTO articlePageDTO)
+    public ResponseEntity<?> postArticlePage(@ApiParam("기사페이지 정보") @RequestBody @Valid ArticlePageDTO articlePageDTO)
             throws InvalidDataException, Exception {
 
         if (McpString.isEmpty(articlePageDTO.getArtPageBody())) {
@@ -244,8 +245,9 @@ public class ArticlePageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "기사페이지 수정")
     @PutMapping(value = "/{artPageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putPage(@PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq,
-            @RequestBody @Valid ArticlePageDTO articlePageDTO)
+    public ResponseEntity<?> putPage(@ApiParam("기사페이지 일련번호(필수)") @PathVariable("artPageSeq")
+    @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq,
+            @ApiParam("기사페이지 정보") @RequestBody @Valid ArticlePageDTO articlePageDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
@@ -294,8 +296,8 @@ public class ArticlePageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "기사페이지 삭제")
     @DeleteMapping("/{artPageSeq}")
-    public ResponseEntity<?> deletePage(
-            @PathVariable("artPageSeq") @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
+    public ResponseEntity<?> deletePage(@ApiParam("기사페이지 일련번호(필수)") @PathVariable("artPageSeq")
+    @Min(value = 0, message = "{tps.article-page.error.min.artPageSeq}") Long artPageSeq)
             throws InvalidDataException, NoDataException, Exception {
 
         // 1.1 아이디체크

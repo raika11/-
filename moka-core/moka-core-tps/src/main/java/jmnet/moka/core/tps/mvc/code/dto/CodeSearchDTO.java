@@ -27,9 +27,6 @@ public class CodeSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 5956572673684444343L;
 
-    /**
-     * 사용여부
-     */
     @ApiModelProperty("사용여부")
     private String usedYn;
 

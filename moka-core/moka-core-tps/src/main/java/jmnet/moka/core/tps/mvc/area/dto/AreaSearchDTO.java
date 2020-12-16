@@ -8,6 +8,8 @@
 package jmnet.moka.core.tps.mvc.area.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -31,18 +33,15 @@ import org.apache.ibatis.type.Alias;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
 @Alias("AreaSearchDTO")
+@ApiModel("편집영역 검색 DTO")
 public class AreaSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 5900493133914418299L;
 
-    /**
-     * 부모 편집영역SEQ
-     */
+    @ApiModelProperty("부모 편집영역 일련번호")
     private Long parentAreaSeq;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
 

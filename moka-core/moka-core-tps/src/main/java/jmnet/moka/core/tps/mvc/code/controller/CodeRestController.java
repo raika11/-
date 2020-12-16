@@ -8,14 +8,12 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
 import jmnet.moka.core.tps.mvc.code.dto.MastercodeDTO;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
 import jmnet.moka.core.tps.mvc.code.service.CodeService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,16 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping("/api/codes")
 @Api(tags = {"마스터코드조회 API"})
-public class CodeRestController {
+public class CodeRestController extends AbstractCommonController {
 
-    @Autowired
-    private CodeService codeService;
+    private final CodeService codeService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public CodeRestController(CodeService codeService) {
+        this.codeService = codeService;
+    }
 
     @ApiOperation(value = "마스터코드 목록조회")
     @GetMapping("/masters")

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.article.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
@@ -46,7 +47,7 @@ public class ArticleRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
 
-    @Value("${tps.desking.article.source.list}")
+    @Value("${desking.article.source}")
     private String[] deskingSourceList;
 
     public ArticleRestController(ArticleService articleService) {
@@ -111,7 +112,7 @@ public class ArticleRestController extends AbstractCommonController {
 
     @ApiOperation(value = "기사 상세조회")
     @GetMapping("/{totalId}")
-    public ResponseEntity<?> getArticle(@PathVariable("totalId") Long totalId)
+    public ResponseEntity<?> getArticle(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
             throws NoDataException {
 
         ArticleBasic articleBasic = articleService
@@ -128,7 +129,7 @@ public class ArticleRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "매체 목록조회")
+    @ApiOperation(value = "기사검색 매체 목록조회")
     @GetMapping("/sources")
     public ResponseEntity<?> getSourceList() {
 
@@ -148,7 +149,8 @@ public class ArticleRestController extends AbstractCommonController {
 
     @ApiOperation(value = "기사 편집제목 등록/수정")
     @PutMapping("/{totalId}/edit-title")
-    public ResponseEntity<?> putEditTitle(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+    public ResponseEntity<?> putEditTitle(
+            @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
             @Valid ArticleTitleDTO articleTitleDTO)
             throws Exception {
         ArticleBasic articleBasic = articleService

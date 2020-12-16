@@ -1,8 +1,16 @@
 package jmnet.moka.web.wms.ftp;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +83,37 @@ public class FtpTest {
     }
 
 
+
+    @Test
+    public void getDomain()
+            throws IOException {
+
+        Set<String> domainList = new LinkedHashSet<>();
+
+        String path = "C:\\box\\static\\newsStand\\Joongang_v4.html";
+        String html = FileUtils.readFileToString(new File(path), "UTF-8");
+
+        Pattern pattern1 = Pattern.compile("<a href=\\\"(?<entry>.*?)\\\"", Pattern.CASE_INSENSITIVE);
+        Pattern pattern2 = Pattern.compile("src=\\\"(?<entry>.*?)\\\"", Pattern.CASE_INSENSITIVE);
+        Pattern pattern3 = Pattern.compile("src='(?<entry>.*?)'", Pattern.CASE_INSENSITIVE);
+
+        Matcher matcher1 = pattern1.matcher(html);
+        String url = "";
+        while (matcher1.find()) {
+            url = matcher1.group(1);
+            if (!url.equals("#") && McpString.isNotEmpty(url)) {
+                if (!url.startsWith("http") && !url.startsWith("https")) {
+                    url = "http:" + url;
+                }
+                URL netUrl = new URL(url);
+                String host = netUrl.getHost();
+                if (McpString.isNotEmpty(host)) {
+                    domainList.add(host);
+                }
+            }
+        }
+
+
+    }
 
 }

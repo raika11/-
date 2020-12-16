@@ -12,13 +12,12 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.dto.ValidList;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
@@ -34,7 +33,6 @@ import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,27 +56,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping("/api/components")
 @Api(tags = {"컴포넌트 API"})
-public class ComponentRestController {
-    @Autowired
-    private ComponentService componentService;
+public class ComponentRestController extends AbstractCommonController {
+
+    private final ComponentService componentService;
+
+    private final ComponentHistService componentHistService;
+
+    private final RelationService relationService;
+
+    private final PurgeHelper purgeHelper;
 
     @Autowired
-    private ComponentHistService componentHistService;
-
-    @Autowired
-    private RelationService relationService;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private PurgeHelper purgeHelper;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public ComponentRestController(ComponentService componentService, ComponentHistService componentHistService, RelationService relationService,
+            PurgeHelper purgeHelper) {
+        this.componentService = componentService;
+        this.componentHistService = componentHistService;
+        this.relationService = relationService;
+        this.purgeHelper = purgeHelper;
+    }
 
     /**
      * 컴포넌트 목록조회

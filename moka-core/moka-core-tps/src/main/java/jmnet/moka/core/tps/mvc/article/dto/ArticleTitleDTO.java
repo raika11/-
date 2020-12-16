@@ -5,6 +5,8 @@
 package jmnet.moka.core.tps.mvc.article.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Builder
 @Alias("ArticleTitleDTO")
+@ApiModel("기사 편집제목 DTO")
 public class ArticleTitleDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,23 +41,17 @@ public class ArticleTitleDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ArticleTitleDTO>>() {
     }.getType();
 
-    /**
-     * 서비스기사아이디
-     */
+    @ApiModelProperty("서비스기사아이디(필수)")
     @Min(value = 0, message = "{tps.article.error.min.totalId}")
     private Long totalId;
 
-    /**
-     * 편집된 기사제목
-     */
+    @ApiModelProperty("편집된 기사제목(필수)")
     @NotNull(message = "{tps.article.error.notnull.artEditTitle}")
     @Pattern(regexp = ".+", message = "{tps.article.error.pattern.artEditTitle}")
     @Length(min = 1, max = 510, message = "{tps.article.error.length.artEditTitle}")
     private String artEditTitle;
 
-    /**
-     * 편집된 모바일 기사제목
-     */
+    @ApiModelProperty("편집된 모바일 기사제목(필수)")
     @NotNull(message = "{tps.article.error.notnull.artEditMobTitle}")
     @Pattern(regexp = ".+", message = "{tps.article.error.pattern.artEditMobTitle}")
     @Length(min = 1, max = 510, message = "{tps.article.error.length.artEditMobTitle}")

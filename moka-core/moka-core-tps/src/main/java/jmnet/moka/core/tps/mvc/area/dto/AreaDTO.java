@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq")
+@ApiModel("편집영역 DTO")
 public class AreaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,100 +48,69 @@ public class AreaDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<AreaDTO>>() {
     }.getType();
 
-    /**
-     * 영역일련번호
-     */
+    @ApiModelProperty("영역일련번호")
     @Min(value = 0, message = "{tps.area.error.min.areaSeq}")
     private Long areaSeq;
 
-    /**
-     * 부모영역
-     */
+    @ApiModelProperty("부모영역")
     @ToString.Exclude
     private ParentAreaDTO parent;
 
-    /**
-     * 뎁스
-     */
+    @ApiModelProperty("뎁스")
     @Min(value = 0, message = "{tps.area.error.min.depth}")
     @Builder.Default
     private Integer depth = 1;
 
-    /**
-     * 사용여부(Y:사용, N:미사용)
-     */
+    @ApiModelProperty("사용여부(Y:사용, N:미사용)")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.area.error.pattern.usedYn}")
     @Builder.Default
     private String usedYn = MokaConstants.YES;
 
-    /**
-     * 도메인
-     */
+    @ApiModelProperty("도메인(필수)")
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private DomainSimpleDTO domain;
 
-    /**
-     * 페이지
-     */
+    @ApiModelProperty("페이지")
     private PageSimpleDTO page;
 
-    /**
-     * 영역구분(CP,CT)
-     */
+    @ApiModelProperty("영역구분(CP,CT)")
     @Pattern(regexp = "^(CP)|(CT)|()$", message = "{tps.area.error.pattern.areaDiv}")
     @Builder.Default
     private String areaDiv = MokaConstants.ITEM_COMPONENT;
 
-    /**
-     * 영역정렬:가로형H/세로형V
-     */
+    @ApiModelProperty("영역정렬:가로형H/세로형V")
     @Pattern(regexp = "[H|V]{1}$", message = "{tps.area.error.pattern.areaAlign}")
     @Builder.Default
     private String areaAlign = TpsConstants.AREA_ALIGN_V;
 
-    /**
-     * 컨테이너
-     */
+    @ApiModelProperty("컨테이너")
     private ContainerDTO container;
 
-    /**
-     * 순서
-     */
+    @ApiModelProperty("순서")
     @Builder.Default
     private Integer ordNo = 1;
 
-    /**
-     * 영역명
-     */
+    @ApiModelProperty("영역명(필수)")
     @NotNull(message = "{tps.area.error.notnull.areaName}")
     @Pattern(regexp = ".+", message = "{tps.area.error.pattern.areaName}")
     @Length(min = 1, max = 128, message = "{tps.area.error.length.areaName}")
     private String areaNm;
 
-    /**
-     * 후속API 또는 함수
-     */
+    @ApiModelProperty("후속API 또는 함수")
     @Length(max = 256, message = "{tps.area.error.length.afterApi}")
     private String afterApi;
 
-    /**
-     * 미리보기리소스
-     */
+    @ApiModelProperty("미리보기리소스")
     @Length(max = 2000, message = "{tps.area.error.length.previewRsrc}")
     private String previewRsrc;
 
-    /**
-     * 컴포넌트목록: areaDiv == 'CT'인 경우 값 있음
-     */
+    @ApiModelProperty("컴포넌트목록: areaDiv == 'CT'인 경우 값 있음")
     private List<AreaCompDTO> areaComps = new ArrayList<AreaCompDTO>();
 
-    /**
-     * 컴포넌트: areaDiv == 'CP'인 경우 값 있음
-     */
+    @ApiModelProperty("컴포넌트: areaDiv == 'CP'인 경우 값 있음")
     private AreaCompDTO areaComp;
 
     public void addAreaComp(AreaCompDTO areaComp) {
-
         if (areaComp.getArea() == null) {
             areaComp.setArea(this);
             return;

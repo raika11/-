@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.component.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.Api;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -25,6 +26,7 @@ import org.apache.ibatis.type.Alias;
 //@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 @Alias("ComponentSearchDTO")
+@Api(tags = {"컴포넌트 API"})
 public class ComponentSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = -7998111385290877921L;

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.codemgt.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
@@ -28,8 +28,6 @@ import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,19 +52,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/codemgt-grps")
 @Api(tags = {"기타코드 API"})
-public class CodeMgtRestController {
+public class CodeMgtRestController extends AbstractCommonController {
 
-    @Autowired
-    private CodeMgtService codeMgtService;
+    private final CodeMgtService codeMgtService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MessageByLocale messageByLocale;
-
-    @Autowired
-    private TpsLogger tpsLogger;
+    public CodeMgtRestController(CodeMgtService codeMgtService) {
+        this.codeMgtService = codeMgtService;
+    }
 
     /**
      * 그룹 목록조회
@@ -102,8 +94,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드 목록조회")
     @GetMapping("/{grpCd}/codemgts")
-    public ResponseEntity<?> getCodeMgtList(
-            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+    public ResponseEntity<?> getCodeMgtList(@ApiParam("그룹코드(필수)") @PathVariable("grpCd")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
             @Valid @SearchParam CodeMgtSearchDTO search)
             throws InvalidDataException, Exception {
         // 데이타유효성검사.
@@ -133,8 +125,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "사용중인 코드 목록조회")
     @GetMapping("/{grpCd}/use-codemgts")
-    public ResponseEntity<?> getUseCodeMgtList(
-            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd) {
+    public ResponseEntity<?> getUseCodeMgtList(@ApiParam("그룹코드(필수)") @PathVariable("grpCd")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd) {
 
         // 조회
         List<CodeMgt> returnValue = codeMgtService.findUseList(grpCd);
@@ -160,7 +152,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "그룹 상세조회")
     @GetMapping("/{grpCd}")
-    public ResponseEntity<?> getCodeMgtGrp(@PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd)
+    public ResponseEntity<?> getCodeMgtGrp(
+            @ApiParam("그룹코드(필수)") @PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd)
             throws NoDataException, Exception {
 
         // 데이타유효성검사.
@@ -301,7 +294,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "그룹 수정")
     @PutMapping("/{seqNo}")
-    public ResponseEntity<?> putCodeMgtGrp(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo,
+    public ResponseEntity<?> putCodeMgtGrp(
+            @ApiParam("그룹코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo,
             @Valid CodeMgtGrpDTO codeMgtGrpDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -345,7 +339,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "그룹 삭제")
     @DeleteMapping("/{seqNo}")
-    public ResponseEntity<?> deleteCodeMgtGrp(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo)
+    public ResponseEntity<?> deleteCodeMgtGrp(
+            @ApiParam("그룹코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo)
             throws NoDataException, Exception {
         // 1. 데이타 존재여부 검사
         CodeMgtGrp codeMgtGrp = codeMgtService
@@ -383,7 +378,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드 상세조회")
     @GetMapping("/codemgts/{seqNo}")
-    public ResponseEntity<?> getCodeMgt(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo)
+    public ResponseEntity<?> getCodeMgt(
+            @ApiParam("그룹코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
@@ -525,7 +521,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드수정")
     @PutMapping("/codemgts/{seqNo}")
-    public ResponseEntity<?> putCodeMgt(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo,
+    public ResponseEntity<?> putCodeMgt(
+            @ApiParam("상세코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo,
             @Valid CodeMgtDTO codeMgtDTO)
             throws InvalidDataException, NoDataException, Exception {
         // 데이타유효성검사.
@@ -571,7 +568,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드삭제")
     @DeleteMapping("/codemgts/{seqNo}")
-    public ResponseEntity<?> deleteCodeMgt(@PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo)
+    public ResponseEntity<?> deleteCodeMgt(
+            @ApiParam("상세코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo)
             throws InvalidDataException, NoDataException, Exception {
         // 1. 데이타 존재여부 검사
         CodeMgt codeMgt = codeMgtService
@@ -610,9 +608,10 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드 목록조회")
     @GetMapping("/{grpCd}/special-char/{dtlCd}")
-    public ResponseEntity<?> getSpecialChar(
-            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
-            @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.dtlCd}") String dtlCd)
+    public ResponseEntity<?> getSpecialChar(@ApiParam("그룹코드(필수)") @PathVariable("grpCd")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+            @ApiParam("상세코드(필수)") @PathVariable("dtlCd")
+            @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.dtlCd}") String dtlCd)
             throws InvalidDataException, Exception {
         // specialChar
         // 조회
@@ -647,7 +646,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "코드수정")
     @PutMapping("/{grpCd}/special-char")
-    public ResponseEntity<?> putCodeMgtDtl(@PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd,
+    public ResponseEntity<?> putCodeMgtDtl(
+            @ApiParam("그룹코드(필수)") @PathVariable("grpCd") @NotNull(message = "{tps.codeMgt.error.notnul.grpCd}") String grpCd,
             @Valid CodeMgtDtlDTO codeMgtDtlDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -693,8 +693,8 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "동일 그룹아이디 존재 여부")
     @GetMapping("/{grpCd}/exists")
-    public ResponseEntity<?> duplicateCheckGrpCd(
-            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd)
+    public ResponseEntity<?> duplicateCheckGrpCd(@ApiParam("그룹코드(필수)") @PathVariable("grpCd")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd)
             throws Exception {
 
         try {
@@ -722,9 +722,10 @@ public class CodeMgtRestController {
      */
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{grpCd}/{dtlCd}/exists")
-    public ResponseEntity<?> duplicateCheckDtlCd(
-            @PathVariable("grpCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
-            @PathVariable("dtlCd") @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}") String dtlCd)
+    public ResponseEntity<?> duplicateCheckDtlCd(@ApiParam("그룹코드(필수)") @PathVariable("grpCd")
+    @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgtGrp.error.pattern.grpCd}") String grpCd,
+            @ApiParam("상세코드(필수)") @PathVariable("dtlCd")
+            @Pattern(regexp = "^[0-9a-zA-Z_\\-\\/]+$", message = "{tps.codeMgt.error.pattern.dtlCd}") String dtlCd)
             throws Exception {
 
         try {

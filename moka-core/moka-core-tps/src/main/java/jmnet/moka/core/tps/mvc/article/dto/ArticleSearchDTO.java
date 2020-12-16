@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.article.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -27,52 +29,40 @@ import org.hibernate.validator.constraints.Length;
 //@JsonInclude(Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 @Alias("ArticleSearchDTO")
+@ApiModel("기사 검색 DTO")
 public class ArticleSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 6774193298696439472L;
 
-    /**
-     * 분류
-     */
+    @ApiModelProperty("분류")
     @Length(max = 8, message = "{tps.article.error.length.masterCode}")
     private String masterCode;
 
-    /**
-     * 판
-     */
+    @ApiModelProperty("판")
     @Pattern(regexp = "[0-9]*$", message = "{tps.article.error.pattern.pressPan}")
     private String pressPan;
 
-    /**
-     * 면
-     */
+    @ApiModelProperty("면")
     @Pattern(regexp = "[0-9]*$", message = "{tps.article.error.pattern.pressMyun}")
     private String pressMyun;
 
-    /**
-     * 서비스 시작일자
-     */
+    @ApiModelProperty("서비스 시작일자(필수)")
     @NotNull(message = "{tps.article.error.notnull.startServiceDay}")
     @DTODateTimeFormat
     private Date startServiceDay;
 
-    /**
-     * 서비스 종료일자
-     */
+    @ApiModelProperty("서비스 종료일자(필수)")
     @NotNull(message = "{tps.article.error.notnull.endServiceDay}")
     @DTODateTimeFormat
     private Date endServiceDay;
 
-    /**
-     * 콘텐트타입
-     */
+    @ApiModelProperty("콘텐트타입")
     @Length(max = 1, message = "{tps.article.error.length.contentType}")
     private String contentType;
 
-    /**
-     * 매체목록(구분자 ,)
-     */
+    @ApiModelProperty("매체목록 (필수/구분자,)")
     @JsonIgnore
+    @NotNull(message = "{tps.article.error.notnull.deskingSourceList}")
     private String deskingSourceList;
 
     public ArticleSearchDTO() {

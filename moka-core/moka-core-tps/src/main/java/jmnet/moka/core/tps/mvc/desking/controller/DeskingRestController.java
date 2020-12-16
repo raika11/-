@@ -558,7 +558,7 @@ public class DeskingRestController extends AbstractCommonController {
      * @throws Exception            그외 에러
      */
     @ApiOperation(value = "편집기사work 수정")
-    @PutMapping("/components/{componentWorkSeq}/contents")
+    @PutMapping(path = "/components/{componentWorkSeq}/contents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> putDeskingWork(@Valid DeskingWorkDTO deskingWorkDTO, Principal principal,
             @PathVariable("componentWorkSeq") Long componentWorkSeq, @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
             throws InvalidDataException, NoDataException, Exception {

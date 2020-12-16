@@ -97,7 +97,7 @@ const ChangeArtGroupModal = (props) => {
 
     return (
         <MokaModal
-            width={530}
+            width={600}
             title={unescapeHtml(artData.artTitle || '')}
             titleClassName="user-select-text"
             show={show}
@@ -120,26 +120,26 @@ const ChangeArtGroupModal = (props) => {
             ]}
             centered
         >
-            <div className="title-line1 position-absolute" style={{ height: 19, top: 41, left: 70 + 5 + titleWidth[0] }}></div>
-            <div className="title-line2 position-absolute" style={{ height: 19, top: 41, left: 70 + 5 + titleWidth[1] }}></div>
+            <div className="title-line1 position-absolute" style={{ height: 19, top: 35, left: 12 + titleWidth[0] }}></div>
+            <div className="title-line2 position-absolute" style={{ height: 19, top: 35, left: 12 + titleWidth[1] }}></div>
             <p
-                className={clsx('mb-0', {
+                className={clsx('mb-10', {
                     'color-positive': !artData.artEditTitle || artData.artEditTitle === '',
                 })}
             >
                 웹제목
             </p>
-            <MokaInput as="textarea" className="mb-2 resize-none custom-scroll p-05" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} isInvalid={error.webTitle} />
+            <MokaInput className="mb-20" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} isInvalid={error.webTitle} />
 
-            <div className="mob-title-line position-absolute" style={{ height: 19, top: 120, left: 70 + 5 + mobWidth }}></div>
+            <div className="mob-title-line position-absolute" style={{ height: 19, top: 115, left: 12 + mobWidth }}></div>
             <p
-                className={clsx('mb-0', {
+                className={clsx('mb-10', {
                     'color-positive': !artData.artEditMobTitle || artData.artEditMobTitle === '',
                 })}
             >
                 모바일제목
             </p>
-            <MokaInput as="textarea" className="mb-0 resize-none custom-scroll" value={mobTitle} onChange={(e) => setMobTitle(e.target.value)} isInvalid={error.mobTitle} />
+            <MokaInput className="mb-0" value={mobTitle} onChange={(e) => setMobTitle(e.target.value)} isInvalid={error.mobTitle} />
         </MokaModal>
     );
 };

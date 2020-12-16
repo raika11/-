@@ -9,7 +9,7 @@ export default [
     {
         headerName: '데이터셋명',
         field: 'datasetName',
-        width: 364,
+        width: 340,
         flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'datasetName',

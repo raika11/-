@@ -388,8 +388,8 @@ const TemplateListModal = (props) => {
             )}
             {listType === 'thumbnail' && (
                 <TemplateThumbTable
-                    cardWidth={209}
-                    cardHeight={209}
+                    cardWidth={198}
+                    cardHeight={198}
                     tableHeight={501}
                     rowData={rowData}
                     loading={loading}

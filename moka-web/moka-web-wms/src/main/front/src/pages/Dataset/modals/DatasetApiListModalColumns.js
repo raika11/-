@@ -10,7 +10,8 @@ export default [
     {
         headerName: '설명',
         field: 'description',
-        width: 393,
+        width: 370,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
     },
 ];

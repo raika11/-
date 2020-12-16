@@ -287,7 +287,7 @@ body {
 }
 
 /* -----------------------
-* modal (react-draggable-container, 기존 modal override)
+* modal (react-draggable-container)
 * ---------------------- */
 .react-draggable-container {
     height: 100vh;
@@ -298,11 +298,6 @@ body {
     justify-content: center;
 
     .modal-dialog {
-        box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
-        border-radius: 7px;
-        margin: 0;
-        min-width: 300px;
-    
         &.react-draggable {
             .modal-header[data-drag-on="true"] {
                 cursor: move;
@@ -322,33 +317,6 @@ body {
 
     @include media-breakpoint-down(md) {
         padding: 10px;
-    }
-}
-
-.modal-header {
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 0;
-
-    .modal-title {
-        margin-right: 1.5rem;
-        font-size: 16px;
-        letter-spacing: -1px;
-    }
-    
-    .close {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 0;
-        text-overflow: clip;
-    }
-}
-
-.modal-dialog {
-    .toast-footer {
-        @include toast-footer;
     }
 }
 

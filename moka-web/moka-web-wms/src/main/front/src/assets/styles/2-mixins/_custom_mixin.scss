@@ -33,10 +33,10 @@
 
     button {
         @include button-variant($white, $white);
-        margin: 0px;
+        margin: 0;
         flex: 1 1 auto !important;
-        border: 0px;
-        padding: $spacer;
+        border: 0;
+        padding: 24px 0;
         border-radius: 0;
         border-right: 1px solid $border-color;
 

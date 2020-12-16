@@ -1,5 +1,6 @@
 import React, { useEffect, forwardRef } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import ArticleDeskSearch from './ArticleDeskSearch';
 import ArticleDeskAgGrid from './ArticleDeskAgGrid';
@@ -52,7 +53,7 @@ const ArticleDeskList = forwardRef((props, ref) => {
     }, [dispatch]);
 
     return (
-        <div className={className}>
+        <div className={clsx('d-flex flex-column h-100', className)}>
             <ArticleDeskSearch media={media} selectedComponent={selectedComponent} show={show} />
             <ArticleDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
         </div>

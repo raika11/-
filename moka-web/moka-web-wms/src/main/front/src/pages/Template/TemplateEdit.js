@@ -8,10 +8,10 @@ import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, copyTemplate, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { DefaultInputModal } from '@pages/commons';
+import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
 
 /**
@@ -48,11 +48,11 @@ const TemplateEdit = ({ onDelete }) => {
     // modal state
     const [copyModalShow, setCopyModalShow] = useState(false);
     const [addComponentModalShow, setAddComponentModalShow] = useState(false);
-    const [copyModalData, setCopyModalData] = useState({
-        title: '템플릿명',
-        value: '',
-        isInvalid: false,
-    });
+    // const [copyModalData, setCopyModalData] = useState({
+    //     title: '템플릿명',
+    //     value: '',
+    //     isInvalid: false,
+    // });
 
     // ref
     const imgFileRef = useRef(null);
@@ -186,48 +186,48 @@ const TemplateEdit = ({ onDelete }) => {
     /**
      * 템플릿 복사 모달 hide
      */
-    const handleHideCopyModal = () => {
-        setCopyModalData({
-            title: '템플릿명',
-            value: '',
-            isInvalid: false,
-        });
-        setCopyModalShow(false);
-    };
+    // const handleHideCopyModal = () => {
+    //     setCopyModalData({
+    //         title: '템플릿명',
+    //         value: '',
+    //         isInvalid: false,
+    //     });
+    //     setCopyModalShow(false);
+    // };
 
     /**
      * 템플릿 복사 모달 > 저장 버튼
      * @param {object} returnData 템플릿 복사 데이터
      */
-    const handleClickCopy = (returnData) => {
-        if (returnData.value.length > 0) {
-            setCopyModalData({
-                ...returnData,
-                isInvalid: false,
-            });
-            dispatch(
-                copyTemplate({
-                    domainId: template.domain.domainId,
-                    templateSeq: template.templateSeq,
-                    templateName: returnData.value,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            handleHideCopyModal();
-                            toast.success(header.message);
-                            history.push(`/template/${body.templateSeq}`);
-                        } else {
-                            toast.fail(header.message);
-                        }
-                    },
-                }),
-            );
-        } else {
-            setCopyModalData({
-                ...returnData,
-                isInvalid: true,
-            });
-        }
-    };
+    // const handleClickCopy = (returnData) => {
+    //     if (returnData.value.length > 0) {
+    //         setCopyModalData({
+    //             ...returnData,
+    //             isInvalid: false,
+    //         });
+    //         dispatch(
+    //             copyTemplate({
+    //                 domainId: template.domain.domainId,
+    //                 templateSeq: template.templateSeq,
+    //                 templateName: returnData.value,
+    //                 callback: ({ header, body }) => {
+    //                     if (header.success) {
+    //                         handleHideCopyModal();
+    //                         toast.success(header.message);
+    //                         history.push(`/template/${body.templateSeq}`);
+    //                     } else {
+    //                         toast.fail(header.message);
+    //                     }
+    //                 },
+    //             }),
+    //         );
+    //     } else {
+    //         setCopyModalData({
+    //             ...returnData,
+    //             isInvalid: true,
+    //         });
+    //     }
+    // };
 
     /**
      * 삭제 버튼
@@ -370,8 +370,8 @@ const TemplateEdit = ({ onDelete }) => {
                             type="number"
                         />
                     </Col>
-                    <Col xs={3} className="d-flex p-0 pl-2">
-                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" inputClassName="ft-12" />{' '}
+                    <Col xs={3} className="d-flex align-items-center p-0 pl-2">
+                        x <MokaInput className="ml-2 mb-0 ft-12" value={cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" />{' '}
                     </Col>
                 </Row>
                 {/* 입력태그 */}
@@ -418,8 +418,8 @@ const TemplateEdit = ({ onDelete }) => {
             </Form>
 
             {/* 템플릿복사 Modal */}
-            <DefaultInputModal show={copyModalShow} onHide={handleHideCopyModal} onSave={handleClickCopy} title="템플릿 설정복사" inputData={copyModalData} />
-            {/* <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={template} /> */}
+            {/* <DefaultInputModal show={copyModalShow} onHide={handleHideCopyModal} onSave={handleClickCopy} title="템플릿 설정복사" inputData={copyModalData} /> */}
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={template} />
 
             {/* 컴포넌트생성 Modal */}
             <AddComponentModal show={addComponentModalShow} onHide={() => setAddComponentModalShow(false)} />

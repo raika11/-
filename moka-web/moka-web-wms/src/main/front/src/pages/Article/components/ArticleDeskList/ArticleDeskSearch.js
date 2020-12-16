@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import { defaultArticleSearchType, CodeAutocomplete } from '@pages/commons';
+import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { SourceSelector } from '@pages/commons';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
@@ -188,7 +188,7 @@ const ArticleDeskSearch = (props) => {
                 {/* 검색 조건 */}
                 <div style={{ width: 110 }} className="mr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                        {defaultArticleSearchType.map((searchType) => (
+                        {initialState.searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
                             </option>

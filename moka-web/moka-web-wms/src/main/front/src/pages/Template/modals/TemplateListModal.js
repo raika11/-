@@ -10,7 +10,6 @@ import TemplateThumbTable, { propTypes as thumbTableProps } from '@pages/Templat
 import { getTpZone, getTpSize } from '@store/codeMgt';
 import { initialState, GET_TEMPLATE_LIST_MODAL, getTemplateListModal } from '@store/template';
 import columnDefs from './TemplateListModalColumns';
-import { defaultTemplateSearchType } from '@pages/commons';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -351,7 +350,7 @@ const TemplateListModal = (props) => {
                     {/* 검색조건 */}
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput as="select" value={search.searchType} className="ft-12" name="searchType" onChange={handleChangeValue}>
-                            {defaultTemplateSearchType.map((type) => (
+                            {initialState.searchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>

@@ -10,7 +10,6 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getTemplateList, changeSearchOption, initialState } from '@store/template';
 import { getTpSize, getTpZone } from '@store/codeMgt';
-import { defaultTemplateSearchType } from '@pages/commons';
 
 /**
  * 템플릿 검색 컴포넌트
@@ -170,7 +169,7 @@ const TemplateSearch = () => {
                             });
                         }}
                     >
-                        {defaultTemplateSearchType.map((type) => (
+                        {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>

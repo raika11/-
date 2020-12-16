@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import { ITEM_PG, ITEM_AP, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
-import { defaultHistorySearchType } from './index';
 import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
 import toast from '@utils/toastUtil';
@@ -198,7 +197,7 @@ const HistoryList = (props) => {
                                 });
                             }}
                         >
-                            {defaultHistorySearchType.map((searchType) => (
+                            {initialState.searchTypeList.map((searchType) => (
                                 <option value={searchType.id} key={searchType.id}>
                                     {searchType.name}
                                 </option>

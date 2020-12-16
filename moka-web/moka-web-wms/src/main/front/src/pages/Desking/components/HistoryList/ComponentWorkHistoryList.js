@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { DESK_HIST_PUBLISH, DESK_HIST_SAVE } from '@/constants';
 import { MokaTable, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import { defaultHistorySearchType } from '@pages/commons';
+import { initialState } from '@store/history';
 import columnDefs from './ComponentWorkHistoryListColumns';
 
 const ComponentWorkHistoryList = (props) => {
@@ -64,7 +64,7 @@ const ComponentWorkHistoryList = (props) => {
                     {/* 검색조건 */}
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput as="select" className="mb-0 ft-12" value={search.searchType} name="keyword" onChange={handleChangeValue}>
-                            {defaultHistorySearchType.map((searchType) => (
+                            {initialState.searchTypeList.map((searchType) => (
                                 <option value={searchType.id} key={searchType.id}>
                                     {searchType.name}
                                 </option>

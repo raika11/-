@@ -8,7 +8,6 @@ import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getPageListModal, GET_PAGE_LIST_MODAL } from '@store/page';
 import columnDefs from './PageListModalColums';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-import { defaultPageSearchType } from '@pages/commons';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -209,7 +208,7 @@ const PageListModal = (props) => {
                                 });
                             }}
                         >
-                            {defaultPageSearchType.map((type) => (
+                            {initialState.searchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>

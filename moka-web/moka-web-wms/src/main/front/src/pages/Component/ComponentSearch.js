@@ -10,7 +10,6 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getComponentList, changeSearchOption, initialState } from '@store/component';
 import { getTpZone } from '@store/codeMgt';
-import { defaultComponentSearchType } from '@pages/commons';
 
 /**
  * 컴포넌트 검색 컴포넌트
@@ -120,7 +119,7 @@ const ComponentSearch = () => {
                             });
                         }}
                     >
-                        {defaultComponentSearchType.map((type) => (
+                        {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>

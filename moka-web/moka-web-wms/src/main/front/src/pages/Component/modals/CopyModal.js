@@ -64,6 +64,7 @@ const CopyModal = (props) => {
             ]}
             footerClassName="justify-content-center"
             draggable
+            centered
         >
             <Form>
                 <MokaInputLabel

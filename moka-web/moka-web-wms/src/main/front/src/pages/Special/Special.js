@@ -1,14 +1,25 @@
 import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import SpecialEdit from './SpecialEdit';
+import { clearStore } from '@store/special';
 const SpecialList = React.lazy(() => import('./SpecialList'));
 
 /**
  * 디지털 스페셜 관리
  */
 const Special = ({ match }) => {
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className="d-flex">
             <Helmet>

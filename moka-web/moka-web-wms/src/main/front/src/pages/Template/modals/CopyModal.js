@@ -64,6 +64,7 @@ const CopyModal = (props) => {
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             footerClassName="justify-content-center"
+            centered
             draggable
         >
             <Form>

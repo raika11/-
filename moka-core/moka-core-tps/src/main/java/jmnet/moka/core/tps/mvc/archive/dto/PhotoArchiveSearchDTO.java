@@ -41,7 +41,8 @@ public class PhotoArchiveSearchDTO {
      * 메뉴 코드
      */
     @ApiModelProperty("메뉴 번호")
-    private PhotoArchiveMenuCode menuCode;
+    @Builder.Default
+    private PhotoArchiveMenuCode menuCode = PhotoArchiveMenuCode.PHOTO_DESK;
 
     /**
      * 출처 코드 ( default: ALL /  ex: coverage,newsis ) : 포토아카이브 목록 - 출처(분류) 목록 시트 참조

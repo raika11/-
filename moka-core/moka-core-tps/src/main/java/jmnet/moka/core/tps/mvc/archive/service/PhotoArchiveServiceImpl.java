@@ -89,23 +89,43 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
             MultiValueMap<String, Object> params = MapBuilder
                     .getInstance()
                     .getMultiValueMap();
-            params.setAll(BeanConverter.toMap(searchDTO));
-            params.set("page", searchDTO.getPage() + 1);
-            params.remove("menuCode");
-            if (searchDTO.getMenuCode() != null) {
-                params.set("menuNo", searchDTO
-                        .getMenuCode()
-                        .getMenuNo());
-            }
+            BeanConverter
+                    .toMap(searchDTO)
+                    .entrySet()
+                    .forEach(entry -> {
+                        if (entry.getValue() != null) {
+                            if (entry
+                                    .getKey()
+                                    .equals("page")) {
+                                params.set("page", searchDTO.getPage() + 1);
+                            } else if (entry
+                                    .getKey()
+                                    .equals("pageCount")) {
+                                params.set("page_count", entry.getValue());
+                            } else if (entry
+                                    .getKey()
+                                    .equals("menuCode")) {
+                                if (searchDTO.getMenuCode() != null) {
+                                    params.set("menuNo", searchDTO
+                                            .getMenuCode()
+                                            .getMenuNo());
+                                }
+                            } else {
+                                params.set(entry.getKey(), entry.getValue());
+                            }
+                        }
+                    });
 
-            ResponseEntity<String> responseEntity = restTemplateHelper.post(archiveAddress + photoListApi, params, getHeader(memberId));
+            ResponseEntity<String> responseEntity = restTemplateHelper.post(archiveAddress + photoListApi, params, getHeader("ilbo"));
 
             result = ResourceMapper
                     .getDefaultObjectMapper()
                     .readValue(responseEntity.getBody(), new TypeReference<CmsVO<CmsResultListVO<PhotoArchiveVO>>>() {
                     });
             CmsResultListVO<PhotoArchiveVO> data = result.getData();
-            page = new PageImpl<>(data.getResultList(), PageRequest.of(data.getPage(), data.getPageCount()), data.getTotalCount());
+            if (data != null) {
+                page = new PageImpl<>(data.getResultList(), PageRequest.of(data.getPage(), data.getPageCount()), data.getTotalCount());
+            }
 
         } catch (Exception ex) {
             log.error(ex.toString());

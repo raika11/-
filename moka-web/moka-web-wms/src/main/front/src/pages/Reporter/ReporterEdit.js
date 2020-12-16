@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, GET_REPORTER, CHANGE_REPORTER, saveReporter } from '@store/reporter';
 import toast from '@utils/toastUtil';
@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col';
  * 기자 정보 조회/수정
  */
 const ReporterEdit = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const { repSeq: paramSeq } = useParams();
 
@@ -172,6 +173,11 @@ const ReporterEdit = () => {
         }
     }, [invalidList]);
 
+    const handleClickCancle = () => {
+        dispatch(clearReporter());
+        history.push(`/reporter`);
+    };
+
     // setter 도메인 데이터 셋팅
     useEffect(() => {
         setRepSeqError(false);
@@ -249,9 +255,9 @@ const ReporterEdit = () => {
                             저장
                         </Button>
                         {/* 2020-11-27 14:55 추후에 기능을 추가 할수 있어서 일단 주석 처리. */}
-                        {/* <Button variant="negative" onClick={handleClickCancle} disabled={inputDisabled}>
+                        <Button variant="negative" onClick={handleClickCancle} disabled={inputDisabled}>
                             취소
-                        </Button> */}
+                        </Button>
                     </div>
                 </div>
             </div>

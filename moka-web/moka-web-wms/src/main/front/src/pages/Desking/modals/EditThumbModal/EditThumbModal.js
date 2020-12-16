@@ -6,7 +6,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaModal, MokaCardTabs } from '@components';
-import { initialState, getPhotoList, getPhotoTypes, changeSearchOption, clearStore } from '@store/photoArchive';
+import { initialState, getPhotoList, changeSearchOption, clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
 import EditThumbDropzone from './EditThumbDropzone';
@@ -23,12 +23,11 @@ const EditThumbModal = (props) => {
     // 대표 이미지 props
     const { setFileValue, thumbFileName, setThumbFileName } = props;
     const dispatch = useDispatch();
-    const { total, list, storeSearch, imageTypeList, photo } = useSelector(
+    const { total, list, storeSearch, photo } = useSelector(
         (store) => ({
             total: store.photoArchive.total,
             list: store.photoArchive.list,
             storeSearch: store.photoArchive.search,
-            imageTypeList: store.photoArchive.search.imageTypeList,
             photo: store.photoArchive.photo,
         }),
         shallowEqual,
@@ -47,18 +46,6 @@ const EditThumbModal = (props) => {
         imgProps: {},
     });
     const [showViewModal, setShowViewModal] = useState(false);
-    const [error, setError] = useState();
-
-    const handleSearch = () => {
-        let temp = {
-            ...search,
-            startdate: moment(search.startdate, DB_DATEFORMAT),
-            endServiceDay: moment(search.finishdate, DB_DATEFORMAT),
-            imageTypeList,
-            page: 0,
-        };
-        dispatch(getPhotoList(changeSearchOption(temp)));
-    };
 
     /**
      * 썸네일 클릭
@@ -88,9 +75,9 @@ const EditThumbModal = (props) => {
         e.stopPropagation();
 
         if (thumbFileName === data.imageThumPath) {
-            toast.warning('이미 등록 된 대표사진 입니다.');
+            toast.warning('이미 등록된 대표 사진입니다.');
         } else if (repPhoto.path.thumbPath === data.imageThumPath) {
-            toast.warning('이미 대표이미지 영역에 설정된 사진 입니다.');
+            toast.warning('이미 대표 이미지 영역에 설정된 사진입니다.');
         }
 
         setRepPhoto({
@@ -143,39 +130,10 @@ const EditThumbModal = (props) => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
-    // useEffect(() => {
-    //     // 모달 show 포토아카이브 목록 셋팅
-    //     if (show) {
-    //         const startdate = search.startdate ? moment(search.startdate).format(DB_DATEFORMAT) : moment().format(DB_DATEFORMAT);
-    //         const finishdate = search.finishdate ? moment(search.finishdate).format(DB_DATEFORMAT) : moment().format(DB_DATEFORMAT);
-    //         let temp = {
-    //             ...search,
-    //             startdate,
-    //             finishdate,
-    //             imageTypeList,
-    //             page: 0,
-    //         };
-
-    //         // if (type) {
-    //         //     dispatch(getPhotoList(changeSearchOption(temp)));
-    //         //     setError({ ...error, deskingSourceList: false });
-    //         // } else {
-    //         //     setError({ ...error, deskingSourceList: true });
-    //         // }
-    //     }
-    //     //  else {
-    //     //     dispatch(clearList());
-    //     //     setError({ ...error, deskingSourceList: true });
-    //     // }
-
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [sourceOn, show]);
-
     useEffect(() => {
         // 모달 show 포토아카이브 목록 셋팅
         if (show) {
             dispatch(getPhotoList());
-            dispatch(getPhotoTypes());
         } else if (onHide) {
             dispatch(clearStore());
         }
@@ -218,7 +176,7 @@ const EditThumbModal = (props) => {
                         tabs={[
                             <React.Fragment>
                                 <div className="px-3 py-2">
-                                    <EditThumbSearch search={search} setSearch={setSearch} imageTypeList={imageTypeList} onSearch={handleSearch} />
+                                    <EditThumbSearch search={search} setSearch={setSearch} />
                                     <EditThumbTable
                                         total={total}
                                         page={search.page}
@@ -233,7 +191,7 @@ const EditThumbModal = (props) => {
                                 </div>
                             </React.Fragment>,
                         ]}
-                        tabNavs={['아카이브', '본문 소재 리스트']}
+                        tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
                         fill
                     />
                     <div

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
 import EditThumbSelectDropdown from './EditThumbSelectDropdown';
+import { getPhotoList, changeSearchOption, clearList } from '@store/photoArchive';
 
 const periodType = [
     { id: 'all', name: '전체' },
@@ -13,18 +14,30 @@ const periodType = [
 ];
 
 const EditThumbSearch = (props) => {
-    const { search, setSearch, onSearch } = props;
+    const { search, setSearch } = props;
+    const dispatch = useDispatch();
 
     const searchKeyList = useSelector((store) => store.photoArchive.searchKeyList);
 
     const [period, setPeriod] = useState('all');
-    const [startDate, setStartDate] = useState(moment().format(DB_DATEFORMAT));
-    const [finishDate, setFinishDate] = useState(moment().format(DB_DATEFORMAT));
-    const [dataTypeList, setDataTypeList] = useState(null);
-    const [imageTypeList, setImageTypeList] = useState(null);
-    const [searchType, setSearchType] = useState('all');
-    const [type, setType] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [finishDate, setFinishDate] = useState(null);
+    // const [dataTypeList, setDataTypeList] = useState(null);
+    const [imageType, setImageType] = useState(null);
+    const [timeReady, setTimeReady] = useState(false);
+    const [searchKey, setSearchKey] = useState('all');
     const [error, setError] = useState({});
+
+    const handleSearch = () => {
+        let temp = {
+            ...search,
+            startdate: moment(search.startdate, DB_DATEFORMAT),
+            endServiceDay: moment(search.finishdate, DB_DATEFORMAT),
+            imageType,
+            page: 0,
+        };
+        dispatch(getPhotoList(changeSearchOption(temp)));
+    };
 
     // useEffect(() => {
     //     if (type) {
@@ -35,6 +48,15 @@ const EditThumbSearch = (props) => {
     //         setError({ ...error, deskingSourceList: true });
     //     }
     // }, []);
+
+    // useEffect(() => {
+    //     if (imageType) {
+    //         dispatch(getPhotoList(changeSearchOption(...search, imageType)));
+    //     } else {
+    //         dispatch(clearList());
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [imageType]);
 
     return (
         <Form className="d-flex mb-2">
@@ -107,31 +129,31 @@ const EditThumbSearch = (props) => {
                 />
             </div>
 
-            <div className="mr-2" style={{ width: 150 }}>
+            {/* <div className="mr-2" style={{ width: 150 }}>
                 <EditThumbSelectDropdown
-                // className="mr-2"
-                // value={dataTypeList}
-                // onChange={(value) => {
-                //     setDataTypeList(value);
-                //     if (value !== '') {
-                //         setType(true);
-                //     }
-                // }}
-                // isInvalid={error.deskingSourceList}
+                value={dataTypeList}
+                onChange={(value) => {
+                    setDataTypeList(value);
+                    if (value !== '') {
+                        setType(true);
+                    }
+                }}
+                isInvalid={error.deskingSourceList}
                 />
-            </div>
+            </div> */}
 
             <div className="mr-2 d-flex align-items-center" style={{ width: 140 }}>
                 <EditThumbSelectDropdown
-                // className="mr-2"
-                // value={imageTypeList}
-                // onChange={(value) => {
-                //     setImageTypeList(value);
-                //     if (value !== '') {
-                //         setType(true);
-                //     }
-                // }}
-                // isInvalid={error.deskingSourceList}
+                    imageValue={imageType}
+                    onChange={(value) => {
+                        console.log(value);
+                        setImageType(value);
+                        setError({ ...error, imageType: false });
+                        if (value !== '') {
+                            setTimeReady(true);
+                        }
+                    }}
+                    isInvalid={error.imageType}
                 />
             </div>
 
@@ -154,7 +176,7 @@ const EditThumbSearch = (props) => {
                         searchValue: e.target.value,
                     });
                 }}
-                onSearch={onSearch}
+                onSearch={handleSearch}
             />
         </Form>
     );

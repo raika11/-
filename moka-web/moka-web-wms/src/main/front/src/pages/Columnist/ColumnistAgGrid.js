@@ -75,7 +75,7 @@ const ColumnistAgGrid = () => {
             </div>
 
             <MokaTable
-                agGridHeight={650}
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(data) => data.seqNo}

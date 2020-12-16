@@ -290,31 +290,15 @@ const ReporterEdit = () => {
                         <MokaInputLabel label="JNET 이메일4" labelWidth={100} inputProps={{ plaintext: true, readOnly: true }} value={rMail4} name="" />
                     </div>
                 </Form.Row>
-                <Form.Row className="d-flex justify-content-between">
-                    <Col xs={2} className="p-1 mb-0 mr-2">
-                        <Form.Label className={'text-right'} style={{ width: '100px', minwidth: '100px' }} htmlFor="none">
-                            기자 한마디
-                        </Form.Label>
-                    </Col>
-                    <Col xs={10} className="p-0">
-                        <MokaInput as={'textarea'} className="resize-none" value={repTalk} inputProps={{ plaintext: true, readOnly: true, rows: '5' }} />
-                    </Col>
-                </Form.Row>
-                {/* <MokaInputLabel
+                <MokaInputLabel
                     as="textarea"
-                    label={
-                        <>
-                            <div className="" style={{ position: 'relative', padding: '0px 0px 80px' }}>
-                                기자 한마디
-                            </div>
-                        </>
-                    }
+                    label="기자 한마디"
                     labelWidth={100}
-                    inputProps={{ plaintext: true, readOnly: true, rows: '5' }}
+                    inputProps={{ readOnly: true, rows: '5' }}
                     value={repTalk}
                     name="repTalk"
-                    className="resize-none"
-                /> */}
+                    inputClassName="resize-none bg-white"
+                />
             </Form>
         </>
     );

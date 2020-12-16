@@ -41,14 +41,21 @@ const propTypes = {
      */
     setFileValue: PropTypes.func,
     /**
+     * 파일 변경 시 실행
+     */
+    onChange: PropTypes.func,
+    /**
      * 이미지 alt
      */
     alt: PropTypes.string,
-
     /**
      * 업로드 가능 이미지 타입
      */
     selectAccept: PropTypes.array,
+    /**
+     * 타당한 데이터 체크
+     */
+    isInvalid: PropTypes.bool,
 };
 const defaultProps = {
     width: 171,
@@ -68,7 +75,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -167,10 +174,16 @@ const MokaImageInput = forwardRef((props, ref) => {
             if (setFileValue) {
                 setFileValue(acceptedFiles[0]);
             }
+            if (onChange) {
+                onChange(acceptedFiles);
+            }
         } else {
             // 이미지가 아닐 경우 alert 처리
             setAlert(true);
             imageHide();
+            if (onChange) {
+                onChange();
+            }
         }
     };
 
@@ -202,6 +215,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         className={clsx(
                             'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
                             className,
+                            { 'is-invalid': isInvalid },
                         )}
                         style={{ width, height }}
                         ref={wrapRef}

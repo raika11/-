@@ -27,6 +27,10 @@ export const initialState = {
     special: {
         seqNo: null,
         repDeptNameSelect: 'self',
+        ordinal: '',
+        pageTitle: '',
+        pcUrl: '',
+        mobileUrl: '',
     },
     specialError: null,
     invalidList: [],
@@ -38,6 +42,11 @@ export default handleActions(
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
+            });
+        },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
         [act.CLEAR_STORE]: () => initialState,
@@ -77,6 +86,11 @@ export default handleActions(
         [act.GET_SPECIAL_DEPT_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.depts = initialState.depts;
+            });
+        },
+        [act.DELETE_SPECIAL_SUCCESS]: (state) => {
+            return produce(state, (draft) => {
+                draft.special = initialState.special;
             });
         },
     },

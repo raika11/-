@@ -37,4 +37,4 @@ export const saveSpecial = createAction(SAVE_SPECIAL, ({ special, callback }) =>
  * 삭제
  */
 export const [DELETE_SPECIAL, DELETE_SPECIAL_SUCCESS] = createRequestActionTypes('special/DELETE_SPECIAL');
-export const deleteSpecial = createAction(DELETE_SPECIAL, ({ special, callback }) => ({ special, callback }));
+export const deleteSpecial = createAction(DELETE_SPECIAL, ({ seqNo, callback }) => ({ seqNo, callback }));

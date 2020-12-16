@@ -371,7 +371,7 @@ const TemplateEdit = ({ onDelete }) => {
                         />
                     </Col>
                     <Col xs={3} className="d-flex p-0 pl-2">
-                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" inputClassName="ft-12" />
+                        x <MokaInput className="ml-2 mb-0" value={cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" inputClassName="ft-12" />{' '}
                     </Col>
                 </Row>
                 {/* 입력태그 */}
@@ -402,6 +402,7 @@ const TemplateEdit = ({ onDelete }) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     imgFileRef.current.deleteFile();
+                                    setTemplateThumb(null);
                                 }}
                             >
                                 삭제

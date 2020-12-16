@@ -86,8 +86,8 @@ const defaultProps = {
     displayPageNum: DISPLAY_PAGE_NUM,
     onChangeSearchOption: null,
     paging: true,
-    cardWidth: 176,
-    cardHeight: 192,
+    cardWidth: 172,
+    cardHeight: 172,
     loading: false,
 };
 

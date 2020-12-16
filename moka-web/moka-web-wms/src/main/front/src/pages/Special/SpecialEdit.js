@@ -7,8 +7,10 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { DIGITAL_SPECIAL_URL } from '@/constants';
 import { MokaCard, MokaInput, MokaInputLabel, MokaImageInput, MokaCopyTextButton, MokaInputGroup } from '@components';
-import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, deleteSpecial, DELETE_SPECIAL, SAVE_SPECIAL } from '@store/special';
+import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, changeInvalidList, deleteSpecial, DELETE_SPECIAL, SAVE_SPECIAL } from '@store/special';
 
 moment.locale('ko');
 let currentDate = moment().format('YYYYMMDDHHmmss');
@@ -48,6 +50,9 @@ const SpecialEdit = () => {
         } else {
             setTemp({ ...temp, [name]: value });
         }
+
+        // error 제거
+        if (error[name] === true) setError({ ...error, [name]: false });
     };
 
     /**
@@ -55,6 +60,7 @@ const SpecialEdit = () => {
      * @param {any} date date
      */
     const handleChangeSdate = (date) => {
+        setError({ ...error, pageSdate: false });
         if (typeof date === 'object') {
             setTemp({ ...temp, pageSdate: date });
         } else if (date === '') {
@@ -67,6 +73,7 @@ const SpecialEdit = () => {
      * @param {any} date date
      */
     const handleChangeEdate = (date) => {
+        setError({ ...error, pageEdate: false });
         if (typeof date === 'object') {
             setTemp({ ...temp, pageEdate: date });
         } else if (date === '') {
@@ -95,6 +102,7 @@ const SpecialEdit = () => {
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success(header.message);
+                                history.push('/special');
                             } else {
                                 toast.fail(header.message);
                             }
@@ -104,17 +112,86 @@ const SpecialEdit = () => {
             },
             () => {},
         );
-    }, [dispatch, special.seqNo]);
+    }, [dispatch, history, special.seqNo]);
 
     /**
      * validate
      * @param {object} saveObj validate target
      */
-    const validate = (saveObj) => {
-        let isInvalid = false;
+    const validate = useCallback(
+        (saveObj) => {
+            let isInvalid = false,
+                errList = [];
 
-        return !isInvalid;
-    };
+            // 페이지코드 체크
+            if (!saveObj.pageCd || !REQUIRED_REGEX.test(saveObj.pageCd)) {
+                errList.push({
+                    field: 'pageCd',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // 회차 체크
+            if (!REQUIRED_REGEX.test(saveObj.ordinal)) {
+                errList.push({
+                    field: 'ordinal',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // 제목 체크
+            if (!REQUIRED_REGEX.test(saveObj.pageTitle)) {
+                errList.push({
+                    field: 'pageTitle',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // pcUrl 체크
+            if (!REQUIRED_REGEX.test(saveObj.pcUrl)) {
+                errList.push({
+                    field: 'pcUrl',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // mobUrl 체크
+            if (!REQUIRED_REGEX.test(saveObj.mobUrl)) {
+                errList.push({
+                    field: 'mobUrl',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // 이미지 체크 (기존 이미지, fileValue 둘 다 없으면 에러)
+            if (!saveObj.imgUrl && !saveObj.thumbnailFile) {
+                errList.push({
+                    field: 'imgUrl',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // 시작일, 종료일 체크 (필수로 존재, 종료일이 시작일보다 뒷날이어야함)
+            if (!saveObj.pageSdate) {
+                errList.push({
+                    field: 'pageSdate',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            if (!saveObj.pageEdate || Number(saveObj.pageSdate) > Number(saveObj.pageEdate)) {
+                errList.push({
+                    field: 'pageEdate',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+
+            dispatch(changeInvalidList(errList));
+            return !isInvalid;
+        },
+        [dispatch],
+    );
 
     /**
      * 저장
@@ -122,18 +199,19 @@ const SpecialEdit = () => {
     const handleClickSave = useCallback(() => {
         let saveObj = {
             ...temp,
-            pageSdate: moment(temp.pageSdate).format('YYYYMMDD'),
-            pageEdate: moment(temp.pageEdate).format('YYYYMMDD'),
+            pageSdate: temp.pageSdate.isValid() ? moment(temp.pageSdate).format('YYYYMMDD') : null,
+            pageEdate: temp.pageEdate.isValid() ? moment(temp.pageEdate).format('YYYYMMDD') : null,
             thumbnailFile: fileValue,
         };
         if (validate(saveObj)) {
             dispatch(
                 saveSpecial({
                     special: saveObj,
-                    callback: ({ header }) => {
+                    callback: ({ header, body }) => {
                         if (header.success) {
                             currentDate = moment().format('YYYYMMDDHHmmss');
                             toast.success(header.message);
+                            history.push(`/special/${body.seqNo}`);
                         } else {
                             toast.fail(header.message);
                         }
@@ -141,7 +219,15 @@ const SpecialEdit = () => {
                 }),
             );
         }
-    }, [dispatch, fileValue, temp]);
+    }, [dispatch, fileValue, history, temp, validate]);
+
+    /**
+     * 이미지삭제
+     */
+    const deleteImage = () => {
+        imgFileRef.current.deleteFile();
+        setTemp({ ...temp, imgUrl: null });
+    };
 
     useEffect(() => {
         if (seqNo) {
@@ -163,7 +249,7 @@ const SpecialEdit = () => {
 
     useEffect(() => {
         if (special.seqNo) {
-            setArticleUrl(`https://news.joins.com/DigitalSpecial/${special.seqNo}`);
+            setArticleUrl(`${DIGITAL_SPECIAL_URL}${special.seqNo}`);
         }
     }, [special.seqNo]);
 
@@ -198,13 +284,20 @@ const SpecialEdit = () => {
         );
     }, [invalidList]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(changeInvalidList([]));
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <MokaCard
             width={738}
             loading={loading}
             titleAs={
                 <div className="w-100 d-flex">
-                    <p className="m-0 font-weight-bold">디지털 스페셜 페이지 {special.seqNo ? '수정' : '등록'}</p>
+                    <p className="m-0 h5 font-weight-bold">디지털 스페셜 페이지 {special.seqNo ? '수정' : '등록'}</p>
                     <p className="m-0 pl-2 ft-12 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
@@ -221,9 +314,17 @@ const SpecialEdit = () => {
                         <p className="mb-1 ft-12">
                             <span className="required-text">*</span>이미지 등록(290*180)
                         </p>
-                        <MokaImageInput width={205} height={166} ref={imgFileRef} img={temp.imgUrl ? `${temp.imgUrl}?${currentDate}` : null} setFileValue={setFileValue} />
+                        <MokaImageInput
+                            width={205}
+                            height={166}
+                            ref={imgFileRef}
+                            img={temp.imgUrl ? `${temp.imgUrl}?${currentDate}` : null}
+                            setFileValue={setFileValue}
+                            isInvalid={error.imgUrl}
+                            onChange={() => setError({ ...error, imgUrl: false })}
+                        />
                         <Form.Row className="d-flex justify-content-between mt-2">
-                            <Button variant="negative" size="sm" onClick={() => imgFileRef.current.deleteFile()}>
+                            <Button variant="negative" size="sm" onClick={deleteImage}>
                                 삭제
                             </Button>
                             <Button variant="outline-neutral" size="sm">
@@ -286,6 +387,8 @@ const SpecialEdit = () => {
                                     name="pageCd"
                                     value={temp.pageCd}
                                     onChange={handleChangeValue}
+                                    isInvalid={error.pageCd}
+                                    required
                                 >
                                     <option hidden>선택</option>
                                     {ptRows &&
@@ -339,6 +442,8 @@ const SpecialEdit = () => {
                                     inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                                     value={temp.pageSdate}
                                     onChange={handleChangeSdate}
+                                    isInvalid={error.pageSdate}
+                                    required
                                 />
                             </Col>
                             <Col xs={6} className="p-0">
@@ -352,6 +457,8 @@ const SpecialEdit = () => {
                                     inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                                     value={temp.pageEdate}
                                     onChange={handleChangeEdate}
+                                    isInvalid={error.pageEdate}
+                                    required
                                 />
                             </Col>
                         </Form.Row>

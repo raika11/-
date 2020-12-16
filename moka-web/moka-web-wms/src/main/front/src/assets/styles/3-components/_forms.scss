@@ -45,4 +45,11 @@
       }
     }
   }
+  .is-file-dropzone {
+    @include form-validation-state-selector($state) {
+      .dropzone-dragover-mask {
+        border-color: map-get($data, color) !important;
+      }
+    }
+  }
 }

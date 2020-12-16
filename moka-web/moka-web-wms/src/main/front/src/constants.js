@@ -114,3 +114,6 @@ export const snsNames = {
     fb: 'Facebook',
     tw: 'Twitter',
 };
+
+// 디지털스페셜 링크
+export const DIGITAL_SPECIAL_URL = 'https://news.joins.com/DigitalSpecial/';

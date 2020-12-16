@@ -79,7 +79,7 @@ function* deleteSpecial({ payload }) {
     yield put(startLoading(ACTION));
     try {
         response = yield call(api.deleteSpecial, { seqNo });
-        callbackData = response;
+        callbackData = response.data;
 
         if (response.data.header.success && response.data.body) {
             yield put({

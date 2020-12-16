@@ -26,7 +26,7 @@ const Columnist = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+            <MokaCard width={940} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
                 <Suspense>
                     <ColumnistList />
                 </Suspense>

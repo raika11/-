@@ -288,7 +288,7 @@ const ColumnistEdit = ({ history }) => {
     }, []);
 
     return (
-        <MokaCard width={535} title={`칼럼 니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
+        <MokaCard width={635} title={`칼럼 니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
             <Form className="mb-gutter">
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">

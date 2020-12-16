@@ -25,18 +25,19 @@ const EditThumbSearch = (props) => {
     // const [dataTypeList, setDataTypeList] = useState(null);
     const [imageType, setImageType] = useState(null);
     const [timeReady, setTimeReady] = useState(false);
-    const [searchKey, setSearchKey] = useState('all');
+    // const [searchValue, setSearchValue] = useState('');
     const [error, setError] = useState({});
 
     const handleSearch = () => {
-        let temp = {
-            ...search,
-            startdate: moment(search.startdate, DB_DATEFORMAT),
-            endServiceDay: moment(search.finishdate, DB_DATEFORMAT),
-            imageType,
-            page: 0,
-        };
-        dispatch(getPhotoList(changeSearchOption(temp)));
+        // let temp = {
+        //     ...search,
+        //     startdate: moment(search.startdate, DB_DATEFORMAT),
+        //     endServiceDay: moment(search.finishdate, DB_DATEFORMAT),
+        //     imageType,
+        //     searchValue,
+        //     page: 0,
+        // };
+        dispatch(getPhotoList(changeSearchOption(search)));
     };
 
     // useEffect(() => {
@@ -146,7 +147,7 @@ const EditThumbSearch = (props) => {
                 <EditThumbSelectDropdown
                     imageValue={imageType}
                     onChange={(value) => {
-                        console.log(value);
+                        // setSearch({ ...search, imageType: value });
                         setImageType(value);
                         setError({ ...error, imageType: false });
                         if (value !== '') {

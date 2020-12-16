@@ -17,7 +17,7 @@ export const initialState = {
         finishdate: null,
         // dataType: null,
         // imageType: null,
-        searchKey: '',
+        searchKey: 'all',
         searchValue: '',
     },
     dataTypeList: [
@@ -32,9 +32,10 @@ export const initialState = {
     imageTypeList: [],
     searchKeyList: [
         { id: 'all', name: '전체' },
-        { id: 'title', name: '제목' },
-        { id: 'text', name: '캡션' },
-        { id: 'regNm', name: '등록자' },
+        { id: 'text', name: '제목' },
+        { id: 'dc', name: '캡션' },
+        { id: 'reg_nm', name: '등록자' },
+        { id: 'phtofrfm', name: '촬영자' },
         { id: 'nid', name: '사진ID' },
     ],
     photo: {},

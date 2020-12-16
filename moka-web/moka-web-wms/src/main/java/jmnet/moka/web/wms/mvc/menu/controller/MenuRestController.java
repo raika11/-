@@ -2,6 +2,7 @@ package jmnet.moka.web.wms.mvc.menu.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -150,7 +151,7 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 조회")
     @GetMapping("/{menuSeq}")
     public ResponseEntity<?> getMenu(HttpServletRequest request,
-            @PathVariable("menuSeq") @Min(value = 0, message = "{tps.menu.error.min.menuSeq}") Long menuSeq)
+            @ApiParam("메뉴 일련번호") @PathVariable("menuSeq") @Min(value = 0, message = "{tps.menu.error.min.menuSeq}") Long menuSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.menu.error.no-data", request);
@@ -175,7 +176,7 @@ public class MenuRestController {
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{menuId}/exists")
     public ResponseEntity<?> duplicateCheckId(
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId) {
+            @ApiParam("메뉴 ID") @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId) {
 
         boolean duplicated = menuService.isDuplicatedId(menuId);
         ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
@@ -241,7 +242,8 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 수정")
     @PutMapping("/{menuSeq}")
     public ResponseEntity<?> putMenu(HttpServletRequest request,
-            @PathVariable("menuSeq") @Min(value = 0, message = "{tps.menu.error.min.menuSeq}") Long menuSeq, @Valid MenuDTO menuDTO)
+            @ApiParam("메뉴 일련번호") @PathVariable("menuSeq") @Min(value = 0, message = "{tps.menu.error.min.menuSeq}") Long menuSeq,
+            @Valid MenuDTO menuDTO)
             throws Exception {
 
 
@@ -293,8 +295,8 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 순서 조절")
     @PutMapping("/{parentMenuId}/change-order-children")
-    public ResponseEntity<?> putMenuOrder(HttpServletRequest request,
-            @PathVariable("parentMenuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.pattern.parentMenuId}") String parentMenuId,
+    public ResponseEntity<?> putMenuOrder(HttpServletRequest request, @ApiParam("부모 메뉴 ID") @PathVariable("parentMenuId")
+    @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.pattern.parentMenuId}") String parentMenuId,
             @RequestBody List<@Valid MenuOrderDTO> menuOrders)
             throws Exception {
 
@@ -432,7 +434,7 @@ public class MenuRestController {
      */
     @ApiOperation(value = "메뉴 권한 수정")
     @PutMapping("/auths")
-    public ResponseEntity<?> deleteMemberMenuAuth(HttpServletRequest request, List<Long> menuAuthSeqs)
+    public ResponseEntity<?> deleteMemberMenuAuth(HttpServletRequest request, @ApiParam("권한 일련번호") List<Long> menuAuthSeqs)
             throws Exception {
 
         try {
@@ -491,7 +493,7 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 권한 존재 여부")
     @GetMapping("/{menuId}/exist-auth")
     public ResponseEntity<?> existAuth(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
+            @ApiParam("메뉴 ID") @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -528,7 +530,7 @@ public class MenuRestController {
     @ApiOperation(value = "메뉴 삭제")
     @DeleteMapping("/{menuId}")
     public ResponseEntity<?> deleteMenu(HttpServletRequest request,
-            @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
+            @ApiParam("메뉴 ID") @PathVariable("menuId") @Pattern(regexp = "[0-9]{2,8}$", message = "{tps.menu.error.length.menuId}") String menuId)
             throws InvalidDataException, NoDataException, Exception {
 
 

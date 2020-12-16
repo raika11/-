@@ -1,11 +1,8 @@
 package jmnet.moka.web.wms.mvc.member.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiParam;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.Date;
 import java.util.List;
@@ -85,12 +82,9 @@ public class MemberJoinRestController extends AbstractCommonController {
      * @throws MokaException 그룹웨어에 사용자 정보가 없음
      */
     @ApiOperation(value = "그룹웨어 사용자 정보 조회")
-    @ApiImplicitParams({@ApiImplicitParam(name = "groupWareUserId", value = "그룹웨어ID", required = true, dataType = "string", paramType = "path")})
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = ResultMapDTO.class),
-                           @ApiResponse(code = 500, message = "Failure")})
     @GetMapping("/groupware-users/{groupWareUserId}")
-    public ResponseEntity<?> getGroupWareMember(
-            @PathVariable("groupWareUserId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String groupWareUserId)
+    public ResponseEntity<?> getGroupWareMember(@ApiParam("그룹웨어 사용자 ID") @PathVariable("groupWareUserId")
+    @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String groupWareUserId)
             throws MokaException {
         try {
             GroupWareUserInfo groupWareUserInfo = groupWareAuthClient.getUserInfo(groupWareUserId);
@@ -141,7 +135,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @ApiOperation(value = "Member 조회")
     @GetMapping("/{memberId}")
     public ResponseEntity<?> getMember(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId)
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
@@ -178,16 +172,6 @@ public class MemberJoinRestController extends AbstractCommonController {
      * @throws Exception            예외처리
      */
     @ApiOperation(value = "Member 신규 등록 요청")
-    @ApiImplicitParams({@ApiImplicitParam(name = "memberId", value = "사용자ID", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "memberNm", value = "사용자명", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "password", value = "비밀번호", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "mobilePhone", value = "휴대 전화번호", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "companyPhone", value = "사무실 전화번호", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "email", value = "이메일", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "confirmPassword", value = "비밀번호 확인", required = true, dataType = "string", paramType = "query"),
-                        @ApiImplicitParam(name = "requestReason", value = "요청 사유", required = true, dataType = "string", paramType = "query")})
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = ResultMapDTO.class),
-                           @ApiResponse(code = 500, message = "Failure")})
     @PostMapping("/register-request")
     public ResponseEntity<?> postRegisterRequest(@Valid MemberRequestDTO memberDTO)
             throws InvalidDataException, Exception {
@@ -236,7 +220,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @ApiOperation(value = "Member SMS 인증문자 요청")
     @GetMapping("/{memberId}/sms-request")
     public ResponseEntity<?> putSmsRequest(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 
@@ -327,7 +311,7 @@ public class MemberJoinRestController extends AbstractCommonController {
     @ApiOperation(value = "Member SMS 인증문자로 잠금 해제 및 관리자 잠금 해제 요청")
     @GetMapping({"/{memberId}/approval-request", "/{memberId}/unlock-request"})
     public ResponseEntity<?> putStatusChange(
-            @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
+            @ApiParam("사용자 ID") @PathVariable("memberId") @Size(min = 1, max = 30, message = "{tps.member.error.pattern.memberId}") String memberId,
             @Valid MemberRequestDTO memberRequestDTO)
             throws Exception {
 

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.group.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.group.dto.GroupDTO;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
+import jmnet.moka.core.tps.mvc.group.dto.GroupUpdateDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.GroupMember;
 import jmnet.moka.core.tps.mvc.group.service.GroupService;
@@ -123,7 +125,7 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "그룹 조회")
     @GetMapping("/{groupCd}")
     public ResponseEntity<?> getGroup(HttpServletRequest request,
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd)
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd)
             throws NoDataException {
 
         String message = msg("tps.group.error.no-data", request);
@@ -149,7 +151,7 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{groupCd}/exists")
     public ResponseEntity<?> duplicateCheckId(
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd) {
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd) {
 
         boolean duplicated = groupService.isDuplicatedId(groupCd);
         ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
@@ -212,12 +214,14 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "그룹 수정")
     @PutMapping("/{groupCd}")
     public ResponseEntity<?> putGroup(HttpServletRequest request,
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd, @Valid GroupDTO groupDTO)
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
+            @Valid GroupUpdateDTO groupDTO)
             throws Exception {
 
         // GroupDTO -> Group 변환
         String infoMessage = msg("tps.group.error.no-data", request);
         GroupInfo newGroup = modelMapper.map(groupDTO, GroupInfo.class);
+        newGroup.setGroupCd(groupCd);
 
         // 오리진 데이터 조회
         groupService
@@ -256,7 +260,7 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "그룹 내 속한 멤버 존재 여부")
     @GetMapping("/{groupCd}/has-members")
     public ResponseEntity<?> hasMembers(
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd) {
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd) {
 
         boolean exists = groupService.hasMembers(groupCd);
         String message = exists ? msg("tps.group.success.select.exist-member") : "";
@@ -279,7 +283,7 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "그룹 삭제")
     @DeleteMapping("/{groupCd}")
     public ResponseEntity<?> deleteGroup(HttpServletRequest request,
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd)
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd)
             throws InvalidDataException, NoDataException, Exception {
 
 
@@ -326,7 +330,7 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "여러 메뉴의 그룹 권한 수정")
     @PutMapping("/{groupCd}/menu-auths")
     public ResponseEntity<?> putGroupMenuAuth(HttpServletRequest request,
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
             @RequestBody List<@Valid MenuAuthSimpleDTO> menuAuths)
             throws Exception {
 
@@ -360,7 +364,7 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "그룹 내 Member 목록 조회")
     @GetMapping("/{groupCd}/members")
     public ResponseEntity<?> getGroupMemberList(
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
             @SearchParam SearchDTO search) {
 
         ResultListDTO<MemberDTO> resultListMessage = new ResultListDTO<>();
@@ -388,8 +392,9 @@ public class GroupRestController extends AbstractCommonController {
     @ApiOperation(value = "그룹 사용자 추가/제거")
     @PutMapping("/{groupCd}/members")
     public ResponseEntity<?> postGroupMember(HttpServletRequest request,
-            @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
-            @RequestParam("memberIds") List<String> memberIds, @RequestParam(value = "useYn", defaultValue = MokaConstants.YES) String useYn)
+            @ApiParam("그룹코드") @PathVariable("groupCd") @Size(min = 1, max = 3, message = "{tps.group.error.pattern.groupCd}") String groupCd,
+            @ApiParam("사용자ID") @RequestParam("memberIds") List<String> memberIds,
+            @ApiParam("사용여부") @RequestParam(value = "useYn", defaultValue = MokaConstants.YES) String useYn)
             throws Exception {
 
         try {

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.reporter.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -99,8 +100,8 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자관리 조회")
     @GetMapping("/{repSeq}")
-    public ResponseEntity<?> getReportMgr(HttpServletRequest request,
-            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq)
+    public ResponseEntity<?> getReportMgr(HttpServletRequest request, @ApiParam("기자 일련번호") @PathVariable("repSeq")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq)
             throws NoDataException {
         // 조회(mybatis)
         ReporterVO returnValue = reporterService.findBySeq(repSeq);
@@ -120,9 +121,8 @@ public class ReporterRestController {
      */
     @ApiOperation(value = "기자정보 수정")
     @PutMapping("/{repSeq}")
-    public ResponseEntity<?> putReporter(HttpServletRequest request,
-            @PathVariable("repSeq") @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq,
-            @Valid ReporterSimpleDTO reporterSimpleDTO)
+    public ResponseEntity<?> putReporter(HttpServletRequest request, @ApiParam("기자 일련번호") @PathVariable("repSeq")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.reporter.error.pattern.repSeq}") String repSeq, @Valid ReporterSimpleDTO reporterSimpleDTO)
             throws Exception {
 
         // GroupDTO -> Group 변환

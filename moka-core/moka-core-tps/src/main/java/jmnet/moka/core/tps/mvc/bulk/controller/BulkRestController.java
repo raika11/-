@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.bulk.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -127,7 +128,7 @@ public class BulkRestController extends AbstractCommonController {
     @ApiOperation(value = "벌크문구 기사 목록 조회")
     @GetMapping("/{bulkartSeq}/articles")
     public ResponseEntity<?> getBulkList(HttpServletRequest request,
-            @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
             throws Exception {
 
         ResultListDTO<BulkArticleDTO> resultListMessage = new ResultListDTO<>();
@@ -176,7 +177,8 @@ public class BulkRestController extends AbstractCommonController {
     @ApiOperation(value = "벌크 사용여부 수정")
     @PutMapping(value = "/{bulkartSeq}/used")
     public ResponseEntity<?> putBulkWordServiceYn(
-            @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq, @Valid BulkDTO bulkDTO)
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq,
+            @Valid BulkDTO bulkDTO)
             throws InvalidDataException, Exception {
 
         // naverbulkDto -> naverbulk 변환
@@ -228,7 +230,8 @@ public class BulkRestController extends AbstractCommonController {
 
     @ApiOperation(value = "벌크 재전송")
     @PutMapping(value = "/{bulkartSeq}/resend")
-    public ResponseEntity<?> putResend(@PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
+    public ResponseEntity<?> putResend(
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
             throws InvalidDataException, Exception {
 
         Bulk bulk = naverBulkService

@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.directlink.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -109,7 +110,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "바로가기 조회")
     @GetMapping("/{linkSeq}")
     public ResponseEntity<?> getDirectLink(HttpServletRequest request,
-            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+            @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         String message = messageByLocale.get("tps.direct-link.error.no-data", request);
@@ -136,7 +137,7 @@ public class DirectLinkRestController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                  MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postDirectLink(@Valid DirectLinkDTO directLinkDTO,
-            @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
+            @ApiParam("썸네일파일") @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
             throws InvalidDataException, Exception {
 
 
@@ -197,9 +198,10 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트정보 수정")
     @PutMapping(value = "/{linkSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                                       MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<?> putDirectLink(@PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
+    public ResponseEntity<?> putDirectLink(
+            @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq,
             @Valid DirectLinkDTO directLinkDTO,
-            @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
+            @ApiParam("썸네일파일") @RequestParam(value = "directLinkThumbnailFile", required = false) MultipartFile directLinkThumbnailFile)
             throws InvalidDataException, Exception {
 
 
@@ -269,7 +271,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "사이트 내 속한 멤버 존재 여부")
     @GetMapping("/{linkSeq}/has-members")
     public ResponseEntity<?> hasMembers(HttpServletRequest request,
-            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+            @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
@@ -293,7 +295,7 @@ public class DirectLinkRestController {
     @ApiOperation(value = "바로가기 삭제")
     @DeleteMapping("/{linkSeq}")
     public ResponseEntity<?> deleteDirectLink(HttpServletRequest request,
-            @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
+            @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 

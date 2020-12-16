@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.jpod.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -95,7 +96,7 @@ public class JpodChannelController extends AbstractCommonController {
     @ApiOperation(value = "JpodChannel 조회")
     @GetMapping("/{chnlSeq}")
     public ResponseEntity<?> getJpodChannel(HttpServletRequest request,
-            @PathVariable("chnlSeq") @Size(min = 1, max = 30, message = "{tps.jpodChannel.error.pattern.chnlSeq}") Long chnlSeq)
+            @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Size(min = 1, max = 30, message = "{tps.jpodChannel.error.pattern.chnlSeq}") Long chnlSeq)
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
@@ -165,9 +166,8 @@ public class JpodChannelController extends AbstractCommonController {
      */
     @ApiOperation(value = "JpodChannel 수정")
     @PutMapping("/{chnlSeq}")
-    public ResponseEntity<?> putJpodChannel(HttpServletRequest request,
-            @PathVariable("chnlSeq") @Size(min = 1, max = 30, message = "{tps.jpodChannel.error.pattern.chnlSeq}") String chnlSeq,
-            @Valid JpodChannelDTO jpodChannelDTO)
+    public ResponseEntity<?> putJpodChannel(HttpServletRequest request, @ApiParam("채널 일련번호") @PathVariable("chnlSeq")
+    @Size(min = 1, max = 30, message = "{tps.jpodChannel.error.pattern.chnlSeq}") String chnlSeq, @Valid JpodChannelDTO jpodChannelDTO)
             throws Exception {
 
         // JpodChannelDTO -> JpodChannel 변환
@@ -217,7 +217,7 @@ public class JpodChannelController extends AbstractCommonController {
     @ApiOperation(value = "JpodChannel 삭제")
     @DeleteMapping("/{chnlSeq}")
     public ResponseEntity<?> deleteJpodChannel(HttpServletRequest request,
-            @PathVariable("chnlSeq") @Size(min = 1, max = 30, message = "{tps.jpodChannel.error.pattern.chnlSeq}") Long chnlSeq)
+            @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Size(min = 1, max = 30, message = "{tps.jpodChannel.error.pattern.chnlSeq}") Long chnlSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 

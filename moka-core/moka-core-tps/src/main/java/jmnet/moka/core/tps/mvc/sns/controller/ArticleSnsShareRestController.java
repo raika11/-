@@ -1,15 +1,13 @@
 package jmnet.moka.core.tps.mvc.sns.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -18,7 +16,6 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.common.utils.exception.FileFormatException;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
@@ -103,12 +100,6 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @return 검색 결과
      */
     @ApiOperation(value = "SNS 메타 목록 조회")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "searchType", value = "검색조건<br>all:전체<br>artTitle:제목<br>totalId:기사ID", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "keyword", value = "검색어", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "page", value = "페이지수", dataType = "int", paramType = "query", defaultValue = SearchDTO.DEFAULT_PAGE + ""),
-            @ApiImplicitParam(name = "size", value = "페이지당 목록수", dataType = "int", paramType = "query", defaultValue = SearchDTO.DEFAULT_SIZE + ""),
-            @ApiImplicitParam(name = "useTotal", value = "페이징처리여부", dataType = "String", paramType = "query", defaultValue = MokaConstants.YES)})
     @GetMapping
     public ResponseEntity<?> getArticleSnsShareList(@SearchParam ArticleSnsShareSearchDTO search) {
 
@@ -133,12 +124,6 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @return 검색 결과
      */
     @ApiOperation(value = "SNS 전송 기사 목록 조회(FB)")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "searchType", value = "검색조건<br>all:전체<br>artTitle:제목<br>totalId:기사ID", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "keyword", value = "검색어", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "page", value = "페이지수", dataType = "int", paramType = "query", defaultValue = SearchDTO.DEFAULT_PAGE + ""),
-            @ApiImplicitParam(name = "size", value = "페이지당 목록수", dataType = "int", paramType = "query", defaultValue = SearchDTO.DEFAULT_SIZE + ""),
-            @ApiImplicitParam(name = "useTotal", value = "페이징처리여부", dataType = "String", paramType = "query", defaultValue = MokaConstants.YES)})
     @GetMapping("/send-articles")
     public ResponseEntity<?> getArticleSnsShareSendList(@SearchParam ArticleSnsShareMetaSearchDTO search) {
 
@@ -166,11 +151,10 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      * @return 검색 결과
      */
     @ApiOperation(value = "SNS 상세 조회")
-    @ApiImplicitParams({@ApiImplicitParam(name = "totalId", value = "기사ID", required = true, dataType = "int", paramType = "path", defaultValue =
-            SearchDTO.DEFAULT_SIZE + ""), @ApiImplicitParam(name = "snsType", value = "SNS유형", dataType = "String")})
     @GetMapping("/{totalId}")
-    public ResponseEntity<?> getArticleSnsShare(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
-            @RequestParam(value = "snsType", required = false)
+    public ResponseEntity<?> getArticleSnsShare(
+            @ApiParam("기사 ID") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+            @ApiParam("SNS 유형") @RequestParam(value = "snsType", required = false)
             @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType)
             throws NoDataException {
 
@@ -202,8 +186,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     @PostMapping(value = "/{totalId}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                                        MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postArticleSnsShare(
-            @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
-            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO, @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
+            @ApiParam("기사 ID") @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
+            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO,
+            @ApiParam("이미지 파일") @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
             throws InvalidDataException, Exception {
 
         ArticleSnsShare articleSnsShare = modelMapper.map(articleSnsShareSaveDTO, ArticleSnsShare.class);
@@ -267,8 +252,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
     @PutMapping(value = "/{totalId}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                                       MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putArticleSnsShare(
-            @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
-            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO, @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
+            @ApiParam("기사 ID") @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
+            @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO,
+            @ApiParam("이미지 파일") @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
             throws FileFormatException, NoDataException, IOException {
 
         // ArticleSnsShareDTO -> ArticleSnsShare 변환
@@ -335,8 +321,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "SNS 동일 정보 존재 여부 확인")
     @GetMapping("/{totalId}/exists")
-    public ResponseEntity<?> exists(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
-            @RequestParam(value = "snsType", required = false)
+    public ResponseEntity<?> exists(
+            @ApiParam("기사 ID") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+            @ApiParam("SNS 유형") @RequestParam(value = "snsType", required = false)
             @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType) {
 
         String message = msg("tps.common.success.exists");
@@ -358,8 +345,9 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "SNS 메타 삭제")
     @DeleteMapping("/{totalId}")
-    public ResponseEntity<?> deleteArticleSnsShare(@PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
-            @RequestParam(value = "snsType", required = false)
+    public ResponseEntity<?> deleteArticleSnsShare(
+            @ApiParam("기사 ID") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId,
+            @ApiParam("SNS 유형") @RequestParam(value = "snsType", required = false)
             @Length(max = 2, message = "{tps.article-page.error.length.artType}") SnsTypeCode snsType)
             throws InvalidDataException, NoDataException, Exception {
 

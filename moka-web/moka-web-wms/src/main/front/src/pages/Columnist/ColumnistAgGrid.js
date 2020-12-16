@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
-import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption, changeColumnlistEditMode } from '@store/columnist';
+import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
 const ColumnistAgGrid = () => {
@@ -12,28 +12,23 @@ const ColumnistAgGrid = () => {
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
 
-    const { loading, list, search, total, columnist, editmode } = useSelector((store) => ({
+    const { loading, list, search, total, columnist } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST_LIST],
         columnist: store.columnist.columnist,
         list: store.columnist.columnlist_list.list,
         search: store.columnist.columnlist_list.search,
         total: store.columnist.columnlist_list.total,
-        editmode: store.columnist.editmode,
     }));
 
     // 목록에서 아이템 클릭시 수정 모드.
     const handleClickListRow = (data) => {
-        // 수정 상태 체크.
-        if (editmode === false) {
-            dispatch(changeColumnlistEditMode({ editmode: true }));
-        }
         history.push(`/columnist/${data.seqNo}`);
     };
 
     // 신규등록 버튼 처리.
     const handleNewColumnlist = () => {
-        dispatch(changeColumnlistEditMode({ editmode: true }));
-        history.push(`/columnist`);
+        dispatch(clearColumnist());
+        history.push(`/columnist/add`);
     };
 
     // 검색

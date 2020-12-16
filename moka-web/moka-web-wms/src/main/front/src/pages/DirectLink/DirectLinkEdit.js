@@ -8,17 +8,7 @@ import toast from '@utils/toastUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaCard, MokaInputLabel } from '@components';
-import {
-    clearDirectLink,
-    getDirectLink,
-    GET_DIRECT_LINK,
-    SAVE_DIRECT_LINK,
-    saveDirectLink,
-    changeDirectLink,
-    changeInvalidList,
-    deleteDirectLink,
-    changeDirectLinkEditMode,
-} from '@store/directLink';
+import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
 
 /**
  * 사이트 바로 가기 등록/수정창
@@ -29,12 +19,11 @@ const DirectLinkEdit = ({ history }) => {
     const imgFileRef = useRef(null);
     const [dateFixYn, setDateFixYn] = useState('Y'); // 계속노출 서정.
     const [dateDisabled, setDateDisabled] = useState(true); // 계속 노출시 datePiker disable
-    const [inputBoxDisabled, setInputBoxDisabled] = useState(true);
+    const [inputBoxDisabled, setInputBoxDisabled] = useState(false);
 
-    const { directLink, invalidList, loading, editmode } = useSelector((store) => ({
+    const { directLink, invalidList, loading } = useSelector((store) => ({
         directLink: store.directLink.directLink,
         invalidList: store.directLink.invalidList,
-        editmode: store.directLink.editmode,
         loading: store.loading[GET_DIRECT_LINK] || store.loading[SAVE_DIRECT_LINK],
     }));
 
@@ -275,11 +264,7 @@ const DirectLinkEdit = ({ history }) => {
                 callback: (response) => {
                     if (response.header.success) {
                         toast.success('등록하였습니다.');
-                        // TODO 저장 완료후 어떻게 해야 할지?
                         history.push(`direct-link/${response.body.linkSeq}`);
-                        // dispatch(clearDirectLink());
-                        // history.push('/direct-link');
-                        // setTemp({});
                     } else {
                         toast.fail('실패하였습니다.');
                     }
@@ -288,12 +273,14 @@ const DirectLinkEdit = ({ history }) => {
         );
     };
 
+    //취소 버튼.
+    const handleClickCancleButton = () => {
+        history.push(`/direct-link`);
+    };
+
     // 정보 조회.
     useEffect(() => {
         if (linkSeq) {
-            if (editmode === false) {
-                dispatch(changeDirectLinkEditMode({ editmode: true }));
-            }
             dispatch(
                 getDirectLink({
                     linkSeq: linkSeq,
@@ -302,7 +289,7 @@ const DirectLinkEdit = ({ history }) => {
         } else {
             dispatch(clearDirectLink());
         }
-    }, [dispatch, editmode, linkSeq]);
+    }, [dispatch, linkSeq]);
 
     useEffect(() => {
         // 스토어에서 가져온 데이터 셋팅
@@ -318,7 +305,7 @@ const DirectLinkEdit = ({ history }) => {
         if (imgFileRef.current) {
             imgFileRef.current.deleteFile();
         }
-    }, [directLink, dispatch, editmode]);
+    }, [directLink, dispatch]);
 
     useEffect(() => {
         // invalidList 처리
@@ -351,10 +338,9 @@ const DirectLinkEdit = ({ history }) => {
     }, [inputBoxDisabled]);
 
     useEffect(() => {
-        if (editmode === true) {
-            setInputBoxDisabled(false);
-        }
-    }, [editmode]);
+        setInputBoxDisabled(false);
+        setTemp({});
+    }, []);
 
     return (
         <MokaCard width={535} title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
@@ -553,9 +539,14 @@ const DirectLinkEdit = ({ history }) => {
             </Form>
 
             <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                <Button variant="positive" onClick={handleClickSave} disabled={inputBoxDisabled}>
-                    저장
-                </Button>
+                <div className="d-flex justify-content-center">
+                    <Button variant="positive" className="mr-05" onClick={handleClickSave} disabled={inputBoxDisabled}>
+                        저장
+                    </Button>
+                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={inputBoxDisabled}>
+                        취소
+                    </Button>
+                </div>
             </div>
         </MokaCard>
     );

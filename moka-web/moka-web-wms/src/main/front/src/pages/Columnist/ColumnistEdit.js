@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { MokaCard, MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaCard, MokaInputLabel } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
 import toast, { messageBox } from '@utils/toastUtil';
-import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, changeColumnlistEditMode, clearColumnist } from '@store/columnist';
+import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
 
 const ColumnistEdit = ({ history }) => {
     const dispatch = useDispatch();
@@ -19,16 +19,14 @@ const ColumnistEdit = ({ history }) => {
     const [selectRepoterData, setSelectRepoterData] = useState(repoterDataInitialize);
     const [error, setError] = useState(setErrorInitialize);
 
-    const { loading, columnist, invalidList, editmode } = useSelector((store) => ({
+    const { loading, columnist, invalidList } = useSelector((store) => ({
         loading: store.loading[GET_COLUMNIST],
         columnist: store.columnist.columnist,
         invalidList: store.columnist.invalidList,
-        editmode: store.columnist.editmode,
     }));
 
     // input 값 변경.
     const tempOnchange = (e) => {
-        // FIXME: 2020-11-23 16:50  사용여부가 checkbox 여서 checked 가 있을땐 Y / N 세팅.
         const { name, value, checked } = e.target;
         if (name === 'status') {
             setSelectRepoterData({
@@ -198,7 +196,6 @@ const ColumnistEdit = ({ history }) => {
 
     // 취소 버튼 클릭.
     const handleClickCancleButton = () => {
-        dispatch(changeColumnlistEditMode({ editmode: editmode === false ? true : false }));
         dispatch(clearColumnist());
         history.push(`/columnist`);
     };
@@ -220,7 +217,7 @@ const ColumnistEdit = ({ history }) => {
             setEditData({
                 repNo: columnist.repNo,
                 // inout: null,
-                status: columnist.status, // FIXME: 2020-11-23 16:37 임시 Y
+                status: columnist.status,
                 repSeq: columnist.repSeq,
                 seqNo: columnist.seqNo,
                 columnistNm: columnist.columnistNm,
@@ -257,22 +254,10 @@ const ColumnistEdit = ({ history }) => {
 
     // 등록 버튼 클릭 ( 스토어 이용.)
     useEffect(() => {
-        if (editmode === true) {
-            setSelectRepoterData(repoterDataInitialize); // 초기화.
-            // 에디트 박스 Disable 초기화.
-            setEditDisabled(
-                Object.keys(setEditDisabledInitialize).reduce(function (element, key) {
-                    element[key] = key === 'repSeq' ? true : false;
-                    return element;
-                }, {}),
-            );
-        } else {
-            // 초기화.
-            setSelectRepoterData(repoterDataInitialize);
-            setEditDisabled(setEditDisabledInitialize);
-            setError(setErrorInitialize);
-        }
-    }, [editmode]);
+        setSelectRepoterData(repoterDataInitialize);
+        setEditDisabled(setEditDisabledInitialize);
+        setError(setErrorInitialize);
+    }, []);
 
     // 페이지 시작.
     useEffect(() => {
@@ -286,7 +271,6 @@ const ColumnistEdit = ({ history }) => {
     // 라우터 변경 체크(목록에서 클릭.)
     useEffect(() => {
         if (seqNo) {
-            dispatch(changeColumnlistEditMode({ editmode: true }));
             dispatch(
                 getColumnist({
                     seqNo: seqNo,
@@ -294,6 +278,14 @@ const ColumnistEdit = ({ history }) => {
             );
         }
     }, [dispatch, seqNo]);
+
+    useEffect(() => {
+        return () => {
+            setSelectRepoterData(repoterDataInitialize);
+            // setEditDisabled(setEditDisabledInitialize);
+            setError(setErrorInitialize);
+        };
+    }, []);
 
     return (
         <MokaCard width={535} title={`칼럼 니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
@@ -499,15 +491,15 @@ const setErrorInitialize = {
 };
 
 const setEditDisabledInitialize = {
-    columnistNm: true,
+    columnistNm: false,
     repSeq: true,
-    email1: true,
-    email2: true,
+    email1: false,
+    email2: false,
     status: false,
-    position: true,
-    profile: true,
-    selectImg: true,
-    editBoxButton: true,
+    position: false,
+    profile: false,
+    selectImg: false,
+    editBoxButton: false,
 };
 
 export default ColumnistEdit;

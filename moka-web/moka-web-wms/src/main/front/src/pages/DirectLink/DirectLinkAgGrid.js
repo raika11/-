@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import columnDefs from './DirectLinkAgGridColumns';
 import { MokaTable } from '@components';
-import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption, changeDirectLinkEditMode } from '@store/directLink';
+import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption } from '@store/directLink';
 
 /**
  * 사이트 바로 가기 AgGrid 컴포넌트
@@ -76,8 +76,7 @@ const DirectLinkAgGrid = () => {
 
     // 싸이트 바로 가기 버튼 클릭시 input disabled 변경.
     const handleEditNewMode = () => {
-        dispatch(changeDirectLinkEditMode({ editmode: true }));
-        history.push({ pathname: '/direct-link' });
+        history.push({ pathname: '/direct-link/add' });
     };
 
     return (

@@ -26,7 +26,7 @@ const BulknList = (props) => {
 
     return (
         <>
-            <MokaCard titleClassName="mb-0" loading={null} header={false} className={'mr-gutter flex-fill'}>
+            <MokaCard titleClassName="mb-0" width={670} loading={null} header={false} className={'mr-gutter'}>
                 <BulknListSearchBox HandleEditEnable={handleEditEnable} />
                 <BulknListGrid bulksURL={props.bulksURL} HandleEditEnable={handleEditEnable} />
             </MokaCard>

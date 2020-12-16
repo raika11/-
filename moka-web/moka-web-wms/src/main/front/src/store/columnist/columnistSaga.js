@@ -68,20 +68,9 @@ function* saveColumnist({ payload: { type, actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-/**
- * 에디트 모드 처리.
- */
-function* chengEditModeToggle({ payload: { editmode, callback } }) {
-    yield put({ type: act.CHANGE_COLUMNIST_LIST_EDIT_MODE_SUCCESS, payload: editmode });
-    if (typeof callback === 'function') {
-        yield call(callback);
-    }
-}
-
 export default function* columNistSaga() {
     yield takeLatest(act.GET_COLUMNIST_LIST, getColumnistListSaga);
     yield takeLatest(act.GET_REPOTER_LIST, getRepoterSearchList);
     yield takeLatest(act.SAVE_COLUMNIST, saveColumnist);
     yield takeLatest(act.GET_COLUMNIST, getColumnist);
-    yield takeLatest(act.CHANGE_COLUMNIST_LIST_EDIT_MODE, chengEditModeToggle);
 }

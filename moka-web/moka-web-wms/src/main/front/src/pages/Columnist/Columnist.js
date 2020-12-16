@@ -26,7 +26,7 @@ const Columnist = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter flex-fill" titleClassName="mb-0" header={false}>
+            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" header={false}>
                 <Suspense>
                     <ColumnistList />
                 </Suspense>
@@ -34,7 +34,7 @@ const Columnist = ({ match }) => {
 
             {/* 등록/수정창 */}
             <Route
-                path={[match.url, `${match.url}/:seqNo`]}
+                path={([`${match.url}/add`], [`${match.url}/:seqNo`])}
                 exact
                 render={(props) => (
                     <Suspense>

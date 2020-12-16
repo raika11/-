@@ -24,21 +24,24 @@ const ReporterMgr = () => {
             </Helmet>
 
             {/* 기자 목록 */}
-            <MokaCard title="기자 목록" width={830} className="mr-4 flex-fill" headerClassName="pb-0" titleClassName="mb-0">
+            <MokaCard title="기자 목록" width={830} className="mr-4" headerClassName="pb-0" titleClassName="mb-0">
                 <Suspense>
                     <ReporterList />
                 </Suspense>
             </MokaCard>
 
             {/* 기자 정보 */}
-
-            <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0" loading={loading}>
-                <Suspense>
-                    <Switch>
-                        <Route path={['/reporter', '/reporter/:repSeq']} exact render={() => <ReporterEdit />} />
-                    </Switch>
-                </Suspense>
-            </MokaCard>
+            <Route
+                path={[`/reporter/:repSeq`]}
+                exact
+                render={(props) => (
+                    <Suspense>
+                        <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0" loading={loading}>
+                            <ReporterEdit />
+                        </MokaCard>
+                    </Suspense>
+                )}
+            />
         </div>
     );
 };

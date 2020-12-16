@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
-import { SpecialCharModal } from './Modal';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
-import { getBulkArticle, GET_BULK_LIST, saveBulkArticle, getBulkList, getSpecialchar, showPreviewModal } from '@store/bulks';
+import { getBulkArticle, GET_BULK_LIST, saveBulkArticle, getBulkList, showPreviewModal } from '@store/bulks';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
@@ -159,6 +158,11 @@ const BulknEdit = (props) => {
     // 문구 임시 저장.
     const handleClickTempSaveButton = () => {
         handleSaveBulkArticle('save');
+    };
+
+    // 취소 버튼
+    const handleClickCancleButton = () => {
+        history.push(`/${bulkPathName}`);
     };
 
     const handleClickSymbolSave = ({ value: symbol }) => {
@@ -335,6 +339,9 @@ const BulknEdit = (props) => {
                         </Button>
                         <Button variant="positive" className="mr-05" onClick={handleClickTempSaveButton} disabled={editState}>
                             임시저장
+                        </Button>
+                        <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editState}>
+                            취소
                         </Button>
                     </Col>
                 </Form.Row>

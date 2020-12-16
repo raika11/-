@@ -103,20 +103,9 @@ function* deleteDirectLink({ payload: { linkSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-/**
- * 에디트 모드 처리.
- */
-function* chengEditModeToggle({ payload: { editmode, callback } }) {
-    yield put({ type: act.CHANGE_DIRECT_LINK_EDIT_MODE_SUCCESS, payload: editmode });
-    if (typeof callback === 'function') {
-        yield call(callback);
-    }
-}
-
 export default function* directSaga() {
     yield takeLatest(act.GET_DIRECT_LINK_LIST, getDirectLinkList);
     yield takeLatest(act.GET_DIRECT_LINK, getDirectLink);
     yield takeLatest(act.SAVE_DIRECT_LINK, saveDirectLink);
     yield takeLatest(act.DELETE_DIRECT_LINK, deleteDirectLink);
-    yield takeLatest(act.CHANGE_DIRECT_LINK_EDIT_MODE, chengEditModeToggle);
 }

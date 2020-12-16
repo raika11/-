@@ -49,13 +49,17 @@ const Bulkn = ({ bulksParams, bulksURL }) => {
                 <Route path={[`/${bulkPathName}`, `/${bulkPathName}/:tempSeq`]} exact render={() => <BulknMain bulksParams={bulksParams} />} />
             </Switch>
 
+            {/* 리스트 창 */}
+            <Suspense>
+                <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
+            </Suspense>
+
             {/* 등록/수정창 */}
             <Route
-                path={[`/${bulkPathName}`, `/${bulkPathName}/:bulkartSeq`]}
+                path={[`/${bulkPathName}/add`, `/${bulkPathName}/:bulkartSeq`]}
                 exact
                 render={(props) => (
                     <Suspense>
-                        <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
                         <BulknEdit {...props} EditState={editState} HandleEditEnable={handleEditEnable} />
                     </Suspense>
                 )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaSearchInput } from '@components';
 import { initialState, getColumnistList, changeSearchOption, clearSearchOption } from '@store/columnist';
 
-// TODO 검색 버튼 옆 초기화 버튼 추가 필요.
 const ColumnistSearch = () => {
     const dispatch = useDispatch();
 

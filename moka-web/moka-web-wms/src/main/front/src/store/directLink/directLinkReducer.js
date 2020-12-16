@@ -30,7 +30,6 @@ export const initialState = {
     },
     directLinkError: null,
     invalidList: [],
-    editmode: false,
 };
 
 export default handleActions(
@@ -107,14 +106,6 @@ export default handleActions(
         [act.DELETE_DIRECT_LINK_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.directLinkError = payload;
-            });
-        },
-        /**
-         * 등록 버튼 처리.
-         */
-        [act.CHANGE_DIRECT_LINK_EDIT_MODE_SUCCESS]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.editmode = payload;
             });
         },
     },

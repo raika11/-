@@ -72,7 +72,7 @@ const BulknListSearchBox = (props) => {
     const handleClickNewButton = () => {
         props.HandleEditEnable();
         dispatch(clearBulksArticle());
-        history.push(`/${bulkPathName}`);
+        history.push(`/${bulkPathName}/add`);
     };
 
     return (

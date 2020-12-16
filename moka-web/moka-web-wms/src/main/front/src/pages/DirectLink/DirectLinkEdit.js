@@ -264,7 +264,7 @@ const DirectLinkEdit = ({ history }) => {
                 callback: (response) => {
                     if (response.header.success) {
                         toast.success('등록하였습니다.');
-                        history.push(`direct-link/${response.body.linkSeq}`);
+                        history.push(`/direct-link/${response.body.linkSeq}`);
                     } else {
                         toast.fail('실패하였습니다.');
                     }

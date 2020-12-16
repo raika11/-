@@ -1,6 +1,7 @@
 import { createRequestActionTypes } from '@store/commons/saga';
 import { createAction } from 'redux-actions';
 
+/*************** 메타 *******************/
 export const CLEAR_META_STORE = 'sns/CLEAR_META_STORE';
 export const clearMetaStore = createAction(CLEAR_META_STORE);
 
@@ -21,3 +22,11 @@ export const saveSnsMeta = createAction(SAVE_SNS_META);
 
 export const PUBLISH_SNS_META = 'sns/PUBLISH_SNS_META';
 export const publishSnsMeta = createAction(PUBLISH_SNS_META);
+/*************** 메타 *******************/
+
+/*************** 전송기사 *******************/
+export const [GET_SNS_SEND_ARTICLE_LIST, GET_SNS_SEND_ARTICLE_LIST_SUCCESS, GET_SNS_SEND_ARTICLE_LIST_FAILURE] = createRequestActionTypes('sns/GET_SNS_SEND_ARTICLE_LIST');
+export const getSnsSendArticleList = createAction(GET_SNS_SEND_ARTICLE_LIST);
+
+export const CHANGE_SNS_SEND_ARTICLE_SEARCH_OPTIONS = 'sns/CHANGE_SNS_SEND_ARTICLE_SEARCH_OPTIONS';
+export const changeSnsSendArticleSearchOptions = createAction(CHANGE_SNS_SEND_ARTICLE_SEARCH_OPTIONS);

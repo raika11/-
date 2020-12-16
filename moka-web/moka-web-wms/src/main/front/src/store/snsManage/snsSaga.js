@@ -4,79 +4,11 @@ import { takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
-import { BLANK_IMAGE_PATH, IR_URL, PDS_URL, snsNames } from '@/constants';
+import { API_BASE_URL, BLANK_IMAGE_PATH, IR_URL, PDS_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
 import { unescapeHtml } from '@utils/convertUtil';
-
-function* publishSnsMeta({ type, payload }) {
-    yield put(startLoading(action.GET_SNS_META));
-    const data = toSaveSnsMeta(payload.data);
-    yield saveSnsMeta({
-        type,
-        payload: {
-            ...payload,
-            callback: function* (saveResponse) {
-                if (saveResponse.header.success) {
-                    if (data[saveResponse.body.id.snsType]) {
-                        const snsData = data[saveResponse.body.id.snsType];
-                        const response = yield call(api.postSnsPublish, {
-                            totalId: payload.totalId,
-                            message: snsData.snsPostMsg,
-                            reserveDt: snsData.reserveDt,
-                            snsType: snsData.snsType,
-                        });
-                        if (payload.callback instanceof Function) {
-                            payload.callback(response.data);
-                        }
-                    }
-                } else {
-                    if (payload.callback instanceof Function) {
-                        payload.callback(saveResponse);
-                    }
-                }
-
-                yield put(finishLoading(action.GET_SNS_META));
-            },
-        },
-    });
-}
-
-function* saveSnsMeta({ type, payload: { totalId, data, callback } }) {
-    yield put(startLoading(action.GET_SNS_META));
-    const params = toSaveSnsMeta(data);
-    /*data.forEach((data) => {
-        params[data.snsType] = {
-            usedYn: data.usedYn === true ? 'Y' : 'N',
-            reserveDt: data.reserveDt,
-            snsPostMsg: data.postMessage,
-            imgUrl: data.metaImage,
-            artTitle: data.title,
-            artSummary: data.summary,
-            snsType: data.snsType.toUpperCase(),
-            snsArtSts: 'I',
-        };
-    });*/
-
-    if (params['FB']) {
-        const response = yield call(api.putSnsMeta, totalId, params['FB']);
-        if (callback instanceof Function) {
-            const callbackResponse = response.data;
-            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `${snsNames['fb']} ${callbackResponse.header.message}` } });
-        }
-    }
-
-    if (params['TW']) {
-        const response = yield call(api.putSnsMeta, totalId, params['TW']);
-        if (callback instanceof Function) {
-            const callbackResponse = response.data;
-            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `${snsNames['tw']} ${callbackResponse.header.message}` } });
-        }
-    }
-
-    yield put(finishLoading(action.GET_SNS_META));
-}
-
+/************* 메타 **********************/
 function toSaveSnsMeta(data) {
     const params = {};
     data.forEach((data) => {
@@ -95,91 +27,60 @@ function toSaveSnsMeta(data) {
     return params;
 }
 
-function* getSnsMeta({ type, payload: totalId }) {
-    yield put(startLoading(type));
-
-    try {
-        const response = yield call(api.getSnsMeta, totalId);
-        if (response.data.header.success) {
-            yield put({ type: `${type}_SUCCESS`, payload: toSnsMetaViewData(response.data.body) });
-        } else {
-            yield put({ type: `${type}_FAILURE`, payload: response.data });
-        }
-    } catch (e) {
-        yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
-    }
-    yield put(finishLoading(type));
-}
-
 function toSnsMetaViewData({ snsShare, article }) {
-    const textArea = document.createElement('textarea');
-    textArea.innerText = commonUtil.setDefaultValue(article.fbMetaTitle);
+    const { totalId } = article;
+    let { articleBasic } = snsShare;
+    if (commonUtil.isEmpty(articleBasic)) {
+        articleBasic = {};
+    }
+    const { fbMetaUsedYn, fbMetaTitle, fbMetaSummary, fbMetaPostMsg, fbMetaImage, fbMetaReserveDt } = article;
+    const { twMetaUsedYn, twMetaTitle, twMetaSummary, twMetaPostMsg, twMetaImage, twMetaReserveDt } = article;
 
+    const { serviceFlag, artTitle, artSummary, artThumb, artRegDt } = articleBasic;
+    console.log(artThumb);
     return {
-        totalId: commonUtil.setDefaultValue(article.totalId),
+        totalId: commonUtil.setDefaultValue(totalId),
         fb: {
-            usedYn: commonUtil.setDefaultValue(article.fbMetaUsedYn, 'N') === 'Y',
-            title: unescapeHtml(commonUtil.setDefaultValue(article.fbMetaTitle)),
-            summary: commonUtil.setDefaultValue(article.fbMetaSummary),
-            postMessage: commonUtil.setDefaultValue(article.fbMetaPostMsg),
-            metaImage: toMetaImage(
+            usedYn: commonUtil.setDefaultValue(fbMetaUsedYn, 'N') === 'Y',
+            title: unescapeHtml(commonUtil.setDefaultValue(fbMetaTitle)),
+            summary: commonUtil.setDefaultValue(fbMetaSummary),
+            postMessage: commonUtil.setDefaultValue(fbMetaPostMsg),
+            imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
-                    article.fbMetaImage,
+                    fbMetaImage,
                     'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
                 ),
             ),
-            isReserve: !commonUtil.isEmpty(article.fbMetaReserveDt),
-            reserveDt: article.fbMetaReserveDt,
+            isReserve: !commonUtil.isEmpty(fbMetaReserveDt),
+            reserveDt: fbMetaReserveDt,
         },
         tw: {
-            usedYn: commonUtil.setDefaultValue(article.twMetaUsedYn, 'N') === 'Y',
-            title: unescapeHtml(commonUtil.setDefaultValue(article.twMetaTitle)),
-            summary: commonUtil.setDefaultValue(article.twMetaSummary),
-            postMessage: commonUtil.setDefaultValue(article.twMetaPostMsg),
-            metaImage: toMetaImage(
+            usedYn: commonUtil.setDefaultValue(twMetaUsedYn, 'N') === 'Y',
+            title: unescapeHtml(commonUtil.setDefaultValue(twMetaTitle)),
+            summary: commonUtil.setDefaultValue(twMetaSummary),
+            postMessage: commonUtil.setDefaultValue(twMetaPostMsg),
+            imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
-                    article.twMetaImage,
+                    twMetaImage,
                     'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
                 ),
             ),
-            isReserve: !commonUtil.isEmpty(article.twMetaReserveDt),
-            reserveDt: article.twMetaReserveDt,
+            isReserve: !commonUtil.isEmpty(twMetaReserveDt),
+            reserveDt: twMetaReserveDt,
+        },
+        article: {
+            serviceFlag: commonUtil.setDefaultValue(serviceFlag, 'N') === 'Y',
+            title: unescapeHtml(commonUtil.setDefaultValue(artTitle)),
+            summary: commonUtil.setDefaultValue(artSummary),
+            imgUrl: toMetaImage(
+                commonUtil.setDefaultValue(
+                    artThumb,
+                    'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
+                ),
+            ),
+            regDt: artRegDt,
         },
     };
-}
-
-function toMetaImage(metaImageUrl) {
-    let toMetaImageUrl = metaImageUrl;
-    if (toMetaImageUrl.indexOf(IR_URL) < 0) {
-        if (toMetaImageUrl.indexOf(PDS_URL) < 0) {
-            toMetaImageUrl = PDS_URL + toMetaImageUrl;
-        }
-
-        if (toMetaImageUrl.indexOf('.tn_120') > 0) {
-            toMetaImageUrl = toMetaImageUrl.split('.tn_120')[0];
-        }
-    }
-
-    return toMetaImageUrl;
-}
-
-function* getSnsMetaList({ type, payload }) {
-    yield put(startLoading(type));
-    try {
-        const response = yield call(api.getSNSMetaList, { search: payload });
-
-        if (response.data.header.success) {
-            const list = toSnsMetaListData(response.data.body.list);
-
-            yield put({ type: `${type}_SUCCESS`, payload: { ...response.data, body: { ...response.data.body, list } } });
-        } else {
-            yield put({ type: `${type}_FAILURE`, payload: response.data });
-        }
-    } catch (e) {
-        yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
-        console.log(e);
-    }
-    yield put(finishLoading(type));
 }
 
 function toSnsMetaListData(response) {
@@ -302,9 +203,156 @@ function setStatus({ iud, insDt, sendDt, statusMsg, fbStatusId, fbArticleId }) {
     return sendType + sendStatus;
 }
 
+function* publishSnsMeta({ type, payload }) {
+    yield put(startLoading(action.GET_SNS_META));
+    const data = toSaveSnsMeta(payload.data);
+    yield saveSnsMeta({
+        type,
+        payload: {
+            ...payload,
+            callback: function* (saveResponse) {
+                if (saveResponse.header.success) {
+                    if (data[saveResponse.body.id.snsType]) {
+                        const snsData = data[saveResponse.body.id.snsType];
+                        const response = yield call(api.postSnsPublish, {
+                            totalId: payload.totalId,
+                            message: snsData.snsPostMsg,
+                            reserveDt: snsData.reserveDt,
+                            snsType: snsData.snsType,
+                        });
+                        if (payload.callback instanceof Function) {
+                            payload.callback(response.data);
+                        }
+                    }
+                } else {
+                    if (payload.callback instanceof Function) {
+                        payload.callback(saveResponse);
+                    }
+                }
+
+                yield put(finishLoading(action.GET_SNS_META));
+            },
+        },
+    });
+}
+
+function toMetaImage(metaImageUrl) {
+    console.log('REACT_APP_API_URL', API_BASE_URL);
+    console.log('PDS_URL', PDS_URL);
+    console.log('IR_URL', IR_URL);
+    let toMetaImageUrl = metaImageUrl;
+    if (toMetaImageUrl.indexOf(IR_URL) < 0) {
+        if (toMetaImageUrl.indexOf(PDS_URL) < 0) {
+            toMetaImageUrl = PDS_URL + toMetaImageUrl;
+        }
+
+        if (toMetaImageUrl.indexOf('.tn_120') > 0) {
+            toMetaImageUrl = toMetaImageUrl.split('.tn_120')[0];
+        }
+    }
+
+    return toMetaImageUrl;
+}
+
+function* saveSnsMeta({ type, payload: { totalId, data, callback } }) {
+    yield put(startLoading(action.GET_SNS_META));
+    const params = toSaveSnsMeta(data);
+    /*data.forEach((data) => {
+        params[data.snsType] = {
+            usedYn: data.usedYn === true ? 'Y' : 'N',
+            reserveDt: data.reserveDt,
+            snsPostMsg: data.postMessage,
+            imgUrl: data.metaImage,
+            artTitle: data.title,
+            artSummary: data.summary,
+            snsType: data.snsType.toUpperCase(),
+            snsArtSts: 'I',
+        };
+    });*/
+
+    if (params['FB']) {
+        const response = yield call(api.putSnsMeta, totalId, params['FB']);
+        if (callback instanceof Function) {
+            const callbackResponse = response.data;
+            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `${snsNames['fb']} ${callbackResponse.header.message}` } });
+        }
+    }
+
+    if (params['TW']) {
+        const response = yield call(api.putSnsMeta, totalId, params['TW']);
+        if (callback instanceof Function) {
+            const callbackResponse = response.data;
+            yield callback({ ...callbackResponse, header: { ...callbackResponse.header, message: `${snsNames['tw']} ${callbackResponse.header.message}` } });
+        }
+    }
+
+    yield put(finishLoading(action.GET_SNS_META));
+}
+
+function* getSnsMeta({ type, payload: totalId }) {
+    yield put(startLoading(type));
+
+    try {
+        const response = yield call(api.getSnsMeta, totalId);
+        if (response.data.header.success) {
+            yield put({ type: `${type}_SUCCESS`, payload: toSnsMetaViewData(response.data.body) });
+        } else {
+            yield put({ type: `${type}_FAILURE`, payload: response.data });
+        }
+    } catch (e) {
+        yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
+    }
+    yield put(finishLoading(type));
+}
+
+function* getSnsMetaList({ type, payload }) {
+    yield put(startLoading(type));
+    try {
+        const response = yield call(api.getSnsMetaList, { search: payload });
+
+        if (response.data.header.success) {
+            const list = toSnsMetaListData(response.data.body.list);
+
+            yield put({ type: `${type}_SUCCESS`, payload: { ...response.data, body: { ...response.data.body, list } } });
+        } else {
+            yield put({ type: `${type}_FAILURE`, payload: response.data });
+        }
+    } catch (e) {
+        yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
+        console.log(e);
+    }
+    yield put(finishLoading(type));
+}
+
+/************* 메타 **********************/
+/************* 전송기사 **********************/
+function toSnsSendArticleListData(response) {
+    return response.map((data) => ({
+        id: data.id.totalId,
+        title: data.artTitle,
+        imgUrl: data.imgUrl,
+        usedYn: data.usedYn === 'Y',
+        sendDt: data.snsInsDt,
+    }));
+}
+
+function* getSnsSendArticle({ type, payload }) {
+    yield put(startLoading(type));
+
+    const response = yield call(api.getSnsSendArticleList, { search: payload });
+    const list = toSnsSendArticleListData(response.data.body.list);
+    yield put({ type: `${type}_SUCCESS`, payload: { ...response.data, body: { ...response.data.body, list } } });
+
+    yield put(finishLoading(type));
+}
+
 export default function* snsSaga() {
+    /************* 메타 **********************/
     yield takeLatest(action.GET_SNS_META_LIST, getSnsMetaList);
     yield takeLatest(action.GET_SNS_META, getSnsMeta);
     yield takeLatest(action.SAVE_SNS_META, saveSnsMeta);
     yield takeLatest(action.PUBLISH_SNS_META, publishSnsMeta);
+    /************* 메타 **********************/
+    /************* 전송기사 **********************/
+    yield takeLatest(action.GET_SNS_SEND_ARTICLE_LIST, getSnsSendArticle);
 }

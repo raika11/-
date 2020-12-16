@@ -1,9 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Container, Row, Col, Figure, Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import commonUtil from '@utils/commonUtil';
+import { clearSnsMeta, GET_SNS_META, getSnsMeta } from '@store/snsManage';
 
 const FbArtEdit = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const { totalId } = useParams();
     const tempOnchange = (e) => {};
+    const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
+        return {
+            meta: store.sns.meta.meta,
+            cdNm: store.codeMgt.specialCharCode.cdNm,
+            loading: store.loading[GET_SNS_META],
+            errors: store.sns.meta.errors,
+            search: store.sns.meta.search,
+        };
+    });
+
+    const handleClickCancel = () => {
+        history.push('/fb-art');
+    };
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(totalId)) {
+            dispatch(getSnsMeta(totalId));
+        } else {
+            dispatch(clearSnsMeta());
+        }
+    }, [dispatch, totalId]);
 
     return (
         <>
@@ -15,15 +43,15 @@ const FbArtEdit = () => {
                             <div className="d-flex h4">원본 기사</div>
                         </Col>
                         <Col xs={4}>
-                            <div className="d-flex">기사 ID 2333234</div>
+                            <div className="d-flex">기사 ID {meta.totalId}</div>
                         </Col>
                     </Row>
                     <Row xs={12}>
                         <Col xs={4}>
-                            <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
+                            <Figure.Image className="mb-0" src={meta.article.imgUrl} />
                         </Col>
                         <Col>
-                            <div className="d-flex mb-3 display-5 font-weight-bold text-left">{`프로야구 SK 내야수 김성현, 2021 FA 1호 계약`}</div>
+                            <div className="d-flex mb-3 display-5 font-weight-bold text-left">{meta.article.title}</div>
                             <div className="d-flex">
                                 <MokaInput
                                     as={'textarea'}
@@ -91,7 +119,7 @@ SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계
                         <Button variant="positive" className="mr-05">
                             저장
                         </Button>
-                        <Button variant="negative" className="mr-05">
+                        <Button variant="negative" className="mr-05" onClick={handleClickCancel}>
                             취소
                         </Button>
                     </div>

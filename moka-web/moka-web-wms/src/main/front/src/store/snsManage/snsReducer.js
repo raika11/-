@@ -27,6 +27,13 @@ export const initialState = {
                 isReserve: 'N',
                 reserveDt: null,
             },
+            article: {
+                serviceFlag: 'N',
+                title: '',
+                summary: '',
+                imgUrl: '',
+                regDt: null,
+            },
         },
         total: 0,
         search: {
@@ -37,6 +44,26 @@ export const initialState = {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             //sort: 'startDt,desc',
+        },
+    },
+    sendArticle: {
+        article: {
+            totalId: '',
+            snsInsDt: null,
+            imgUrl: '',
+            orgTitle: '',
+            orgSummary: '',
+            title: '',
+            summary: '',
+            useYn: 'N',
+        },
+        list: [],
+        total: 0,
+        search: {
+            searchType: 'artTitle',
+            keyword: '',
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
         },
     },
 };
@@ -68,6 +95,19 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.meta.meta = initialState.meta.meta;
                 draft.meta.errors = payload;
+            });
+        },
+
+        /**************** ************/
+        [action.GET_SNS_SEND_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.sendArticle.list = body.list;
+                draft.sendArticle.total = body.totalCnt;
+            });
+        },
+        [action.CHANGE_SNS_SEND_ARTICLE_SEARCH_OPTIONS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.sendArticle.search = payload;
             });
         },
     },

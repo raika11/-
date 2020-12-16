@@ -6,27 +6,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const tempColumnDefs = [
     {
         headerName: 'ID',
-        field: 'repId',
+        field: 'id',
         width: 70,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '20px' },
     },
     {
-        headerName: '\t전송일시',
-        field: 'sendDate',
+        headerName: '전송일시',
+        field: 'sendDt',
         wrapText: true,
         width: 130,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px' },
     },
     {
         headerName: '\t사진',
-        field: 'repImg',
+        field: 'imgUrl',
         cellRendererFramework: (params) => <ImageRenderer {...params} />,
         width: 90,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '8px' },
     },
     {
-        headerName: '\t\t\t\tSNS제목',
-        field: 'snsTitle',
+        headerName: 'SNS제목',
+        field: 'title',
         wrapText: true,
         width: 250,
         flex: 1,
@@ -34,17 +34,17 @@ export const tempColumnDefs = [
     },
     {
         headerName: '사용여부',
-        field: 'useYn',
+        field: 'usedYn',
         width: 120,
         wrapText: true,
         cellRendererFramework: ({ value }) => {
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={value === 'Y' ? 'color-primary' : 'color-gray150'} />;
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={value ? 'color-primary' : 'color-gray150'} />;
         },
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingLeft: '20px', paddingTop: '20px' },
     },
     {
-        headerName: '\t\t\t기타',
-        field: 'insStatus',
+        headerName: '기타',
+        field: 'id',
         width: 230,
         wrapText: true,
         cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '20px', paddingLeft: '12px' },

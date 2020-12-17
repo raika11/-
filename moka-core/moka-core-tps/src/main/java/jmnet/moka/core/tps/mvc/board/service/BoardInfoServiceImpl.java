@@ -34,7 +34,7 @@ public class BoardInfoServiceImpl implements BoardInfoService {
     }
 
     @Override
-    public Optional<BoardInfo> findBoardInfoById(Long boardId) {
+    public Optional<BoardInfo> findBoardInfoById(Integer boardId) {
         return boardInfoRepository.findById(boardId);
     }
 
@@ -54,12 +54,12 @@ public class BoardInfoServiceImpl implements BoardInfoService {
     }
 
     @Override
-    public void deleteBoardInfo(Long boardId) {
+    public void deleteBoardInfo(Integer boardId) {
         boardInfoRepository.deleteById(boardId);
     }
 
     @Override
-    public boolean hasBoard(Long boardId) {
+    public boolean hasBoard(Integer boardId) {
         return false;
     }
 }

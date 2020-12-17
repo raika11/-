@@ -35,8 +35,8 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARD_ID", nullable = false)
-    private Long boardId;
+    @Column(name = "BOARDINFO_SEQ", nullable = false)
+    private Integer boardId;
 
     /**
      * 게시판명
@@ -49,7 +49,7 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      */
     @Column(name = "BOARD_TYPE")
     @Builder.Default
-    private String boardType = MokaConstants.NO;
+    private String boardType = "A";
 
     /**
      * 사용여부

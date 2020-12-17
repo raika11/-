@@ -32,7 +32,7 @@ public interface BoardInfoService {
      * @param boardId 게시판 ID
      * @return 게시판 정보 상세
      */
-    Optional<BoardInfo> findBoardInfoById(Long boardId);
+    Optional<BoardInfo> findBoardInfoById(Integer boardId);
 
     /**
      * 게시판 정보 등록
@@ -63,7 +63,7 @@ public interface BoardInfoService {
      * @param boardId 게시판 정보 ID
      * @return 삭제 건수
      */
-    void deleteBoardInfo(Long boardId);
+    void deleteBoardInfo(Integer boardId);
 
-    boolean hasBoard(Long boardId);
+    boolean hasBoard(Integer boardId);
 }

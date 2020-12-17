@@ -42,10 +42,13 @@ public class BoardRepositorySupportImpl extends QuerydslRepositorySupport implem
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        QueryResults<Board> list = query.fetchResults();
+        QueryResults<Board> list = query
+                .leftJoin(qBoard.regMember, qMember)
+                .fetchJoin()
+                .fetchResults();
 
         return new PageImpl<Board>(list.getResults(), pageable, list.getTotal());
     }
 
-    
+
 }

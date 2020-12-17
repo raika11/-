@@ -49,8 +49,8 @@ public class BoardAttach extends jmnet.moka.core.tps.common.entity.BaseAudit imp
     /**
      * 게시판ID
      */
-    @Column(name = "BOARD_ID", nullable = false)
-    private Long boardId;
+    @Column(name = "BOARDINFO_SEQ", nullable = false)
+    private Integer boardId;
 
     /**
      * 원본파일명

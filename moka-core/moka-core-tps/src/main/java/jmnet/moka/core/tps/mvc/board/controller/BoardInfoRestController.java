@@ -93,20 +93,20 @@ public class BoardInfoRestController extends AbstractCommonController {
     /**
      * 게시판정보 조회
      *
-     * @param request  요청
-     * @param boardSeq 게시판아이디 (필수)
+     * @param request 요청
+     * @param boardId 게시판아이디 (필수)
      * @return 게시판정보
      * @throws NoDataException 게시판 정보가 없음
      */
     @ApiOperation(value = "게시판 조회")
-    @GetMapping("/{boardSeq}")
+    @GetMapping("/{boardId}")
     public ResponseEntity<?> getBoardInfo(HttpServletRequest request,
-            @ApiParam("게시판코드") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardSeq}") Long boardSeq)
+            @ApiParam("게시판코드") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId)
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data", request);
         BoardInfo group = boardInfoService
-                .findBoardInfoById(boardSeq)
+                .findBoardInfoById(boardId)
                 .orElseThrow(() -> new NoDataException(message));
 
         BoardInfoDTO dto = modelMapper.map(group, BoardInfoDTO.class);
@@ -162,22 +162,22 @@ public class BoardInfoRestController extends AbstractCommonController {
      * 수정
      *
      * @param request  요청
-     * @param boardSeq 게시판아이디
+     * @param boardId  게시판아이디
      * @param groupDTO 수정할 게시판정보
      * @return 수정된 게시판정보
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "게시판 수정")
-    @PutMapping("/{boardSeq}")
+    @PutMapping("/{boardId}")
     public ResponseEntity<?> putBoardInfo(HttpServletRequest request,
-            @ApiParam("게시판코드") @PathVariable("boardSeq") @Min(value = 1, message = "{tps.board-info.error.pattern.boardId}") Long boardSeq,
+            @ApiParam("게시판코드") @PathVariable("boardId") @Min(value = 1, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
             @Valid BoardInfoDTO groupDTO)
             throws Exception {
 
         // BoardInfoDTO -> BoardInfo 변환
         String infoMessage = msg("tps.common.error.no-data", request);
         BoardInfo newBoardInfo = modelMapper.map(groupDTO, BoardInfo.class);
-        newBoardInfo.setBoardId(boardSeq);
+        newBoardInfo.setBoardId(boardId);
 
         // 오리진 데이터 조회
         boardInfoService
@@ -210,15 +210,15 @@ public class BoardInfoRestController extends AbstractCommonController {
     /**
      * 게시판 내 속한 멤버 존재 여부
      *
-     * @param boardSeq 게시판ID
+     * @param boardId 게시판ID
      * @return 관련아이템 존재 여부
      */
     @ApiOperation(value = "게시판 내 속한 게시글 존재 여부")
-    @GetMapping("/{boardSeq}/has-members")
+    @GetMapping("/{boardId}/has-members")
     public ResponseEntity<?> hasBoard(
-            @ApiParam("게시판코드") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardSeq}") Long boardSeq) {
+            @ApiParam("게시판코드") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId) {
 
-        boolean exists = boardInfoService.hasBoard(boardSeq);
+        boolean exists = boardInfoService.hasBoard(boardId);
         String message = exists ? msg("tps.board-info.success.select.exist-board") : "";
 
         // 결과리턴
@@ -229,28 +229,28 @@ public class BoardInfoRestController extends AbstractCommonController {
     /**
      * 삭제
      *
-     * @param request  요청
-     * @param boardSeq 삭제 할 게시판아이디 (필수)
+     * @param request 요청
+     * @param boardId 삭제 할 게시판아이디 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
      * @throws NoDataException      삭제 할 게시판 없음
      * @throws Exception            그 외 에러처리
      */
     @ApiOperation(value = "게시판 삭제")
-    @DeleteMapping("/{boardSeq}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<?> deleteBoardInfo(HttpServletRequest request,
-            @ApiParam("게시판코드") @PathVariable("boardSeq") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardSeq}") Long boardSeq)
+            @ApiParam("게시판코드") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId)
             throws InvalidDataException, NoDataException, Exception {
 
 
         // 게시판 데이터 조회
         String noContentMessage = msg("tps.common.error.no-data", request);
         BoardInfo boardInfo = boardInfoService
-                .findBoardInfoById(boardSeq)
+                .findBoardInfoById(boardId)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
-        if (boardInfoService.hasBoard(boardSeq)) {
+        if (boardInfoService.hasBoard(boardId)) {
             // 액션 로그에 실패 로그 출력
             tpsLogger.fail(ActionType.DELETE, msg("tps.board-info.error.delete.exist-board", request));
             throw new InvalidDataException(msg("tps.board-info.error.delete.exist-board", request));
@@ -268,7 +268,7 @@ public class BoardInfoRestController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO DELETE BOARDINFO] boardSeq: {} {}", boardSeq, e.getMessage());
+            log.error("[FAIL TO DELETE BOARDINFO] boardId: {} {}", boardId, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
             throw new Exception(msg("tps.board-info.error.delete", request), e);

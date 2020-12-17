@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -50,8 +51,8 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     /**
      * 게시판ID
      */
-    @Column(name = "BOARD_ID", nullable = false)
-    private Long boardId;
+    @Column(name = "BOARDINFO_SEQ", nullable = false)
+    private Integer boardId;
 
     /**
      * 부모게시물일련번호
@@ -88,7 +89,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 제목
      */
     @Column(name = "TITLE", nullable = false)
-    private String TITLE;
+    private String title;
 
     /**
      * 등록자명
@@ -101,14 +102,14 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      */
     @Column(name = "DEPTH", nullable = false)
     @Builder.Default
-    private Integer DEPTH = 0;
+    private Integer depth = 0;
 
     /**
      * 들여쓰기
      */
     @Column(name = "INDENT", nullable = false)
     @Builder.Default
-    private Integer INDENT = 0;
+    private Integer indent = 0;
 
     /**
      * 1:일반 9:공지
@@ -156,7 +157,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 내용
      */
     @Column(name = "CONTENT", nullable = false)
-    private String CONTENT;
+    private String content;
 
     /**
      * 회원ID
@@ -168,7 +169,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 비밀번호
      */
     @Column(name = "PWD")
-    private String PWD;
+    private String pwd;
 
     /**
      * 등록IP주소
@@ -180,11 +181,19 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 그룹정보
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOARD_ID", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "BOARDINFO_SEQ", nullable = false, insertable = false, updatable = false)
     private BoardInfo boardInfo;
 
     @NotFound(action = NotFoundAction.IGNORE)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("seqNo")
     private Set<BoardAttach> attaches;
+
+    /**
+     * 등록자
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
+    private MemberInfo regMember;
 }

@@ -327,7 +327,7 @@ public class MergeServiceImpl implements MergeService {
 
                 for (ComponentWorkVO workVo : componentWorkVOList) {
                     componentIdList.add(workVo
-                            .getSeq()
+                            .getComponentSeq()
                             .toString());
                 }
 
@@ -357,7 +357,7 @@ public class MergeServiceImpl implements MergeService {
                 if (componentWorkVOList.size() > 0) {
                     for (ComponentWorkVO workVo : componentWorkVOList) {
                         componentIdList.add(workVo
-                                .getSeq()
+                                .getComponentSeq()
                                 .toString());
                         componentItem = workVo.toComponentItem();
                     }

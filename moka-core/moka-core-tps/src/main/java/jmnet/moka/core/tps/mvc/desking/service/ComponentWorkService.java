@@ -72,8 +72,9 @@ public interface ComponentWorkService {
      *
      * @param componentWorkSeq 컴포넌트워크순번
      * @param componentHist    컴포넌트 히스토리
+     * @param updateTemplateYn 템플릿수정여부(네이버채널에서 Y)
      * @return 수정된 컴포넌트워크
      */
-    ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist)
+    ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist, String updateTemplateYn)
             throws NoDataException;
 }

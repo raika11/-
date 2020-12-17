@@ -16,6 +16,7 @@ import jmnet.moka.core.tps.mvc.article.repository.ArticleTitleRepository;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleCodeVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentRelVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
@@ -159,6 +160,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleBasicVO> findAllArticleBasicByBulkY(ArticleSearchDTO search) {
         return articleMapper.findAllByBulkY(search);
+    }
+
+    @Override
+    public List<ArticleComponentVO> findAllImageComponent(Long totalId) {
+        return articleMapper.findAllImageComponent(totalId);
     }
 
 }

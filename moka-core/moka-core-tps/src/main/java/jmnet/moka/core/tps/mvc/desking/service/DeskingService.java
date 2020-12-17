@@ -392,8 +392,9 @@ public interface DeskingService {
      * @param componentWorkSeq 컴포넌트 work SEQ
      * @param componentHistSeq 컴포넌트 히스토리 SEQ
      * @param regId            작업자
+     * @param updateTemplateYn 템플릿수정여부(네이버채널에서 Y)
      */
-    void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId)
+    void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId, String updateTemplateYn)
             throws Exception;
 
     /**

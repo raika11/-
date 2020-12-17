@@ -21,6 +21,7 @@ import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -225,6 +226,29 @@ public class ArticleRestController extends AbstractCommonController {
         }
     }
 
+    @ApiOperation(value = "벌크전송 매체목록 조회")
+    @GetMapping("/{totalId}/components/image")
+    public ResponseEntity<?> getImageComponentList(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
+            throws Exception {
 
+        try {
+            // 조회
+            List<ArticleComponentVO> returnValue = articleService.findAllImageComponent(totalId);
+
+            // 리턴값 설정
+            List<ArticleComponentVO> dtoList = modelMapper.map(returnValue, ArticleComponentVO.TYPE);
+            ResultListDTO<ArticleComponentVO> resultListMessage = new ResultListDTO<>();
+            resultListMessage.setTotalCnt(dtoList.size());
+            resultListMessage.setList(dtoList);
+
+            ResultDTO<ResultListDTO<ArticleComponentVO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD IMAGE COMPONENT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD IMAGE COMPONENT", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
 
 }

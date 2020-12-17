@@ -8,6 +8,7 @@ import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 
 /**
@@ -82,4 +83,11 @@ public interface ArticleService {
      * @return 기사목록
      */
     List<ArticleBasicVO> findAllArticleBasicByBulkY(ArticleSearchDTO search);
+
+    /**
+     * 기사의 이미지 목록 조회
+     *
+     * @return 기사의 이미지 목록
+     */
+    List<ArticleComponentVO> findAllImageComponent(Long totalId);
 }

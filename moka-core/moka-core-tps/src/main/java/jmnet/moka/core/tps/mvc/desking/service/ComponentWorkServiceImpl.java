@@ -9,6 +9,7 @@
 package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
@@ -112,7 +113,7 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
     }
 
     @Override
-    public ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist)
+    public ComponentWork updateComponentWork(Long componentWorkSeq, ComponentHist componentHist, String updateTemplateYn)
             throws NoDataException {
         String messageC = messageByLocale.get("tps.common.error.no-data");
         ComponentWork componentWork = this
@@ -121,7 +122,9 @@ public class ComponentWorkServiceImpl implements jmnet.moka.core.tps.mvc.desking
 
         componentWork.setSnapshotYn(componentHist.getSnapshotYn());
         componentWork.setSnapshotBody(componentHist.getSnapshotBody());
-        //        componentWork.setTemplate(componentHist.getTemplate());
+        if (updateTemplateYn != null && updateTemplateYn.equals(MokaConstants.YES)) {
+            componentWork.setTemplate(componentHist.getTemplate());
+        }
         //        componentWork.setZone(componentHist.getZone());
         //        componentWork.setMatchZone(componentHist.getMatchZone());
         componentWork.setViewYn(componentHist.getViewYn());

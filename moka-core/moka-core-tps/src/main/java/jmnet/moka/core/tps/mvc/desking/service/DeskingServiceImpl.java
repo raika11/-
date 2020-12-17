@@ -1047,13 +1047,13 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Override
     @Transactional
-    public void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId)
+    public void importDeskingWorkHistory(Long componentWorkSeq, Long componentHistSeq, String regId, String updateTemplateYn)
             throws Exception {
 
         // component work 수정
         Optional<ComponentHist> componentHist = componentHistService.findComponentHistBySeq(componentHistSeq);
         if (componentHist.isPresent()) {
-            ComponentWork componentWork = componentWorkService.updateComponentWork(componentWorkSeq, componentHist.get());
+            ComponentWork componentWork = componentWorkService.updateComponentWork(componentWorkSeq, componentHist.get(), updateTemplateYn);
 
             Long datasetSeq = componentWork
                     .getDataset()

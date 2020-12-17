@@ -948,11 +948,11 @@ public class DeskingRestController extends AbstractCommonController {
     @Min(value = 0, message = "{tps.deskinghist.error.min.componentWorkSeq}") Long componentWorkSeq,
             @ApiParam("컴포넌트 히스토리 일련번호(필수)") @PathVariable("componentHistSeq")
             @Min(value = 0, message = "{tps.deskinghist.error.min.componentHistSeq}") Long componentHistSeq,
-            @ApiParam(hidden = true) Principal principal)
+            @ApiParam("템플릿수정여부(네이버채널은 Y, 그 외는 N 할 것)") String updateTemplateYn, @ApiParam(hidden = true) Principal principal)
             throws NoDataException, Exception {
 
         try {
-            deskingService.importDeskingWorkHistory(componentWorkSeq, componentHistSeq, principal.getName());
+            deskingService.importDeskingWorkHistory(componentWorkSeq, componentHistSeq, principal.getName(), updateTemplateYn);
 
             // 컴포넌트 워크 조회(편집기사포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);

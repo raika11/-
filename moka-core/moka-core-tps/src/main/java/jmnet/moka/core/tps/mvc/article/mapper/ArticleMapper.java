@@ -4,6 +4,7 @@ import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 
 /**
@@ -28,4 +29,12 @@ public interface ArticleMapper extends BaseMapper<ArticleBasicVO, ArticleSearchD
      * @return 기사목록
      */
     List<ArticleBasicVO> findAllByBulkY(ArticleSearchDTO search);
+
+    /**
+     * 기사의 이미지 목록 조회
+     *
+     * @param totalId 기사키
+     * @return 기사이미지목록
+     */
+    List<ArticleComponentVO> findAllImageComponent(Long totalId);
 }

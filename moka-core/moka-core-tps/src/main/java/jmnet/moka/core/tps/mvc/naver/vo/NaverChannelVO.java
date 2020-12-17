@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.naver.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class NaverChannel {
+public class NaverChannelVO implements Serializable {
     private String editorId;
     private String template;
     private List<Map<String, String>> headlineArticles = new ArrayList<>();

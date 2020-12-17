@@ -7,13 +7,11 @@ package jmnet.moka.core.tps.mvc.naver.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.naver.service.NaverService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -45,9 +43,8 @@ public class NaverRestController extends AbstractCommonController {
     public ResponseEntity<?> getPublishNaverStand(@ApiParam("편집영역 일련번호(필수)") Long areaSeq)
             throws Exception {
         try {
-            naverService.publishNaverStand(areaSeq);
-
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.naver.sucess.stand"));
+            String msg = naverService.publishNaverStand(areaSeq) ? msg("tps.naver.sucess.stand") : msg("tps.naver.error.stand");
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO PUBLISH NAVER STAND]", e);
@@ -61,9 +58,8 @@ public class NaverRestController extends AbstractCommonController {
     public ResponseEntity<?> getPublishNaverChannel(@ApiParam("편집영역 일련번호(필수)") Long areaSeq)
             throws Exception {
         try {
-            naverService.publishNaverChannel(areaSeq);
-
-            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg("tps.naver.sucess.channel"));
+            String msg = naverService.publishNaverChannel(areaSeq) ? msg("tps.naver.sucess.channel") : msg("tps.naver.error.channel");
+            ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, msg);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO PUBLISH NAVER CHANNEL]", e);

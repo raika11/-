@@ -12,8 +12,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +32,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
@@ -37,6 +41,7 @@ import jmnet.moka.core.tps.mvc.area.service.AreaService;
 import jmnet.moka.core.tps.mvc.desking.entity.Desking;
 import jmnet.moka.core.tps.mvc.desking.service.DeskingService;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
+import jmnet.moka.core.tps.mvc.naver.vo.NaverChannelVO;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
@@ -83,6 +88,12 @@ public class NaverServiceImpl implements NaverService {
     @Value("${naver.channel.path}")
     private String naverChannelPath;
 
+    @Value("${naver.channel.editorId}")
+    private String naverChannelEditorId;
+
+    @Value("${naver.channel.feedbackEmail}")
+    private String naverChannelEmail;
+
     @Autowired
     private FtpHelper ftpHelper;
 
@@ -96,7 +107,7 @@ public class NaverServiceImpl implements NaverService {
     private ModelMapper modelMapper;
 
     @Override
-    public void publishNaverStand(Long areaSeq)
+    public boolean publishNaverStand(Long areaSeq)
             throws Exception {
         // 편집영역조회
         Area area = areaService
@@ -121,13 +132,88 @@ public class NaverServiceImpl implements NaverService {
 
         // html, xml모두 생성된 경우만 정상.
         if (McpString.isEmpty(html) || !sendXml) {
-            throw new Exception();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void publishNaverChannel(Long areaSeq) {
-        
+    public boolean publishNaverChannel(Long areaSeq)
+            throws IOException, NoDataException {
+        // 편집영역조회
+        Area area = areaService
+                .findAreaBySeq(areaSeq)
+                .orElseThrow(() -> {
+                    String messageArea = messageByLocale.get("tps.common.error.no-data");
+                    log.error(messageArea, true);
+                    return new NoDataException(messageArea);
+                });
+
+        NaverChannelVO channel = NaverChannelVO
+                .builder()
+                .editorId(naverChannelEditorId)
+                .feedbackEmail(naverChannelEmail)
+                .build();
+
+        if (area
+                .getAreaComps()
+                .size() > 0) {
+            AreaComp comp = area
+                    .getAreaComps()
+                    .get(0);
+            // 템플릿명 조회
+            String templateName = comp
+                    .getComponent()
+                    .getTemplate()
+                    .getTemplateName();
+            channel.setTemplate(templateName);
+
+            // 기사목록 조회
+            List<Map<String, String>> headlineArticles = new ArrayList<>();
+            Long datasetSeq = comp
+                    .getComponent()
+                    .getDataset()
+                    .getDatasetSeq();
+            List<Desking> deskingList = deskingService.findByDatasetSeq(datasetSeq);
+            for (Desking desking : deskingList) {
+                if (desking.getParentContentId() == null) {
+                    Map<String, String> article = new HashMap<>();
+                    article.put("nsid", desking.getContentId());
+                    headlineArticles.add(article);
+                }
+            }
+            if (headlineArticles.size() > 0) {
+                channel.setHeadlineArticles(headlineArticles);
+            }
+        }
+
+        File jsonFile = File.createTempFile("naverChannel", ".json");
+        try {
+            ResourceMapper
+                    .getDefaultObjectMapper()
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValue(jsonFile, channel);
+            //            ResourceMapper.writeJson(jsonFile, channel);
+
+            // 파일 저장
+            String fileName = naverChannelPath.substring(naverChannelPath.lastIndexOf("/") + 1);
+            String remotePath = naverChannelPath.substring(0, naverChannelPath.lastIndexOf("/"));
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(jsonFile));
+            boolean upload = ftpHelper.upload(naverFtpKey, fileName, bufferedInputStream, remotePath);
+            if (upload) {
+                tpsLogger.success(ActionType.UPLOAD, true);
+                log.debug("SEND NAVER_CHANNEL_JSON TO FTP: {}", jsonFile.getPath());
+                return false;
+            } else {
+                tpsLogger.error(ActionType.UPLOAD, "FAIL TO SEND NAVER_CHANNEL_JSON TO FTP", true);
+                log.debug("FAIL TO SEND NAVER_CHANNEL_JSON TO FTP: {}", jsonFile.getPath());
+            }
+            jsonFile.deleteOnExit(); // 생성된 임시파일은 종료와 함께 삭제.
+        } catch (IOException e) {
+            log.error("FAIL TO SEND NAVER_CHANNEL_JSON");
+        }
+        return true;
+
     }
 
     /**

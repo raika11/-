@@ -4,6 +4,9 @@
 
 package jmnet.moka.core.tps.mvc.naver.service;
 
+import java.io.IOException;
+import jmnet.moka.core.tps.exception.NoDataException;
+
 /**
  * Description: 설명
  *
@@ -17,7 +20,7 @@ public interface NaverService {
      *
      * @param areaSeq 편집영역순번
      */
-    void publishNaverStand(Long areaSeq)
+    boolean publishNaverStand(Long areaSeq)
             throws Exception;
 
     /**
@@ -25,5 +28,6 @@ public interface NaverService {
      *
      * @param areaSeq 편집영역순번
      */
-    void publishNaverChannel(Long areaSeq);
+    boolean publishNaverChannel(Long areaSeq)
+            throws IOException, NoDataException;
 }

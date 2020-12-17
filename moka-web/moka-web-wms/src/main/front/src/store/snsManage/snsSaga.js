@@ -4,7 +4,7 @@ import { takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
-import { API_BASE_URL, BLANK_IMAGE_PATH, IR_URL, PDS_URL, snsNames } from '@/constants';
+import { API_BASE_URL, BLANK_IMAGE_PATH, DB_DATEFORMAT, IR_URL, PDS_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
 import { unescapeHtml } from '@utils/convertUtil';
@@ -29,7 +29,7 @@ function toSaveSnsMeta(data) {
 
 function toSnsMetaViewData({ snsShare, article }) {
     const { totalId } = article;
-    let { articleBasic } = snsShare;
+    let { articleBasic, snsRegDt } = snsShare;
     if (commonUtil.isEmpty(articleBasic)) {
         articleBasic = {};
     }
@@ -37,13 +37,16 @@ function toSnsMetaViewData({ snsShare, article }) {
     const { twMetaUsedYn, twMetaTitle, twMetaSummary, twMetaPostMsg, twMetaImage, twMetaReserveDt } = article;
 
     const { serviceFlag, artTitle, artSummary, artThumb, artRegDt } = articleBasic;
+
+    console.log(new Date(snsRegDt));
+
     return {
         totalId: commonUtil.setDefaultValue(totalId),
         fb: {
             usedYn: commonUtil.setDefaultValue(fbMetaUsedYn, 'N') === 'Y',
             title: unescapeHtml(commonUtil.setDefaultValue(fbMetaTitle)),
-            summary: commonUtil.setDefaultValue(fbMetaSummary),
-            postMessage: commonUtil.setDefaultValue(fbMetaPostMsg),
+            summary: unescapeHtml(commonUtil.setDefaultValue(fbMetaSummary)),
+            postMessage: unescapeHtml(commonUtil.setDefaultValue(fbMetaPostMsg)),
             imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
                     fbMetaImage,
@@ -56,8 +59,8 @@ function toSnsMetaViewData({ snsShare, article }) {
         tw: {
             usedYn: commonUtil.setDefaultValue(twMetaUsedYn, 'N') === 'Y',
             title: unescapeHtml(commonUtil.setDefaultValue(twMetaTitle)),
-            summary: commonUtil.setDefaultValue(twMetaSummary),
-            postMessage: commonUtil.setDefaultValue(twMetaPostMsg),
+            summary: unescapeHtml(commonUtil.setDefaultValue(twMetaSummary)),
+            postMessage: unescapeHtml(commonUtil.setDefaultValue(twMetaPostMsg)),
             imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
                     twMetaImage,
@@ -70,7 +73,7 @@ function toSnsMetaViewData({ snsShare, article }) {
         article: {
             serviceFlag: commonUtil.setDefaultValue(serviceFlag, 'N') === 'Y',
             title: unescapeHtml(commonUtil.setDefaultValue(artTitle)),
-            summary: commonUtil.setDefaultValue(artSummary),
+            summary: unescapeHtml(commonUtil.setDefaultValue(artSummary)),
             imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
                     artThumb,
@@ -78,6 +81,7 @@ function toSnsMetaViewData({ snsShare, article }) {
                 ),
             ),
             regDt: artRegDt,
+            snsRegDt: snsRegDt && moment(snsRegDt).format(DB_DATEFORMAT),
         },
     };
 }

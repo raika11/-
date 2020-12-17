@@ -15,7 +15,7 @@ export const initialState = {
                 summary: '',
                 postMessage: '',
                 imgUrl: '',
-                isReserve: 'N',
+                isReserve: false,
                 reserveDt: null,
             },
             tw: {
@@ -24,11 +24,11 @@ export const initialState = {
                 summary: '',
                 postMessage: '',
                 imgUrl: '',
-                isReserve: 'N',
+                isReserve: false,
                 reserveDt: null,
             },
             article: {
-                serviceFlag: 'N',
+                serviceFlag: false,
                 title: '',
                 summary: '',
                 imgUrl: '',

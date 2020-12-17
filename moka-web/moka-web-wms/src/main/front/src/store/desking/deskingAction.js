@@ -86,6 +86,7 @@ export const changeWorkStatus = createAction(CHANGE_WORK_STATUS, ({ componentWor
 
 /**
  * 컴포넌트 워크 임시저장
+ * templateSeq => 네이버채널 임시저장만 사용!!
  */
 export const POST_SAVE_COMPONENT_WORK = 'desking/POST_SAVE_COMPONENT_WORK';
 export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ componentWorkSeq, templateSeq, callback }) => ({
@@ -96,6 +97,7 @@ export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ c
 
 /**
  * 컴포넌트 워크 전송
+ * templateSeq => 네이버채널 임시저장만 사용!!
  */
 export const POST_PUBLISH_COMPONENT_WORK = 'desking/POST_PUBLISH_COMPONENT_WORK';
 export const postPublishComponentWork = createAction(POST_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, areaSeq, templateSeq, callback }) => ({

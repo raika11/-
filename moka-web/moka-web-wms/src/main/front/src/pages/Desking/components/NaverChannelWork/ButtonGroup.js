@@ -17,7 +17,7 @@ import { AddSpaceModal, EditListNumberModal, EditHtmlModal } from '@pages/Deskin
  * 네이버채널 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances } = props;
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workTemplateSeq } = props;
     // const { workStatus } = props;
     const dispatch = useDispatch();
 
@@ -51,6 +51,7 @@ const ButtonGroup = (props) => {
             dispatch(
                 postPublishComponentWork({
                     componentWorkSeq: component.seq,
+                    templateSeq: workTemplateSeq,
                     areaSeq,
                     callback: ({ header }) => {
                         if (header.success) {
@@ -62,7 +63,7 @@ const ButtonGroup = (props) => {
                 }),
             );
         });
-    }, [component.seq, areaSeq, dispatch]);
+    }, [dispatch, component.seq, workTemplateSeq, areaSeq]);
 
     /**
      * 임시저장
@@ -71,6 +72,7 @@ const ButtonGroup = (props) => {
         dispatch(
             postSaveComponentWork({
                 componentWorkSeq: component.seq,
+                templateSeq: workTemplateSeq,
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success(header.message);
@@ -80,7 +82,7 @@ const ButtonGroup = (props) => {
                 },
             }),
         );
-    }, [component.seq, dispatch]);
+    }, [component.seq, dispatch, workTemplateSeq]);
 
     /**
      * 공백추가

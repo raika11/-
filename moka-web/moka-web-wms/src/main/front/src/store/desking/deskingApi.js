@@ -128,15 +128,16 @@ export const putDeskingWorkListSort = ({ componentWorkSeq, datasetSeq, list }) =
 };
 
 // 컴포넌트 워크 임시저장
-export const postSaveComponentWork = ({ componentWorkSeq }) => {
-    return instance.post(`/api/desking/components/save/${componentWorkSeq}`).catch((err) => {
+export const postSaveComponentWork = ({ componentWorkSeq, templateSeq }) => {
+    const queryString = { templateSeq };
+    return instance.post(`/api/desking/components/save/${componentWorkSeq}?${qs.stringify(queryString)}`).catch((err) => {
         throw err;
     });
 };
 
 // 컴포넌트 워크 전송
-export const postPublishComponentWork = ({ componentWorkSeq, areaSeq }) => {
-    const queryString = { areaSeq };
+export const postPublishComponentWork = ({ componentWorkSeq, areaSeq, templateSeq }) => {
+    const queryString = { areaSeq, templateSeq };
     return instance.post(`/api/desking/components/publish/${componentWorkSeq}?${qs.stringify(queryString)}`).catch((err) => {
         throw err;
     });

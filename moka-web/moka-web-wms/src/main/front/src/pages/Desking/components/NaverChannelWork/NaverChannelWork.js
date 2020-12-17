@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -43,12 +43,14 @@ const defaultProps = {
  * 네이버채널에서만 쓰는 컴포넌트 워크
  */
 const NaverChannelWork = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
+    const { component, componentWorkList, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
     const dispatch = useDispatch();
 
     const { workStatus } = useSelector((store) => ({
         workStatus: store.desking.workStatus,
     }));
+
+    const [workTemplateSeq, setWorkTemplateSeq] = useState(null);
 
     /**
      * 편집기사 삭제 (delete)
@@ -68,6 +70,14 @@ const NaverChannelWork = (props) => {
         dispatch(deleteDeskingWorkList(option));
     };
 
+    useEffect(() => {
+        if (componentWorkList.length > 0) {
+            setWorkTemplateSeq(componentWorkList[0].templateSeq);
+        } else {
+            setWorkTemplateSeq(null);
+        }
+    }, [componentWorkList]);
+
     return (
         <div
             className={clsx('component-work', 'border-top', {
@@ -85,6 +95,7 @@ const NaverChannelWork = (props) => {
                 agGridIndex={agGridIndex}
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
+                workTemplateSeq={workTemplateSeq}
             />
 
             {/* 편집기사 리스트 */}

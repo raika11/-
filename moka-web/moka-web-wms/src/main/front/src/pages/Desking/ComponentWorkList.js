@@ -96,6 +96,7 @@ const ComponentWorkList = (props) => {
                         component={component}
                         editFormPart={editFormPart}
                         agGridIndex={targetIdx}
+                        componentWorkList={componentWorkList}
                         {...props}
                     />
                 );

@@ -66,7 +66,7 @@ const ComponentWorkPreview = ({ show }) => {
     }, [previewContent]);
 
     return (
-        <div className="p-3 position-relative">
+        <div className="px-card py-20 position-relative">
             {loading && <MokaLoader />}
             <div className="d-flex align-items-center justify-content-between mb-2" style={{ height: 30 }}>
                 <p className="h5 mb-0">미리보기</p>
@@ -75,7 +75,7 @@ const ComponentWorkPreview = ({ show }) => {
                 </Button>
             </div>
 
-            <iframe ref={iframeRef} title="컴포넌트미리보기" frameBorder="0" className="w-100" style={{ height: 741 }} />
+            <iframe ref={iframeRef} title="컴포넌트미리보기" frameBorder="0" className="w-100" style={{ height: 733 }} />
         </div>
     );
 };

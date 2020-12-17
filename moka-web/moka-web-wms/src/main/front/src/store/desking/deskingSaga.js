@@ -69,11 +69,10 @@ function* getComponentWorkList({ payload }) {
         callbackData = { ...response.data, isNaverChannel };
 
         if (response.data.header.success) {
-            // 편집영역의 페이지가 네이버채널 페이지면 컴포넌트 워크의 임시저장된 템플릿 정보를 조회한다.
             const { area, desking } = response.data.body;
 
             if (area.page?.pageUrl === '/naver-channel') {
-                // 네이버채널 예외처리
+                // 편집영역의 페이지가 네이버채널 페이지면 컴포넌트 워크의 임시저장된 템플릿 정보를 조회한다
                 isNaverChannel = true;
                 callbackData = { ...response.data, isNaverChannel };
 
@@ -127,6 +126,11 @@ const putComponentWork = createDeskingRequestSaga(act.PUT_COMPONENT_WORK, api.pu
  * 컴포넌트 워크 스냅샷 수정
  */
 const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPONENT_WORK, api.putSnapshotComponentWork, 'work');
+
+/**
+ * 컴포넌트 워크 수정(템플릿만)
+ */
+const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK_TEMPLATE, api.putComponentWorkTemplate, 'work');
 
 /**
  * 데스킹 워크의 관련기사 rowNode 생성
@@ -582,6 +586,7 @@ export default function* saga() {
     yield takeLatest(act.GET_COMPONENT_WORK, getComponentWork);
     yield takeLatest(act.PUT_COMPONENT_WORK, putComponentWork);
     yield takeLatest(act.PUT_SNAPSHOT_COMPONENT_WORK, putSnapshotComponentWork);
+    yield takeLatest(act.PUT_COMPONENT_WORK_TEMPLATE, putComponentWorkTemplate);
 
     yield takeLatest(act.POST_SAVE_COMPONENT_WORK, postSaveComponentWork);
     yield takeLatest(act.POST_PUBLISH_COMPONENT_WORK, postPublishComponentWork);

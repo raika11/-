@@ -9,6 +9,10 @@ export const loginJwt = createAction(LOGIN_JWT);
 export const LOGOUT = 'auth/LOGOUT';
 export const logout = createAction(LOGOUT);
 
+// BackOffice 유저 정보 조회
+export const GET_BACK_OFFICE_USER = 'auth/GET_BACK_OFFICE_USER';
+export const getBackOfficeUser = createAction(GET_BACK_OFFICE_USER);
+
 // 그룹웨어 유저 정보 조회
 export const GET_GROUP_WARE_USER = 'auth/GET_GROUP_WARE_USER';
 export const getGroupWareUser = createAction(GET_GROUP_WARE_USER);

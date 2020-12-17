@@ -4,18 +4,23 @@ import { setLocalItem } from '@utils/storageUtil';
 import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
-import { AUTHORIZATION, SIGNIN_MEMBER_ID } from '@/constants';
+import { AUTHORIZATION, SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
 /**
  * 로그인
  * @param {object} param0.payload
  */
-export function* loginJwtSaga({ payload: { userId, userPassword, callback } }) {
+export function* loginJwtSaga({ payload: { userId, userPassword, idSave, callback } }) {
     try {
         const response = yield call(api.loginJwt, userId, userPassword);
         const { headers } = response;
         if (headers.authorization) {
             yield call(setLocalItem, { key: AUTHORIZATION, value: headers.authorization });
-            yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: userId });
+            yield call(setLocalItem, { key: SIGNIN_MEMBER_ID_SAVE, value: idSave });
+            if (idSave) {
+                yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: userId });
+            } else {
+                yield call(setLocalItem, { key: SIGNIN_MEMBER_ID, value: undefined });
+            }
         }
         callback(response);
     } catch (err) {}
@@ -33,6 +38,18 @@ export function* logout() {
             yield call(setLocalItem, { key: AUTHORIZATION, value: undefined });
             yield call(window.location.reload());
         }
+    } catch (err) {}
+}
+
+/**
+ * BackOffice 사용자 조회
+ * @param {object} param0.payload
+ */
+
+export function* getBackOfficeUser({ payload: { memberId, callback } }) {
+    try {
+        const response = yield call(api.getBackOfficeUser, memberId);
+        callback(response.data);
     } catch (err) {}
 }
 
@@ -213,6 +230,7 @@ export function* getDomainList({ payload: domainId }) {
 export default function* authSaga() {
     yield takeLatest(authAction.LOGIN_JWT, loginJwtSaga);
     yield takeLatest(authAction.LOGOUT, logout);
+    yield takeLatest(authAction.GET_BACK_OFFICE_USER, getBackOfficeUser);
     yield takeLatest(authAction.GET_GROUP_WARE_USER, getGroupWareUser);
     yield takeLatest(authAction.GET_SMS_REQUEST, getSmsRequest);
     yield takeLatest(authAction.UNLOCK_SMS, approvalRequest);

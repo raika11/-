@@ -24,6 +24,13 @@ export const logout = () => {
     });
 };
 
+// BackOffice 사용자 조회
+export const getBackOfficeUser = (memberId) => {
+    return instance.get(`/api/member-join/${memberId}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 그룹웨어 사용자 조회
 export const getGroupWareUser = (groupWareUserId) => {
     return instance.get(`/api/member-join/groupware-users/${groupWareUserId}`).catch((err) => {

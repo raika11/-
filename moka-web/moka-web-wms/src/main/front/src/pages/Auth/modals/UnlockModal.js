@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupWareUser, getSmsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, GET_SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
+import { getBackOfficeUser, getSmsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, GET_SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -29,7 +29,7 @@ const UnlockModal = (props) => {
     const defaultMinutes = 3;
     const defaultSeconds = 0;
     const [userObj, setUserObj] = useState({});
-    const [groupWareUserId, setGroupWareUserId] = useState('');
+    const [backOfficeId, setBackOfficeId] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [requestReason, setRequestReason] = useState('');
@@ -58,8 +58,8 @@ const UnlockModal = (props) => {
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
-        if (name === 'groupWareUserId') {
-            setGroupWareUserId(value);
+        if (name === 'backOfficeId') {
+            setBackOfficeId(value);
         } else if (name === 'password') {
             setPassword(value);
             setError({ ...error, password: false });
@@ -76,19 +76,16 @@ const UnlockModal = (props) => {
     };
 
     const handleSearch = useCallback(() => {
-        if (groupWareUserId.replace(/ /g, '').length > 0 && !/\s/.test(groupWareUserId)) {
+        if (!/\s/.test(backOfficeId) && backOfficeId.length > 0) {
             dispatch(
-                getGroupWareUser({
-                    groupWareUserId: groupWareUserId,
+                getBackOfficeUser({
+                    memberId: backOfficeId,
                     callback: ({ header, body }) => {
+                        console.log(header, body);
                         if (header.success) {
-                            if (!body.groupWareUser.existMokaUserId) {
-                                messageBox.alert("BackOffice에 등록되지 않은 아이디 입니다.\n'BackOffice 사용신청'을 이용하세요.");
-                            } else {
-                                setUnlockRequestCode(body.UNLOCK_REQUEST);
-                                setUnlockSmsCode(body.UNLOCK_SMS);
-                                setUserObj(body.groupWareUser);
-                            }
+                            setUnlockRequestCode(body.UNLOCK_REQUEST);
+                            setUnlockSmsCode(body.UNLOCK_SMS);
+                            setUserObj(body.member);
                         } else {
                             messageBox.alert(header.message);
                         }
@@ -98,7 +95,7 @@ const UnlockModal = (props) => {
         } else {
             messageBox.alert('아이디가 올바르지 않습니다.');
         }
-    }, [dispatch, groupWareUserId]);
+    }, [dispatch, backOfficeId]);
 
     /**
      * 입력된 validate체크
@@ -154,7 +151,7 @@ const UnlockModal = (props) => {
      */
     const handleClickSmsUnlock = useCallback(() => {
         const unlock = {
-            memberId: userObj.userId,
+            memberId: userObj.memberId,
             password,
             confirmPassword,
             requestReason,
@@ -164,7 +161,7 @@ const UnlockModal = (props) => {
             setSmsUnlock(true);
             setBtnOkDisplay('block');
         }
-    }, [confirmPassword, password, requestReason, userObj.userId]);
+    }, [confirmPassword, password, requestReason, userObj.memberId]);
 
     /**
      * 인증번호 요청
@@ -172,7 +169,7 @@ const UnlockModal = (props) => {
     const handleClickRequestSms = useCallback(() => {
         if (!requestSms || parseInt(minutes) <= defaultMinutes - 2) {
             const unlock = {
-                memberId: userObj.userId,
+                memberId: userObj.memberId,
                 password,
                 confirmPassword,
                 requestReason,
@@ -199,9 +196,9 @@ const UnlockModal = (props) => {
                 );
             }
         } else {
-            messageBox.alert('잠시 후 다시 시도하시기 바랍니다.');
+            messageBox.alert('재전송 간격이 빠릅니다.\n잠시 후 다시 시도하시기 바랍니다.');
         }
-    }, [confirmPassword, dispatch, minutes, password, requestReason, requestSms, userObj.userId]);
+    }, [confirmPassword, dispatch, minutes, password, requestReason, requestSms, userObj.memberId]);
 
     useEffect(() => {
         // invalidList 처리
@@ -249,7 +246,7 @@ const UnlockModal = (props) => {
      * 초기화
      */
     const reset = () => {
-        setGroupWareUserId('');
+        setBackOfficeId('');
         setPassword('');
         setConfirmPassword('');
         setRequestReason('');
@@ -268,13 +265,14 @@ const UnlockModal = (props) => {
      */
     const handleClickApprovalRequest = useCallback(() => {
         const unlock = {
-            memberId: userObj.userId,
+            memberId: userObj.memberId,
             smsAuth,
             password,
             confirmPassword,
             requestReason,
             requestType: unlockSmsCode,
         };
+
         if (validate(unlock)) {
             dispatch(
                 approvalRequest({
@@ -292,19 +290,20 @@ const UnlockModal = (props) => {
                 }),
             );
         }
-    }, [confirmPassword, dispatch, error, onHide, password, requestReason, smsAuth, unlockSmsCode, userObj.userId]);
+    }, [confirmPassword, dispatch, error, onHide, password, requestReason, smsAuth, unlockSmsCode, userObj.memberId]);
 
     /**
      * 관리자 해제 요청
      */
     const handleClickUnlockRequest = useCallback(() => {
         const unlock = {
-            memberId: userObj.userId,
+            memberId: userObj.memberId,
             password,
             confirmPassword,
             requestReason,
             requestType: unlockRequestCode,
         };
+
         if (validate(unlock)) {
             dispatch(
                 unlockRequest({
@@ -322,7 +321,7 @@ const UnlockModal = (props) => {
                 }),
             );
         }
-    }, [confirmPassword, dispatch, error, onHide, password, requestReason, unlockRequestCode, userObj.userId]);
+    }, [confirmPassword, dispatch, error, onHide, password, requestReason, unlockRequestCode, userObj.memberId]);
 
     /**
      * 닫기
@@ -336,7 +335,7 @@ const UnlockModal = (props) => {
         <>
             <MokaModal
                 loading={loading}
-                width={400}
+                width={420}
                 size="md"
                 draggable
                 show={show}
@@ -359,37 +358,41 @@ const UnlockModal = (props) => {
                 centered
             >
                 <Form className="mb-10">
-                    <Form.Group as={Row} className="mb-3">
-                        <Col xs={12} className="p-0">
+                    <Form.Group as={Row} className="mb-3 align-items-center">
+                        <Col xs={3} className="p-0">
+                            <Form.Label className="p-0">BackOffice ID</Form.Label>
+                        </Col>
+                        <Col xs={9} className="p-0">
                             <MokaSearchInput
                                 label="ID"
                                 labelWidth={80}
-                                value={groupWareUserId}
+                                value={backOfficeId}
                                 onChange={handleChangeValue}
                                 onSearch={handleSearch}
-                                name="groupWareUserId"
+                                name="backOfficeId"
                                 disabled={requestSms}
+                                placeholder="BackOffice ID를 입력하세요."
                                 inputProps={{ autoComplete: 'off' }}
                             />
                         </Col>
                     </Form.Group>
-                    {userObj.userId ? (
+                    {userObj.memberId ? (
                         <>
                             <Form.Group as={Row} className="mb-3">
                                 <Col xs={12} className="p-0 mb-0">
                                     <MokaInputLabel
                                         label="ID"
                                         labelWidth={80}
-                                        name="userId"
-                                        value={userObj.userId}
+                                        name="memberId"
+                                        value={userObj.memberId}
                                         onChange={handleChangeValue}
                                         inputProps={{ plaintext: true, readOnly: true }}
                                     />
                                     <MokaInputLabel
                                         label="이름"
                                         labelWidth={80}
-                                        name="userName"
-                                        value={userObj.userName}
+                                        name="memberNm"
+                                        value={userObj.memberNm}
                                         onChange={handleChangeValue}
                                         inputProps={{ plaintext: true, readOnly: true }}
                                     />
@@ -404,8 +407,8 @@ const UnlockModal = (props) => {
                                     <MokaInputLabel
                                         label="휴대전화"
                                         labelWidth={80}
-                                        name="mobile"
-                                        value={userObj.mobile.replace(/(^01.{1})-([0-9]+)-([0-9]{4})/, '$1-$2-XXXX')}
+                                        name="mobilePhone"
+                                        value={userObj.mobilePhone.replace(/(^01.{1})-([0-9]+)-([0-9]{4})/, '$1-$2-XXXX')}
                                         onChange={handleChangeValue}
                                         inputProps={{ plaintext: true, readOnly: true }}
                                     />
@@ -451,17 +454,13 @@ const UnlockModal = (props) => {
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
-                                <Col xs lg="4" className="p-0 mr-10">
-                                    <Button variant="outline-neutral" className="mr-2" onClick={handleClickUnlockRequest}>
-                                        관리자 해제 요청
-                                    </Button>
-                                </Col>
+                                <Button variant="outline-neutral" className="mr-10" onClick={handleClickUnlockRequest}>
+                                    관리자 해제 요청
+                                </Button>
                                 {!smsUnlock ? (
-                                    <Col xs lg="4" className="p-0">
-                                        <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsUnlock}>
-                                            본인인증 해제
-                                        </Button>
-                                    </Col>
+                                    <Button variant="outline-neutral" onClick={handleClickSmsUnlock}>
+                                        본인인증 해제
+                                    </Button>
                                 ) : (
                                     ''
                                 )}
@@ -497,7 +496,7 @@ const UnlockModal = (props) => {
                                         </Col>
                                         {requestSms ? (
                                             <Col xs lg="3" className="p-0">
-                                                <Form.Label className="form-label p-0 mb-0" style={{ width: 90, minWidth: 90 }}>
+                                                <Form.Label className="form-label p-0 mb-0  text-right" style={{ width: 90, minWidth: 90 }}>
                                                     남은시간 : {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                                                 </Form.Label>
                                             </Col>

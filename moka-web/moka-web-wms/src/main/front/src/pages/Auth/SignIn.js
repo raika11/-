@@ -5,19 +5,21 @@ import { Button, Card, Col, Form, FormCheck, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Main from '@/layout/components/Main';
 import { getLocalItem } from '@/utils/storageUtil';
-import { SIGNIN_MEMBER_ID } from '@/constants';
+import { SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
 import logo from '@assets/images/img_logo@2x.png';
 import loginBg from '@assets/images/login_bg.png';
-import { MokaIcon } from '@components';
+import { MokaIcon, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import UnlockModal from './modals/UnlockModal';
+import RegisterModal from './modals/RegisterModal';
 
 const SignIn = () => {
     const dispatch = useDispatch();
     const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
     const [showUnlockModal, setShowUnlockModal] = useState(false);
-    const [showApprovalModal, setShowApprovalModal] = useState(false);
+    const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [password, setPassword] = useState('sscMoka#2020');
+    const [idSave, setIdSave] = useState(getLocalItem(SIGNIN_MEMBER_ID_SAVE));
     const [passwordErrorCount, setPasswordErrorCount] = useState(0);
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,6 +32,7 @@ const SignIn = () => {
             loginJwt({
                 userId: userId,
                 userPassword: password,
+                idSave: idSave,
                 callback: ({ headers, data }) => {
                     if (headers.authorization) {
                         if (data.header.resultType === 0) {
@@ -64,16 +67,19 @@ const SignIn = () => {
         );
     };
 
-    const handleUserIdChange = (e) => {
-        setUserId(e.target.value);
+    const handleChangeValue = ({ target }) => {
+        const { name, value, checked } = target;
+        if (name === 'userid') {
+            setUserId(value);
+        } else if (name === 'password') {
+            setPassword(value);
+        } else if (name === 'idSave') {
+            setIdSave(checked);
+        }
     };
 
-    const handlePasswrdChange = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const handleClickApproval = (event) => {
-        console.log(event);
+    const handleClickRegister = (event) => {
+        setShowRegisterModal(true);
     };
     const handleClickUnlock = (event) => {
         setShowUnlockModal(true);
@@ -105,7 +111,7 @@ const SignIn = () => {
                                                             type={'text'}
                                                             size="lg"
                                                             name="userid"
-                                                            onChange={handleUserIdChange}
+                                                            onChange={handleChangeValue}
                                                             value={userId}
                                                             placeholder="ID"
                                                             autoComplete="off"
@@ -119,14 +125,14 @@ const SignIn = () => {
                                                             size="lg"
                                                             type="password"
                                                             name="password"
-                                                            onChange={handlePasswrdChange}
+                                                            onChange={handleChangeValue}
                                                             value={password}
                                                             placeholder="Password"
                                                             autoComplete="off"
                                                         />
                                                     </Form.Group>
                                                     <div className="user-info">
-                                                        <FormCheck type="checkbox" id="rememberMe" label="Save ID" defaultChecked />
+                                                        <MokaInput as="checkbox" id="idSave" name="idSave" label="Save ID" onChange={handleChangeValue} checked={idSave} />
                                                         {passwordErrorCount ? (
                                                             <label class="password-error">
                                                                 비밀번호 오류 <span>{passwordErrorCount}</span> 회
@@ -141,15 +147,16 @@ const SignIn = () => {
                                                         </Button>
                                                     </div>
                                                     <div className="etc-btn">
-                                                        <label onClick={handleClickApproval}>
+                                                        <label onClick={handleClickRegister}>
                                                             BackOffice <span>사용신청</span>
                                                         </label>
-                                                        <UnlockModal show={showUnlockModal} onHide={() => setShowUnlockModal(false)} /* onSave={onSave} onDelete={onDelete}*/ />
+                                                        <RegisterModal show={showRegisterModal} onHide={() => setShowRegisterModal(false)} />
                                                     </div>
                                                     <div className="etc-btn">
                                                         <label onClick={handleClickUnlock}>
                                                             BackOffice <span>잠금해제</span>
                                                         </label>
+                                                        <UnlockModal show={showUnlockModal} onHide={() => setShowUnlockModal(false)} />
                                                     </div>
                                                 </Form>
                                             </div>

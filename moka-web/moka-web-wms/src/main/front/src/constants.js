@@ -93,6 +93,8 @@ export const AREA_COMP_ALIGN_NONE = 'NONE';
 export const AUTHORIZATION = 'Authorization';
 // 로그인 사용자 ID
 export const SIGNIN_MEMBER_ID = 'SIGNIN_MEMBER_ID';
+//ID 저장 체크
+export const SIGNIN_MEMBER_ID_SAVE = 'SIGNIN_MEMBER_ID_SAVE';
 
 // 페이지편집 기사 편집 그룹의 최대 개수
 export const MAX_GROUP_NUMBER = 8;

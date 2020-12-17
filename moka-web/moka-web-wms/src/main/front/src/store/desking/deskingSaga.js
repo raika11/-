@@ -56,7 +56,62 @@ export function createDeskingRequestSaga(actionType, api, status) {
 /**
  * 편집영역 클릭시, 컴포넌트 워크 목록 조회
  */
-const getComponentWorkList = createRequestSaga(act.GET_COMPONENT_WORK_LIST, api.getComponentWorkList);
+function* getComponentWorkList({ payload }) {
+    const { areaSeq, callback } = payload;
+    const ACTION = act.GET_COMPONENT_WORK_LIST;
+    let response,
+        callbackData,
+        isNaverChannel = false;
+
+    yield startLoading(ACTION);
+    try {
+        response = yield call(api.getComponentWorkList, { areaSeq });
+        callbackData = { ...response.data, isNaverChannel };
+
+        if (response.data.header.success) {
+            // 편집영역의 페이지가 네이버채널 페이지면 컴포넌트 워크의 임시저장된 템플릿 정보를 조회한다.
+            const { area, desking } = response.data.body;
+
+            if (area.page?.pageUrl === '/naver-channel') {
+                // 네이버채널 예외처리
+                isNaverChannel = true;
+                callbackData = { ...response.data, isNaverChannel };
+
+                // 컴포넌트가 1개만 있다고 가정 (여러개가 되면 소스 수정해야함)
+                const targetComponent = desking[0];
+                // 임시저장되어있는 템플릿ID 조회
+                const second = yield call(api.getComponentTemplate, { componentSeq: targetComponent?.componentSeq });
+                if (second.data.header.success) {
+                    // 컴포넌트의 원래 템플릿ID와 임시저장된 템플릿ID가 다르면 ====> 컴포넌트워크의 템플릿ID 변경
+                    if (second.data.body.templateSeq !== targetComponent.templateSeq) {
+                        const third = yield call(api.putComponentWorkTemplate, { componentWorkSeq: targetComponent.seq, templateSeq: second.data.body?.templateSeq });
+                        if (third.data.header.success) {
+                            callbackData = { ...third.data, isNaverChannel };
+                        }
+                    }
+                }
+            }
+
+            yield put({
+                type: act.GET_COMPONENT_WORK_LIST_SUCCESS,
+                payload: callbackData,
+            });
+        } else {
+            yield put({
+                type: act.GET_COMPONENT_WORK_HISTORY_FAILURE,
+                payload: callbackData,
+            });
+        }
+    } catch (e) {
+        callbackData = { ...errorResponse(e), isNaverChannel };
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * 컴포넌트 워크 조회

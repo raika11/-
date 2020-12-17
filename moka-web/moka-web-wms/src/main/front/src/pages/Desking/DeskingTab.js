@@ -11,7 +11,6 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
-    // 순서 반대로
     return (
         <React.Fragment>
             <MokaIconTabs
@@ -22,13 +21,13 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                 tabContentClass="flex-fill"
                 tabs={[
                     /**
-                     * 기사보기
-                     */
-                    <DeskingArticleTab componentAgGridInstances={componentAgGridInstances} componentList={componentList} show={activeTabIdx === 0} />,
-                    /**
                      * 미리보기
                      */
-                    <ComponentWorkPreview show={activeTabIdx === 1} />,
+                    <ComponentWorkPreview show={activeTabIdx === 0} />,
+                    /**
+                     * 기사보기
+                     */
+                    <DeskingArticleTab componentAgGridInstances={componentAgGridInstances} componentList={componentList} show={activeTabIdx === 1} />,
                     /**
                      * 히스토리
                      */
@@ -37,8 +36,8 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                 tabNavWidth={48}
                 tabNavPosition="right"
                 tabNavs={[
-                    { title: '기사보기', icon: <MokaIcon iconName="fal-file" /> },
                     { title: '미리보기', icon: <MokaIcon iconName="fal-tv" /> },
+                    { title: '기사보기', icon: <MokaIcon iconName="fal-file" /> },
                     { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
                 ]}
             />

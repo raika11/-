@@ -17,14 +17,16 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     const { onDragStop, dropTargetAgGrid } = props;
 
     const dispatch = useDispatch();
-    const { search, list, total, error, loading, PDS_URL, IR_URL } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST]);
+    const { PDS_URL, IR_URL } = useSelector((store) => ({
+        PDS_URL: store.app.PDS_URL,
+        IR_URL: store.app.IR_URL,
+    }));
+    const { search, list, total, error } = useSelector((store) => ({
         search: store.article.search,
         list: store.article.list,
         total: store.article.total,
         error: store.article.error,
-        loading: store.loading[GET_ARTICLE_LIST],
-        PDS_URL: store.app.PDS_URL,
-        IR_URL: store.app.IR_URL,
     }));
 
     // state

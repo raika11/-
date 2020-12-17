@@ -16,6 +16,13 @@ export const getComponentWork = ({ componentWorkSeq }) => {
     });
 };
 
+// 컴포넌트 워크의 템플릿정보만 조회 (주의사항: pathVariable가 componentSeq임)
+export const getComponentTemplate = ({ componentSeq }) => {
+    return instance.get(`/api/desking/components/${componentSeq}/template`).catch((err) => {
+        throw err;
+    });
+};
+
 // 컴포넌트 워크를 데스킹 테이블로 전송
 export const postComponentWork = ({ componentWorkSeq }) => {
     return instance.post(`/api/desking/components/${componentWorkSeq}`).catch((err) => {
@@ -34,6 +41,15 @@ export const putComponentWork = ({ componentWork }) => {
         .catch((err) => {
             throw err;
         });
+};
+
+/**
+ * 컴포넌트 워크 수정(템플릿ID만! 수정)
+ */
+export const putComponentWorkTemplate = ({ componentWorkSeq, templateSeq }) => {
+    return instance.put(`/api/desking/components/${componentWorkSeq}/template/${templateSeq}`).catch((err) => {
+        throw err;
+    });
 };
 
 // 컴포넌트 워크 스냅샷 수정
@@ -71,7 +87,7 @@ export const postDeskingWorkList = ({ componentWorkSeq, datasetSeq, list }) => {
         });
 };
 
-// 더미 기사 추가=> payload
+// 더미 기사 추가 => payload
 export const postDeskingWork = ({ areaSeq, componentWorkSeq, datasetSeq, deskingWork }) => {
     const queryString = { areaSeq };
     return instance

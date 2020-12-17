@@ -2,23 +2,29 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInput } from '@components';
+import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, API_BASE_URL } from '@/constants';
 import { GET_COMPONENT_WORK_LIST, changeWorkStatus } from '@store/desking';
-import { ComponentWork } from './components';
+import { getChannelTp } from '@store/codeMgt';
+import { ComponentWork, NaverChannelWork } from './components';
 
 /**
  * 컴포넌트의 워크 리스트
  */
 const ComponentWorkList = (props) => {
     const dispatch = useDispatch();
-    const { area, componentWorkList, workStatus, loading } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_COMPONENT_WORK_LIST]);
+    const { area, isNaverChannel } = useSelector((store) => ({
         area: store.desking.area,
+        isNaverChannel: store.desking.isNaverChannel,
+    }));
+    const { componentWorkList, workStatus } = useSelector((store) => ({
         componentWorkList: store.desking.list,
         workStatus: store.desking.workStatus,
-        loading: store.loading[GET_COMPONENT_WORK_LIST],
     }));
+    const channelTpRows = useSelector((store) => store.codeMgt.channelTpRows);
 
+    // state
     const [disabledList, setDisabledList] = useState([]);
     const [leftList, setLeftList] = useState([]);
     const [rightList, setRightList] = useState([]);
@@ -60,6 +66,20 @@ const ComponentWorkList = (props) => {
                 return null;
             } else if (workStatus[component.seq] !== 'work' && component.viewYn === 'N') {
                 return null;
+            } else if (isNaverChannel) {
+                // 네이버채널 예외처리
+                return (
+                    <NaverChannelWork
+                        key={`${area.areaSeq}-${componentSeq}`}
+                        deskingPart={areaComp.deskingPart}
+                        area={area}
+                        areaSeq={area.areaSeq}
+                        component={component}
+                        editFormPart={editFormPart}
+                        agGridIndex={targetIdx}
+                        {...props}
+                    />
+                );
             } else {
                 return (
                     <ComponentWork
@@ -75,7 +95,7 @@ const ComponentWorkList = (props) => {
                 );
             }
         },
-        [area, componentWorkList, props, workStatus],
+        [area, componentWorkList, isNaverChannel, props, workStatus],
     );
 
     useEffect(() => {
@@ -103,6 +123,11 @@ const ComponentWorkList = (props) => {
         setDisabledList(componentWorkList.filter((work) => (workStatus[work.seq] !== 'work' && work.viewYn === 'N' ? true : false)));
     }, [componentWorkList, workStatus]);
 
+    useEffect(() => {
+        // 네이버채널 => CHANNEL_TP 조회
+        dispatch(getChannelTp());
+    }, [dispatch]);
+
     return (
         <React.Fragment>
             {/* 왼쪽 기본 카드 1건 */}
@@ -113,20 +138,46 @@ const ComponentWorkList = (props) => {
                 className={clsx('p-0 position-relative', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
                 bodyClassName="p-0 overflow-hidden"
             >
-                <div className="d-flex justify-content-between p-2 border-bottom">
-                    <div style={{ width: 170 }}>
-                        <MokaInput as="select" className="ft-12 h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
-                            <option hidden>비활성 영역 보기</option>
-                            {disabledList.map((work) => (
-                                <option key={work.seq} value={work.seq}>
-                                    {work.componentName}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    <Button variant="outline-neutral" className="ft-12 flex-shrink-0" onClick={handleClickPreview}>
-                        페이지 미리보기
-                    </Button>
+                <div className="d-flex justify-content-between p-2 border-bottom" style={{ height: 45 }}>
+                    {isNaverChannel ? (
+                        // 네이버채널 예외처리
+                        <div style={{ width: 230 }}>
+                            <MokaInputLabel
+                                label="타입선택"
+                                labelWidth={47}
+                                as="select"
+                                labelClassName="ml-0"
+                                className="ft-12 h-100 mb-0"
+                                value={null}
+                                inputProps={{ size: 'sm' }}
+                                onChange={handleChangeDisabled}
+                            >
+                                <option hidden>템플릿 선택</option>
+                                {channelTpRows &&
+                                    channelTpRows.map((code) => (
+                                        <option key={code.id} value={code.id}>
+                                            {code.name}
+                                        </option>
+                                    ))}
+                            </MokaInputLabel>
+                        </div>
+                    ) : (
+                        <React.Fragment>
+                            <div style={{ width: 170 }}>
+                                <MokaInput as="select" className="ft-12 h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
+                                    <option hidden>비활성 영역 보기</option>
+                                    {disabledList.map((work) => (
+                                        <option key={work.seq} value={work.seq}>
+                                            {work.componentName}
+                                        </option>
+                                    ))}
+                                </MokaInput>
+                            </div>
+                            <Button variant="outline-neutral" className="ft-12 flex-shrink-0" onClick={handleClickPreview}>
+                                페이지 미리보기
+                            </Button>
+                        </React.Fragment>
+                    )}
                 </div>
 
                 <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>

@@ -23,20 +23,12 @@ const EditThumbSearch = (props) => {
     const [startDate, setStartDate] = useState(null);
     const [finishDate, setFinishDate] = useState(null);
     // const [dataTypeList, setDataTypeList] = useState(null);
-    const [imageType, setImageType] = useState(null);
+    // const [imageType, setImageType] = useState(null);
     const [timeReady, setTimeReady] = useState(false);
     // const [searchValue, setSearchValue] = useState('');
     const [error, setError] = useState({});
 
     const handleSearch = () => {
-        // let temp = {
-        //     ...search,
-        //     startdate: moment(search.startdate, DB_DATEFORMAT),
-        //     endServiceDay: moment(search.finishdate, DB_DATEFORMAT),
-        //     imageType,
-        //     searchValue,
-        //     page: 0,
-        // };
         dispatch(getPhotoList(changeSearchOption(search)));
     };
 
@@ -50,14 +42,14 @@ const EditThumbSearch = (props) => {
     //     }
     // }, []);
 
-    // useEffect(() => {
-    //     if (imageType) {
-    //         dispatch(getPhotoList(changeSearchOption(...search, imageType)));
-    //     } else {
-    //         dispatch(clearList());
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [imageType]);
+    useEffect(() => {
+        if (timeReady) {
+            dispatch(getPhotoList(changeSearchOption(search)));
+        } else {
+            dispatch(clearList());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [timeReady]);
 
     return (
         <Form className="d-flex mb-2">
@@ -97,7 +89,7 @@ const EditThumbSearch = (props) => {
                         if (typeof date === 'object') {
                             setSearch({
                                 ...search,
-                                startdate: date,
+                                startdate: moment(date).format('YYYYMMDD'),
                             });
                         } else {
                             setSearch({
@@ -118,7 +110,7 @@ const EditThumbSearch = (props) => {
                         if (typeof date === 'object') {
                             setSearch({
                                 ...search,
-                                finishdate: date,
+                                finishdate: moment(date).format('YYYYMMDD'),
                             });
                         } else {
                             setSearch({
@@ -145,10 +137,14 @@ const EditThumbSearch = (props) => {
 
             <div className="mr-2 d-flex align-items-center" style={{ width: 140 }}>
                 <EditThumbSelectDropdown
-                    imageValue={imageType}
+                    imageValue={search.imageType}
                     onChange={(value) => {
-                        // setSearch({ ...search, imageType: value });
-                        setImageType(value);
+                        if (value.indexOf('All') > -1) {
+                            setSearch({ ...search, imageType: 'All' });
+                        } else {
+                            setSearch({ ...search, imageType: value });
+                        }
+                        // setImageType(value);
                         setError({ ...error, imageType: false });
                         if (value !== '') {
                             setTimeReady(true);

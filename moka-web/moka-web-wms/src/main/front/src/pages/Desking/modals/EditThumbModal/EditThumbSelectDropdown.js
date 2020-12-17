@@ -4,7 +4,6 @@ import produce from 'immer';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaInput, MokaInputGroup } from '@components';
 import { getPhotoTypes } from '@store/photoArchive';
 
@@ -86,15 +85,41 @@ const EditThumbSelectDropdown = (props) => {
      * id로 리스트의 index 조회
      */
     // const dataTypeIndex = useCallback((id) => dataTypeList.findIndex((type) => type.name === id), [dataTypeList]);
-    const imageTypeIndex = useCallback((id) => imageTypeList.findIndex((type) => type.name === id), [imageTypeList]);
+    const imageTypeIndex = useCallback((id) => imageTypeList.findIndex((type) => type.name === id.name), [imageTypeList]);
 
     /**
      * change 이벤트
      * @param {object} e 이벤트
      */
     const handleChangeValue = (e) => {
-        const { name, checked, id } = e.target;
+        const { checked, id } = e.target;
         let resultList = [];
+        debugger;
+        if (typeof onChange === 'function') {
+            if (id === 'All') {
+                if (checked) {
+                    onChange('All');
+                } else {
+                    onChange('');
+                }
+            } else {
+                const targetIdx = imageTypeIndex({ name: id });
+
+                if (checked) {
+                    resultList = [...imageSelectedList, imageObj[targetIdx]].sort((a, b) => {
+                        return a.index - b.index;
+                    });
+                } else {
+                    const isSelected = imageSelectedList.findIndex((type) => type.name === id);
+                    if (isSelected > -1) {
+                        resultList = produce(imageSelectedList, (draft) => {
+                            draft.splice(isSelected, 1);
+                        });
+                    }
+                }
+                onChange(resultList.map((r) => r.name).join(','));
+            }
+        }
         // if (name === 'dataTypeList') {
         //     const targetIdx = dataTypeIndex(id);
         //     if (checked) {
@@ -110,26 +135,6 @@ const EditThumbSelectDropdown = (props) => {
         //         }
         //     }
         // }
-
-        if (name === 'imageTypeList') {
-            const targetIdx = imageTypeIndex(id);
-
-            if (checked) {
-                resultList = [...imageSelectedList, imageObj[targetIdx]].sort((a, b) => {
-                    return a.index - b.index;
-                });
-            } else {
-                const isSelected = imageSelectedList.findIndex((type) => type.name === id);
-                if (isSelected > -1) {
-                    resultList = produce(imageSelectedList, (draft) => {
-                        draft.splice(isSelected, 1);
-                    });
-                }
-            }
-        }
-        if (typeof onChange === 'function') {
-            onChange(resultList.map((r) => r.name).join(','));
-        }
     };
 
     useEffect(() => {
@@ -147,11 +152,12 @@ const EditThumbSelectDropdown = (props) => {
 
     /**
      * 렌더링 시 checked true인지 false인지 판단
-     * @param {string} cd 이미지 타입 코드
+     * @param {string} name 이미지 타입 이름
      */
-    const chkTrue = (cd) => {
+    const chkTrue = (name) => {
         if (!imageValue || imageValue === '') return false;
-        else return imageValue.split(',').indexOf(cd) > -1;
+        else if (imageValue === 'All') return true;
+        else return imageValue.split(',').indexOf(name) > -1;
     };
 
     useEffect(() => {
@@ -169,10 +175,10 @@ const EditThumbSelectDropdown = (props) => {
         // }
 
         if (imageSelectedList.length > 0) {
-            const targetIdx = imageTypeIndex(imageSelectedList[0].name);
+            const targetIdx = imageTypeIndex(imageSelectedList[0]);
             const target = imageObj[targetIdx];
 
-            if (imageSelectedList.length === Object.keys(imageObj).length) {
+            if (imageSelectedList.length + 1 === Object.keys(imageObj).length) {
                 setToggleText('전체');
             } else if (imageSelectedList.length === 1) {
                 setToggleText(target.label);
@@ -187,21 +193,29 @@ const EditThumbSelectDropdown = (props) => {
     useEffect(() => {
         if (Object.keys(imageObj).length < 1) return;
         if (imageValue || imageValue === '') {
-            const valueArr = imageValue.split(',').filter((v) => v !== '');
-            setImageSelectedList(
-                valueArr.map((v) => {
-                    const targetIndex = imageTypeIndex(v);
-                    return imageObj[targetIndex];
-                }),
-            );
+            if (imageValue === 'All') {
+                setImageSelectedList(
+                    Object.values(imageObj)
+                        .filter((type) => type.name !== 'All')
+                        .map((v) => {
+                            const targetIndex = imageTypeIndex(v);
+                            return imageObj[targetIndex];
+                        }),
+                );
+            } else {
+                const valueArr = imageValue.split(',').filter((v) => v !== '');
+
+                setImageSelectedList(
+                    valueArr.map((v) => {
+                        const targetIndex = imageTypeIndex({ name: v });
+                        return imageObj[targetIndex];
+                    }),
+                );
+            }
         } else {
             // 값이 없을 때는 모든 매체 선택
             if (typeof onChange === 'function') {
-                onChange(
-                    Object.values(imageObj)
-                        .map((type) => type.name)
-                        .join(','),
-                );
+                onChange('All');
             }
         }
     }, [imageObj, imageTypeIndex, imageValue, onChange]);
@@ -213,6 +227,13 @@ const EditThumbSelectDropdown = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu}>
+                <MokaInput
+                    id={'All'}
+                    onChange={handleChangeValue}
+                    className="mb-2 ft-12"
+                    as="checkbox"
+                    inputProps={{ label: '전체', custom: true, checked: imageValue === 'All' }}
+                />
                 {/* {dataTypeList &&
                     dataTypeList.map((data) => (
                         <MokaInput
@@ -226,18 +247,21 @@ const EditThumbSelectDropdown = (props) => {
                         />
                     ))} */}
 
+                {/* 필터 */}
                 {imageTypeList &&
-                    imageTypeList.map((type) => (
-                        <MokaInput
-                            key={type.name}
-                            id={type.name}
-                            name="imageTypeList"
-                            onChange={handleChangeValue}
-                            className="mb-2 ft-12"
-                            as="checkbox"
-                            inputProps={{ label: type.label, custom: true, checked: chkTrue(type.name) }}
-                        />
-                    ))}
+                    imageTypeList
+                        .filter((type) => type.name !== 'All')
+                        .map((type) => (
+                            <MokaInput
+                                key={type.name}
+                                id={type.name}
+                                name="imageTypeList"
+                                onChange={handleChangeValue}
+                                className="mb-2 ft-12"
+                                as="checkbox"
+                                inputProps={{ label: type.label, custom: true, checked: chkTrue(type.name) }}
+                            />
+                        ))}
             </Dropdown.Menu>
         </Dropdown>
     );

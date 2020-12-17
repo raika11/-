@@ -62,8 +62,8 @@ public class ArticleSearchDTO extends SearchDTO {
 
     @ApiModelProperty("매체목록 (필수/구분자,)")
     @JsonIgnore
-    @NotNull(message = "{tps.article.error.notnull.deskingSourceList}")
-    private String deskingSourceList;
+    @NotNull(message = "{tps.article.error.notnull.sourceList}")
+    private String sourceList;
 
     public ArticleSearchDTO() {
         super(ArticleBasicVO.class, "totalId,desc");

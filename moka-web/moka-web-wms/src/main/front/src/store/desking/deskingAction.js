@@ -42,6 +42,9 @@ export const putComponentWork = createAction(PUT_COMPONENT_WORK, ({ componentWor
     callback,
 }));
 
+/**
+ * 컴포넌트 워크 수정(템플릿만!)
+ */
 export const PUT_COMPONENT_WORK_TEMPLATE = 'desking/PUT_COMPONENT_WORK_TEMPLATE';
 export const putComponentWorkTemplate = createAction(PUT_COMPONENT_WORK_TEMPLATE, ({ componentWorkSeq, templateSeq, callback }) => ({
     componentWorkSeq,

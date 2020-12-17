@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, API_BASE_URL } from '@/constants';
-import { GET_COMPONENT_WORK_LIST, changeWorkStatus } from '@store/desking';
+import { GET_COMPONENT_WORK_LIST, changeWorkStatus, putComponentWorkTemplate, PUT_COMPONENT_WORK_TEMPLATE } from '@store/desking';
 import { getChannelTp } from '@store/codeMgt';
 import { ComponentWork, NaverChannelWork } from './components';
 
@@ -13,7 +13,7 @@ import { ComponentWork, NaverChannelWork } from './components';
  */
 const ComponentWorkList = (props) => {
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_COMPONENT_WORK_LIST]);
+    const loading = useSelector((store) => store.loading[GET_COMPONENT_WORK_LIST] || store.loading[PUT_COMPONENT_WORK_TEMPLATE]);
     const { area, isNaverChannel } = useSelector((store) => ({
         area: store.desking.area,
         isNaverChannel: store.desking.isNaverChannel,
@@ -49,6 +49,25 @@ const ComponentWorkList = (props) => {
             changeWorkStatus({
                 componentWorkSeq: Number(e.target.value),
                 status: 'work',
+            }),
+        );
+    };
+
+    /**
+     * 네이버채널 > 템플릿변경
+     */
+    const handleChangeTemplate = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { value } = e.target;
+        const { workseq } = e.target.dataset;
+        if (workseq === '') return;
+
+        dispatch(
+            putComponentWorkTemplate({
+                componentWorkSeq: Number(workseq),
+                templateSeq: Number(value),
             }),
         );
     };
@@ -148,9 +167,9 @@ const ComponentWorkList = (props) => {
                                 as="select"
                                 labelClassName="ml-0"
                                 className="ft-12 h-100 mb-0"
-                                value={null}
-                                inputProps={{ size: 'sm' }}
-                                onChange={handleChangeDisabled}
+                                value={componentWorkList.length > 0 ? componentWorkList[0].templateSeq : null}
+                                inputProps={{ size: 'sm', 'data-workseq': componentWorkList.length > 0 ? componentWorkList[0].seq : '' }}
+                                onChange={handleChangeTemplate}
                             >
                                 <option hidden>템플릿 선택</option>
                                 {channelTpRows &&

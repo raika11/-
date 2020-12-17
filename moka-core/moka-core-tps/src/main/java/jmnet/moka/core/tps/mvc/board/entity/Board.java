@@ -51,13 +51,13 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 게시판ID
      */
     @Column(name = "BOARD_ID", nullable = false)
-    private Integer boardId;
+    private Long boardId;
 
     /**
      * 부모게시물일련번호
      */
     @Column(name = "PARENT_BOARD_SEQ", nullable = false)
-    private Integer parentBoardSeq;
+    private Long parentBoardSeq;
 
     /**
      * 채널타입(예:JPOD)
@@ -70,7 +70,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      */
     @Column(name = "CHANNEL_ID", nullable = false)
     @Builder.Default
-    private Integer channelId = 0;
+    private Long channelId = 0l;
 
     /**
      * 말머리1

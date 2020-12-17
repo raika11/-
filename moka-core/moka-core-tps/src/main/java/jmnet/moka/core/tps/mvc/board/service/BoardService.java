@@ -60,14 +60,14 @@ public interface BoardService {
      *
      * @param board 게시물 정보
      */
-    int deleteBoard(Board board);
+    void deleteBoard(Board board);
 
     /**
      * 게시물 삭제
      *
      * @param boardSeq 게시물 일련번호
      */
-    int deleteBoard(Long boardSeq);
+    void deleteBoard(Long boardSeq);
 
     /**
      * 게시물 첨부파일 목록 조회
@@ -91,7 +91,7 @@ public interface BoardService {
      * @param boardAttach 게시물 첨부파일
      * @return 삭제 건수
      */
-    int deleteBoardAttach(BoardAttach boardAttach);
+    void deleteBoardAttach(BoardAttach boardAttach);
 
     /**
      * 게시물 번호로 첨부파일 삭제
@@ -99,5 +99,5 @@ public interface BoardService {
      * @param boardSeq 게시물 일련번호
      * @return 삭제 건수
      */
-    int deleteAllBoardAttach(Long boardSeq);
+    void deleteAllBoardAttach(Long boardSeq);
 }

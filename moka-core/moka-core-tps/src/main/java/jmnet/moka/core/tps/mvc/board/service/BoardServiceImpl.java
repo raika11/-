@@ -6,6 +6,7 @@ import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
 import jmnet.moka.core.tps.mvc.board.repository.BoardAttachRepository;
+import jmnet.moka.core.tps.mvc.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    //private final BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
     private final BoardAttachRepository boardAttachRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardAttachRepository boardAttachRepository) {
-        //this.boardRepository = boardRepository;
+    public BoardServiceImpl(BoardRepository boardRepository, BoardAttachRepository boardAttachRepository) {
+        this.boardRepository = boardRepository;
         this.boardAttachRepository = boardAttachRepository;
     }
 
@@ -39,51 +40,51 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Page<Board> findAllBoard(BoardSearchDTO searchDTO) {
-        return null;
+        return boardRepository.findAllBoard(searchDTO);
     }
 
     @Override
     public Optional<Board> findBoardBySeq(Long boardSeq) {
-        return null;
+        return boardRepository.findById(boardSeq);
     }
 
     @Override
     public Board insertBoard(Board board) {
-        return null;
+        return boardRepository.save(board);
     }
 
     @Override
     public Board updateBoard(Board board) {
-        return null;
+        return boardRepository.save(board);
     }
 
     @Override
-    public int deleteBoard(Board board) {
-        return 0;
+    public void deleteBoard(Board board) {
+        boardRepository.delete(board);
     }
 
     @Override
-    public int deleteBoard(Long boardSeq) {
-        return 0;
+    public void deleteBoard(Long boardSeq) {
+        boardRepository.deleteById(boardSeq);
     }
 
     @Override
     public List<BoardAttach> findAllBoardAttach(Long boardSeq) {
-        return null;
+        return boardAttachRepository.findAllByBoardSeq(boardSeq);
     }
 
     @Override
     public BoardAttach insertBoardAttach(BoardAttach boardAttach) {
-        return null;
+        return boardAttachRepository.save(boardAttach);
     }
 
     @Override
-    public int deleteBoardAttach(BoardAttach boardAttach) {
-        return 0;
+    public void deleteBoardAttach(BoardAttach boardAttach) {
+        boardAttachRepository.delete(boardAttach);
     }
 
     @Override
-    public int deleteAllBoardAttach(Long boardSeq) {
-        return 0;
+    public void deleteAllBoardAttach(Long boardSeq) {
+        boardAttachRepository.deleteByBoardSeq(boardSeq);
     }
 }

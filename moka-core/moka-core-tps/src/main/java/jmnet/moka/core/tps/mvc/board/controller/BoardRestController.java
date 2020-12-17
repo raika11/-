@@ -235,7 +235,7 @@ public class BoardRestController extends AbstractCommonController {
 
         // 게시판 데이터 조회
         String noContentMessage = msg("tps.common.error.no-data", request);
-        Board boardInfo = boardService
+        Board board = boardService
                 .findBoardBySeq(boardSeq)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
@@ -243,7 +243,7 @@ public class BoardRestController extends AbstractCommonController {
 
         try {
             // 삭제
-            boardService.deleteBoard(boardInfo);
+            boardService.deleteBoard(board);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);

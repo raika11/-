@@ -44,13 +44,13 @@ public class BoardAttach extends jmnet.moka.core.tps.common.entity.BaseAudit imp
      * 게시물일련번호
      */
     @Column(name = "BOARD_SEQ", nullable = false)
-    private Integer boardSeq;
+    private Long boardSeq;
 
     /**
      * 게시판ID
      */
     @Column(name = "BOARD_ID", nullable = false)
-    private Integer boardId;
+    private Long boardId;
 
     /**
      * 원본파일명

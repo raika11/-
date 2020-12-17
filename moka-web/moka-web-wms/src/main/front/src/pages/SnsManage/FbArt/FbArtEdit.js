@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Container, Row, Col, Figure, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import commonUtil from '@utils/commonUtil';
-import { clearSnsMeta, GET_SNS_META, getSnsMeta } from '@store/snsManage';
+import { clearSnsMeta, GET_SNS_META, getSnsMeta, initialState } from '@store/snsManage';
 
 const FbArtEdit = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { totalId } = useParams();
+
+    const [edit, setEdit] = useState(initialState.meta.meta);
+
     const tempOnchange = (e) => {};
     const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
         return {
@@ -24,6 +27,10 @@ const FbArtEdit = () => {
     const handleClickCancel = () => {
         history.push('/fb-art');
     };
+
+    useEffect(() => {
+        setEdit(meta);
+    }, [meta]);
 
     useEffect(() => {
         if (!commonUtil.isEmpty(totalId)) {
@@ -43,26 +50,17 @@ const FbArtEdit = () => {
                             <div className="d-flex h4">원본 기사</div>
                         </Col>
                         <Col xs={4}>
-                            <div className="d-flex">기사 ID {meta.totalId}</div>
+                            <div className="d-flex">기사 ID {edit.totalId}</div>
                         </Col>
                     </Row>
                     <Row xs={12}>
                         <Col xs={4}>
-                            <Figure.Image className="mb-0" src={meta.article.imgUrl} />
+                            <Figure.Image className="mb-0" src={edit.article.imgUrl} />
                         </Col>
                         <Col>
-                            <div className="d-flex mb-3 display-5 font-weight-bold text-left">{meta.article.title}</div>
+                            <div className="d-flex mb-3 display-5 font-weight-bold text-left">{edit.article.title}</div>
                             <div className="d-flex">
-                                <MokaInput
-                                    as={'textarea'}
-                                    className="resize-none"
-                                    value={`SK 와이번스 내야수 김성현(33)이 2021년 1호 자유계약선수(FA) 계약을 했다.
-
-2+1년 최대 11억원에 잔류
-
-SK는 "김성현과 2+1년 최대 11억원에 계약했다. 세부 조건은 계약금 2억원... `}
-                                    inputProps={{ plaintext: true, readOnly: true, rows: '4' }}
-                                />
+                                <MokaInput as={'textarea'} className="resize-none" value={meta.article.summary} inputProps={{ plaintext: true, readOnly: true, rows: '4' }} />
                             </div>
                         </Col>
                     </Row>

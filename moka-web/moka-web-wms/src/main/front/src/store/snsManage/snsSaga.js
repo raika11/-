@@ -37,7 +37,6 @@ function toSnsMetaViewData({ snsShare, article }) {
     const { twMetaUsedYn, twMetaTitle, twMetaSummary, twMetaPostMsg, twMetaImage, twMetaReserveDt } = article;
 
     const { serviceFlag, artTitle, artSummary, artThumb, artRegDt } = articleBasic;
-    console.log(artThumb);
     return {
         totalId: commonUtil.setDefaultValue(totalId),
         fb: {
@@ -237,9 +236,6 @@ function* publishSnsMeta({ type, payload }) {
 }
 
 function toMetaImage(metaImageUrl) {
-    console.log('REACT_APP_API_URL', API_BASE_URL);
-    console.log('PDS_URL', PDS_URL);
-    console.log('IR_URL', IR_URL);
     let toMetaImageUrl = metaImageUrl;
     if (toMetaImageUrl.indexOf(IR_URL) < 0) {
         if (toMetaImageUrl.indexOf(PDS_URL) < 0) {

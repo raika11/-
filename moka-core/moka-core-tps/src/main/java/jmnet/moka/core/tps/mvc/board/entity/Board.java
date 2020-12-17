@@ -1,21 +1,39 @@
 package jmnet.moka.core.tps.mvc.board.entity;
 
 import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import lombok.Data;
+import jmnet.moka.core.common.MokaConstants;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * 게시물
  */
 @Table(name = "TB_BOARD")
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
 @EqualsAndHashCode(callSuper = true)
 public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
 
@@ -33,13 +51,13 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 게시판ID
      */
     @Column(name = "BOARD_ID", nullable = false)
-    private Integer boardId;
+    private Long boardId;
 
     /**
      * 부모게시물일련번호
      */
     @Column(name = "PARENT_BOARD_SEQ", nullable = false)
-    private Integer parentBoardSeq;
+    private Long parentBoardSeq;
 
     /**
      * 채널타입(예:JPOD)
@@ -51,7 +69,8 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 채널ID(예:JPOD 채널SEQ)
      */
     @Column(name = "CHANNEL_ID", nullable = false)
-    private Integer channelId = 0;
+    @Builder.Default
+    private Long channelId = 0l;
 
     /**
      * 말머리1
@@ -81,49 +100,57 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 뎁스
      */
     @Column(name = "DEPTH", nullable = false)
+    @Builder.Default
     private Integer DEPTH = 0;
 
     /**
      * 들여쓰기
      */
     @Column(name = "INDENT", nullable = false)
+    @Builder.Default
     private Integer INDENT = 0;
 
     /**
      * 1:일반 9:공지
      */
     @Column(name = "ORD_NO", nullable = false)
+    @Builder.Default
     private Integer ordNo = 1;
 
     /**
      * 조회수
      */
     @Column(name = "VIEW_CNT", nullable = false)
+    @Builder.Default
     private Integer viewCnt = 0;
 
     /**
      * 추천수
      */
     @Column(name = "RECOM_CNT", nullable = false)
+    @Builder.Default
     private Integer recomCnt = 0;
 
     /**
      * 비추천수
      */
     @Column(name = "DECOM_CNT", nullable = false)
+    @Builder.Default
     private Integer decomCnt = 0;
 
     /**
      * 신고수
      */
     @Column(name = "DECLARE_CNT", nullable = false)
+    @Builder.Default
     private Integer declareCnt = 0;
 
     /**
      * 삭제여부
      */
     @Column(name = "DEL_YN", nullable = false)
-    private String delYn = "N";
+    @Builder.Default
+    private String delYn = MokaConstants.NO;
 
     /**
      * 내용
@@ -149,4 +176,15 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @Column(name = "REG_IP")
     private String regIp;
 
+    /**
+     * 그룹정보
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOARD_ID", nullable = false, insertable = false, updatable = false)
+    private BoardInfo boardInfo;
+
+    @NotFound(action = NotFoundAction.IGNORE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OrderBy("seqNo")
+    private Set<BoardAttach> attaches;
 }

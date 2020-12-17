@@ -60,7 +60,7 @@ const FbArtEdit = () => {
                         <Col>
                             <div className="d-flex mb-3 display-5 font-weight-bold text-left">{edit.article.title}</div>
                             <div className="d-flex">
-                                <MokaInput as={'textarea'} className="resize-none" value={meta.article.summary} inputProps={{ plaintext: true, readOnly: true, rows: '4' }} />
+                                <MokaInput as={'textarea'} className="resize-none" value={edit.article.summary} inputProps={{ plaintext: true, readOnly: true, rows: '4' }} />
                             </div>
                         </Col>
                     </Row>
@@ -86,11 +86,18 @@ const FbArtEdit = () => {
                             variant="positive"
                             style={{ paddingLeft: '15px' }}
                         />
-                        <MokaInputLabel labelClassName="d-flex" as="switch" name="temp-status" id="temp-status" variant="positive" />
+                        <MokaInputLabel
+                            labelClassName="d-flex"
+                            as="switch"
+                            name="temp-status"
+                            id="temp-status"
+                            variant="positive"
+                            inputProps={{ label: '', checked: edit.fb.usedYn }}
+                        />
                     </Row>
                     <Row xs={12}>
                         <Col xs={4}>
-                            <Figure.Image className="mb-0" src={'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/25ed1572-899d-4bb7-9f59-81059bea0e49.jpg'} />
+                            <Figure.Image className="mb-0" src={edit.fb.imgUrl} />
                             <div className="d-flex justify-content-end mb-0 pt-3">
                                 <div className="d-flex justify-content-end pr-2">
                                     <Button variant="outline-neutral">신규 등록</Button>
@@ -101,8 +108,8 @@ const FbArtEdit = () => {
                             </div>
                         </Col>
                         <Col>
-                            <MokaInputLabel onChange={(e) => tempOnchange(e)} />
-                            <MokaInput as={'textarea'} className="resize-none" value={''} inputProps={{ rows: '5' }} onChange={(e) => tempOnchange(e)} />
+                            <MokaInputLabel onChange={(e) => tempOnchange(e)} value={edit.fb.title} />
+                            <MokaInput as="textarea" className="resize-none" value={edit.fb.postMessage} inputProps={{ rows: '5' }} onChange={(e) => tempOnchange(e)} />
                         </Col>
                     </Row>
                     <Row xs={12}>

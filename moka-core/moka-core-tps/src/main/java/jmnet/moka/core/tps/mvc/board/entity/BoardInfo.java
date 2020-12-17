@@ -7,15 +7,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Data;
+import jmnet.moka.core.common.MokaConstants;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 게시판설정정보
  */
 @Entity
 @Table(name = "TB_BOARD_INFO")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
 @EqualsAndHashCode(callSuper = true)
 public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
 
@@ -39,13 +48,15 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      * 게시판유형(S:서비스 / A:관리자)
      */
     @Column(name = "BOARD_TYPE")
-    private String boardType = "N";
+    @Builder.Default
+    private String boardType = MokaConstants.NO;
 
     /**
      * 사용여부
      */
     @Column(name = "USED_YN", nullable = false)
-    private String usedYn = "Y";
+    @Builder.Default
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 말머리1
@@ -63,66 +74,77 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      * 글쓰기 권한(0:모두 1:회원 9:관리자)
      */
     @Column(name = "INS_LEVEL")
+    @Builder.Default
     private String insLevel = "9";
 
     /**
      * 조회 권한(0:모두 1:회원 9:관리자)
      */
     @Column(name = "VIEW_LEVEL")
+    @Builder.Default
     private String viewLevel = "0";
 
     /**
      * 답변글 작성권한(0:모두 1:회원 9:관리자)
      */
     @Column(name = "ANSW_LEVEL")
+    @Builder.Default
     private String answLevel = "9";
 
     /**
      * 댓글 작성권한(0:모두 1:회원)
      */
     @Column(name = "REPLY_LEVEL")
+    @Builder.Default
     private String replyLevel = "1";
 
     /**
      * 에디터여부
      */
     @Column(name = "EDITOR_YN")
-    private String editorYn = "N";
+    @Builder.Default
+    private String editorYn = MokaConstants.NO;
 
     /**
      * 답글여부
      */
     @Column(name = "ANSW_YN")
-    private String answYn = "N";
+    @Builder.Default
+    private String answYn = MokaConstants.NO;
 
     /**
      * 댓글여부
      */
     @Column(name = "REPLY_YN")
-    private String replyYn = "N";
+    @Builder.Default
+    private String replyYn = MokaConstants.NO;
 
     /**
      * 파일업로드여부
      */
     @Column(name = "FILE_YN")
-    private String fileYn = "Y";
+    @Builder.Default
+    private String fileYn = MokaConstants.YES;
 
     /**
      * 허용파일개수
      */
     @Column(name = "ALLOW_FILE_CNT", nullable = false)
+    @Builder.Default
     private Integer allowFileCnt = 5;
 
     /**
      * 허용되는 파일크기(MB)
      */
     @Column(name = "ALLOW_FILE_SIZE", nullable = false)
+    @Builder.Default
     private Integer allowFileSize = 10;
 
     /**
      * 허용되는 파일확장자(;로 구분)
      */
     @Column(name = "ALLOW_FILE_EXT", nullable = false)
+    @Builder.Default
     private String allowFileExt = "zip;xls;xlsx;ppt;doc;hwp;jpg;png;gif;";
 
     /**

@@ -1,13 +1,12 @@
 package jmnet.moka.core.tps.mvc.board.service;
 
 import java.util.List;
-import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
-import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.repository.BoardAttachRepository;
-import jmnet.moka.core.tps.mvc.board.repository.BoardInfoRepository;
+import jmnet.moka.core.tps.mvc.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -27,95 +26,65 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    private final BoardInfoRepository boardInfoRepository;
+    private final BoardRepository boardRepository;
 
     private final BoardAttachRepository boardAttachRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardInfoRepository boardInfoRepository, BoardAttachRepository boardAttachRepository) {
-        this.boardInfoRepository = boardInfoRepository;
+    public BoardServiceImpl(BoardRepository boardRepository, BoardAttachRepository boardAttachRepository) {
+        this.boardRepository = boardRepository;
         this.boardAttachRepository = boardAttachRepository;
     }
 
 
 
     @Override
-    public Page<BoardInfo> findAllBoardInfo(BoardInfoSearchDTO searchDTO) {
-        return null;
-    }
-
-    @Override
-    public BoardInfo findBoardInfoById(Long boardId) {
-        return null;
-    }
-
-    @Override
-    public BoardInfo insertBoardInfo(BoardInfo boardInfo) {
-        return null;
-    }
-
-    @Override
-    public BoardInfo updateBoardInfo(BoardInfo boardInfo) {
-        return null;
-    }
-
-    @Override
-    public int deleteBoardInfo(BoardInfo boardInfo) {
-        return 0;
-    }
-
-    @Override
-    public int deleteBoardInfo(Long boardId) {
-        return 0;
-    }
-
-    @Override
     public Page<Board> findAllBoard(BoardSearchDTO searchDTO) {
-        return null;
+        return boardRepository.findAllBoard(searchDTO);
     }
 
     @Override
-    public Board findBoardBySeq(Long boardSeq) {
-        return null;
+    public Optional<Board> findBoardBySeq(Long boardSeq) {
+        return boardRepository.findById(boardSeq);
     }
 
     @Override
     public Board insertBoard(Board board) {
-        return null;
+        return boardRepository.save(board);
     }
 
     @Override
     public Board updateBoard(Board board) {
-        return null;
+        return boardRepository.save(board);
     }
 
     @Override
-    public int deleteBoard(Board board) {
-        return 0;
+    public void deleteBoard(Board board) {
+        boardRepository.delete(board);
     }
 
     @Override
-    public int deleteBoard(Long boardSeq) {
-        return 0;
+    public void deleteBoard(Long boardSeq) {
+        boardRepository.deleteById(boardSeq);
     }
 
     @Override
     public List<BoardAttach> findAllBoardAttach(Long boardSeq) {
-        return null;
+        return boardAttachRepository.findAllByBoardSeq(boardSeq);
     }
 
     @Override
     public BoardAttach insertBoardAttach(BoardAttach boardAttach) {
-        return null;
+        return boardAttachRepository.save(boardAttach);
     }
 
     @Override
-    public int deleteBoardAttach(BoardAttach boardAttach) {
-        return 0;
+    public void deleteBoardAttach(BoardAttach boardAttach) {
+        boardAttachRepository.delete(boardAttach);
     }
 
     @Override
-    public int deleteAllBoardAttach(Long boardSeq) {
-        return 0;
+    public void deleteAllBoardAttach(Long boardSeq) {
+        boardAttachRepository.deleteByBoardSeq(boardSeq);
     }
 }

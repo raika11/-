@@ -6,10 +6,11 @@ import { getSnsSendArticleList } from '@store/snsManage';
 
 const FbArtList = () => {
     const dispatch = useDispatch();
-    const { search, list, total } = useSelector((store) => ({
+    const { search, list, total, totalId } = useSelector((store) => ({
         search: store.sns.sendArticle.search,
         list: store.sns.sendArticle.list,
         total: store.sns.sendArticle.total,
+        totalId: store.sns.meta.meta.totalId,
     }));
     useEffect(() => {
         dispatch(getSnsSendArticleList(search));
@@ -17,8 +18,8 @@ const FbArtList = () => {
 
     return (
         <>
-            <Search />
-            <AgGrid rows={list} searchOptions={search} total={total} />
+            <Search searchOptions={search} />
+            <AgGrid rows={list} searchOptions={search} total={total} selected={totalId} />
         </>
     );
 };

@@ -4,7 +4,9 @@ import { Form, Container, Row, Col, Figure, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import commonUtil from '@utils/commonUtil';
-import { clearSnsMeta, GET_SNS_META, getSnsMeta, initialState } from '@store/snsManage';
+import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialState, publishSnsMeta } from '@store/snsManage';
+import toast from '@utils/toastUtil';
+import { snsNames } from '@/constants';
 
 const FbArtEdit = () => {
     const dispatch = useDispatch();
@@ -13,7 +15,6 @@ const FbArtEdit = () => {
 
     const [edit, setEdit] = useState(initialState.meta.meta);
 
-    const tempOnchange = (e) => {};
     const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
         return {
             meta: store.sns.meta.meta,
@@ -24,8 +25,52 @@ const FbArtEdit = () => {
         };
     });
 
+    const handleChangeEditValue = ({ target: { name, value } }, isCheckedValue = false) => {
+        if (isCheckedValue) {
+            value = !edit['fb'].usedYn;
+        }
+        setEdit({ ...edit, fb: { ...edit['fb'], [name]: value } });
+    };
+
     const handleClickCancel = () => {
         history.push('/fb-art');
+    };
+
+    const handleClickPublish = () => {
+        let data = [{ ...edit['fb'], snsType: 'FB' }];
+
+        if (validSaveData(data)) {
+            dispatch(
+                publishSnsMeta({
+                    totalId: edit.totalId,
+                    data,
+                    callback: (response) => {
+                        dispatch(getSnsMeta(totalId));
+                        dispatch(getSnsSendArticleList({ payload: search }));
+                        toast.result(response);
+                    },
+                }),
+            );
+        }
+    };
+
+    const validSaveData = (data) => {
+        for (const item of data) {
+            const snsTypeEng = item.snsType.toLowerCase();
+            const snsKor = snsNames[snsTypeEng];
+
+            if (commonUtil.isEmpty(item.title)) {
+                toast.warning(`${snsKor} 제목을 입력해 주세요.`);
+                return false;
+            }
+
+            if (commonUtil.isEmpty(item.postMessage)) {
+                toast.warning(`${snsKor} 메세지를 입력해 주세요.`);
+                return false;
+            }
+        }
+
+        return true;
     };
 
     useEffect(() => {
@@ -42,7 +87,7 @@ const FbArtEdit = () => {
 
     return (
         <>
-            <MokaCard width={550} title={`페이스북 메타 ${true ? '정보' : '등록'}`} titleClassName="mb-0" loading={null}>
+            <MokaCard width={550} title={`페이스북 메타 ${true ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
                 <hr />
                 <Container>
                     <Row xs={12}>
@@ -60,7 +105,7 @@ const FbArtEdit = () => {
                         <Col>
                             <div className="d-flex mb-3 display-5 font-weight-bold text-left">{edit.article.title}</div>
                             <div className="d-flex">
-                                <MokaInput as={'textarea'} className="resize-none" value={edit.article.summary} inputProps={{ plaintext: true, readOnly: true, rows: '4' }} />
+                                <MokaInput as="textarea" className="resize-none" value={edit.article.summary} inputProps={{ plaintext: true, readOnly: true, rows: '4' }} />
                             </div>
                         </Col>
                     </Row>
@@ -89,9 +134,12 @@ const FbArtEdit = () => {
                         <MokaInputLabel
                             labelClassName="d-flex"
                             as="switch"
-                            name="temp-status"
+                            name="usedYn"
                             id="temp-status"
                             variant="positive"
+                            onChange={(e) => {
+                                handleChangeEditValue(e, true);
+                            }}
                             inputProps={{ label: '', checked: edit.fb.usedYn }}
                         />
                     </Row>
@@ -108,20 +156,27 @@ const FbArtEdit = () => {
                             </div>
                         </Col>
                         <Col>
-                            <MokaInputLabel onChange={(e) => tempOnchange(e)} value={edit.fb.title} />
-                            <MokaInput as="textarea" className="resize-none" value={edit.fb.postMessage} inputProps={{ rows: '5' }} onChange={(e) => tempOnchange(e)} />
+                            <MokaInputLabel name="title" onChange={handleChangeEditValue} value={edit.fb.title} />
+                            <MokaInput
+                                as="textarea"
+                                name="postMessage"
+                                className="resize-none"
+                                value={edit.fb.postMessage}
+                                inputProps={{ rows: '5' }}
+                                onChange={handleChangeEditValue}
+                            />
                         </Col>
                     </Row>
                     <Row xs={12}>
                         <Col className="d-flex justify-content-end align-items-end pt-3">
-                            <div className="justify-content-end align-items-end pr-2">수정정보 2020-12-03 09:36:00 </div>
+                            <div className="justify-content-end align-items-end pr-2">수정정보 {edit.article.snsRegDt}</div>
                         </Col>
                     </Row>
                 </Container>
                 <hr />
                 <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
                     <div className="d-flex justify-content-center">
-                        <Button variant="positive" className="mr-05">
+                        <Button variant="positive" className="mr-05" onClick={handleClickPublish}>
                             저장
                         </Button>
                         <Button variant="negative" className="mr-05" onClick={handleClickCancel}>

@@ -74,7 +74,7 @@ const MemberChildMenuAuth = () => {
 
     return (
         <MokaCard
-            title={
+            titleAs={
                 <>
                     메뉴권한
                     <Row className="rc-tree-header" style={{ marginTop: '20px' }}>

@@ -31,7 +31,7 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
                 rowHeight={65}
                 onRowNodeId={(row) => row.id}
                 onRowClicked={handleClickListRow}
-                loading={null}
+                loading={loading}
                 total={total}
                 page={searchOptions.page}
                 size={searchOptions.size}

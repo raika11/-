@@ -219,12 +219,15 @@ public class DeskingRestController extends AbstractCommonController {
             @ApiParam("템플릿 일련번호(네이버채널만 사용 그 외는 모두 null줄 것)") Long templateSeq, @ApiParam(hidden = true) Principal principal)
             throws Exception {
 
+        boolean checkPublish = false;       // 전송여부
+        boolean checkAfterApi = true;      // afterApi성공여부
         try {
             // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장
             deskingService.publish(returnValue, principal.getName(), templateSeq);
+            checkPublish = true;
 
             String message = msg("tps.desking.success.publish");
 
@@ -256,9 +259,11 @@ public class DeskingRestController extends AbstractCommonController {
                                 .getHeader()
                                 .getMessage();
                     }
+                    checkAfterApi = true;
                 } else {
                     message = msg("tps.desking.error.after-api");
                     log.warn(message);
+                    checkAfterApi = false;
                 }
             }
 
@@ -271,9 +276,15 @@ public class DeskingRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.SELECT, "[SENT IT, BUT THERE WAS AN ERROR IN PARSING THE RESPONSE DATA.]", je, true);
             throw new Exception(msg("tps.desking.error.after-api"), je);
         } catch (Exception e) {
+            String msg = "";
+            if (checkPublish && !checkAfterApi) {
+                msg = msg("tps.desking.error.after-api");
+            } else {
+                msg = msg("tps.desking.error.publish");
+            }
             log.error("[FAIL TO PUBLISH DESKING]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO PUBLISH DESKING]", e, true);
-            throw new Exception(msg("tps.desking.error.publish"), e);
+            throw new Exception(msg, e);
         }
     }
 

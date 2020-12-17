@@ -107,7 +107,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     return (
         <div className="d-flex h-100 align-items-center desking-ag-grid-editor justify-content-between overflow-hidden">
             <OverlayTrigger overlay={<Tooltip id={data.contentId}>{editValue}</Tooltip>}>
-                <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
+                <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 243 : 171 }}>
                     {editValue}
                 </div>
             </OverlayTrigger>
@@ -127,14 +127,14 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
                                 />
                             </div>
                         )}
-                        <div style={{ height: 24, width: 24 }}>
+                        <div style={{ height: 23, width: 23 }}>
                             <MokaTableEditButton editing={editMode} onClick={handleClickEdit} />
                         </div>
                     </React.Fragment>
                 )}
 
                 {/* 삭제버튼 */}
-                <div style={{ height: 24, width: 24 }}>
+                <div style={{ height: 23, width: 23 }}>
                     <MokaTableEditCancleButton editing={editMode} onClick={handleClickDelete} />
                 </div>
             </div>

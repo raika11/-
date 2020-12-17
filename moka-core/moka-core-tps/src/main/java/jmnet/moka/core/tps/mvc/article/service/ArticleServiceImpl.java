@@ -156,4 +156,9 @@ public class ArticleServiceImpl implements ArticleService {
         return articleSourceRepository.findAllUsedSource(useTypeCode);
     }
 
+    @Override
+    public List<ArticleBasicVO> findAllArticleBasicByBulkY(ArticleSearchDTO search) {
+        return articleMapper.findAllByBulkY(search);
+    }
+
 }

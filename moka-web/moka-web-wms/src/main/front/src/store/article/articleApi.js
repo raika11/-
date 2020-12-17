@@ -23,3 +23,19 @@ export const putArticleEditTitle = ({ totalId, title, mobTitle }) => {
         throw err;
     });
 };
+
+// 벌크기사 목록 조회(네이버채널용)
+export const getBulkArticleList = ({ search }) => {
+    // searchType : all, title, reporterId, reporterName
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/articles/bulk?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 벌크전송 매체 목록 조회(네이버채널용)
+export const getBulkSourceList = () => {
+    return instance.get(`/api/articles/bulk-sources`).catch((err) => {
+        throw err;
+    });
+};

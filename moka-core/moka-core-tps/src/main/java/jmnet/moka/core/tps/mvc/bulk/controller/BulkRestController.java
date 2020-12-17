@@ -328,5 +328,4 @@ public class BulkRestController extends AbstractCommonController {
         }
     }
 
-
 }

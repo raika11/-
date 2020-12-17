@@ -16,6 +16,13 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
  * @author jeon0525
  */
 public interface ArticleService {
+
+    /**
+     * 서비스기사목록 조회
+     *
+     * @param search 검색조건
+     * @return 서비스기사목록
+     */
     List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search);
 
     /**
@@ -67,4 +74,12 @@ public interface ArticleService {
      * @return ArticleSource목록
      */
     List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode);
+
+    /**
+     * 벌크전송된 기사목록 조회
+     *
+     * @param search 검색조건
+     * @return 기사목록
+     */
+    List<ArticleBasicVO> findAllArticleBasicByBulkY(ArticleSearchDTO search);
 }

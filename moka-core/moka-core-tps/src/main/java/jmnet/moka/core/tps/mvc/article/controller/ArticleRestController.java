@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.article.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -55,10 +54,10 @@ public class ArticleRestController extends AbstractCommonController {
     }
 
     /**
-     * 기사목록조회
+     * 서비스 기사목록조회
      *
      * @param search 검색조건
-     * @return 기사목록
+     * @return 서비스 기사목록
      */
     @ApiOperation(value = "기사 목록조회")
     @GetMapping
@@ -66,30 +65,7 @@ public class ArticleRestController extends AbstractCommonController {
             throws Exception {
 
         //분류코드 검색설정
-        if (search.getMasterCode() != null && McpString.isNotEmpty(search.getMasterCode())) {
-            String masterCode = search.getMasterCode();
-
-            if (masterCode.length() > 2 && masterCode
-                    .substring(2)
-                    .equals("00000")) {
-                // 대분류검색
-                search.setMasterCode(masterCode.substring(0, 1));
-            } else if (masterCode.length() > 4 && masterCode
-                    .substring(4)
-                    .equals("000")) {
-                // 중분류검색
-                search.setMasterCode(masterCode.substring(0, 1));
-            }
-        }
-
-        // 편집기사 기본매체조건 추가
-        if (deskingSourceList.length > 0) {
-            String paramSList = Arrays
-                    .stream(deskingSourceList)
-                    .reduce((a, b) -> a + "," + b)
-                    .get();
-            search.setDeskingSourceList(paramSList);
-        }
+        resetMasterCode(search);
 
         try {
             // 조회(mybatis)
@@ -107,6 +83,24 @@ public class ArticleRestController extends AbstractCommonController {
             log.error("[FAIL TO LOAD ARTICLE BASIC]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ARTICLE BASIC]", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
+
+    private void resetMasterCode(ArticleSearchDTO search) {
+        if (search.getMasterCode() != null && McpString.isNotEmpty(search.getMasterCode())) {
+            String masterCode = search.getMasterCode();
+
+            if (masterCode.length() > 2 && masterCode
+                    .substring(2)
+                    .equals("00000")) {
+                // 대분류검색
+                search.setMasterCode(masterCode.substring(0, 2));
+            } else if (masterCode.length() > 4 && masterCode
+                    .substring(4)
+                    .equals("000")) {
+                // 중분류검색
+                search.setMasterCode(masterCode.substring(0, 4));
+            }
         }
     }
 
@@ -129,7 +123,7 @@ public class ArticleRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "기사검색 매체 목록조회")
+    @ApiOperation(value = "서비스 기사검색 매체 목록조회")
     @GetMapping("/sources")
     public ResponseEntity<?> getSourceList() {
 
@@ -172,4 +166,65 @@ public class ArticleRestController extends AbstractCommonController {
             throw new Exception(msg("tps.article.error.edittitle.save"), e);
         }
     }
+
+    /**
+     * 벌크 기사목록조회
+     *
+     * @param search 검색조건
+     * @return 네이버채널 기사목록
+     */
+    @ApiOperation(value = "벌크 기사 목록조회")
+    @GetMapping("/bulk")
+    public ResponseEntity<?> getBulkArticleList(@Valid @SearchParam ArticleSearchDTO search)
+            throws Exception {
+
+        //분류코드 검색설정
+        resetMasterCode(search);
+
+        try {
+            // 조회(mybatis)
+            List<ArticleBasicVO> returnValue = articleService.findAllArticleBasicByBulkY(search);
+
+            // 리턴값 설정
+            ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();
+            resultListMessage.setTotalCnt(search.getTotal());
+            resultListMessage.setList(returnValue);
+
+            ResultDTO<ResultListDTO<ArticleBasicVO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD ARTICLE BASIC]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ARTICLE BASIC]", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
+
+    @ApiOperation(value = "벌크전송 매체목록 조회")
+    @GetMapping("/bulk-sources")
+    public ResponseEntity<?> getBulkSourceList()
+            throws Exception {
+
+        try {
+            // 조회
+            List<ArticleSource> returnValue = articleService.findAllBulkArticleSource();
+
+            // 리턴값 설정
+            List<ArticleSourceDTO> dtoList = modelMapper.map(returnValue, ArticleSourceDTO.TYPE);
+            ResultListDTO<ArticleSourceDTO> resultListMessage = new ResultListDTO<>();
+            resultListMessage.setTotalCnt(dtoList.size());
+            resultListMessage.setList(dtoList);
+
+            ResultDTO<ResultListDTO<ArticleSourceDTO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD BULK ARTICLE SOURCE]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD BULK ARTICLE SOURCE", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
+
+
+
 }

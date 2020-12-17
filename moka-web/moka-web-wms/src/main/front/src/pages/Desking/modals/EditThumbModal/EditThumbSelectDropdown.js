@@ -94,7 +94,6 @@ const EditThumbSelectDropdown = (props) => {
     const handleChangeValue = (e) => {
         const { checked, id } = e.target;
         let resultList = [];
-        debugger;
         if (typeof onChange === 'function') {
             if (id === 'All') {
                 if (checked) {

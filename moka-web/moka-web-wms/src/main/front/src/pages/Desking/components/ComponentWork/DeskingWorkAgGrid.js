@@ -18,7 +18,7 @@ let hoverBox = makeHoverBox();
  * 데스킹 AgGrid
  */
 const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete, deskingPart } = props;
     const { deskingWorks } = component;
     const dispatch = useDispatch();
 
@@ -58,6 +58,7 @@ const DeskingWorkAgGrid = (props) => {
                     onRowClicked,
                     onSave,
                     onDelete,
+                    deskingPart,
                 };
             }),
         );

@@ -30,7 +30,7 @@ export const initialState = {
         ordinal: '',
         pageTitle: '',
         pcUrl: '',
-        mobileUrl: '',
+        mobUrl: '',
     },
     specialError: null,
     invalidList: [],

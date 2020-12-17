@@ -78,8 +78,9 @@ export const changeWorkStatus = createAction(CHANGE_WORK_STATUS, ({ componentWor
  * 컴포넌트 워크 임시저장
  */
 export const POST_SAVE_COMPONENT_WORK = 'desking/POST_SAVE_COMPONENT_WORK';
-export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ componentWorkSeq, callback }) => ({
+export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ componentWorkSeq, templateSeq, callback }) => ({
     componentWorkSeq,
+    templateSeq,
     callback,
 }));
 
@@ -87,9 +88,10 @@ export const postSaveComponentWork = createAction(POST_SAVE_COMPONENT_WORK, ({ c
  * 컴포넌트 워크 전송
  */
 export const POST_PUBLISH_COMPONENT_WORK = 'desking/POST_PUBLISH_COMPONENT_WORK';
-export const postPublishComponentWork = createAction(POST_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, areaSeq, callback }) => ({
+export const postPublishComponentWork = createAction(POST_PUBLISH_COMPONENT_WORK, ({ componentWorkSeq, areaSeq, templateSeq, callback }) => ({
     componentWorkSeq,
     areaSeq,
+    templateSeq,
     callback,
 }));
 

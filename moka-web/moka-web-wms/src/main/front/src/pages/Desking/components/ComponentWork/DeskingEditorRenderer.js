@@ -17,6 +17,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     const [editValue, setEditValue] = useState('');
     const [error, setError] = useState(false);
     const [data, setData] = useState(initialData);
+    const [editable, setEditable] = useState(false);
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
@@ -97,23 +98,45 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
         setEditValue(data.title);
     }, [data]);
 
+    useEffect(() => {
+        if (initialData.deskingPart) {
+            setEditable(initialData.deskingPart.split(',').indexOf('TITLE') > -1);
+        }
+    }, [initialData]);
+
     return (
-        <div className="d-flex h-100 align-items-center desking-ag-grid-editor">
+        <div className="d-flex h-100 align-items-center desking-ag-grid-editor justify-content-between overflow-hidden">
             <OverlayTrigger overlay={<Tooltip id={data.contentId}>{editValue}</Tooltip>}>
                 <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 245 : 173 }}>
                     {editValue}
                 </div>
             </OverlayTrigger>
-            {editMode && (
-                <div className="edit">
-                    <MokaInput as={data.rel ? 'input' : 'textarea'} className="resize-none" value={editValue} onChange={(e) => setEditValue(e.target.value)} isInvalid={error} />
+
+            <div className="d-flex align-items-center">
+                {/* 수정버튼(deskingPart에 TITLE이 포함되어 있을 때만 처리) */}
+                {editable && (
+                    <React.Fragment>
+                        {editMode && (
+                            <div className="edit">
+                                <MokaInput
+                                    as={data.rel ? 'input' : 'textarea'}
+                                    className="resize-none"
+                                    value={editValue}
+                                    onChange={(e) => setEditValue(e.target.value)}
+                                    isInvalid={error}
+                                />
+                            </div>
+                        )}
+                        <div style={{ height: 24, width: 24 }}>
+                            <MokaTableEditButton editing={editMode} onClick={handleClickEdit} />
+                        </div>
+                    </React.Fragment>
+                )}
+
+                {/* 삭제버튼 */}
+                <div style={{ height: 24, width: 24 }}>
+                    <MokaTableEditCancleButton editing={editMode} onClick={handleClickDelete} />
                 </div>
-            )}
-            <div className="mr-1" style={{ height: 25, width: 25 }}>
-                <MokaTableEditButton editing={editMode} onClick={handleClickEdit} />
-            </div>
-            <div style={{ height: 25, width: 25 }}>
-                <MokaTableEditCancleButton editing={editMode} onClick={handleClickDelete} />
             </div>
         </div>
     );

@@ -211,13 +211,17 @@ $alert-padding-x: .95rem !default;
 $alert-border-width: 0 !default;
 $alert-bg-level: 0 !default;
 
+// Buttons (box-shadow 제거 => 실제로 기능동작을 안함. 어쩔 수 없이 2-mixins/_button.scss에 important로 처리. 추후 올바른 방향으로 변경)
+$btn-active-box-shadow: none !default;
+$btn-focus-box-shadow: none !default;
+
 // Forms
 $input-bg: $white !default;
 $input-disabled-bg: $gray-200 !default;
 $input-color: $gray-700 !default;
 $input-placeholder-color: rgba($black, 0.5) !default;
-$input-padding-x: 8px;
-$input-btn-focus-box-shadow: unset;
+$input-padding-x: 8px !default;
+$input-btn-focus-box-shadow: none !default;
 $input-btn-border-width: $border-width !default;
 $input-btn-line-height: $line-height-base !default;
 $input-btn-line-height-sm:    $line-height-sm !default;

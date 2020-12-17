@@ -4,6 +4,9 @@ import { deskingDragStop } from '@store/desking';
 import { addDeskingWorkDropzone } from '@utils/agGridUtil';
 import toast from '@utils/toastUtil';
 
+/**
+ * 데스킹워크 간의 드롭존 생성
+ */
 const DeskingReadyGrid = (props) => {
     const { componentAgGridInstances = [], agGridIndex: sourceIdx, component } = props;
     const dispatch = useDispatch();

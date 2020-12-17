@@ -476,7 +476,7 @@ const SpecialEdit = () => {
                     isInvalid={error.pcUrl}
                     required
                 />
-                {/* Mobile URL */}
+                {/* Mob URL */}
                 <MokaInputLabel
                     label="Mobile URL"
                     labelWidth={110}

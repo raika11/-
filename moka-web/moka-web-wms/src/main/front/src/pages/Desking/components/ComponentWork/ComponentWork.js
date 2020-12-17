@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
+import { DATA_TYPE_DESK } from '@/constants';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ButtonGroup';
-import AgGrid from './DeskingWorkAgGrid';
+import DeskingWorkAgGrid from './DeskingWorkAgGrid';
 import { EditDeskingWorkModal } from '@pages/Desking/modals';
 // import ComponentWorkForm from '@pages/Desking/components/ComponentWorkForm';
 import toast from '@utils/toastUtil';
@@ -41,8 +41,12 @@ const defaultProps = {
     agGridIndex: 0,
 };
 
+/**
+ * 가장 기본이 되는 데스킹 워크
+ */
 const ComponentWork = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart, editFormPart } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
+    // const { editFormPart } = props;
     const dispatch = useDispatch();
 
     const { workStatus } = useSelector((store) => ({
@@ -58,8 +62,11 @@ const ComponentWork = (props) => {
      * 편집기사 목록에서 Row클릭
      */
     const handleRowClicked = (rowData) => {
-        setDeskingWorkData(rowData);
-        setEditModalShow(true);
+        // deskingPart로 지정된 필드가 없으면 수정불가
+        if (deskingPart && deskingPart !== '') {
+            setDeskingWorkData(rowData);
+            setEditModalShow(true);
+        }
     };
 
     /**
@@ -72,6 +79,7 @@ const ComponentWork = (props) => {
         delete saveData.onRowClicked;
         delete saveData.onSave;
         delete saveData.onDelete;
+        delete saveData.deskingPart;
 
         dispatch(
             putDeskingWork({
@@ -123,11 +131,12 @@ const ComponentWork = (props) => {
 
             {/* 편집기사 리스트 */}
             {component.dataType === DATA_TYPE_DESK && (
-                <AgGrid
+                <DeskingWorkAgGrid
                     component={component}
                     agGridIndex={agGridIndex}
                     componentAgGridInstances={componentAgGridInstances}
                     setComponentAgGridInstances={setComponentAgGridInstances}
+                    deskingPart={deskingPart}
                     onRowClicked={handleRowClicked}
                     onSave={handleClickSave}
                     onDelete={handleClickDelete}

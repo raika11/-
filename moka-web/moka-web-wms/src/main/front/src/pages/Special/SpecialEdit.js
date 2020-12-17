@@ -14,6 +14,7 @@ import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial,
 
 moment.locale('ko');
 let currentDate = moment().format('YYYYMMDDHHmmss');
+const textReg = /['"]/;
 
 const SpecialEdit = () => {
     const dispatch = useDispatch();
@@ -140,9 +141,25 @@ const SpecialEdit = () => {
                 isInvalid = isInvalid || true;
             }
             // 제목 체크
-            if (!REQUIRED_REGEX.test(saveObj.pageTitle)) {
+            if (!REQUIRED_REGEX.test(saveObj.pageTitle) || textReg.test(saveObj.pageTitle)) {
                 errList.push({
                     field: 'pageTitle',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // 검색키워드 체크
+            if (textReg.test(saveObj.schKwd)) {
+                errList.push({
+                    field: 'schKwd',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+            // 페이지설명 체크
+            if (textReg.test(saveObj.pageDesc)) {
+                errList.push({
+                    field: 'pageDesc',
                     reason: '',
                 });
                 isInvalid = isInvalid || true;
@@ -417,8 +434,8 @@ const SpecialEdit = () => {
                         <Form.Row className="mb-3">
                             <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" as="none" />
                             <div className="w-100 d-flex flex-column">
-                                <MokaInput name="schKwd" className="mb-1" value={temp.schKwd} onChange={handleChangeValue} />
-                                <p className="m-0 ft-12 text-danger">*&nbsp;""포함, 특수문자 사용금지</p>
+                                <MokaInput name="schKwd" className="mb-1" value={temp.schKwd} onChange={handleChangeValue} isInvalid={error.schKwd} />
+                                <p className="m-0 ft-12 text-danger">*&nbsp;', " 포함 특수문자 사용금지</p>
                             </div>
                         </Form.Row>
                         {/* 제목 */}
@@ -426,7 +443,7 @@ const SpecialEdit = () => {
                             <MokaInputLabel label="제목" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" required as="none" />
                             <div className="w-100 d-flex flex-column">
                                 <MokaInput name="pageTitle" className="mb-1" value={temp.pageTitle} isInvalid={error.pageTitle} onChange={handleChangeValue} />
-                                <p className="m-0 ft-12 text-danger">*&nbsp;""포함, 특수문자 사용금지</p>
+                                <p className="m-0 ft-12 text-danger">*&nbsp;', " 포함 특수문자 사용금지</p>
                             </div>
                         </Form.Row>
                         {/* 서비스시작일/서비스종료일 */}
@@ -538,7 +555,7 @@ const SpecialEdit = () => {
                             페이지 설명 <br />
                             <br />
                             <p className="p-0 m-0 text-danger">
-                                *&nbsp;&#39;&quot;포함 <br /> 특수문자 사용금지
+                                *&nbsp;', " 포함 <br /> 특수문자 사용금지
                             </p>
                         </>
                     }
@@ -550,6 +567,7 @@ const SpecialEdit = () => {
                     name="pageDesc"
                     value={temp.pageDesc}
                     onChange={handleChangeValue}
+                    isInvalid={error.pageDesc}
                 />
                 {/* 부서명 */}
                 <Form.Row className="mb-3">
@@ -628,7 +646,7 @@ const SpecialEdit = () => {
                                     inputProps={{ plaintext: true, readOnly: true }}
                                 />
                             </Col>
-                            <Col xs={4} className="p-0">
+                            <Col xs={8} className="p-0">
                                 <MokaInputLabel
                                     label="등록일시"
                                     labelWidth={70}
@@ -653,7 +671,7 @@ const SpecialEdit = () => {
                                     inputProps={{ plaintext: true, readOnly: true }}
                                 />
                             </Col>
-                            <Col xs={4} className="p-0">
+                            <Col xs={8} className="p-0">
                                 <MokaInputLabel
                                     label="수정일시"
                                     labelWidth={70}

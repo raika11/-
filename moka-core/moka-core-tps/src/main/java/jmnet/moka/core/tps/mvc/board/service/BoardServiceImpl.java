@@ -1,13 +1,11 @@
 package jmnet.moka.core.tps.mvc.board.service;
 
 import java.util.List;
-import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
-import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.repository.BoardAttachRepository;
-import jmnet.moka.core.tps.mvc.board.repository.BoardInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -27,47 +25,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    private final BoardInfoRepository boardInfoRepository;
+    //private final BoardRepository boardRepository;
 
     private final BoardAttachRepository boardAttachRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardInfoRepository boardInfoRepository, BoardAttachRepository boardAttachRepository) {
-        this.boardInfoRepository = boardInfoRepository;
+    public BoardServiceImpl(BoardAttachRepository boardAttachRepository) {
+        //this.boardRepository = boardRepository;
         this.boardAttachRepository = boardAttachRepository;
     }
 
 
-
-    @Override
-    public Page<BoardInfo> findAllBoardInfo(BoardInfoSearchDTO searchDTO) {
-        return null;
-    }
-
-    @Override
-    public BoardInfo findBoardInfoById(Long boardId) {
-        return null;
-    }
-
-    @Override
-    public BoardInfo insertBoardInfo(BoardInfo boardInfo) {
-        return null;
-    }
-
-    @Override
-    public BoardInfo updateBoardInfo(BoardInfo boardInfo) {
-        return null;
-    }
-
-    @Override
-    public int deleteBoardInfo(BoardInfo boardInfo) {
-        return 0;
-    }
-
-    @Override
-    public int deleteBoardInfo(Long boardId) {
-        return 0;
-    }
 
     @Override
     public Page<Board> findAllBoard(BoardSearchDTO searchDTO) {
@@ -75,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board findBoardBySeq(Long boardSeq) {
+    public Optional<Board> findBoardBySeq(Long boardSeq) {
         return null;
     }
 

@@ -3,18 +3,29 @@ package jmnet.moka.core.tps.mvc.board.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 게시물첨부파일
  */
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "TB_BOARD_ATTACH")
 public class BoardAttach extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
@@ -63,12 +74,22 @@ public class BoardAttach extends jmnet.moka.core.tps.common.entity.BaseAudit imp
      * 파일크기(KB)
      */
     @Column(name = "FILE_SIZE", nullable = false)
+    @Builder.Default
     private Integer fileSize = 0;
 
     /**
      * 다운로드수
      */
     @Column(name = "DOWNLOAD_CNT", nullable = false)
+    @Builder.Default
     private Integer downloadCnt = 0;
+
+    /**
+     * 그룹정보
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOARD_SEQ", nullable = false, insertable = false, updatable = false)
+    private Board board;
+
 
 }

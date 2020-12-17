@@ -61,7 +61,6 @@ const SpecialEdit = () => {
      * @param {any} date date
      */
     const handleChangeSdate = (date) => {
-        setError({ ...error, pageSdate: false });
         if (typeof date === 'object') {
             setTemp({ ...temp, pageSdate: date });
         } else if (date === '') {
@@ -188,15 +187,8 @@ const SpecialEdit = () => {
                 });
                 isInvalid = isInvalid || true;
             }
-            // 시작일, 종료일 체크 (필수로 존재, 종료일이 시작일보다 뒷날이어야함)
-            if (!saveObj.pageSdate) {
-                errList.push({
-                    field: 'pageSdate',
-                    reason: '',
-                });
-                isInvalid = isInvalid || true;
-            }
-            if (!saveObj.pageEdate || Number(saveObj.pageSdate) > Number(saveObj.pageEdate)) {
+            // 종료일 체크 (종료일이 시작일보다 뒷날이어야함)
+            if (Number(saveObj.pageSdate) > Number(saveObj.pageEdate)) {
                 errList.push({
                     field: 'pageEdate',
                     reason: '',

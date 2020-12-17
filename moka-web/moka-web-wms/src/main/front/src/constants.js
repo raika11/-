@@ -60,6 +60,8 @@ export const CODETYPE_DS_PRE_LOC = 'DS_PRE_LOC';
 export const CODETYPE_DS_ICON = 'DS_ICON';
 // 공통코드 : 디지털스페셜 페이지코드
 export const CODETYPE_PT = 'PT';
+// 공통코드 : 네이버채널 템플릿
+export const CODETYPE_CHANNEL_TP = 'CHANNEL_TP';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

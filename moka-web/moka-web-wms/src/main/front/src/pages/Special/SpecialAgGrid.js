@@ -50,7 +50,7 @@ const SpecialAgGrid = () => {
         setRowData(
             specialList.map((sp) => ({
                 ...sp,
-                pageSdate: `${sp.pageSdate.substr(0, 4)}-${sp.pageSdate.substr(4, 2)}-${sp.pageSdate.substr(6, 2)}`,
+                pageSdate: sp.pageSdate && `${sp.pageSdate.substr(0, 4)}-${sp.pageSdate.substr(4, 2)}-${sp.pageSdate.substr(6, 2)}`,
                 regDtText: moment(sp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD'),
             })),
         );

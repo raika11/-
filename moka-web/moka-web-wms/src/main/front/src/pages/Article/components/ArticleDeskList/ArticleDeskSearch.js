@@ -25,7 +25,7 @@ const ArticleDeskSearch = (props) => {
     const [modalShow, setModalShow] = useState(false);
     const [error, setError] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
-    const [deskingSourceList, setDeskingSourceList] = useState(null);
+    const [sourceList, setSourceList] = useState(null);
 
     /**
      * 입력값 변경
@@ -42,9 +42,9 @@ const ArticleDeskSearch = (props) => {
     const validate = (ns) => {
         let isInvalid = false;
 
-        if (!REQUIRED_REGEX.test(ns.deskingSourceList)) {
+        if (!REQUIRED_REGEX.test(ns.sourceList)) {
             isInvalid = isInvalid || true;
-            setError({ ...error, deskingSourceList: true });
+            setError({ ...error, sourceList: true });
         }
 
         return !isInvalid;
@@ -56,7 +56,7 @@ const ArticleDeskSearch = (props) => {
     const handleSearch = () => {
         let ns = {
             ...search,
-            deskingSourceList,
+            sourceList,
             startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
             endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
             page: 0,
@@ -154,7 +154,7 @@ const ArticleDeskSearch = (props) => {
             let ns = {
                 ...search,
                 masterCode: selectedComponent.masterCode || null,
-                deskingSourceList,
+                sourceList,
                 startServiceDay,
                 endServiceDay,
                 contentType: media ? 'M' : null,
@@ -214,15 +214,15 @@ const ArticleDeskSearch = (props) => {
                     {/* 매체 */}
                     <SourceSelector
                         className="mr-2"
-                        value={deskingSourceList}
+                        value={sourceList}
                         onChange={(value) => {
-                            setDeskingSourceList(value);
-                            setError({ ...error, deskingSourceList: false });
+                            setSourceList(value);
+                            setError({ ...error, sourceList: false });
                             if (value !== '') {
                                 setSourceOn(true);
                             }
                         }}
-                        isInvalid={error.deskingSourceList}
+                        isInvalid={error.sourceList}
                     />
 
                     {/* 면 */}

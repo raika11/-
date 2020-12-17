@@ -17,7 +17,7 @@ export const initialState = {
         keyword: '',
         pressPan: null, // 판
         pressMyun: null, // 면
-        deskingSourceList: null, // 매체
+        sourceList: null, // 매체
         masterCode: null, // 분류
         startServiceDay: null, // 시작일
         endServiceDay: null, // 종료일

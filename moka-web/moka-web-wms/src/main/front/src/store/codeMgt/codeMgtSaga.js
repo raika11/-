@@ -373,6 +373,7 @@ export const getDsPreLoc = createReadOnlySaga(act.GET_DS_PRE_LOC, 'dsPreLocRows'
 export const getDsIcon = createReadOnlySaga(act.GET_DS_ICON, 'dsIconRows', constants.CODETYPE_DS_ICON);
 export const getArticleType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'articleTypeRows', constants.CODETYPE_ARTICLE_TYPE);
 export const getPt = createReadOnlySaga(act.GET_PT, 'ptRows', constants.CODETYPE_PT);
+export const getChannelTp = createReadOnlySaga(act.GET_CHANNEL_TP, 'channelTpRows', constants.CODETYPE_CHANNEL_TP);
 
 /** saga */
 export default function* codeMgt() {
@@ -404,6 +405,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_DS_ICON, getDsIcon);
     yield takeLatest(act.GET_ARTICLE_TYPE, getArticleType);
     yield takeLatest(act.GET_PT, getPt);
+    yield takeLatest(act.GET_CHANNEL_TP, getChannelTp);
 
     yield takeLatest(act.GET_SPECIAL_CHAR_CODE, getSpecialCharCode);
     yield takeLatest(act.SAVE_SPECIAL_CHAR_CODE, putSpecialCharCode);

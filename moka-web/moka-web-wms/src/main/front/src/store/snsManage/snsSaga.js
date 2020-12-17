@@ -325,7 +325,7 @@ function* getSnsMetaList({ type, payload }) {
 function toSnsSendArticleListData(response) {
     return response.map((data) => ({
         id: data.id.totalId,
-        title: data.artTitle,
+        title: unescapeHtml(data.artTitle),
         imgUrl: data.imgUrl,
         usedYn: data.usedYn === 'Y',
         sendDt: data.snsInsDt,

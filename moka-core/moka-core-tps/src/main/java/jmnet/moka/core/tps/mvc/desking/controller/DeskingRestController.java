@@ -971,7 +971,8 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "단일 컴포넌트워크 템플릿 수정")
     @PutMapping("/components/{componentWorkSeq}/template/{templateSeq}")
     public ResponseEntity<?> putTemplateComponentWork(@ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq")
-    @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq, @ApiParam("템플릿 일련번호(필수)") Long templateSeq,
+    @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
+            @ApiParam("템플릿 일련번호(필수)") @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
             @ApiParam(hidden = true) Principal principal)
             throws Exception {
 

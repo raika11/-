@@ -16,7 +16,7 @@ export const initialState = {
         startdate: null,
         finishdate: null,
         // dataType: null,
-        // imageType: null,
+        imageType: null,
         searchKey: 'all',
         searchValue: '',
     },

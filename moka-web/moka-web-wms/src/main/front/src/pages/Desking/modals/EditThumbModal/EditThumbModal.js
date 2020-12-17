@@ -13,6 +13,7 @@ import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
 import toast from '@utils/toastUtil';
+import EditThumbImageInput from './EditThumbImageInput';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
@@ -187,6 +188,15 @@ const EditThumbModal = (props) => {
                                         onThumbClick={handleThumbClick}
                                         onRepClick={handleRepClick}
                                         onEditClick={handleEditClick}
+                                    />
+                                </div>
+                            </React.Fragment>,
+                            <React.Fragment></React.Fragment>,
+                            <React.Fragment>
+                                <div className="px-3 py-2">
+                                    <EditThumbImageInput
+                                    // className="w-100"
+                                    // height={416}
                                     />
                                 </div>
                             </React.Fragment>,

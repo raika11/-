@@ -46,12 +46,13 @@ public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySuppo
         BooleanBuilder builder = new BooleanBuilder();
         String searchType = search.getSearchType();
         String keyword = search.getKeyword();
+        String pageCd = search.getPageCd();
 
         builder.and(specialPageMgt.usedYn.ne(MokaConstants.DELETE));    // 삭제된 디지털스페셜은 제외
 
-        if (McpString.isNotEmpty(search.getPageCd())) {
-            if (!searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-                builder.and(specialPageMgt.pageCd.eq(search.getPageCd()));
+        if (McpString.isNotEmpty(pageCd)) {
+            if (!pageCd.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+                builder.and(specialPageMgt.pageCd.eq(pageCd));
             }
         }
 

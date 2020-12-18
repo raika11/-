@@ -2,8 +2,10 @@ package jmnet.moka.core.tps.mvc.code.service;
 
 import java.util.List;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
+import jmnet.moka.core.tps.mvc.code.entity.JamMastercode;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
 import jmnet.moka.core.tps.mvc.code.entity.ServiceMap;
+import jmnet.moka.core.tps.mvc.code.repository.JamMastercodeRepository;
 import jmnet.moka.core.tps.mvc.code.repository.MastercodeRepository;
 import jmnet.moka.core.tps.mvc.code.repository.ServiceMapRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class CodeServiceImpl implements CodeService {
     @Autowired
     private ServiceMapRepository serviceMapRepository;
 
+    @Autowired
+    private JamMastercodeRepository jamMastercodeRepository;
+
     @Override
     public List<Mastercode> findAllMastercode(CodeSearchDTO search) {
         return mastercodeRepository.findList(search);
@@ -25,5 +30,10 @@ public class CodeServiceImpl implements CodeService {
     @Override
     public List<ServiceMap> findAllServiceMap(CodeSearchDTO search) {
         return serviceMapRepository.findList(search);
+    }
+
+    @Override
+    public List<JamMastercode> findAllJamMastercode() {
+        return jamMastercodeRepository.findAll();
     }
 }

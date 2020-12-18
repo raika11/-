@@ -26,6 +26,7 @@ const ArticleDeskSearch = (props) => {
     const [error, setError] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(null);
+    const [period, setPeriod] = useState([2, 'days']);
 
     /**
      * 입력값 변경
@@ -33,7 +34,20 @@ const ArticleDeskSearch = (props) => {
      */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
-        setSearch({ ...search, [name]: value });
+
+        if (name === 'period') {
+            // 기간 설정
+            const { number, date } = e.target.selectedOptions[0].dataset;
+            setPeriod([Number(number), date]);
+
+            // startServiceDay, endServiceDay 변경
+            const nd = new Date();
+            const startServiceDay = moment(nd).subtract(Number(number), date);
+            const endServiceDay = moment(nd);
+            setSearch({ ...search, startServiceDay, endServiceDay });
+        } else {
+            setSearch({ ...search, [name]: value });
+        }
     };
 
     /**
@@ -175,6 +189,27 @@ const ArticleDeskSearch = (props) => {
     return (
         <Form>
             <Form.Row className="d-flex mb-2">
+                {/* 검색기간 */}
+                <div style={{ width: 78 }} className="mr-2">
+                    <MokaInput as="select" name="period" className="ft-12" onChange={handleChangeValue} value={period.join('')}>
+                        <option value="2days" data-number="2" data-date="days">
+                            2일
+                        </option>
+                        <option value="3days" data-number="3" data-date="days">
+                            3일
+                        </option>
+                        <option value="7days" data-number="7" data-date="days">
+                            7일
+                        </option>
+                        <option value="1months" data-number="1" data-date="months">
+                            1개월
+                        </option>
+                        <option value="3months" data-number="3" data-date="months">
+                            3개월
+                        </option>
+                    </MokaInput>
+                </div>
+
                 {/* 시작일 */}
                 <div style={{ width: 138 }} className="mr-2">
                     <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
@@ -187,7 +222,7 @@ const ArticleDeskSearch = (props) => {
 
                 {/* 검색 조건 */}
                 <div style={{ width: 110 }} className="mr-2">
-                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="searchType" className="ft-12" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}

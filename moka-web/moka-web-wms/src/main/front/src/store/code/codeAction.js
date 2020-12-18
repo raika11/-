@@ -9,9 +9,17 @@ export const clearStore = createAction(CLEAR_STORE);
 export const CLEAR_SERVICE_LIST = 'code/CLEAR_SERVICE_LIST';
 export const CLEAR_SECTION_LIST = 'code/CLEAR_SECTION_LIST';
 export const CLEAR_CONTENT_LIST = 'code/CLEAR_CONTENT_LIST';
+export const CLEAR_MASTER_CODE_LIST = 'code/CLEAR_MASTER_CODE_LIST';
 export const clearServiceList = createAction(CLEAR_SERVICE_LIST);
 export const clearSectionList = createAction(CLEAR_SECTION_LIST);
 export const clearContentList = createAction(CLEAR_CONTENT_LIST);
+export const clearMasterCodeList = createAction(CLEAR_MASTER_CODE_LIST);
+
+/**
+ * 서비스코드 전체 리스트 조회
+ */
+export const [GET_MASTER_CODE_LIST, GET_MASTER_CODE_LIST_SUCCESS, GET_MASTER_CODE_LIST_FAILURE] = createRequestActionTypes('code/GET_MASTER_CODE_LIST');
+export const getMasterCodeList = createAction(GET_MASTER_CODE_LIST);
 
 /**
  * 서비스코드(대분류) 리스트 조회

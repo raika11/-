@@ -11,13 +11,13 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 import DropdownToggle from '@pages/Desking/components/ComponentWork/DropdownToggle';
 // import ReserveComponentWork from '@pages/Desking/components/ComponentWork/ReserveComponentWork';
-import { AddSpaceModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
+import { EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
 
 /**
  * 네이버채널 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances, workTemplateSeq } = props;
+    const { areaSeq, component, workTemplateSeq } = props;
     // const { workStatus } = props;
     const dispatch = useDispatch();
 
@@ -85,11 +85,6 @@ const ButtonGroup = (props) => {
     }, [component.seq, dispatch, workTemplateSeq]);
 
     /**
-     * 공백추가
-     */
-    const handleOpenAddSpace = useCallback(() => handleModalShow('space', true), [handleModalShow]);
-
-    /**
      * 리스트 건수
      */
     const handleOpenListNumber = useCallback(() => handleModalShow('listNumber', true), [handleModalShow]);
@@ -122,7 +117,6 @@ const ButtonGroup = (props) => {
     const createDropdownItem = useCallback(() => {
         const items = [
             { text: 'HTML 수동편집', viewN: false, onClick: () => handleModalShow('html', true) },
-            { text: '공백 기사 추가', viewN: false, onClick: handleOpenAddSpace },
             { text: '전체 삭제', viewN: false, onClick: handleClickDelete },
             { text: '리스트 건수 변경', viewN: false, onClick: handleOpenListNumber },
         ];
@@ -138,7 +132,7 @@ const ButtonGroup = (props) => {
                     ))}
             </React.Fragment>
         );
-    }, [handleClickDelete, handleModalShow, handleOpenAddSpace, handleOpenListNumber, viewN]);
+    }, [handleClickDelete, handleModalShow, handleOpenListNumber, viewN]);
 
     useEffect(() => {
         if (component.componentSeq) setTitle(component.componentName);
@@ -195,16 +189,6 @@ const ButtonGroup = (props) => {
 
             {/* HTML 수동 편집 */}
             <EditHtmlModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} />
-
-            {/* 공백 추가 */}
-            <AddSpaceModal
-                show={modalShow.space}
-                onHide={() => handleModalShow('space', false)}
-                areaSeq={areaSeq}
-                component={component}
-                agGridIndex={agGridIndex}
-                componentAgGridInstances={componentAgGridInstances}
-            />
 
             {/* 리스트 건수 */}
             <EditListNumberModal show={modalShow.listNumber} onHide={() => handleModalShow('listNumber', false)} data={component} />

@@ -88,14 +88,18 @@ const MokaImageInput = forwardRef((props, ref) => {
     const defaultRef = useRef(null);
 
     const imageHide = () => {
-        imgRef.current.classList.add('d-none');
+        if (imgRef.current) {
+            imgRef.current.classList.add('d-none');
+        }
         defaultRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-flex');
         setImgSrc(null);
     };
 
     const imageShow = () => {
-        imgRef.current.classList.remove('d-none');
+        if (imgRef.current) {
+            imgRef.current.classList.remove('d-none');
+        }
         defaultRef.current.classList.add('d-none');
         defaultRef.current.classList.remove('d-flex');
     };

@@ -5,10 +5,12 @@
 package jmnet.moka.core.tps.mvc.articlesource.service;
 
 import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.repository.ArticleSourceRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,18 +30,23 @@ public class ArticleSourceServiceImpl implements ArticleSourceService {
     }
 
     @Override
-    public List<ArticleSource> findAllArticleSource(String[] deskingSourceList) {
-        return articleSourceRepository.findAllSourceByDesking(deskingSourceList);
+    public List<ArticleSource> findAllArticleSourceByDesking(String[] deskingSourceList) {
+        return articleSourceRepository.findAllArticleSourceByDesking(deskingSourceList);
     }
 
     @Override
-    public List<ArticleSource> findAllBulkArticleSource() {
+    public List<ArticleSource> findAllArticleSourceByBulk() {
         return findAllUsedArticleSource(ArticleSourceUseTypeCode.BULK);
     }
 
     @Override
     public List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode) {
         return articleSourceRepository.findAllUsedSource(useTypeCode);
+    }
+
+    @Override
+    public Page<ArticleSource> findAllArticleSource(SearchDTO search) {
+        return articleSourceRepository.findAllArticleSource(search);
     }
 
 }

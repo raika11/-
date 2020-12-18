@@ -12,7 +12,7 @@ export const getArticleList = ({ search }) => {
 
 // 매체 목록 조회
 export const getSourceList = () => {
-    return instance.get(`/api/article-sources`).catch((err) => {
+    return instance.get(`/api/article-sources/desking`).catch((err) => {
         throw err;
     });
 };

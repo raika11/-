@@ -175,9 +175,9 @@ const ArticleDeskSearch = (props) => {
                 page: 0,
             };
 
+            dispatch(changeSearchOption(ns));
             if (sourceOn) {
                 dispatch(getArticleList({ search: ns }));
-                dispatch(changeSearchOption(ns));
             }
         } else {
             dispatch(clearList());

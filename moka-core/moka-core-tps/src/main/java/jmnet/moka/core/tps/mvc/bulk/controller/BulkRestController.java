@@ -194,7 +194,7 @@ public class BulkRestController extends AbstractCommonController {
                 });
 
         // SourceCode check
-        List<ArticleSource> articleSources = articleSourceService.findAllBulkArticleSource();
+        List<ArticleSource> articleSources = articleSourceService.findAllArticleSourceByBulk();
         boolean isSourceCodeMatch = articleSources
                 .stream()
                 .anyMatch(articleSource -> articleSource
@@ -295,7 +295,7 @@ public class BulkRestController extends AbstractCommonController {
                 throw new Exception(msg("tps.bulk.error.pattern.status"));
             }
 
-            List<ArticleSource> articleSources = articleSourceService.findAllBulkArticleSource();
+            List<ArticleSource> articleSources = articleSourceService.findAllArticleSourceByBulk();
             boolean isSourceCodeMatch = articleSources
                     .stream()
                     .anyMatch(articleSource -> articleSource

@@ -187,8 +187,9 @@ export const getDeskingHistory = ({ componentHistSeq }) => {
 };
 
 // 히스토리를 편집기사 워크로 등록
-export const putDeskingWorkHistory = ({ componentWorkSeq, componentHistSeq }) => {
-    return instance.put(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}`).catch((err) => {
+export const putDeskingWorkHistory = ({ componentWorkSeq, componentHistSeq, updateTemplateYn }) => {
+    const queryString = qs.stringify({ updateTemplateYn });
+    return instance.put(`/api/desking/components/${componentWorkSeq}/history/${componentHistSeq}?${queryString}`).catch((err) => {
         throw err;
     });
 };

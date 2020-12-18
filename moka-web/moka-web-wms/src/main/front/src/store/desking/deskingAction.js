@@ -232,9 +232,10 @@ export const [GET_DESKING_WORK_HISTORY, GET_DESKING_WORK_HISTORY_SUCCESS, GET_DE
 export const PUT_DESKING_WORK_HISTORY = 'desking/PUT_DESKING_WORK_HISTORY';
 export const getComponentWorkHistory = createAction(GET_COMPONENT_WORK_HISTORY, ({ search, callback }) => ({ search, callback }));
 export const getDeskingWorkHistory = createAction(GET_DESKING_WORK_HISTORY, ({ componentHistSeq }) => ({ componentHistSeq }));
-export const putDeskingWorkHistory = createAction(PUT_DESKING_WORK_HISTORY, ({ componentWorkSeq, componentHistSeq, callback }) => ({
+export const putDeskingWorkHistory = createAction(PUT_DESKING_WORK_HISTORY, ({ componentWorkSeq, componentHistSeq, updateTemplateYn, callback }) => ({
     componentWorkSeq,
     componentHistSeq,
+    updateTemplateYn,
     callback,
 }));
 

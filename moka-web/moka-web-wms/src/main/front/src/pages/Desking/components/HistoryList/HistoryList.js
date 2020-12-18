@@ -26,16 +26,22 @@ const initialSearch = {
 const HistoryList = (props) => {
     const { show } = props;
     const dispatch = useDispatch();
-    const { area, componentWorkLoading, deskingWorkLoading, total, componentList, HistoryList, deskingWorkHistoryList, selectedComponent } = useSelector(
+
+    const { componentWorkLoading, deskingWorkLoading } = useSelector((store) => ({
+        componentWorkLoading: store.loading[GET_COMPONENT_WORK_HISTORY],
+        deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
+    }));
+    const { selectedComponent, isNaverChannel } = useSelector((store) => ({
+        selectedComponent: store.desking.selectedComponent,
+        isNaverChannel: store.desking.isNaverChannel,
+    }));
+    const { area, total, componentList, HistoryList, deskingWorkHistoryList } = useSelector(
         (store) => ({
             area: store.desking.area,
-            componentWorkLoading: store.loading[GET_COMPONENT_WORK_HISTORY],
-            deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
             componentList: store.desking.list,
             total: store.desking.history.componentWorkHistory.total,
             HistoryList: store.desking.history.componentWorkHistory.list,
             deskingWorkHistoryList: store.desking.history.deskingWorkHistory.list,
-            selectedComponent: store.desking.selectedComponent,
         }),
         shallowEqual,
     );
@@ -102,7 +108,7 @@ const HistoryList = (props) => {
             messageBox.confirm(
                 '현재 작업 중인 목록이 히스토리 목록으로 변경됩니다.\n변경하시겠습니까?',
                 () => {
-                    let compWork = componentList.find((c) => String(c.componentSeq) === search.componentSeq);
+                    let compWork = componentList.find((c) => String(c.componentSeq) === String(search.componentSeq));
                     if (!compWork) return;
 
                     // 컴포넌트 히스토리의 데스킹 기사를 편집기사 워크로 등록
@@ -110,6 +116,7 @@ const HistoryList = (props) => {
                         putDeskingWorkHistory({
                             componentWorkSeq: compWork.seq,
                             componentHistSeq: data.seq,
+                            updateTemplateYn: isNaverChannel ? 'Y' : 'N',
                             callback: (response) => {
                                 if (response.header) {
                                     toast.success(response.header.message);
@@ -123,7 +130,7 @@ const HistoryList = (props) => {
                 () => {},
             );
         },
-        [componentList, dispatch, search.componentSeq],
+        [componentList, dispatch, isNaverChannel, search.componentSeq],
     );
 
     useEffect(() => {

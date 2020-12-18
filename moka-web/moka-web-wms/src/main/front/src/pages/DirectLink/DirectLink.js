@@ -2,7 +2,7 @@ import React, { useEffect, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@components';
+import { MokaCard, MokaLoader } from '@components';
 import { clearStore } from '@store/directLink';
 
 const DirectLinkList = React.lazy(() => import('./DirectLinkList'));
@@ -40,7 +40,7 @@ const DirectLink = ({ match }) => {
                 path={[`${match.url}/add`, `${match.url}/:linkSeq`]}
                 exact
                 render={(props) => (
-                    <Suspense>
+                    <Suspense fallback={<MokaLoader />}>
                         <DirectLinkEdit {...props} />
                     </Suspense>
                 )}

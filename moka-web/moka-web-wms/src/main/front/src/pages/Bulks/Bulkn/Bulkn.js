@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import { BulkPreviewModal } from './Modal';
 import { useSelector } from 'react-redux';
+import { MokaLoader } from '@components';
 
 const BulknMain = React.lazy(() => import('./BulknMain'));
 const BulknList = React.lazy(() => import('./BulknList'));
@@ -50,25 +51,21 @@ const Bulkn = ({ bulksParams, bulksURL }) => {
             </Switch>
 
             {/* 리스트 창 */}
-            <Suspense>
-                <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
-            </Suspense>
+            <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
 
             {/* 등록/수정창 */}
             <Route
                 path={[`/${bulkPathName}/add`, `/${bulkPathName}/:bulkartSeq`]}
                 exact
                 render={(props) => (
-                    <Suspense>
+                    <Suspense fallback={<MokaLoader />}>
                         <BulknEdit {...props} EditState={editState} HandleEditEnable={handleEditEnable} />
                     </Suspense>
                 )}
             />
 
             {/* 미리 보기 모달창. */}
-            <Suspense>
-                <BulkPreviewModal />
-            </Suspense>
+            <BulkPreviewModal />
         </div>
     );
 };

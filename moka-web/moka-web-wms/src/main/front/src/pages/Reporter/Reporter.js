@@ -2,8 +2,7 @@ import React, { Suspense } from 'react';
 import Helmet from 'react-helmet';
 import { useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
-
-import { MokaCard } from '@components';
+import { MokaCard, MokaLoader } from '@components';
 import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
 
 // relations
@@ -35,7 +34,7 @@ const ReporterMgr = () => {
                 path={[`/reporter/:repSeq`]}
                 exact
                 render={(props) => (
-                    <Suspense>
+                    <Suspense fallback={<MokaLoader />}>
                         <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0" loading={loading}>
                             <ReporterEdit />
                         </MokaCard>

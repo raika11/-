@@ -2,7 +2,7 @@ import React, { useEffect, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@components';
+import { MokaCard, MokaLoader } from '@components';
 import { clearStore } from '@store/columnist';
 
 const ColumnistList = React.lazy(() => import('./ColumnistList'));
@@ -37,7 +37,7 @@ const Columnist = ({ match }) => {
                 path={([`${match.url}/add`], [`${match.url}/:seqNo`])}
                 exact
                 render={(props) => (
-                    <Suspense>
+                    <Suspense fallback={<MokaLoader />}>
                         <ColumnistEdit {...props} />
                     </Suspense>
                 )}

@@ -25,7 +25,13 @@ const EtcButtonRenderer = ({ value }) => {
                     >
                         FB 캐시
                     </Button>
-                    <Button variant="outline-table-btn" className="mr-0" onClick={handleClickSaveButton}>
+                    <Button
+                        variant="outline-table-btn"
+                        className="mr-0"
+                        onClick={() => {
+                            window.open(`https://news.joins.com/article/${value}`);
+                        }}
+                    >
                         기사보기
                     </Button>
                 </div>

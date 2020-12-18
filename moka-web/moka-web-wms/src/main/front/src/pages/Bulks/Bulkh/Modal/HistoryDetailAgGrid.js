@@ -6,12 +6,14 @@ import { Col } from 'react-bootstrap';
 import { MokaCard } from '@components';
 import Button from 'react-bootstrap/Button';
 import { useSelector } from 'react-redux';
+import { GET_HISTORY_DETAIL } from '@store/bulks';
 
 const HistoryDetailAgGrid = () => {
     const history = useHistory();
-    const { historyListArticle, bulkPathName } = useSelector((store) => ({
+    const { historyListArticle, bulkPathName, loading } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
         historyListArticle: store.bulks.bulkh.historyList.article,
+        loading: store.loading[GET_HISTORY_DETAIL],
     }));
 
     const [rowData, setRowData] = useState([]);
@@ -41,7 +43,7 @@ const HistoryDetailAgGrid = () => {
             <MokaCard
                 width={630}
                 height={650}
-                loading={null}
+                loading={loading}
                 header={false}
                 className={'custom-scroll mr-gutter flex-fill'}
                 footer

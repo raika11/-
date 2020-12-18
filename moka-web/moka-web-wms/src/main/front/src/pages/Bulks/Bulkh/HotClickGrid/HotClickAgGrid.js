@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import ItemRenderer from './ItemRenderer';
 import { columnDefs, rowClassRules } from './HotClickAgGridColumns';
 import { findWork, makeHoverBox, getRow, findNextMainRow } from '@utils/agGridUtil';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeHotClickList, clearDeleteHotclick } from '@store/bulks';
+import { changeHotClickList } from '@store/bulks';
 
 const hoverCssName = 'hover';
 const nextCssName = 'next';

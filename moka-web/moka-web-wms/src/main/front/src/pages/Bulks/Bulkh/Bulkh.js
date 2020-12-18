@@ -35,8 +35,10 @@ const Bulkh = () => {
                     exact
                     render={() => (
                         <>
-                            <BulkhHotClickList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-                            <BulkhArticleList componentAgGridInstances={componentAgGridInstances} />
+                            <Suspense>
+                                <BulkhHotClickList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+                                <BulkhArticleList componentAgGridInstances={componentAgGridInstances} />
+                            </Suspense>
                         </>
                     )}
                 />

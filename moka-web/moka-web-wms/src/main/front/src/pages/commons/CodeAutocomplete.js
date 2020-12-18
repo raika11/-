@@ -66,7 +66,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
             if (value === null) {
                 onChange(null);
             } else {
-                onChange(value.value);
+                onChange(value.masterCode);
             }
         }
     };
@@ -82,9 +82,9 @@ const CodeAutocomplete = forwardRef((props, ref) => {
         if (!isMulti) {
             const findOp = options.find((op) => String(op.value) === String(code.masterCode));
             if (findOp) {
-                setDefaultValue(findOp);
+                handleChangeValue(findOp);
             } else {
-                setDefaultValue(null);
+                handleChangeValue(null);
             }
         } else {
             // 멀티일 경우 => 추후 처리
@@ -155,7 +155,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 onChange={handleChangeValue}
                 inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon }}
             />
-            <CodeListModal show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />
+            <CodeListModal value={value} show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />
         </React.Fragment>
     );
 });

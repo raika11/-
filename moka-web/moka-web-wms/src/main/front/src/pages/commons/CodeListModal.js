@@ -12,6 +12,10 @@ import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@s
 
 const propTypes = {
     /**
+     * value
+     */
+    value: PropTypes.any,
+    /**
      * show
      */
     show: PropTypes.bool.isRequired,
@@ -45,7 +49,7 @@ const defaultProps = {
  * 기사 분류 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, onSave, onCancel, selection, ...rest } = props;
+    const { show, onHide, title, onSave, onCancel, selection, value, ...rest } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector((store) => store.code.master.list);
@@ -156,6 +160,27 @@ const CodeListModal = (props) => {
         setSectionList(scl);
         setContentList(cnl);
     }, [masterCodeList]);
+
+    useEffect(() => {
+        let ns = [];
+
+        if (!value || value === null) {
+            return;
+        } else if (masterCodeList.length < 1) {
+            return;
+        } else if (typeof value === 'string') {
+            // masterCode만 넘어온 경우
+            ns = [masterCodeList.find((m) => m.masterCode === value)];
+        } else if (Array.isArray(value)) {
+            // object의 array인 경우
+            ns = value.map((v) => masterCodeList.find((m) => m.masterCode === v.masterCode));
+        } else if (typeof value === 'object') {
+            // object가 넘어온 경우
+            ns = masterCodeList.find((m) => m.masterCode === value.masterCode);
+        }
+
+        setSelectedList(ns);
+    }, [masterCodeList, value]);
 
     useEffect(() => {
         return () => {

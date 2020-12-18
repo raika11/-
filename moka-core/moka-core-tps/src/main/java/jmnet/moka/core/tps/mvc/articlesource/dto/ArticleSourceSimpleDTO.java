@@ -5,10 +5,11 @@
 package jmnet.moka.core.tps.mvc.articlesource.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,7 @@ import org.apache.ibatis.type.Alias;
 @Getter
 @Builder
 @Alias("ArticleSourceSimpleDTO")
+@ApiModel("간단 기사 매체 DTO")
 public class ArticleSourceSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,21 +34,10 @@ public class ArticleSourceSimpleDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<ArticleSourceSimpleDTO>>() {
     }.getType();
 
-    /**
-     * 출처
-     */
+    @ApiModelProperty("출처")
     private String sourceCode;
 
-    /**
-     * 출처명
-     */
+    @ApiModelProperty("출처명")
     private String sourceName;
-
-    /**
-     * 사용여부
-     */
-    @Builder.Default
-    private String usedYn = MokaConstants.YES;
-
 
 }

@@ -9,10 +9,15 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.entity.QArticleSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -30,7 +35,7 @@ public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySuppor
     }
 
     @Override
-    public List<ArticleSource> findAllSourceByDesking(String[] deskingSourceList) {
+    public List<ArticleSource> findAllArticleSourceByDesking(String[] deskingSourceList) {
         QArticleSource articleSource = QArticleSource.articleSource;
 
         BooleanBuilder builder = new BooleanBuilder();
@@ -83,5 +88,35 @@ public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySuppor
         return query
                 .fetchResults()
                 .getResults();
+    }
+
+    @Override
+    public Page<ArticleSource> findAllArticleSource(SearchDTO search) {
+        QArticleSource articleSource = QArticleSource.articleSource;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        String searchType = search.getSearchType();
+        String keyword = search.getKeyword();
+
+        // WHERE 조건
+        if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
+            if (searchType.equals("sourceName")) {
+                builder.and(articleSource.sourceName.contains(keyword));
+            } else if (searchType.equals("sourceCode")) {
+                builder.and(articleSource.sourceCode.contains(keyword));
+            } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+                builder.and(articleSource.sourceName
+                        .contains(keyword)
+                        .or(articleSource.sourceCode.contains(keyword)));
+            }
+        }
+
+        JPQLQuery<ArticleSource> query = queryFactory.selectFrom(articleSource);
+        query = getQuerydsl().applyPagination(search.getPageable(), query);
+        QueryResults<ArticleSource> list = query
+                .where(builder)
+                .fetchResults();
+
+        return new PageImpl<>(list.getResults(), search.getPageable(), list.getTotal());
     }
 }

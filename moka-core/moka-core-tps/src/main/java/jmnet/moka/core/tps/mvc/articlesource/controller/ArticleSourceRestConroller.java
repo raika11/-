@@ -7,16 +7,21 @@ package jmnet.moka.core.tps.mvc.articlesource.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
+import javax.validation.Valid;
+import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceDTO;
 import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSimpleDTO;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,10 +49,10 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
     private String[] deskingSourceList;
 
     @ApiOperation(value = "서비스 기사검색 매체 목록조회")
-    @GetMapping
-    public ResponseEntity<?> getArticleSourceList() {
+    @GetMapping("/desking")
+    public ResponseEntity<?> getDeskingArticleSourceList() {
         // 조회
-        List<ArticleSource> returnValue = articleSourceService.findAllArticleSource(deskingSourceList);
+        List<ArticleSource> returnValue = articleSourceService.findAllArticleSourceByDesking(deskingSourceList);
 
         // 리턴값 설정
         ResultListDTO<ArticleSourceSimpleDTO> resultListMessage = new ResultListDTO<>();
@@ -56,10 +61,9 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
         resultListMessage.setList(dtoList);
 
         ResultDTO<ResultListDTO<ArticleSourceSimpleDTO>> resultDto = new ResultDTO<>(resultListMessage);
-        tpsLogger.success(ActionType.SELECT);
+        tpsLogger.success(ActionType.SELECT, true);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
-
 
     @ApiOperation(value = "벌크전송 매체목록 조회")
     @GetMapping("/bulk")
@@ -68,7 +72,7 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
 
         try {
             // 조회
-            List<ArticleSource> returnValue = articleSourceService.findAllBulkArticleSource();
+            List<ArticleSource> returnValue = articleSourceService.findAllArticleSourceByBulk();
 
             // 리턴값 설정
             List<ArticleSourceSimpleDTO> dtoList = modelMapper.map(returnValue, ArticleSourceSimpleDTO.TYPE);
@@ -84,6 +88,23 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD BULK ARTICLE SOURCE", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
         }
+    }
+
+    @ApiOperation(value = "매체 목록조회")
+    @GetMapping
+    public ResponseEntity<?> getArticleSourceList(@Valid @SearchParam SearchDTO search) {
+        // 조회
+        Page<ArticleSource> returnValue = articleSourceService.findAllArticleSource(search);
+
+        // 리턴값 설정
+        ResultListDTO<ArticleSourceDTO> resultListMessage = new ResultListDTO<>();
+        List<ArticleSourceDTO> dtoList = modelMapper.map(returnValue.getContent(), ArticleSourceDTO.TYPE);
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(dtoList);
+
+        ResultDTO<ResultListDTO<ArticleSourceDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        tpsLogger.success(ActionType.SELECT, true);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
 }

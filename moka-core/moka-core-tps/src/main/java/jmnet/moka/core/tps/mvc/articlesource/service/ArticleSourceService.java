@@ -5,8 +5,10 @@
 package jmnet.moka.core.tps.mvc.articlesource.service;
 
 import java.util.List;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
+import org.springframework.data.domain.Page;
 
 /**
  * Description: 설명
@@ -17,19 +19,19 @@ import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 public interface ArticleSourceService {
 
     /**
-     * 매체목록 조회
+     * 페이지편집 매체목록 조회
      *
      * @param deskingSourceList 조회할 매체아이디 목록
      * @return ArticleSource 목록
      */
-    List<ArticleSource> findAllArticleSource(String[] deskingSourceList);
+    List<ArticleSource> findAllArticleSourceByDesking(String[] deskingSourceList);
 
     /**
      * 벌크에서 사용하는 소스 코드 목록 조회
      *
      * @return ArticleSource목록
      */
-    List<ArticleSource> findAllBulkArticleSource();
+    List<ArticleSource> findAllArticleSourceByBulk();
 
     /**
      * 각 사용여부 코드에 따른 소스 코드 목록 조회
@@ -38,4 +40,12 @@ public interface ArticleSourceService {
      * @return ArticleSource목록
      */
     List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode);
+
+    /**
+     * 매체목록 조회
+     *
+     * @param search 검색조건
+     * @return 매체목록
+     */
+    Page<ArticleSource> findAllArticleSource(SearchDTO search);
 }

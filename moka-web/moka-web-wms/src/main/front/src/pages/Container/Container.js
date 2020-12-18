@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import produce from 'immer';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
-
-import { MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { deleteContainer, hasRelationList, changeContainerBody, appendTag, clearStore } from '@store/container';
 
 import ContainerEditor from './ContainerEditor';
+import ContainerEdit from './ContainerEdit';
 const ContainerList = React.lazy(() => import('./ContainerList'));
-const ContainerEdit = React.lazy(() => import('./ContainerEdit'));
 
 // relations
 const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
@@ -25,7 +24,7 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 /**
  * 컨테이너 관리
  */
-const Container = () => {
+const Container = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -195,8 +194,8 @@ const Container = () => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>컨테이너관리</title>
-                <meta name="description" content="컨테이너관리페이지입니다." />
+                <title>컨테이너 관리</title>
+                <meta name="description" content="컨테이너 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -217,60 +216,56 @@ const Container = () => {
                 </Suspense>
             </MokaCard>
 
-            <Switch>
-                <Route
-                    path={['/container', '/container/:containerSeq']}
-                    exact
-                    render={() => (
-                        <>
-                            {/* 에디터 */}
-                            <ContainerEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+            <Route
+                path={[`${match.url}/add`, `${match.url}/:containerSeq`]}
+                exact
+                render={() => (
+                    <>
+                        {/* 에디터 */}
+                        <ContainerEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
-                            {/* 탭 */}
-                            <MokaIconTabs
-                                expansion={expansionState[2]}
-                                onExpansion={handleTabExpansion}
-                                onSelectNav={(idx) => setActiveTabIdx(idx)}
-                                tabWidth={412}
-                                tabs={[
-                                    <Suspense>
-                                        <ContainerEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickContainerLoad} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
-                                    </Suspense>,
-                                    <Suspense>
-                                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickHistLoad} />
-                                    </Suspense>,
-                                ]}
-                                tabNavWidth={48}
-                                tabNavPosition="right"
-                                tabNavs={[
-                                    { title: '컨테이너 정보', text: 'Info' },
-                                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
-                                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
-                                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                                    { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },
-                                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                                ]}
-                            />
-                        </>
-                    )}
-                />
-            </Switch>
+                        {/* 탭 */}
+                        <MokaIconTabs
+                            expansion={expansionState[2]}
+                            onExpansion={handleTabExpansion}
+                            onSelectNav={(idx) => setActiveTabIdx(idx)}
+                            tabWidth={412}
+                            tabs={[
+                                <ContainerEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <RelationInArticlePageList show={activeTabIdx === 2} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupContainerList show={activeTabIdx === 3} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickContainerLoad} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupComponentList show={activeTabIdx === 4} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupTemplateList show={activeTabIdx === 5} seqType={ITEM_CT} seq={container.containerSeq} onAppend={handleAppendTag} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <HistoryList show={activeTabIdx === 6} seqType={ITEM_CT} seq={container.containerSeq} onLoad={handleClickHistLoad} />
+                                </Suspense>,
+                            ]}
+                            tabNavWidth={48}
+                            tabNavPosition="right"
+                            tabNavs={[
+                                { title: '컨테이너 정보', text: 'Info' },
+                                { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
+                                { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                                { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },
+                                { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                            ]}
+                        />
+                    </>
+                )}
+            />
         </div>
     );
 };

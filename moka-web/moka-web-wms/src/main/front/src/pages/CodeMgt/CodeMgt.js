@@ -4,14 +4,13 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/codeMgt';
-
+import CodeMgtEdit from './CodeMgtEdit';
 const CodeMgtList = React.lazy(() => import('./CodeMgtList'));
-const CodeMgtEdit = React.lazy(() => import('./CodeMgtEdit'));
 
 /**
  * 기타코드 관리 컴포넌트
  */
-const CodeMgt = () => {
+const CodeMgt = ({ match }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -24,8 +23,8 @@ const CodeMgt = () => {
         <>
             <div className="d-flex">
                 <Helmet>
-                    <title>기타코드관리</title>
-                    <meta name="description" content="기타코드관리페이지입니다." />
+                    <title>기타코드 관리</title>
+                    <meta name="description" content="기타코드 관리페이지입니다." />
                     <meta name="robots" content="noindex" />
                 </Helmet>
 
@@ -38,14 +37,12 @@ const CodeMgt = () => {
 
                 <Switch>
                     <Route
-                        path={['/codeMgt', '/codeMgt/:grpCd', '/codeMgt/:grpCd/:cdSeq']}
+                        path={[`${match.url}/:grpCd`, `${match.url}/:grpCd/:cdSeq`]}
                         exact
                         render={() => (
                             <MokaCard width={1300} titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
                                 {/* 기타코드 편집 */}
-                                <Suspense>
-                                    <CodeMgtEdit />
-                                </Suspense>
+                                <CodeMgtEdit />
                             </MokaCard>
                         )}
                     />

@@ -178,20 +178,17 @@ const SourceSelector = (props) => {
 
             <Dropdown.Menu as={CustomMenu}>
                 {sourceList &&
-                    sourceList.map(
-                        (cd) =>
-                            cd.usedYn === 'Y' && (
-                                <MokaInput
-                                    key={cd.sourceCode}
-                                    name="sourceList"
-                                    onChange={handleChangeValue}
-                                    className="mb-2 ft-12"
-                                    as="checkbox"
-                                    inputProps={{ label: cd.sourceName, custom: true, checked: chkTrue(cd.sourceCode) }}
-                                    id={cd.sourceCode}
-                                />
-                            ),
-                    )}
+                    sourceList.map((cd) => (
+                        <MokaInput
+                            key={cd.sourceCode}
+                            name="sourceList"
+                            onChange={handleChangeValue}
+                            className="mb-2 ft-12"
+                            as="checkbox"
+                            inputProps={{ label: cd.sourceName, custom: true, checked: chkTrue(cd.sourceCode) }}
+                            id={cd.sourceCode}
+                        />
+                    ))}
             </Dropdown.Menu>
         </Dropdown>
     );

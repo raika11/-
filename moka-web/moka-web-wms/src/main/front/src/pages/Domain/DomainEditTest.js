@@ -195,6 +195,14 @@ const DomainEditTest = ({ history, onDelete }) => {
     };
 
     /**
+     * 취소
+     */
+    const handleClickCancle = () => {
+        dispatch(clearDomain());
+        history.push('/domain');
+    };
+
+    /**
      * 저장 이벤트
      * @param object 폼데이터
      */
@@ -340,10 +348,13 @@ const DomainEditTest = ({ history, onDelete }) => {
 
                 {/* 버튼 */}
                 <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button type="submit" variant="positive" className="float-left mr-10 pr-20 pl-20">
+                    <Button type="submit" variant="positive" className="mr-10 pr-20 pl-20">
                         저장
                     </Button>
-                    <Button className="float-left mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete} disabled={!paramId}>
+                    <Button variant="negative" onClick={handleClickCancle} className="mr-10 pr-20 pl-20">
+                        취소
+                    </Button>
+                    <Button className="mr-0 pr-20 pl-20" variant="negative" onClick={handleClickDelete} disabled={!paramId}>
                         삭제
                     </Button>
                 </Form.Group>

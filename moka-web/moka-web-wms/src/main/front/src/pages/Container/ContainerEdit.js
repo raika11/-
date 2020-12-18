@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
+import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList, clearContainer } from '@store/container';
 
 /**
  * 컨테이너 정보/수정 컴포넌트
@@ -14,12 +14,12 @@ import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, sav
 const ContainerEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { container, inputTag, invalidList, latestDomainId, loading } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER]);
+    const latestDomainId = useSelector((store) => store.auth.latestDomainId);
+    const { container, inputTag, invalidList } = useSelector((store) => ({
         container: store.container.container,
         inputTag: store.container.inputTag,
         invalidList: store.container.invalidList,
-        latestDomainId: store.auth.latestDomainId,
-        loading: store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER],
     }));
 
     // state
@@ -164,6 +164,14 @@ const ContainerEdit = ({ onDelete }) => {
         onDelete(container);
     };
 
+    /**
+     * 취소버튼
+     */
+    const handleClickCancle = () => {
+        dispatch(clearContainer());
+        history.push('/container');
+    };
+
     useEffect(() => {
         if (container.containerSeq) {
             setBtnDisabled(false);
@@ -181,6 +189,9 @@ const ContainerEdit = ({ onDelete }) => {
                     <div className="d-flex">
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             저장
+                        </Button>
+                        <Button variant="negative" className="mr-05" onClick={handleClickCancle}>
+                            취소
                         </Button>
                         <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
                             삭제

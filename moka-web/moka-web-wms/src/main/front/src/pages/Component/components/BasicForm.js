@@ -6,7 +6,7 @@ import { MokaInputLabel } from '@components';
 import CopyModal from '../modals/CopyModal';
 
 const BasicForm = (props) => {
-    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, error, setError } = props;
+    const { component, setComponent, componentNameRegex, onClickSave, onClickDelete, onClickCancle, error, setError } = props;
 
     // state
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -36,6 +36,9 @@ const BasicForm = (props) => {
                     <div className="d-flex">
                         <Button variant="positive" className="mr-2" onClick={onClickSave}>
                             저장
+                        </Button>
+                        <Button variant="negative" className="mr-2" onClick={onClickCancle}>
+                            취소
                         </Button>
                         <Button variant="negative" onClick={onClickDelete} disabled={btnDisabled}>
                             삭제

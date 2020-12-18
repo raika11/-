@@ -24,7 +24,7 @@ const ContainerAgGrid = ({ onDelete }) => {
     /**
      * 컨테이너 등록 버튼 클릭
      */
-    const handleAddClick = useCallback(() => history.push('/container'), [history]);
+    const handleAddClick = useCallback(() => history.push('/container/add'), [history]);
 
     /**
      * 목록에서 Row클릭

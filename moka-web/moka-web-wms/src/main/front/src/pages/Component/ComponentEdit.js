@@ -22,16 +22,19 @@ const ComponentEdit = ({ onDelete }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { component, inputTag, latestDomainId, invalidList, MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT, loading } = useSelector((store) => ({
-        component: store.component.component,
-        inputTag: store.component.inputTag,
-        latestDomainId: store.auth.latestDomainId,
-        invalidList: store.component.invalidList,
+
+    const loading = useSelector((store) => store.loading[GET_COMPONENT] || store.loading[SAVE_COMPONENT] || store.loading[DELETE_COMPONENT]);
+    const latestDomainId = useSelector((store) => store.auth.latestDomainId);
+    const { MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector((store) => ({
         MORE_COUNT: store.app.MORE_COUNT,
         DISP_PAGE_COUNT: store.app.DISP_PAGE_COUNT,
         PER_PAGE_COUNT: store.app.PER_PAGE_COUNT,
         MAX_PAGE_COUNT: store.app.MAX_PAGE_COUNT,
-        loading: store.loading[GET_COMPONENT] || store.loading[SAVE_COMPONENT] || store.loading[DELETE_COMPONENT],
+    }));
+    const { component, inputTag, invalidList } = useSelector((store) => ({
+        component: store.component.component,
+        inputTag: store.component.inputTag,
+        invalidList: store.component.invalidList,
     }));
 
     // state
@@ -175,6 +178,14 @@ const ComponentEdit = ({ onDelete }) => {
         }
     };
 
+    /**
+     * 취소
+     */
+    const handleClickCancle = () => {
+        history.push('/component');
+        dispatch(clearComponent());
+    };
+
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
         setTemp({
@@ -228,6 +239,7 @@ const ComponentEdit = ({ onDelete }) => {
                 componentNameRegex={REQUIRED_REGEX}
                 onClickSave={handleClickSave}
                 onClickDelete={() => onDelete(component)}
+                onClickCancle={handleClickCancle}
                 error={error}
                 setError={setError}
             />

@@ -1,20 +1,17 @@
 import React, { useCallback, useState, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
-import { MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deleteComponent, hasRelationList } from '@store/component';
 import toast, { messageBox } from '@utils/toastUtil';
 import { ITEM_CP } from '@/constants';
 
+import ComponentEdit from './ComponentEdit';
+import RelationInPageList from '@pages/Page/components/RelationInPageList';
 const ComponentList = React.lazy(() => import('./ComponentList'));
-const ComponentEdit = React.lazy(() => import('./ComponentEdit'));
-
-// relations
-const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
 const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
 const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
 
@@ -102,8 +99,8 @@ const Component = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>컴포넌트관리</title>
-                <meta name="description" content="컴포넌트관리페이지입니다." />
+                <title>컴포넌트 관리</title>
+                <meta name="description" content="컴포넌트 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -114,34 +111,38 @@ const Component = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            {/* 등록/수정 */}
-            <Switch>
-                <Route path={[match.url, `${match.url}/:componentSeq`]} exact render={() => <ComponentEdit onDelete={handleClickDelete} />} />
-            </Switch>
+            <Route
+                path={[`${match.url}/add`, `${match.url}/:componentSeq`]}
+                exact
+                render={() => (
+                    <React.Fragment>
+                        {/* 등록/수정 */}
+                        <ComponentEdit onDelete={handleClickDelete} />
 
-            {/* 탭 */}
-            <MokaIconTabs
-                foldable={false}
-                onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
-                tabWidth={412}
-                tabs={[
-                    <Suspense>
-                        <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
-                    </Suspense>,
-                    <Suspense>
-                        <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
-                    </Suspense>,
-                    <Suspense>
-                        <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
-                    </Suspense>,
-                ]}
-                tabNavWidth={48}
-                tabNavPosition="right"
-                tabNavs={[
-                    { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
-                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
-                ]}
+                        {/* 탭 */}
+                        <MokaIconTabs
+                            foldable={false}
+                            onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
+                            tabWidth={412}
+                            tabs={[
+                                <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_CP} relSeq={component.componentSeq} />,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_CP} relSeq={component.componentSeq} />
+                                </Suspense>,
+                            ]}
+                            tabNavWidth={48}
+                            tabNavPosition="right"
+                            tabNavs={[
+                                { title: '관련 페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-file-alt" /> },
+                                { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
+                            ]}
+                        />
+                    </React.Fragment>
+                )}
             />
         </div>
     );

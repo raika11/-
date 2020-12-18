@@ -211,6 +211,14 @@ const ReservedEdit = () => {
         );
     };
 
+    /**
+     * 취소 버튼
+     */
+    const handleClickCancle = () => {
+        dispatch(clearReserved());
+        history.push('/reserved');
+    };
+
     useEffect(() => {
         // invalidList 처리
         if (invalidList.length > 0) {
@@ -244,7 +252,10 @@ const ReservedEdit = () => {
                     <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button variant="negative" onClick={handleClickDelete}>
+                    <Button variant="negative" className="mr-05" onClick={handleClickCancle}>
+                        취소
+                    </Button>
+                    <Button variant="negative" onClick={handleClickDelete} disabled={!reserved.reservedId}>
                         삭제
                     </Button>
                 </Form.Group>

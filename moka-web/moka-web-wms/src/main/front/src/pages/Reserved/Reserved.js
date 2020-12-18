@@ -5,9 +5,9 @@ import { Switch, Route } from 'react-router-dom';
 
 import { MokaCard } from '@components';
 import { GET_RESERVED, SAVE_RESERVED, DELETE_RESERVED } from '@store/reserved';
+import ReservedEdit from './ReservedEdit';
 
 const ReservedList = React.lazy(() => import('./ReservedList'));
-const ReservedEdit = React.lazy(() => import('./ReservedEdit'));
 
 /**
  * 예약어 관리 컴포넌트
@@ -35,13 +35,11 @@ const Reserved = ({ match }) => {
             {/* 예약어 정보 */}
             <Switch>
                 <Route
-                    path={[match.url, `${match.url}/:reservedSeq`]}
+                    path={[`${match.url}/add`, `${match.url}/:reservedSeq`]}
                     exact
                     render={() => (
                         <MokaCard width={780} titleClassName="mb-0" title="예약어 정보" loading={loading}>
-                            <Suspense>
-                                <ReservedEdit />
-                            </Suspense>
+                            <ReservedEdit />
                         </MokaCard>
                     )}
                 />

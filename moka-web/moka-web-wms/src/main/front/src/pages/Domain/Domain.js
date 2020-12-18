@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
@@ -8,14 +8,13 @@ import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteDomain, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import toast, { messageBox } from '@utils/toastUtil';
-
-const DomainEdit = React.lazy(() => import('./DomainEditTest'));
+import DomainEdit from './DomainEditTest';
 const DomainList = React.lazy(() => import('./DomainList'));
 
 /**
  * 도메인 관리
  */
-const Domain = () => {
+const Domain = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -27,7 +26,7 @@ const Domain = () => {
      * 도메인 등록
      */
     const handleAddClickDomain = () => {
-        history.push('/domain');
+        history.push('/domain/add');
     };
 
     /**
@@ -93,7 +92,7 @@ const Domain = () => {
         <div className="d-flex">
             <Helmet>
                 <title>도메인 관리</title>
-                <meta name="description" content="도메인 관리 페이지 입니다." />
+                <meta name="description" content="도메인 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -118,20 +117,22 @@ const Domain = () => {
             </MokaCard>
 
             {/* 도메인 정보 */}
-            <MokaCard
-                title="도메인 등록"
-                width={820}
-                titleClassName="mb-0"
-                headerClassName="d-flex justify-content-between align-item-center"
-                height={CARD_DEFAULT_HEIGHT}
-                loading={loading}
-            >
-                <Suspense>
-                    <Switch>
-                        <Route path={['/domain', '/domain/:domainId']} exact render={() => <DomainEdit onDelete={handleClickDelete} />} />
-                    </Switch>
-                </Suspense>
-            </MokaCard>
+            <Route
+                path={[`${match.url}/add`, `${match.url}/:domainId`]}
+                exact
+                render={() => (
+                    <MokaCard
+                        title="도메인 등록"
+                        width={820}
+                        titleClassName="mb-0"
+                        headerClassName="d-flex justify-content-between align-item-center"
+                        height={CARD_DEFAULT_HEIGHT}
+                        loading={loading}
+                    >
+                        <DomainEdit onDelete={handleClickDelete} />
+                    </MokaCard>
+                )}
+            />
         </div>
     );
 };

@@ -42,7 +42,7 @@ const ReservedAgGrid = () => {
     /**
      * 예약어 등록 버튼 클릭
      */
-    const handleAddClick = useCallback(() => history.push('/reserved'), [history]);
+    const handleAddClick = useCallback(() => history.push('/reserved/add'), [history]);
 
     return (
         <>

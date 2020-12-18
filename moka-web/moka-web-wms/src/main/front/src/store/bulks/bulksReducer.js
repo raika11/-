@@ -17,8 +17,17 @@ import {
     GET_COPYRIGHT_SUCCESS,
     GET_COPYRIGHT_FAILURE,
     CLEAR_BULKS_ARTICLE,
+    GET_HOTCLICK_TITLE_SUCCESS,
+    CHANGE_HOTCLICK_LIST,
+    CLEAR_HOTCLICK_HISTORYLIST,
+    GET_HOTCLICK_HISTORY_LIST_SUCCESS,
+    CHANGE_HISTORY_SEARCH_OPTION,
+    GET_HISTORY_DETAIL_SUCCESS,
+    CLEAR_HISTORY_DETAIL,
+    GET_HOTCLICK_LIST_SUCCESS,
+    CLEAR_HOTCLICK_LIST,
 } from './bulksAction';
-import { PAGESIZE_OPTIONS, DB_DATEFORMAT } from '@/constants';
+import { PAGESIZE_OPTIONS } from '@/constants';
 
 export const initialState = {
     bulkPathName: '',
@@ -59,7 +68,32 @@ export const initialState = {
             seqNo: null,
         },
     },
-    bulkh: {},
+    bulkh: {
+        topTitle: {
+            send: {},
+            wait: {},
+        },
+        bulkartSeq: 0,
+        hotclickList: {
+            total: 0,
+            list: [],
+        },
+        historyList: {
+            totalCnt: 0,
+            list: [],
+            search: {
+                page: 0,
+                size: PAGESIZE_OPTIONS[0],
+                bulkartDiv: '',
+                sourceCode: '',
+            },
+            article: {
+                totalCnt: 0,
+                selectSeq: 0,
+                list: [],
+            },
+        },
+    },
 };
 
 export default handleActions(
@@ -74,6 +108,8 @@ export default handleActions(
                 draft.sourceCode = bulk_source;
                 draft.bulkn.search.bulkartDiv = bulk_div;
                 draft.bulkn.search.sourceCode = bulk_source;
+                draft.bulkh.historyList.search.bulkartDiv = bulk_div;
+                draft.bulkh.historyList.search.sourceCode = bulk_source;
             });
         },
         // 리스트 초기화.
@@ -165,6 +201,68 @@ export default handleActions(
         [CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.bulkn.search = payload;
+            });
+        },
+
+        // 아티클 핫클릭.
+        // 핫클릭 상단 타이틀.
+        [GET_HOTCLICK_TITLE_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.topTitle.send = payload.send ? payload.send : initialState.bulkh.topTitle.send;
+                draft.bulkh.topTitle.wait = payload.wait ? payload.wait : initialState.bulkh.topTitle.wait;
+            });
+        },
+        // 핫클릭 리스트 초기화.
+        [CLEAR_HOTCLICK_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.hotclickList = initialState.bulkh.hotclickList;
+            });
+        },
+        // 핫클릭 리스트 변경 처리. ( 삭제,이동, 추가.)
+        [CHANGE_HOTCLICK_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.hotclickList.list = payload;
+            });
+        },
+        // 핫클릭 히스토리 클리어.
+        [CLEAR_HOTCLICK_HISTORYLIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.bulkh.historyList.list = initialState.bulkh.historyList.list;
+            });
+        },
+
+        // 핫클릭 히스토리 가지고 오기.
+        [GET_HOTCLICK_HISTORY_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.historyList.totalCnt = body.totalCnt;
+                draft.bulkh.historyList.list = body.list;
+            });
+        },
+        // 히스토리 그리드에서 옵션처리시 다시 가지고 오기.( 페이징)
+        [CHANGE_HISTORY_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.historyList.search = payload;
+            });
+        },
+        // 히스토리 상세
+        [GET_HISTORY_DETAIL_SUCCESS]: (state, { payload: { bulkartSeq, body } }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.historyList.article.totalCnt = body.totalCnt;
+                draft.bulkh.historyList.article.list = body.list;
+                draft.bulkh.historyList.article.selectSeq = bulkartSeq;
+            });
+        },
+        // 핫클릭 히스토리 상제 클리어.
+        [CLEAR_HISTORY_DETAIL]: (state) => {
+            return produce(state, (draft) => {
+                draft.bulkh.historyList.article = initialState.bulkh.historyList.article;
+            });
+        },
+        // 핫클릭 리스트 가지고 오기.
+        [GET_HOTCLICK_LIST_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.hotclickList.totalCnt = payload.totalCnt;
+                draft.bulkh.hotclickList.list = payload.list;
             });
         },
     },

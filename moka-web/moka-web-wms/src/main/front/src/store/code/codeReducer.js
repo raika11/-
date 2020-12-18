@@ -6,6 +6,13 @@ import * as act from './codeAction';
  * initialState
  */
 export const initialState = {
+    master: {
+        error: null,
+        list: [],
+        search: {
+            usedYn: 'Y',
+        },
+    },
     // 대분류
     service: {
         error: null,
@@ -86,9 +93,26 @@ export default handleActions(
                 draft.content = initialState.content;
             });
         },
+        [act.CLEAR_MASTER_CODE_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.master = initialState.master;
+            });
+        },
         /**
          * 데이터 조회
          */
+        [act.GET_MASTER_CODE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.master.list = body.list;
+                draft.master.error = initialState.master.error;
+            });
+        },
+        [act.GET_MASTER_CODE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.master.list = initialState.master.list;
+                draft.master.error = payload;
+            });
+        },
         /** 대분류 */
         [act.GET_CODE_SERVICE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {

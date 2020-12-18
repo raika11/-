@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { MokaModal, MokaInput } from '@components';
+import Badge from 'react-bootstrap/Badge';
+import { MokaModal, MokaInput, MokaIcon } from '@components';
 import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@store/code';
 
 const propTypes = {
@@ -37,7 +38,7 @@ const propTypes = {
 };
 const defaultProps = {
     title: '분류코드표',
-    selection: 'single',
+    selection: 'multiple',
 };
 
 /**
@@ -61,7 +62,24 @@ const CodeListModal = (props) => {
         if (onHide) {
             onHide();
         }
+        setSelectedList([]);
     }, [onHide]);
+
+    /**
+     * selectedList에서 타겟 제거
+     * @param {string} masterCode masterCode
+     */
+    const spliceList = useCallback(
+        (masterCode) => {
+            const idx = selectedList.findIndex((s) => s.masterCode === masterCode);
+            setSelectedList(
+                produce(selectedList, (draft) => {
+                    draft.splice(idx, 1);
+                }),
+            );
+        },
+        [selectedList],
+    );
 
     /**
      * input 변경
@@ -84,34 +102,32 @@ const CodeListModal = (props) => {
                     );
                 }
             } else {
-                const idx = selectedList.findIndex((s) => s.masterCode === id);
-                setSelectedList(
-                    produce(selectedList, (draft) => {
-                        draft.splice(idx, 1);
-                    }),
-                );
+                spliceList(id);
             }
         },
-        [masterCodeList, selectedList, selection],
+        [masterCodeList, selectedList, selection, spliceList],
     );
 
     /**
-     * 적용버튼 클릭
+     * 저장
      */
-    // const handleOkTrigger = useCallback(() => {
-    //     if (typeof onSave !== 'function') {
-    //         return;
-    //     }
-    //     if (selectedContent) {
-    //         onSave(selectedContent);
-    //     } else if (selectedSection) {
-    //         onSave(selectedSection);
-    //     } else {
-    //         onSave(selectedService);
-    //     }
+    const handleOkTrigger = useCallback(() => {
+        if (typeof onSave !== 'function') {
+            return;
+        }
 
-    //     handleHide();
-    // }, [onSave, handleHide]);
+        if (selectedList.length > 0) {
+            if (selection === 'single') {
+                onSave(selectedList[0]);
+            } else {
+                onSave(selectedList);
+            }
+        } else {
+            onSave(null);
+        }
+
+        handleHide();
+    }, [onSave, selectedList, handleHide, selection]);
 
     useEffect(() => {
         // 마스터코드 조회
@@ -152,11 +168,26 @@ const CodeListModal = (props) => {
         <MokaModal width={900} {...rest} show={show} onHide={handleHide} title={title} size="lg" draggable bodyClassName="code-modal" loading={loading} centered>
             <div className="d-flex flex-column">
                 {/* 분류명, 분류코드 노출, 등록, 취소 버튼 */}
-                <div className="d-flex align-items-center mb-3">
-                    <div className="border">태그 들어갈 자리</div>
-                    <Button variant="positive">등록</Button>
-                    <Button variant="negative">취소</Button>
-                </div>
+                <Form.Row className="mb-2">
+                    <Col xs={8} className="p-0 pr-2">
+                        <div className="w-100 h-100 border mb-0 p-1 h6">
+                            {selectedList.map((s) => (
+                                <Badge key={s.masterCode} className="mr-1 mb-1" variant="searching">
+                                    {s.masterCode} {s.contentKorname || s.sectionKorname || s.serviceKorname}
+                                    <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
+                                </Badge>
+                            ))}
+                        </div>
+                    </Col>
+                    <Col xs={4} className="p-0 d-flex align-items-end">
+                        <Button variant="positive" className="mr-2" onClick={handleOkTrigger}>
+                            등록
+                        </Button>
+                        <Button variant="negative" onClick={handleHide}>
+                            취소
+                        </Button>
+                    </Col>
+                </Form.Row>
 
                 {/* 분류 테이블 */}
                 <Form.Row className="flex-wrap border flex-fill custom-scroll" style={{ height: 400 }}>

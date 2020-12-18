@@ -3,13 +3,14 @@ import { MokaTable } from '@components';
 import { historyColumnDefs } from './HistoryAgGridColumns';
 import { MokaCard } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
-import { getHotclickHistoryList, changeHistirySearchOption, getHotclickDetail, clearHistoryDetail } from '@store/bulks';
+import { getHotclickHistoryList, changeHistirySearchOption, getHotclickDetail, clearHistoryDetail, GET_HOTCLICK_HISTORY_LIST } from '@store/bulks';
 
 const HistoryAgGrid = () => {
     const [rowData, setRowData] = useState([]);
     const dispatch = useDispatch();
-    const { historyList } = useSelector((store) => ({
+    const { historyList, loading } = useSelector((store) => ({
         historyList: store.bulks.bulkh.historyList,
+        loading: store.loading[GET_HOTCLICK_HISTORY_LIST],
     }));
 
     // row 클릭시 오른쪽 리스트를 가지고 온다.
@@ -54,7 +55,7 @@ const HistoryAgGrid = () => {
                     onRowClicked={(row) => {
                         handleClickListRow(row.bulkartSeq);
                     }}
-                    loading={null}
+                    loading={loading}
                     total={historyList.totalCnt}
                     page={historyList.search.page}
                     size={historyList.search.size}

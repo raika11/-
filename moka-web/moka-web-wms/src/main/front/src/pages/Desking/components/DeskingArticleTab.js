@@ -6,7 +6,7 @@ import { deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
 
 const DeskingArticleTab = (props) => {
-    const { componentList, componentAgGridInstances } = props;
+    const { componentList, componentAgGridInstances, show } = props;
     const dispatch = useDispatch();
     const area = useSelector((store) => store.desking.area);
 
@@ -60,7 +60,7 @@ const DeskingArticleTab = (props) => {
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
                         onDragStop={handleArticleDragStop}
-                        show={navIdx === idx}
+                        show={navIdx === idx && show}
                     />
                 );
             }
@@ -74,7 +74,7 @@ const DeskingArticleTab = (props) => {
                         dropTargetAgGrid={componentAgGridInstances}
                         dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
-                        show={navIdx === idx}
+                        show={navIdx === idx && show}
                         media
                     />
                 );

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
 import { Col, Row, Form } from 'react-bootstrap';
 import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import BulkhHistoryModal from '@pages/Bulks/Bulkh/Modal/BulkhHistoryModal';
-import { getHotClickTitle, saveHotClick, getHotclickList, saveHotClickResend } from '@store/bulks';
+import { getHotClickTitle, saveHotClick, getHotclickList, saveHotClickResend, GET_HOTCLICK_LIST } from '@store/bulks';
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useParams } from 'react-router-dom';
@@ -16,10 +16,11 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
     const dispatch = useDispatch();
     const params = useParams();
     const selectBulkartSeq = useRef();
-    const { hotclickList, topTitle, bulkPathName } = useSelector((store) => ({
+    const { loading, hotclickList, topTitle, bulkPathName } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
         hotclickList: store.bulks.bulkh.hotclickList.list,
         topTitle: store.bulks.bulkh.topTitle,
+        loading: store.loading[GET_HOTCLICK_LIST],
     }));
 
     const [tempModalShow, setTempModalShow] = useState(false);
@@ -142,10 +143,9 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
         <>
             <MokaCard
                 width={130}
-                loading={null}
+                loading={loading}
                 className={'custom-scroll mr-gutter flex-fill'}
                 footer
-                footerButtons={[]}
                 titleAs={
                     <>
                         <Row>

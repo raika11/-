@@ -75,6 +75,11 @@ export default handleActions(
                 draft.meta = initialState.meta;
             });
         },
+        [action.CLEAR_SNS_META]: (state) => {
+            return produce(state, (draft) => {
+                draft.meta.meta = initialState.meta.meta;
+            });
+        },
         [action.GET_SNS_META_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.meta.list = body.list;

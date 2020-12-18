@@ -59,6 +59,7 @@ const SnsMetaEdit = () => {
     };
 
     const handleClickCancel = () => {
+        dispatch(clearSnsMeta());
         history.push('/sns-meta');
     };
 
@@ -98,7 +99,26 @@ const SnsMetaEdit = () => {
     };
 
     const handleClickPublish = (type) => {
-        snsMetaSave(type);
+        let data = [{ ...edit[type], snsType: type.toUpperCase() }];
+        if (type === 'all') {
+            data = [
+                { ...edit['fb'], snsType: 'FB' },
+                { ...edit['tw'], snsType: 'TW' },
+            ];
+        }
+        if (validSaveData(data, 'send')) {
+            dispatch(
+                publishSnsMeta({
+                    totalId: edit.totalId,
+                    data,
+                    callback: (response) => {
+                        dispatch(getSnsMeta(totalId));
+                        dispatch(getSNSMetaList({ payload: search }));
+                        toast.result(response);
+                    },
+                }),
+            );
+        }
     };
 
     const handleClickSave = () => {
@@ -123,28 +143,7 @@ const SnsMetaEdit = () => {
         //snsMetaSave('all');
     };
 
-    const snsMetaSave = (type) => {
-        let data = [{ ...edit[type], snsType: type.toUpperCase() }];
-        if (type === 'all') {
-            data = [
-                { ...edit['fb'], snsType: 'FB' },
-                { ...edit['tw'], snsType: 'TW' },
-            ];
-        }
-        if (validSaveData(data, 'send')) {
-            dispatch(
-                publishSnsMeta({
-                    totalId: edit.totalId,
-                    data,
-                    callback: (response) => {
-                        dispatch(getSnsMeta(totalId));
-                        dispatch(getSNSMetaList({ payload: search }));
-                        toast.result(response);
-                    },
-                }),
-            );
-        }
-    };
+    const snsMetaSave = (type) => {};
 
     const validSaveData = (data, type) => {
         for (const item of data) {

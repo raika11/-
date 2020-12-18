@@ -35,7 +35,6 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
                 total={total}
                 page={searchOptions.page}
                 size={searchOptions.size}
-                displayPageNum={3}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={selected}
             />

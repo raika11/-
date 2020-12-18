@@ -38,7 +38,8 @@ const DetailPagingForm = (props) => {
                         type="number"
                         value={component.perPageCount}
                         onChange={(e) => setComponent({ ...component, perPageCount: e.target.value })}
-                        disabled={!available}
+                        // 최초로 편집 데이터셋을 연결했거나, 자동 데이터셋인 컴포넌트를 제외하고 수정 불가!
+                        disabled={!available || (component.prevDeskDataset && component.componentSeq && component.dataType !== 'AUTO')}
                     />
                 </div>
 

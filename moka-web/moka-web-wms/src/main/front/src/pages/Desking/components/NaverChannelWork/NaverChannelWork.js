@@ -58,7 +58,7 @@ const NaverChannelWork = (props) => {
      */
     const handleClickDelete = (deskingWork) => {
         const option = {
-            NaverChannelWorkSeq: component.seq,
+            componentWorkSeq: component.seq,
             datasetSeq: component.datasetSeq,
             list: [deskingWork],
             callback: ({ header }) => {

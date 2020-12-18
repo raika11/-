@@ -53,7 +53,7 @@ const ArticleDeskList = forwardRef((props, ref) => {
     }, [dispatch]);
 
     return (
-        <div className={clsx('d-flex flex-column h-100', className)}>
+        <div className={clsx('d-flex flex-column h-100 py-3 px-card', className)}>
             <ArticleDeskSearch media={media} selectedComponent={selectedComponent} show={show} />
             <ArticleDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
         </div>

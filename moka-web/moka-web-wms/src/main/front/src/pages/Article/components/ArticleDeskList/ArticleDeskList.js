@@ -34,7 +34,6 @@ const propTypes = {
 };
 const defaultProps = {
     selectedComponent: {},
-    show: true,
 };
 
 /**

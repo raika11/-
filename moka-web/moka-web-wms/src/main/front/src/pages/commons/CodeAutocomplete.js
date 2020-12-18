@@ -38,6 +38,7 @@ const propTypes = {
 const defaultProps = {
     isMulti: false,
     searchIcon: true,
+    selection: 'single',
 };
 
 /**
@@ -47,10 +48,11 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon } = props;
     const dispatch = useDispatch();
 
-    const { storeSearch, list, loading } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
+
+    const { storeSearch, list } = useSelector((store) => ({
         storeSearch: store.code.korname.search,
         list: store.code.korname.list,
-        loading: store.loading[GET_CODE_KORNAME_LIST],
     }));
 
     // state
@@ -77,11 +79,15 @@ const CodeAutocomplete = forwardRef((props, ref) => {
      * 코드목록 모달에서 등록 버튼 클릭
      */
     const handleClickSave = (code) => {
-        const findOp = options.find((op) => String(op.value) === String(code.masterCode));
-        if (findOp) {
-            setDefaultValue(findOp);
+        if (!isMulti) {
+            const findOp = options.find((op) => String(op.value) === String(code.masterCode));
+            if (findOp) {
+                setDefaultValue(findOp);
+            } else {
+                setDefaultValue(null);
+            }
         } else {
-            setDefaultValue(null);
+            // 멀티일 경우 => 추후 처리
         }
     };
 
@@ -149,7 +155,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 onChange={handleChangeValue}
                 inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon }}
             />
-            <CodeListModal show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} />
+            <CodeListModal show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />
         </React.Fragment>
     );
 });

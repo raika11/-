@@ -31,6 +31,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.mobile.device.LiteDeviceResolver;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
@@ -241,6 +242,15 @@ public class TmsAutoConfiguration {
     @ConditionalOnMissingBean(name = "tmsHandlerInterceptor")
     public HandlerInterceptorAdapter tmsHandlerInterceptor() {
         return new MokaCommonHandlerInterceptor("TMS");
+    }
+
+    /**
+     * 접속 디바이스 유형을 탐지하기 위한 Bean
+     * @return LiteDeviceResolver
+     */
+    @Bean(name = "deviceResolver")
+    public LiteDeviceResolver deviceResolver() {
+        return new LiteDeviceResolver();
     }
 
     private Contact contact = new Contact("중앙일보 Moka TMS", "http://joongang.co.kr", "mater@joongang.co.kr");

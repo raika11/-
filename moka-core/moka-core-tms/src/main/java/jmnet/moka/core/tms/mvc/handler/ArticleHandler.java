@@ -56,6 +56,7 @@ public class ArticleHandler extends AbstractHandler {
                 String articleId = pathList.get(1);
                 // 머지 옵션설정
                 MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
+                this.setDeviceType(request, mergeContext);
                 mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
                 mergeContext.set(MokaConstants.MERGE_PATH, requestPath);
                 mergeContext.set(MokaConstants.MERGE_CONTEXT_ARTICLE_ID, articleId);

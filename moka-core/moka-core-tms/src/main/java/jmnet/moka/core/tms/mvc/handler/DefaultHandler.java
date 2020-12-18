@@ -2,6 +2,7 @@ package jmnet.moka.core.tms.mvc.handler;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.exception.TemplateLoadException;
@@ -72,6 +73,7 @@ public class DefaultHandler extends AbstractHandler {
         try {
             String itemKey = this.domainTemplateMerger.getItemKey(domainId, requestPath);
             MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
+            this.setDeviceType(request, mergeContext);
             mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
             if (itemKey != null) {
                 // 머지 옵션설정
@@ -117,6 +119,7 @@ public class DefaultHandler extends AbstractHandler {
             if (this.domainTemplateMerger.getItem(domainId, itemType, itemId) != null) {
                 // 머지 옵션설정
                 MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
+                this.setDeviceType(request, mergeContext);
                 mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
                 mergeContext.set(MokaConstants.MERGE_PATH, requestPath);
                 mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, itemType);
@@ -237,6 +240,12 @@ public class DefaultHandler extends AbstractHandler {
         mergeContext.set(MokaConstants.MERGE_CONTEXT_HEADER, HttpHelper.getHeaderMap(request));
         // Http 쿠기 설정
         mergeContext.set(MokaConstants.MERGE_CONTEXT_COOKIE, HttpHelper.getCookieMap(request));
+
+        Map<String,String> cookieMap = HttpHelper.getCookieMap(request);
+        if ( !cookieMap.containsKey("moka_width") && !((String) mergeContext.get(MokaConstants.MERGE_PATH)).equals("/responsive/js")) {
+            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_PAGE);
+            mergeContext.set(MokaConstants.MERGE_ITEM_ID, "80");
+        }
 
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;

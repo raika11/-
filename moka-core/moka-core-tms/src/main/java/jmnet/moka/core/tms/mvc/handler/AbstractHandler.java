@@ -3,7 +3,11 @@ package jmnet.moka.core.tms.mvc.handler;
 import java.lang.reflect.Method;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.tms.merge.MokaFunctions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
+import org.springframework.mobile.device.DeviceResolver;
 import org.springframework.web.method.HandlerMethod;
 
 /**
@@ -14,6 +18,19 @@ public abstract class AbstractHandler {
     protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     protected String viewName;
     protected HandlerMethod handlerMethod;
+    public enum DeviceType {
+        MOBILE("mobile"), TABLET("tablet"), NORMAL("normal"), UNKNOWN("unknown");
+        private final String code;
+        public String getCode(){
+            return this.code;
+        }
+        private DeviceType(String code) {
+            this.code = code;
+        }
+    }
+
+    @Autowired
+    private DeviceResolver deviceResolver;
 
     public void setViewName(String viewName) {
         this.viewName = viewName;
@@ -48,4 +65,21 @@ public abstract class AbstractHandler {
      * @throws Exception 예외
      */
     public abstract HandlerMethod resolvable(HttpServletRequest request, String requestPath, List<String> pathList, String domainId) throws Exception;
+
+
+    public void setDeviceType(HttpServletRequest request, MergeContext mergeContext) {
+        if ( deviceResolver != null ) {
+//            Device device = DeviceUtils.getCurrentDevice(request);
+            Device device = deviceResolver.resolveDevice(request);
+            if (device.isMobile()) {
+                mergeContext.set("device", DeviceType.MOBILE.getCode());
+            } else if (device.isTablet()) {
+                mergeContext.set("device", DeviceType.TABLET.getCode());
+            } else {
+                mergeContext.set("device", DeviceType.NORMAL.getCode());
+            }
+        } else {
+            mergeContext.set("device", DeviceType.UNKNOWN.getCode());
+        }
+    }
 }

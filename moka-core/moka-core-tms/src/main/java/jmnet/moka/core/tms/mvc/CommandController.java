@@ -1,5 +1,6 @@
 package jmnet.moka.core.tms.mvc;
 
+import io.swagger.annotations.Api;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -56,6 +57,7 @@ import jmnet.moka.core.tms.mvc.domain.DomainResolver;
  * @author kspark
  */
 @Controller
+@Api(tags= {"명령 API"})
 public class CommandController {
 
     public final static Logger logger = LoggerFactory.getLogger(CommandController.class);

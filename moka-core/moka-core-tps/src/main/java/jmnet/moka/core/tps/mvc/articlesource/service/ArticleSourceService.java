@@ -5,6 +5,7 @@
 package jmnet.moka.core.tps.mvc.articlesource.service;
 
 import java.util.List;
+import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
@@ -48,4 +49,36 @@ public interface ArticleSourceService {
      * @return 매체목록
      */
     Page<ArticleSource> findAllArticleSource(SearchDTO search);
+
+    /**
+     * 매체 상세조회
+     *
+     * @param sourceCode 매체코드
+     * @return 매체정보
+     */
+    Optional<ArticleSource> findAricleSourceById(String sourceCode);
+
+    /**
+     * 매체 등록
+     *
+     * @param articleSource 매체정보
+     * @return 등록된 매체정보
+     */
+    ArticleSource insertArticleSource(ArticleSource articleSource);
+
+    /**
+     * 매체코드 중복여부
+     *
+     * @param sourceCode 매체코드
+     * @return 중복시  true
+     */
+    Boolean isDuplicatedId(String sourceCode);
+
+    /**
+     * 매체 수정
+     *
+     * @param articleSource 매체정보
+     * @return 수정된 매체정보
+     */
+    ArticleSource updateArticleSource(ArticleSource articleSource);
 }

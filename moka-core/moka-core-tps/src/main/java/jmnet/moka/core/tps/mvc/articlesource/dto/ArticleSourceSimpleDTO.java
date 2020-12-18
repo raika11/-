@@ -18,7 +18,7 @@ import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 /**
- * 매체
+ * 간단 매체 DTO
  */
 @AllArgsConstructor
 @NoArgsConstructor

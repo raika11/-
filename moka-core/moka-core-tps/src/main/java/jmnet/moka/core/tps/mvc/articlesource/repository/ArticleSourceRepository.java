@@ -15,5 +15,5 @@ import org.springframework.stereotype.Repository;
  * @since 2020-11-12
  */
 @Repository
-public interface ArticleSourceRepository extends JpaRepository<ArticleSource, Long>, ArticleSourceRepositorySupport {
+public interface ArticleSourceRepository extends JpaRepository<ArticleSource, String>, ArticleSourceRepositorySupport {
 }

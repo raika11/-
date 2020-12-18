@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 /**
  * 매체
@@ -40,6 +41,7 @@ public class ArticleSource extends BaseAudit {
     /**
      * 출처명
      */
+    @Nationalized
     @Column(name = "SOURCE_NAME", nullable = false)
     private String sourceName;
 
@@ -173,6 +175,4 @@ public class ArticleSource extends BaseAudit {
     @Column(name = "RECEIVE_IMG_YN", columnDefinition = "char")
     @Builder.Default
     private String receiveImgYn = MokaConstants.NO;
-
-
 }

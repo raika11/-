@@ -14,11 +14,9 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -32,8 +30,6 @@ import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -201,8 +197,7 @@ public class TemplateRestController extends AbstractCommonController {
     @PutMapping(value = "/{templateSeq}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
                                                                                                           MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putTemplate(@Valid TemplateDTO templateDTO,
-            @ApiParam("템플릿 미리보기 이미지파일") @RequestPart(value = "templateThumbnailFile", required = false)
-                    MultipartFile templateThumbnailFile)
+            @ApiParam("템플릿 미리보기 이미지파일") @RequestPart(value = "templateThumbnailFile", required = false) MultipartFile templateThumbnailFile)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이터 검사
@@ -305,8 +300,7 @@ public class TemplateRestController extends AbstractCommonController {
     @PostMapping("/{templateSeq}/copy")
     public ResponseEntity<?> copyTemplate(
             @ApiParam("템플릿SEQ(필수)") @PathVariable("templateSeq") @Min(value = 0, message = "{tps.template.error.min.templateSeq}") Long templateSeq,
-            @ApiParam("도메인(필수)") DomainSimpleDTO domain,
-            @ApiParam("복사할 템플릿명(필수)") String templateName)
+            @ApiParam("도메인(필수)") DomainSimpleDTO domain, @ApiParam("복사할 템플릿명(필수)") String templateName)
             throws InvalidDataException, Exception {
 
         // 조회
@@ -415,7 +409,7 @@ public class TemplateRestController extends AbstractCommonController {
 
         } catch (Exception e) {
             log.error("[TEMPLATE RELATION EXISTENCE CHECK FAILED] seq: {} {}", templateSeq, e.getMessage());
-            tpsLogger.error(ActionType.DELETE, "[TEMPLATE RELATION EXISTENCE CHECK FAILEDE]", e, true);
+            tpsLogger.error(ActionType.SELECT, "[TEMPLATE RELATION EXISTENCE CHECK FAILEDE]", e, true);
             throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
         }
     }

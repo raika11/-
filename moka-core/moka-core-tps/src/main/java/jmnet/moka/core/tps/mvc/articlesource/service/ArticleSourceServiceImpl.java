@@ -5,6 +5,7 @@
 package jmnet.moka.core.tps.mvc.articlesource.service;
 
 import java.util.List;
+import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
@@ -47,6 +48,27 @@ public class ArticleSourceServiceImpl implements ArticleSourceService {
     @Override
     public Page<ArticleSource> findAllArticleSource(SearchDTO search) {
         return articleSourceRepository.findAllArticleSource(search);
+    }
+
+    @Override
+    public Optional<ArticleSource> findAricleSourceById(String sourceCode) {
+        return articleSourceRepository.findById(sourceCode);
+    }
+
+    @Override
+    public ArticleSource insertArticleSource(ArticleSource articleSource) {
+        return articleSourceRepository.save(articleSource);
+    }
+
+    @Override
+    public Boolean isDuplicatedId(String sourceCode) {
+        Optional<ArticleSource> maybeArticleSource = this.findAricleSourceById(sourceCode);
+        return maybeArticleSource.isPresent() ? true : false;
+    }
+
+    @Override
+    public ArticleSource updateArticleSource(ArticleSource articleSource) {
+        return articleSourceRepository.save(articleSource);
     }
 
 }

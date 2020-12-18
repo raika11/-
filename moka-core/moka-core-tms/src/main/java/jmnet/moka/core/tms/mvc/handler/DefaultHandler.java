@@ -241,11 +241,12 @@ public class DefaultHandler extends AbstractHandler {
         // Http 쿠기 설정
         mergeContext.set(MokaConstants.MERGE_CONTEXT_COOKIE, HttpHelper.getCookieMap(request));
 
-        Map<String,String> cookieMap = HttpHelper.getCookieMap(request);
-        if ( !cookieMap.containsKey("moka_width") && !((String) mergeContext.get(MokaConstants.MERGE_PATH)).equals("/responsive/js")) {
-            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_PAGE);
-            mergeContext.set(MokaConstants.MERGE_ITEM_ID, "80");
-        }
+//  브라우저 사이즈 체크 ( 좀 더 상위에서 처리하게 해야함 )
+//        Map<String,String> cookieMap = HttpHelper.getCookieMap(request);
+//        if ( !cookieMap.containsKey("moka_width") && !((String) mergeContext.get(MokaConstants.MERGE_PATH)).equals("/responsive/js")) {
+//            mergeContext.set(MokaConstants.MERGE_ITEM_TYPE, MokaConstants.ITEM_PAGE);
+//            mergeContext.set(MokaConstants.MERGE_ITEM_ID, "80");
+//        }
 
         model.addAttribute(MokaConstants.MERGE_CONTEXT, mergeContext);
         return this.viewName;

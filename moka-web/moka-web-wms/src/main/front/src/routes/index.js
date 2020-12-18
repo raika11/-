@@ -324,6 +324,16 @@ const routes = [
         exact: false,
         strict: true,
     },
+    {
+        path: '/bulkh-su',
+        name: 'bulkh-su',
+        displayName: '선데이 아티클 핫클릭',
+        component: Bulks,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
 ];
 
 export default routes;

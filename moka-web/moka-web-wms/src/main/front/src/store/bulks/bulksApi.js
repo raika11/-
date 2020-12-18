@@ -49,6 +49,14 @@ export const saveBulkArticle = ({ PostData: { parameter, validList } }) => {
         });
 };
 
+// 핫클릭 재전송
+export const resendHotClick = ({ bulkartSeq }) => {
+    console.log(bulkartSeq);
+    return instance.put(`/api/bulks/${bulkartSeq}/resend`).catch((err) => {
+        throw err;
+    });
+};
+
 // 벌크 상태값 변경.
 export const putChangeBulkused = ({ bulkartSeq, parameter }) => {
     return instance.put(`/api/bulks/${bulkartSeq}/used?${qs.stringify(parameter)}`).catch((err) => {

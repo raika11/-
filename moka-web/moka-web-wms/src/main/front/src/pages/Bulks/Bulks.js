@@ -54,6 +54,13 @@ const Bulks = ({ match }) => {
                         bulk_div: 'H',
                     });
                     break;
+                case 'bulkh-su':
+                    setBulkParams({
+                        bulkPathName: pathName,
+                        bulk_source: '61',
+                        bulk_div: 'H',
+                    });
+                    break;
                 default:
                     // 없는 데이터 처리는 어떻게?
                     console.log('경로에서 페이지 데이터를 가지고 오지 못했습니다.');

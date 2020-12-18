@@ -1,4 +1,5 @@
 import { takeLatest, put, select, call } from 'redux-saga/effects';
+import toast from '@/utils/toastUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, errorResponse } from '@store/commons/saga';
 import {
@@ -17,11 +18,22 @@ import {
     GET_BULK_ARTICLE_FAILURE,
     GET_COPYRIGHT,
     GET_MODAL_BULK_ARTICLE,
+    GET_HOTCLICK_TITLE,
+    GET_HOTCLICK_TITLE_SUCCESS,
+    SAVE_HOTCLICK,
+    RESEND_HOTCLICK,
+    GET_HOTCLICK_HISTORY_LIST,
+    GET_HISTORY_DETAIL,
+    GET_HISTORY_DETAIL_SUCCESS,
+    GET_HOTCLICK_LIST,
+    GET_HOTCLICK_LIST_SUCCESS,
 } from './bulksAction';
-import { getBulkList, getBulkArticle, saveBulkArticle, getSpecialchar, putSpecialchar, putChangeBulkused, getCopyright } from './bulksApi';
+import { getBulkList, getBulkArticle, saveBulkArticle, getSpecialchar, putSpecialchar, putChangeBulkused, getCopyright, resendHotClick } from './bulksApi';
 
 // 벌크 리스트 가지고 오기.
 const getBulkListSaga = callApiAfterActions(GET_BULK_LIST, getBulkList, (state) => state.bulks.bulkn);
+// 핫클릭 히스토리 가지고 오기.
+const getHotClickHistoryListSaga = callApiAfterActions(GET_HOTCLICK_HISTORY_LIST, getBulkList, (state) => state.bulks.bulkh.historyList);
 // 약물 정보 가지고 오기.
 const getSpecialcharSaga = callApiAfterActions(GET_SPECIALCHAR, getSpecialchar, (state) => state.bulks);
 const getCopyrightSaga = callApiAfterActions(GET_COPYRIGHT, getCopyright, (state) => state.bulks);
@@ -198,6 +210,174 @@ function* changeBulkusedSaga({ payload: { bulkartSeq, callback } }) {
     yield put(finishLoading(CHANGE_BULKUSED));
 }
 
+// 아티클 핫클릭 상단 타이틀 가지고 오기.
+function* getHotClickTopTitleSaga() {
+    yield put(startLoading(GET_HOTCLICK_TITLE));
+    const { bulkartDiv, sourceCode } = yield select((store) => store.bulks);
+
+    try {
+        // 아티클 상단 타이틀이 전송, 대기 두개 이기 때문에 api 를 두번 호출.
+        // 전송 타이틀 가지고 오기.
+
+        const {
+            data: {
+                body: { list: sendResultList },
+            },
+        } = yield call(getBulkList, {
+            search: {
+                page: 0,
+                size: 1,
+                bulkartDiv: bulkartDiv,
+                sourceCode: sourceCode,
+                usedYn: 'Y',
+                status: 'publish',
+            },
+        });
+
+        // 대기 타이틀 가지고 오기.
+        const {
+            data: {
+                body: { list: waitResultList },
+            },
+        } = yield call(getBulkList, {
+            search: {
+                page: 0,
+                size: 1,
+                bulkartDiv: bulkartDiv,
+                sourceCode: sourceCode,
+            },
+        });
+        yield put({
+            type: GET_HOTCLICK_TITLE_SUCCESS,
+            payload: {
+                send: Array.isArray(sendResultList) ? sendResultList[0] : sendResultList, // 결과가 한개만 내려옴.
+                wait: Array.isArray(waitResultList) ? waitResultList[0] : waitResultList, // 결과가 한개만 내려옴.
+            },
+        });
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(GET_HOTCLICK_TITLE));
+}
+
+// 핫클릭 저장, 임시저장.
+function* saveHotclickSaga({ payload: { type, hotclicklist, callback } }) {
+    yield put(startLoading(SAVE_HOTCLICK));
+
+    let callbackData = {};
+    let response;
+
+    try {
+        const { bulkartDiv, sourceCode } = yield select((store) => store.bulks);
+
+        const PostData = {
+            parameter: {
+                bulkartDiv: bulkartDiv,
+                sourceCode: sourceCode,
+                status: type,
+            },
+            validList: hotclicklist,
+        };
+
+        response = yield call(saveBulkArticle, { PostData });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(SAVE_HOTCLICK));
+}
+
+// 핫클릭 재전송.
+function* saveHotclickResendSaga({ payload: { bulkartSeq, callback } }) {
+    yield put(startLoading(RESEND_HOTCLICK));
+
+    let callbackData = {};
+    let response;
+
+    try {
+        response = yield call(resendHotClick, {
+            bulkartSeq: bulkartSeq,
+        });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(RESEND_HOTCLICK));
+}
+
+// 히스토리 상세.
+function* getHistoryDetailSaga({ payload: bulkartSeq }) {
+    yield put(startLoading(GET_HISTORY_DETAIL));
+    try {
+        const response = yield call(getBulkArticle, {
+            bulkartSeq: bulkartSeq,
+        });
+        const {
+            header: { success },
+            body,
+        } = response.data;
+        if (success === true) {
+            yield put({ type: GET_HISTORY_DETAIL_SUCCESS, payload: { bulkartSeq: bulkartSeq, body: body } });
+        } else {
+            toast.error(response.data.header.message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(GET_HISTORY_DETAIL));
+}
+
+// 핫클릭 리스트 가지고 오기.
+function* getHotclickListSaga({ payload: bulkartSeq }) {
+    yield put(startLoading(GET_HOTCLICK_LIST));
+    try {
+        const response = yield call(getBulkArticle, {
+            bulkartSeq: bulkartSeq,
+        });
+        const {
+            header: { success },
+            body,
+        } = response.data;
+        if (success === true) {
+            yield put({ type: GET_HOTCLICK_LIST_SUCCESS, payload: body });
+        } else {
+            toast.error(response.data.header.message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(GET_HOTCLICK_LIST));
+}
+
 export default function* bulksSaga() {
     yield takeLatest(INITIALIZE_PARAMS, initializeParamsSaga); // 페이지 공통 구분 코드
     yield takeLatest(TRY_PREVIEW_MODAL, showPreviewModelSaga); // 벌크 에서 사용하는 미리보기 모달.
@@ -209,4 +389,12 @@ export default function* bulksSaga() {
     yield takeLatest(GET_COPYRIGHT, getCopyrightSaga); // Copyright 가지고 오기.
     yield takeLatest(SAVE_SPECIALCHAR, saveSpecialcharSaga); // 약물 정보 저장.
     yield takeLatest(CHANGE_BULKUSED, changeBulkusedSaga); // 벌크 상태 변경.
+
+    // 아티클 핫클릭.
+    yield takeLatest(GET_HOTCLICK_TITLE, getHotClickTopTitleSaga); // 벌크 상태 변경.
+    yield takeLatest(SAVE_HOTCLICK, saveHotclickSaga); // 핫클릭 저장 및 임시저장.
+    yield takeLatest(RESEND_HOTCLICK, saveHotclickResendSaga); // 핫클릭 재전송.
+    yield takeLatest(GET_HOTCLICK_HISTORY_LIST, getHotClickHistoryListSaga); // 핫클릭 히스토리 리스트.
+    yield takeLatest(GET_HISTORY_DETAIL, getHistoryDetailSaga); // 핫클릭 히스토리 불러오기.
+    yield takeLatest(GET_HOTCLICK_LIST, getHotclickListSaga); // 핫클릭 리스트 가지고 오기.
 }

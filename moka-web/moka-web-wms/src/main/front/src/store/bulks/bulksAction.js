@@ -62,3 +62,51 @@ export const changeBulkused = createAction(CHANGE_BULKUSED, ({ bulkartSeq, callb
 // 검색 옵션 변경.
 export const CHANGE_SEARCH_OPTION = 'bulks/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (actions) => actions);
+
+/** */
+/** 아티클 핫클릭 */
+/** */
+
+// 히스토리 클리어.
+export const CLEAR_HOTCLICK_LIST = 'bulks/CLEAR_HOTCLICK_LIST';
+export const clearHotclicklist = createAction(CLEAR_HOTCLICK_LIST);
+
+// 핫클릭 상단 타이틀 가지고 오기.
+export const [GET_HOTCLICK_TITLE, GET_HOTCLICK_TITLE_SUCCESS, GET_HOTCLICK_TITLE_FAILURE] = createRequestActionTypes('bulks/GET_HOTCLICK_TITLE');
+export const getHotClickTitle = createAction(GET_HOTCLICK_TITLE, (...actions) => actions);
+
+// 아티클 할클릿 리스트 가지고 오기.
+export const [GET_HOTCLICK_LIST, GET_HOTCLICK_LIST_SUCCESS, GET_HOTCLICK_LIST_FAILURE] = createRequestActionTypes('bulks/GET_HOTCLICK_LIST');
+export const getHotclickList = createAction(GET_HOTCLICK_LIST, ({ bulkartSeq }) => bulkartSeq);
+
+// 임시 데이터 업데이트 ( 추가, 순서 변경, 삭제,)
+export const CHANGE_HOTCLICK_LIST = 'bulks/CHANGE_HOTCLICK_LIST';
+export const changeHotClickList = createAction(CHANGE_HOTCLICK_LIST, (actions) => actions);
+
+// 아티클 핫클릭 저장.
+export const [SAVE_HOTCLICK, SAVE_HOTCLICK_SUCCESS, SAVE_HOTCLICK_FAILURE] = createRequestActionTypes('bulks/SAVE_HOTCLICK');
+export const saveHotClick = createAction(SAVE_HOTCLICK, ({ type, hotclicklist, callback }) => ({ type, hotclicklist, callback }));
+
+// 아티클 핫클릭 재전송.
+export const [RESEND_HOTCLICK, RESEND_HOTCLICK_SUCCESS, RESEND_HOTCLICK_FAILURE] = createRequestActionTypes('bulks/RESEND_HOTCLICK');
+export const saveHotClickResend = createAction(RESEND_HOTCLICK, ({ bulkartSeq, callback }) => ({ bulkartSeq, callback }));
+
+// 히스토리 클리어.
+export const CLEAR_HOTCLICK_HISTORYLIST = 'bulks/CLEAR_HOTCLICK_HISTORYLIST';
+export const clearHotclickHistorylist = createAction(CLEAR_HOTCLICK_HISTORYLIST);
+
+// 핫클릭 히스토리 조회.
+export const [GET_HOTCLICK_HISTORY_LIST, GET_HOTCLICK_HISTORY_LIST_SUCCESS, GET_HOTCLICK_HISTORY_LIST_FAILURE] = createRequestActionTypes('bulks/GET_HOTCLICK_HISTORY_LIST');
+export const getHotclickHistoryList = createAction(GET_HOTCLICK_HISTORY_LIST);
+
+// 핫클릭 히스토리 조회. 변경.
+export const CHANGE_HISTORY_SEARCH_OPTION = 'bulks/CHANGE_HISTORY_SEARCH_OPTION';
+export const changeHistirySearchOption = createAction(CHANGE_HISTORY_SEARCH_OPTION, (actions) => actions);
+
+// 히스토리 상세.
+export const [GET_HISTORY_DETAIL, GET_HISTORY_DETAIL_SUCCESS, GET_HISTORY_DETAIL_FAILURE] = createRequestActionTypes('bulks/GET_HISTORY_DETAIL');
+export const getHotclickDetail = createAction(GET_HISTORY_DETAIL, ({ bulkartSeq }) => bulkartSeq);
+
+// 히스토리 상세 클리어.
+export const CLEAR_HISTORY_DETAIL = 'bulks/CLEAR_BHISTORY_DETAIL';
+export const clearHistoryDetail = createAction(CLEAR_HISTORY_DETAIL);

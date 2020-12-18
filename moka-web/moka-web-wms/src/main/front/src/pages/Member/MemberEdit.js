@@ -87,12 +87,11 @@ const MemberEdit = () => {
     const handleClickSave = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        setExpireDt(tmpExpireDt);
         const menuItem = {
             memberId,
             status,
             remark,
-            expireDt,
+            expireDt: tmpExpireDt,
         };
 
         if (validate(menuItem)) {

@@ -333,7 +333,9 @@ const RegisterModal = (props) => {
                 <Form className="mb-10">
                     <Form.Group as={Row} className="mb-3 align-items-center">
                         <Col xs={3} className="p-0">
-                            <Form.Label className="p-0">Groupware ID</Form.Label>
+                            <Form.Label className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ marginLeft: '8px' }}>
+                                Groupware ID
+                            </Form.Label>
                         </Col>
                         <Col xs={9} className="p-0">
                             <MokaSearchInput

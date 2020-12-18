@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@components';
 import { previewPage, w3cArticlePage } from '@store/merge';
-import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
+import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList, clearArticlePage } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
@@ -54,7 +54,8 @@ const ArticlePageEdit = ({ onDelete }) => {
             };
             dispatch(getArticlePage(option));
         }
-    }, [articlePage, articlePage.artPageSeq, dispatch, history, paramId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (articlePage.artPageSeq) {
@@ -344,6 +345,14 @@ const ArticlePageEdit = ({ onDelete }) => {
         f.remove();
     };
 
+    /**
+     * 취소 버튼
+     */
+    const handleClickCancle = () => {
+        history.push('/article-page');
+        dispatch(clearArticlePage());
+    };
+
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title={`기사페이지 ${articlePage.artPageSeq ? '정보' : '등록'}`} loading={loading}>
             <Form>
@@ -361,9 +370,14 @@ const ArticlePageEdit = ({ onDelete }) => {
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             전송
                         </Button>
-                        <Button variant="negative" disabled={btnDisabled} onClick={(e) => onDelete(articlePage)}>
-                            삭제
+                        <Button variant="negative" onClick={handleClickCancle}>
+                            취소
                         </Button>
+                        {!btnDisabled && (
+                            <Button variant="negative" className="ml-05" onClick={(e) => onDelete(articlePage)}>
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </Form.Group>
                 {/* 기사페이지ID */}

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import { MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
 import { getArticleType } from '@store/codeMgt';
@@ -192,52 +192,59 @@ const ArticlePage = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            {/* 에디터 */}
-            <Route path={[match.url, `${match.url}/:artPageSeq`]} exact render={() => <ArticlePageEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />} />
+            <Route
+                path={[`${match.url}/add`, `${match.url}/:artPageSeq`]}
+                exact
+                render={() => (
+                    <React.Fragment>
+                        {/* 에디터 */}
+                        <ArticlePageEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
-            {/* 탭 */}
-            <MokaIconTabs
-                expansion={expansionState[2]}
-                onExpansion={handleTabExpansion}
-                onSelectNav={(idx) => setActiveTabIdx(idx)}
-                tabWidth={412}
-                tabs={[
-                    <Suspense>
-                        <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
-                    </Suspense>,
+                        {/* 탭 */}
 
-                    <Suspense>
-                        <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />
-                    </Suspense>,
+                        <MokaIconTabs
+                            expansion={expansionState[2]}
+                            onExpansion={handleTabExpansion}
+                            onSelectNav={(idx) => setActiveTabIdx(idx)}
+                            tabWidth={412}
+                            tabs={[
+                                <Suspense fallback={<MokaLoader />}>
+                                    <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <PageChildAdList show={activeTabIdx === 5} seqType={ITEM_AP} />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <HistoryList show={activeTabIdx === 6} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickHistLoad} />
+                                </Suspense>,
+                            ]}
+                            tabNavWidth={48}
+                            tabNavPosition="right"
+                            tabNavs={[
+                                { title: '기사페이지 정보', text: 'Info' },
 
-                    <Suspense>
-                        <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
-                    </Suspense>,
-                    <Suspense>
-                        <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
-                    </Suspense>,
-                    <Suspense>
-                        <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_AP} seq={articlePage.artPageSeq} onAppend={handleAppendTag} />
-                    </Suspense>,
-                    <Suspense>
-                        <PageChildAdList show={activeTabIdx === 5} seqType={ITEM_AP} />
-                    </Suspense>,
-                    <Suspense>
-                        <HistoryList show={activeTabIdx === 6} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickHistLoad} />
-                    </Suspense>,
-                ]}
-                tabNavWidth={48}
-                tabNavPosition="right"
-                tabNavs={[
-                    { title: '기사페이지 정보', text: 'Info' },
-
-                    { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-money-check" /> },
-                    { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
-                    { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
-                    { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },
-                    { title: '관련 광고', icon: <MokaIcon iconName="fal-ad" /> },
-                    { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
-                ]}
+                                { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-money-check" /> },
+                                { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
+                                { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },
+                                { title: '관련 템플릿', icon: <MokaIcon iconName="fal-newspaper" /> },
+                                { title: '관련 광고', icon: <MokaIcon iconName="fal-ad" /> },
+                                { title: '히스토리', icon: <MokaIcon iconName="fal-history" /> },
+                            ]}
+                        />
+                    </React.Fragment>
+                )}
             />
         </div>
     );

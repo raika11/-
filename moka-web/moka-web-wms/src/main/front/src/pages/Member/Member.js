@@ -6,6 +6,7 @@ import { MokaCard, MokaIconTabs, MokaIcon } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore } from '@store/member';
 import MemberChildMenuAuth from '@pages/Member/relations/MemberChildMenuAuth';
+import { MokaLoader } from '@components';
 
 const MemberList = React.lazy(() => import('./MemberLIst'));
 const MemberEdit = React.lazy(() => import('./MemberEdit'));
@@ -34,7 +35,7 @@ const Member = () => {
 
             {/* 리스트 */}
             <MokaCard
-                className="mb-0 mr-gutter flex-fill"
+                className="mb-0 mr-gutter"
                 height={CARD_DEFAULT_HEIGHT}
                 headerClassName="d-flex justify-content-between align-item-center"
                 bodyClassName="d-flex flex-column"
@@ -49,23 +50,23 @@ const Member = () => {
 
             <Switch>
                 <Route
-                    path={['/member', '/member/:memberId']}
+                    path={['/member/add', '/member/:memberId']}
                     exact
                     render={() => (
-                        <>
+                        <React.Fragment>
                             {/* 탭 */}
                             <MokaIconTabs
                                 height={CARD_DEFAULT_HEIGHT}
                                 tabWidth={520}
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabs={[
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <MemberEdit />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <MemberChildLoginHistoryList show={activeTabIdx === 1} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <MemberChildMenuAuth />
                                     </Suspense>,
                                 ]}
@@ -77,7 +78,7 @@ const Member = () => {
                                     { title: '메뉴권한', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
                             />
-                        </>
+                        </React.Fragment>
                     )}
                 />
             </Switch>

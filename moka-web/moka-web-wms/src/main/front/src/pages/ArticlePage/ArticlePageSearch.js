@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 
 import { changeLatestDomainId } from '@store/auth';
-import { getArticlePageList, changeSearchOption, initialState } from '@store/articlePage';
+import { getArticlePageList, changeSearchOption, initialState, clearArticlePage } from '@store/articlePage';
 /**
  * 관련 기사페이지 검색 컴포넌트
  */
@@ -37,6 +37,7 @@ const ArticlePageSearch = () => {
     const handleSearch = useCallback(() => {
         dispatch(
             getArticlePageList(
+                clearArticlePage(),
                 changeSearchOption({
                     ...search,
                     page: 0,
@@ -50,6 +51,7 @@ const ArticlePageSearch = () => {
         if (latestDomainId !== search.domainId) {
             dispatch(
                 getArticlePageList(
+                    clearArticlePage(),
                     changeSearchOption({
                         ...search,
                         domainId: latestDomainId,

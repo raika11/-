@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import { useParams, withRouter, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import moment from 'moment';
 import { MokaCard } from '@components';
@@ -18,6 +18,8 @@ import { MokaInputLabel } from '@components';
 const MemberEdit = () => {
     const { memberId: paramId } = useParams();
     const dispatch = useDispatch();
+    const history = useHistory();
+
     const [status, setStatus] = useState('');
     const [memberId, setMemberId] = useState('');
     const [expireDt, setExpireDt] = useState('');
@@ -161,6 +163,12 @@ const MemberEdit = () => {
         );
     };
 
+    const handleClickCancle = () => {
+        history.push('/member');
+        dispatch(clearMember());
+        dispatch(clearMemberMenuAuth());
+    };
+
     return (
         <MokaCard className="w-100" titleClassName="h-100 mb-0" title="사용자 정보" loading={loading}>
             <Form>
@@ -228,6 +236,9 @@ const MemberEdit = () => {
                     <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
                         <Button variant="positive" className="float-left pr-20 pl-20" onClick={handleClickSave}>
                             저장
+                        </Button>
+                        <Button variant="negative" className="ml-05" onClick={handleClickCancle}>
+                            취소
                         </Button>
                     </Form.Group>
                 ) : (

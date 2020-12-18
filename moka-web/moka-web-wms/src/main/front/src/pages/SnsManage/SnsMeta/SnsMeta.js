@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@components';
+import { MokaCard, MokaLoader } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import commonUtil from '@utils/commonUtil';
 import { clearMetaStore } from '@store/snsManage';
@@ -34,7 +34,7 @@ const SnsMeta = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false}>
-                <Suspense>
+                <Suspense fallback={<MokaLoader />}>
                     <SnsMetaList />
                 </Suspense>
             </MokaCard>
@@ -44,7 +44,7 @@ const SnsMeta = ({ match }) => {
                 path={[`${match.url}/:totalId`]}
                 exact
                 render={(props) => (
-                    <Suspense>
+                    <Suspense fallback={<MokaLoader />}>
                         <SnsMetaEdit {...props} />
                     </Suspense>
                 )}

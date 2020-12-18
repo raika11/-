@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@components';
+import { MokaCard, MokaLoader } from '@components';
 
 const FbArtList = React.lazy(() => import('./FbArtList'));
 const FbArtEdit = React.lazy(() => import('./FbArtEdit'));
@@ -22,7 +22,7 @@ const FbArt = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false}>
-                <Suspense>
+                <Suspense fallback={<MokaLoader />}>
                     <FbArtList />
                 </Suspense>
             </MokaCard>
@@ -32,7 +32,7 @@ const FbArt = ({ match }) => {
                 path={[`${match.url}/:totalId`]}
                 exact
                 render={(props) => (
-                    <Suspense>
+                    <Suspense fallback={<MokaLoader />}>
                         <FbArtEdit {...props} />
                     </Suspense>
                 )}

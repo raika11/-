@@ -7,12 +7,14 @@ import commonUtil from '@utils/commonUtil';
 import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialState, publishSnsMeta } from '@store/snsManage';
 import toast from '@utils/toastUtil';
 import { snsNames } from '@/constants';
+import { EditThumbModal } from '@pages/Desking/modals';
 
 const FbArtEdit = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { totalId } = useParams();
 
+    const [isFacebookImageModalOpen, setIsFacebookImageModalOpen] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
 
     const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
@@ -33,6 +35,7 @@ const FbArtEdit = () => {
     };
 
     const handleClickCancel = () => {
+        dispatch(clearSnsMeta());
         history.push('/fb-art');
     };
 
@@ -148,7 +151,14 @@ const FbArtEdit = () => {
                             <Figure.Image className="mb-0" src={edit.fb.imgUrl} />
                             <div className="d-flex justify-content-end mb-0 pt-3">
                                 <div className="d-flex justify-content-end pr-2">
-                                    <Button variant="outline-neutral">신규 등록</Button>
+                                    <Button
+                                        variant="outline-neutral"
+                                        onClick={() => {
+                                            setIsFacebookImageModalOpen(true);
+                                        }}
+                                    >
+                                        신규 등록
+                                    </Button>
                                 </div>
                                 <div className="d-flex justify-content-end">
                                     <Button variant="outline-neutral">편집</Button>
@@ -185,6 +195,13 @@ const FbArtEdit = () => {
                     </div>
                 </div>
             </MokaCard>
+            <EditThumbModal
+                show={isFacebookImageModalOpen}
+                onHide={() => setIsFacebookImageModalOpen(false)}
+                setFileValue={(data) => console.log('fb-setFileValue', data)}
+                thumbFileName={edit.fb.imgUrl}
+                setThumbFileName={(data) => console.log('fb-handleThumbFileName', data)}
+            />
         </>
     );
 };

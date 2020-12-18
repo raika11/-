@@ -24,8 +24,11 @@ public class BoardInfoServiceImpl implements BoardInfoService {
 
     private final BoardInfoRepository boardInfoRepository;
 
-    public BoardInfoServiceImpl(BoardInfoRepository boardInfoRepository) {
+    private final BoardService boardService;
+
+    public BoardInfoServiceImpl(BoardInfoRepository boardInfoRepository, BoardService boardService) {
         this.boardInfoRepository = boardInfoRepository;
+        this.boardService = boardService;
     }
 
     @Override
@@ -59,7 +62,9 @@ public class BoardInfoServiceImpl implements BoardInfoService {
     }
 
     @Override
-    public boolean hasBoard(Integer boardId) {
-        return false;
+    public boolean hasContents(Integer boardId) {
+        return boardService
+                .findTopBoard(boardId)
+                .isPresent();
     }
 }

@@ -6,7 +6,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
-import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,17 +31,30 @@ public class BoardInfoRepositorySupportImpl extends QuerydslRepositorySupport im
 
     public Page<BoardInfo> findAllBoardInfo(BoardInfoSearchDTO searchDTO) {
         QBoardInfo qBoardInfo = QBoardInfo.boardInfo;
-        QMemberInfo qMember = QMemberInfo.memberInfo;
 
         JPQLQuery<BoardInfo> query = from(qBoardInfo);
 
+        if (McpString.isNotEmpty(searchDTO.getUsedYn())) {
+            query.where(qBoardInfo.usedYn.eq(searchDTO.getUsedYn()));
+        }
+
+        if (McpString.isNotEmpty(searchDTO.getBoardType())) {
+            query.where(qBoardInfo.boardType.eq(searchDTO.getBoardType()));
+        }
+
+        if (McpString.isNotEmpty(searchDTO.getKeyword())) {
+            query.where(qBoardInfo.boardName
+                    .contains(searchDTO.getKeyword())
+                    .or(qBoardInfo.boardDesc.contains(searchDTO.getKeyword())));
+        }
+
         Pageable pageable = searchDTO.getPageable();
-        if (McpString.isYes(searchDTO.getUseTotal())) {
+        if (McpString.isYes(searchDTO.getUseTotal()) && getQuerydsl() != null) {
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
         QueryResults<BoardInfo> list = query.fetchResults();
 
-        return new PageImpl<BoardInfo>(list.getResults(), pageable, list.getTotal());
+        return new PageImpl<>(list.getResults(), pageable, list.getTotal());
     }
 }

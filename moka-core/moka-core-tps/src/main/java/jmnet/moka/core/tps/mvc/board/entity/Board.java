@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -159,17 +160,18 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @Column(name = "CONTENT", nullable = false)
     private String content;
 
-    /**
-     * 회원ID
-     */
-    @Column(name = "MEM_ID")
-    private String memId;
 
     /**
      * 비밀번호
      */
     @Column(name = "PWD")
     private String pwd;
+
+    /**
+     * 비밀번호
+     */
+    @Column(name = "ADDR")
+    private String addr;
 
     /**
      * 등록IP주소
@@ -190,10 +192,30 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     private Set<BoardAttach> attaches;
 
     /**
+     * JPOD 채널 정보
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CHANNEL_ID", insertable = false, updatable = false)
+    private JpodChannel jpodChannel;
+
+    /**
      * 등록자
      */
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
     private MemberInfo regMember;
+
+    /**
+     * 등록구분(M:회원,A:관리자)
+     */
+    @Column(name = "REG_DIV")
+    private String regDiv;
+
+    /**
+     * 수정구분(M:회원,A:관리자)
+     */
+    @Column(name = "MOD_DIV")
+    private String modDiv;
 }

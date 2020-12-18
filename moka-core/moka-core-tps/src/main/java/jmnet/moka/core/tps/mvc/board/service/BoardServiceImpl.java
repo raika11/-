@@ -87,4 +87,10 @@ public class BoardServiceImpl implements BoardService {
     public void deleteAllBoardAttach(Long boardSeq) {
         boardAttachRepository.deleteByBoardSeq(boardSeq);
     }
+
+
+    @Override
+    public Optional<Board> findTopBoard(Integer boardId) {
+        return boardRepository.findTopByBoardId(boardId);
+    }
 }

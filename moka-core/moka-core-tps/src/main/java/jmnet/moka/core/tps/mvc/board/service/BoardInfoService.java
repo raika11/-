@@ -65,5 +65,5 @@ public interface BoardInfoService {
      */
     void deleteBoardInfo(Integer boardId);
 
-    boolean hasBoard(Integer boardId);
+    boolean hasContents(Integer boardId);
 }

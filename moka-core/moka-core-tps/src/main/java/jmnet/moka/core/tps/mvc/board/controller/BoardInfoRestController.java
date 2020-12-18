@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.board.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -11,14 +12,18 @@ import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.code.BoardTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.board.dto.BoardInfoDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
+import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSimpleDTO;
+import jmnet.moka.core.tps.mvc.board.dto.BoardTypeGroupDTO;
 import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.service.BoardInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -78,12 +83,62 @@ public class BoardInfoRestController extends AbstractCommonController {
         Page<BoardInfo> returnValue = boardInfoService.findAllBoardInfo(search);
 
         // 리턴값 설정
-        List<BoardInfoDTO> memberDtoList = modelMapper.map(returnValue.getContent(), BoardInfoDTO.TYPE);
+        List<BoardInfoDTO> boardDtoList = modelMapper.map(returnValue.getContent(), BoardInfoDTO.TYPE);
         resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(memberDtoList);
+        resultListMessage.setList(boardDtoList);
 
 
         ResultDTO<ResultListDTO<BoardInfoDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 사용중인 게시판을 유형별로 그룹화한 목록 조회
+     *
+     * @return 게시판목록
+     */
+    @ApiOperation(value = "게시판 유형 그룹별 게시판 목록 조회")
+    @GetMapping("/groups")
+    public ResponseEntity<?> getBoardInfoTree() {
+
+        ResultListDTO<BoardInfoDTO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        BoardInfoSearchDTO search = BoardInfoSearchDTO
+                .builder()
+                .usedYn(MokaConstants.YES)
+                .build();
+
+        Page<BoardInfo> resultValue = boardInfoService.findAllBoardInfo(search);
+        List<BoardTypeGroupDTO> returnValue = new ArrayList<>();
+        if (resultValue.getContent() != null) {
+            BoardTypeCode
+                    .toList()
+                    .stream()
+                    .forEach(action -> {
+                        String code = (String) action.get("code");
+                        BoardTypeGroupDTO boardTypeGroupDTO = BoardTypeGroupDTO
+                                .builder()
+                                .boardType((String) action.get("code"))
+                                .boardTypeName((String) action.get("name"))
+                                .build();
+                        resultValue
+                                .getContent()
+                                .forEach(boardInfo -> {
+                                    if (boardInfo
+                                            .getBoardType()
+                                            .getCode()
+                                            .equals(code)) {
+                                        boardTypeGroupDTO.addBoardInfoList(modelMapper.map(boardInfo, BoardInfoSimpleDTO.class));
+                                    }
+                                });
+                        returnValue.add(boardTypeGroupDTO);
+                    });
+        }
+        ResultDTO<List<BoardTypeGroupDTO>> resultDto = new ResultDTO<>(returnValue);
 
         tpsLogger.success(ActionType.SELECT);
 
@@ -214,11 +269,11 @@ public class BoardInfoRestController extends AbstractCommonController {
      * @return 관련아이템 존재 여부
      */
     @ApiOperation(value = "게시판 내 속한 게시글 존재 여부")
-    @GetMapping("/{boardId}/has-members")
-    public ResponseEntity<?> hasBoard(
+    @GetMapping("/{boardId}/has-contents")
+    public ResponseEntity<?> hasContent(
             @ApiParam("게시판코드") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId) {
 
-        boolean exists = boardInfoService.hasBoard(boardId);
+        boolean exists = boardInfoService.hasContents(boardId);
         String message = exists ? msg("tps.board-info.success.select.exist-board") : "";
 
         // 결과리턴
@@ -250,7 +305,7 @@ public class BoardInfoRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
         // 관련 데이터 조회
-        if (boardInfoService.hasBoard(boardId)) {
+        if (boardInfoService.hasContents(boardId)) {
             // 액션 로그에 실패 로그 출력
             tpsLogger.fail(ActionType.DELETE, msg("tps.board-info.error.delete.exist-board", request));
             throw new InvalidDataException(msg("tps.board-info.error.delete.exist-board", request));

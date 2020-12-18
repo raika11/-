@@ -100,4 +100,12 @@ public interface BoardService {
      * @return 삭제 건수
      */
     void deleteAllBoardAttach(Long boardSeq);
+
+    /**
+     * 게시판 첫번째 글을 조회한다.
+     *
+     * @param boardId 게시판 ID
+     * @return Board
+     */
+    Optional<Board> findTopBoard(Integer boardId);
 }

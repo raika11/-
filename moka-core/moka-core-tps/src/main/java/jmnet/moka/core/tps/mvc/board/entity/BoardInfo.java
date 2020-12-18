@@ -3,11 +3,14 @@ package jmnet.moka.core.tps.mvc.board.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.code.BoardTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -49,7 +52,8 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      */
     @Column(name = "BOARD_TYPE")
     @Builder.Default
-    private String boardType = "A";
+    @Enumerated(value = EnumType.STRING)
+    private BoardTypeCode boardType = BoardTypeCode.A;
 
     /**
      * 사용여부
@@ -151,19 +155,22 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      * 추천여부 0:사용안함 1:추천/비추천 2:추천만
      */
     @Column(name = "RECOM_FLAG")
-    private String recomFlag;
+    @Builder.Default
+    private String recomFlag = "0";
 
     /**
      * 신고여부
      */
     @Column(name = "DECLARE_YN")
-    private String declareYn;
+    @Builder.Default
+    private String declareYn = MokaConstants.NO;
 
     /**
      * 캡차여부
      */
     @Column(name = "CAPTCHA_YN")
-    private String captchaYn;
+    @Builder.Default
+    private String captchaYn = MokaConstants.NO;
 
     /**
      * 채널타입(예:JPOD)
@@ -176,5 +183,39 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      */
     @Column(name = "BOARD_DESC")
     private String boardDesc;
+
+    /**
+     * 이메일수신여부
+     */
+    @Column(name = "EMAIL_RECEIVE_YN")
+    @Builder.Default
+    private String emailReceiveYn = MokaConstants.NO;
+
+    /**
+     * 수신이메일(여러명;로 구분)
+     */
+    @Column(name = "RECEIVE_EMAIL")
+    private String receiveEmail;
+
+    /**
+     * 발송이메일
+     */
+    @Column(name = "SEND_EMAIL")
+    private String sendEmail;
+
+    /**
+     * 이메일발송여부
+     */
+    @Column(name = "EMAIL_SEND_YN")
+    @Builder.Default
+    private String emailSendYn = MokaConstants.NO;
+
+
+    /**
+     * 제외컬럼(,)로 연결
+     */
+    @Column(name = "EXCEPT_ITEM")
+    @Builder.Default
+    private String exceptItem = "ADDR";
 
 }

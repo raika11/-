@@ -19,8 +19,9 @@ import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
+import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
+import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkArticleDTO;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkDTO;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkSaveDTO;
@@ -79,16 +80,19 @@ public class BulkRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
 
+    private final ArticleSourceService articleSourceService;
+
     private final TpsLogger tpsLogger;
 
     public BulkRestController(BulkService naverBulkService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger,
-            CodeMgtService codeMgtService, ArticleService articleService) {
+            CodeMgtService codeMgtService, ArticleService articleService, ArticleSourceService articleSourceService) {
         this.codeMgtService = codeMgtService;
         this.naverBulkService = naverBulkService;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.tpsLogger = tpsLogger;
         this.articleService = articleService;
+        this.articleSourceService = articleSourceService;
     }
 
     /**
@@ -190,7 +194,7 @@ public class BulkRestController extends AbstractCommonController {
                 });
 
         // SourceCode check
-        List<ArticleSource> articleSources = articleService.findAllBulkArticleSource();
+        List<ArticleSource> articleSources = articleSourceService.findAllBulkArticleSource();
         boolean isSourceCodeMatch = articleSources
                 .stream()
                 .anyMatch(articleSource -> articleSource
@@ -291,7 +295,7 @@ public class BulkRestController extends AbstractCommonController {
                 throw new Exception(msg("tps.bulk.error.pattern.status"));
             }
 
-            List<ArticleSource> articleSources = articleService.findAllBulkArticleSource();
+            List<ArticleSource> articleSources = articleSourceService.findAllBulkArticleSource();
             boolean isSourceCodeMatch = articleSources
                     .stream()
                     .anyMatch(articleSource -> articleSource

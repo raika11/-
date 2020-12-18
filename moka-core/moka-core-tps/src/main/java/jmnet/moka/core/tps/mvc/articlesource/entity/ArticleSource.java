@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.article.entity;
+package jmnet.moka.core.tps.mvc.articlesource.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 
 /**
  * 매체
@@ -35,13 +34,12 @@ public class ArticleSource extends BaseAudit {
      * 출처
      */
     @Id
-    @Column(name = "SOURCE_CODE", columnDefinition = "char", nullable = false)
+    @Column(name = "SOURCE_CODE", nullable = false)
     private String sourceCode;
 
     /**
      * 출처명
      */
-    @Nationalized
     @Column(name = "SOURCE_NAME", nullable = false)
     private String sourceName;
 
@@ -100,7 +98,7 @@ public class ArticleSource extends BaseAudit {
     private String jstoreUse;
 
     /**
-     * SOCIAL사용
+     * 소셜전송여부
      */
     @Column(name = "SOCIAL_USE", columnDefinition = "char")
     private String socialUse;
@@ -113,9 +111,10 @@ public class ArticleSource extends BaseAudit {
     private String bulkFlag = MokaConstants.NO;
 
     /**
-     * 수신 사용여부
+     * CP수신사용여부
      */
-    @Column(name = "RCV_USED_YN", columnDefinition = "char")
+    @Column(name = "RCV_USED_YN", nullable = false, columnDefinition = "char")
+    @Builder.Default
     private String rcvUsedYn = MokaConstants.YES;
 
     /**
@@ -136,6 +135,9 @@ public class ArticleSource extends BaseAudit {
     @Column(name = "CP_EMAIL")
     private String cpEmail;
 
+    /**
+     * 작업자
+     */
     @Column(name = "LOCAL_ADMIN")
     private String localAdmin;
 
@@ -155,17 +157,22 @@ public class ArticleSource extends BaseAudit {
      * 내용편집 필요여부
      */
     @Column(name = "ART_EDIT_YN", columnDefinition = "char")
+    @Builder.Default
     private String artEditYn = MokaConstants.NO;
 
     /**
      * 조인스XML형식
      */
     @Column(name = "JOINS_XML_FORMAT", columnDefinition = "char")
+    @Builder.Default
     private String joinsXmlFormat = MokaConstants.YES;
 
     /**
      * 이미지수신여부
      */
     @Column(name = "RECEIVE_IMG_YN", columnDefinition = "char")
+    @Builder.Default
     private String receiveImgYn = MokaConstants.NO;
+
+
 }

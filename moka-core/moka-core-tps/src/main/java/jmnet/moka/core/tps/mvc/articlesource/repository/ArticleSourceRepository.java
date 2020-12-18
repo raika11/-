@@ -2,9 +2,9 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.article.repository;
+package jmnet.moka.core.tps.mvc.articlesource.repository;
 
-import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
+import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

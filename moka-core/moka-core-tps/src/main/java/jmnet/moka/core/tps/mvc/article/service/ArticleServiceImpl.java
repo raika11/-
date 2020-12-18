@@ -3,15 +3,12 @@ package jmnet.moka.core.tps.mvc.article.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
-import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleTitle;
 import jmnet.moka.core.tps.mvc.article.mapper.ArticleMapper;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleBasicRepository;
-import jmnet.moka.core.tps.mvc.article.repository.ArticleSourceRepository;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleTitleRepository;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleCodeVO;
@@ -33,16 +30,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleBasicRepository articleBasicRepository;
 
-    private final ArticleSourceRepository articleSourceRepository;
-
     private final ArticleTitleRepository articleTitleRepository;
 
     private final ArticleMapper articleMapper;
 
-    public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleSourceRepository articleSourceRepository,
-            ArticleTitleRepository articleTitleRepository, ArticleMapper articleMapper) {
+    public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
+            ArticleMapper articleMapper) {
         this.articleBasicRepository = articleBasicRepository;
-        this.articleSourceRepository = articleSourceRepository;
         this.articleTitleRepository = articleTitleRepository;
         this.articleMapper = articleMapper;
     }
@@ -60,11 +54,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Long findLastestArticleBasicByArtType(String artType) {
         return articleBasicRepository.findLastestByTotalIdByArtType(artType);
-    }
-
-    @Override
-    public List<ArticleSource> findAllArticleSource(String[] deskingSourceList) {
-        return articleSourceRepository.findAllSourceByDesking(deskingSourceList);
     }
 
     @Override
@@ -145,16 +134,6 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         return Optional.ofNullable(articleDetailVO);
-    }
-
-    @Override
-    public List<ArticleSource> findAllBulkArticleSource() {
-        return findAllUsedArticleSource(ArticleSourceUseTypeCode.BULK);
-    }
-
-    @Override
-    public List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode) {
-        return articleSourceRepository.findAllUsedSource(useTypeCode);
     }
 
     @Override

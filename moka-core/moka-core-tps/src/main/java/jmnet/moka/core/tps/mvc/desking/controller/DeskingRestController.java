@@ -970,7 +970,7 @@ public class DeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "단일 컴포넌트워크 템플릿 조회")
     @GetMapping("/components/{componentSeq}/template")
     public ResponseEntity<?> getTemplate(@ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
-    @Min(value = 0, message = "{tps.component.error.min.componentSeq=}") Long componentSeq) {
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq) {
 
         TemplateVO returnValue = templateService.findTemplateByComponentHist(componentSeq);
 

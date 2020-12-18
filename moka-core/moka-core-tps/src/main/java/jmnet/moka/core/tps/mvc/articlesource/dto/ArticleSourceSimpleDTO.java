@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.article.dto;
+package jmnet.moka.core.tps.mvc.articlesource.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
@@ -24,12 +24,12 @@ import org.apache.ibatis.type.Alias;
 @Setter
 @Getter
 @Builder
-@Alias("ArticleSourceDTO")
-public class ArticleSourceDTO implements Serializable {
+@Alias("ArticleSourceSimpleDTO")
+public class ArticleSourceSimpleDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final Type TYPE = new TypeReference<List<ArticleSourceDTO>>() {
+    public static final Type TYPE = new TypeReference<List<ArticleSourceSimpleDTO>>() {
     }.getType();
 
     /**

@@ -12,7 +12,7 @@ export const getArticleList = ({ search }) => {
 
 // 매체 목록 조회
 export const getSourceList = () => {
-    return instance.get(`/api/articles/sources`).catch((err) => {
+    return instance.get(`/api/article-sources`).catch((err) => {
         throw err;
     });
 };
@@ -35,7 +35,7 @@ export const getBulkArticleList = ({ search }) => {
 
 // 벌크전송 매체 목록 조회(네이버채널용)
 export const getBulkSourceList = () => {
-    return instance.get(`/api/articles/bulk-sources`).catch((err) => {
+    return instance.get(`/api/article-sources/bulk`).catch((err) => {
         throw err;
     });
 };

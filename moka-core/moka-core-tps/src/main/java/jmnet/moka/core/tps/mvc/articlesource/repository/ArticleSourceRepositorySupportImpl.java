@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.article.repository;
+package jmnet.moka.core.tps.mvc.articlesource.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
@@ -11,8 +11,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
-import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
-import jmnet.moka.core.tps.mvc.article.entity.QArticleSource;
+import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
+import jmnet.moka.core.tps.mvc.articlesource.entity.QArticleSource;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
@@ -78,7 +78,7 @@ public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySuppor
                 break;
             default:
         }
-        
+
         QueryResults<ArticleSource> list = query.fetchResults();
         return query
                 .fetchResults()

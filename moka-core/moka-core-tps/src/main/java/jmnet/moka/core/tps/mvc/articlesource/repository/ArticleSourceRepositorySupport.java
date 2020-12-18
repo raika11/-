@@ -2,11 +2,11 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.article.repository;
+package jmnet.moka.core.tps.mvc.articlesource.repository;
 
 import java.util.List;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
-import jmnet.moka.core.tps.mvc.article.entity.ArticleSource;
+import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 
 /**
  * Description: 설명

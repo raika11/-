@@ -218,7 +218,7 @@ const MokaCard = forwardRef((props, ref) => {
             {/* 푸터 버튼 */}
             {footer && (
                 <Card.Footer className={clsx('d-flex', footerClassName)}>
-                    {footerButtons ? (
+                    {footerButtons.length > 0 ? (
                         <>
                             {footerButtons.map(({ variant, text, ...rest }, idx) => (
                                 <Button key={`${text}-${idx}`} variant={variant} {...rest}>

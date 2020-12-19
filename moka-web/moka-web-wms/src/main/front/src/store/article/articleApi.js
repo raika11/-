@@ -39,3 +39,10 @@ export const getBulkSourceList = () => {
         throw err;
     });
 };
+
+// 기사 내 이미지 목록 조회
+export const getArticleImageList = ({ totalId }) => {
+    return instance.get(`/api/articles/${totalId}/components/image`).catch((err) => {
+        throw err;
+    });
+};

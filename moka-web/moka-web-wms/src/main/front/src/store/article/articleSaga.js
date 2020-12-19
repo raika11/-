@@ -43,8 +43,14 @@ function* putArticleEditTitle({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 기사 내 이미지 목록 조회
+ */
+const getArticleImageList = createRequestSaga(act.getArticleImageList, api.getArticleImageList);
+
 export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
     yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
     yield takeLatest(act.PUT_ARTICLE_EDIT_TITLE, putArticleEditTitle);
+    yield takeLatest(act.GET_ARTICLE_IMAGE_LIST, getArticleImageList);
 }

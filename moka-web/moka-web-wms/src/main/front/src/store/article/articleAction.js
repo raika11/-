@@ -30,3 +30,9 @@ export const getSourceList = createAction(GET_SOURCE_LIST, () => ({}));
  */
 export const PUT_ARTICLE_EDIT_TITLE = 'article/PUT_ARTICLE_EDIT_TITLE';
 export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ totalId, title, mobTitle, callback }) => ({ totalId, title, mobTitle, callback }));
+
+/**
+ * 기사 내 이미지 목록 조회
+ */
+export const [GET_ARTICLE_IMAGE_LIST, GET_ARTICLE_IMAGE_LIST_SUCCESS, GET_ARTICLE_IMAGE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_IMAGE_LIST');
+export const getArticleImageList = createAction(GET_ARTICLE_IMAGE_LIST, ({ totalId }) => ({ totalId }));

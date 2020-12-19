@@ -29,6 +29,7 @@ export const initialState = {
         { id: 'totalId', name: '기사ID' },
         { id: 'artReporter', name: '기자명' },
     ],
+    imageList: [],
     invalidList: [],
     sourceList: null,
 };
@@ -84,6 +85,16 @@ export default handleActions(
         [act.GET_SOURCE_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.sourceList = initialState.sourceList;
+            });
+        },
+        [act.GET_ARTICLE_IMAGE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.imageList = body.list;
+            });
+        },
+        [act.GET_ARTICLE_IMAGE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.imageList = initialState.imageList;
             });
         },
     },

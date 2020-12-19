@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
 import Dropzone from 'react-dropzone';
@@ -28,7 +28,7 @@ const defaultProps = {};
 moment.locale('ko');
 
 /**
- * 이미지파일input + preview + dropzone
+ * local 이미지파일 input + dropzone
  * react-dropzone 사용
  */
 const EditThumbImageInput = (props) => {

@@ -26,11 +26,15 @@ const propTypes = {
      */
     height: PropTypes.number,
     /**
-     * 아카이브 img 경로
+     * img 경로
      */
     img: PropTypes.string,
     /**
-     * 로컬 pc 업로드 경로
+     * 기사 내 이미지 존재 여부
+     */
+    articleImg: PropTypes.bool,
+    /**
+     * 로컬 pc 업로드 여부
      */
     localImg: PropTypes.bool,
     /**
@@ -70,7 +74,7 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { width, height, data, img, localImg, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
+    const { width, height, data, img, localImg, articleImg, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
     // 대표 사진 설정 props
     const { represent } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
@@ -152,7 +156,7 @@ const EditThumbCard = forwardRef((props, ref) => {
     useEffect(() => {
         // 썸네일 카드 경로 셋팅
         if (img && !localImg) {
-            let thumb = img.indexOf('blob') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
+            let thumb = img.indexOf('blob') > -1 || img.indexOf('news') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
             setThumbSrc(thumb);
         } else {
             setThumbSrc(img);
@@ -310,7 +314,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                     </div>
 
                     {/* 드롭 카드, 대표 이미지는 텍스트영역 필요없음 */}
-                    {!localImg && !dropCard && !represent && (
+                    {!dropCard && !represent && !localImg && !articleImg && (
                         <div className="p-03 border-top" style={{ minHeight: 48 }}>
                             <div className="d-flex justify-content-between" style={{ height: 20 }}>
                                 <p className="pt-05 pl-05 mb-0 flex-fill h5 text-truncate">{data.text}</p>

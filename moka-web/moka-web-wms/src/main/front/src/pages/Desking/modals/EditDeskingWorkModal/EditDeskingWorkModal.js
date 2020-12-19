@@ -265,6 +265,7 @@ const EditDeskingWorkModal = (props) => {
             <EditThumbModal
                 show={showModal}
                 onHide={() => setShowModal(false)}
+                deskingWorkData={deskingWorkData}
                 setFileValue={setFileValue}
                 thumbFileName={temp.thumbFileName}
                 setThumbFileName={handleThumbFileName}

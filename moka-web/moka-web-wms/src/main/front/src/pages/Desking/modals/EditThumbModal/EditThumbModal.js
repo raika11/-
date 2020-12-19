@@ -7,10 +7,11 @@ import { MokaModal, MokaCardTabs } from '@components';
 import { initialState, getPhotoList, changeSearchOption, clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
+import EditThumbImageInputTable from './EditThumbImageInputTable';
+import EditThumbArticleImageListTable from './EditThumbArticleImageListTable';
 import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
-import EditThumbImageInputTable from './EditThumbImageInputTable';
 import toast from '@utils/toastUtil';
 
 /**
@@ -18,7 +19,7 @@ import toast from '@utils/toastUtil';
  */
 const EditThumbModal = (props) => {
     // modal props
-    const { show, onHide } = props;
+    const { show, onHide, deskingWorkData } = props;
     // 대표 이미지 props
     const { setFileValue, thumbFileName, setThumbFileName } = props;
     const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const EditThumbModal = (props) => {
         path: {
             orgPath: '',
             thumbPath: '',
+            articleImgPath: '',
             localImgPath: '',
         },
         imgProps: {},
@@ -74,19 +76,19 @@ const EditThumbModal = (props) => {
     const handleRepClick = (data, e) => {
         e.stopPropagation();
 
-        debugger;
-        if (thumbFileName === data.imageThumPath || thumbFileName === data.preview) {
+        if (thumbFileName === data.imageThumPath || thumbFileName === data.compFileUrl || thumbFileName === data.preview) {
             toast.warning('이미 등록된 대표 사진입니다.');
-        } else if (repPhoto.path.thumbPath === data.imageThumPath || repPhoto.path.localImgPath === data.preview) {
+        } else if (repPhoto.id === data.id) {
             toast.warning('이미 대표 이미지 영역에 설정된 사진입니다.');
         }
 
         setRepPhoto({
             ...repPhoto,
-            id: data.nid || data.id,
+            id: data.id,
             path: {
                 orgPath: data.imageOnlnPath,
                 thumbPath: data.imageThumPath,
+                articleImgPath: data.compFileUrl,
                 localImgPath: data.preview,
             },
             // imgProps: imgData,
@@ -176,35 +178,32 @@ const EditThumbModal = (props) => {
                         height={503}
                         className="shadow-none w-100"
                         tabs={[
-                            <React.Fragment>
-                                <div className="px-3 py-2">
-                                    <EditThumbSearch search={search} setSearch={setSearch} />
-                                    <EditThumbTable
-                                        total={total}
-                                        page={search.page}
-                                        size={search.pageCount}
-                                        list={list}
-                                        setRepPhoto={setRepPhoto}
-                                        onChangeSearchOption={handleChangeSearchOption}
-                                        onThumbClick={handleThumbClick}
-                                        onRepClick={handleRepClick}
-                                        onEditClick={handleEditClick}
-                                    />
-                                </div>
-                            </React.Fragment>,
-                            <React.Fragment></React.Fragment>,
-                            <React.Fragment>
-                                <div className="px-3 py-2">
-                                    <EditThumbImageInputTable
-                                        setRepPhoto={setRepPhoto}
-                                        onThumbClick={handleThumbClick}
-                                        onRepClick={handleRepClick}
-                                        onEditClick={handleEditClick}
-                                        // className="w-100"
-                                        // height={416}
-                                    />
-                                </div>
-                            </React.Fragment>,
+                            <div className="px-3 py-2">
+                                <EditThumbSearch search={search} setSearch={setSearch} />
+                                <EditThumbTable
+                                    total={total}
+                                    page={search.page}
+                                    size={search.pageCount}
+                                    list={list}
+                                    setRepPhoto={setRepPhoto}
+                                    onChangeSearchOption={handleChangeSearchOption}
+                                    onThumbClick={handleThumbClick}
+                                    onRepClick={handleRepClick}
+                                    onEditClick={handleEditClick}
+                                />
+                            </div>,
+                            <div className="px-3 py-2">
+                                <EditThumbArticleImageListTable
+                                    deskingWorkData={deskingWorkData}
+                                    setRepPhoto={setRepPhoto}
+                                    onThumbClick={handleThumbClick}
+                                    onRepClick={handleRepClick}
+                                    onEditClick={handleEditClick}
+                                />
+                            </div>,
+                            <div className="px-3 py-2">
+                                <EditThumbImageInputTable setRepPhoto={setRepPhoto} onThumbClick={handleThumbClick} onRepClick={handleRepClick} onEditClick={handleEditClick} />
+                            </div>,
                         ]}
                         tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
                         fill
@@ -216,7 +215,7 @@ const EditThumbModal = (props) => {
                         <div className="deskthumb-main d-flex align-items-center justify-content-center" style={{ width: 202 }}>
                             {repPhoto.path.thumbPath !== '' && (
                                 <EditThumbCard
-                                    img={repPhoto.path.localImgPath ? repPhoto.path.localImgPath : repPhoto.path.thumbPath}
+                                    img={repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath}
                                     onThumbClick={handleThumbClick}
                                     onDeleteClick={handleDeleteClick}
                                     onEditClick={handleEditClick}

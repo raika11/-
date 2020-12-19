@@ -26,9 +26,13 @@ const propTypes = {
      */
     height: PropTypes.number,
     /**
-     * img 이미지 경로
+     * 아카이브 img 경로
      */
     img: PropTypes.string,
+    /**
+     * 로컬 pc 업로드 경로
+     */
+    localImg: PropTypes.bool,
     /**
      * alt 이미지 alt
      */
@@ -52,6 +56,7 @@ const defaultProps = {
     height: 168,
     alt: '썸네일이미지',
     data: {},
+    localImg: false,
     selected: false,
 };
 
@@ -65,7 +70,7 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { width, height, data, img, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
+    const { width, height, data, img, localImg, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
     // 대표 사진 설정 props
     const { represent } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
@@ -87,6 +92,8 @@ const EditThumbCard = forwardRef((props, ref) => {
         () => ({
             cardRef: cardRef.current,
             hoverIndex: data.index,
+            wrapperRef: wrapperRef.current,
+            imgRef: imgRef.current,
         }),
         [data],
     );
@@ -144,12 +151,14 @@ const EditThumbCard = forwardRef((props, ref) => {
 
     useEffect(() => {
         // 썸네일 카드 경로 셋팅
-        if (img) {
-            let thumb = img ? `${PHOTO_ARCHIVE_URL}${img}` : undefined;
+        if (img && !localImg) {
+            let thumb = img.indexOf('blob') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
             setThumbSrc(thumb);
+        } else {
+            setThumbSrc(img);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [img]);
+    }, [img, localImg]);
 
     const handleEdit = (e) => {
         e.stopPropagation();
@@ -232,14 +241,16 @@ const EditThumbCard = forwardRef((props, ref) => {
                                             </Button>
                                         )}
                                         {/* 상세 조회 */}
-                                        <Button
-                                            variant="searching"
-                                            className="border-0 p-0 moka-table-button"
-                                            style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                            onClick={() => onThumbClick(data)}
-                                        >
-                                            <MokaIcon iconName="fal-search-plus" />
-                                        </Button>
+                                        {!data.preview && (
+                                            <Button
+                                                variant="searching"
+                                                className="border-0 p-0 moka-table-button"
+                                                style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
+                                                onClick={() => onThumbClick(data)}
+                                            >
+                                                <MokaIcon iconName="fal-search-plus" />
+                                            </Button>
+                                        )}
                                     </>
                                 )}
 
@@ -293,13 +304,13 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         </Button>
                                     </>
                                 )}
-                                {img && <BSImage src={thumbSrc} alt={alt} ref={imgRef} />}
+                                {thumbSrc !== '' && <BSImage src={thumbSrc} alt={alt} ref={imgRef} />}
                             </div>
                         </div>
                     </div>
 
                     {/* 드롭 카드, 대표 이미지는 텍스트영역 필요없음 */}
-                    {!dropCard && !represent && (
+                    {!localImg && !dropCard && !represent && (
                         <div className="p-03 border-top" style={{ minHeight: 48 }}>
                             <div className="d-flex justify-content-between" style={{ height: 20 }}>
                                 <p className="pt-05 pl-05 mb-0 flex-fill h5 text-truncate">{data.text}</p>

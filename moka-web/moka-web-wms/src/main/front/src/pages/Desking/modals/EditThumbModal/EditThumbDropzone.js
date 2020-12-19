@@ -119,7 +119,7 @@ const EditThumbDropzone = (props) => {
                                 className="flex-shrink-0"
                                 key={idx}
                                 data={{ ...data, move: true, index: idx }}
-                                img={data.imageThumPath}
+                                img={data.imageThumPath || data.preview}
                                 moveCard={moveCard}
                                 dropCard
                                 setAddIndex={setAddIndex}

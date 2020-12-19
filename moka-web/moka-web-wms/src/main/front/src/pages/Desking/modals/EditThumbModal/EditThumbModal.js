@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import clsx from 'clsx';
-import moment from 'moment';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DB_DATEFORMAT } from '@/constants';
 import { MokaModal, MokaCardTabs } from '@components';
 import { initialState, getPhotoList, changeSearchOption, clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
@@ -12,8 +10,8 @@ import EditThumbTable from './EditThumbTable';
 import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
+import EditThumbImageInputTable from './EditThumbImageInputTable';
 import toast from '@utils/toastUtil';
-import EditThumbImageInput from './EditThumbImageInput';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
@@ -43,6 +41,7 @@ const EditThumbModal = (props) => {
         path: {
             orgPath: '',
             thumbPath: '',
+            localImgPath: '',
         },
         imgProps: {},
     });
@@ -75,18 +74,20 @@ const EditThumbModal = (props) => {
     const handleRepClick = (data, e) => {
         e.stopPropagation();
 
-        if (thumbFileName === data.imageThumPath) {
+        debugger;
+        if (thumbFileName === data.imageThumPath || thumbFileName === data.preview) {
             toast.warning('이미 등록된 대표 사진입니다.');
-        } else if (repPhoto.path.thumbPath === data.imageThumPath) {
+        } else if (repPhoto.path.thumbPath === data.imageThumPath || repPhoto.path.localImgPath === data.preview) {
             toast.warning('이미 대표 이미지 영역에 설정된 사진입니다.');
         }
 
         setRepPhoto({
             ...repPhoto,
-            id: data.nid,
+            id: data.nid || data.id,
             path: {
                 orgPath: data.imageOnlnPath,
                 thumbPath: data.imageThumPath,
+                localImgPath: data.preview,
             },
             // imgProps: imgData,
         });
@@ -194,9 +195,13 @@ const EditThumbModal = (props) => {
                             <React.Fragment></React.Fragment>,
                             <React.Fragment>
                                 <div className="px-3 py-2">
-                                    <EditThumbImageInput
-                                    // className="w-100"
-                                    // height={416}
+                                    <EditThumbImageInputTable
+                                        setRepPhoto={setRepPhoto}
+                                        onThumbClick={handleThumbClick}
+                                        onRepClick={handleRepClick}
+                                        onEditClick={handleEditClick}
+                                        // className="w-100"
+                                        // height={416}
                                     />
                                 </div>
                             </React.Fragment>,
@@ -211,7 +216,7 @@ const EditThumbModal = (props) => {
                         <div className="deskthumb-main d-flex align-items-center justify-content-center" style={{ width: 202 }}>
                             {repPhoto.path.thumbPath !== '' && (
                                 <EditThumbCard
-                                    img={repPhoto.path.thumbPath}
+                                    img={repPhoto.path.localImgPath ? repPhoto.path.localImgPath : repPhoto.path.thumbPath}
                                     onThumbClick={handleThumbClick}
                                     onDeleteClick={handleDeleteClick}
                                     onEditClick={handleEditClick}

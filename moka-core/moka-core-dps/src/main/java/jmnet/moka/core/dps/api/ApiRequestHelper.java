@@ -233,7 +233,7 @@ public class ApiRequestHelper implements ApiListingScannerPlugin {
                 .tags(tagSet)
                 .summary(api.getDescription() + " [ " + api.getApiConfig().getXmlFile() + " ]")
                 .codegenMethodNameStem(api.getId())
-                .method(HttpMethod.GET).notes(api.getDescription()).parameters(getApiParameter(api))
+                .method(api.getMethod()).notes(api.getDescription()).parameters(getApiParameter(api))
                 .responseMessages(responseMessages()).responseModel(new ModelRef("string"))
                 .build());
         return apiOperationList;

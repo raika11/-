@@ -23,9 +23,9 @@ import jmnet.moka.core.dps.api.handler.DefaultApiRequestHandler;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.excepton.ParameterException;
 
-public class MspApiRequestHandler extends DefaultApiRequestHandler {
+public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
-	public static final Logger logger = LoggerFactory.getLogger(MspApiRequestHandler.class);
+	public static final Logger logger = LoggerFactory.getLogger(MokaApiRequestHandler.class);
 
 	@Autowired
 	private CacheManager cacheManager;
@@ -67,6 +67,11 @@ public class MspApiRequestHandler extends DefaultApiRequestHandler {
 
             ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
                     apiResolver, HttpHelper.getParamMap(request));
+
+			// Method가 일치하는지 확인한다.
+			if ( !apiContext.getApi().getMethod().matches(request.getMethod())) {
+				return this.getMethodNotAllowedResponse(request, apiResolver);
+			}
 
             // ACL, Cross Origin 적용
 			String referer = request.getHeader("Referer");

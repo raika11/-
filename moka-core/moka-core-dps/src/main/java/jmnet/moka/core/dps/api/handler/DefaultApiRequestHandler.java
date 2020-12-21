@@ -302,8 +302,6 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
         return null;
     }
 
-
-
     protected ResponseEntity<?> getApiNotFoundResponse(HttpServletRequest request,
             ApiResolver apiResolver) {
         // apiPath는 존재하지만 apiId를 찾을 수 없는 경우
@@ -313,7 +311,17 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
                 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
                 .body(errorResult);
         return responseEntity;
+    }
 
+    protected ResponseEntity<?> getMethodNotAllowedResponse(HttpServletRequest request,
+            ApiResolver apiResolver) {
+        // api는 존재하지만 method가 일치하지 않을 경우
+        ApiResult errorResult = ApiResult.createApiErrorResult(
+                new ApiException("Method Not Allowed", apiResolver.getPath(), apiResolver.getId()));
+        ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
+                                                         .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
+                                                         .body(errorResult);
+        return responseEntity;
     }
 
     @Override

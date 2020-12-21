@@ -9,12 +9,14 @@ import java.util.Map;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.dps.api.ApiCacheHelper;
 import jmnet.moka.core.dps.api.ApiParser;
+import org.springframework.http.HttpMethod;
 
 public class Api {
     @JsonIgnore
     private ApiConfig apiConfig;
     @JsonProperty("parameter")
     private Map<String, Parameter> parameterMap;
+    private HttpMethod method;
     private String description;
     private String id;
     private long expire;
@@ -28,12 +30,13 @@ public class Api {
     private List<String> keyList = ApiParser.EMPTY_TOKEN_LIST;
 
     public Api(ApiConfig apiConfig, String id) {
-        this(apiConfig, id, 0L, null, null, null, null);
+        this(apiConfig, id, null, 0L, null, null, null, null);
     }
 
-    public Api(ApiConfig apiConfig, String id, long expire, String period, String description, String contentType, String cors) {
+    public Api(ApiConfig apiConfig, String id, HttpMethod method, long expire, String period, String description, String contentType, String cors) {
         this.apiConfig = apiConfig;
         this.id = id;
+        this.method = method;
         this.period = period;
         this.expire = expire;
         this.description = description;
@@ -50,6 +53,8 @@ public class Api {
     public String getId() {
         return this.id;
     }
+
+    public HttpMethod getMethod() { return this.method; }
 
     public long getExpire() {
         return this.expire;

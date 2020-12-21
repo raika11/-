@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -58,6 +59,7 @@ public class ApiParser {
     private static final String EL_REFERER = "referer";
 	private static final String EL_CHILDREN = "./*";
 	private static final String ATTR_ID = "id";
+	private static final String ATTR_METHOD = "method";
     private static final String ATTR_EXPIRE = "expire";
     private static final String ATTR_NAME = "name";
 	private static final String ATTR_PERIOD = "period";
@@ -151,6 +153,11 @@ public class ApiParser {
     private Api getApi(ApiConfig apiConfig, Node node) throws XPathExpressionException, ApiException {
     	Element apiEl = (Element)node;
     	String id = apiEl.getAttribute(ATTR_ID);
+    	String methodStr = apiEl.getAttribute(ATTR_METHOD);
+    	HttpMethod method = HttpMethod.GET;
+    	if (methodStr.equalsIgnoreCase("post")) {
+    	    method = HttpMethod.POST;
+        }
         String expireAttr = apiEl.getAttribute(ATTR_EXPIRE);
         long expire = ApiCacheHelper.EXPIRE_UNDEFINED;
         if (McpString.isNotEmpty(expireAttr)) {
@@ -161,7 +168,7 @@ public class ApiParser {
     	String description = descriptionNode.getTextContent(); 
     	String cors =apiEl.getAttribute(ATTR_CORS);
     	String contentType =apiEl.getAttribute(ATTR_CONTENT_TYPE);
-        Api api = new Api(apiConfig, id, expire, period, description, contentType, cors);
+        Api api = new Api(apiConfig, id, method, expire, period, description, contentType, cors);
     	setParameter(api, apiEl);
     	setRequestList(api, apiEl);
         setKeys(api, apiEl);

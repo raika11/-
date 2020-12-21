@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupWareUser, getSmsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, GET_SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
+import { getGroupWareUser, smsRequest, registerRequest, approvalRequest, GET_GROUP_WARE_USER, SMS_REQUEST } from '@store/auth';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -34,15 +34,15 @@ const RegisterModal = (props) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [requestReason, setRequestReason] = useState('');
     const [smsAuth, setSmsAuth] = useState('');
-    const [smsUnlock, setSmsUnlock] = useState(false);
     const [requestSms, setRequestSms] = useState(false);
     const [minutes, setMinutes] = useState(defaultMinutes);
     const [seconds, setSeconds] = useState(defaultSeconds);
     const [newRequestCode, setNewRequestCode] = useState('');
     const [newSmsCode, setNewSmsCode] = useState('');
-
+    const [smsUnlock, setSmsUnlock] = useState(false);
     const [invalidList, setInvalidList] = useState([]);
     const [btnOkDisplay, setBtnOkDisplay] = useState('none');
+    const [registerRequestMessage, setRegisterRequestMessage] = useState('');
     const [error, setError] = useState({
         password: false,
         confirmPassword: false,
@@ -50,7 +50,7 @@ const RegisterModal = (props) => {
     });
 
     const { loading } = useSelector((store) => ({
-        loading: store.loading[GET_GROUP_WARE_USER] || store.loading[GET_SMS_REQUEST] || store.loading[UNLOCK_REQUEST] || store.loading[UNLOCK_SMS],
+        loading: store.loading[GET_GROUP_WARE_USER] || store.loading[SMS_REQUEST],
     }));
 
     /**
@@ -105,18 +105,18 @@ const RegisterModal = (props) => {
      * 입력된 validate체크
      * @param {} obj
      */
-    const validate = (unlock) => {
+    const validate = (member) => {
         let isInvalid = false;
         let errList = [];
 
-        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(unlock.password)) {
+        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(member.password)) {
             errList.push({
                 field: 'password',
                 reason: '비밀번호 형식이 올바르지 않습니다.',
             });
             isInvalid = isInvalid | true;
         }
-        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(unlock.confirmPassword)) {
+        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(member.confirmPassword)) {
             errList.push({
                 field: 'confirmPassword',
                 reason: '비밀번호 확인 형식이 올바르지 않습니다.',
@@ -124,14 +124,14 @@ const RegisterModal = (props) => {
             isInvalid = isInvalid | true;
         }
 
-        if (unlock.password !== unlock.confirmPassword) {
+        if (member.password !== member.confirmPassword) {
             errList.push({
                 field: 'confirmPassword',
-                reason: '입력한 비밀번호와 확인 비밀번호가 일치하지 않습니다..',
+                reason: '입력한 비밀번호와 확인 비밀번호가 일치하지 않습니다.',
             });
             isInvalid = isInvalid | true;
         }
-        if (unlock.requestReason === '') {
+        if (member.requestReason === '') {
             errList.push({
                 field: 'requestReason',
                 reason: '사유는 필수 입력 항목 입니다.',
@@ -139,7 +139,7 @@ const RegisterModal = (props) => {
             isInvalid = isInvalid | true;
         }
 
-        if (typeof unlock.smsAuth !== 'undefined' && !/^[0-9]{4,6}$/.test(unlock.smsAuth)) {
+        if (typeof member.smsAuth !== 'undefined' && !/^[0-9]{4,6}$/.test(member.smsAuth)) {
             errList.push({
                 field: 'smsAuth',
                 reason: 'SMS인증번호는 4자리 이상 6자리 이하의 숫자로 입력하세요.',
@@ -151,41 +151,26 @@ const RegisterModal = (props) => {
     };
 
     /**
-     * 본인인증 해제
-     */
-    const handleClickSmsUnlock = useCallback(() => {
-        const unlock = {
-            memberId: userObj.userId,
-            password,
-            confirmPassword,
-            requestReason,
-        };
-
-        if (validate(unlock)) {
-            setSmsUnlock(true);
-            setBtnOkDisplay('block');
-        }
-    }, [confirmPassword, password, requestReason, userObj.userId]);
-
-    /**
      * 인증번호 요청
      */
-    const handleClickRequestSms = useCallback(() => {
+    const handleClickSmsRequest = useCallback(() => {
         if (!requestSms || parseInt(minutes) <= defaultMinutes - 2) {
-            const unlock = {
+            const member = {
                 memberId: userObj.userId,
                 password,
                 confirmPassword,
                 requestReason,
                 requestType: newSmsCode,
             };
-            if (validate(unlock)) {
+
+            if (validate(member)) {
                 dispatch(
-                    getSmsRequest({
-                        unlock: unlock,
+                    smsRequest({
+                        member: member,
                         callback: ({ header, body }) => {
                             if (header.success) {
                                 messageBox.alert(header.message);
+                                setBtnOkDisplay('block');
                                 setRequestSms(true);
                                 setMinutes(defaultMinutes);
                                 setSeconds(defaultSeconds);
@@ -266,26 +251,31 @@ const RegisterModal = (props) => {
         });
     };
     /**
-     * 본인인증 해제 전송
+     * 사용자 신규등록 요청
      */
-    const handleClickApprovalRequest = useCallback(() => {
-        const unlock = {
+    const handleClickRegisterRequest = useCallback(() => {
+        const member = {
             memberId: userObj.userId,
-            smsAuth,
+            memberNm: userObj.userName,
+            dept: userObj.groupName,
+            mobilePhone: userObj.mobile,
+            companyPhone: userObj.phone,
+            email: userObj.email,
             password,
             confirmPassword,
             requestReason,
             requestType: newRequestCode,
         };
-        if (validate(unlock)) {
+        if (validate(member)) {
             dispatch(
-                approvalRequest({
-                    unlock: unlock,
+                registerRequest({
+                    member: member,
                     callback: ({ header, body }) => {
+                        console.log(header, body);
                         if (header.success) {
-                            toast.success(header.message);
-                            reset();
-                            onHide();
+                            setRegisterRequestMessage(header.message.replace(/\n/g, '<br />'));
+                            //toast.success(header.message);
+                            setSmsUnlock(true);
                         } else {
                             setError({ ...error, smsAuth: true });
                             messageBox.alert(header.message);
@@ -294,8 +284,50 @@ const RegisterModal = (props) => {
                 }),
             );
         }
-    }, [confirmPassword, dispatch, error, newRequestCode, onHide, password, requestReason, smsAuth, userObj.userId]);
+    }, [
+        confirmPassword,
+        dispatch,
+        error,
+        newRequestCode,
+        password,
+        requestReason,
+        userObj.email,
+        userObj.groupName,
+        userObj.mobile,
+        userObj.phone,
+        userObj.userId,
+        userObj.userName,
+    ]);
 
+    const handleClickApprovalRequest = useCallback(() => {
+        const member = {
+            memberId: userObj.userId,
+            password,
+            confirmPassword,
+            requestReason,
+            smsAuth,
+            requestType: newSmsCode,
+        };
+
+        if (validate(member)) {
+            dispatch(
+                approvalRequest({
+                    member: member,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            messageBox.alert(header.message, () => {
+                                reset();
+                                onHide();
+                            });
+                        } else {
+                            setError({ ...error, smsAuth: true });
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        }
+    }, [confirmPassword, dispatch, error, newSmsCode, onHide, password, requestReason, smsAuth, userObj.userId]);
     /**
      * 닫기
      */
@@ -416,7 +448,7 @@ const RegisterModal = (props) => {
                                         isInvalid={error.password}
                                         onChange={handleChangeValue}
                                         inputProps={{ autoComplete: 'off' }}
-                                        disabled={requestSms}
+                                        disabled={smsUnlock}
                                         required
                                     />
                                     <MokaInputLabel
@@ -428,7 +460,7 @@ const RegisterModal = (props) => {
                                         isInvalid={error.confirmPassword}
                                         onChange={handleChangeValue}
                                         inputProps={{ autoComplete: 'off' }}
-                                        disabled={requestSms}
+                                        disabled={smsUnlock}
                                         required
                                     />
                                     <MokaInputLabel
@@ -439,14 +471,14 @@ const RegisterModal = (props) => {
                                         isInvalid={error.requestReason}
                                         onChange={handleChangeValue}
                                         inputProps={{ autoComplete: 'off' }}
-                                        disabled={requestSms}
+                                        disabled={smsUnlock}
                                         required
                                     />
                                 </Col>
                             </Form.Group>
                             {!smsUnlock ? (
                                 <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
-                                    <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsUnlock}>
+                                    <Button variant="outline-neutral" className="mr-2" onClick={handleClickRegisterRequest}>
                                         신청
                                     </Button>
                                 </Form.Group>
@@ -456,11 +488,7 @@ const RegisterModal = (props) => {
                             {smsUnlock ? (
                                 <>
                                     <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
-                                        <Form.Label className="form-label p-0 mb-0">
-                                            그룹웨어에 등록된 휴대번호로 본인인증 문자가 발송됩니다.
-                                            <br />
-                                            수신한 인증번호 입력 후 '확인' 버튼을 누르면 잠금이 해제됩니다.
-                                        </Form.Label>
+                                        <Form.Label className="form-label p-0 mb-0" dangerouslySetInnerHTML={{ __html: registerRequestMessage }}></Form.Label>
                                     </Form.Group>
                                     <Form.Group as={Row} className="mb-3 justify-content-md-center align-items-center">
                                         {requestSms ? (
@@ -478,7 +506,7 @@ const RegisterModal = (props) => {
                                             ''
                                         )}
                                         <Col xs lg="4" className="p-0">
-                                            <Button variant="outline-neutral" className="mr-2" onClick={handleClickRequestSms}>
+                                            <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsRequest}>
                                                 인증번호 {requestSms ? '재전송' : '전송'}
                                             </Button>
                                         </Col>

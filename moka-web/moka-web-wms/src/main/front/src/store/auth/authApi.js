@@ -39,7 +39,7 @@ export const getGroupWareUser = (groupWareUserId) => {
 };
 
 // SMS 인증문자 요청
-export const getSmsRequest = ({ payload }) => {
+export const smsRequest = ({ payload }) => {
     const queryString = qs.stringify(payload);
     return instance.get(`/api/member-join/${payload.memberId}/sms-request?${queryString}`).catch((err) => {
         throw err;
@@ -57,7 +57,15 @@ export const approvalRequest = ({ payload }) => {
 // 관리자 해제 요청
 export const unlockRequest = ({ payload }) => {
     const queryString = qs.stringify(payload);
+    console.log(queryString);
     return instance.get(`/api/member-join/${payload.memberId}/unlock-request?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 사용자 신규등록 요청
+export const registerRequest = ({ payload }) => {
+    return instance.post('/api/member-join/register-request', qs.stringify(payload)).catch((err) => {
         throw err;
     });
 };

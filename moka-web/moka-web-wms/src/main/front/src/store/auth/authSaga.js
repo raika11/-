@@ -68,9 +68,9 @@ export function* getGroupWareUser({ payload: { groupWareUserId, callback } }) {
  * SMS 인증 요청
  * @param {object} param0.payload
  */
-export function* getSmsRequest({ payload: { unlock, callback } }) {
+export function* smsRequest({ payload: { member, callback } }) {
     try {
-        const response = yield call(api.getSmsRequest, { payload: unlock });
+        const response = yield call(api.smsRequest, { payload: member });
         callback(response.data);
     } catch (err) {}
 }
@@ -79,9 +79,9 @@ export function* getSmsRequest({ payload: { unlock, callback } }) {
  * 본인인증 해제
  * @param {object} param0.payload
  */
-export function* approvalRequest({ payload: { unlock, callback } }) {
+export function* approvalRequest({ payload: { member, callback } }) {
     try {
-        const response = yield call(api.approvalRequest, { payload: unlock });
+        const response = yield call(api.approvalRequest, { payload: member });
         callback(response.data);
     } catch (err) {}
 }
@@ -90,9 +90,20 @@ export function* approvalRequest({ payload: { unlock, callback } }) {
  * 관리자 해제 요청
  * @param {object} param0.payload
  */
-export function* unlockRequest({ payload: { unlock, callback } }) {
+export function* unlockRequest({ payload: { member, callback } }) {
     try {
-        const response = yield call(api.unlockRequest, { payload: unlock });
+        const response = yield call(api.unlockRequest, { payload: member });
+        callback(response.data);
+    } catch (err) {}
+}
+
+/**
+ * 사용자 신규등록 요청
+ * @param {object} param0.payload
+ */
+export function* registerRequest({ payload: { member, callback } }) {
+    try {
+        const response = yield call(api.registerRequest, { payload: member });
         callback(response.data);
     } catch (err) {}
 }
@@ -232,9 +243,10 @@ export default function* authSaga() {
     yield takeLatest(authAction.LOGOUT, logout);
     yield takeLatest(authAction.GET_BACK_OFFICE_USER, getBackOfficeUser);
     yield takeLatest(authAction.GET_GROUP_WARE_USER, getGroupWareUser);
-    yield takeLatest(authAction.GET_SMS_REQUEST, getSmsRequest);
+    yield takeLatest(authAction.SMS_REQUEST, smsRequest);
     yield takeLatest(authAction.UNLOCK_SMS, approvalRequest);
     yield takeLatest(authAction.UNLOCK_REQUEST, unlockRequest);
+    yield takeLatest(authAction.REGISTER_REQUEST, registerRequest);
     yield takeLatest(authAction.GET_USER_MENU_TREE, getUserMenuTree);
     yield takeLatest(authAction.GET_DOMAIN_LIST, getDomainList);
 }

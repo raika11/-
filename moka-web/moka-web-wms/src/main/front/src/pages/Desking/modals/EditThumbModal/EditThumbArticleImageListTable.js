@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import EditThumbCard from './EditThumbCard';
 import { getArticleImageList } from '@store/article';
+import { MokaLoader } from '@/components';
 
 const propTypes = {
     /**
@@ -20,7 +21,7 @@ const defaultProps = {};
  * 아티클 기사 이미지 목록 테이블
  */
 const EditThumbArticleImageListTable = (props) => {
-    const { deskingWorkData, setRepPhoto, onRepClick } = props;
+    const { loading, deskingWorkData, onRepClick } = props;
     const dispatch = useDispatch();
 
     const imageList = useSelector((store) => store.article.imageList);
@@ -37,15 +38,9 @@ const EditThumbArticleImageListTable = (props) => {
     return (
         <div className="border w-100 custom-scroll mb-2" style={{ height: 420 }}>
             <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
+                {loading && <MokaLoader />}
                 {imageList.map((data) => (
-                    <EditThumbCard
-                        key={data.seqNo}
-                        img={`https://pds.joins.com${data.compFileUrl}`}
-                        data={{ ...data, id: data.seqNo }}
-                        setRepPhoto={setRepPhoto}
-                        onRepClick={onRepClick}
-                        articleImg
-                    />
+                    <EditThumbCard key={data.seqNo} img={data.compFileUrl} data={{ ...data, id: data.seqNo }} onRepClick={onRepClick} articleImg />
                 ))}
             </div>
         </div>

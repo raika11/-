@@ -124,7 +124,10 @@ const EditDeskingWorkModal = (props) => {
      * 대표 이미지 thumbName
      */
     const handleThumbFileName = (data) => {
-        setTemp({ ...temp, thumbFileName: data });
+        if (data) {
+            let irImgSrc = data.indexOf('news') > -1 || data.indexOf('blob') > -1 ? data : `${PHOTO_ARCHIVE_URL}${data}`;
+            setTemp({ ...temp, thumbFileName: data, irImg: irImgSrc });
+        }
     };
 
     useEffect(() => {
@@ -145,14 +148,14 @@ const EditDeskingWorkModal = (props) => {
         // 기사 deskingWorkData 셋팅
         if (show && deskingWorkData) {
             // 이미지경로
-            let irImg = deskingWorkData.thumbFileName ? `${PHOTO_ARCHIVE_URL}${deskingWorkData.thumbFileName}` : undefined;
+            let irImg = deskingWorkData.irImg;
             // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
             setTemp({
                 ...deskingWorkData,
                 irImg,
             });
         }
-    }, [PHOTO_ARCHIVE_URL, deskingWorkData, show]);
+    }, [deskingWorkData, show]);
 
     useEffect(() => {
         // 기타코드 로드

@@ -156,7 +156,7 @@ const EditThumbCard = forwardRef((props, ref) => {
     useEffect(() => {
         // 썸네일 카드 경로 셋팅
         if (img && !localImg) {
-            let thumb = img.indexOf('blob') > -1 || img.indexOf('news') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
+            let thumb = img.indexOf('news') > -1 || img.indexOf('blob') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
             setThumbSrc(thumb);
         } else {
             setThumbSrc(img);

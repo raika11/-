@@ -4,7 +4,8 @@ import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MokaModal, MokaCardTabs } from '@components';
-import { initialState, getPhotoList, changeSearchOption, clearStore } from '@store/photoArchive';
+import { GET_PHOTO_LIST, initialState, getPhotoList, changeSearchOption, clearStore } from '@store/photoArchive';
+import { GET_ARTICLE_IMAGE_LIST } from '@store/article';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
 import EditThumbImageInputTable from './EditThumbImageInputTable';
@@ -23,11 +24,12 @@ const EditThumbModal = (props) => {
     // 대표 이미지 props
     const { setFileValue, thumbFileName, setThumbFileName } = props;
     const dispatch = useDispatch();
-    const { total, list, storeSearch, photo } = useSelector(
+    const { total, list, storeSearch, loading, photo } = useSelector(
         (store) => ({
             total: store.photoArchive.total,
             list: store.photoArchive.list,
             storeSearch: store.photoArchive.search,
+            loading: store.loading[GET_PHOTO_LIST] || store.loading[GET_ARTICLE_IMAGE_LIST],
             photo: store.photoArchive.photo,
         }),
         shallowEqual,
@@ -66,7 +68,18 @@ const EditThumbModal = (props) => {
 
         // 대표사진 삭제
         if (!data.index) {
-            setRepPhoto({ ...repPhoto, path: { thumbPath: '' } });
+            setRepPhoto({
+                ...repPhoto,
+                type: '',
+                id: '',
+                path: {
+                    orgPath: '',
+                    thumbPath: '',
+                    articleImgPath: '',
+                    localImgPath: '',
+                },
+                imgProps: {},
+            });
         }
     };
 
@@ -82,17 +95,38 @@ const EditThumbModal = (props) => {
             toast.warning('이미 대표 이미지 영역에 설정된 사진입니다.');
         }
 
-        setRepPhoto({
-            ...repPhoto,
-            id: data.id,
-            path: {
-                orgPath: data.imageOnlnPath,
-                thumbPath: data.imageThumPath,
-                articleImgPath: data.compFileUrl,
-                localImgPath: data.preview,
-            },
-            // imgProps: imgData,
-        });
+        if (data.nid) {
+            setRepPhoto({
+                ...repPhoto,
+                type: 'archive',
+                id: data.id,
+                path: {
+                    orgPath: data.imageOnlnPath,
+                    thumbPath: data.imageThumPath,
+                },
+                // imgProps: imgData,
+            });
+        } else if (data.seqNo) {
+            setRepPhoto({
+                ...repPhoto,
+                type: 'article',
+                id: data.id,
+                path: {
+                    articleImgPath: data.compFileUrl,
+                },
+                // imgProps: imgData,
+            });
+        } else if (data.preview) {
+            setRepPhoto({
+                ...repPhoto,
+                type: 'local',
+                id: data.id,
+                path: {
+                    localImgPath: data.preview,
+                },
+                // imgProps: imgData,
+            });
+        }
     };
 
     /**
@@ -112,10 +146,10 @@ const EditThumbModal = (props) => {
     };
 
     /**
-     * 등록 버튼 클릭
+     * 이미지 편집 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        setThumbFileName(repPhoto.path.thumbPath);
+        setThumbFileName(repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath);
         // setFileValue(repPhoto);
         handleHide();
     };
@@ -184,8 +218,8 @@ const EditThumbModal = (props) => {
                                     total={total}
                                     page={search.page}
                                     size={search.pageCount}
+                                    loading={loading}
                                     list={list}
-                                    setRepPhoto={setRepPhoto}
                                     onChangeSearchOption={handleChangeSearchOption}
                                     onThumbClick={handleThumbClick}
                                     onRepClick={handleRepClick}
@@ -193,16 +227,10 @@ const EditThumbModal = (props) => {
                                 />
                             </div>,
                             <div className="px-3 py-2">
-                                <EditThumbArticleImageListTable
-                                    deskingWorkData={deskingWorkData}
-                                    setRepPhoto={setRepPhoto}
-                                    onThumbClick={handleThumbClick}
-                                    onRepClick={handleRepClick}
-                                    onEditClick={handleEditClick}
-                                />
+                                <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} loading={loading} onRepClick={handleRepClick} />
                             </div>,
                             <div className="px-3 py-2">
-                                <EditThumbImageInputTable setRepPhoto={setRepPhoto} onThumbClick={handleThumbClick} onRepClick={handleRepClick} onEditClick={handleEditClick} />
+                                <EditThumbImageInputTable onRepClick={handleRepClick} onEditClick={handleEditClick} />
                             </div>,
                         ]}
                         tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
@@ -213,7 +241,7 @@ const EditThumbModal = (props) => {
                         style={{ backgroundColor: 'F4F5F6' }}
                     >
                         <div className="deskthumb-main d-flex align-items-center justify-content-center" style={{ width: 202 }}>
-                            {repPhoto.path.thumbPath !== '' && (
+                            {(repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath) && (
                                 <EditThumbCard
                                     img={repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath}
                                     onThumbClick={handleThumbClick}

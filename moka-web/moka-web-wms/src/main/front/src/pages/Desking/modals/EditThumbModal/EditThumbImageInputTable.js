@@ -34,7 +34,7 @@ moment.locale('ko');
 const EditThumbImageInput = (props) => {
     const { className } = props;
 
-    const { setRepPhoto, onRepClick } = props;
+    const { onRepClick } = props;
 
     // state
     const [files, setFiles] = useState([]);
@@ -91,7 +91,7 @@ const EditThumbImageInput = (props) => {
                     >
                         {/* 이미지 미리보기 */}
                         {files.map((file) => (
-                            <EditThumbCard ref={cardRef} key={file.id} img={file.preview} localImg data={file} setRepPhoto={setRepPhoto} onRepClick={onRepClick} />
+                            <EditThumbCard ref={cardRef} key={file.id} img={file.preview} data={file} onRepClick={onRepClick} localImg />
                         ))}
 
                         <input {...getInputProps()} />

@@ -31,6 +31,7 @@ const SnsMeta = React.lazy(() => import('@pages/SnsManage/SnsMeta'));
 const FbArt = React.lazy(() => import('@pages/SnsManage/FbArt'));
 const ArticlePage = React.lazy(() => import('@pages/ArticlePage'));
 const Bulks = React.lazy(() => import('@pages/Bulks'));
+const Poll = React.lazy(() => import('@pages/Survey/Poll'));
 
 const routes = [
     {
@@ -329,6 +330,16 @@ const routes = [
         name: 'bulkh-su',
         displayName: '선데이 아티클 핫클릭',
         component: Bulks,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/poll',
+        name: 'poll',
+        displayName: '투표 관리',
+        component: Poll,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

@@ -177,7 +177,7 @@ public class ArticleRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "벌크전송 매체목록 조회")
+    @ApiOperation(value = "기사내 이미지목록 조회")
     @GetMapping("/{totalId}/components/image")
     public ResponseEntity<?> getImageComponentList(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
             throws Exception {

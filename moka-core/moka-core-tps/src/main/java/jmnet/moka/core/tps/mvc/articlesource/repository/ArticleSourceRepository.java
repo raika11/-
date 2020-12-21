@@ -16,4 +16,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ArticleSourceRepository extends JpaRepository<ArticleSource, String>, ArticleSourceRepositorySupport {
+
+    /**
+     * 매체코드 사용중인 매체 조회
+     *
+     * @param sourceCode 매체코드
+     * @return 사용중인 매체 갯수
+     */
+    Integer countBySourceCode(String sourceCode);
+
 }

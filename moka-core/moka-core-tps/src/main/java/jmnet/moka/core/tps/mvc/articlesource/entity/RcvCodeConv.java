@@ -43,34 +43,16 @@ public class RcvCodeConv implements Serializable {
     private Long seqNo;
 
     /**
-     * FR코드
+     * FR코드(CP 분류코드)
      */
     @Column(name = "FR_CODE", nullable = false)
     private String frCode;
 
     /**
-     * TO코드
+     * TO코드(분류코드)
      */
     @Column(name = "TO_CODE", nullable = false)
     private String toCode;
-
-    /**
-     * TO코드PRIME
-     */
-    @Column(name = "TO_CODE_PRIME")
-    private String toCodePrime;
-
-    /**
-     * 코드타입
-     */
-    @Column(name = "CODE_TYPE")
-    private String codeType;
-
-    /**
-     * JAM중분류코드
-     */
-    @Column(name = "SECTCODE")
-    private String sectcode;
 
     /**
      * 매체

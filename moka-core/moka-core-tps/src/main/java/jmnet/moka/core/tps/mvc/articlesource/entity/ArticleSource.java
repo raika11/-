@@ -7,7 +7,10 @@ package jmnet.moka.core.tps.mvc.articlesource.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import lombok.AllArgsConstructor;
@@ -175,4 +178,14 @@ public class ArticleSource extends BaseAudit {
     @Column(name = "RECEIVE_IMG_YN", columnDefinition = "char")
     @Builder.Default
     private String receiveImgYn = MokaConstants.NO;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        this.bulkFlag = McpString.defaultValue(this.bulkFlag, MokaConstants.NO);
+        this.rcvUsedYn = McpString.defaultValue(this.rcvUsedYn, MokaConstants.YES);
+        this.artEditYn = McpString.defaultValue(this.artEditYn, MokaConstants.NO);
+        this.joinsXmlFormat = McpString.defaultValue(this.joinsXmlFormat, MokaConstants.YES);
+        this.receiveImgYn = McpString.defaultValue(this.receiveImgYn, MokaConstants.NO);
+    }
 }

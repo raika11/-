@@ -10,9 +10,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
-import jmnet.moka.core.tps.mvc.code.dto.JamMastercodeDTO;
 import jmnet.moka.core.tps.mvc.code.dto.MastercodeDTO;
-import jmnet.moka.core.tps.mvc.code.entity.JamMastercode;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
 import jmnet.moka.core.tps.mvc.code.service.CodeService;
 import lombok.extern.slf4j.Slf4j;
@@ -54,23 +52,23 @@ public class CodeRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "JAM 마스터코드 목록조회")
-    @GetMapping("/jam-masters")
-    public ResponseEntity<?> getJamMastercodeList() {
-
-        // 조회
-        List<JamMastercode> returnValue = codeService.findAllJamMastercode();
-
-        // 리턴값 설정
-        ResultListDTO<JamMastercodeDTO> resultListMessage = new ResultListDTO<>();
-        List<JamMastercodeDTO> dtoList = modelMapper.map(returnValue, JamMastercodeDTO.TYPE);
-        resultListMessage.setTotalCnt(returnValue.size());
-        resultListMessage.setList(dtoList);
-
-        ResultDTO<ResultListDTO<JamMastercodeDTO>> resultDto = new ResultDTO<>(resultListMessage);
-        tpsLogger.success(ActionType.SELECT, true);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
+    //    @ApiOperation(value = "JAM 마스터코드 목록조회")
+    //    @GetMapping("/jam-masters")
+    //    public ResponseEntity<?> getJamMastercodeList() {
+    //
+    //        // 조회
+    //        List<JamMastercode> returnValue = codeService.findAllJamMastercode();
+    //
+    //        // 리턴값 설정
+    //        ResultListDTO<JamMastercodeDTO> resultListMessage = new ResultListDTO<>();
+    //        List<JamMastercodeDTO> dtoList = modelMapper.map(returnValue, JamMastercodeDTO.TYPE);
+    //        resultListMessage.setTotalCnt(returnValue.size());
+    //        resultListMessage.setList(dtoList);
+    //
+    //        ResultDTO<ResultListDTO<JamMastercodeDTO>> resultDto = new ResultDTO<>(resultListMessage);
+    //        tpsLogger.success(ActionType.SELECT, true);
+    //        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    //    }
 
     //    @ApiOperation(value = "서비스맵 목록조회")
     //    @GetMapping("/service-maps")

@@ -39,7 +39,7 @@ export default [
     {
         headerName: '입력',
         field: 'regTime',
-        width: 65,
+        width: 50,
         cellStyle: { fontSize: '12px' },
     },
     {

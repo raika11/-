@@ -7,7 +7,7 @@ import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/t
 
 const testData = [
     {
-        totalId: '1234',
+        totalId: '1231',
         rcvDate: '11-30',
         rcvTime: '10:30',
         source: '[연합]정치',
@@ -15,12 +15,21 @@ const testData = [
         regTime: '13:25',
     },
     {
-        totalId: '1234',
+        totalId: '1232',
         rcvDate: '11-30',
         rcvTime: '10:30',
         source: '[뉴시스]',
         artTitle: '[수정]미-이란 무력 충돌 우려...주식 울고 비트코인 웃었다',
         regTime: '13:25',
+    },
+    {
+        totalId: '1233',
+        rcvDate: '11-30',
+        rcvTime: '10:30',
+        source: '[중앙일보]',
+        artTitle: '미-이란 무력 충돌 우려...주식 울고 비트코인 웃었다',
+        regTime: '13:25',
+        photo: 'Y',
     },
 ];
 

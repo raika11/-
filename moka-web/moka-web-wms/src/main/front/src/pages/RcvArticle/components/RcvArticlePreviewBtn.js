@@ -3,8 +3,8 @@ import Button from 'react-bootstrap/Button';
 
 const RcvArticlePreviewBtn = ({ data }) => {
     return (
-        <Button variant="outline-table-btn" size="sm">
-            보기
+        <Button variant={data.photo === 'Y' ? 'table-btn' : 'outline-table-btn'} size="sm">
+            {data.photo === 'Y' ? '포토' : '보기'}
         </Button>
     );
 };

@@ -189,7 +189,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 <Row>
                     <Col className="w-100 text-center">
                         <div
-                            className={clsx('component-work', 'border-top', 'pt-0', {
+                            className={clsx('component-work component-hot-click', 'border-top', 'pt-0', {
                                 disabled: false,
                             })}
                             id={`agGrid-0`}

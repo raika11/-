@@ -329,6 +329,19 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             overflow: hidden;
         }
     }
+
+    /* 벌크 핫클릭 예외처리 */
+    &.bulk-hot-click {
+        .ag-row {
+            &.next::before {
+                top: 95px;
+            }
+    
+            &.hover::before {
+                top: 95px;
+            }
+        }
+    }
 }
 
 .desking-ag-grid-editor {

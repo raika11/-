@@ -609,6 +609,13 @@ body {
         right: 0px;
         border-top: 2px solid $positive;
     }
+
+    /* 벌크 핫클릭 예외처리 */
+    &.component-hot-click {
+        &.hover::before {
+            top: 0px;
+        }
+    }
 }
 
 .deskthumb-gif-list {

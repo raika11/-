@@ -448,6 +448,7 @@ const RegisterModal = (props) => {
                                         isInvalid={error.password}
                                         onChange={handleChangeValue}
                                         inputProps={{ autoComplete: 'off' }}
+                                        placeholder="대/소문자, 특문, 숫자조합 10자리 이상."
                                         disabled={smsUnlock}
                                         required
                                     />
@@ -460,6 +461,7 @@ const RegisterModal = (props) => {
                                         isInvalid={error.confirmPassword}
                                         onChange={handleChangeValue}
                                         inputProps={{ autoComplete: 'off' }}
+                                        placeholder="대/소문자, 특문, 숫자조합 10자리 이상."
                                         disabled={smsUnlock}
                                         required
                                     />
@@ -471,6 +473,7 @@ const RegisterModal = (props) => {
                                         isInvalid={error.requestReason}
                                         onChange={handleChangeValue}
                                         inputProps={{ autoComplete: 'off' }}
+                                        placeholder="사유를 입력하세요"
                                         disabled={smsUnlock}
                                         required
                                     />

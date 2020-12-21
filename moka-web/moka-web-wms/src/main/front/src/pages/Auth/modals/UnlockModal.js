@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBackOfficeUser, getSmsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, GET_SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
+import { getBackOfficeUser, smsRequest, unlockRequest, approvalRequest, GET_GROUP_WARE_USER, SMS_REQUEST, UNLOCK_REQUEST, UNLOCK_SMS } from '@store/auth';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -50,7 +50,7 @@ const UnlockModal = (props) => {
     });
 
     const { loading } = useSelector((store) => ({
-        loading: store.loading[GET_GROUP_WARE_USER] || store.loading[GET_SMS_REQUEST] || store.loading[UNLOCK_REQUEST] || store.loading[UNLOCK_SMS],
+        loading: store.loading[GET_GROUP_WARE_USER] || store.loading[SMS_REQUEST] || store.loading[UNLOCK_REQUEST] || store.loading[UNLOCK_SMS],
     }));
 
     /**
@@ -101,18 +101,18 @@ const UnlockModal = (props) => {
      * 입력된 validate체크
      * @param {} obj
      */
-    const validate = (unlock) => {
+    const validate = (member) => {
         let isInvalid = false;
         let errList = [];
 
-        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(unlock.password)) {
+        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(member.password)) {
             errList.push({
                 field: 'password',
                 reason: '비밀번호 형식이 올바르지 않습니다.',
             });
             isInvalid = isInvalid | true;
         }
-        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(unlock.confirmPassword)) {
+        if (!/^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)/.test(member.confirmPassword)) {
             errList.push({
                 field: 'confirmPassword',
                 reason: '비밀번호 확인 형식이 올바르지 않습니다.',
@@ -120,14 +120,14 @@ const UnlockModal = (props) => {
             isInvalid = isInvalid | true;
         }
 
-        if (unlock.password !== unlock.confirmPassword) {
+        if (member.password !== member.confirmPassword) {
             errList.push({
                 field: 'confirmPassword',
                 reason: '입력한 비밀번호와 확인 비밀번호가 일치하지 않습니다..',
             });
             isInvalid = isInvalid | true;
         }
-        if (unlock.requestReason === '') {
+        if (member.requestReason === '') {
             errList.push({
                 field: 'requestReason',
                 reason: '사유는 필수 입력 항목 입니다.',
@@ -135,7 +135,7 @@ const UnlockModal = (props) => {
             isInvalid = isInvalid | true;
         }
 
-        if (typeof unlock.smsAuth !== 'undefined' && !/^[0-9]{4,6}$/.test(unlock.smsAuth)) {
+        if (typeof member.smsAuth !== 'undefined' && !/^[0-9]{4,6}$/.test(member.smsAuth)) {
             errList.push({
                 field: 'smsAuth',
                 reason: 'SMS인증번호는 4자리 이상 6자리 이하의 숫자로 입력하세요.',
@@ -150,14 +150,14 @@ const UnlockModal = (props) => {
      * 본인인증 해제
      */
     const handleClickSmsUnlock = useCallback(() => {
-        const unlock = {
+        const member = {
             memberId: userObj.memberId,
             password,
             confirmPassword,
             requestReason,
         };
 
-        if (validate(unlock)) {
+        if (validate(member)) {
             setSmsUnlock(true);
             setBtnOkDisplay('block');
         }
@@ -166,18 +166,18 @@ const UnlockModal = (props) => {
     /**
      * 인증번호 요청
      */
-    const handleClickRequestSms = useCallback(() => {
+    const handleClickSmsRequest = useCallback(() => {
         if (!requestSms || parseInt(minutes) <= defaultMinutes - 2) {
-            const unlock = {
+            const member = {
                 memberId: userObj.memberId,
                 password,
                 confirmPassword,
                 requestReason,
             };
-            if (validate(unlock)) {
+            if (validate(member)) {
                 dispatch(
-                    getSmsRequest({
-                        unlock: unlock,
+                    smsRequest({
+                        member: member,
                         callback: ({ header, body }) => {
                             if (header.success) {
                                 messageBox.alert(header.message);
@@ -264,7 +264,7 @@ const UnlockModal = (props) => {
      * 본인인증 해제 전송
      */
     const handleClickApprovalRequest = useCallback(() => {
-        const unlock = {
+        const member = {
             memberId: userObj.memberId,
             smsAuth,
             password,
@@ -273,15 +273,16 @@ const UnlockModal = (props) => {
             requestType: unlockSmsCode,
         };
 
-        if (validate(unlock)) {
+        if (validate(member)) {
             dispatch(
                 approvalRequest({
-                    unlock: unlock,
+                    member: member,
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            toast.success(header.message);
-                            reset();
-                            onHide();
+                            messageBox.alert(header.message, () => {
+                                reset();
+                                onHide();
+                            });
                         } else {
                             setError({ ...error, smsAuth: true });
                             messageBox.alert(header.message);
@@ -296,7 +297,7 @@ const UnlockModal = (props) => {
      * 관리자 해제 요청
      */
     const handleClickUnlockRequest = useCallback(() => {
-        const unlock = {
+        const member = {
             memberId: userObj.memberId,
             password,
             confirmPassword,
@@ -304,15 +305,16 @@ const UnlockModal = (props) => {
             requestType: unlockRequestCode,
         };
 
-        if (validate(unlock)) {
+        if (validate(member)) {
             dispatch(
                 unlockRequest({
-                    unlock: unlock,
+                    member: member,
                     callback: ({ header, body }) => {
                         if (header.success) {
-                            toast.success(header.message);
-                            reset();
-                            onHide();
+                            messageBox.alert(header.message, () => {
+                                reset();
+                                onHide();
+                            });
                         } else {
                             setError({ ...error, smsAuth: true });
                             messageBox.alert(header.message);
@@ -492,7 +494,7 @@ const UnlockModal = (props) => {
                                             ''
                                         )}
                                         <Col xs lg="4" className="p-0">
-                                            <Button variant="outline-neutral" className="mr-2" onClick={handleClickRequestSms}>
+                                            <Button variant="outline-neutral" className="mr-2" onClick={handleClickSmsRequest}>
                                                 인증번호 {requestSms ? '재전송' : '전송'}
                                             </Button>
                                         </Col>

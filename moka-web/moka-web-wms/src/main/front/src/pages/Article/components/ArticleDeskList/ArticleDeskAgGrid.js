@@ -56,13 +56,8 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
             temp['page'] = 0;
         }
 
-        if (!isNaverChannel) {
-            dispatch(getArticleList({ search: temp }));
-            dispatch(changeSearchOption(temp));
-        } else {
-            dispatch(getBulkArticleList({ search: temp }));
-            dispatch(changeSearchOption(temp));
-        }
+        dispatch(changeSearchOption(temp));
+        !isNaverChannel ? dispatch(getArticleList({ search: temp })) : dispatch(getBulkArticleList({ search: temp }));
     };
 
     useEffect(() => {

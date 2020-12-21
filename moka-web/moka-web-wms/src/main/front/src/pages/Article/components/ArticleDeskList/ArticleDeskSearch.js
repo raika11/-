@@ -78,11 +78,7 @@ const ArticleDeskSearch = (props) => {
 
         if (validate(ns)) {
             dispatch(changeSearchOption(ns));
-            if (!isNaverChannel) {
-                dispatch(getArticleList({ search: ns }));
-            } else {
-                dispatch(getBulkArticleList({ search: ns }));
-            }
+            !isNaverChannel ? dispatch(getArticleList({ search: ns })) : dispatch(getBulkArticleList({ search: ns }));
         }
     };
 
@@ -157,6 +153,11 @@ const ArticleDeskSearch = (props) => {
     }, [storeSearch]);
 
     useEffect(() => {
+        // 기본 매체가 변경해야되므로 sourceOn = false로 변경
+        setSourceOn(false);
+    }, [isNaverChannel]);
+
+    useEffect(() => {
         /**
          * 마운트 시 기사목록 최초 로딩
          *
@@ -181,11 +182,7 @@ const ArticleDeskSearch = (props) => {
 
             dispatch(changeSearchOption(ns));
             if (sourceOn) {
-                if (!isNaverChannel) {
-                    dispatch(getArticleList({ search: ns }));
-                } else {
-                    dispatch(getBulkArticleList({ search: ns }));
-                }
+                !isNaverChannel ? dispatch(getArticleList({ search: ns })) : dispatch(getBulkArticleList({ search: ns }));
             }
         } else {
             dispatch(clearList());

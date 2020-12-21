@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { loginJwt } from '@store/auth';
 import { call, delay } from 'redux-saga/effects';
-import { Button, Card, Col, Form, FormCheck, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Main from '@/layout/components/Main';
 import { getLocalItem } from '@/utils/storageUtil';
@@ -40,14 +40,7 @@ const SignIn = () => {
                             delay(1000);
                             call(window.location.reload());
                         } else {
-                            // 패스워드 변경 안내 팝업으로 변경 예정
-                            messageBox.confirm(data.header.message, (ok) => {
-                                if (ok) {
-                                    toast.info('비밀번호 변경 페이지로 이동. 기능 구현중...');
-                                } else {
-                                    window.location.reload();
-                                }
-                            });
+                            messageBox.alert(data.header.message);
                         }
                     } else {
                         const resultType = data.header.resultType;

@@ -14,6 +14,9 @@
     <request resultName="CLICKCNT">dps.article.clickcnt</request>
     <request resultName="MULTI">dps.article.multi</request>
     <request resultName="SOURCE">dps.article.source</request>
+    <request resultName="META_FB">dps.article.meta_fb</request>
+    <request resultName="META_TW">dps.article.meta_tw</request>
+    <request resultName="META_JA">dps.article.meta_ja</request>
     <keys>
       totalId
     </keys>

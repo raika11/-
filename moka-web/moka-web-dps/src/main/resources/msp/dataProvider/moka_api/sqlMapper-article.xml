@@ -59,6 +59,42 @@ where TOTAL_ID = #{totalId}
     where TOTAL_ID = #{totalId}
   </select>
 
+  <select id="meta_fb" parameterType="hashmap" resultType="map">
+    SELECT TOP 1 B.TOTAL_ID
+    ,(CASE WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com'+REPLACE(B.ART_THUMB,'.tn_120.jpg','') ELSE  M.IMG_URL END) AS IMG_URL
+    ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END) AS ART_TITLE
+    ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
+    , M.ART_KEYWORD
+    FROM [DB_NEWS_MOKA].[dbo].[TB_ARTICLE_BASIC] B
+    LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
+    ON M.TOTAL_ID = B.TOTAL_ID AND M.USED_YN='Y' AND M.SNS_TYPE='FB'
+    WHERE B.TOTAL_ID = #{totalId}
+  </select>
+
+  <select id="meta_tw" parameterType="hashmap" resultType="map">
+    SELECT TOP 1 B.TOTAL_ID
+    ,(CASE WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com'+REPLACE(B.ART_THUMB,'.tn_120.jpg','') ELSE  M.IMG_URL END) AS IMG_URL
+         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END) AS ART_TITLE
+         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
+         , M.ART_KEYWORD
+    FROM [DB_NEWS_MOKA].[dbo].[TB_ARTICLE_BASIC] B
+      LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
+    ON M.TOTAL_ID = B.TOTAL_ID AND M.USED_YN='Y' AND M.SNS_TYPE='TW'
+    WHERE B.TOTAL_ID = #{totalId}
+  </select>
+
+  <select id="meta_ja" parameterType="hashmap" resultType="map">
+    SELECT TOP 1 B.TOTAL_ID
+    ,(CASE WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com'+REPLACE(B.ART_THUMB,'.tn_120.jpg','') ELSE  M.IMG_URL END) AS IMG_URL
+         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END) AS ART_TITLE
+         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
+         , M.ART_KEYWORD
+    FROM [DB_NEWS_MOKA].[dbo].[TB_ARTICLE_BASIC] B
+      LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
+    ON M.TOTAL_ID = B.TOTAL_ID AND M.USED_YN='Y' AND M.SNS_TYPE='JA'
+    WHERE B.TOTAL_ID = #{totalId}
+  </select>
+
   <resultMap id="map" type="hashmap"/>
   <!-- article list -->
   <select id="list" parameterType="map" resultType="map" resultMap="map,map"

@@ -379,7 +379,7 @@ const RegisterModal = (props) => {
                                 name="groupWareUserId"
                                 disabled={requestSms}
                                 placeholder="Groupware ID를 입력하세요."
-                                //  inputProps={{ autoComplete: 'off' }}
+                                inputProps={{ autoComplete: 'off' }}
                             />
                         </Col>
                     </Form.Group>

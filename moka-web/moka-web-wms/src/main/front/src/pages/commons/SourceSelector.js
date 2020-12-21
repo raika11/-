@@ -87,13 +87,14 @@ const SourceSelector = (props) => {
     const [sourceObj, setSourceObj] = useState({}); // 파싱을 편하게 하기 위해서 매체 리스트를 obj로 변환함. key는 list의 idx, value는 list값
     const [toggleText, setToggleText] = useState('매체 전체');
 
-    const sourceList = useSelector((store) => store.articleSource.sourceList); // 원래 매체
-    const bulkSourceList = useSelector((store) => store.articleSource.bulkSourceList); // 벌크까지 하는 매체
+    const sourceList = useSelector((store) => store.articleSource.sourceList); // 전체 매체
+    const bulkSourceList = useSelector((store) => store.articleSource.bulkSourceList); // 벌크전송 되는 매체
 
     /**
      * 매체 리스트에서 sourceCode로 매체 데이터의 index를 찾음
+     * @param {string} 매체ID
      */
-    const findSourceIndex = useCallback((id) => sourceList.findIndex((sc) => sc.sourceCode === id), [sourceList]);
+    const findSourceIndex = useCallback((id) => renderList.findIndex((sc) => sc.sourceCode === id), [renderList]);
 
     /**
      * 매체check change
@@ -171,13 +172,23 @@ const SourceSelector = (props) => {
     useEffect(() => {
         if (Object.keys(sourceObj).length < 1) return;
         if (value || value === '') {
-            const valueArr = value.split(',').filter((v) => v !== '');
-            setSelectedList(
-                valueArr.map((v) => {
-                    const targetIndex = findSourceIndex(v);
-                    return sourceObj[targetIndex];
-                }),
-            );
+            // 1,3,60,61 => [1, 3, 60, 61]로 파싱하고, renderList에 포함되어 있는 데이터만 남기도록 필터링한다
+            const valueArr = value
+                .split(',')
+                .filter((v) => v !== '')
+                .filter((v) => findSourceIndex(v) > -1);
+
+            // 필터링된 valueArr과 selectedList와 비교하여 다를 경우 value, selectedList 변경
+            const selectedListStr = selectedList.map((r) => r.sourceCode).join(',');
+            if (selectedListStr !== valueArr.join(',')) {
+                setSelectedList(
+                    valueArr.map((v) => {
+                        const targetIndex = findSourceIndex(v);
+                        return sourceObj[targetIndex];
+                    }),
+                );
+                onChange(valueArr.join(','));
+            }
         } else {
             // 값이 없을 때는(value === null) 모든 매체 선택
             if (typeof onChange === 'function') {
@@ -188,7 +199,7 @@ const SourceSelector = (props) => {
                 );
             }
         }
-    }, [findSourceIndex, onChange, sourceObj, value]);
+    }, [findSourceIndex, onChange, selectedList, sourceObj, value]);
 
     return (
         <Dropdown style={{ width: 195 }} className={clsx('flex-fill', className)}>

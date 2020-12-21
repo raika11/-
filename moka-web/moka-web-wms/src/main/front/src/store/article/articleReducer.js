@@ -76,6 +76,26 @@ export default handleActions(
                 draft.error = payload;
             });
         },
+        /**
+         * 벌크 기사 조회
+         */
+        [act.GET_BULK_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.total = body.totalCnt;
+                draft.list = body.list;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_BULK_ARTICLE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.total = initialState.total;
+                draft.list = initialState.list;
+                draft.error = payload;
+            });
+        },
+        /**
+         * 기사 내 이미지
+         */
         [act.GET_ARTICLE_IMAGE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.imageList = body.list;

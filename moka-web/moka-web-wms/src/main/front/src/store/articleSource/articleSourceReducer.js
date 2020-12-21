@@ -7,7 +7,7 @@ import * as act from './articleSourceAction';
  */
 export const initialState = {
     sourceList: null,
-    blukSourceList: null,
+    bulkSourceList: null,
 };
 
 export default handleActions(
@@ -26,12 +26,12 @@ export default handleActions(
         // 벌크 매체 조회
         [act.GET_BLUK_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.blukSourceList = body.list;
+                draft.bulkSourceList = body.list;
             });
         },
         [act.GET_BLUK_SOURCE_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
-                draft.blukSourceList = initialState.blukSourceList;
+                draft.bulkSourceList = initialState.bulkSourceList;
             });
         },
     },

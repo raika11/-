@@ -24,6 +24,12 @@ export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILU
 export const getArticleList = createAction(GET_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
 
 /**
+ * 벌크 기사리스트 조회
+ */
+export const [GET_BULK_ARTICLE_LIST, GET_BULK_ARTICLE_LIST_SUCCESS, GET_BULK_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_BULK_ARTICLE_LIST');
+export const getBulkArticleList = createAction(GET_BULK_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 기사 편집제목 수정
  */
 export const PUT_ARTICLE_EDIT_TITLE = 'article/PUT_ARTICLE_EDIT_TITLE';

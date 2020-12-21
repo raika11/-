@@ -5,7 +5,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
 import { addDeskingWorkDropzone } from '@utils/agGridUtil';
-import { GET_ARTICLE_LIST, getArticleList, changeSearchOption } from '@store/article';
+import { GET_ARTICLE_LIST, GET_BULK_ARTICLE_LIST, getArticleList, getBulkArticleList, changeSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
 import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
@@ -14,10 +14,10 @@ import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
  */
 const ArticleDeskAgGrid = forwardRef((props, ref) => {
-    const { onDragStop, dropTargetAgGrid } = props;
+    const { onDragStop, dropTargetAgGrid, isNaverChannel } = props;
 
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST]);
+    const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST] || store.loading[GET_BULK_ARTICLE_LIST]);
     const { PDS_URL, IR_URL } = useSelector((store) => ({
         PDS_URL: store.app.PDS_URL,
         IR_URL: store.app.IR_URL,
@@ -55,8 +55,14 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(getArticleList({ search: temp }));
-        dispatch(changeSearchOption(temp));
+
+        if (!isNaverChannel) {
+            dispatch(getArticleList({ search: temp }));
+            dispatch(changeSearchOption(temp));
+        } else {
+            dispatch(getBulkArticleList({ search: temp }));
+            dispatch(changeSearchOption(temp));
+        }
     };
 
     useEffect(() => {

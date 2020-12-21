@@ -9,7 +9,7 @@ import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { SourceSelector } from '@pages/commons';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { initialState, getArticleList, changeSearchOption, clearList } from '@store/article';
+import { initialState, getArticleList, getBulkArticleList, changeSearchOption, clearList } from '@store/article';
 
 /**
  * 기사 검색
@@ -77,8 +77,12 @@ const ArticleDeskSearch = (props) => {
         };
 
         if (validate(ns)) {
-            dispatch(getArticleList({ search: ns }));
             dispatch(changeSearchOption(ns));
+            if (!isNaverChannel) {
+                dispatch(getArticleList({ search: ns }));
+            } else {
+                dispatch(getBulkArticleList({ search: ns }));
+            }
         }
     };
 
@@ -177,7 +181,11 @@ const ArticleDeskSearch = (props) => {
 
             dispatch(changeSearchOption(ns));
             if (sourceOn) {
-                dispatch(getArticleList({ search: ns }));
+                if (!isNaverChannel) {
+                    dispatch(getArticleList({ search: ns }));
+                } else {
+                    dispatch(getBulkArticleList({ search: ns }));
+                }
             }
         } else {
             dispatch(clearList());

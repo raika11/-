@@ -31,6 +31,7 @@ const SnsMeta = React.lazy(() => import('@pages/SnsManage/SnsMeta'));
 const FbArt = React.lazy(() => import('@pages/SnsManage/FbArt'));
 const ArticlePage = React.lazy(() => import('@pages/ArticlePage'));
 const Bulks = React.lazy(() => import('@pages/Bulks'));
+const ArticleSource = React.lazy(() => import('@pages/ArticleSource'));
 const Poll = React.lazy(() => import('@pages/Survey/Poll'));
 
 const routes = [
@@ -256,16 +257,6 @@ const routes = [
         strict: true,
     },
     {
-        path: '/columnist',
-        name: 'columnist',
-        displayName: '컬럼니스트 관리',
-        component: Columnist,
-        layout: SidebarOpenLayout,
-        nonResponsive: true,
-        exact: false,
-        strict: true,
-    },
-    {
         path: '/sns-meta',
         name: 'sns-meta',
         displayName: 'FB & TW 관리',
@@ -330,6 +321,16 @@ const routes = [
         name: 'bulkh-su',
         displayName: '선데이 아티클 핫클릭',
         component: Bulks,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article-sources',
+        name: 'article-sources',
+        displayName: '수신 매체 관리',
+        component: ArticleSource,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

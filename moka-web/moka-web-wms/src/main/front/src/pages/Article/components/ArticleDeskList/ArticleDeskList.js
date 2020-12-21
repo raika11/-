@@ -31,16 +31,21 @@ const propTypes = {
      * show 일 때만 데이터를 로드한다
      */
     show: PropTypes.bool,
+    /**
+     * 네이버채널일 경우 기사매체 & 기사리스트 api를 별도로 사용한다
+     */
+    isNaverChannel: PropTypes.bool,
 };
 const defaultProps = {
     selectedComponent: {},
+    isNaverChannel: false,
 };
 
 /**
  * 페이지편집 > 기사리스트
  */
 const ArticleDeskList = forwardRef((props, ref) => {
-    const { className, media, selectedComponent, dropTargetAgGrid, onDragStop, show } = props;
+    const { className, media, selectedComponent, dropTargetAgGrid, onDragStop, show, isNaverChannel } = props;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -53,8 +58,8 @@ const ArticleDeskList = forwardRef((props, ref) => {
 
     return (
         <div className={clsx('d-flex flex-column h-100 py-3 px-card', className)}>
-            <ArticleDeskSearch media={media} selectedComponent={selectedComponent} show={show} />
-            <ArticleDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
+            <ArticleDeskSearch media={media} selectedComponent={selectedComponent} show={show} isNaverChannel={isNaverChannel} />
+            <ArticleDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} isNaverChannel={isNaverChannel} />
         </div>
     );
 });

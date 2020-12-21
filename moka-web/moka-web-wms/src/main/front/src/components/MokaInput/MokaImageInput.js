@@ -170,11 +170,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                 return;
             }
             setAlert(false);
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(acceptedFiles[0]);
-            fileReader.onload = (f) => {
-                previewImg(f.target.result);
-            };
+            previewImg(URL.createObjectURL(acceptedFiles[0]));
             if (setFileValue) {
                 setFileValue(acceptedFiles[0]);
             }

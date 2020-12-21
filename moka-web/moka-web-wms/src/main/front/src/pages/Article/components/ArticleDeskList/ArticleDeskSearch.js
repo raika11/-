@@ -15,7 +15,7 @@ import { initialState, getArticleList, changeSearchOption, clearList } from '@st
  * 기사 검색
  */
 const ArticleDeskSearch = (props) => {
-    const { media, selectedComponent, show } = props;
+    const { media, selectedComponent, show, isNaverChannel } = props;
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.article.search);
 
@@ -250,6 +250,7 @@ const ArticleDeskSearch = (props) => {
                     <SourceSelector
                         className="mr-2"
                         value={sourceList}
+                        bulk={isNaverChannel}
                         onChange={(value) => {
                             setSourceList(value);
                             setError({ ...error, sourceList: false });

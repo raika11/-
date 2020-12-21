@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
-import { getSourceList } from '@store/article';
+import { getSourceList, getBulkSourceList } from '@store/articleSource';
 
 /**
  * 커스텀 메뉴
@@ -65,22 +65,30 @@ const propTypes = {
      * 매체 checked 변경 시 실행되는 함수 (필수)
      */
     onChange: PropTypes.func.isRequired,
+    /**
+     * 벌크 매체 리스트를 조회해야하는지
+     */
+    bulk: PropTypes.bool,
 };
 
-const defaultProps = {};
+const defaultProps = {
+    bulk: false,
+};
 
 /**
  * 매체 선택자
  * (value, onChange 필수로 받음)
  */
 const SourceSelector = (props) => {
-    const { className, isInvalid, value, onChange } = props;
+    const { className, isInvalid, value, onChange, bulk } = props;
     const dispatch = useDispatch();
     const [selectedList, setSelectedList] = useState([]); // 체크된 매체 리스트
+    const [renderList, setRenderList] = useState([]); // 렌더링되는 매체 리스트
+    const [sourceObj, setSourceObj] = useState({}); // 파싱을 편하게 하기 위해서 매체 리스트를 obj로 변환함. key는 list의 idx, value는 list값
     const [toggleText, setToggleText] = useState('매체 전체');
-    const [sourceObj, setSourceObj] = useState({}); // 순서를 유지하기 위해 매체 리스트를 obj로 변환함. key는 list의 idx, value는 list값
 
-    const sourceList = useSelector((store) => store.article.sourceList);
+    const sourceList = useSelector((store) => store.articleSource.sourceList); // 원래 매체
+    const bulkSourceList = useSelector((store) => store.articleSource.bulkSourceList); // 벌크까지 하는 매체
 
     /**
      * 매체 리스트에서 sourceCode로 매체 데이터의 index를 찾음
@@ -124,12 +132,24 @@ const SourceSelector = (props) => {
     };
 
     useEffect(() => {
-        if (!sourceList) {
-            dispatch(getSourceList());
+        if (!bulk) {
+            // 원래 매체 조회
+            if (!sourceList) {
+                dispatch(getSourceList());
+            } else {
+                setRenderList(sourceList);
+                setSourceObj(sourceList.reduce((all, sc, index) => ({ ...all, [index]: { ...sc, index } }), {}));
+            }
         } else {
-            setSourceObj(sourceList.reduce((all, sc, index) => ({ ...all, [index]: { ...sc, index } }), {}));
+            // 벌크 매체 조회
+            if (!bulkSourceList) {
+                dispatch(getBulkSourceList());
+            } else {
+                setRenderList(bulkSourceList);
+                setSourceObj(bulkSourceList.reduce((all, sc, index) => ({ ...all, [index]: { ...sc, index } }), {}));
+            }
         }
-    }, [dispatch, sourceList]);
+    }, [dispatch, sourceList, bulk, bulkSourceList]);
 
     useEffect(() => {
         if (selectedList.length > 0) {
@@ -177,18 +197,17 @@ const SourceSelector = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu}>
-                {sourceList &&
-                    sourceList.map((cd) => (
-                        <MokaInput
-                            key={cd.sourceCode}
-                            name="sourceList"
-                            onChange={handleChangeValue}
-                            className="mb-2 ft-12"
-                            as="checkbox"
-                            inputProps={{ label: cd.sourceName, custom: true, checked: chkTrue(cd.sourceCode) }}
-                            id={cd.sourceCode}
-                        />
-                    ))}
+                {renderList.map((cd) => (
+                    <MokaInput
+                        key={cd.sourceCode}
+                        name="sourceList"
+                        onChange={handleChangeValue}
+                        className="mb-2 ft-12"
+                        as="checkbox"
+                        inputProps={{ label: cd.sourceName, custom: true, checked: chkTrue(cd.sourceCode) }}
+                        id={cd.sourceCode}
+                    />
+                ))}
             </Dropdown.Menu>
         </Dropdown>
     );

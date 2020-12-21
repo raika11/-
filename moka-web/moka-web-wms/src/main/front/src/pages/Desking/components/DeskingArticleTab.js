@@ -9,6 +9,7 @@ const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances, show } = props;
     const dispatch = useDispatch();
     const area = useSelector((store) => store.desking.area);
+    const isNaverChannel = useSelector((store) => store.desking.isNaverChannel);
 
     // state
     const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
@@ -61,6 +62,7 @@ const DeskingArticleTab = (props) => {
                         dropTargetAgGrid={componentAgGridInstances}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx && show}
+                        isNaverChannel={isNaverChannel}
                     />
                 );
             }
@@ -75,6 +77,7 @@ const DeskingArticleTab = (props) => {
                         dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx && show}
+                        isNaverChannel={isNaverChannel}
                         media
                     />
                 );

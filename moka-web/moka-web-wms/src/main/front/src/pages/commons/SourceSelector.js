@@ -208,12 +208,14 @@ const SourceSelector = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu}>
-                {renderList.map((cd) => (
+                {renderList.map((cd, idx) => (
                     <MokaInput
                         key={cd.sourceCode}
                         name="sourceList"
                         onChange={handleChangeValue}
-                        className="mb-2 ft-12"
+                        className={clsx('ft-12', {
+                            'mb-2': idx !== renderList.length - 1,
+                        })}
                         as="checkbox"
                         inputProps={{ label: cd.sourceName, custom: true, checked: chkTrue(cd.sourceCode) }}
                         id={cd.sourceCode}

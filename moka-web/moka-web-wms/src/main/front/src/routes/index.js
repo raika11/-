@@ -33,6 +33,7 @@ const ArticlePage = React.lazy(() => import('@pages/ArticlePage'));
 const Bulks = React.lazy(() => import('@pages/Bulks'));
 const ArticleSource = React.lazy(() => import('@pages/ArticleSource'));
 const Poll = React.lazy(() => import('@pages/Survey/Poll'));
+const RcvArticle = React.lazy(() => import('@pages/RcvArticle'));
 
 const routes = [
     {
@@ -341,6 +342,16 @@ const routes = [
         name: 'poll',
         displayName: '투표 관리',
         component: Poll,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/rcv-article',
+        name: 'rcv-article',
+        displayName: '수신 기사 전체',
+        component: RcvArticle,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

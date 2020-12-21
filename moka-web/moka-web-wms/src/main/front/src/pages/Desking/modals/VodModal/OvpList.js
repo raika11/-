@@ -78,7 +78,7 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
     }, [ovpList]);
 
     return (
-        <div className="d-flex flex-column overflow-hidden h-100">
+        <div className="d-flex flex-column overflow-hidden px-card  pt-3 h-100">
             <Form className="mb-2">
                 <Form.Row>
                     <MokaSearchInput

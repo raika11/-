@@ -46,7 +46,7 @@ const defaultProps = {
 };
 
 /**
- * 기사 분류 코드 선택 모달
+ * 기사 분류(masterCode) 코드 선택 모달
  */
 const CodeListModal = (props) => {
     const { show, onHide, title, onSave, onCancel, selection, value, ...rest } = props;

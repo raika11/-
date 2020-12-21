@@ -42,7 +42,7 @@ const defaultProps = {
 };
 
 /**
- * 기사 분류 데이터를 가져오는 자동완성
+ * 기사 분류(masterCode) 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
     const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon } = props;

@@ -13,7 +13,7 @@ const YoutubeList = ({ youtubeUrl, setYoutubeUrl }) => {
     };
 
     return (
-        <React.Fragment>
+        <div className="px-card pt-3">
             <p className="text-positive mb-0">※&nbsp;입력예제</p>
             <p className="mb-2">https://www.youtube.com/embed/-WWWIWDD0G44</p>
 
@@ -28,7 +28,7 @@ const YoutubeList = ({ youtubeUrl, setYoutubeUrl }) => {
                     </MokaInput>
                 </Col>
             </Row>
-        </React.Fragment>
+        </div>
     );
 };
 

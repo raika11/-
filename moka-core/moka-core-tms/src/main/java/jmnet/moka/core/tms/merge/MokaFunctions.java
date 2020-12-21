@@ -21,12 +21,13 @@ import jmnet.moka.core.tms.merge.item.PageItem;
 public class MokaFunctions extends Functions {
 	/**
 	 * cloc 코드를 생성한다.
-	 * @param url
+	 * @param urlObj
 	 * @param pageItem
 	 * @param componentItem
 	 * @return
 	 */
-	public String cloc(String url, Object pageItem, Object componentItem) {
+	public String cloc(Object urlObj, Object pageItem, Object componentItem) {
+		String url = urlObj == null ? "" : (String)urlObj;
 		if ( url == null || url.length() == 0) return "";
 		String cloc = "joongang-" +
 				(pageItem==null?"none":((MergeItem)pageItem).getItemId()) + "-" +
@@ -38,8 +39,15 @@ public class MokaFunctions extends Functions {
 		}
 	}
 
-	public String cloc(String url, String cloc) {
+	public String cloc(Object urlObj, Object clocObj) {
+		String url = urlObj == null ? "" : (String)urlObj;
+		String cloc = clocObj == null ? "" : (String)clocObj;
 		return url.contains("?") ? url+"&cloc="+cloc : url+"?cloc="+cloc;
+	}
+
+	public String cloc(Object urlObj) {
+		String url = urlObj == null ? "" : (String)urlObj;
+		return url;
 	}
 
 	private String getString(Map<String,Object> map, String column) {

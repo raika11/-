@@ -129,6 +129,9 @@ public class ArticleView extends AbstractView {
         article.put("keyword",jsonResult.getDataList("KEYWORD"));
         article.put("clickcnt",jsonResult.getDataList("CLICKCNT"));
         article.put("multi",jsonResult.getDataList("MULTI"));
+        article.put("meta_fb",jsonResult.getDataList("META_FB"));
+        article.put("meta_tw",jsonResult.getDataList("META_TW"));
+        article.put("meta_ja",jsonResult.getDataList("META_JA"));
         return article;
     }
 

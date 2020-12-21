@@ -10,13 +10,6 @@ export const getArticleList = ({ search }) => {
     });
 };
 
-// 매체 목록 조회
-export const getSourceList = () => {
-    return instance.get(`/api/article-sources/desking`).catch((err) => {
-        throw err;
-    });
-};
-
 // 기사 편집제목 수정
 export const putArticleEditTitle = ({ totalId, title, mobTitle }) => {
     return instance.put(`/api/articles/${totalId}/edit-title?${qs.stringify({ title, mobTitle })}`).catch((err) => {
@@ -29,13 +22,6 @@ export const getBulkArticleList = ({ search }) => {
     // searchType : all, title, reporterId, reporterName
     const queryString = qs.stringify(search);
     return instance.get(`/api/articles/bulk?${queryString}`).catch((err) => {
-        throw err;
-    });
-};
-
-// 벌크전송 매체 목록 조회(네이버채널용)
-export const getBulkSourceList = () => {
-    return instance.get(`/api/article-sources/bulk`).catch((err) => {
         throw err;
     });
 };

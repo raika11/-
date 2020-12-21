@@ -6,6 +6,7 @@ import loading from '@store/loading/loadingReducer';
 import layout from '@store/layout/layoutReducer';
 import auth from '@store/auth/authReducer';
 import article from '@store/article/articleReducer';
+import articleSource from '@store/articleSource/articleSourceReducer';
 import domain from '@store/domain/domainReducer';
 import template from '@store/template/templateReducer';
 import code from '@store/code/codeReducer';
@@ -41,6 +42,7 @@ export default combineReducers({
     layout,
     auth,
     article,
+    articleSource,
     photoArchive,
     bright,
     domain,

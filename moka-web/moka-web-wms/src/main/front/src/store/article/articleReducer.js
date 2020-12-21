@@ -31,7 +31,6 @@ export const initialState = {
     ],
     imageList: [],
     invalidList: [],
-    sourceList: null,
 };
 
 export default handleActions(
@@ -75,16 +74,6 @@ export default handleActions(
                 draft.total = initialState.total;
                 draft.list = initialState.list;
                 draft.error = payload;
-            });
-        },
-        [act.GET_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.sourceList = body.list;
-            });
-        },
-        [act.GET_SOURCE_LIST_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.sourceList = initialState.sourceList;
             });
         },
         [act.GET_ARTICLE_IMAGE_LIST_SUCCESS]: (state, { payload: { body } }) => {

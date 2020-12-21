@@ -3,6 +3,7 @@ import { all } from 'redux-saga/effects';
 import appSaga from '@store/app/appSaga';
 import authSaga from '@store/auth/authSaga';
 import articleSaga from '@store/article/articleSaga';
+import articleSourceSaga from '@store/articleSource/articleSourceSaga';
 import domainSaga from '@store/domain/domainSaga';
 import templateSaga from '@store/template/templateSaga';
 import codeSaga from '@store/code/codeSaga';
@@ -36,6 +37,7 @@ export default function* rootSaga() {
         appSaga(),
         authSaga(),
         articleSaga(),
+        articleSourceSaga(),
         domainSaga(),
         templateSaga(),
         codeSaga(),

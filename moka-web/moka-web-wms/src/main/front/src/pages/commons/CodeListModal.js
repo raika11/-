@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
-import { MokaModal, MokaInput, MokaIcon } from '@components';
+import { MokaModal, MokaInput, MokaIcon, useBreakpoint } from '@components';
 import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@store/code';
 
 const propTypes = {
@@ -53,10 +53,11 @@ const CodeListModal = (props) => {
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector((store) => store.code.master.list);
+    const matchPoints = useBreakpoint();
 
-    const [serviceList, setServiceList] = useState([]); // 1뎁스
-    const [sectionList, setSectionList] = useState([]); // 2뎁스
-    const [contentList, setContentList] = useState([]); // 3뎁스
+    const [serviceList, setServiceList] = useState([]); // 1뎁스 = 대분류 = 서비스코드
+    const [sectionList, setSectionList] = useState([]); // 2뎁스 = 중분류 = 섹션코드
+    const [contentList, setContentList] = useState([]); // 3뎁스 = 소분류 = 컨텐츠코드
     const [selectedList, setSelectedList] = useState([]); // 선택한 코드
 
     /**
@@ -190,81 +191,103 @@ const CodeListModal = (props) => {
     }, []);
 
     return (
-        <MokaModal width={900} {...rest} show={show} onHide={handleHide} title={title} size="lg" draggable bodyClassName="code-modal" loading={loading} centered>
-            <div className="d-flex flex-column">
+        <MokaModal
+            width={1200}
+            height={800}
+            {...rest}
+            show={show}
+            onHide={handleHide}
+            title={title}
+            size="xl"
+            draggable
+            bodyClassName="code-modal h-100"
+            loading={loading}
+            centered
+        >
+            <div className="d-flex flex-column h-100">
                 {/* 분류명, 분류코드 노출, 등록, 취소 버튼 */}
-                <Form.Row className="mb-2">
-                    <Col xs={8} className="p-0 pr-2">
-                        <div className="w-100 h-100 border mb-0 p-1 h6">
-                            {selectedList.map((s) => (
-                                <Badge key={s.masterCode} className="mr-1 mb-1" variant="searching">
-                                    {s.masterCode} {s.contentKorname || s.sectionKorname || s.serviceKorname}
-                                    <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
-                                </Badge>
-                            ))}
-                        </div>
-                    </Col>
-                    <Col xs={4} className="p-0 d-flex align-items-end">
-                        <Button variant="positive" className="mr-2" onClick={handleOkTrigger}>
-                            등록
-                        </Button>
-                        <Button variant="negative" onClick={handleHide}>
-                            취소
-                        </Button>
-                    </Col>
-                </Form.Row>
+                <div>
+                    <Form.Row className="flex-wrap">
+                        <Col sm={10} className="p-0">
+                            <div className="w-100 mb-0 h6">
+                                {selectedList.map((s) => (
+                                    <Badge key={s.masterCode} className="mr-1 mb-1 user-select-text" variant="searching">
+                                        {s.masterCode} {s.contentKorname || s.sectionKorname || s.serviceKorname}
+                                        <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
+                                    </Badge>
+                                ))}
+                            </div>
+                        </Col>
+                        <Col sm={2} className="p-0 d-flex align-items-end mb-2">
+                            <Button variant="positive" className="mr-2 flex-fill" onClick={handleOkTrigger}>
+                                등록
+                            </Button>
+                            <Button variant="negative" className="flex-fill" onClick={handleHide}>
+                                취소
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                </div>
 
                 {/* 분류 테이블 */}
-                <Form.Row className="flex-wrap border flex-fill custom-scroll" style={{ height: 400 }}>
+                <div className="border d-flex flex-fill flex-wrap custom-scroll">
                     {serviceList.map((dep1, idx) => (
-                        <Col xs={6} key={dep1.masterCode} className={clsx('service p-0 border-bottom', { 'border-right': idx % 2 === 0 })}>
+                        <Col
+                            md={4}
+                            sm={6}
+                            key={dep1.masterCode}
+                            className={clsx('service d-flex flex-column p-0 border-bottom', {
+                                'border-right': (matchPoints.lg && idx % 3 !== 2) || (matchPoints.md && idx % 2 === 0),
+                            })}
+                        >
                             {/* 대분류 */}
-                            <div className={clsx('d-flex align-items-center justify-content-center border-bottom')} style={{ height: 50 }}>
+                            <div
+                                className={clsx('d-flex align-items-center justify-content-center border-bottom')}
+                                style={{ height: 34, backgroundColor: 'rgb(123 188 222 / 0.1)' }}
+                            >
                                 <MokaInput
                                     as={selection === 'single' ? 'radio' : 'checkbox'}
                                     name="masterCode"
-                                    className="flex-grow-0 mt-1 h5 mb-0"
+                                    className="flex-grow-0 mt-2 h5 mb-0 ft-12"
                                     id={dep1.masterCode}
                                     inputProps={{ custom: true, label: dep1.serviceKorname, checked: selectedList.findIndex((s) => s.masterCode === dep1.masterCode) > -1 }}
                                     onChange={handleChangeValue}
                                 />
                             </div>
-                            <Form.Row className={clsx('section d-flex flex-wrap align-items-start')}>
+                            <div className={clsx('section flex-fill d-flex flex-column align-items-start')} style={{ minHeight: 0 }}>
                                 {sectionList.map((dep2) => {
                                     if (dep2.masterCode.startsWith(dep1.masterCode.slice(0, 2))) {
                                         return (
-                                            <div key={dep2.masterCode} className="d-flex h-100 w-100 border-bottom">
+                                            <div key={dep2.masterCode} className="d-flex w-100 border-bottom">
                                                 {/* 중분류 */}
-                                                <Col xs={4} className="p-3 h-auto border-right">
-                                                    <div className="d-flex align-items-center">
-                                                        <MokaInput
-                                                            as={selection === 'single' ? 'radio' : 'checkbox'}
-                                                            name="masterCode"
-                                                            className="flex-grow-0"
-                                                            id={dep2.masterCode}
-                                                            inputProps={{
-                                                                custom: true,
-                                                                label: dep2.sectionKorname,
-                                                                checked: selectedList.findIndex((s) => s.masterCode === dep2.masterCode) > -1,
-                                                            }}
-                                                            onChange={handleChangeValue}
-                                                        />
-                                                    </div>
+                                                <Col xs={3} className="p-2 h-auto border-right" style={{ backgroundColor: 'rgb(189 180 142 / 10%)' }}>
+                                                    <MokaInput
+                                                        as={selection === 'single' ? 'radio' : 'checkbox'}
+                                                        name="masterCode"
+                                                        className="flex-grow-0 ft-12"
+                                                        id={dep2.masterCode}
+                                                        inputProps={{
+                                                            custom: true,
+                                                            label: dep2.sectionKorname,
+                                                            checked: selectedList.findIndex((s) => s.masterCode === dep2.masterCode) > -1,
+                                                        }}
+                                                        onChange={handleChangeValue}
+                                                    />
                                                 </Col>
-                                                <Col xs={8} className="d-flex flex-wrap pt-3 pl-2 pb-0">
+                                                <Col xs={9} className="pt-1 pr-1 pl-1 pb-0">
                                                     {/* 소분류 */}
                                                     {contentList.map((dep3) => {
                                                         if (dep3.masterCode.startsWith(dep2.masterCode.slice(0, 4))) {
                                                             return (
-                                                                <div key={dep3.masterCode} className="d-flex align-items-center ml-10 mb-10">
+                                                                <div key={dep3.masterCode} className="float-left ml-1 mb-1">
                                                                     <MokaInput
                                                                         as={selection === 'single' ? 'radio' : 'checkbox'}
                                                                         name="masterCode"
-                                                                        className="flex-grow-0"
+                                                                        className="flex-grow-0 ft-12"
                                                                         id={dep3.masterCode}
                                                                         inputProps={{
                                                                             custom: true,
-                                                                            label: dep3.contentKorname,
+                                                                            label: `[${dep3.masterCode}] ${dep3.contentKorname}`,
                                                                             checked: selectedList.findIndex((s) => s.masterCode === dep3.masterCode) > -1,
                                                                         }}
                                                                         onChange={handleChangeValue}
@@ -282,10 +305,10 @@ const CodeListModal = (props) => {
                                         return null;
                                     }
                                 })}
-                            </Form.Row>
+                            </div>
                         </Col>
                     ))}
-                </Form.Row>
+                </div>
             </div>
         </MokaModal>
     );

@@ -347,24 +347,22 @@ public class AreaRestController extends AbstractCommonController {
                     tpsLogger.fail(actionType, message, true);
                 }
 
-                // 컴포넌트가 없으면 에러
+                // Div==CP일때, 컴포넌트가 없으면 에러
                 if (area
                         .getAreaDiv()
-                        .equals(MokaConstants.ITEM_COMPONENT) && area
-                        .getAreaComps()
-                        .size() <= 0) {
+                        .equals(MokaConstants.ITEM_COMPONENT) && area.getAreaComp() == null) {
                     String message = msg("tps.area.error.notnull.areaComp");
                     invalidList.add(new InvalidDataDTO("areaComp", message));
                     tpsLogger.fail(actionType, message, true);
                 }
 
-                // 컨테이너에 컴포넌트가 없으면 에러
+                // Div==CT일때, 컨테이너에 컴포넌트가 없으면 에러
                 if (area
                         .getAreaDiv()
-                        .equals(MokaConstants.ITEM_CONTAINER) && area
+                        .equals(MokaConstants.ITEM_CONTAINER) && (area.getAreaComps() == null || area
                         .getAreaComps()
-                        .size() <= 0) {
-                    String message = msg("tps.area.error.notnull.areaComp");
+                        .size() <= 0)) {
+                    String message = msg("tps.area.error.notnull.areaComps");
                     invalidList.add(new InvalidDataDTO("areaComps", message));
                     tpsLogger.fail(actionType, message, true);
                 }

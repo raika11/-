@@ -14,6 +14,7 @@ import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
 import toast from '@utils/toastUtil';
+import common from '@utils/commonUtil';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
@@ -124,7 +125,7 @@ const EditThumbModal = (props) => {
                 path: {
                     localImgPath: data.preview,
                 },
-                // imgProps: imgData,
+                imgProps: data,
             });
         }
     };
@@ -149,8 +150,13 @@ const EditThumbModal = (props) => {
      * 이미지 편집 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        setThumbFileName(repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath);
-        // setFileValue(repPhoto);
+        debugger;
+        if (repPhoto.type === 'local') {
+            let blobData = common.blobToFile(repPhoto.imgProps.preview, deskingWorkData.seq);
+            setFileValue(blobData);
+        } else {
+            setThumbFileName(repPhoto.path.thumbPath || repPhoto.path.articleImgPath);
+        }
         handleHide();
     };
 

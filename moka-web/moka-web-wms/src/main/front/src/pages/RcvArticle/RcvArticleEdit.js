@@ -1,16 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { MokaCard } from '@components';
-// import ArticleForm from '@pages/Article/components/ArticleForm';
+import { getReporterAllListModal } from '@store/reporter';
+import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
+
+const rcv = true;
 
 const RcvArticleEdit = () => {
     const history = useHistory();
-    const [reporterList, setReporterList] = useState([]);
+    const dispatch = useDispatch();
+
+    // 기자리스트 => 나중에 스토어로 관리
+    const [reporterList, setReporterList] = useState(null);
+
+    useEffect(() => {
+        dispatch(
+            getReporterAllListModal({
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        setReporterList(
+                            body.list.map((reporter) => ({
+                                ...reporter,
+                                value: reporter.repSeq,
+                                label: reporter.repName,
+                            })),
+                        );
+                    } else {
+                        setReporterList([]);
+                    }
+                },
+            }),
+        );
+    }, [dispatch]);
 
     return (
         <MokaCard
-            title="수신기사"
+            title={!rcv ? '수신기사' : '등록기사'}
             className="flex-fill"
             footer
             footerClassName="d-flex justify-content-center"
@@ -21,7 +48,8 @@ const RcvArticleEdit = () => {
                 { variant: 'negative', text: '취소', onClick: () => history.push('/rcv-article') },
             ]}
         >
-            <RctArticleForm reporterList={reporterList} />
+            {/* <RctArticleForm reporterList={reporterList} /> */}
+            <ArticleForm reporterList={reporterList} inRcv />
         </MokaCard>
     );
 };

@@ -12,9 +12,12 @@ import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@s
 
 const propTypes = {
     /**
-     * value
+     * value (string | array | object)
+     * string => 1110000 마스터코드
+     * array => [1110000, 1110001]처럼 string 마스터코드의 배열
+     * object => { masterCode: 1110000 }처럼 마스터코드를 가진 오브젝트 1개
      */
-    value: PropTypes.any,
+    value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string, PropTypes.object]),
     /**
      * show
      */
@@ -32,7 +35,7 @@ const propTypes = {
      */
     selection: PropTypes.oneOf(['single', 'multiple']),
     /**
-     * 적용 버튼 클릭이벤트
+     * 등록 버튼 클릭이벤트
      */
     onSave: PropTypes.func,
     /**
@@ -42,7 +45,7 @@ const propTypes = {
 };
 const defaultProps = {
     title: '분류코드표',
-    selection: 'multiple',
+    selection: 'single',
 };
 
 /**
@@ -173,13 +176,14 @@ const CodeListModal = (props) => {
             // masterCode만 넘어온 경우
             ns = [masterCodeList.find((m) => m.masterCode === value)];
         } else if (Array.isArray(value)) {
-            // object의 array인 경우
-            ns = value.map((v) => masterCodeList.find((m) => m.masterCode === v.masterCode));
+            // masterCode의 array가 넘어온 경우
+            ns = value.map((v) => masterCodeList.find((m) => m.masterCode === v));
         } else if (typeof value === 'object') {
             // object가 넘어온 경우
-            ns = masterCodeList.find((m) => m.masterCode === value.masterCode);
+            ns = [masterCodeList.find((m) => m.masterCode === value.masterCode)];
         }
 
+        ns = ns.filter((s) => s);
         setSelectedList(ns);
     }, [masterCodeList, value]);
 
@@ -212,7 +216,8 @@ const CodeListModal = (props) => {
                             <div className="w-100 mb-0 h6">
                                 {selectedList.map((s) => (
                                     <Badge key={s.masterCode} className="mr-1 mb-1 user-select-text" variant="searching">
-                                        {s.masterCode} {s.contentKorname || s.sectionKorname || s.serviceKorname}
+                                        {s.masterCode}&nbsp;
+                                        {s.masterCode.slice(-5) === '00000' ? s.serviceKorname : s.masterCode.slice(-3) === '000' ? s.sectionKorname : s.contentKorname}
                                         <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
                                     </Badge>
                                 ))}

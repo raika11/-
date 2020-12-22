@@ -56,6 +56,10 @@ const propTypes = {
      * invalid 여부
      */
     isInvalid: PropTypes.bool,
+    /**
+     * 옵션이 노출되는 메뉴의 maxHeight 설정
+     */
+    maxMenuHeight: PropTypes.number,
 };
 
 const defaultProps = {
@@ -73,7 +77,7 @@ const defaultProps = {
  * https://react-select.com/home
  */
 const MokaAutocomplete = forwardRef((props, ref) => {
-    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, defaultValue, value, onChange, className, isInvalid, ...rest } = props;
+    const { options, isMulti, closeMenuOnSelect, searchIcon, onClickSearchIcon, placeholder, defaultValue, value, onChange, className, isInvalid, maxMenuHeight, ...rest } = props;
 
     const customStyles = {
         option: (provided, state) => ({
@@ -87,6 +91,11 @@ const MokaAutocomplete = forwardRef((props, ref) => {
         singleValue: (provided, state) => ({
             ...provided,
             fontSize: '12px',
+        }),
+        multiValueLabel: (provided, state) => ({
+            ...provided,
+            fontSize: '12px',
+            fontWeight: 'bold',
         }),
     };
 
@@ -107,7 +116,7 @@ const MokaAutocomplete = forwardRef((props, ref) => {
                     onMouseDown={onClick}
                     onTouchEnd={onClick}
                 >
-                    <MokaIcon iconName="fal-search" />
+                    <MokaIcon iconName="fas-search" />
                 </div>
                 {children}
             </components.IndicatorsContainer>
@@ -133,6 +142,7 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             onChange={onChange}
             components={searchIcon ? { IndicatorsContainer } : undefined}
             styles={customStyles}
+            maxMenuHeight={maxMenuHeight}
             {...rest}
         />
     );

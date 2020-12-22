@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.rcvArticle.mapper.RcvArticleMapper">
+
+  <!-- 수신 기사 목록 조회 -->
+  <select id="findAll" parameterType="RcvArticleSearchDTO" resultType="RcvArticleBasicVO"
+    statementType="CALLABLE">
+    { call UPA_RCV_ARTICLE_BASIC_LIST_SEL(
+    <choose>
+      <when test="sourceList != null and sourceList != ''">
+        #{sourceList},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+    <choose>
+      <when test="depart != null and contentType != ''">
+        #{depart},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="status != null and status = 'Y'">
+        #{status},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="status != null and status = 'B'">
+        #{status},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="modify != null and status = 'U'">
+        #{modify},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="modify != null and status = 'D'">
+        #{modify},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'rid' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'title' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+</mapper>

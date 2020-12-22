@@ -30,7 +30,6 @@ import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
 import jmnet.moka.core.tps.mvc.special.service.SpecialPageMgtService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,6 +56,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/specials")
 @Api(tags = {"디지털 스페셜 API"})
 public class SpecialPageMgtRestController extends AbstractCommonController {
+    
     private final SpecialPageMgtService specialPageMgtService;
 
     public SpecialPageMgtRestController(SpecialPageMgtService specialPageMgtService) {
@@ -219,7 +219,7 @@ public class SpecialPageMgtRestController extends AbstractCommonController {
      * @throws Exception 예외
      */
     @ApiOperation(value = "디지털스페셜 수정")
-    @PutMapping(value="/{seqNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{seqNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> putSpecialPageMgt(
             @ApiParam("디지털스페셜SEQ(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.specialPageMgt.error.pattern.seqNo}") Long seqNo,
             @Valid SpecialPageMgtDTO specialPageMgtDTO)

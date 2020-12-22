@@ -1010,6 +1010,7 @@ public class DeskingServiceImpl implements DeskingService {
                         .getPage()
                         .getPageUrl()
                         .split("/"))
+                .filter(name -> McpString.isNotEmpty(name))
                 .findFirst();
         String serviceName = "index";
         if (twoDepthName.isPresent()) {

@@ -16,3 +16,4 @@ export { default as Moka } from './ComponentFactory';
 export * from './MokaButton';
 export { default as MokaMessageBox } from './MokaMessageBox';
 export * from './MokaImage';
+export { default as useBreakpoint } from './useBreakpoint';

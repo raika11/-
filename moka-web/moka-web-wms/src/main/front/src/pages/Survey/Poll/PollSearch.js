@@ -4,48 +4,7 @@ import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import Button from 'react-bootstrap/Button';
-
-const vote = {
-    groups: [
-        { key: '1', value: '관리자' },
-        { key: '2', value: '자동차' },
-        { key: '3', value: '중국연구소' },
-        { key: '4', value: '디지털썰전' },
-        { key: '5', value: '강남통신' },
-        { key: '6', value: 'JES_골든' },
-        { key: '7', value: '헬스케어' },
-        { key: '8', value: '일간' },
-        { key: '9', value: '포탈 life' },
-        { key: '10', value: '마프' },
-        { key: '11', value: '매거진' },
-        { key: '12', value: 'Mr.alfflxjfl' },
-        { key: '13', value: '헬스-정신건강' },
-        { key: '14', value: '조인스2006' },
-        { key: '15', value: '중앙일보' },
-        { key: '16', value: '시민마이크' },
-        { key: '17', value: '포털news' },
-    ],
-    statuses: [
-        { key: '0', value: '' },
-        { key: '1', value: '종료' },
-        { key: '2', value: '서비스중' },
-        { key: '3', value: '일시중지' },
-    ],
-    sections: [
-        { key: '0', value: '' },
-        { key: '1', value: '정치' },
-        { key: '2', value: '사회/경제' },
-        { key: '3', value: '문화/방송연예' },
-        { key: '4', value: '국제' },
-        { key: '5', value: '스포츠' },
-        { key: '6', value: '기타' },
-        { key: '7', value: '자동차' },
-        { key: '8', value: '건강' },
-        { key: '9', value: '인물' },
-        { key: '10', value: '중국연구소' },
-        { key: '11', value: 'Life' },
-    ],
-};
+import { codes } from '@pages/Survey/Poll/PollAgGridColumns';
 
 const PollSearch = ({ searchOptions, onChange, onAdd }) => {
     const handleChangeValue = ({ target: { name, value } }) => {
@@ -58,27 +17,29 @@ const PollSearch = ({ searchOptions, onChange, onAdd }) => {
             <Form.Row>
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInputLabel name="group" label="그룹" as="select" labelWidth={25} onChange={handleChangeValue} value={searchOptions.group}>
-                        {vote.groups.map((group) => (
-                            <option key={group.key} value={group.key}>
-                                {group.value}
+                        {codes.groups.map((option) => (
+                            <option key={option.key} value={option.key}>
+                                {option.value}
                             </option>
                         ))}
                     </MokaInputLabel>
                 </Col>
                 <Col xs={3} className="p-0 pr-2">
                     <MokaInputLabel name="status" label="투표 상태" as="select" labelWidth={55} onChange={handleChangeValue} value={searchOptions.status}>
-                        {vote.statuses.map((status) => (
-                            <option key={status.key} value={status.key}>
-                                {status.value}
+                        <option key="0" value="0"></option>
+                        {codes.status.map((option) => (
+                            <option key={option.key} value={option.key}>
+                                {option.value}
                             </option>
                         ))}
                     </MokaInputLabel>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInputLabel name="section" label="분류" as="select" labelWidth={25} onChange={handleChangeValue} value={searchOptions.section}>
-                        {vote.sections.map((section) => (
-                            <option key={section.key} value={section.key}>
-                                {section.value}
+                        <option key="0" value="0"></option>
+                        {codes.servcode.map((option) => (
+                            <option key={option.key} value={option.key}>
+                                {option.value}
                             </option>
                         ))}
                     </MokaInputLabel>

@@ -14,7 +14,7 @@ import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
 import toast from '@utils/toastUtil';
-import common from '@utils/commonUtil';
+import util from '@utils/commonUtil';
 
 /**
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
@@ -150,10 +150,16 @@ const EditThumbModal = (props) => {
      * 이미지 편집 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        debugger;
         if (repPhoto.type === 'local') {
-            let blobData = common.blobToFile(repPhoto.imgProps.preview, deskingWorkData.seq);
-            setFileValue(blobData);
+            (async () => {
+                await fetch(repPhoto.imgProps.preview)
+                    .then((r) => r.blob())
+                    .then((blobFile) => {
+                        const file = util.blobToFile(blobFile, `${deskingWorkData.seq}.jpeg`, blobFile.type);
+                        setFileValue(file);
+                        setThumbFileName(repPhoto.imgProps.preview);
+                    });
+            })();
         } else {
             setThumbFileName(repPhoto.path.thumbPath || repPhoto.path.articleImgPath);
         }

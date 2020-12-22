@@ -40,6 +40,15 @@ const fileDownload = (data, filename, mime) => {
 };
 
 /**
+ * blob To File
+ * @param {any} blobData blobData
+ * @param {string} fileName 저장할 파일명
+ */
+const blobToFile = (blobData, fileName) => {
+    return new File([blobData], fileName, { lastModified: new Date().getTime(), type: blobData.type });
+};
+
+/**
  * 문자열이 빈값인지 체크
  * @param {*} str 문자열
  */
@@ -285,6 +294,7 @@ export const setDefaultValue = (value, defaultValue = '') => {
 
 export default {
     fileDownload,
+    blobToFile,
     isEmpty,
     findNode,
     findChildNodeKeys,

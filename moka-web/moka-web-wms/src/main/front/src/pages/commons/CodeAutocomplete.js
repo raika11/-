@@ -34,6 +34,10 @@ const propTypes = {
      * placeholder
      */
     placeholder: PropTypes.string,
+    /**
+     * autocomplete의 maxMenuHeight
+     */
+    maxMenuHeight: PropTypes.number,
 };
 const defaultProps = {
     isMulti: false,
@@ -45,11 +49,9 @@ const defaultProps = {
  * 기사 분류(masterCode) 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon } = props;
+    const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight } = props;
     const dispatch = useDispatch();
-
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
-
     const { storeSearch, list } = useSelector((store) => ({
         storeSearch: store.code.korname.search,
         list: store.code.korname.list,
@@ -153,7 +155,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 value={defaultValue}
                 placeholder={placeholder}
                 onChange={handleChangeValue}
-                inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon }}
+                inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon, maxMenuHeight: maxMenuHeight }}
             />
             <CodeListModal value={value} show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />
         </React.Fragment>

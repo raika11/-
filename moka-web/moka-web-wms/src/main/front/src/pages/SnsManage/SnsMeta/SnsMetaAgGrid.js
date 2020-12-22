@@ -40,7 +40,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={selected}
                 preventRowClickCell={['insStatus', 'sendType']}
-                className="sns-meta-ag-grid"
+                className="ag-grid-align-center"
             />
         </>
     );

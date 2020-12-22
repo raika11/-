@@ -270,7 +270,7 @@ const ButtonGroup = (props) => {
 
                     {/* 드롭다운 메뉴 */}
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
-                        <Dropdown>
+                        <Dropdown style={{ position: 'unset' }}>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                             <Dropdown.Menu className="ft-12">{createDropdownItem()}</Dropdown.Menu>
                         </Dropdown>

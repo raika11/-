@@ -41,6 +41,9 @@ export default [
         field: 'regTime',
         width: 50,
         cellStyle: { fontSize: '12px' },
+        cellClassRules: {
+            'text-positive': () => true,
+        },
     },
     {
         headerName: '기능',

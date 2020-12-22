@@ -253,7 +253,7 @@ const CodeListModal = (props) => {
                                 <MokaInput
                                     as={selection === 'single' ? 'radio' : 'checkbox'}
                                     name="masterCode"
-                                    className="flex-grow-0 mt-2 h5 mb-0 ft-12"
+                                    className="flex-grow-0 text-dark font-weight-bold mb-0 ft-12"
                                     id={dep1.masterCode}
                                     inputProps={{ custom: true, label: dep1.serviceKorname, checked: selectedList.findIndex((s) => s.masterCode === dep1.masterCode) > -1 }}
                                     onChange={handleChangeValue}

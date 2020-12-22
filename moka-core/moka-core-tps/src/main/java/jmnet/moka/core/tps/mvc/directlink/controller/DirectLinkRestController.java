@@ -168,16 +168,17 @@ public class DirectLinkRestController extends AbstractCommonController {
                     returnValue = directLinkService.updateDirectLink(directLink);
                 } else {
                     String message = msg("tps.direct-link.error.image-upload");
-                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
-                    invalidList.add(new InvalidDataDTO("imgUrl", message));
                     tpsLogger.fail(ActionType.INSERT, message, true);
-                    throw new InvalidDataException(invalidList, message);
+                    // 이미지저장 실패시 오류로 처리하지 않는다. 디폴트이미지로 저장된다.
+                    //                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    //                    invalidList.add(new InvalidDataDTO("imgUrl", message));
+                    //                    throw new InvalidDataException(invalidList, message);
                 }
             }
 
             // 결과리턴
             DirectLinkDTO dto = modelMapper.map(returnValue, DirectLinkDTO.class);
-            ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.INSERT);
@@ -241,10 +242,11 @@ public class DirectLinkRestController extends AbstractCommonController {
                     newDirectLink.setImgUrl(imgUrl);
                 } else {
                     String message = msg("tps.direct-link.error.image-upload");
-                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
-                    invalidList.add(new InvalidDataDTO("imgUrl", message));
-                    tpsLogger.fail(ActionType.INSERT, message, true);
-                    throw new InvalidDataException(invalidList, message);
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    // 이미지저장 실패시 오류로 처리하지 않는다. 디폴트이미지로 저장된다.
+                    //                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    //                    invalidList.add(new InvalidDataDTO("imgUrl", message));
+                    //                    throw new InvalidDataException(invalidList, message);
                 }
             }
             // update

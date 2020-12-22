@@ -3,20 +3,18 @@
  */
 package jmnet.moka.core.tps.mvc.columnist.service;
 
+import java.util.Optional;
 import jmnet.moka.common.utils.McpFile;
-import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.helper.UploadFileHelper;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
 import jmnet.moka.core.tps.mvc.columnist.repository.ColumnistRepository;
-import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
 
 /**
  * 기자관리 서비스 2020. 11. 11. ssc 최초생성
@@ -32,7 +30,13 @@ public class ColumnistServiceImpl implements ColumnistService {
     private ColumnistRepository columnistRepository;
 
     @Autowired
-    private UploadFileHelper uploadFileHelper;
+    private FtpHelper ftpHelper;
+
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+    @Value("${columnist.save.filepath}")
+    private String saveFilePath;
 
     @Override
     public Page<Columnist> findAllColumnist(ColumnistSearchDTO search) {
@@ -51,9 +55,9 @@ public class ColumnistServiceImpl implements ColumnistService {
 
     @Override
     public Columnist insertColumnist(Columnist columnist) {
-//        if (McpString.isEmpty(columnist.getseqNo())) {
-//            Columnist.setseqNo(getNewDirectseqNo());
-//        }
+        //        if (McpString.isEmpty(columnist.getseqNo())) {
+        //            Columnist.setseqNo(getNewDirectseqNo());
+        //        }
         return columnistRepository.save(columnist);
     }
 
@@ -66,31 +70,34 @@ public class ColumnistServiceImpl implements ColumnistService {
     @Override
     public String saveImage(Columnist columnist, MultipartFile thumbnail)
             throws Exception {
-        String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
-        String newFilename = String.valueOf(columnist.getSeqNo()) + "." + extension;
-        // 이미지를 저장할 실제 경로 생성
-        //String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-        String uri = "https://pds.joins.com/news/search_direct_link/";
+        // 파일명 생성
+        String extension = McpFile
+                .getExtension(thumbnail.getOriginalFilename())
+                .toLowerCase();
+        String fileName = String.valueOf(columnist.getSeqNo()) + "." + extension;
 
-        try {
-            if (uploadFileHelper.saveImage("c:/msp/wms/", thumbnail.getBytes())) {
-                //String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-                uri= uri + newFilename;
-
-            }
-        } catch (Exception e) {
-            return "https://pds.joins.com/news/search_direct_link/" + newFilename;
+        // 파일 저장
+        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
+        if (upload) {
+            log.debug("SAVE COLUMNIST IMAGE");
+            String path = pdsUrl + saveFilePath + "/" + fileName;
+            return path;
+        } else {
+            log.debug("SAVE FAIL COLUMNIST IMAGE");
         }
 
-        return uri;
+        return "";
     }
 
     @Override
     public boolean deleteImage(Columnist columnist)
             throws Exception {
-        // 이미지 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPathByDB(columnist.getProfilePhoto());
-        return uploadFileHelper.deleteFile(imageRealPath);
+        String extension = McpFile
+                .getExtension(columnist.getProfilePhoto())
+                .toLowerCase();
+        String fileName = String.valueOf(columnist.getSeqNo()) + "." + extension;
+
+        return ftpHelper.delete(FtpHelper.PDS, saveFilePath, fileName);
     }
 
 }

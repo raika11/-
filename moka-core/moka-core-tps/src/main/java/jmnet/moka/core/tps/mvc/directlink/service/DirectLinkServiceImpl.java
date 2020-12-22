@@ -118,7 +118,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
                 .toLowerCase();
         String fileName = String.valueOf(directLink.getLinkSeq()) + "." + extension;
 
-        return ftpHelper.delete(FtpHelper.STATIC, saveFilePath, fileName);
+        return ftpHelper.delete(FtpHelper.PDS, saveFilePath, fileName);
     }
 
 }

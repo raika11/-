@@ -61,7 +61,6 @@ const HistoryAgGrid = () => {
                     size={historyList.search.size}
                     onChangeSearchOption={handleChangeSearchOption}
                     selected={null}
-                    className="sns-meta-ag-grid"
                 />
             </MokaCard>
         </>

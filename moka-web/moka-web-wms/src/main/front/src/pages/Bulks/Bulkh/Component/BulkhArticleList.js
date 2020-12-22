@@ -74,7 +74,7 @@ const BulkhArticleList = ({ componentAgGridInstances }) => {
     };
 
     return (
-        <MokaCard titleClassName="mb-0" width={480} loading={null} header={false} className={'custom-scroll mr-gutter flex-fill'}>
+        <MokaCard titleClassName="mb-0" width={850} loading={null} header={false} className={'custom-scroll mr-gutter flex-fill'}>
             <ArticleDeskList
                 className="flex-fill"
                 ref={articleRef}

@@ -42,7 +42,7 @@ const HistoryDetailAgGrid = () => {
         <>
             <MokaCard
                 width={630}
-                height={650}
+                height={670}
                 loading={loading}
                 header={false}
                 className={'custom-scroll mr-gutter flex-fill'}

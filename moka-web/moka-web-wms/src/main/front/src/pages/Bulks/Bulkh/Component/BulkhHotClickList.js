@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
-import { Col, Row, Form } from 'react-bootstrap';
+import { Col, Row, Form, Container } from 'react-bootstrap';
 import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
@@ -23,7 +23,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
         loading: store.loading[GET_HOTCLICK_LIST],
     }));
 
-    const [tempModalShow, setTempModalShow] = useState(false);
+    const [historyModalShow, setHistoryModalShow] = useState(false);
     // 상단 타이틀 문구 스테이트.
     const [topTitleItem, setTopTitleItem] = useState({
         send: '',
@@ -32,7 +32,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
 
     // 편집 정보 버튼 클릭 처리.
     const handleClickHistoryModalButton = () => {
-        setTempModalShow(true);
+        setHistoryModalShow(true);
     };
 
     // 전송 버튼 임시저장 버튼 처리.
@@ -142,7 +142,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
     return (
         <>
             <MokaCard
-                width={130}
+                width={380}
                 loading={loading}
                 className={'custom-scroll mr-gutter flex-fill'}
                 footer
@@ -150,7 +150,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                     <>
                         <Row>
                             <Col className="align-self-center justify-content-start" xs={2}>
-                                <MokaInputLabel label="아티클 핫클릭" labelWidth={80} className="h5" as="none" />
+                                <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" />
                             </Col>
                             <Col className="align-self-center justify-content-end mb-0 p-0" xs={8}>
                                 <Col className="align-self-top justify-content-end text-right">{topTitleItem.send}</Col>
@@ -168,21 +168,25 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 }
                 footerAs={
                     <>
-                        <Col>
-                            <Button variant="outline-neutral" onClick={() => handleClickResendButton()}>
-                                재전송
-                            </Button>
-                        </Col>
-                        <Col className="offset-6 pr-0">
-                            <Button variant="positive" onClick={() => handleClickSaveButton('publish')}>
-                                전송
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button variant="positive" onClick={() => handleClickSaveButton('save')}>
-                                임시저장
-                            </Button>
-                        </Col>
+                        <Container>
+                            <Row>
+                                <Col xs={2}>
+                                    <Button variant="outline-neutral" onClick={() => handleClickResendButton()}>
+                                        재전송
+                                    </Button>
+                                </Col>
+                                <Col xs={8} className="justify-content-end text-right pr-0">
+                                    <Button variant="positive" onClick={() => handleClickSaveButton('publish')}>
+                                        전송
+                                    </Button>
+                                </Col>
+                                <Col xs={2}>
+                                    <Button variant="positive" onClick={() => handleClickSaveButton('save')}>
+                                        임시저장
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Container>
                     </>
                 }
             >
@@ -199,7 +203,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                     </Col>
                 </Row>
             </MokaCard>
-            <BulkhHistoryModal show={tempModalShow} onHide={() => setTempModalShow(false)} />
+            <BulkhHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
         </>
     );
 };

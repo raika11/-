@@ -3,7 +3,7 @@ import { MokaCard } from '@components';
 
 const BulknMain = () => {
     return (
-        <MokaCard className="mr-gutter treeview" bodyClassName="p-2" width={200} header={false}>
+        <MokaCard className="mr-gutter treeview" bodyClassName="p-2" width={150} header={false}>
             <></>
         </MokaCard>
     );

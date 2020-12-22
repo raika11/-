@@ -36,8 +36,8 @@ const ItemRenderer = ({ itemIndex, title, url }) => {
     return (
         <>
             <Row>
-                <Col className="align-self-center justify-content-start mb-0 p-0 pr-0 pl-0 w-100">{itemIndex + 1}</Col>
-                <Col className="d-felx mb-0 pl-0 w-100" xs={10}>
+                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-2 w-100">{itemIndex + 1}</Col>
+                <Col className="d-felx" xs={10}>
                     <MokaInputLabel
                         name="title"
                         id="title"

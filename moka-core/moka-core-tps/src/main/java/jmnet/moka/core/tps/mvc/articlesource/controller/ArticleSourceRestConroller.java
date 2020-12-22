@@ -451,7 +451,7 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
                     .getArticleSource()
                     .getSourceCode();
             if (McpString.isEmpty(sourceCode)) {
-                String message = messageByLocale.get("tps.article-source.error.notnull.sourceCode");
+                String message = msg("tps.article-source.error.notnull.sourceCode");
                 tpsLogger.fail(actionType, message, true);
                 invalidList.add(new InvalidDataDTO("sourceCode", message));
             }
@@ -460,7 +460,7 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
             if (McpString.isNotEmpty(sourceCode)) {
                 Optional<ArticleSource> articleSource = articleSourceService.findAricleSourceById(sourceCode);
                 if (!articleSource.isPresent()) {
-                    String message = messageByLocale.get("tps..article-source.error.notnull.sourceCode");
+                    String message = msg("tps..article-source.error.notnull.sourceCode");
                     tpsLogger.fail(actionType, message, true);
                     invalidList.add(new InvalidDataDTO("grpCd", message));
                 }

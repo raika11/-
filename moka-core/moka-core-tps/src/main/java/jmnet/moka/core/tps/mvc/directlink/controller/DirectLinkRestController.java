@@ -13,9 +13,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -24,7 +23,7 @@ import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.service.DirectLinkService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,22 +54,21 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequestMapping("/api/direct-links")
 @Api(tags = {"바로가기 API"})
-public class DirectLinkRestController {
+public class DirectLinkRestController extends AbstractCommonController {
+
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+    @Value("${direct-link.save.filepath}")
+    private String saveFilePath;
+
+    @Value("${direct-link.save.default.filename}")
+    private String saveDefaultFileName;
 
     private final DirectLinkService directLinkService;
 
-    private final ModelMapper modelMapper;
-
-    private final MessageByLocale messageByLocale;
-
-    private final TpsLogger tpsLogger;
-
-    public DirectLinkRestController(DirectLinkService directLinkService, ModelMapper modelMapper, MessageByLocale messageByLocale,
-            TpsLogger tpsLogger) {
+    public DirectLinkRestController(DirectLinkService directLinkService) {
         this.directLinkService = directLinkService;
-        this.modelMapper = modelMapper;
-        this.messageByLocale = messageByLocale;
-        this.tpsLogger = tpsLogger;
     }
 
     /**
@@ -113,7 +111,7 @@ public class DirectLinkRestController {
             @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.direct-link.error.no-data", request);
+        String message = msg("tps.direct-link.error.no-data");
         DirectLink directLink = directLinkService
                 .findById(linkSeq)
                 .orElseThrow(() -> new NoDataException(message));
@@ -143,7 +141,7 @@ public class DirectLinkRestController {
 
         // 널이면 강제로 셋팅
         if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
-            directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
+            directLinkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
         }
 
         // 데이터 유효성 검사
@@ -153,7 +151,7 @@ public class DirectLinkRestController {
         DirectLink directLink = modelMapper.map(directLinkDTO, DirectLink.class);
         if (McpString.isNotEmpty(directLink.getLinkSeq())) { // 자동 발번이 아닌 경우 중복 체크
             if (directLinkService.isDuplicatedId(directLink.getLinkSeq())) {
-                throw new InvalidDataException(messageByLocale.get("tps.direct-link.error.duplicate.linkSeq"));
+                throw new InvalidDataException(msg("tps.direct-link.error.duplicate.linkSeq"));
             }
         }
 
@@ -162,11 +160,19 @@ public class DirectLinkRestController {
 
             if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
-                String imgPath = directLinkService.saveImage(returnValue, directLinkThumbnailFile);
-                tpsLogger.success(ActionType.UPLOAD, true);
-                directLink.setLinkSeq(returnValue.getLinkSeq());
-                directLink.setImgUrl(imgPath);
-                returnValue = directLinkService.updateDirectLink(directLink);
+                String imgUrl = directLinkService.saveImage(returnValue, directLinkThumbnailFile);
+                if (McpString.isNotEmpty(imgUrl)) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    directLink.setLinkSeq(returnValue.getLinkSeq());
+                    directLink.setImgUrl(imgUrl);
+                    returnValue = directLinkService.updateDirectLink(directLink);
+                } else {
+                    String message = msg("tps.direct-link.error.image-upload");
+                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    invalidList.add(new InvalidDataDTO("imgUrl", message));
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    throw new InvalidDataException(invalidList, message);
+                }
             }
 
             // 결과리턴
@@ -182,7 +188,7 @@ public class DirectLinkRestController {
             log.error("[FAIL TO INSERT SITE]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(messageByLocale.get("tps.direct-link.error.save"), e);
+            throw new Exception(msg("tps.direct-link.error.save"), e);
         }
     }
 
@@ -207,7 +213,7 @@ public class DirectLinkRestController {
 
         // 널이면 강제로 셋팅
         if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
-            directLinkDTO.setImgUrl("http://pds.joins.com/news/search_direct_link/000.jpg");
+            directLinkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
         }
 
         // DirectLinkDTO -> DirectLink 변환
@@ -216,7 +222,7 @@ public class DirectLinkRestController {
         DirectLink orgDirectLink = directLinkService
                 .findById(newDirectLink.getLinkSeq())
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.direct-link.error.no-data");
+                    String message = msg("tps.direct-link.error.no-data");
                     tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
@@ -224,28 +230,29 @@ public class DirectLinkRestController {
 
         try {
             /*
-             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다.
+             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일을 덮어쓰기 한다.
              */
             if (directLinkThumbnailFile != null && !directLinkThumbnailFile.isEmpty()) {
-                // 기존이미지 삭제
-                if (McpString.isNotEmpty(orgDirectLink.getImgUrl())) {
-                    directLinkService.deleteImage(orgDirectLink);
-                    tpsLogger.success(ActionType.FILE_DELETE, true);
-                }
-
                 // 새로운 이미지 저장
-                String imgPath = directLinkService.saveImage(newDirectLink, directLinkThumbnailFile);
-                tpsLogger.success(ActionType.UPLOAD, true);
-
-                // 이미지 파일명 수정
-                newDirectLink.setImgUrl(imgPath);
+                String imgUrl = directLinkService.saveImage(newDirectLink, directLinkThumbnailFile);
+                if (McpString.isNotEmpty(imgUrl)) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    // 이미지 파일명 수정
+                    newDirectLink.setImgUrl(imgUrl);
+                } else {
+                    String message = msg("tps.direct-link.error.image-upload");
+                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    invalidList.add(new InvalidDataDTO("imgUrl", message));
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    throw new InvalidDataException(invalidList, message);
+                }
             }
             // update
             DirectLink returnValue = directLinkService.updateDirectLink(newDirectLink);
 
             // 결과리턴
             DirectLinkDTO dto = modelMapper.map(returnValue, DirectLinkDTO.class);
-            String message = messageByLocale.get("tps.direct-link.success.update");
+            String message = msg("tps.direct-link.success.update");
             ResultDTO<DirectLinkDTO> resultDto = new ResultDTO<>(dto, message);
 
             // 액션 로그에 성공 로그 출력
@@ -256,7 +263,7 @@ public class DirectLinkRestController {
             log.error("[FAIL TO UPDATE DirectLink] seq: {} {}", directLinkDTO.getLinkSeq(), e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE DirectLink]", e, true);
-            throw new Exception(messageByLocale.get("tps.direct-link.error.save"), e);
+            throw new Exception(msg("tps.direct-link.error.save"), e);
         }
     }
 
@@ -272,7 +279,7 @@ public class DirectLinkRestController {
             @ApiParam("바로가기 일련번호") @PathVariable("linkSeq") @Min(value = 0, message = "{tps.direct-link.error.pattern.linkSeq}") Long linkSeq) {
 
         boolean exists = directLinkService.hasMembers(linkSeq);
-        String message = exists ? messageByLocale.get("tps.direct-link.success.select.exist-member") : "";
+        String message = exists ? msg("tps.direct-link.success.select.exist-member") : "";
 
         // 결과리턴
         ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
@@ -297,7 +304,7 @@ public class DirectLinkRestController {
 
 
         // 그룹 데이터 조회
-        String noContentMessage = messageByLocale.get("tps.direct-link.error.no-data", request);
+        String noContentMessage = msg("tps.direct-link.error.no-data");
         DirectLink member = directLinkService
                 .findById(linkSeq)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
@@ -308,15 +315,18 @@ public class DirectLinkRestController {
 
             // 이미지 있으면 이미지도
             if (McpString.isNotEmpty(member.getImgUrl())) {
-                directLinkService.deleteImage(member);
-                tpsLogger.success(ActionType.FILE_DELETE, true);
+                if (directLinkService.deleteImage(member)) {
+                    tpsLogger.success(ActionType.FILE_DELETE, true);
+                } else {
+                    tpsLogger.fail(ActionType.FILE_DELETE, msg("tps.direct-link.error.image-delete"), true);
+                }
             }
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
-            String message = messageByLocale.get("tps.direct-link.success.delete");
+            String message = msg("tps.direct-link.success.delete");
             ResultDTO<Boolean> resultDto = new ResultDTO<>(true, message);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -324,7 +334,7 @@ public class DirectLinkRestController {
             log.error("[FAIL TO DELETE DIRECT_LINK] linkSeq: {} {}", linkSeq, e.getMessage());
             // 액션 로그에 실패 로그 출력
             tpsLogger.error(ActionType.DELETE, e.toString());
-            throw new Exception(messageByLocale.get("tps.direct-link.error.delete", request), e);
+            throw new Exception(msg("tps.direct-link.error.delete"), e);
         }
     }
 
@@ -344,14 +354,14 @@ public class DirectLinkRestController {
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {
-                String message = messageByLocale.get("tps.direct-link.error.only-image.thumbnail");
+                String message = msg("tps.direct-link.error.only-image.thumbnail");
                 invalidList.add(new InvalidDataDTO("thumbnail", message));
                 tpsLogger.fail(ActionType.INSERT, message, true);
             }
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }

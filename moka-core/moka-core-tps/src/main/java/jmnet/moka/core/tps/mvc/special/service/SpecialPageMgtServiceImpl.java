@@ -43,6 +43,9 @@ public class SpecialPageMgtServiceImpl implements SpecialPageMgtService {
     @Value("${pds.url}")
     private String pdsUrl;
 
+    @Value("${special-page-mgt.save.filepath}")
+    private String saveFilePath;
+
     @Override
     public Page<SpecialPageMgt> findAllSpecialPageMgt(SpecialPageMgtSearchDTO search) {
         return specialPageMgtRepository.findAllSpecialPageMgt(search);
@@ -76,15 +79,14 @@ public class SpecialPageMgtServiceImpl implements SpecialPageMgtService {
                 .toString();
         String fileName = uuid + "." + extension;
 
-        // 경로 생성
+        // 경로
         // https://stg-pds.joongang.co.kr/special/thumbnail/
-        String remotePath = "/" + String.join("/", "special", "thumbnail");
 
         // 파일 저장
-        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), remotePath);
+        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
         if (upload) {
             log.debug("SAVE SPECIAL_PAGE_MGT THUMBNAIL");
-            String path = pdsUrl + remotePath + "/" + fileName;
+            String path = pdsUrl + saveFilePath + "/" + fileName;
             return path;
         } else {
             log.debug("SAVE FAIL SPECIAL_PAGE_MGT THUMBNAIL");

@@ -3,28 +3,19 @@
  */
 package jmnet.moka.core.tps.mvc.directlink.service;
 
-import jmnet.moka.common.ApiResult;
-import jmnet.moka.common.JSONResult;
+import java.util.Optional;
 import jmnet.moka.common.utils.McpFile;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.helper.UploadFileHelper;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.repository.DirectLinkRepository;
-import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
-import jmnet.moka.core.tps.mvc.template.entity.Template;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Optional;
 
 /**
  * 기자관리 서비스 2020. 11. 11. ssc 최초생성
@@ -40,7 +31,13 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     private DirectLinkRepository directLinkRepository;
 
     @Autowired
-    private UploadFileHelper uploadFileHelper;
+    private FtpHelper ftpHelper;
+
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+    @Value("${direct-link.save.filepath}")
+    private String saveFilePath;
 
     @Override
     public Page<DirectLink> findAllDirectLink(DirectLinkSearchDTO search) {
@@ -62,9 +59,9 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     @Transactional
     public DirectLink insertDirectLink(DirectLink directLink) {
-//        if (McpString.isEmpty(directLink.getLinkSeq())) {
-//            directLink.setLinkSeq(getNewDirectLinkSeq());
-//        }
+        //        if (McpString.isEmpty(directLink.getLinkSeq())) {
+        //            directLink.setLinkSeq(getNewDirectLinkSeq());
+        //        }
         return directLinkRepository.save(directLink);
     }
 
@@ -84,40 +81,44 @@ public class DirectLinkServiceImpl implements DirectLinkService {
         directLinkRepository.delete(directLink);
     }
 
-//    private Long getNewDirectLinkSeq() {
-//        long count = directLinkRepository.count();
-//        Long newId = count + 1;
-//        return newId;
-//    }
+    //    private Long getNewDirectLinkSeq() {
+    //        long count = directLinkRepository.count();
+    //        Long newId = count + 1;
+    //        return newId;
+    //    }
 
     @Override
     public String saveImage(DirectLink directLink, MultipartFile thumbnail)
             throws Exception {
-        String extension = McpFile.getExtension(thumbnail.getOriginalFilename()).toLowerCase();
-        String newFilename = String.valueOf(directLink.getLinkSeq()) + "." + extension;
-        // 이미지를 저장할 실제 경로 생성
-        //String imageRealPath = uploadFileHelper.getRealPath(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-        String uri = "https://pds.joins.com/news/search_direct_link/";
 
-        try {
-            if (uploadFileHelper.saveImage("c:/msp/wms/", thumbnail.getBytes())) {
-                //String uri = uploadFileHelper.getDbUri(TpsConstants.DIRECT_LINK_BUSINESS, "/news/search_direct_link/", newFilename);
-                uri= uri + newFilename;
+        // 파일명 생성
+        String extension = McpFile
+                .getExtension(thumbnail.getOriginalFilename())
+                .toLowerCase();
+        String fileName = String.valueOf(directLink.getLinkSeq()) + "." + extension;
 
-            }
-        } catch (Exception e) {
-            return "https://pds.joins.com/news/search_direct_link/" + newFilename;
+        // 파일 저장
+        boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
+        if (upload) {
+            log.debug("SAVE DIRECT_LINK IMAGE");
+            String path = pdsUrl + saveFilePath + "/" + fileName;
+            return path;
+        } else {
+            log.debug("SAVE FAIL DIRECT_LINK IMAGE");
         }
 
-        return uri;
+        return "";
     }
 
     @Override
     public boolean deleteImage(DirectLink directLink)
             throws Exception {
-        // 이미지 실제 경로 생성
-        String imageRealPath = uploadFileHelper.getRealPathByDB(directLink.getImgUrl());
-        return uploadFileHelper.deleteFile(imageRealPath);
+        String extension = McpFile
+                .getExtension(directLink.getImgUrl())
+                .toLowerCase();
+        String fileName = String.valueOf(directLink.getLinkSeq()) + "." + extension;
+
+        return ftpHelper.delete(FtpHelper.STATIC, saveFilePath, fileName);
     }
 
 }

@@ -3,28 +3,17 @@
  */
 package jmnet.moka.core.tps.mvc.directlink.service;
 
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
-import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
-import jmnet.moka.core.tps.mvc.template.entity.Template;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
-
 /**
- * 사이트이동 서비스 2020. 1. 8. ssc 최초생성
- * 메소드 생성 규칙
- * 목록 조회 : findAllDirectLink{Target}List
- * ID로 상세 조회 : find{Target}ById
- * 여러 속성으로 상세 조회 : find{Target}
- * 등록 : insertDirectLink{Target}
- * 수정 : updateDirectLink{Target}
- * 삭제 :  deleteDirectLink{Target}
- * 중복조회 : isDuplicatedId{Target}
- * 이미지저장 : saveImage{Target}
- * 이미지삭제 : deleteImage{Target}
- * 멤버목록조회 : hasMembers{Target}
+ * 사이트이동 서비스 2020. 1. 8. ssc 최초생성 메소드 생성 규칙 목록 조회 : findAllDirectLink{Target}List ID로 상세 조회 : find{Target}ById 여러 속성으로 상세 조회 : find{Target} 등록 :
+ * insertDirectLink{Target} 수정 : updateDirectLink{Target} 삭제 :  deleteDirectLink{Target} 중복조회 : isDuplicatedId{Target} 이미지저장 : saveImage{Target} 이미지삭제
+ * : deleteImage{Target} 멤버목록조회 : hasMembers{Target}
+ *
  * @author ssc
  * @since 2020. 1. 8. 오후 2:06:54
  */
@@ -87,20 +76,24 @@ public interface DirectLinkService {
 
     /**
      * 썸네일 이미지 저장
+     *
      * @param directLink 템플릿
-     * @param thumbnail 썸네일 이미지(Multipart)
+     * @param thumbnail  썸네일 이미지(Multipart)
      * @return 이미지 uri
      * @throws Exception 예외처리
      */
-    String saveImage(DirectLink directLink, MultipartFile thumbnail) throws Exception;
+    String saveImage(DirectLink directLink, MultipartFile thumbnail)
+            throws Exception;
 
     /**
      * 썸네일 이미지 삭제
+     *
      * @param directLink 템플릿
      * @return 삭제 결과
      * @throws Exception 예외처리
      */
-    boolean deleteImage(DirectLink directLink) throws Exception;
+    boolean deleteImage(DirectLink directLink)
+            throws Exception;
 
 
 }

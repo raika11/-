@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { MokaCard, MokaInput, MokaInputLabel } from '@components';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { codes } from '@pages/Survey/Poll/PollAgGridColumns';
 import { initialState } from '@store/survey/poll/pollReducer';
+import PollDetailQuestionComponent from '@pages/Survey/Poll/component/PollDetailQuestionComponent';
+import { useHistory } from 'react-router-dom';
 
 const PollEdit = () => {
+    const history = useHistory();
     const [edit, setEdit] = useState(initialState.poll);
-    const handleChangeValue = (name, value) => {
-        console.log(name);
-        console.log(value);
+    const [isSet, setIsSet] = useState(false);
+    const [title, setTitle] = useState('');
+    const handleChangeValue = (name, value, type) => {
+        if (type === 'number') {
+            value = parseInt(value);
+        }
         setEdit({ ...edit, [name]: value });
     };
 
@@ -21,7 +27,7 @@ const PollEdit = () => {
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: '저장', variant: 'positive', onClick: () => console.log('저장'), className: 'mr-05' },
-                { text: '취소', variant: 'negative', onClick: () => console.log('취소'), className: 'mr-05' },
+                { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
             ]}
         >
             <Form>
@@ -113,6 +119,7 @@ const PollEdit = () => {
                                 } = e;
                                 handleChangeValue(name, value);
                             }}
+                            disabled={isSet}
                         />
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
@@ -129,6 +136,7 @@ const PollEdit = () => {
                                 } = e;
                                 handleChangeValue(name, value);
                             }}
+                            disabled={isSet}
                         />
                     </Col>
                     <Col xs={3} className="d-flex pr-0">
@@ -145,6 +153,7 @@ const PollEdit = () => {
                                 } = e;
                                 handleChangeValue(name, value);
                             }}
+                            disabled={isSet}
                         />
                     </Col>
                 </Form.Row>
@@ -304,7 +313,7 @@ const PollEdit = () => {
                     )}
                 </Form.Row>
                 <Form.Row className="d-flex justify-content-center">
-                    <MokaCard title="투표 정보 설정" height={130} className="w-75" headerClassName="pb-0">
+                    <MokaCard title="투표 정보 설정" height={130} className="w-100" headerClassName="pb-0">
                         <Form.Row>
                             <Col xs={4}>
                                 <MokaInputLabel
@@ -317,10 +326,12 @@ const PollEdit = () => {
                                     value={edit.itemCount}
                                     onChange={(e) => {
                                         const {
-                                            target: { name, value },
+                                            target: { name, value, type },
                                         } = e;
-                                        handleChangeValue(name, value);
+
+                                        handleChangeValue(name, value, type);
                                     }}
+                                    disabled={isSet}
                                 />
                             </Col>
                             <Col xs={4}>
@@ -333,18 +344,50 @@ const PollEdit = () => {
                                     value={edit.itemvalueLimit}
                                     onChange={(e) => {
                                         const {
-                                            target: { name, value },
+                                            target: { name, value, type },
                                         } = e;
-                                        handleChangeValue(name, value);
+                                        handleChangeValue(name, value, type);
                                     }}
+                                    disabled={isSet}
                                 />
                             </Col>
                             <Col xs={3} className="p-0  pr-2 text-right">
-                                <Button variant="positive">생성</Button>
+                                <Button
+                                    variant="positive"
+                                    onClick={() => {
+                                        setIsSet(!isSet);
+                                    }}
+                                    disabled={isSet}
+                                >
+                                    생성
+                                </Button>
                             </Col>
                         </Form.Row>
                     </MokaCard>
                 </Form.Row>
+                {edit.itemCount > 0 && isSet && (
+                    <Form.Row>
+                        <MokaCard
+                            className="flex-fill pl-0"
+                            minHeight="300px"
+                            titleAs={
+                                <MokaInputLabel
+                                    as="textarea"
+                                    onChange={(e) => {
+                                        setEdit({ ...edit, question: { title: e.target.value } });
+                                    }}
+                                    value={edit.question.title}
+                                    label="Q."
+                                    labelWidth={20}
+                                />
+                            }
+                        >
+                            {[...Array(edit.itemCount)].map((n, index) => (
+                                <PollDetailQuestionComponent key={index} label1={`보기${index + 1}`} label2={`url`} type={edit.type} />
+                            ))}
+                        </MokaCard>
+                    </Form.Row>
+                )}
             </Form>
         </MokaCard>
     );

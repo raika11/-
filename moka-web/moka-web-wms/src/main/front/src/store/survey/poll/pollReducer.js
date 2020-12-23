@@ -14,5 +14,8 @@ export const initialState = {
         commentFlag: 'Y',
         itemCount: 2,
         itemvalueLimit: 1,
+        question: {
+            title: '',
+        },
     },
 };

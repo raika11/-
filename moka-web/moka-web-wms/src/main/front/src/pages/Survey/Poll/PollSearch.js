@@ -9,7 +9,6 @@ import { codes } from '@pages/Survey/Poll/PollAgGridColumns';
 const PollSearch = ({ searchOptions, onChange, onAdd }) => {
     const handleChangeValue = ({ target: { name, value } }) => {
         onChange({ ...searchOptions, [name]: value });
-        console.log({ name, value });
     };
 
     return (

@@ -108,7 +108,6 @@ public class DefaultView extends AbstractView {
         // content-type 설정 : PAGE에 설정된 content-type을 따르며, PAGE가 아니거나 없으면 text/html; charset=UTF-8로 설정 
         MergeItem item = (MergeItem) mergeContext.get(MokaConstants.MERGE_CONTEXT_ITEM);
         if (item != null && itemType.equals(MokaConstants.ITEM_PAGE)) {
-            this.setCodesAndMenus(domainId, item, mergeContext);
             String pageType = item.getString(ItemConstants.PAGE_TYPE);
             if (McpString.isNotEmpty(pageType)) {
                 response.setContentType(pageType + "; charset=UTF-8");
@@ -131,6 +130,7 @@ public class DefaultView extends AbstractView {
                         cachedItem = this.cacheManager.get(cacheType, cacheKey);
                     }
                     if (cachedItem == null) {
+                        this.setCodesAndMenus(domainId, item, mergeContext);
                         sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                         writer.append(sb);
                         if (this.isPageCache) {
@@ -150,6 +150,7 @@ public class DefaultView extends AbstractView {
                     }
                 }
             } else {
+                this.setCodesAndMenus(domainId, item, mergeContext);
                 sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                 writer.append(sb);
             }

@@ -4,7 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.rcvArticle.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,7 +60,6 @@ public class RcvArticleSearchDTO extends SearchDTO {
     private Date endDay;
 
     @ApiModelProperty("매체목록 (필수/구분자,)")
-    @JsonIgnore
     @NotNull(message = "{tps.rcv-article.error.notnull.sourceList}")
     private String sourceList;
 

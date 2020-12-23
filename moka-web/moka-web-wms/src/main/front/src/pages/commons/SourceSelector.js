@@ -7,7 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
 import toast from '@utils/toastUtil';
-import { getDeskingSourceList, getTypeSourceListModal } from '@store/articleSource';
+import { getDeskingSourceList, getTypeSourceList } from '@store/articleSource';
 
 /**
  * 커스텀 메뉴
@@ -93,6 +93,7 @@ const SourceSelector = (props) => {
     const [renderList, setRenderList] = useState([]); // 렌더링되는 매체 리스트
     const [toggleText, setToggleText] = useState('매체 전체');
     const deskingSourceList = useSelector((store) => store.articleSource.deskingSourceList); // 데스킹 매체
+    const typeSourceList = useSelector((store) => store.articleSource.typeSourceList); // 타입별 매체
 
     /**
      * 매체 리스트에서 sourceCode로 매체 데이터의 index를 찾음
@@ -157,21 +158,14 @@ const SourceSelector = (props) => {
                 setRenderList(deskingSourceList.map((li, idx) => ({ ...li, index: idx })));
             }
         } else {
-            dispatch(
-                getTypeSourceListModal({
-                    type: sourceType,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            setRenderList(body.list.map((li, idx) => ({ ...li, index: idx })));
-                        } else {
-                            toast.fail(header.message);
-                            setRenderList([]);
-                        }
-                    },
-                }),
-            );
+            // 타입별 매체 조회
+            if (!typeSourceList?.[sourceType]) {
+                dispatch(getTypeSourceList({ type: sourceType }));
+            } else {
+                setRenderList(typeSourceList[sourceType].map((li, idx) => ({ ...li, index: idx })));
+            }
         }
-    }, [dispatch, deskingSourceList, sourceType]);
+    }, [dispatch, deskingSourceList, sourceType, typeSourceList]);
 
     useEffect(() => {
         if (selectedList.length > 0) {

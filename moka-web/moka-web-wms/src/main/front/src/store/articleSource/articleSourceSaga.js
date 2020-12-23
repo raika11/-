@@ -10,11 +10,11 @@ import * as api from './articleSourceApi';
 const getDeskingSourceList = createRequestSaga(act.GET_DESKING_SOURCE_LIST, api.getDeskingSourceList);
 
 /**
- * 타입별 매체 목록 조회 (모달)
+ * 타입별 매체 목록 조회
  */
-const getTypeSourceListModal = createRequestSaga(act.GET_TYPE_SOURCE_LIST_MODAL, api.getTypeSourceList, true);
+const getTypeSourceList = createRequestSaga(act.GET_TYPE_SOURCE_LIST, api.getTypeSourceList);
 
 export default function* saga() {
     yield takeLatest(act.GET_DESKING_SOURCE_LIST, getDeskingSourceList);
-    yield takeLatest(act.GET_TYPE_SOURCE_LIST_MODAL, getTypeSourceListModal);
+    yield takeLatest(act.GET_TYPE_SOURCE_LIST, getTypeSourceList);
 }

@@ -7,11 +7,12 @@ import * as act from './articleSourceAction';
  */
 export const initialState = {
     deskingSourceList: null,
+    typeSourceList: {},
 };
 
 export default handleActions(
     {
-        // 매체 조회
+        // 데스킹 매체 조회
         [act.GET_DESKING_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.deskingSourceList = body.list;
@@ -20,6 +21,17 @@ export default handleActions(
         [act.GET_DESKING_SOURCE_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.deskingSourceList = initialState.deskingSourceList;
+            });
+        },
+        // 타입별 매체 조회
+        [act.GET_TYPE_SOURCE_LIST_SUCCESS]: (state, { payload: { body, payload } }) => {
+            return produce(state, (draft) => {
+                draft.typeSourceList[payload.type] = body.list;
+            });
+        },
+        [act.GET_TYPE_SOURCE_LIST_FAILURE]: (state, { payload: { payload } }) => {
+            return produce(state, (draft) => {
+                draft.typeSourceList[payload.type] = null;
             });
         },
     },

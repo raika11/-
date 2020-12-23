@@ -21,7 +21,6 @@ import jmnet.moka.common.utils.MapBuilder;
 public enum BoardTypeCode {
 
     A("A", "관리자"),
-    C("C", "채널"),
     S("S", "서비스");
 
     private String code;

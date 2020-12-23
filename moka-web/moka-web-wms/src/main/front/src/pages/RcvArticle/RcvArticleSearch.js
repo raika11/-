@@ -126,6 +126,18 @@ const RcvArticleSearch = () => {
         }
     };
 
+    /**
+     * 키 입력
+     * @param {object} e 이벤트
+     */
+    const handleKeyPress = (e) => {
+        // 엔터 기본 동작 막음
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSearch();
+        }
+    };
+
     useEffect(() => {
         let ssd = moment(storeSearch.startDay, DB_DATEFORMAT);
         if (!ssd.isValid()) ssd = null;
@@ -245,7 +257,15 @@ const RcvArticleSearch = () => {
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between">
                 {/* 제목 */}
-                <MokaInputLabel name="keyword" label="제목" labelWidth={50} className="mb-0 flex-fill" value={search.keyword} onChange={handleChangeValue} />
+                <MokaInputLabel
+                    name="keyword"
+                    label="제목"
+                    labelWidth={50}
+                    className="mb-0 flex-fill"
+                    value={search.keyword}
+                    onChange={handleChangeValue}
+                    inputProps={{ onKeyPress: handleKeyPress }}
+                />
 
                 {/* 매체 */}
                 <div style={{ width: 195 }} className="ml-2">

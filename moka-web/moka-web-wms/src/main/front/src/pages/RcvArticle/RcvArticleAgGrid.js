@@ -61,13 +61,14 @@ const RcvArticleAgGrid = () => {
                     rcvDt: moment(data.regDt, DB_DATEFORMAT).format('MM-DD'),
                     rcvTime: moment(data.regDt, DB_DATEFORMAT).format('HH:mm'),
                     sourceName: `[${data.sourceName}]`,
-                    serviceTime: moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm'),
+                    serviceTime: data.serviceDaytime ? moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm') : null,
+                    handleRowClicked,
                 })),
             );
         } else {
             setRowData([]);
         }
-    }, [list]);
+    }, [handleRowClicked, list]);
 
     return (
         <MokaTable
@@ -81,7 +82,7 @@ const RcvArticleAgGrid = () => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['preview', 'register']}
+            preventRowClickCell={['sourceName', 'preview', 'register']}
             selected={rcvArticle.rid}
         />
     );

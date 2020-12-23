@@ -161,7 +161,7 @@ const EditDeskingWorkModal = (props) => {
         // 기사 deskingWorkData 셋팅
         if (show && deskingWorkData) {
             // 이미지경로
-            let irImg = deskingWorkData.irImg;
+            let irImg = deskingWorkData.thumbFileName;
             // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
             setTemp({
                 ...deskingWorkData,

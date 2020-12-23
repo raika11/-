@@ -6,32 +6,32 @@ import * as act from './articleSourceAction';
  * initialState
  */
 export const initialState = {
-    sourceList: null,
-    bulkSourceList: null,
+    deskingSourceList: null,
+    typeSourceList: {},
 };
 
 export default handleActions(
     {
-        // 매체 조회
-        [act.GET_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        // 데스킹 매체 조회
+        [act.GET_DESKING_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.sourceList = body.list;
+                draft.deskingSourceList = body.list;
             });
         },
-        [act.GET_SOURCE_LIST_FAILURE]: (state) => {
+        [act.GET_DESKING_SOURCE_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
-                draft.sourceList = initialState.sourceList;
+                draft.deskingSourceList = initialState.deskingSourceList;
             });
         },
-        // 벌크 매체 조회
-        [act.GET_BLUK_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        // 타입별 매체 조회
+        [act.GET_TYPE_SOURCE_LIST_SUCCESS]: (state, { payload: { body, payload } }) => {
             return produce(state, (draft) => {
-                draft.bulkSourceList = body.list;
+                draft.typeSourceList[payload.type] = body.list;
             });
         },
-        [act.GET_BLUK_SOURCE_LIST_FAILURE]: (state) => {
+        [act.GET_TYPE_SOURCE_LIST_FAILURE]: (state, { payload: { payload } }) => {
             return produce(state, (draft) => {
-                draft.bulkSourceList = initialState.bulkSourceList;
+                draft.typeSourceList[payload.type] = null;
             });
         },
     },

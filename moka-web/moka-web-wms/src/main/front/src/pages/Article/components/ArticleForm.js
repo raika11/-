@@ -76,8 +76,8 @@ const ArticleForm = ({ reporterList, inRcv }) => {
                         isMulti
                     />
                 </Col>
-                <Col className="p-0 pl-2" xs={2}>
-                    <Button variant="outline-neutral" className="ft-12 h-100" onClick={() => setCodeModalShow(true)}>
+                <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
+                    <Button variant="outline-neutral" className="ft-12" onClick={() => setCodeModalShow(true)}>
                         통합분류표
                     </Button>
                 </Col>

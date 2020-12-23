@@ -5,16 +5,16 @@ import * as act from './articleSourceAction';
 import * as api from './articleSourceApi';
 
 /**
- * 매체 목록 조회
+ * 데스킹 매체 목록 조회
  */
-const getSourceList = createRequestSaga(act.getSourceList, api.getSourceList);
+const getDeskingSourceList = createRequestSaga(act.GET_DESKING_SOURCE_LIST, api.getDeskingSourceList);
 
 /**
- * 벌크 매체 목록 조회
+ * 타입별 매체 목록 조회
  */
-const getBulkSourceList = createRequestSaga(act.getBulkSourceList, api.getBulkSourceList);
+const getTypeSourceList = createRequestSaga(act.GET_TYPE_SOURCE_LIST, api.getTypeSourceList);
 
 export default function* saga() {
-    yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
-    yield takeLatest(act.GET_BLUK_SOURCE_LIST, getBulkSourceList);
+    yield takeLatest(act.GET_DESKING_SOURCE_LIST, getDeskingSourceList);
+    yield takeLatest(act.GET_TYPE_SOURCE_LIST, getTypeSourceList);
 }

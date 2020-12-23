@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
-import { getSourceList, getBulkSourceList } from '@store/articleSource';
+import toast from '@utils/toastUtil';
+import { getDeskingSourceList, getTypeSourceList } from '@store/articleSource';
 
 /**
  * 커스텀 메뉴
  */
-const CustomMenu = forwardRef(({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
+const CustomMenu = forwardRef(({ children, style, height, className, 'aria-labelledby': labeledBy }, ref) => {
     return (
-        <div ref={ref} style={style} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
+        <div ref={ref} style={{ ...style, maxHeight: height }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
             {children}
         </div>
     );
@@ -66,13 +67,19 @@ const propTypes = {
      */
     onChange: PropTypes.func.isRequired,
     /**
-     * 벌크 매체 리스트를 조회해야하는지
+     * 매체의 타입
      */
-    bulk: PropTypes.bool,
+    sourceType: PropTypes.oneOf(['DESKING', 'JOONGANG', 'CONSALES', 'JSTORE', 'SOCIAL', 'BULK', 'RCV']),
+    /**
+     * 드롭다운 메뉴의 height
+     */
+    dropdownHeight: PropTypes.number,
 };
 
 const defaultProps = {
     bulk: false,
+    sourceType: 'JOONGANG',
+    dropdownHeight: 200,
 };
 
 /**
@@ -80,15 +87,13 @@ const defaultProps = {
  * (value, onChange 필수로 받음)
  */
 const SourceSelector = (props) => {
-    const { className, isInvalid, value, onChange, bulk } = props;
+    const { className, isInvalid, value, onChange, sourceType, dropdownHeight } = props;
     const dispatch = useDispatch();
     const [selectedList, setSelectedList] = useState([]); // 체크된 매체 리스트
     const [renderList, setRenderList] = useState([]); // 렌더링되는 매체 리스트
-    const [sourceObj, setSourceObj] = useState({}); // 파싱을 편하게 하기 위해서 매체 리스트를 obj로 변환함. key는 list의 idx, value는 list값
     const [toggleText, setToggleText] = useState('매체 전체');
-
-    const sourceList = useSelector((store) => store.articleSource.sourceList); // 전체 매체
-    const bulkSourceList = useSelector((store) => store.articleSource.bulkSourceList); // 벌크전송 되는 매체
+    const deskingSourceList = useSelector((store) => store.articleSource.deskingSourceList); // 데스킹 매체
+    const typeSourceList = useSelector((store) => store.articleSource.typeSourceList); // 타입별 매체
 
     /**
      * 매체 리스트에서 sourceCode로 매체 데이터의 index를 찾음
@@ -97,67 +102,77 @@ const SourceSelector = (props) => {
     const findSourceIndex = useCallback((id) => renderList.findIndex((sc) => sc.sourceCode === id), [renderList]);
 
     /**
+     * 매체 리스트에서 sourceCode로 매체 데이터 찾음
+     * @param {string} 매체ID
+     */
+    const findSource = useCallback((id) => renderList.find((sc) => sc.sourceCode === id), [renderList]);
+
+    /**
      * 매체check change
      * @param {object} e 이벤트
      */
-    const handleChangeValue = (e) => {
-        const { checked, id } = e.target;
-        let resultList = [];
+    const handleChangeValue = useCallback(
+        (e) => {
+            const { checked, id } = e.target;
+            let resultList = [];
 
-        const targetIdx = findSourceIndex(id);
-        if (checked) {
-            resultList = [...selectedList, sourceObj[targetIdx]].sort(function (a, b) {
-                return a.index - b.index;
-            });
-        } else {
-            const isSelected = selectedList.findIndex((sl) => sl.sourceCode === id);
-            if (isSelected > -1) {
-                resultList = produce(selectedList, (draft) => {
-                    draft.splice(isSelected, 1);
+            const target = findSource(id);
+            if (checked) {
+                resultList = [...selectedList, target].sort(function (a, b) {
+                    return a.index - b.index;
                 });
+            } else {
+                const isSelected = selectedList.findIndex((sl) => sl.sourceCode === id);
+                if (isSelected > -1) {
+                    resultList = produce(selectedList, (draft) => {
+                        draft.splice(isSelected, 1);
+                    });
+                }
             }
-        }
 
-        if (typeof onChange === 'function') {
-            onChange(resultList.map((r) => r.sourceCode).join(','));
-        }
-    };
+            if (typeof onChange === 'function') {
+                onChange(resultList.map((r) => r.sourceCode).join(','));
+            }
+        },
+        [findSource, onChange, selectedList],
+    );
 
     /**
      * 렌더링 시 checked true인지 false인지 판단
      * @param {string} sourceCode 매체코드
      */
-    const chkTrue = (sourceCode) => {
-        if (!value) return false;
-        else return value.split(',').indexOf(sourceCode) > -1;
-    };
+    const chkTrue = useCallback(
+        (sourceCode) => {
+            if (!value) return false;
+            else return value.split(',').indexOf(sourceCode) > -1;
+        },
+        [value],
+    );
 
     useEffect(() => {
-        if (!bulk) {
-            // 원래 매체 조회
-            if (!sourceList) {
-                dispatch(getSourceList());
+        if (sourceType === 'DESKING') {
+            // 데스킹 매체 조회
+            if (!deskingSourceList) {
+                dispatch(getDeskingSourceList());
             } else {
-                setRenderList(sourceList);
-                setSourceObj(sourceList.reduce((all, sc, index) => ({ ...all, [index]: { ...sc, index } }), {}));
+                setRenderList(deskingSourceList.map((li, idx) => ({ ...li, index: idx })));
             }
         } else {
-            // 벌크 매체 조회
-            if (!bulkSourceList) {
-                dispatch(getBulkSourceList());
+            // 타입별 매체 조회
+            if (!typeSourceList?.[sourceType]) {
+                dispatch(getTypeSourceList({ type: sourceType }));
             } else {
-                setRenderList(bulkSourceList);
-                setSourceObj(bulkSourceList.reduce((all, sc, index) => ({ ...all, [index]: { ...sc, index } }), {}));
+                setRenderList(typeSourceList[sourceType].map((li, idx) => ({ ...li, index: idx })));
             }
         }
-    }, [dispatch, sourceList, bulk, bulkSourceList]);
+    }, [dispatch, deskingSourceList, sourceType, typeSourceList]);
 
     useEffect(() => {
         if (selectedList.length > 0) {
-            const targetIdx = findSourceIndex(selectedList[0].sourceCode);
-            const target = sourceObj[targetIdx];
+            const target = findSource(selectedList[0].sourceCode);
+            if (!target) return;
 
-            if (selectedList.length === Object.keys(sourceObj).length) {
+            if (selectedList.length === renderList.length) {
                 setToggleText('매체 전체');
             } else if (selectedList.length === 1) {
                 setToggleText(target.sourceName);
@@ -167,10 +182,10 @@ const SourceSelector = (props) => {
         } else {
             setToggleText('');
         }
-    }, [sourceObj, selectedList, findSourceIndex]);
+    }, [findSource, renderList, selectedList]);
 
     useEffect(() => {
-        if (Object.keys(sourceObj).length < 1) return;
+        if (renderList.length < 1) return;
         if (value || value === '') {
             // 1,3,60,61 => [1, 3, 60, 61]로 파싱하고, renderList에 포함되어 있는 데이터만 남기도록 필터링한다
             const valueArr = value
@@ -181,25 +196,16 @@ const SourceSelector = (props) => {
             // 필터링된 valueArr과 selectedList와 비교하여 다를 경우 value, selectedList 변경
             const selectedListStr = selectedList.map((r) => r.sourceCode).join(',');
             if (selectedListStr !== valueArr.join(',')) {
-                setSelectedList(
-                    valueArr.map((v) => {
-                        const targetIndex = findSourceIndex(v);
-                        return sourceObj[targetIndex];
-                    }),
-                );
+                setSelectedList(valueArr.map((v) => findSource(v)));
                 onChange(valueArr.join(','));
             }
         } else {
             // 값이 없을 때는(value === null) 모든 매체 선택
             if (typeof onChange === 'function') {
-                onChange(
-                    Object.values(sourceObj)
-                        .map((sc) => sc.sourceCode)
-                        .join(','),
-                );
+                onChange(renderList.map((sc) => sc.sourceCode).join(','));
             }
         }
-    }, [findSourceIndex, onChange, selectedList, sourceObj, value]);
+    }, [onChange, selectedList, renderList, value, findSourceIndex, findSource]);
 
     return (
         <Dropdown style={{ width: 195 }} className={clsx('flex-fill', className)}>
@@ -207,7 +213,7 @@ const SourceSelector = (props) => {
                 {toggleText}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu as={CustomMenu}>
+            <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll">
                 {renderList.map((cd, idx) => (
                     <MokaInput
                         key={cd.sourceCode}

@@ -40,6 +40,9 @@ const SignIn = () => {
                             delay(1000);
                             call(window.location.reload());
                         } else {
+                            /**
+                             * 비밀번호 기간 만료 오류
+                             */
                             messageBox.alert(data.header.message);
                         }
                     } else {

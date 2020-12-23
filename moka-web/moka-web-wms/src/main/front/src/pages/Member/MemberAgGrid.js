@@ -6,7 +6,7 @@ import { GET_MEMBER_LIST, changeSearchOption, getMemberList } from '@store/membe
 import { columnDefs } from './MemberAgGridColumns';
 
 /**
- * 도메인 AgGrid 목록
+ * 사용자 AgGrid 목록
  */
 const MemberAgGrid = () => {
     const dispatch = useDispatch();

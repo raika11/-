@@ -34,6 +34,7 @@ import sns from '@store/snsManage/snsReducer';
 import bright from '@store/bright/brightReducer';
 import bulks from '@store/bulks/bulksReducer';
 import special from '@store/special/specialReducer';
+import comment from '@store/commentManage/comment/commentReducer';
 
 export default combineReducers({
     toastr,
@@ -70,4 +71,5 @@ export default combineReducers({
     sns,
     bulks,
     special,
+    comment,
 });

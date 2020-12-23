@@ -83,6 +83,7 @@ public class RcvArticleRestController extends AbstractCommonController {
     public ResponseEntity<?> getRcvArticle(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid)
             throws Exception {
 
+        // 수신기사 상세조회
         RcvArticleBasic rcvArticleBasic = rcvArticleService
                 .findRcvArticleBasicById(rid)
                 .orElseThrow(() -> {
@@ -90,8 +91,14 @@ public class RcvArticleRestController extends AbstractCommonController {
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
-
         RcvArticleBasicDTO dto = modelMapper.map(rcvArticleBasic, RcvArticleBasicDTO.class);
+
+        // 수신기사 분류조회
+        List<String> codeList = rcvArticleService.findAllRcvArticleCode(rid, rcvArticleBasic
+                .getArticleSource()
+                .getSourceCode());
+        dto.setCodeList(codeList);
+
         ResultDTO<RcvArticleBasicDTO> resultDto = new ResultDTO<>(dto);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);

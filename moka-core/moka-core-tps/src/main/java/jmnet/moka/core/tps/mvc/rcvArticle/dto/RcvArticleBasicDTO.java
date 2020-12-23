@@ -13,6 +13,7 @@ package jmnet.moka.core.tps.mvc.rcvArticle.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -153,6 +154,7 @@ public class RcvArticleBasicDTO implements Serializable {
     /**
      * 섹션구분(조판만 사용)
      */
+    @Builder.Default
     private String section = "0";
 
     /**
@@ -170,4 +172,9 @@ public class RcvArticleBasicDTO implements Serializable {
      * 기사본문
      */
     private String content;
+
+    /**
+     * 분류코드 목록
+     */
+    private List<String> codeList = new ArrayList<>();
 }

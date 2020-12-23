@@ -32,4 +32,13 @@ public interface RcvArticleService {
      * @return 수신기사 정보
      */
     Optional<RcvArticleBasic> findRcvArticleBasicById(Long rid);
+
+    /**
+     * 수신기사의 분류코드 목록 조회
+     *
+     * @param rid        수신기사키
+     * @param sourceCode 수신기사 매체코드
+     * @return 분류코드 목록
+     */
+    List<String> findAllRcvArticleCode(Long rid, String sourceCode);
 }

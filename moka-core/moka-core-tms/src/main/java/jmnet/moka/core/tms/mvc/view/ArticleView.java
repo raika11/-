@@ -14,6 +14,7 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
@@ -82,7 +83,19 @@ public class ArticleView extends AbstractView {
         String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
 
         MokaTemplateMerger templateMerger = null;
+        PrintWriter writer = null;
+        String cacheType = "article.merge";
+        String cacheKey = String.format("%s_%s", domainId, articleId);
+
         try {
+            String cached = null;
+            if ( this.cacheManager != null) {
+                cached = this.cacheManager.get(cacheType, cacheKey);
+                if ( cached != null) { // cache가 있을 경우
+                    writeArticle(request, response, cached);
+                    return;
+                }
+            }
             templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
             DataLoader loader = templateMerger.getDataLoader();
             Map<String,Object> paramMap = new HashMap<>();
@@ -91,30 +104,32 @@ public class ArticleView extends AbstractView {
             Map<String,Object> articleInfo = rebuildInfo(jsonResult);
             mergeContext.set("article",articleInfo);
             this.setCodesAndMenus(loader, articleInfo, mergeContext);
-            response.setContentType("text/html; charset=UTF-8");
-
-            PrintWriter writer = null;
-            StringBuilder sb;
-            try {
-                writer = response.getWriter();
-                sb = templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE,
+            StringBuilder sb = templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE,
                         this.getArticlePageId(templateMerger, domainId, articleInfo), mergeContext);
-                writer.write(sb.toString());
-            } catch (Exception e) {
-                logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
-                throw e;
-            } finally {
-                if (writer != null) {
-                    writer.flush();
-                    writer.close();
-                }
-            }
+            this.cacheManager.set(cacheType, cacheKey, sb.toString());
+            writeArticle(request, response, sb.toString());
         } catch (TemplateMergeException e) {
             e.printStackTrace();
         } catch (TemplateParseException e) {
             e.printStackTrace();
-        } catch (DataLoadException | IOException e) {
+        } catch (DataLoadException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void writeArticle(HttpServletRequest request,HttpServletResponse response, String content) {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            writer.append(content);
+        } catch (Exception e) {
+            logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
+        } finally {
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
         }
     }
 
@@ -132,7 +147,44 @@ public class ArticleView extends AbstractView {
         article.put("meta_fb",jsonResult.getDataListFirst("META_FB"));
         article.put("meta_tw",jsonResult.getDataListFirst("META_TW"));
         article.put("meta_ja",jsonResult.getDataListFirst("META_JA"));
+        this.setEPaper(article);
         return article;
+    }
+
+    private void setEPaper(Map<String,Object> article) {
+        Object basic = article.get("basic");
+        if ( basic == null || ((Map)basic).size() == 0 ) return;
+        Map basicMap = (Map)basic;
+        String nowHour = McpDate.nowStr().substring(0,13);
+        // 오전 06시 이후 링크 노출
+        String serviceTime = basicMap.get("SERVICE_DAYTIME").toString().substring(0,11) + "06";
+        if ( nowHour.compareTo(serviceTime) <= 0) return;
+        String sourceCode = basicMap.get("SOURCE_CODE").toString();
+        String title = null;
+        String link = null;
+        String pressMyun = basicMap.get("PRESS_MYUN").toString();
+        String pressCategory = basicMap.get("PRESS_CATEGORY").toString().trim();
+        if ( pressCategory == null || pressCategory.length() == 0) return;
+        if ( sourceCode.equals("1")) { // 중앙일보일 경우
+            if ( pressCategory.equals("A")) {
+                title = "종합 " + pressMyun +"면";
+            } else if ( pressCategory.equals("E")) {
+                title = "경제 " + pressMyun +"면";
+            } else {
+                title = pressMyun +"면";
+            }
+            link = "https://www.joins.com/v2?mseq=11&tid="+basicMap.get("TOTAL_ID").toString();
+        } else if (sourceCode.equals("61")) { // 중앙선데이일 경우
+            title = basicMap.get("PRESS_NUMBER").toString() +"호 " + pressMyun +"면";
+            link = "https://www.joins.com/v2?mseq=12&tid="+basicMap.get("TOTAL_ID").toString();
+        }
+        // 앱에 대한 처리
+
+
+        Map<String,String> epaper = new HashMap<String,String>();
+        epaper.put("title",title);
+        epaper.put("link",link);
+        article.put("epaper",epaper);
     }
 
     private void setCodesAndMenus(DataLoader loader, Map<String,Object> articleInfo, MergeContext mergeContext)

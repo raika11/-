@@ -15,6 +15,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.helper.KeywordHelper;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
@@ -44,8 +45,11 @@ public class RcvArticleRestController extends AbstractCommonController {
 
     private final RcvArticleService rcvArticleService;
 
-    public RcvArticleRestController(RcvArticleService rcvArticleService) {
+    private final KeywordHelper keywordHelper;
+
+    public RcvArticleRestController(RcvArticleService rcvArticleService, KeywordHelper keywordHelper) {
         this.rcvArticleService = rcvArticleService;
+        this.keywordHelper = keywordHelper;
     }
 
     /**
@@ -78,6 +82,12 @@ public class RcvArticleRestController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 수신기사 상세조회(분류코드포함)
+     * @param rid 수신기사키(필수)
+     * @return 수신기사정보
+     * @throws Exception
+     */
     @ApiOperation(value = "수신기사 상세조회")
     @GetMapping("/{rid}")
     public ResponseEntity<?> getRcvArticle(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid)
@@ -100,6 +110,28 @@ public class RcvArticleRestController extends AbstractCommonController {
         dto.setCodeList(codeList);
 
         ResultDTO<RcvArticleBasicDTO> resultDto = new ResultDTO<>(dto);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "수신기사 추천키워드 조회")
+    @GetMapping("/{rid}/keywords")
+    public ResponseEntity<?> getKeyword(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid,
+            @ApiParam("제목") String title)
+            throws Exception {
+
+        // 수신기사 상세조회
+        RcvArticleBasic rcvArticleBasic = rcvArticleService
+                .findRcvArticleBasicById(rid)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        List<String> keywordList = keywordHelper.getKeywords(title, rcvArticleBasic.getSubTitle(), rcvArticleBasic.getContent());
+
+        ResultDTO<List<String>> resultDto = new ResultDTO<>(keywordList);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

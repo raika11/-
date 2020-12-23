@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.config;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.EditFormHelper;
+import jmnet.moka.core.tps.helper.KeywordHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -69,4 +70,12 @@ public class HelperConfiguration {
         return new EditFormHelper(xmlMapper);
     }
 
+    /**
+     * Keyword 추출 빈
+     * @return 빈
+     */
+    @Bean
+    public KeywordHelper keywordHelper() {
+        return new KeywordHelper();
+    }
 }

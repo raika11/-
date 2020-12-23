@@ -208,5 +208,4 @@ public class ArticleRestController extends AbstractCommonController {
             throw new Exception(msg("tps.common.error.select"), e);
         }
     }
-
 }

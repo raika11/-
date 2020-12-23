@@ -45,7 +45,12 @@ const DeskingWorkAgGrid = (props) => {
 
                 // 이미지 IR_URL
                 let irThumbFileName = '';
-                if (desking.thumbFileName) irThumbFileName = `${IR_URL}?t=k&w=100&h=100u=//${desking.thumbFileName}`;
+                if (desking.thumbFileName) {
+                    // 일시적으로 IR_URL 연결 제거
+                    // const npLink = desking.thumbFileName.replace(/^https*:\/\//, '');
+                    // irThumbFileName = `${IR_URL}?t=k&w=100&h=100u=//${npLink}`;
+                    irThumbFileName = desking.thumbFileName;
+                }
 
                 return {
                     ...desking,

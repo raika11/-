@@ -7,13 +7,13 @@ export default [
     {
         headerName: '월일',
         field: 'rcvDt',
-        width: 50,
+        width: 45,
         cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '수신',
         field: 'rcvTime',
-        width: 50,
+        width: 45,
         cellStyle: { fontSize: '12px' },
     },
     {
@@ -21,6 +21,19 @@ export default [
         field: 'sourceName',
         width: 70,
         cellStyle: { fontSize: '12px' },
+        cellRendererFramework: ({ data }) => (
+            <div
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (data.serviceUrl) {
+                        window.open(data.serviceUrl);
+                    }
+                }}
+            >
+                {data.sourceName}
+            </div>
+        ),
     },
     {
         headerName: '보기',
@@ -39,7 +52,7 @@ export default [
     {
         headerName: '입력',
         field: 'serviceTime',
-        width: 50,
+        width: 45,
         cellStyle: { fontSize: '12px' },
         cellClassRules: {
             'text-positive': () => true,

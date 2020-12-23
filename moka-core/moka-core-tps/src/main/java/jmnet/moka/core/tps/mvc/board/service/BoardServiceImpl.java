@@ -99,7 +99,9 @@ public class BoardServiceImpl implements BoardService {
     public void deleteAllBoardAttach(Set<BoardAttach> boardAttachSet) {
         if (boardAttachSet != null && boardAttachSet.size() > 0) {
             boardAttachSet.forEach(boardAttach -> {
-                boardAttachRepository.deleteById(boardAttach.getSeqNo());
+                if (boardAttach != null) {
+                    boardAttachRepository.deleteById(boardAttach.getSeqNo());
+                }
             });
         }
     }

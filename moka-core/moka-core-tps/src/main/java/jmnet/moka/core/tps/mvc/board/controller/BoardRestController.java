@@ -249,7 +249,7 @@ public class BoardRestController extends AbstractCommonController {
 
     }
 
-    private ResponseEntity<?> processUpdateEntity(Board newBoard, Board oldBoard, Set<BoardAttachSaveDTO> boardAttachSaveDTOSet)
+    private ResponseEntity<?> processUpdateEntity(Board newBoard, Board oldBoard, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
             throws Exception {
         newBoard.setRecomCnt(oldBoard.getRecomCnt());
         newBoard.setViewCnt(oldBoard.getViewCnt());
@@ -257,6 +257,7 @@ public class BoardRestController extends AbstractCommonController {
         newBoard.setDecomCnt(oldBoard.getDecomCnt());
         newBoard.setRegName(oldBoard.getRegName());
         newBoard.setRegIp(oldBoard.getRegIp());
+        newBoard.setAttaches(oldBoard.getAttaches());
         return processBoardContents(newBoard, boardAttachSaveDTOSet);
     }
 
@@ -319,7 +320,7 @@ public class BoardRestController extends AbstractCommonController {
      * @return ResponseEntity
      * @throws Exception 공통 에러 처리
      */
-    private ResponseEntity<?> processBoardContents(Board board, Set<BoardAttachSaveDTO> boardAttachSaveDTOSet)
+    private ResponseEntity<?> processBoardContents(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
             throws Exception {
         ActionType actionType = board.getBoardSeq() != null && board.getBoardSeq() > 0 ? ActionType.UPDATE : ActionType.INSERT;
         try {
@@ -530,7 +531,7 @@ public class BoardRestController extends AbstractCommonController {
         board.setRegIp(HttpHelper.getRemoteAddr());
     }
 
-    private void saveAttachFiles(Board board, Set<BoardAttachSaveDTO> boardAttachSaveDTOSet) {
+    private void saveAttachFiles(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet) {
         Set<BoardAttach> attaches = board.getAttaches();
         if (boardAttachSaveDTOSet != null && boardAttachSaveDTOSet.size() > 0) {
             boardAttachSaveDTOSet.forEach(boardAttachSaveDTO -> {
@@ -570,7 +571,6 @@ public class BoardRestController extends AbstractCommonController {
                                                     .getAttachFile()
                                                     .getOriginalFilename())
                                             .build()));
-                            boardService.updateBoard(board);
                             attaches.removeIf(boardAttach -> boardAttachSaveDTO
                                     .getSeqNo()
                                     .equals(boardAttach.getSeqNo()));
@@ -586,14 +586,19 @@ public class BoardRestController extends AbstractCommonController {
                                             .getOriginalFilename())
                                     .build());
                         }
-                    }
-                    if (attaches != null && attaches.size() > 0) {
-                        boardService.deleteAllBoardAttach(attaches);
+                    } else {
+                        attaches.removeIf(boardAttach -> boardAttachSaveDTO
+                                .getSeqNo()
+                                .equals(boardAttach.getSeqNo()));
                     }
                 } catch (IOException ex) {
                     log.error("[FAIL TO FILE UPLOAD BOARD] boardseq: {} {}", board.getBoardSeq(), ex.getMessage());
                 }
             });
+
+            if (attaches != null && attaches.size() > 0) {
+                boardService.deleteAllBoardAttach(attaches);
+            }
         }
     }
 

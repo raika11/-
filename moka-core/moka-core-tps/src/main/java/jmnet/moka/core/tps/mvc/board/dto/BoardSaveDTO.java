@@ -2,7 +2,7 @@ package jmnet.moka.core.tps.mvc.board.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Set;
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -113,8 +113,8 @@ public class BoardSaveDTO {
     /**
      * 첨부파일
      */
-    @ApiModelProperty(hidden = true)
-    private Set<BoardAttachSaveDTO> attaches;
+    @ApiModelProperty("첨부파일")
+    private List<BoardAttachSaveDTO> attaches;
 
 
 

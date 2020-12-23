@@ -26,10 +26,10 @@ public class BoardAttachSaveDTO implements Serializable {
     /**
      * 일련번호
      */
-    @ApiModelProperty("첨부파일 일련번호, 신규 파일이면 0")
+    @ApiModelProperty(value = "첨부파일 일련번호, 신규 파일이면 0", required = false)
     private Long seqNo;
 
-    @ApiModelProperty("첨부파일 - 파일을 변경했거나, 신규 파일인 경우에만 입력")
+    @ApiModelProperty(value = "첨부파일 - 파일을 변경했거나, 신규 파일인 경우에만 입력", required = false)
     private MultipartFile attachFile;
 
 }

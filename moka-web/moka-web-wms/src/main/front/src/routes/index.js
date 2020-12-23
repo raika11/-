@@ -34,6 +34,7 @@ const Bulks = React.lazy(() => import('@pages/Bulks'));
 const ArticleSource = React.lazy(() => import('@pages/ArticleSource'));
 const Poll = React.lazy(() => import('@pages/Survey/Poll'));
 const RcvArticle = React.lazy(() => import('@pages/RcvArticle'));
+const Comment = React.lazy(() => import('@pages/CommentManage/Comment'));
 
 const routes = [
     {
@@ -352,6 +353,16 @@ const routes = [
         name: 'rcv-article',
         displayName: '수신 기사 전체',
         component: RcvArticle,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/comment',
+        name: 'Comment',
+        displayName: '댓글 관리',
+        component: Comment,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

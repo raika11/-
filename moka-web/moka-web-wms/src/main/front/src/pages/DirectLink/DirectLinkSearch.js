@@ -73,8 +73,8 @@ const DirectLinkSearch = () => {
             {/* 노출고정 */}
             <Col xs={3} className="p-0 pr-2">
                 <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue} className="mb-0">
-                    <option value="Y">항상노출</option>
                     <option value="N">검색시만 노출</option>
+                    <option value="Y">항상노출</option>
                 </MokaInputLabel>
             </Col>
 

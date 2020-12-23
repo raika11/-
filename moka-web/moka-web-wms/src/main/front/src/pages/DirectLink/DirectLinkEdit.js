@@ -513,8 +513,8 @@ const DirectLinkEdit = ({ history }) => {
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
                         <MokaInputLabel label="노출고정" as="select" className="mb-0" name="fixYn" value={temp.fixYn} onChange={handleChangeValue} disabled={inputBoxDisabled}>
-                            <option value="Y">항상노출</option>
                             <option value="N">검색시만 노출</option>
+                            <option value="Y">항상노출</option>
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>

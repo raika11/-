@@ -40,10 +40,14 @@ public class ReporterSearchDTO extends SearchDTO {
     @ApiModelProperty(hidden = true)
     private Integer returnValue;
 
+    @ApiModelProperty("페이징여부")
+    private String usePaging;
+
     // 검색 조건의 기본값을 설정
     public ReporterSearchDTO() {
         super("repSeq,desc");
         useTotal = MokaConstants.YES;
         returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        usePaging = MokaConstants.YES;
     }
 }

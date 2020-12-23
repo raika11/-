@@ -4,47 +4,50 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.reporter.mapper.ReporterMapper">
 
   <select id="findAll" parameterType="ReporterSearchDTO" resultType="ReporterVO"
-                   statementType="CALLABLE">
-  {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_15RE_REPORTER_LIST_SEL(
-  <choose>
-    <when test="searchType == 'all' and keyword != null and keyword != ''">
-      #{keyword},
-    </when>
-    <otherwise>
-      NULL,
-    </otherwise>
-  </choose>
+    statementType="CALLABLE">
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_15RE_REPORTER_LIST_SEL(
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
 
-  <choose>
-    <when test="searchType == 'repSeq' and keyword != null and keyword != ''">
-      #{keyword},
-    </when>
-    <otherwise>
-      NULL,
-    </otherwise>
-  </choose>
+    <choose>
+      <when test="searchType == 'repSeq' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
 
-  <choose>
-    <when test="keyword != null and keyword != ''">
-      #{keyword},
-    </when>
-    <otherwise>
-      NULL,
-    </otherwise>
-  </choose>
+    <choose>
+      <when test="keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
 
-  #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-  #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-  #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
-  #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
-  ) }
-</select>
+    #{usePaging, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
 
   <select id="findBySeq" parameterType="String" resultType="ReporterVO" statementType="CALLABLE">
     <![CDATA[
-    {
-      call UPA_15RE_REPORTER_SEL(#{repSeq, mode=IN, jdbcType=VARCHAR, javaType=string})
-      }
+
+        {
+          call UPA_15RE_REPORTER_SEL(#{repSeq, mode=IN, jdbcType=VARCHAR, javaType=string})
+          }
+
     ]]>
 
   </select>

@@ -16,6 +16,7 @@ export const initialState = {
         sort: 'repSeq,asc',
         searchType: 'all',
         keyword: '',
+        usePaging: 'Y',
     },
     reporter: {},
     reporterError: {},

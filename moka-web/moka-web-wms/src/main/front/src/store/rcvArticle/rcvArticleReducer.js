@@ -13,13 +13,13 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'totalId,desc',
+        sort: 'rid,desc',
         startDay: null, // 시작일 (필수조건)
         endDay: null, // 종료일 (필수조건)
         sourceList: null, // 매체(출처) (필수조건)
         depart: null, // 섹션
-        status: null, // all(전체), B(작업전), null(작업전), Y(등록)
-        modify: null, // all(전체), D(원본만), U(수정만)
+        status: 'all', // all(전체), B(작업전), Y(등록)
+        modify: 'all', // all(전체), D(원본만), U(수정만)
         searchType: 'title',
         keyword: '',
     },

@@ -1,15 +1,12 @@
-import React, { useState, Suspense, useCallback } from 'react';
+import React, { Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-import produce from 'immer';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIcon, MokaLoader } from '@components';
-import { MokaIconTabs } from '@/components/MokaTabs';
-import { ITEM_TP } from '@/constants';
+import { MokaCard } from '@components';
 
+import RcvArticleEdit from './RcvArticleEdit';
 const RcvArticleList = React.lazy(() => import('./RcvArticleList'));
-const RcvArticleEdit = React.lazy(() => import('./RcvArticleEdit'));
 
 /**
  * 수신 기사 전체
@@ -33,15 +30,7 @@ const RcvArticle = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            <Route
-                path={[`${match.url}/:totalId`]}
-                exact
-                render={() => (
-                    <Suspense>
-                        <RcvArticleEdit />
-                    </Suspense>
-                )}
-            />
+            <Route path={[`${match.url}/:rid`]} exact render={() => <RcvArticleEdit />} />
         </div>
     );
 };

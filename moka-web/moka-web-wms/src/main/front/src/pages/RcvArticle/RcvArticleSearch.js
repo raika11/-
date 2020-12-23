@@ -25,7 +25,7 @@ const RcvArticleSearch = () => {
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
     const [error, setError] = useState({});
-    const [period, setPeriod] = useState([1, 'days']);
+    const [period, setPeriod] = useState([3, 'months']);
 
     /**
      * 입력값 변경

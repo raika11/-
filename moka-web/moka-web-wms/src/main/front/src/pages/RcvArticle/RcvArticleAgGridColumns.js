@@ -6,7 +6,7 @@ import TitleRenderer from './components/TitleRenderer';
 export default [
     {
         headerName: '월일',
-        field: 'rcvDate',
+        field: 'rcvDt',
         width: 50,
         cellStyle: { fontSize: '12px' },
     },
@@ -18,7 +18,7 @@ export default [
     },
     {
         headerName: '구분',
-        field: 'source',
+        field: 'sourceName',
         width: 70,
         cellStyle: { fontSize: '12px' },
     },
@@ -30,15 +30,15 @@ export default [
     },
     {
         headerName: '제목',
-        field: 'artTitle',
+        field: 'title',
         flex: 1,
         width: 100,
-        tooltipField: 'artTitle',
+        tooltipField: 'title',
         cellRendererFramework: (row) => <TitleRenderer {...row} />,
     },
     {
         headerName: '입력',
-        field: 'regTime',
+        field: 'serviceTime',
         width: 50,
         cellStyle: { fontSize: '12px' },
         cellClassRules: {

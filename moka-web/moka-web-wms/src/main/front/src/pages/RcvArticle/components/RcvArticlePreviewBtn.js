@@ -7,8 +7,8 @@ const RcvArticlePreviewBtn = ({ data }) => {
 
     return (
         <React.Fragment>
-            <Button variant={data.photo === 'Y' ? 'table-btn' : 'outline-table-btn'} size="sm" onClick={() => setModalShow(true)}>
-                {data.photo === 'Y' ? '포토' : '보기'}
+            <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} size="sm" onClick={() => setModalShow(true)}>
+                {data.compUrl ? '포토' : '보기'}
             </Button>
 
             <ArticlePreviewModal show={modalShow} onHide={() => setModalShow(false)} />

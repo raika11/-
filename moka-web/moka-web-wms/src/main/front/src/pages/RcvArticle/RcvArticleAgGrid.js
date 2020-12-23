@@ -1,55 +1,31 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './RcvArticleAgGridColumns';
 import { MokaTable } from '@components';
-import { GET_TEMPLATE_LIST, getTemplateList, changeSearchOption } from '@store/template';
+import { unescapeHtml } from '@utils/convertUtil';
+import { GET_RCV_ARTICLE_LIST, changeSearchOption, getRcvArticleList } from '@store/rcvArticle';
+import { DB_DATEFORMAT } from '@/constants';
 
-const testData = [
-    {
-        totalId: '1231',
-        rcvDate: '11-30',
-        rcvTime: '10:30',
-        source: '[연합]정치',
-        artTitle: '[속보]미-이란 무력 충돌 우려...주식 울고 비트코인 웃었다',
-        regTime: '13:25',
-    },
-    {
-        totalId: '1232',
-        rcvDate: '11-30',
-        rcvTime: '10:30',
-        source: '[뉴시스]',
-        artTitle: '[수정]미-이란 무력 충돌 우려...주식 울고 비트코인 웃었다',
-        regTime: '13:25',
-    },
-    {
-        totalId: '1233',
-        rcvDate: '11-30',
-        rcvTime: '10:30',
-        source: '[중앙일보]',
-        artTitle: '미-이란 무력 충돌 우려...주식 울고 비트코인 웃었다',
-        regTime: '13:25',
-        photo: 'Y',
-    },
-];
+moment.locale('ko');
 
 /**
  * 수신기사 AgGrid 컴포넌트
  */
-const RcvArticleAgGrid = ({ onDelete }) => {
+const RcvArticleAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE_LIST]);
+    const { total, list, search } = useSelector((store) => ({
+        total: store.rcvArticle.total,
+        list: store.rcvArticle.list,
+        search: store.rcvArticle.search,
+    }));
 
     //state
-    const [rowData, setRowData] = useState(testData);
-
+    const [rowData, setRowData] = useState([]);
     const rcvArticle = useSelector((store) => store.rcvArticle || {});
-    const { total, list, search, loading } = useSelector((store) => ({
-        total: store.template.total,
-        list: store.template.list,
-        search: store.template.search,
-        loading: store.loading[GET_TEMPLATE_LIST],
-    }));
 
     /**
      * 테이블 검색옵션 변경
@@ -60,7 +36,8 @@ const RcvArticleAgGrid = ({ onDelete }) => {
             if (key !== 'page') {
                 temp['page'] = 0;
             }
-            dispatch(getTemplateList(changeSearchOption(temp)));
+            dispatch(changeSearchOption(temp));
+            dispatch(getRcvArticleList({ search: temp }));
         },
         [dispatch, search],
     );
@@ -70,39 +47,34 @@ const RcvArticleAgGrid = ({ onDelete }) => {
      */
     const handleRowClicked = useCallback(
         (data) => {
-            history.push(`/rcv-article/${data.totalId}`);
+            history.push(`/rcv-article/${data.rid}`);
         },
         [history],
     );
 
-    // useEffect(() => {
-    //     if (list.length > 0) {
-    //         setRowData(
-    //             list.map((data) => {
-    //                 let thumb = data.templateThumb;
-    //                 if (thumb && thumb !== '') {
-    //                     UPLOAD_PATH_URL                        thumb = `${API_BASE_URL}${UPLOAD_PATH_URL}/${thumb}`;
-    //                 }
-    //                 return {
-    //                     ...data,
-    //                     id: data.templateSeq,
-    //                     name: data.templateName,
-    //                     thumb,
-    //                     onDelete,
-    //                 };
-    //             }),
-    //         );
-    //     } else {
-    //         setRowData([]);
-    //     }
-    // }, [list, onDelete]);
+    useEffect(() => {
+        if (list.length > 0) {
+            setRowData(
+                list.map((data) => ({
+                    ...data,
+                    title: unescapeHtml(data.title),
+                    rcvDt: moment(data.regDt, DB_DATEFORMAT).format('MM-DD'),
+                    rcvTime: moment(data.regDt, DB_DATEFORMAT).format('HH:mm'),
+                    sourceName: `[${data.sourceName}]`,
+                    serviceTime: moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm'),
+                })),
+            );
+        } else {
+            setRowData([]);
+        }
+    }, [list]);
 
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
-            onRowNodeId={(data) => data.totalId}
+            onRowNodeId={(data) => data.rid}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
@@ -110,7 +82,7 @@ const RcvArticleAgGrid = ({ onDelete }) => {
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['preview', 'register']}
-            selected={rcvArticle.totalId}
+            selected={rcvArticle.rid}
         />
     );
 };

@@ -35,7 +35,7 @@ const propTypes = {
      */
     selection: PropTypes.oneOf(['single', 'multiple']),
     /**
-     * 등록 버튼 클릭이벤트
+     * 저장 버튼 클릭이벤트
      */
     onSave: PropTypes.func,
     /**
@@ -72,6 +72,14 @@ const CodeListModal = (props) => {
         }
         setSelectedList([]);
     }, [onHide]);
+
+    /**
+     * 초기화
+     */
+    const handleReset = useCallback(() => {
+        // selectedList 제거
+        setSelectedList([]);
+    }, []);
 
     /**
      * selectedList에서 타겟 제거
@@ -209,7 +217,7 @@ const CodeListModal = (props) => {
             centered
         >
             <div className="d-flex flex-column h-100">
-                {/* 분류명, 분류코드 노출, 등록, 취소 버튼 */}
+                {/* 분류명, 분류코드 노출, 저장, 초기화 버튼 */}
                 <div>
                     <Form.Row className="flex-wrap">
                         <Col sm={10} className="p-0">
@@ -225,10 +233,10 @@ const CodeListModal = (props) => {
                         </Col>
                         <Col sm={2} className="p-0 d-flex align-items-end mb-2">
                             <Button variant="positive" className="mr-2 flex-fill" onClick={handleOkTrigger}>
-                                등록
+                                저장
                             </Button>
-                            <Button variant="negative" className="flex-fill" onClick={handleHide}>
-                                취소
+                            <Button variant="negative" className="flex-fill" onClick={handleReset}>
+                                초기화
                             </Button>
                         </Col>
                     </Form.Row>

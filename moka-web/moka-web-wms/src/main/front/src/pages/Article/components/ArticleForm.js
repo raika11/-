@@ -3,22 +3,26 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import copy from 'copy-to-clipboard';
-import { CodeListModal } from '@pages/commons';
-import { MokaInputLabel, MokaInput } from '@components';
+import { CodeListModal, CodeAutocomplete } from '@pages/commons';
+import { MokaInputLabel } from '@components';
 import toast from '@utils/toastUtil';
+import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
-const ArticleForm = ({ reporterList }) => {
+const ArticleForm = ({ reporterList, inRcv }) => {
     const [codeModalShow, setCodeModalShow] = useState(false);
-    const [selectedMasterCode, setSelectedMasterCode] = useState(['', '', '', '']);
+    const [selectedMasterCode, setSelectedMasterCode] = useState([]);
     const [selectedReporter, setSelectedReporter] = useState([]);
+    const [historyModalShow, setHistoryModalShow] = useState(false);
 
     /**
      * 마스터코드 변경 모달
      * @param {array} list 마스터코드리스트
      */
     const handleMasterCode = (list) => {
-        let result = list.map((code) => code.masterCode);
-        if (result.length < 4) result = Array.prototype.concat(result, ['', '', '', '']).splice(0, 4);
+        let result = [];
+        if (list) {
+            result = list.map((code) => code.masterCode);
+        }
         setSelectedMasterCode(result);
     };
 
@@ -50,23 +54,32 @@ const ArticleForm = ({ reporterList }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
-                <Col className="p-0" xs={12}>
+                <Col className="p-0" xs={4}>
                     <MokaInputLabel label="출처" value="매체명 노출" className="mb-0" inputProps={{ plaintext: true }} disabled />
+                </Col>
+                <Col className="p-0" xs={8}>
+                    <Button variant="outline-neutral" className="ft-12" onClick={() => setHistoryModalShow(true)}>
+                        작업정보
+                    </Button>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
-                <Col className="p-0 d-flex" xs={12}>
-                    <MokaInputLabel label="분류표" className="mb-0" as="none" />
-                    <div className="flex-fill d-flex">
-                        {selectedMasterCode.map((code, idx) => (
-                            <div key={idx} style={{ width: 95 }} className="mr-2">
-                                <MokaInput value={code} disabled />
-                            </div>
-                        ))}
-                        <Button variant="outline-neutral" className="ft-12" onClick={() => setCodeModalShow(true)}>
-                            통합분류표
-                        </Button>
-                    </div>
+                <Col className="p-0" xs={10}>
+                    <CodeAutocomplete
+                        label="분류표"
+                        className="mb-0"
+                        searchIcon={false}
+                        labelType="masterCode"
+                        value={selectedMasterCode.join(',')}
+                        onChange={handleMasterCode}
+                        maxMenuHeight={150}
+                        isMulti
+                    />
+                </Col>
+                <Col className="p-0 pl-2" xs={2}>
+                    <Button variant="outline-neutral" className="ft-12 h-100" onClick={() => setCodeModalShow(true)}>
+                        통합분류표
+                    </Button>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
@@ -119,6 +132,9 @@ const ArticleForm = ({ reporterList }) => {
 
             {/* masterCode 모달 */}
             <CodeListModal show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
+
+            {/* 작업정보 모달 */}
+            <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
         </Form>
     );
 };

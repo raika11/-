@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { CodeListModal } from '@pages/commons';
-import { MokaInputLabel, MokaInput } from '@components';
+import { CodeListModal, CodeAutocomplete } from '@pages/commons';
+import { MokaInputLabel } from '@components';
 
-const RcvArticleForm = ({ reporterList, inRcv }) => {
+const RcvArticleForm = ({ reporterList }) => {
     const [codeModalShow, setCodeModalShow] = useState(false);
     const [selectedMasterCode, setSelectedMasterCode] = useState(['', '', '', '']);
     const [selectedReporter, setSelectedReporter] = useState([]);
@@ -15,8 +15,10 @@ const RcvArticleForm = ({ reporterList, inRcv }) => {
      * @param {array} list 마스터코드리스트
      */
     const handleMasterCode = (list) => {
-        let result = list.map((code) => code.masterCode);
-        if (result.length < 4) result = Array.prototype.concat(result, ['', '', '', '']).splice(0, 4);
+        let result = [];
+        if (list) {
+            result = list.map((code) => code.masterCode);
+        }
         setSelectedMasterCode(result);
     };
 
@@ -45,18 +47,22 @@ const RcvArticleForm = ({ reporterList, inRcv }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
-                <Col className="p-0 d-flex" xs={12}>
-                    <MokaInputLabel label="분류표" className="mb-0" as="none" />
-                    <div className="flex-fill d-flex">
-                        {selectedMasterCode.map((code, idx) => (
-                            <div key={idx} style={{ width: 95 }} className="mr-2">
-                                <MokaInput value={code} disabled />
-                            </div>
-                        ))}
-                        <Button variant="outline-neutral" className="ft-12" onClick={() => setCodeModalShow(true)}>
-                            통합분류표
-                        </Button>
-                    </div>
+                <Col className="p-0" xs={10}>
+                    <CodeAutocomplete
+                        label="분류표"
+                        className="mb-0"
+                        searchIcon={false}
+                        labelType="masterCode"
+                        value={selectedMasterCode.join(',')}
+                        onChange={handleMasterCode}
+                        maxMenuHeight={150}
+                        isMulti
+                    />
+                </Col>
+                <Col className="p-0 pl-2" xs={2}>
+                    <Button variant="outline-neutral" className="ft-12 h-100" onClick={() => setCodeModalShow(true)}>
+                        통합분류표
+                    </Button>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">

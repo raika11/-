@@ -125,8 +125,21 @@ const EditDeskingWorkModal = (props) => {
      */
     const handleThumbFileName = (data) => {
         if (data) {
-            let irImgSrc = data.indexOf('news') > -1 || data.indexOf('blob') > -1 ? data : `${PHOTO_ARCHIVE_URL}${data}`;
-            setTemp({ ...temp, thumbFileName: data, irImg: irImgSrc });
+            let irImg = data;
+            let thumbFileName = '';
+            if (data.indexOf('blob:') > -1) {
+                // blob string
+                irImg = data;
+            } else if (data.indexOf('news') > -1) {
+                // 기사 내 사진
+                irImg = data;
+                thumbFileName = data;
+            } else {
+                // 포토아카이브
+                irImg = `${PHOTO_ARCHIVE_URL}${data}`;
+                thumbFileName = data;
+            }
+            setTemp({ ...temp, thumbFileName, irImg });
         }
     };
 

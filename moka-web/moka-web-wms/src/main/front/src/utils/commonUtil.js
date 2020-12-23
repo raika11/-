@@ -41,11 +41,12 @@ const fileDownload = (data, filename, mime) => {
 
 /**
  * blob To File
- * @param {any} blobData blobData
+ * @param {any} blob blob
  * @param {string} fileName 저장할 파일명
+ * @param {string} contentType contentType
  */
-const blobToFile = (blobData, fileName) => {
-    return new File([blobData], fileName, { lastModified: new Date().getTime(), type: blobData.type });
+const blobToFile = (blob, fileName, contentType) => {
+    return new File([blob], fileName, { type: contentType });
 };
 
 /**

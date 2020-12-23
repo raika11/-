@@ -372,16 +372,17 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     }
 }
 
-.sns-meta-ag-grid {
-    .ag-grid-sns-meta-header {
-        .ag-header-group-cell-label,
-        .ag-header-cell-label {
-            justify-content: center;
-        }
+.ag-grid-align-center {
+    .ag-header-group-cell-label,
+    .ag-header-cell-label {
+        justify-content: center;
     }
     .ag-row .ag-cell {
         display: flex;
         justify-content: center; /* align horizontal */
         align-items: center;
+        .ag-react-container {
+            align-items: center !important;
+        }
     }
 }

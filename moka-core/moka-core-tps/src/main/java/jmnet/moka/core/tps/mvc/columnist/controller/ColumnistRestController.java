@@ -12,9 +12,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -23,7 +22,7 @@ import jmnet.moka.core.tps.mvc.columnist.dto.ColumnistSearchDTO;
 import jmnet.moka.core.tps.mvc.columnist.entity.Columnist;
 import jmnet.moka.core.tps.mvc.columnist.service.ColumnistService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,21 +58,18 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequestMapping("/api/columnists")
 @Api(tags = {"칼럼니스트 API"})
-public class ColumnistRestController {
+public class ColumnistRestController extends AbstractCommonController {
 
     private final ColumnistService columnistService;
 
-    private final ModelMapper modelMapper;
+    @Value("${pds.url}")
+    private String pdsUrl;
 
-    private final MessageByLocale messageByLocale;
+    @Value("${columnist.save.filepath}")
+    private String saveFilePath;
 
-    private final TpsLogger tpsLogger;
-
-    public ColumnistRestController(ColumnistService columnistService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger) {
+    public ColumnistRestController(ColumnistService columnistService) {
         this.columnistService = columnistService;
-        this.modelMapper = modelMapper;
-        this.messageByLocale = messageByLocale;
-        this.tpsLogger = tpsLogger;
     }
 
     /**
@@ -116,7 +112,7 @@ public class ColumnistRestController {
             @PathVariable("seqNo") @Min(value = 0, message = "{tps.columnist.error.pattern.seqNo}") Long seqNo)
             throws NoDataException {
 
-        String message = messageByLocale.get("tps.columnist.error.no-data", request);
+        String message = msg("tps.columnist.error.no-data");
         Columnist columnist = columnistService
                 .findById(seqNo)
                 .orElseThrow(() -> new NoDataException(message));
@@ -150,7 +146,7 @@ public class ColumnistRestController {
         Columnist columnist = modelMapper.map(columnistDTO, Columnist.class);
         if (McpString.isNotEmpty(columnist.getSeqNo())) { // 자동 발번이 아닌 경우 중복 체크
             if (columnistService.isDuplicatedId(columnist.getSeqNo())) {
-                throw new InvalidDataException(messageByLocale.get("tps.columnist.error.duplicate.seqNo"));
+                throw new InvalidDataException(msg("tps.columnist.error.duplicate.seqNo"));
             }
         }
 
@@ -160,18 +156,27 @@ public class ColumnistRestController {
 
             if (columnistFile != null && !columnistFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
-                String imgPath = columnistService.saveImage(returnValue, columnistFile);
+                String imgUrl = columnistService.saveImage(returnValue, columnistFile);
+                if (McpString.isNotEmpty(imgUrl)) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    columnist.setProfilePhoto(imgUrl);
+                    columnist.setSeqNo(returnValue.getSeqNo());
+                    columnist.setProfilePhoto(imgUrl);
+                    returnValue = columnistService.updateColumnist(columnist);
+                } else {
+                    String message = msg("tps.columnist.error.image-upload");
+                    tpsLogger.fail(ActionType.INSERT, message, true);
+                    // 이미지저장 실패시 오류로 처리하지 않는다.
+                    //                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    //                    invalidList.add(new InvalidDataDTO("profilePhoto", message));
+                    //                    throw new InvalidDataException(invalidList, message);
+                }
                 tpsLogger.success(ActionType.UPLOAD, true);
-
-                columnist.setProfilePhoto(imgPath);
-                columnist.setSeqNo(returnValue.getSeqNo());
-                columnist.setProfilePhoto(imgPath);
-                returnValue = columnistService.updateColumnist(columnist);
             }
 
             // 결과리턴
             ColumnistDTO dto = modelMapper.map(returnValue, ColumnistDTO.class);
-            ResultDTO<ColumnistDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<ColumnistDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.insert"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.INSERT);
@@ -182,7 +187,7 @@ public class ColumnistRestController {
             log.error("[FAIL TO INSERT]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(messageByLocale.get("tps.columnist.error.save"), e);
+            throw new Exception(msg("tps.columnist.error.save"), e);
         }
     }
 
@@ -207,32 +212,31 @@ public class ColumnistRestController {
         Columnist orgColumnist = columnistService
                 .findById(newColumnist.getSeqNo())
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.columnist.error.no-data");
+                    String message = msg("tps.columnist.error.no-data");
                     tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
 
 
         try {
-
             /*
-             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일이 있으면 삭제하고 새 파일을 저장한다.
+             * 이미지 파일 저장 새로운 파일이 있으면 기존 파일을 덮어쓰기 한다.
              */
-
-
             if (columnistFile != null && !columnistFile.isEmpty()) {
-
-                // 기존이미지 삭제
-                if (McpString.isNotEmpty(orgColumnist.getProfilePhoto())) {
-                    columnistService.deleteImage(orgColumnist);
-                    tpsLogger.success(ActionType.FILE_DELETE, true);
-                }
                 // 새로운 이미지 저장
-                String imgPath = columnistService.saveImage(newColumnist, columnistFile);
-                tpsLogger.success(ActionType.UPLOAD, true);
-
-                // 이미지 파일명 수정
-                newColumnist.setProfilePhoto(imgPath);
+                String imgUrl = columnistService.saveImage(newColumnist, columnistFile);
+                if (McpString.isNotEmpty(imgUrl)) {
+                    tpsLogger.success(ActionType.UPLOAD, true);
+                    // 이미지 파일명 수정
+                    newColumnist.setProfilePhoto(imgUrl);
+                } else {
+                    String message = msg("tps.columnist.error.image-upload");
+                    tpsLogger.fail(ActionType.UPDATE, message, true);
+                    // 이미지저장 실패시 오류로 처리하지 않는다.
+                    //                    List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+                    //                    invalidList.add(new InvalidDataDTO("profilePhoto", message));
+                    //                    throw new InvalidDataException(invalidList, message);
+                }
             }
 
             // update
@@ -240,7 +244,7 @@ public class ColumnistRestController {
 
             // 결과리턴
             ColumnistDTO dto = modelMapper.map(returnValue, ColumnistDTO.class);
-            String message = messageByLocale.get("tps.columnist.success.update");
+            String message = msg("tps.columnist.success.update");
             ResultDTO<ColumnistDTO> resultDto = new ResultDTO<ColumnistDTO>(dto, message);
 
             // 액션 로그에 성공 로그 출력
@@ -252,7 +256,7 @@ public class ColumnistRestController {
             log.error("[FAIL TO UPDATE Columnist] seq: {} {}", columnistDTO.getSeqNo(), e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE columnist]", e, true);
-            throw new Exception(messageByLocale.get("tps.columnist.error.save"), e);
+            throw new Exception(msg("tps.columnist.error.save"), e);
         }
     }
 
@@ -274,14 +278,14 @@ public class ColumnistRestController {
         if (file != null && !file.isEmpty()) {
             boolean isImage = ImageUtil.isImage(file);
             if (!isImage) {
-                String message = messageByLocale.get("tps.columnist.error.onlyimage.thumbnail");
+                String message = msg("tps.columnist.error.onlyimage.thumbnail");
                 invalidList.add(new InvalidDataDTO("thumbnail", message));
                 tpsLogger.fail(actionType, message, true);
             }
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }

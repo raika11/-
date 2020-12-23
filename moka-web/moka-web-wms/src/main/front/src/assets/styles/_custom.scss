@@ -323,8 +323,9 @@ body {
 .code-modal {
     .service {
         .section {
-            div:nth-last-child(1) {
+            > div:nth-last-child(1) {
                 border-bottom: 0 !important;
+                flex: 1 1 auto;
             }
         }
     }

@@ -33,20 +33,23 @@ $spacers: (
 	card: $spacer-card
 ) !default;
 
+$sm-width: 900px !default;
 $min-width: 1360px !default;
 $max-width: 1920px !default;
 $max-height: 960px !default;
 
 // Grid breakpoints
 $grid-breakpoints: (
-    sm: 0px,
+	xs: 0px,
+    sm: $sm-width,
     md: $min-width,
     lg: $max-width
 ) !default;
 
 // Grid containers
 $container-max-widths: (
-    sm: 0px,
+	xs: 0px,
+    sm: $sm-width,
     md: $min-width,
     lg: $max-width
 ) !default;

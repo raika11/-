@@ -36,6 +36,13 @@ public interface ArticleSourceService {
     List<ArticleSource> findAllArticleSourceByBulk();
 
     /**
+     * 중앙에서 사용하는 소스 코드 목록 조회
+     *
+     * @return ArticleSource목록
+     */
+    List<ArticleSource> findAllArticleSourceByJoongang();
+
+    /**
      * 각 사용여부 코드에 따른 소스 코드 목록 조회
      *
      * @param useTypeCode 소스 코드 사용 유형 코드

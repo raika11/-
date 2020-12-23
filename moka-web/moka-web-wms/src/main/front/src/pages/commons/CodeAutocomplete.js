@@ -19,7 +19,8 @@ const propTypes = {
      */
     className: PropTypes.string,
     /**
-     * 기사코드 값!!!
+     * 기사코드 값!!! 오직 스트링만 받는다
+     * "1000000" 이거나 "1000000,1100000"
      */
     value: PropTypes.string,
     /**
@@ -34,25 +35,34 @@ const propTypes = {
      * placeholder
      */
     placeholder: PropTypes.string,
+    /**
+     * autocomplete의 maxMenuHeight
+     */
+    maxMenuHeight: PropTypes.number,
+    /**
+     * 자동완성 아이템 선택 시 노출할 라벨명
+     * masterCode => 1000000,
+     * korname => 대분류 > 중분류 > 소분류
+     */
+    labelType: PropTypes.oneOf(['masterCode', 'korname']),
 };
 const defaultProps = {
     isMulti: false,
     searchIcon: true,
     selection: 'single',
+    labelType: 'korname',
 };
 
 /**
  * 기사 분류(masterCode) 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon } = props;
+    const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType } = props;
     const dispatch = useDispatch();
-
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
-
-    const { storeSearch, list } = useSelector((store) => ({
+    const { storeSearch, codeList } = useSelector((store) => ({
         storeSearch: store.code.korname.search,
-        list: store.code.korname.list,
+        codeList: store.code.korname.list,
     }));
 
     // state
@@ -61,12 +71,24 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     const [options, setOptions] = useState([]);
     const [modalShow, setModalShow] = useState(false);
 
+    /**
+     * 자동완성 값 변경시
+     * @param {any} value 단일일 때 object, 여러개일 때 array
+     */
     const handleChangeValue = (value) => {
-        if (onChange) {
-            if (value === null) {
-                onChange(null);
-            } else {
-                onChange(value.masterCode);
+        if (!isMulti) {
+            // typeof value === 'object'
+            if (onChange) {
+                if (value === null) {
+                    onChange(null);
+                } else {
+                    onChange(value.masterCode);
+                }
+            }
+        } else {
+            // typeof value === array
+            if (onChange) {
+                onChange(value);
             }
         }
     };
@@ -76,18 +98,20 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     };
 
     /**
-     * 코드목록 모달에서 등록 버튼 클릭
+     * 코드목록 모달에서 저장 버튼 클릭
+     * @param {any} result 단일일 때 object, 여러개일 때 array
      */
-    const handleClickSave = (code) => {
+    const handleClickSave = (result) => {
         if (!isMulti) {
-            const findOp = options.find((op) => String(op.value) === String(code.masterCode));
+            const findOp = options.find((op) => String(op.value) === String(result.masterCode));
             if (findOp) {
                 handleChangeValue(findOp);
             } else {
                 handleChangeValue(null);
             }
         } else {
-            // 멀티일 경우 => 추후 처리
+            // 멀티일 경우 (list 채로 보냄)
+            handleChangeValue(result);
         }
     };
 
@@ -97,18 +121,25 @@ const CodeAutocomplete = forwardRef((props, ref) => {
 
     useEffect(() => {
         dispatch(getCodeKornameList(changeKornameSearchOption(search)));
-    }, [dispatch, search]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setOptions(
-            list.map((code) => {
+            codeList.map((code) => {
                 const { masterCode, serviceKorname, sectionKorname, contentKorname } = code;
-                let label = serviceKorname;
-                if (sectionKorname && sectionKorname !== '') {
-                    label += ` > ${sectionKorname}`;
-                }
-                if (contentKorname && contentKorname !== '') {
-                    label += ` > ${contentKorname}`;
+                let label = '';
+
+                if (labelType === 'korname') {
+                    label = serviceKorname;
+                    if (sectionKorname && sectionKorname !== '') {
+                        label += ` > ${sectionKorname}`;
+                    }
+                    if (contentKorname && contentKorname !== '') {
+                        label += ` > ${contentKorname}`;
+                    }
+                } else if (labelType === 'masterCode') {
+                    label = masterCode;
                 }
 
                 return {
@@ -118,7 +149,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 };
             }),
         );
-    }, [list]);
+    }, [labelType, codeList]);
 
     useEffect(() => {
         if (!isMulti) {
@@ -132,9 +163,9 @@ const CodeAutocomplete = forwardRef((props, ref) => {
         } else {
             // 멀티인 경우 value -> ,로 분리하여 object 리스트 찾아서 셋팅
             let findOps = [];
-            let values = value.split(',');
-            options.forEach((op) => {
-                const findOp = values.find((v) => v === op.value);
+            let values = value.split(',').filter((val) => val !== '');
+            values.forEach((val) => {
+                const findOp = options.find((op) => op.value === val);
                 if (findOp) findOps.push(findOp);
             });
             setDefaultValue(findOps);
@@ -153,9 +184,10 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 value={defaultValue}
                 placeholder={placeholder}
                 onChange={handleChangeValue}
-                inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon }}
+                inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon, maxMenuHeight: maxMenuHeight }}
             />
-            <CodeListModal value={value} show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />
+
+            {searchIcon && <CodeListModal value={value} show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />}
         </React.Fragment>
     );
 });

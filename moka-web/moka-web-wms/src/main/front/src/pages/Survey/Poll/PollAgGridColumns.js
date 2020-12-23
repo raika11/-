@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
+import MultiRowColumnComponent from '@pages/Survey/Poll/component/MultiRowColumnComponent';
 
 export const columnDefs = [
     {
@@ -46,9 +47,13 @@ export const columnDefs = [
         cellStyle: { fontSize: '12px', lineHeight: '60px' },
         cellRendererFramework: (param) => {
             return (
-                <Button variant={param.value.variant} onClick={param.value.handleClick}>
-                    {param.value.name}
-                </Button>
+                <Row className="d-flex w-100 align-items-center justify-content-center mr-0">
+                    <Col className="w-100">
+                        <Button variant={param.value.variant} onClick={param.value.handleClick}>
+                            {param.value.name}
+                        </Button>
+                    </Col>
+                </Row>
             );
         },
     },
@@ -62,21 +67,27 @@ export const columnDefs = [
                 headerName: '수정날짜',
                 field: 'regDt',
                 width: 130,
-                cellStyle: { fontSize: '12px', lineHeight: '65px' },
+                cellStyle: { fontSize: '12px' },
+                cellRendererFramework: (param) => {
+                    return <MultiRowColumnComponent values={[param.data.regDt, param.value]} />;
+                },
             },
         ],
     },
     {
         headerName: '등록자',
-        field: 'regDt',
+        field: 'regMod',
         width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellStyle: { fontSize: '12px' },
         children: [
             {
                 headerName: '수정자',
-                field: 'updateDt',
+                field: 'regMod',
                 width: 130,
-                cellStyle: { fontSize: '12px', lineHeight: '65px' },
+                cellStyle: { fontSize: '12px' },
+                cellRendererFramework: (param) => {
+                    return <MultiRowColumnComponent values={[`${param.data.regName}(${param.data.regId})`, `${param.data.modName}(${param.data.modId})`]} />;
+                },
             },
         ],
     },
@@ -110,7 +121,6 @@ export const rowData = [
                 console.log('미리보기');
             },
         },
-        regDt: '2020-12-21 14:51:43',
         delete: {
             name: '삭제',
             variant: 'outline-table-btn',
@@ -118,5 +128,55 @@ export const rowData = [
                 console.log('삭제');
             },
         },
+        regDt: '2020-12-21 14:51:43',
+        updateDt: '2020-12-22 12:34:21',
+        regId: 'thkim',
+        regName: '김태형',
+        modId: 'thkim2',
+        modName: '김태형2',
     },
 ];
+
+export const codes = {
+    groups: [
+        { key: '1', value: '관리자' },
+        { key: '2', value: '자동차' },
+        { key: '3', value: '중국연구소' },
+        { key: '4', value: '디지털썰전' },
+        { key: '5', value: '강남통신' },
+        { key: '6', value: 'JES_골든' },
+        { key: '7', value: '헬스케어' },
+        { key: '8', value: '일간' },
+        { key: '9', value: '포탈 life' },
+        { key: '10', value: '마프' },
+        { key: '11', value: '매거진' },
+        { key: '12', value: 'Mr.밀리터리' },
+        { key: '13', value: '헬스-정신건강' },
+        { key: '14', value: '조인스2006' },
+        { key: '15', value: '중앙일보' },
+        { key: '16', value: '시민마이크' },
+        { key: '17', value: '포털news' },
+    ],
+    status: [
+        { key: 'D', value: '종료' },
+        { key: 'S', value: '서비스중' },
+        { key: 'T', value: '일시중지' },
+    ],
+    servcode: [
+        { key: '1', value: '정치' },
+        { key: '2', value: '사회/경제' },
+        { key: '3', value: '문화/방송연예' },
+        { key: '4', value: '국제' },
+        { key: '5', value: '스포츠' },
+        { key: '6', value: '기타' },
+        { key: '7', value: '자동차' },
+        { key: '8', value: '건강' },
+        { key: '9', value: '인물' },
+        { key: '10', value: '중국연구소' },
+        { key: '11', value: 'Life' },
+    ],
+    graphType: [
+        { key: 'W', value: '일반형' },
+        { key: 'V', value: '비교형' },
+    ],
+};

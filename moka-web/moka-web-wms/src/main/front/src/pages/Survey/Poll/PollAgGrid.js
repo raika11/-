@@ -14,6 +14,7 @@ const PollAgGrid = ({ searchOptions }) => {
                 size={searchOptions.size}
                 total={searchOptions.total}
                 rowHeight={65}
+                className="ag-grid-align-center"
             />
         </>
     );

@@ -177,6 +177,7 @@ const RcvArticleSearch = () => {
                             setSourceList(value);
                             setError({ ...error, sourceList: false });
                         }}
+                        sourceType="JOONGANG"
                         isInvalid={error.sourceList}
                     />
                 </div>

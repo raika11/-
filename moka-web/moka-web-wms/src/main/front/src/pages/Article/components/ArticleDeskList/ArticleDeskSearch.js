@@ -255,7 +255,6 @@ const ArticleDeskSearch = (props) => {
                     <SourceSelector
                         className="mr-2"
                         value={sourceList}
-                        bulk={isNaverChannel}
                         onChange={(value) => {
                             setSourceList(value);
                             setError({ ...error, sourceList: false });
@@ -263,6 +262,7 @@ const ArticleDeskSearch = (props) => {
                                 setSourceOn(true);
                             }
                         }}
+                        sourceType={isNaverChannel ? 'BULK' : 'DESKING'}
                         isInvalid={error.sourceList}
                     />
 

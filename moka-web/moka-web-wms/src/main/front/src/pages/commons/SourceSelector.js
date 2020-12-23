@@ -213,7 +213,7 @@ const SourceSelector = (props) => {
                 {toggleText}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll">
+            <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100">
                 {renderList.map((cd, idx) => (
                     <MokaInput
                         key={cd.sourceCode}

@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import { CodeAutocomplete } from '@pages/commons';
+import { initialState, getRcvArticleList, changeSearchOption } from '@store/rcvArticle';
+import { MokaInput, MokaInputLabel } from '@components';
 import { SourceSelector } from '@pages/commons';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
 moment.locale('ko');
+const SOURCE_LIST_KEY = 'rcvArticleSourceList';
 
+/**
+ * 수신기사 검색 컴포넌트
+ */
 const RcvArticleSearch = () => {
+    const dispatch = useDispatch();
+    const storeSearch = useSelector((store) => store.rcvArticle.search);
+
     // state
-    const [search, setSearch] = useState({});
-    const [searchDisabled, setSearchDisabled] = useState(false);
-    const [modalShow, setModalShow] = useState(false);
-    const [sourceList, setSourceList] = useState(null);
+    const [search, setSearch] = useState(initialState.search);
+    const [sourceOn, setSourceOn] = useState(false);
+    const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
     const [error, setError] = useState({});
-    const [period, setPeriod] = useState([2, 'days']);
+    const [period, setPeriod] = useState([1, 'days']);
 
     /**
      * 입력값 변경
@@ -31,11 +39,11 @@ const RcvArticleSearch = () => {
             const { number, date } = e.target.selectedOptions[0].dataset;
             setPeriod([Number(number), date]);
 
-            // startServiceDay, endServiceDay 변경
+            // startDay, endDay 변경
             const nd = new Date();
-            const startServiceDay = moment(nd).subtract(Number(number), date);
-            const endServiceDay = moment(nd);
-            setSearch({ ...search, startServiceDay, endServiceDay });
+            const startDay = moment(nd).subtract(Number(number), date);
+            const endDay = moment(nd);
+            setSearch({ ...search, startDay, endDay });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -47,9 +55,9 @@ const RcvArticleSearch = () => {
      */
     const handleChangeSDate = (date) => {
         if (typeof date === 'object') {
-            setSearch({ ...search, startServiceDay: date });
+            setSearch({ ...search, startDay: date });
         } else if (date === '') {
-            setSearch({ ...search, startServiceDay: null });
+            setSearch({ ...search, startDay: null });
         }
     };
 
@@ -59,9 +67,9 @@ const RcvArticleSearch = () => {
      */
     const handleChangeEDate = (date) => {
         if (typeof date === 'object') {
-            setSearch({ ...search, endServiceDay: date });
+            setSearch({ ...search, endDay: date });
         } else if (date === '') {
-            setSearch({ ...search, endServiceDay: null });
+            setSearch({ ...search, endDay: null });
         }
     };
 
@@ -74,17 +82,81 @@ const RcvArticleSearch = () => {
         e.stopPropagation();
 
         const date = new Date();
-
-        // dispatch(
-        //     changeSearchOption({
-        //         ...initialState.search,
-        //         masterCode: selectedComponent.masterCode || null,
-        //         startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
-        //         endServiceDay: moment(date).format(DB_DATEFORMAT),
-        //         page: 0,
-        //     }),
-        // );
+        setPeriod([1, 'days']);
+        dispatch(
+            changeSearchOption({
+                ...initialState.search,
+                startDay: moment(date).subtract(1, 'days').format(DB_DATEFORMAT),
+                endDay: moment(date).format(DB_DATEFORMAT),
+                sourceList,
+                page: 0,
+            }),
+        );
     };
+
+    /**
+     * validate
+     */
+    const validate = (ns) => {
+        let isInvalid = false;
+
+        if (!REQUIRED_REGEX.test(ns.sourceList)) {
+            isInvalid = isInvalid || true;
+            setError({ ...error, sourceList: true });
+        }
+
+        return !isInvalid;
+    };
+
+    /**
+     * 검색
+     */
+    const handleSearch = () => {
+        let ns = {
+            ...search,
+            sourceList,
+            startDay: moment(search.startDay).format(DB_DATEFORMAT),
+            endDay: moment(search.endDay).format(DB_DATEFORMAT),
+            page: 0,
+        };
+
+        if (validate(ns)) {
+            dispatch(changeSearchOption(ns));
+            dispatch(getRcvArticleList({ search: ns }));
+        }
+    };
+
+    useEffect(() => {
+        let ssd = moment(storeSearch.startDay, DB_DATEFORMAT);
+        if (!ssd.isValid()) ssd = null;
+        let esd = moment(storeSearch.endDay, DB_DATEFORMAT);
+        if (!esd.isValid()) esd = null;
+
+        setSearch({
+            ...storeSearch,
+            startDay: ssd,
+            endDay: esd,
+        });
+    }, [storeSearch]);
+
+    useEffect(() => {
+        /**
+         * 마운트 시 기사목록 최초 로딩
+         *
+         * 시작일 : 현재 시간(시분초o)
+         * 종료일 : 현재 시간(시분초o) - period 설정 일수
+         */
+        const date = new Date();
+        const startDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
+        const endDay = moment(date).format(DB_DATEFORMAT);
+        const ns = { ...search, sourceList, startDay, endDay, page: 0 };
+
+        dispatch(changeSearchOption(ns));
+        if (sourceOn) {
+            dispatch(getRcvArticleList({ search: ns }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sourceOn]);
 
     return (
         <Form>
@@ -101,7 +173,7 @@ const RcvArticleSearch = () => {
                         onChange={handleChangeValue}
                         value={period.join('')}
                     >
-                        <option value="2days" data-number="2" data-date="days">
+                        <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>
                         <option value="3days" data-number="3" data-date="days">
@@ -121,17 +193,17 @@ const RcvArticleSearch = () => {
 
                 {/* 시작일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
+                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startDay} />
                 </div>
 
                 {/* 종료일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endServiceDay} />
+                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endDay} />
                 </div>
 
                 {/* 섹션 전체 */}
                 <div style={{ width: 110 }} className="mr-2">
-                    <MokaInput as="select" name="section" className="ft-12" value={search.searchType} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="section" className="ft-12" value={search.depart} onChange={handleChangeValue} disabled>
                         {['경제', '국제', '기타', '문화', '북한', '사회', '스포츠/레저', '정치', '지방'].map((section) => (
                             <option key={section} value={section}>
                                 {section}
@@ -149,25 +221,31 @@ const RcvArticleSearch = () => {
                         labelWidth={25}
                         className="mb-0"
                         inputClassName="ft-12"
-                        value={search.searchType}
+                        value={search.status}
                         onChange={handleChangeValue}
                     >
-                        <option>작업전</option>
-                        <option>등록</option>
+                        {initialState.statusList.map((op) => (
+                            <option key={op.id} value={op.id}>
+                                {op.name}
+                            </option>
+                        ))}
                     </MokaInputLabel>
                 </div>
 
                 {/* 원본/수정만 */}
                 <div style={{ width: 110 }}>
-                    <MokaInput as="select" name="original" className="ft-12" value={search.searchType} onChange={handleChangeValue}>
-                        <option>원본만</option>
-                        <option>수정만</option>
+                    <MokaInput as="select" name="modify" className="ft-12" value={search.modify} onChange={handleChangeValue}>
+                        {initialState.modifyList.map((op) => (
+                            <option key={op.id} value={op.id}>
+                                {op.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </div>
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between">
                 {/* 제목 */}
-                <MokaInputLabel name="title" label="제목" labelWidth={50} className="mb-0 flex-fill" value={search.searchType} onChange={handleChangeValue} />
+                <MokaInputLabel name="keyword" label="제목" labelWidth={50} className="mb-0 flex-fill" value={search.keyword} onChange={handleChangeValue} />
 
                 {/* 매체 */}
                 <div style={{ width: 195 }} className="ml-2">
@@ -176,6 +254,11 @@ const RcvArticleSearch = () => {
                         onChange={(value) => {
                             setSourceList(value);
                             setError({ ...error, sourceList: false });
+                            if (value !== '') {
+                                setSourceOn(true);
+                                // 로컬스토리지에 저장
+                                setLocalItem({ key: SOURCE_LIST_KEY, value });
+                            }
                         }}
                         sourceType="JOONGANG"
                         isInvalid={error.sourceList}
@@ -183,7 +266,7 @@ const RcvArticleSearch = () => {
                 </div>
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-end">
-                <Button variant="searching" className="mr-2" onClick={() => setModalShow(true)}>
+                <Button variant="searching" className="mr-2" onClick={handleSearch}>
                     검색
                 </Button>
 

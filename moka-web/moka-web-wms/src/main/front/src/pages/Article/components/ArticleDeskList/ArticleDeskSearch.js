@@ -162,7 +162,7 @@ const ArticleDeskSearch = (props) => {
          * 마운트 시 기사목록 최초 로딩
          *
          * 시작일 : 현재 시간(시분초o)
-         * 종료일 : 현재 시간(시분초o) - 24시간
+         * 종료일 : 현재 시간(시분초o) - period 설정 일수
          */
         if (show) {
             // const date = new Date();

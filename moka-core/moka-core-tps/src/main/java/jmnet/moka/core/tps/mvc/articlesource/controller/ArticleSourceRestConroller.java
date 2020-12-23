@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -86,19 +88,20 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
     }
 
     /**
-     * 벌크전송 매체목록 조회(네이버채널용)
+     * 타입별 매체목록 조회
      *
      * @return 매체목록
      * @throws Exception 예외
      */
-    @ApiOperation(value = "벌크전송 매체목록 조회")
-    @GetMapping("/bulk")
-    public ResponseEntity<?> getBulkArticleSourceList()
+    @ApiOperation(value = "타입별 매체목록 조회")
+    @GetMapping("/types/{useTypeCode}")
+    public ResponseEntity<?> getTypeArticleSourceList(@ApiParam("매체타입(필수)") @PathVariable("useTypeCode")
+    @NotNull(message = "{tps.article-source.error.notnull.useTypeCode}") String useTypeCode)
             throws Exception {
 
         try {
             // 조회
-            List<ArticleSource> returnValue = articleSourceService.findAllArticleSourceByBulk();
+            List<ArticleSource> returnValue = articleSourceService.findAllUsedArticleSource(ArticleSourceUseTypeCode.get(useTypeCode));
 
             // 리턴값 설정
             List<ArticleSourceSimpleDTO> dtoList = modelMapper.map(returnValue, ArticleSourceSimpleDTO.TYPE);
@@ -110,8 +113,8 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO LOAD BULK ARTICLE SOURCE]", e);
-            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD BULK ARTICLE SOURCE", e, true);
+            log.error("[FAIL TO LOAD TYPE ARTICLE SOURCE]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD TYPE ARTICLE SOURCE", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
         }
     }

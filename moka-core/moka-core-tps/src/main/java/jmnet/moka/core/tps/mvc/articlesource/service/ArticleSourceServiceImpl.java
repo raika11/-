@@ -45,6 +45,11 @@ public class ArticleSourceServiceImpl implements ArticleSourceService {
     }
 
     @Override
+    public List<ArticleSource> findAllArticleSourceByJoongang() {
+        return findAllUsedArticleSource(ArticleSourceUseTypeCode.JOONGANG);
+    }
+
+    @Override
     public List<ArticleSource> findAllUsedArticleSource(ArticleSourceUseTypeCode useTypeCode) {
         return articleSourceRepository.findAllUsedSource(useTypeCode);
     }

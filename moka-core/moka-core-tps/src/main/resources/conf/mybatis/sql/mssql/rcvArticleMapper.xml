@@ -20,8 +20,8 @@
       </otherwise>
     </choose>
 
-    #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{startDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
       <when test="depart != null and contentType != ''">

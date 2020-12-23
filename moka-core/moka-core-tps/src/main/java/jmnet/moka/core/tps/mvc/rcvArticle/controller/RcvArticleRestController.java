@@ -54,9 +54,6 @@ public class RcvArticleRestController extends AbstractCommonController {
     public ResponseEntity<?> getRcvArticleList(@Valid @SearchParam RcvArticleSearchDTO search)
             throws Exception {
 
-        //분류코드 검색설정
-        //        resetMasterCode(search);
-
         try {
             // 조회(mybatis)
             List<RcvArticleBasicVO> returnValue = rcvArticleService.findAllRcvArticleBasic(search);

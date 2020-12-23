@@ -50,15 +50,15 @@ public class RcvArticleSearchDTO extends SearchDTO {
     //    @Pattern(regexp = "[0-9]*$", message = "{tps.article.error.pattern.pressMyun}")
     //    private String pressMyun;
 
-    @ApiModelProperty("배부 시작일자(필수)")
-    @NotNull(message = "{tps.rcv-article.error.notnull.startServiceDay}")
+    @ApiModelProperty("검색 시작일자(필수)")
+    @NotNull(message = "{tps.rcv-article.error.notnull.startDay}")
     @DTODateTimeFormat
-    private Date startServiceDay;
+    private Date startDay;
 
-    @ApiModelProperty("배부 종료일자(필수)")
-    @NotNull(message = "{tps.rcv-article.error.notnull.endServiceDay}")
+    @ApiModelProperty("검색 종료일자(필수)")
+    @NotNull(message = "{tps.rcv-article.error.notnull.endDay}")
     @DTODateTimeFormat
-    private Date endServiceDay;
+    private Date endDay;
 
     @ApiModelProperty("매체목록 (필수/구분자,)")
     @JsonIgnore
@@ -81,7 +81,6 @@ public class RcvArticleSearchDTO extends SearchDTO {
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
-        //        this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
     }
 
     /**
@@ -89,9 +88,9 @@ public class RcvArticleSearchDTO extends SearchDTO {
      *
      * @return 종료일자
      */
-    public String getEndServiceDay() {
-        if (this.endServiceDay != null) {
-            return McpDate.dateStr(this.endServiceDay, MokaConstants.JSON_DATE_FORMAT);
+    public String getEndDay() {
+        if (this.endDay != null) {
+            return McpDate.dateStr(this.endDay, MokaConstants.JSON_DATE_FORMAT);
         }
         return null;
     }
@@ -101,9 +100,9 @@ public class RcvArticleSearchDTO extends SearchDTO {
      *
      * @return 시작일자
      */
-    public String getStartServiceDay() {
-        if (this.startServiceDay != null) {
-            return McpDate.dateStr(this.startServiceDay, MokaConstants.JSON_DATE_FORMAT);
+    public String getStartDay() {
+        if (this.startDay != null) {
+            return McpDate.dateStr(this.startDay, MokaConstants.JSON_DATE_FORMAT);
         }
         return null;
     }

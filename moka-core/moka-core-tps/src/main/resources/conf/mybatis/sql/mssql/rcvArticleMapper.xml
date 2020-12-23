@@ -24,7 +24,7 @@
     #{endDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test="depart != null and contentType != ''">
+      <when test='depart != "all" and depart != null and depart != ""'>
         #{depart},
       </when>
       <otherwise>
@@ -33,7 +33,7 @@
     </choose>
 
     <choose>
-      <when test="status != null and status = 'Y'">
+      <when test='status != "all" and status != null and status == "Y"'>
         #{status},
       </when>
       <otherwise>
@@ -42,7 +42,7 @@
     </choose>
 
     <choose>
-      <when test="status != null and status = 'B'">
+      <when test='status != "all" and status != null and status == "B"'>
         #{status},
       </when>
       <otherwise>
@@ -51,7 +51,7 @@
     </choose>
 
     <choose>
-      <when test="modify != null and status = 'U'">
+      <when test='modify != "all" and modify != null and status == "U"'>
         #{modify},
       </when>
       <otherwise>
@@ -60,7 +60,7 @@
     </choose>
 
     <choose>
-      <when test="modify != null and status = 'D'">
+      <when test='modify != "all" and modify != null and status == "D"'>
         #{modify},
       </when>
       <otherwise>

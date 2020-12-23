@@ -69,11 +69,11 @@ public class RcvArticleSearchDTO extends SearchDTO {
     private String depart;
 
     @ApiModelProperty("등록상태(Y,B)")
-    @Pattern(regexp = "[Y|B]{1}$", message = "{tps.rcv-article.error.pattern.status}")
+    @Pattern(regexp = "^(all)|(Y)|(B)$", message = "{tps.rcv-article.error.pattern.status}")
     private String status;
 
     @ApiModelProperty("수정여부(U,D)")
-    @Pattern(regexp = "[U|D]{1}$", message = "{tps.rcv-article.error.pattern.modify}")
+    @Pattern(regexp = "^(all)|(U)|(D)$", message = "{tps.rcv-article.error.pattern.modify}")
     private String modify;
 
     public RcvArticleSearchDTO() {

@@ -11,7 +11,7 @@ export const initialState = {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         usedYn: 'Y',
-        fixYn: 'Y',
+        fixYn: 'N',
         searchType: 'all',
         keyword: '',
     },

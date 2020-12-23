@@ -17,7 +17,13 @@ import org.springframework.data.domain.Page;
  * @since 2020-12-17 11:52
  */
 public interface BoardRepositorySupport {
-    Page<Board> findAllBoard(BoardSearchDTO searchDTO);
+    Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO);
 
-    
+    long updateViewCnt(Long boardSeq);
+
+    long updateRecomCnt(Long boardSeq, boolean add);
+
+    long updateDecomCnt(Long boardSeq, boolean add);
+
+    long updateDeclareCnt(Long boardSeq, boolean add);
 }

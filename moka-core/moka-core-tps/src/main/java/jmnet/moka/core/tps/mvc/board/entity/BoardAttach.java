@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,9 +25,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "TB_BOARD_ATTACH")
-public class BoardAttach extends jmnet.moka.core.tps.common.entity.BaseAudit implements Serializable {
+public class BoardAttach implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

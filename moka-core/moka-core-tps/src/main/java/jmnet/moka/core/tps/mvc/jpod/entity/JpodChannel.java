@@ -60,7 +60,7 @@ public class JpodChannel extends jmnet.moka.core.tps.common.entity.BaseAudit imp
     /**
      * 채널 개설일
      */
-    @Column(name = "CHNL_SDT", nullable = false)
+    @Column(name = "CHNL_SDATE", nullable = false)
     private String chnlSdt;
 
     /**
@@ -84,7 +84,7 @@ public class JpodChannel extends jmnet.moka.core.tps.common.entity.BaseAudit imp
     /**
      * 채널 종료일
      */
-    @Column(name = "CHNL_EDT")
+    @Column(name = "CHNL_EDATE")
     private String chnlEdt;
 
     /**

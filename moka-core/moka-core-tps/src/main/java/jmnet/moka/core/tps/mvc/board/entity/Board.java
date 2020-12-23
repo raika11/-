@@ -16,7 +16,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
-import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -59,13 +58,9 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      * 부모게시물일련번호
      */
     @Column(name = "PARENT_BOARD_SEQ", nullable = false)
-    private Long parentBoardSeq;
+    @Builder.Default
+    private Long parentBoardSeq = 0L;
 
-    /**
-     * 채널타입(예:JPOD)
-     */
-    @Column(name = "CHANNEL_TYPE")
-    private String channelType;
 
     /**
      * 채널ID(예:JPOD 채널SEQ)
@@ -117,7 +112,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
      */
     @Column(name = "ORD_NO", nullable = false)
     @Builder.Default
-    private Integer ordNo = 1;
+    private String ordNo = "1";
 
     /**
      * 조회수
@@ -146,6 +141,13 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @Column(name = "DECLARE_CNT", nullable = false)
     @Builder.Default
     private Integer declareCnt = 0;
+
+    /**
+     * 사용여부
+     */
+    @Column(name = "USED_YN", nullable = false)
+    @Builder.Default
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 삭제여부
@@ -187,7 +189,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     private BoardInfo boardInfo;
 
     @NotFound(action = NotFoundAction.IGNORE)
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE)
     @OrderBy("seqNo")
     private Set<BoardAttach> attaches;
 
@@ -199,13 +201,6 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @JoinColumn(name = "CHANNEL_ID", insertable = false, updatable = false)
     private JpodChannel jpodChannel;
 
-    /**
-     * 등록자
-     */
-    @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
-    private MemberInfo regMember;
 
     /**
      * 등록구분(M:회원,A:관리자)

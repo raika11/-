@@ -6,5 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface BoardRepository extends JpaRepository<Board, Long>, JpaSpecificationExecutor<Board>, BoardRepositorySupport {
-    public Optional<Board> findTopByBoardId(Integer boardId);
+
+    Optional<Board> findByBoardSeqAndDelYn(Long boardSeq, String delYn);
+
+    Optional<Board> findTopByBoardId(Integer boardId);
+
+    Long countByParentBoardSeqAndDelYn(Long parentBoardSeq, String delYn);
 }

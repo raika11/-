@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.board.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
@@ -29,7 +30,15 @@ public interface BoardService {
      * @param searchDTO 검색 조건
      * @return 게시물 목록
      */
-    Page<Board> findAllBoard(BoardSearchDTO searchDTO);
+    Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO);
+
+    /**
+     * 게시물의 하위 게시 목록 건수 조회
+     *
+     * @param parentBoardSeq 부모 게시물 일련번호
+     * @return 게시물 건수
+     */
+    Long countAllBoardByParentBoardSeq(Long parentBoardSeq);
 
     /**
      * 게시물 조회
@@ -86,6 +95,14 @@ public interface BoardService {
     BoardAttach insertBoardAttach(BoardAttach boardAttach);
 
     /**
+     * 게시물 첨부파일 수정
+     *
+     * @param boardAttach 게시물
+     * @return 게시물 첨부파일
+     */
+    BoardAttach updateBoardAttach(BoardAttach boardAttach);
+
+    /**
      * 게시물 첨부파일 삭제
      *
      * @param boardAttach 게시물 첨부파일
@@ -102,10 +119,52 @@ public interface BoardService {
     void deleteAllBoardAttach(Long boardSeq);
 
     /**
+     * 첨부파일 정보 삭제
+     *
+     * @param boardAttachSet 첨부파일 Set
+     */
+    void deleteAllBoardAttach(Set<BoardAttach> boardAttachSet);
+
+    /**
      * 게시판 첫번째 글을 조회한다.
      *
      * @param boardId 게시판 ID
      * @return Board
      */
     Optional<Board> findTopBoard(Integer boardId);
+
+    /**
+     * 조회수 증가
+     *
+     * @param boardSeq 게시물 일련번호
+     * @return 수정 결과
+     */
+    long updateViewCnt(Long boardSeq);
+
+    /**
+     * 추천수 증가/제거
+     *
+     * @param boardSeq 게시물 일련번호
+     * @param add      증가/감소 여부
+     * @return 수정 결과
+     */
+    long updateRecomCnt(Long boardSeq, boolean add);
+
+    /**
+     * 비추천수 증가/제거
+     *
+     * @param boardSeq 게시물 일련번호
+     * @param add      증가/감소 여부
+     * @return 수정 결과
+     */
+    long updateDecomCnt(Long boardSeq, boolean add);
+
+    /**
+     * 신고수 증가/제거
+     *
+     * @param boardSeq 게시물 일련번호
+     * @param add      증가/감소 여부
+     * @return 수정 결과
+     */
+    long updateDeclareCnt(Long boardSeq, boolean add);
 }

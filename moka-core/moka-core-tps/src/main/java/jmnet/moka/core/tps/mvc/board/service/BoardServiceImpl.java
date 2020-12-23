@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.board.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
@@ -39,13 +41,18 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public Page<Board> findAllBoard(BoardSearchDTO searchDTO) {
-        return boardRepository.findAllBoard(searchDTO);
+    public Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO) {
+        return boardRepository.findAllBoard(boardId, searchDTO);
+    }
+
+    @Override
+    public Long countAllBoardByParentBoardSeq(Long parentBoardSeq) {
+        return boardRepository.countByParentBoardSeqAndDelYn(parentBoardSeq, MokaConstants.NO);
     }
 
     @Override
     public Optional<Board> findBoardBySeq(Long boardSeq) {
-        return boardRepository.findById(boardSeq);
+        return boardRepository.findByBoardSeqAndDelYn(boardSeq, MokaConstants.NO);
     }
 
     @Override
@@ -79,8 +86,22 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public BoardAttach updateBoardAttach(BoardAttach boardAttach) {
+        return boardAttachRepository.save(boardAttach);
+    }
+
+    @Override
     public void deleteBoardAttach(BoardAttach boardAttach) {
         boardAttachRepository.delete(boardAttach);
+    }
+
+    @Override
+    public void deleteAllBoardAttach(Set<BoardAttach> boardAttachSet) {
+        if (boardAttachSet != null && boardAttachSet.size() > 0) {
+            boardAttachSet.forEach(boardAttach -> {
+                boardAttachRepository.deleteById(boardAttach.getSeqNo());
+            });
+        }
     }
 
     @Override
@@ -92,5 +113,25 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Optional<Board> findTopBoard(Integer boardId) {
         return boardRepository.findTopByBoardId(boardId);
+    }
+
+    @Override
+    public long updateViewCnt(Long boardSeq) {
+        return boardRepository.updateViewCnt(boardSeq);
+    }
+
+    @Override
+    public long updateRecomCnt(Long boardSeq, boolean add) {
+        return boardRepository.updateRecomCnt(boardSeq, add);
+    }
+
+    @Override
+    public long updateDecomCnt(Long boardSeq, boolean add) {
+        return boardRepository.updateDecomCnt(boardSeq, add);
+    }
+
+    @Override
+    public long updateDeclareCnt(Long boardSeq, boolean add) {
+        return boardRepository.updateDeclareCnt(boardSeq, add);
     }
 }

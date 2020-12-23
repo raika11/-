@@ -2,6 +2,8 @@ package jmnet.moka.core.tms.mvc.view;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +103,7 @@ public class ArticleView extends AbstractView {
             Map<String,Object> paramMap = new HashMap<>();
             paramMap.put("totalId",articleId);
             JSONResult jsonResult = loader.getJSONResult("article",paramMap,true);
-            Map<String,Object> articleInfo = rebuildInfo(jsonResult);
+            Map<String,Object> articleInfo = rebuildInfo(jsonResult, mergeContext);
             mergeContext.set("article",articleInfo);
             this.setCodesAndMenus(loader, articleInfo, mergeContext);
             StringBuilder sb = templateMerger.merge(MokaConstants.ITEM_ARTICLE_PAGE,
@@ -133,7 +135,7 @@ public class ArticleView extends AbstractView {
         }
     }
 
-    private Map<String,Object> rebuildInfo(JSONResult jsonResult) {
+    private Map<String,Object> rebuildInfo(JSONResult jsonResult, MergeContext mergeContext) {
         Map<String,Object> article = new HashMap<>();
         article.put("basic",jsonResult.getDataListFirst("BASIC"));
         article.put("content",jsonResult.getDataList("CONTENT"));
@@ -147,11 +149,11 @@ public class ArticleView extends AbstractView {
         article.put("meta_fb",jsonResult.getDataListFirst("META_FB"));
         article.put("meta_tw",jsonResult.getDataListFirst("META_TW"));
         article.put("meta_ja",jsonResult.getDataListFirst("META_JA"));
-        this.setEPaper(article);
+        this.setEPaper(article, mergeContext);
         return article;
     }
 
-    private void setEPaper(Map<String,Object> article) {
+    private void setEPaper(Map<String,Object> article, MergeContext mergeContext) {
         Object basic = article.get("basic");
         if ( basic == null || ((Map)basic).size() == 0 ) return;
         Map basicMap = (Map)basic;
@@ -179,8 +181,17 @@ public class ArticleView extends AbstractView {
             link = "https://www.joins.com/v2?mseq=12&tid="+basicMap.get("TOTAL_ID").toString();
         }
         // 앱에 대한 처리
-
-
+        if (mergeContext.has(MokaConstants.MERGE_CONTEXT_HEADER)) {
+            Map<String,String> headerMap = (Map<String,String>)mergeContext.get(MokaConstants.MERGE_CONTEXT_HEADER);
+            String userAgent = headerMap.get("User-Agent");
+            if ( userAgent != null && userAgent.equalsIgnoreCase("joongangilbo")) {
+                try {
+                    link = "joongang://open/browser?url=" + URLEncoder.encode(link,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         Map<String,String> epaper = new HashMap<String,String>();
         epaper.put("title",title);
         epaper.put("link",link);

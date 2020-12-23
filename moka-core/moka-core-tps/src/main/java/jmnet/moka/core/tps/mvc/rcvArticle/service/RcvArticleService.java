@@ -5,7 +5,9 @@
 package jmnet.moka.core.tps.mvc.rcvArticle.service;
 
 import java.util.List;
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
 import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleBasicVO;
 
 /**
@@ -22,4 +24,12 @@ public interface RcvArticleService {
      * @return 수신기사목록
      */
     List<RcvArticleBasicVO> findAllRcvArticleBasic(RcvArticleSearchDTO search);
+
+    /**
+     * 수신기사 상세조죄
+     *
+     * @param rid 기사키
+     * @return 수신기사 정보
+     */
+    Optional<RcvArticleBasic> findRcvArticleBasicById(Long rid);
 }

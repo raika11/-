@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.rcvArticle.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.validation.Valid;
 import jmnet.moka.common.data.support.SearchParam;
@@ -13,7 +14,10 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
 import jmnet.moka.core.tps.mvc.rcvArticle.service.RcvArticleService;
 import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleBasicVO;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -71,5 +76,24 @@ public class RcvArticleRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD RCV ARTICLE BASIC]", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
         }
+    }
+
+    @ApiOperation(value = "수신기사 상세조회")
+    @GetMapping("/{rid}")
+    public ResponseEntity<?> getRcvArticle(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid)
+            throws Exception {
+
+        RcvArticleBasic rcvArticleBasic = rcvArticleService
+                .findRcvArticleBasicById(rid)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        RcvArticleBasicDTO dto = modelMapper.map(rcvArticleBasic, RcvArticleBasicDTO.class);
+        ResultDTO<RcvArticleBasicDTO> resultDto = new ResultDTO<>(dto);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

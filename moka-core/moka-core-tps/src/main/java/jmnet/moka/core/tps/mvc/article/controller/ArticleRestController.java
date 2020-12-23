@@ -99,6 +99,13 @@ public class ArticleRestController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 기사 상세조회
+     *
+     * @param totalId 기사키
+     * @return 기사정보
+     * @throws NoDataException
+     */
     @ApiOperation(value = "기사 상세조회")
     @GetMapping("/{totalId}")
     public ResponseEntity<?> getArticle(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)

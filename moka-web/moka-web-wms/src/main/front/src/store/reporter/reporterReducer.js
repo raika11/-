@@ -20,6 +20,7 @@ export const initialState = {
     },
     reporter: {},
     reporterError: {},
+    allReporter: null,
 };
 
 /**
@@ -102,6 +103,14 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.reporter = initialState.reporter;
                 draft.reporterError = payload;
+            });
+        },
+        /**
+         * 전체 기자 조회
+         */
+        [act.GET_REPORTER_ALL_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.allReporter = body.list;
             });
         },
     },

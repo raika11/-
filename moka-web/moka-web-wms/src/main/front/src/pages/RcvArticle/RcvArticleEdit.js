@@ -1,56 +1,113 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { MokaCard } from '@components';
-import { getReporterAllListModal } from '@store/reporter';
+import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getReporterAllList } from '@store/reporter';
+import { getArticleType } from '@store/codeMgt';
+import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
-
-const rcv = true;
+import toast from '@utils/toastUtil';
+import { unescapeHtml } from '@utils/convertUtil';
 
 const RcvArticleEdit = () => {
+    const { rid } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
+    const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE]);
+    const rcvArticle = useSelector((store) => store.rcvArticle.rcvArticle);
+    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
+    const reporterList = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
+    const [temp, setTemp] = useState(initialState.rcvArticle);
 
-    // 기자리스트 => 나중에 스토어로 관리
-    const [reporterList, setReporterList] = useState(null);
+    /**
+     * temp 값 변경
+     */
+    const handleChangeValue = ({ key, value }) => {
+        setTemp({
+            ...temp,
+            [key]: value,
+        });
+    };
+
+    /**
+     * 취소
+     */
+    const handleCancle = () => {
+        history.push('/rcv-article');
+        dispatch(clearRcvArticle());
+    };
 
     useEffect(() => {
-        dispatch(
-            getReporterAllListModal({
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        setReporterList(
-                            body.list.map((reporter) => ({
-                                ...reporter,
-                                value: reporter.repSeq,
-                                label: reporter.repName,
-                            })),
-                        );
-                    } else {
-                        setReporterList([]);
-                    }
-                },
-            }),
-        );
-    }, [dispatch]);
+        // 기사타입 조회
+        if (!articleTypeRows) {
+            dispatch(getArticleType());
+        }
+    }, [articleTypeRows, dispatch]);
+
+    useEffect(() => {
+        // 기자 리스트 조회
+        if (!reporterList) {
+            dispatch(getReporterAllList());
+        }
+    }, [dispatch, reporterList]);
+
+    useEffect(() => {
+        // 기사 상세 조회
+        if (rid) {
+            dispatch(
+                getRcvArticle({
+                    rid,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            dispatch(clearRcvArticle());
+        }
+    }, [dispatch, rid]);
+
+    useEffect(() => {
+        setTemp({
+            ...rcvArticle,
+            title: unescapeHtml(rcvArticle.title),
+        });
+    }, [rcvArticle]);
 
     return (
-        <MokaCard
-            title={!rcv ? '수신기사' : '등록기사'}
-            className="flex-fill"
-            footer
-            footerClassName="d-flex justify-content-center"
-            footerButtons={[
-                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2' },
-                { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2' },
-                { variant: 'positive', text: '기사등록', className: 'mr-2' },
-                { variant: 'negative', text: '취소', onClick: () => history.push('/rcv-article') },
-            ]}
-        >
-            {/* <RctArticleForm reporterList={reporterList} /> */}
-            <ArticleForm reporterList={reporterList} inRcv />
-        </MokaCard>
+        <React.Fragment>
+            <RctArticleForm
+                article={temp}
+                onChange={handleChangeValue}
+                articleTypeRows={articleTypeRows}
+                reporterList={reporterList || []}
+                loading={loading}
+                onCancle={handleCancle}
+            />
+            {/* {rcvArticle.rid && !rcvArticle.totalId && (
+                <RctArticleForm
+                    article={temp}
+                    onChange={handleChangeValue}
+                    articleTypeRows={articleTypeRows}
+                    reporterList={reporterList || []}
+                    loading={loading}
+                    onCancle={handleCancle}
+                />
+            )}
+            {rcvArticle.rid && rcvArticle.totalId && (
+                <ArticleForm
+                    article={temp}
+                    onChange={handleChangeValue}
+                    articleTypeRows={articleTypeRows}
+                    reporterList={reporterList || []}
+                    loading={loading}
+                    onCancle={handleCancle}
+                    inRcv
+                />
+            )} */}
+        </React.Fragment>
     );
 };
 

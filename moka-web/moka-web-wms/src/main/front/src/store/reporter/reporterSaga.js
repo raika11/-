@@ -21,9 +21,9 @@ const getReporter = createRequestSaga(reporterAction.GET_REPORTER, reporterAPI.g
 const getReporterListModal = createRequestSaga(reporterAction.GET_REPORTER_LIST_MODAL, reporterAPI.getReporterList, true);
 
 /**
- * 전체 기자 목록 조회 (페이징 X, 스토어 저장X)
+ * 전체 기자 목록 조회 (페이징 X)
  */
-const getReporterAllListModal = createRequestSaga(reporterAction.GET_REPORTER_ALL_LIST_MODAL, reporterAPI.getReporterList, true);
+const getReporterAllList = createRequestSaga(reporterAction.GET_REPORTER_ALL_LIST, reporterAPI.getReporterList, true);
 
 /**
  * 등록/수정
@@ -88,5 +88,5 @@ export default function* reporterSaga() {
     yield takeLatest(reporterAction.GET_REPORTER_LIST, getReporterList);
     yield takeLatest(reporterAction.GET_REPORTER, getReporter);
     yield takeLatest(reporterAction.SAVE_REPORTER, saveReporter);
-    yield takeLatest(reporterAction.GET_REPORTER_ALL_LIST_MODAL, getReporterAllListModal);
+    yield takeLatest(reporterAction.GET_REPORTER_ALL_LIST, getReporterAllList);
 }

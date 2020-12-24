@@ -7,3 +7,10 @@ export const getRcvArticleList = ({ search }) => {
         throw err;
     });
 };
+
+// 수신기사 조회
+export const getRcvArticle = ({ rid }) => {
+    return instance.get(`/api/rcv-articles/${rid}`).catch((err) => {
+        throw err;
+    });
+};

@@ -28,10 +28,10 @@ export const getReporterList = createAction(GET_REPORTER_LIST, (...actions) => a
 export const getReporter = createAction(GET_REPORTER, (reporter) => reporter);
 
 /**
- * 전체 기자 목록 조회 (페이징 X, 스토어 저장X)
+ * 전체 기자 목록 조회 (페이징 X, 스토어 O)
  */
-export const GET_REPORTER_ALL_LIST_MODAL = 'reporter/GET_REPORTER_LIST_MODAL';
-export const getReporterAllListModal = createAction(GET_REPORTER_ALL_LIST_MODAL, ({ callback }) => ({ callback }));
+export const [GET_REPORTER_ALL_LIST, GET_REPORTER_ALL_LIST_SUCCESS] = createRequestActionTypes('reporter/GET_REPORTER_ALL_LIST');
+export const getReporterAllList = createAction(GET_REPORTER_ALL_LIST, () => ({}));
 
 /**
  * 모달 데이터 조회

@@ -33,6 +33,13 @@ export const initialState = {
         { id: 'D', name: '원본만' },
         { id: 'U', name: '수정만' },
     ],
+    rcvArticle: {
+        rid: null,
+        codeList: [],
+        articleSource: {},
+        title: '',
+    },
+    invalidList: [],
 };
 
 export default handleActions(
@@ -49,6 +56,11 @@ export default handleActions(
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_RCV_ARTICLE]: (state) => {
+            return produce(state, (draft) => {
+                draft.rcvArticle = initialState.rcvArticle;
+            });
+        },
         /**
          * 데이터 조회
          */
@@ -64,6 +76,11 @@ export default handleActions(
                 draft.list = initialState.list;
                 draft.total = initialState.total;
                 draft.error = payload;
+            });
+        },
+        [act.GET_RCV_ARTICLE_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.rcvArticle = body;
             });
         },
     },

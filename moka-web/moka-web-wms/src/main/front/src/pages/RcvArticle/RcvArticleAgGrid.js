@@ -25,7 +25,7 @@ const RcvArticleAgGrid = () => {
 
     //state
     const [rowData, setRowData] = useState([]);
-    const rcvArticle = useSelector((store) => store.rcvArticle || {});
+    const rcvArticle = useSelector((store) => store.rcvArticle.rcvArticle);
 
     /**
      * 테이블 검색옵션 변경

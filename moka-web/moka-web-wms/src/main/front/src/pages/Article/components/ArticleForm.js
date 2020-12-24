@@ -7,6 +7,7 @@ import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard } from '@components';
 import toast from '@utils/toastUtil';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
+import ArticlePC from '@pages/Article/components/ArticlePC';
 
 const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange, articleTypeRows }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
@@ -15,6 +16,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
     const [pressDt, setPressDt] = useState(''); // 발행일자
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
+    const [previewOn, setPreviewOn] = useState({ pc: false, mobile: false }); // 미리보기 윈도우
 
     /**
      * input 변경
@@ -82,7 +84,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
-                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2' },
+                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: () => setPreviewOn({ ...previewOn, pc: true }) },
                 { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2' },
                 { variant: 'positive', text: '기사수정', className: 'mr-2' },
                 { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2' },
@@ -191,6 +193,9 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
 
                 {/* 작업정보 모달 */}
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
+
+                {/* PC미리보기 */}
+                {previewOn.pc && <ArticlePC onClose={() => setPreviewOn({ ...previewOn, pc: false })} />}
             </Form>
         </MokaCard>
     );

@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard } from '@components';
+// import ArticlePC from '@pages/Article/components/ArticlePC';
 
 const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, loading, onCancle }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트

@@ -9,7 +9,7 @@ const ArticlePreviewModal = (props) => {
     const { show, onHide, article = {} } = props;
 
     return (
-        <MokaModal title="기사보기" show={show} onHide={onHide} id={article?.totalId} size="lg" width={700} draggable centered>
+        <MokaModal title="기사보기" show={show} onHide={onHide} id={String(article?.totalId)} size="lg" width={700} draggable centered>
             <p className="h3">{unescapeHtml(article.title || '')}</p>
             <p>
                 <span className="text-info mr-1">[{article.articleSource?.sourceName}]</span>

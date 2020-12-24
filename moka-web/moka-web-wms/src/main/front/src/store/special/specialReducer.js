@@ -27,7 +27,7 @@ export const initialState = {
     special: {
         seqNo: null,
         repDeptNameSelect: 'self',
-        ordinal: '',
+        ordinal: '1',
         pageTitle: '',
         pcUrl: '',
         mobUrl: '',

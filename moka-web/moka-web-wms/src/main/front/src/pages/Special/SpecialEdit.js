@@ -452,7 +452,6 @@ const SpecialEdit = () => {
                                     value={temp.pageSdate}
                                     onChange={handleChangeSdate}
                                     isInvalid={error.pageSdate}
-                                    required
                                 />
                             </Col>
                             <Col xs={6} className="p-0">
@@ -467,7 +466,6 @@ const SpecialEdit = () => {
                                     value={temp.pageEdate}
                                     onChange={handleChangeEdate}
                                     isInvalid={error.pageEdate}
-                                    required
                                 />
                             </Col>
                         </Form.Row>

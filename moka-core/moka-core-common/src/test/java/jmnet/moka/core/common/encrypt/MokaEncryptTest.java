@@ -24,7 +24,7 @@ public class MokaEncryptTest {
     private String[] ftpStgAddress =
             {"stg-pds.joongang.co.kr", "stg-static.joongang.co.kr", "stg-images.joongang.co.kr", "stg-wimage.joongang.co.kr"};
 
-    private String[] localhost = {"localhost", "21", "ssc", "ssc#2020"};
+    private String[] localhost = {"203.249.147.45", "8021", "mokaftp", "ahzk0pvmxlvl"};
 
     @Test
     public void encrypt() {

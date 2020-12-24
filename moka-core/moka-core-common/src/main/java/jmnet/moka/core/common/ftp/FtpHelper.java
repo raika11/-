@@ -62,6 +62,8 @@ public class FtpHelper {
     public final static String STATIC = "STATIC";
     public final static String PDS = "PDS";
 
+    public final static String SEPARATOR = "/";
+
 
     /**
      * ftp_info.json에서 ftp 서버 접속 정보를 로드한다.
@@ -311,20 +313,15 @@ public class FtpHelper {
             int replyCode = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
                 log.warn("ftpServer refused connection, replyCode:{}", replyCode);
+                ftpClient.disconnect();
                 return false;
             }
             StringBuilder realSavePath = new StringBuilder(fi.getRemotePath());
             if (McpString.isNotEmpty(remotePath)) {
-                realSavePath
-                        .append(realSavePath
-                                .toString()
-                                .endsWith(File.separator) ? "" : File.separator)
-                        .append(remotePath);
+                realSavePath.append(remotePath);
             }
 
             String savePath = isTempSave ? fi.getTempPath() : realSavePath.toString();
-            log.info("current ftp directory : {}", ftpClient.listNames());
-            //ftpClient.makeDirectory(savePath);
             mkdirs(ftpClient, savePath);
             ftpClient.changeWorkingDirectory(savePath);
 
@@ -340,10 +337,15 @@ public class FtpHelper {
                 // 파일 경로를 변경한다.
                 //ftpClient.makeDirectory(realSavePath.toString());
                 mkdirs(ftpClient, realSavePath.toString());
-                String from = McpFile.makeFilepathName(fi.getTempPath(), fileName);
-                String to = McpFile.makeFilepathName(realSavePath.toString(), fileName);
+                String from = (fi
+                        .getTempPath()
+                        .endsWith(SEPARATOR) ? fi.getTempPath() : fi.getTempPath() + SEPARATOR) + fileName;
+                String to = (realSavePath
+                        .toString()
+                        .endsWith(SEPARATOR) ? realSavePath.toString() : realSavePath.toString() + SEPARATOR) + fileName;
                 ftpClient.deleteFile(to);
                 success = ftpClient.rename(from, to);
+                ftpClient.changeWorkingDirectory(fi.getRemotePath());
             }
 
         } catch (FileNotFoundException e) {
@@ -402,7 +404,7 @@ public class FtpHelper {
                 realPath
                         .append(realPath
                                 .toString()
-                                .endsWith(File.separator) ? "" : File.separator)
+                                .endsWith(SEPARATOR) ? "" : SEPARATOR)
                         .append(remotePath);
             }
 
@@ -410,7 +412,7 @@ public class FtpHelper {
             FTPFile[] ftpFiles = ftpClient.listFiles();
             for (FTPFile file : ftpFiles) {
                 if (fileName.equalsIgnoreCase(file.getName())) {
-                    String stringBuilder = localPath + File.separator + file.getName();
+                    String stringBuilder = localPath + SEPARATOR + file.getName();
                     File localFile = new File(stringBuilder);
                     outputStream = new FileOutputStream(localFile);
                     ftpClient.retrieveFile(file.getName(), outputStream);
@@ -465,7 +467,7 @@ public class FtpHelper {
                 realPath
                         .append(realPath
                                 .toString()
-                                .endsWith(File.separator) ? "" : File.separator)
+                                .endsWith(SEPARATOR) ? "" : SEPARATOR)
                         .append(remotePath);
             }
             ftpClient.changeWorkingDirectory(realPath.toString());
@@ -483,13 +485,13 @@ public class FtpHelper {
     private void mkdirs(FTPClient ftpClient, String path)
             throws IOException {
         if (McpString.isNotEmpty(path)) {
-            String[] paths = path.split("/");
+            String[] paths = path.split(SEPARATOR);
             String tempPath = "";
             for (String subPath : paths) {
                 if (McpString.isNotEmpty(subPath)) {
-                    tempPath += "/" + subPath;
+                    tempPath += SEPARATOR + subPath;
                     if (ftpClient.changeWorkingDirectory(tempPath)) {
-                        ftpClient.changeWorkingDirectory("/");
+                        ftpClient.changeWorkingDirectory(SEPARATOR);
                     } else {
                         boolean isCreateDirectory = ftpClient.makeDirectory(tempPath);
                         log.info("ftp directory : {}, created : {}", tempPath, isCreateDirectory);

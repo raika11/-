@@ -16,7 +16,8 @@ const RcvArticleEdit = () => {
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE]);
     const rcvArticle = useSelector((store) => store.rcvArticle.rcvArticle);
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
-    const reporterList = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
+    const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
+    const [reporterList, setReporterList] = useState([]);
     const [temp, setTemp] = useState(initialState.rcvArticle);
 
     /**
@@ -46,10 +47,18 @@ const RcvArticleEdit = () => {
 
     useEffect(() => {
         // 기자 리스트 조회
-        if (!reporterList) {
+        if (!allReporter) {
             dispatch(getReporterAllList());
+        } else {
+            setReporterList(
+                allReporter.map((reporter) => ({
+                    ...reporter,
+                    value: reporter.repSeq,
+                    label: reporter.repName,
+                })),
+            );
         }
-    }, [dispatch, reporterList]);
+    }, [allReporter, dispatch]);
 
     useEffect(() => {
         // 기사 상세 조회
@@ -78,15 +87,7 @@ const RcvArticleEdit = () => {
 
     return (
         <React.Fragment>
-            <RctArticleForm
-                article={temp}
-                onChange={handleChangeValue}
-                articleTypeRows={articleTypeRows}
-                reporterList={reporterList || []}
-                loading={loading}
-                onCancle={handleCancle}
-            />
-            {/* {rcvArticle.rid && !rcvArticle.totalId && (
+            {rcvArticle.rid && !rcvArticle.totalId && (
                 <RctArticleForm
                     article={temp}
                     onChange={handleChangeValue}
@@ -106,7 +107,7 @@ const RcvArticleEdit = () => {
                     onCancle={handleCancle}
                     inRcv
                 />
-            )} */}
+            )}
         </React.Fragment>
     );
 };

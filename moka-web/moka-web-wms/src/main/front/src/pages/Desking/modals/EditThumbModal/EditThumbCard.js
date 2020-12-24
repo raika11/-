@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import BSImage from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import util from '@utils/commonUtil';
 import { MokaIcon } from '@components';
@@ -56,12 +55,13 @@ const propTypes = {
 };
 
 const defaultProps = {
-    width: 191,
+    width: 188,
     height: 168,
-    alt: '썸네일이미지',
+    alt: '',
     data: {},
     localImg: false,
     selected: false,
+    rounded: true,
 };
 
 export const ItemTypes = {
@@ -74,7 +74,7 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { width, height, data, img, localImg, articleImg, alt, selected, className, dropCard, moveCard, setAddIndex } = props;
+    const { width, height, data, img, localImg, articleImg, alt, selected, className, dropCard, moveCard, setAddIndex, rounded } = props;
     // 대표 사진 설정 props
     const { represent } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
@@ -88,7 +88,6 @@ const EditThumbCard = forwardRef((props, ref) => {
     // state
     const [mouseOver, setMouseOver] = useState(false);
     const [repButtonColor, setRepButtonColor] = useState('');
-    const [thumbSrc, setThumbSrc] = useState('');
 
     // return ref 설정
     useImperativeHandle(
@@ -153,13 +152,30 @@ const EditThumbCard = forwardRef((props, ref) => {
         }),
     });
 
+    const previewImg = (src) => {
+        util.makeImgPreview(
+            src,
+            imgRef.current,
+            wrapperRef.current,
+            () => {
+                imgRef.current.src = src;
+            },
+            () => {
+                imgRef.current.src = src;
+            },
+        );
+    };
+
     useEffect(() => {
         // 썸네일 카드 경로 셋팅
         if (img && !localImg) {
-            let thumb = img.indexOf('news') > -1 || img.indexOf('blob') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
-            setThumbSrc(thumb);
+            let thumb = img;
+            if (img.indexOf('http') < 0) {
+                thumb = img.indexOf('news') > -1 || img.indexOf('blob') > -1 ? img : `${PHOTO_ARCHIVE_URL}${img}`;
+            }
+            previewImg(thumb);
         } else {
-            setThumbSrc(img);
+            previewImg(img);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [img, localImg]);
@@ -172,35 +188,15 @@ const EditThumbCard = forwardRef((props, ref) => {
         }
     };
 
-    // 이미지 landscape, portrait 설정
-    useEffect(() => {
-        if (imgRef.current !== null) {
-            util.makeImgPreview(
-                imgRef.current.src,
-                imgRef.current,
-                wrapperRef.current,
-                () => {
-                    imgRef.current.style.visibility = 'visible';
-                },
-                () => {
-                    imgRef.current.style.visibility = 'visible';
-                },
-            );
-        }
-    }, []);
-
     return (
         <>
             <div className={clsx('p-2', className, { dropCard })} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
-                <div
-                    ref={drag(drop(cardRef))}
-                    className={clsx('d-flex flex-direction-column h-100 w-100', { 'thumb-card-selected': selected, border: !dropCard, rounded: !dropCard })}
-                >
+                <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })}>
                     <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                         <div className="w-100 h-100 absolute-top">
                             <div
                                 ref={wrapperRef}
-                                className={clsx('w-100 h-100 bg-gray600 d-flex align-item-center justify-content-center overflow-hidden', { 'rounded-top': !dropCard })}
+                                className={clsx('w-100 h-100 bg-gray600 d-flex align-item-center justify-content-center overflow-hidden', { 'rounded-top': !rounded, rounded })}
                                 onMouseOver={() => setMouseOver(true)}
                                 onMouseLeave={() => {
                                     setMouseOver(false);
@@ -308,7 +304,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         </Button>
                                     </>
                                 )}
-                                {thumbSrc !== '' && <BSImage src={thumbSrc} alt={alt} ref={imgRef} />}
+                                <img alt={alt} ref={imgRef} />
                             </div>
                         </div>
                     </div>
@@ -317,9 +313,9 @@ const EditThumbCard = forwardRef((props, ref) => {
                     {!dropCard && !represent && !localImg && !articleImg && (
                         <div className="p-03 border-top" style={{ minHeight: 48 }}>
                             <div className="d-flex justify-content-between" style={{ height: 20 }}>
-                                <p className="pt-05 pl-05 mb-0 flex-fill h5 text-truncate">{data.text}</p>
+                                <p className="pt-05 pl-05 mb-0 flex-fill ft-12 h5 text-truncate">{data.text}</p>
                             </div>
-                            <p className="pt-0 pl-05 mb-0 text-truncate">{data.date}</p>
+                            <p className="pt-0 pl-05 mb-0 ft-12 text-truncate">{data.date}</p>
                         </div>
                     )}
                 </div>

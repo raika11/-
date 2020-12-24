@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Figure from 'react-bootstrap/Figure';
 import util from '@utils/commonUtil';
+import not_found from '@assets/images/not_found.png';
 
 const propTypes = {
     /**
@@ -29,7 +30,7 @@ const propTypes = {
 const defaultProps = {
     width: 171,
     height: 180,
-    alt: '이미지',
+    alt: '',
 };
 
 /**
@@ -54,7 +55,13 @@ const MokaImage = (props) => {
                 setImgSrc(src);
             },
             () => {
-                setImgSrc(src);
+                let rate = (wrapRef.current.innerWidth || wrapRef.current.offsetWidth) / (wrapRef.current.innerHeight || wrapRef.current.offsetHeight);
+                if (1 > rate) {
+                    imgRef.current.className = 'landscape';
+                } else {
+                    imgRef.current.className = 'portrait';
+                }
+                setImgSrc(not_found);
             },
         );
     }, []);

@@ -102,7 +102,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
                         />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
-                        <Button variant="outline-neutral" className="ft-12" onClick={() => setCodeModalShow(true)}>
+                        <Button variant="outline-neutral" className="ft-12 w-100" onClick={() => setCodeModalShow(true)}>
                             통합분류표
                         </Button>
                     </Col>
@@ -135,7 +135,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
                             as="autocomplete"
                             value={selectedReporter}
                             onChange={handleReporter}
-                            inputProps={{ options: reporterList || [], isMulti: true, className: 'ft-12', maxMenuHeight: 100 }}
+                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 120 }}
                         />
                     </Col>
                 </Form.Row>

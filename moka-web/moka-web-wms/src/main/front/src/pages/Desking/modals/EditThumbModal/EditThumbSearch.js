@@ -57,6 +57,7 @@ const EditThumbSearch = (props) => {
                 <MokaInput
                     as="select"
                     value={period}
+                    className="ft-12"
                     onChange={(e) => {
                         setPeriod(e.target.value);
 
@@ -83,7 +84,7 @@ const EditThumbSearch = (props) => {
             <div className="mr-2" style={{ width: 140 }}>
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null }}
+                    inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                     value={startDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -104,7 +105,7 @@ const EditThumbSearch = (props) => {
             <div className="mr-2" style={{ width: 140 }}>
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null }}
+                    inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                     value={finishDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -155,7 +156,7 @@ const EditThumbSearch = (props) => {
             </div>
 
             <div className="mr-2" style={{ width: 150 }}>
-                <MokaInput as="select" className="mr-2" value={search.searchKey} onChange={(e) => setSearch({ ...search, searchKey: e.target.value })}>
+                <MokaInput as="select" className="mr-2 ft-12" value={search.searchKey} onChange={(e) => setSearch({ ...search, searchKey: e.target.value })}>
                     {searchKeyList.map((key) => (
                         <option key={key.id} value={key.id}>
                             {key.name}
@@ -166,6 +167,7 @@ const EditThumbSearch = (props) => {
 
             <MokaSearchInput
                 className="flex-fill"
+                inputClassName="ft-12"
                 value={search.searchValue}
                 onChange={(e) => {
                     setSearch({

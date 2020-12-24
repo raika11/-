@@ -8,6 +8,16 @@ export const getReporterList = ({ search }) => {
     });
 };
 
+// 전체 기자 목록 조회
+export const getAllReporterList = () => {
+    const search = {
+        usePaging: 'N',
+    };
+    return instance.get(`/api/reporters?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 기자관리 조회
 export const getReporter = (repSeq) => {
     return instance.get(`/api/reporters/${repSeq}`).catch((err) => {

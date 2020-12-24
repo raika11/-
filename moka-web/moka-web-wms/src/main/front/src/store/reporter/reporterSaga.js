@@ -23,7 +23,7 @@ const getReporterListModal = createRequestSaga(reporterAction.GET_REPORTER_LIST_
 /**
  * 전체 기자 목록 조회 (페이징 X)
  */
-const getReporterAllList = createRequestSaga(reporterAction.GET_REPORTER_ALL_LIST, reporterAPI.getReporterList, true);
+const getReporterAllList = createRequestSaga(reporterAction.GET_REPORTER_ALL_LIST, reporterAPI.getAllReporterList);
 
 /**
  * 등록/수정

@@ -9,7 +9,7 @@ const EditThumbTable = (props) => {
 
     return (
         <React.Fragment>
-            <div className="border w-100 custom-scroll mb-2" style={{ height: 346 }}>
+            <div className="border w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll mb-2">
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {loading && <MokaLoader />}
                     {list.map((data) => (
@@ -19,6 +19,7 @@ const EditThumbTable = (props) => {
                             data={{ ...data, id: data.nid, date: moment(data.date).format('YYYY-MM-DD') }}
                             onThumbClick={onThumbClick}
                             onRepClick={onRepClick}
+                            rounded={false}
                         />
                     ))}
                 </div>

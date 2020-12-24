@@ -24,13 +24,14 @@ const EditThumbModal = (props) => {
     const { show, onHide, deskingWorkData } = props;
     // 대표 이미지 props
     const { setFileValue, thumbFileName, setThumbFileName } = props;
+
     const dispatch = useDispatch();
-    const { total, list, storeSearch, loading, photo } = useSelector(
+    const loading = useSelector((store) => store.loading[GET_PHOTO_LIST] || store.loading[GET_ARTICLE_IMAGE_LIST]);
+    const { total, list, storeSearch, photo } = useSelector(
         (store) => ({
             total: store.photoArchive.total,
             list: store.photoArchive.list,
             storeSearch: store.photoArchive.search,
-            loading: store.loading[GET_PHOTO_LIST] || store.loading[GET_ARTICLE_IMAGE_LIST],
             photo: store.photoArchive.photo,
         }),
         shallowEqual,
@@ -203,79 +204,74 @@ const EditThumbModal = (props) => {
     }, [show, thumbFileName]);
 
     return (
-        <>
-            <MokaModal
-                title="대표 이미지 편집"
-                show={show}
-                onHide={handleHide}
-                width={1200}
-                height={860}
-                size="xl"
-                buttons={[
-                    { text: '등록', variant: 'positive', onClick: handleClickSave },
-                    { text: '취소', variant: 'negative', onClick: handleHide },
-                ]}
-                bodyClassName="p-0 overflow-x-hidden custom-scroll"
-                footerClassName="d-flex justify-content-center"
-                draggable
-            >
-                <DndProvider backend={HTML5Backend}>
-                    <MokaCardTabs
-                        height={503}
-                        className="shadow-none w-100"
-                        tabs={[
-                            <div className="px-3 py-2">
-                                <EditThumbSearch search={search} setSearch={setSearch} />
-                                <EditThumbTable
-                                    total={total}
-                                    page={search.page}
-                                    size={search.pageCount}
-                                    loading={loading}
-                                    list={list}
-                                    onChangeSearchOption={handleChangeSearchOption}
-                                    onThumbClick={handleThumbClick}
-                                    onRepClick={handleRepClick}
-                                    onEditClick={handleEditClick}
-                                />
-                            </div>,
-                            <div className="px-3 py-2">
-                                <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} loading={loading} onRepClick={handleRepClick} />
-                            </div>,
-                            <div className="px-3 py-2">
-                                <EditThumbImageInputTable onRepClick={handleRepClick} onEditClick={handleEditClick} />
-                            </div>,
-                        ]}
-                        tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
-                        fill
-                    />
-                    <div
-                        className={clsx('deskthumb-gif-list', 'd-flex', 'justify-content-between', 'overflow-hidden', { collapse: collapse })}
-                        style={{ backgroundColor: 'F4F5F6' }}
-                    >
-                        <div className="deskthumb-main d-flex align-items-center justify-content-center" style={{ width: 202 }}>
-                            {(repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath) && (
-                                <EditThumbCard
-                                    img={repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath}
-                                    onThumbClick={handleThumbClick}
-                                    onDeleteClick={handleDeleteClick}
-                                    onEditClick={handleEditClick}
-                                    represent
-                                />
-                            )}
-                        </div>
-                        <EditThumbDropzone
-                            collapse={collapse}
-                            setCollapse={setCollapse}
-                            onThumbClick={handleThumbClick}
-                            onDeleteClick={handleDeleteClick}
-                            onRepClick={handleRepClick}
-                            onEditClick={handleEditClick}
-                        />
+        <MokaModal
+            title="대표 이미지 편집"
+            show={show}
+            onHide={handleHide}
+            width={1200}
+            height={860}
+            size="xl"
+            buttons={[
+                { text: '등록', variant: 'positive', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleHide },
+            ]}
+            bodyClassName="p-0 overflow-x-hidden custom-scroll"
+            footerClassName="d-flex justify-content-center"
+            draggable
+        >
+            <DndProvider backend={HTML5Backend}>
+                <MokaCardTabs
+                    height={481}
+                    className="shadow-none w-100"
+                    tabs={[
+                        <div className="px-card py-2 d-flex h-100 flex-column">
+                            <EditThumbSearch search={search} setSearch={setSearch} />
+                            <EditThumbTable
+                                total={total}
+                                page={search.page}
+                                size={search.pageCount}
+                                loading={loading}
+                                list={list}
+                                onChangeSearchOption={handleChangeSearchOption}
+                                onThumbClick={handleThumbClick}
+                                onRepClick={handleRepClick}
+                                onEditClick={handleEditClick}
+                            />
+                        </div>,
+                        <div className="px-card py-2 d-flex h-100 flex-column">
+                            <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} loading={loading} onRepClick={handleRepClick} />
+                        </div>,
+                        <div className="px-card py-2 d-flex h-100 flex-column">
+                            <EditThumbImageInputTable onRepClick={handleRepClick} onEditClick={handleEditClick} />
+                        </div>,
+                    ]}
+                    tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
+                    fill
+                />
+                <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
+                    <div className="deskthumb-main d-flex align-items-center justify-content-center" style={{ width: 202 }}>
+                        {(repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath) && (
+                            <EditThumbCard
+                                img={repPhoto.path.thumbPath || repPhoto.path.articleImgPath || repPhoto.path.localImgPath}
+                                onThumbClick={handleThumbClick}
+                                onDeleteClick={handleDeleteClick}
+                                onEditClick={handleEditClick}
+                                represent
+                            />
+                        )}
                     </div>
-                </DndProvider>
-            </MokaModal>
+                    <EditThumbDropzone
+                        collapse={collapse}
+                        setCollapse={setCollapse}
+                        onThumbClick={handleThumbClick}
+                        onDeleteClick={handleDeleteClick}
+                        onRepClick={handleRepClick}
+                        onEditClick={handleEditClick}
+                    />
+                </div>
+            </DndProvider>
             <ThumbViewModal show={showViewModal} onHide={() => setShowViewModal(false)} data={cardData} />
-        </>
+        </MokaModal>
     );
 };
 

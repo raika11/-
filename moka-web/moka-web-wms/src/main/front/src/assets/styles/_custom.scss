@@ -627,7 +627,7 @@ body {
     z-index: 2;
     transition: top 0.25s ease-out;
     background-color: darken($gray-100, 1.5);
-    min-height:502px;
+    min-height: 481px;
 
     .deskthumb-main {
         background-color: $gray-300;
@@ -635,7 +635,7 @@ body {
 
     &.collapse {
         transition: top 0.25s ease-out;
-        top: 502px;
+        top: 481px;
         min-height: 196px;
     }
 }

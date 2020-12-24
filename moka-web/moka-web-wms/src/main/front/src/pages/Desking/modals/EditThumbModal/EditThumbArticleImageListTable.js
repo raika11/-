@@ -36,7 +36,7 @@ const EditThumbArticleImageListTable = (props) => {
     }, []);
 
     return (
-        <div className="border w-100 custom-scroll mb-2" style={{ height: 420 }}>
+        <div className="border rounded w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll">
             <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                 {loading && <MokaLoader />}
                 {imageList.map((data) => (

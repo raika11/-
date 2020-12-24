@@ -53,7 +53,7 @@ const EditThumbImageInput = (props) => {
             acceptedFiles.forEach((f, idx) => {
                 if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
                     const id = moment().format('YYYYMMDDsss') + `_${idx}`;
-                    result.push({ id: id, File: f, preview: URL.createObjectURL(f) });
+                    result.push({ id: id, File: f, preview: URL.createObjectURL(f), type: 'local' });
                 } else {
                     // 이미지 파일이 아닌경우
                     toast.warning('이미지 파일만 등록할 수 있습니다.');
@@ -88,7 +88,7 @@ const EditThumbImageInput = (props) => {
                         <div className="d-flex flex-wrap align-content-start custom-scroll p-1 h-100 overflow-y-scroll is-file-dropzone">
                             {/* 이미지 미리보기 */}
                             {files.map((file) => (
-                                <EditThumbCard ref={cardRef} key={file.id} img={file.preview} data={file} onRepClick={onRepClick} localImg />
+                                <EditThumbCard ref={cardRef} key={file.id} img={file.preview} data={file} type={file.type} onRepClick={onRepClick} />
                             ))}
 
                             <input {...getInputProps()} />

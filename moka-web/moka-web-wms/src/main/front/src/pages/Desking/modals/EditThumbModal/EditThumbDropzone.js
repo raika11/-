@@ -75,10 +75,6 @@ const EditThumbDropzone = (props) => {
         );
     };
 
-    React.useEffect(() => {
-        console.log(addIndex);
-    }, [addIndex]);
-
     return (
         <div className="d-flex flex-column overflow-hidden" style={{ width: 998 }}>
             {/* 버튼 영역 */}

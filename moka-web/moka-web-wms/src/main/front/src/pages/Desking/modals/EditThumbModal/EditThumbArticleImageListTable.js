@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import EditThumbCard from './EditThumbCard';
@@ -18,29 +18,38 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 아티클 기사 이미지 목록 테이블
+ * 기사 내 이미지 목록 테이블
  */
 const EditThumbArticleImageListTable = (props) => {
     const { loading, deskingWorkData, onRepClick } = props;
     const dispatch = useDispatch();
-
     const imageList = useSelector((store) => store.article.imageList);
+    const [renderList, setRenderList] = useState([]);
 
     useEffect(() => {
         dispatch(
             getArticleImageList({
-                totalId: deskingWorkData.contentId,
+                totalId: deskingWorkData?.contentId,
             }),
         );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [deskingWorkData.contentId, dispatch]);
+
+    useEffect(() => {
+        setRenderList(
+            imageList.map((data) => ({
+                ...data,
+                id: data.seqNo,
+                type: 'article',
+            })),
+        );
+    }, [imageList]);
 
     return (
         <div className="border rounded w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll">
             <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                 {loading && <MokaLoader />}
-                {imageList.map((data) => (
-                    <EditThumbCard key={data.seqNo} img={data.compFileUrl} data={{ ...data, id: data.seqNo }} onRepClick={onRepClick} articleImg />
+                {renderList.map((data) => (
+                    <EditThumbCard key={data.seqNo} img={data.compFileUrl} data={data} type={data.type} onRepClick={onRepClick} articleImg />
                 ))}
             </div>
         </div>

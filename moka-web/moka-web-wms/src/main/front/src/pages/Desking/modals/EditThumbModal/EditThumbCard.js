@@ -24,6 +24,10 @@ const propTypes = {
      */
     height: PropTypes.number,
     /**
+     * card 이동 시 실행하는 함수
+     */
+    moveCard: PropTypes.func,
+    /**
      * img 경로
      */
     img: PropTypes.string,
@@ -40,9 +44,9 @@ const propTypes = {
      */
     selected: PropTypes.bool,
     /**
-     * 이미지타입
+     * 데이터타입
      */
-    type: PropTypes.oneOf(['archive', 'article', 'local', 'represent', 'drop']),
+    dataType: PropTypes.oneOf(['archive', 'article', 'local', 'represent', 'drop']),
 };
 
 const defaultProps = {
@@ -51,7 +55,7 @@ const defaultProps = {
     alt: '',
     data: {},
     selected: false,
-    type: 'archive',
+    dataType: 'archive',
 };
 
 export const ItemTypes = {
@@ -64,7 +68,7 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { width, height, data, img, alt, selected, className, dropCard, moveCard, setAddIndex, type } = props;
+    const { width, height, data, img, alt, selected, className, moveCard, setAddIndex, dataType } = props;
     // 대표 사진 설정 props
     const { represent } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
@@ -169,14 +173,14 @@ const EditThumbCard = forwardRef((props, ref) => {
     };
 
     return (
-        <div className={clsx('p-2', className, { dropCard })} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
+        <div className={clsx('p-2', className)} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
             <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })}>
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div
                         ref={wrapperRef}
                         className={clsx('w-100 h-100 d-inline-flex align-items-center justify-content-center position-relative bg-gray600 overflow-hidden', {
-                            'rounded-top': type === 'archive',
-                            rounded: type !== 'archive',
+                            'rounded-top': dataType === 'archive',
+                            rounded: dataType !== 'archive',
                         })}
                         onMouseOver={() => setMouseOver(true)}
                         onMouseLeave={() => {
@@ -203,7 +207,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                             )}
 
                             {/* 테이블 카드의 버튼 */}
-                            {!dropCard && !represent && (
+                            {dataType !== 'drop' && !represent && (
                                 <React.Fragment>
                                     {/* 초상권 주의 */}
                                     {data.atpnPoriatentYn === 'Y' && (
@@ -237,63 +241,63 @@ const EditThumbCard = forwardRef((props, ref) => {
                                     )}
                                 </React.Fragment>
                             )}
+
+                            {/* 드롭된 카드의 버튼 */}
+                            {dataType === 'drop' && !represent && (
+                                <React.Fragment>
+                                    {/* 삭제 */}
+                                    <Button
+                                        variant="searching"
+                                        className="border-0 p-0 moka-table-button"
+                                        style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
+                                        onClick={(e) => onDeleteClick(data, e)}
+                                    >
+                                        <MokaIcon iconName="fas-times" />
+                                    </Button>
+                                    {/* 사진 편집 */}
+                                    <Button
+                                        variant="searching"
+                                        className="border-0 p-0 moka-table-button"
+                                        style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
+                                        onClick={handleEdit}
+                                    >
+                                        <MokaIcon iconName="fas-pencil" />
+                                    </Button>
+                                </React.Fragment>
+                            )}
+
+                            {/* 대표 사진의 버튼 */}
+                            {represent && (
+                                <React.Fragment>
+                                    {/* 삭제 */}
+                                    <Button
+                                        variant="searching"
+                                        className="border-0 p-0 moka-table-button"
+                                        style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
+                                        onClick={(e) => onDeleteClick(data, e)}
+                                    >
+                                        <MokaIcon iconName="fas-times" />
+                                    </Button>
+                                    {/* 사진 편집 */}
+                                    <Button
+                                        variant="searching"
+                                        className="border-0 p-0 moka-table-button"
+                                        style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
+                                        onClick={handleEdit}
+                                    >
+                                        <MokaIcon iconName="fas-pencil" />
+                                    </Button>
+                                    <Button className="ft-12" style={{ position: 'absolute', bottom: '1px', left: '1px' }} as="a">
+                                        대표 이미지
+                                    </Button>
+                                </React.Fragment>
+                            )}
                         </div>
-
-                        {/* 드롭된 카드의 버튼 */}
-                        {dropCard && !represent && (
-                            <div className="w-100 h-100 absolute-top">
-                                {/* 삭제 */}
-                                <Button
-                                    variant="searching"
-                                    className="border-0 p-0 moka-table-button"
-                                    style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                    onClick={(e) => onDeleteClick(data, e)}
-                                >
-                                    <MokaIcon iconName="fas-times" />
-                                </Button>
-                                {/* 사진 편집 */}
-                                <Button
-                                    variant="searching"
-                                    className="border-0 p-0 moka-table-button"
-                                    style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                    onClick={handleEdit}
-                                >
-                                    <MokaIcon iconName="fas-pencil" />
-                                </Button>
-                            </div>
-                        )}
-
-                        {/* 대표 사진의 버튼 */}
-                        {represent && (
-                            <div className="w-100 h-100 absolute-top">
-                                {/* 삭제 */}
-                                <Button
-                                    variant="searching"
-                                    className="border-0 p-0 moka-table-button"
-                                    style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
-                                    onClick={(e) => onDeleteClick(data, e)}
-                                >
-                                    <MokaIcon iconName="fas-times" />
-                                </Button>
-                                {/* 사진 편집 */}
-                                <Button
-                                    variant="searching"
-                                    className="border-0 p-0 moka-table-button"
-                                    style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                    onClick={handleEdit}
-                                >
-                                    <MokaIcon iconName="fas-pencil" />
-                                </Button>
-                                <Button className="ft-12" style={{ position: 'absolute', bottom: '1px', left: '1px' }} as="a">
-                                    대표 이미지
-                                </Button>
-                            </div>
-                        )}
                     </div>
                 </div>
 
                 {/* 아카이브만 텍스트영역 노출 필요없음 */}
-                {type === 'archive' && !represent && (
+                {dataType === 'archive' && !represent && (
                     <div className="p-03 border-top" style={{ minHeight: 48 }}>
                         <div className="d-flex justify-content-between" style={{ height: 20 }}>
                             <p className="pt-05 pl-05 mb-0 flex-fill ft-12 h5 text-truncate">{data.text}</p>

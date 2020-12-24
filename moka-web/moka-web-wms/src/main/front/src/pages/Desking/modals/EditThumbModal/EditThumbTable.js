@@ -17,11 +17,12 @@ const EditThumbTable = (props) => {
         setRenderList(
             archiveList.map((archive) => ({
                 ...archive,
-                type: 'archive',
+                dataType: 'archive',
                 id: archive.nid,
                 date: moment(archive.date).format('YYYY-MM-DD'),
                 imageThumPath: `${PHOTO_ARCHIVE_URL}${archive.imageThumPath}`,
                 imageOnlnPath: `${PHOTO_ARCHIVE_URL}${archive.imageOnlnPath}`,
+                thumbPath: `${PHOTO_ARCHIVE_URL}${archive.imageThumPath}`,
             })),
         );
     }, [PHOTO_ARCHIVE_URL, archiveList]);
@@ -32,7 +33,7 @@ const EditThumbTable = (props) => {
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {loading && <MokaLoader />}
                     {renderList.map((data) => (
-                        <EditThumbCard key={data.nid} img={data.imageThumPath} data={data} onThumbClick={onThumbClick} onRepClick={onRepClick} type={data.type} />
+                        <EditThumbCard key={data.nid} img={data.thumbPath} data={data} onThumbClick={onThumbClick} onRepClick={onRepClick} dataType={data.dataType} />
                     ))}
                 </div>
             </div>

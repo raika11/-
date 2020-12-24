@@ -22,25 +22,12 @@ const EditThumbSearch = (props) => {
     const [period, setPeriod] = useState('all');
     const [startDate, setStartDate] = useState(null);
     const [finishDate, setFinishDate] = useState(null);
-    // const [dataTypeList, setDataTypeList] = useState(null);
-    // const [imageType, setImageType] = useState(null);
     const [timeReady, setTimeReady] = useState(false);
-    // const [searchValue, setSearchValue] = useState('');
     const [error, setError] = useState({});
 
     const handleSearch = () => {
         dispatch(getPhotoList(changeSearchOption(search)));
     };
-
-    // useEffect(() => {
-    //     if (type) {
-    //         dispatch(getPhotoList({ search: ns }));
-    //         dispatch(changeSearchOption(ns));
-    //         setError({ ...error, deskingSourceList: false });
-    //     } else {
-    //         setError({ ...error, deskingSourceList: true });
-    //     }
-    // }, []);
 
     useEffect(() => {
         if (timeReady) {
@@ -123,19 +110,6 @@ const EditThumbSearch = (props) => {
                 />
             </div>
 
-            {/* <div className="mr-2" style={{ width: 150 }}>
-                <EditThumbSelectDropdown
-                value={dataTypeList}
-                onChange={(value) => {
-                    setDataTypeList(value);
-                    if (value !== '') {
-                        setType(true);
-                    }
-                }}
-                isInvalid={error.deskingSourceList}
-                />
-            </div> */}
-
             <div className="mr-2 d-flex align-items-center" style={{ width: 140 }}>
                 <EditThumbSelectDropdown
                     imageValue={search.imageType}
@@ -145,7 +119,6 @@ const EditThumbSearch = (props) => {
                         } else {
                             setSearch({ ...search, imageType: value });
                         }
-                        // setImageType(value);
                         setError({ ...error, imageType: false });
                         if (value !== '') {
                             setTimeReady(true);

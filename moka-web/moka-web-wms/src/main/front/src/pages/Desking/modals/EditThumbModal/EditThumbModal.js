@@ -18,7 +18,7 @@ import util from '@utils/commonUtil';
 
 const defaultValue = {
     id: '',
-    type: 'represent',
+    dataType: 'represent',
     thumbPath: '',
     path: {
         orgPath: '',
@@ -79,16 +79,15 @@ const EditThumbModal = (props) => {
      */
     const handleRepClick = (data, e) => {
         e.stopPropagation();
-        debugger;
 
         if (repPhoto.id === data.id) {
             toast.warning('대표 이미지로 지정된 사진입니다.');
         }
 
-        if (data.type === 'archive') {
+        if (data.dataType === 'archive') {
             setRepPhoto({
                 ...repPhoto,
-                type: 'archive',
+                dataType: 'archive',
                 id: data.id,
                 thumbPath: data.imageThumPath,
                 path: {
@@ -96,20 +95,20 @@ const EditThumbModal = (props) => {
                     imageThumPath: data.imageThumPath,
                 },
             });
-        } else if (data.type === 'article') {
+        } else if (data.dataType === 'article') {
             setRepPhoto({
                 ...repPhoto,
-                type: 'article',
+                dataType: 'article',
                 id: data.id,
                 thumbPath: data.compFileUrl,
                 path: {
                     compFileUrl: data.compFileUrl,
                 },
             });
-        } else if (data.type === 'local') {
+        } else if (data.dataType === 'local') {
             setRepPhoto({
                 ...repPhoto,
-                type: 'local',
+                dataType: 'local',
                 id: data.id,
                 thumbPath: data.preview,
                 path: {
@@ -117,6 +116,8 @@ const EditThumbModal = (props) => {
                 },
                 imgProps: data,
             });
+        } else {
+            setRepPhoto(data);
         }
     };
 
@@ -140,7 +141,7 @@ const EditThumbModal = (props) => {
      * 이미지 편집 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        if (repPhoto.type === 'local') {
+        if (repPhoto.dataType === 'local') {
             (async () => {
                 await fetch(repPhoto.imgProps.preview)
                     .then((r) => r.blob())
@@ -178,6 +179,7 @@ const EditThumbModal = (props) => {
     }, [dispatch, show]);
 
     useEffect(() => {
+        // 이미지 필드 thumbPath로 통일
         if (show && thumbFileName) {
             setRepPhoto({
                 ...defaultValue,
@@ -236,7 +238,7 @@ const EditThumbModal = (props) => {
                         {repPhoto.thumbPath && repPhoto.thumbPath !== '' && (
                             <EditThumbCard
                                 img={repPhoto.thumbPath}
-                                type={repPhoto.type}
+                                dataType={repPhoto.dataType}
                                 onThumbClick={handleThumbClick}
                                 onDeleteClick={handleDeleteClick}
                                 onEditClick={handleEditClick}

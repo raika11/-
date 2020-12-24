@@ -196,4 +196,14 @@ public class TpsConstants {
      */
     public static final String PREVIEW_DT_FORMAT = "yyyyMMddHHmmss";
 
+    // 관리자 게시판 등록/수정
+    public static final String BOARD_REG_DIV_ADMIN = "A";
+    // 일반 사용자 게시판 등록/수정
+    public static final String BOARD_REG_DIV_MEMBER = "M";
+
+    // 공지사항 게시물
+    public static final String BOARD_NOTICE_CONTENT = "9";
+    // 일반 게시물
+    public static final String BOARD_GENERAL_CONTENT = "1";
+
 }

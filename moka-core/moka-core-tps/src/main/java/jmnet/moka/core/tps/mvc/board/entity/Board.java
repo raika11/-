@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.board.entity;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -191,7 +191,7 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @NotFound(action = NotFoundAction.IGNORE)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE)
     @OrderBy("seqNo")
-    private Set<BoardAttach> attaches;
+    private List<BoardAttach> attaches;
 
     /**
      * JPOD 채널 정보

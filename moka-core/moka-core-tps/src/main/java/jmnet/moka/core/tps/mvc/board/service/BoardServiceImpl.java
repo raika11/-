@@ -2,7 +2,6 @@ package jmnet.moka.core.tps.mvc.board.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
@@ -12,6 +11,7 @@ import jmnet.moka.core.tps.mvc.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -52,17 +52,25 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Optional<Board> findBoardBySeq(Long boardSeq) {
-        return boardRepository.findByBoardSeqAndDelYn(boardSeq, MokaConstants.NO);
+        return boardRepository.findByBoardSeq(boardSeq);
     }
 
     @Override
+    @Transactional
     public Board insertBoard(Board board) {
-        return boardRepository.save(board);
+        return boardRepository.saveAndFlush(board);
     }
 
     @Override
+    @Transactional
     public Board updateBoard(Board board) {
         return boardRepository.save(board);
+    }
+
+    @Override
+    @Transactional
+    public long updateBoardParentSeq(Long boardSeq, Long parentBoardSeq) {
+        return boardRepository.updateParentBoardSeq(boardSeq, parentBoardSeq);
     }
 
     @Override
@@ -96,10 +104,10 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void deleteAllBoardAttach(Set<BoardAttach> boardAttachSet) {
+    public void deleteAllBoardAttach(List<BoardAttach> boardAttachSet) {
         if (boardAttachSet != null && boardAttachSet.size() > 0) {
             boardAttachSet.forEach(boardAttach -> {
-                if (boardAttach != null) {
+                if (boardAttach != null && boardAttach.getSeqNo() > 0) {
                     boardAttachRepository.deleteById(boardAttach.getSeqNo());
                 }
             });

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -14,14 +13,17 @@ import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.HttpHelper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
@@ -33,6 +35,8 @@ import jmnet.moka.core.tps.mvc.board.dto.BoardSaveDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
+import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
+import jmnet.moka.core.tps.mvc.board.service.BoardInfoService;
 import jmnet.moka.core.tps.mvc.board.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -46,6 +50,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -68,15 +73,21 @@ public class BoardRestController extends AbstractCommonController {
 
     private final BoardService boardService;
 
+    private final BoardInfoService boardInfoService;
+
     private final FtpHelper ftpHelper;
 
+    private final MokaCrypt mokaCrypt;
+
     public BoardRestController(BoardService boardService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger,
-            FtpHelper ftpHelper) {
+            BoardInfoService boardInfoService, FtpHelper ftpHelper, MokaCrypt mokaCrypt) {
         this.boardService = boardService;
+        this.boardInfoService = boardInfoService;
         this.ftpHelper = ftpHelper;
         this.modelMapper = modelMapper;
         this.messageByLocale = messageByLocale;
         this.tpsLogger = tpsLogger;
+        this.mokaCrypt = mokaCrypt;
     }
 
     /**
@@ -120,13 +131,18 @@ public class BoardRestController extends AbstractCommonController {
     @GetMapping("/{boardId}/contents/{boardSeq}")
     public ResponseEntity<?> getBoard(
             @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Min(value = 1, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq)
-            throws NoDataException {
+            @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Min(value = 1, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
+            @ApiParam("게시물 비밀번호") @RequestParam(value = "pwd", required = false) String pwd)
+            throws NoDataException, InvalidDataException {
 
         String message = msg("tps.common.error.no-data");
         Board board = boardService
                 .findBoardBySeq(boardSeq)
                 .orElseThrow(() -> new NoDataException(message));
+
+        if (!matchedPassword(board, pwd)) {
+            throw new InvalidDataException(msg("tps.board.error.pwd-unmatched"));
+        }
 
         BoardDTO dto = modelMapper.map(board, BoardDTO.class);
 
@@ -148,25 +164,36 @@ public class BoardRestController extends AbstractCommonController {
     @PostMapping("/{boardId}/contents")
     public ResponseEntity<?> postBoard(
             @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @Valid BoardSaveDTO boardDTO, @ApiParam(hidden = true) @NotNull Principal principal) {
+            @Valid BoardSaveDTO boardDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+            throws InvalidDataException, NoDataException {
 
         // BoardDTO -> Board 변환
         Board board = modelMapper.map(boardDTO, Board.class);
         board.setBoardId(boardId);
         board.setParentBoardSeq(0L);
         board.setDepth(0);
+        setPassword(board);
         setRegisterInfo(board, principal);
 
 
         Board returnValue = boardService.insertBoard(board);
         returnValue.setParentBoardSeq(returnValue.getBoardSeq());
-        returnValue = boardService.updateBoard(returnValue);
+        boardService.updateBoardParentSeq(returnValue.getBoardSeq(), returnValue.getBoardSeq());
 
-        saveAttachFiles(returnValue, boardDTO.getAttaches());
+        BoardInfo boardInfo = boardInfoService
+                .findBoardInfoById(boardId)
+                .orElseThrow(() -> new NoDataException(msg("tps.board-info.error.not-exist")));
+        returnValue.setBoardInfo(boardInfo);
+
+        String attachMessage = saveAttachFiles(returnValue, boardDTO.getAttaches());
 
         // 결과리턴
         BoardDTO dto = modelMapper.map(returnValue, BoardDTO.class);
-        ResultDTO<BoardDTO> resultDto = new ResultDTO<>(dto);
+        String successMsg = msg("tps.board.success.save");
+        if (attachMessage.length() > 0) {
+            successMsg += "\n" + attachMessage;
+        }
+        ResultDTO<BoardDTO> resultDto = new ResultDTO<>(dto, successMsg);
 
         // 액션 로그에 성공 로그 출력
         tpsLogger.success(ActionType.INSERT);
@@ -197,6 +224,7 @@ public class BoardRestController extends AbstractCommonController {
         board.setBoardId(boardId);
         board.setParentBoardSeq(parentBoardSeq);
         setRegisterInfo(board, principal);
+        setPassword(board);
         try {
             if (board.getParentBoardSeq() == null || board.getParentBoardSeq() == 0) {
                 throw new InvalidDataException(msg("tps.board.error.min.parentBoardSeq"));
@@ -250,7 +278,10 @@ public class BoardRestController extends AbstractCommonController {
     }
 
     private ResponseEntity<?> processUpdateEntity(Board newBoard, Board oldBoard, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
-            throws Exception {
+            throws InvalidDataException {
+        if (!matchedPassword(oldBoard, newBoard.getPwd())) {
+            throw new InvalidDataException(msg("tps.board.error.pwd-unmatched"));
+        }
         newBoard.setRecomCnt(oldBoard.getRecomCnt());
         newBoard.setViewCnt(oldBoard.getViewCnt());
         newBoard.setDeclareCnt(oldBoard.getDeclareCnt());
@@ -258,6 +289,9 @@ public class BoardRestController extends AbstractCommonController {
         newBoard.setRegName(oldBoard.getRegName());
         newBoard.setRegIp(oldBoard.getRegIp());
         newBoard.setAttaches(oldBoard.getAttaches());
+        newBoard.setBoardInfo(oldBoard.getBoardInfo());
+        newBoard.setModDiv(TpsConstants.BOARD_REG_DIV_ADMIN);
+        setPassword(newBoard);
         return processBoardContents(newBoard, boardAttachSaveDTOSet);
     }
 
@@ -321,28 +355,34 @@ public class BoardRestController extends AbstractCommonController {
      * @throws Exception 공통 에러 처리
      */
     private ResponseEntity<?> processBoardContents(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
-            throws Exception {
+            throws InvalidDataException {
         ActionType actionType = board.getBoardSeq() != null && board.getBoardSeq() > 0 ? ActionType.UPDATE : ActionType.INSERT;
         try {
             // insert or update
             Board returnValue = actionType == ActionType.UPDATE ? boardService.updateBoard(board) : boardService.insertBoard(board);
 
-            saveAttachFiles(returnValue, boardAttachSaveDTOSet);
+            String attachMessage = saveAttachFiles(returnValue, boardAttachSaveDTOSet);
 
             // 결과리턴
             BoardDTO dto = modelMapper.map(returnValue, BoardDTO.class);
-            ResultDTO<BoardDTO> resultDto = new ResultDTO<>(dto);
+
+            String successMsg = msg("tps.board.success.save");
+            if (attachMessage.length() > 0) {
+                successMsg += "\n" + attachMessage;
+            }
+
+            ResultDTO<BoardDTO> resultDto = new ResultDTO<>(dto, successMsg);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(actionType);
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
-        } catch (Exception e) {
+        } catch (InvalidDataException e) {
             log.error("[FAIL TO " + actionType.code() + " BOARD]", e);
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(actionType, e);
-            throw new Exception(msg("tps.board.error.save"), e);
+            throw e;
         }
     }
 
@@ -528,11 +568,34 @@ public class BoardRestController extends AbstractCommonController {
     private void setRegisterInfo(Board board, Principal principal) {
         UserDTO userDTO = (UserDTO) ((UsernamePasswordAuthenticationToken) principal).getDetails();
         board.setRegName(userDTO.getUserName());
+        board.setRegDiv(TpsConstants.BOARD_REG_DIV_ADMIN);
         board.setRegIp(HttpHelper.getRemoteAddr());
     }
 
-    private void saveAttachFiles(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet) {
-        Set<BoardAttach> attaches = board.getAttaches();
+    private String saveAttachFiles(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
+            throws InvalidDataException {
+        List<BoardAttach> attaches = board.getAttaches();
+
+        // 파일 첨부 가능 여부 체크
+        if (board
+                .getBoardInfo()
+                .getFileYn()
+                .equals(MokaConstants.NO)) {
+            throw new InvalidDataException(msg("tps.board.error.file-attach-disable"));
+        }
+
+        // 최대 파일 건수 체크
+        if (board
+                .getBoardInfo()
+                .getAllowFileCnt()
+                .compareTo(boardAttachSaveDTOSet.size()) < 0) {
+            throw new InvalidDataException(msg("tps.board.error.file-limit-count", board
+                    .getBoardInfo()
+                    .getAllowFileCnt()));
+        }
+
+        StringBuilder message = new StringBuilder();
+
         if (boardAttachSaveDTOSet != null && boardAttachSaveDTOSet.size() > 0) {
             boardAttachSaveDTOSet.forEach(boardAttachSaveDTO -> {
                 try {
@@ -540,28 +603,67 @@ public class BoardRestController extends AbstractCommonController {
                         String ext = McpFile.getExtension(boardAttachSaveDTO
                                 .getAttachFile()
                                 .getOriginalFilename());
-                        String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM");
-                        String saveFilePath = "/board/" + board.getBoardId() + "/" + yearMonth;
-                        String filename = UUIDGenerator.uuid() + "." + ext;
-                        ftpHelper.upload(FtpHelper.PDS, filename, boardAttachSaveDTO
-                                .getAttachFile()
-                                .getInputStream(), saveFilePath);
 
-                        if (boardAttachSaveDTO.getSeqNo() != null && boardAttachSaveDTO.getSeqNo() > 0) {
-                            attaches
-                                    .stream()
-                                    .filter(attach -> attach
+                        // 개별 파일 확장자 검사
+                        if (!board
+                                .getBoardInfo()
+                                .getAllowFileExt()
+                                .contains(ext)) {
+                            message.append(message.length() > 0 ? "\n" : "");
+                            message.append(msg("tps.board.error.file-ext", boardAttachSaveDTO
+                                    .getAttachFile()
+                                    .getOriginalFilename()));
+                        } else {
+                            // 개별 파일의 사이즈 검사
+                            if (board
+                                    .getBoardInfo()
+                                    .getAllowFileSize()
+                                    .compareTo((int) (boardAttachSaveDTO
+                                            .getAttachFile()
+                                            .getSize() / (1024 * 1024))) < 0) {
+                                message.append(message.length() > 0 ? "\n" : "");
+                                message.append(msg("tps.board.error.file-size", boardAttachSaveDTO
+                                        .getAttachFile()
+                                        .getOriginalFilename(), board
+                                        .getBoardInfo()
+                                        .getAllowFileSize()));
+                            } else {
+                                String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM");
+                                String saveFilePath = "/board/" + board.getBoardId() + "/" + yearMonth;
+                                String filename = UUIDGenerator.uuid() + "." + ext;
+                                ftpHelper.upload(FtpHelper.PDS, filename, boardAttachSaveDTO
+                                        .getAttachFile()
+                                        .getInputStream(), saveFilePath);
+
+                                if (boardAttachSaveDTO.getSeqNo() != null && boardAttachSaveDTO.getSeqNo() > 0) {
+                                    attaches
+                                            .stream()
+                                            .filter(attach -> attach
+                                                    .getSeqNo()
+                                                    .equals(boardAttachSaveDTO.getSeqNo()))
+                                            .findFirst()
+                                            .ifPresentOrElse(boardAttach -> {
+                                                boardAttach.setFileName(filename);
+                                                boardAttach.setFilePath(saveFilePath);
+                                                boardAttach.setOrgFileName(boardAttachSaveDTO
+                                                        .getAttachFile()
+                                                        .getOriginalFilename());
+                                                boardService.updateBoardAttach(boardAttach);
+                                            }, () -> boardService.insertBoardAttach(BoardAttach
+                                                    .builder()
+                                                    .boardId(board.getBoardId())
+                                                    .boardSeq(board.getBoardSeq())
+                                                    .fileName(filename)
+                                                    .filePath(saveFilePath)
+                                                    .orgFileName(boardAttachSaveDTO
+                                                            .getAttachFile()
+                                                            .getOriginalFilename())
+                                                    .build()));
+                                    attaches.removeIf(boardAttach -> boardAttachSaveDTO
                                             .getSeqNo()
-                                            .equals(boardAttachSaveDTO.getSeqNo()))
-                                    .findFirst()
-                                    .ifPresentOrElse(boardAttach -> {
-                                        boardAttach.setFileName(filename);
-                                        boardAttach.setFilePath(saveFilePath);
-                                        boardAttach.setOrgFileName(boardAttachSaveDTO
-                                                .getAttachFile()
-                                                .getOriginalFilename());
-                                        boardService.updateBoardAttach(boardAttach);
-                                    }, () -> boardService.insertBoardAttach(BoardAttach
+                                            .equals(boardAttach.getSeqNo()));
+                                } else {
+                                    boardService.insertBoardAttach(BoardAttach
                                             .builder()
                                             .boardId(board.getBoardId())
                                             .boardSeq(board.getBoardSeq())
@@ -570,21 +672,9 @@ public class BoardRestController extends AbstractCommonController {
                                             .orgFileName(boardAttachSaveDTO
                                                     .getAttachFile()
                                                     .getOriginalFilename())
-                                            .build()));
-                            attaches.removeIf(boardAttach -> boardAttachSaveDTO
-                                    .getSeqNo()
-                                    .equals(boardAttach.getSeqNo()));
-                        } else {
-                            boardService.insertBoardAttach(BoardAttach
-                                    .builder()
-                                    .boardId(board.getBoardId())
-                                    .boardSeq(board.getBoardSeq())
-                                    .fileName(filename)
-                                    .filePath(saveFilePath)
-                                    .orgFileName(boardAttachSaveDTO
-                                            .getAttachFile()
-                                            .getOriginalFilename())
-                                    .build());
+                                            .build());
+                                }
+                            }
                         }
                     } else {
                         attaches.removeIf(boardAttach -> boardAttachSaveDTO
@@ -600,6 +690,34 @@ public class BoardRestController extends AbstractCommonController {
                 boardService.deleteAllBoardAttach(attaches);
             }
         }
+
+        return message.toString();
+    }
+
+    private void setPassword(Board board) {
+        if (McpString.isNotEmpty(board.getPwd())) {
+            try {
+                board.setPwd(mokaCrypt.encrypt(board.getPwd()));
+            } catch (Exception ex) {
+                log.error("[FAIL TO BOARD PASSWORD] password: {} {}", board.getPwd(), ex.getMessage());
+            }
+        }
+    }
+
+    private boolean matchedPassword(Board board, String pwd) {
+        if (McpString.isNotEmpty(board.getPwd())) {
+            if (McpString.isEmpty(pwd)) {
+                return false;
+            }
+
+            try {
+                return pwd.equals(mokaCrypt.decrypt(board.getPwd()));
+            } catch (Exception ex) {
+                log.error("[FAIL TO BOARD PASSWORD] password: {} {}", board.getPwd(), ex.getMessage());
+                return false;
+            }
+        }
+        return true;
     }
 
 

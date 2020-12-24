@@ -2,7 +2,6 @@ package jmnet.moka.core.tps.mvc.board.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
@@ -65,6 +64,15 @@ public interface BoardService {
     Board updateBoard(Board board);
 
     /**
+     * 부모 게시물 일련번호 변경
+     *
+     * @param boardSeq       게시물 일련번호
+     * @param parentBoardSeq 부모 게시물 일련번호
+     * @return 성공 여부
+     */
+    long updateBoardParentSeq(Long boardSeq, Long parentBoardSeq);
+
+    /**
      * 게시물 삭제
      *
      * @param board 게시물 정보
@@ -123,7 +131,7 @@ public interface BoardService {
      *
      * @param boardAttachSet 첨부파일 Set
      */
-    void deleteAllBoardAttach(Set<BoardAttach> boardAttachSet);
+    void deleteAllBoardAttach(List<BoardAttach> boardAttachSet);
 
     /**
      * 게시판 첫번째 글을 조회한다.

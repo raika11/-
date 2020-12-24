@@ -11,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -170,7 +171,7 @@ public class BoardDTO {
     @ApiModelProperty("1:일반 9:공지")
     @Builder.Default
     @Pattern(regexp = "[1|9]{1}$", message = "{tps.board.error.pattern.ordNo}")
-    private String ordNo = "1";
+    private String ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
     /**
      * 내용

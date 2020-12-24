@@ -3,11 +3,13 @@ package jmnet.moka.core.tps.mvc.board.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.QBoard;
+import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -91,6 +93,19 @@ public class BoardRepositorySupportImpl extends QuerydslRepositorySupport implem
 
     @Override
     @Transactional
+    public long updateParentBoardSeq(Long boardSeq, Long parentBoardSeq) {
+        QBoard qBoard = QBoard.board;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qBoard.boardSeq.eq(boardSeq));
+        return update(qBoard)
+                .where(builder)
+                .set(qBoard.parentBoardSeq, parentBoardSeq)
+                .execute();
+    }
+
+    @Override
+    @Transactional
     public long updateViewCnt(Long boardSeq) {
         QBoard qBoard = QBoard.board;
 
@@ -139,6 +154,25 @@ public class BoardRepositorySupportImpl extends QuerydslRepositorySupport implem
                 .where(builder)
                 .set(qBoard.declareCnt, qBoard.declareCnt.add(add ? 1 : -1))
                 .execute();
+    }
+
+    @Override
+    public Optional<Board> findByBoardSeq(Long boardSeq) {
+        QBoard qBoard = QBoard.board;
+        QBoardInfo qBoardInfo = QBoardInfo.boardInfo;
+
+        JPQLQuery<Board> query = from(qBoard);
+
+        query.where(qBoard.boardSeq
+                .eq(boardSeq)
+                .and(qBoard.delYn.eq(MokaConstants.NO)));
+
+        Board board = query
+                .innerJoin(qBoard.boardInfo, qBoardInfo)
+                .fetchJoin()
+                .fetchFirst();
+
+        return Optional.ofNullable(board);
     }
 
 

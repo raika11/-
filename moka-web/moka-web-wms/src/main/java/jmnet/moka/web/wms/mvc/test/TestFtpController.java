@@ -50,7 +50,8 @@ public class TestFtpController {
     public ResponseEntity<?> pdsUpload(@RequestParam(value = "file") MultipartFile file)
             throws InvalidDataException, Exception {
 
-        boolean success = ftpHelper.upload(FtpHelper.PDS, file.getOriginalFilename(), file.getInputStream());
+        boolean success =
+                ftpHelper.upload(FtpHelper.PDS, file.getOriginalFilename(), file.getInputStream(), "/news/component/htmlphoto_mmdata/202008/21");
 
         return new ResponseEntity<>(success, HttpStatus.OK);
 

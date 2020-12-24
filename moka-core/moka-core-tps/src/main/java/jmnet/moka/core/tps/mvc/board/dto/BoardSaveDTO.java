@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.common.TpsConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,7 +40,7 @@ public class BoardSaveDTO {
      */
     @ApiModelProperty("채널ID(예:JPOD 채널SEQ)")
     @Min(value = 0, message = "{tps.board.error.min.channelId}")
-    private Long channelId = 0l;
+    private Long channelId = 0L;
 
     /**
      * 말머리1
@@ -67,7 +68,7 @@ public class BoardSaveDTO {
     /**
      * 뎁스
      */
-    @ApiModelProperty(hidden = true, required = true)
+    @ApiModelProperty(value = "깊이", required = true)
     @Builder.Default
     private Integer depth = 0;
 
@@ -83,8 +84,8 @@ public class BoardSaveDTO {
      */
     @ApiModelProperty(value = "1:일반 9:공지", required = true)
     @Builder.Default
-    @Pattern(regexp = "[1|9]{1}$", message = "{tps.board.error.pattern.ordNo}")
-    private String ordNo = "1";
+    @Pattern(regexp = "[1|9]$", message = "{tps.board.error.pattern.ordNo}")
+    private String ordNo = TpsConstants.BOARD_GENERAL_CONTENT;
 
 
     /**

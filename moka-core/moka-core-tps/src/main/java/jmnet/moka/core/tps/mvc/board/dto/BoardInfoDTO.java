@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.BoardTypeCode;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -73,14 +75,14 @@ public class BoardInfoDTO {
      * 말머리1
      */
     @ApiModelProperty("말머리1")
-    @Max(value = 100, message = "{tps.board-info.error.size.titlePrefix1}")
+    @Size(max = 100, message = "{tps.board-info.error.size.titlePrefix1}")
     private String titlePrefix1;
 
     /**
      * 말머리2
      */
     @ApiModelProperty("말머리2")
-    @Max(value = 100, message = "{tps.board-info.error.size.titlePrefix2}")
+    @Size(max = 100, message = "{tps.board-info.error.size.titlePrefix2}")
     private String titlePrefix2;
 
     /**
@@ -225,4 +227,7 @@ public class BoardInfoDTO {
     @ApiModelProperty("제외컬럼(,)로 연결")
     @Builder.Default
     private String exceptItem = "ADDR";
+
+    @DTODateTimeFormat
+    private Date regDt;
 }

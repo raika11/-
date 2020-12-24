@@ -1,15 +1,15 @@
 export default [
     {
-        headerName: 'cp 코드',
+        headerName: '매체 코드',
         field: 'sourceCode',
         cellStyle: { fontSize: '12px' },
-        width: 110,
+        width: 70,
     },
     {
-        headerName: 'cp명',
+        headerName: '매체(cp)명',
         field: 'sourceName',
         cellStyle: { fontSize: '12px' },
-        width: 120,
+        width: 100,
     },
     {
         headerName: 'XML경로',
@@ -22,30 +22,30 @@ export default [
         headerName: '편집여부',
         field: 'artEditYn',
         cellStyle: { fontSize: '12px' },
-        width: 100,
+        width: 70,
     },
     {
         headerName: 'XML포맷 출처',
         field: 'joinsXmlFormat',
         cellStyle: { fontSize: '12px' },
-        width: 120,
+        width: 100,
     },
     {
         headerName: '이미지',
         field: 'receiveImgYn',
         cellStyle: { fontSize: '12px' },
-        width: 90,
+        width: 70,
     },
     {
         headerName: '사용여부',
         field: 'joongangUse',
         cellStyle: { fontSize: '12px' },
-        width: 100,
+        width: 70,
     },
     {
         headerName: '등록일시',
         field: 'regDt',
         cellStyle: { fontSize: '12px' },
-        width: 160,
+        flex: 1,
     },
 ];

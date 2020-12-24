@@ -2,13 +2,11 @@ import React from 'react';
 import Search from './SpecialSearch';
 import AgGrid from './SpecialAgGrid';
 
-const SpecialList = (props) => {
-    const { onRowClicked } = props;
-
+const SpecialList = () => {
     return (
         <>
             <Search />
-            <AgGrid onRowClicked={onRowClicked} />
+            <AgGrid />
         </>
     );
 };

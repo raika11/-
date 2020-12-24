@@ -13,7 +13,7 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        sort: 'sourceCode,desc',
+        sort: 'sourceCode,asc',
         searchType: 'sourceName',
         keyword: '',
     },

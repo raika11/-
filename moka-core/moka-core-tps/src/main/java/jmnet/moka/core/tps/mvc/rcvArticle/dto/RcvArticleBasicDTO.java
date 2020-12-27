@@ -20,6 +20,7 @@ import javax.persistence.Column;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSimpleDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleReporterVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -176,5 +177,15 @@ public class RcvArticleBasicDTO implements Serializable {
     /**
      * 분류코드 목록
      */
-    private List<String> codeList = new ArrayList<>();
+    private List<String> categoryList = new ArrayList<>();
+
+    /**
+     * 기자 목록
+     */
+    private List<RcvArticleReporterVO> reporterList = new ArrayList<>();
+
+    /**
+     * 추천태그 목록
+     */
+    private List<String> tagList = new ArrayList<>();
 }

@@ -4,8 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.rcvArticle.repository;
 
-import java.util.List;
-
 /**
  * Description: 설명
  *
@@ -14,12 +12,12 @@ import java.util.List;
  */
 public interface RcvArticleCodeRepositorySupport {
 
-    /**
-     * 수신기사키에 해당하는 코드목록 조회
-     *
-     * @param rid        수신기사키
-     * @param sourceCode 수신기사 매체코드
-     * @return 코드목록
-     */
-    List<String> findByRid(Long rid, String sourceCode);
+    //    /**
+    //     * 수신기사키에 해당하는 코드목록 조회
+    //     *
+    //     * @param rid        수신기사키
+    //     * @param sourceCode 수신기사 매체코드
+    //     * @return 코드목록
+    //     */
+    //    List<String> findByRid(Long rid, String sourceCode);
 }

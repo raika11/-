@@ -1,11 +1,14 @@
 package jmnet.moka.core.tps.mvc.reporter.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import org.apache.ibatis.type.Alias;
-
-import javax.persistence.Column;
 import java.io.Serializable;
+import javax.persistence.Column;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
 @Alias("ReporterVO")
 @NoArgsConstructor

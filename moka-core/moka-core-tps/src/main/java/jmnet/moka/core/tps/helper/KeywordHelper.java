@@ -18,7 +18,6 @@ import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -40,13 +39,13 @@ public class KeywordHelper {
             throws IOException {
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.add(MokaConstants.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=UTF-8");
         String requestUrl = keywordUrl;
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         params.add("title", title);
         params.add("subTitle", subTitle);
         params.add("content", content);
-        params.add("term", MokaConstants.YES);
+        params.add("term_yn", MokaConstants.YES);   // 각각 url encode해야되나?
         ResponseEntity<String> responseEntity = restTemplateHelper.post(requestUrl, params, headers);
 
         String response = responseEntity.getBody();

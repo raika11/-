@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaSearchInput } from '@/components';
 import { initialState, changeSearchOption, getSourceList } from '@store/articleSource';
@@ -9,6 +10,7 @@ import { initialState, changeSearchOption, getSourceList } from '@store/articleS
  */
 const ArticleSourceSearch = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const storeSearch = useSelector((store) => store.articleSource.search);
 
     // local state
@@ -37,6 +39,13 @@ const ArticleSourceSearch = () => {
         );
     };
 
+    /**
+     * 신규 등록 버튼
+     */
+    const handleAddClick = () => {
+        history.push('/article-sources/add');
+    };
+
     useEffect(() => {
         // 스토어의 search 객체 변경 시 로컬 state에 셋팅
         setSearch(storeSearch);
@@ -47,9 +56,24 @@ const ArticleSourceSearch = () => {
     }, [dispatch]);
 
     return (
-        <div className="mb-2 d-flex">
-            <MokaSearchInput className="mr-2" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
-            <Button>초기화</Button>
+        <div className="mb-2 d-flex align-items-center justify-content-between">
+            <div className="d-flex">
+                <MokaSearchInput
+                    className="mr-2"
+                    inputClassName="ft-12"
+                    buttonClassName="ft-12"
+                    value={search.keyword}
+                    name="keyword"
+                    onChange={handleChangeValue}
+                    onSearch={handleSearch}
+                />
+                <Button className="ft-12" variant="outline-table-btn">
+                    초기화
+                </Button>
+            </div>
+            <Button className="ft-12" variant="outline-table-btn" onClick={handleAddClick}>
+                신규 등록
+            </Button>
         </div>
     );
 };

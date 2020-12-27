@@ -23,7 +23,9 @@ export const clearSearch = createAction(CLEAR_SEARCH);
  * 검색조건 변경
  */
 export const CHANGE_SEARCH_OPTION = 'articleSource/CHANGE_SEARCH_OPTION';
+export const CHANGE_MODAL_SEARCH_OPTION = 'articleSource/CHANGE_MODAL_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
+export const changeModalSearchOption = createAction(CHANGE_MODAL_SEARCH_OPTION, (mappingSearch) => mappingSearch);
 
 // invalid
 export const CHANGE_INVALID_LIST = 'articleSource/CHANGE_INVALID_LIST';
@@ -51,11 +53,11 @@ export const getArticleSource = createAction(GET_ARTICLE_SOURCE, ({ sourceCode }
 
 // 매체 등록, 수정
 export const SAVE_ARTICLE_SOURCE = 'articleSource/SAVE_ARTICLE_SOURCE';
-export const saveArticleSource = createAction(SAVE_ARTICLE_SOURCE, ({ sourceCode, callback }) => ({ sourceCode, callback }));
+export const saveArticleSource = createAction(SAVE_ARTICLE_SOURCE, ({ source, callback }) => ({ source, callback }));
 
-// // 매핑 목록조회
-// export const [GET_MAPPING_SOURCE_LIST, GET_MAPPING_SOURCE_LIST_SUCCESS, GET_MAPPING_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_MAPPING_SOURCE');
-// export const putMappingSourceList = createAction(GET_MAPPING_SOURCE_LIST, () => ({}));
+// 매핑 목록조회
+export const [GET_MAPPING_SOURCE_LIST, GET_MAPPING_SOURCE_LIST_SUCCESS, GET_MAPPING_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_MAPPING_SOURCE');
+export const getMappingSourceList = createAction(GET_MAPPING_SOURCE_LIST, ({ sourceCode }) => ({ sourceCode }));
 
 // // 매체코드 중복 체크
 // export const CODE_DUPLICATE_CHECK = 'articleSource/CODE_DUPLICATE_CHECK';

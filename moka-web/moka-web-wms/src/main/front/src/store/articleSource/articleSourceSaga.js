@@ -37,10 +37,10 @@ function* saveArticleSource({ payload }) {
 
     try {
         // 등록/수정 분기
-        if (source.sourceCode) {
-            response = yield call(api.putArticleSource, { source });
-        } else {
+        if (source.add) {
             response = yield call(api.postArticleSource, { source });
+        } else {
+            response = yield call(api.putArticleSource, { source });
         }
         callbackData = response.data;
 
@@ -76,6 +76,11 @@ function* saveArticleSource({ payload }) {
 }
 
 /**
+ * 매핑 목록 조회
+ */
+const getMappingList = createRequestSaga(act.GET_MAPPING_SOURCE_LIST, api.getMappingList);
+
+/**
  * 벌크 매체 목록 조회
  */
 const getBulkSourceList = createRequestSaga(act.GET_BLUK_SOURCE_LIST, api.getBulkSourceList);
@@ -86,5 +91,6 @@ export default function* saga() {
     yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
     yield takeLatest(act.GET_ARTICLE_SOURCE, getArticleSource);
     yield takeLatest(act.SAVE_ARTICLE_SOURCE, saveArticleSource);
+    yield takeLatest(act.GET_MAPPING_SOURCE_LIST, getMappingList);
     yield takeLatest(act.GET_BLUK_SOURCE_LIST, getBulkSourceList);
 }

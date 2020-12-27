@@ -50,3 +50,10 @@ export const postArticleSource = ({ source }) => {
         throw err;
     });
 };
+
+// 매핑 목록조회
+export const getMappingList = ({ sourceCode, mappingSearch }) => {
+    return instance.get(`/api/article-sources/${sourceCode}/codes?${qs.stringify(mappingSearch)}`).catch((err) => {
+        throw err;
+    });
+};

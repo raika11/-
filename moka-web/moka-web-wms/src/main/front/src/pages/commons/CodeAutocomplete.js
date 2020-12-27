@@ -15,6 +15,10 @@ const propTypes = {
      */
     labelWidth: PropTypes.number,
     /**
+     * labelClassName
+     */
+    labelClassName: PropTypes.string,
+    /**
      * className
      */
     className: PropTypes.string,
@@ -57,7 +61,7 @@ const defaultProps = {
  * 기사 분류(masterCode) 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType } = props;
+    const { label, labelWidth, labelClassName, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
     const { storeSearch, codeList } = useSelector((store) => ({
@@ -180,6 +184,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 as="autocomplete"
                 id="code-auto-complete"
                 labelWidth={labelWidth}
+                labelClassName={labelClassName}
                 className={className}
                 value={defaultValue}
                 placeholder={placeholder}

@@ -3,8 +3,7 @@ import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@/components';
-import toast from '@utils/toastUtil';
-import { clearStore, saveArticleSource } from '@store/articleSource';
+import { clearStore } from '@store/articleSource';
 import ArticleSourceEdit from './ArticleSourceEdit';
 
 const ArticleSourceList = React.lazy(() => import('./ArticleSourceList'));
@@ -16,28 +15,37 @@ const ArticleSourcePage = (props) => {
 
     // local state
     const [footerBtns, setFooterBtns] = useState([]);
+    const [clickMapping, setClickMapping] = useState(false);
+    const [clickSave, setClickSave] = useState(false);
 
     /**
-     * 저장
+     * 코드 매핑
      */
-    const handleClickSave = useCallback(
-        (temp) => {
-            dispatch(
-                saveArticleSource({
-                    source: temp,
-                    callback: ({ header, body }) => {
-                        if (header.success) {
-                            toast.success(header.message);
-                            history.push(`${match.url}/${body.souceCode}`);
-                        } else {
-                            toast.fail(header.message);
-                        }
-                    },
-                }),
-            );
-        },
-        [dispatch, history, match.url],
-    );
+    // const handleClickMapping = () => {
+    //     setShowModal(true);
+    // };
+
+    /**
+     * 등록, 수정
+     */
+    // const handleClickSave = useCallback(
+    //     (temp) => {
+    //         dispatch(
+    //             saveArticleSource({
+    //                 source: temp,
+    //                 callback: ({ header, body }) => {
+    //                     if (header.success) {
+    //                         toast.success(header.message);
+    //                         history.push(`${match.url}/${body.souceCode}`);
+    //                     } else {
+    //                         toast.fail(header.message);
+    //                     }
+    //                 },
+    //             }),
+    //         );
+    //     },
+    //     [dispatch, history, match.url],
+    // );
 
     useEffect(() => {
         return () => {
@@ -48,8 +56,8 @@ const ArticleSourcePage = (props) => {
 
     useEffect(() => {
         let btns = [
-            { text: '코드 매핑', variant: 'outline-table-btn', className: 'mr-2' },
-            { text: '수정', variant: 'positive', onClick: handleClickSave },
+            { text: '코드 매핑', variant: 'outline-table-btn', className: 'mr-2', onClick: () => setClickMapping(true) },
+            { text: '수정', variant: 'positive', onClick: () => setClickSave(true) },
         ];
 
         if (location.pathname.lastIndexOf('add') > -1) {
@@ -58,7 +66,8 @@ const ArticleSourcePage = (props) => {
         } else {
             setFooterBtns(btns);
         }
-    }, [handleClickSave, location.pathname]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.pathname]);
 
     return (
         <div className="d-flex">
@@ -81,9 +90,17 @@ const ArticleSourcePage = (props) => {
                     path={[`${match.url}/add`, `${match.url}/:sourceCode`]}
                     exact
                     render={() => (
-                        <MokaCard width={782} titleClassName="mb-0" title="매체 정보" footer footerButtons={footerBtns} footerClassName="justify-content-center">
-                            <ArticleSourceEdit handleClickSave={handleClickSave} />
-                        </MokaCard>
+                        <>
+                            <MokaCard width={782} titleClassName="mb-0" title="매체 정보" footer footerButtons={footerBtns} footerClassName="justify-content-center">
+                                <ArticleSourceEdit
+                                    location={location}
+                                    clickMapping={clickMapping}
+                                    clickSave={clickSave}
+                                    setClickMapping={setClickMapping}
+                                    setClickSave={setClickSave}
+                                />
+                            </MokaCard>
+                        </>
                     )}
                 />
             </Switch>

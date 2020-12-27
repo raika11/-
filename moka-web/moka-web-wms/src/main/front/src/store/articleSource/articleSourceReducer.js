@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './articleSourceAction';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { PAGESIZE_OPTIONS, MODAL_PAGESIZE_OPTIONS } from '@/constants';
 
 /**
  * initialState
@@ -18,10 +18,18 @@ export const initialState = {
         keyword: '',
     },
     source: {},
-    bulkSourceList: null,
     invalidList: [],
+    mappingTotal: 0,
+    mappingList: [],
+    mappingSearch: {
+        page: 0,
+        size: MODAL_PAGESIZE_OPTIONS[0],
+        masterCode: null,
+    },
+    mappingCode: {},
     deskingSourceList: null,
     typeSourceList: {},
+    bulkSourceList: null,
 };
 
 export default handleActions(
@@ -52,6 +60,11 @@ export default handleActions(
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
+            });
+        },
+        [act.CHANGE_MODAL_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.mappingSearch = payload;
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
@@ -103,6 +116,21 @@ export default handleActions(
         [act.GET_ARTICLE_SOURCE_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.source = initialState.source;
+            });
+        },
+        // 매핑 목록 조회
+        [act.GET_MAPPING_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.mappingTotal = body.totalCnt;
+                draft.mappingList = body.list;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_MAPPING_SOURCE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.mappingTotal = initialState.mappingTotal;
+                draft.mappingList = initialState.mappingList;
+                draft.error = payload;
             });
         },
         // 벌크 매체 조회

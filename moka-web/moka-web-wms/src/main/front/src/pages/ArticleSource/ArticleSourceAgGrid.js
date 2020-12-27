@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 import columnDefs from './ArticleSourceAgGridColumns';
 import { MokaTable } from '@/components';
 import { GET_SOURCE_LIST, getSourceList, changeSearchOption } from '@store/articleSource';
@@ -18,13 +17,6 @@ const ArticleSourceAgGrid = (props) => {
     const search = useSelector((store) => store.articleSource.search);
     const source = useSelector((store) => store.articleSource.source);
     const loading = useSelector((store) => store.loading[GET_SOURCE_LIST]);
-
-    /**
-     * 신규 등록 버튼
-     */
-    const handleAddClick = () => {
-        history.push('/article-sources/add');
-    };
 
     /**
      * 목록에서 Row클릭
@@ -47,26 +39,19 @@ const ArticleSourceAgGrid = (props) => {
     );
 
     return (
-        <>
-            <div className="pb-2 d-flex justify-content-end">
-                <Button variant="positive" className="ft-12" onClick={handleAddClick}>
-                    신규 등록
-                </Button>
-            </div>
-            <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
-                rowData={sourceList}
-                onRowNodeId={(row) => row.sourceCode}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                total={total}
-                page={search.page}
-                size={search.size}
-                selected={source.sourceCode}
-                onChangeSearchOption={handleChangeSearchOption}
-            />
-        </>
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            columnDefs={columnDefs}
+            rowData={sourceList}
+            onRowNodeId={(row) => row.sourceCode}
+            onRowClicked={handleRowClicked}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            selected={source.sourceCode}
+            onChangeSearchOption={handleChangeSearchOption}
+        />
     );
 };
 

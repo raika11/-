@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import Overlay from 'react-bootstrap/Overlay';
+import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
-// import { Controller } from 'react-hook-form';
 import { MokaImageInput, MokaAutocomplete, MokaDateTimePicker } from '@components';
 
 export const propTypes = {
@@ -43,9 +44,13 @@ export const propTypes = {
      */
     value: PropTypes.any,
     /**
-     * 값 valid 체크
+     * input value가 타당하지 않을 경우 danger 테두리 생성
      */
     isInvalid: PropTypes.bool,
+    /**
+     * invalid일 때 hover로 노출하는 message
+     */
+    invalidMessage: PropTypes.string,
     /**
      * input의 disabled
      */
@@ -99,11 +104,43 @@ const defaultProps = {
  * controlled input
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, disabled, uncontrolled, size, ...rest } = props;
-    // const { rules, control } = props;
+    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, invalidMessage, disabled, uncontrolled, size, ...rest } = props;
+    const inputRef = useRef(null);
+    const [invalidShow, setInvalidShow] = React.useState(false);
+    useImperativeHandle(ref, () => inputRef?.current);
+
+    const onMouseEnter = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (inputProps.onMouseEnter) {
+                inputProps.onMouseEnter();
+            }
+            if (isInvalid) {
+                setInvalidShow(true);
+            }
+        },
+        [inputProps, isInvalid],
+    );
+
+    const onMouseLeave = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (inputProps.onMouseLeave) {
+                inputProps.onMouseLeave();
+            }
+            if (isInvalid) {
+                setInvalidShow(false);
+            }
+        },
+        [inputProps, isInvalid],
+    );
 
     let Type = Form.Control;
-    let inputObject = {
+    let contextProps = {
         id,
         name,
         className: clsx('flex-fill', className),
@@ -111,99 +148,73 @@ const MokaInput = forwardRef((props, ref) => {
         disabled,
         onChange,
         placeholder,
-        ref,
         size,
         ...inputProps,
+        onMouseEnter,
+        onMouseLeave,
         ...rest,
     };
 
     if (uncontrolled) {
-        inputObject = { ...inputObject, defaultValue: value };
+        contextProps = { ...contextProps, defaultValue: value };
     } else {
-        inputObject = { ...inputObject, value: value || '' };
+        contextProps = { ...contextProps, value: value || '' };
     }
 
     // 셀렉트
     if (as === 'select') {
-        inputObject = { ...inputObject, as, custom: true };
+        contextProps = { ...contextProps, as, custom: true };
     }
     // textarea
     else if (as === 'textarea') {
-        inputObject = { ...inputObject, as };
+        contextProps = { ...contextProps, as };
     }
     // 라디오
     else if (as === 'radio') {
         Type = Form.Check;
-        inputObject = { ...inputObject, type: as };
+        contextProps = { ...contextProps, type: as };
     }
     // 스위치
     else if (as === 'switch') {
         Type = Form.Check;
-        inputObject = { ...inputObject, type: as, label: inputProps.label || '' };
+        contextProps = { ...contextProps, type: as, label: inputProps.label || '' };
     }
     // 체크박스
     else if (as === 'checkbox') {
         Type = Form.Check;
-        inputObject = { ...inputObject, type: as };
+        contextProps = { ...contextProps, type: as };
     }
-    // 드롭가능한 이미지 파일
+    // imageFile(드롭가능한 이미지 파일)
     else if (as === 'imageFile') {
         Type = MokaImageInput;
-        inputObject = { ...inputProps, ref, onChange, value };
+        contextProps = { ...contextProps, className };
     }
-    // auto complete
+    // autocomplete
     else if (as === 'autocomplete') {
         Type = MokaAutocomplete;
-
-        /*if (uncontrolled) {
-            inputObject = {
-                ...inputObject,
-                value,
-            };
-
-            console.log(inputObject);
-            return (
-                <Controller
-                    name={name}
-                    rules={rules}
-                    control={control}
-                    defaultValue={value}
-                    render={(props) => {
-                        const { onChange: controllerChange, value, ...restControllerProps } = props;
-                        // restControllerProps에 value 제외하여야함(이유는 모르겠음..)
-                        return (
-                            <MokaAutocomplete
-                                id={id}
-                                isInvalid={isInvalid}
-                                onChange={(value) => {
-                                    controllerChange(value);
-                                    if (onChange) {
-                                        onChange(value);
-                                    }
-                                }}
-                                value={inputObject.defaultValue}
-                                className={className}
-                                {...inputProps}
-                                {...restControllerProps}
-                            />
-                        );
-                    }}
-                />
-            );
-        }*/
-        /* return <MokaAutocomplete ref={ref} name={name} id={id} value={value} onChange={onChange} isInvalid={isInvalid} {...inputProps} />;*/
     }
     // dateTimePicker
     else if (as === 'dateTimePicker') {
         Type = MokaDateTimePicker;
-        inputObject = { ...inputObject, placeholder };
+        contextProps = { ...contextProps, placeholder };
     }
     // 기본 input
     else {
-        inputObject = { ...inputObject, placeholder, type };
+        contextProps = { ...contextProps, placeholder, type };
     }
 
-    return <Type {...inputObject}>{children}</Type>;
+    return (
+        <>
+            <Type ref={inputRef} {...contextProps}>
+                {children}
+            </Type>
+            {isInvalid && invalidMessage && invalidMessage !== '' && (
+                <Overlay target={as === 'imageFile' ? inputRef.current?.wrapRef : as === 'dateTimePicker' ? inputRef.current?.inputGroupRef : inputRef.current} show={invalidShow}>
+                    <Tooltip id={`input-invalid-${name}`}>{invalidMessage}</Tooltip>
+                </Overlay>
+            )}
+        </>
+    );
 });
 
 MokaInput.propTypes = propTypes;

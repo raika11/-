@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import EditThumbCard from './EditThumbCard';
-import { getArticleImageList } from '@store/article';
+import { GET_ARTICLE_IMAGE_LIST, getArticleImageList } from '@store/article';
 import { MokaLoader } from '@/components';
 
 const propTypes = {
@@ -21,9 +21,11 @@ const defaultProps = {};
  * 기사 내 이미지 목록 테이블
  */
 const EditThumbArticleImageListTable = (props) => {
-    const { loading, deskingWorkData, onRepClick } = props;
+    const { deskingWorkData, onRepClick } = props;
     const dispatch = useDispatch();
     const imageList = useSelector((store) => store.article.imageList);
+    const loading = useSelector((store) => store.loading[GET_ARTICLE_IMAGE_LIST]);
+    const PDS_URL = useSelector((store) => store.app.PDS_URL);
     const [renderList, setRenderList] = useState([]);
 
     useEffect(() => {
@@ -40,10 +42,11 @@ const EditThumbArticleImageListTable = (props) => {
                 ...data,
                 id: data.seqNo,
                 dataType: 'article',
-                thumbPath: data.compFileUrl,
+                compFileUrl: `${PDS_URL}${data.compFileUrl}`,
+                thumbPath: `${PDS_URL}${data.compFileUrl}`,
             })),
         );
-    }, [imageList]);
+    }, [PDS_URL, imageList]);
 
     return (
         <div className="border rounded w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll">

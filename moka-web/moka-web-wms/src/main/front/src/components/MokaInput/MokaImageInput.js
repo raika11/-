@@ -75,7 +75,7 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
@@ -132,6 +132,7 @@ const MokaImageInput = forwardRef((props, ref) => {
         () => ({
             inputRef: inputRef.current,
             imgRef: imgRef.current,
+            wrapRef: wrapRef.current,
             defaultTextRef: defaultRef.current,
             deleteFile: deleteFile,
         }),
@@ -166,7 +167,7 @@ const MokaImageInput = forwardRef((props, ref) => {
         if (ACCEPTED_IMAGE_TYPES.includes(acceptedFiles[0].type)) {
             // 업로드 가능 확장자 체크
             if (selectAccept.length > 0 && selectAccept.includes(acceptedFiles[0].type) === false) {
-                handleEtcAlert(`업로드 이미지는 (${selectAccept.map((n) => n.split('/')[1]).join(', ')})만 가능합니다.`);
+                handleEtcAlert(`확장자 (${selectAccept.map((n) => n.split('/')[1]).join(', ')})만 가능합니다.`);
                 return;
             }
             setAlert(false);
@@ -212,6 +213,8 @@ const MokaImageInput = forwardRef((props, ref) => {
                 return (
                     <Figure
                         {...getRootProps()}
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
                         className={clsx(
                             'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
                             className,

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import clsx from 'clsx';
 import DateTime from 'react-datetime';
 import InputMask from 'react-input-mask';
@@ -73,7 +73,30 @@ const defaultProps = {
  * TimePicker
  */
 const MokaDateTimePicker = forwardRef((props, ref) => {
-    const { width, placeholder, dateFormat, timeFormat, defaultValue, value, onChange, disabled, className, inputClassName, size, isInvalid, ...rest } = props;
+    const {
+        width,
+        placeholder,
+        dateFormat,
+        timeFormat,
+        defaultValue,
+        value,
+        onChange,
+        disabled,
+        className,
+        inputClassName,
+        size,
+        isInvalid,
+        onMouseEnter,
+        onMouseLeave,
+        ...rest
+    } = props;
+    const dateTimeRef = useRef(null);
+    const inputGroupRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        dateTimeRef: dateTimeRef.current,
+        inputGroupRef: inputGroupRef.current,
+    }));
 
     // 날짜시간 포맷
     const dateTimeFormat = (() => {
@@ -101,7 +124,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     // input element 생성
     const renderInput = (props, openCalendar, closeCalendar) => {
         return (
-            <InputGroup style={{ width }} size={size}>
+            <InputGroup ref={inputGroupRef} style={{ width }} size={size} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 <InputMask
                     onChange={props.onChange}
                     onKeyDown={props.onKeyDown}
@@ -124,7 +147,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
 
     return (
         <DateTime
-            ref={ref}
+            ref={dateTimeRef}
             className={clsx('flex-fill', className)}
             locale="ko"
             dateFormat={dateFormat}

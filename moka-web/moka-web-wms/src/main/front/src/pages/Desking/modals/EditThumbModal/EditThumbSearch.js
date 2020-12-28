@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
 import EditThumbSelectDropdown from './EditThumbSelectDropdown';
-import { getPhotoList, changeSearchOption, clearList } from '@store/photoArchive';
+import { initialState, getPhotoList, changeSearchOption, clearList } from '@store/photoArchive';
 
 const periodType = [
     { id: 'all', name: '전체' },
@@ -13,12 +13,11 @@ const periodType = [
     { id: 'week', name: '일주일' },
 ];
 
-const EditThumbSearch = (props) => {
-    const { search, setSearch } = props;
+const EditThumbSearch = () => {
     const dispatch = useDispatch();
-
     const searchKeyList = useSelector((store) => store.photoArchive.searchKeyList);
-
+    const storeSearch = useSelector((store) => store.photoArchive.search);
+    const [search, setSearch] = useState(initialState.search);
     const [period, setPeriod] = useState('all');
     const [startDate, setStartDate] = useState(null);
     const [finishDate, setFinishDate] = useState(null);
@@ -28,6 +27,10 @@ const EditThumbSearch = (props) => {
     const handleSearch = () => {
         dispatch(getPhotoList(changeSearchOption(search)));
     };
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     useEffect(() => {
         if (timeReady) {

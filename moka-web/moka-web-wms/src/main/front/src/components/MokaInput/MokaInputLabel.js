@@ -55,7 +55,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
     const { label, labelWidth, className, labelClassName, required } = props;
 
     // common props
-    const { inputClassName, as, type, placeholder, onChange, children, inputProps, isInvalid, disabled, id, name, uncontrolled } = props;
+    const { inputClassName, as, type, placeholder, onChange, children, inputProps, isInvalid, invalidMessage, disabled, id, name, uncontrolled } = props;
 
     // MokaInput props
     const { value } = props;
@@ -104,6 +104,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
                     onChange={onChange}
                     className={inputClassName}
                     isInvalid={isInvalid}
+                    invalidMessage={invalidMessage}
                     disabled={disabled}
                     placeholder={placeholder}
                     type={type}

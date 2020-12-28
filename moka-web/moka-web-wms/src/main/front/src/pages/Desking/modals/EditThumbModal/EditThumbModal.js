@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MokaModal, MokaCardTabs } from '@components';
-import { GET_PHOTO_LIST, initialState, getPhotoList, changeSearchOption, clearStore } from '@store/photoArchive';
-import { GET_ARTICLE_IMAGE_LIST } from '@store/article';
+import { clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
 import EditThumbImageInputTable from './EditThumbImageInputTable';
@@ -32,24 +31,10 @@ const defaultValue = {
  * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
  */
 const EditThumbModal = (props) => {
-    // modal props
-    const { show, onHide, deskingWorkData } = props;
-    // 대표 이미지 props
-    const { setFileValue, thumbFileName, setThumbFileName } = props;
-
+    const { show, onHide, deskingWorkData } = props; // modal props
+    const { setFileValue, thumbFileName, setThumbFileName } = props; // 대표 이미지 props
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_PHOTO_LIST] || store.loading[GET_ARTICLE_IMAGE_LIST]);
-    const { total, list, storeSearch, photo } = useSelector(
-        (store) => ({
-            total: store.photoArchive.total,
-            list: store.photoArchive.list,
-            storeSearch: store.photoArchive.search,
-            photo: store.photoArchive.photo,
-        }),
-        shallowEqual,
-    );
 
-    const [search, setSearch] = useState(initialState.search);
     const [collapse, setCollapse] = useState(true);
     const [cardData, setCardData] = useState({});
     const [repPhoto, setRepPhoto] = useState(defaultValue);
@@ -127,24 +112,6 @@ const EditThumbModal = (props) => {
     const handleEditClick = () => {};
 
     /**
-     * 테이블에서 검색옵션 변경
-     */
-    const handleChangeSearchOption = ({ key, value }) => {
-        let temp = search;
-
-        // 포토아카이브는 size 대신 pageCount라는 명칭 사용
-        if (key === 'size') {
-            temp = { ...temp, pageCount: value };
-        } else {
-            temp = { ...temp, [key]: value };
-        }
-        if (key !== 'page') {
-            temp['page'] = 0;
-        }
-        dispatch(getPhotoList(changeSearchOption(temp)));
-    };
-
-    /**
      * 이미지 편집 등록 버튼 클릭
      */
     const handleClickSave = () => {
@@ -173,17 +140,6 @@ const EditThumbModal = (props) => {
         dispatch(clearStore());
         onHide();
     };
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        // 모달 show => 포토아카이브 목록 셋팅
-        if (show) {
-            dispatch(getPhotoList());
-        }
-    }, [dispatch, show]);
 
     useEffect(() => {
         // 이미지 필드 thumbPath로 통일
@@ -218,23 +174,15 @@ const EditThumbModal = (props) => {
                     tabs={[
                         // 아카이브 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbSearch search={search} setSearch={setSearch} />
-                            <EditThumbTable
-                                total={total}
-                                page={search.page}
-                                size={search.pageCount}
-                                loading={loading}
-                                archiveList={list}
-                                onChangeSearchOption={handleChangeSearchOption}
-                                onThumbClick={handleThumbClick}
-                                onRepClick={handleRepClick}
-                                onEditClick={handleEditClick}
-                            />
+                            <EditThumbSearch />
+                            <EditThumbTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} onEditClick={handleEditClick} />
                         </div>,
+
                         // 본문 소재 리스트 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} loading={loading} onRepClick={handleRepClick} />
+                            <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} onRepClick={handleRepClick} />
                         </div>,
+
                         // 내 PC 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
                             <EditThumbImageInputTable onRepClick={handleRepClick} onEditClick={handleEditClick} />

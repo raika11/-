@@ -127,7 +127,7 @@ const SpecialEdit = () => {
             if (!saveObj.pageCd || !REQUIRED_REGEX.test(saveObj.pageCd)) {
                 errList.push({
                     field: 'pageCd',
-                    reason: '',
+                    reason: '페이지 코드를 선택하세요',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -135,7 +135,7 @@ const SpecialEdit = () => {
             if (!REQUIRED_REGEX.test(saveObj.ordinal)) {
                 errList.push({
                     field: 'ordinal',
-                    reason: '',
+                    reason: '회차를 입력하세요',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -143,7 +143,7 @@ const SpecialEdit = () => {
             if (!REQUIRED_REGEX.test(saveObj.pageTitle) || textReg.test(saveObj.pageTitle)) {
                 errList.push({
                     field: 'pageTitle',
-                    reason: '',
+                    reason: '제목을 입력하세요',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -151,7 +151,7 @@ const SpecialEdit = () => {
             if (textReg.test(saveObj.schKwd)) {
                 errList.push({
                     field: 'schKwd',
-                    reason: '',
+                    reason: '\', "를 입력할 수 없습니다',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -159,7 +159,7 @@ const SpecialEdit = () => {
             if (textReg.test(saveObj.pageDesc)) {
                 errList.push({
                     field: 'pageDesc',
-                    reason: '',
+                    reason: '\', "를 입력할 수 없습니다',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -167,7 +167,7 @@ const SpecialEdit = () => {
             if (!REQUIRED_REGEX.test(saveObj.pcUrl)) {
                 errList.push({
                     field: 'pcUrl',
-                    reason: '',
+                    reason: 'PC URL을 입력하세요',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -175,7 +175,7 @@ const SpecialEdit = () => {
             if (!REQUIRED_REGEX.test(saveObj.mobUrl)) {
                 errList.push({
                     field: 'mobUrl',
-                    reason: '',
+                    reason: 'Mobile URL을 입력하세요',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -183,7 +183,7 @@ const SpecialEdit = () => {
             if (!saveObj.imgUrl && !saveObj.thumbnailFile) {
                 errList.push({
                     field: 'imgUrl',
-                    reason: '',
+                    reason: '이미지를 추가하세요',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -191,7 +191,7 @@ const SpecialEdit = () => {
             if (Number(saveObj.pageSdate) > Number(saveObj.pageEdate)) {
                 errList.push({
                     field: 'pageEdate',
-                    reason: '',
+                    reason: '종료일이 시작일보다 빠를 수 없습니다',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -247,6 +247,7 @@ const SpecialEdit = () => {
             );
         } else {
             dispatch(clearSpecial());
+            setError({});
         }
     }, [dispatch, seqNo]);
 
@@ -287,6 +288,7 @@ const SpecialEdit = () => {
                 (all, c) => ({
                     ...all,
                     [c.field]: true,
+                    [`${c.field}Message`]: c.reason,
                 }),
                 {},
             ),
@@ -323,13 +325,17 @@ const SpecialEdit = () => {
                         <p className="mb-1 ft-12 ml-1">
                             <span className="required-text">*</span>이미지 등록(290*180)
                         </p>
-                        <MokaImageInput
-                            width={205}
-                            height={166}
+                        <MokaInput
+                            as="imageFile"
+                            inputProps={{
+                                width: 205,
+                                height: 166,
+                                img: temp.imgUrl ? `${temp.imgUrl}?${currentDate}` : null,
+                                setFileValue,
+                            }}
                             ref={imgFileRef}
-                            img={temp.imgUrl ? `${temp.imgUrl}?${currentDate}` : null}
-                            setFileValue={setFileValue}
                             isInvalid={error.imgUrl}
+                            invalidMessage={error.imgUrlMessage}
                             onChange={() => setError({ ...error, imgUrl: false })}
                         />
                         <Form.Row className="d-flex justify-content-between mt-2">
@@ -397,6 +403,7 @@ const SpecialEdit = () => {
                                     value={temp.pageCd}
                                     onChange={handleChangeValue}
                                     isInvalid={error.pageCd}
+                                    invalidMessage={error.pageCdMessage}
                                     required
                                 >
                                     <option hidden>선택</option>
@@ -418,6 +425,7 @@ const SpecialEdit = () => {
                                     required
                                     value={temp.ordinal}
                                     isInvalid={error.ordinal}
+                                    invalidMessage={error.ordinalMessage}
                                     onChange={handleChangeValue}
                                 />
                             </Col>
@@ -426,7 +434,14 @@ const SpecialEdit = () => {
                         <Form.Row className="mb-3">
                             <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" as="none" />
                             <div className="w-100 d-flex flex-column">
-                                <MokaInput name="schKwd" className="mb-1" value={temp.schKwd} onChange={handleChangeValue} isInvalid={error.schKwd} />
+                                <MokaInput
+                                    name="schKwd"
+                                    className="mb-1"
+                                    value={temp.schKwd}
+                                    onChange={handleChangeValue}
+                                    isInvalid={error.schKwd}
+                                    invalidMessage={error.schKwdMessage}
+                                />
                                 <p className="m-0 ft-12 text-danger">*&nbsp;', " 포함 특수문자 사용금지</p>
                             </div>
                         </Form.Row>
@@ -434,7 +449,14 @@ const SpecialEdit = () => {
                         <Form.Row className="mb-3">
                             <MokaInputLabel label="제목" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" required as="none" />
                             <div className="w-100 d-flex flex-column">
-                                <MokaInput name="pageTitle" className="mb-1" value={temp.pageTitle} isInvalid={error.pageTitle} onChange={handleChangeValue} />
+                                <MokaInput
+                                    name="pageTitle"
+                                    className="mb-1"
+                                    value={temp.pageTitle}
+                                    isInvalid={error.pageTitle}
+                                    invalidMessage={error.pageTitleMessage}
+                                    onChange={handleChangeValue}
+                                />
                                 <p className="m-0 ft-12 text-danger">*&nbsp;', " 포함 특수문자 사용금지</p>
                             </div>
                         </Form.Row>
@@ -452,6 +474,7 @@ const SpecialEdit = () => {
                                     value={temp.pageSdate}
                                     onChange={handleChangeSdate}
                                     isInvalid={error.pageSdate}
+                                    invalidMessage={error.pageSdateMessage}
                                 />
                             </Col>
                             <Col xs={6} className="p-0">
@@ -466,6 +489,7 @@ const SpecialEdit = () => {
                                     value={temp.pageEdate}
                                     onChange={handleChangeEdate}
                                     isInvalid={error.pageEdate}
+                                    invalidMessage={error.pageEdateMessage}
                                 />
                             </Col>
                         </Form.Row>
@@ -481,6 +505,7 @@ const SpecialEdit = () => {
                     value={temp.pcUrl}
                     onChange={handleChangeValue}
                     isInvalid={error.pcUrl}
+                    invalidMessage={error.pcUrlMessage}
                     required
                 />
                 {/* Mob URL */}
@@ -493,6 +518,7 @@ const SpecialEdit = () => {
                     value={temp.mobUrl}
                     onChange={handleChangeValue}
                     isInvalid={error.mobUrl}
+                    invalidMessage={error.mobUrlMessage}
                     required
                 />
                 {/* 중계페이지 URL */}
@@ -558,6 +584,7 @@ const SpecialEdit = () => {
                     value={temp.pageDesc}
                     onChange={handleChangeValue}
                     isInvalid={error.pageDesc}
+                    invalidMessage={error.pageDescMessage}
                 />
                 {/* 부서명 */}
                 <Form.Row className="mb-3">

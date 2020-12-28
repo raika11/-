@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import jmnet.moka.common.data.support.DTOModelMapper;
 import jmnet.moka.common.data.support.SearchParamResolver;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -143,8 +141,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
 
-    @PersistenceContext(unitName = MokaConstants.PERSISTANCE_UNIT_TPS)
-    private EntityManager tpsEntityManager;
+    private final ApplicationContext applicationContext;
+    private final EntityManager tpsEntityManager;
+
+    @Autowired
+    public WebMvcConfiguration(ApplicationContext applicationContext, @Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
+        this.applicationContext = applicationContext;
+        this.tpsEntityManager = entityManager;
+    }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {

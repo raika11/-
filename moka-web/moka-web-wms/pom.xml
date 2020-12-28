@@ -77,6 +77,12 @@
     </dependency>
 
     <dependency>
+      <groupId>jmnet.moka.core</groupId>
+      <artifactId>moka-core-comment</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.auth0</groupId>
       <artifactId>java-jwt</artifactId>
       <version>3.1.0</version>

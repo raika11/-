@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+jmnet.moka.core.comment.config.CommentConfiguration

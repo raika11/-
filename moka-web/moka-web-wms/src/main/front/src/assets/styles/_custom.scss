@@ -443,32 +443,8 @@ body {
 }
 
 /* -----------------------
-* table tooltip, button
+* MokaTable 안에 사용하는 컴포넌트 스타일
 * ---------------------- */
-.moka-tooltip {
-    position: absolute;
-    width: 150px;
-    height: 70px;
-    border: 1px solid $gray-310;
-    overflow: hidden;
-    pointer-events: none;
-    transition: opacity 1s;
-    z-index: 2;
-
-    &.ag-tooltip-hiding {
-        opacity: 0;
-    }
-
-    p {
-        margin: 5px;
-        white-space: nowrap;
-
-        &:first-of-type {
-            font-weight: bold;
-        }
-    }
-}
-
 .moka-table-button {
     width: 20px;
     height: 20px;

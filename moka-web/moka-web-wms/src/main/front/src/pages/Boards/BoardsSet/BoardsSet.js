@@ -21,9 +21,9 @@ const BoardsSet = () => {
             ...initialState.setmenu.search,
             boardType: boardType,
         };
-        dispatch(changeSetMenuSearchOption(tmpSearchOption));
-        dispatch(getSetmenuBoardsList());
-    }, [boardType, dispatch]);
+        dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [boardType]);
     return (
         <div className="d-flex">
             <Helmet>

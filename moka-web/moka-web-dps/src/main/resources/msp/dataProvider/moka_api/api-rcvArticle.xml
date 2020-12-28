@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<apiConfig>
+  <api id="rcvArticle">
+    <description>수신기사 기본 정보를 반환한다.</description>
+    <parameter>
+      <rid desc="수신기사Id">[0-9]{1,9}</rid>
+    </parameter>
+    <request resultName="BASIC">dps.rcvArticle.basic</request>
+    <request resultName="CONTENT">dps.rcvArticle.content</request>
+    <request resultName="REPORTER">dps.rcvArticle.reporter</request>
+    <request resultName="MASTERCODE">dps.rcvArticle.mastercode</request>
+    <request resultName="SERVICEMAP">dps.rcvArticle.servicemap</request>
+    <request resultName="KEYWORD">dps.rcvArticle.keyword</request>
+    <request resultName="MULTI">dps.rcvArticle.multi</request>
+    <keys>
+      rid
+    </keys>
+  </api>
+</apiConfig>

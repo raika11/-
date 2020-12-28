@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dps.rcvArticle">
+
+  <!-- rcv article basic -->
+  <select id="basic" parameterType="hashmap" resultType="map">
+    select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE from TB_RCV_ARTICLE_BASIC A, TB_ARTICLE_SOURCE B
+    where A.SOURCE_CODE = B.SOURCE_CODE AND A.RID=#{rid}
+  </select>
+  <!-- rcv article content -->
+  <select id="content" parameterType="hashmap" resultType="map">
+    select CONTENT AS ART_CONTENT FROM TB_RCV_ARTICLE_BASIC
+    where RID=#{rid}
+  </select>
+  <!-- rcv article reporter -->
+  <select id="reporter" parameterType="hashmap" resultType="map">
+    select B.* from TB_RCV_ARTICLE_REPORTER A, TB_15RE_REPORTER B
+    where A.RID=#{rid} AND A.REPORTER_NAME = B.REP_NAME AND A.REPORTER_EMAIL = B.REP_EMAIL1
+  </select>
+  <!-- rcv article mastercode -->
+  <select id="mastercode" parameterType="hashmap" resultType="map">
+    select MAS.*
+    from TB_RCV_ARTICLE_CODE RCODE, TB_RCV_CODE_CONV RCONV, TB_MASTERCODE MAS, TB_RCV_ARTICLE_BASIC RART
+    where RCODE.RID = #{rid}
+    AND RCODE.CODE_ID = RCONV.FR_CODE
+    AND RCODE.RID = RART.RID
+    AND RCONV.SOURCE_CODE = RART.SOURCE_CODE
+    AND RCONV.TO_CODE = MAS.MASTER_CODE
+    order by RCODE.CODE_ORD
+  </select>
+  <!-- rcv article servicemap -->
+  <select id="servicemap" parameterType="hashmap" resultType="map">
+    select B.*
+    from TB_SERVICE_MAP B
+    where EXISTS (
+      select MAS.*
+      from TB_RCV_ARTICLE_CODE RCODE, TB_RCV_CODE_CONV RCONV, TB_MASTERCODE MAS, TB_RCV_ARTICLE_BASIC RART
+      where RCODE.RID = #{rid}
+      AND RCODE.CODE_ID = RCONV.FR_CODE
+      AND RCODE.RID = RART.RID
+      AND RCONV.SOURCE_CODE = RART.SOURCE_CODE
+      AND RCONV.TO_CODE = MAS.MASTER_CODE
+      AND MAS.MASTER_CODE = B.MASTER_CODE
+    )
+  </select>
+  <!-- rcv article keyword -->
+  <select id="keyword" parameterType="hashmap" resultType="map">
+  SELECT *
+  FROM TB_RCV_ARTICLE_KEYWORD
+  WHERE RID=#{rid}
+  </select>
+  <!-- rcv article multi -->
+  <select id="multi" parameterType="hashmap" resultType="map">
+  select * from TB_RCV_ARTICLE_COMPONENT A,
+  where RID = #{rid}
+  </select>
+
+</mapper>

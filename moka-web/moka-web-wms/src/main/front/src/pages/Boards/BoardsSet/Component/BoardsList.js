@@ -15,7 +15,7 @@ const BoardsList = () => {
         const setMokaCardTitle = () => {
             let title = '';
             if (boardType === 'S') {
-                title = '시스템';
+                title = '서비스';
             } else if (boardType === 'A') {
                 title = '관리자';
             }

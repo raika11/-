@@ -3,11 +3,11 @@ package jmnet.moka.core.tps.mvc.menu.repository;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
 import jmnet.moka.core.tps.mvc.menu.entity.QMenuAuth;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-public class MenuAuthRepositorySupportImpl extends QuerydslRepositorySupport implements MenuAuthRepositorySupport {
+public class MenuAuthRepositorySupportImpl extends TpsQueryDslRepositorySupport implements MenuAuthRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 

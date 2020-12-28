@@ -12,13 +12,10 @@ const BoardsListSearchBox = (props) => {
     const dispatch = useDispatch();
 
     // 공통 구분값 URL
-    const { pagePathName, total, search, list, boardType } = useSelector((store) => ({
+    const { pagePathName, boardType, search } = useSelector((store) => ({
         pagePathName: store.boards.pagePathName,
         boardType: store.boards.boardType,
-        total: store.boards.setmenu.total,
         search: store.boards.setmenu.search,
-        list: store.boards.setmenu.list,
-        // loading: store.loading[GET_BULK_LIST],
     }));
 
     const [searchData, setSearchData] = useState(initialState.setmenu.search);
@@ -33,19 +30,12 @@ const BoardsListSearchBox = (props) => {
     const handleSearchChange = ({ target: { name, value } }) => {
         setSearchData({
             ...searchData,
-            boardType: boardType,
             [name]: value,
         });
     };
 
     const handleClickSearchButton = () => {
-        const tmpSearchOption = {
-            ...initialState.setmenu.search,
-            boardType: boardType,
-        };
-        setSearchData(tmpSearchOption);
-        dispatch(changeSetMenuSearchOption(tmpSearchOption));
-        dispatch(getSetmenuBoardsList());
+        dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(searchData)));
     };
 
     const handleClickSearchResetButton = () => {
@@ -55,8 +45,13 @@ const BoardsListSearchBox = (props) => {
             boardType: boardType,
         };
         setSearchData(tmpSearchOption);
-        dispatch(getSetmenuBoardsList());
+        dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
     };
+
+    useEffect(() => {
+        setSearchData(search);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Form>

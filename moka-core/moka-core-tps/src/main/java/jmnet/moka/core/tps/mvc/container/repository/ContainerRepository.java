@@ -1,32 +1,33 @@
 package jmnet.moka.core.tps.mvc.container.repository;
 
+import jmnet.moka.core.tps.mvc.container.entity.Container;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import jmnet.moka.core.tps.mvc.container.entity.Container;
 import org.springframework.stereotype.Repository;
 
 /**
- * 컨테이너 
- * @author ohtah
+ * 컨테이너
  *
+ * @author ohtah
  */
 @Repository
-public interface ContainerRepository
-        extends JpaRepository<Container, Long>, ContainerRepositorySupport {
-    
+public interface ContainerRepository extends JpaRepository<Container, Long>, ContainerRepositorySupport {
+
     /**
      * 도메인아이디와 관련된 컨테이너 목록 조회
+     *
      * @param domainId 도메인아이디
      * @param pageable Pageable
      * @return 컨테이너 목록
      */
     @EntityGraph(attributePaths = {"domain"})
     public Page<Container> findByDomain_DomainId(String domainId, Pageable pageable);
-    
+
     /**
      * 도메인아이디와 관련된 컨테이너수
+     *
      * @param domainId 도메인아이디
      * @return 컨테이너수
      */

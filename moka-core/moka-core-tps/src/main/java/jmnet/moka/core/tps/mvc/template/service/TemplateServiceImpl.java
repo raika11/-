@@ -3,10 +3,8 @@ package jmnet.moka.core.tps.mvc.template.service;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
@@ -17,6 +15,7 @@ import jmnet.moka.core.tps.mvc.template.repository.TemplateRepository;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,11 +44,10 @@ public class TemplateServiceImpl implements TemplateService {
     @Autowired
     private UploadFileHelper uploadFileHelper;
 
-    @PersistenceContext(name = MokaConstants.PERSISTANCE_UNIT_TPS)
     private final EntityManager entityManager;
 
     @Autowired
-    public TemplateServiceImpl(EntityManager entityManager) {
+    public TemplateServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

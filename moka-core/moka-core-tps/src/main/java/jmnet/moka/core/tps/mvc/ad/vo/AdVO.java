@@ -2,11 +2,11 @@ package jmnet.moka.core.tps.mvc.ad.vo;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import org.apache.ibatis.type.Alias;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.Alias;
 
 @Alias("adVO")
 @NoArgsConstructor

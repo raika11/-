@@ -14,10 +14,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
@@ -29,7 +27,6 @@ import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +36,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,8 +73,8 @@ public class DomainRestController extends AbstractCommonController {
 
     private final PurgeHelper purgeHelper;
 
-    public DomainRestController(DomainService domainService, CodeMgtService codeMgtService,
-            RelationService relationService, ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper) {
+    public DomainRestController(DomainService domainService, CodeMgtService codeMgtService, RelationService relationService,
+            ApiCodeHelper apiCodeHelper, PurgeHelper purgeHelper) {
         this.domainService = domainService;
         this.codeMgtService = codeMgtService;
         this.relationService = relationService;
@@ -121,8 +117,8 @@ public class DomainRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "도메인 조회")
     @GetMapping("/{domainId}")
-    public ResponseEntity<?> getDomain(
-            @ApiParam("도메인 ID(필수)") @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
+    public ResponseEntity<?> getDomain(@ApiParam("도메인 ID(필수)") @PathVariable("domainId")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
             throws NoDataException {
 
         String message = msg("tps.domain.error.no-data");
@@ -153,8 +149,8 @@ public class DomainRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{domainId}/exists")
-    public ResponseEntity<?> duplicateCheckId(
-            @ApiParam("도메인 ID(필수)") @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId) {
+    public ResponseEntity<?> duplicateCheckId(@ApiParam("도메인 ID(필수)") @PathVariable("domainId")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId) {
 
         boolean duplicated = domainService.isDuplicatedId(domainId);
         ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated);
@@ -213,9 +209,8 @@ public class DomainRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "도메인 수정")
     @PutMapping("/{domainId}")
-    public ResponseEntity<?> putDomain(@ApiParam(hidden = true) HttpServletRequest request,
-            @ApiParam("도메인 ID(필수)") @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @Valid DomainDTO domainDTO)
+    public ResponseEntity<?> putDomain(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam("도메인 ID(필수)") @PathVariable("domainId")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId, @Valid DomainDTO domainDTO)
             throws Exception {
 
         // DomainDTO -> Domain 변환
@@ -261,8 +256,8 @@ public class DomainRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "도메인과 관련아이템 존재 여부 확인")
     @GetMapping("/{domainId}/has-relations")
-    public ResponseEntity<?> hasRelations(@ApiParam(hidden = true) HttpServletRequest request,
-            @ApiParam("도메인 ID(필수)") @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
+    public ResponseEntity<?> hasRelations(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam("도메인 ID(필수)") @PathVariable("domainId")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
             throws NoDataException {
 
         String message = msg("tps.domain.error.no-data", request);
@@ -290,8 +285,8 @@ public class DomainRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "도메인 삭제")
     @DeleteMapping("/{domainId}")
-    public ResponseEntity<?> deleteDomain(@ApiParam(hidden = true) HttpServletRequest request,
-            @ApiParam("도메인 ID(필수)") @PathVariable("domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
+    public ResponseEntity<?> deleteDomain(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam("도메인 ID(필수)") @PathVariable("domainId")
+    @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId)
             throws InvalidDataException, NoDataException, Exception {
 
 

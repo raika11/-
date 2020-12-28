@@ -4,10 +4,10 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingWork;
 import jmnet.moka.core.tps.mvc.desking.entity.QDeskingWork;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ssc
  * @since 2020. 8. 11. 오전 10:43:25
  */
-public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport implements DeskingWorkRepositorySupport {
+public class DeskingWorkRepositorySupportImpl extends TpsQueryDslRepositorySupport implements DeskingWorkRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -38,9 +38,10 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport 
         builder.and(deskingWork.regId.eq(regId));
 
         // 삭제
-        queryFactory.delete(deskingWork)
-                    .where(builder)
-                    .execute();
+        queryFactory
+                .delete(deskingWork)
+                .where(builder)
+                .execute();
     }
 
     @Override
@@ -51,10 +52,10 @@ public class DeskingWorkRepositorySupportImpl extends QuerydslRepositorySupport 
         builder.and(deskingWork.datasetSeq.eq(search.getDatasetSeq()));
         builder.and(deskingWork.regId.eq(search.getRegId()));
 
-        JPQLQuery<DeskingWork> query = queryFactory.selectFrom(deskingWork)
-                                                   .where(builder)
-                                                   .orderBy(deskingWork.contentOrd.asc(), deskingWork.relOrd.asc(), deskingWork.parentContentId.asc(),
-                                                            deskingWork.seq.desc());
+        JPQLQuery<DeskingWork> query = queryFactory
+                .selectFrom(deskingWork)
+                .where(builder)
+                .orderBy(deskingWork.contentOrd.asc(), deskingWork.relOrd.asc(), deskingWork.parentContentId.asc(), deskingWork.seq.desc());
 
         return query.fetch();
     }

@@ -13,6 +13,7 @@ import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtGrpRepository;
 import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     private final EntityManager entityManager;
 
     @Autowired
-    public CodeMgtServiceImpl(EntityManager entityManager) {
+    public CodeMgtServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

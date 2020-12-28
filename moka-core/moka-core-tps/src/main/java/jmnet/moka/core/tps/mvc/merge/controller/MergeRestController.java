@@ -20,7 +20,6 @@ import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +55,7 @@ public class MergeRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "tems 문법검사")
     @PostMapping(value = "/syntax")
-    public ResponseEntity<?> postSyntax(@ApiParam(hidden=true) HttpServletRequest request, @ApiParam("tems 소스") String content)
+    public ResponseEntity<?> postSyntax(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam("tems 소스") String content)
             throws Exception {
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
@@ -94,7 +93,8 @@ public class MergeRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "페이지 미리보기")
     @PostMapping(value = "/previewPG", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postPreviewPG(@ApiParam(hidden=true) HttpServletRequest request, @ApiParam("페이지 정보(필수)") @RequestBody @Valid PageDTO pageDto)
+    public ResponseEntity<?> postPreviewPG(@ApiParam(hidden = true) HttpServletRequest request,
+            @ApiParam("페이지 정보(필수)") @RequestBody @Valid PageDTO pageDto)
             throws Exception {
         try {
             String html = mergeService.getMergePage(pageDto);
@@ -121,11 +121,8 @@ public class MergeRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 미리보기")
     @GetMapping(value = "/previewCP")
-    public ResponseEntity<?> getPreviewCP(
-            @ApiParam(hidden=true) HttpServletRequest request,
-            @ApiParam("편집영역 일련번호(필수)") Long areaSeq,
-            @ApiParam("컴포넌트워크 일련번호(필수)") Long componentWorkSeq,
-            @ApiParam(hidden=true) Principal principal,
+    public ResponseEntity<?> getPreviewCP(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam("편집영역 일련번호(필수)") Long areaSeq,
+            @ApiParam("컴포넌트워크 일련번호(필수)") Long componentWorkSeq, @ApiParam(hidden = true) Principal principal,
             @ApiParam("미리보기 리소스 포함여부(필수)") String resourceYn)
             throws Exception {
         try {
@@ -151,10 +148,8 @@ public class MergeRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "편집영역 미리보기")
     @GetMapping(value = "/previewArea")
-    public ResponseEntity<?> getPreviewArea(
-            @ApiParam(hidden=true) HttpServletRequest request,
-            @ApiParam("편집영역 일련번호(필수)") Long areaSeq,
-            @ApiParam(hidden=true) Principal principal)
+    public ResponseEntity<?> getPreviewArea(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam("편집영역 일련번호(필수)") Long areaSeq,
+            @ApiParam(hidden = true) Principal principal)
             throws Exception {
         try {
             String html = mergeService.getMergeAreaWork(areaSeq, principal.getName());
@@ -181,8 +176,7 @@ public class MergeRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "기사페이지 미리보기")
     @PostMapping(value = "/previewAP/{totalId}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postPreviewAP(
-            @ApiParam(hidden=true) HttpServletRequest request,
+    public ResponseEntity<?> postPreviewAP(@ApiParam(hidden = true) HttpServletRequest request,
             @ApiParam("기사페이지 정보(필수)") @RequestBody @Valid ArticlePageDTO articlePageDto,
             @ApiParam("서비스기사키(필수)") @PathVariable("totalId") @Min(value = 0, message = "{tps.article.error.min.totalId}") Long totalId)
             throws Exception {

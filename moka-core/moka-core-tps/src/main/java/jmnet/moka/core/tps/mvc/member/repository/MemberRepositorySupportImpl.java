@@ -8,6 +8,7 @@ import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.group.entity.QGroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.QGroupMember;
 import jmnet.moka.core.tps.mvc.member.dto.MemberSearchDTO;
@@ -16,7 +17,6 @@ import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -30,7 +30,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-11-02 18:49
  */
-public class MemberRepositorySupportImpl extends QuerydslRepositorySupport implements MemberRepositorySupport {
+public class MemberRepositorySupportImpl extends TpsQueryDslRepositorySupport implements MemberRepositorySupport {
 
     public MemberRepositorySupportImpl() {
         super(MemberInfo.class);

@@ -370,8 +370,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/boards-set',
-        name: 'boards-set',
+        path: '/boarda-set',
+        name: 'boarda-set',
         displayName: '전체 게시판 관리',
         component: Boards,
         layout: SidebarOpenLayout,
@@ -380,8 +380,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/boarda-set',
-        name: 'boarda-set',
+        path: '/boards-set',
+        name: 'boards-set',
         displayName: '전체 게시판 관리',
         component: Boards,
         layout: SidebarOpenLayout,

@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.QSpecialPageMgt;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * Description: 설명
@@ -30,7 +30,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ohtah
  * @since 2020. 12. 5.
  */
-public class SpecialPageMgtRepositorySupportImpl extends QuerydslRepositorySupport implements SpecialPageMgtRepositorySupport {
+public class SpecialPageMgtRepositorySupportImpl extends TpsQueryDslRepositorySupport implements SpecialPageMgtRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 

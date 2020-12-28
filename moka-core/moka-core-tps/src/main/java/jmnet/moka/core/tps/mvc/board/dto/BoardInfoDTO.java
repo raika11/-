@@ -194,7 +194,8 @@ public class BoardInfoDTO {
      */
     @ApiModelProperty("캡차여부")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.captchaYn}")
-    private String captchaYn;
+    @Builder.Default
+    private String captchaYn = MokaConstants.NO;
 
     /**
      * 채널타입(예:JPOD)

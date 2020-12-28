@@ -3,13 +3,13 @@ package jmnet.moka.core.tps.mvc.sns.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.QArticleSnsShare;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-12-04 14:20
  */
-public class ArticleSnsShareRepositorySupportImpl extends QuerydslRepositorySupport implements ArticleSnsShareRepositorySupport {
+public class ArticleSnsShareRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ArticleSnsShareRepositorySupport {
 
     public ArticleSnsShareRepositorySupportImpl() {
         super(ArticleSnsShare.class);

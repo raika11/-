@@ -7,6 +7,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.entity.QContainer;
 import jmnet.moka.core.tps.mvc.container.entity.QContainerRel;
@@ -14,14 +15,13 @@ import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * 컨테이너 히스토리 Support 구현클래스
  *
  * @author ohtah
  */
-public class ContainerRepositorySupportImpl extends QuerydslRepositorySupport implements ContainerRepositorySupport {
+public class ContainerRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ContainerRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -38,8 +38,9 @@ public class ContainerRepositorySupportImpl extends QuerydslRepositorySupport im
         QContainer container = QContainer.container;
 
         BooleanBuilder builder = new BooleanBuilder();
-        if (McpString.isNotEmpty(search.getDomainId()) && !search.getDomainId()
-                                                                 .equals(TpsConstants.SEARCH_TYPE_ALL)) {
+        if (McpString.isNotEmpty(search.getDomainId()) && !search
+                .getDomainId()
+                .equals(TpsConstants.SEARCH_TYPE_ALL)) {
             builder.and(containerRel.domain.domainId.eq(search.getDomainId()));
         }
 
@@ -51,10 +52,12 @@ public class ContainerRepositorySupportImpl extends QuerydslRepositorySupport im
          * skinRel.skin.skinSeq from SkinRel skinRel where skinRel.relType = ?1 and skinRel.relSeq =
          * ?2)
          */
-        JPQLQuery<Container> query = queryFactory.selectFrom(container)
-                                                 .where(container.containerSeq.in(JPAExpressions.select(containerRel.container.containerSeq)
-                                                                                                .from(containerRel)
-                                                                                                .where(builder)));
+        JPQLQuery<Container> query = queryFactory
+                .selectFrom(container)
+                .where(container.containerSeq.in(JPAExpressions
+                        .select(containerRel.container.containerSeq)
+                        .from(containerRel)
+                        .where(builder)));
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<Container> list = query.fetchResults();
 

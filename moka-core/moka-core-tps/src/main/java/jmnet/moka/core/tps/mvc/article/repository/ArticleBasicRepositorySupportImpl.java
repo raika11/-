@@ -2,9 +2,9 @@ package jmnet.moka.core.tps.mvc.article.repository;
 
 import com.querydsl.jpa.JPQLQuery;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.QArticleBasic;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-12-01 13:07
  */
-public class ArticleBasicRepositorySupportImpl extends QuerydslRepositorySupport implements ArticleBasicRepositorySupport {
+public class ArticleBasicRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ArticleBasicRepositorySupport {
 
     public ArticleBasicRepositorySupportImpl() {
         super(ArticleBasic.class);

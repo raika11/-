@@ -6,13 +6,13 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkSearchDTO;
 import jmnet.moka.core.tps.mvc.bulk.entity.Bulk;
 import jmnet.moka.core.tps.mvc.bulk.entity.QBulk;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ince
  * @since 2020-10-22 18:56
  */
-public class BulkRepositorySupportImpl extends QuerydslRepositorySupport implements BulkRepositorySupport {
+public class BulkRepositorySupportImpl extends TpsQueryDslRepositorySupport implements BulkRepositorySupport {
 
 
     public BulkRepositorySupportImpl(JPAQueryFactory queryFactory) {

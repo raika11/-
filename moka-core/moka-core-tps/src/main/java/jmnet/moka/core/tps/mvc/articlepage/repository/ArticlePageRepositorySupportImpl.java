@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan. 
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna. 
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus. 
- * Vestibulum commodo. Ut rhoncus gravida arcu. 
+ * Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
 package jmnet.moka.core.tps.mvc.articlepage.repository;
@@ -14,6 +14,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageSearchDTO;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
 import jmnet.moka.core.tps.mvc.articlepage.entity.QArticlePage;
@@ -21,7 +22,6 @@ import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * Description: 기사페이지 RepositorySupportImpl
@@ -29,8 +29,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ohtah
  * @since 2020. 11. 14.
  */
-public class ArticlePageRepositorySupportImpl extends QuerydslRepositorySupport implements
-    ArticlePageRepositorySupport {
+public class ArticlePageRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ArticlePageRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public ArticlePageRepositorySupportImpl(JPAQueryFactory queryFactory) {
@@ -58,18 +57,20 @@ public class ArticlePageRepositorySupportImpl extends QuerydslRepositorySupport 
             } else if (searchType.equals("artPageBody")) {
                 builder.and(articlePage.artPageBody.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-                builder.and(articlePage.artPageSeq.like(keyword)
-                    .or(articlePage.artPageName.contains(keyword))
-                    .or(articlePage.artPageBody.contains(keyword)));
+                builder.and(articlePage.artPageSeq
+                        .like(keyword)
+                        .or(articlePage.artPageName.contains(keyword))
+                        .or(articlePage.artPageBody.contains(keyword)));
             }
         }
 
         JPQLQuery<ArticlePage> query = queryFactory.selectFrom(articlePage);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<ArticlePage> list = query.innerJoin(articlePage.domain, domain)
-            .fetchJoin()
-            .where(builder)
-            .fetchResults();
+        QueryResults<ArticlePage> list = query
+                .innerJoin(articlePage.domain, domain)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults();
 
         return new PageImpl<ArticlePage>(list.getResults(), pageable, list.getTotal());
     }

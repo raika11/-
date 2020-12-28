@@ -7,13 +7,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
 import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.entity.QPage;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author jeon
  * @since 2020. 4. 14. 오후 4:15:10
  */
-public class PageRepositorySupportImpl extends QuerydslRepositorySupport implements PageRepositorySupport {
+public class PageRepositorySupportImpl extends TpsQueryDslRepositorySupport implements PageRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public PageRepositorySupportImpl(JPAQueryFactory queryFactory) {
@@ -43,12 +43,13 @@ public class PageRepositorySupportImpl extends QuerydslRepositorySupport impleme
         // WHERE 조건
         builder.and(page.domain.domainId.eq(domainId));
 
-        JPQLQuery<Page> query = queryFactory.selectFrom(page)
-                                            .innerJoin(page.domain, domain)
-                                            .fetchJoin()
-                                            // .leftJoin(page.pageRelations, relation).fetchJoin()
-                                            .where(builder)
-                                            .orderBy(page.pageUrl.asc());
+        JPQLQuery<Page> query = queryFactory
+                .selectFrom(page)
+                .innerJoin(page.domain, domain)
+                .fetchJoin()
+                // .leftJoin(page.pageRelations, relation).fetchJoin()
+                .where(builder)
+                .orderBy(page.pageUrl.asc());
 
         return query.fetch();
     }
@@ -65,12 +66,13 @@ public class PageRepositorySupportImpl extends QuerydslRepositorySupport impleme
         builder.and(page.domain.domainId.eq(domainId));
         builder.and(page.pageUrl.eq(pageUrl));
 
-        JPQLQuery<Page> query = queryFactory.selectFrom(page)
-                                            .innerJoin(page.domain, domain)
-                                            .fetchJoin()
-                                            // .leftJoin(page.pageRelations, relation).fetchJoin()
-                                            .where(builder)
-                                            .orderBy(page.pageUrl.asc());
+        JPQLQuery<Page> query = queryFactory
+                .selectFrom(page)
+                .innerJoin(page.domain, domain)
+                .fetchJoin()
+                // .leftJoin(page.pageRelations, relation).fetchJoin()
+                .where(builder)
+                .orderBy(page.pageUrl.asc());
 
         return query.fetch();
     }
@@ -96,18 +98,20 @@ public class PageRepositorySupportImpl extends QuerydslRepositorySupport impleme
             } else if (searchType.equals("pageServiceName")) {
                 builder.and(page.pageServiceName.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-                builder.and(page.pageSeq.like(keyword)
-                                        .or(page.pageName.contains(keyword))
-                                        .or(page.pageServiceName.contains(keyword)));
+                builder.and(page.pageSeq
+                        .like(keyword)
+                        .or(page.pageName.contains(keyword))
+                        .or(page.pageServiceName.contains(keyword)));
             }
         }
 
         JPQLQuery<Page> query = queryFactory.selectFrom(page);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<Page> list = query.innerJoin(page.domain, domain)
-                                       .fetchJoin()
-                                       .where(builder)
-                                       .fetchResults();
+        QueryResults<Page> list = query
+                .innerJoin(page.domain, domain)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults();
 
         return new PageImpl<Page>(list.getResults(), pageable, list.getTotal());
     }

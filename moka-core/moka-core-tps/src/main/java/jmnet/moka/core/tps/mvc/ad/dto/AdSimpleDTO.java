@@ -1,14 +1,10 @@
 package jmnet.moka.core.tps.mvc.ad.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

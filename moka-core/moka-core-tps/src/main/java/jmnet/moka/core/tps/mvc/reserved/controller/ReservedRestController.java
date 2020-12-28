@@ -15,10 +15,8 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.reserved.dto.ReservedDTO;
@@ -26,8 +24,6 @@ import jmnet.moka.core.tps.mvc.reserved.dto.ReservedSearchDTO;
 import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
 import jmnet.moka.core.tps.mvc.reserved.service.ReservedService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -278,10 +274,9 @@ public class ReservedRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "동일 아이디 존재 여부")
     @GetMapping("/{reservedId}/exists")
-    public ResponseEntity<?> duplicateCheckId(
-            @ApiParam("예약어아이디(필수)") @PathVariable("reservedId")
-            @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId,
-            @ApiParam("도메인아이디(필수)")String domainId)
+    public ResponseEntity<?> duplicateCheckId(@ApiParam("예약어아이디(필수)") @PathVariable("reservedId")
+    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_/-].+", message = "{tps.reserved.error.pattern.reservedId}") String reservedId,
+            @ApiParam("도메인아이디(필수)") String domainId)
             throws Exception {
 
         try {

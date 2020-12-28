@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
 const queries = {
-    xs: 0,
-    sm: '(min-width: 0px) and (max-width: 900px)',
-    md: '(min-width: 900px) and (max-width: 1360px)',
-    lg: '(min-width: 1360px) and (max-width: 1920px)',
+    xs: '(min-width: 0px) and (max-width: 1359px)',
+    sm: '(min-width: 1360px) and (max-width: 1699px)',
+    md: '(min-width: 1700px) and (max-width: 1919px)',
+    lg: '(min-width: 1920px)',
 };
 
 const useBreakpoint = () => {

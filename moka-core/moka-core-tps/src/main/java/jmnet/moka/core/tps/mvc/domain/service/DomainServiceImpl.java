@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
@@ -23,6 +21,7 @@ import jmnet.moka.core.tps.mvc.domain.repository.DomainRepository;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -52,11 +51,11 @@ public class DomainServiceImpl implements DomainService {
     @Autowired
     private UploadFileHelper uploadFileHelper;
 
-    @PersistenceContext(name = MokaConstants.PERSISTANCE_UNIT_TPS)
+    //@PersistenceContext(name = MokaConstants.PERSISTANCE_UNIT_TPS)
     private final EntityManager entityManager;
 
     @Autowired
-    public DomainServiceImpl(EntityManager entityManager) {
+    public DomainServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -121,11 +120,13 @@ public class DomainServiceImpl implements DomainService {
         uploadFileHelper.deleteBusinessDir("template", domainId);
 
         // 루트 페이지 삭제
-        jmnet.moka.core.tps.mvc.page.entity.Page root = pageService.findPageByDomainId(domainId, null)
-                                                                   .getContent()
-                                                                   .get(0);
-        Principal principal = SecurityContextHolder.getContext()
-                                                   .getAuthentication();
+        jmnet.moka.core.tps.mvc.page.entity.Page root = pageService
+                .findPageByDomainId(domainId, null)
+                .getContent()
+                .get(0);
+        Principal principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
         pageService.deletePage(root, principal.getName());
         log.debug("[DELETE DOMAIN] Root Page Delete: {}", root.getPageSeq());
 

@@ -13,13 +13,21 @@ const BoardsEdit = () => {
     const paramBoardId = useRef(null);
     const params = useParams();
     // 공통 구분값 URL
-    const { pagePathName, boardinfo, loading } = useSelector((store) => ({
+    const { pagePathName, boardType: storeBoardType, boardinfo, loading } = useSelector((store) => ({
         pagePathName: store.boards.pagePathName,
+        boardType: store.boards.boardType,
         boardinfo: store.boards.setmenu.boardinfo,
         loading: store.loading[GET_SETMENU_BOARD_INFO],
     }));
 
     const [boardInfoData, setBoardInfoData] = useState(initialState.setmenu.boardinfo);
+    const [inputfieldDisabled, setInputfieldDisabled] = useState({
+        allowFileCnt: false,
+        allowFileSize: false,
+        allowFileExt: false,
+        receiveEmail: false,
+        sendEmail: false,
+    });
 
     const handleClickCancleButton = () => {
         history.push(`/${pagePathName}`);
@@ -42,12 +50,6 @@ const BoardsEdit = () => {
 
     // 유효성
     const validate = (element) => {
-        // 타입.
-        if (element.boardType === '') {
-            messageBox.alert('타입을 선택해 주세요.', () => {});
-            return false;
-        }
-
         // 게시판명
         if (element.boardName === '') {
             messageBox.alert('게시판명을 입력해 주세요.', () => {});
@@ -106,12 +108,19 @@ const BoardsEdit = () => {
     const handleClickSaveButton = () => {
         const boardId = boardInfoData.boardId;
         const type = boardId !== null ? 'update' : 'save';
-
         if (validate(boardInfoData)) {
             dispatch(
                 saveBoardInfo({
                     type: type,
-                    boardinfo: boardInfoData,
+                    boardinfo: {
+                        ...boardInfoData,
+                        boardType: storeBoardType,
+                        allowFileCnt: boardInfoData.fileYn === 'Y' ? boardInfoData.allowFileCnt : null,
+                        allowFileSize: boardInfoData.fileYn === 'Y' ? boardInfoData.allowFileSize : null,
+                        allowFileExt: boardInfoData.fileYn === 'Y' ? boardInfoData.allowFileExt : null,
+                        receiveEmail: boardInfoData.emailReceiveYn === 'N' ? boardInfoData.receiveEmail : null,
+                        sendEmail: boardInfoData.emailSendYn === 'N' ? boardInfoData.sendEmail : null,
+                    },
                     callback: ({ header: { success, message }, body }) => {
                         if (success === true) {
                             toast.success(message);
@@ -173,6 +182,18 @@ const BoardsEdit = () => {
         setBoardInfoData(boardinfo);
     }, [boardinfo]);
 
+    useEffect(() => {
+        setInputfieldDisabled({
+            ...inputfieldDisabled,
+            allowFileCnt: boardInfoData.fileYn === 'N',
+            allowFileSize: boardInfoData.fileYn === 'N',
+            allowFileExt: boardInfoData.fileYn === 'N',
+            receiveEmail: boardInfoData.emailReceiveYn === 'N',
+            sendEmail: boardInfoData.emailSendYn === 'N',
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [boardInfoData]);
+
     return (
         <MokaCard
             width={635}
@@ -188,6 +209,7 @@ const BoardsEdit = () => {
             ]}
         >
             <Form className="mb-gutter">
+                {/* 사용 여부 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
@@ -203,26 +225,23 @@ const BoardsEdit = () => {
                         />
                     </Col>
                 </Form.Row>
+
+                {/* 타입 */}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
-                        <MokaInputLabel
-                            label={`타입`}
-                            as="select"
-                            labelWidth={60}
-                            onChange={(e) => handleChangeInfoData(e)}
-                            name="boardType"
-                            id="boardType"
-                            value={boardInfoData.boardType}
-                        >
-                            <option hidden>선택</option>
-                            {selectItem.boardType.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
-                                </option>
-                            ))}
+                        <MokaInputLabel label={`타입`} as="select" labelWidth={60} name="boardType" id="boardType" value={storeBoardType} onChange={(e) => handleChangeInfoData(e)}>
+                            {selectItem.boardType
+                                .filter((item) => item.value === storeBoardType)
+                                .map((item, index) => (
+                                    <option key={index} value={item.value}>
+                                        {item.name}
+                                    </option>
+                                ))}
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
+
+                {/* 게시판명 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -238,6 +257,8 @@ const BoardsEdit = () => {
                         />
                     </Col>
                 </Form.Row>
+
+                {/* 게시판 설명 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -253,6 +274,8 @@ const BoardsEdit = () => {
                         />
                     </Col>
                 </Form.Row>
+
+                {/* 말머리1 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -267,6 +290,8 @@ const BoardsEdit = () => {
                         />
                     </Col>
                 </Form.Row>
+
+                {/* 말머리2 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -281,8 +306,11 @@ const BoardsEdit = () => {
                         />
                     </Col>
                 </Form.Row>
+
+                {/* 에디터 */}
                 <Form.Row className="mb-2">
-                    <Col xs={4} className="p-0">
+                    {/* 에디터 */}
+                    <Col xs={2.5} className="p-0">
                         <MokaInputLabel
                             as="switch"
                             labelWidth={60}
@@ -294,7 +322,9 @@ const BoardsEdit = () => {
                             onChange={(e) => handleChangeInfoData(e)}
                         />
                     </Col>
-                    <Col xs={4} className="p-0">
+
+                    {/* 답변 */}
+                    <Col xs={2} className="p-0">
                         <MokaInputLabel
                             as="switch"
                             name="answYn"
@@ -306,7 +336,197 @@ const BoardsEdit = () => {
                             onChange={(e) => handleChangeInfoData(e)}
                         />
                     </Col>
+
+                    {storeBoardType === 'S' && (
+                        <>
+                            {/* 댓글 */}
+                            <Col xs={2} className="p-0">
+                                <MokaInputLabel
+                                    as="switch"
+                                    name="replyYn"
+                                    id="replyYn"
+                                    className="pl-1 pr-0 mb-2"
+                                    label="댓글"
+                                    labelWidth={25}
+                                    inputProps={{ checked: boardInfoData.replyYn === 'Y' ? true : false }}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                />
+                            </Col>
+
+                            {/* 신고 */}
+                            <Col xs={2} className="p-0">
+                                <MokaInputLabel
+                                    as="switch"
+                                    name="declareYn"
+                                    id="declareYn"
+                                    className="pl-1 pr-0 mb-2"
+                                    label="신고"
+                                    labelWidth={25}
+                                    inputProps={{ checked: boardInfoData.declareYn === 'Y' ? true : false }}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                />
+                            </Col>
+
+                            {/* 캡챠 */}
+                            <Col xs={2} className="p-0">
+                                <MokaInputLabel
+                                    as="switch"
+                                    name="captchaYn"
+                                    id="captchaYn"
+                                    className="pl-1 pr-0 mb-2"
+                                    label="캡챠"
+                                    labelWidth={25}
+                                    inputProps={{ checked: boardInfoData.captchaYn === 'Y' ? true : false }}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                />
+                            </Col>
+                        </>
+                    )}
                 </Form.Row>
+
+                {storeBoardType === 'S' && (
+                    <>
+                        {/* 이메일 수신여부 */}
+                        <Form.Row className="mb-2">
+                            {/* 이메일 수신여부 */}
+                            <Col xs={2.5} className="p-0">
+                                <MokaInputLabel
+                                    as="switch"
+                                    labelWidth={60}
+                                    name="emailReceiveYn"
+                                    id="emailReceiveYn"
+                                    className="pr-2 mb-2"
+                                    label="이메일\n수신여부"
+                                    inputProps={{ checked: boardInfoData.emailReceiveYn === 'Y' ? true : false }}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                />
+                            </Col>
+
+                            {/* 이메일 */}
+                            <Col className="p-0">
+                                <MokaInputLabel
+                                    label="이메일"
+                                    labelWidth={40}
+                                    className="mb-0 w-100"
+                                    id="receiveEmail"
+                                    name="receiveEmail"
+                                    placeholder={'이메일'}
+                                    value={boardInfoData.receiveEmail}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                    disabled={inputfieldDisabled.receiveEmail}
+                                />
+                            </Col>
+                        </Form.Row>
+
+                        {/* 이메일 발신여부 */}
+                        <Form.Row className="mb-2">
+                            {/* 이메일 발신여부 */}
+                            <Col xs={2.5} className="p-0">
+                                <MokaInputLabel
+                                    as="switch"
+                                    labelWidth={60}
+                                    name="emailSendYn"
+                                    id="emailSendYn"
+                                    className="pr-2 mb-2"
+                                    label="이메일\n발신여부"
+                                    inputProps={{ checked: boardInfoData.emailSendYn === 'Y' ? true : false }}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                />
+                            </Col>
+
+                            {/*  발신 이메일 */}
+                            <Col className="p-0">
+                                <MokaInputLabel
+                                    label="이메일"
+                                    labelWidth={40}
+                                    className="mb-0 w-100"
+                                    id="sendEmail"
+                                    name="sendEmail"
+                                    placeholder={'이메일'}
+                                    value={boardInfoData.sendEmail}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                    disabled={inputfieldDisabled.sendEmail}
+                                />
+                            </Col>
+                        </Form.Row>
+                        <Form.Row className="mb-2">
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel
+                                    label={`입력등급`}
+                                    as="select"
+                                    labelWidth={60}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                    name="insLevel"
+                                    id="insLevel"
+                                    value={boardInfoData.insLevel}
+                                >
+                                    <option hidden>선택</option>
+                                    {selectItem.insLevel.map((item, index) => (
+                                        <option key={index} value={item.value}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
+                            </Col>
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel
+                                    label={`조회등급`}
+                                    as="select"
+                                    labelWidth={60}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                    name="viewLevel"
+                                    id="viewLevel"
+                                    value={boardInfoData.viewLevel}
+                                >
+                                    <option hidden>선택</option>
+                                    {selectItem.viewLevel.map((item, index) => (
+                                        <option key={index} value={item.value}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
+                            </Col>
+                        </Form.Row>
+                        <Form.Row className="mb-2">
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel
+                                    label={`답변등급`}
+                                    as="select"
+                                    labelWidth={60}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                    name="answLevel"
+                                    id="answLevel"
+                                    value={boardInfoData.answLevel}
+                                >
+                                    <option hidden>선택</option>
+                                    {selectItem.answLevel.map((item, index) => (
+                                        <option key={index} value={item.value}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
+                            </Col>
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel
+                                    label={`댓글등급`}
+                                    as="select"
+                                    labelWidth={60}
+                                    onChange={(e) => handleChangeInfoData(e)}
+                                    name="replyLevel"
+                                    id="replyLevel"
+                                    value={boardInfoData.replyLevel}
+                                >
+                                    <option hidden>선택</option>
+                                    {selectItem.replyLevel.map((item, index) => (
+                                        <option key={index} value={item.value}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </MokaInputLabel>
+                            </Col>
+                        </Form.Row>
+                    </>
+                )}
                 <Form.Row className="mb-2">
                     <Col xs={6} className="p-0">
                         <MokaInputLabel
@@ -326,6 +546,26 @@ const BoardsEdit = () => {
                             ))}
                         </MokaInputLabel>
                     </Col>
+                    {storeBoardType === 'S' && (
+                        <Col xs={6} className="p-0">
+                            <MokaInputLabel
+                                label={`추천`}
+                                as="select"
+                                labelWidth={60}
+                                onChange={(e) => handleChangeInfoData(e)}
+                                name="recomFlag"
+                                id="recomFlag"
+                                value={boardInfoData.recomFlag}
+                            >
+                                <option hidden>선택</option>
+                                {selectItem.recomFlag.map((item, index) => (
+                                    <option key={index} value={item.value}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </MokaInputLabel>
+                        </Col>
+                    )}
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={2} className="p-0">
@@ -349,6 +589,7 @@ const BoardsEdit = () => {
                             name="allowFileCnt"
                             value={boardInfoData.allowFileCnt}
                             onChange={(e) => handleChangeInfoData(e)}
+                            disabled={inputfieldDisabled.allowFileCnt}
                         />
                     </Col>
                     <Col xs={3}>
@@ -361,6 +602,7 @@ const BoardsEdit = () => {
                             placeholder={'용량(MB)'}
                             value={boardInfoData.allowFileSize}
                             onChange={(e) => handleChangeInfoData(e)}
+                            disabled={inputfieldDisabled.allowFileSize}
                         />
                     </Col>
                     <Col xs={4}>
@@ -372,6 +614,7 @@ const BoardsEdit = () => {
                             name="allowFileExt"
                             value={boardInfoData.allowFileExt}
                             onChange={(e) => handleChangeInfoData(e)}
+                            disabled={inputfieldDisabled.allowFileExt}
                         />
                     </Col>
                 </Form.Row>

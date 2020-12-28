@@ -5,8 +5,8 @@
 package jmnet.moka.core.tps.mvc.rcvArticle.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleCode;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * Description: 수신기사 분류코드 Repo Support Impl
@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ssc
  * @since 2020-12-23
  */
-public class RcvArticleCodeRepositorySupportImpl extends QuerydslRepositorySupport implements RcvArticleCodeRepositorySupport {
+public class RcvArticleCodeRepositorySupportImpl extends TpsQueryDslRepositorySupport implements RcvArticleCodeRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public RcvArticleCodeRepositorySupportImpl(JPAQueryFactory queryFactory) {

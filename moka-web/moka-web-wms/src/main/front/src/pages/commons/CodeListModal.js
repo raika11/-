@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import { MokaModal, MokaInput, MokaIcon, useBreakpoint } from '@components';
 import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@store/code';
+import toast from '@utils/toastUtil';
 
 const propTypes = {
     /**
@@ -42,6 +43,10 @@ const propTypes = {
      * 취소 버튼 클릭이벤트
      */
     onCancel: PropTypes.func,
+    /**
+     * 선택가능한 마스터코드의 최대 갯수
+     */
+    max: PropTypes.number,
 };
 const defaultProps = {
     title: '분류코드표',
@@ -52,7 +57,7 @@ const defaultProps = {
  * 기사 분류(masterCode) 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, onSave, onCancel, selection, value, ...rest } = props;
+    const { show, onHide, title, onSave, onCancel, selection, value, max, ...rest } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector((store) => store.code.master.list);
@@ -111,6 +116,13 @@ const CodeListModal = (props) => {
                 if (selection === 'single') {
                     setSelectedList([origin]);
                 } else {
+                    // selectedList.lenght가 max보다 크면 waning 노출
+                    if (max) {
+                        if (selectedList.length >= max) {
+                            toast.warning(`최대 ${max}개까지 선택할 수 있습니다.`);
+                            return;
+                        }
+                    }
                     setSelectedList(
                         produce(selectedList, (draft) => {
                             draft.push(origin);
@@ -121,7 +133,7 @@ const CodeListModal = (props) => {
                 spliceList(id);
             }
         },
-        [masterCodeList, selectedList, selection, spliceList],
+        [masterCodeList, max, selectedList, selection, spliceList],
     );
 
     /**
@@ -250,7 +262,7 @@ const CodeListModal = (props) => {
                             sm={6}
                             key={dep1.masterCode}
                             className={clsx('service d-flex flex-column p-0 border-bottom', {
-                                'border-right': (matchPoints.lg && idx % 3 !== 2) || (matchPoints.md && idx % 2 === 0),
+                                'border-right': (matchPoints.sm && idx % 2 === 0) || (matchPoints.md && idx % 3 !== 2) || (matchPoints.lg && idx % 3 !== 2),
                             })}
                         >
                             {/* 대분류 */}

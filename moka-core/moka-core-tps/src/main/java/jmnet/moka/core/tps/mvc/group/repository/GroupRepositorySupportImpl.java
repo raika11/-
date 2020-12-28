@@ -4,6 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.group.dto.GroupSearchDTO;
 import jmnet.moka.core.tps.mvc.group.entity.GroupInfo;
 import jmnet.moka.core.tps.mvc.group.entity.QGroupInfo;
@@ -11,7 +12,6 @@ import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-10-22 18:56
  */
-public class GroupRepositorySupportImpl extends QuerydslRepositorySupport implements GroupRepositorySupport {
+public class GroupRepositorySupportImpl extends TpsQueryDslRepositorySupport implements GroupRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 

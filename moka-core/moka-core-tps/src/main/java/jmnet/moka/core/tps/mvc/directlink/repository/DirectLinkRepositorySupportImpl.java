@@ -5,13 +5,13 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.entity.QDirectLink;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -25,7 +25,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-10-22 18:56
  */
-public class DirectLinkRepositorySupportImpl extends QuerydslRepositorySupport implements DirectLinkRepositorySupport {
+public class DirectLinkRepositorySupportImpl extends TpsQueryDslRepositorySupport implements DirectLinkRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -42,12 +42,20 @@ public class DirectLinkRepositorySupportImpl extends QuerydslRepositorySupport i
         JPQLQuery<DirectLink> query = from(qDirectLink);
         // 사용여부
         if (McpString.isNotEmpty(searchDTO.getUsedYn())) {
-            query.where(qDirectLink.usedYn.toUpperCase().eq(searchDTO.getUsedYn().toUpperCase()));
+            query.where(qDirectLink.usedYn
+                    .toUpperCase()
+                    .eq(searchDTO
+                            .getUsedYn()
+                            .toUpperCase()));
         }
 
         // 노출여부
         if (McpString.isNotEmpty(searchDTO.getFixYn())) {
-            query.where(qDirectLink.fixYn.toUpperCase().eq(searchDTO.getFixYn().toUpperCase()));
+            query.where(qDirectLink.fixYn
+                    .toUpperCase()
+                    .eq(searchDTO
+                            .getFixYn()
+                            .toUpperCase()));
         }
 
         //전체 : all, 제목 : title, 내용:content, 키워드 : keyword
@@ -63,10 +71,10 @@ public class DirectLinkRepositorySupportImpl extends QuerydslRepositorySupport i
             } else if (searchType.equals("keyword")) {
                 query.where(qDirectLink.linkKwd.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-                query.where(qDirectLink.linkTitle.contains(keyword)
-                     .or(qDirectLink.linkContent.contains(keyword))
-                        .or(qDirectLink.linkKwd.contains(keyword))
-                );
+                query.where(qDirectLink.linkTitle
+                        .contains(keyword)
+                        .or(qDirectLink.linkContent.contains(keyword))
+                        .or(qDirectLink.linkKwd.contains(keyword)));
             }
         }
 

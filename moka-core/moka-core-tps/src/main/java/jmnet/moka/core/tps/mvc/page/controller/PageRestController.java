@@ -17,11 +17,9 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.PurgeHelper;
@@ -35,8 +33,6 @@ import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -115,7 +111,8 @@ public class PageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "페이지 상세조회")
     @GetMapping("/{pageSeq}")
-    public ResponseEntity<?> getPage(@ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
+    public ResponseEntity<?> getPage(
+            @ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
             throws NoDataException, InvalidDataException, Exception {
 
         // 데이타유효성검사.
@@ -267,7 +264,8 @@ public class PageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "페이지 수정")
     @PutMapping(value = "/{pageSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putPage(@ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
+    public ResponseEntity<?> putPage(
+            @ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
             @ApiParam("페이지정보") @RequestBody @Valid PageDTO pageDTO)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -322,7 +320,8 @@ public class PageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "페이지 삭제")
     @DeleteMapping("/{pageSeq}")
-    public ResponseEntity<?> deletePage(@ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
+    public ResponseEntity<?> deletePage(
+            @ApiParam("페이지SEQ(필수)") @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq,
             @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -365,10 +364,12 @@ public class PageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "페이지 서비스URL 사용여부 체크")
     @GetMapping("/isPageUrl")
-    public ResponseEntity<?> getIsPageUrl(
-            @ApiParam("페이지 URL(필수)") @RequestParam(name = "pageUrl") @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.pageUrl}") String pageUrl,
-            @ApiParam("도메인ID(필수)") @RequestParam(name = "domainId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
-            @ApiParam("페이지 일련번호(필수)") @RequestParam(name = "pageSeq", defaultValue = "0") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq) {
+    public ResponseEntity<?> getIsPageUrl(@ApiParam("페이지 URL(필수)") @RequestParam(name = "pageUrl")
+    @Pattern(regexp = MokaConstants.PAGE_SERVICE_URL_PATTERN, message = "{tps.page.error.pattern.pageUrl}") String pageUrl,
+            @ApiParam("도메인ID(필수)") @RequestParam(name = "domainId")
+            @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}") String domainId,
+            @ApiParam("페이지 일련번호(필수)") @RequestParam(name = "pageSeq", defaultValue = "0")
+            @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq) {
 
         List<Page> pageList = pageService.findPageByPageUrl(pageUrl, domainId);
 

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
@@ -24,12 +23,10 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
@@ -42,7 +39,6 @@ import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -124,7 +120,8 @@ public class DatasetRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "데이타셋 상세조회")
     @GetMapping("/{datasetSeq}")
-    public ResponseEntity<?> getDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq)
+    public ResponseEntity<?> getDataset(
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq)
             throws Exception {
 
         Dataset dataset = datasetService
@@ -288,7 +285,8 @@ public class DatasetRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "데이타셋 수정")
     @PutMapping("/{datasetSeq}")
-    public ResponseEntity<?> putDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
+    public ResponseEntity<?> putDataset(
+            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
             @Valid DatasetDTO datasetDTO)
             throws Exception {
 
@@ -468,8 +466,8 @@ public class DatasetRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{datasetSeq}/has-relations")
-    public ResponseEntity<?> hasRelationList(
-            @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq)
+    public ResponseEntity<?> hasRelationList(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq")
+    @Min(value = 0, message = "{tps.dataset.error.invalid.datasetSeq}") Long datasetSeq)
             throws Exception {
 
         // 데이타셋 확인
@@ -510,7 +508,8 @@ public class DatasetRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "데이타셋 복사")
     @PostMapping("/{datasetSeq}/copy")
-    public ResponseEntity<?> copyDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") Long datasetSeq, @ApiParam("데이타셋명") String datasetName)
+    public ResponseEntity<?> copyDataset(@ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") Long datasetSeq,
+            @ApiParam("데이타셋명") String datasetName)
             throws InvalidDataException, Exception {
 
         // 조회

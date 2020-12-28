@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.Id;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;

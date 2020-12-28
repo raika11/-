@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import 'bootstrap';
+/*import 'react-summernote/dist/react-summernote.css';*/
+import ReactSummernote from 'react-summernote';
+import 'react-summernote/lang/summernote-ko-KR';
 
 import { Helmet } from 'react-helmet';
 import Container from 'react-bootstrap/Container';
 
 import { MokaCard, Moka, MokaIcon } from '@components';
-import { Col } from 'react-bootstrap';
+
 import { shallowEqual, useSelector } from 'react-redux';
 
 const ComponentDashboard = () => {
@@ -107,6 +111,10 @@ const ComponentDashboard = () => {
         menuConverter(menu);
     }, [menu, menuConverter]);
 
+    const onChange = (content) => {
+        console.log('onChange', content);
+    };
+
     return (
         <Container className="p-0" fluid>
             <Helmet>
@@ -116,46 +124,25 @@ const ComponentDashboard = () => {
             </Helmet>
 
             <div className="d-flex">
-                <MokaCard>
-                    <Moka.Input type="date" name="date" onChange={handleChangeValue}></Moka.Input>
-                    <Moka.Input name="moka-input" value={values['moka-input']} onChange={handleChangeValue} />
-                    <Moka.CheckBox name="moka-checkbox" label="moka-checkbox" value={values['moka-checkbox']} onChange={handleChangeValue} />
-                    <Moka.Radio name="moka-radio" label="moka-radio" value={values['moka-radio']} onChange={handleChangeValue} />
-                    <Moka.Select name="moka-select" value={values['moka-select']} onChange={handleChangeValue}>
-                        <option value="moka1">moka1</option>
-                        <option value="moka2">moka2</option>
-                        <option value="moka3">moka3</option>
-                    </Moka.Select>
-                    <Moka.Label label="타이틀" labelWidth={80}>
-                        <Col xs={5}>
-                            <Moka.Radio
-                                id="moka-radio-group1"
-                                name="moka-radio2"
-                                label="moka-checkbox"
-                                value="Y"
-                                checked={values['moka-radio2'] === 'Y'}
-                                onChange={handleChangeValue}
-                                custom
-                            />
-                        </Col>
-                        <Col xs={5}>
-                            <Moka.Radio
-                                id="moka-radio-group2"
-                                name="moka-radio2"
-                                label="moka-checkbox"
-                                value="N"
-                                checked={values['moka-radio2'] === 'N'}
-                                onChange={handleChangeValue}
-                                custom
-                            />
-                        </Col>
-                    </Moka.Label>
-                </MokaCard>
-                <MokaCard>
-                    <Moka.Tree treeData={treeMenu} onCheck={handleCheck} />
-                </MokaCard>
+                <ReactSummernote
+                    value="Default value"
+                    options={{
+                        lang: 'ko-KR',
+                        height: 350,
+                        dialogsInBody: true,
+                        /*toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'underline', 'clear']],
+                            ['fontname', ['fontname']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'video']],
+                            ['view', ['fullscreen', 'codeview']],
+                        ],*/
+                    }}
+                    onChange={onChange}
+                />
             </div>
-            <MokaIcon iconName="fal-check-circle" />
         </Container>
     );
 };

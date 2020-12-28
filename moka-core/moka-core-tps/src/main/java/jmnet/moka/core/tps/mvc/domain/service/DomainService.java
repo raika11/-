@@ -101,4 +101,12 @@ public interface DomainService {
      * @return 관련아이템 여부
      */
     public boolean hasRelations(String domainId);
+
+    /**
+     * 서비스플랫폼별 도메인 조회
+     *
+     * @param servicePlatform 서비스플랫포
+     * @return 도메인
+     */
+    Domain findByServiceFlatform(String servicePlatform);
 }

@@ -120,4 +120,13 @@ public interface ArticlePageService {
      * @param artType  기사 유형
      */
     boolean existArtType(String domainId, String artType);
+
+    /**
+     * 유형에 해당하는 기사페이지 조회
+     *
+     * @param domainId       도메인ID
+     * @param defaultArtType 유형
+     * @return 기사페이지
+     */
+    ArticlePage findByArticePageByArtType(String domainId, String defaultArtType);
 }

@@ -335,4 +335,14 @@ public class ArticlePageServiceImpl implements ArticlePageService {
     public boolean existArtType(String domainId, String artType) {
         return articlePageRepository.countByDomainDomainIdAndArtType(domainId, artType) > 0;
     }
+
+    @Override
+    public ArticlePage findByArticePageByArtType(String domainId, String artType) {
+        List<ArticlePage> pageList = articlePageRepository.findByDomainDomainIdAndArtType(domainId, artType);
+        if (pageList.size() > 0) {
+            return pageList.get(0);
+        } else {
+            return null;
+        }
+    }
 }

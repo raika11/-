@@ -19,11 +19,15 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /*
@@ -155,7 +159,7 @@ public class PreviewController extends AbstractCommonController {
     }
 
     /**
-     * 페이지 미리보기
+     * 기사페이지 미리보기
      *
      * @param request        요청
      * @param articlePageDto 기사페이지
@@ -185,4 +189,36 @@ public class PreviewController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 수신기사페이지 미리보기
+     *
+     * @param request   요청
+     * @param response  결과
+     * @param rid       수신기사키
+     * @param updateDto 수신기사 수정정보
+     * @throws InvalidDataException         페이지정보오류
+     * @throws NoDataException              도메인,페이지 정보 없음 오류
+     * @throws IOException                  입출력오류
+     * @throws Exception                    기타오류
+     * @throws TemplateMergeException       tems 머징오류
+     * @throws UnsupportedEncodingException 인코딩오류
+     * @throws TemplateParseException       tems 문법오류
+     * @throws TemplateLoadException        tems 로딩오류
+     */
+    @PostMapping(value = "/article-page/rcv/{rid}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void perviewArticlePageWithRcv(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
+            @ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid,
+            @ApiParam("수정할 정보(기자목록,분류코드목록,태그목록)") @RequestBody RcvArticleBasicUpdateDTO updateDto, @ApiParam("도메인(P/M)") String domainType)
+            throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
+            TemplateParseException, TemplateLoadException {
+
+        try {
+            String html = mergeService.getMergeArticlePageWithRcv(rid, updateDto, domainType);
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+        } catch (Exception e) {
+            log.error("[FAIL TO MERGE] rid: {} {}", rid, e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
+        }
+    }
 }

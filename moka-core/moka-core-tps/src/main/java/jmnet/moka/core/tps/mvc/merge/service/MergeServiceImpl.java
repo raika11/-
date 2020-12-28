@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.merge.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,11 +24,14 @@ import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
+import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
+import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
@@ -39,6 +43,7 @@ import jmnet.moka.core.tps.mvc.domain.service.DomainService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +85,9 @@ public class MergeServiceImpl implements MergeService {
 
     @Autowired
     private TpsLogger tpsLogger;
+
+    @Autowired
+    private ArticlePageService articlePageService;
 
 
     @Override
@@ -418,6 +426,50 @@ public class MergeServiceImpl implements MergeService {
 
         // 랜더링
         StringBuilder sb = dtm.merge(articlePageItem, totalId);
+
+        String content = sb.toString();
+
+        return content;
+    }
+
+    @Override
+    public String getMergeArticlePageWithRcv(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainType)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        // 도메인Id조회
+        Domain domainInfo = domainService.findByServiceFlatform(domainType);
+        String domainId = domainInfo != null ? domainInfo.getDomainId() : null;
+        if (domainInfo == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
+        // 기사페이지 정보 조회(기본타입으로 조회)
+        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, TpsConstants.DEFAULT_ART_TYPE);
+        if (articlePage == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        ArticlePageDTO articlePageDto = modelMapper.map(articlePage, ArticlePageDTO.class);
+
+        // 기사사페이지
+        ArticlePageItem articlePageItem = articlePageDto.toArticlePageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        articlePageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+
+        // 기자정보 변환
+        List<Map<String, Object>> reporterList = modelMapper.map(updateDto.getReporterList(), new TypeReference<List<Map<String, Object>>>() {
+        }.getType());
+
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+
+        // 랜더링
+        StringBuilder sb = dtm.mergeRcv(articlePageItem, rid, updateDto.getCategoryList(), reporterList, updateDto.getTagList());
 
         String content = sb.toString();
 

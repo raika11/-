@@ -10,6 +10,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 
 /**
  * Description: merge서비스
@@ -34,6 +35,9 @@ public interface MergeService {
             throws Exception;
 
     String getMergeArticlePage(ArticlePageDTO articlePageDto, Long totalId)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
+
+    String getMergeArticlePageWithRcv(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 
 }

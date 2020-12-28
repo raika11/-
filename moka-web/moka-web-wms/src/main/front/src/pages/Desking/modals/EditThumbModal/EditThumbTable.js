@@ -29,11 +29,20 @@ const EditThumbTable = (props) => {
 
     return (
         <React.Fragment>
-            <div className="border w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll mb-2">
+            <div className="border w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll mb-2 position-relative">
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {loading && <MokaLoader />}
                     {renderList.map((data) => (
-                        <EditThumbCard key={data.nid} img={data.thumbPath} data={data} onThumbClick={onThumbClick} onRepClick={onRepClick} dataType={data.dataType} />
+                        <EditThumbCard
+                            width={226}
+                            height={188}
+                            key={data.nid}
+                            img={data.thumbPath}
+                            data={data}
+                            onThumbClick={onThumbClick}
+                            onRepClick={onRepClick}
+                            dataType={data.dataType}
+                        />
                     ))}
                 </div>
             </div>

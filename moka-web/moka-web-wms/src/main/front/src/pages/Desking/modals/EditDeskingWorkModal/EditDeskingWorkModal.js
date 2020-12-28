@@ -36,10 +36,10 @@ const EditDeskingWorkModal = (props) => {
             store.loading[GET_DS_PRE_LOC] ||
             store.loading[GET_DS_TITLE_LOC],
     );
-    const { IR_URL, PHOTO_ARCHIVE_URL } = useSelector((store) => ({
-        IR_URL: store.app.IR_URL,
-        PHOTO_ARCHIVE_URL: store.app.PHOTO_ARCHIVE_URL,
-    }));
+    // const { IR_URL, PHOTO_ARCHIVE_URL } = useSelector((store) => ({
+    //     IR_URL: store.app.IR_URL,
+    //     PHOTO_ARCHIVE_URL: store.app.PHOTO_ARCHIVE_URL,
+    // }));
     const bulkCharRows = useSelector((store) => store.codeMgt.bulkCharRows);
     const imgFileRef = useRef(null);
 
@@ -125,21 +125,7 @@ const EditDeskingWorkModal = (props) => {
      */
     const handleThumbFileName = (data) => {
         if (data) {
-            let irImg = data;
-            let thumbFileName = '';
-            if (data.indexOf('blob:') > -1) {
-                // blob string
-                irImg = data;
-            } else if (data.indexOf('news') > -1) {
-                // 기사 내 사진
-                irImg = data;
-                thumbFileName = data;
-            } else {
-                // 포토아카이브
-                irImg = `${PHOTO_ARCHIVE_URL}${data}`;
-                thumbFileName = data;
-            }
-            setTemp({ ...temp, thumbFileName, irImg });
+            setTemp({ ...temp, thumbFileName: data, irImg: data });
         }
     };
 
@@ -278,6 +264,8 @@ const EditDeskingWorkModal = (props) => {
                     })}
                 </Form>
             </MokaModal>
+
+            {/* 대표이미지 신규등록 모달 */}
             <EditThumbModal
                 show={showModal}
                 onHide={() => setShowModal(false)}

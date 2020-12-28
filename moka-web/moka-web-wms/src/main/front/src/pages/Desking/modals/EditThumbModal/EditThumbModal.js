@@ -130,7 +130,14 @@ const EditThumbModal = (props) => {
      * 테이블에서 검색옵션 변경
      */
     const handleChangeSearchOption = ({ key, value }) => {
-        let temp = { ...search, [key]: value };
+        let temp = search;
+
+        // 포토아카이브는 size 대신 pageCount라는 명칭 사용
+        if (key === 'size') {
+            temp = { ...temp, pageCount: value };
+        } else {
+            temp = { ...temp, [key]: value };
+        }
         if (key !== 'page') {
             temp['page'] = 0;
         }
@@ -143,16 +150,16 @@ const EditThumbModal = (props) => {
     const handleClickSave = () => {
         if (repPhoto.dataType === 'local') {
             (async () => {
-                await fetch(repPhoto.imgProps.preview)
+                await fetch(repPhoto.thumbPath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
                         const file = util.blobToFile(blobFile, `${deskingWorkData.seq}.jpeg`, blobFile.type);
                         setFileValue(file);
-                        setThumbFileName(repPhoto.imgProps.preview);
+                        setThumbFileName(repPhoto.thumbPath);
                     });
             })();
         } else {
-            setThumbFileName(repPhoto.path.thumbPath || repPhoto.path.articleImgPath);
+            setThumbFileName(repPhoto.thumbPath);
         }
         handleHide();
     };
@@ -209,6 +216,7 @@ const EditThumbModal = (props) => {
                     height={481}
                     className="shadow-none w-100"
                     tabs={[
+                        // 아카이브 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
                             <EditThumbSearch search={search} setSearch={setSearch} />
                             <EditThumbTable
@@ -223,9 +231,11 @@ const EditThumbModal = (props) => {
                                 onEditClick={handleEditClick}
                             />
                         </div>,
+                        // 본문 소재 리스트 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
                             <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} loading={loading} onRepClick={handleRepClick} />
                         </div>,
+                        // 내 PC 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
                             <EditThumbImageInputTable onRepClick={handleRepClick} onEditClick={handleEditClick} />
                         </div>,
@@ -234,6 +244,7 @@ const EditThumbModal = (props) => {
                     fill
                 />
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
+                    {/* 대표사진 */}
                     <div className="deskthumb-main d-flex pt-3 justify-content-center" style={{ width: 202 }}>
                         {repPhoto.thumbPath && repPhoto.thumbPath !== '' && (
                             <EditThumbCard
@@ -246,6 +257,8 @@ const EditThumbModal = (props) => {
                             />
                         )}
                     </div>
+
+                    {/* GIF 생성 드롭존 */}
                     <EditThumbDropzone
                         collapse={collapse}
                         setCollapse={setCollapse}
@@ -256,6 +269,8 @@ const EditThumbModal = (props) => {
                     />
                 </div>
             </DndProvider>
+
+            {/* 사진 크게 보기 */}
             <ThumbViewModal show={showViewModal} onHide={() => setShowViewModal(false)} data={cardData} />
         </MokaModal>
     );

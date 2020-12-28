@@ -50,7 +50,7 @@ const EditThumbArticleImageListTable = (props) => {
             <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                 {loading && <MokaLoader />}
                 {renderList.map((data) => (
-                    <EditThumbCard key={data.seqNo} img={data.thumbPath} data={data} dataType={data.dataType} onRepClick={onRepClick} articleImg />
+                    <EditThumbCard width={226} height={188} key={data.seqNo} img={data.thumbPath} data={data} dataType={data.dataType} onRepClick={onRepClick} articleImg />
                 ))}
             </div>
         </div>

@@ -195,7 +195,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
 
                 {/* PC미리보기 */}
-                {previewOn.pc && <ArticlePC onClose={() => setPreviewOn({ ...previewOn, pc: false })} />}
+                <ArticlePC show={previewOn.pc} onHide={() => setPreviewOn({ ...previewOn, pc: false })} />
             </Form>
         </MokaCard>
     );

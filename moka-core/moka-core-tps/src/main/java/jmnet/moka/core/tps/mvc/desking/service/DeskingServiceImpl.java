@@ -53,6 +53,7 @@ import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,7 +121,7 @@ public class DeskingServiceImpl implements DeskingService {
     private String wimageUrl;
 
     @Autowired
-    public DeskingServiceImpl(EntityManager entityManager) {
+    public DeskingServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

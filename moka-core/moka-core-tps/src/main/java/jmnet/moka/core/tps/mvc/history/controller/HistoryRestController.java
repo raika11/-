@@ -21,9 +21,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
 import jmnet.moka.core.tps.mvc.history.dto.HistSearchDTO;
@@ -31,7 +29,6 @@ import jmnet.moka.core.tps.mvc.history.mapper.HistoryMapper;
 import jmnet.moka.core.tps.mvc.history.service.HistoryService;
 import jmnet.moka.core.tps.mvc.history.vo.HistSimpleVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -95,7 +92,8 @@ public class HistoryRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "히스토리 상세조회")
     @GetMapping("/{histSeq}")
-    public ResponseEntity<?> getHistory(@ApiParam("히스토리 일련번호(필수)") @PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
+    public ResponseEntity<?> getHistory(
+            @ApiParam("히스토리 일련번호(필수)") @PathVariable("histSeq") @Min(value = 0, message = "{tps.history.error.min.histseq}") Long histSeq,
             @Valid @SearchParam HistSearchDTO search)
             throws Exception {
 

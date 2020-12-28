@@ -5,7 +5,6 @@ package jmnet.moka.core.tps.mvc.directlink.repository;
 
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
-import jmnet.moka.core.tps.mvc.group.repository.GroupRepositorySupport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -16,8 +15,9 @@ import org.springframework.stereotype.Repository;
  * 기자관리 Repository
  * 2020. 11. 10. ssc 최초생성
  * </pre>
- * 
+ * <p>
  * 2020. 11. 10. 오후 2:04:49
+ *
  * @author ssc
  */
 @Repository

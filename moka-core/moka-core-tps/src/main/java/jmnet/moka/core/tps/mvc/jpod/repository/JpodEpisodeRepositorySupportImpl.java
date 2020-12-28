@@ -5,12 +5,12 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodEpisode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-11-09 17:16
  */
-public class JpodEpisodeRepositorySupportImpl extends QuerydslRepositorySupport implements JpodEpisodeRepositorySupport {
+public class JpodEpisodeRepositorySupportImpl extends TpsQueryDslRepositorySupport implements JpodEpisodeRepositorySupport {
 
 
     public JpodEpisodeRepositorySupportImpl(JPAQueryFactory queryFactory) {

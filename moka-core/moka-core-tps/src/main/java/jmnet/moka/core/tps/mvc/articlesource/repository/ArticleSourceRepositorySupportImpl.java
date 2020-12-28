@@ -14,11 +14,11 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.entity.QArticleSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * Description: 설명
@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ssc
  * @since 2020-11-13
  */
-public class ArticleSourceRepositorySupportImpl extends QuerydslRepositorySupport implements ArticleSourceRepositorySupport {
+public class ArticleSourceRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ArticleSourceRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public ArticleSourceRepositorySupportImpl(JPAQueryFactory queryFactory) {

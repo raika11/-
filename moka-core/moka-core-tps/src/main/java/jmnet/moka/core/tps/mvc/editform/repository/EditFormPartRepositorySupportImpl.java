@@ -6,13 +6,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPart;
 import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPart;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-10-23 09:38
  */
-public class EditFormPartRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormPartRepositorySupport {
+public class EditFormPartRepositorySupportImpl extends TpsQueryDslRepositorySupport implements EditFormPartRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
@@ -101,7 +101,7 @@ public class EditFormPartRepositorySupportImpl extends QuerydslRepositorySupport
         if (McpString.isNotEmpty(searchDTO.getPartSeq())) {
             query.where(qPart.partSeq.eq(searchDTO.getPartSeq()));
         }
-        
+
         Pageable pageable = searchDTO.getPageable();
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = getQuerydsl().applyPagination(pageable, query);

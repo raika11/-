@@ -3,13 +3,13 @@ package jmnet.moka.core.tps.mvc.board.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.board.dto.BoardInfoSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.BoardInfo;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-12-17 11:56
  */
-public class BoardInfoRepositorySupportImpl extends QuerydslRepositorySupport implements BoardInfoRepositorySupport {
+public class BoardInfoRepositorySupportImpl extends TpsQueryDslRepositorySupport implements BoardInfoRepositorySupport {
 
     public BoardInfoRepositorySupportImpl() {
         super(BoardInfo.class);

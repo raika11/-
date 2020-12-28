@@ -7,6 +7,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.QComponent;
@@ -18,14 +19,13 @@ import jmnet.moka.core.tps.mvc.template.entity.QTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * 컴포넌트 Repository Support 구현체
  *
  * @author jeon
  */
-public class ComponentRepositorySupportImpl extends QuerydslRepositorySupport implements ComponentRepositorySupport {
+public class ComponentRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ComponentRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public ComponentRepositorySupportImpl(JPAQueryFactory queryFactory) {

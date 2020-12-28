@@ -8,8 +8,6 @@
 
 package jmnet.moka.core.tps.mvc.code.entity;
 
-import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

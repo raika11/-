@@ -26,6 +26,7 @@ import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class ComponentServiceImpl implements ComponentService {
     private final EntityManager entityManager;
 
     @Autowired
-    public ComponentServiceImpl(EntityManager entityManager) {
+    public ComponentServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

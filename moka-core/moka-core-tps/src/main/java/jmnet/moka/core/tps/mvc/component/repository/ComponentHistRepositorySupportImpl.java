@@ -10,12 +10,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.entity.QComponentHist;
 import jmnet.moka.core.tps.mvc.dataset.entity.QDataset;
 import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPart;
 import jmnet.moka.core.tps.mvc.template.entity.QTemplate;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * Description: 설명
@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ssc
  * @since 2020-11-19
  */
-public class ComponentHistRepositorySupportImpl extends QuerydslRepositorySupport implements ComponentHistRepositorySupport {
+public class ComponentHistRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ComponentHistRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public ComponentHistRepositorySupportImpl(JPAQueryFactory queryFactory) {

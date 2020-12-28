@@ -6,6 +6,7 @@ import com.querydsl.jpa.JPQLQuery;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.QBoard;
@@ -13,7 +14,6 @@ import jmnet.moka.core.tps.mvc.board.entity.QBoardInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ince
  * @since 2020-12-17 11:59
  */
-public class BoardRepositorySupportImpl extends QuerydslRepositorySupport implements BoardRepositorySupport {
+public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport implements BoardRepositorySupport {
 
     public BoardRepositorySupportImpl() {
         super(Board.class);

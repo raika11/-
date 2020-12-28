@@ -8,9 +8,9 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.desking.entity.Desking;
 import jmnet.moka.core.tps.mvc.desking.entity.QDesking;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ssc
  * @since 2020. 8. 11. 오전 10:43:25
  */
-public class DeskingRepositorySupportImpl extends QuerydslRepositorySupport implements DeskingRepositorySupport {
+public class DeskingRepositorySupportImpl extends TpsQueryDslRepositorySupport implements DeskingRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 

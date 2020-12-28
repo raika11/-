@@ -1,8 +1,8 @@
 package jmnet.moka.core.tps.mvc.board.repository;
 
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
 import jmnet.moka.core.tps.mvc.board.entity.QBoardAttach;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -16,7 +16,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-12-17 13:51
  */
-public class BoardAttachRepositorySupportImpl extends QuerydslRepositorySupport implements BoardAttachRepositorySupport {
+public class BoardAttachRepositorySupportImpl extends TpsQueryDslRepositorySupport implements BoardAttachRepositorySupport {
 
     public BoardAttachRepositorySupportImpl() {
         super(BoardAttach.class);

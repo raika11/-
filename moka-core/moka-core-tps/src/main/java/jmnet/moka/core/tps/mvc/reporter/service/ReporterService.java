@@ -3,20 +3,14 @@
  */
 package jmnet.moka.core.tps.mvc.reporter.service;
 
+import java.util.List;
+import java.util.Optional;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
- * 도메인 서비스 2020. 1. 8. ssc 최초생성
- * 메소드 생성 규칙
- * 목록 조회 : find{Target}List
- * ID로 상세 조회 : find{Target}ById
- * 여러 속성으로 상세 조회 : find{Target}
- * 수정 : update{Target}
+ * 도메인 서비스 2020. 1. 8. ssc 최초생성 메소드 생성 규칙 목록 조회 : find{Target}List ID로 상세 조회 : find{Target}ById 여러 속성으로 상세 조회 : find{Target} 수정 : update{Target}
  *
  * @author ssc
  * @since 2020. 1. 8. 오후 2:06:54

@@ -4,10 +4,10 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.bulk.entity.BulkArticle;
 import jmnet.moka.core.tps.mvc.bulk.entity.BulkArticlePK;
 import jmnet.moka.core.tps.mvc.bulk.entity.QBulkArticle;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-10-22 18:56
  */
-public class BulkArticleRepositorySupportImpl extends QuerydslRepositorySupport implements BulkArticleRepositorySupport {
+public class BulkArticleRepositorySupportImpl extends TpsQueryDslRepositorySupport implements BulkArticleRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 

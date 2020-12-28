@@ -8,10 +8,10 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.component.entity.QComponentHist;
 import jmnet.moka.core.tps.mvc.desking.entity.DeskingHist;
 import jmnet.moka.core.tps.mvc.desking.entity.QDeskingHist;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * Description: 설명
@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ssc
  * @since 2020-11-27
  */
-public class DeskingHistRepositorySupportImpl extends QuerydslRepositorySupport implements DeskingHistRepositorySupport {
+public class DeskingHistRepositorySupportImpl extends TpsQueryDslRepositorySupport implements DeskingHistRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 

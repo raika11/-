@@ -28,7 +28,8 @@ import org.springframework.util.StringUtils;
 @Configuration
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
 @Import({HelperConfiguration.class, PreviewConfiguration.class, TpsJpaConfiguration.class, TpsQuerydslConfiguration.class,
-         TpsMybatisConfiguration.class, SwaggerConfiguration.class, AsyncTaskConfiguration.class})
+         TpsMybatisConfiguration.class, SwaggerConfiguration.class, AsyncTaskConfiguration.class/*, CommentJpaConfiguration.class,
+         CommentMybatisConfiguration.class, CommentQuerydslConfiguration.class*/})
 @ComponentScan(basePackages = {"jmnet.moka.core.tps.mvc", "jmnet.moka.core.tps.common.logger"})
 public class TpsAutoConfiguration {
 
@@ -52,5 +53,26 @@ public class TpsAutoConfiguration {
         }
         return dataSource;
     }
+/*
+    @Qualifier
+    @Bean
+    @ConfigurationProperties(prefix = "comment.spring.datasource")
+    public DataSourceProperties commentDataSourceProperties() {
+        return new DataSourceProperties();
+    }
 
+    @Qualifier
+    @Bean
+    public DataSource commentDataSource() {
+        DataSourceProperties dataSourceProperties = commentDataSourceProperties();
+        HikariDataSource dataSource = (HikariDataSource) dataSourceProperties
+                .initializeDataSourceBuilder()
+                .type(HikariDataSource.class)
+                .build();
+        if (StringUtils.hasText(dataSourceProperties.getName())) {
+            dataSource.setPoolName(dataSourceProperties.getName());
+        }
+        return dataSource;
+    }
+*/
 }

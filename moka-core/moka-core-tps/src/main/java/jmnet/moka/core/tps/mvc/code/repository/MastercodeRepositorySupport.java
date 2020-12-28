@@ -11,7 +11,6 @@ package jmnet.moka.core.tps.mvc.code.repository;
 import java.util.List;
 import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
 import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
-import org.springframework.data.domain.Page;
 
 /**
  * Description: 설명

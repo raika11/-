@@ -9,6 +9,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.domain.entity.QDomain;
 import jmnet.moka.core.tps.mvc.reserved.dto.ReservedSearchDTO;
 import jmnet.moka.core.tps.mvc.reserved.entity.QReserved;
@@ -16,7 +17,6 @@ import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -27,7 +27,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ssc
  * @since 2020. 6. 17. 오전 11:32:58
  */
-public class ReservedRepositorySupportImpl extends QuerydslRepositorySupport implements ReservedRepositorySupport {
+public class ReservedRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ReservedRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     public ReservedRepositorySupportImpl(JPAQueryFactory queryFactory) {
@@ -52,17 +52,19 @@ public class ReservedRepositorySupportImpl extends QuerydslRepositorySupport imp
             } else if (searchType.equals("reservedValue")) {
                 builder.and(reserved.reservedValue.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-                builder.and(reserved.reservedId.contains(keyword)
-                                               .or(reserved.reservedValue.contains(keyword)));
+                builder.and(reserved.reservedId
+                        .contains(keyword)
+                        .or(reserved.reservedValue.contains(keyword)));
             }
         }
 
         JPQLQuery<Reserved> query = queryFactory.selectFrom(reserved);
         query = getQuerydsl().applyPagination(pageable, query);
-        QueryResults<Reserved> list = query.innerJoin(reserved.domain, domain)
-                                           .fetchJoin()
-                                           .where(builder)
-                                           .fetchResults();
+        QueryResults<Reserved> list = query
+                .innerJoin(reserved.domain, domain)
+                .fetchJoin()
+                .where(builder)
+                .fetchResults();
 
         return new PageImpl<Reserved>(list.getResults(), pageable, list.getTotal());
     }

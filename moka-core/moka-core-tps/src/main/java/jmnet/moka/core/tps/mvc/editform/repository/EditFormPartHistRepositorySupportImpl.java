@@ -5,6 +5,7 @@ import com.querydsl.jpa.JPQLQuery;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.editform.dto.EditFormPartHistSearchDTO;
 import jmnet.moka.core.tps.mvc.editform.entity.EditFormPartHist;
 import jmnet.moka.core.tps.mvc.editform.entity.QEditFormPartHist;
@@ -12,7 +13,6 @@ import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2020-11-23 13:28
  */
-public class EditFormPartHistRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormPartHistRepositorySupport {
+public class EditFormPartHistRepositorySupportImpl extends TpsQueryDslRepositorySupport implements EditFormPartHistRepositorySupport {
 
     public EditFormPartHistRepositorySupportImpl() {
         super(EditFormPartHist.class);

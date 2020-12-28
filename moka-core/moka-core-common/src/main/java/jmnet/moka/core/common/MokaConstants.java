@@ -67,8 +67,11 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT = "mergeContext";
     public static final String MERGE_CONTEXT_ITEM = "item";
     public static final String MERGE_DATA_MAP = "mergeDataMap";
+
+    /* TMS Special URL prefix */
     public static final String MERGE_COMMAND_PREFIX = "/command";
     public static final String MERGE_ARTICE_PREFIX = "/article";
+    public static final String MERGE_AMP_ARTICE_PREFIX = "/amparticle";
     public static final String MERGE_DIGITAL_SPECIAL_PREFIX = "/digitalspecial";
 
     /* TMS Custom Token */

@@ -1,12 +1,13 @@
 package jmnet.moka.core.tms.mvc.view;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.JSONResult;
@@ -53,6 +54,7 @@ public class ArticleView extends AbstractView {
     private CacheManager cacheManager;
 
     private MokaFunctions functions = new MokaFunctions();
+    private static Pattern PATTERN_BR = Pattern.compile("<br\\/?>(\\s|&nbsp;)*?<br\\/?>", Pattern.CASE_INSENSITIVE);
 
     @Override
     protected boolean generatesDownloadContent() {
@@ -149,8 +151,31 @@ public class ArticleView extends AbstractView {
         article.put("meta_fb",jsonResult.getDataListFirst("META_FB"));
         article.put("meta_tw",jsonResult.getDataListFirst("META_TW"));
         article.put("meta_ja",jsonResult.getDataListFirst("META_JA"));
+        this.insertSubTitle(article);
         this.setEPaper(article, mergeContext);
         return article;
+    }
+
+    private void insertSubTitle(Map<String,Object> articleInfo) {
+        List contentList = (List)articleInfo.get("content");
+        Map contentMap = (Map)contentList.get(0);
+        String content = (String)contentMap.get("ART_CONTENT");
+        Map basicMap = (Map)articleInfo.get("basic");
+        Object subTitleObj = basicMap.get("ART_SUB_TITLE");
+        if ( subTitleObj == null) {
+            return ;
+        }
+        Matcher matcher = PATTERN_BR.matcher(content);
+//        if ( !matcher.find()) { // 첫번째는 skip
+//            return ;
+//        }
+        if (matcher.find()) { // 두번째에 삽입
+            StringBuffer sb = new StringBuffer(content.length());
+            matcher.appendReplacement(sb,"$0<div class=\"ab_subtitle\"><p>" + (String)subTitleObj + "</p></div>");
+            matcher.appendTail(sb);
+            content = sb.toString();
+            contentMap.put("ART_CONTENT",content);
+        }
     }
 
     private void setEPaper(Map<String,Object> article, MergeContext mergeContext) {

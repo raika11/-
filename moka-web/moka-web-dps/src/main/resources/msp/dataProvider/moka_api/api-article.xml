@@ -6,6 +6,7 @@
       <totalId desc="기사Id">[0-9]{1,9}</totalId>
     </parameter>
     <request resultName="BASIC">dps.article.basic</request>
+    <request resultName="TITLE">dps.article.title</request>
     <request resultName="CONTENT">dps.article.content</request>
     <request resultName="REPORTER">dps.article.reporter</request>
     <request resultName="MASTERCODE">dps.article.mastercode</request>
@@ -13,7 +14,6 @@
     <request resultName="KEYWORD">dps.article.keyword</request>
     <request resultName="CLICKCNT">dps.article.clickcnt</request>
     <request resultName="MULTI">dps.article.multi</request>
-    <request resultName="SOURCE">dps.article.source</request>
     <request resultName="META_FB">dps.article.meta_fb</request>
     <request resultName="META_TW">dps.article.meta_tw</request>
     <request resultName="META_JA">dps.article.meta_ja</request>

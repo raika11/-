@@ -8,6 +8,11 @@
     select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE from TB_ARTICLE_BASIC A, TB_ARTICLE_SOURCE B
     where A.SOURCE_CODE = B.SOURCE_CODE AND A.TOTAL_ID=#{totalId}
   </select>
+  <!-- article title -->
+  <select id="title" parameterType="hashmap" resultType="map">
+    select TITLE_DIV, TITLE from TB_ARTICLE_TITLE
+    where TOTAL_ID=#{totalId}
+  </select>
   <!-- article content -->
   <select id="content" parameterType="hashmap" resultType="map">
     select * FROM TB_ARTICLE_CONTENT
@@ -52,11 +57,6 @@
   <select id="multi" parameterType="hashmap" resultType="map">
   select * from TB_15RE_ARTICLE_MULTI
 where TOTAL_ID = #{totalId}
-  </select>
-  <!-- article source -->
-  <select id="source" parameterType="hashmap" resultType="map">
-    select * from TB_15RE_ARTICLE_MULTI
-    where TOTAL_ID = #{totalId}
   </select>
 
   <select id="meta_fb" parameterType="hashmap" resultType="map">

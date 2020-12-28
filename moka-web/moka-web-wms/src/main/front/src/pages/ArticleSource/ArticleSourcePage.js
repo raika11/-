@@ -18,35 +18,6 @@ const ArticleSourcePage = (props) => {
     const [clickMapping, setClickMapping] = useState(false);
     const [clickSave, setClickSave] = useState(false);
 
-    /**
-     * 코드 매핑
-     */
-    // const handleClickMapping = () => {
-    //     setShowModal(true);
-    // };
-
-    /**
-     * 등록, 수정
-     */
-    // const handleClickSave = useCallback(
-    //     (temp) => {
-    //         dispatch(
-    //             saveArticleSource({
-    //                 source: temp,
-    //                 callback: ({ header, body }) => {
-    //                     if (header.success) {
-    //                         toast.success(header.message);
-    //                         history.push(`${match.url}/${body.souceCode}`);
-    //                     } else {
-    //                         toast.fail(header.message);
-    //                     }
-    //                 },
-    //             }),
-    //         );
-    //     },
-    //     [dispatch, history, match.url],
-    // );
-
     useEffect(() => {
         return () => {
             dispatch(clearStore());

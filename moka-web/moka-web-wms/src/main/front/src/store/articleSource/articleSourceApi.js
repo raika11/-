@@ -52,8 +52,57 @@ export const postArticleSource = ({ source }) => {
 };
 
 // 매핑 목록조회
-export const getMappingList = ({ sourceCode, mappingSearch }) => {
-    return instance.get(`/api/article-sources/${sourceCode}/codes?${qs.stringify(mappingSearch)}`).catch((err) => {
+export const getMappingList = ({ mappingSearch }) => {
+    return instance.get(`/api/article-sources/${mappingSearch.sourceCode}/codes?${qs.stringify(mappingSearch)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 매핑코드 중복검사
+export const getMappingCodeDuplicateCheck = ({ sourceCode, frCode }) => {
+    return instance.get(`/api/article-sources/${sourceCode}/codes/${frCode}/exists`).catch((err) => {
+        throw err;
+    });
+};
+
+// 매핑코드 상세조회
+export const getMappingCode = ({ sourceCode, seqNo }) => {
+    return instance.get(`/api/article-sources/${sourceCode}/codes/${seqNo}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 매핑코드 등록
+export const postMappingCode = ({ mappingCode }) => {
+    const data = {
+        ...mappingCode,
+        'articleSource.sourceCode': mappingCode.articleSource.sourceCode,
+        'articleSource.sourceName': mappingCode.articleSource.sourceName,
+    };
+    delete data.articleSource;
+
+    return instance.post(`/api/article-sources/${mappingCode.sourceCode}/codes`, qs.stringify(data)).catch((err) => {
+        throw err;
+    });
+};
+
+// 매핑코드 수정
+export const putMappingCode = ({ mappingCode }) => {
+    const data = {
+        ...mappingCode,
+        'articleSource.sourceCode': mappingCode.articleSource.sourceCode,
+        'articleSource.sourceName': mappingCode.articleSource.sourceName,
+    };
+    delete data.articleSource;
+
+    return instance.put(`/api/article-sources/${mappingCode.sourceCode}/codes/${mappingCode.seqNo}`, qs.stringify(data)).catch((err) => {
+        throw err;
+    });
+};
+
+// 매핑코드 삭제
+export const deleteMappingCode = ({ sourceCode, seqNo }) => {
+    return instance.delete(`/api/article-sources/${sourceCode}/codes/${seqNo}`).catch((err) => {
         throw err;
     });
 };

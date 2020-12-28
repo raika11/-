@@ -24,7 +24,7 @@ export const initialState = {
     mappingSearch: {
         page: 0,
         size: MODAL_PAGESIZE_OPTIONS[0],
-        masterCode: null,
+        sourceCode: null,
     },
     mappingCode: {},
     deskingSourceList: null,
@@ -91,6 +91,24 @@ export default handleActions(
                 draft.search = initialState.search;
             });
         },
+        [act.CLEAR_MAPPING_CODE]: (state) => {
+            return produce(state, (draft) => {
+                draft.mappingCode = initialState.mappingCode;
+            });
+        },
+        [act.CLEAR_MAPPING_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.mappingTotal = initialState.mappingTotal;
+                draft.mappingList = initialState.mappingList;
+                draft.error = initialState.error;
+            });
+        },
+        [act.CLEAR_MAPPING_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.mappingSearch = initialState.mappingSearch;
+            });
+        },
+
         // 매체 목록 조회
         [act.GET_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
@@ -119,17 +137,39 @@ export default handleActions(
             });
         },
         // 매핑 목록 조회
-        [act.GET_MAPPING_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_MAPPING_CODE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.mappingTotal = body.totalCnt;
                 draft.mappingList = body.list;
                 draft.error = initialState.error;
             });
         },
-        [act.GET_MAPPING_SOURCE_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_MAPPING_CODE_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.mappingTotal = initialState.mappingTotal;
                 draft.mappingList = initialState.mappingList;
+                draft.error = payload;
+            });
+        },
+        // 매핑 코드 상세 조회
+        [act.GET_MAPPING_CODE_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.mappingCode = body;
+            });
+        },
+        [act.GET_MAPPING_CODE_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.mappingCode = initialState.mappingCode;
+            });
+        },
+        // 매핑 코드 삭제
+        [act.DELETE_MAPPING_CODE_SUCCESS]: (state) => {
+            return produce(state, (draft) => {
+                draft.mappingCode = initialState.mappingCode;
+            });
+        },
+        [act.DELETE_MAPPING_CODE_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
                 draft.error = payload;
             });
         },

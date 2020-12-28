@@ -14,10 +14,16 @@ export const CLEAR_STORE = 'articleSource/CLEAR_STORE';
 export const CLEAR_ARTICLE_SOURCE = 'articleSource/CLEAR_ARTICLE_SOURCE';
 export const CLEAR_LIST = 'articleSource/CLEAR_LIST';
 export const CLEAR_SEARCH = 'articleSource/CLEAR_SEARCH';
+export const CLEAR_MAPPING_CODE = 'articleSource/CLEAR_MAPPING_CODE';
+export const CLEAR_MAPPING_LIST = 'articleSource/CLEAR_MAPPING_LIST';
+export const CLEAR_MAPPING_SEARCH = 'articleSource/CLEAR_MAPPING_SEARCH';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearArticleSource = createAction(CLEAR_ARTICLE_SOURCE);
 export const clearList = createAction(CLEAR_LIST);
 export const clearSearch = createAction(CLEAR_SEARCH);
+export const clearMappingCode = createAction(CLEAR_MAPPING_CODE);
+export const clearMappingList = createAction(CLEAR_MAPPING_LIST);
+export const clearMappingSearch = createAction(CLEAR_MAPPING_SEARCH);
 
 /**
  * 검색조건 변경
@@ -34,10 +40,6 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
 // 매체 목록조회
 export const [GET_SOURCE_LIST, GET_SOURCE_LIST_SUCCESS, GET_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_SOURCE_LIST');
 export const getSourceList = createAction(GET_SOURCE_LIST, (...actions) => actions);
-
-// // 매체 등록
-// export const POST_SOURCE = 'articleSource/POST_SOURCE';
-// export const postSource = createAction(POST_SOURCE, () => ({}));
 
 // 벌크전송 매체 목록 조회(네이버채널용)
 export const [GET_BLUK_SOURCE_LIST, GET_BLUK_SOURCE_LIST_SUCCESS, GET_BLUK_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_BLUK_SOURCE_LIST');
@@ -56,29 +58,25 @@ export const SAVE_ARTICLE_SOURCE = 'articleSource/SAVE_ARTICLE_SOURCE';
 export const saveArticleSource = createAction(SAVE_ARTICLE_SOURCE, ({ source, callback }) => ({ source, callback }));
 
 // 매핑 목록조회
-export const [GET_MAPPING_SOURCE_LIST, GET_MAPPING_SOURCE_LIST_SUCCESS, GET_MAPPING_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_MAPPING_SOURCE');
-export const getMappingSourceList = createAction(GET_MAPPING_SOURCE_LIST, ({ sourceCode }) => ({ sourceCode }));
+export const [GET_MAPPING_CODE_LIST, GET_MAPPING_CODE_LIST_SUCCESS, GET_MAPPING_CODE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_MAPPING_CODE_LIST');
+export const getMappingCodeList = createAction(GET_MAPPING_CODE_LIST, (...actions) => actions);
+
+// 매핑코드 중복 체크
+export const GET_MAPPING_CODE_DUPLICATE_CHECK = 'articleSource/GET_MAPPING_CODE_DUPLICATE_CHECK';
+export const getMappingCodeDuplicateCheck = createAction(GET_MAPPING_CODE_DUPLICATE_CHECK, ({ sourceCode, frCode, callback }) => ({ sourceCode, frCode, callback }));
+
+// 매핑코드 상세조회
+export const [GET_MAPPING_CODE, GET_MAPPING_CODE_SUCCESS, GET_MAPPING_CODE_FAILURE] = createRequestActionTypes('articleSource/GET_MAPPING_CODE');
+export const getMappingCode = createAction(GET_MAPPING_CODE, ({ sourceCode, seqNo }) => ({ sourceCode, seqNo }));
+
+// 매핑 코드 등록, 수정
+export const SAVE_MAPPING_CODE = 'articleSource/SAVE_MAPPING_CODE';
+export const saveMappingCode = createAction(SAVE_MAPPING_CODE, ({ mappingCode, callback }) => ({ mappingCode, callback }));
+
+// 매핑코드 삭제
+export const [DELETE_MAPPING_CODE, DELETE_MAPPING_CODE_SUCCESS, DELETE_MAPPING_CODE_FAILURE] = createRequestActionTypes('articleSource/DELETE_MAPPING_CODE');
+export const deleteMappingCode = createAction(DELETE_MAPPING_CODE, ({ sourceCode, seqNo, callback }) => ({ sourceCode, seqNo, callback }));
 
 // // 매체코드 중복 체크
 // export const CODE_DUPLICATE_CHECK = 'articleSource/CODE_DUPLICATE_CHECK';
 // export const codeDuplicateCheck = createAction(CODE_DUPLICATE_CHECK, () => ({}));
-
-// // 매핑 등록
-// export const POST_MAPPING_SOURCE = 'articleSource/POST_MAPPING_SOURCE';
-// export const postMappingSourceList = createAction(POST_MAPPING_SOURCE, () => ({}));
-
-// // 매핑코드 중복 체크
-// export const MAPPING_DUPLICATE_CHECK = 'articleSource/MAPPING_DUPLICATE_CHECK';
-// export const mappingDuplicateCheck = createAction(MAPPING_DUPLICATE_CHECK, () => ({}));
-
-// // 매핑코드 삭제
-// export const DELETE_MAPPING_SOURCE = 'articleSource/DELETE_MAPPING_SOURCE';
-// export const deleteMappingSource = createAction(DELETE_MAPPING_SOURCE, () => ({}));
-
-// // 매핑코드 상세조회
-// export const GET_MAPPING_SOURCE = 'articleSource/GET_MAPPING_SOURCE';
-// export const getMappingSource = createAction(GET_MAPPING_SOURCE, () => ({}));
-
-// // 매핑 수정
-// export const PUT_MAPPING_SOURCE = 'articleSource/PUT_MAPPING_SOURCE';
-// export const putMappingSource = createAction(PUT_MAPPING_SOURCE, () => ({}));

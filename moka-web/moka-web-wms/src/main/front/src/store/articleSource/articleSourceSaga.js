@@ -78,7 +78,116 @@ function* saveArticleSource({ payload }) {
 /**
  * 매핑 목록 조회
  */
-const getMappingList = createRequestSaga(act.GET_MAPPING_SOURCE_LIST, api.getMappingList);
+const getMappingList = callApiAfterActions(act.GET_MAPPING_CODE_LIST, api.getMappingList, (store) => store.articleSource);
+
+/**
+ * 매핑코드 중복 체크
+ * @param {string} param0.payload.sourceCode 매체 코드
+ * @param {string} param0.payload.frCode CP 코드
+ * @param {string} param0.payload.callback callback
+ */
+function* getMappingCodeDuplicateCheck({ payload: { sourceCode, frCode, callback } }) {
+    const ACTION = act.GET_MAPPING_CODE_DUPLICATE_CHECK;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.getMappingCodeDuplicateCheck, { sourceCode, frCode, callback });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(true);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 매핑코드 상세조회
+ */
+const getMappingCode = createRequestSaga(act.GET_MAPPING_CODE, api.getMappingCode);
+
+/**
+ * 매핑코드 등록, 수정
+ */
+function* saveMappingCode({ payload }) {
+    const { mappingCode, callback } = payload;
+    const ACTION = act.SAVE_MAPPING_CODE;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+
+    try {
+        // 등록/수정 분기
+        if (!mappingCode.seqNo) {
+            response = yield call(api.postMappingCode, { mappingCode });
+        } else {
+            response = yield call(api.putMappingCode, { mappingCode });
+        }
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_MAPPING_CODE_SUCCESS,
+                payload: response.data,
+            });
+
+            // 목록 다시 검색
+            yield put({
+                type: act.GET_MAPPING_CODE_LIST,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 매핑코드 삭제
+ * @param {number} param0.payload.sourceCode 매체코드
+ * @param {function} param0.payload.seqNo 매핑순번
+ * @param {function} param0.payload.callback 콜백
+ */
+export function* deleteMappingCode({ payload: { sourceCode, seqNo, callback } }) {
+    const ACTION = act.DELETE_MAPPING_CODE;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.deleteMappingCode, { sourceCode, seqNo });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({ type: act.DELETE_MAPPING_CODE_SUCCESS });
+
+            // 목록 다시 검색
+            yield put({ type: act.GET_MAPPING_CODE_LIST });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+
+        yield put({
+            type: act.DELETE_MAPPING_CODE_FAILURE,
+            payload: callbackData,
+        });
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * 벌크 매체 목록 조회
@@ -91,6 +200,10 @@ export default function* saga() {
     yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
     yield takeLatest(act.GET_ARTICLE_SOURCE, getArticleSource);
     yield takeLatest(act.SAVE_ARTICLE_SOURCE, saveArticleSource);
-    yield takeLatest(act.GET_MAPPING_SOURCE_LIST, getMappingList);
+    yield takeLatest(act.GET_MAPPING_CODE_LIST, getMappingList);
+    yield takeLatest(act.GET_MAPPING_CODE_DUPLICATE_CHECK, getMappingCodeDuplicateCheck);
+    yield takeLatest(act.GET_MAPPING_CODE, getMappingCode);
+    yield takeLatest(act.SAVE_MAPPING_CODE, saveMappingCode);
+    yield takeLatest(act.DELETE_MAPPING_CODE, deleteMappingCode);
     yield takeLatest(act.GET_BLUK_SOURCE_LIST, getBulkSourceList);
 }

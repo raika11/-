@@ -3,12 +3,12 @@ export default [
         headerName: 'CP 분류 코드',
         field: 'frCode',
         cellStyle: { fontSize: '12px' },
-        width: 150,
+        width: 140,
     },
     {
         headerName: 'CMS 분류 코드',
         field: 'toCode',
         cellStyle: { fontSize: '12px' },
-        width: 180,
+        flex: 1,
     },
 ];

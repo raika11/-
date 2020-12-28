@@ -117,6 +117,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
                         <CodeAutocomplete
+                            max={4}
                             label="분류표"
                             className="mb-0"
                             searchIcon={false}
@@ -185,10 +186,13 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                         <p className="mb-0">중앙: {article.serviceUrl}</p>
                     </Col>
                 </Form.Row>
+
                 {/* masterCode 모달 */}
-                <CodeListModal show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
+                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
+
                 {/* 작업정보 모달 */}
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
+
                 {/* PC미리보기 */}
                 <ArticlePC show={previewOn.pc} onHide={() => setPreviewOn({ ...previewOn, pc: false })} />
             </Form>

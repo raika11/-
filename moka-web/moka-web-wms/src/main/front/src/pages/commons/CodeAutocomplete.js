@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaInputLabel } from '@components';
 import { initialState, getCodeKornameList, changeKornameSearchOption, GET_CODE_KORNAME_LIST } from '@store/code';
+import toast from '@utils/toastUtil';
 import CodeListModal from './CodeListModal';
 
 const propTypes = {
@@ -49,6 +50,10 @@ const propTypes = {
      * korname => 대분류 > 중분류 > 소분류
      */
     labelType: PropTypes.oneOf(['masterCode', 'korname']),
+    /**
+     * 선택가능한 마스터코드의 최대 갯수
+     */
+    max: PropTypes.number,
 };
 const defaultProps = {
     isMulti: false,
@@ -61,7 +66,7 @@ const defaultProps = {
  * 기사 분류(masterCode) 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, labelClassName, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType } = props;
+    const { label, labelWidth, labelClassName, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType, max } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
     const { storeSearch, codeList } = useSelector((store) => ({
@@ -90,6 +95,13 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 }
             }
         } else {
+            // 리스트의 length가 max보다 크면 waning 노출
+            if (max) {
+                if (value.length > max) {
+                    toast.warning(`최대 ${max}개까지 선택할 수 있습니다.`);
+                    return;
+                }
+            }
             // typeof value === array
             if (onChange) {
                 onChange(value);
@@ -192,7 +204,9 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon, maxMenuHeight: maxMenuHeight }}
             />
 
-            {searchIcon && <CodeListModal value={value} show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />}
+            {searchIcon && (
+                <CodeListModal max={max} value={value} show={modalShow} onHide={() => setModalShow(false)} onSave={handleClickSave} selection={isMulti ? 'multiple' : 'single'} />
+            )}
         </React.Fragment>
     );
 });

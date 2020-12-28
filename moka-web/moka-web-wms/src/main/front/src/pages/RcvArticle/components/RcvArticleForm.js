@@ -87,6 +87,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
                         <CodeAutocomplete
+                            max={4}
                             label="분류표"
                             className="mb-0"
                             searchIcon={false}
@@ -145,7 +146,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
                 </Form.Row>
 
                 {/* masterCode 모달 */}
-                <CodeListModal show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
+                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
             </Form>
         </MokaCard>
     );

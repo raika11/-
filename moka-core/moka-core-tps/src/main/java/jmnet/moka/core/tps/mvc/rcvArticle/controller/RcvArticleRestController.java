@@ -14,15 +14,13 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.exception.NoDataException;
-import jmnet.moka.core.tps.helper.KeywordHelper;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
 import jmnet.moka.core.tps.mvc.rcvArticle.service.RcvArticleService;
 import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleBasicVO;
-import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,11 +48,8 @@ public class RcvArticleRestController extends AbstractCommonController {
 
     private final RcvArticleService rcvArticleService;
 
-    private final KeywordHelper keywordHelper;
-
-    public RcvArticleRestController(RcvArticleService rcvArticleService, KeywordHelper keywordHelper) {
+    public RcvArticleRestController(RcvArticleService rcvArticleService) {
         this.rcvArticleService = rcvArticleService;
-        this.keywordHelper = keywordHelper;
     }
 
     /**
@@ -117,49 +112,17 @@ public class RcvArticleRestController extends AbstractCommonController {
     }
 
     /**
-     * 수신기사 추천태그 조회
-     *
-     * @param rid 수신기사키
-     * @return 키워드목록
-     * @throws Exception
-     */
-    @ApiOperation(value = "수신기사 추천태그 조회")
-    @GetMapping("/{rid}/keywords")
-    public ResponseEntity<?> getKeyword(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid)
-            throws Exception {
-
-        // 수신기사 상세조회
-        RcvArticleBasic rcvArticleBasic = rcvArticleService
-                .findRcvArticleBasicById(rid)
-                .orElseThrow(() -> {
-                    String message = msg("tps.common.error.no-data");
-                    tpsLogger.fail(message, true);
-                    return new NoDataException(message);
-                });
-
-        List<String> keywordList = keywordHelper.getKeywords(rcvArticleBasic.getTitle(), rcvArticleBasic.getSubTitle(), rcvArticleBasic.getContent());
-
-        ResultDTO<List<String>> resultDto = new ResultDTO<>(keywordList);
-        tpsLogger.success(ActionType.SELECT);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
-
-    /**
      * 등록기사로 등록
      *
-     * @param rid           수신기사키
-     * @param pCodeList     분류목록(마스터코드)
-     * @param pReporterList 기자목록
-     * @param pKeywordList  태그목록
+     * @param rid       수신기사키
+     * @param updateDto 수정할 정보(기자목록,분류코드목록,태그목록)
      * @return 수신기사정보
      * @throws Exception
      */
     @ApiOperation(value = "등록기사로 등록")
     @PostMapping(value = "/articles/{rid}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postArticle(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid,
-            @ApiParam("분류코드(마스터코드) 목록") @RequestBody @Valid ValidList<String> pCategoryList,
-            @ApiParam("기자 목록") @RequestBody @Valid ValidList<RcvArticleReporterVO> pReporterList,
-            @ApiParam("태그 목록") @RequestBody @Valid ValidList<String> pTagList)
+            @ApiParam("dd") @RequestBody RcvArticleBasicUpdateDTO updateDto)
             throws Exception {
 
         // 수신기사 상세조회
@@ -172,12 +135,8 @@ public class RcvArticleRestController extends AbstractCommonController {
                 });
 
         try {
-            List<String> categoryList = pCategoryList.getList();
-            List<RcvArticleReporterVO> reporterList = pReporterList.getList();
-            List<String> tagList = pTagList.getList();
-
             // 등록기사로 등록
-            boolean insertOk = rcvArticleService.insertRcvArticleIud(rcvArticleBasic, reporterList, categoryList, tagList);
+            boolean insertOk = rcvArticleService.insertRcvArticleIud(rcvArticleBasic, updateDto);
 
             String message = "";
             if (insertOk) {
@@ -197,7 +156,54 @@ public class RcvArticleRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO ARTICE_BASIC INSERT]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO ARTICE_BASIC INSERT]", e, true);
-            throw new Exception(msg("tps.rcv-articles.error.to-article.insert"), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
+        }
+    }
+
+    /**
+     * 등록기사로 등록(부가정보 수정없음)
+     *
+     * @param rid 수신기사키
+     * @return 수신기사정보
+     * @throws Exception
+     */
+    @ApiOperation(value = "등록기사로 등록(부가정보 수정없음)")
+    @PostMapping("/articles/{rid}/with-rid")
+    public ResponseEntity<?> postArticleWithRid(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid)
+            throws Exception {
+
+        // 수신기사 상세조회
+        RcvArticleBasic rcvArticleBasic = rcvArticleService
+                .findRcvArticleBasicById(rid)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        try {
+            // 등록기사로 등록
+            boolean insertOk = rcvArticleService.insertRcvArticleIud(rcvArticleBasic);
+
+            String message = "";
+            if (insertOk) {
+                message = msg("tps.common.success.insert");
+            } else {
+                message = msg("tps.common.error.insert");
+            }
+
+            // 수신기사정보 조회
+            RcvArticleBasicDTO dto = modelMapper.map(rcvArticleBasic, RcvArticleBasicDTO.class);
+            rcvArticleService.findRcvArticleInfo(dto);
+
+            ResultDTO<RcvArticleBasicDTO> resultDto = new ResultDTO<>(dto, message);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO ARTICE_BASIC INSERT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO ARTICE_BASIC INSERT]", e, true);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
 }

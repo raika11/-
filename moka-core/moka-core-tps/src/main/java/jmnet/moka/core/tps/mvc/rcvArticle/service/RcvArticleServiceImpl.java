@@ -12,6 +12,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
 import jmnet.moka.core.tps.mvc.rcvArticle.mapper.RcvArticleMapper;
@@ -100,8 +101,7 @@ public class RcvArticleServiceImpl implements RcvArticleService {
 
     @Override
     @Transactional
-    public boolean insertRcvArticleIud(RcvArticleBasic rcvArticleBasic, List<RcvArticleReporterVO> reporterList, List<String> categoryList,
-            List<String> tagList) {
+    public boolean insertRcvArticleIud(RcvArticleBasic rcvArticleBasic, RcvArticleBasicUpdateDTO updateDto) {
 
         Map paramMap = new HashMap();
         paramMap.put("rid", rcvArticleBasic.getRid());
@@ -114,10 +114,10 @@ public class RcvArticleServiceImpl implements RcvArticleService {
             return false;
         }
 
-        // 분류코드 삭제
-        if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeDel(paramMap))) {
-            return false;
-        }
+        // 분류코드 삭제 : code_id가 마스터코드가 들어갈 수 있으므로 개발 보류!
+        //        if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeDel(paramMap))) {
+        //            return false;
+        //        }
 
         // 키워드 삭제
         if (isReturnErr(rcvArticleMapper.callUspRcvArticleKeywordDel(paramMap))) {
@@ -125,14 +125,20 @@ public class RcvArticleServiceImpl implements RcvArticleService {
         }
 
         // 기자 등록
-        for (RcvArticleReporterVO reporter : reporterList) {
-            if (isReturnErr(rcvArticleMapper.callUspRcvArticleReporterIns(reporter))) {
+        Map paramReporterMap = new HashMap();
+        paramReporterMap.put("rid", rcvArticleBasic.getRid());
+        paramReporterMap.put("sourceCode", rcvArticleBasic
+                .getArticleSource()
+                .getSourceCode());
+        for (RcvArticleReporterVO reporter : updateDto.getReporterList()) {
+            paramReporterMap.put("reporter", reporter);
+            if (isReturnErr(rcvArticleMapper.callUspRcvArticleReporterIns(paramReporterMap))) {
                 return false;
             }
         }
 
-        // 분류코드 등록
-        //        for (String category : categoryList) {
+        // 분류코드 등록 : code_id가 마스터코드가 들어갈 수 있으므로 개발 보류!
+        //        for (String category : updateDto.getCategoryList()) {
         //            if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeIns(category))) {
         //                return false;
         //            }
@@ -140,24 +146,28 @@ public class RcvArticleServiceImpl implements RcvArticleService {
 
         // 키워드 등록
         Map paramTagMap = new HashMap();
-        paramMap.put("rid", rcvArticleBasic.getRid());
-        paramMap.put("sourceCode", rcvArticleBasic
+        paramTagMap.put("rid", rcvArticleBasic.getRid());
+        paramTagMap.put("sourceCode", rcvArticleBasic
                 .getArticleSource()
                 .getSourceCode());
-        for (String tag : tagList) {
-            paramMap.put("keyword", tag);
+        for (String tag : updateDto.getTagList()) {
+            paramTagMap.put("keyword", tag);
             if (isReturnErr(rcvArticleMapper.callUspRcvArticleKeywordIns(paramTagMap))) {
                 return false;
             }
         }
 
-        // 수신기사를 등록기사로 등록
-        Map iudParamMap = new HashMap();
+        return insertRcvArticleIud(rcvArticleBasic);
+    }
+
+    @Override
+    public boolean insertRcvArticleIud(RcvArticleBasic rcvArticleBasic) {
+        Map paramMap = new HashMap();
         Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
         paramMap.put("rid", rcvArticleBasic.getRid());
         paramMap.put("returnValue", returnValue);
-        rcvArticleMapper.insertRcvArticleIud(iudParamMap);
-        if ((int) iudParamMap.get("returnValue") < 0) {
+        rcvArticleMapper.insertRcvArticleIud(paramMap);
+        if ((int) paramMap.get("returnValue") < 0) {
             log.debug("INSERT FAIL RCV_ARTICLE_IUD rid: {} errorCode: {} ", rcvArticleBasic.getRid(), returnValue);
             return false;
         }

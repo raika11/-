@@ -9,7 +9,6 @@ import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleBasicVO;
-import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleReporterVO;
 
 /**
  * Description: 수신기사 mapper
@@ -22,7 +21,7 @@ public interface RcvArticleMapper extends BaseMapper<RcvArticleBasicVO, RcvArtic
      * 수신기사 부가정보 조회(분류코드,기자,키워드)
      *
      * @param map rid:수신기사키, sourceCode:매체코드
-     * @return 분류코드, 기자, 키워드
+     * @return 분류코드목록, 기자목록, 키워드목록
      */
     List<List<Object>> findInfo(Map<String, Object> map);
 
@@ -33,15 +32,51 @@ public interface RcvArticleMapper extends BaseMapper<RcvArticleBasicVO, RcvArtic
      */
     void insertRcvArticleIud(Map<String, Object> param);
 
-    Integer callUspRcvArticleReporterIns(RcvArticleReporterVO rcvArticleReporterVO);
+    /**
+     * 수신기자 등록
+     *
+     * @param param rid: 수신기사키, sourceCode: 매체코드, reporter: 수신기자정보
+     * @return 성공여부
+     */
+    Integer callUspRcvArticleReporterIns(Map<String, Object> param);
 
+    /**
+     * 수신기자 삭제
+     *
+     * @param param rid: 수신기사키, sourceCode: 매체코드
+     * @return 성공여부
+     */
     Integer callUspRcvArticleReporterDel(Map<String, Object> param);
 
-    Integer callUspRcvArticleCodeIns(String category);
+    //    /**
+    //     * 분류코드 등록
+    //     *
+    //     * @param category 분류코드
+    //     * @return 성공여부
+    //     */
+    //    Integer callUspRcvArticleCodeIns(String category);
+    //
+    //    /**
+    //     * 분류코드 삭제
+    //     *
+    //     * @param param rid: 수신기사키
+    //     * @return 성공여부
+    //     */
+    //    Integer callUspRcvArticleCodeDel(Map<String, Object> param);
 
-    Integer callUspRcvArticleCodeDel(Map<String, Object> param);
-
+    /**
+     * 태그등록
+     *
+     * @param param rid: 수신기사키, sourceCode: 매체코드, keyword: 태그
+     * @return 성공여부
+     */
     Integer callUspRcvArticleKeywordIns(Map<String, Object> param);
 
+    /**
+     * 태그삭제
+     *
+     * @param param rid: 수신기사키, sourceCode: 매체코드
+     * @return 성공여부
+     */
     Integer callUspRcvArticleKeywordDel(Map<String, Object> param);
 }

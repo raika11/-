@@ -7,10 +7,10 @@ package jmnet.moka.core.tps.mvc.rcvArticle.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
 import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleBasicVO;
-import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleReporterVO;
 
 /**
  * Description: 수신기사 서비스
@@ -55,11 +55,16 @@ public interface RcvArticleService {
      * 수신기사를 등록기사로 등록
      *
      * @param rcvArticleBasic 수신기사정보
-     * @param reporterList    기자목록
-     * @param categoryList    분류코드목록
-     * @param tagList         태그목록
+     * @param updateDto       기자목록,분류코드목록,태그목록
      * @return 등록성공여부
      */
-    boolean insertRcvArticleIud(RcvArticleBasic rcvArticleBasic, List<RcvArticleReporterVO> reporterList, List<String> categoryList,
-            List<String> tagList);
+    boolean insertRcvArticleIud(RcvArticleBasic rcvArticleBasic, RcvArticleBasicUpdateDTO updateDto);
+
+    /**
+     * 수신기사를 등록기사로 등록
+     *
+     * @param rcvArticleBasic 수신기사정보
+     * @return 등록성공여부
+     */
+    boolean insertRcvArticleIud(RcvArticleBasic rcvArticleBasic);
 }

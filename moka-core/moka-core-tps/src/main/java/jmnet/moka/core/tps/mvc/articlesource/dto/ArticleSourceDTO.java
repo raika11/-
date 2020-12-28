@@ -9,10 +9,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -140,4 +142,8 @@ public class ArticleSourceDTO implements Serializable {
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.article-source.error.pattern.receiveImgYn}")
     @Builder.Default
     private String receiveImgYn = MokaConstants.NO;
+
+    @ApiModelProperty("등록일시")
+    @DTODateTimeFormat
+    private Date regDt;
 }

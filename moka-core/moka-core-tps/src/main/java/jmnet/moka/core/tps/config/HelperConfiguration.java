@@ -3,19 +3,10 @@ package jmnet.moka.core.tps.config;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
 import jmnet.moka.core.tps.helper.EditFormHelper;
-import jmnet.moka.core.tps.helper.KeywordHelper;
 import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.Charset;
-import java.time.Duration;
 
 /**
  * <pre>
@@ -68,14 +59,5 @@ public class HelperConfiguration {
     public EditFormHelper editFormHelper() {
         final XmlMapper xmlMapper = new XmlMapper();
         return new EditFormHelper(xmlMapper);
-    }
-
-    /**
-     * Keyword 추출 빈
-     * @return 빈
-     */
-    @Bean
-    public KeywordHelper keywordHelper() {
-        return new KeywordHelper();
     }
 }

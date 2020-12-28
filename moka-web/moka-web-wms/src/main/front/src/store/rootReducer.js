@@ -36,6 +36,7 @@ import bright from '@store/bright/brightReducer';
 import bulks from '@store/bulks/bulksReducer';
 import special from '@store/special/specialReducer';
 import comment from '@store/commentManage/comment/commentReducer';
+import boards from '@store/boards/boardsReducer';
 
 export default combineReducers({
     toastr,
@@ -74,4 +75,5 @@ export default combineReducers({
     bulks,
     special,
     comment,
+    boards,
 });

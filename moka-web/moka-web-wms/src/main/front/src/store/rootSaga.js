@@ -33,6 +33,7 @@ import brightSaga from '@store/bright/brightSaga';
 import bulksSaga from '@store/bulks/bulksSaga';
 import specialSaga from '@store/special/specialSaga';
 import commentSaga from '@store/commentManage/comment/commentSaga';
+import boardsSaga from '@store/boards/boardsSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -69,5 +70,6 @@ export default function* rootSaga() {
         bulksSaga(),
         specialSaga(),
         commentSaga(),
+        boardsSaga(),
     ]);
 }

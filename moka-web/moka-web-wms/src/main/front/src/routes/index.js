@@ -35,6 +35,7 @@ const ArticleSource = React.lazy(() => import('@pages/ArticleSource'));
 const Poll = React.lazy(() => import('@pages/Survey/Poll'));
 const RcvArticle = React.lazy(() => import('@pages/RcvArticle'));
 const Comment = React.lazy(() => import('@pages/CommentManage/Comment'));
+const Boards = React.lazy(() => import('@pages/Boards'));
 
 const routes = [
     {
@@ -363,6 +364,26 @@ const routes = [
         name: 'Comment',
         displayName: '댓글 관리',
         component: Comment,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/boards-set',
+        name: 'boards-set',
+        displayName: '전체 게시판 관리',
+        component: Boards,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/boarda-set',
+        name: 'boarda-set',
+        displayName: '전체 게시판 관리',
+        component: Boards,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

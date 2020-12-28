@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
 import { MokaInputLabel } from '@/components';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { getArticleSource, clearArticleSource, saveArticleSource, changeInvalidList } from '@store/articleSource';
+import { getArticleSource, clearArticleSource, saveArticleSource, changeInvalidList, getSourceDuplicateCheck } from '@store/articleSource';
 import CodeMappingModal from './modals/CodeMappingModal';
 
 const testReg = /[^a-zA-Z]{1,10}/;
@@ -23,6 +23,7 @@ const ArticleSourceEdit = (props) => {
 
     const [addParam, setAddParam] = useState(false);
     const [temp, setTemp] = useState({});
+    const [disabledBtn, setDisabledBtn] = useState(false);
     const [error, setError] = useState({});
     const [show, setShow] = useState(false);
 
@@ -36,9 +37,16 @@ const ArticleSourceEdit = (props) => {
             name === 'jstoreUse' ||
             name === 'consalesUse' ||
             name === 'ilganUse' ||
-            name === 'socialUse'
+            name === 'socialUse' ||
+            name === 'bulkFlag'
         ) {
             setTemp({ ...temp, [name]: checked ? 'Y' : 'N' });
+        } else if (name === 'sourceCode') {
+            setTemp({ ...temp, sourceCode: value });
+
+            if (temp.sourceCode !== value) {
+                setDisabledBtn(false);
+            }
         } else {
             setTemp({ ...temp, [name]: value });
         }
@@ -95,6 +103,32 @@ const ArticleSourceEdit = (props) => {
         [dispatch],
     );
 
+    /**
+     * 매체코드의 중복체크
+     */
+    const checkDuplicatedSource = () => {
+        dispatch(
+            getSourceDuplicateCheck({
+                sourceCode: temp.sourceCode,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 중복 없음
+                        if (!body) {
+                            toast.success('사용할 수 있는 매체코드입니다.');
+                            setDisabledBtn(true);
+                        }
+                        // 중복 있음
+                        else {
+                            toast.fail('중복된 매체코드입니다.');
+                        }
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
     useEffect(() => {
         if (sourceCode) {
             dispatch(getArticleSource({ sourceCode }));
@@ -134,7 +168,7 @@ const ArticleSourceEdit = (props) => {
                         callback: ({ header, body }) => {
                             if (header.success) {
                                 toast.success(header.message);
-                                history.push(`/article-sources/${body.souceCode}`);
+                                history.push(`/article-sources/${body.sourceCode}`);
                             } else {
                                 toast.fail(header.message);
                             }
@@ -189,7 +223,7 @@ const ArticleSourceEdit = (props) => {
                         <Form.Row>
                             <Col xs={6} className="p-0">
                                 <MokaInputLabel
-                                    label="소스코드"
+                                    label="매체코드"
                                     labelWidth={100}
                                     labelClassName="ft-12"
                                     inputClassName="ft-12"
@@ -202,7 +236,9 @@ const ArticleSourceEdit = (props) => {
                                 />
                             </Col>
                             <Col xs={3} className="p-0">
-                                <Button variant="outline-table-btn">중복 확인</Button>
+                                <Button variant="outline-table-btn" onClick={checkDuplicatedSource} disabled={disabledBtn}>
+                                    중복 확인
+                                </Button>
                             </Col>
                         </Form.Row>
                         <Form.Row>
@@ -335,7 +371,7 @@ const ArticleSourceEdit = (props) => {
                         <Form.Row>
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
-                                    label="매체 타입"
+                                    label="매체타입"
                                     labelWidth={100}
                                     labelClassName="ft-12"
                                     inputClassName="ft-12"
@@ -394,20 +430,20 @@ const ArticleSourceEdit = (props) => {
                                 className="mb-0"
                                 as="switch"
                                 name="artEditYn"
-                                id="switch1"
+                                id="switch-artEditYn"
                                 inputProps={{ custom: true, checked: temp.artEditYn === 'Y' }}
                                 onChange={handleChangeValue}
                             />
                         </Form.Row>
                         <Form.Row className="mb-3" style={{ height: 31 }}>
                             <MokaInputLabel
-                                label="사용여부"
+                                label="CP수신여부"
                                 labelWidth={160}
                                 labelClassName="mr-3 ft-12"
                                 className="mb-0"
                                 as="switch"
                                 name="rcvUsedYn"
-                                id="switch2"
+                                id="switch-rcvUsedYn"
                                 inputProps={{ custom: true, checked: temp.rcvUsedYn === 'Y' }}
                                 onChange={handleChangeValue}
                             />
@@ -420,7 +456,7 @@ const ArticleSourceEdit = (props) => {
                                 className="mb-0"
                                 as="switch"
                                 name="joongangUse"
-                                id="switch3"
+                                id="switch-joongangUse"
                                 inputProps={{ custom: true, checked: temp.joongangUse === 'Y' }}
                                 onChange={handleChangeValue}
                             />
@@ -433,7 +469,7 @@ const ArticleSourceEdit = (props) => {
                                 className="mb-0"
                                 as="switch"
                                 name="jstoreUse"
-                                id="switch4"
+                                id="switch-jstoreUse"
                                 inputProps={{ custom: true, checked: temp.jstoreUse === 'Y' }}
                                 onChange={handleChangeValue}
                             />
@@ -446,7 +482,7 @@ const ArticleSourceEdit = (props) => {
                                 className="mb-0"
                                 as="switch"
                                 name="consalesUse"
-                                id="switch5"
+                                id="switch-consalesUse"
                                 inputProps={{ custom: true, checked: temp.consalesUse === 'Y' }}
                                 onChange={handleChangeValue}
                             />
@@ -459,7 +495,7 @@ const ArticleSourceEdit = (props) => {
                                 className="mb-0"
                                 as="switch"
                                 name="ilganUse"
-                                id="switch6"
+                                id="switch-ilganUse"
                                 inputProps={{ custom: true, checked: temp.ilganUse === 'Y' }}
                                 onChange={handleChangeValue}
                             />
@@ -472,8 +508,21 @@ const ArticleSourceEdit = (props) => {
                                 className="mb-0"
                                 as="switch"
                                 name="socialUse"
-                                id="switch7"
+                                id="switch-socialUse"
                                 inputProps={{ custom: true, checked: temp.socialUse === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                        </Form.Row>
+                        <Form.Row className="mb-3" style={{ height: 31 }}>
+                            <MokaInputLabel
+                                label="벌크 여부"
+                                labelWidth={160}
+                                labelClassName="mr-3 ft-12"
+                                className="mb-0"
+                                as="switch"
+                                name="bulkFlag"
+                                id="switch-bulkFlag"
+                                inputProps={{ custom: true, checked: temp.bulkFlag === 'Y' }}
                                 onChange={handleChangeValue}
                             />
                         </Form.Row>

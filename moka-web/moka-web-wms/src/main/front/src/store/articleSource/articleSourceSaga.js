@@ -21,6 +21,31 @@ const getTypeSourceList = createRequestSaga(act.GET_TYPE_SOURCE_LIST, api.getTyp
 const getSourceList = callApiAfterActions(act.GET_SOURCE_LIST, api.getSourceList, (store) => store.articleSource);
 
 /**
+ * 매체 중복 체크
+ * @param {string} param0.payload.sourceCode 매체 코드
+ * @param {string} param0.payload.callback callback
+ */
+function* getSourceDuplicateCheck({ payload: { sourceCode, callback } }) {
+    const ACTION = act.GET_SOURCE_DUPLICATE_CHECK;
+    let callbackData = {};
+
+    yield put(startLoading(ACTION));
+
+    try {
+        const response = yield call(api.getSourceDuplicateCheck, { sourceCode, callback });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(true);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * 매체 상세조회
  */
 const getArticleSource = createRequestSaga(act.GET_ARTICLE_SOURCE, api.getArticleSource);
@@ -189,15 +214,17 @@ export function* deleteMappingCode({ payload: { sourceCode, seqNo, callback } })
     yield put(finishLoading(ACTION));
 }
 
-/**
- * 벌크 매체 목록 조회
- */
-const getBulkSourceList = createRequestSaga(act.GET_BLUK_SOURCE_LIST, api.getBulkSourceList);
+// /**
+//  * 벌크 매체 목록 조회
+//  */
+// const getBulkSourceList = createRequestSaga(act.GET_BLUK_SOURCE_LIST, api.getBulkSourceList);
 
 export default function* saga() {
     yield takeLatest(act.GET_DESKING_SOURCE_LIST, getDeskingSourceList);
     yield takeLatest(act.GET_TYPE_SOURCE_LIST, getTypeSourceList);
+    // yield takeLatest(act.GET_BLUK_SOURCE_LIST, getBulkSourceList);
     yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
+    yield takeLatest(act.GET_SOURCE_DUPLICATE_CHECK, getSourceDuplicateCheck);
     yield takeLatest(act.GET_ARTICLE_SOURCE, getArticleSource);
     yield takeLatest(act.SAVE_ARTICLE_SOURCE, saveArticleSource);
     yield takeLatest(act.GET_MAPPING_CODE_LIST, getMappingList);
@@ -205,5 +232,4 @@ export default function* saga() {
     yield takeLatest(act.GET_MAPPING_CODE, getMappingCode);
     yield takeLatest(act.SAVE_MAPPING_CODE, saveMappingCode);
     yield takeLatest(act.DELETE_MAPPING_CODE, deleteMappingCode);
-    yield takeLatest(act.GET_BLUK_SOURCE_LIST, getBulkSourceList);
 }

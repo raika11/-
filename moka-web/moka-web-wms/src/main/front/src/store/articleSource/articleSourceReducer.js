@@ -17,7 +17,17 @@ export const initialState = {
         searchType: 'sourceName',
         keyword: '',
     },
-    source: {},
+    source: {
+        artEditYn: 'N',
+        rcvUsedYn: 'Y',
+        joongangUse: 'N',
+        jstoreUse: 'N',
+        consalesUse: 'N',
+        ilganUse: 'N',
+        socialUse: 'N',
+        bulkFlag: 'N',
+        receiveImgYn: 'N',
+    },
     invalidList: [],
     mappingTotal: 0,
     mappingList: [],
@@ -108,7 +118,6 @@ export default handleActions(
                 draft.mappingSearch = initialState.mappingSearch;
             });
         },
-
         // 매체 목록 조회
         [act.GET_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
@@ -173,17 +182,17 @@ export default handleActions(
                 draft.error = payload;
             });
         },
-        // 벌크 매체 조회
-        [act.GET_BLUK_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.bulkSourceList = body.list;
-            });
-        },
-        [act.GET_BLUK_SOURCE_LIST_FAILURE]: (state) => {
-            return produce(state, (draft) => {
-                draft.bulkSourceList = initialState.bulkSourceList;
-            });
-        },
+        // // 벌크 매체 조회
+        // [act.GET_BLUK_SOURCE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        //     return produce(state, (draft) => {
+        //         draft.bulkSourceList = body.list;
+        //     });
+        // },
+        // [act.GET_BLUK_SOURCE_LIST_FAILURE]: (state) => {
+        //     return produce(state, (draft) => {
+        //         draft.bulkSourceList = initialState.bulkSourceList;
+        //     });
+        // },
     },
     initialState,
 );

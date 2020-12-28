@@ -16,6 +16,13 @@ export const getTypeSourceList = ({ type }) => {
     });
 };
 
+// // 벌크전송 매체 목록 조회(네이버채널용)
+// export const getBulkSourceList = () => {
+//     return instance.get(`/api/article-sources/types/BULK`).catch((err) => {
+//         throw err;
+//     });
+// };
+
 // 매체 목록 조회
 export const getSourceList = ({ search }) => {
     return instance.get(`/api/article-sources?${qs.stringify(search)}`).catch((err) => {
@@ -23,9 +30,9 @@ export const getSourceList = ({ search }) => {
     });
 };
 
-// 벌크전송 매체 목록 조회(네이버채널용)
-export const getBulkSourceList = () => {
-    return instance.get(`/api/article-sources/types/BULK`).catch((err) => {
+// 매체 중복검사
+export const getSourceDuplicateCheck = ({ sourceCode }) => {
+    return instance.get(`/api/article-sources/${sourceCode}/exists`).catch((err) => {
         throw err;
     });
 };
@@ -39,6 +46,8 @@ export const getArticleSource = ({ sourceCode }) => {
 
 // 매체 수정
 export const putArticleSource = ({ source }) => {
+    delete source.add;
+
     return instance.put(`/api/article-sources/${source.sourceCode}`, qs.stringify(source)).catch((err) => {
         throw err;
     });
@@ -46,6 +55,7 @@ export const putArticleSource = ({ source }) => {
 
 // 매체 등록
 export const postArticleSource = ({ source }) => {
+    delete source.add;
     return instance.post(`/api/article-sources`, qs.stringify(source)).catch((err) => {
         throw err;
     });

@@ -9,6 +9,10 @@ export const getDeskingSourceList = createAction(GET_DESKING_SOURCE_LIST, () => 
 export const [GET_TYPE_SOURCE_LIST, GET_TYPE_SOURCE_LIST_SUCCESS, GET_TYPE_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_TYPE_SOURCE_LIST');
 export const getTypeSourceList = createAction(GET_TYPE_SOURCE_LIST, ({ type, callback }) => ({ type, callback }));
 
+// // 벌크전송 매체 목록 조회(네이버채널용)
+// export const [GET_BLUK_SOURCE_LIST, GET_BLUK_SOURCE_LIST_SUCCESS, GET_BLUK_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_BLUK_SOURCE_LIST');
+// export const getBulkSourceList = createAction(GET_BLUK_SOURCE_LIST, () => ({}));
+
 // clear
 export const CLEAR_STORE = 'articleSource/CLEAR_STORE';
 export const CLEAR_ARTICLE_SOURCE = 'articleSource/CLEAR_ARTICLE_SOURCE';
@@ -41,13 +45,9 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
 export const [GET_SOURCE_LIST, GET_SOURCE_LIST_SUCCESS, GET_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_SOURCE_LIST');
 export const getSourceList = createAction(GET_SOURCE_LIST, (...actions) => actions);
 
-// 벌크전송 매체 목록 조회(네이버채널용)
-export const [GET_BLUK_SOURCE_LIST, GET_BLUK_SOURCE_LIST_SUCCESS, GET_BLUK_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_BLUK_SOURCE_LIST');
-export const getBulkSourceList = createAction(GET_BLUK_SOURCE_LIST, () => ({}));
-
-// // 서비스 기사검색 매체 목록조회
-// export const [GET_DESKING_SOURCE_LIST, GET_DESKING_SOURCE_LIST_SUCCESS, GET_DESKING_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_BLUK_SOURCE_LIST');
-// export const getDekingSourceList = createAction(GET_DESKING_SOURCE_LIST, () => ({}));
+// 매체 중복 체크
+export const GET_SOURCE_DUPLICATE_CHECK = 'articleSource/GET_SOURCE_DUPLICATE_CHECK';
+export const getSourceDuplicateCheck = createAction(GET_SOURCE_DUPLICATE_CHECK, ({ sourceCode, callback }) => ({ sourceCode, callback }));
 
 // 매체 상세조회
 export const [GET_ARTICLE_SOURCE, GET_ARTICLE_SOURCE_SUCCESS, GET_ARTICLE_SOURCE_FAILURE] = createRequestActionTypes('articleSource/GET_ARTICLE_SOURCE');
@@ -76,7 +76,3 @@ export const saveMappingCode = createAction(SAVE_MAPPING_CODE, ({ mappingCode, c
 // 매핑코드 삭제
 export const [DELETE_MAPPING_CODE, DELETE_MAPPING_CODE_SUCCESS, DELETE_MAPPING_CODE_FAILURE] = createRequestActionTypes('articleSource/DELETE_MAPPING_CODE');
 export const deleteMappingCode = createAction(DELETE_MAPPING_CODE, ({ sourceCode, seqNo, callback }) => ({ sourceCode, seqNo, callback }));
-
-// // 매체코드 중복 체크
-// export const CODE_DUPLICATE_CHECK = 'articleSource/CODE_DUPLICATE_CHECK';
-// export const codeDuplicateCheck = createAction(CODE_DUPLICATE_CHECK, () => ({}));

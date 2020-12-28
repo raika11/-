@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import columnDefs from './ArticleSourceAgGridColumns';
@@ -8,7 +8,7 @@ import { GET_SOURCE_LIST, getSourceList, changeSearchOption } from '@store/artic
 /**
  * 수신 매체 AgGrid 테이블
  */
-const ArticleSourceAgGrid = (props) => {
+const ArticleSourceAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -17,6 +17,8 @@ const ArticleSourceAgGrid = (props) => {
     const search = useSelector((store) => store.articleSource.search);
     const source = useSelector((store) => store.articleSource.source);
     const loading = useSelector((store) => store.loading[GET_SOURCE_LIST]);
+
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 목록에서 Row클릭
@@ -38,11 +40,27 @@ const ArticleSourceAgGrid = (props) => {
         [dispatch, search],
     );
 
+    /**
+     * rowData 셋팅
+     */
+    useEffect(() => {
+        if (sourceList) {
+            setRowData(
+                sourceList.map((data) => ({
+                    ...data,
+                    usedYn: data.rcvUsedYn,
+                })),
+            );
+        } else if (!sourceList) {
+            setRowData([]);
+        }
+    }, [sourceList]);
+
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={sourceList}
+            rowData={rowData}
             onRowNodeId={(row) => row.sourceCode}
             onRowClicked={handleRowClicked}
             loading={loading}

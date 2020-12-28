@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { MokaSearchInput } from '@/components';
+import { MokaInput, MokaSearchInput } from '@/components';
 import { initialState, changeSearchOption, getSourceList } from '@store/articleSource';
 
 /**
@@ -58,6 +58,12 @@ const ArticleSourceSearch = () => {
     return (
         <div className="mb-2 d-flex align-items-center justify-content-between">
             <div className="d-flex">
+                <div style={{ width: 120 }} className="mr-2">
+                    <MokaInput className="ft-12" as="select" value={search.searchType}>
+                        <option value="sourceName">매체명</option>
+                        <option value="sourceCode">매체코드</option>
+                    </MokaInput>
+                </div>
                 <MokaSearchInput
                     className="mr-2"
                     inputClassName="ft-12"

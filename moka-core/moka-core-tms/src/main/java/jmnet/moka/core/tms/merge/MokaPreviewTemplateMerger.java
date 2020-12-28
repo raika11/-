@@ -273,4 +273,75 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
             httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, (String) codes.get(MokaConstants.MERGE_CONTEXT_CATEGORY));
         }
     }
+
+    /**
+     * 수신기사 미리보기
+     *
+     * @param articlePageItem 기사페이지아이템
+     * @param rid             수신기사키
+     * @param categoryList    분류목록
+     * @param reporterList    기자목록
+     * @param tagList         태그목록
+     * @return
+     * @throws TemplateMergeException
+     * @throws DataLoadException
+     * @throws TemplateParseException
+     */
+    public StringBuilder mergeRcv(ArticlePageItem articlePageItem, Long rid, List<String> categoryList, List<Map<String, Object>> reporterList,
+            List<String> tagList)
+            throws TemplateMergeException, DataLoadException, TemplateParseException {
+        MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
+        // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
+        mergeContext
+                .getMergeOptions()
+                .setPreview(true);
+        if (this.regId != null) {
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_REG_ID, this.regId);
+        }
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, this.domainItem);
+
+        // 예약어를 설정한다.
+        ReservedMap reservedMap = domainResolver.getReservedMap(domainId);
+        if (reservedMap != null) {
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_RESERVED, reservedMap);
+        }
+
+        // Htttp 파라미터 설정
+        HttpParamMap httpParamMap = new HttpParamMap();
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
+
+        DataLoader loader = this.getDataLoader();
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("rid", rid.toString());
+        JSONResult jsonResult = loader.getJSONResult("rcvArticle", paramMap, true);
+        Map<String, Object> articleInfo = rebuildInfoRcv(jsonResult);
+        mergeContext.set("article", articleInfo);
+        mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + rid.toString());
+        this.setCodesAndMenus(loader, articleInfo, mergeContext);
+        String itemType = articlePageItem.getItemType();
+        String itemId = articlePageItem.getItemId();
+
+        // ArticlePageItem 설정
+        this.setItem(itemType, itemId, articlePageItem);
+
+        StringBuilder sb = super.merge(itemType, itemId, mergeContext);
+
+        // base 태그 처리
+        setBaseTag(itemType, mergeContext, sb);
+        return sb;
+    }
+
+    private Map<String, Object> rebuildInfoRcv(JSONResult jsonResult) {
+        Map<String, Object> article = new HashMap<>();
+        article.put("basic", jsonResult.getDataListFirst("BASIC"));
+        article.put("content", jsonResult.getDataList("CONTENT"));
+        article.put("reporter", jsonResult.getDataList("REPORTER"));
+        //        article.put("meta", jsonResult.getDataList("META"));
+        article.put("mastercode", jsonResult.getDataList("MASTERCODE"));
+        article.put("servicemap", jsonResult.getDataList("SERVICEMAP"));
+        article.put("keyword", jsonResult.getDataList("KEYWORD"));
+        //        article.put("clickcnt", jsonResult.getDataList("CLICKCNT"));
+        article.put("multi", jsonResult.getDataList("MULTI"));
+        return article;
+    }
 }

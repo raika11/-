@@ -123,7 +123,7 @@ const ComponentDashboard = () => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <div className="d-flex">
+            <div className="d-flex moka-summernote">
                 <ReactSummernote
                     value="Default value"
                     options={{

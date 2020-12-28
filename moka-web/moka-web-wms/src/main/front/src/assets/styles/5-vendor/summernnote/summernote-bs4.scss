@@ -11,3 +11,28 @@
   padding: 0.28rem 0.65rem;
   font-size: 13px;
 }
+
+.note-btn>span.note-icon-caret:nth-child(2) {
+  padding-left: 3px;
+  margin-right: -5px;
+}
+
+.moka-summernote .dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+
+.moka-summernote .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+
+.moka-summernote .dropdown-toggle:after {
+  content:none;
+}

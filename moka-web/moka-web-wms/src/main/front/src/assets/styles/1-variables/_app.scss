@@ -33,26 +33,32 @@ $spacers: (
 	card: $spacer-card
 ) !default;
 
-$sm-width: 900px !default;
 $min-width: 1360px !default;
+$md-width: 1700px !default;
 $max-width: 1920px !default;
 $max-height: 960px !default;
 
 // Grid breakpoints
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
 $grid-breakpoints: (
 	xs: 0px,
-    sm: $sm-width,
-    md: $min-width,
+    sm: $min-width,
+    md: $md-width,
     lg: $max-width
 ) !default;
 
 // Grid containers
+// Define the maximum width of `.container` for different screen sizes.
 $container-max-widths: (
-	xs: 0px,
-    sm: $sm-width,
-    md: $min-width,
-    lg: $max-width
+	xs: $min-width,
+    sm: $md-width,
+    md: $max-width,
 ) !default;
+
+// Grid columns
+// Set the number of columns and specify the width of the gutters.
+$grid-gutter-width: 16px !default;
 
 // Options
 $enable-validation-icons: false !default;
@@ -251,7 +257,7 @@ $custom-select-focus-box-shadow: unset;
 $form-feedback-valid-color:         $gray-400 !default;
 $form-feedback-invalid-color:       $danger !default;
 
-// Input group (ssc 추가)
+// Input group validation
 $input-group-validation-states: (
 	"valid": (
 		"color": $form-feedback-valid-color

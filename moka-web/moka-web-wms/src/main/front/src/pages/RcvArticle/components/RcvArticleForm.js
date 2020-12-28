@@ -76,17 +76,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
         >
             <Form>
                 <Form.Row className="mb-2">
-                    <Col className="p-0" xs={6}>
-                        <MokaInputLabel label="기사유형" value={articleTypeName} className="mr-2 mb-0" inputProps={{ plaintext: true }} disabled />
+                    <Col className="p-0" xs={3}>
+                        <MokaInputLabel label="출처" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
                     </Col>
-                    <Col className="p-0 d-flex justify-content-end" xs={6}>
+                    <Col className="p-0 d-flex justify-content-end" xs={9}>
                         <MokaInputLabel label="발행일" labelWidth={40} value={pressDt} className="mr-2 mb-0" inputProps={{ plaintext: true }} disabled />
                         <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} className="mb-0" inputProps={{ plaintext: true }} disabled />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="출처" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -141,13 +136,10 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col className="p-0" xs={6}>
+                    <Col className="p-0" xs={10}>
                         <MokaInputLabel label="태그" className="mb-0" value="태그입력" disabled />
                     </Col>
-                    <Col className="p-0 pl-2 d-flex align-items-center" xs={6}>
-                        <Button variant="outline-neutral" className="ft-12 h-100">
-                            추천태그 자동 입력
-                        </Button>
+                    <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
                         <p className="mb-0 ml-2">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>

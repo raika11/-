@@ -250,7 +250,7 @@ const CodeListModal = (props) => {
                             sm={6}
                             key={dep1.masterCode}
                             className={clsx('service d-flex flex-column p-0 border-bottom', {
-                                'border-right': (matchPoints.lg && idx % 3 !== 2) || (matchPoints.md && idx % 2 === 0),
+                                'border-right': (matchPoints.sm && idx % 2 === 0) || (matchPoints.md && idx % 3 !== 2) || (matchPoints.lg && idx % 3 !== 2),
                             })}
                         >
                             {/* 대분류 */}

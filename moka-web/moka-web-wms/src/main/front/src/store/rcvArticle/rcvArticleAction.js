@@ -32,3 +32,15 @@ export const getRcvArticle = createAction(GET_RCV_ARTICLE, ({ rid, callback }) =
  */
 export const GET_RCV_ARTICLE_MODAL = 'rcvArticle/GET_RCV_ARTICLE_MODAL';
 export const getRcvArticleModal = createAction(GET_RCV_ARTICLE_MODAL, ({ rid, callback }) => ({ rid, callback }));
+
+/**
+ * 수신기사 => 등록기사 부가정보 수정하면서 등록
+ */
+export const [POST_RCV_ARTICLE, POST_RCV_ARTICLE_SUCCESS, POST_RCV_ARTICLE_FAILURE] = createRequestActionTypes('rcvArticle/POST_RCV_ARTICLE');
+export const postRcvArticle = createAction(POST_RCV_ARTICLE, ({ rcvArticle, callback }) => ({ rcvArticle, callback }));
+
+/**
+ * 수신기사 => 등록기사 등록만
+ */
+export const POST_RCV_ARTICLE_WITH_RID = 'rcvArticle/POST_RCV_ARTICLE_WITH_RID';
+export const postRcvArticleWithRid = createAction(POST_RCV_ARTICLE_WITH_RID, ({ rid, callback }) => ({ rid, callback }));

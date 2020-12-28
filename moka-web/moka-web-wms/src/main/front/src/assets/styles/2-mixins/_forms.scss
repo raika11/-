@@ -1,0 +1,20 @@
+// Form control focus state
+// focus된 input의 friend(.input-group ~)가 있으면 걔의 테두리도 변경
+@mixin form-control-focus($ignore-warning: false) {
+    &:focus {
+        color: $input-focus-color;
+        background-color: $input-focus-bg;
+        border-color: $input-focus-border-color;
+        outline: 0;
+        @if $enable-shadows {
+        @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+        } @else {
+            // Avoid using mixin so we can pass custom focus shadow properly
+            box-shadow: $input-focus-box-shadow;
+        }
+        + .input-group-prepend > div, + .input-group-append > div {
+            border-color: $input-focus-border-color !important;
+        }
+    }
+    @include deprecate("The `form-control-focus()` mixin", "v4.4.0", "v5", $ignore-warning);
+}

@@ -19,7 +19,8 @@ const propTypes = {
      */
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     /**
-     * 라벨의 넓이 (기본 값 70px)
+     * 라벨의 넓이
+     * @default 66
      */
     labelWidth: PropTypes.number,
     /**
@@ -38,7 +39,7 @@ const propTypes = {
 };
 const defaultProps = {
     label: null,
-    labelWidth: 70,
+    labelWidth: 66,
     as: 'input',
     required: false,
     inputProps: {},

@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
+import { clearStore } from '@store/rcvArticle';
 
 import RcvArticleEdit from './RcvArticleEdit';
 const RcvArticleList = React.lazy(() => import('./RcvArticleList'));
@@ -12,8 +12,13 @@ const RcvArticleList = React.lazy(() => import('./RcvArticleList'));
  * 수신 기사 전체
  */
 const RcvArticle = ({ match }) => {
-    const history = useHistory();
     const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <div className="d-flex">

@@ -38,8 +38,8 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
                 isInvalid={isInvalid}
                 append={
                     <div
-                        className="cursor-pointer bg-white d-flex align-items-center justify-content-center border-left-0"
-                        style={{ width: 30, border: '1px solid #CED1DB', borderRadius: '0.2rem' }}
+                        className="cursor-pointer bg-white d-flex align-items-center justify-content-center border-left-0 rounded-right"
+                        style={{ width: 30, border: '1px solid #CED1DB' }}
                     >
                         <MokaIcon iconName="fas-sort" />
                     </div>

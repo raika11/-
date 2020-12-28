@@ -6,10 +6,10 @@ import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard } from '@components';
 // import ArticlePC from '@pages/Article/components/ArticlePC';
 
-const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, loading, onCancle }) => {
+const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
-    const [articleTypeName, setArticleTypeName] = useState(''); // 기사유형명
+    const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [pressDt, setPressDt] = useState(''); // 발행일자
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
 
@@ -19,9 +19,24 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
      */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
+        if (name === 'tagList') {
+            // 계속 파싱할 수 없어서
+            setTagStr(value);
+        } else {
+            onChange({
+                key: name,
+                value,
+            });
+        }
+    };
+
+    /**
+     * 태그 input blur시에 onChange 실행
+     */
+    const handleBlur = () => {
         onChange({
-            key: name,
-            value,
+            key: 'tagList',
+            value: tagStr.split(','),
         });
     };
 
@@ -35,30 +50,51 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
             result = list.map((code) => code.masterCode);
         }
         onChange({
-            key: 'codeList',
+            key: 'categoryList',
             value: result,
         });
     };
+
+    const valueCreator = (name, email) => `${name}/${email}`;
 
     /**
      * 기자 자동완성 변경
      * @param {array} value value
      */
     const handleReporter = (value) => {
-        setSelectedReporter(value);
+        let result = [];
+        if (value) {
+            result = value.map((reporter) => ({
+                rid: reporter.rid,
+                reporterBlog: reporter.reporterBlog,
+                reporterEmail: reporter.reporterEmail || reporter.repEmail1,
+                reporterEtc: reporter.reporterEtc,
+                reporterName: reporter.reporterName || reporter.repName,
+                label: reporter.reporterName || reporter.repName,
+                value: reporter.reporterName ? valueCreator(reporter.reporterName, reporter.reporterEmail) : valueCreator(reporter.repName, reporter.repEmail1),
+            }));
+        }
+
+        onChange({
+            key: 'reporterList',
+            value: result,
+        });
     };
 
     useEffect(() => {
-        setSelectedMasterCode(article.codeList || []);
-        if (articleTypeRows) {
-            const at = articleTypeRows.find((a) => a.dtlCd === article.pressArtType);
-            if (at) setArticleTypeName(at.cdNm);
-            else setArticleTypeName('기본');
-        }
+        setSelectedMasterCode(article.categoryList || []);
         if (article.pressDt) {
             setPressDt(article.pressDt.slice(0, 10));
         }
-    }, [article, articleTypeRows]);
+        setTagStr((article.tagList || []).join(','));
+        setSelectedReporter(
+            (article.reporterList || []).map((reporter) => ({
+                ...reporter,
+                label: reporter.reporterName,
+                value: valueCreator(reporter.reporterName, reporter.reporterEmail),
+            })),
+        );
+    }, [article]);
 
     return (
         <MokaCard
@@ -132,13 +168,13 @@ const RcvArticleForm = ({ reporterList, article, onChange, articleTypeRows, load
                             as="autocomplete"
                             value={selectedReporter}
                             onChange={handleReporter}
-                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 120 }}
+                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 140 }}
                         />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
-                        <MokaInputLabel label="태그" className="mb-0" value="태그입력" disabled />
+                        <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlur }} />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
                         <p className="mb-0 ml-2">콤마(,) 구분입력</p>

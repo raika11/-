@@ -29,6 +29,11 @@
   outline: none;
 }
 
+.form-control {
+  // Customize the `:focus` state to imitate native WebKit styles.
+  @include form-control-focus($ignore-warning: true);
+}
+
 /**
  * input-group의 invalid 처리
  * bootstrap/scss/mixins/_forms.scss 참고하여서 추가함

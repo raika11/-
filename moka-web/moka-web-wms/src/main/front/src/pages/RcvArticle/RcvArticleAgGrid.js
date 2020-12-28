@@ -5,8 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './RcvArticleAgGridColumns';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
-import { GET_RCV_ARTICLE_LIST, changeSearchOption, getRcvArticleList } from '@store/rcvArticle';
+import { GET_RCV_ARTICLE_LIST, changeSearchOption, getRcvArticleList, postRcvArticleWithRid, POST_RCV_ARTICLE_WITH_RID } from '@store/rcvArticle';
 import { DB_DATEFORMAT } from '@/constants';
+import toast from '@utils/toastUtil';
 
 moment.locale('ko');
 
@@ -16,7 +17,7 @@ moment.locale('ko');
 const RcvArticleAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE_LIST]);
+    const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE_LIST] || store.loading[POST_RCV_ARTICLE_WITH_RID]);
     const { total, list, search } = useSelector((store) => ({
         total: store.rcvArticle.total,
         list: store.rcvArticle.list,
@@ -52,6 +53,27 @@ const RcvArticleAgGrid = () => {
         [history],
     );
 
+    /**
+     * 등록
+     */
+    const handleRegister = useCallback(
+        (data) => {
+            dispatch(
+                postRcvArticleWithRid({
+                    rid: data.rid,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch],
+    );
+
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
@@ -63,12 +85,13 @@ const RcvArticleAgGrid = () => {
                     sourceName: `[${data.sourceName}]`,
                     serviceTime: data.serviceDaytime ? moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm') : null,
                     handleRowClicked,
+                    handleRegister,
                 })),
             );
         } else {
             setRowData([]);
         }
-    }, [handleRowClicked, list]);
+    }, [handleRegister, handleRowClicked, list]);
 
     return (
         <MokaTable

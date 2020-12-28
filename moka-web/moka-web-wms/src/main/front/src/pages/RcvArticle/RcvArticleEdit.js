@@ -53,7 +53,7 @@ const RcvArticleEdit = () => {
             setReporterList(
                 allReporter.map((reporter) => ({
                     ...reporter,
-                    value: reporter.repSeq,
+                    value: `${reporter.repName}/${reporter.repEmail1}`,
                     label: reporter.repName,
                 })),
             );

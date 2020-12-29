@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
@@ -52,6 +54,7 @@ public class BoardInfoDTO {
      * 게시판명
      */
     @ApiModelProperty("게시판명")
+    @NotEmpty(message = "{tps.board-info.error.size.boardName}")
     @Size(min = 2, max = 100, message = "{tps.board-info.error.size.boardName}")
     private String boardName;
 
@@ -60,7 +63,7 @@ public class BoardInfoDTO {
      */
     @ApiModelProperty("게시판유형(S:서비스 / A:관리자)")
     @Builder.Default
-    //@Pattern(regexp = "[S|A]{1}$", message = "{tps.board-info.error.pattern.boardType}")
+    @NotNull(message = "{tps.board-info.error.pattern.boardType}")
     private BoardTypeCode boardType = BoardTypeCode.A;
 
     /**

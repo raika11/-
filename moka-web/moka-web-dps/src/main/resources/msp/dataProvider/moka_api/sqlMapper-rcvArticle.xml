@@ -56,7 +56,7 @@
   </select>
   <!-- rcv article multi -->
   <select id="multi" parameterType="hashmap" resultType="map">
-  select * from TB_RCV_ARTICLE_COMPONENT A,
+  select * from TB_RCV_ARTICLE_COMPONENT
   where RID = #{rid}
   </select>
 

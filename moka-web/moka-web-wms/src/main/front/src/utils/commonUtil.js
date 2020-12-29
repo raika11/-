@@ -306,3 +306,44 @@ export default {
     dateFormat,
     setDefaultValue,
 };
+
+/**
+ * 미리보기 팝업띄움.
+ */
+export const popupPreview = (targetUrl, item, enctype = null) => {
+    // 폼 생성
+    const f = document.createElement('form');
+    f.setAttribute('method', 'post');
+    f.setAttribute('action', targetUrl);
+    f.setAttribute('target', '_blank');
+    if (enctype !== null) {
+        f.setAttribute('enctype', 'multipart/form-data');
+    }
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const propName in item) {
+        if (typeof item[propName] === 'object') {
+            const subObject = item[propName];
+            // eslint-disable-next-line no-restricted-syntax
+            for (const inPropName in subObject) {
+                if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = `${propName}.${inPropName}`;
+                    input.value = item[propName][inPropName];
+                    f.appendChild(input);
+                }
+            }
+        } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = propName;
+            input.value = item[propName];
+            f.appendChild(input);
+        }
+    }
+
+    document.getElementsByTagName('body')[0].appendChild(f);
+    f.submit();
+    f.remove();
+};

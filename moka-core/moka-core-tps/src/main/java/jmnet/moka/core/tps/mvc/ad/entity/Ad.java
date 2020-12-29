@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.ad.entity;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,31 +10,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.domain.entity.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
  * The persistent class for the WMS_AD database table.
- * 
  */
-@Entity
-@Table(name = "WMS_AD")
-@NamedQuery(name = "Ad.findAll", query = "SELECT a FROM Ad a")
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
-@EqualsAndHashCode(of = "adSeq")
+@NoArgsConstructor
+@Setter
+@Getter
 @Builder
-public class Ad implements Serializable {
+@EqualsAndHashCode(exclude = "areaComps")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "areaSeq")
+@Entity
+@Table(name = "TB_WMS_AD")
+public class Ad extends BaseAudit {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -59,14 +61,14 @@ public class Ad implements Serializable {
     @Column(name = "PERIOD_YN", columnDefinition = "char")
     private String periodYn;
 
-    @Column(name = "PERIOD_END_YMDT")
-    private String periodEndYmdt;
+    @Column(name = "PERIOD_END_DT")
+    private Date periodEndDt;
 
-    @Column(name = "PERIOD_START_YMDT")
-    private String periodStartYmdt;
+    @Column(name = "PERIOD_START_DT")
+    private Date periodStartDt;
 
-    @Column(name = "USE_YN", columnDefinition = "char")
-    private String useYn;
+    @Column(name = "USED_YN", columnDefinition = "char")
+    private String usedYn;
 
     @Column(name = "AD_HEIGHT")
     private int adHeight;
@@ -74,30 +76,17 @@ public class Ad implements Serializable {
     @Column(name = "AD_WIDTH")
     private int adWidth;
 
+    @Column(name = "AD_TYPE", columnDefinition = "char")
+    private String adType;
+
     @Column(name = "SLIDE_TYPE")
     private String slideType;
 
-    @Lob
     @Column(name = "AD_BODY")
     private String adBody;
 
     @Column(name = "AD_FILE_NAME")
     private String adFileName;
-
-    @Column(name = "CREATE_YMDT")
-    private String createYmdt;
-
-    @Column(name = "CREATOR")
-    private String creator;
-
-    @Column(name = "MODIFIED_YMDT")
-    private String modifiedYmdt;
-
-    @Column(name = "MODIFIER")
-    private String modifier;
-
-    @Column(name = "AD_TYPE", columnDefinition = "char")
-    private String adType;
 
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;

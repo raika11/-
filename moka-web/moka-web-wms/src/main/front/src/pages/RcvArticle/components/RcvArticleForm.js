@@ -6,7 +6,7 @@ import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard } from '@components';
 // import ArticlePC from '@pages/Article/components/ArticlePC';
 
-const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle }) => {
+const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
     const [tagStr, setTagStr] = useState(''); // 태그리스트
@@ -81,6 +81,20 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle }) 
         });
     };
 
+    /**
+     * PC 미리보기
+     */
+    const handlePCPreview = () => {
+        onPreview('P');
+    };
+
+    /**
+     * 모바일 미리보기
+     */
+    const handleMobilePreview = () => {
+        onPreview('M');
+    };
+
     useEffect(() => {
         setSelectedMasterCode(article.categoryList || []);
         if (article.pressDt) {
@@ -103,8 +117,8 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle }) 
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
-                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2' },
-                { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2' },
+                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
+                { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
                 { variant: 'positive', text: '기사등록', className: 'mr-2' },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}

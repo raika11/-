@@ -314,7 +314,7 @@ public class AreaRestController extends AbstractCommonController {
                 areaService.compsToComp(returnValDTO);
             }
 
-            String message = msg("tps.common.success.insert");
+            String message = msg("tps.common.success.update");
             ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(returnValDTO, message);
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);

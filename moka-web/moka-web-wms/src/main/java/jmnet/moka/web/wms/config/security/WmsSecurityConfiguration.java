@@ -211,7 +211,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader("*");
         // configuration.setAllowedMethods(Arrays.asList("GET","POST","OPTIONS","PUT","DELETE"));
         configuration.addAllowedMethod("*");
-        configuration.setExposedHeaders(Arrays.asList(WmsJwtHelper.HEADER_STRING, TpsConstants.HEADER_MENU_ID));
+        configuration.setExposedHeaders(Arrays.asList(WmsJwtHelper.HEADER_STRING, MokaConstants.HEADER_MENU_ID));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         configuration.addExposedHeader(MokaConstants.HEADER_DOWNLOAD_FILENAME);
         source.registerCorsConfiguration("/**", configuration);

@@ -10,6 +10,7 @@ import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
 import toast from '@utils/toastUtil';
+import { popupPreview } from '@utils/commonUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
@@ -338,7 +339,7 @@ const PageEdit = ({ onDelete }) => {
                     const item = produce(page, (draft) => {
                         draft.pageBody = pageBody;
                     });
-                    popupPreview('/preview/page', item);
+                    popupPreview(`${API_BASE_URL}/preview/page`, item);
                 } else {
                     toast.fail(header.message || '미리보기에 실패하였습니다');
                 }
@@ -346,46 +347,6 @@ const PageEdit = ({ onDelete }) => {
         };
         dispatch(previewPage(option));
     }, [dispatch, page, pageBody]);
-
-    /**
-     * 미리보기 팝업띄움.
-     */
-    const popupPreview = (url, item) => {
-        const targetUrl = `${API_BASE_URL}${url}`;
-
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const propName in item) {
-            if (typeof item[propName] === 'object') {
-                const subObject = item[propName];
-                // eslint-disable-next-line no-restricted-syntax
-                for (const inPropName in subObject) {
-                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = `${propName}.${inPropName}`;
-                        input.value = item[propName][inPropName];
-                        f.appendChild(input);
-                    }
-                }
-            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = propName;
-                input.value = item[propName];
-                f.appendChild(input);
-            }
-        }
-
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
 
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
@@ -400,7 +361,7 @@ const PageEdit = ({ onDelete }) => {
             page: tempPage,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    popupW3C(body);
+                    popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
                 } else {
                     toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }
@@ -408,29 +369,6 @@ const PageEdit = ({ onDelete }) => {
         };
         dispatch(w3cPage(option));
     }, [dispatch, page, pageBody]);
-
-    /**
-     * W3C 팝업띄움.
-     */
-    const popupW3C = (body) => {
-        const targetUrl = W3C_URL;
-
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-        f.setAttribute('enctype', 'multipart/form-data');
-
-        let input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'fragment';
-        input.value = body;
-        f.appendChild(input);
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
 
     /**
      * page url 클릭

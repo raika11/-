@@ -231,7 +231,7 @@ public class DomainRestController extends AbstractCommonController {
 
             // 결과리턴
             DomainDTO dto = modelMapper.map(returnValue, DomainDTO.class);
-            ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto);
+            ResultDTO<DomainDTO> resultDto = new ResultDTO<>(dto, msg("tps.common.success.update"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -318,7 +318,7 @@ public class DomainRestController extends AbstractCommonController {
             tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.common.success.delete"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

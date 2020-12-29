@@ -198,4 +198,9 @@ public class MokaConstants {
      * response header의 다운로드 파일명
      */
     public static final String HEADER_DOWNLOAD_FILENAME = "X-Suggested-Filename";
+
+    /**
+     * request header의 메뉴 ID key
+     */
+    public static final String HEADER_MENU_ID = "x-menuid";
 }

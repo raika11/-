@@ -28,6 +28,7 @@ public class Constants {
 	public final static String EL_CASE = PREFIX + "case";
 	public final static String EL_SET = PREFIX + "set";
 	public final static String EL_DATA = PREFIX + "data";
+	public final static String EL_PRESERVE = PREFIX + "preserve";
 	public final static String EL_SCRIPT = PREFIX + "script";
 	public final static String EL_PARAM = PREFIX + "param";
 	public final static String EL_PAGING = PREFIX + "paging";
@@ -216,7 +217,7 @@ public class Constants {
 	 * @return 하위 텍스트 보존여부
 	 */
 	public static boolean preserveChildText(String element) {
-		return element.equals(EL_SCRIPT);
+		return element.equals(EL_SCRIPT)||element.equals(EL_PRESERVE);
 	}
 	
 }

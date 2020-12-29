@@ -170,8 +170,8 @@ public class BoardInfoDTO {
      */
     @ApiModelProperty("허용되는 파일확장자(;로 구분)")
     @Builder.Default
-    //@Pattern(regexp = "zip;|xls;|xlsx;|ppt;|doc;|hwp;|jpg;|png;|gif;", message = "{tps.board-info.error.pattern.allowFileExt}")
-    private String allowFileExt = "zip;xls;xlsx;ppt;doc;hwp;jpg;png;gif;";
+    //@Pattern(regexp = "zip,|xls,|xlsx,|ppt,|doc,|hwp,|jpg,|png,|gif,", message = "{tps.board-info.error.pattern.allowFileExt}")
+    private String allowFileExt = "zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif,";
 
     /**
      * 추천여부 0:사용안함 1:추천/비추천 2:추천만

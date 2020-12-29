@@ -1,8 +1,12 @@
 package jmnet.moka.web.wms.comment;
 
+import java.util.List;
+import jmnet.moka.core.comment.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.comment.mvc.comment.entity.Comment;
 import jmnet.moka.core.comment.mvc.comment.entity.CommentPk;
+import jmnet.moka.core.comment.mvc.comment.mapper.CommentMapper;
 import jmnet.moka.core.comment.mvc.comment.repository.CommentRepository;
+import jmnet.moka.core.comment.mvc.comment.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,15 +37,26 @@ public class CommentTest {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private CommentMapper commentMapper;
+
     @Test
     public void selectComment() {
         Comment comment = commentRepository
                 .findById(CommentPk
                         .builder()
-                        .commentSeq(6187671)
-                        .psn(6187671)
+                        .commentSeq(6187671L)
+                        .psn(6187671L)
                         .build())
                 .get();
         log.debug(comment.getCont());
+    }
+
+    @Test
+    public void selectAllComment() {
+        List<CommentVO> comment = commentMapper.findAll(CommentSearchDTO
+                .builder()
+                .build());
+        log.debug(comment.toString());
     }
 }

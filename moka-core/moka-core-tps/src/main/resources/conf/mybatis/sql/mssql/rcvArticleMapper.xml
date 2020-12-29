@@ -148,28 +148,26 @@
   </select>
 
   <!--분류코드 등록-->
-  <!--<select id="callUspRcvArticleCodeIns" parameterType="CpArticleTotalVo" resultType="Integer"
+  <select id="callUspRcvArticleCodeIns" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
-      { call USP_RCV_ARTICLE_CODE_INS(
+      { call USP_RCV_ARTICLE_CODE_INS_BY_MASTER_CODE(
         #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-        #{curArticle.id, mode=IN, jdbcType=VARCHAR, javaType=string},
+        NULL
         #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{curCategory.type, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{curCategory.code, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{curCategory.name, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{curIndex, mode=IN, jdbcType=VARCHAR, javaType=string}
+        #{code, mode=IN, jdbcType=VARCHAR, javaType=string},
+        #{ord, mode=IN, jdbcType=INTEGER, javaType=integer}
         )}
-  </select>-->
+  </select>
 
   <!--분류코드 삭제-->
-  <!--<select id="callUspRcvArticleCodeDel" parameterType="hashMap" resultType="Integer"
+  <select id="callUspRcvArticleCodeDel" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
     { call USP_RCV_ARTICLE_CODE_DEL(
         #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
         NULL,
         #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
-  </select>-->
+  </select>
 
   <!--태그등록-->
   <select id="callUspRcvArticleKeywordIns" parameterType="hashMap" resultType="Integer"

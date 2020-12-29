@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.common.controller
+ * Package : jmnet.moka.core.comment.common.controller
  * ClassName : AbstractCommentController
  * Created : 2020-11-09 ince
  * </pre>

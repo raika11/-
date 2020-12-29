@@ -15,7 +15,7 @@ import lombok.ToString;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.comment.entity
+ * Package : jmnet.moka.core.comment.comment.entity
  * ClassName : CommentPk
  * Created : 2020-12-28 ince
  * </pre>

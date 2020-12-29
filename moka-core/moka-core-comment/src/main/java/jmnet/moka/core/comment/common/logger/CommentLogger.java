@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.common.logger
+ * Package : jmnet.moka.core.comment.common.logger
  * ClassName : TpsLogger
  * Created : 2020-10-19 ince
  * </pre>

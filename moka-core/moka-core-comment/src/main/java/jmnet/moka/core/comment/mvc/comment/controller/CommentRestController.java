@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -55,9 +55,7 @@ public class CommentRestController extends AbstractCommentController {
      */
     @ApiOperation(value = "댓글 목록 조회")
     @GetMapping
-    public ResponseEntity<?> getBoardList(
-            @ApiParam("댓글 일련번호") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @SearchParam CommentSearchDTO search) {
+    public ResponseEntity<?> getCommentList(@SearchParam CommentSearchDTO search) {
 
         ResultListDTO<CommentVO> resultListMessage = new ResultListDTO<>();
 
@@ -67,16 +65,17 @@ public class CommentRestController extends AbstractCommentController {
     }
 
     /**
-     * 등록
+     * 삭제
      *
      * @param commentDTO 등록할 댓글정보
      * @return 등록된 댓글정보
      */
-    @ApiOperation(value = "댓글 등록")
-    @PostMapping("/{boardId}/contents")
-    public ResponseEntity<?> postBoard(
-            @ApiParam("댓글 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
-            @Valid CommentDTO commentDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+    @ApiOperation(value = "댓글 삭제")
+    @PostMapping("/{commentSeq}/{psn}")
+    public ResponseEntity<?> deleteComment(
+            @ApiParam("댓글 ID") @PathVariable("commentSeq") @Min(value = 1, message = "{comment.error.pattern.commentSeq}") Long commentSeq,
+            @ApiParam("댓글 ID") @PathVariable("psn") @Min(value = 1, message = "{comment.error.pattern.psn}") Long psn, @Valid CommentDTO commentDTO,
+            @ApiParam(hidden = true) @NotNull Principal principal)
             throws MokaException {
 
         ResultDTO<CommentDTO> resultDto = new ResultDTO<>(commentDTO, msg(""));

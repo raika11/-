@@ -18,14 +18,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Setter
 @Getter
 @Builder
-public class CommentBannedDTO implements Serializable {
+public class CommentBannedSaveDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 일련번호
-     */
-    private Integer bannedIdx;
 
     /**
      * 금지타입 I/U/W - 아이피/사용자/단어
@@ -35,6 +30,7 @@ public class CommentBannedDTO implements Serializable {
     /**
      * 설정/해제여부
      */
+    @Builder.Default
     private String usedYn = "Y";
 
     /**

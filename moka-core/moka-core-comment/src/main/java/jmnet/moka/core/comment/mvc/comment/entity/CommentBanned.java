@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import jmnet.moka.core.comment.mvc.comment.code.CommentBannedType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,7 +43,8 @@ public class CommentBanned implements Serializable {
      * 금지타입 I/U/W - 아이피/사용자/단어
      */
     @Column(name = "TAG_TYPE", nullable = false)
-    private String tagType = "U";
+    @Enumerated(value = EnumType.STRING)
+    private CommentBannedType tagType = CommentBannedType.U;
 
     /**
      * 설정/해제여부

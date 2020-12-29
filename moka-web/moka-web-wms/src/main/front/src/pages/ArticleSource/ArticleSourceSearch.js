@@ -65,10 +65,18 @@ const ArticleSourceSearch = () => {
     return (
         <div className="mb-2 d-flex align-items-center justify-content-between">
             <div className="d-flex">
-                <div style={{ width: 120 }} className="mr-2">
+                <div style={{ width: 100 }} className="mr-2">
                     <MokaInput className="ft-12" as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                        <option value="all">전체</option>
                         <option value="sourceName">매체명</option>
                         <option value="sourceCode">매체코드</option>
+                    </MokaInput>
+                </div>
+                <div style={{ width: 130 }} className="mr-2">
+                    <MokaInput className="ft-12" as="select" name="rcvUsedYn" value={search.rcvUsedYn} onChange={handleChangeValue}>
+                        <option value="all">CP수신여부(전체)</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
                     </MokaInput>
                 </div>
                 <MokaSearchInput

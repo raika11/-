@@ -4,10 +4,8 @@ import java.awt.Image;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +21,11 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
-import jmnet.moka.core.tms.mvc.HttpParamMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,8 +158,8 @@ public class AmpArticleView extends AbstractView {
     }
 
 
-    private void convertAmp(Map<String,Object> articleInfo) {
-        List contentList = (List)articleInfo.get("content");
+    private void convertAmp(Map<String,Object> article) {
+        List contentList = (List)article.get("content");
         Map contentMap = (Map)contentList.get(0);
         String originalContent = (String)contentMap.get("ART_CONTENT");
         // 본문
@@ -213,12 +209,26 @@ public class AmpArticleView extends AbstractView {
         //인용구
         ampContent = ampContent.replaceAll("(?i)<div class=\"tag_quotation\">(.*?)</div>","<div class=\"ab_quot\"><p>$1</p></div>");
 
-        // 서브 타이틀
-        ampContent = convertAmpSubTitle(ampContent, articleInfo);
+        //서브 타이틀
+        ampContent = convertAmpSubTitle(ampContent, article);
 
-        // 메타 이미지
+        //메타 이미지 (
+        setMetaImage(article);
 
-        // 타이틀 처리
+        //타이틀 처리
+        setMobileTitle(article);
+
+        //alt 태그 수정
+        ampContent = convertAmpAlt(ampContent);
+
+        //유튜브 태그 수정 -> 동영상(amp-youtube)에서 처리
+
+        //비정상 태그 수정
+        //제외 태그
+        ampContent = convertAmpEtc(ampContent);
+
+        //본문 광고 삽입
+        ampContent = setAmpAd(ampContent);
 
         contentMap.put("ART_CONTENT",ampContent);
     }
@@ -241,6 +251,11 @@ public class AmpArticleView extends AbstractView {
     private static Pattern PATTERN_SNS = Pattern.compile("<div class=\"tag_sns\" data.+?<\\/div>", Pattern.CASE_INSENSITIVE);
     private static Pattern PATTERN_URL = Pattern.compile("url=\"[^\"]+", Pattern.CASE_INSENSITIVE);
     private static Pattern PATTERN_BR = Pattern.compile("<br>(\\s|&nbsp;)*?<br>", Pattern.CASE_INSENSITIVE);
+    private static Pattern PATTERN_ALT_REFINE = Pattern.compile("alt=\".*?\"", Pattern.CASE_INSENSITIVE);
+    private static Pattern PATTERN_YOUTUBE_ID = Pattern.compile("[\\w-]");
+    private static String AD_IN_BODY = "<br><br><div class=\"shopping_box\">"
+            + "<amp-ad width=\"336\" height=\"280\" type=\"doubleclick\" data-slot=\"/30349040/AMP_Joongang_article_336x280\"></amp-ad>"
+            + "</div><br>";
 
     private String convertAmpImage(String ampContent, boolean old) {
         Matcher matcher;
@@ -302,8 +317,8 @@ public class AmpArticleView extends AbstractView {
                                     + "<amp-carousel class=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" type=\"%s\">%s</amp-carousel>"
                                     + "</div>",
                     "amp_carousel",
-                    450,
-                    300,
+                    "450",
+                    "300",
                     "responsive",
                     "slides",
                     imageBuldleHtml)
@@ -325,11 +340,13 @@ public class AmpArticleView extends AbstractView {
                 continue;
             }
             if ( vod.equals("youtube")) {
+                String youtubeId = id.substring(id.lastIndexOf("/") + 1);
+                youtubeId = getFirstValue(PATTERN_YOUTUBE_ID, youtubeId); // 11자리 Id를 추출
                 ampContent.replace(vod,
                         String.format("<div class=\"ab_player\"><div class=\"player_area\">"
                                         + "<amp-youtube data-videoid=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\"></amp-youtube>"
                                         + "</div></div>",
-                         id.substring(id.lastIndexOf("/") + 1),
+                                youtubeId,
                                 DEFAULT_WIDTH,
                                 DEFAULT_HEIGHT,
                                 "responsive" ));
@@ -467,10 +484,10 @@ public class AmpArticleView extends AbstractView {
         return new String[]{ampContent,useTagList};
     }
 
-    private String convertAmpSubTitle(String ampContent, Map<String,Object> articleInfo) {
-        Map basicMap = (Map)articleInfo.get("basic");
+    private String convertAmpSubTitle(String ampContent, Map<String,Object> article) {
+        Map basicMap = (Map)article.get("basic");
         Object subTitleObj = basicMap.get("ART_SUB_TITLE");
-        if ( subTitleObj == null) {
+        if ( McpString.isEmpty(subTitleObj)) {
             return ampContent;
         }
         Matcher matcher = PATTERN_BR.matcher(ampContent);
@@ -484,6 +501,85 @@ public class AmpArticleView extends AbstractView {
             ampContent = sb.toString();
         }
         return ampContent;
+    }
+
+    private void setMetaImage(Map<String,Object> article) {
+        Map metaJa = (Map)article.get("meta_ja");
+        String jaImage = (String)metaJa.get("IMG_URL");
+        String[] size = null;
+        if ( McpString.isNotEmpty(jaImage)) {
+            size = getImageSize(jaImage);
+        }
+        if ( size != null) {
+            metaJa.put("IMAGE_WIDTH",size[0]);
+            metaJa.put("IMAGE_HEIGHT",size[1]);
+        } else {
+            metaJa.put("IMG_URL","https://static.joins.com/joongang_15re/profile_joongang_200.png");
+            metaJa.put("IMAGE_WIDTH", 200);
+            metaJa.put("IMAGE_HEIGHT",200);
+        }
+    }
+
+    private void setMobileTitle(Map<String,Object> article) {
+        String mobileTitle = functions.findColumn((List<Map<String,Object>>)article.get("title"),"TITLE_DIV","M","TITLE");
+        mobileTitle = mobileTitle.replace("<.*?>","").trim();
+        Map metaJa = (Map)article.get("meta_ja");
+        metaJa.put("ART_TITLE",mobileTitle);
+    }
+
+    private String convertAmpAlt(String ampContent) {
+        Matcher matcher = PATTERN_ALT_REFINE.matcher(ampContent);
+        while ( matcher.find()) {
+            String alt = matcher.group();
+            String altRefined = alt.substring(5, alt.length()-1);
+            if ( alt.matches("(?i)(div|span|style)")) {
+                altRefined = "";
+            } else {
+                altRefined = altRefined.replace("\"","'").replace("&#34;", "'").replace("&#39;", "'");
+            }
+            ampContent = ampContent.replace(alt, "alt=\""+altRefined+"\"");
+        }
+        return ampContent;
+    }
+
+    private String convertAmpEtc(String ampContent) {
+        //비정상 태그 수정
+        ampContent = ampContent.replaceAll("(?i); bgcolor=\"(\\s?)(#\\w{6})\" b",";\" b");
+        ampContent = ampContent.replaceAll("(?i)(a\\s)?target=('|\"|”)?_?(new|blank|joinsnews|notice_win)\\2?","target=\"_blank\"");
+        ampContent = ampContent.replace("\"“", "\"").replace("”\"", "\"")
+                               .replace("\"‘", "\"").replace("’\"", "\"").replace("hhttp", "http");
+        ampContent = ampContent.replace("<a class=\"style2\" style=\"MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%\"<font size=\"2\">", "");
+
+        //제외 태그
+        ampContent = ampContent.replaceAll("<div class=\"dim\".+?>.*?<\\/div>","");
+        ampContent = ampContent.replaceAll("(?i)<(embed|map|script|style|video).*?<\\/\\1>","");
+        ampContent = ampContent.replaceAll("(?i)<\\/?(blog|embed|font|form|hr|http|img|jtbc|link|mbc|meta|new|object|param|special|width|yonhap).*?>","");
+        ampContent = ampContent.replaceAll("<\\/?[\\w\\s-.]+@+[\\w\\s-.,]+>","");
+        ampContent = ampContent.replaceAll("<[a-z0-9.]+(\\.{1})[a-z]+>","");
+        ampContent = ampContent.replaceAll("\"<!--.*?-->\"","");
+        ampContent = ampContent.replaceAll("(?i)<[EF]\\w{3}>","");
+        ampContent = ampContent.replaceAll("(?i)<[^amp|^<|^>]*?[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+.*?>","");
+        ampContent = ampContent.replaceAll("(?i)(background|basefont|bordercolor|contenteditable|fonttext|name|onclick|rgb|style|to-remove-element|cols|rows|colspan|rowspan)=('|\").*?\\2","");
+        ampContent = ampContent.replaceAll("(?i)('|\")javascript:.*?\\1","");
+        ampContent = ampContent.replace("&#34;", "\"").replace("&#39;", "'");
+        ampContent = ampContent.replace("<hr><hr>", "");
+
+        return ampContent;
+    }
+
+    private String setAmpAd(String ampContent) {
+        Matcher matcher = PATTERN_BR.matcher(ampContent);
+        int matchCount = 0;
+        while ( matcher.find()) {
+            matchCount ++;
+            if ( matchCount == 4) {
+                StringBuffer sb = new StringBuffer(ampContent.length());
+                matcher.appendReplacement(sb, AD_IN_BODY);
+                matcher.appendTail(sb);
+                return sb.toString();
+            }
+        }
+        return ampContent + AD_IN_BODY;
     }
 
     private String getFirstValue(Pattern pattern, String text) {

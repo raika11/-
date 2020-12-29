@@ -61,10 +61,10 @@ export default [
         },
     },
     {
-        headerName: '사용여부',
+        headerName: 'CP수신여부',
         field: 'rcvUsedYn',
         cellStyle: { fontSize: '12px', textAlign: 'center' },
-        width: 65,
+        width: 80,
         cellRendererFramework: (params) => {
             const { rcvUsedYn } = params.data;
             let color = rcvUsedYn === 'Y' ? 'color-primary' : 'color-gray150';
@@ -87,5 +87,6 @@ export default [
         field: 'regDt',
         cellStyle: { fontSize: '12px' },
         flex: 1,
+        tooltipField: 'regDt',
     },
 ];

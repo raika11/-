@@ -58,15 +58,15 @@ const ArticleSourceEdit = (props) => {
 
     /**
      * validate
-     * @param {object} temp validate target
+     * @param {object} source 데이터
      */
     const validate = useCallback(
-        (temp) => {
+        (source) => {
             let isInvalid = false,
                 errList = [];
 
             // 매체명 체크
-            if (!temp.sourceName || !REQUIRED_REGEX.test(temp.sourceName)) {
+            if (!REQUIRED_REGEX.test(source.sourceName)) {
                 errList.push({
                     field: 'sourceName',
                     reason: '매체명을 입력하세요.',
@@ -74,7 +74,7 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 매체타입 체크
-            if (!temp.sourceType || !/^[a-zA-Z0-9]{1,5}$/.test(temp.sourceType)) {
+            if (!source.sourceType || !/^[a-zA-Z0-9]{1,5}$/.test(source.sourceType)) {
                 errList.push({
                     field: 'sourceType',
                     reason: '매체타입을 5자리 이하로 입력하세요.',
@@ -82,7 +82,7 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 매체코드 체크
-            if (!temp.sourceCode || !/^[a-zA-Z0-9]{1,2}$/.test(temp.sourceCode)) {
+            if (!source.sourceCode || !/^[a-zA-Z0-9]{1,2}$/.test(source.sourceCode)) {
                 errList.push({
                     field: 'sourceCode',
                     reason: '매체코드를 2자리 이하로 입력하세요.',
@@ -90,8 +90,8 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 서버구분 체크
-            if (temp.serverGubun) {
-                if (!/^[a-zA-Z]{1,10}/.test(temp.serverGubun)) {
+            if (source.serverGubun) {
+                if (!/^[a-zA-Z]{1,10}/.test(source.serverGubun)) {
                     errList.push({
                         field: 'serverGubun',
                         reason: '서버구분을 10자리 이하로 입력하세요.',
@@ -147,7 +147,39 @@ const ArticleSourceEdit = (props) => {
     }, [location.pathname]);
 
     useEffect(() => {
-        setTemp(source);
+        if (source) {
+            let obj = { ...source };
+            // let ynKeys = Object.keys(obj).filter((k) => k.lastIndexOf('Use') > -1);
+            Object.keys(obj).forEach((k) => {
+                if (obj[k] === ' ') {
+                    obj[k] = 'N';
+                } else if (!obj['jstoreUse']) {
+                    obj['jstoreUse'] = 'N';
+                } else if (!obj['consalesUse']) {
+                    obj['consalesUse'] = 'N';
+                } else if (!obj['joongangUse']) {
+                    obj['joongangUse'] = 'N';
+                } else if (!obj['socialUse']) {
+                    obj['socialUse'] = 'N';
+                } else if (!obj['ilganUse']) {
+                    obj['ilganUse'] = 'N';
+                }
+                setTemp(obj);
+            });
+            console.log(obj);
+            // if (temp.jstoreUse === '') {
+            //     setTemp({ ...temp, jstoreUse: 'N' });
+            // } else if (temp.consalesUse === '') {
+            //     setTemp({ ...temp, consalesUse: 'N' });
+            // } else if (temp.joongangUse === '') {
+            //     setTemp({ ...temp, joongangUse: 'N' });
+            // } else if (temp.socialUse === '') {
+            //     setTemp({ ...temp, socialUse: 'N' });
+            // } else if (temp.ilganUse === '') {
+            //     setTemp({ ...temp, ilganUse: 'N' });
+            // }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [source]);
 
     useEffect(() => {
@@ -159,25 +191,32 @@ const ArticleSourceEdit = (props) => {
     }, [clickMapping]);
 
     useEffect(() => {
+        // 등록, 수정
         if (clickSave) {
             let obj = {
                 ...temp,
                 add: addParam,
             };
-            if (validate(obj)) {
-                dispatch(
-                    saveArticleSource({
-                        source: obj,
-                        callback: ({ header, body }) => {
-                            if (header.success) {
-                                toast.success(header.message);
-                                history.push(`/article-sources/${body.sourceCode}`);
-                            } else {
-                                toast.fail(header.message);
-                            }
-                        },
-                    }),
-                );
+            if (addParam === true) {
+                if (disabledBtn === false) {
+                    toast.warning('매체코드 중복 확인을 해주세요');
+                }
+            } else {
+                if (validate(obj)) {
+                    dispatch(
+                        saveArticleSource({
+                            source: obj,
+                            callback: ({ header, body }) => {
+                                if (header.success) {
+                                    toast.success(header.message);
+                                    history.push(`/article-sources/${body.sourceCode}`);
+                                } else {
+                                    toast.fail(header.message);
+                                }
+                            },
+                        }),
+                    );
+                }
             }
         }
         setClickSave(false);

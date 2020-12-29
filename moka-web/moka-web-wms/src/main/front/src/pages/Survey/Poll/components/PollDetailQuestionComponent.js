@@ -8,7 +8,7 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
     const [value1, setValue1] = useState('');
     const [value2, setValue2] = useState('');
     return (
-        <Form.Row>
+        <Form.Row style={{ alignItems: 'center' }}>
             {type !== 'P' && (
                 <Col className="flex-fill">
                     <Form.Row>
@@ -41,14 +41,14 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
             )}
 
             {type !== 'M' && (
-                <Col xs={2}>
+                <Col xs={3}>
                     <Form.Row>
                         <Col xs={12} className="mb-2 text-center">
                             <Figure.Image className="mb-0" src={IR_URL + BLANK_IMAGE_PATH} style={{ height: '70px', width: '100%' }} />
                         </Col>
                     </Form.Row>
                     <Form.Row className="d-flex justify-content-center">
-                        <Col xs={7} className="pr-0">
+                        <Col xs={7} className="pl-0 pr-0">
                             <Button variant="outline-table-btn" size="sm">
                                 신규등록
                             </Button>

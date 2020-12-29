@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { MokaCard, MokaInput, MokaInputLabel } from '@components';
+import { MokaCard, MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { codes } from '@pages/Survey/Poll/PollAgGridColumns';
 import { initialState } from '@store/survey/poll/pollReducer';
-import PollDetailQuestionComponent from '@pages/Survey/Poll/component/PollDetailQuestionComponent';
+import PollDetailQuestionComponent from '@pages/Survey/Poll/components/PollDetailQuestionComponent';
 import { useHistory } from 'react-router-dom';
+import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 
 const PollEdit = () => {
     const history = useHistory();
     const [edit, setEdit] = useState(initialState.poll);
     const [isSet, setIsSet] = useState(false);
-    const [title, setTitle] = useState('');
+    const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
     const handleChangeValue = (name, value, type) => {
         if (type === 'number') {
             value = parseInt(value);
@@ -29,6 +30,7 @@ const PollEdit = () => {
                 { text: '저장', variant: 'positive', onClick: () => console.log('저장'), className: 'mr-05' },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
             ]}
+            width={570}
         >
             <Form>
                 <Form.Row>
@@ -63,7 +65,7 @@ const PollEdit = () => {
                         <MokaInputLabel
                             as="select"
                             label="분류"
-                            labelWidth={50}
+                            labelWidth={70}
                             name="servcode"
                             labelClassName="text-right"
                             value={edit.servcode}
@@ -156,6 +158,11 @@ const PollEdit = () => {
                             disabled={isSet}
                         />
                     </Col>
+                    <Col xs={1}>
+                        <Button variant="white" size="md" onClick={() => setIsPollLayoutInfoModalShow(true)}>
+                            <MokaIcon iconName="fal-info-circle" />
+                        </Button>
+                    </Col>
                 </Form.Row>
                 <Form.Row>
                     <Col xs={7}>
@@ -208,7 +215,7 @@ const PollEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={2}>
+                    <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
                             label="로그인"
@@ -229,11 +236,11 @@ const PollEdit = () => {
                             inputProps={{ checked: edit.loginFlag === 'Y' }}
                         />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={4}>
                         <MokaInputLabel
                             as="switch"
                             label="중복 투표 제한"
-                            labelWidth={85}
+                            labelWidth={120}
                             name="repetitionFlag"
                             id="repetitionFlag"
                             labelClassName="text-right mr-1"
@@ -250,7 +257,7 @@ const PollEdit = () => {
                             inputProps={{ checked: edit.repetitionFlag === 'Y' }}
                         />
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={4}>
                         <MokaInputLabel
                             as="switch"
                             label="나도 한마디"
@@ -273,7 +280,7 @@ const PollEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={2}>
+                    <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
                             label="게시판"
@@ -334,11 +341,11 @@ const PollEdit = () => {
                                     disabled={isSet}
                                 />
                             </Col>
-                            <Col xs={4}>
+                            <Col xs={5}>
                                 <MokaInputLabel
                                     type="number"
                                     label="허용 답변 수"
-                                    labelWidth={60}
+                                    labelWidth={80}
                                     name="itemvalueLimit"
                                     className="text-right"
                                     value={edit.itemvalueLimit}
@@ -349,6 +356,7 @@ const PollEdit = () => {
                                         handleChangeValue(name, value, type);
                                     }}
                                     disabled={isSet}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
                                 />
                             </Col>
                             <Col xs={3} className="p-0  pr-2 text-right">
@@ -389,6 +397,7 @@ const PollEdit = () => {
                     </Form.Row>
                 )}
             </Form>
+            <PollLayoutInfoModal show={isPollLayoutInfoModalShow} onHide={() => setIsPollLayoutInfoModalShow(false)} />
         </MokaCard>
     );
 };

@@ -149,7 +149,6 @@ const ArticleSourceEdit = (props) => {
     useEffect(() => {
         if (source) {
             let obj = { ...source };
-            // let ynKeys = Object.keys(obj).filter((k) => k.lastIndexOf('Use') > -1);
             Object.keys(obj).forEach((k) => {
                 if (obj[k] === ' ') {
                     obj[k] = 'N';
@@ -166,18 +165,6 @@ const ArticleSourceEdit = (props) => {
                 }
                 setTemp(obj);
             });
-            console.log(obj);
-            // if (temp.jstoreUse === '') {
-            //     setTemp({ ...temp, jstoreUse: 'N' });
-            // } else if (temp.consalesUse === '') {
-            //     setTemp({ ...temp, consalesUse: 'N' });
-            // } else if (temp.joongangUse === '') {
-            //     setTemp({ ...temp, joongangUse: 'N' });
-            // } else if (temp.socialUse === '') {
-            //     setTemp({ ...temp, socialUse: 'N' });
-            // } else if (temp.ilganUse === '') {
-            //     setTemp({ ...temp, ilganUse: 'N' });
-            // }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [source]);

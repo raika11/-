@@ -6,11 +6,19 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PA_CMT_Comment")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -19,10 +27,10 @@ public class Comment implements Serializable {
     private CommentPk commentId;
 
     @Column(name = "TOTAL_ID")
-    private String totalId;
+    private Long totalId;
 
     @Column(name = "ATCID")
-    private Integer atcid;
+    private String atcid;
 
 
     @Column(name = "CMTCont")

@@ -34,8 +34,9 @@ import lombok.ToString;
 public class CommentPk implements Serializable {
 
     @Column(name = "CMTSN", nullable = false)
-    private Integer commentSeq;
+    private Long commentSeq;
 
     @Column(name = "CMTPSN", nullable = false)
-    private Integer psn = 0;
+    @Builder.Default
+    private Long psn = 0L;
 }

@@ -160,10 +160,7 @@ public class TpsConstants {
     public static final String DIRECT_LINK_BUSINESS = "directlink";
 
 
-    /**
-     * request header의 메뉴 ID key
-     */
-    public static final String HEADER_MENU_ID = "x-menuid";
+
     /**
      * response header의 다운로드 파일명
      */

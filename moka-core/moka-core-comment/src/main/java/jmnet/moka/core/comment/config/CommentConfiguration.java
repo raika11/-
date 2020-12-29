@@ -27,7 +27,7 @@ import org.springframework.util.StringUtils;
 @Configuration
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
 @Import({CommentJpaConfiguration.class, CommentQuerydslConfiguration.class, CommentMybatisConfiguration.class})
-@ComponentScan(basePackages = {"jmnet.moka.core.comment.mvc"})
+@ComponentScan(basePackages = {"jmnet.moka.core.comment.mvc", "jmnet.moka.core.comment.common.logger"})
 public class CommentConfiguration {
 
     @Qualifier

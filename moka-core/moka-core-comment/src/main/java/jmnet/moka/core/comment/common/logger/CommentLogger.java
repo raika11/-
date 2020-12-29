@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.common.logger;
+package jmnet.moka.core.comment.common.logger;
 
 import javax.servlet.http.HttpServletRequest;
 import jmnet.moka.common.utils.McpString;
@@ -6,8 +6,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
-import jmnet.moka.core.tps.mvc.editlog.service.EditLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,22 +25,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class TpsLogger {
+public class CommentLogger {
 
     private final ActionLogger actionLogger;
 
-    private final EditLogService editLogService;
-
-    public TpsLogger(ActionLogger actionLogger, EditLogService editLogService) {
+    public CommentLogger(ActionLogger actionLogger) {
         this.actionLogger = actionLogger;
-        this.editLogService = editLogService;
     }
 
     /**
      * 성공 로그 생성
      */
     public void success() {
-        success(null, null, false);
+        success(null, null);
     }
 
     /**
@@ -51,17 +46,7 @@ public class TpsLogger {
      * @param msg 에러 메세지
      */
     public void success(String msg) {
-        success(null, msg, false);
-    }
-
-    /**
-     * 성공 로그 생성
-     *
-     * @param msg            에러 메세지
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void success(String msg, boolean isEditLogWrite) {
-        success(null, msg, isEditLogWrite);
+        success(null, msg);
     }
 
     /**
@@ -70,19 +55,8 @@ public class TpsLogger {
      * @param actionType 액션 유형
      */
     public void success(ActionType actionType) {
-        success(actionType, null, false);
+        success(actionType, null);
     }
-
-
-    /**
-     * 성공 로그 생성
-     *
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void success(boolean isEditLogWrite) {
-        success(null, null, isEditLogWrite);
-    }
-
 
     /**
      * 성공 로그 생성
@@ -91,36 +65,9 @@ public class TpsLogger {
      * @param msg        에러 메세지
      */
     public void success(ActionType actionType, String msg) {
-        success(actionType, msg, false);
-    }
-
-    /**
-     * 성공 로그 생성
-     *
-     * @param actionType     액션 유형
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void success(ActionType actionType, boolean isEditLogWrite) {
-        success(actionType, null, isEditLogWrite);
-    }
-
-    /**
-     * 성공 로그 생성
-     *
-     * @param actionType     액션 유형
-     * @param msg            에러 메세지
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void success(ActionType actionType, String msg, boolean isEditLogWrite) {
-        EditLog editLog = makeEditLog(actionType, MokaConstants.YES, msg);
+        LogInfo editLog = makeLogInfo(actionType, MokaConstants.YES, msg);
         actionLogger.success(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg);
-        try {
-            if (isEditLogWrite) {
-                editLogService.insertEditLog(editLog);
-            }
-        } catch (Exception ex) {
-            log.error("[TPS LOGGER ERROR] : {}", ex.toString());
-        }
+
     }
 
     /**
@@ -129,18 +76,9 @@ public class TpsLogger {
      * @param msg 에러 메세지
      */
     public void fail(String msg) {
-        fail(null, msg, false);
+        fail(null, msg);
     }
 
-    /**
-     * 실패 로그 생성
-     *
-     * @param msg            에러 메세지
-     * @param isEditLogWrite isEditLogWrite 편집 로그 출력 여부
-     */
-    public void fail(String msg, boolean isEditLogWrite) {
-        fail(null, msg, isEditLogWrite);
-    }
 
     /**
      * 실패 로그 생성
@@ -149,26 +87,8 @@ public class TpsLogger {
      * @param msg        에러 메세지
      */
     public void fail(ActionType actionType, String msg) {
-        fail(actionType, msg, false);
-    }
-
-    /**
-     * 실패 로그 생성
-     *
-     * @param actionType     액션 유형
-     * @param msg            에러 메세지
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void fail(ActionType actionType, String msg, boolean isEditLogWrite) {
-        EditLog editLog = makeEditLog(actionType, MokaConstants.NO, msg);
+        LogInfo editLog = makeLogInfo(actionType, MokaConstants.NO, msg);
         actionLogger.fail(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg);
-        try {
-            if (isEditLogWrite) {
-                editLogService.insertEditLog(editLog);
-            }
-        } catch (Exception ex) {
-            log.error("[TPS LOGGER ERROR] : {}", ex.toString());
-        }
     }
 
     /**
@@ -187,7 +107,7 @@ public class TpsLogger {
      * @param msg        에러 메세지
      */
     public void skip(ActionType actionType, String msg) {
-        EditLog editLog = makeEditLog(actionType, MokaConstants.NO, msg);
+        LogInfo editLog = makeLogInfo(actionType, MokaConstants.NO, msg);
         actionLogger.skip(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg);
     }
 
@@ -197,18 +117,9 @@ public class TpsLogger {
      * @param msg 에러 메세지
      */
     public void error(String msg) {
-        error(null, msg, null, false);
+        error(null, msg, null);
     }
 
-    /**
-     * 에러 로그 생성
-     *
-     * @param msg            에러 메세지
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void error(String msg, boolean isEditLogWrite) {
-        error(null, msg, null, isEditLogWrite);
-    }
 
     /**
      * 에러 로그 생성
@@ -217,19 +128,10 @@ public class TpsLogger {
      * @param msg        에러 메세지
      */
     public void error(ActionType actionType, String msg) {
-        error(actionType, msg, null, false);
+        error(actionType, msg, null);
     }
 
-    /**
-     * 에러 로그 생성
-     *
-     * @param actionType     액션 유형
-     * @param msg            에러 메세지
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void error(ActionType actionType, String msg, boolean isEditLogWrite) {
-        error(actionType, msg, null, isEditLogWrite);
-    }
+
 
     /**
      * 에러 로그 생성
@@ -237,18 +139,10 @@ public class TpsLogger {
      * @param t Throwable
      */
     public void error(Throwable t) {
-        error(null, null, t, false);
+        error(null, null, t);
     }
 
-    /**
-     * 에러 로그 생성
-     *
-     * @param t              Throwable
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void error(Throwable t, boolean isEditLogWrite) {
-        error(null, null, t, isEditLogWrite);
-    }
+
 
     /**
      * 에러 로그 생성
@@ -257,16 +151,9 @@ public class TpsLogger {
      * @param t   Throwable
      */
     public void error(String msg, Throwable t) {
-        error(null, msg, t, false);
+        error(null, msg, t);
     }
 
-    /**
-     * @param msg            에러 메세지 * @param t   Throwable
-     * @param isEditLogWrite 편집 로그 출력 여부
-     */
-    public void error(String msg, Throwable t, boolean isEditLogWrite) {
-        error(null, msg, t, isEditLogWrite);
-    }
 
     /**
      * 에러 로그 생성
@@ -275,28 +162,21 @@ public class TpsLogger {
      * @param t          Throwable
      */
     public void error(ActionType actionType, Throwable t) {
-        error(actionType, null, t, false);
+        error(actionType, null, t);
     }
 
     /**
      * 에러 로그 생성
      *
-     * @param actionType     액션 유형
-     * @param msg            에러 메세지
-     * @param t              Throwable
-     * @param isEditLogWrite 편집 로그 출력 여부
+     * @param actionType 액션 유형
+     * @param msg        에러 메세지
+     * @param t          Throwable
      */
-    public void error(ActionType actionType, String msg, Throwable t, boolean isEditLogWrite) {
+    public void error(ActionType actionType, String msg, Throwable t) {
         String errorMsg = McpString.defaultValue(msg) + (t != null ? t.getMessage() : "");
-        EditLog editLog = makeEditLog(actionType, MokaConstants.NO, errorMsg);
+        LogInfo editLog = makeLogInfo(actionType, MokaConstants.NO, errorMsg);
         actionLogger.error(editLog.getMemberId(), editLog.getAction(), editLog.getExecutedTime(), msg, t);
-        try {
-            if (isEditLogWrite) {
-                editLogService.insertEditLog(editLog);
-            }
-        } catch (Exception ex) {
-            log.error("[TPS LOGGER ERROR] : {}", ex.toString());
-        }
+
     }
 
     /**
@@ -305,9 +185,9 @@ public class TpsLogger {
      * @param actionType 행위
      * @param successYn  성공 여부
      * @param errorMsg   에러 메세지
-     * @return EditLog
+     * @return LogInfo
      */
-    private EditLog makeEditLog(ActionType actionType, String successYn, String errorMsg) {
+    private LogInfo makeLogInfo(ActionType actionType, String successYn, String errorMsg) {
 
         Authentication auth = SecurityContextHolder
                 .getContext()
@@ -328,7 +208,7 @@ public class TpsLogger {
         String remoteAddr = req != null ? McpString.defaultValue(HttpHelper.getRemoteAddr(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
 
 
-        return EditLog
+        return LogInfo
                 .builder()
                 .action(actionType)
                 .memberId(memberId)

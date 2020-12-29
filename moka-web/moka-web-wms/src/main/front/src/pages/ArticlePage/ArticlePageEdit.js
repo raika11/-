@@ -8,6 +8,7 @@ import { MokaCard, MokaInputLabel } from '@components';
 import { previewPage, w3cArticlePage } from '@store/merge';
 import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList, clearArticlePage } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
+import { popupPreview } from '@utils/commonUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
 const ArticlePageEdit = ({ onDelete }) => {
@@ -248,7 +249,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                             }),
                             totalId: previewTotalId,
                         };
-                        popupPreview('/preview/article-page', item);
+                        popupPreview(`${API_BASE_URL}/preview/article-page`, item);
                     } else {
                         toast.fail(header.message || '미리보기에 실패하였습니다');
                     }
@@ -259,46 +260,6 @@ const ArticlePageEdit = ({ onDelete }) => {
             toast.error('기사ID를 입력해 주세요.');
         }
     }, [artPageBody, articlePage, dispatch, previewTotalId]);
-
-    /**
-     * 미리보기 팝업띄움.
-     */
-    const popupPreview = (url, item) => {
-        const targetUrl = `${API_BASE_URL}${url}`;
-
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const propName in item) {
-            if (typeof item[propName] === 'object') {
-                const subObject = item[propName];
-                // eslint-disable-next-line no-restricted-syntax
-                for (const inPropName in subObject) {
-                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = `${propName}.${inPropName}`;
-                        input.value = item[propName][inPropName];
-                        f.appendChild(input);
-                    }
-                }
-            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = propName;
-                input.value = item[propName];
-                f.appendChild(input);
-            }
-        }
-
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
 
     /**
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
@@ -314,7 +275,7 @@ const ArticlePageEdit = ({ onDelete }) => {
             totalId: previewTotalId,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    popupW3C(body);
+                    popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
                 } else {
                     toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }
@@ -322,28 +283,6 @@ const ArticlePageEdit = ({ onDelete }) => {
         };
         dispatch(w3cArticlePage(option));
     }, [articlePage, artPageBody, dispatch, previewTotalId]);
-
-    /**
-     * W3C 팝업띄움.
-     */
-    const popupW3C = (body) => {
-        const targetUrl = W3C_URL;
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-        f.setAttribute('enctype', 'multipart/form-data');
-
-        let input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'fragment';
-        input.value = body;
-        f.appendChild(input);
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
 
     /**
      * 취소 버튼

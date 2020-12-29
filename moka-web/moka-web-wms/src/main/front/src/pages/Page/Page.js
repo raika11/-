@@ -127,8 +127,9 @@ const Page = () => {
                     msg = `${item.pageSeq}_${item.pageName}(${item.pageUrl})을(를) 삭제하시겠습니까?`;
                 }
 
-                messageBox.confirm(msg, {
-                    onOk: () => {
+                messageBox.confirm(
+                    msg,
+                    () => {
                         const option = {
                             pageSeq: item.pageSeq,
                             callback: (response) => {
@@ -142,8 +143,8 @@ const Page = () => {
                         };
                         dispatch(deletePage(option));
                     },
-                    onCancle: () => {},
-                });
+                    () => {},
+                );
             }
         },
         [dispatch, findNode, history, tree],

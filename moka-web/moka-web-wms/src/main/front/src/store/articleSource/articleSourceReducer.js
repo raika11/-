@@ -27,6 +27,7 @@ export const initialState = {
         socialUse: 'N',
         bulkFlag: 'N',
         receiveImgYn: 'N',
+        joinsXmlFormat: 'Y',
     },
     invalidList: [],
     mappingTotal: 0,

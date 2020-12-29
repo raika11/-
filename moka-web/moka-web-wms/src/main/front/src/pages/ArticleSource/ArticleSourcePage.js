@@ -48,7 +48,7 @@ const ArticleSourcePage = (props) => {
             </Helmet>
 
             {/* 수신 매체 리스트 */}
-            <MokaCard header={false} width={812} height={null} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column">
+            <MokaCard header={false} width={812} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column">
                 <Suspense>
                     <ArticleSourceList />
                 </Suspense>
@@ -61,7 +61,7 @@ const ArticleSourcePage = (props) => {
                     exact
                     render={() => (
                         <>
-                            <MokaCard width={782} titleClassName="mb-0" title="매체 정보" footer footerButtons={footerBtns} footerClassName="justify-content-center">
+                            <MokaCard width={772} titleClassName="mb-0" title="매체 정보" footer footerButtons={footerBtns} footerClassName="justify-content-center">
                                 <ArticleSourceEdit
                                     location={location}
                                     clickMapping={clickMapping}

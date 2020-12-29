@@ -10,8 +10,9 @@ import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getArticleSource, clearArticleSource, saveArticleSource, changeInvalidList, getSourceDuplicateCheck } from '@store/articleSource';
 import CodeMappingModal from './modals/CodeMappingModal';
 
-const testReg = /[^a-zA-Z]{1,10}/;
-
+/**
+ * 수신 매체 편집
+ */
 const ArticleSourceEdit = (props) => {
     const { location, clickMapping, setClickMapping, clickSave, setClickSave } = props;
     const history = useHistory();
@@ -68,33 +69,35 @@ const ArticleSourceEdit = (props) => {
             if (!temp.sourceName || !REQUIRED_REGEX.test(temp.sourceName)) {
                 errList.push({
                     field: 'sourceName',
-                    reason: '',
+                    reason: '매체명을 입력하세요.',
                 });
                 isInvalid = isInvalid || true;
             }
             // 매체타입 체크
-            if (!temp.sourceType || !REQUIRED_REGEX.test(temp.sourceType)) {
+            if (!temp.sourceType || !/^[a-zA-Z0-9]{1,5}$/.test(temp.sourceType)) {
                 errList.push({
                     field: 'sourceType',
-                    reason: '',
+                    reason: '매체타입을 5자리 이하로 입력하세요.',
                 });
                 isInvalid = isInvalid || true;
             }
             // 매체코드 체크
-            if (!temp.sourceCode || !REQUIRED_REGEX.test(temp.sourceCode)) {
+            if (!temp.sourceCode || !/^[a-zA-Z0-9]{1,2}$/.test(temp.sourceCode)) {
                 errList.push({
                     field: 'sourceCode',
-                    reason: '',
+                    reason: '매체코드를 2자리 이하로 입력하세요.',
                 });
                 isInvalid = isInvalid || true;
             }
             // 서버구분 체크
-            if (testReg.test(temp.serverGubun)) {
-                errList.push({
-                    field: 'serverGubun',
-                    reason: '',
-                });
-                isInvalid = isInvalid || true;
+            if (temp.serverGubun) {
+                if (!/^[a-zA-Z]{1,10}/.test(temp.serverGubun)) {
+                    errList.push({
+                        field: 'serverGubun',
+                        reason: '서버구분을 10자리 이하로 입력하세요.',
+                    });
+                    isInvalid = isInvalid || true;
+                }
             }
 
             dispatch(changeInvalidList(errList));
@@ -422,7 +425,7 @@ const ArticleSourceEdit = (props) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
+                        <div className="d-flex flex-column justify-content-between" style={{ height: 310 }}>
                             <MokaInputLabel
                                 label="편집 필요여부"
                                 labelWidth={160}
@@ -434,8 +437,6 @@ const ArticleSourceEdit = (props) => {
                                 inputProps={{ custom: true, checked: temp.artEditYn === 'Y' }}
                                 onChange={handleChangeValue}
                             />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
                             <MokaInputLabel
                                 label="CP수신여부"
                                 labelWidth={160}
@@ -447,73 +448,6 @@ const ArticleSourceEdit = (props) => {
                                 inputProps={{ custom: true, checked: temp.rcvUsedYn === 'Y' }}
                                 onChange={handleChangeValue}
                             />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
-                            <MokaInputLabel
-                                label="중앙 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
-                                as="switch"
-                                name="joongangUse"
-                                id="switch-joongangUse"
-                                inputProps={{ custom: true, checked: temp.joongangUse === 'Y' }}
-                                onChange={handleChangeValue}
-                            />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
-                            <MokaInputLabel
-                                label="JSTORE 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
-                                as="switch"
-                                name="jstoreUse"
-                                id="switch-jstoreUse"
-                                inputProps={{ custom: true, checked: temp.jstoreUse === 'Y' }}
-                                onChange={handleChangeValue}
-                            />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
-                            <MokaInputLabel
-                                label="CONSALES 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
-                                as="switch"
-                                name="consalesUse"
-                                id="switch-consalesUse"
-                                inputProps={{ custom: true, checked: temp.consalesUse === 'Y' }}
-                                onChange={handleChangeValue}
-                            />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
-                            <MokaInputLabel
-                                label="일간 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
-                                as="switch"
-                                name="ilganUse"
-                                id="switch-ilganUse"
-                                inputProps={{ custom: true, checked: temp.ilganUse === 'Y' }}
-                                onChange={handleChangeValue}
-                            />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
-                            <MokaInputLabel
-                                label="소셜 전송여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
-                                as="switch"
-                                name="socialUse"
-                                id="switch-socialUse"
-                                inputProps={{ custom: true, checked: temp.socialUse === 'Y' }}
-                                onChange={handleChangeValue}
-                            />
-                        </Form.Row>
-                        <Form.Row className="mb-3" style={{ height: 31 }}>
                             <MokaInputLabel
                                 label="벌크 여부"
                                 labelWidth={160}
@@ -525,10 +459,74 @@ const ArticleSourceEdit = (props) => {
                                 inputProps={{ custom: true, checked: temp.bulkFlag === 'Y' }}
                                 onChange={handleChangeValue}
                             />
-                        </Form.Row>
+                            <MokaInputLabel
+                                label="중앙 사용여부"
+                                labelWidth={160}
+                                labelClassName="mr-3 ft-12"
+                                className="mb-0"
+                                as="switch"
+                                name="joongangUse"
+                                id="switch-joongangUse"
+                                inputProps={{ custom: true, checked: temp.joongangUse === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInputLabel
+                                label="JSTORE 사용여부"
+                                labelWidth={160}
+                                labelClassName="mr-3 ft-12"
+                                className="mb-0"
+                                as="switch"
+                                name="jstoreUse"
+                                id="switch-jstoreUse"
+                                inputProps={{ custom: true, checked: temp.jstoreUse === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInputLabel
+                                label="CONSALES 사용여부"
+                                labelWidth={160}
+                                labelClassName="mr-3 ft-12"
+                                className="mb-0"
+                                as="switch"
+                                name="consalesUse"
+                                id="switch-consalesUse"
+                                inputProps={{ custom: true, checked: temp.consalesUse === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInputLabel
+                                label="일간 사용여부"
+                                labelWidth={160}
+                                labelClassName="mr-3 ft-12"
+                                className="mb-0"
+                                as="switch"
+                                name="ilganUse"
+                                id="switch-ilganUse"
+                                inputProps={{ custom: true, checked: temp.ilganUse === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                            <MokaInputLabel
+                                label="소셜 전송여부"
+                                labelWidth={160}
+                                labelClassName="mr-3 ft-12"
+                                className="mb-0"
+                                as="switch"
+                                name="socialUse"
+                                id="switch-socialUse"
+                                inputProps={{ custom: true, checked: temp.socialUse === 'Y' }}
+                                onChange={handleChangeValue}
+                            />
+                        </div>
                     </Col>
                 </Form.Row>
             </Form>
+            <div className="p-2" style={{ border: '1px solid #e1e3eB' }}>
+                <p className="ft-12 mb-2" style={{ color: 'red' }}>
+                    ** 신규 매체 추가시 작업 순서
+                </p>
+                <p className="ft-12 mb-0">1. 데이터 수신을 위한 계정 설정 및 FTP 가상디렉토리 추가</p>
+                <p className="ft-12 mb-0">2. 업체 아이디명의 가상디렉토리 설정 FTP 접근포트는 가능하면 8021로 설정</p>
+                <p className="ft-12 mb-2">3. 업체에서 접근할 IP를 확인하고 시스템팀에 방화벽 오픈 요청</p>
+                <p className="ft-12 mb-0">...</p>
+            </div>
             <CodeMappingModal show={show} onHide={() => setShow(false)} data={temp} />
         </>
     );

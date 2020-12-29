@@ -75,8 +75,8 @@ const ArticleSourceSearch = () => {
                 <div style={{ width: 130 }} className="mr-2">
                     <MokaInput className="ft-12" as="select" name="rcvUsedYn" value={search.rcvUsedYn} onChange={handleChangeValue}>
                         <option value="all">CP수신여부(전체)</option>
-                        <option value="Y">Y</option>
-                        <option value="N">N</option>
+                        <option value="Y">수신</option>
+                        <option value="N">미수신</option>
                     </MokaInput>
                 </div>
                 <MokaSearchInput

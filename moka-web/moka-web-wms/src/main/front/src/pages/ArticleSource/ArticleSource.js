@@ -8,7 +8,7 @@ import ArticleSourceEdit from './ArticleSourceEdit';
 
 const ArticleSourceList = React.lazy(() => import('./ArticleSourceList'));
 
-const ArticleSourcePage = (props) => {
+const ArticleSource = (props) => {
     const { match, location } = props;
     const dispatch = useDispatch();
 
@@ -78,4 +78,4 @@ const ArticleSourcePage = (props) => {
     );
 };
 
-export default ArticleSourcePage;
+export default ArticleSource;

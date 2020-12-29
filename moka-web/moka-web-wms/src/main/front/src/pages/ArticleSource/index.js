@@ -1,1 +1,1 @@
-export { default } from './ArticleSourcePage';
+export { default } from './ArticleSource';

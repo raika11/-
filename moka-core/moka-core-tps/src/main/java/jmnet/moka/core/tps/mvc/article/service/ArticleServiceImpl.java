@@ -42,8 +42,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search) {
-        return articleMapper.findAll(search);
+    public List<ArticleBasicVO> findAllArticleBasicByService(ArticleSearchDTO search) {
+        return articleMapper.findAllByService(search);
     }
 
     @Override
@@ -144,6 +144,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleComponentVO> findAllImageComponent(Long totalId) {
         return articleMapper.findAllImageComponent(totalId);
+    }
+
+    @Override
+    public List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search) {
+        return articleMapper.findAll(search);
     }
 
 }

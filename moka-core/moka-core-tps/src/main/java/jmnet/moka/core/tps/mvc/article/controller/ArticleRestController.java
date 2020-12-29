@@ -54,9 +54,9 @@ public class ArticleRestController extends AbstractCommonController {
      * @param search 검색조건
      * @return 서비스 기사목록
      */
-    @ApiOperation(value = "기사 목록조회")
-    @GetMapping
-    public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search)
+    @ApiOperation(value = "기사 목록조회(페이지편집용)")
+    @GetMapping("/service")
+    public ResponseEntity<?> getServiceArticleList(@Valid @SearchParam ArticleSearchDTO search)
             throws Exception {
 
         //분류코드 검색설정
@@ -64,7 +64,7 @@ public class ArticleRestController extends AbstractCommonController {
 
         try {
             // 조회(mybatis)
-            List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
+            List<ArticleBasicVO> returnValue = articleService.findAllArticleBasicByService(search);
 
             // 리턴값 설정
             ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();
@@ -205,6 +205,39 @@ public class ArticleRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO LOAD IMAGE COMPONENT]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD IMAGE COMPONENT", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
+
+    /**
+     * 기사목록조회
+     *
+     * @param search 검색조건
+     * @return 서비스 기사목록
+     */
+    @ApiOperation(value = "기사 목록조회")
+    @GetMapping("/service")
+    public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search)
+            throws Exception {
+
+        //분류코드 검색설정
+        resetMasterCode(search);
+
+        try {
+            // 조회(mybatis)
+            List<ArticleBasicVO> returnValue = articleService.findAllArticleBasic(search);
+
+            // 리턴값 설정
+            ResultListDTO<ArticleBasicVO> resultListMessage = new ResultListDTO<>();
+            resultListMessage.setTotalCnt(search.getTotal());
+            resultListMessage.setList(returnValue);
+
+            ResultDTO<ResultListDTO<ArticleBasicVO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD ARTICLE BASIC]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ARTICLE BASIC]", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
         }
     }

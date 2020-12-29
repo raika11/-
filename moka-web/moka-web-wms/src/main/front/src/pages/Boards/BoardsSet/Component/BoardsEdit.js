@@ -312,25 +312,27 @@ const BoardsEdit = () => {
 
     // 삭제 버튼 철.
     const handleClickDeleteButton = () => {
-        dispatch(
-            deleteBoard({
-                boardId: boardinfo.boardId,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        dispatch(getSetmenuBoardsList()); // 리스트를 다시 가지고 옴.
-                        history.push(`/${pagePathName}`);
-                    } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
-                            messageBox.alert(list[0].reason, () => {}); // 에러 메시지 확인.
+        messageBox.confirm('삭제 하시겠습니까?', () => {
+            dispatch(
+                deleteBoard({
+                    boardId: boardinfo.boardId,
+                    callback: ({ header: { success, message }, body }) => {
+                        if (success === true) {
+                            toast.success(message);
+                            dispatch(getSetmenuBoardsList()); // 리스트를 다시 가지고 옴.
+                            history.push(`/${pagePathName}`);
                         } else {
-                            messageBox.alert(message, () => {}); // 서버 메시지 확인.
+                            const { totalCnt, list } = body;
+                            if (totalCnt > 0 && Array.isArray(list)) {
+                                messageBox.alert(list[0].reason, () => {}); // 에러 메시지 확인.
+                            } else {
+                                messageBox.alert(message, () => {}); // 서버 메시지 확인.
+                            }
                         }
-                    }
-                },
-            }),
-        );
+                    },
+                }),
+            );
+        });
     };
 
     useEffect(() => {

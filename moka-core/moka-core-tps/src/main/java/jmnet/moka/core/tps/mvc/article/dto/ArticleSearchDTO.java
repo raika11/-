@@ -65,12 +65,18 @@ public class ArticleSearchDTO extends SearchDTO {
     @NotNull(message = "{tps.article.error.notnull.sourceList}")
     private String sourceList;
 
+    @ApiModelProperty("출판 카테고리")
+    @Length(max = 2, message = "{tps.article.error.length.pressCategory}")
+    private String pressCategory;
+
     public ArticleSearchDTO() {
         super(ArticleBasicVO.class, "totalId,desc");
         super.setUseTotal(MokaConstants.YES);
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
         super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
-        //        this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
+        this.masterCode = TpsConstants.SEARCH_TYPE_ALL;
+        this.contentType = TpsConstants.SEARCH_TYPE_ALL;
+        this.pressCategory = TpsConstants.SEARCH_TYPE_ALL;
     }
 
     /**

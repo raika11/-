@@ -319,6 +319,15 @@
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
+      <when test="pressCategory != 'all' and pressCategory != null and contentType != ''">
+        #{pressCategory},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
       <when test="contentType != 'all' and contentType != null and contentType != ''">
         #{contentType},
       </when>

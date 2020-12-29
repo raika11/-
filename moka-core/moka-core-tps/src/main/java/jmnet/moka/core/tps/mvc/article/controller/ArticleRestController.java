@@ -216,7 +216,7 @@ public class ArticleRestController extends AbstractCommonController {
      * @return 서비스 기사목록
      */
     @ApiOperation(value = "기사 목록조회")
-    @GetMapping("/service")
+    @GetMapping
     public ResponseEntity<?> getArticleList(@Valid @SearchParam ArticleSearchDTO search)
             throws Exception {
 

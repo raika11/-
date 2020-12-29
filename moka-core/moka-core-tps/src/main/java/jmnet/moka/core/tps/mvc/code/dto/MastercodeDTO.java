@@ -81,6 +81,12 @@ public class MastercodeDTO implements Serializable {
     private String usedYn = MokaConstants.YES;
 
     /**
+     * 백오피스 노출여부 : Y/N
+     */
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
      * 순서
      */
     @Builder.Default

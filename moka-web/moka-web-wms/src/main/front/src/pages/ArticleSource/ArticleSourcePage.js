@@ -1,5 +1,5 @@
-import React, { useState, Suspense, useEffect, useCallback } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import React, { useState, Suspense, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@/components';
@@ -11,7 +11,6 @@ const ArticleSourceList = React.lazy(() => import('./ArticleSourceList'));
 const ArticleSourcePage = (props) => {
     const { match, location } = props;
     const dispatch = useDispatch();
-    const history = useHistory();
 
     // local state
     const [footerBtns, setFooterBtns] = useState([]);
@@ -49,7 +48,7 @@ const ArticleSourcePage = (props) => {
             </Helmet>
 
             {/* 수신 매체 리스트 */}
-            <MokaCard header={false} width={812} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column">
+            <MokaCard header={false} width={812} height={null} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column">
                 <Suspense>
                     <ArticleSourceList />
                 </Suspense>

@@ -58,15 +58,15 @@ const ArticleSourceEdit = (props) => {
 
     /**
      * validate
-     * @param {object} source 데이터
+     * @param {object} save obj
      */
     const validate = useCallback(
-        (source) => {
+        (obj) => {
             let isInvalid = false,
                 errList = [];
 
             // 매체명 체크
-            if (!REQUIRED_REGEX.test(source.sourceName)) {
+            if (!obj.sourceName || !REQUIRED_REGEX.test(obj.sourceName)) {
                 errList.push({
                     field: 'sourceName',
                     reason: '매체명을 입력하세요.',
@@ -74,7 +74,7 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 매체타입 체크
-            if (!source.sourceType || !/^[a-zA-Z0-9]{1,5}$/.test(source.sourceType)) {
+            if (!obj.sourceType || !/^[a-zA-Z0-9]{1,5}$/.test(obj.sourceType)) {
                 errList.push({
                     field: 'sourceType',
                     reason: '매체타입을 5자리 이하로 입력하세요.',
@@ -82,7 +82,7 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 매체코드 체크
-            if (!source.sourceCode || !/^[a-zA-Z0-9]{1,2}$/.test(source.sourceCode)) {
+            if (!obj.sourceCode || !/^[a-zA-Z0-9]{1,2}$/.test(obj.sourceCode)) {
                 errList.push({
                     field: 'sourceCode',
                     reason: '매체코드를 2자리 이하로 입력하세요.',
@@ -90,8 +90,8 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 서버구분 체크
-            if (source.serverGubun) {
-                if (!/^[a-zA-Z]{1,10}/.test(source.serverGubun)) {
+            if (obj.serverGubun) {
+                if (!/^[a-zA-Z]{1,10}/.test(obj.serverGubun)) {
                     errList.push({
                         field: 'serverGubun',
                         reason: '서버구분을 10자리 이하로 입력하세요.',
@@ -338,8 +338,8 @@ const ArticleSourceEdit = (props) => {
                                     name="receiveImgYn"
                                     onChange={handleChangeValue}
                                 >
-                                    <option value="Y">외부 이미지</option>
-                                    <option value="N">이미지 FTP 수신</option>
+                                    <option value="Y">이미지 FTP 수신</option>
+                                    <option value="N">외부 이미지</option>
                                 </MokaInputLabel>
                             </Col>
                         </Form.Row>

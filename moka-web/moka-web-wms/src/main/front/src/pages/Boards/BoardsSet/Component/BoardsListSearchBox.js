@@ -34,21 +34,24 @@ const BoardsListSearchBox = (props) => {
         });
     };
 
+    // 검색 버튼 클릭 처리.
     const handleClickSearchButton = () => {
         dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(searchData)));
     };
 
+    // 리셋 버튼 클릭 처리.
     const handleClickSearchResetButton = () => {
-        dispatch(clearSetMenuSearchOption());
+        dispatch(clearSetMenuSearchOption()); // 스토어에 검색 옵션을 초기화
         const tmpSearchOption = {
             ...initialState.setmenu.search,
-            boardType: boardType,
+            boardType: boardType, // store 공통 구분값에서 보드 타입을 가지고 온다. (S: 서비스, A: 관리자)
         };
-        setSearchData(tmpSearchOption);
-        dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
+        setSearchData(tmpSearchOption); // state 변경.
+        dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption))); // store 에 검색 옵션 변경후 리스트를 가지고 온다.
     };
 
     useEffect(() => {
+        // 최초 로딩후 store 에 search 옵션을 가지고 와서 검색 state 값 변경.
         setSearchData(search);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -66,7 +69,7 @@ const BoardsListSearchBox = (props) => {
                         ))}
                     </MokaInput>
                 </Col>
-                <Col xs={8}>
+                <Col xs={7}>
                     <MokaSearchInput
                         id="keyword"
                         name="keyword"
@@ -76,12 +79,12 @@ const BoardsListSearchBox = (props) => {
                         onSearch={() => handleClickSearchButton()}
                     />
                 </Col>
-                <Col xs={1}>
+                <Col xs={1} className="mr-2">
                     <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
                         초기화
                     </Button>
                 </Col>
-                <Col xs={1}>
+                <Col xs={2} className="mr-2 text-center">
                     <Button variant="positive" onClick={() => handleBoardNewButton()}>
                         게시판 생성
                     </Button>

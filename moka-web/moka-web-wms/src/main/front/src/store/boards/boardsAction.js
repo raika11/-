@@ -8,6 +8,9 @@ export const initializeParams = createAction(INITIALIZE_PARAMS);
 export const CLEAR_STORE = 'boards/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
+export const [GET_BOARD_CHANNEL_LIST, GET_BOARD_CHANNEL_LIST_SUCCESS, GET_BOARD_CHANNEL_LIST_FAILURE] = createRequestActionTypes('boards/GET_BOARD_CHANNEL_LIST');
+export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST, (...actions) => actions);
+
 /** set 메뉴 */
 // 검색 옵션 변경.
 export const CHANGE_SETMENU_SEARCH_OPTION = 'boards/CHANGE_SETMENU_SEARCH_OPTION';

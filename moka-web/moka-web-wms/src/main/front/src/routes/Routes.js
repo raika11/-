@@ -26,7 +26,7 @@ const Routes = () => {
             dispatch(getUserMenuTree({ pathName: pathName }));
         } else {
             if (menu.menuPaths[pathName] === undefined) {
-                window.location.href = '/404';
+                // window.location.href = '/404';
             } else {
                 dispatch(changeLatestMenuId(menu.menuPaths[pathName]));
             }

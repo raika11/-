@@ -13,136 +13,304 @@ const BoardsEdit = () => {
     const paramBoardId = useRef(null);
     const params = useParams();
     // 공통 구분값 URL
-    const { pagePathName, boardType: storeBoardType, boardinfo, loading } = useSelector((store) => ({
+    const { pagePathName, boardType: storeBoardType, boardinfo, loading, channel_list } = useSelector((store) => ({
         pagePathName: store.boards.pagePathName,
         boardType: store.boards.boardType,
         boardinfo: store.boards.setmenu.boardinfo,
+        channel_list: store.boards.channel_list,
         loading: store.loading[GET_SETMENU_BOARD_INFO],
     }));
 
+    // 게시판 폼 필드값.
     const [boardInfoData, setBoardInfoData] = useState(initialState.setmenu.boardinfo);
+
+    // 게시판 폼 필드 disabled 컨트롤.
     const [inputfieldDisabled, setInputfieldDisabled] = useState({
         allowFileCnt: false,
         allowFileSize: false,
         allowFileExt: false,
         receiveEmail: false,
         sendEmail: false,
+        answLevel: false,
+        replyLevel: false,
     });
 
+    // 취소 버튼 클릭.
     const handleClickCancleButton = () => {
         history.push(`/${pagePathName}`);
     };
 
+    // 폼 input 데이터 변경시
     const handleChangeInfoData = (e) => {
+        let tempObject = {};
         const { name, value, checked } = e.target;
+
+        // checkbox 값이 변경되면 연관 필드 값도 disabled 시켜줌.
         if (e.target.type === 'checkbox') {
-            setBoardInfoData({
+            tempObject = {
                 ...boardInfoData,
                 [name]: checked === true ? 'Y' : 'N',
-            });
+            };
+
+            // 답변 checkbox 버튼
+            if (name === 'answYn' && checked === false) {
+                tempObject = {
+                    ...tempObject,
+                    answLevel: initialState.setmenu.boardinfo.answLevel,
+                };
+            }
+
+            // 답글 checkbox 버튼
+            if (name === 'replyYn' && checked === false) {
+                tempObject = {
+                    ...tempObject,
+                    replyLevel: initialState.setmenu.boardinfo.replyLevel,
+                };
+            }
+
+            // 이메일 수진 여부 checkbox 버튼
+            if (name === 'emailReceiveYn' && checked === false) {
+                tempObject = {
+                    ...tempObject,
+                    receiveEmail: initialState.setmenu.boardinfo.receiveEmail,
+                };
+            }
+
+            // 이메일 발신 여부 checkbox 버튼
+            if (name === 'emailSendYn' && checked === false) {
+                tempObject = {
+                    ...tempObject,
+                    sendEmail: initialState.setmenu.boardinfo.sendEmail,
+                };
+            }
+
+            // 파일 checkbox 버튼
+            if (name === 'fileYn' && checked === false) {
+                tempObject = {
+                    ...tempObject,
+                    allowFileCnt: initialState.setmenu.boardinfo.allowFileCnt,
+                    allowFileSize: initialState.setmenu.boardinfo.allowFileSize,
+                    allowFileExt: initialState.setmenu.boardinfo.allowFileExt,
+                };
+            }
         } else {
-            setBoardInfoData({
+            tempObject = {
                 ...boardInfoData,
                 [name]: value,
-            });
+            };
         }
+
+        // 데이터 조합해서 스테이트 변경 처리.
+        setBoardInfoData(tempObject);
     };
 
-    // 유효성
-    const validate = (element) => {
-        // 게시판명
-        if (element.boardName === '') {
-            messageBox.alert('게시판명을 입력해 주세요.', () => {});
-            return false;
+    // form 값 체크 어드민 페이지 일떄.
+    const makeAdminFormData = () => {
+        let returnFormData = {
+            ...boardInfoData,
+            boardType: storeBoardType,
+        };
+
+        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileCnt) {
+            return {
+                state: false,
+                message: '개수를 입력해 주세요.',
+            };
         }
 
-        // 게시판 설명
-        if (element.boardDesc === '') {
-            messageBox.alert('게시판 설명을 입력해주세요.', () => {});
-            return false;
+        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileSize) {
+            return {
+                state: false,
+                message: '용량을 입력해 주세요.',
+            };
         }
 
-        // 말머리1
-        if (element.titlePrefix1 === '') {
-            messageBox.alert('말머리1을 입력해주세요.', () => {});
-            return false;
+        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileExt) {
+            return {
+                state: false,
+                message: '확장자를 입력해 주세요.',
+            };
         }
 
-        // 말머리2
-        if (element.titlePrefix2 === '') {
-            messageBox.alert('말머리2를 입력해주세요.', () => {});
-            return false;
+        return {
+            state: true,
+            data: returnFormData,
+            message: '',
+        };
+    };
+
+    // form 값 체크 서비스 페이지 일떄.
+    const makeServiceFormData = () => {
+        let returnFormData = {
+            ...boardInfoData,
+            boardType: storeBoardType,
+        };
+
+        // 답변 checkbox 를 true 로 선택후 관련 등급을 선택 안했을떄.
+        if (boardInfoData.answYn === 'Y' && !boardInfoData.answLevel) {
+            return {
+                state: false,
+                message: '답변 등급을 선택해 주세요.',
+            };
         }
 
-        // 채널
-        if (element.channelType === '') {
-            messageBox.alert('채널을 선택해 주세요.', () => {});
-            return false;
+        // 댓글 checkbox 를 true 로 선택후 관련 등급을 선택 안했을떄.
+        if (boardInfoData.replyYn === 'Y' && !boardInfoData.replyLevel) {
+            return {
+                state: false,
+                message: '댓글 등급을 선택해 주세요.',
+            };
         }
 
-        // 파일
-        if (element.fileYn === 'Y') {
-            // 개수
-            if (element.allowFileCnt === '') {
-                messageBox.alert('파일 개수를 입력해 주세요.', () => {});
-                return false;
-            }
-
-            // 용량
-            if (element.allowFileSize === '') {
-                messageBox.alert('용량을 입력해 주세요.', () => {});
-                return false;
-            }
-
-            // 확장자
-            if (element.allowFileExt === '') {
-                messageBox.alert('확장자를 입력해 주세요.', () => {});
-                return false;
-            }
+        // 이메일 수신여부 checkbox 를 true 로 선택후 이메일을 입력 안했을떄.
+        if (boardInfoData.emailReceiveYn === 'Y' && !boardInfoData.receiveEmail) {
+            return {
+                state: false,
+                message: '이메일을 입력해 주세요.',
+            };
         }
 
-        return true;
+        // 이메일 발신여부 checkbox 를 true 로 선택후 이메일을 입력 안했을떄.
+        if (boardInfoData.emailSendYn === 'Y' && !boardInfoData.sendEmail) {
+            return {
+                state: false,
+                message: '이메일을 입력해 주세요.',
+            };
+        }
+
+        // 파일 checkbox 를 true 로 선택후 개수를 입력 안했을떄.
+        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileCnt) {
+            return {
+                state: false,
+                message: '개수를 입력해 주세요.',
+            };
+        }
+
+        // 파일 checkbox 를 true 로 선택후 용량를 입력 안했을떄.
+        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileSize) {
+            return {
+                state: false,
+                message: '용량을 입력해 주세요.',
+            };
+        }
+
+        // 파일 checkbox 를 true 로 선택후 확장자를 입력 안했을떄.
+        if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileExt) {
+            return {
+                state: false,
+                message: '확장자를 입력해 주세요.',
+            };
+        }
+
+        // 입력 등급을 선택 안했을떄.
+        if (!boardInfoData.insLevel) {
+            return {
+                state: false,
+                message: '입력 등급을 선택해 주세요.',
+            };
+        }
+
+        // 조회 등급을 선택 안했을떄.
+        if (!boardInfoData.viewLevel) {
+            return {
+                state: false,
+                message: '조회 등급을 선택해 주세요.',
+            };
+        }
+
+        // 추천 항목을 선택 안했을떄.
+        if (!boardInfoData.recomFlag) {
+            return {
+                state: false,
+                message: '추천을 선택해 주세요.',
+            };
+        }
+
+        return {
+            state: true,
+            data: returnFormData,
+        };
     };
 
     // 저장 버튼.
     const handleClickSaveButton = () => {
-        const boardId = boardInfoData.boardId;
-        const type = boardId !== null ? 'update' : 'save';
-        if (validate(boardInfoData)) {
-            dispatch(
-                saveBoardInfo({
-                    type: type,
-                    boardinfo: {
-                        ...boardInfoData,
-                        boardType: storeBoardType,
-                        allowFileCnt: boardInfoData.fileYn === 'Y' ? boardInfoData.allowFileCnt : null,
-                        allowFileSize: boardInfoData.fileYn === 'Y' ? boardInfoData.allowFileSize : null,
-                        allowFileExt: boardInfoData.fileYn === 'Y' ? boardInfoData.allowFileExt : null,
-                        receiveEmail: boardInfoData.emailReceiveYn === 'N' ? boardInfoData.receiveEmail : null,
-                        sendEmail: boardInfoData.emailSendYn === 'N' ? boardInfoData.sendEmail : null,
-                    },
-                    callback: ({ header: { success, message }, body }) => {
-                        if (success === true) {
-                            toast.success(message);
-                            const { boardId } = body;
-                            if (body.boardId) {
-                                dispatch(getSetmenuBoardsList()); // 리스트를 다시 가지고 옴.
-                                history.push(`/${pagePathName}/${boardId}`);
-                            }
-                        } else {
-                            const { totalCnt, list } = body;
-                            if (totalCnt > 0 && Array.isArray(list)) {
-                                messageBox.alert(list[0].reason, () => {}); // 에러 메시지 확인.
-                            } else {
-                                messageBox.alert(message, () => {}); // 서버 메시지 확인.
-                            }
-                        }
-                    },
-                }),
-            );
+        let tempData = initialState.setmenu.boardinfo; // 기본 init 데이터.
+        let formData = {}; // 폼데이터.
+
+        if (boardInfoData.boardName === '' || boardInfoData.boardName === null) {
+            messageBox.alert('게시판 명을 입력해 주세요.', () => {});
+            return false;
         }
+
+        if (storeBoardType === 'S') {
+            formData = makeServiceFormData();
+        } else {
+            formData = makeAdminFormData();
+        }
+
+        // form 체크 실패면 해당 메시지 얼럿.
+        if (formData.state === false) {
+            messageBox.alert(formData.message, () => {});
+            return false;
+        }
+
+        const tempFormData = formData.data;
+
+        // form 값을 체크후에 init 데이터와 조합.
+        // null 처리를 하기 위해서 기존 init 데이터에 폼 체크 값을 추가 해줘서 api 에 보낼 데이터를 만듬.
+        Object.keys(tempFormData).forEach((key) => {
+            let value = tempFormData[key];
+
+            if (value === '') {
+                value = initialState.setmenu.boardinfo[key];
+            }
+
+            tempData = {
+                ...tempData,
+                [key]: value,
+            };
+        });
+
+        // boardId 값이 없으면 등록 있으면 수정.
+        let type;
+        if (boardInfoData.boardId != null) {
+            type = 'update';
+        } else {
+            type = 'save';
+        }
+
+        dispatch(
+            saveBoardInfo({
+                type: type,
+                boardinfo: tempData,
+                callback: ({ header: { success, message }, body }) => {
+                    if (success === true) {
+                        toast.success(message);
+                        const { boardId } = body;
+                        if (body.boardId) {
+                            // 리스트를 다시 가지고 옴.
+                            dispatch(getSetmenuBoardsList());
+                            // 게시판 정보 값도 다시 가지고 옴.
+                            dispatch(getBoardInfo({ boardId: body.boardId }));
+                            history.push(`/${pagePathName}/${boardId}`);
+                        }
+                    } else {
+                        const { totalCnt, list } = body;
+                        if (totalCnt > 0 && Array.isArray(list)) {
+                            // 에러 메시지 확인.
+                            messageBox.alert(list[0].reason, () => {});
+                        } else {
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+                            messageBox.alert(message, () => {});
+                        }
+                    }
+                },
+            }),
+        );
+        return;
     };
 
+    // 삭제 버튼 철.
     const handleClickDeleteButton = () => {
         dispatch(
             deleteBoard({
@@ -167,10 +335,12 @@ const BoardsEdit = () => {
 
     useEffect(() => {
         const setParamBoardId = ({ boardId }) => {
+            // url 로 boardId 값이 변경 되면 해당 게시판 정보를 가지고 옴.
             if (isNaN(boardId) === false && paramBoardId.current !== boardId) {
                 paramBoardId.current = boardId;
 
                 dispatch(getBoardInfo({ boardId: boardId }));
+                // url 에 add 일 경우는 게시판 정보 상태값을 초기화 한다.
             } else if (boardId === 'add') {
                 setBoardInfoData(initialState.setmenu.boardinfo);
             }
@@ -179,17 +349,21 @@ const BoardsEdit = () => {
     }, [dispatch, params]);
 
     useEffect(() => {
+        // url 이 변경 되거나 게시판 정보를 다시 가지고 오면 store 값을 읽어서 게시판 정보 스테이트를 변경 해준다.
         setBoardInfoData(boardinfo);
     }, [boardinfo]);
 
+    // 게시판 정보 스테이트가 변경 되면 check 값을 확인해서 관련 input 을 disabled 해준다.
     useEffect(() => {
         setInputfieldDisabled({
             ...inputfieldDisabled,
-            allowFileCnt: boardInfoData.fileYn === 'N',
-            allowFileSize: boardInfoData.fileYn === 'N',
-            allowFileExt: boardInfoData.fileYn === 'N',
-            receiveEmail: boardInfoData.emailReceiveYn === 'N',
-            sendEmail: boardInfoData.emailSendYn === 'N',
+            allowFileCnt: boardInfoData.fileYn !== 'Y',
+            allowFileSize: boardInfoData.fileYn !== 'Y',
+            allowFileExt: boardInfoData.fileYn !== 'Y',
+            receiveEmail: boardInfoData.emailReceiveYn !== 'Y',
+            sendEmail: boardInfoData.emailSendYn !== 'Y',
+            answLevel: boardInfoData.answYn !== 'Y',
+            replyLevel: boardInfoData.replyYn !== 'Y',
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardInfoData]);
@@ -460,7 +634,7 @@ const BoardsEdit = () => {
                                     id="insLevel"
                                     value={boardInfoData.insLevel}
                                 >
-                                    <option hidden>선택</option>
+                                    <option value="">선택</option>
                                     {selectItem.insLevel.map((item, index) => (
                                         <option key={index} value={item.value}>
                                             {item.name}
@@ -478,7 +652,7 @@ const BoardsEdit = () => {
                                     id="viewLevel"
                                     value={boardInfoData.viewLevel}
                                 >
-                                    <option hidden>선택</option>
+                                    <option value="">선택</option>
                                     {selectItem.viewLevel.map((item, index) => (
                                         <option key={index} value={item.value}>
                                             {item.name}
@@ -497,8 +671,9 @@ const BoardsEdit = () => {
                                     name="answLevel"
                                     id="answLevel"
                                     value={boardInfoData.answLevel}
+                                    disabled={inputfieldDisabled.answLevel}
                                 >
-                                    <option hidden>선택</option>
+                                    <option value="">선택</option>
                                     {selectItem.answLevel.map((item, index) => (
                                         <option key={index} value={item.value}>
                                             {item.name}
@@ -515,8 +690,9 @@ const BoardsEdit = () => {
                                     name="replyLevel"
                                     id="replyLevel"
                                     value={boardInfoData.replyLevel}
+                                    disabled={inputfieldDisabled.replyLevel}
                                 >
-                                    <option hidden>선택</option>
+                                    <option value="">선택</option>
                                     {selectItem.replyLevel.map((item, index) => (
                                         <option key={index} value={item.value}>
                                             {item.name}
@@ -538,10 +714,10 @@ const BoardsEdit = () => {
                             id="channelType"
                             value={boardInfoData.channelType}
                         >
-                            <option hidden>선택</option>
-                            {selectItem.channelType.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
+                            <option value="">선택</option>
+                            {channel_list.map((item, index) => (
+                                <option key={index} value={item.dtlCd}>
+                                    {item.cdNm}
                                 </option>
                             ))}
                         </MokaInputLabel>
@@ -557,7 +733,7 @@ const BoardsEdit = () => {
                                 id="recomFlag"
                                 value={boardInfoData.recomFlag}
                             >
-                                <option hidden>선택</option>
+                                <option value="">선택</option>
                                 {selectItem.recomFlag.map((item, index) => (
                                     <option key={index} value={item.value}>
                                         {item.name}
@@ -612,6 +788,7 @@ const BoardsEdit = () => {
                             className="mb-0"
                             id="allowFileExt"
                             name="allowFileExt"
+                            placeholder={'허용 확장자는 텍스트로 Comma(,)로 구분하여 입력해 주세요'}
                             value={boardInfoData.allowFileExt}
                             onChange={(e) => handleChangeInfoData(e)}
                             disabled={inputfieldDisabled.allowFileExt}

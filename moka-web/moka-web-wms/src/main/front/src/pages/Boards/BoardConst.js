@@ -1,3 +1,4 @@
+// 등록시 사용할 select 옵션값.
 export const selectItem = {
     orderType: [
         {
@@ -121,8 +122,12 @@ export const selectItem = {
     ],
     channelType: [
         {
-            value: '1',
+            value: 'BOARD_DIVC1',
             name: 'JPOD',
+        },
+        {
+            value: 'BOARD_DIVC2',
+            name: '기자',
         },
     ],
     recomFlag: [
@@ -140,57 +145,6 @@ export const selectItem = {
         },
     ],
 };
-
-export const tree = [
-    {
-        pageSeq: 3,
-        pageName: '메인1',
-        pageUrl: '/',
-        parentPageSeq: 0,
-        pageOrd: 1,
-        btnShow: false,
-        match: 'N',
-        usedYn: 'Y',
-        nodes: [
-            {
-                pageSeq: 13,
-                pageName: '정치',
-                pageUrl: '/politics',
-                parentPageSeq: 3,
-                parentPageName: '메인',
-                parentPageUrl: '/',
-                pageOrd: 100,
-                btnShow: false,
-                match: 'N',
-                usedYn: 'Y',
-            },
-        ],
-    },
-    {
-        pageSeq: 4,
-        pageName: '메인2',
-        pageUrl: '/',
-        parentPageSeq: 0,
-        pageOrd: 1,
-        btnShow: false,
-        match: 'N',
-        usedYn: 'Y',
-        nodes: [
-            {
-                pageSeq: 14,
-                pageName: '정치',
-                pageUrl: '/politics',
-                parentPageSeq: 4,
-                parentPageName: '메인',
-                parentPageUrl: '/',
-                pageOrd: 100,
-                btnShow: false,
-                match: 'N',
-                usedYn: 'Y',
-            },
-        ],
-    },
-];
 
 export const tempRows = {
     szie: 20,

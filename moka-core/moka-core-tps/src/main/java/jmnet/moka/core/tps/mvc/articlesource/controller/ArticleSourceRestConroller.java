@@ -25,6 +25,7 @@ import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceDTO;
+import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSearchDTO;
 import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSimpleDTO;
 import jmnet.moka.core.tps.mvc.articlesource.dto.RcvCodeConvDTO;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
@@ -127,7 +128,7 @@ public class ArticleSourceRestConroller extends AbstractCommonController {
      */
     @ApiOperation(value = "매체 목록조회")
     @GetMapping
-    public ResponseEntity<?> getArticleSourceList(@Valid @SearchParam SearchDTO search) {
+    public ResponseEntity<?> getArticleSourceList(@Valid @SearchParam ArticleSourceSearchDTO search) {
         // 조회
         Page<ArticleSource> returnValue = articleSourceService.findAllArticleSource(search);
 

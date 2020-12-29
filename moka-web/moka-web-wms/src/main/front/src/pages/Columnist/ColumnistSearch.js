@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaInputLabel, MokaSearchInput } from '@components';
-import { initialState, getColumnistList, changeSearchOption, clearSearchOption } from '@store/columnist';
+import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
 
 const ColumnistSearch = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     // store 연결.
     const { search: storeSearch } = useSelector((store) => ({
@@ -51,6 +53,12 @@ const ColumnistSearch = () => {
         [dispatch, search],
     );
 
+    // 신규등록 버튼 처리.
+    const handleNewColumnlist = () => {
+        dispatch(clearColumnist());
+        history.push(`/columnist/add`);
+    };
+
     // 검색 스토어 연결.
     useEffect(() => {
         setSearch(storeSearch);
@@ -68,10 +76,10 @@ const ColumnistSearch = () => {
         <Form.Row className="mb-10">
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInputLabel label="상태정보" labelWidth={56} as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
-                    <option value="">전체</option>
-                    <option value="Y">설정</option>
-                    <option value="N">해제</option>
+                <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
+                    <option value="">상태정보 전체</option>
+                    <option value="Y">상태정보 설정</option>
+                    <option value="N">상태정보 해제</option>
                 </MokaInputLabel>
             </Col>
 
@@ -84,6 +92,12 @@ const ColumnistSearch = () => {
             <div style={{ width: 85 }} className="d-flex justify-content-center">
                 <Button variant="outline-neutral" onClick={handleSearchReset}>
                     초기화
+                </Button>
+            </div>
+
+            <div className="pt-0">
+                <Button variant="positive" onClick={handleNewColumnlist}>
+                    신규등록
                 </Button>
             </div>
         </Form.Row>

@@ -307,8 +307,8 @@ public class BoardInfoRestController extends AbstractCommonController {
         // 관련 데이터 조회
         if (boardInfoService.hasContents(boardId)) {
             // 액션 로그에 실패 로그 출력
-            tpsLogger.fail(ActionType.DELETE, msg("tps.board-info.error.delete.exist-board", request));
-            throw new InvalidDataException(msg("tps.board-info.error.delete.exist-board", request));
+            tpsLogger.fail(ActionType.DELETE, msg("tps.board-info.error.delete.exist-boardContent", request));
+            throw new InvalidDataException(msg("tps.board-info.error.delete.exist-boardContent", request));
         }
 
         try {

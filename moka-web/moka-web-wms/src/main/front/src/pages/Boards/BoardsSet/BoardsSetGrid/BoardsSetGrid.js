@@ -12,7 +12,6 @@ const BulkhHotClicAgGrid = () => {
     const history = useHistory();
     const params = useParams();
 
-    const [rowData, setRowData] = useState([]);
     const { boardslist, total, page, size, search, loading, pagePathName } = useSelector((store) => ({
         pagePathName: store.boards.pagePathName,
         total: store.boards.setmenu.total,
@@ -21,6 +20,10 @@ const BulkhHotClicAgGrid = () => {
         loading: store.loading[GET_SETMENU_BOARD_LIST],
     }));
 
+    // 그리드 리스트 데이터.
+    const [rowData, setRowData] = useState([]);
+
+    // 리스트 아이템 클릭.
     const handleRowClicked = ({ boardId }) => {
         history.push(`/${pagePathName}/${boardId}`);
     };

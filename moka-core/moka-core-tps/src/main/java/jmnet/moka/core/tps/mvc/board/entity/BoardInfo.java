@@ -149,7 +149,7 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
      */
     @Column(name = "ALLOW_FILE_EXT", nullable = false)
     @Builder.Default
-    private String allowFileExt = "zip;xls;xlsx;ppt;doc;hwp;jpg;png;gif;";
+    private String allowFileExt = "zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif,";
 
     /**
      * 추천여부 0:사용안함 1:추천/비추천 2:추천만

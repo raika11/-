@@ -2,6 +2,13 @@ import qs from 'qs';
 import instance from '@store/commons/axios';
 import { objectToFormData } from '@utils/convertUtil';
 
+// 게시판 채널 리스트 가지고 오기.
+export const getBoardChannelList = () => {
+    return instance.get(`/api/codemgt-grps/BOARD_DIVC/codemgts?grpCd=BOARD_DIVC`).catch((err) => {
+        throw err;
+    });
+};
+
 // 게시판 리스트 가지고 오기.
 export const getBoardInfoList = ({ search }) => {
     return instance.get(`/api/board-info?${qs.stringify(search)}`).catch((err) => {

@@ -16,6 +16,7 @@ const BoardsSet = () => {
         boardType: store.boards.boardType,
     }));
 
+    // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
     useEffect(() => {
         const tmpSearchOption = {
             ...initialState.setmenu.search,
@@ -24,6 +25,7 @@ const BoardsSet = () => {
         dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardType]);
+
     return (
         <div className="d-flex">
             <Helmet>

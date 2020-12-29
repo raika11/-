@@ -9,8 +9,45 @@ import {
     GET_SETMENU_BOARD_INFO_SUCCESS,
     SAVE_SETMENU_BOARD_INFO,
     GET_BOARD_GROUP_LIST,
+    GET_BOARD_CHANNEL_LIST,
+    GET_BOARD_CHANNEL_LIST_SUCCESS,
 } from './boardsAction';
-import { getBoardInfoList, getBoardInfo, saveBoardInfo, deleteBoard, getBoardGroup } from './boardsApi';
+import { getBoardInfoList, getBoardInfo, saveBoardInfo, deleteBoard, getBoardGroup, getBoardChannelList } from './boardsApi';
+
+// 게시판 채널 리스트 가지고 오기.
+function* getBoardChannelListSaga() {
+    yield put(startLoading(GET_SETMENU_BOARD_INFO));
+    let response;
+    try {
+        response = yield call(getBoardChannelList);
+        const {
+            header: { success, message },
+        } = response.data;
+        if (success === true) {
+            // yield put({ type: GET_SETMENU_BOARD_INFO_SUCCESS, payload: response.data });
+            const { list } = response.data.body;
+            const resultList = list.map((element) => {
+                return {
+                    seqNo: element.seqNo,
+                    dtlCd: element.dtlCd,
+                    cdNm: element.cdNm,
+                    cdEngNm: element.cdEngNm,
+                };
+            });
+
+            yield put({ type: GET_BOARD_CHANNEL_LIST_SUCCESS, payload: resultList });
+        } else {
+            // 에러 나면 서버 에러 메시지 토스트 전달.
+            toast.error(message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    yield put(finishLoading(GET_SETMENU_BOARD_INFO));
+}
 
 // 게시판 리스트 가지고 오기
 const getSetmenuBoardsListSaga = callApiAfterActions(GET_SETMENU_BOARD_LIST, getBoardInfoList, (state) => state.boards.setmenu);
@@ -94,4 +131,5 @@ export default function* boardsSaga() {
     yield takeLatest(SAVE_SETMENU_BOARD_INFO, saveBoardInfoSaga); // 게시판 상세 정보 가지고 오기.
     yield takeLatest(DELETE_SETMENU_BOARD, deleteBoardSaga); // 게시판 삭제.
     yield takeLatest(GET_BOARD_GROUP_LIST, getBoardsGroupListSaga); // 게시판 그룹(트리메뉴).
+    yield takeLatest(GET_BOARD_CHANNEL_LIST, getBoardChannelListSaga); // 게시판 채널 리스트 가지고 오기.
 }

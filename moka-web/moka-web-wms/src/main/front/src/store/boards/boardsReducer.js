@@ -10,6 +10,7 @@ import {
     GET_SETMENU_BOARD_INFO_SUCCESS,
     CLEAR_SETMENU_BOARD_INFO,
     GET_GROUP_LIST_SUCCESS,
+    GET_BOARD_CHANNEL_LIST_SUCCESS,
 } from './boardsAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -17,6 +18,7 @@ export const initialState = {
     pagePathName: '',
     gubun: '',
     boardType: '',
+    channel_list: [],
     setmenu: {
         total: 0,
         list: [],
@@ -30,32 +32,32 @@ export const initialState = {
         },
         boardinfo: {
             boardId: null,
-            boardName: '',
-            boardType: '',
+            boardName: null,
+            boardType: null,
             usedYn: 'Y',
-            titlePrefix1: '',
-            titlePrefix2: '',
-            insLevel: '0',
-            viewLevel: '0',
-            answLevel: '0',
-            replyLevel: '0',
+            titlePrefix1: null,
+            titlePrefix2: null,
+            insLevel: null,
+            viewLevel: null,
+            answLevel: null,
+            replyLevel: null,
             editorYn: 'N',
             answYn: 'N',
             replyYn: 'N',
             fileYn: 'N',
-            allowFileCnt: '',
-            allowFileSize: '',
+            allowFileCnt: 0,
+            allowFileSize: 0,
             allowFileExt: '',
-            recomFlag: '0',
+            recomFlag: null,
             declareYn: 'N',
             captchaYn: 'N',
-            channelType: '',
-            boardDesc: '',
+            channelType: null,
+            boardDesc: null,
             emailReceiveYn: 'N',
-            receiveEmail: '',
-            sendEmail: '',
+            receiveEmail: null,
+            sendEmail: null,
             emailSendYn: 'N',
-            exceptItem: '',
+            exceptItem: null,
         },
     },
     listmenu: {
@@ -75,6 +77,12 @@ export default handleActions(
                 draft.gubun = gubun;
             });
         },
+        [GET_BOARD_CHANNEL_LIST_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.channel_list = payload;
+            });
+        },
+
         // set 메뉴 검색 옵션 처리.
         [CHANGE_SETMENU_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {

@@ -18,8 +18,6 @@ const ArticleSourceAgGrid = () => {
     const source = useSelector((store) => store.articleSource.source);
     const loading = useSelector((store) => store.loading[GET_SOURCE_LIST]);
 
-    const [rowData, setRowData] = useState([]);
-
     /**
      * 목록에서 Row클릭
      */
@@ -40,27 +38,11 @@ const ArticleSourceAgGrid = () => {
         [dispatch, search],
     );
 
-    /**
-     * rowData 셋팅
-     */
-    useEffect(() => {
-        if (sourceList) {
-            setRowData(
-                sourceList.map((data) => ({
-                    ...data,
-                    usedYn: data.rcvUsedYn,
-                })),
-            );
-        } else if (!sourceList) {
-            setRowData([]);
-        }
-    }, [sourceList]);
-
     return (
         <MokaTable
-            className="overflow-hidden flex-fill"
+            agGridHeight={692}
             columnDefs={columnDefs}
-            rowData={rowData}
+            rowData={sourceList}
             onRowNodeId={(row) => row.sourceCode}
             onRowClicked={handleRowClicked}
             loading={loading}

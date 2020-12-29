@@ -67,6 +67,7 @@ import {
     faSort as fasSort,
     faCaretDown as fasCaretDown,
     faSearch as fasSearch,
+    faCircle as fasCircle,
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
@@ -122,7 +123,6 @@ library.add(falEyeSlash);
 library.add(falExclamationTriangle);
 library.add(falUser);
 library.add(falLockAlt);
-library.add(fasSearch);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);
@@ -139,7 +139,9 @@ library.add(fasCheck);
 library.add(fasTimes);
 library.add(fasStar);
 library.add(fasCaretDown);
+library.add(fasSearch);
 library.add(fasSort);
+library.add(fasCircle);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);

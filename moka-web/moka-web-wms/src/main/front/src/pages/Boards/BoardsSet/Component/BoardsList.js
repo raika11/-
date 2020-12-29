@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MokaCard } from '@components';
 import { BoardsSetGrid } from '@pages/Boards/BoardsSet/BoardsSetGrid';
 import BoardsListSearchBox from './BoardsListSearchBox';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const BoardsList = () => {
     const { boardType } = useSelector((store) => ({
@@ -11,6 +11,7 @@ const BoardsList = () => {
 
     const [cardTitle, setCardTitle] = useState('');
 
+    // store 에 보드 구분으로 목록 타이명을 변경 해준다.
     useEffect(() => {
         const setMokaCardTitle = () => {
             let title = '';

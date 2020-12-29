@@ -123,7 +123,7 @@ const CodeMappingModal = (props) => {
                             handleChangeSearchOption={handleChangeSearchOption}
                         />
                     </Col>
-                    <Col xs={7}>{showEdit && <Edit data={data} mappingCode={mappingCode} />}</Col>
+                    <Col xs={7}>{showEdit && <Edit data={data} mappingCode={mappingCode} onHide={handleHide} />}</Col>
                 </Row>
             </Container>
         </MokaModal>

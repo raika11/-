@@ -25,12 +25,6 @@ const ColumnistAgGrid = () => {
         history.push(`/columnist/${data.seqNo}`);
     };
 
-    // 신규등록 버튼 처리.
-    const handleNewColumnlist = () => {
-        dispatch(clearColumnist());
-        history.push(`/columnist/add`);
-    };
-
     // 검색
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
@@ -61,13 +55,6 @@ const ColumnistAgGrid = () => {
     return (
         <React.Fragment>
             {/* 버튼 그룹 */}
-            <div className="d-flex justify-content-end mb-10">
-                <div className="pt-0">
-                    <Button variant="positive" onClick={handleNewColumnlist}>
-                        신규등록
-                    </Button>
-                </div>
-            </div>
 
             <MokaTable
                 className="overflow-hidden flex-fill"

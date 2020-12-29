@@ -383,7 +383,7 @@ public class AmpArticleView extends AbstractView {
                                 0,
                                 "<amp-img layout=\"fill\" src=\"" + DEFAULT_IMAGE_PATH + "/mw/common/v_noimg.png\" placeholder></amp-img>" )
                 ).trim();
-                if (useTagList.indexOf("iframe") < 0) useTagList += "iframe|";
+                if (!useTagList.contains("iframe")) useTagList += "iframe|";
             } else {
                 ampContent = ampContent.replace(vod,"").trim();
             }
@@ -398,12 +398,12 @@ public class AmpArticleView extends AbstractView {
             String iframe = matcher.group();
             String src = getFirstValue(PATTERN_SRC, iframe).replace("src=\"","");
             String height = getFirstValue(PATTERN_HEIGHT, iframe).replace("height=\"","");
-            if ( src.indexOf("https:") < 0 || McpString.isEmpty(height)) {
+            if (!src.contains("https:") || McpString.isEmpty(height)) {
                 ampContent = ampContent.replace(iframe,"").trim();
                 continue;
             }
             ampContent = ampContent.replace(iframe,
-                    String.format("<amp-iframe src=\"{0}\" sandbox=\"{1}\" width=\"{2}\" height=\"{3}\" layout=\"{4}\" frameborder=\"{5}\">{6}</amp-iframe>",
+                    String.format("<amp-iframe src=\"%s\" sandbox=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" frameborder=\"%s\">%s</amp-iframe>",
                             src,
                             "allow-same-origin allow-scripts allow-popups allow-forms allow-modals",
                             DEFAULT_WIDTH,
@@ -522,6 +522,9 @@ public class AmpArticleView extends AbstractView {
 
     private void setMobileTitle(Map<String,Object> article) {
         String mobileTitle = functions.findColumn((List<Map<String,Object>>)article.get("title"),"TITLE_DIV","M","TITLE");
+        if ( McpString.isEmpty(mobileTitle)) { //예외처리 mobile title이 없을 경우
+            mobileTitle = ((Map)article.get("basic")).get("ART_TITLE").toString();
+        }
         mobileTitle = mobileTitle.replace("<.*?>","").trim();
         Map metaJa = (Map)article.get("meta_ja");
         metaJa.put("ART_TITLE",mobileTitle);

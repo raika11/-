@@ -26,6 +26,7 @@ import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
@@ -40,6 +41,7 @@ import jmnet.moka.core.tps.mvc.board.service.BoardInfoService;
 import jmnet.moka.core.tps.mvc.board.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +54,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -78,6 +81,12 @@ public class BoardRestController extends AbstractCommonController {
     private final FtpHelper ftpHelper;
 
     private final MokaCrypt mokaCrypt;
+
+    @Value("${board.image.save.filepath}")
+    private String boardImageSavepath;
+
+    @Value("${pds.url}")
+    private String pdsUrl;
 
     public BoardRestController(BoardService boardService, ModelMapper modelMapper, MessageByLocale messageByLocale, TpsLogger tpsLogger,
             BoardInfoService boardInfoService, FtpHelper ftpHelper, MokaCrypt mokaCrypt) {
@@ -718,6 +727,44 @@ public class BoardRestController extends AbstractCommonController {
             }
         }
         return true;
+    }
+
+    /**
+     * 본문에 첨부되는 이미지 업로드
+     *
+     * @param boardId 등록할 게시판 ID
+     * @return 등록된 게시판정보
+     */
+    @ApiOperation(value = "본문에 첨부되는 이미지 업로드")
+    @PostMapping("/{boardId}/image")
+    public ResponseEntity<?> postUploadContentImage(
+            @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
+            MultipartFile attachFile)
+            throws InvalidDataException, NoDataException, IOException {
+
+        if (!ImageUtil.isImage(attachFile)) {
+            throw new InvalidDataException(msg("tps.board.error.file-ext", attachFile.getOriginalFilename()));
+        }
+
+        String ext = McpFile.getExtension(attachFile.getOriginalFilename());
+        String filename = UUIDGenerator.uuid() + "." + ext;
+        String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM");
+        String saveFilePath = String.format(boardImageSavepath, boardId, yearMonth);
+        String imageUrl = pdsUrl;
+        String message = "";
+        if (ftpHelper.upload(FtpHelper.PDS, filename, attachFile.getInputStream(), saveFilePath)) {
+            imageUrl = pdsUrl + saveFilePath + "/" + filename;
+            message = msg("tps.board-info.success.upload");
+        } else {
+            message = msg("tps.board-info.error.upload");
+        }
+
+        ResultDTO<String> resultDto = new ResultDTO<>(imageUrl, message);
+
+        // 액션 로그에 성공 로그 출력
+        tpsLogger.success(ActionType.INSERT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
 

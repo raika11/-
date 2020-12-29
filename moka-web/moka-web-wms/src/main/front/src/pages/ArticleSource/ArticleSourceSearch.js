@@ -59,7 +59,7 @@ const ArticleSourceSearch = () => {
         <div className="mb-2 d-flex align-items-center justify-content-between">
             <div className="d-flex">
                 <div style={{ width: 120 }} className="mr-2">
-                    <MokaInput className="ft-12" as="select" value={search.searchType}>
+                    <MokaInput className="ft-12" as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         <option value="sourceName">매체명</option>
                         <option value="sourceCode">매체코드</option>
                     </MokaInput>

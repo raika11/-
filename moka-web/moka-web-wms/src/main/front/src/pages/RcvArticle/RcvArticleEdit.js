@@ -7,7 +7,9 @@ import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE } from '@
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
+import { popupPreview } from '@utils/commonUtil';
 import { unescapeHtml } from '@utils/convertUtil';
+import { API_BASE_URL } from '@/constants';
 
 const RcvArticleEdit = () => {
     const { rid } = useParams();
@@ -34,6 +36,7 @@ const RcvArticleEdit = () => {
      * 취소
      */
     const handleCancle = () => {
+        debugger;
         history.push('/rcv-article');
         dispatch(clearRcvArticle());
     };
@@ -85,6 +88,13 @@ const RcvArticleEdit = () => {
         });
     }, [rcvArticle]);
 
+    /**
+     * 미리보기 팝업
+     */
+    const handleClickPreviewOpen = (servicePlatform) => {
+        popupPreview(`${API_BASE_URL}/preview/article-page/rcv/${temp.rid}`, { ...temp, servicePlatform });
+    };
+
     return (
         <React.Fragment>
             {rcvArticle.rid && !rcvArticle.totalId && (
@@ -95,6 +105,7 @@ const RcvArticleEdit = () => {
                     reporterList={reporterList || []}
                     loading={loading}
                     onCancle={handleCancle}
+                    onPreview={handleClickPreviewOpen}
                 />
             )}
             {rcvArticle.rid && rcvArticle.totalId && (
@@ -105,6 +116,7 @@ const RcvArticleEdit = () => {
                     reporterList={reporterList || []}
                     loading={loading}
                     onCancle={handleCancle}
+                    onPreview={handleClickPreviewOpen}
                     inRcv
                 />
             )}

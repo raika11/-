@@ -125,6 +125,12 @@ public class ArticleBasicVO implements Serializable {
     private String ovpYn;
 
     /**
+     * OVP동영상 링크
+     */
+    @Column(name = "OVP_LINK")
+    private String ovpLink;
+
+    /**
      * 유투브동영상 첨부여부(DTL_CD = MY)
      */
     @Column(name = "YOUTUBE_YN")
@@ -153,4 +159,10 @@ public class ArticleBasicVO implements Serializable {
      */
     @Column(name = "ART_EDIT_MOB_TITLE")
     private String artEditMobTitle;
+
+    /**
+     * 벌크전송여부
+     */
+    @Column(name = "BULK_YN")
+    private String bulkYn;
 }

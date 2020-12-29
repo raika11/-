@@ -57,7 +57,6 @@ public class ArticleSearchDTO extends SearchDTO {
     private Date endServiceDay;
 
     @ApiModelProperty("콘텐트타입")
-    @Length(max = 1, message = "{tps.article.error.length.contentType}")
     private String contentType;
 
     @ApiModelProperty("매체목록 (필수/구분자,)")
@@ -66,7 +65,6 @@ public class ArticleSearchDTO extends SearchDTO {
     private String sourceList;
 
     @ApiModelProperty("출판 카테고리")
-    @Length(max = 2, message = "{tps.article.error.length.pressCategory}")
     private String pressCategory;
 
     public ArticleSearchDTO() {

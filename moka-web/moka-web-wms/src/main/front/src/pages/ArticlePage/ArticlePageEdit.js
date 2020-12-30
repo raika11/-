@@ -1,33 +1,34 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@components';
 import { previewPage, w3cArticlePage } from '@store/merge';
-import { initialState, getArticlePage, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList, clearArticlePage } from '@store/articlePage';
+import { initialState, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList, clearArticlePage } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import { popupPreview } from '@utils/commonUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
 const ArticlePageEdit = ({ onDelete }) => {
-    const { artPageSeq: paramId } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { articlePage, artPageBody, loading, articleTypeRows, latestDomainId, invalidList } = useSelector(
+    const loading = useSelector(
+        (store) =>
+            store.loading['articlePage/GET_ARTICLE_PAGE'] ||
+            store.loading['articlePage/POST_ARTICLE_PAGE'] ||
+            store.loading['articlePage/PUT_ARTICLE_PAGE'] ||
+            store.loading['articlePage/DELETE_ARTICLE_PAGE'] ||
+            store.loading['merge/PREVIEW_PAGE'] ||
+            store.loading['merge/W3C_PAGE'],
+    );
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
+    const { articlePage, artPageBody, invalidList } = useSelector(
         (store) => ({
             articlePage: store.articlePage.articlePage,
             artPageBody: store.articlePage.artPageBody,
-            loading:
-                store.loading['articlePage/GET_ARTICLE_PAGE'] ||
-                store.loading['articlePage/POST_ARTICLE_PAGE'] ||
-                store.loading['articlePage/PUT_ARTICLE_PAGE'] ||
-                store.loading['articlePage/DELETE_ARTICLE_PAGE'] ||
-                store.loading['merge/PREVIEW_PAGE'] ||
-                store.loading['merge/W3C_PAGE'],
-            articleTypeRows: store.codeMgt.articleTypeRows,
-            latestDomainId: store.auth.latestDomainId,
             invalidList: store.page.invalidList,
         }),
         [shallowEqual],
@@ -41,22 +42,6 @@ const ArticlePageEdit = ({ onDelete }) => {
     });
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [previewTotalId, setPreviewTotalId] = useState('');
-
-    useEffect(() => {
-        // url로 다이렉트로 페이지 조회하는 경우
-        if (paramId && paramId !== articlePage.artPageSeq) {
-            const option = {
-                artPageSeq: paramId,
-                callback: (result) => {
-                    if (!result.header.success) {
-                        history.push(`/article-page`);
-                    }
-                },
-            };
-            dispatch(getArticlePage(option));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         if (articlePage.artPageSeq) {
@@ -320,7 +305,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                     </div>
                 </Form.Group>
                 {/* 기사페이지ID */}
-                {articlePage.artPageSeq ? (
+                {articlePage.artPageSeq && (
                     <Form.Row className="mb-2">
                         <MokaInputLabel
                             label="기사페이지ID"
@@ -335,8 +320,6 @@ const ArticlePageEdit = ({ onDelete }) => {
                             required
                         />
                     </Form.Row>
-                ) : (
-                    ''
                 )}
                 {/* 기사페이지명 */}
                 <Form.Row className="mb-2">
@@ -367,13 +350,12 @@ const ArticlePageEdit = ({ onDelete }) => {
                         required
                         isInvalid={error.pageServiceName}
                     >
-                        {articleTypeRows
-                            ? articleTypeRows.map((type) => (
-                                  <option key={type.dtlCd} value={type.dtlCd}>
-                                      {type.cdNm}
-                                  </option>
-                              ))
-                            : ''}
+                        {articleTypeRows &&
+                            articleTypeRows.map((type) => (
+                                <option key={type.dtlCd} value={type.dtlCd}>
+                                    {type.cdNm}
+                                </option>
+                            ))}
                     </MokaInputLabel>
                 </Form.Row>
                 <Form.Row className="mb-2">

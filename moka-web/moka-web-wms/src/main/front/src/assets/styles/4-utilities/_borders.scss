@@ -36,3 +36,7 @@
   border-top-left-radius: $border-radius-sm !important;
   border-bottom-left-radius: $border-radius-sm !important;
 }
+.input-border {
+  border: $input-border-width solid $input-border-color;
+  @include form-control-focus;
+}

@@ -330,6 +330,24 @@
     #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
+      <when test='contentType != null and contentType == "P"'>
+        'Y',
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test='contentType != null and contentType == "N"'>
+        'Y',
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
       <when test="pressCategory != 'all' and pressCategory != null and contentType != ''">
         #{pressCategory},
       </when>
@@ -339,8 +357,8 @@
     </choose>
 
     <choose>
-      <when test="contentType != 'all' and contentType != null and contentType != ''">
-        #{contentType},
+      <when test="bulkYn != 'all' and bulkYn != null and bulkYn != ''">
+        #{bulkYn},
       </when>
       <otherwise>
         NULL,

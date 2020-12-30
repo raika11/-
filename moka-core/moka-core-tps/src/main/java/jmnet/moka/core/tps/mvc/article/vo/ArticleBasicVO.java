@@ -163,6 +163,12 @@ public class ArticleBasicVO implements Serializable {
     /**
      * 벌크전송여부
      */
-    @Column(name = "BULK_YN")
-    private String bulkYn;
+    @Column(name = "BULK_FLAG")
+    private String bulkflag;
+
+    /**
+     * 분류명
+     */
+    @Column(name = "CONTENT_KORNAME")
+    private String contentKorname;
 }

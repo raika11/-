@@ -35,7 +35,7 @@ public class ArticleReporterVO implements Serializable {
      * 기자일련버호
      */
     @Column(name = "REP_SEQ")
-    private Long reqSeq;
+    private Long repSeq;
 
     /**
      * 기자명

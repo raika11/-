@@ -20,6 +20,10 @@ const propTypes = {
      */
     paginationClassName: PropTypes.string,
     /**
+     * pagination 아이템의 size(sm이면 작게 정의하지 않으면 기본 size)
+     */
+    paginationSize: PropTypes.string,
+    /**
      * 목록 컬럼정의
      */
     columnDefs: PropTypes.arrayOf(PropTypes.object),
@@ -97,6 +101,7 @@ const defaultProps = {
     page: 0,
     size: PAGESIZE_OPTIONS[0],
     pageSizes: PAGESIZE_OPTIONS,
+    sizeType: '',
     displayPageNum: DISPLAY_PAGE_NUM,
     preventRowClickCell: [],
     rowSelection: 'single',
@@ -144,7 +149,7 @@ const MokaTable = forwardRef((props, ref) => {
     const { dragManaged, onRowDragMove, onRowDragEnd } = props;
 
     // paging props
-    const { paginationClassName, paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption, showTotalString } = props;
+    const { paginationClassName, paging, total, page, size, pageSizes, paginationSize, displayPageNum, onChangeSearchOption, showTotalString } = props;
 
     // gridApi state
     const [gridApi, setGridApi] = useState(null);
@@ -317,6 +322,7 @@ const MokaTable = forwardRef((props, ref) => {
                         displayPageNum={displayPageNum}
                         showTotalString={showTotalString}
                         className={paginationClassName}
+                        paginationSize={paginationSize}
                     />
                 </div>
             ) : null}

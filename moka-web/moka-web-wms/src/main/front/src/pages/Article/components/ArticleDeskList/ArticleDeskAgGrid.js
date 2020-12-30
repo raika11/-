@@ -83,6 +83,8 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
                 let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');
                 if (art.artModDt) {
                     articleDt = `${articleDt}\n${moment(art.artModDt, DB_DATEFORMAT).format('MM-DD HH:mm')}`;
+                } else {
+                    articleDt = `${articleDt}\n `;
                 }
 
                 // 이미지경로

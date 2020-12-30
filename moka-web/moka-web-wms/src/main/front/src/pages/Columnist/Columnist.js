@@ -2,11 +2,11 @@ import React, { useEffect, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaLoader } from '@components';
+import { MokaCard } from '@components';
 import { clearStore } from '@store/columnist';
 
+import ColumnistEdit from './ColumnistEdit';
 const ColumnistList = React.lazy(() => import('./ColumnistList'));
-const ColumnistEdit = React.lazy(() => import('./ColumnistEdit'));
 
 const Columnist = ({ match }) => {
     const dispatch = useDispatch();
@@ -33,15 +33,7 @@ const Columnist = ({ match }) => {
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route
-                path={([`${match.url}/add`], [`${match.url}/:seqNo`])}
-                exact
-                render={(props) => (
-                    <Suspense fallback={<MokaLoader />}>
-                        <ColumnistEdit {...props} />
-                    </Suspense>
-                )}
-            />
+            <Route path={([`${match.url}/add`], [`${match.url}/:seqNo`])} exact render={(props) => <ColumnistEdit {...props} />} />
         </div>
     );
 };

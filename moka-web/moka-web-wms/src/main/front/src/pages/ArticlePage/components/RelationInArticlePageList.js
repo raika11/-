@@ -125,7 +125,7 @@ const RelationInArticlePageList = (props) => {
                 <Form.Row className="mb-2">
                     <MokaInput
                         as="select"
-                        className="w-100"
+                        className="ft-12"
                         value={search.domainId || undefined}
                         onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}
                     >
@@ -140,7 +140,7 @@ const RelationInArticlePageList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={() => history.push('/article-page')}>
+                <Button variant="positive" onClick={() => history.push('/article-page')} className="ft-12">
                     기사페이지 등록
                 </Button>
             </div>

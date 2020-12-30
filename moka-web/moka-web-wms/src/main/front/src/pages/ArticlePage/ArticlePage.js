@@ -180,7 +180,6 @@ const ArticlePage = ({ match }) => {
             <MokaCard
                 width={412}
                 className="mr-gutter"
-                titleClassName="mb-0"
                 bodyClassName="d-flex flex-column"
                 title="기사페이지 검색"
                 expansion={expansionState[0]}

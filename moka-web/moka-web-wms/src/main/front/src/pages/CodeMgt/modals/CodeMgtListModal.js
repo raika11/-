@@ -164,8 +164,18 @@ const CodeMgtListModal = (props) => {
                     onChange={handleChangeValue}
                     isInvalid={error.grpCd}
                     required
+                    className="mb-2"
                 />
-                <MokaInputLabel label="코드그룹명" placeholder="코드그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
+                <MokaInputLabel
+                    label="코드그룹명"
+                    className="mb-2"
+                    placeholder="코드그룹명"
+                    value={cdNm}
+                    name="cdNm"
+                    onChange={handleChangeValue}
+                    isInvalid={error.cdNm}
+                    required
+                />
             </MokaModal>
         );
     } else if (type === 'edit') {
@@ -192,8 +202,17 @@ const CodeMgtListModal = (props) => {
                 footerClassName="justify-content-center"
                 centered
             >
-                <MokaInputLabel label="코드그룹" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
-                <MokaInputLabel label="코드그룹명" placeholder="코드 그룹명" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
+                <MokaInputLabel label="코드그룹" className="mb-2" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
+                <MokaInputLabel
+                    label="코드그룹명"
+                    className="mb-2"
+                    placeholder="코드 그룹명"
+                    value={cdNm}
+                    name="cdNm"
+                    onChange={handleChangeValue}
+                    isInvalid={error.cdNm}
+                    required
+                />
             </MokaModal>
         );
     }

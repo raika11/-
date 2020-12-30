@@ -9,7 +9,8 @@ export default [
     {
         headerName: '페이지명',
         field: 'pageName',
-        width: 190,
+        width: 150,
+        flex: 1,
         cellStyle: { fontSize: '12px' },
         tooltipField: 'pageName',
     },

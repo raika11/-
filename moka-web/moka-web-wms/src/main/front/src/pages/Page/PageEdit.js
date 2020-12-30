@@ -469,22 +469,12 @@ const PageEdit = ({ onDelete }) => {
                             value={temp.pageDisplayName}
                             name="pageDisplayName"
                             onChange={handleChangeValue}
-                            className="mb-0"
                             placeholder="표출명을 입력하세요"
                             isInvalid={error.pageDisplayName}
                         />
                     </Col>
-                    <Col xs={4} className="px-0">
-                        <MokaInputLabel
-                            label="순서"
-                            labelWidth={43}
-                            className="mb-0"
-                            value={temp.pageOrd}
-                            name="pageOrd"
-                            onChange={handleChangeValue}
-                            required
-                            isInvalid={error.pageOrd}
-                        />
+                    <Col xs={4} className="px-0 pl-2">
+                        <MokaInputLabel label="순서" labelWidth={43} value={temp.pageOrd} name="pageOrd" onChange={handleChangeValue} required isInvalid={error.pageOrd} />
                     </Col>
                 </Form.Row>
                 {/* 이동URL */}
@@ -543,13 +533,7 @@ const PageEdit = ({ onDelete }) => {
                 {/* 경로 파라미터명 */}
                 <MokaInputLabel
                     className="mb-2"
-                    label={
-                        <>
-                            경로
-                            <br />
-                            파라미터명
-                        </>
-                    }
+                    label="경로\n파라미터명"
                     value={temp.urlParam}
                     name="urlParam"
                     onChange={handleChangeValue}

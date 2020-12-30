@@ -178,6 +178,7 @@ const HistoryList = (props) => {
                         className="mb-0 w-100"
                         inputProps={{
                             timeFormat: null,
+                            inputClassName: 'ft-12',
                         }}
                         value={moment(search.regDt, DB_DATEFORMAT)}
                         onChange={handleDate}
@@ -188,7 +189,7 @@ const HistoryList = (props) => {
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput
                             as="select"
-                            className="mb-0"
+                            className="ft-12"
                             value={search.searchType || undefined}
                             onChange={(e) => {
                                 setSearch({
@@ -214,6 +215,8 @@ const HistoryList = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
+                            buttonClassName="ft-12"
+                            inputClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>

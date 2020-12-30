@@ -75,24 +75,31 @@ const ReservedSearch = () => {
     };
 
     return (
-        <Form className="mb-10">
-            <MokaInput as="select" className="m-0 mb-2" value={search.domainId || undefined} onChange={handleChangeSearchOption} name="domainId">
+        <Form className="mb-2">
+            <MokaInput as="select" className="mb-2 ft-12" value={search.domainId || undefined} onChange={handleChangeSearchOption} name="domainId">
                 {domainList.map((domain) => (
                     <option key={domain.domainId} value={domain.domainId}>
                         {domain.domainName}
                     </option>
                 ))}
             </MokaInput>
-            <Form.Row className="m-0 mb-2">
+            <Form.Row>
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaInput as="select" value={search.searchType || 'all'} onChange={handleChangeSearchOption} name="searchType">
+                    <MokaInput as="select" value={search.searchType || 'all'} onChange={handleChangeSearchOption} name="searchType" className="ft-12">
                         <option value="all">전체</option>
                         <option value="reservedId">코드</option>
                         <option value="reservedValue">값</option>
                     </MokaInput>
                 </Col>
                 <Col xs={8} className="p-0">
-                    <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
+                    <MokaSearchInput
+                        value={search.keyword}
+                        onChange={handleChangeSearchOption}
+                        onSearch={handleSearch}
+                        name="keyword"
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
+                    />
                 </Col>
             </Form.Row>
         </Form>

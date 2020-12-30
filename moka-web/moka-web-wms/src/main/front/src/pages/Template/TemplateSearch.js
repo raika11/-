@@ -102,12 +102,12 @@ const TemplateSearch = () => {
     }, []);
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    className="w-100"
+                    className="ft-12"
                     value={search.domainId || undefined}
                     onChange={(e) => {
                         dispatch(changeLatestDomainId(e.target.value));
@@ -133,6 +133,7 @@ const TemplateSearch = () => {
                                 templateGroup: e.target.value,
                             });
                         }}
+                        className="ft-12"
                     >
                         <option value="all">위치그룹 전체</option>
                         {tpZoneRows &&
@@ -145,7 +146,7 @@ const TemplateSearch = () => {
                 </Col>
                 {/* 템플릿 사이즈 */}
                 <Col xs={5} className="p-0">
-                    <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
+                    <MokaInput as="select" className="ft-12" value={search.templateWidth} onChange={handleChangeTpSize}>
                         <option value="all">사이즈 전체</option>
                         {tpSizeRows &&
                             tpSizeRows.map((cd) => (
@@ -156,7 +157,7 @@ const TemplateSearch = () => {
                     </MokaInput>
                 </Col>
             </Form.Row>
-            <Form.Group as={Row} className="mb-2">
+            <Form.Group as={Row}>
                 {/* 검색조건 */}
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput
@@ -168,6 +169,7 @@ const TemplateSearch = () => {
                                 searchType: e.target.value,
                             });
                         }}
+                        className="ft-12"
                     >
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -186,6 +188,8 @@ const TemplateSearch = () => {
                                 keyword: e.target.value,
                             });
                         }}
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
                         onSearch={handleSearch}
                     />
                 </Col>

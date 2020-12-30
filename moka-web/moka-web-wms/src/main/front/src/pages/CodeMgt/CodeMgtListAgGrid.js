@@ -245,7 +245,7 @@ const CodeMgtListAgGrid = () => {
                     }}
                     inputProps={{ label: '숨김 코드', custom: true }}
                 />
-                <Button variant="positive" onClick={handleAddClick}>
+                <Button variant="positive" onClick={handleAddClick} className="ft-12">
                     그룹 등록
                 </Button>
             </Form.Row>

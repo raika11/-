@@ -61,10 +61,19 @@ const DirectLinkSearch = () => {
     }, []);
 
     return (
-        <Form.Row className="mb-10">
+        <Form.Row className="mb-2">
             {/* 사용여부 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInputLabel label="사용여부" labelWidth={56} as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue} className="mb-0">
+                <MokaInputLabel
+                    label="사용여부"
+                    labelWidth={56}
+                    as="select"
+                    name="usedYn"
+                    value={search.usedYn}
+                    onChange={handleChangeValue}
+                    className="mb-0"
+                    inputClassName="ft-12"
+                >
                     <option value="Y">사용</option>
                     <option value="N">미사용</option>
                 </MokaInputLabel>
@@ -72,7 +81,7 @@ const DirectLinkSearch = () => {
 
             {/* 노출고정 */}
             <Col xs={3} className="p-0 pr-2">
-                <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue} className="mb-0">
+                <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue} className="mb-0" inputClassName="ft-12">
                     <option value="N">검색시만 노출</option>
                     <option value="Y">항상노출</option>
                 </MokaInputLabel>
@@ -80,7 +89,7 @@ const DirectLinkSearch = () => {
 
             {/* 검색조건 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue} className="ft-12">
                     {initialState.searchTypeList.map((type) => (
                         <option key={type.id} value={type.id}>
                             {type.name}
@@ -90,8 +99,8 @@ const DirectLinkSearch = () => {
             </Col>
 
             {/* 키워드 */}
-            <Col xs={4} className="p-0">
-                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+            <Col xs={5} className="p-0">
+                <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} inputClassName="ft-12" buttonClassName="ft-12" />
             </Col>
         </Form.Row>
     );

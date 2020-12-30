@@ -189,11 +189,11 @@ const CodeMgtListModal = (props) => {
                     footerClassName="justify-content-center"
                     centered
                 >
-                    <MokaInputLabel label="코드그룹" value={grpCd} name="grpCd" onChange={handleChangeValue} isInvalid={grpCdError} disabled />
-                    <MokaInputLabel label="코드" value={stateObj.dtlCd} name="dtlCd" onChange={handleChangeValue} />
-                    <MokaInputLabel label="코드명" value={stateObj.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} />
-                    <MokaInputLabel label="영문명" value={stateObj.cdEngNm} name="cdEngNm" onChange={handleChangeValue} />
-                    <MokaInputLabel label="순서" value={stateObj.cdOrd} name="cdOrd" onChange={handleChangeValue} isInvalid={cdOrdError} />
+                    <MokaInputLabel label="코드그룹" className="mb-2" value={grpCd} name="grpCd" onChange={handleChangeValue} isInvalid={grpCdError} disabled />
+                    <MokaInputLabel label="코드" className="mb-2" value={stateObj.dtlCd} name="dtlCd" onChange={handleChangeValue} />
+                    <MokaInputLabel label="코드명" className="mb-2" value={stateObj.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} />
+                    <MokaInputLabel label="영문명" className="mb-2" value={stateObj.cdEngNm} name="cdEngNm" onChange={handleChangeValue} />
+                    <MokaInputLabel label="순서" className="mb-2" value={stateObj.cdOrd} name="cdOrd" onChange={handleChangeValue} isInvalid={cdOrdError} />
                     <MokaInputLabel
                         label="사용여부"
                         as="switch"
@@ -201,11 +201,12 @@ const CodeMgtListModal = (props) => {
                         value={stateObj.usedYn}
                         id="usedYn"
                         name="usedYn"
+                        className="mb-2"
                         onChange={handleChangeValue}
                     />
-                    <MokaInputLabel label="비고" value={stateObj.cdComment} name="cdComment" onChange={handleChangeValue} />
-                    <MokaInputLabel label="기타1" value={stateObj.cdNmEtc1} name="cdNmEtc1" onChange={handleChangeValue} />
-                    <MokaInputLabel label="기타2" value={stateObj.cdNmEtc2} name="cdNmEtc2" onChange={handleChangeValue} />
+                    <MokaInputLabel label="비고" className="mb-2" value={stateObj.cdComment} name="cdComment" onChange={handleChangeValue} />
+                    <MokaInputLabel label="기타1" className="mb-2" value={stateObj.cdNmEtc1} name="cdNmEtc1" onChange={handleChangeValue} />
+                    <MokaInputLabel label="기타2" className="mb-2" value={stateObj.cdNmEtc2} name="cdNmEtc2" onChange={handleChangeValue} />
                     <MokaInputLabel label="기타3" value={stateObj.cdNmEtc3} name="cdNmEtc3" onChange={handleChangeValue} />
                 </MokaModal>
             )}
@@ -236,11 +237,11 @@ const CodeMgtListModal = (props) => {
                     footerClassName="justify-content-center"
                     centered
                 >
-                    <MokaInputLabel label="코드그룹" value={grpCd} name="grpCd" onChange={handleChangeValue} isInvalid={grpCdError} disabled />
-                    <MokaInputLabel label="코드" value={stateObj.dtlCd} name="dtlCd" onChange={handleChangeValue} disabled />
-                    <MokaInputLabel label="코드명" value={stateObj.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} />
-                    <MokaInputLabel label="영문명" value={stateObj.cdEngNm} name="cdEngNm" onChange={handleChangeValue} />
-                    <MokaInputLabel label="순서" value={stateObj.cdOrd} name="cdOrd" onChange={handleChangeValue} isInvalid={cdOrdError} />
+                    <MokaInputLabel label="코드그룹" className="mb-2" value={grpCd} name="grpCd" onChange={handleChangeValue} isInvalid={grpCdError} disabled />
+                    <MokaInputLabel label="코드" className="mb-2" value={stateObj.dtlCd} name="dtlCd" onChange={handleChangeValue} disabled />
+                    <MokaInputLabel label="코드명" className="mb-2" value={stateObj.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={cdNmError} />
+                    <MokaInputLabel label="영문명" className="mb-2" value={stateObj.cdEngNm} name="cdEngNm" onChange={handleChangeValue} />
+                    <MokaInputLabel label="순서" className="mb-2" value={stateObj.cdOrd} name="cdOrd" onChange={handleChangeValue} isInvalid={cdOrdError} />
                     <MokaInputLabel
                         label="사용여부"
                         as="switch"
@@ -248,11 +249,12 @@ const CodeMgtListModal = (props) => {
                         value={stateObj.usedYn}
                         id="usedYn"
                         name="usedYn"
+                        className="mb-2"
                         onChange={handleChangeValue}
                     />
-                    <MokaInputLabel label="비고" value={stateObj.cdComment} name="cdComment" onChange={handleChangeValue} />
-                    <MokaInputLabel label="기타1" value={stateObj.cdNmEtc1} name="cdNmEtc1" onChange={handleChangeValue} />
-                    <MokaInputLabel label="기타2" value={stateObj.cdNmEtc2} name="cdNmEtc2" onChange={handleChangeValue} />
+                    <MokaInputLabel label="비고" className="mb-2" value={stateObj.cdComment} name="cdComment" onChange={handleChangeValue} />
+                    <MokaInputLabel label="기타1" className="mb-2" value={stateObj.cdNmEtc1} name="cdNmEtc1" onChange={handleChangeValue} />
+                    <MokaInputLabel label="기타2" className="mb-2" value={stateObj.cdNmEtc2} name="cdNmEtc2" onChange={handleChangeValue} />
                     <MokaInputLabel label="기타3" value={stateObj.cdNmEtc3} name="cdNmEtc3" onChange={handleChangeValue} />
                 </MokaModal>
             )}

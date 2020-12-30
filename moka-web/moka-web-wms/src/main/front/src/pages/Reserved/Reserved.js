@@ -2,11 +2,9 @@ import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-
 import { MokaCard } from '@components';
 import { GET_RESERVED, SAVE_RESERVED, DELETE_RESERVED } from '@store/reserved';
 import ReservedEdit from './ReservedEdit';
-
 const ReservedList = React.lazy(() => import('./ReservedList'));
 
 /**
@@ -26,7 +24,7 @@ const Reserved = ({ match }) => {
             </Helmet>
 
             {/* 예약어 목록 */}
-            <MokaCard width={412} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" title="예약어 검색">
+            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="예약어 검색">
                 <Suspense>
                     <ReservedList />
                 </Suspense>
@@ -38,7 +36,7 @@ const Reserved = ({ match }) => {
                     path={[`${match.url}/add`, `${match.url}/:reservedSeq`]}
                     exact
                     render={() => (
-                        <MokaCard width={780} titleClassName="mb-0" title="예약어 정보" loading={loading}>
+                        <MokaCard width={780} title="예약어 정보" loading={loading}>
                             <ReservedEdit />
                         </MokaCard>
                     )}

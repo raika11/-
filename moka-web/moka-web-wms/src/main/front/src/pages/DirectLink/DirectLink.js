@@ -2,11 +2,11 @@ import React, { useEffect, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaLoader } from '@components';
+import { MokaCard } from '@components';
 import { clearStore } from '@store/directLink';
 
+import DirectLinkEdit from './DirectLinkEdit';
 const DirectLinkList = React.lazy(() => import('./DirectLinkList'));
-const DirectLinkEdit = React.lazy(() => import('./DirectLinkEdit'));
 
 /**
  * 사이트 바로 가기 관리
@@ -29,22 +29,14 @@ const DirectLink = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={1040} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+            <MokaCard width={1040} className="mr-gutter" bodyClassName="d-flex flex-column" header={false}>
                 <Suspense>
                     <DirectLinkList />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route
-                path={[`${match.url}/add`, `${match.url}/:linkSeq`]}
-                exact
-                render={(props) => (
-                    <Suspense fallback={<MokaLoader />}>
-                        <DirectLinkEdit {...props} />
-                    </Suspense>
-                )}
-            />
+            <Route path={[`${match.url}/add`, `${match.url}/:linkSeq`]} exact render={(props) => <DirectLinkEdit {...props} />} />
         </div>
     );
 };

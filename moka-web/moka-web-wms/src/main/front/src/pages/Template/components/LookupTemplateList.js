@@ -195,6 +195,7 @@ const LookupTemplateList = (props) => {
                     <Col xs={7} className="p-0 pr-2">
                         <MokaInput
                             as="select"
+                            className="ft-12"
                             value={search.templateGroup}
                             onChange={(e) => {
                                 setSearch({
@@ -214,7 +215,7 @@ const LookupTemplateList = (props) => {
                     </Col>
                     {/* 템플릿 사이즈 */}
                     <Col xs={5} className="p-0">
-                        <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
+                        <MokaInput as="select" className="ft-12" value={search.templateWidth} onChange={handleChangeTpSize}>
                             <option value="all">사이즈 전체</option>
                             {tpSizeRows &&
                                 tpSizeRows.map((cd) => (
@@ -230,6 +231,7 @@ const LookupTemplateList = (props) => {
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput
                             as="select"
+                            className="ft-12"
                             value={search.searchType}
                             onChange={(e) => {
                                 setSearch({
@@ -258,6 +260,8 @@ const LookupTemplateList = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
+                            inputClassName="ft-12"
+                            buttonClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>
@@ -268,7 +272,7 @@ const LookupTemplateList = (props) => {
             <div className="d-flex mb-10">
                 <MokaTableTypeButton onSelect={(selectedKey) => setListType(selectedKey)} />
                 <div className="pt-0">
-                    <Button variant="positive" onClick={() => window.open('/template')}>
+                    <Button variant="positive" onClick={() => window.open('/template')} className="ft-12">
                         템플릿 등록
                     </Button>
                 </div>

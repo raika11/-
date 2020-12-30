@@ -105,11 +105,10 @@ const Domain = ({ match }) => {
                 headerClassName="d-flex justify-content-between align-item-center"
                 bodyClassName="d-flex flex-column"
                 title="도메인 관리"
-                titleClassName="mb-0"
                 width={480}
             >
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button variant="positive" className={clsx('p-0', 'mr-05')} onClick={handleAddClickDomain} style={{ width: '100px', height: '32px' }}>
+                    <Button variant="positive" className="ft-12" onClick={handleAddClickDomain}>
                         도메인 등록
                     </Button>
                 </div>
@@ -123,14 +122,7 @@ const Domain = ({ match }) => {
                 path={[`${match.url}/add`, `${match.url}/:domainId`]}
                 exact
                 render={() => (
-                    <MokaCard
-                        title="도메인 등록"
-                        width={820}
-                        titleClassName="mb-0"
-                        headerClassName="d-flex justify-content-between align-item-center"
-                        height={CARD_DEFAULT_HEIGHT}
-                        loading={loading}
-                    >
+                    <MokaCard title="도메인 등록" width={820} headerClassName="d-flex justify-content-between align-item-center" height={CARD_DEFAULT_HEIGHT} loading={loading}>
                         <DomainEdit onDelete={handleClickDelete} />
                     </MokaCard>
                 )}

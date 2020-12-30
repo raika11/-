@@ -5,18 +5,18 @@ import Button from 'react-bootstrap/Button';
 import copy from 'copy-to-clipboard';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard } from '@components';
+import { MokaEditorCore } from '@components/MokaEditor';
 import toast from '@utils/toastUtil';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
-import ArticlePC from '@pages/Article/components/ArticlePC';
 
 const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange, onPreview }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
     const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [pressDt, setPressDt] = useState(''); // 발행일자
+    const [content, setContent] = useState(''); // 본문
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
-    const [previewOn, setPreviewOn] = useState({ pc: false, mobile: false }); // 미리보기 윈도우
 
     /**
      * input 변경
@@ -38,11 +38,19 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
     /**
      * 태그 input blur시에 onChange 실행
      */
-    const handleBlur = () => {
+    const handleTagBlur = () => {
         onChange({
             key: 'tagList',
             value: tagStr.split(','),
         });
+    };
+
+    /**
+     * 본문 blur 시
+     * @param {string} value editor value
+     */
+    const handleContentBlur = (value) => {
+        setContent(value);
     };
 
     /**
@@ -101,16 +109,12 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => {
-        onPreview('P');
-    };
+    const handlePCPreview = () => onPreview('P');
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => {
-        onPreview('M');
-    };
+    const handleMobilePreview = () => onPreview('M');
 
     useEffect(() => {
         setSelectedMasterCode(article.categoryList || []);
@@ -125,6 +129,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                 value: valueCreator(reporter.reporterName, reporter.reporterEmail),
             })),
         );
+        setContent(article.content || '');
     }, [article]);
 
     return (
@@ -195,16 +200,11 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col className="p-0 d-flex" xs={12}>
-                        <MokaInputLabel
-                            label="본문"
-                            as="textarea"
-                            name="content"
-                            className="mb-0 flex-fill"
-                            value={article.content}
-                            onChange={handleChangeValue}
-                            inputProps={{ rows: 13 }}
-                        />
+                    <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: 320 }}>
+                        <MokaInputLabel label="본문" as="none" />
+                        <div className="flex-fill border rounded">
+                            <MokaEditorCore defaultValue={article.content} value={content} onBlur={handleContentBlur} />
+                        </div>
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -221,7 +221,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
-                        <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlur }} />
+                        <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleTagBlur }} />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
                         <p className="mb-0 ml-2">콤마(,) 구분입력</p>
@@ -242,9 +242,6 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
 
                 {/* 작업정보 모달 */}
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
-
-                {/* PC미리보기 */}
-                <ArticlePC show={previewOn.pc} onHide={() => setPreviewOn({ ...previewOn, pc: false })} />
             </Form>
         </MokaCard>
     );

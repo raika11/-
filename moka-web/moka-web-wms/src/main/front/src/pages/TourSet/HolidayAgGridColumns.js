@@ -6,26 +6,29 @@ export default [
         headerName: '휴일명',
         field: 'holidayName',
         cellStyle: { fontSize: '12px' },
-        width: 350,
+        width: 320,
     },
     {
         headerName: '날짜',
         field: 'date',
         cellStyle: { fontSize: '12px' },
-        width: 350,
+        width: 320,
     },
     {
         headerName: '',
         field: 'editButton',
-        cellStyle: { fontSize: '12px' },
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         flex: 1,
-        cellRendererFramework: () => {
+        cellRendererFramework: (params) => {
+            const { data } = params;
             return (
-                <div className="d-flex">
-                    <Button className="mr-2" variant="outline-table-btn2">
+                <div>
+                    <Button className="mr-2" variant="outline-table-btn" size="sm" onClick={data.onModify}>
                         수정
                     </Button>
-                    <Button variant="outline-table-btn2">삭제</Button>
+                    <Button variant="outline-table-btn" size="sm" onClick={data.onDelete}>
+                        삭제
+                    </Button>
                 </div>
             );
         },

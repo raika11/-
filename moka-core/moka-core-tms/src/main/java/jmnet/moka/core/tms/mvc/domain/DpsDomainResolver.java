@@ -69,6 +69,7 @@ public class DpsDomainResolver extends AbstractDomainResolver {
             this.domainItemMapByUrl = newDomainItemMapByUrl;
             this.domainLoaded = true;
         } catch (Exception e) {
+            logger.error("Domain Loading Fail: {}",e);
             throw new TmsException("Domain Item load fail by DPS", e);
         }
     }

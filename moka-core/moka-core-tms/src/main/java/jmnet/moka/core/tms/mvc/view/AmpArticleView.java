@@ -254,6 +254,7 @@ public class AmpArticleView extends AbstractView {
     private static Pattern PATTERN_BR = Pattern.compile("<br>(\\s|&nbsp;)*?<br>", Pattern.CASE_INSENSITIVE);
     private static Pattern PATTERN_ALT_REFINE = Pattern.compile("alt=\".*?\"", Pattern.CASE_INSENSITIVE);
     private static Pattern PATTERN_YOUTUBE_ID = Pattern.compile("[\\w-]{11}");
+    private static Pattern PATTERN_ETC = Pattern.compile("(div|span|style)", Pattern.CASE_INSENSITIVE);
     private static String AD_IN_BODY = "<br><br><div class=\"shopping_box\">"
             + "<amp-ad width=\"336\" height=\"280\" type=\"doubleclick\" data-slot=\"/30349040/AMP_Joongang_article_336x280\"></amp-ad>"
             + "</div><br>";
@@ -265,28 +266,27 @@ public class AmpArticleView extends AbstractView {
         } else {
             matcher = PATTERN_IMAGE.matcher(ampContent);
         }
+        StringBuilder sb = new StringBuilder(ampContent.length()*2);
         while ( matcher.find()) {
             String image = matcher.group();
             String src = getFirstValue(PATTERN_SRC, image).replace("src=\"","");
             String alt = getFirstValue(PATTERN_ALT, image).replace("alt=\"","");
             String[] imageSize = this.getImageSize(src);
             if ( imageSize != null ) {
-                String ampImage =
-                        String.format("<amp-img src=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" alt=\"%s\"></amp-img>",
-                                src, imageSize[0], imageSize[1], "responsive", alt);
-                ampContent = ampContent.replace(image, ampImage);
+                matcher.appendReplacement(sb, String.format("<amp-img src=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" alt=\"%s\"></amp-img>",
+                        src, imageSize[0], imageSize[1], "responsive", alt));
             } else {
-                ampContent = ampContent
-                        .replace(image, "")
-                        .trim(); // 이미지정보가 없을 경우 제거함
+                matcher.appendReplacement(sb,"");
             }
         }
-        return ampContent;
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     private String[] convertAmpCarousel(String ampContent) {
         Matcher photoBundleMatcher = PATTERN_PHOTO_BUNDLE.matcher(ampContent);
         String useTagList = "";
+        StringBuilder sb = new StringBuilder(ampContent.length()*2);
         while ( photoBundleMatcher.find()) {
             String photoBuldle = photoBundleMatcher.group();
             String imageBuldleHtml = "";
@@ -310,179 +310,141 @@ public class AmpArticleView extends AbstractView {
                 }
             }
             if (McpString.isEmpty(imageBuldleHtml)) {
-                ampContent = ampContent.replace(photoBuldle,"");
-                continue;
+                photoBundleMatcher.appendReplacement(sb,"");
+            } else {
+                photoBundleMatcher.appendReplacement(sb,
+                        String.format("<div class=\"ab_photo photo_center\">"
+                                + "<amp-carousel class=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" type=\"%s\">%s</amp-carousel>"
+                                + "</div>", "amp_carousel", "450", "300", "responsive", "slides", imageBuldleHtml));
+                if (useTagList.indexOf("carousel") < 0)
+                    useTagList += "carousel|";
             }
-            ampContent = ampContent.replace(photoBuldle,
-                    String.format("<div class=\"ab_photo photo_center\">"
-                                    + "<amp-carousel class=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" type=\"%s\">%s</amp-carousel>"
-                                    + "</div>",
-                    "amp_carousel",
-                    "450",
-                    "300",
-                    "responsive",
-                    "slides",
-                    imageBuldleHtml)
-                    ).trim();
-            if (useTagList.indexOf("carousel") < 0) useTagList += "carousel|";
         }
-        return new String[]{ampContent,useTagList};
+        photoBundleMatcher.appendTail(sb);
+        return new String[]{sb.toString(),useTagList};
     }
 
     private String[] convertAmpVod(String ampContent) {
         String useTagList = "";
         Matcher matcher= PATTERN_VOD.matcher(ampContent);
+        StringBuilder sb = new StringBuilder(ampContent.length()*2);
         while ( matcher.find()) {
             String vod = matcher.group();
             String id = getFirstValue(PATTERN_ID, vod).replace("id=\"","");
             String service = getFirstValue(PATTERN_SERVICE, vod).replace("service=\"","");
             if ( McpString.isEmpty(id) || McpString.isEmpty(service)) {
-                ampContent = ampContent.replace(vod, "").trim();
-                continue;
-            }
-            if ( service.equals("youtube")) {
-                String youtubeId = id.substring(id.lastIndexOf("/") + 1);
-                youtubeId = getFirstValue(PATTERN_YOUTUBE_ID, youtubeId); // 11자리 Id를 추출
-                ampContent = ampContent.replace(vod,
-                        String.format("<div class=\"ab_player\"><div class=\"player_area\">"
-                                        + "<amp-youtube data-videoid=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\"></amp-youtube>"
-                                        + "</div></div>",
-                                youtubeId,
-                                DEFAULT_WIDTH,
-                                DEFAULT_HEIGHT,
-                                "responsive" ));
-                if (useTagList.indexOf("youtube") < 0) useTagList += "youtube|";
-            } else if ("facebooklive".indexOf(service) > -1) {
-                String href ="";
-                try {
-                    href = URLDecoder.decode(getFirstValue(PATTERN_HREF, id).replace("href=\"",""),"UTF-8");
-                    ampContent = ampContent.replace(vod,
-                            String.format("<div class=\"ab_player\"><div class=\"player_area\"><amp-facebook data-href=\"%s\" "
-                                            + "data-embed-as=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\"></amp-facebook></div></div>",
-                                    href.replace("http:","https:"),
-                                    "video",
-                                    DEFAULT_WIDTH,
-                                    DEFAULT_HEIGHT,
-                                    "responsive" )
-                            ).trim();
-                    if (useTagList.indexOf("facebook") < 0) useTagList += "facebook|";
-                } catch (UnsupportedEncodingException e) {
-                    logger.warn("Url decode fail:{}",href);
-                    ampContent = ampContent.replace(vod, "").trim();
-                }
-            } else if ("navercast,kakaotv".indexOf(service) > -1) {
-                ampContent = ampContent.replace(vod,
-                        String.format("<div class=\"ab_player\"><div class=\"player_area\">"
-                                        + "<amp-iframe src=\"%s\" sandbox=\"%s\" width=\"%s\" height=\"%s\" "
-                                        + "layout=\"%s\" frameborder=\"%s\" allowfullscreen>%s"
-                                        + "</amp-iframe></div></div>",
-                                id.replace("http:","https:"),
-                                "allow-same-origin allow-scripts allow-popups allow-forms allow-modals",
-                                DEFAULT_WIDTH,
-                                DEFAULT_HEIGHT,
-                                "responsive",
-                                0,
-                                "<amp-img layout=\"fill\" src=\"" + DEFAULT_IMAGE_PATH + "/mw/common/v_noimg.png\" placeholder></amp-img>" )
-                ).trim();
-                if (!useTagList.contains("iframe")) useTagList += "iframe|";
+                matcher.appendReplacement(sb,"");
             } else {
-                ampContent = ampContent.replace(vod,"").trim();
+                if (service.equals("youtube")) {
+                    String youtubeId = id.substring(id.lastIndexOf("/") + 1);
+                    youtubeId = getFirstValue(PATTERN_YOUTUBE_ID, youtubeId); // 11자리 Id를 추출
+                    matcher.appendReplacement(sb, String.format("<div class=\"ab_player\"><div class=\"player_area\">"
+                            + "<amp-youtube data-videoid=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\"></amp-youtube>"
+                            + "</div></div>", youtubeId, DEFAULT_WIDTH, DEFAULT_HEIGHT, "responsive"));
+                    if (useTagList.indexOf("youtube") < 0) useTagList += "youtube|";
+                } else if ("facebooklive".indexOf(service) > -1) {
+                    String href = "";
+                    try {
+                        href = URLDecoder.decode(getFirstValue(PATTERN_HREF, id).replace("href=\"", ""), "UTF-8");
+                        matcher.appendReplacement(sb, String.format("<div class=\"ab_player\"><div class=\"player_area\"><amp-facebook data-href=\"%s\" "
+                                        + "data-embed-as=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\"></amp-facebook></div></div>",
+                                        href.replace("http:", "https:"), "video", DEFAULT_WIDTH, DEFAULT_HEIGHT, "responsive"));
+                        if (useTagList.indexOf("facebook") < 0) useTagList += "facebook|";
+                    } catch (UnsupportedEncodingException e) {
+                        logger.warn("Url decode fail:{}", href);
+                        matcher.appendReplacement(sb,"");
+                    }
+                } else if ("navercast,kakaotv".indexOf(service) > -1) {
+                    matcher.appendReplacement(sb, String.format("<div class=\"ab_player\"><div class=\"player_area\">"
+                                    + "<amp-iframe src=\"%s\" sandbox=\"%s\" width=\"%s\" height=\"%s\" "
+                                    + "layout=\"%s\" frameborder=\"%s\" allowfullscreen>%s"
+                                    + "</amp-iframe></div></div>",
+                                    id.replace("http:", "https:"),
+                                    "allow-same-origin allow-scripts allow-popups allow-forms allow-modals",
+                                    DEFAULT_WIDTH, DEFAULT_HEIGHT,
+                                    "responsive",
+                                    0,
+                                    "<amp-img layout=\"fill\" src=\"" + DEFAULT_IMAGE_PATH + "/mw/common/v_noimg.png\" placeholder></amp-img>"));
+                    if (!useTagList.contains("iframe")) useTagList += "iframe|";
+                } else {
+                    matcher.appendReplacement(sb,"");
+                }
             }
         }
-        return new String[]{ampContent,useTagList};
+        matcher.appendTail(sb);
+        return new String[]{sb.toString(),useTagList};
     }
 
     private String[] convertAmpIframe(String ampContent) {
         String useTagList = "";
         Matcher matcher = PATTERN_IFRAME.matcher(ampContent);
+        StringBuilder sb = new StringBuilder(ampContent.length()*2);
         while ( matcher.find()) {
             String iframe = matcher.group();
             String src = getFirstValue(PATTERN_SRC, iframe).replace("src=\"","");
             String height = getFirstValue(PATTERN_HEIGHT, iframe).replace("height=\"","");
             if (!src.contains("https:") || McpString.isEmpty(height)) {
-                ampContent = ampContent.replace(iframe,"").trim();
-                continue;
+                matcher.appendReplacement(sb,"");
+            } else {
+                matcher.appendReplacement(sb, String.format(
+                                "<amp-iframe src=\"%s\" sandbox=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" frameborder=\"%s\">%s</amp-iframe>",
+                                src, "allow-same-origin allow-scripts allow-popups allow-forms allow-modals", DEFAULT_WIDTH, height, "responsive", "0",
+                                "<amp-img layout=\"fill\" src=\"" + DEFAULT_IMAGE_PATH + "/mw/common/v_noimg.png\" placeholder></amp-img>"));
+                if (useTagList.indexOf("iframe") < 0) useTagList += "iframe|";
             }
-            ampContent = ampContent.replace(iframe,
-                    String.format("<amp-iframe src=\"%s\" sandbox=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\" frameborder=\"%s\">%s</amp-iframe>",
-                            src,
-                            "allow-same-origin allow-scripts allow-popups allow-forms allow-modals",
-                            DEFAULT_WIDTH,
-                            height,
-                            "responsive",
-                            "0",
-                            "<amp-img layout=\"fill\" src=\"" + DEFAULT_IMAGE_PATH + "/mw/common/v_noimg.png\" placeholder></amp-img>"
-                            )).trim();
-            if (useTagList.indexOf("iframe") < 0) useTagList += "iframe|";
         }
-        return new String[]{ampContent,useTagList};
+        matcher.appendTail(sb);
+        return new String[]{sb.toString(), useTagList};
     }
 
     private String[] convertAmpSns(String ampContent) {
         String useTagList = "";
         Matcher matcher = PATTERN_SNS.matcher(ampContent);
+        StringBuilder sb = new StringBuilder(ampContent.length()*2);
         while ( matcher.find()) {
             String sns = matcher.group();
             String url = getFirstValue(PATTERN_URL, sns).replace("url=\"","");
             String service = getFirstValue(PATTERN_SERVICE, sns).replace("service=\"","");
             if ( McpString.isEmpty(url) || McpString.isEmpty(service)) {
-                ampContent = ampContent.replace(sns, "").trim();
-                continue;
-            }
-            if ("twitter,instagram".indexOf(service) > -1) {
-                url = (url.endsWith("/")) ? url.substring(0, url.length() - 1) : url;
-                String[] urlArray = url.split("/");
-                url = urlArray[urlArray.length-1];
-            }
-            if ( service.equals("facebook")) {
-                ampContent = ampContent.replace(sns,
-                        String.format("<div class=\"ab_sns\"><amp-facebook data-href=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\">"
-                                        + "</amp-facebook></div>",
-                                url.replace("http:", "https:"),
-                                DEFAULT_WIDTH,
-                                DEFAULT_HEIGHT,
-                                "responsive"
-                                )
-                        ).trim();
-                if (useTagList.indexOf("facebook") < 0) useTagList += "facebook|";
-            } else if ( service.equals("twitter")) {
-                ampContent = ampContent.replace(sns,
-                        String.format("<div class=\"ab_sns\"><amp-twitter data-tweetid=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\">"
-                                        + "</amp-twitter></div>",
-                                url,
-                                DEFAULT_WIDTH,
-                                DEFAULT_HEIGHT,
-                                "responsive"
-                        )
-                ).trim();
-                if (useTagList.indexOf("twitter") < 0) useTagList += "twitter|";
-            } else if ( service.equals("instagram")) {
-                ampContent = ampContent.replace(sns,
-                        String.format("<div class=\"ab_sns\"><amp-instagram data-shortcode=\"%s\" data-captioned width=\"%s\" height=\"%s\" "
-                                        + "layout=\"%s\"></amp-instagram></div>",
-                                url,
-                                DEFAULT_WIDTH,
-                                DEFAULT_HEIGHT,
-                                "responsive"
-                        )
-                ).trim();
-                if (useTagList.indexOf("instagram") < 0) useTagList += "instagram|";
-            } else if ( service.equals("pinterest")) {
-                ampContent = ampContent.replace(sns,
-                        String.format("<div class=\"ab_sns\"><amp-pinterest data-url=\"%s\" data-do=\"%s\" width=\"%s\" height=\"%s\">"
-                                        + "</amp-pinterest></div>",
-                                url,
-                                "embedPin",
-                                DEFAULT_WIDTH,
-                                DEFAULT_HEIGHT
-                        )
-                ).trim();
-                if (useTagList.indexOf("pinterest") < 0) useTagList += "pinterest|";
+                matcher.appendReplacement(sb, "");
             } else {
-                ampContent = ampContent.replace(sns, "").trim();
+                if ("twitter,instagram".indexOf(service) > -1) {
+                    url = (url.endsWith("/")) ? url.substring(0, url.length() - 1) : url;
+                    String[] urlArray = url.split("/");
+                    url = urlArray[urlArray.length - 1];
+                }
+                if (service.equals("facebook")) {
+                    matcher.appendReplacement(sb,
+                            String.format("<div class=\"ab_sns\"><amp-facebook data-href=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\">"
+                                    + "</amp-facebook></div>",
+                                    url.replace("http:", "https:"), DEFAULT_WIDTH, DEFAULT_HEIGHT, "responsive"));
+                    if (useTagList.indexOf("facebook") < 0) useTagList += "facebook|";
+                } else if (service.equals("twitter")) {
+                    matcher.appendReplacement(sb,
+                            String.format("<div class=\"ab_sns\"><amp-twitter data-tweetid=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\">"
+                                    + "</amp-twitter></div>",
+                                    url, DEFAULT_WIDTH, DEFAULT_HEIGHT, "responsive"));
+                    if (useTagList.indexOf("twitter") < 0) useTagList += "twitter|";
+                } else if (service.equals("instagram")) {
+                    matcher.appendReplacement(sb,
+                            String.format(
+                                    "<div class=\"ab_sns\"><amp-instagram data-shortcode=\"%s\" data-captioned width=\"%s\" height=\"%s\" "
+                                            + "layout=\"%s\"></amp-instagram></div>",
+                                    url, DEFAULT_WIDTH, DEFAULT_HEIGHT, "responsive"));
+                    if (useTagList.indexOf("instagram") < 0) useTagList += "instagram|";
+                } else if (service.equals("pinterest")) {
+                    matcher.appendReplacement(sb,
+                            String.format("<div class=\"ab_sns\"><amp-pinterest data-url=\"%s\" data-do=\"%s\" width=\"%s\" height=\"%s\">"
+                                            + "</amp-pinterest></div>",
+                                    url, "embedPin", DEFAULT_WIDTH, DEFAULT_HEIGHT));
+                    if (useTagList.indexOf("pinterest") < 0) useTagList += "pinterest|";
+                } else {
+                    matcher.appendReplacement(sb, "");
+                }
             }
         }
-        return new String[]{ampContent,useTagList};
+        matcher.appendTail(sb);
+        return new String[]{sb.toString(),useTagList};
     }
 
     private String convertAmpSubTitle(String ampContent, Map<String,Object> article) {
@@ -533,17 +495,19 @@ public class AmpArticleView extends AbstractView {
 
     private String convertAmpAlt(String ampContent) {
         Matcher matcher = PATTERN_ALT_REFINE.matcher(ampContent);
+        StringBuilder sb = new StringBuilder(ampContent.length()*2);
         while ( matcher.find()) {
             String alt = matcher.group();
             String altRefined = alt.substring(5, alt.length()-1);
-            if ( alt.matches("(?i)(div|span|style)")) {
+            if ( PATTERN_ETC.matcher(altRefined).results().count() > 0) {
                 altRefined = "";
             } else {
                 altRefined = altRefined.replace("\"","'").replace("&#34;", "'").replace("&#39;", "'");
             }
-            ampContent = ampContent.replace(alt, "alt=\""+altRefined+"\"");
+            matcher.appendReplacement(sb, "alt=\""+altRefined+"\"");
         }
-        return ampContent;
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     private String convertAmpEtc(String ampContent) {
@@ -551,7 +515,8 @@ public class AmpArticleView extends AbstractView {
         ampContent = ampContent.replaceAll("(?i); bgcolor=\"(\\s?)(#\\w{6})\" b",";\" b");
         ampContent = ampContent.replaceAll("(?i)(a\\s)?target=('|\"|”)?_?(new|blank|joinsnews|notice_win)\\2?","target=\"_blank\"");
         ampContent = ampContent.replace("\"“", "\"").replace("”\"", "\"")
-                               .replace("\"‘", "\"").replace("’\"", "\"").replace("hhttp", "http");
+                               .replace("\"‘", "\"").replace("’\"", "\"")
+                               .replace("hhttp", "http");
         ampContent = ampContent.replace("<a class=\"style2\" style=\"MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%\"<font size=\"2\">", "");
 
         //제외 태그
@@ -560,7 +525,7 @@ public class AmpArticleView extends AbstractView {
         ampContent = ampContent.replaceAll("(?i)<\\/?(blog|embed|font|form|hr|http|img|jtbc|link|mbc|meta|new|object|param|special|width|yonhap).*?>","");
         ampContent = ampContent.replaceAll("<\\/?[\\w\\s-.]+@+[\\w\\s-.,]+>","");
         ampContent = ampContent.replaceAll("<[a-z0-9.]+(\\.{1})[a-z]+>","");
-        ampContent = ampContent.replaceAll("\"<!--.*?-->\"","");
+        ampContent = ampContent.replaceAll("<!--.*?-->","");
         ampContent = ampContent.replaceAll("(?i)<[EF]\\w{3}>","");
         ampContent = ampContent.replaceAll("(?i)<[^amp|^<|^>]*?[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+.*?>","");
         ampContent = ampContent.replaceAll("(?i)(background|basefont|bordercolor|contenteditable|fonttext|name|onclick|rgb|style|to-remove-element|cols|rows|colspan|rowspan)=('|\").*?\\2","");

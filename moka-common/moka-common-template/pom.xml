@@ -5,7 +5,7 @@
 		<groupId>jmnet.moka.common</groupId>
 		<artifactId>moka-common</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
   <artifactId>moka-common-template</artifactId>
   <name>moka-common-template</name>

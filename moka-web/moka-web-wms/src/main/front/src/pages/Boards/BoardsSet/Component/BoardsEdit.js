@@ -376,6 +376,8 @@ const BoardsEdit = () => {
             title={`게시판 ${true ? '정보' : '등록'}`}
             titleClassName="mb-0"
             loading={loading}
+            className="mr-gutter flex-fill"
+            bodyClassName="d-flex flex-column"
             footer
             footerClassName="justify-content-center"
             footerButtons={[

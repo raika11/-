@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.rcvArticle.vo;
+package jmnet.moka.core.tps.mvc.article.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,47 +17,35 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
-@Alias("RcvArticleReporterVO")
+@Alias("ArticleReporterVO")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RcvArticleReporterVO implements Serializable {
+public class ArticleReporterVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final Type TYPE = new TypeReference<List<RcvArticleReporterVO>>() {
+    public static final Type TYPE = new TypeReference<List<ArticleReporterVO>>() {
     }.getType();
 
     /**
-     * 기사일련버호
+     * 기자일련버호
      */
-    @Column(name = "RID")
-    private Long rid;
+    @Column(name = "REP_SEQ")
+    private Long reqSeq;
 
     /**
-     * 이름
+     * 기자명
      */
-    @Column(name = "REPORTER_NAME")
-    private String reporterName;
+    @Column(name = "REP_NAME")
+    private String repName;
 
     /**
-     * 이메일
+     * 순서
      */
-    @Column(name = "REPORTER_EMAIL")
-    private String reporterEmail;
-
-    /**
-     * 기자페이지
-     */
-    @Column(name = "REPORTER_BLOG")
-    private String reporterBlog;
-
-    /**
-     * 기자기타정보
-     */
-    @Column(name = "REPORTER_ETC")
-    private String reporterEtc;
+    @Column(name = "ORD_NO")
+    private int ordNo;
 }

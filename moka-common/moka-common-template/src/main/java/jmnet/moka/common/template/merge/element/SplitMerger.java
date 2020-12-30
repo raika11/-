@@ -88,19 +88,15 @@ public class SplitMerger extends AbstractElementMerger{
 	}
 
 	private String getTokenValue(String token, MergeContext context) {
-        String[] list =  token.split("\\.");
-        if (list.length == 1) {
-            return (String)context.get(token);
-        } else {
-            try {
-                Map map = (Map) context.get(list[0]);
-                for (int i = 1; i < list.length-1; i++) {
-                    map = (Map) map.get(list[i]);
-                }
-                return (String)map.get(list[list.length-1]);
-            } catch (Exception e){
-                logger.warn("Can't find token = {}",token);
+        try {
+            Object value = templateMerger.getEvaluator().eval(token, context);
+            if ( value != null ) {
+                return value.toString();
+            } else {
+                return "";
             }
+        } catch ( org.apache.commons.jexl3.JexlException.Variable e) {
+            logger.debug("message:{}",e.getMessage());
         }
         return "";
     }

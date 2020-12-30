@@ -13,6 +13,7 @@ export default [
         field: 'sourceName',
         cellStyle: { fontSize: '12px' },
         width: 90,
+        tooltipField: 'sourceName',
     },
     {
         headerName: 'XML경로',

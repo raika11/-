@@ -19,16 +19,16 @@ public class MokaEncryptTest {
 
     private String[] sources = {"USER_JA_WCMS", "user_ja_wcms!@", "wms", "Wms#2019"};
 
-    private String[] ftpStgSources = {"8021", "mokaftp", "ahzk0pvmxlvl"};
+    private String[] ftpStgSources = {"20021", "joongangndnews", "joongang(!)$#@!"};
 
     private String[] ftpStgAddress =
-            {"stg-pds.joongang.co.kr", "stg-static.joongang.co.kr", "stg-images.joongang.co.kr", "stg-wimage.joongang.co.kr"};
+            {"stg-pds.joongang.co.kr", "stg-static.joongang.co.kr", "stg-images.joongang.co.kr", "stg-wimage.joongang.co.kr", "jup.xdn.kinxcdn.com"};
 
     private String[] localhost = {"203.249.147.45", "8021", "mokaftp", "ahzk0pvmxlvl"};
 
     @Test
     public void encrypt() {
-        for (String source : sources) {
+        for (String source : ftpStgSources) {
             logger.debug("!!ENC source={} --> encrypted = {} ", source, mokaEncryptor.encrypt(source));
         }
     }

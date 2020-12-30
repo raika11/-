@@ -202,7 +202,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                 <Form.Row className="mb-2">
                     <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: 320 }}>
                         <MokaInputLabel label="본문" as="none" />
-                        <div className="flex-fill border rounded">
+                        <div className="flex-fill input-border">
                             <MokaEditorCore defaultValue={article.content} value={content} onBlur={handleContentBlur} />
                         </div>
                     </Col>

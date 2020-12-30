@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.article.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
@@ -72,4 +73,11 @@ public interface ArticleService {
      * @return 서비스기사목록
      */
     List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search);
+
+    /**
+     * 기사부가정보 조회(분류,기자,키워드)
+     *
+     * @param dto 기사정보
+     */
+    void findArticleInfo(ArticleBasicDTO articleDto);
 }

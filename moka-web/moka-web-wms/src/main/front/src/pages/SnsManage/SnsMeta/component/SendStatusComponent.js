@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 
 const StatusIdle = () => (
     <div className="d-flex text-center">
-        <Button variant="outline-table-btn" className="mr-0">
+        <Button variant="outline-table-btn" size="sm" className="mr-0">
             등록/전송
         </Button>
     </div>
@@ -29,11 +29,9 @@ const SendStatusComponent = ({ sendFlag, facebook, twitter }) => {
     // twitter Y: 트위터 보낸기사. N : 보내지 않은 기사.
 
     return (
-        <>
-            <div className="d-flex py-3 justify-content-center">
-                <div className="d-flex">{!sendFlag ? <StatusSend faceBook={facebook} twitter={twitter} /> : <StatusIdle />}</div>
-            </div>
-        </>
+        <div className="d-flex py-3 justify-content-center">
+            <div className="d-flex">{!sendFlag ? <StatusSend faceBook={facebook} twitter={twitter} /> : <StatusIdle />}</div>
+        </div>
     );
 };
 

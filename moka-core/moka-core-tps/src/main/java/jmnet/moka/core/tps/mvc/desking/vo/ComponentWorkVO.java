@@ -74,6 +74,14 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "TEMPLATE_NAME")
     private String templateName;
 
+    @ApiModelProperty("크롭 가로")
+    @Builder.Default
+    private Integer cropWidth = 0;
+
+    @ApiModelProperty("크롭 세로")
+    @Builder.Default
+    private Integer cropHeight = 0;
+
     //    @Column(name = "TEMPLATE_WIDTH")
     //    private Integer templateWidth;
     //
@@ -122,9 +130,9 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "SCH_CODE_ID")
     private String schCodeId;
 
-//    @ApiModelProperty("기사페이지SEQ")
-//    @Column(name = "ART_PAGE_SEQ")
-//    private Long artPageSeq;
+    //    @ApiModelProperty("기사페이지SEQ")
+    //    @Column(name = "ART_PAGE_SEQ")
+    //    private Long artPageSeq;
 
     @ApiModelProperty("파트SEQ")
     @Column(name = "PART_SEQ")

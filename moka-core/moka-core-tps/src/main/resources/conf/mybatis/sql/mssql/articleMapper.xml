@@ -6,7 +6,7 @@
   <!-- 서비스 기사 목록 조회 (페이지편집용)-->
   <select id="findAllByService" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
-    { call USP_ARTICLE_BASIC_LIST_SEL_SERVICE(
+    { call UPA_ARTICLE_BASIC_LIST_SEL_SERVICE(
     <choose>
       <when test="sourceList != null and sourceList != ''">
         #{sourceList},
@@ -198,10 +198,21 @@
 		) }
   	</select>
 
+  <!-- 기사 부가정보 조회(분류코드,기자,키워드) -->
+  <resultMap id="CodeMap" type="string"/>
+  <resultMap id="ArtReporterMap" type="ArticleReporterVO"/>
+  <resultMap id="ArtKeywordMap" type="string"/>
+  <select id="findInfo" parameterType="hashMap" resultMap="CodeMap,ArtReporterMap,ArtKeywordMap"
+    statementType="CALLABLE">
+  { call UPA_ARTICLE_BASIC_SEL_BY_INFO(
+    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
   <!-- 네이버채널 기사 목록 조회(bulk_flag=Y) -->
   <select id="findAllByBulkY" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
-    { call USP_ARTICLE_BASIC_LIST_SEL_BULKY(
+    { call UPA_ARTICLE_BASIC_LIST_SEL_BULKY(
     <choose>
       <when test="sourceList != null and sourceList != ''">
         #{sourceList},
@@ -305,7 +316,7 @@
   <!-- 기사 목록 조회-->
   <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
-    { call USP_ARTICLE_BASIC_LIST_SEL(
+    { call UPA_ARTICLE_BASIC_LIST_SEL(
     <choose>
       <when test="sourceList != null and sourceList != ''">
         #{sourceList},

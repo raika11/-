@@ -1,8 +1,12 @@
 package jmnet.moka.core.tps.mvc.article.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
@@ -15,8 +19,10 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleCodeVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentRelVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,11 +40,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleMapper articleMapper;
 
+    private final ModelMapper modelMapper;
+
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
-            ArticleMapper articleMapper) {
+            ArticleMapper articleMapper, ModelMapper modelMapper) {
         this.articleBasicRepository = articleBasicRepository;
         this.articleTitleRepository = articleTitleRepository;
         this.articleMapper = articleMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -151,4 +160,36 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.findAll(search);
     }
 
+    @Override
+    public void findArticleInfo(ArticleBasicDTO articleDto) {
+        Map paramMap = new HashMap();
+        paramMap.put("totalId", articleDto.getTotalId());
+        List<List<Object>> listMap = articleMapper.findInfo(paramMap);
+        if (listMap.size() == 3) {
+
+        }
+        if (listMap.get(0) != null && listMap
+                .get(0)
+                .size() > 0) {
+            List<String> categoryList = modelMapper.map(listMap.get(0), new TypeReference<List<String>>() {
+            }.getType());
+            articleDto.setCategoryList(categoryList);
+        }
+
+        if (listMap.get(1) != null && listMap
+                .get(1)
+                .size() > 0) {
+            List<ArticleReporterVO> reporterList = modelMapper.map(listMap.get(1), ArticleReporterVO.TYPE);
+            articleDto.setReporterList(reporterList);
+        }
+
+        if (listMap.get(2) != null && listMap
+                .get(2)
+                .size() > 0) {
+            List<String> tagList = modelMapper.map(listMap.get(2), new TypeReference<List<String>>() {
+            }.getType());
+            articleDto.setTagList(tagList);
+        }
+
+    }
 }

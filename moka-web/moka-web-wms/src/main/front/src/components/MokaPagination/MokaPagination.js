@@ -58,7 +58,7 @@ const defaultProps = {
  * 페이지네이션
  */
 const MokaPagination = (props) => {
-    const { className, total, page, size, pageSizes, displayPageNum, showTotalString, onChangeSearchOption } = props;
+    const { className, total, page, size, pageSizes, paginationSize, displayPageNum, showTotalString, onChangeSearchOption } = props;
 
     const handleChangeRowsPerPage = useCallback(
         (event) => {
@@ -67,12 +67,19 @@ const MokaPagination = (props) => {
         [onChangeSearchOption],
     );
 
+    const [pageItemsSize, setPageItemsSize] = useState('');
     const [viewPage, setViewPage] = useState(0);
     const [startPage, setStartPage] = useState(0);
     const [endPage, setEndPage] = useState(0);
     const [pageList, setPageList] = useState([]);
     const [prev, setPrev] = useState(false);
     const [next, setNext] = useState(false);
+
+    useEffect(() => {
+        if (paginationSize === 'sm') {
+            setPageItemsSize('sm');
+        }
+    }, [paginationSize]);
 
     useEffect(() => {
         const vp = page + 1;
@@ -121,7 +128,7 @@ const MokaPagination = (props) => {
     return (
         <div className={clsx('d-flex', 'align-items-center', className)}>
             {pageSizes && (
-                <Form.Control as="select" style={{ width: 65, height: 29 }} onChange={handleChangeRowsPerPage} value={size} custom>
+                <Form.Control as="select" style={{ width: 65, height: 29 }} className="ft-12" onChange={handleChangeRowsPerPage} value={size} custom>
                     {pageSizes.map((value) => (
                         <option key={value} value={value}>
                             {value}
@@ -129,7 +136,8 @@ const MokaPagination = (props) => {
                     ))}
                 </Form.Control>
             )}
-            <Pagination className="mb-0">
+
+            <Pagination className="mb-0" size={pageItemsSize}>
                 <Pagination.Prev disabled={!prev} onClick={handleBackButtonClick}>
                     <MokaIcon iconName="fas-angle-left" />
                 </Pagination.Prev>
@@ -142,6 +150,7 @@ const MokaPagination = (props) => {
                     <MokaIcon iconName="fas-angle-right" />
                 </Pagination.Next>
             </Pagination>
+
             {showTotalString && <div className="small">{`총: ${total} 건`}</div>}
         </div>
     );

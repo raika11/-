@@ -109,7 +109,7 @@ const CodeMappingModal = (props) => {
         >
             <Container fluid>
                 <Row>
-                    <Col xs={5}>
+                    <Col xs={6}>
                         <AgGrid
                             show={show}
                             data={data}
@@ -123,7 +123,7 @@ const CodeMappingModal = (props) => {
                             handleChangeSearchOption={handleChangeSearchOption}
                         />
                     </Col>
-                    <Col xs={7}>{showEdit && <Edit data={data} mappingCode={mappingCode} onHide={handleHide} />}</Col>
+                    <Col xs={6}>{showEdit && <Edit data={data} mappingCode={mappingCode} onHide={handleHide} />}</Col>
                 </Row>
             </Container>
         </MokaModal>

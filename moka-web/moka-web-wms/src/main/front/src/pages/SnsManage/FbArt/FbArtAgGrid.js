@@ -23,22 +23,21 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     };
 
     return (
-        <>
-            <MokaTable
-                agGridHeight={650}
-                columnDefs={tempColumnDefs}
-                rowData={rows}
-                rowHeight={65}
-                onRowNodeId={(row) => row.id}
-                onRowClicked={handleClickListRow}
-                loading={loading}
-                total={total}
-                page={searchOptions.page}
-                size={searchOptions.size}
-                onChangeSearchOption={handleChangeSearchOption}
-                selected={selected}
-            />
-        </>
+        <MokaTable
+            className="flex-fill overflow-hidden"
+            agGridHeight={650}
+            columnDefs={tempColumnDefs}
+            rowData={rows}
+            rowHeight={50}
+            onRowNodeId={(row) => row.id}
+            onRowClicked={handleClickListRow}
+            loading={loading}
+            total={total}
+            page={searchOptions.page}
+            size={searchOptions.size}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={selected}
+        />
     );
 };
 

@@ -7,11 +7,13 @@ package jmnet.moka.core.tps.mvc.article.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -161,4 +163,18 @@ public class ArticleBasicDTO implements Serializable {
      */
     private String artSubTitle;
 
+    /**
+     * 분류코드 목록
+     */
+    private List<String> categoryList = new ArrayList<>();
+
+    /**
+     * 기자 목록
+     */
+    private List<ArticleReporterVO> reporterList = new ArrayList<>();
+
+    /**
+     * 추천태그 목록
+     */
+    private List<String> tagList = new ArrayList<>();
 }

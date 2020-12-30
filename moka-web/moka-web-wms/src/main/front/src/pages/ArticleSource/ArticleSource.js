@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useRef, useCallback } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -9,13 +9,21 @@ import ArticleSourceEdit from './ArticleSourceEdit';
 const ArticleSourceList = React.lazy(() => import('./ArticleSourceList'));
 
 const ArticleSource = (props) => {
-    const { match, location } = props;
+    const { match } = props;
     const dispatch = useDispatch();
+    const editRef = useRef(null);
 
-    // local state
-    const [footerBtns, setFooterBtns] = useState([]);
-    const [clickMapping, setClickMapping] = useState(false);
-    const [clickSave, setClickSave] = useState(false);
+    const handleClickMapping = useCallback(() => {
+        if (editRef.current) {
+            editRef.current.onMapping();
+        }
+    }, []);
+
+    const handleClickSave = useCallback(() => {
+        if (editRef.current) {
+            editRef.current.onSave();
+        }
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -23,21 +31,6 @@ const ArticleSource = (props) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        let btns = [
-            { text: '코드 매핑', variant: 'outline-table-btn', className: 'mr-2', onClick: () => setClickMapping(true) },
-            { text: '수정', variant: 'positive', onClick: () => setClickSave(true) },
-        ];
-
-        if (location.pathname.lastIndexOf('add') > -1) {
-            let updatedBtns = btns.map((btn) => (btn.text !== '수정' ? btn : { ...btn, text: '등록' }));
-            setFooterBtns(updatedBtns);
-        } else {
-            setFooterBtns(btns);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.pathname]);
 
     return (
         <div className="d-flex">
@@ -59,19 +52,25 @@ const ArticleSource = (props) => {
                 <Route
                     path={[`${match.url}/add`, `${match.url}/:sourceCode`]}
                     exact
-                    render={() => (
-                        <>
-                            <MokaCard width={772} titleClassName="mb-0" title="매체 정보" footer footerButtons={footerBtns} footerClassName="justify-content-center">
-                                <ArticleSourceEdit
-                                    location={location}
-                                    clickMapping={clickMapping}
-                                    clickSave={clickSave}
-                                    setClickMapping={setClickMapping}
-                                    setClickSave={setClickSave}
-                                />
+                    render={({ match }) => {
+                        const { params } = match;
+
+                        return (
+                            <MokaCard
+                                width={772}
+                                titleClassName="mb-0"
+                                title="매체 정보"
+                                footer
+                                footerButtons={[
+                                    { text: '코드 매핑', variant: 'outline-table-btn', className: 'mr-2', onClick: handleClickMapping },
+                                    { text: params?.sourceCode ? '수정' : '등록', variant: 'positive', onClick: handleClickSave },
+                                ]}
+                                footerClassName="justify-content-center"
+                            >
+                                <ArticleSourceEdit ref={editRef} />
                             </MokaCard>
-                        </>
-                    )}
+                        );
+                    }}
                 />
             </Switch>
         </div>

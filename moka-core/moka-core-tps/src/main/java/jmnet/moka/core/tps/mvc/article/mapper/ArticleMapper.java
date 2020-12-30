@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.article.mapper;
 
 import java.util.List;
+import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
@@ -45,4 +46,12 @@ public interface ArticleMapper extends BaseMapper<ArticleBasicVO, ArticleSearchD
      * @return 기사이미지목록
      */
     List<ArticleComponentVO> findAllImageComponent(Long totalId);
+
+    /**
+     * 기사 부가정보 조회(분류코드,기자,키워드)
+     *
+     * @param map rid:기사키
+     * @return 분류코드목록, 기자목록, 키워드목록
+     */
+    List<List<Object>> findInfo(Map<String, Object> map);
 }

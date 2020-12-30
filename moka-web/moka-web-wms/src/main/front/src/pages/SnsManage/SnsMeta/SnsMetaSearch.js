@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInputLabel, MokaInput, MokaSearchInput } from '@components';
+import { MokaInput, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
 import { useDispatch } from 'react-redux';
 import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
@@ -77,13 +76,11 @@ const SnsMetaSearch = ({ searchOptions }) => {
     return (
         <Form>
             <Form.Row className="mb-3">
-                <Col xs={2} className="p-0 pr-2">
-                    <MokaInputLabel
-                        label="날짜"
-                        labelWidth={56}
+                <div style={{ width: 110 }} className="mr-2 flex-shrink-0">
+                    <MokaInput
                         as="select"
                         value={dateType}
-                        className="m-0"
+                        className="ft-12"
                         name="dateType"
                         onChange={(event) => {
                             const {
@@ -96,9 +93,9 @@ const SnsMetaSearch = ({ searchOptions }) => {
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
                         <option value="direct">직접입력</option>
-                    </MokaInputLabel>
-                </Col>
-                <Col xs={2} className="p-0 pr-2">
+                    </MokaInput>
+                </div>
+                <div style={{ width: 130 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -109,11 +106,11 @@ const SnsMetaSearch = ({ searchOptions }) => {
                             const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                             handleChangeValue('startDt', date);
                         }}
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                         disabled={disabled.date}
                     />
-                </Col>
-                <Col xs={2} className="p-0 pr-2">
+                </div>
+                <div style={{ width: 130 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -124,15 +121,15 @@ const SnsMetaSearch = ({ searchOptions }) => {
                             const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 23, 59, 59)).format(DB_DATEFORMAT);
                             handleChangeValue('endDt', date);
                         }}
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                         disabled={disabled.date}
                     />
-                </Col>
-                <Col xs={1} className="p-0 pr-2">
+                </div>
+                <div style={{ width: 85 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="select"
                         value={options.searchType}
-                        className="m-0"
+                        className="m-0 ft-12"
                         name="searchType"
                         onChange={(event) => {
                             const {
@@ -144,26 +141,25 @@ const SnsMetaSearch = ({ searchOptions }) => {
                         <option value="artTitle">제목</option>
                         <option value="totalId">기사ID</option>
                     </MokaInput>
-                </Col>
-                <Col xs={4} className="p-0 pr-2">
-                    <MokaSearchInput
-                        name="keyword"
-                        value={options.keyword}
-                        onChange={(event) => {
-                            const {
-                                target: { name, value },
-                            } = event;
-                            handleChangeValue(name, value);
-                        }}
-                        onSearch={handleClickSearch}
-                    />
-                </Col>
+                </div>
+                <MokaSearchInput
+                    name="keyword"
+                    value={options.keyword}
+                    onChange={(event) => {
+                        const {
+                            target: { name, value },
+                        } = event;
+                        handleChangeValue(name, value);
+                    }}
+                    className="mr-2 flex-fill"
+                    buttonClassName="ft-12"
+                    inputClassName="ft-12"
+                    onSearch={handleClickSearch}
+                />
                 {/* 초기화 버튼 */}
-                <Col xs={1} className="p-0">
-                    <Button variant="negative" onClick={handleSearchReset}>
-                        초기화
-                    </Button>
-                </Col>
+                <Button variant="negative" onClick={handleSearchReset} className="flex-shrink-0 ft-12">
+                    초기화
+                </Button>
             </Form.Row>
         </Form>
     );

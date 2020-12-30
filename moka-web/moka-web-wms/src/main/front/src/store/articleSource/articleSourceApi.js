@@ -47,7 +47,6 @@ export const getArticleSource = ({ sourceCode }) => {
 // 매체 수정
 export const putArticleSource = ({ source }) => {
     delete source.add;
-
     return instance.put(`/api/article-sources/${source.sourceCode}`, qs.stringify(source)).catch((err) => {
         throw err;
     });

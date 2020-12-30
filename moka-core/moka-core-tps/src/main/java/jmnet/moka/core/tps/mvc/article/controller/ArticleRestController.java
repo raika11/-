@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/articles")
-@Api(tags = {"기사 API"})
+@Api(tags = {"등록기사 API"})
 public class ArticleRestController extends AbstractCommonController {
 
     private final ArticleService articleService;
@@ -120,6 +120,9 @@ public class ArticleRestController extends AbstractCommonController {
                 });
 
         ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+
+        articleService.findArticleInfo(dto);
+
         ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);

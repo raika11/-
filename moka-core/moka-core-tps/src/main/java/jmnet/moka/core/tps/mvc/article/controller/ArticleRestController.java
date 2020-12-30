@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/articles")
-@Api(tags = {"기사 API"})
+@Api(tags = {"등록기사 API"})
 public class ArticleRestController extends AbstractCommonController {
 
     private final ArticleService articleService;

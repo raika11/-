@@ -214,15 +214,9 @@ export function* deleteMappingCode({ payload: { sourceCode, seqNo, callback } })
     yield put(finishLoading(ACTION));
 }
 
-// /**
-//  * 벌크 매체 목록 조회
-//  */
-// const getBulkSourceList = createRequestSaga(act.GET_BLUK_SOURCE_LIST, api.getBulkSourceList);
-
 export default function* saga() {
     yield takeLatest(act.GET_DESKING_SOURCE_LIST, getDeskingSourceList);
     yield takeLatest(act.GET_TYPE_SOURCE_LIST, getTypeSourceList);
-    // yield takeLatest(act.GET_BLUK_SOURCE_LIST, getBulkSourceList);
     yield takeLatest(act.GET_SOURCE_LIST, getSourceList);
     yield takeLatest(act.GET_SOURCE_DUPLICATE_CHECK, getSourceDuplicateCheck);
     yield takeLatest(act.GET_ARTICLE_SOURCE, getArticleSource);

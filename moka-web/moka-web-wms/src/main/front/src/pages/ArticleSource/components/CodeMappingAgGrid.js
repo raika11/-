@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@/components';
 import columnDefs from './CodeMappingAgGridColumns';
+import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
 import { getMappingCodeList, changeModalSearchOption } from '@store/articleSource';
 
 const CodeMappingAgGrid = (props) => {
@@ -36,6 +37,8 @@ const CodeMappingAgGrid = (props) => {
                 total={mappingTotal}
                 page={search.page}
                 size={search.size}
+                paginationSize="sm"
+                pageSizes={MODAL_PAGESIZE_OPTIONS}
                 selected={mappingCode.seqNo}
                 onChangeSearchOption={handleChangeSearchOption}
             />

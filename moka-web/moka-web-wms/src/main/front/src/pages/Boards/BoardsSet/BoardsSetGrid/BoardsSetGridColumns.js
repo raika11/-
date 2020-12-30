@@ -1,3 +1,7 @@
+import React from 'react';
+import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 export const ColumnDefs = [
     {
         headerName: '번호',
@@ -34,6 +38,11 @@ export const ColumnDefs = [
         width: 120,
         cellStyle: { fontSize: '12px' },
         cellClass: ['text-left'],
+        cellRendererFramework: ({ value }) => {
+            let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
+
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
+        },
     },
     {
         headerName: '답변',
@@ -41,6 +50,11 @@ export const ColumnDefs = [
         width: 120,
         cellStyle: { fontSize: '12px' },
         cellClass: ['text-left'],
+        cellRendererFramework: ({ value }) => {
+            let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
+
+            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
+        },
     },
     {
         headerName: '생성일',

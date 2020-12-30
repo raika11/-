@@ -183,4 +183,9 @@ public class ArticleBasicDTO implements Serializable {
      * 벌크사이트 목록
      */
     private List<ArticleBulkSimpleVO> bulkSiteList = new ArrayList<>();
+
+    /**
+     * 본문
+     */
+    private String artContent;
 }

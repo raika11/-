@@ -198,7 +198,7 @@
 		) }
   	</select>
 
-  <!-- 기사 부가정보 조회(분류코드,기자,키워드) -->
+  <!-- 기사 부가정보 조회(분류코드,기자,키워드,벌크,본문) -->
   <resultMap id="CodeMap" type="string"/>
   <resultMap id="ArtReporterMap" type="ArticleReporterVO"/>
   <resultMap id="ArtKeywordMap" type="string"/>

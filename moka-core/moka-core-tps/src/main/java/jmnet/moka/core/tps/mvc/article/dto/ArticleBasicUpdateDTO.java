@@ -2,10 +2,10 @@
  * Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
  */
 
-package jmnet.moka.core.tps.mvc.rcvArticle.dto;
+package jmnet.moka.core.tps.mvc.article.dto;
 
 /**
- * Description: 수신기사 수정항목
+ * Description: 기사정보 수정항목
  *
  * @author ssc
  * @since 2020-12-23
@@ -28,13 +28,23 @@ import org.apache.ibatis.type.Alias;
 @Setter
 @Getter
 @Builder
-@Alias("RcvArticleBasicUpdateDTO")
-public class RcvArticleBasicUpdateDTO implements Serializable {
+@Alias("ArticleBasicUpdateDTO")
+public class ArticleBasicUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final Type TYPE = new TypeReference<List<RcvArticleBasicUpdateDTO>>() {
+    public static final Type TYPE = new TypeReference<List<ArticleBasicUpdateDTO>>() {
     }.getType();
+
+    /**
+     * 기사제목
+     */
+    private String artTitle;
+    
+    /**
+     * 기사본문
+     */
+    private String content;
 
     /**
      * 분류코드 목록

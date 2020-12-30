@@ -13,6 +13,7 @@ import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleBulkSimpleVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -177,4 +178,9 @@ public class ArticleBasicDTO implements Serializable {
      * 추천태그 목록
      */
     private List<String> tagList = new ArrayList<>();
+
+    /**
+     * 벌크사이트 목록
+     */
+    private List<ArticleBulkSimpleVO> bulkSiteList = new ArrayList<>();
 }

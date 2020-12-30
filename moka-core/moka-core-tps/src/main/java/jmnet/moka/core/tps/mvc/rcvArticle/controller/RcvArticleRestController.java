@@ -152,8 +152,8 @@ public class RcvArticleRestController extends AbstractCommonController {
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.error("[FAIL TO ARTICE_BASIC INSERT]", e);
-            tpsLogger.error(ActionType.SELECT, "[FAIL TO ARTICE_BASIC INSERT]", e, true);
+            log.error("[FAIL TO RCV_ARTICE_IUD INSERT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO RCV_ARTICE_IUD INSERT]", e, true);
             throw new Exception(msg("tps.common.error.insert"), e);
         }
     }

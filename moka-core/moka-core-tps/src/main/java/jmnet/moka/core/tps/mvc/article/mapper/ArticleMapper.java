@@ -54,4 +54,11 @@ public interface ArticleMapper extends BaseMapper<ArticleBasicVO, ArticleSearchD
      * @return 분류코드목록, 기자목록, 키워드목록
      */
     List<List<Object>> findInfo(Map<String, Object> map);
+
+    /**
+     * 등록기사를 중지 또는 삭제
+     *
+     * @param paramMap totalId:기사키, iud: 삭제는 'D', 중지는 'E', returnValue: 리턴값
+     */
+    void insertArticleIud(Map paramMap);
 }

@@ -1,20 +1,27 @@
 package jmnet.moka.core.tps.mvc.article.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleTitle;
 import jmnet.moka.core.tps.mvc.article.mapper.ArticleMapper;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleBasicRepository;
+import jmnet.moka.core.tps.mvc.article.repository.ArticleHistoryRepository;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleTitleRepository;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleBulkSimpleVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleCodeVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentRelVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
@@ -23,6 +30,8 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,14 +47,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleTitleRepository articleTitleRepository;
 
+    private final ArticleHistoryRepository articleHistoryRepository;
+
     private final ArticleMapper articleMapper;
 
     private final ModelMapper modelMapper;
 
+    @Value("${bulk.site.id}")
+    private String[] bulkSiteId;
+
+    @Value("${bulk.site.name}")
+    private String[] bulkSiteName;
+
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
-            ArticleMapper articleMapper, ModelMapper modelMapper) {
+            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper) {
         this.articleBasicRepository = articleBasicRepository;
         this.articleTitleRepository = articleTitleRepository;
+        this.articleHistoryRepository = articleHistoryRepository;
         this.articleMapper = articleMapper;
         this.modelMapper = modelMapper;
     }
@@ -165,31 +183,90 @@ public class ArticleServiceImpl implements ArticleService {
         Map paramMap = new HashMap();
         paramMap.put("totalId", articleDto.getTotalId());
         List<List<Object>> listMap = articleMapper.findInfo(paramMap);
-        if (listMap.size() == 3) {
+        if (listMap.size() == 4) {
+            // 분류목록
+            if (listMap.get(0) != null && listMap
+                    .get(0)
+                    .size() > 0) {
+                List<String> categoryList = modelMapper.map(listMap.get(0), new TypeReference<List<String>>() {
+                }.getType());
+                articleDto.setCategoryList(categoryList);
+            }
 
-        }
-        if (listMap.get(0) != null && listMap
-                .get(0)
-                .size() > 0) {
-            List<String> categoryList = modelMapper.map(listMap.get(0), new TypeReference<List<String>>() {
-            }.getType());
-            articleDto.setCategoryList(categoryList);
+            // 기자목록
+            if (listMap.get(1) != null && listMap
+                    .get(1)
+                    .size() > 0) {
+                List<ArticleReporterVO> reporterList = modelMapper.map(listMap.get(1), ArticleReporterVO.TYPE);
+                articleDto.setReporterList(reporterList);
+            }
+
+            // 태그목록
+            if (listMap.get(2) != null && listMap
+                    .get(2)
+                    .size() > 0) {
+                List<String> tagList = modelMapper.map(listMap.get(2), new TypeReference<List<String>>() {
+                }.getType());
+                articleDto.setTagList(tagList);
+            }
+
+            // 벌크목록
+            if (listMap.get(1) != null && listMap
+                    .get(3)
+                    .size() > 0) {
+                List<String> dbList = modelMapper.map(listMap.get(3), new TypeReference<List<String>>() {
+                }.getType());
+                if (dbList.size() > 0) {
+                    String[] bulkSiteList = dbList
+                            .get(0)
+                            .split(",");
+                    List<ArticleBulkSimpleVO> list = new ArrayList<>();
+
+                    for (int i = 0; i < bulkSiteId.length; i++) {
+                        String id = bulkSiteId[i];
+                        boolean bFind = Arrays
+                                .asList(bulkSiteList)
+                                .stream()
+                                .filter(m -> m.equals(id))
+                                .findFirst()
+                                .isPresent();
+                        ArticleBulkSimpleVO vo = ArticleBulkSimpleVO
+                                .builder()
+                                .siteId(bulkSiteId[i])
+                                .siteName(bulkSiteName[i])
+                                .bulkYn(bFind ? "Y" : "N")
+                                .build();
+                        list.add(vo);
+                    }
+                    articleDto.setBulkSiteList(list);
+                }
+            }
         }
 
-        if (listMap.get(1) != null && listMap
-                .get(1)
-                .size() > 0) {
-            List<ArticleReporterVO> reporterList = modelMapper.map(listMap.get(1), ArticleReporterVO.TYPE);
-            articleDto.setReporterList(reporterList);
-        }
+    }
 
-        if (listMap.get(2) != null && listMap
-                .get(2)
-                .size() > 0) {
-            List<String> tagList = modelMapper.map(listMap.get(2), new TypeReference<List<String>>() {
-            }.getType());
-            articleDto.setTagList(tagList);
+    @Override
+    public boolean insertArticleIud(ArticleBasic articleBasic, String iud) {
+        Map paramMap = new HashMap();
+        Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
+        paramMap.put("totalId", articleBasic.getTotalId());
+        paramMap.put("iud", iud);
+        paramMap.put("returnValue", returnValue);
+        articleMapper.insertArticleIud(paramMap);
+        if ((int) paramMap.get("returnValue") < 0) {
+            log.debug("INSERT FAIL ARTICLE_IUD totalId: {} errorCode: {} ", articleBasic.getTotalId(), returnValue);
+            return false;
         }
+        return true;
+    }
 
+    @Override
+    public Page<ArticleHistory> findAllArticleHistory(Long totalId, SearchDTO search) {
+        return articleHistoryRepository.findByTotalIdOrderBySeqNo(totalId, search.getPageable());
+    }
+
+    @Override
+    public String insertCdn(Long totalId) {
+        return null;
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -14,18 +15,22 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleHistoryDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -243,5 +248,162 @@ public class ArticleRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD ARTICLE BASIC]", e, true);
             throw new Exception(msg("tps.common.error.select"), e);
         }
+    }
+
+    /**
+     * 등록기사 삭제
+     *
+     * @param totalId 기사키
+     * @return 등록기사정보
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "등록기사 삭제")
+    @PostMapping("/{totalId}/delete")
+    public ResponseEntity<?> postArticleDelete(@ApiParam("기사아이디(필수)") @PathVariable("totalId") Long totalId)
+            throws Exception {
+
+        // 기사 상세조회
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        try {
+            // 삭제는 D로 등록
+            boolean insertOk = articleService.insertArticleIud(articleBasic, "D");
+
+            String message = "";
+            if (insertOk) {
+                message = msg("tps.common.success.delete");
+            } else {
+                message = msg("tps.common.error.delete");
+            }
+
+            // 수신기사정보 조회
+            ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+            articleService.findArticleInfo(dto);
+
+            ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto, message);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO ARTICE_IUD INSERT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO ARTICE_IUD INSERT]", e, true);
+            throw new Exception(msg("tps.common.error.delete"), e);
+        }
+    }
+
+    /**
+     * 등록기사 삭제
+     *
+     * @param totalId 기사키
+     * @return 등록기사정보
+     * @throws Exception 예외
+     */
+    @ApiOperation(value = "등록기사 중지")
+    @PostMapping("/{totalId}/stop")
+    public ResponseEntity<?> postArticleStop(@ApiParam("기사아이디(필수)") @PathVariable("totalId") Long totalId)
+            throws Exception {
+
+        // 기사 상세조회
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        try {
+            // 삭제는 D로 등록
+            boolean insertOk = articleService.insertArticleIud(articleBasic, "E");
+
+            String message = "";
+            if (insertOk) {
+                message = msg("tps.common.success.delete");
+            } else {
+                message = msg("tps.common.error.delete");
+            }
+
+            // 수신기사정보 조회
+            ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+            articleService.findArticleInfo(dto);
+
+            ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto, message);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO ARTICE_IUD INSERT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO ARTICE_IUD INSERT]", e, true);
+            throw new Exception(msg("tps.common.error.delete"), e);
+        }
+    }
+
+    /**
+     * 히스토리 목록조회
+     *
+     * @param totalId 기사키
+     * @param search  검색조건
+     * @return 히스토리 목록
+     * @throws NoDataException
+     */
+    @ApiOperation(value = "히스토리 목록조회")
+    @GetMapping("/{totalId}/histories")
+    ResponseEntity<?> getArticleHistoryList(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId, @Valid @SearchParam SearchDTO search)
+            throws NoDataException {
+
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        // 조회
+        Page<ArticleHistory> returnValue = articleService.findAllArticleHistory(totalId, search);
+        List<ArticleHistoryDTO> dtoList = modelMapper.map(returnValue.getContent(), ArticleHistoryDTO.TYPE);
+
+        // 리턴값 설정
+        ResultListDTO<ArticleHistoryDTO> resultListMessage = new ResultListDTO<>();
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(dtoList);
+
+        ResultDTO<ResultListDTO<ArticleHistoryDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * CDN등록
+     *
+     * @param totalId 기사키
+     * @return 등록된 URL
+     * @throws NoDataException
+     */
+    @ApiOperation(value = "CDN 등록")
+    @GetMapping("/{totalId}/cdn")
+    ResponseEntity<?> postArticleCdn(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
+            throws NoDataException {
+
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        // cdn등록
+        String cdnUrl = articleService.insertCdn(totalId);
+        
+        ResultDTO<String> resultDto = new ResultDTO<>(cdnUrl);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

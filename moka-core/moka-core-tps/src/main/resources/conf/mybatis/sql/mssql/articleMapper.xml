@@ -202,7 +202,9 @@
   <resultMap id="CodeMap" type="string"/>
   <resultMap id="ArtReporterMap" type="ArticleReporterVO"/>
   <resultMap id="ArtKeywordMap" type="string"/>
-  <select id="findInfo" parameterType="hashMap" resultMap="CodeMap,ArtReporterMap,ArtKeywordMap"
+  <resultMap id="bulkSiteMap" type="string"/>
+  <select id="findInfo" parameterType="hashMap"
+    resultMap="CodeMap,ArtReporterMap,ArtKeywordMap,bulkSiteMap"
     statementType="CALLABLE">
   { call UPA_ARTICLE_BASIC_SEL_BY_INFO(
     #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
@@ -433,6 +435,14 @@
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
+  </select>
+
+  <!-- 기사를 중지 또는 삭제-->
+  <select id="insertArticleIud" parameterType="hashMap" statementType="CALLABLE">
+  {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_ARTICLE_IUD_INS(
+  #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+  #{iud, mode=IN, jdbcType=VARCHAR, javaType=string}
+  ) }
   </select>
 
 </mapper>

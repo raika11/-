@@ -2,13 +2,16 @@ package jmnet.moka.core.tps.mvc.article.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
+import org.springframework.data.domain.Page;
 
 /**
  * Article 서비스
@@ -77,7 +80,33 @@ public interface ArticleService {
     /**
      * 기사부가정보 조회(분류,기자,키워드)
      *
-     * @param dto 기사정보
+     * @param articleDto 기사정보
      */
     void findArticleInfo(ArticleBasicDTO articleDto);
+
+    /**
+     * 등록기사를 삭제 또는 중지
+     *
+     * @param articleBasic 등록기사정보
+     * @param iud          삭제는 'D', 중지는 'E'
+     * @return
+     */
+    boolean insertArticleIud(ArticleBasic articleBasic, String iud);
+
+    /**
+     * 기사 히스토리 조회
+     *
+     * @param totalId 기사키
+     * @param search  검색조건
+     * @return 기사히스토리 목록
+     */
+    Page<ArticleHistory> findAllArticleHistory(Long totalId, SearchDTO search);
+
+    /**
+     * CDN등록
+     *
+     * @param totalId 기사킹
+     * @return 등록된 cdn url
+     */
+    String insertCdn(Long totalId);
 }

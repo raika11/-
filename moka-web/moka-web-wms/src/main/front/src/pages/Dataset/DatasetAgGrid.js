@@ -73,6 +73,7 @@ const DatasetAgGrid = (props) => {
             onRowNodeId={(rowData) => rowData.id}
             onChangeSearchOption={handleChangeSearchOption}
             onRowClicked={handleRowClicked}
+            suppressRefreshCellAfterUpdate
         />
     );
 };

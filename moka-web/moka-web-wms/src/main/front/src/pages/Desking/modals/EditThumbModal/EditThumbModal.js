@@ -28,10 +28,10 @@ const defaultValue = {
 };
 
 /**
- * 대표이미지 편집 모달 ====> 데스킹워크 저장 후 나중에 작업
+ * 대표이미지 편집 모달
  */
 const EditThumbModal = (props) => {
-    const { show, onHide, deskingWorkData } = props; // modal props
+    const { show, onHide, deskingWorkData, cropHeight, cropWidth } = props; // modal props
     const { setFileValue, thumbFileName, setThumbFileName } = props; // 대표 이미지 props
     const dispatch = useDispatch();
 

@@ -31,7 +31,6 @@ const IconForm = ({ show, temp, setTemp, onChange }) => {
                 <MokaInputLabel
                     as="select"
                     label="아이콘"
-                    labelWidth={80}
                     labelClassName="ft-12 pr-3"
                     className="mb-0 w-100"
                     inputClassName="ft-12"

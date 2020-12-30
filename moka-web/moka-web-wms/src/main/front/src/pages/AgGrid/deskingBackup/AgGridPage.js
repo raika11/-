@@ -5,13 +5,10 @@ import Col from 'react-bootstrap/Col';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowData, rowClassRules } from './data';
 import toast from '@/utils/toastUtil';
-import { EditThumbModal } from '@pages/Desking/modals';
+import { CodeListModal } from '@pages/commons';
 
 const AgGridPage = () => {
     const [moveRows, setMoveRows] = useState([]);
-
-    // test state
-    const [fileValue, setFileValue] = useState(null); // 파일
 
     // 드래그 시작
     const onRowDragEnter = (params) => {
@@ -161,7 +158,8 @@ const AgGridPage = () => {
                     </div>
                 </Col>
             </Row>
-            <EditThumbModal show={true} onHide={() => {}} fileValue={fileValue} setFileValue={setFileValue} />
+
+            <CodeListModal show={true} />
         </Container>
     );
 };

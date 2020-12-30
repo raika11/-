@@ -59,7 +59,6 @@ const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) 
                             )}
                         </React.Fragment>
                     }
-                    labelWidth={80}
                     labelClassName="ft-12 pr-3"
                     name={field}
                     className="mb-0 w-100"

@@ -20,7 +20,6 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
                 <MokaInputLabel
                     as={as}
                     label={label}
-                    labelWidth={80}
                     labelClassName="ft-12 pr-3"
                     name={field}
                     className="mb-0 w-100"

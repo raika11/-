@@ -88,6 +88,8 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
                         value={search.keyword}
                         onChange={handleChangeValue}
                         onSearch={handleSearch}
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
                     />
                     <Button variant="negative" className="ft-12" onClick={() => setSearch(initialState.ovp.search)}>
                         초기화

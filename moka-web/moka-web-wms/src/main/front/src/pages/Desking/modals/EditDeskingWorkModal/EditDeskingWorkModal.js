@@ -220,13 +220,13 @@ const EditDeskingWorkModal = (props) => {
                             );
                         } else if (partKey === 'THUMB_FILE_NAME') {
                             return (
-                                <Form.Row key={partKey} className="mb-2 flex-column">
+                                <Form.Row key={partKey} className="mb-2">
                                     <div className="d-flex">
-                                        <MokaInputLabel as="none" label="대표\n이미지" labelWidth={80} labelClassName="ft-12 pr-3" className="mb-0" />
+                                        <MokaInputLabel as="none" label="대표\n이미지" labelClassName="ft-12 pr-3" className="mb-0" />
                                         <MokaImage img={temp.irImg} width={216} height={150} />
                                     </div>
-                                    <div className="mt-2 d-flex justify-content-between" style={{ width: 216, marginLeft: 100 }}>
-                                        <Button variant="positive" size="sm" onClick={() => setShowModal(true)}>
+                                    <div className="d-flex flex-column justify-content-end ml-2">
+                                        <Button variant="positive" size="sm" onClick={() => setShowModal(true)} className="mb-2">
                                             신규등록
                                         </Button>
                                         <Button variant="outline-neutral" size="sm">
@@ -240,7 +240,6 @@ const EditDeskingWorkModal = (props) => {
                                 <Form.Row key={partKey} className="mb-2">
                                     <MokaInputLabel
                                         label="약물"
-                                        labelWidth={80}
                                         labelClassName="ft-12 pr-3"
                                         className="mb-0 w-100"
                                         value={specialChar}
@@ -268,6 +267,8 @@ const EditDeskingWorkModal = (props) => {
             {/* 대표이미지 신규등록 모달 */}
             <EditThumbModal
                 show={showModal}
+                cropHeight={component?.cropHeight}
+                cropWidth={component?.cropWidth}
                 onHide={() => setShowModal(false)}
                 deskingWorkData={deskingWorkData}
                 setFileValue={setFileValue}

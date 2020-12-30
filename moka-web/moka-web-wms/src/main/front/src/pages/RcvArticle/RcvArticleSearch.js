@@ -25,8 +25,7 @@ const RcvArticleSearch = () => {
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
     const [error, setError] = useState({});
-    // const [period, setPeriod] = useState([3, 'months']);
-    const [period, setPeriod] = useState([1, 'years']);
+    const [period, setPeriod] = useState([3, 'months']);
 
     /**
      * 입력값 변경
@@ -159,9 +158,12 @@ const RcvArticleSearch = () => {
          * 시작일 : 현재 시간(시분초o)
          * 종료일 : 현재 시간(시분초o) - period 설정 일수
          */
-        const date = new Date();
-        const startDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
-        const endDay = moment(date).format(DB_DATEFORMAT);
+        // 임시 데이터 연결함, 실제로는 주석 날짜 사용
+        // const date = new Date();
+        // const startDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
+        // const endDay = moment(date).format(DB_DATEFORMAT);
+        const startDay = moment('20200823', 'YYYYMMDD').format(DB_DATEFORMAT);
+        const endDay = moment('20200826', 'YYYYMMDD').format(DB_DATEFORMAT);
         const ns = { ...search, sourceList, startDay, endDay, page: 0 };
 
         dispatch(changeSearchOption(ns));
@@ -200,10 +202,6 @@ const RcvArticleSearch = () => {
                         </option>
                         <option value="3months" data-number="3" data-date="months">
                             3개월
-                        </option>
-                        {/* 데이터 조회용 임시 옵션 */}
-                        <option value="1years" data-number="1" data-date="years">
-                            1년
                         </option>
                     </MokaInputLabel>
                 </div>

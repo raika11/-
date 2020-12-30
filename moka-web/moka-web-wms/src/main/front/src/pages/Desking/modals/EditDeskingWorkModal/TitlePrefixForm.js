@@ -38,7 +38,6 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
                 <MokaInputLabel
                     as="select"
                     label="말머리"
-                    labelWidth={80}
                     labelClassName="ft-12 pr-3"
                     className="mb-0 w-100"
                     inputClassName="ft-12"

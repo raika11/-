@@ -65,7 +65,7 @@ const CodeListModal = (props) => {
 
     const [serviceList, setServiceList] = useState([]); // 1뎁스 = 대분류 = 서비스코드
     const [sectionList, setSectionList] = useState([]); // 2뎁스 = 중분류 = 섹션코드
-    const [contentList, setContentList] = useState([]); // 3뎁스 = 소분류 = 컨텐츠코드
+    const [contentObj, setContentObj] = useState({}); // 3뎁스 = 소분류 = 컨텐츠코드
     const [selectedList, setSelectedList] = useState([]); // 선택한 코드
 
     /**
@@ -180,9 +180,22 @@ const CodeListModal = (props) => {
             }
         });
 
+        // 렌더링하기 위해 소분류 데이터 파싱
+        let key = null;
+        const co = cnl.reduce((all, current) => {
+            const parentCode = current.masterCode.slice(0, 4);
+            if (key !== parentCode) {
+                all[parentCode] = [current];
+                key = parentCode;
+            } else {
+                all[parentCode].push(current);
+            }
+            return all;
+        }, {});
+
         setServiceList(svl);
         setSectionList(scl);
-        setContentList(cnl);
+        setContentObj(co);
     }, [masterCodeList]);
 
     useEffect(() => {
@@ -280,12 +293,23 @@ const CodeListModal = (props) => {
                                 />
                             </div>
                             <div className={clsx('section flex-fill d-flex flex-column align-items-start')} style={{ minHeight: 0 }}>
-                                {sectionList.map((dep2) => {
-                                    if (dep2.masterCode.startsWith(dep1.masterCode.slice(0, 2))) {
-                                        return (
-                                            <div key={dep2.masterCode} className="d-flex w-100 border-bottom">
-                                                {/* 중분류 */}
-                                                <Col xs={3} className="p-2 h-auto border-right" style={{ backgroundColor: 'rgb(189 180 142 / 10%)' }}>
+                                {Object.keys(contentObj).map((contentKey) => {
+                                    if (!contentKey.startsWith(dep1.masterCode.slice(0, 2))) {
+                                        return null;
+                                    }
+
+                                    let dep2 = sectionList.find((section) => section.masterCode.startsWith(contentKey));
+                                    let exist = true;
+                                    if (!dep2) {
+                                        dep2 = contentObj[contentKey][0];
+                                        exist = false;
+                                    }
+
+                                    return (
+                                        <div key={contentKey} className="d-flex w-100 border-bottom">
+                                            {/* 중분류 */}
+                                            <Col xs={3} className="p-2 h-auto border-right" style={{ backgroundColor: 'rgb(189 180 142 / 10%)' }}>
+                                                {exist ? (
                                                     <MokaInput
                                                         as={selection === 'single' ? 'radio' : 'checkbox'}
                                                         name="masterCode"
@@ -298,37 +322,33 @@ const CodeListModal = (props) => {
                                                         }}
                                                         onChange={handleChangeValue}
                                                     />
-                                                </Col>
-                                                <Col xs={9} className="pt-1 pr-1 pl-1 pb-0">
-                                                    {/* 소분류 */}
-                                                    {contentList.map((dep3) => {
-                                                        if (dep3.masterCode.startsWith(dep2.masterCode.slice(0, 4))) {
-                                                            return (
-                                                                <div key={dep3.masterCode} className="float-left ml-1 mb-1">
-                                                                    <MokaInput
-                                                                        as={selection === 'single' ? 'radio' : 'checkbox'}
-                                                                        name="masterCode"
-                                                                        className="flex-grow-0 ft-12"
-                                                                        id={dep3.masterCode}
-                                                                        inputProps={{
-                                                                            custom: true,
-                                                                            label: `[${dep3.masterCode}] ${dep3.contentKorname}`,
-                                                                            checked: selectedList.findIndex((s) => s.masterCode === dep3.masterCode) > -1,
-                                                                        }}
-                                                                        onChange={handleChangeValue}
-                                                                    />
-                                                                </div>
-                                                            );
-                                                        } else {
-                                                            return null;
-                                                        }
-                                                    })}
-                                                </Col>
-                                            </div>
-                                        );
-                                    } else {
-                                        return null;
-                                    }
+                                                ) : (
+                                                    <p className="mb-0 ft-12">dep2.sectionKorname</p>
+                                                )}
+                                            </Col>
+                                            <Col xs={9} className="pt-1 pr-1 pl-1 pb-0">
+                                                {/* 소분류 */}
+                                                {contentObj[contentKey].map((dep3) => {
+                                                    return (
+                                                        <div key={dep3.masterCode} className="float-left ml-1 mb-1">
+                                                            <MokaInput
+                                                                as={selection === 'single' ? 'radio' : 'checkbox'}
+                                                                name="masterCode"
+                                                                className="flex-grow-0 ft-12"
+                                                                id={dep3.masterCode}
+                                                                inputProps={{
+                                                                    custom: true,
+                                                                    label: `[${dep3.masterCode}] ${dep3.contentKorname}`,
+                                                                    checked: selectedList.findIndex((s) => s.masterCode === dep3.masterCode) > -1,
+                                                                }}
+                                                                onChange={handleChangeValue}
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
+                                            </Col>
+                                        </div>
+                                    );
                                 })}
                             </div>
                         </Col>

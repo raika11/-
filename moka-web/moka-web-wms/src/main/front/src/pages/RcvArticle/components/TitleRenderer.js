@@ -1,13 +1,13 @@
 import React, { useState, forwardRef, useEffect, useImperativeHandle } from 'react';
 import Badge from 'react-bootstrap/Badge';
 
-const badgeReg = new RegExp(/([\[\(]+(속보|긴급|1보|종합1보|2보|종합2보|종합|수정)[\]\)]+)(.*)/);
+const titleReg = /[\[\(]+(속보|긴급|1보|종합1보|2보|종합2보|종합|수정)[\]\)]+/;
 
 const TitleRenderer = forwardRef((params, ref) => {
     const { data: initialData, colDef } = params;
     const [field] = useState(colDef.field);
     const [data, setData] = useState(initialData);
-    const [badgeTitle, setBadgeTitle] = useState(null);
+    const [titleArr, setTitleArr] = useState([]);
 
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
@@ -23,24 +23,23 @@ const TitleRenderer = forwardRef((params, ref) => {
     useEffect(() => {
         const title = initialData[field];
         if (title) {
-            const result = badgeReg.exec(title);
-            // result = [종합]미-이란,[종합],종합,미-이란
-            if (result) {
-                setBadgeTitle([result[2], result[3]]);
+            const result = title.match(titleReg);
+            if (result !== null) {
+                setTitleArr([result[1], title.replace(result[0], '')]);
             } else {
-                setBadgeTitle([null, title]);
+                setTitleArr([null, title]);
             }
         }
     }, [initialData, field]);
 
     return (
         <div>
-            {badgeTitle && badgeTitle[0] && (
-                <Badge variant={badgeTitle[0] !== '수정' ? 'success' : 'searching'} className="mr-1">
-                    {badgeTitle[0]}
+            {titleArr && titleArr[0] && (
+                <Badge variant={titleArr[0] !== '수정' ? 'success' : 'searching'} className="mr-1">
+                    {titleArr[0]}
                 </Badge>
             )}
-            {badgeTitle && badgeTitle[1]}
+            {titleArr && titleArr[1]}
         </div>
     );
 });

@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
-import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE } from '@store/rcvArticle';
+import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
@@ -15,7 +15,7 @@ const RcvArticleEdit = () => {
     const { rid } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE]);
+    const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
     const rcvArticle = useSelector((store) => store.rcvArticle.rcvArticle);
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
@@ -40,6 +40,26 @@ const RcvArticleEdit = () => {
         dispatch(clearRcvArticle());
     };
 
+    /**
+     * 수신기사 등록
+     */
+    const handleRegister = () => {
+        dispatch(
+            postRcvArticle({
+                rcvArticle: temp,
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                        history.push('/rcv-article');
+                        dispatch(clearRcvArticle());
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
     useEffect(() => {
         // 기사타입 조회
         if (!articleTypeRows) {
@@ -52,15 +72,17 @@ const RcvArticleEdit = () => {
         if (!allReporter) {
             dispatch(getReporterAllList());
         } else {
+            // 등록기사인 경우 동일 기자 비교 => repSeq,
+            // 수신기사인 경우 동일 기자 비교 => 기자명/기자이메일
             setReporterList(
                 allReporter.map((reporter) => ({
                     ...reporter,
-                    value: `${reporter.repName}/${reporter.repEmail1}`,
+                    value: rcvArticle.totalId ? reporter.repSeq : `${reporter.repName}/${reporter.repEmail1}`,
                     label: reporter.repName,
                 })),
             );
         }
-    }, [allReporter, dispatch]);
+    }, [allReporter, dispatch, rcvArticle.totalId]);
 
     useEffect(() => {
         // 기사 상세 조회
@@ -107,6 +129,7 @@ const RcvArticleEdit = () => {
                     loading={loading}
                     onCancle={handleCancle}
                     onPreview={handleClickPreviewOpen}
+                    onRegister={handleRegister}
                 />
             )}
             {rcvArticle.rid && rcvArticle.totalId && (

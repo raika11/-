@@ -4,9 +4,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard } from '@components';
-// import ArticlePC from '@pages/Article/components/ArticlePC';
 
-const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview }) => {
+const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview, onRegister }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
     const [tagStr, setTagStr] = useState(''); // 태그리스트
@@ -84,16 +83,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => {
-        onPreview('P');
-    };
+    const handlePCPreview = () => onPreview('P');
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => {
-        onPreview('M');
-    };
+    const handleMobilePreview = () => onPreview('M');
 
     useEffect(() => {
         setSelectedMasterCode(article.categoryList || []);
@@ -119,7 +114,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
                 { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사등록', className: 'mr-2' },
+                { variant: 'positive', text: '기사등록', className: 'mr-2', onClick: onRegister },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
             loading={loading}
@@ -168,8 +163,8 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                     <Col className="p-0 d-flex" xs={12}>
                         <MokaInputLabel label="본문" className="mb-0" as="none" />
                         <div
-                            className="flex-fill overflow-hidden overflow-y-scroll input-border p-2"
-                            style={{ height: 283 }}
+                            className="flex-fill overflow-hidden overflow-y-scroll input-border p-2 user-select-text"
+                            style={{ height: 350 }}
                             dangerouslySetInnerHTML={{ __html: article.content }}
                         />
                     </Col>
@@ -182,7 +177,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                             as="autocomplete"
                             value={selectedReporter}
                             onChange={handleReporter}
-                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 140 }}
+                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 100 }}
                         />
                     </Col>
                 </Form.Row>

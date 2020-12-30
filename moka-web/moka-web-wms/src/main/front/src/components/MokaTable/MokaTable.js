@@ -279,7 +279,7 @@ const MokaTable = forwardRef((props, ref) => {
     return (
         <React.Fragment>
             {/* ag-grid */}
-            <div className={clsx('ag-theme-moka-grid', 'position-relative', className, { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
+            <div className={clsx('ag-theme-moka-grid position-relative', className, { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
                 {loading && <MokaLoader />}
                 <AgGridReact
                     immutableData

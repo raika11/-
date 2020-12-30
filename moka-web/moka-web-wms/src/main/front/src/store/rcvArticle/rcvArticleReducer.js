@@ -86,8 +86,8 @@ export default handleActions(
         /**
          * 수신기사 등록
          */
-        [act.POST_RCV_ARTICLE_SUCCESS]: (state, { payload }) => {},
-        [act.POST_RCV_ARTICLE_FAILURE]: (state, { payload }) => {},
+        // [act.POST_RCV_ARTICLE_SUCCESS]: () => {},
+        // [act.POST_RCV_ARTICLE_FAILURE]: () => {},
     },
     initialState,
 );

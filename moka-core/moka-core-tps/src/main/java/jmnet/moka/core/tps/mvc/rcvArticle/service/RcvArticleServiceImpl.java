@@ -114,10 +114,10 @@ public class RcvArticleServiceImpl implements RcvArticleService {
             return false;
         }
 
-        // 분류코드 삭제 : code_id가 마스터코드가 들어갈 수 있으므로 개발 보류!
-        //        if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeDel(paramMap))) {
-        //            return false;
-        //        }
+        // 분류코드 삭제
+        if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeDel(paramMap))) {
+            return false;
+        }
 
         // 키워드 삭제
         if (isReturnErr(rcvArticleMapper.callUspRcvArticleKeywordDel(paramMap))) {
@@ -138,11 +138,19 @@ public class RcvArticleServiceImpl implements RcvArticleService {
         }
 
         // 분류코드 등록 : code_id가 마스터코드가 들어갈 수 있으므로 개발 보류!
-        //        for (String category : updateDto.getCategoryList()) {
-        //            if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeIns(category))) {
-        //                return false;
-        //            }
-        //        }
+        Map paramCatMap = new HashMap();
+        paramCatMap.put("rid", rcvArticleBasic.getRid());
+        paramCatMap.put("sourceCode", rcvArticleBasic
+                .getArticleSource()
+                .getSourceCode());
+        int ord = 0;
+        for (String category : updateDto.getCategoryList()) {
+            paramCatMap.put("code", category);
+            paramCatMap.put("ord", ord++);
+            if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeIns(paramCatMap))) {
+                return false;
+            }
+        }
 
         // 키워드 등록
         Map paramTagMap = new HashMap();

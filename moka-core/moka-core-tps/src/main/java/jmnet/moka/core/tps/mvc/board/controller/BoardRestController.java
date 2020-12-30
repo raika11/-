@@ -762,7 +762,7 @@ public class BoardRestController extends AbstractCommonController {
         ResultDTO<String> resultDto = new ResultDTO<>(imageUrl, message);
 
         // 액션 로그에 성공 로그 출력
-        tpsLogger.success(ActionType.INSERT);
+        tpsLogger.success(ActionType.UPLOAD);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

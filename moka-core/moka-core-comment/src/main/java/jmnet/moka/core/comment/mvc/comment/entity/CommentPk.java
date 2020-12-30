@@ -15,7 +15,7 @@ import lombok.ToString;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.core.tps.comment.entity
+ * Package : jmnet.moka.core.comment.comment.entity
  * ClassName : CommentPk
  * Created : 2020-12-28 ince
  * </pre>
@@ -34,8 +34,9 @@ import lombok.ToString;
 public class CommentPk implements Serializable {
 
     @Column(name = "CMTSN", nullable = false)
-    private Integer commentSeq;
+    private Long commentSeq;
 
     @Column(name = "CMTPSN", nullable = false)
-    private Integer psn = 0;
+    @Builder.Default
+    private Long psn = 0L;
 }

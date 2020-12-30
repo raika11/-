@@ -9,12 +9,12 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSearchDTO;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.entity.QArticleSource;
 import org.springframework.data.domain.Page;
@@ -91,14 +91,19 @@ public class ArticleSourceRepositorySupportImpl extends TpsQueryDslRepositorySup
     }
 
     @Override
-    public Page<ArticleSource> findAllArticleSource(SearchDTO search) {
+    public Page<ArticleSource> findAllArticleSource(ArticleSourceSearchDTO search) {
         QArticleSource articleSource = QArticleSource.articleSource;
 
         BooleanBuilder builder = new BooleanBuilder();
         String searchType = search.getSearchType();
         String keyword = search.getKeyword();
+        String rcvUsedYn = search.getRcvUsedYn();
 
         // WHERE 조건
+        if (!McpString.isEmpty(rcvUsedYn) && !rcvUsedYn.equals(TpsConstants.SEARCH_TYPE_ALL)) {
+            builder.and(articleSource.rcvUsedYn.eq(rcvUsedYn));
+        }
+
         if (!McpString.isEmpty(searchType) && !McpString.isEmpty(keyword)) {
             if (searchType.equals("sourceName")) {
                 builder.and(articleSource.sourceName.contains(keyword));

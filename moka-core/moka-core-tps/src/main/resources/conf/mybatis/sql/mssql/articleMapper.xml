@@ -3,10 +3,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.article.mapper.ArticleMapper">
 
-  <!-- 서비스 기사 목록 조회 -->
-  <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
+  <!-- 서비스 기사 목록 조회 (페이지편집용)-->
+  <select id="findAllByService" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
     statementType="CALLABLE">
-    { call USP_ARTICLE_BASIC_LIST_SEL(
+    { call USP_ARTICLE_BASIC_LIST_SEL_SERVICE(
     <choose>
       <when test="sourceList != null and sourceList != ''">
         #{sourceList},
@@ -301,4 +301,109 @@
     #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
   </select>
+
+  <!-- 기사 목록 조회-->
+  <select id="findAll" parameterType="ArticleSearchDTO" resultType="ArticleBasicVO"
+    statementType="CALLABLE">
+    { call USP_ARTICLE_BASIC_LIST_SEL(
+    <choose>
+      <when test="sourceList != null and sourceList != ''">
+        #{sourceList},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{startServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endServiceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+    <choose>
+      <when test="pressCategory != 'all' and pressCategory != null and contentType != ''">
+        #{pressCategory},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="contentType != 'all' and contentType != null and contentType != ''">
+        #{contentType},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'all' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'totalId' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'title' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="searchType == 'reporterName' and keyword != null and keyword != ''">
+        #{keyword},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="masterCode != 'all' and masterCode != null and masterCode != ''">
+        #{masterCode},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="pressMyun != 'all' and pressMyun != null and pressMyun != ''">
+        #{pressMyun},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="pressPan != 'all' and pressPan != null and pressPan != ''">
+        #{pressPan},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
 </mapper>

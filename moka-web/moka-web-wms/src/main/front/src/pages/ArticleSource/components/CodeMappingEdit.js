@@ -9,7 +9,7 @@ import toast from '@utils/toastUtil';
 import { getMappingCodeDuplicateCheck, saveMappingCode, deleteMappingCode } from '@store/articleSource';
 
 const CodeMappingEdit = (props) => {
-    const { data, mappingCode } = props;
+    const { data, mappingCode, onHide } = props;
     const dispatch = useDispatch();
     // local state
     const [temp, setTemp] = useState({});
@@ -82,6 +82,10 @@ const CodeMappingEdit = (props) => {
         );
     };
 
+    const handleClickCancel = () => {
+        onHide();
+    };
+
     useEffect(() => {
         if (mappingCode.seqNo) {
             setDisabledInput(true);
@@ -140,7 +144,9 @@ const CodeMappingEdit = (props) => {
                     <Button className="mr-2" variant="positive" onClick={handleClickSave}>
                         등록
                     </Button>
-                    <Button variant="negative">취소</Button>
+                    <Button variant="negative" onClick={handleClickCancel}>
+                        취소
+                    </Button>
                 </div>
             )}
             {temp.seqNo && (
@@ -148,7 +154,7 @@ const CodeMappingEdit = (props) => {
                     <Button className="mr-2" variant="positive" onClick={handleClickSave}>
                         수정
                     </Button>
-                    <Button className="mr-2" variant="negative">
+                    <Button className="mr-2" variant="negative" onClick={handleClickCancel}>
                         취소
                     </Button>
                     <Button variant="negative" onClick={handleClickDelete}>

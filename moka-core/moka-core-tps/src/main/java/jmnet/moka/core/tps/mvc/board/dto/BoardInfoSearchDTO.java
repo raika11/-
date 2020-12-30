@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.board.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.BoardTypeCode;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,6 @@ public class BoardInfoSearchDTO extends SearchDTO {
     private String usedYn;
 
     @ApiModelProperty("게시판유형(S:서비스 / A:관리자)")
-    //@Pattern(regexp = "[S|A]{1}$", message = "{tps.board-info.error.pattern.boardType}")
+    @NotNull(message = "{tps.board-info.error.pattern.boardType}")
     private BoardTypeCode boardType = BoardTypeCode.A;
 }

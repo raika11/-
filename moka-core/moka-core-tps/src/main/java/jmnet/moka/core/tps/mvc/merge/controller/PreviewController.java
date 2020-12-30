@@ -21,13 +21,11 @@ import jmnet.moka.core.tps.mvc.merge.service.MergeService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /*
@@ -84,7 +82,9 @@ public class PreviewController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] pageSeq: {} {}", pageDto.getPageSeq(), e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.merge.error.page", request), e);
+            String html = "<script>alert('" + messageByLocale.get("tps.merge.error.page", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.page", request), e);
         }
     }
 
@@ -131,7 +131,9 @@ public class PreviewController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] pageSeq: {} {}", pageSeq, e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.merge.error.page", request), e);
+            String html = "<script>alert('" + messageByLocale.get("tps.merge.error.page", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.page", request), e);
         }
     }
 
@@ -154,7 +156,9 @@ public class PreviewController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] areaSeq: {} {}", areaSeq, e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.merge.error.area", request), e);
+            String html = "<script>alert('" + messageByLocale.get("tps.merge.error.area", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.area", request), e);
         }
     }
 
@@ -185,7 +189,9 @@ public class PreviewController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] artPageSeq: {} {}", articlePageDto.getArtPageSeq(), e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
+            String html = "<script>alert('" + messageByLocale.get("tps.merge.error.article-page", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
         }
     }
 
@@ -205,20 +211,22 @@ public class PreviewController extends AbstractCommonController {
      * @throws TemplateParseException       tems 문법오류
      * @throws TemplateLoadException        tems 로딩오류
      */
-    @PostMapping(value = "/article-page/rcv/{rid}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/article-page/rcv/{rid}")
     public void perviewArticlePageWithRcv(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
-            @ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid,
-            @ApiParam("수정할 정보(기자목록,분류코드목록,태그목록)") @RequestBody RcvArticleBasicUpdateDTO updateDto, @ApiParam("도메인(P/M)") String domainType)
+            @ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid, @ApiParam("수정할 정보(기자목록,분류코드목록,태그목록)") @Valid RcvArticleBasicUpdateDTO updateDto,
+            @ApiParam("서비스플랫폼(P/M)") String servicePlatform)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
         try {
-            String html = mergeService.getMergeArticlePageWithRcv(rid, updateDto, domainType);
+            String html = mergeService.getMergeArticlePageWithRcv(rid, updateDto, servicePlatform);
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] rid: {} {}", rid, e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
-            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
+            String html = "<script>alert('" + messageByLocale.get("tps.rcv-article.error.preview", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
         }
     }
 }

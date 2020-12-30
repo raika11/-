@@ -120,15 +120,20 @@ public class DomainServiceImpl implements DomainService {
         uploadFileHelper.deleteBusinessDir("template", domainId);
 
         // 루트 페이지 삭제
-        jmnet.moka.core.tps.mvc.page.entity.Page root = pageService
-                .findPageByDomainId(domainId, null)
-                .getContent()
-                .get(0);
-        Principal principal = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-        pageService.deletePage(root, principal.getName());
-        log.debug("[DELETE DOMAIN] Root Page Delete: {}", root.getPageSeq());
+        Page<jmnet.moka.core.tps.mvc.page.entity.Page> root = pageService.findPageByDomainId(domainId, null);
+
+        if (root.getTotalElements() > 0) {
+            Principal principal = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication();
+            pageService.deletePage(root
+                    .getContent()
+                    .get(0), principal.getName());
+            log.debug("[DELETE DOMAIN] Root Page Delete: {}", root
+                    .getContent()
+                    .get(0)
+                    .getPageSeq());
+        }
 
         domainRepository.deleteById(domainId);
         log.debug("[DELETE DOMAIN] domainId: {}", domainId);

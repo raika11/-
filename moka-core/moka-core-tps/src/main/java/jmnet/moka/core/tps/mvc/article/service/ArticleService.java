@@ -17,12 +17,12 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 public interface ArticleService {
 
     /**
-     * 서비스기사목록 조회
+     * 서비스기사목록 조회(페이지편집용)
      *
      * @param search 검색조건
      * @return 서비스기사목록
      */
-    List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search);
+    List<ArticleBasicVO> findAllArticleBasicByService(ArticleSearchDTO search);
 
     /**
      * 기사 상세조회
@@ -51,7 +51,7 @@ public interface ArticleService {
     Optional<ArticleDetailVO> findArticleDetailById(Long totalId);
 
     /**
-     * 벌크전송된 기사목록 조회
+     * 벌크전송된 기사목록 조회(네이버채널용)
      *
      * @param search 검색조건
      * @return 기사목록
@@ -64,4 +64,12 @@ public interface ArticleService {
      * @return 기사의 이미지 목록
      */
     List<ArticleComponentVO> findAllImageComponent(Long totalId);
+
+    /**
+     * 기사목록 조회
+     *
+     * @param search 검색조건
+     * @return 서비스기사목록
+     */
+    List<ArticleBasicVO> findAllArticleBasic(ArticleSearchDTO search);
 }

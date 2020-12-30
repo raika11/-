@@ -34,8 +34,9 @@ const Domain = ({ match }) => {
      * @param {object} domain domain
      */
     const deleteCallback = (domain) => {
-        messageBox.confirm(`${domain.domainId}_${domain.domainName}을 정말 삭제하시겠습니까?`, {
-            onOk: () => {
+        messageBox.confirm(
+            `${domain.domainId}_${domain.domainName}을 정말 삭제하시겠습니까?`,
+            () => {
                 dispatch(
                     deleteDomain({
                         domainId: domain.domainId,
@@ -53,12 +54,12 @@ const Domain = ({ match }) => {
                     }),
                 );
             },
-            onCancel: () => {},
-        });
+            () => {},
+        );
     };
 
     /**
-     * 삭제 버튼 클릭
+     * 삭제 버튼 클릭O
      * @param {object} domain domain
      */
     const handleClickDelete = (domain) => {
@@ -68,10 +69,11 @@ const Domain = ({ match }) => {
                 domainId,
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        // 관련 아이템 없음
-                        if (!body) deleteCallback(domain);
-                        // 관련 아이템 있음
-                        else {
+                        if (!body) {
+                            // 관련 아이템 없음
+                            deleteCallback(domain);
+                        } else {
+                            // 관련 아이템 있음
                             toast.fail('사용 중인 도메인은 삭제할 수 없습니다');
                         }
                     } else {

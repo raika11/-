@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
-import MultiRowColumnComponent from '@pages/Survey/Poll/component/MultiRowColumnComponent';
+import MultiRowColumnComponent from '@pages/Survey/Poll/components/MultiRowColumnComponent';
 
 export const columnDefs = [
     {

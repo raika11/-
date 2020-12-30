@@ -40,9 +40,26 @@ const ArticleSourceSearch = () => {
     };
 
     /**
+     * 초기화 버튼
+     */
+    const handleClickInitialize = () => {
+        dispatch(
+            getSourceList(
+                changeSearchOption({
+                    ...search,
+                    page: 0,
+                    searchType: 'all',
+                    rcvUsedYn: 'all',
+                    keyword: '',
+                }),
+            ),
+        );
+    };
+
+    /**
      * 신규 등록 버튼
      */
-    const handleAddClick = () => {
+    const handleClickAdd = () => {
         history.push('/article-sources/add');
     };
 
@@ -58,10 +75,18 @@ const ArticleSourceSearch = () => {
     return (
         <div className="mb-2 d-flex align-items-center justify-content-between">
             <div className="d-flex">
-                <div style={{ width: 120 }} className="mr-2">
+                <div style={{ width: 100 }} className="mr-2">
                     <MokaInput className="ft-12" as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                        <option value="all">전체</option>
                         <option value="sourceName">매체명</option>
                         <option value="sourceCode">매체코드</option>
+                    </MokaInput>
+                </div>
+                <div style={{ width: 130 }} className="mr-2">
+                    <MokaInput className="ft-12" as="select" name="rcvUsedYn" value={search.rcvUsedYn} onChange={handleChangeValue}>
+                        <option value="all">CP수신여부(전체)</option>
+                        <option value="Y">수신</option>
+                        <option value="N">미수신</option>
                     </MokaInput>
                 </div>
                 <MokaSearchInput
@@ -73,11 +98,11 @@ const ArticleSourceSearch = () => {
                     onChange={handleChangeValue}
                     onSearch={handleSearch}
                 />
-                <Button className="ft-12" variant="outline-table-btn">
+                <Button className="ft-12" variant="outline-neutral" onClick={handleClickInitialize}>
                     초기화
                 </Button>
             </div>
-            <Button className="ft-12" variant="outline-table-btn" onClick={handleAddClick}>
+            <Button className="ft-12" variant="positive" onClick={handleClickAdd}>
                 신규 등록
             </Button>
         </div>

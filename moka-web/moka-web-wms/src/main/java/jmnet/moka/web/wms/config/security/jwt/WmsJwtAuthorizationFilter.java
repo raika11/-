@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -59,7 +60,7 @@ public class WmsJwtAuthorizationFilter extends BasicAuthenticationFilter {
         String header = request.getHeader(WmsJwtHelper.HEADER_STRING);
 
         // 메뉴 ID
-        String menuId = request.getHeader(TpsConstants.HEADER_MENU_ID);
+        String menuId = request.getHeader(MokaConstants.HEADER_MENU_ID);
 
         // 인증된 세션이 있으면 다음 필터로 넘김, 중복 로그인 확인
         Authentication auth = SecurityContextHolder

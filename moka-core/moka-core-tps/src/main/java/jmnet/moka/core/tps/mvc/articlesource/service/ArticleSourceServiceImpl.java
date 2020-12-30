@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
+import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSearchDTO;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.entity.RcvCodeConv;
 import jmnet.moka.core.tps.mvc.articlesource.repository.ArticleSourceRepository;
@@ -55,7 +56,7 @@ public class ArticleSourceServiceImpl implements ArticleSourceService {
     }
 
     @Override
-    public Page<ArticleSource> findAllArticleSource(SearchDTO search) {
+    public Page<ArticleSource> findAllArticleSource(ArticleSourceSearchDTO search) {
         return articleSourceRepository.findAllArticleSource(search);
     }
 

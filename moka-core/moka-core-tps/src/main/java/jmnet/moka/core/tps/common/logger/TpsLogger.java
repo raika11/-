@@ -6,7 +6,6 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
-import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
 import jmnet.moka.core.tps.mvc.editlog.service.EditLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -322,8 +321,9 @@ public class TpsLogger {
         Long processStartTime =
                 req != null ? System.currentTimeMillis() - Long.parseLong(McpString.defaultValue(req.getAttribute("processStartTime"), "0")) : 0;
         String url = req != null ? McpString.defaultValue(req.getRequestURI(), MokaConstants.UNKNOWN) : MokaConstants.IP_UNKNOWN;
-        String menuId =
-                req != null ? McpString.defaultValue(req.getHeader(TpsConstants.HEADER_MENU_ID), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
+        String menuId = req != null
+                ? McpString.defaultValue(req.getHeader(MokaConstants.HEADER_MENU_ID), MokaConstants.IP_UNKNOWN)
+                : MokaConstants.IP_UNKNOWN;
         String param = req != null ? McpString.defaultValue(HttpHelper.getParamString(req, "&"), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
         String remoteAddr = req != null ? McpString.defaultValue(HttpHelper.getRemoteAddr(req), MokaConstants.IP_UNKNOWN) : MokaConstants.IP_UNKNOWN;
 

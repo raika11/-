@@ -5,8 +5,8 @@
 package jmnet.moka.core.tps.mvc.articlesource.repository;
 
 import java.util.List;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.code.ArticleSourceUseTypeCode;
+import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSearchDTO;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import org.springframework.data.domain.Page;
 
@@ -39,5 +39,5 @@ public interface ArticleSourceRepositorySupport {
      * @param search 검색조건
      * @return 매체목록
      */
-    Page<ArticleSource> findAllArticleSource(SearchDTO search);
+    Page<ArticleSource> findAllArticleSource(ArticleSourceSearchDTO search);
 }

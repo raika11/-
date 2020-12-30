@@ -36,6 +36,8 @@ const Poll = React.lazy(() => import('@pages/Survey/Poll'));
 const RcvArticle = React.lazy(() => import('@pages/RcvArticle'));
 const Comment = React.lazy(() => import('@pages/CommentManage/Comment'));
 const Boards = React.lazy(() => import('@pages/Boards'));
+const TourSet = React.lazy(() => import('@pages/TourSet'));
+const TourMsgSet = React.lazy(() => import('@pages/TourMsgSet'));
 
 const routes = [
     {
@@ -384,6 +386,26 @@ const routes = [
         name: 'boards-set',
         displayName: '전체 게시판 관리',
         component: Boards,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/tour-set',
+        name: 'tour-set',
+        displayName: '기본 설정',
+        component: TourSet,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/tour-message',
+        name: 'tour-message',
+        displayName: '메세지 설정',
+        component: TourMsgSet,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

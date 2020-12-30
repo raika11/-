@@ -14,7 +14,7 @@ import jmnet.moka.common.template.parse.model.TemplateText;
 
 /**
  * <pre>
- * tp(템플릿) 엘리먼트를 머지한다.
+ * script 엘리먼트를 머지한다.
  * 2019. 9. 4. kspark 최초생성
  * </pre>
  * 

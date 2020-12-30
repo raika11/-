@@ -48,21 +48,21 @@ public interface RcvArticleMapper extends BaseMapper<RcvArticleBasicVO, RcvArtic
      */
     Integer callUspRcvArticleReporterDel(Map<String, Object> param);
 
-    //    /**
-    //     * 분류코드 등록
-    //     *
-    //     * @param category 분류코드
-    //     * @return 성공여부
-    //     */
-    //    Integer callUspRcvArticleCodeIns(String category);
-    //
-    //    /**
-    //     * 분류코드 삭제
-    //     *
-    //     * @param param rid: 수신기사키
-    //     * @return 성공여부
-    //     */
-    //    Integer callUspRcvArticleCodeDel(Map<String, Object> param);
+    /**
+     * 분류코드 등록
+     *
+     * @param param rid: 수신기사키, sourceCode: 매체코드, category: 분류정보
+     * @return 성공여부
+     */
+    Integer callUspRcvArticleCodeIns(Map<String, Object> param);
+
+    /**
+     * 분류코드 삭제
+     *
+     * @param param rid: 수신기사키, sourceCode: 매체코드
+     * @return 성공여부
+     */
+    Integer callUspRcvArticleCodeDel(Map<String, Object> param);
 
     /**
      * 태그등록

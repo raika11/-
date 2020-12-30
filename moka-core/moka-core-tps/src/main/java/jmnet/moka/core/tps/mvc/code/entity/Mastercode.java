@@ -89,6 +89,13 @@ public class Mastercode {
     private String usedYn = MokaConstants.YES;
 
     /**
+     * 백오피스 노출여부 : Y/N
+     */
+    @Column(name = "VIEW_YN")
+    @Builder.Default
+    private String viewYn = MokaConstants.YES;
+
+    /**
      * 순서
      */
     @Column(name = "CODE_ORD")
@@ -99,6 +106,7 @@ public class Mastercode {
     @PreUpdate
     public void prePersist() {
         this.usedYn = this.usedYn == null ? MokaConstants.YES : this.usedYn;
+        this.viewYn = this.viewYn == null ? MokaConstants.YES : this.viewYn;
         this.codeOrd = this.codeOrd == null ? 1 : this.codeOrd;
     }
 }

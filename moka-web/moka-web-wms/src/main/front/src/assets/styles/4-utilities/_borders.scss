@@ -38,5 +38,5 @@
 }
 .input-border {
   border: $input-border-width solid $input-border-color;
-  @include form-control-focus;
+  @include form-control-focus($ignore-warning: true);
 }

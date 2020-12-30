@@ -9,10 +9,6 @@ export const getDeskingSourceList = createAction(GET_DESKING_SOURCE_LIST, () => 
 export const [GET_TYPE_SOURCE_LIST, GET_TYPE_SOURCE_LIST_SUCCESS, GET_TYPE_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_TYPE_SOURCE_LIST');
 export const getTypeSourceList = createAction(GET_TYPE_SOURCE_LIST, ({ type, callback }) => ({ type, callback }));
 
-// // 벌크전송 매체 목록 조회(네이버채널용)
-// export const [GET_BLUK_SOURCE_LIST, GET_BLUK_SOURCE_LIST_SUCCESS, GET_BLUK_SOURCE_LIST_FAILURE] = createRequestActionTypes('articleSource/GET_BLUK_SOURCE_LIST');
-// export const getBulkSourceList = createAction(GET_BLUK_SOURCE_LIST, () => ({}));
-
 // clear
 export const CLEAR_STORE = 'articleSource/CLEAR_STORE';
 export const CLEAR_ARTICLE_SOURCE = 'articleSource/CLEAR_ARTICLE_SOURCE';

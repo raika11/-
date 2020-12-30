@@ -13,8 +13,8 @@ import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from 
 import toast, { messageBox } from '@utils/toastUtil';
 
 import ArticlePageEditor from './ArticlePageEditor';
+import ArticlePageEdit from './ArticlePageEdit';
 const ArticlePageList = React.lazy(() => import('./ArticlePageList'));
-const ArticlePageEdit = React.lazy(() => import('./ArticlePageEdit'));
 // relations
 const LookupArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/LookupArticlePageList'));
 const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
@@ -22,16 +22,15 @@ const LookupComponentList = React.lazy(() => import('@pages/Component/components
 const LookupTemplateList = React.lazy(() => import('@pages/Template/components/LookupTemplateList'));
 const PageChildAdList = React.lazy(() => import('@pages/Page/relations/PageChildAdList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
+
 /**
  * 기사페이지 관리
  */
 const ArticlePage = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { articlePage, articleTypeRows } = useSelector((store) => ({
-        articlePage: store.articlePage.articlePage,
-        articleTypeRows: store.codeMgt.articleTypeRows,
-    }));
+    const articlePage = useSelector((store) => store.articlePage.articlePage);
+    const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
 
     // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
@@ -82,6 +81,7 @@ const ArticlePage = ({ match }) => {
             }),
         );
     };
+
     /**
      * 삭제 이벤트
      */
@@ -116,7 +116,7 @@ const ArticlePage = ({ match }) => {
     }, [dispatch]);
 
     React.useEffect(() => {
-        if (!articleTypeRows || articleTypeRows.length <= 0) {
+        if (!articleTypeRows) {
             dispatch(getArticleType());
         }
     }, [articleTypeRows, dispatch]);
@@ -201,16 +201,13 @@ const ArticlePage = ({ match }) => {
                         <ArticlePageEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
 
                         {/* 탭 */}
-
                         <MokaIconTabs
                             expansion={expansionState[2]}
                             onExpansion={handleTabExpansion}
                             onSelectNav={(idx) => setActiveTabIdx(idx)}
                             tabWidth={412}
                             tabs={[
-                                <Suspense fallback={<MokaLoader />}>
-                                    <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
-                                </Suspense>,
+                                <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />,
                                 <Suspense fallback={<MokaLoader />}>
                                     <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />
                                 </Suspense>,
@@ -234,7 +231,6 @@ const ArticlePage = ({ match }) => {
                             tabNavPosition="right"
                             tabNavs={[
                                 { title: '기사페이지 정보', text: 'Info' },
-
                                 { title: '관련 기사페이지', icon: <MokaIcon iconName="fal-money-check" /> },
                                 { title: '관련 컨테이너', icon: <MokaIcon iconName="fal-calculator" /> },
                                 { title: '관련 컴포넌트', icon: <MokaIcon iconName="fal-ballot" /> },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -13,8 +13,7 @@ import CodeMappingModal from './modals/CodeMappingModal';
 /**
  * 수신 매체 편집
  */
-const ArticleSourceEdit = (props) => {
-    const { location, clickMapping, setClickMapping, clickSave, setClickSave } = props;
+const ArticleSourceEdit = forwardRef((props, ref) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { sourceCode } = useParams();
@@ -22,39 +21,10 @@ const ArticleSourceEdit = (props) => {
     const source = useSelector((store) => store.articleSource.source);
     const invalidList = useSelector((store) => store.articleSource.invalidList);
 
-    const [addParam, setAddParam] = useState(false);
     const [temp, setTemp] = useState({});
     const [disabledBtn, setDisabledBtn] = useState(false);
     const [error, setError] = useState({});
     const [show, setShow] = useState(false);
-
-    const handleChangeValue = (e) => {
-        const { name, value, checked } = e.target;
-
-        if (
-            name === 'artEditYn' ||
-            name === 'rcvUsedYn' ||
-            name === 'joongangUse' ||
-            name === 'jstoreUse' ||
-            name === 'consalesUse' ||
-            name === 'ilganUse' ||
-            name === 'socialUse' ||
-            name === 'bulkFlag'
-        ) {
-            setTemp({ ...temp, [name]: checked ? 'Y' : 'N' });
-        } else if (name === 'sourceCode') {
-            setTemp({ ...temp, sourceCode: value });
-
-            if (temp.sourceCode !== value) {
-                setDisabledBtn(false);
-            }
-        } else {
-            setTemp({ ...temp, [name]: value });
-        }
-
-        // error 제거
-        if (error[name] === true) setError({ ...error, [name]: false });
-    };
 
     /**
      * validate
@@ -74,7 +44,7 @@ const ArticleSourceEdit = (props) => {
                 isInvalid = isInvalid || true;
             }
             // 매체타입 체크
-            if (!obj.sourceType || !/^[a-zA-Z0-9]{1,5}$/.test(obj.sourceType)) {
+            if (!obj.sourceType || !/^[a-zA-Z0-9\s]{1,5}$/.test(obj.sourceType)) {
                 errList.push({
                     field: 'sourceType',
                     reason: '매체타입을 5자리 이하로 입력하세요.',
@@ -107,6 +77,79 @@ const ArticleSourceEdit = (props) => {
     );
 
     /**
+     * 매체 코드 유효성 체크 후 저장
+     */
+    const checkSaveSource = useCallback(() => {
+        const saveObj = { ...temp, add: sourceCode ? false : true };
+
+        if (!sourceCode) {
+            if (disabledBtn === false) {
+                toast.warning('매체코드 중복 확인을 해주세요');
+            } else if (disabledBtn === true) {
+                if (validate(saveObj)) {
+                    dispatch(
+                        saveArticleSource({
+                            source: saveObj,
+                            callback: ({ header, body }) => {
+                                if (header.success) {
+                                    toast.success(header.message);
+                                    history.push(`/article-sources/${body.sourceCode}`);
+                                } else {
+                                    toast.fail(header.message);
+                                }
+                            },
+                        }),
+                    );
+                }
+            }
+        } else {
+            if (validate(saveObj)) {
+                dispatch(
+                    saveArticleSource({
+                        source: saveObj,
+                        callback: ({ header, body }) => {
+                            if (header.success) {
+                                toast.success(header.message);
+                                history.push(`/article-sources/${body.sourceCode}`);
+                            } else {
+                                toast.fail(header.message);
+                            }
+                        },
+                    }),
+                );
+            }
+        }
+    }, [disabledBtn, dispatch, history, sourceCode, temp, validate]);
+
+    const handleChangeValue = (e) => {
+        const { name, value, checked } = e.target;
+
+        if (
+            name === 'artEditYn' ||
+            name === 'rcvUsedYn' ||
+            name === 'joongangUse' ||
+            name === 'jstoreUse' ||
+            name === 'consalesUse' ||
+            name === 'ilganUse' ||
+            name === 'socialUse' ||
+            name === 'bulkFlag'
+        ) {
+            setTemp({ ...temp, [name]: checked ? 'Y' : 'N' });
+        } else if (name === 'sourceCode') {
+            setTemp({ ...temp, sourceCode: value });
+
+            if (temp.sourceCode !== value) {
+                setDisabledBtn(false);
+            }
+        } else {
+            setTemp({ ...temp, [name]: value });
+        }
+
+        // error 제거
+        if (error[name] === true) setError({ ...error, [name]: false });
+    };
+
+    /**
      * 매체코드의 중복체크
      */
     const checkDuplicatedSource = () => {
@@ -132,6 +175,17 @@ const ArticleSourceEdit = (props) => {
         );
     };
 
+    useImperativeHandle(
+        ref,
+        () => ({
+            onSave: checkSaveSource,
+            onMapping: () => {
+                setShow(true);
+            },
+        }),
+        [checkSaveSource],
+    );
+
     useEffect(() => {
         if (sourceCode) {
             dispatch(getArticleSource({ sourceCode }));
@@ -139,12 +193,6 @@ const ArticleSourceEdit = (props) => {
             dispatch(clearArticleSource());
         }
     }, [dispatch, sourceCode]);
-
-    useEffect(() => {
-        if (location.pathname.lastIndexOf('add') > -1) {
-            setAddParam(true);
-        }
-    }, [location.pathname]);
 
     useEffect(() => {
         if (source) {
@@ -168,47 +216,6 @@ const ArticleSourceEdit = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [source]);
-
-    useEffect(() => {
-        if (clickMapping) {
-            setShow(true);
-        }
-        setClickMapping(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clickMapping]);
-
-    useEffect(() => {
-        // 등록, 수정
-        if (clickSave) {
-            let obj = {
-                ...temp,
-                add: addParam,
-            };
-            if (addParam === true) {
-                if (disabledBtn === false) {
-                    toast.warning('매체코드 중복 확인을 해주세요');
-                }
-            } else {
-                if (validate(obj)) {
-                    dispatch(
-                        saveArticleSource({
-                            source: obj,
-                            callback: ({ header, body }) => {
-                                if (header.success) {
-                                    toast.success(header.message);
-                                    history.push(`/article-sources/${body.sourceCode}`);
-                                } else {
-                                    toast.fail(header.message);
-                                }
-                            },
-                        }),
-                    );
-                }
-            }
-        }
-        setClickSave(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clickSave]);
 
     useEffect(() => {
         setError(
@@ -261,13 +268,16 @@ const ArticleSourceEdit = (props) => {
                                     name="sourceCode"
                                     onChange={handleChangeValue}
                                     isInvalid={error.sourceCode}
+                                    inputProps={{ plaintext: sourceCode ? true : false, readOnly: sourceCode ? true : false }}
                                     required
                                 />
                             </Col>
                             <Col xs={3} className="p-0">
-                                <Button variant="outline-table-btn" onClick={checkDuplicatedSource} disabled={disabledBtn}>
-                                    중복 확인
-                                </Button>
+                                {!sourceCode && (
+                                    <Button variant="outline-table-btn" onClick={checkDuplicatedSource} disabled={disabledBtn}>
+                                        중복 확인
+                                    </Button>
+                                )}
                             </Col>
                         </Form.Row>
                         <Form.Row>
@@ -407,6 +417,7 @@ const ArticleSourceEdit = (props) => {
                                     value={temp.sourceType}
                                     name="sourceType"
                                     onChange={handleChangeValue}
+                                    isInvalid={error.sourceType}
                                     required
                                 />
                             </Col>
@@ -556,6 +567,6 @@ const ArticleSourceEdit = (props) => {
             <CodeMappingModal show={show} onHide={() => setShow(false)} data={temp} />
         </>
     );
-};
+});
 
 export default ArticleSourceEdit;

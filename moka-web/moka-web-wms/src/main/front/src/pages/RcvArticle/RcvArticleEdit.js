@@ -36,7 +36,6 @@ const RcvArticleEdit = () => {
      * 취소
      */
     const handleCancle = () => {
-        debugger;
         history.push('/rcv-article');
         dispatch(clearRcvArticle());
     };
@@ -85,6 +84,8 @@ const RcvArticleEdit = () => {
         setTemp({
             ...rcvArticle,
             title: unescapeHtml(rcvArticle.title),
+            // categoryList 중복인 마스터코드 제거
+            categoryList: [...new Set(rcvArticle.categoryList)],
         });
     }, [rcvArticle]);
 

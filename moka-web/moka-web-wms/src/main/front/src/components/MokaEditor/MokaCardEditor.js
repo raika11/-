@@ -85,7 +85,6 @@ const MokaCardEditor = forwardRef((props, ref) => {
             className={className}
             headerClassName="d-flex justify-content-between align-items-center"
             bodyClassName="overflow-hidden"
-            titleClassName="mb-0"
             title={title}
             buttons={[
                 // 워드랩 버튼

@@ -88,6 +88,7 @@ const CodeMgtEditSearch = (props) => {
                             searchType: e.target.value,
                         });
                     }}
+                    className="ft-12"
                 >
                     <option value="dtlCd">코드</option>
                     <option value="cdNm">코드명</option>
@@ -102,11 +103,13 @@ const CodeMgtEditSearch = (props) => {
                             keyword: e.target.value,
                         });
                     }}
+                    inputClassName="ft-12"
+                    buttonClassName="ft-12"
                     onSearch={handleSearch}
                 />
             </Col>
             <Col xs={1} className="p-0">
-                <Button variant="positive" onClick={handleAdd}>
+                <Button variant="positive" onClick={handleAdd} className="ft-12 h-100">
                     코드 등록
                 </Button>
             </Col>

@@ -38,18 +38,18 @@ const Group = () => {
                 <meta name="description" content="사용자 그룹관리 페이지 입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
+
             {/*리스트*/}
             <MokaCard
                 title="사용자 그룹관리"
                 width={480}
-                titleClassName="h-100 mb-0 pb-0"
                 headerClassName="d-flex justify-content-between align-item-center"
-                className="mb-0 mr-10"
+                className="mr-gutter"
                 bodyClassName="d-flex flex-column"
                 height={CARD_DEFAULT_HEIGHT}
             >
-                <div className="mb-3 d-flex justify-content-end">
-                    <Button variant="dark" onClick={handleClickAddGroup}>
+                <div className="mb-2 d-flex justify-content-end">
+                    <Button variant="positive" onClick={handleClickAddGroup} className="ft-12">
                         그룹 추가
                     </Button>
                 </div>

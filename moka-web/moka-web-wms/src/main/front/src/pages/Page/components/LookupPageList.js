@@ -196,7 +196,7 @@ const LookupPageList = (props) => {
             {/* 버튼 그룹 */}
             {seqType !== ITEM_PG && (
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="positive" onClick={() => window.open('/page')}>
+                    <Button variant="positive" onClick={() => window.open('/page')} className="ft-12">
                         페이지 등록
                     </Button>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import { MokaIcon } from '@components';
 import Button from 'react-bootstrap/Button';
@@ -23,8 +23,12 @@ const defaultProps = {
 /**
  * 테이블에 들어가는 load 버튼
  */
-const MokaTableLoadButton = (props) => {
+const MokaTableLoadButton = forwardRef((props, ref) => {
     const { data, onClick } = props;
+
+    useImperativeHandle(ref, () => ({
+        refresh: () => false,
+    }));
 
     const handleClick = useCallback(
         (e) => {
@@ -47,7 +51,7 @@ const MokaTableLoadButton = (props) => {
             </OverlayTrigger>
         </div>
     );
-};
+});
 
 MokaTableLoadButton.propTypes = propTypes;
 MokaTableLoadButton.defaultProps = defaultProps;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListTitleRenderer, ImageRenderer, ButtonStatusRenderer, SendStatusRenderer } from './component';
+import { ListTitleRenderer, ButtonStatusRenderer, SendStatusRenderer } from './component';
 
 export const tempColumnDefs = [
     {
@@ -18,11 +18,10 @@ export const tempColumnDefs = [
     },
     {
         headerName: '이미지',
-        field: 'listRepImg',
+        field: 'thumbnail',
         headerClass: 'ag-grid-sns-meta-header',
-        cellRendererFramework: (params) => <ImageRenderer src={params.data.thumbnail} />,
+        cellRenderer: 'imageRenderer',
         width: 80,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '8px' },
     },
     {
         headerName: '기사제목',
@@ -32,10 +31,9 @@ export const tempColumnDefs = [
             {
                 headerName: 'SNS제목',
                 field: 'listTitle',
-                headerClass: 'ag-grid-sns-meta-header',
                 flex: 1,
+                headerClass: 'ag-grid-sns-meta-header',
                 cellRendererFramework: (params) => <ListTitleRenderer title={params.data.title} summary={params.data.summary} />,
-                cellStyle: { fontSize: '12px' },
             },
         ],
     },
@@ -43,7 +41,6 @@ export const tempColumnDefs = [
         headerName: '전송상태',
         field: 'sendType',
         width: 100,
-        // wrapText: true,
         cellRendererFramework: (params) => (
             <SendStatusRenderer sendFlag={params.data.sendStatus.button} facebook={params.data.sendStatus.facebook} twitter={params.data.sendStatus.twitter} />
         ),
@@ -75,9 +72,8 @@ export const tempColumnDefs = [
             {
                 headerName: '전송',
                 field: 'insStatus',
-                width: 140,
+                width: 65,
                 cellRendererFramework: (params) => <ButtonStatusRenderer hasButtons={params.data.hasSnsArticleSendButtons} />,
-                cellStyle: { fontSize: '12px', lineHeight: '23px' },
                 headerClass: 'ag-grid-sns-meta-header',
             },
         ],

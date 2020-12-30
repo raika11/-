@@ -47,7 +47,7 @@ const ReservedAgGrid = () => {
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={handleAddClick}>
+                <Button variant="positive" onClick={handleAddClick} className="ft-12">
                     예약어추가
                 </Button>
             </div>

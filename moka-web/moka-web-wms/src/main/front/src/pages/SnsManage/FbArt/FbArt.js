@@ -3,8 +3,8 @@ import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaLoader } from '@components';
 
+import FbArtEdit from './FbArtEdit';
 const FbArtList = React.lazy(() => import('./FbArtList'));
-const FbArtEdit = React.lazy(() => import('./FbArtEdit'));
 
 /**
  * FB전송기사
@@ -21,22 +21,14 @@ const FbArt = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false}>
+            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false} bodyClassName="d-flex flex-column">
                 <Suspense fallback={<MokaLoader />}>
                     <FbArtList />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route
-                path={[`${match.url}/:totalId`]}
-                exact
-                render={(props) => (
-                    <Suspense fallback={<MokaLoader />}>
-                        <FbArtEdit {...props} />
-                    </Suspense>
-                )}
-            />
+            <Route path={[`${match.url}/:totalId`]} exact render={(props) => <FbArtEdit {...props} />} />
         </div>
     );
 };

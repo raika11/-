@@ -89,10 +89,10 @@ const DatasetSearch = () => {
     }, [apiRows, dispatch, search]);
 
     return (
-        <Form className="mb-10">
-            <Form.Row className="m-0 mb-2">
+        <Form className="mb-2">
+            <Form.Row className="mb-2">
                 <Col xs={8} className="p-0 pr-2">
-                    <MokaInput as="select" name="apiCodeId" onChange={handleChangeSearchValue} value={search.apiCodeId}>
+                    <MokaInput as="select" name="apiCodeId" onChange={handleChangeSearchValue} value={search.apiCodeId} className="ft-12">
                         {apiRows &&
                             apiRows.map((api) => (
                                 <option key={api.id} value={api.dtlCd}>
@@ -102,7 +102,7 @@ const DatasetSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={4} className="p-0">
-                    <MokaInput as="select" name="autoCreateYn" onChange={handleChangeSearchValue} value={search.autoCreateYn}>
+                    <MokaInput as="select" name="autoCreateYn" onChange={handleChangeSearchValue} value={search.autoCreateYn} className="ft-12">
                         {defaultAutoCreateYn &&
                             defaultAutoCreateYn.map((autoCreateYn) => (
                                 <option key={autoCreateYn.id} value={autoCreateYn.id}>
@@ -112,9 +112,9 @@ const DatasetSearch = () => {
                     </MokaInput>
                 </Col>
             </Form.Row>
-            <Form.Row className="m-0 mb-2">
+            <Form.Row className="mb-2">
                 <Col xs={5} className="p-0 pr-2">
-                    <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue} value={search.searchType}>
+                    <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue} value={search.searchType} className="ft-12">
                         {defaultSearchType &&
                             defaultSearchType.map((type) => (
                                 <option key={type.id} value={type.id}>
@@ -124,11 +124,18 @@ const DatasetSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0">
-                    <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChangeSearchValue} onSearch={handleClickSearch} />
+                    <MokaSearchInput
+                        name="keyword"
+                        value={search.keyword}
+                        onChange={handleChangeSearchValue}
+                        onSearch={handleClickSearch}
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
+                    />
                 </Col>
             </Form.Row>
-            <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={handleClickAddDataSet}>
+            <div className="d-flex justify-content-end">
+                <Button variant="positive" onClick={handleClickAddDataSet} className="ft-12">
                     데이터셋 등록
                 </Button>
             </div>

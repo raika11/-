@@ -349,7 +349,7 @@ const GroupEdit = () => {
             footer
         >
             <Form noValidate>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             label="그룹코드"
@@ -364,14 +364,14 @@ const GroupEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row className="d-flex mb-10 text-align-center">
+                <Form.Row className="d-flex mb-2 text-align-center">
                     <MokaInputLabel label=" " labelWidth={80} as="none" />
                     <Form.Label className="text-danger">
                         <div>* 한번입력하면 변경하실 수 없습니다.</div>
                         <div style={{ textIndent: 8 }}>신중히 입력하시기 바랍니다.</div>
                     </Form.Label>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             label="그룹명"
@@ -385,7 +385,7 @@ const GroupEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             label="그룹 한글명"
@@ -399,7 +399,7 @@ const GroupEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel label="등록자" labelWidth={80} disabled={true} name={regId} value={regId} />
                     </Col>

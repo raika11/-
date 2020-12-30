@@ -29,7 +29,7 @@ const RcvArticle = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={850} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+            <MokaCard width={850} className="mr-gutter" bodyClassName="d-flex flex-column" header={false}>
                 <Suspense>
                     <RcvArticleList />
                 </Suspense>

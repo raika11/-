@@ -116,7 +116,7 @@ const RelationInContainerList = (props) => {
                 <Form.Row className="mb-2">
                     <MokaInput
                         as="select"
-                        className="w-100"
+                        className="ft-12"
                         value={search.domainId || undefined}
                         onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}
                     >
@@ -131,7 +131,7 @@ const RelationInContainerList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={() => history.push('/container')}>
+                <Button variant="positive" onClick={() => history.push('/container')} className="ft-12">
                     컨테이너 등록
                 </Button>
             </div>

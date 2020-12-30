@@ -61,12 +61,12 @@ const ArticlePageSearch = () => {
     }, [dispatch, latestDomainId, search]);
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    className="w-100"
+                    className="ft-12"
                     value={search.domainId || undefined}
                     onChange={(e) => {
                         dispatch(changeLatestDomainId(e.target.value));
@@ -80,7 +80,7 @@ const ArticlePageSearch = () => {
                     ))}
                 </MokaInput>
             </Form.Row>
-            <Form.Group as={Row} className="mb-2">
+            <Form.Group as={Row}>
                 {/* 검색조건 */}
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput
@@ -92,6 +92,7 @@ const ArticlePageSearch = () => {
                                 searchType: e.target.value,
                             });
                         }}
+                        className="ft-12"
                     >
                         {searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -110,6 +111,8 @@ const ArticlePageSearch = () => {
                                 keyword: e.target.value,
                             });
                         }}
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
                         onSearch={handleSearch}
                     />
                 </Col>

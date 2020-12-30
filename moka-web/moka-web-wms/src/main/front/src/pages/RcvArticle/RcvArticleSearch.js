@@ -25,7 +25,8 @@ const RcvArticleSearch = () => {
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
     const [error, setError] = useState({});
-    const [period, setPeriod] = useState([3, 'months']);
+    // const [period, setPeriod] = useState([3, 'months']);
+    const [period, setPeriod] = useState([1, 'years']);
 
     /**
      * 입력값 변경
@@ -200,6 +201,10 @@ const RcvArticleSearch = () => {
                         <option value="3months" data-number="3" data-date="months">
                             3개월
                         </option>
+                        {/* 데이터 조회용 임시 옵션 */}
+                        <option value="1years" data-number="1" data-date="years">
+                            1년
+                        </option>
                     </MokaInputLabel>
                 </div>
 
@@ -262,9 +267,11 @@ const RcvArticleSearch = () => {
                     label="제목"
                     labelWidth={50}
                     className="mb-0 flex-fill"
+                    inputClassName="ft-12"
                     value={search.keyword}
                     onChange={handleChangeValue}
                     inputProps={{ onKeyPress: handleKeyPress }}
+                    placeholder="검색어를 입력하세요"
                 />
 
                 {/* 매체 */}
@@ -286,7 +293,7 @@ const RcvArticleSearch = () => {
                 </div>
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-end">
-                <Button variant="searching" className="mr-2" onClick={handleSearch}>
+                <Button variant="searching" className="mr-2 ft-12" onClick={handleSearch}>
                     검색
                 </Button>
 

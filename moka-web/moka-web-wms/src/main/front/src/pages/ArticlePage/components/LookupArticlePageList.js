@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { ITEM_AP } from '@/constants';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import {
     initialState,
     getArticlePageLookupList,
@@ -229,10 +229,8 @@ const LookupArticlePageList = (props) => {
                 {/* 검색조건, 키워드 */}
                 <Form.Row>
                     <Col xs={5} className="p-0 pr-2">
-                        <MokaInputLabel
-                            label="구분"
-                            labelWidth={28}
-                            className="mb-0"
+                        <MokaInput
+                            className="ft-12"
                             as="select"
                             value={search.searchType}
                             onChange={(e) => {
@@ -247,7 +245,7 @@ const LookupArticlePageList = (props) => {
                                     {type.name}
                                 </option>
                             ))}
-                        </MokaInputLabel>
+                        </MokaInput>
                     </Col>
                     <Col xs={7} className="p-0">
                         <MokaSearchInput
@@ -258,6 +256,8 @@ const LookupArticlePageList = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
+                            inputClassName="ft-12"
+                            buttonClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>

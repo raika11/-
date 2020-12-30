@@ -19,6 +19,7 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
@@ -88,8 +89,9 @@ public class ArticleView extends AbstractView {
 
         MokaTemplateMerger templateMerger = null;
         PrintWriter writer = null;
-        String cacheType = "article.merge";
-        String cacheKey = String.format("%s_%s", domainId, articleId);
+
+        String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
+        String cacheKey = KeyResolver.makeArticleCacheKey(domainId, articleId);
 
         try {
             String cached = null;
@@ -166,10 +168,7 @@ public class ArticleView extends AbstractView {
             return ;
         }
         Matcher matcher = PATTERN_BR.matcher(content);
-//        if ( !matcher.find()) { // 첫번째는 skip
-//            return ;
-//        }
-        if (matcher.find()) { // 두번째에 삽입
+        if (matcher.find()) { // 첫번째에 다음에 추가
             StringBuffer sb = new StringBuffer(content.length());
             matcher.appendReplacement(sb,"$0<div class=\"ab_subtitle\"><p>" + (String)subTitleObj + "</p></div>");
             matcher.appendTail(sb);

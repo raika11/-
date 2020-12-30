@@ -171,21 +171,20 @@ const MemberEdit = () => {
     return (
         <MokaCard className="w-100" titleClassName="h-100 mb-0" title="사용자 정보" loading={loading}>
             <Form>
-                <MokaInputLabel className="mb-2" label="ID" labelWidth={108} name="memberId" value={member.memberId} inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="ID" name="memberId" value={member.memberId} inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 이름 */}
-                <MokaInputLabel className="mb-2" label="이름" labelWidth={108} value={member.memberNm} name="memberNm" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="이름" value={member.memberNm} name="memberNm" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* Email */}
-                <MokaInputLabel className="mb-2" label="Email" labelWidth={108} value={member.email} name="email" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="Email" value={member.email} name="email" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 휴대전화 */}
-                <MokaInputLabel className="mb-2" label="휴대전화" labelWidth={108} value={member.mobilePhone} name="mobilePhone" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="휴대전화" value={member.mobilePhone} name="mobilePhone" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 소속 */}
-                <MokaInputLabel className="mb-2" label="소속" labelWidth={108} value={member.dept} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="소속" value={member.dept} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 상태 */}
                 <MokaInputLabel
                     as="select"
                     className="mb-2"
                     label="상태"
-                    labelWidth={108}
                     name="status"
                     value={status}
                     onChange={handleChangeValue}
@@ -203,7 +202,6 @@ const MemberEdit = () => {
                     as="textarea"
                     className="mb-2"
                     label="비고"
-                    labelWidth={108}
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
                     name="remark"
@@ -217,7 +215,6 @@ const MemberEdit = () => {
                     as="dateTimePicker"
                     className="mb-2"
                     label="만료일시"
-                    labelWidth={108}
                     inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm:ss' }}
                     name="expireDt"
                     value={expireDt}
@@ -226,12 +223,12 @@ const MemberEdit = () => {
                     disabled={member.memberId ? false : true}
                 />
                 {/* 등록일시 */}
-                <MokaInputLabel className="mb-2" labelWidth={108} label="등록일시" value={member.regDt} name="regDt" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="등록일시" value={member.regDt} name="regDt" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 최종 접속일시 */}
-                <MokaInputLabel className="mb-2" labelWidth={108} label="최종 접속일시" value={member.lastLoginDt} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="최종 접속일시" value={member.lastLoginDt} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
 
                 {/* 버튼 */}
-                {member.memberId ? (
+                {member.memberId && (
                     <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
                         <Button variant="positive" className="float-left pr-20 pl-20" onClick={handleClickSave}>
                             저장
@@ -240,8 +237,6 @@ const MemberEdit = () => {
                             취소
                         </Button>
                     </Form.Group>
-                ) : (
-                    ''
                 )}
             </Form>
         </MokaCard>

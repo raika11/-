@@ -71,7 +71,7 @@ const MokaSearchInput = (props) => {
             <MokaInput
                 as="input"
                 type="text"
-                className={clsx('mr-2', 'flex-fill', inputClassName)}
+                className={clsx('mr-2 flex-fill', inputClassName)}
                 inputProps={{
                     ...inputProps,
                     onKeyPress: handleKeyPress,
@@ -84,7 +84,7 @@ const MokaSearchInput = (props) => {
                 onChange={onChange}
                 placeholder={placeholder}
             />
-            <Button variant="searching" className={buttonClassName} style={{ minWidth: 53 }} onClick={onSearch} disabled={buttonDisabled || disabled}>
+            <Button variant="searching" className={clsx('flex-shrink-0', buttonClassName)} onClick={onSearch} disabled={buttonDisabled || disabled}>
                 {searchText}
             </Button>
         </Form.Group>

@@ -82,7 +82,7 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
             <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0 d-flex justify-content-end">
-                        <Button variant="positive" onClick={handleClickAdd}>
+                        <Button variant="positive" onClick={handleClickAdd} className="ft-12">
                             추가
                         </Button>
                     </Col>

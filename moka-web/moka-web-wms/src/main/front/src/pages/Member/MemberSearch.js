@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-
+import { MokaInput, MokaSearchInput } from '@components';
 import { initialState, getMemberList, changeSearchOption } from '@store/member';
 
 /**
@@ -65,10 +63,10 @@ const MemberSearch = () => {
     };
 
     return (
-        <Form className="mb-10">
-            <Form.Group as={Row} className="mb-2">
+        <Form className="mb-3">
+            <Form.Group as={Row}>
                 <Col xs={3} className="p-0 pr-2">
-                    <MokaInputLabel as="select" className="m-0 mb-2" label="상태" labelWidth={33} value={search.status} onChange={handleChangeSearchOption} name="searchStatus">
+                    <MokaInput as="select" className="ft-12" value={search.status} onChange={handleChangeSearchOption} name="searchStatus">
                         <option key="all" value="">
                             전체
                         </option>
@@ -77,10 +75,10 @@ const MemberSearch = () => {
                                 {status.name}
                             </option>
                         ))}
-                    </MokaInputLabel>
+                    </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0 mb-2" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
+                    <MokaInput as="select" className="ft-12" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
                         {searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
@@ -89,7 +87,7 @@ const MemberSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0">
-                    <MokaSearchInput value={keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
+                    <MokaSearchInput value={keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" inputClassName="ft-12" buttonClassName="ft-12" />
                 </Col>
             </Form.Group>
         </Form>

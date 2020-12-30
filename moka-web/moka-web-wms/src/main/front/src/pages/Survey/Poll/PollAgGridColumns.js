@@ -6,7 +6,7 @@ export const columnDefs = [
     {
         headerName: 'ID',
         field: 'id',
-        width: 70,
+        width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
     {
@@ -18,9 +18,9 @@ export const columnDefs = [
     {
         headerName: '투표 제목',
         field: 'title',
-        width: 70,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellClass: 'ag-grid-cell-left',
     },
     {
         headerName: '상태',
@@ -31,25 +31,25 @@ export const columnDefs = [
     {
         headerName: '시작일',
         field: 'startDt',
-        width: 100,
+        width: 70,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
     {
         headerName: '종료일',
         field: 'endDt',
-        width: 100,
+        width: 80,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
     {
         headerName: '미리보기',
         field: 'preview',
-        width: 100,
+        width: 80,
         cellStyle: { fontSize: '12px', lineHeight: '60px' },
         cellRendererFramework: (param) => {
             return (
                 <Row className="d-flex w-100 align-items-center justify-content-center mr-0">
                     <Col className="w-100">
-                        <Button variant={param.value.variant} onClick={param.value.handleClick}>
+                        <Button variant={param.value.variant} onClick={param.value.handleClick} size="sm">
                             {param.value.name}
                         </Button>
                     </Col>
@@ -60,7 +60,6 @@ export const columnDefs = [
     {
         headerName: '입력날짜',
         field: 'regDt',
-        width: 200,
         cellStyle: { fontSize: '12px' },
         children: [
             {
@@ -83,7 +82,7 @@ export const columnDefs = [
             {
                 headerName: '수정자',
                 field: 'regMod',
-                width: 130,
+                width: 100,
                 cellStyle: { fontSize: '12px' },
                 cellRendererFramework: (param) => {
                     return <MultiRowColumnComponent values={[`${param.data.regName}(${param.data.regId})`, `${param.data.modName}(${param.data.modId})`]} />;
@@ -94,11 +93,11 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 70,
+        width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '60px' },
         cellRendererFramework: (param) => {
             return (
-                <Button variant={param.value.variant} onClick={param.value.handleClick}>
+                <Button variant={param.value.variant} onClick={param.value.handleClick} size="sm">
                     {param.value.name}
                 </Button>
             );

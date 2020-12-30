@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Form, Container, Row, Col, Figure, Button } from 'react-bootstrap';
+import { Container, Row, Col, Figure, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import commonUtil from '@utils/commonUtil';
@@ -17,7 +17,7 @@ const FbArtEdit = () => {
     const [isFacebookImageModalOpen, setIsFacebookImageModalOpen] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
 
-    const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
+    const { meta, loading, search } = useSelector((store) => {
         return {
             meta: store.sns.meta.meta,
             cdNm: store.codeMgt.specialCharCode.cdNm,
@@ -89,112 +89,114 @@ const FbArtEdit = () => {
     }, [dispatch, totalId]);
 
     return (
-        <>
-            <MokaCard width={550} title={`페이스북 메타 ${true ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
-                <hr />
-                <Container>
-                    <Row xs={12}>
-                        <Col xs={3} className="pr-0">
-                            <div className="d-flex h4">원본 기사</div>
-                        </Col>
-                        <Col xs={4}>
-                            <div className="d-flex">기사 ID {edit.totalId}</div>
-                        </Col>
-                    </Row>
-                    <Row xs={12}>
-                        <Col xs={4}>
-                            <Figure.Image className="mb-0" src={edit.article.imgUrl} />
-                        </Col>
-                        <Col>
-                            <div className="d-flex mb-3 display-5 font-weight-bold text-left">{edit.article.title}</div>
-                            <div className="d-flex">
-                                <MokaInput as="textarea" className="resize-none" value={edit.article.summary} inputProps={{ plaintext: true, readOnly: true, rows: '4' }} />
+        <MokaCard
+            width={550}
+            title={`페이스북 메타 ${true ? '정보' : '등록'}`}
+            titleClassName="mb-0"
+            loading={loading}
+            footer
+            footerClassName="d-flex justify-content-center"
+            footerButtons={[
+                {
+                    text: '저장',
+                    variant: 'positive',
+                    className: 'mr-2',
+                    onClick: handleClickPublish,
+                },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel },
+            ]}
+        >
+            <Container>
+                <Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <p className="h6 mb-0">원본 기사</p>
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        기사 ID {edit.totalId}
+                    </Col>
+                </Row>
+
+                <Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <Figure.Image className="mb-0" src={edit.article.imgUrl} />
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        <div className="d-flex mb-2 display-5 font-weight-bold text-left">{edit.article.title}</div>
+                        <MokaInput as="textarea" className="resize-none custom-scroll" value={edit.article.summary} inputProps={{ readOnly: true, rows: 6 }} />
+                    </Col>
+                </Row>
+            </Container>
+
+            <hr />
+
+            <Container>
+                <Row className="mb-2">
+                    <Col xs={5} className="p-0">
+                        <p className="h6 mb-0">페이스북 메타 정보</p>
+                    </Col>
+                </Row>
+
+                <Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <p className="text-danger mb-0 ft-12">SNS 이미지 (850*350 px)</p>
+                    </Col>
+                    <MokaInputLabel
+                        labelClassName="d-flex"
+                        label="사용유무"
+                        as="switch"
+                        name="usedYn"
+                        id="temp-status"
+                        variant="positive"
+                        onChange={(e) => {
+                            handleChangeEditValue(e, true);
+                        }}
+                        inputProps={{ label: '', checked: edit.fb.usedYn }}
+                    />
+                </Row>
+
+                <Row className="mb-2">
+                    <Col xs={4} className="p-0 pr-2">
+                        <Figure.Image className="mb-0" src={edit.fb.imgUrl} />
+                        <div className="d-flex justify-content-end mb-0 pt-3">
+                            <div className="d-flex justify-content-end">
+                                <Button
+                                    variant="positive"
+                                    onClick={() => {
+                                        setIsFacebookImageModalOpen(true);
+                                    }}
+                                    size="sm"
+                                    className="mr-2"
+                                >
+                                    신규 등록
+                                </Button>
+
+                                <Button variant="outline-neutral" size="sm">
+                                    편집
+                                </Button>
                             </div>
-                        </Col>
-                    </Row>
-                </Container>
-                <hr />
-                <Container>
-                    <Row xs={12}>
-                        <Col xs={5} className="d-flex">
-                            <div className="d-flex h4">페이스북 메타 정보</div>
-                        </Col>
-                    </Row>
-                    <Row xs={12}>
-                        <Col xs={4} className="d-flex p-0 m-0 pl-3" style={{ fontSize: '0.775rem' }}>
-                            <Form.Label className="text-danger">{`SNS 이미지 (850*350 px)`}</Form.Label>
-                        </Col>
-                        <MokaInputLabel
-                            labelClassName="d-flex p-0 pl-3"
-                            label="사용유무"
-                            labelWidth={80}
-                            as="none"
-                            name="temp-status"
-                            id="temp-status"
-                            variant="positive"
-                            style={{ paddingLeft: '15px' }}
+                        </div>
+                    </Col>
+
+                    <Col xs={8} className="p-0">
+                        <MokaInputLabel name="title" onChange={handleChangeEditValue} value={edit.fb.title} className="mb-2" />
+                        <MokaInput
+                            as="textarea"
+                            name="postMessage"
+                            className="resize-none custom-scroll"
+                            value={edit.fb.postMessage}
+                            inputProps={{ rows: 5 }}
+                            onChange={handleChangeEditValue}
                         />
-                        <MokaInputLabel
-                            labelClassName="d-flex"
-                            as="switch"
-                            name="usedYn"
-                            id="temp-status"
-                            variant="positive"
-                            onChange={(e) => {
-                                handleChangeEditValue(e, true);
-                            }}
-                            inputProps={{ label: '', checked: edit.fb.usedYn }}
-                        />
-                    </Row>
-                    <Row xs={12}>
-                        <Col xs={4}>
-                            <Figure.Image className="mb-0" src={edit.fb.imgUrl} />
-                            <div className="d-flex justify-content-end mb-0 pt-3">
-                                <div className="d-flex justify-content-end pr-2">
-                                    <Button
-                                        variant="outline-neutral"
-                                        onClick={() => {
-                                            setIsFacebookImageModalOpen(true);
-                                        }}
-                                    >
-                                        신규 등록
-                                    </Button>
-                                </div>
-                                <div className="d-flex justify-content-end">
-                                    <Button variant="outline-neutral">편집</Button>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col>
-                            <MokaInputLabel name="title" onChange={handleChangeEditValue} value={edit.fb.title} />
-                            <MokaInput
-                                as="textarea"
-                                name="postMessage"
-                                className="resize-none"
-                                value={edit.fb.postMessage}
-                                inputProps={{ rows: '5' }}
-                                onChange={handleChangeEditValue}
-                            />
-                        </Col>
-                    </Row>
-                    <Row xs={12}>
-                        <Col className="d-flex justify-content-end align-items-end pt-3">
-                            <div className="justify-content-end align-items-end pr-2">수정정보 {edit.article.snsRegDt}</div>
-                        </Col>
-                    </Row>
-                </Container>
-                <hr />
-                <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                    <div className="d-flex justify-content-center">
-                        <Button variant="positive" className="mr-05" onClick={handleClickPublish}>
-                            저장
-                        </Button>
-                        <Button variant="negative" className="mr-05" onClick={handleClickCancel}>
-                            취소
-                        </Button>
-                    </div>
-                </div>
-            </MokaCard>
+                    </Col>
+                </Row>
+
+                <Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <div className="d-flex justify-content-end">수정정보 {edit.article.snsRegDt}</div>
+                    </Col>
+                </Row>
+            </Container>
+
             <EditThumbModal
                 show={isFacebookImageModalOpen}
                 onHide={() => setIsFacebookImageModalOpen(false)}
@@ -202,7 +204,7 @@ const FbArtEdit = () => {
                 thumbFileName={edit.fb.imgUrl}
                 setThumbFileName={(data) => console.log('fb-handleThumbFileName', data)}
             />
-        </>
+        </MokaCard>
     );
 };
 

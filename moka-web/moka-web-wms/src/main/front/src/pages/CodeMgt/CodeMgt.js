@@ -29,7 +29,7 @@ const CodeMgt = ({ match }) => {
                 </Helmet>
 
                 {/* 기타코드 리스트 */}
-                <MokaCard width={260} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+                <MokaCard width={260} className="mr-gutter" bodyClassName="d-flex flex-column" header={false}>
                     <Suspense>
                         <CodeMgtList />
                     </Suspense>
@@ -40,7 +40,7 @@ const CodeMgt = ({ match }) => {
                         path={[`${match.url}/:grpCd`, `${match.url}/:grpCd/:cdSeq`]}
                         exact
                         render={() => (
-                            <MokaCard width={1300} titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+                            <MokaCard width={1300} bodyClassName="d-flex flex-column" header={false}>
                                 {/* 기타코드 편집 */}
                                 <CodeMgtEdit />
                             </MokaCard>

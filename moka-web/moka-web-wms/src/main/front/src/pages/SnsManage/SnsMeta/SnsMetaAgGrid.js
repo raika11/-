@@ -23,26 +23,24 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     }, [rows]);
 
     return (
-        <>
-            <MokaTable
-                agGridHeight={650}
-                columnDefs={tempColumnDefs}
-                rowData={rowData}
-                rowHeight={65}
-                onRowNodeId={(row) => row.id}
-                onRowClicked={(row) => {
-                    handleClickListRow(row);
-                }}
-                loading={loading}
-                total={total}
-                page={searchOptions.page}
-                size={searchOptions.size}
-                onChangeSearchOption={handleChangeSearchOption}
-                selected={selected}
-                preventRowClickCell={['insStatus', 'sendType']}
-                className="ag-grid-align-center"
-            />
-        </>
+        <MokaTable
+            agGridHeight={650}
+            columnDefs={tempColumnDefs}
+            rowData={rowData}
+            rowHeight={65}
+            onRowNodeId={(row) => row.id}
+            onRowClicked={(row) => {
+                handleClickListRow(row);
+            }}
+            loading={loading}
+            total={total}
+            page={searchOptions.page}
+            size={searchOptions.size}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={selected}
+            preventRowClickCell={['insStatus', 'sendType']}
+            className="ag-grid-align-center overflow-hidden flex-fill"
+        />
     );
 };
 

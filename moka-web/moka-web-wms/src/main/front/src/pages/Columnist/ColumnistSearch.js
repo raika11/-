@@ -73,10 +73,10 @@ const ColumnistSearch = () => {
     }, []);
 
     return (
-        <Form.Row className="mb-10">
+        <Form.Row className="mb-3">
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
-                <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
+                <MokaInputLabel as="select" name="status" value={search.status} inputClassName="ft-12" onChange={handleChangeValue} className="mb-0">
                     <option value="">상태정보 전체</option>
                     <option value="Y">상태정보 설정</option>
                     <option value="N">상태정보 해제</option>
@@ -84,22 +84,26 @@ const ColumnistSearch = () => {
             </Col>
 
             {/* 이름 검색 */}
-            <Col xs={4} className="p-0">
-                <MokaSearchInput name="keyword" placeholder={'칼럼니스트 이름 검색'} value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+            <Col xs={4} className="p-0 mr-2">
+                <MokaSearchInput
+                    name="keyword"
+                    placeholder={'칼럼니스트 이름 검색'}
+                    value={search.keyword}
+                    onChange={handleChangeValue}
+                    onSearch={handleSearch}
+                    buttonClassName="ft-12"
+                    inputClassName="ft-12"
+                />
             </Col>
 
             {/* 초기화 버튼 */}
-            <div style={{ width: 85 }} className="d-flex justify-content-center">
-                <Button variant="outline-neutral" onClick={handleSearchReset}>
-                    초기화
-                </Button>
-            </div>
+            <Button variant="negative" onClick={handleSearchReset} className="ft-12 mr-2">
+                초기화
+            </Button>
 
-            <div className="pt-0">
-                <Button variant="positive" onClick={handleNewColumnlist}>
-                    신규등록
-                </Button>
-            </div>
+            <Button variant="positive" onClick={handleNewColumnlist} className="ft-12">
+                신규등록
+            </Button>
         </Form.Row>
     );
 };

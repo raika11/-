@@ -84,16 +84,16 @@ const ContainerSearch = () => {
 
     return (
         <Form className="mb-2">
-            <MokaInput as="select" className="m-0 mb-2" value={search.domainId || undefined} onChange={handleChangeSearchOption} name="domainId">
+            <MokaInput as="select" className="mb-2 ft-12" value={search.domainId || undefined} onChange={handleChangeSearchOption} name="domainId">
                 {domainList.map((domain) => (
                     <option key={domain.domainId} value={domain.domainId}>
                         {domain.domainName}
                     </option>
                 ))}
             </MokaInput>
-            <Form.Group as={Row} className="mb-2">
+            <Form.Group as={Row}>
                 <Col xs={5} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0 mb-2" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
+                    <MokaInput as="select" className="ft-12" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
                         {searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
@@ -102,7 +102,14 @@ const ContainerSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0">
-                    <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
+                    <MokaSearchInput
+                        value={search.keyword}
+                        onChange={handleChangeSearchOption}
+                        onSearch={handleSearch}
+                        name="keyword"
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
+                    />
                 </Col>
             </Form.Group>
         </Form>

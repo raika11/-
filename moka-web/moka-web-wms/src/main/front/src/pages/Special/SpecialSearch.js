@@ -85,7 +85,15 @@ const SpecialSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={4} className="p-0">
-                    <MokaSearchInput className="m-0 ft-12" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                    <MokaSearchInput
+                        className="m-0"
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
+                        name="keyword"
+                        value={search.keyword}
+                        onChange={handleChangeValue}
+                        onSearch={handleSearch}
+                    />
                 </Col>
                 <Col xs={3} className="p-0 d-flex justify-content-end">
                     <Button variant="positive" className="ft-12" onClick={handleClickAdd}>

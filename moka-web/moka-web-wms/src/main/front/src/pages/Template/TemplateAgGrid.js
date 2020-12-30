@@ -87,7 +87,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                     }}
                 />
                 <div className="pt-0">
-                    <Button variant="positive" onClick={() => history.push('/template/add')}>
+                    <Button variant="positive" onClick={() => history.push('/template/add')} className="ft-12">
                         템플릿 등록
                     </Button>
                 </div>

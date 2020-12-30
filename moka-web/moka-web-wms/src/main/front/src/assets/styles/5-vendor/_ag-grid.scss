@@ -385,4 +385,9 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             align-items: center !important;
         }
     }
+
+    .ag-row .ag-cell.ag-grid-cell-left {
+        display: block;
+    }
+
 }

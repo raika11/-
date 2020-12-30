@@ -2,13 +2,12 @@ import React, { Suspense, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaLoader } from '@components';
-import { useDispatch, useSelector } from 'react-redux';
-import commonUtil from '@utils/commonUtil';
+import { useDispatch } from 'react-redux';
 import { clearMetaStore } from '@store/snsManage';
 import { clearSpecialCharCode } from '@store/codeMgt';
 
+import SnsMetaEdit from './SnsMetaEdit';
 const SnsMetaList = React.lazy(() => import('./SnsMetaList'));
-const SnsMetaEdit = React.lazy(() => import('./SnsMetaEdit'));
 
 /**
  * FB & TW
@@ -22,8 +21,6 @@ const SnsMeta = ({ match }) => {
         };
     }, [dispatch]);
 
-    const { totalId } = useSelector((store) => ({ totalId: store.sns.meta.meta.totalId }));
-
     return (
         <div className="d-flex">
             <Helmet>
@@ -33,22 +30,14 @@ const SnsMeta = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false}>
+            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false} bodyClassName="d-flex flex-column">
                 <Suspense fallback={<MokaLoader />}>
                     <SnsMetaList />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route
-                path={[`${match.url}/:totalId`]}
-                exact
-                render={(props) => (
-                    <Suspense fallback={<MokaLoader />}>
-                        <SnsMetaEdit {...props} />
-                    </Suspense>
-                )}
-            />
+            <Route path={[`${match.url}/:totalId`]} exact render={(props) => <SnsMetaEdit {...props} />} />
         </div>
     );
 };

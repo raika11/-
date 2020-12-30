@@ -67,12 +67,12 @@ const ComponentSearch = () => {
     }, [dispatch, tpZoneRows]);
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    className="w-100"
+                    className="ft-12"
                     value={search.domainId || undefined}
                     onChange={(e) => {
                         dispatch(changeLatestDomainId(e.target.value));
@@ -89,6 +89,7 @@ const ComponentSearch = () => {
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
+                    className="ft-12"
                     value={search.templateGroup}
                     onChange={(e) => {
                         setSearch({
@@ -106,7 +107,7 @@ const ComponentSearch = () => {
                         ))}
                 </MokaInput>
             </Form.Row>
-            <Form.Group as={Row} className="mb-2">
+            <Form.Group as={Row}>
                 {/* 검색조건 */}
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput
@@ -118,6 +119,7 @@ const ComponentSearch = () => {
                                 searchType: e.target.value,
                             });
                         }}
+                        className="ft-12"
                     >
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -136,6 +138,8 @@ const ComponentSearch = () => {
                                 keyword: e.target.value,
                             });
                         }}
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
                         onSearch={handleSearch}
                     />
                 </Col>

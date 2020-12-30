@@ -128,7 +128,7 @@ const MokaPagination = (props) => {
     return (
         <div className={clsx('d-flex', 'align-items-center', className)}>
             {pageSizes && (
-                <Form.Control as="select" style={{ width: 65, height: 29 }} onChange={handleChangeRowsPerPage} value={size} custom>
+                <Form.Control as="select" style={{ width: 65, height: 29 }} className="ft-12" onChange={handleChangeRowsPerPage} value={size} custom>
                     {pageSizes.map((value) => (
                         <option key={value} value={value}>
                             {value}
@@ -136,6 +136,7 @@ const MokaPagination = (props) => {
                     ))}
                 </Form.Control>
             )}
+
             <Pagination className="mb-0" size={pageItemsSize}>
                 <Pagination.Prev disabled={!prev} onClick={handleBackButtonClick}>
                     <MokaIcon iconName="fas-angle-left" />
@@ -149,6 +150,7 @@ const MokaPagination = (props) => {
                     <MokaIcon iconName="fas-angle-right" />
                 </Pagination.Next>
             </Pagination>
+
             {showTotalString && <div className="small">{`총: ${total} 건`}</div>}
         </div>
     );

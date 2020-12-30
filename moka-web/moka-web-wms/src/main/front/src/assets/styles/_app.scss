@@ -62,12 +62,12 @@
 // 3rd party plugins
 @import 'react-redux-toastr/src/styles/index';
 @import 'react-resizable/css/styles';
+@import "@fullcalendar/bootstrap/main";
 // @import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min';
 // @import "react-quill/dist/quill.bubble";
 // @import "react-quill/dist/quill.snow";
 // @import "jvectormap-next/jquery-jvectormap";
 // @import "react-dragula/dist/dragula";
-// @import "@fullcalendar/bootstrap/main";
 // @import "smartwizard/dist/css/smart_wizard";
 // @import "smartwizard/dist/css/smart_wizard_theme_arrows";
 
@@ -81,7 +81,7 @@
 @import '5-vendor/react-dropzone';
 @import '5-vendor/rc-tree';
 @import '5-vendor/summernnote/summernote-bs4';
-// @import '5-vendor/fullcalendar';
+@import '5-vendor/fullcalendar';
 // @import '5-vendor/quill';
 // @import '5-vendor/wizard';
 

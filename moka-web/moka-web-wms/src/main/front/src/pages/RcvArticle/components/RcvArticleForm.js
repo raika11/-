@@ -168,7 +168,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                     <Col className="p-0 d-flex" xs={12}>
                         <MokaInputLabel label="본문" className="mb-0" as="none" />
                         <div
-                            className="flex-fill overflow-hidden overflow-y-scroll border rounded p-2"
+                            className="flex-fill overflow-hidden overflow-y-scroll input-border p-2"
                             style={{ height: 283 }}
                             dangerouslySetInnerHTML={{ __html: article.content }}
                         />

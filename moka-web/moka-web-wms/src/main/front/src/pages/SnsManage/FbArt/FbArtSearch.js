@@ -26,17 +26,24 @@ const FbArtSearch = ({ searchOptions }) => {
         <Form>
             <Form.Row className="mb-3">
                 <Col xs={1} className="p-0 pr-2">
-                    <MokaInput as="select" value={options.searchType} className="m-0" name="type" onChange={handleChangeValue}>
+                    <MokaInput as="select" value={options.searchType} className="m-0 ft-12" name="type" onChange={handleChangeValue}>
                         <option value="articleTitle">제목</option>
                         <option value="totalId">기사ID</option>
                     </MokaInput>
                 </Col>
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaSearchInput name="keyword" placeholder={'검색어를 입력해 주세요.'} value={options.keyword} onChange={handleChangeValue} onSearch={handleClickSearch} />
+                    <MokaSearchInput
+                        name="keyword"
+                        value={options.keyword}
+                        onChange={handleChangeValue}
+                        onSearch={handleClickSearch}
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
+                    />
                 </Col>
                 {/* 초기화 버튼 */}
                 <Col xs={1} className="p-0">
-                    <Button variant="outline-neutral" onClick={handleSearchReset}>
+                    <Button variant="negative" onClick={handleSearchReset} className="ft-12 h-100">
                         초기화
                     </Button>
                 </Col>

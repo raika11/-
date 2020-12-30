@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageRenderer, EtcButtonRenderer } from './GridRenderer';
+import { EtcButtonRenderer } from './GridRenderer';
 import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -8,21 +8,20 @@ export const tempColumnDefs = [
         headerName: 'ID',
         field: 'id',
         width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '20px' },
+        tooltipFied: 'id',
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '전송일시',
         field: 'sendDt',
-        wrapText: true,
         width: 130,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '22px' },
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '\t사진',
+        headerName: '사진',
         field: 'imgUrl',
-        cellRendererFramework: (params) => <ImageRenderer {...params} />,
-        width: 90,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '8px' },
+        cellRenderer: 'imageRenderer',
+        width: 60,
     },
     {
         headerName: 'SNS제목',
@@ -30,48 +29,35 @@ export const tempColumnDefs = [
         wrapText: true,
         width: 250,
         flex: 1,
-        cellStyle: { fontSize: '12px', lineHeight: '40px', paddingLeft: '20px', paddingTop: '12px' },
+        tooltipField: 'title',
+        cellStyle: {
+            boxSizing: 'border-box',
+            whiteSpace: 'normal',
+            lineHeight: '20px',
+            fontSize: '14px',
+            display: '-webkit-box',
+            paddingTop: '5px',
+            '-webkit-line-clamp': 2,
+            '-webkit-box-orient': 'vertical',
+            overflow: 'hidden',
+        },
     },
     {
         headerName: '사용여부',
         field: 'usedYn',
-        width: 120,
-        wrapText: true,
+        width: 64,
         cellRendererFramework: ({ value }) => {
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={value ? 'color-primary' : 'color-gray150'} />;
+            return (
+                <div className="d-flex align-items-center justify-content-center h-100">
+                    <FontAwesomeIcon icon={faCircle} fixedWidth className={value ? 'color-primary' : 'color-gray150'} />
+                </div>
+            );
         },
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingLeft: '20px', paddingTop: '20px' },
     },
     {
         headerName: '기타',
         field: 'id',
-        width: 230,
-        wrapText: true,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '20px', paddingLeft: '12px' },
+        width: 195,
         cellRendererFramework: (params) => <EtcButtonRenderer {...params} />,
-    },
-];
-
-export const tempRowData = [
-    {
-        repId: 999999,
-        repImg: 'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/75752c82-c8c4-45f1-8741-bed04a3a19b4.jpg',
-        snsTitle: `[김기자의 V토크] 진실게임 된 배구 코트 ‘머니 게임’`,
-        useYn: 'Y',
-        sendDate: '2020-10-25 13:40:05',
-    },
-    {
-        repId: 999998,
-        repImg: 'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/75752c82-c8c4-45f1-8741-bed04a3a19b4.jpg',
-        snsTitle: `‘킹’ 르브론 제임스, LA레이커스와 2년 재계약`,
-        useYn: 'n',
-        sendDate: '2020-10-25 13:40:05',
-    },
-    {
-        repId: 999997,
-        repImg: 'https://pds.joins.com/news/component/htmlphoto_mmdata/202012/01/75752c82-c8c4-45f1-8741-bed04a3a19b4.jpg',
-        snsTitle: `판공비 6000만원 자청하고 "억울"···이대호에 선수들 분노`,
-        useYn: 'Y',
-        sendDate: '2020-10-25 13:40:05',
     },
 ];

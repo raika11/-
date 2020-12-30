@@ -143,7 +143,7 @@ const SnsMetaEdit = () => {
         //snsMetaSave('all');
     };
 
-    const snsMetaSave = (type) => {};
+    // const snsMetaSave = (type) => {};
 
     const validSaveData = (data, type) => {
         for (const item of data) {
@@ -188,6 +188,7 @@ const SnsMetaEdit = () => {
                 case 'fb':
                     to = 'tw';
                     break;
+                default:
             }
             setEdit({ ...edit, [to]: edit[from] });
             toast.info(`${snsNames[from]}에서 ${snsNames[to]}로 복사 되었습니다.`);
@@ -223,150 +224,135 @@ const SnsMetaEdit = () => {
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '전송', variant: 'positive', onClick: () => handleClickPublish('all'), className: 'mr-05' },
-                { text: '임시저장', variant: 'positive', onClick: handleClickSave, className: 'mr-05' },
-                { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-05' },
-                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-05' },
+                { text: '전송', variant: 'positive', onClick: () => handleClickPublish('all'), className: 'mr-2' },
+                { text: '임시저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-2' },
+                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-2' },
             ]}
             footer
         >
-            <hr />
-
             {/* 페이스북 */}
-            <Form.Row>
-                <Col xs={12} className="pb-4">
-                    <div className="d-flex">
-                        <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
-                        <div className="d-flex justify-content-center">
-                            <Button
-                                variant="outline-neutral"
-                                className="mr-05"
-                                onClick={() => {
-                                    handleClickPublish('fb');
-                                }}
-                            >
-                                FB 전송
-                            </Button>
-                            <Button
-                                variant="outline-neutral"
-                                className="mr-05"
-                                onClick={() => {
-                                    window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`);
-                                }}
-                            >
-                                FB 캐시삭제
-                            </Button>
-                            <Button variant="outline-neutral" className="mr-05" onClick={handleClickFbTokenModalShow}>
-                                토큰 관리
-                            </Button>
-                            <Button
-                                variant="outline-neutral"
-                                className="mr-05"
-                                onClick={() => {
-                                    window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${totalId}`, '', 'width=500,height=500');
-                                }}
-                            >
-                                공유
-                            </Button>
-                            <Button
-                                variant="outline-neutral"
-                                className="mr-05"
-                                onClick={() => {
-                                    handleClickCopyContent('fb');
-                                }}
-                            >
-                                TW로 복사
-                            </Button>
-                        </div>
-                    </div>
-                </Col>
-            </Form.Row>
+            <div className="d-flex mb-2 w-100">
+                <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
+                <div className="d-flex">
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        onClick={() => {
+                            handleClickPublish('fb');
+                        }}
+                        size="sm"
+                    >
+                        FB 전송
+                    </Button>
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        onClick={() => {
+                            window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`);
+                        }}
+                        size="sm"
+                    >
+                        FB 캐시삭제
+                    </Button>
+                    <Button size="sm" variant="outline-neutral" className="mr-2" onClick={handleClickFbTokenModalShow}>
+                        토큰 관리
+                    </Button>
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        onClick={() => {
+                            window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${totalId}`, '', 'width=500,height=500');
+                        }}
+                        size="sm"
+                    >
+                        공유
+                    </Button>
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        onClick={() => {
+                            handleClickCopyContent('fb');
+                        }}
+                        size="sm"
+                    >
+                        TW로 복사
+                    </Button>
+                </div>
+            </div>
 
             <Form className="mb-gutter">
-                <Form.Row>
-                    <Col xs={12}>
-                        <MokaInputLabel
-                            as="switch"
-                            name="fb-usedYn"
-                            id="fb-usedYn"
-                            label="사용유무"
-                            onChange={handleChangeCheckedValue}
-                            labelWidth={87}
-                            inputProps={{ label: '', checked: edit.fb.usedYn }}
-                        />
-                    </Col>
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        as="switch"
+                        name="fb-usedYn"
+                        id="fb-usedYn"
+                        label="사용유무"
+                        onChange={handleChangeCheckedValue}
+                        inputProps={{ label: '', checked: edit.fb.usedYn }}
+                    />
                 </Form.Row>
-                <Form.Row>
-                    <Col xs={12}>
-                        <MokaInputLabel label="타이틀" name="fb-title" onChange={handleChangeTextValue} labelWidth={87} value={edit.fb.title} />
+
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel label="타이틀" name="fb-title" onChange={handleChangeTextValue} value={edit.fb.title} />
                     </Col>
                 </Form.Row>
 
-                <Form.Row>
-                    <Col xs={12}>
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             name="fb-summary"
-                            label="설명(리드문)"
-                            inputClassName="resize-none"
+                            label="설명\n(리드문)"
+                            inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
-                            labelWidth={87}
                             value={edit.fb.summary}
                         />
                     </Col>
                 </Form.Row>
 
-                <Form.Row>
-                    <Col xs={12}>
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             name="fb-postMessage"
                             label="메시지"
-                            inputClassName="resize-none"
+                            inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
-                            labelWidth={87}
                             value={edit.fb.postMessage}
                         />
                     </Col>
                 </Form.Row>
 
-                <Form.Row xs={12}>
-                    <Col xs={2}>
-                        <MokaInputLabel as="none" label="SNS 이미지" labelWidth={87} />
-                        <MokaInputLabel as="none" label="(850*350px)" labelWidth={87} />
-                    </Col>
-                    <Col xs={8} className="pl-2">
-                        <Col>
-                            <Figure.Image className="mb-0" src={meta.fb.imgUrl} />
-                        </Col>
-                        <Col>
-                            <Form.Label className="text-danger">1200*628 이미지 용량 제한: 1MB.</Form.Label>
-                        </Col>
-                    </Col>
-                    <Col xs={2} className="pb-5 align-self-end">
-                        <Col xs={2} className="pl-0 pb-1">
-                            <Button variant="outline-neutral">편집</Button>
-                        </Col>
-                        <Col xs={2} className="pl-0">
+                <Form.Row className="mb-2">
+                    <div className="d-flex w-100">
+                        <MokaInputLabel as="none" label="SNS 이미지\n(850*350px)" />
+                        <div className="d-flex flex-column mr-2 flex-fill">
+                            <Figure.Image className="mb-1" src={meta.fb.imgUrl} />
+                            <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
+                        </div>
+                        <div className="d-flex flex-column">
+                            <Button variant="outline-neutral" size="sm" className="mb-1">
+                                편집
+                            </Button>
                             <Button
-                                variant="outline-neutral"
+                                variant="positive"
                                 onClick={() => {
                                     setIsTwitterImageModalOpen(true);
                                 }}
+                                size="sm"
                             >
                                 신규 등록
                             </Button>
-                        </Col>
-                    </Col>
+                        </div>
+                    </div>
                 </Form.Row>
-                <Form.Row xs={12}>
-                    <Col xs={2}>
-                        <MokaInputLabel as="none" label="예약" labelWidth={87} />
-                    </Col>
-                    <Col xs={4} className="d-flex pl-4 mr-0 pr-1">
-                        <Form.Check label="예약 노출" type="checkbox" name="fb-isReserve" onChange={handleChangeCheckedValue} checked={edit.fb.isReserve} />
-                    </Col>
-                    <Col xs={5} className="d-flex pl-0">
+
+                <Form.Row className="mb-2">
+                    <div className="d-flex w-100 align-items-center">
+                        <MokaInputLabel as="none" label="예약" />
+                        <Form.Check label="예약 노출" type="checkbox" name="fb-isReserve" className="mr-2" onChange={handleChangeCheckedValue} checked={edit.fb.isReserve} custom />
                         <MokaInput
                             as="dateTimePicker"
                             name="fb-reserveDt"
@@ -374,145 +360,125 @@ const SnsMetaEdit = () => {
                             onChange={(e) => {
                                 handleChangeTextValue({ target: { name: 'fb-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
                             }}
-                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
+                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm', inputClassName: 'ft-12' }}
                             disabled={!edit.fb.isReserve}
                         />
-                    </Col>
+                    </div>
                 </Form.Row>
             </Form>
 
             <hr />
 
             {/* 트위터 */}
-            <Form.Row>
-                <Col xs={12} className="pb-4">
-                    <div className="d-flex">
-                        <MokaInputLabel label="Twitter" labelWidth={70} className="m-0 h5" as="none" />
-                        <Col className="d-flex justify-content-end">
-                            <div className="justify-content-end pr-2">
-                                <Button
-                                    variant="outline-neutral"
-                                    className="mr-05"
-                                    onClick={() => {
-                                        handleClickPublish('tw');
-                                    }}
-                                >
-                                    TW 전송
-                                </Button>
-                            </div>
-                            <div className="justify-content-end pr-2">
-                                <Button
-                                    variant="outline-neutral"
-                                    className="mr-05"
-                                    onClick={() => {
-                                        window.open('https://cards-dev.twitter.com/validator');
-                                    }}
-                                >
-                                    TW 캐시삭제
-                                </Button>
-                            </div>
-                            <div className="justify-content-end pr-2">
-                                <Button
-                                    variant="outline-neutral"
-                                    className="mr-05"
-                                    onClick={() => {
-                                        handleClickCopyContent('tw');
-                                    }}
-                                >
-                                    FB로 복사
-                                </Button>
-                            </div>
-                        </Col>
-                    </div>
-                </Col>
-            </Form.Row>
+            <div className="d-flex mb-2 w-100">
+                <MokaInputLabel label="Twitter" className="m-0 h5" as="none" />
+                <div className="d-flex">
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        size="sm"
+                        onClick={() => {
+                            handleClickPublish('tw');
+                        }}
+                    >
+                        TW 전송
+                    </Button>
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        size="sm"
+                        onClick={() => {
+                            window.open('https://cards-dev.twitter.com/validator');
+                        }}
+                    >
+                        TW 캐시삭제
+                    </Button>
+                    <Button
+                        variant="outline-neutral"
+                        className="mr-2"
+                        size="sm"
+                        onClick={() => {
+                            handleClickCopyContent('tw');
+                        }}
+                    >
+                        FB로 복사
+                    </Button>
+                </div>
+            </div>
 
             <Form className="mb-gutter">
-                <Form.Row>
-                    <Col xs={12}>
-                        <MokaInputLabel
-                            as="switch"
-                            name="tw-usedYn"
-                            id="tw-usedYn"
-                            label="사용유무"
-                            variant="positive"
-                            onChange={handleChangeCheckedValue}
-                            labelWidth={87}
-                            inputProps={{ label: '', checked: edit.tw.usedYn }}
-                        />
-                    </Col>
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        as="switch"
+                        name="tw-usedYn"
+                        id="tw-usedYn"
+                        label="사용유무"
+                        variant="positive"
+                        onChange={handleChangeCheckedValue}
+                        inputProps={{ label: '', checked: edit.tw.usedYn }}
+                    />
                 </Form.Row>
-                <Form.Row>
-                    <Col xs={12}>
-                        <MokaInputLabel label="타이틀" name="tw-title" onChange={handleChangeTextValue} labelWidth={87} value={edit.tw.title} />
+
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel label="타이틀" name="tw-title" onChange={handleChangeTextValue} value={edit.tw.title} />
                     </Col>
                 </Form.Row>
 
-                <Form.Row>
-                    <Col xs={12}>
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             name="tw-summary"
-                            label="설명(리드문)"
-                            inputClassName="resize-none"
+                            label="설명\n(리드문)"
+                            inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
-                            labelWidth={87}
                             value={edit.tw.summary}
                         />
                     </Col>
                 </Form.Row>
 
-                <Form.Row>
-                    <Col xs={12}>
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             name="tw-postMessage"
                             label="메시지"
-                            inputClassName="resize-none"
+                            inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
-                            labelWidth={87}
                             value={edit.tw.postMessage}
                         />
                     </Col>
                 </Form.Row>
 
-                <Form.Row xs={12}>
-                    <Col xs={2}>
-                        <MokaInputLabel as="none" label="SNS 이미지" labelWidth={87} />
-                        <MokaInputLabel as="none" label="(850*350px)" labelWidth={87} />
-                    </Col>
-                    <Col xs={8} className="pl-2">
-                        <Col>
-                            <Figure.Image className="mb-0" src={edit.tw.imgUrl} />
-                        </Col>
-                        <Col>
-                            <Form.Label className="text-danger">1200*628 이미지 용량 제한: 1MB.</Form.Label>
-                        </Col>
-                    </Col>
-                    <Col xs={2} className="pb-5 align-self-end">
-                        <Col xs={2} className="pl-0 pb-1">
-                            <Button variant="outline-neutral">편집</Button>
-                        </Col>
-                        <Col xs={2} className="pl-0">
+                <Form.Row className="mb-2">
+                    <div className="d-flex w-100">
+                        <MokaInputLabel as="none" label="SNS 이미지\n(850*350px)" />
+                        <div className="d-flex flex-column mr-2 flex-fill">
+                            <Figure.Image className="mb-1" src={edit.tw.imgUrl} />
+                            <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
+                        </div>
+                        <div className="d-flex flex-column">
+                            <Button variant="outline-neutral" size="sm" className="mb-1">
+                                편집
+                            </Button>
                             <Button
-                                variant="outline-neutral"
+                                variant="positive"
                                 onClick={() => {
                                     setIsFacebookImageModalOpen(true);
                                 }}
+                                size="sm"
                             >
                                 신규 등록
                             </Button>
-                        </Col>
-                    </Col>
+                        </div>
+                    </div>
                 </Form.Row>
-                <Form.Row xs={12}>
-                    <Col xs={2}>
-                        <MokaInputLabel as="none" label="예약" labelWidth={87} />
-                    </Col>
-                    <Col xs={4} className="d-flex pl-4 mr-0 pr-1">
-                        <Form.Check label="예약 노출" type="checkbox" name="tw-isReserve" onChange={handleChangeCheckedValue} checked={edit.tw.isReserve} />
-                    </Col>
-                    <Col xs={5} className="d-flex pl-0">
+
+                <Form.Row className="mb-2">
+                    <div className="d-flex w-100 align-items-center">
+                        <MokaInputLabel as="none" label="예약" />
+                        <Form.Check label="예약 노출" type="checkbox" className="mr-2" name="tw-isReserve" onChange={handleChangeCheckedValue} checked={edit.tw.isReserve} custom />
                         <MokaInput
                             as="dateTimePicker"
                             name="tw-reserveDt"
@@ -520,10 +486,10 @@ const SnsMetaEdit = () => {
                             onChange={(e) => {
                                 handleChangeTextValue({ target: { name: 'tw-reserveDt', value: moment(e._d).format(DB_DATEFORMAT) } });
                             }}
-                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
+                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm', inputClassName: 'ft-12' }}
                             disabled={!edit.tw.isReserve}
                         />
-                    </Col>
+                    </div>
                 </Form.Row>
             </Form>
 

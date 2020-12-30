@@ -120,6 +120,9 @@ public class ArticleRestController extends AbstractCommonController {
                 });
 
         ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+
+        articleService.findArticleInfo(dto);
+
         ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);

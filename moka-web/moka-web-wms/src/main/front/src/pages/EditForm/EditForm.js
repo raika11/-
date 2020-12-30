@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
@@ -70,9 +69,9 @@ const EditForm = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} title="편집폼 관리" titleClassName="mb-0" bodyClassName="d-flex flex-column" width={480}>
-                <div className="mb-3 d-flex justify-content-end">
-                    <Button variant="positive" className={clsx('p-0', 'mr-05')} onClick={handleAddClickEditForm} style={{ width: '100px', height: '32px' }}>
+            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} title="편집폼 관리" bodyClassName="d-flex flex-column" width={480}>
+                <div className="mb-2 d-flex justify-content-end">
+                    <Button variant="positive" onClick={handleAddClickEditForm} className="ft-12">
                         편집폼 추가
                     </Button>
                 </div>
@@ -82,7 +81,7 @@ const EditForm = () => {
             </MokaCard>
 
             {/* 편집폼 정보 */}
-            <MokaCard title="편집폼 추가" className="flex-fill" minWidth={820} titleClassName="mb-0" height={CARD_DEFAULT_HEIGHT} loading={loading}>
+            <MokaCard title="편집폼 추가" className="flex-fill" minWidth={820} height={CARD_DEFAULT_HEIGHT} loading={loading}>
                 <Suspense>
                     <Switch>
                         <Route path={['/edit-form', '/edit-form/:formId']} exact render={() => <EditFormEdit onDelete={handleClickDelete} />} />

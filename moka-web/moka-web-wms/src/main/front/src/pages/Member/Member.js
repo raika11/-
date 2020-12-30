@@ -8,8 +8,8 @@ import { clearStore } from '@store/member';
 import MemberChildMenuAuth from '@pages/Member/relations/MemberChildMenuAuth';
 import { MokaLoader } from '@components';
 
+import MemberEdit from './MemberEdit';
 const MemberList = React.lazy(() => import('./MemberLIst'));
-const MemberEdit = React.lazy(() => import('./MemberEdit'));
 const MemberChildLoginHistoryList = React.lazy(() => import('./relations/MemberChildLoginHistoryList'));
 
 /**
@@ -40,7 +40,6 @@ const Member = () => {
                 headerClassName="d-flex justify-content-between align-item-center"
                 bodyClassName="d-flex flex-column"
                 title="사용자 관리"
-                titleClassName="mb-0"
                 width={1016}
             >
                 <Suspense>
@@ -60,9 +59,7 @@ const Member = () => {
                                 tabWidth={520}
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabs={[
-                                    <Suspense fallback={<MokaLoader />}>
-                                        <MemberEdit />
-                                    </Suspense>,
+                                    <MemberEdit />,
                                     <Suspense fallback={<MokaLoader />}>
                                         <MemberChildLoginHistoryList show={activeTabIdx === 1} />
                                     </Suspense>,

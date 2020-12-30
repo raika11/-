@@ -6,7 +6,7 @@
 		<groupId>jmnet.moka</groupId>
 		<artifactId>moka-springboot-parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
-		<relativePath/>
+		<relativePath>../moka-springboot-parent</relativePath>
 	</parent>
 	
 	<groupId>jmnet.moka.common</groupId>

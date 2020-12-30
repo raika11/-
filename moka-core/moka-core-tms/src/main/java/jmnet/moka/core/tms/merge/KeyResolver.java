@@ -26,6 +26,8 @@ public class KeyResolver {
     /** cache 관련 */
     public static final String CACHE_MERGE_POSTFIX = ".merge";
     public static final String CACHE_PG_MERGE = "pg" + CACHE_MERGE_POSTFIX;
+    public static final String CACHE_ARTICLE_MERGE = "article" + CACHE_MERGE_POSTFIX;
+    public static final String CACHE_AMP_ARTICLE_MERGE = "ampArticle" + CACHE_MERGE_POSTFIX;
     public static final String CACHE_CP_MERGE = "cp" + CACHE_MERGE_POSTFIX;
     public static final String CACHE_CT_MERGE = "ct" + CACHE_MERGE_POSTFIX;
     public static final String CACHE_TP_MERGE = "tp" + CACHE_MERGE_POSTFIX;
@@ -112,6 +114,14 @@ public class KeyResolver {
 
     public static String makeAdItemCacheKey(String domainId, String itemId) {
         return makeDefaultCacheKey(domainId, MokaConstants.ITEM_AD, itemId);
+    }
+
+    public static String makeArticleCacheKey(String domainId, String articleId) {
+        return String.join(DEFAULT_SEPARATOR, domainId, articleId);
+    }
+
+    public static String makeAmpArticleCacheKey(String domainId, String articleId) {
+        return String.join(DEFAULT_SEPARATOR, domainId, articleId);
     }
 
     public static String makeDataId(String itemType, String itemId) {

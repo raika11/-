@@ -23,6 +23,7 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
@@ -90,9 +91,8 @@ public class AmpArticleView extends AbstractView {
 
         MokaTemplateMerger templateMerger = null;
         PrintWriter writer = null;
-        String cacheType = "amparticle.merge";
-        String cacheKey = String.format("%s_%s", domainId, articleId);
-
+        String cacheType = KeyResolver.CACHE_AMP_ARTICLE_MERGE;
+        String cacheKey = KeyResolver.makeAmpArticleCacheKey(domainId, articleId);
         try {
             String cached = null;
             if ( this.cacheManager != null) {
@@ -231,6 +231,7 @@ public class AmpArticleView extends AbstractView {
         ampContent = setAmpAd(ampContent);
 
         contentMap.put("ART_CONTENT",ampContent);
+        article.put("userTagList", useTagList);
     }
 
     private static String DEFAULT_WIDTH = "480";
@@ -252,7 +253,7 @@ public class AmpArticleView extends AbstractView {
     private static Pattern PATTERN_URL = Pattern.compile("url=\"[^\"]+", Pattern.CASE_INSENSITIVE);
     private static Pattern PATTERN_BR = Pattern.compile("<br>(\\s|&nbsp;)*?<br>", Pattern.CASE_INSENSITIVE);
     private static Pattern PATTERN_ALT_REFINE = Pattern.compile("alt=\".*?\"", Pattern.CASE_INSENSITIVE);
-    private static Pattern PATTERN_YOUTUBE_ID = Pattern.compile("[\\w-]");
+    private static Pattern PATTERN_YOUTUBE_ID = Pattern.compile("[\\w-]{11}");
     private static String AD_IN_BODY = "<br><br><div class=\"shopping_box\">"
             + "<amp-ad width=\"336\" height=\"280\" type=\"doubleclick\" data-slot=\"/30349040/AMP_Joongang_article_336x280\"></amp-ad>"
             + "</div><br>";
@@ -339,10 +340,10 @@ public class AmpArticleView extends AbstractView {
                 ampContent = ampContent.replace(vod, "").trim();
                 continue;
             }
-            if ( vod.equals("youtube")) {
+            if ( service.equals("youtube")) {
                 String youtubeId = id.substring(id.lastIndexOf("/") + 1);
                 youtubeId = getFirstValue(PATTERN_YOUTUBE_ID, youtubeId); // 11자리 Id를 추출
-                ampContent.replace(vod,
+                ampContent = ampContent.replace(vod,
                         String.format("<div class=\"ab_player\"><div class=\"player_area\">"
                                         + "<amp-youtube data-videoid=\"%s\" width=\"%s\" height=\"%s\" layout=\"%s\"></amp-youtube>"
                                         + "</div></div>",

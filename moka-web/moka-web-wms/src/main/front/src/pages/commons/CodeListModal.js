@@ -323,7 +323,7 @@ const CodeListModal = (props) => {
                                                         onChange={handleChangeValue}
                                                     />
                                                 ) : (
-                                                    <p className="mb-0 ft-12">dep2.sectionKorname</p>
+                                                    <p className="mb-0 ft-12">{dep2.sectionKorname}</p>
                                                 )}
                                             </Col>
                                             <Col xs={9} className="pt-1 pr-1 pl-1 pb-0">

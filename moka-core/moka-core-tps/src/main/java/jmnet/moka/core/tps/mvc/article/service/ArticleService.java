@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
@@ -91,7 +92,16 @@ public interface ArticleService {
      * @param iud          삭제는 'D', 중지는 'E'
      * @return
      */
-    boolean insertArticleIud(ArticleBasic articleBasic, String iud);
+    boolean insertArticleIudWithTotalId(ArticleBasic articleBasic, String iud);
+
+    /**
+     * 수신기사를 등록기사로 등록
+     *
+     * @param articleBasic 수신기사정보
+     * @param updateDto    기자목록,분류코드목록,태그목록
+     * @return 등록성공여부
+     */
+    boolean insertArticleIud(ArticleBasic articleBasic, ArticleBasicUpdateDTO updateDto);
 
     /**
      * 기사 히스토리 조회

@@ -165,6 +165,7 @@ public class RcvArticleServiceImpl implements RcvArticleService {
             }
         }
 
+        // RCV_ARTICLE_IUD에 등록
         return insertRcvArticleIud(rcvArticleBasic);
     }
 

@@ -15,6 +15,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleHistoryDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
@@ -273,7 +274,7 @@ public class ArticleRestController extends AbstractCommonController {
 
         try {
             // 삭제는 D로 등록
-            boolean insertOk = articleService.insertArticleIud(articleBasic, "D");
+            boolean insertOk = articleService.insertArticleIudWithTotalId(articleBasic, "D");
 
             String message = "";
             if (insertOk) {
@@ -320,7 +321,7 @@ public class ArticleRestController extends AbstractCommonController {
 
         try {
             // 삭제는 D로 등록
-            boolean insertOk = articleService.insertArticleIud(articleBasic, "E");
+            boolean insertOk = articleService.insertArticleIudWithTotalId(articleBasic, "E");
 
             String message = "";
             if (insertOk) {
@@ -401,9 +402,50 @@ public class ArticleRestController extends AbstractCommonController {
 
         // cdn등록
         String cdnUrl = articleService.insertCdn(totalId);
-        
+
         ResultDTO<String> resultDto = new ResultDTO<>(cdnUrl);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @ApiOperation("기사수정")
+    @PutMapping("/{totalId}")
+    ResponseEntity<?> putArticle(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
+            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @Valid ArticleBasicUpdateDTO updateDto)
+            throws Exception {
+
+        // 기사 상세조회
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        try {
+            // 수정
+            boolean insertOk = articleService.insertArticleIud(articleBasic, updateDto);
+
+            String message = "";
+            if (insertOk) {
+                message = msg("tps.common.success.insert");
+            } else {
+                message = msg("tps.common.error.insert");
+            }
+
+            // 수신기사정보 조회
+            ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
+            articleService.findArticleInfo(dto);
+
+            ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto, message);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO RCV_ARTICE_IUD INSERT]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO RCV_ARTICE_IUD INSERT]", e, true);
+            throw new Exception(msg("tps.common.error.insert"), e);
+        }
     }
 }

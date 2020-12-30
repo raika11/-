@@ -11,6 +11,7 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
@@ -183,7 +184,7 @@ public class ArticleServiceImpl implements ArticleService {
         Map paramMap = new HashMap();
         paramMap.put("totalId", articleDto.getTotalId());
         List<List<Object>> listMap = articleMapper.findInfo(paramMap);
-        if (listMap.size() == 4) {
+        if (listMap.size() == 5) {
             // 분류목록
             if (listMap.get(0) != null && listMap
                     .get(0)
@@ -211,7 +212,7 @@ public class ArticleServiceImpl implements ArticleService {
             }
 
             // 벌크목록
-            if (listMap.get(1) != null && listMap
+            if (listMap.get(3) != null && listMap
                     .get(3)
                     .size() > 0) {
                 List<String> dbList = modelMapper.map(listMap.get(3), new TypeReference<List<String>>() {
@@ -241,12 +242,23 @@ public class ArticleServiceImpl implements ArticleService {
                     articleDto.setBulkSiteList(list);
                 }
             }
+
+            // 본문
+            if (listMap.get(4) != null && listMap
+                    .get(4)
+                    .size() > 0) {
+                List<String> contentList = modelMapper.map(listMap.get(4), new TypeReference<List<String>>() {
+                }.getType());
+                if (contentList.size() > 0) {
+                    articleDto.setArtContent(contentList.get(0));
+                }
+            }
         }
 
     }
 
     @Override
-    public boolean insertArticleIud(ArticleBasic articleBasic, String iud) {
+    public boolean insertArticleIudWithTotalId(ArticleBasic articleBasic, String iud) {
         Map paramMap = new HashMap();
         Integer returnValue = TpsConstants.PROCEDURE_SUCCESS;
         paramMap.put("totalId", articleBasic.getTotalId());
@@ -258,6 +270,27 @@ public class ArticleServiceImpl implements ArticleService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean insertArticleIud(ArticleBasic articleBasic, ArticleBasicUpdateDTO updateDto) {
+
+        // 분류등록
+
+        // 태그등록
+
+        // 기자등록
+
+        // 제목등록
+
+        // 본문등록
+
+        // ARTICLE_IUD에 등록
+        insertArticleIudWithTotalId(articleBasic, "U");
+
+        // 히스토리 등록
+
+        return false;
     }
 
     @Override

@@ -40,7 +40,7 @@ const ArticleSourceAgGrid = () => {
 
     return (
         <MokaTable
-            agGridHeight={692}
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={sourceList}
             onRowNodeId={(row) => row.sourceCode}
@@ -51,6 +51,7 @@ const ArticleSourceAgGrid = () => {
             size={search.size}
             selected={source.sourceCode}
             onChangeSearchOption={handleChangeSearchOption}
+            suppressRefreshCellAfterUpdate
         />
     );
 };

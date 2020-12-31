@@ -39,6 +39,7 @@ const Boards = React.lazy(() => import('@pages/Boards'));
 const TourList = React.lazy(() => import('@pages/TourList'));
 const TourSet = React.lazy(() => import('@pages/TourSet'));
 const TourMsgSet = React.lazy(() => import('@pages/TourMsgSet'));
+const Article = React.lazy(() => import('@pages/Article'));
 
 const routes = [
     {
@@ -419,6 +420,16 @@ const routes = [
         component: TourMsgSet,
         layout: SidebarOpenLayout,
         nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article',
+        name: 'article',
+        displayName: '등록기사 전체',
+        component: Article,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
         exact: false,
         strict: true,
     },

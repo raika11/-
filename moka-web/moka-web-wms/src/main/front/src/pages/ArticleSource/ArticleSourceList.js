@@ -7,13 +7,12 @@ import AgGrid from './ArticleSourceAgGrid';
  */
 const ArticleSourceList = () => {
     return (
-        <div className="d-flex flex-column">
+        <>
             {/* 매체 검색 */}
             <Search />
-
             {/* 매체 목록 테이블 */}
             <AgGrid />
-        </div>
+        </>
     );
 };
 

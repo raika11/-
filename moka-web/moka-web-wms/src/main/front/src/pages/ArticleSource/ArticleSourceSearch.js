@@ -73,7 +73,7 @@ const ArticleSourceSearch = () => {
     }, [dispatch]);
 
     return (
-        <div className="mb-2 d-flex align-items-center justify-content-between">
+        <div className="mb-3 d-flex align-items-center justify-content-between">
             <div className="d-flex">
                 <div style={{ width: 100 }} className="mr-2">
                     <MokaInput className="ft-12" as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>

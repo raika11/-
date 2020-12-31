@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import ArticleDeskSearch from './ArticleDeskSearch';
 import ArticleDeskAgGrid from './ArticleDeskAgGrid';
-import { clearList, clearSearch } from '@store/article';
+import { clearServiceList, clearBulkList, clearServiceSearch, clearBulkSearch } from '@store/article';
 
 const propTypes = {
     /**
@@ -51,8 +51,10 @@ const ArticleDeskList = forwardRef((props, ref) => {
     useEffect(() => {
         return () => {
             // unmount
-            dispatch(clearList());
-            dispatch(clearSearch());
+            dispatch(clearServiceList());
+            dispatch(clearBulkList());
+            dispatch(clearServiceSearch());
+            dispatch(clearBulkSearch());
         };
     }, [dispatch]);
 

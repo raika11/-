@@ -41,7 +41,7 @@ const ArticleSource = (props) => {
             </Helmet>
 
             {/* 수신 매체 리스트 */}
-            <MokaCard header={false} width={812} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column">
+            <MokaCard header={false} width={812} className="mr-gutter" bodyClassName="d-flex flex-column">
                 <Suspense>
                     <ArticleSourceList />
                 </Suspense>
@@ -58,7 +58,6 @@ const ArticleSource = (props) => {
                         return (
                             <MokaCard
                                 width={772}
-                                titleClassName="mb-0"
                                 title="매체 정보"
                                 footer
                                 footerButtons={[

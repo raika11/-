@@ -238,10 +238,10 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
 
     return (
         <>
-            <Form>
+            <Form className="mb-2">
                 <Form.Row>
                     <Col xs={6} className="p-0">
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="매체(CP)명"
@@ -256,7 +256,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={6} className="p-0">
                                 <MokaInputLabel
                                     label="매체코드"
@@ -280,7 +280,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 )}
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="CP 관리자"
@@ -293,7 +293,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="CP 연락처"
@@ -306,7 +306,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="CP 메일"
@@ -319,7 +319,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={8} className="p-0">
                                 <MokaInputLabel
                                     label="XML포맷 출처"
@@ -336,7 +336,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 </MokaInputLabel>
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={8} className="p-0">
                                 <MokaInputLabel
                                     label="본문 이미지"
@@ -353,7 +353,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 </MokaInputLabel>
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
                                 <MokaInputLabel
                                     label="업체 IP 정보(구분)"
@@ -366,7 +366,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
                                 <MokaInputLabel
                                     label="FTP 경로"
@@ -379,7 +379,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
                                 <MokaInputLabel
                                     label="기본 URL"
@@ -392,7 +392,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
                                 <MokaInputLabel
                                     label="이미지 URL"
@@ -407,7 +407,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                         </Form.Row>
                     </Col>
                     <Col xs={6} className="p-0">
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="매체타입"
@@ -422,7 +422,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="서버 구분"
@@ -436,7 +436,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="매체 기타"
@@ -449,7 +449,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
                                 <MokaInputLabel
                                     label="내부관리자"
@@ -462,12 +462,11 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <div className="d-flex flex-column justify-content-between" style={{ height: 310 }}>
+                        <div className="d-flex flex-column justify-content-between" style={{ height: 265 }}>
                             <MokaInputLabel
                                 label="편집 필요여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="artEditYn"
                                 id="switch-artEditYn"
@@ -476,9 +475,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="CP수신여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="rcvUsedYn"
                                 id="switch-rcvUsedYn"
@@ -487,9 +485,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="벌크 여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="bulkFlag"
                                 id="switch-bulkFlag"
@@ -498,9 +495,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="중앙 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="joongangUse"
                                 id="switch-joongangUse"
@@ -509,9 +505,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="JSTORE 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="jstoreUse"
                                 id="switch-jstoreUse"
@@ -520,9 +515,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="CONSALES 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="consalesUse"
                                 id="switch-consalesUse"
@@ -531,9 +525,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="일간 사용여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="ilganUse"
                                 id="switch-ilganUse"
@@ -542,9 +535,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="소셜 전송여부"
-                                labelWidth={160}
-                                labelClassName="mr-3 ft-12"
-                                className="mb-0"
+                                labelWidth={100}
+                                labelClassName="ft-12"
                                 as="switch"
                                 name="socialUse"
                                 id="switch-socialUse"
@@ -555,10 +547,8 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                     </Col>
                 </Form.Row>
             </Form>
-            <div className="p-2" style={{ border: '1px solid #e1e3eB' }}>
-                <p className="ft-12 mb-2" style={{ color: 'red' }}>
-                    ** 신규 매체 추가시 작업 순서
-                </p>
+            <div className="p-2 border rounded">
+                <p className="ft-12 mb-2 color-danger">** 신규 매체 추가시 작업 순서</p>
                 <p className="ft-12 mb-0">1. 데이터 수신을 위한 계정 설정 및 FTP 가상디렉토리 추가</p>
                 <p className="ft-12 mb-0">2. 업체 아이디명의 가상디렉토리 설정 FTP 접근포트는 가능하면 8021로 설정</p>
                 <p className="ft-12 mb-2">3. 업체에서 접근할 IP를 확인하고 시스템팀에 방화벽 오픈 요청</p>

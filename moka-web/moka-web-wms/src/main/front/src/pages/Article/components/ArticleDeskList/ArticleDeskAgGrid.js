@@ -5,29 +5,37 @@ import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
 import { addDeskingWorkDropzone } from '@utils/agGridUtil';
-import { GET_ARTICLE_LIST, GET_BULK_ARTICLE_LIST, getArticleList, getBulkArticleList, changeSearchOption } from '@store/article';
+import { GET_SERVICE_ARTICLE_LIST, GET_BULK_ARTICLE_LIST, getServiceArticleList, getBulkArticleList, changeBulkSearchOption, changeServiceSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';
 import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
+
+const defaultProps = {
+    isNaverChannel: false,
+};
 
 /**
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
  */
 const ArticleDeskAgGrid = forwardRef((props, ref) => {
     const { onDragStop, dropTargetAgGrid, isNaverChannel } = props;
-
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST] || store.loading[GET_BULK_ARTICLE_LIST]);
+
+    const loading = useSelector((store) => store.loading[GET_SERVICE_ARTICLE_LIST] || store.loading[GET_BULK_ARTICLE_LIST]);
     const { PDS_URL, IR_URL } = useSelector((store) => ({
         PDS_URL: store.app.PDS_URL,
         IR_URL: store.app.IR_URL,
     }));
-    const { search, list, total, error } = useSelector((store) => ({
-        search: store.article.search,
-        list: store.article.list,
-        total: store.article.total,
-        error: store.article.error,
+    const { search, list, total, error } = useSelector(({ article }) => ({
+        search: isNaverChannel ? article.bulk.search : article.service.search,
+        list: isNaverChannel ? article.bulk.list : article.service.list,
+        total: isNaverChannel ? article.bulk.total : article.service.total,
+        error: isNaverChannel ? article.bulk.error : article.service.error,
     }));
+
+    // initial setting
+    const changeSearchOption = isNaverChannel ? changeBulkSearchOption : changeServiceSearchOption;
+    const getArticleList = isNaverChannel ? getBulkArticleList : getServiceArticleList;
 
     // state
     const [rowData, setRowData] = useState([]);
@@ -55,9 +63,8 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-
         dispatch(changeSearchOption(temp));
-        !isNaverChannel ? dispatch(getArticleList({ search: temp })) : dispatch(getBulkArticleList({ search: temp }));
+        dispatch(getArticleList({ search: temp }));
     };
 
     useEffect(() => {
@@ -108,9 +115,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
     }, [IR_URL, PDS_URL, list]);
 
     useEffect(() => {
-        /**
-         * 드롭 타겟 ag-grid에 drop-zone 설정
-         */
+        // 드롭 타겟 ag-grid에 drop-zone 설정
         if (gridInstance) {
             if (Array.isArray(dropTargetAgGrid)) {
                 // 타겟이 리스트인 경우
@@ -153,5 +158,7 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
         </React.Fragment>
     );
 });
+
+ArticleDeskAgGrid.defaultProps = defaultProps;
 
 export default ArticleDeskAgGrid;

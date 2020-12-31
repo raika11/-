@@ -9,7 +9,11 @@ import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { SourceSelector } from '@pages/commons';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { initialState, getArticleList, getBulkArticleList, changeSearchOption, clearList } from '@store/article';
+import { initialState, getServiceArticleList, getBulkArticleList, changeServiceSearchOption, changeBulkSearchOption, clearServiceList, clearBulkList } from '@store/article';
+
+const defaultProps = {
+    isNaverChannel: false,
+};
 
 /**
  * 기사 검색
@@ -17,10 +21,16 @@ import { initialState, getArticleList, getBulkArticleList, changeSearchOption, c
 const ArticleDeskSearch = (props) => {
     const { media, selectedComponent, show, isNaverChannel } = props;
     const dispatch = useDispatch();
-    const storeSearch = useSelector((store) => store.article.search);
+
+    // initial setting
+    const storeSearch = useSelector(({ article }) => (isNaverChannel ? article.bulk.search : article.service.search));
+    const clearList = isNaverChannel ? clearBulkList : clearServiceList;
+    const changeSearchOption = isNaverChannel ? changeBulkSearchOption : changeServiceSearchOption;
+    const getArticleList = isNaverChannel ? getBulkArticleList : getServiceArticleList;
+    const initialSearch = isNaverChannel ? initialState.bulk.search : initialState.service.search;
 
     // state
-    const [search, setSearch] = useState(initialState.search);
+    const [search, setSearch] = useState(initialSearch);
     const [searchDisabled, setSearchDisabled] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [error, setError] = useState({});
@@ -78,8 +88,22 @@ const ArticleDeskSearch = (props) => {
 
         if (validate(ns)) {
             dispatch(changeSearchOption(ns));
-            !isNaverChannel ? dispatch(getArticleList({ search: ns })) : dispatch(getBulkArticleList({ search: ns }));
+            dispatch(getArticleList({ search: ns }));
         }
+    };
+
+    /**
+     * 그룹지정 넘버 변경한 후 실행
+     */
+    const onChangeGroupNumber = () => {
+        let ns = {
+            ...search,
+            sourceList,
+            startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
+            endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+            page: 0,
+        };
+        dispatch(getArticleList({ search: ns }));
     };
 
     /**
@@ -126,7 +150,7 @@ const ArticleDeskSearch = (props) => {
 
         dispatch(
             changeSearchOption({
-                ...initialState.search,
+                ...initialSearch,
                 masterCode: selectedComponent.masterCode || null,
                 startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
@@ -182,7 +206,7 @@ const ArticleDeskSearch = (props) => {
 
             dispatch(changeSearchOption(ns));
             if (sourceOn) {
-                !isNaverChannel ? dispatch(getArticleList({ search: ns })) : dispatch(getBulkArticleList({ search: ns }));
+                dispatch(getArticleList({ search: ns }));
             }
         } else {
             dispatch(clearList());
@@ -237,7 +261,15 @@ const ArticleDeskSearch = (props) => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput
+                    className="flex-fill mr-2"
+                    inputClassName="ft-12"
+                    buttonClassName="ft-12"
+                    name="keyword"
+                    value={search.keyword}
+                    onChange={handleChangeValue}
+                    onSearch={handleSearch}
+                />
 
                 {/* 초기화 */}
                 <Button variant="negative" className="ft-12" onClick={handleClickReset}>
@@ -271,7 +303,7 @@ const ArticleDeskSearch = (props) => {
                         <MokaInputLabel
                             label="면"
                             labelWidth={25}
-                            className="mb-0"
+                            className="mb-0 ft-12"
                             inputClassName="ft-12"
                             name="pressMyun"
                             value={search.pressMyun}
@@ -285,7 +317,7 @@ const ArticleDeskSearch = (props) => {
                         <MokaInputLabel
                             label="판"
                             labelWidth={25}
-                            className="mb-0"
+                            className="mb-0 ft-12"
                             inputClassName="ft-12"
                             name="pressPan"
                             value={search.pressPan}
@@ -294,14 +326,20 @@ const ArticleDeskSearch = (props) => {
                         />
                     </div>
                 </div>
-                <Button variant="outline-neutral" className="ft-12" onClick={() => setModalShow(true)}>
-                    그룹지정
-                </Button>
+                {!isNaverChannel && (
+                    <React.Fragment>
+                        <Button variant="outline-neutral" className="ft-12" onClick={() => setModalShow(true)}>
+                            그룹지정
+                        </Button>
+                        {/* 그룹지정 변경 모달 */}
+                        <ChangeArtGroupModal show={modalShow} onHide={() => setModalShow(false)} onSave={onChangeGroupNumber} />
+                    </React.Fragment>
+                )}
             </Form.Row>
-
-            <ChangeArtGroupModal show={modalShow} onHide={() => setModalShow(false)} />
         </Form>
     );
 };
+
+ArticleDeskSearch.defaultProps = defaultProps;
 
 export default ArticleDeskSearch;

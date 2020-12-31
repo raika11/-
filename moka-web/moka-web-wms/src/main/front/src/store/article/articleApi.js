@@ -1,8 +1,8 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
 
-// 기사 목록 조회(페이지편집용)
-export const getArticleList = ({ search }) => {
+// 서비스 기사 목록 조회(페이지편집용)
+export const getServiceArticleList = ({ search }) => {
     // searchType : all, title, reporterId, reporterName
     const queryString = qs.stringify(search);
     return instance.get(`/api/articles/service?${queryString}`).catch((err) => {

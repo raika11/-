@@ -1,67 +1,61 @@
 import React from 'react';
-// import RcvArticleRegisterBtn from './components/RcvArticleRegisterBtn';
+import { MokaIcon } from '@components';
+import ArticleActionBtn from './components/ArticleActionBtn';
 // import RcvArticlePreviewBtn from './components/RcvArticlePreviewBtn';
 // import TitleRenderer from './components/TitleRenderer';
 
 export default [
     {
-        headerName: '월일',
-        field: 'rcvDt',
-        width: 45,
+        headerName: '매체/분류',
+        colId: 'source',
+        width: 150,
         cellStyle: { fontSize: '12px' },
-    },
-    {
-        headerName: '수신',
-        field: 'rcvTime',
-        width: 45,
-        cellStyle: { fontSize: '12px' },
-    },
-    {
-        headerName: '구분',
-        field: 'sourceName',
-        width: 70,
-        cellStyle: { fontSize: '12px' },
-        cellRendererFramework: ({ data }) => (
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (data.serviceUrl) {
-                        window.open(data.serviceUrl);
-                    }
-                }}
-            >
-                {data.sourceName}
-            </div>
-        ),
+        cellRendererFramework: ({ data }) => {
+            return (
+                <React.Fragment>
+                    {data.bulkFlag === 'Y' && <MokaIcon iconName="fas-circle" className="color-info mr-1" />}
+                    {data.sourceName} - {data.contentKorname}
+                </React.Fragment>
+            );
+        },
     },
     {
         headerName: '보기',
-        field: 'preview',
-        width: 55,
-        // cellRendererFramework: (row) => <RcvArticlePreviewBtn {...row} />,
+        field: 'rcvTime',
+        width: 100,
     },
     {
         headerName: '제목',
-        field: 'title',
+        field: 'artTitle',
         flex: 1,
         width: 100,
-        tooltipField: 'title',
+        tooltipField: 'artTitle',
         // cellRendererFramework: (row) => <TitleRenderer {...row} />,
     },
     {
-        headerName: '입력',
-        field: 'serviceTime',
-        width: 45,
-        cellStyle: { fontSize: '12px' },
-        cellClassRules: {
-            'text-positive': () => true,
+        headerName: '면/판',
+        field: 'myunPan',
+        width: 50,
+        cellStyle: {
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px',
+        },
+    },
+    {
+        headerName: '등록시간',
+        field: 'regDt',
+        width: 80,
+        cellStyle: {
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '12px',
         },
     },
     {
         headerName: '기능',
         field: 'register',
-        width: 55,
-        // cellRendererFramework: (row) => <RcvArticleRegisterBtn {...row} />,
+        width: 135,
+        cellRendererFramework: (row) => <ArticleActionBtn {...row} />,
     },
 ];

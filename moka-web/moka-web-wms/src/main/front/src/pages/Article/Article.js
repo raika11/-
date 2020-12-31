@@ -3,18 +3,19 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard, useBreakpoint } from '@components';
 
+import ArticleEdit from './ArticleEdit';
 const ArticleList = React.lazy(() => import('./ArticleList'));
 
 /**
  * 등록기사 전체
  */
 const Article = ({ match }) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const matchPoints = useBreakpoint();
 
     // React.useEffect(() => {
@@ -24,7 +25,7 @@ const Article = ({ match }) => {
     // }, [dispatch]);
 
     return (
-        <Container className="p-0">
+        <Container className="p-0 position-relative">
             <Helmet>
                 <title>등록 기사 전체</title>
                 <meta name="description" content="등록 기사 전체 페이지입니다." />
@@ -42,10 +43,21 @@ const Article = ({ match }) => {
                 </Col>
 
                 {(matchPoints.md || matchPoints.lg) && (
-                    <Col md={5} className="p-0 bg-white">
-                        에디트 영역
-                        {/* <Route path={[`${match.url}/:rid`]} exact render={() => <ArticleEdit />} /> */}
+                    <Col md={5} className="p-0">
+                        <Route path={[`${match.url}/:totalId`]} exact render={() => <ArticleEdit />} />
                     </Col>
+                )}
+
+                {(matchPoints.xs || matchPoints.sm) && (
+                    <Route
+                        path={[`${match.url}/:totalId`]}
+                        exact
+                        render={() => (
+                            <div className="absolute-top-right h-100 bg-dark" style={{ width: 590, zIndex: 2 }}>
+                                <ArticleEdit />
+                            </div>
+                        )}
+                    />
                 )}
             </Row>
         </Container>

@@ -5,8 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { initialState, getRcvArticleList, changeSearchOption } from '@store/rcvArticle';
-import { MokaInput, MokaInputLabel } from '@components';
+import { initialState, getArticleList, changeSearchOption } from '@store/article';
+import { MokaInput, MokaIcon } from '@components';
 import { SourceSelector, CodeAutocomplete } from '@pages/commons';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
@@ -18,7 +18,8 @@ const SOURCE_LIST_KEY = 'articleSourceList';
  * 등록기사 검색 컴포넌트
  */
 const ArticleSearch = () => {
-    // state
+    const dispatch = useDispatch();
+    const storeSearch = useSelector((store) => store.article.search);
     const [search, setSearch] = useState(initialState.search);
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
@@ -37,11 +38,11 @@ const ArticleSearch = () => {
             const { number, date } = e.target.selectedOptions[0].dataset;
             setPeriod([Number(number), date]);
 
-            // startDay, endDay 변경
+            // startServiceDay, endServiceDay 변경
             const nd = new Date();
-            const startDay = moment(nd).subtract(Number(number), date);
-            const endDay = moment(nd);
-            setSearch({ ...search, startDay, endDay });
+            const startServiceDay = moment(nd).subtract(Number(number), date);
+            const endServiceDay = moment(nd);
+            setSearch({ ...search, startServiceDay, endServiceDay });
         } else {
             setSearch({ ...search, [name]: value });
         }
@@ -53,9 +54,9 @@ const ArticleSearch = () => {
      */
     const handleChangeSDate = (date) => {
         if (typeof date === 'object') {
-            setSearch({ ...search, startDay: date });
+            setSearch({ ...search, startServiceDay: date });
         } else if (date === '') {
-            setSearch({ ...search, startDay: null });
+            setSearch({ ...search, startServiceDay: null });
         }
     };
 
@@ -65,9 +66,9 @@ const ArticleSearch = () => {
      */
     const handleChangeEDate = (date) => {
         if (typeof date === 'object') {
-            setSearch({ ...search, endDay: date });
+            setSearch({ ...search, endServiceDay: date });
         } else if (date === '') {
-            setSearch({ ...search, endDay: null });
+            setSearch({ ...search, endServiceDay: null });
         }
     };
 
@@ -81,15 +82,15 @@ const ArticleSearch = () => {
 
         const date = new Date();
         setPeriod([1, 'days']);
-        // dispatch(
-        //     changeSearchOption({
-        //         ...initialState.search,
-        //         startDay: moment(date).subtract(1, 'days').format(DB_DATEFORMAT),
-        //         endDay: moment(date).format(DB_DATEFORMAT),
-        //         sourceList,
-        //         page: 0,
-        //     }),
-        // );
+        dispatch(
+            changeSearchOption({
+                ...initialState.search,
+                startServiceDay: moment(date).subtract(1, 'days').format(DB_DATEFORMAT),
+                endServiceDay: moment(date).format(DB_DATEFORMAT),
+                sourceList,
+                page: 0,
+            }),
+        );
     };
 
     /**
@@ -113,14 +114,14 @@ const ArticleSearch = () => {
         let ns = {
             ...search,
             sourceList,
-            startDay: moment(search.startDay).format(DB_DATEFORMAT),
-            endDay: moment(search.endDay).format(DB_DATEFORMAT),
+            startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
+            endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
             page: 0,
         };
 
         if (validate(ns)) {
-            // dispatch(changeSearchOption(ns));
-            // dispatch(getRcvArticleList({ search: ns }));
+            dispatch(changeSearchOption(ns));
+            dispatch(getArticleList({ search: ns }));
         }
     };
 
@@ -136,18 +137,18 @@ const ArticleSearch = () => {
         }
     };
 
-    // useEffect(() => {
-    //     let ssd = moment(storeSearch.startDay, DB_DATEFORMAT);
-    //     if (!ssd.isValid()) ssd = null;
-    //     let esd = moment(storeSearch.endDay, DB_DATEFORMAT);
-    //     if (!esd.isValid()) esd = null;
+    useEffect(() => {
+        let ssd = moment(storeSearch.startServiceDay, DB_DATEFORMAT);
+        if (!ssd.isValid()) ssd = null;
+        let esd = moment(storeSearch.endServiceDay, DB_DATEFORMAT);
+        if (!esd.isValid()) esd = null;
 
-    //     setSearch({
-    //         ...storeSearch,
-    //         startDay: ssd,
-    //         endDay: esd,
-    //     });
-    // }, [storeSearch]);
+        setSearch({
+            ...storeSearch,
+            startServiceDay: ssd,
+            endServiceDay: esd,
+        });
+    }, [storeSearch]);
 
     useEffect(() => {
         /**
@@ -157,14 +158,15 @@ const ArticleSearch = () => {
          * 종료일 : 현재 시간(시분초o) - period 설정 일수
          */
         const date = new Date();
-        const startDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
-        const endDay = moment(date).format(DB_DATEFORMAT);
-        const ns = { ...search, sourceList, startDay, endDay, page: 0 };
+        const startServiceDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
+        const endServiceDay = moment(date).format(DB_DATEFORMAT);
+        const ns = { ...search, sourceList, startServiceDay, endServiceDay, page: 0 };
 
-        // dispatch(changeSearchOption(ns));
-        // if (sourceOn) {
-        //     dispatch(getRcvArticleList({ search: ns }));
-        // }
+        dispatch(changeSearchOption(ns));
+        if (sourceOn) {
+            dispatch(getArticleList({ search: ns }));
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sourceOn]);
 
@@ -194,8 +196,22 @@ const ArticleSearch = () => {
 
                 {/* 시작일, 종료일 */}
                 <Col xs={4} className="p-0 pl-2 d-flex">
-                    <MokaInput as="dateTimePicker" className="mr-1" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startDay} />
-                    <MokaInput as="dateTimePicker" className="ml-1" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endDay} />
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="mr-1"
+                        inputClassName="ft-12"
+                        inputProps={{ timeFormat: null }}
+                        onChange={handleChangeSDate}
+                        value={search.startServiceDay}
+                    />
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="ml-1"
+                        inputClassName="ft-12"
+                        inputProps={{ timeFormat: null }}
+                        onChange={handleChangeEDate}
+                        value={search.endServiceDay}
+                    />
                 </Col>
 
                 {/* 분류 전체 */}
@@ -211,37 +227,45 @@ const ArticleSearch = () => {
                     </MokaInput>
 
                     {/* 기사타입 */}
-                    <MokaInput as="select" className="ft-12 mr-2" disabled>
-                        <option value="all">기사타입 전체</option>
-                        <option value="P">포토뉴스</option>
-                        <option value="N">일반뉴스</option>
+                    <MokaInput as="select" name="contentType" onChange={handleChangeValue} value={search.contentType} className="ft-12 mr-2">
+                        {initialState.contentTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </MokaInput>
 
                     {/* 벌크 */}
-                    <MokaInput as="select" className="ft-12" disabled>
-                        <option value="all">벌크 전체</option>
-                        <option value="Y">벌크기사</option>
-                        <option value="N">벌크제외</option>
+                    <MokaInput as="select" name="bulkYn" onChange={handleChangeValue} value={search.bulkYn} className="ft-12">
+                        {initialState.bulkYnList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
                 {/* 검색조건 */}
                 <Col xs={2} className="p-0">
-                    <MokaInput as="select" className="ft-12" disabled>
-                        <option>기사제목</option>
+                    <MokaInput as="select" name="searchType" className="ft-12" onChange={handleChangeValue} value={search.searchType}>
+                        {initialState.searchTypeList.map((tp) => (
+                            <option key={tp.id} value={tp.id}>
+                                {tp.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
 
                 {/* 검색어 */}
                 <Col xs={3} className="p-0 pl-2">
-                    <MokaInput className="ft-12" disabled />
+                    <MokaInput className="ft-12" name="keyword" onChange={handleChangeValue} value={search.keyword} onKeyPress={handleKeyPress} placeholder="검색어를 입력하세요" />
                 </Col>
 
                 {/* 면, 판 */}
                 <Col xs={2} className="p-0 pl-2 d-flex">
-                    <MokaInput placeholder="면" disabled className="mr-2 ft-12" />
-                    <MokaInput placeholder="판" disabled className="ft-12" />
+                    <MokaInput placeholder="면" name="pressMyun" className="mr-2 ft-12" onChange={handleChangeValue} value={search.pressMyun} />
+                    <MokaInput placeholder="판" name="pressPan" className="ft-12" onChange={handleChangeValue} value={search.pressPan} />
                 </Col>
 
                 {/* 매체 */}
@@ -262,14 +286,19 @@ const ArticleSearch = () => {
                     />
                 </Col>
             </Form.Row>
-            <Form.Row className="d-flex mb-2 justify-content-end">
-                <Button variant="searching" className="mr-2 ft-12" onClick={handleSearch}>
-                    검색
-                </Button>
-
-                <Button variant="negative" className="ft-12" onClick={handleClickReset}>
-                    초기화
-                </Button>
+            <Form.Row className="d-flex mb-2 justify-content-between align-items-end">
+                <p className="mb-0 ft-12">
+                    <MokaIcon iconName="fas-circle" className="mr-1 color-info" />
+                    벌크전송기사
+                </p>
+                <div className="d-flex">
+                    <Button variant="searching" className="mr-2 ft-12" onClick={handleSearch}>
+                        검색
+                    </Button>
+                    <Button variant="negative" className="ft-12" onClick={handleClickReset}>
+                        초기화
+                    </Button>
+                </div>
             </Form.Row>
         </Form>
     );

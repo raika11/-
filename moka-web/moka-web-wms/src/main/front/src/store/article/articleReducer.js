@@ -17,17 +17,29 @@ export const initialState = {
         keyword: '',
         pressPan: null, // 판
         pressMyun: null, // 면
-        sourceList: null, // 매체
-        masterCode: null, // 분류
+        sourceList: null, // 매체(구분자 ,)
+        masterCode: null, // 분류(1개)
         startServiceDay: null, // 시작일
         endServiceDay: null, // 종료일
-        contentType: null, // 기사타입
+        contentType: null, // 기사타입(all, P, N)
+        pressCategory: null, // 출판 카테고리
+        bulkYn: 'all', // 벌크여부(all, Y, N)
     },
+    contentTypeList: [
+        { id: 'all', name: '기사타입 전체' },
+        { id: 'P', name: '포토뉴스' },
+        { id: 'N', name: '일반뉴스' },
+    ],
+    bulkYnList: [
+        { id: 'all', name: '벌크 전체' },
+        { id: 'Y', name: '벌크기사' },
+        { id: 'N', name: '벌크제외' },
+    ],
     searchTypeList: [
         { id: 'all', name: '전체' },
-        { id: 'artTitle', name: '제목' },
+        { id: 'title', name: '제목' },
         { id: 'totalId', name: '기사ID' },
-        { id: 'artReporter', name: '기자명' },
+        { id: 'reporterName', name: '기자명' },
     ],
     // 서비스 기사 리스트
     service: {
@@ -41,7 +53,7 @@ export const initialState = {
             keyword: '',
             pressPan: null, // 판
             pressMyun: null, // 면
-            sourceList: null, // 매체
+            sourceList: null, // 매체(구분자 ,)
             masterCode: null, // 분류
             startServiceDay: null, // 시작일
             endServiceDay: null, // 종료일
@@ -60,7 +72,7 @@ export const initialState = {
             keyword: '',
             pressPan: null, // 판
             pressMyun: null, // 면
-            sourceList: null, // 매체
+            sourceList: null, // 매체(구분자 ,)
             masterCode: null, // 분류
             startServiceDay: null, // 시작일
             endServiceDay: null, // 종료일
@@ -119,6 +131,23 @@ export default handleActions(
         [act.CLEAR_SEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.search = initialState.search;
+            });
+        },
+        /**
+         * 기사 조회
+         */
+        [act.GET_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.total = body.totalCnt;
+                draft.list = body.list;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_ARTICLE_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.total = initialState.totalCnt;
+                draft.list = initialState.list;
+                draft.error = payload;
             });
         },
         /**

@@ -6,7 +6,7 @@ export default [
         headerName: '매체코드',
         field: 'sourceCode',
         cellStyle: { fontSize: '12px' },
-        width: 60,
+        width: 65,
     },
     {
         headerName: '매체명',

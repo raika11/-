@@ -6,6 +6,11 @@ import * as act from './articleAction';
 import * as api from './articleApi';
 
 /**
+ * 기사 목록 조회
+ */
+const getArticleList = createRequestSaga(act.GET_ARTICLE_LIST, api.getArticleList);
+
+/**
  * 서비스기사 목록 조회 (페이지편집)
  */
 const getServiceArticleList = createRequestSaga(act.GET_SERVICE_ARTICLE_LIST, api.getServiceArticleList);
@@ -49,6 +54,7 @@ function* putArticleEditTitle({ payload }) {
 const getArticleImageList = createRequestSaga(act.getArticleImageList, api.getArticleImageList);
 
 export default function* saga() {
+    yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
     yield takeLatest(act.GET_SERVICE_ARTICLE_LIST, getServiceArticleList);
     yield takeLatest(act.GET_BULK_ARTICLE_LIST, getBulkArticleList);
     yield takeLatest(act.PUT_ARTICLE_EDIT_TITLE, putArticleEditTitle);

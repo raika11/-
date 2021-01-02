@@ -137,19 +137,20 @@ public class RcvArticleServiceImpl implements RcvArticleService {
             }
         }
 
-        // 분류코드 등록 : code_id가 마스터코드가 들어갈 수 있으므로 개발 보류!
+        // 분류코드 등록
         Map paramCatMap = new HashMap();
         paramCatMap.put("rid", rcvArticleBasic.getRid());
         paramCatMap.put("sourceCode", rcvArticleBasic
                 .getArticleSource()
                 .getSourceCode());
-        int ord = 0;
+        int ord = 1;
         for (String category : updateDto.getCategoryList()) {
             paramCatMap.put("code", category);
-            paramCatMap.put("ord", ord++);
+            paramCatMap.put("ord", ord);
             if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeIns(paramCatMap))) {
                 return false;
             }
+            ord++;
         }
 
         // 키워드 등록

@@ -62,4 +62,91 @@ public interface ArticleMapper extends BaseMapper<ArticleBasicVO, ArticleSearchD
      */
     void insertArticleIud(Map paramMap);
 
+    /**
+     * 분류삭제
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleCodelistDel(Map<String, Object> param);
+
+    /**
+     * 마스터코드로 분류등록
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleCodelistInsByMasterCode(Map<String, Object> param);
+
+    /**
+     * 태그삭제
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleKeywordDel(Map<String, Object> param);
+
+    /**
+     * 태그등록
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleKeywordIns(Map<String, Object> param);
+
+    /**
+     * 기자삭제
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpa15ReArticleReporterDel(Map<String, Object> param);
+
+    /**
+     * 기자등록
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpa15ReArticleReporterIns(Map<String, Object> param);
+
+    /**
+     * DIV별 삭제(PC제목 삭제시 사용)
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleTitleDelByDiv(Map<String, Object> param);
+
+    /**
+     * DIV별 제목등록(PC제목 등록시 사용)
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleTitleInsByDiv(Map<String, Object> param);
+
+    /**
+     * 본문삭제
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleContentDel(Map<String, Object> param);
+
+    /**
+     * 본문등록. 본문이 있을 경우 수정되며, 없는데 serialNo가 다른 본문이 있으면, serialNo++해서 본문 추가함.
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleContentInsByTotalId(Map<String, Object> param);
+
+    /**
+     * 제목,기자 수정
+     *
+     * @param param
+     * @return 성공여부
+     */
+    Integer callUpaArticleBasicUpdByTotalId(Map<String, Object> param);
 }

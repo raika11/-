@@ -4,7 +4,6 @@
 
 package jmnet.moka.core.tps.mvc.merge.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,9 +28,14 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
+import jmnet.moka.core.tps.mvc.code.dto.CodeSearchDTO;
+import jmnet.moka.core.tps.mvc.code.entity.Mastercode;
+import jmnet.moka.core.tps.mvc.code.service.CodeService;
 import jmnet.moka.core.tps.mvc.container.dto.ContainerDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
@@ -44,6 +48,7 @@ import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +94,8 @@ public class MergeServiceImpl implements MergeService {
     @Autowired
     private ArticlePageService articlePageService;
 
+    @Autowired
+    private CodeService codeService;
 
     @Override
     public String getMergePage(PageDTO pageDto)
@@ -433,7 +440,7 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergeArticlePageWithRcv(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainType)
+    public String getMergeRcvArticle(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
         // 도메인Id조회
         Domain domainInfo = domainService.findByServiceFlatform(domainType);
@@ -455,21 +462,148 @@ public class MergeServiceImpl implements MergeService {
         }
         ArticlePageDTO articlePageDto = modelMapper.map(articlePage, ArticlePageDTO.class);
 
-        // 기사사페이지
         ArticlePageItem articlePageItem = articlePageDto.toArticlePageItem();
         DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
         articlePageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
                 .now()
                 .format(df));
 
+        //카테고리 정보 변환
+        CodeSearchDTO search = CodeSearchDTO
+                .builder()
+                .usedYn(MokaConstants.YES)
+                .build();
+        search.setPage(0);
+        search.setSize(9999);
+        search.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        List<Mastercode> materCodeList = codeService.findAllMastercode(search);
+
+        List<Map<String, Object>> categoryList = new ArrayList<>();
+        for (String category : updateDto.getCategoryList()) {
+            Mastercode matercode = materCodeList
+                    .stream()
+                    .filter(code -> code
+                            .getMasterCode()
+                            .equals(category))
+                    .findFirst()
+                    .get();
+            Map map = new HashMap();
+            map.put("MASTER_CODE", category);
+            map.put("SERVICE_KORNAME", matercode.getServiceKorname());   // 미리보기에서는 일부 데이타만 하고 있음. 나중에 본문 쿼리 수정후 조치필요??
+            map.put("SECTION_KORNAME", matercode.getSectionKorname());
+            map.put("CONTENT_KORNAME", matercode.getContentKorname());
+            categoryList.add(map);
+        }
+
         // 기자정보 변환
-        List<Map<String, Object>> reporterList = modelMapper.map(updateDto.getReporterList(), new TypeReference<List<Map<String, Object>>>() {
-        }.getType());
+        List<Map<String, Object>> reporterList = new ArrayList<>();
+        for (RcvArticleReporterVO vo : updateDto.getReporterList()) {
+            Map map = new HashMap();
+            map.put("REP_NAME", vo.getReporterName());
+            map.put("REP_EMAIL1", vo.getReporterEmail());
+            map.put("JOINS_BLOG", vo.getReporterBlog());
+            reporterList.add(map);
+        }
+
+        // 태그정보 변환
+        List<Map<String, Object>> tagList = new ArrayList<>();
+        for (String tag : updateDto.getTagList()) {
+            Map map = new HashMap();
+            map.put("TOTAL_ID", rid);
+            map.put("KEYWORD", tag);
+            reporterList.add(map);
+        }
 
         MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
 
         // 랜더링
-        StringBuilder sb = dtm.mergeRcv(articlePageItem, rid, updateDto.getCategoryList(), reporterList, updateDto.getTagList());
+        StringBuilder sb = dtm.mergeRcv(articlePageItem, rid, categoryList, reporterList, tagList);
+
+        String content = sb.toString();
+
+        return content;
+    }
+
+    @Override
+    public String getMergeArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainType, String artType)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        // 도메인Id조회
+        Domain domainInfo = domainService.findByServiceFlatform(domainType);
+        String domainId = domainInfo != null ? domainInfo.getDomainId() : null;
+        if (domainInfo == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
+        // 기사페이지 정보 조회
+        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        if (articlePage == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        ArticlePageDTO articlePageDto = modelMapper.map(articlePage, ArticlePageDTO.class);
+
+        ArticlePageItem articlePageItem = articlePageDto.toArticlePageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        articlePageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+
+        //카테고리 정보 변환
+        CodeSearchDTO search = CodeSearchDTO
+                .builder()
+                .usedYn(MokaConstants.YES)
+                .build();
+        search.setPage(0);
+        search.setSize(9999);
+        search.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        List<Mastercode> materCodeList = codeService.findAllMastercode(search);
+
+        List<Map<String, Object>> categoryList = new ArrayList<>();
+        for (String category : updateDto.getCategoryList()) {
+            Mastercode matercode = materCodeList
+                    .stream()
+                    .filter(code -> code
+                            .getMasterCode()
+                            .equals(category))
+                    .findFirst()
+                    .get();
+            Map map = new HashMap();
+            map.put("MASTER_CODE", category);
+            map.put("SERVICE_KORNAME", matercode.getServiceKorname());   // 미리보기에서는 일부 데이타만 하고 있음. 나중에 본문 쿼리 수정후 조치필요??
+            map.put("SECTION_KORNAME", matercode.getSectionKorname());
+            map.put("CONTENT_KORNAME", matercode.getContentKorname());
+            categoryList.add(map);
+        }
+
+        // 기자정보 변환
+        List<Map<String, Object>> reporterList = new ArrayList<>();
+        for (ArticleReporterVO vo : updateDto.getReporterList()) {
+            Map map = new HashMap();
+            map.put("REP_NAME", vo.getRepName());
+            map.put("REP_EMAIL1", vo.getRepEmail());
+            //            map.put("JOINS_BLOG", vo.);
+            reporterList.add(map);
+        }
+
+        // 태그정보 변환
+        List<Map<String, Object>> tagList = new ArrayList<>();
+        for (String tag : updateDto.getTagList()) {
+            Map map = new HashMap();
+            map.put("TOTAL_ID", totalId);
+            map.put("KEYWORD", tag);
+            reporterList.add(map);
+        }
+
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+
+        // 랜더링
+        StringBuilder sb =
+                dtm.mergeArticle(articlePageItem, totalId, categoryList, reporterList, tagList, updateDto.getArtTitle(), updateDto.getArtContent());
 
         String content = sb.toString();
 

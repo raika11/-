@@ -44,6 +44,12 @@ public class ArticleReporterVO implements Serializable {
     private String repName;
 
     /**
+     * 기자 Email
+     */
+    @Column(name = "REP_EMAIL")
+    private String repEmail;
+
+    /**
      * 순서
      */
     @Column(name = "ORD_NO")

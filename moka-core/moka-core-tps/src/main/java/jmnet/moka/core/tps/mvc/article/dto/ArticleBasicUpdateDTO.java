@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleReporterVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,11 +40,11 @@ public class ArticleBasicUpdateDTO implements Serializable {
      * 기사제목
      */
     private String artTitle;
-    
+
     /**
      * 기사본문
      */
-    private String content;
+    private String artContent;
 
     /**
      * 분류코드 목록
@@ -54,7 +54,7 @@ public class ArticleBasicUpdateDTO implements Serializable {
     /**
      * 기자 목록
      */
-    private List<RcvArticleReporterVO> reporterList = new ArrayList<>();
+    private List<ArticleReporterVO> reporterList = new ArrayList<>();
 
     /**
      * 추천태그 목록

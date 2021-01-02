@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
@@ -272,25 +274,152 @@ public class ArticleServiceImpl implements ArticleService {
         return true;
     }
 
+    private boolean isReturnErr(Integer ret) {
+        if (ret == null) {
+            return true;
+        }
+        return ret == -800 || ret == -900;
+    }
+
     @Override
     public boolean insertArticleIud(ArticleBasic articleBasic, ArticleBasicUpdateDTO updateDto) {
 
-        // 분류등록
+        Map paramMap = new HashMap();
+        paramMap.put("totalId", articleBasic.getTotalId());
+        paramMap.put("sourceCode", articleBasic.getSourceCode());
 
-        // 태그등록
+        // 분류삭제 : UPA_ARTICLE_CODELIST_DEL
+        if (isReturnErr(articleMapper.callUpaArticleCodelistDel(paramMap))) {
+            return false;
+        }
 
-        // 기자등록
+        // 태그삭제 : UPA_ARTICLE_KEYWORD_DEL
+        if (isReturnErr(articleMapper.callUpaArticleKeywordDel(paramMap))) {
+            return false;
+        }
 
-        // 제목등록
+        // 기자삭제 : UPA_15RE_ARTICLE_REPORTER_DEL
+        if (isReturnErr(articleMapper.callUpa15ReArticleReporterDel(paramMap))) {
+            return false;
+        }
 
-        // 본문등록
+        // 제목삭제 : UPA_ARTICLE_TITLE_DEL_BY_DIV
+        if (isReturnErr(articleMapper.callUpaArticleTitleDelByDiv(paramMap))) {
+            return false;
+        }
+
+        // 본문삭제 : UPA_ARTICLE_CONTENT_DEL
+        if (isReturnErr(articleMapper.callUpaArticleContentDel(paramMap))) {
+            return false;
+        }
+
+        // 분류등록 : UPA_ARTICLE_CODELIST_INS_BY_MASTER_CODE
+        Map paramCatMap = new HashMap();
+        paramCatMap.put("totalId", articleBasic.getTotalId());
+        paramCatMap.put("sourceCode", articleBasic.getSourceCode());
+        int ordNo = 1;
+        for (String category : updateDto.getCategoryList()) {
+            paramCatMap.put("code", category);
+            paramCatMap.put("ordNo", ordNo);
+            paramCatMap.put("contentType", articleBasic.getContentType());
+            paramCatMap.put("serviceDaytime", articleBasic.getServiceDaytime());
+            paramCatMap.put("pressNumber", articleBasic.getPressNumber());
+            paramCatMap.put("artTitle", updateDto.getArtTitle());
+            if (isReturnErr(articleMapper.callUpaArticleCodelistInsByMasterCode(paramCatMap))) {
+                return false;
+            }
+            ordNo++;
+        }
+
+        // 태그등록 : UPA_ARTICLE_KEYWORD_INS
+        Map paramKeywordMap = new HashMap();
+        paramKeywordMap.put("totalId", articleBasic.getTotalId());
+        paramKeywordMap.put("sourceCode", articleBasic.getSourceCode());
+        ordNo = 1;
+        for (String tag : updateDto.getTagList()) {
+            paramKeywordMap.put("keyword", tag);
+            paramKeywordMap.put("serialNo", ordNo);
+            paramKeywordMap.put("serviceDay", McpDate.dateStr(articleBasic.getServiceDaytime(), "yyyyMMdd"));
+            if (isReturnErr(articleMapper.callUpaArticleKeywordIns(paramKeywordMap))) {
+                return false;
+            }
+            ordNo++;
+        }
+
+        // 기자등록 : UPA_15RE_ARTICLE_REPORTER_INS
+        Map paramRepMap = new HashMap();
+        paramRepMap.put("totalId", articleBasic.getTotalId());
+        paramRepMap.put("sourceCode", articleBasic.getSourceCode());
+        for (ArticleReporterVO reporter : updateDto.getReporterList()) {
+            paramRepMap.put("ordNo", reporter.getOrdNo());
+            paramRepMap.put("serviceDay", McpDate.dateStr(articleBasic.getServiceDaytime(), "yyyyMMdd"));
+            paramRepMap.put("repName", reporter.getRepName());
+            paramRepMap.put("repEmail", reporter.getRepEmail());
+            if (isReturnErr(articleMapper.callUpa15ReArticleReporterIns(paramRepMap))) {
+                return false;
+            }
+        }
+
+        // 제목등록 : UPA_ARTICLE_TITLE_INS_BY_DIV
+        Map paramTitleMap = new HashMap();
+        paramTitleMap.put("totalId", articleBasic.getTotalId());
+        paramTitleMap.put("title", updateDto.getArtTitle());
+        paramTitleMap.put("titleDiv", "P"); //PC제목으로 등록
+        if (isReturnErr(articleMapper.callUpaArticleTitleInsByDiv(paramTitleMap))) {
+            return false;
+        }
+
+        // 본문등록 : UPA_ARTICLE_CONTENT_INS_BY_TOTALID
+        Map paramContentMap = new HashMap();
+        paramContentMap.put("totalId", articleBasic.getTotalId());
+        paramContentMap.put("serialNo", 1);
+        paramContentMap.put("artContent", updateDto.getArtContent());
+        if (isReturnErr(articleMapper.callUpaArticleContentInsByTotalId(paramContentMap))) {
+            return false;
+        }
+
+        // ARTICLE_BASIC에 제목,기자 수정 : UPA_ARTICLE_BASIC_UPD_BY_TOTALID
+        String reporters = updateDto
+                .getReporterList()
+                .stream()
+                .map(ArticleReporterVO::getRepName)
+                .collect(Collectors.joining("."));
+
+        Map paramBasicMap = new HashMap();
+        paramBasicMap.put("totalId", articleBasic.getTotalId());
+        paramBasicMap.put("artReporter", reporters);
+        paramBasicMap.put("artTitle", updateDto.getArtTitle());
+        if (isReturnErr(articleMapper.callUpaArticleBasicUpdByTotalId(paramBasicMap))) {
+            return false;
+        }
 
         // ARTICLE_IUD에 등록
         insertArticleIudWithTotalId(articleBasic, "U");
 
         // 히스토리 등록
+        String masterCodeList = updateDto
+                .getCategoryList()
+                .stream()
+                .collect(Collectors.joining(","));
 
-        return false;
+        String tagList = updateDto
+                .getTagList()
+                .stream()
+                .collect(Collectors.joining(","));
+
+        ArticleHistory history = ArticleHistory
+                .builder()
+                .totalId(articleBasic.getTotalId())
+                .masterCodeList(masterCodeList)
+                .artTitle(updateDto.getArtTitle())
+                .artReporter(reporters)
+                .artSubTitle(articleBasic.getArtSubTitle())
+                .keywordList(tagList)
+                .iudDiv(TpsConstants.WORKTYPE_UPDATE)
+                .build();
+        articleHistoryRepository.save(history);
+
+        return true;
     }
 
     @Override

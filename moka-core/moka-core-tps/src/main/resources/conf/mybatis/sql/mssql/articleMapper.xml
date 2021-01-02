@@ -445,4 +445,119 @@
   ) }
   </select>
 
+  <!--분류삭제-->
+  <delete id="callUpaArticleCodelistDel" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_CODELIST_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      )}
+  </delete>
+
+  <!--마스터코드로 분류등록-->
+  <insert id="callUpaArticleCodelistInsByMasterCode" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_CODELIST_INS_BY_MASTERCODE(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{code, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{ordNo, mode=IN, jdbcType=INTEGER, javaType=int},
+      'Y', /*SERVICE_FLAG */
+      #{contentType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDaytime, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      #{pressNumber, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{artTitle, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </insert>
+
+  <!--태그삭제-->
+  <delete id="callUpaArticleKeywordDel" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_KEYWORD_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      )}
+  </delete>
+
+  <!--태그등록-->
+  <insert id="callUpaArticleKeywordIns" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_KEYWORD_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{serialNo, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{keyword, mode=IN, jdbcType=NVARCHAR, javaType=string}
+      )}
+  </insert>
+
+  <!--기자삭제-->
+  <delete id="callUpa15ReArticleReporterDel" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_15RE_ARTICLE_REPORTER_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </delete>
+
+  <!--기자등록-->
+  <insert id="callUpa15ReArticleReporterIns" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_15RE_ARTICLE_REPORTER_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{ordNo, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDay, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{repName, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{repEmail, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </insert>
+
+  <!--제목삭제-->
+  <delete id="callUpaArticleTitleDelByDiv" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_TITLE_DEL_BY_DIV(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{titleDiv, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </delete>
+
+  <!--제목등록-->
+  <insert id="callUpaArticleTitleInsByDiv" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_TITLE_INS_BY_DIV(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{title, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{titleDiv, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
+  </insert>
+
+  <!--본문삭제-->
+  <delete id="callUpaArticleContentDel" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_CONTENT_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      )}
+  </delete>
+
+  <!--본문등록-->
+  <insert id="callUpaArticleContentInsByTotalId" parameterType="hashMap"
+    statementType="CALLABLE">
+    { call UPA_ARTICLE_CONTENT_INS_BY_TOTALID(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{serialNo, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{artContent, mode=IN, jdbcType=NVARCHAR, javaType=string}
+      )}
+  </insert>
+
+  <!--제목,기자 수정-->
+  <update id="callUpaArticleBasicUpdByTotalId" parameterType="hashMap"
+    statementType="CALLABLE">
+   { call UPA_ARTICLE_BASIC_UPD_BY_TOTALID(
+    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{artReporter, mode=IN, jdbcType=NVARCHAR, javaType=string},
+    #{artTitle, mode=IN, jdbcType=NVARCHAR, javaType=string}
+    )}
+  </update>
+
 </mapper>

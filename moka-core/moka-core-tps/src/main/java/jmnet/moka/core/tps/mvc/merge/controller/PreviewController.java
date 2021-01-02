@@ -16,6 +16,7 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
@@ -211,20 +212,40 @@ public class PreviewController extends AbstractCommonController {
      * @throws TemplateParseException       tems 문법오류
      * @throws TemplateLoadException        tems 로딩오류
      */
-    @PostMapping("/article-page/rcv/{rid}")
-    public void perviewArticlePageWithRcv(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
+    @PostMapping("/rcv-article/{rid}")
+    public void perviewRcvArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
             @ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid, @ApiParam("수정할 정보(기자목록,분류코드목록,태그목록)") @Valid RcvArticleBasicUpdateDTO updateDto,
             @ApiParam("서비스플랫폼(P/M)") String servicePlatform)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
         try {
-            String html = mergeService.getMergeArticlePageWithRcv(rid, updateDto, servicePlatform);
+            String html = mergeService.getMergeRcvArticle(rid, updateDto, servicePlatform);
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] rid: {} {}", rid, e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
             String html = "<script>alert('" + messageByLocale.get("tps.rcv-article.error.preview", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
+        }
+    }
+
+    @PostMapping("/article/{totalId}")
+    public void perviewArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
+            @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
+            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @Valid ArticleBasicUpdateDTO updateDto, @ApiParam("서비스플랫폼(P/M)") String servicePlatform,
+            @ApiParam("기사유형") String artType)
+            throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
+            TemplateParseException, TemplateLoadException {
+
+        try {
+            String html = mergeService.getMergeArticle(totalId, updateDto, servicePlatform, artType);
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+        } catch (Exception e) {
+            log.error("[FAIL TO MERGE] totalId: {} {}", totalId, e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            String html = "<script>alert('" + messageByLocale.get("tps.article.error.preview", request) + "');window.close();</script>";
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
             //            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
         }

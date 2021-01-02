@@ -115,7 +115,7 @@ const RcvArticleEdit = () => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = (servicePlatform) => {
-        popupPreview(`${API_BASE_URL}/preview/article-page/rcv/${temp.rid}`, { ...temp, servicePlatform });
+        popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, servicePlatform });
     };
 
     return (

@@ -12,7 +12,7 @@ const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = () => {
-        popupPreview(`${API_BASE_URL}/preview/article-page/rcv/${data.rid}`, { ...data, servicePlatform: 'P' });
+        popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, servicePlatform: 'P' });
     };
 
     return (

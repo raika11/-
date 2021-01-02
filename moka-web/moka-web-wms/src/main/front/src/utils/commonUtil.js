@@ -1,3 +1,6 @@
+import produce from 'immer';
+import { ValueFormatterService } from 'ag-grid-community';
+
 /**
  * 파일 다운로드
  * @param {object} data blob 데이터
@@ -310,40 +313,90 @@ export default {
 /**
  * 미리보기 팝업띄움.
  */
-export const popupPreview = (targetUrl, item, enctype = null) => {
-    // 폼 생성
-    const f = document.createElement('form');
-    f.setAttribute('method', 'post');
-    f.setAttribute('action', targetUrl);
-    f.setAttribute('target', '_blank');
+export const popupPreview = (targetUrl, params, enctype = null) => {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = targetUrl;
+    form.target = '_blank';
     if (enctype !== null) {
-        f.setAttribute('enctype', 'multipart/form-data');
+        form.enctype = 'multipart/form-data';
     }
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const propName in item) {
-        if (typeof item[propName] === 'object') {
-            const subObject = item[propName];
-            // eslint-disable-next-line no-restricted-syntax
-            for (const inPropName in subObject) {
-                if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = `${propName}.${inPropName}`;
-                    input.value = item[propName][inPropName];
-                    f.appendChild(input);
+    const addField = (fieldName, fieldValue) => {
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = fieldName;
+        hiddenField.value = fieldValue;
+        form.appendChild(hiddenField);
+    };
+
+    const addArray = (arrName, arrValue) => {
+        for (let i = 0; i < arrValue.length; i++) {
+            if (typeof arrValue[i] === 'object') {
+                var key = `${arrName}[${i}]`;
+                addObject(key, arrValue[i]);
+            } else {
+                addField(arrName, arrValue[i]);
+            }
+        }
+    };
+
+    const addObject = (objKey, objValue) => {
+        for (const loopKey in objValue) {
+            if (objValue.hasOwnProperty(loopKey)) {
+                var key = `${objKey === undefined ? '' : objKey + '.'}${loopKey}`;
+                const value = produce(objValue[loopKey], (draft) => draft);
+                if (value instanceof Array) {
+                    addArray(key, value);
+                } else if (typeof value === 'object') {
+                    addObject(key, value);
+                } else {
+                    addField(key, value);
                 }
             }
-        } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = propName;
-            input.value = item[propName];
-            f.appendChild(input);
         }
-    }
+    };
 
-    document.getElementsByTagName('body')[0].appendChild(f);
-    f.submit();
-    f.remove();
+    addObject(undefined, params);
+
+    document.getElementsByTagName('body')[0].appendChild(form);
+    form.submit();
+    form.remove();
+
+    // // 폼 생성
+    // const f = document.createElement('form');
+    // f.setAttribute('method', 'post');
+    // f.setAttribute('action', targetUrl);
+    // f.setAttribute('target', '_blank');
+    // if (enctype !== null) {
+    //     f.setAttribute('enctype', 'multipart/form-data');
+    // }
+
+    // // eslint-disable-next-line no-restricted-syntax
+    // for (const propName in item) {
+    //     if (typeof item[propName] === 'object') {
+    //         const subObject = item[propName];
+    //         // eslint-disable-next-line no-restricted-syntax
+    //         for (const inPropName in subObject) {
+    //             typeof subObject[inPropName] === 'object' ? console.log('obj') : console.log('not obj');
+    //             if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
+    //                 const input = document.createElement('input');
+    //                 input.type = 'hidden';
+    //                 input.name = `${propName}.${inPropName}`;
+    //                 input.value = item[propName][inPropName];
+    //                 f.appendChild(input);
+    //             }
+    //         }
+    //     } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
+    //         const input = document.createElement('input');
+    //         input.type = 'hidden';
+    //         input.name = propName;
+    //         input.value = item[propName];
+    //         f.appendChild(input);
+    //     }
+    // }
+
+    // document.getElementsByTagName('body')[0].appendChild(f);
+    // f.submit();
+    // f.remove();
 };

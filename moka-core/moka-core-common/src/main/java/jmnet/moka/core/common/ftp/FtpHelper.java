@@ -61,6 +61,7 @@ public class FtpHelper {
     public final static String WIMAGE = "WIMAGE";
     public final static String STATIC = "STATIC";
     public final static String PDS = "PDS";
+    public final static String CDN = "CDN";
 
     public final static String SEPARATOR = "/";
 

@@ -19,6 +19,7 @@ import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleHistoryDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
+import jmnet.moka.core.tps.mvc.article.dto.CdnUploadResultDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
@@ -390,7 +391,7 @@ public class ArticleRestController extends AbstractCommonController {
     @ApiOperation(value = "CDN 등록")
     @GetMapping("/{totalId}/cdn")
     ResponseEntity<?> postArticleCdn(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
-            throws NoDataException {
+            throws Exception {
 
         ArticleBasic articleBasic = articleService
                 .findArticleBasicById(totalId)
@@ -400,12 +401,22 @@ public class ArticleRestController extends AbstractCommonController {
                     return new NoDataException(message);
                 });
 
-        // cdn등록
-        String cdnUrl = articleService.insertCdn(totalId);
+        try {
+            CdnUploadResultDTO cdnResultDto = new CdnUploadResultDTO();
 
-        ResultDTO<String> resultDto = new ResultDTO<>(cdnUrl);
-        tpsLogger.success(ActionType.SELECT);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            // cdn등록
+            boolean sendOk = articleService.insertCdn(totalId, cdnResultDto);
+            cdnResultDto.setSuccess(sendOk);
+            String message = sendOk ? msg("tps.articles.success.cdn") : msg("tps.articles.error.cdn");
+            
+            ResultDTO<CdnUploadResultDTO> resultDto = new ResultDTO<>(cdnResultDto, message);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL CDN]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL CDN]", e, true);
+            throw new Exception(msg("tps.articles.error.cdn"), e);
+        }
     }
 
     @ApiOperation("기사수정")

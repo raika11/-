@@ -1,6 +1,11 @@
 package jmnet.moka.core.tps.mvc.article.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,12 +15,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
+import jmnet.moka.core.tps.mvc.article.dto.CdnUploadResultDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleTitle;
@@ -32,6 +41,8 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -56,19 +67,40 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ModelMapper modelMapper;
 
+    private final FtpHelper ftpHelper;
+
     @Value("${bulk.site.id}")
     private String[] bulkSiteId;
 
     @Value("${bulk.site.name}")
     private String[] bulkSiteName;
 
+    @Value("${pds.url}")
+    private String pdsUrl;
+
+    @Value("${cdn.joongang.svr.ftp.root}")
+    private String cdnFtpRoot;
+
+    @Value("${cdn.joongang.svr.ftp.root.image}")
+    private String cdnFtpRootImage;
+
+    @Value("${cdn.joongang.svr.web.domain}")
+    private String cdnWebDomain;
+
+    @Value("${cdn.joongang.temp.filepath}")
+    private String cdnTempFilepath;
+
+    @Value("${cdn.joongang.temp.imgpath}")
+    private String cdnTempImgpath;
+
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
-            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper) {
+            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper) {
         this.articleBasicRepository = articleBasicRepository;
         this.articleTitleRepository = articleTitleRepository;
         this.articleHistoryRepository = articleHistoryRepository;
         this.articleMapper = articleMapper;
         this.modelMapper = modelMapper;
+        this.ftpHelper = ftpHelper;
     }
 
     @Override
@@ -428,7 +460,124 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public String insertCdn(Long totalId) {
-        return null;
+    public boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto)
+            throws Exception {
+        //1. html string
+        //    1.1. html string생성
+        String articleURL = "http://stg-news.joongang.co.kr/article" + "/" + totalId.toString();
+        InputStream in = new URL(articleURL).openStream();
+        String fullBodyTxt = "";
+        try {
+            fullBodyTxt = IOUtils.toString(in, StandardCharsets.UTF_8);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+
+        //    1.2. string에 이미지경로 수정
+        //    ${pds.url}/TB_15RE_COMPONENT.COMP_FILE_URL -> ${cdn.joongang.svr.web.domain}${cdn.joongang.svr.ftp.root.image}/{이미지 파일명}
+        //    TB_15RE_COMPONENT.COMP_FILE_URL -> ${cdn.joongang.svr.web.domain}${cdn.joongang.svr.ftp.root.image}/{이미지 파일명}
+        List<ArticleComponentVO> imageList = articleMapper.findAllImageComponent(totalId);
+        for (ArticleComponentVO vo : imageList) {
+            String srcImgUrl = pdsUrl + vo.getCompFileUrl();
+            String newImgUrl = cdnWebDomain + cdnFtpRootImage + vo.getCompFileUrl();
+            fullBodyTxt = fullBodyTxt.replaceAll(srcImgUrl, newImgUrl);
+
+            srcImgUrl = vo.getCompFileUrl();
+            newImgUrl = cdnWebDomain + cdnFtpRootImage + vo.getCompFileUrl();
+            fullBodyTxt = fullBodyTxt.replaceAll(srcImgUrl, newImgUrl);
+        }
+
+
+        //2.이미지 다운로드(http download). loop
+        //${pds.url}/TB_15RE_COMPONENT.COMP_FILE_URL -> ${cdn.joongang.temp.imgpath}/{이미지 파일명}
+        for (ArticleComponentVO vo : imageList) {
+            String srcImgUrl = pdsUrl + vo.getCompFileUrl();
+            String fileName = FilenameUtils.getName(srcImgUrl);
+            String downImgUrl = cdnTempImgpath + File.separator + fileName;
+            ImageUtil.downloadImage(srcImgUrl, downImgUrl);
+        }
+
+        //3. html파일 skip bom으로 파일저장
+        //html string -> ${cdn.joongang.temp.filepath}/tmp_{중복prefix_}{totalId}.html
+        String tmpFileName = "tmp_" + totalId.toString() + ".html";
+        String tmpFilePath = cdnTempFilepath + File.separator + tmpFileName;
+        File file = new File(tmpFilePath);
+        if (file.exists()) {
+            String tmpPath = tmpFilePath;
+            Integer num = 1;
+            while ((new File(tmpPath)).exists()) {
+                tmpFileName = "tmp_" + num.toString() + "_" + totalId.toString() + ".html";
+                tmpPath = cdnTempFilepath + File.separator + tmpFileName;
+                num++;
+            }
+            tmpFilePath = tmpPath;
+        }
+        McpFile.fileWrite(tmpFilePath, fullBodyTxt);
+
+        //4. html 기사 파일과 이미지 파일 cdn ftp upload
+        //    4.1. 이미지 CDN에 FTP upload. loop
+        //    ${cdn.joongang.temp.imgpath}/{이미지 파일명} -> ${cdn.joongang.svr.ftp.root.image}/{이미지 파일명}
+        for (ArticleComponentVO vo : imageList) {
+            String srcImgUrl = pdsUrl + vo.getCompFileUrl();
+            String fileName = FilenameUtils.getName(srcImgUrl);
+            String downImgPath = cdnTempImgpath + File.separator + fileName;
+            boolean upload = ftpHelper.upload(FtpHelper.CDN, new File(downImgPath), cdnFtpRootImage, false);
+            if (upload) {
+                log.debug("SAVE CDN IMAGE FILE");
+            } else {
+                log.debug("SAVE FAIL CDN IMAGE FILE");
+                return false;
+            }
+        }
+
+        //    4.2. 본문 CDN에 FTP upload
+        //    ${cdn.joongang.temp.filepath}/tmp_{중복prefix_}{totalId}.html -> ${cdn.joongang.svr.ftp.root}/{중복prefix_}{totalId}.html
+        String uploadFileName = tmpFileName.replace("tmp_", "");
+        FileInputStream fileStream = new FileInputStream(tmpFilePath);
+        boolean upload = ftpHelper.upload(FtpHelper.CDN, uploadFileName, fileStream, cdnFtpRoot);
+        fileStream.close();
+        if (upload) {
+            log.debug("SAVE CDN FILE FILE");
+        } else {
+            log.debug("SAVE FAIL CDN FILE FILE");
+            return false;
+        }
+
+        //5. 업로드 성공 후 처리
+        //    5.1. 새로운 기사링크
+        //    ${cdn.joongang.svr.web.domain}${cdn.joongang.svr.ftp.root}/{중복prefix_}{totalId}.html
+        //    성공시 업로드된 경로노출, 경로복사버튼 제공
+        resultDto.setSuccess(true);
+        resultDto.setCdnUrl(cdnWebDomain + cdnFtpRoot + "/" + uploadFileName);
+
+        //    5.2. 기존 파일 redirection 처리
+        //        5.2.1. 리다렉션 파일 생성
+        //        내용: txtReDir = "<script type='text/javascript'>document.location.replace('" & WebRoot & LocalFilename & "');</script>"
+        //        ${cdn.joongang.temp.filepath}/tmp_redir.html 로 파일 생성
+        String redirectHtml =
+                "<script type='text/javascript'>document.location.replace('" + cdnWebDomain + cdnFtpRoot + "/" + uploadFileName + "');</script>";
+        McpFile.fileWrite(cdnTempFilepath + File.separator + "tmp_redir.html", redirectHtml);
+
+        //        5.2.2. 리다렉션 파일 ftp upload
+        //        ${cdn.joongang.temp.filepath}/tmp_redir.html -> JOONGANG_SVR_FTP_ROOT/article/right(totalId,3)/{totalId}.html
+        //        성공시 업로드된 경로 노출
+        //        String uploadFileNameR = "tmp_redir.html";
+        //        FileInputStream fileStreamR = new FileInputStream(tmpFilePath);
+        //        boolean uploadJ = ftpHelper.upload(FtpHelper.WEB, uploadFileNameR, fileStreamR, cdnFtpRoot);
+        //        fileStreamR.close();
+        //        if (uploadJ) {
+        //            log.debug("SAVE CDN FILE FILE");
+        //        String redirectUrl = "/article/" + totalId
+        //                .toString()
+        //                .substring(-3) + "/" + totalId.toString() + ".html";
+        //        resultDto.setRedirectUrl(redirectUrl);
+        //        } else {
+        //            log.debug("SAVE FAIL CDN FILE FILE");
+        //            return false;
+        //        }
+
+        //        5.2.3. Aid 아웃링크용(중앙일보일 경우만)파일 ftp upload
+        //        ${cdn.joongang.temp.filepath}/tmp_redir.html ->/article/aid/left(serviceday, 4)/mid(serviceday, 5, 2)/right(serviceday, 2 )/{aid}.html
+        return true;
     }
 }

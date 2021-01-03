@@ -2,8 +2,11 @@ package jmnet.moka.core.tps.common.util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import javax.imageio.ImageIO;
 import jmnet.moka.common.utils.McpFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,5 +122,43 @@ public class ImageUtil {
         graphics2D.dispose();
 
         return outputImage;
+    }
+
+    /**
+     * url 이미지 다운로드
+     *
+     * @param sourceUrl      이미지url
+     * @param targetFilename 저장할 파일명
+     * @return 성공여부
+     */
+    public static boolean downloadImage(String sourceUrl, String targetFilename) {
+        FileOutputStream fos = null;
+        InputStream is = null;
+        try {
+            fos = new FileOutputStream(targetFilename);
+
+            URL url = new URL(sourceUrl);
+            URLConnection urlConnection = url.openConnection();
+            is = urlConnection.getInputStream();
+            byte[] buffer = new byte[1024];
+            int readBytes;
+            while ((readBytes = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, readBytes);
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                // no
+            }
+        }
     }
 }

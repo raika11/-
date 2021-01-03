@@ -7,6 +7,7 @@ import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
+import jmnet.moka.core.tps.mvc.article.dto.CdnUploadResultDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
@@ -115,8 +116,10 @@ public interface ArticleService {
     /**
      * CDN등록
      *
-     * @param totalId 기사킹
-     * @return 등록된 cdn url
+     * @param totalId   기사키
+     * @param resultDto cdn업로드 결과정보
+     * @return 등록성공여부
      */
-    String insertCdn(Long totalId);
+    boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto)
+            throws Exception;
 }

@@ -30,7 +30,7 @@ const MessageSettings = () => {
                     </Form.Label>
                     <MokaInput
                         as="textarea"
-                        className="mb-3"
+                        className="mb-3 resize-none"
                         inputProps={{ rows: 3 }}
                         // name=""
                         // value={}
@@ -45,7 +45,7 @@ const MessageSettings = () => {
                     </Form.Label>
                     <MokaInput
                         as="textarea"
-                        className="mb-3"
+                        className="mb-3 resize-none"
                         inputProps={{ rows: 3 }}
                         // name=""
                         // value={}
@@ -60,7 +60,7 @@ const MessageSettings = () => {
                     </Form.Label>
                     <MokaInput
                         as="textarea"
-                        className="mb-3"
+                        className="mb-3 resize-none"
                         inputProps={{ rows: 3 }}
                         // name=""
                         // value={}
@@ -75,7 +75,7 @@ const MessageSettings = () => {
                     </Form.Label>
                     <MokaInput
                         as="textarea"
-                        className="mb-3"
+                        className="mb-3 resize-none"
                         inputProps={{ rows: 3 }}
                         // name=""
                         // value={}
@@ -90,7 +90,7 @@ const MessageSettings = () => {
                     </Form.Label>
                     <MokaInput
                         as="textarea"
-                        className="mb-3"
+                        className="mb-3 resize-none"
                         inputProps={{ rows: 9 }}
                         // name=""
                         // value={}

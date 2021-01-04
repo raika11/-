@@ -13,9 +13,9 @@ export default [
     },
     {
         headerName: '단체명',
-        field: 'name',
+        field: 'groupName',
         cellStyle: { fontSize: '12px' },
-        width: 150,
+        width: 300,
     },
     {
         headerName: '인원',
@@ -46,5 +46,18 @@ export default [
         field: 'regDt',
         cellStyle: { fontSize: '12px' },
         flex: 1,
+    },
+];
+
+export const rowData = [
+    {
+        seqNo: '158',
+        date: '2020-12-01',
+        groupName: '중앙대학교사범대학부속고등학교 시사언론',
+        people: '12',
+        applicant: '테스트',
+        phone: '010-0358-1254',
+        state: '승인',
+        regDt: '2020-11-21',
     },
 ];

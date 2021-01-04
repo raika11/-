@@ -1,0 +1,45 @@
+package jmnet.moka.core.tps.mvc.comment.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "TB_CMT_VOTE")
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+public class CommentVote implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CMT_VOTE_SEQ", nullable = false)
+    private Long voteSeq;
+
+    @Column(name = "CMT_SEQ", nullable = false)
+    private Long cmtSeq;
+
+    @Column(name = "VOTE_VALUE", nullable = false)
+    private Integer voteValue = 0;
+
+    @Column(name = "VOTE_IP", nullable = false)
+    private String voteIP;
+
+    @Column(name = "REG_DT", nullable = false)
+    private Date regDt;
+
+}

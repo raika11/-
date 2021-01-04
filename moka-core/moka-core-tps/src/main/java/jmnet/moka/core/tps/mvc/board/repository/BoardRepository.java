@@ -9,5 +9,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>, JpaSpecific
 
     Optional<Board> findTopByBoardId(Integer boardId);
 
-    Long countByParentBoardSeqAndDelYn(Long parentBoardSeq, String delYn);
+    Long countByParentBoardSeq(Long parentBoardSeq, String delYn);
 }

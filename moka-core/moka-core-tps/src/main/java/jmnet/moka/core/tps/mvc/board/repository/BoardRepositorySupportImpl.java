@@ -175,5 +175,19 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
         return Optional.ofNullable(board);
     }
 
+    @Override
+    public Long countByParentBoardSeq(Long parentBoardSeq, String delYn) {
+        QBoard qBoard = QBoard.board;
+
+        JPQLQuery<Board> query = from(qBoard);
+
+        query.where(qBoard.boardSeq
+                .ne(parentBoardSeq)
+                .and(qBoard.parentBoardSeq.eq(parentBoardSeq))
+                .and(qBoard.delYn.eq(MokaConstants.NO)));
+
+        return query.fetchCount();
+    }
+
 
 }

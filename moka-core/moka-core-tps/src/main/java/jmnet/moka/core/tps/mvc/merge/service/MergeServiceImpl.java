@@ -602,8 +602,9 @@ public class MergeServiceImpl implements MergeService {
         MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
 
         // 랜더링
-        StringBuilder sb =
-                dtm.mergeArticle(articlePageItem, totalId, categoryList, reporterList, tagList, updateDto.getArtTitle(), updateDto.getArtContent());
+        StringBuilder sb = dtm.mergeArticle(articlePageItem, totalId, categoryList, reporterList, tagList, updateDto.getArtTitle(), updateDto
+                .getArtContent()
+                .getArtContent());
 
         String content = sb.toString();
 

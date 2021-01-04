@@ -243,9 +243,11 @@ public class BoardRestController extends AbstractCommonController {
                 throw new InvalidDataException(msg("tps.board.error.min.parentBoardSeq"));
             }
 
-            boardService
+            Board parentBoard = boardService
                     .findBoardBySeq(board.getParentBoardSeq())
                     .orElseThrow(() -> new NoDataException(msg("tps.board.error.no-data.parentBoardSeq")));
+
+            board.setBoardInfo(parentBoard.getBoardInfo());
 
         } catch (Exception e) {
             log.error("[FAIL TO INSERT BOARD]", e);
@@ -592,9 +594,10 @@ public class BoardRestController extends AbstractCommonController {
         List<BoardAttach> attaches = board.getAttaches();
 
         // 파일 첨부 가능 여부 체크
-        if (board
-                .getBoardInfo()
-                .getFileYn()
+        if (McpString
+                .defaultValue(board
+                        .getBoardInfo()
+                        .getFileYn(), MokaConstants.NO)
                 .equals(MokaConstants.NO)) {
             throw new InvalidDataException(msg("tps.board.error.file-attach-disable"));
         }

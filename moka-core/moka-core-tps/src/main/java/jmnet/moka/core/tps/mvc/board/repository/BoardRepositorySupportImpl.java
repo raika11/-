@@ -73,7 +73,7 @@ public class BoardRepositorySupportImpl extends TpsQueryDslRepositorySupport imp
                             .contains(keyword)));
         }
 
-        if (McpString.isNotEmpty(searchDTO.getChannelId())) {
+        if (McpString.isNotEmpty(searchDTO.getChannelId()) && searchDTO.getChannelId() > 0) {
             query.where(qBoard.channelId.eq(searchDTO.getChannelId()));
         }
 

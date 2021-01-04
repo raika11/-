@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.board.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -115,7 +116,8 @@ public class BoardSaveDTO {
      * 첨부파일
      */
     @ApiModelProperty("첨부파일")
-    private List<BoardAttachSaveDTO> attaches;
+    @Builder.Default
+    private List<BoardAttachSaveDTO> attaches = new ArrayList<>();
 
 
 

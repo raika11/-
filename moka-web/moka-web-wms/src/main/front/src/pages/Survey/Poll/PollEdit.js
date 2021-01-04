@@ -33,12 +33,12 @@ const PollEdit = () => {
             width={570}
         >
             <Form>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={3}>
                         <MokaInputLabel as="switch" label="메인노출" labelWidth={70} labelClassName="text-right" />
                     </Col>
                 </Form.Row>
-                <Form.Row className="justify-content-between">
+                <Form.Row className="mb-2 justify-content-between">
                     <Col xs={6}>
                         <MokaInputLabel
                             as="select"
@@ -84,7 +84,7 @@ const PollEdit = () => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
-                <Form.Row className="d-flex align-item-center">
+                <Form.Row className="d-flex align-item-center mb-2">
                     <Col xs={4} className="pr-0">
                         <MokaInputLabel
                             as="select"
@@ -164,7 +164,7 @@ const PollEdit = () => {
                         </Button>
                     </Col>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={7}>
                         <MokaInputLabel
                             as="dateTimePicker"
@@ -190,7 +190,7 @@ const PollEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={6}>
                         <MokaInputLabel
                             as="select"
@@ -214,7 +214,7 @@ const PollEdit = () => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
@@ -279,7 +279,7 @@ const PollEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row>
+                <Form.Row className="mb-2">
                     <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
@@ -319,9 +319,9 @@ const PollEdit = () => {
                         </Col>
                     )}
                 </Form.Row>
-                <Form.Row className="d-flex justify-content-center">
+                <Form.Row className="d-flex justify-content-center mb-2">
                     <MokaCard title="투표 정보 설정" height={130} className="w-100" headerClassName="pb-0">
-                        <Form.Row>
+                        <Form.Row className="mb-2">
                             <Col xs={4}>
                                 <MokaInputLabel
                                     type="number"
@@ -374,7 +374,7 @@ const PollEdit = () => {
                     </MokaCard>
                 </Form.Row>
                 {edit.itemCount > 0 && isSet && (
-                    <Form.Row>
+                    <Form.Row className="mb-2">
                         <MokaCard
                             className="flex-fill pl-0"
                             minHeight="300px"

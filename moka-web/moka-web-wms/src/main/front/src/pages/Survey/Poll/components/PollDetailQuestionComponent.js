@@ -8,10 +8,10 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
     const [value1, setValue1] = useState('');
     const [value2, setValue2] = useState('');
     return (
-        <Form.Row style={{ alignItems: 'center' }}>
+        <Form.Row style={{ alignItems: 'center' }} className="mb-2">
             {type !== 'P' && (
                 <Col className="flex-fill">
-                    <Form.Row>
+                    <Form.Row className="mb-2">
                         <Col xs={12}>
                             <MokaInputLabel
                                 label={label1}
@@ -24,7 +24,7 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
                             />
                         </Col>
                     </Form.Row>
-                    <Form.Row>
+                    <Form.Row className="mb-2">
                         <Col xs={12}>
                             <MokaInputLabel
                                 label={label2}

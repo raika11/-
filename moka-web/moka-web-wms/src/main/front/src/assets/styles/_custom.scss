@@ -149,6 +149,10 @@ body {
     }
 }
 
+.overlay-shadow {
+    box-shadow: 0 0 .875rem 0 rgba($dark, 0.7);
+}
+
 /* -----------------------
 * card
 * ---------------------- */
@@ -326,6 +330,29 @@ body {
             > div:nth-last-child(1) {
                 border-bottom: 0 !important;
                 flex: 1 1 auto;
+            }
+        }
+        &:nth-last-child(1) {
+            border-bottom: 0 !important;
+        }
+
+        &.lg, &.md {
+            &:nth-child(3n+1):nth-last-child(1), &:nth-child(3n+1):nth-last-child(2), &:nth-child(3n+1):nth-last-child(3){
+                border-bottom: 0 !important;
+            }
+            &:nth-child(3n+2):nth-last-child(1), &:nth-child(3n+1):nth-last-child(2){
+                border-bottom: 0 !important;
+            }
+            &:nth-child(3n):nth-last-child(1){
+                border-bottom: 0 !important;
+            }
+        }
+        &.sm {
+            &:nth-child(2n+1):nth-last-child(1), &:nth-child(2n+1):nth-last-child(2){
+                border-bottom: 0 !important;
+            }
+            &:nth-child(2n):nth-last-child(1){
+                border-bottom: 0 !important;
             }
         }
     }

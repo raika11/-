@@ -249,22 +249,24 @@ const CodeListModal = (props) => {
                 {/* 분류명, 분류코드 노출, 저장, 초기화 버튼 */}
                 <div>
                     <Form.Row className="flex-wrap">
-                        <Col sm={10} className="p-0">
-                            <div className="w-100 mb-0 h6">
-                                {selectedList.map((s) => (
-                                    <Badge key={s.masterCode} className="mr-1 mb-1 user-select-text" variant="searching">
-                                        {s.masterCode}&nbsp;
-                                        {s.masterCode.slice(-5) === '00000' ? s.serviceKorname : s.masterCode.slice(-3) === '000' ? s.sectionKorname : s.contentKorname}
-                                        <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
-                                    </Badge>
-                                ))}
+                        <Col sm={10} className="p-0 mb-2">
+                            <div className="w-100 pr-2 h6">
+                                <div className="input-border pl-1 pr-1 pt-1 h-100">
+                                    {selectedList.map((s) => (
+                                        <Badge key={s.masterCode} className="mr-1 mb-1 user-select-text" variant="searching">
+                                            {s.masterCode}&nbsp;
+                                            {s.masterCode.slice(-5) === '00000' ? s.serviceKorname : s.masterCode.slice(-3) === '000' ? s.sectionKorname : s.contentKorname}
+                                            <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
+                                        </Badge>
+                                    ))}
+                                </div>
                             </div>
                         </Col>
-                        <Col sm={2} className="p-0 d-flex align-items-end mb-2">
-                            <Button variant="positive" className="mr-2 flex-fill" onClick={handleOkTrigger}>
-                                저장
+                        <Col sm={2} className="p-0 d-flex mb-2 align-items-end">
+                            <Button variant="positive" className="w-50 mr-1" onClick={handleOkTrigger}>
+                                등록
                             </Button>
-                            <Button variant="negative" className="flex-fill" onClick={handleReset}>
+                            <Button variant="negative" className="w-50 ml-1" onClick={handleReset}>
                                 초기화
                             </Button>
                         </Col>
@@ -280,6 +282,9 @@ const CodeListModal = (props) => {
                             key={dep1.masterCode}
                             className={clsx('service d-flex flex-column p-0 border-bottom', {
                                 'border-right': (matchPoints.sm && idx % 2 === 0) || (matchPoints.md && idx % 3 !== 2) || (matchPoints.lg && idx % 3 !== 2),
+                                sm: matchPoints.sm,
+                                md: matchPoints.md,
+                                lg: matchPoints.lg,
                             })}
                         >
                             {/* 대분류 */}

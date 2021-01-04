@@ -197,7 +197,7 @@ const DatsetListModal = (props) => {
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInputLabel
                             as="select"
-                            className="mb-0"
+                            inputClassName="ft-12"
                             value={search.searchType}
                             onChange={(e) => {
                                 setSearch({
@@ -217,6 +217,8 @@ const DatsetListModal = (props) => {
                     <Col xs={8} className="p-0">
                         <MokaSearchInput
                             value={search.keyword}
+                            buttonClassName="ft-12"
+                            inputClassName="ft-12"
                             onChange={(e) => {
                                 setSearch({
                                     ...search,

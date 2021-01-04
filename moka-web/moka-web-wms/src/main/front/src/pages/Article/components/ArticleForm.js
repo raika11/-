@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import copy from 'copy-to-clipboard';
+import { initialState, getArticle, GET_ARTICLE } from '@store/article';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import toast from '@utils/toastUtil';
+import { popupPreview } from '@utils/commonUtil';
+import { unescapeHtml } from '@utils/convertUtil';
+import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
-const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onChange, onPreview }) => {
-    const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
-    const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
+const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
+    const dispatch = useDispatch();
+    const article = useSelector((store) => store.article.article);
+    const loading = useSelector((store) => store.loading[GET_ARTICLE]);
     const [tagStr, setTagStr] = useState(''); // 태그리스트
-    const [pressDt, setPressDt] = useState(''); // 발행일자
     const [content, setContent] = useState(''); // 본문
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
+    const [temp, setTemp] = useState(initialState.article);
 
     /**
      * input 변경
@@ -28,9 +34,9 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
             // 계속 파싱할 수 없어서
             setTagStr(value);
         } else {
-            onChange({
-                key: name,
-                value,
+            setTemp({
+                ...temp,
+                [name]: value,
             });
         }
     };
@@ -39,9 +45,9 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
      * 태그 input blur시에 onChange 실행
      */
     const handleTagBlur = () => {
-        onChange({
-            key: 'tagList',
-            value: tagStr.split(','),
+        setTemp({
+            ...temp,
+            tagList: tagStr.split(','),
         });
     };
 
@@ -62,13 +68,11 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
         if (list) {
             result = list.map((code) => code.masterCode);
         }
-        onChange({
-            key: 'categoryList',
-            value: result,
+        setTemp({
+            ...temp,
+            categoryList: result,
         });
     };
-
-    const valueCreator = (name, email) => `${name}/${email}`;
 
     /**
      * 기자 자동완성 변경
@@ -78,19 +82,13 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
         let result = [];
         if (value) {
             result = value.map((reporter) => ({
-                rid: reporter.rid,
-                reporterBlog: reporter.reporterBlog,
-                reporterEmail: reporter.reporterEmail || reporter.repEmail1,
-                reporterEtc: reporter.reporterEtc,
-                reporterName: reporter.reporterName || reporter.repName,
-                label: reporter.reporterName || reporter.repName,
-                value: reporter.reporterName ? valueCreator(reporter.reporterName, reporter.reporterEmail) : valueCreator(reporter.repName, reporter.repEmail1),
+                ...reporter,
             }));
         }
 
-        onChange({
-            key: 'reporterList',
-            value: result,
+        setTemp({
+            ...temp,
+            reporterList: result,
         });
     };
 
@@ -98,8 +96,8 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
      * 복사
      */
     const handleClickCopy = () => {
-        if (article.serviceUrl) {
-            copy(article.serviceUrl);
+        if (temp.serviceUrl) {
+            copy(temp.serviceUrl);
             toast.success('복사하였습니다');
         } else {
             toast.warning('복사할 URL이 없습니다');
@@ -109,34 +107,51 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => onPreview('P');
+    const handlePCPreview = () => popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'P' });
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => onPreview('M');
+    const handleMobilePreview = () => popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
 
     useEffect(() => {
-        setSelectedMasterCode(article.categoryList || []);
-        // 발행일
-        if (inRcv) {
-            article.pressDt && setPressDt(article.pressDt.slice(0, 10));
-        } else {
-            article.pressDt && setPressDt(`${article.pressDt.slice(0, 4)}-${article.pressDt.slice(4, 6)}-${article.pressDt.slice(6, 8)}`);
+        // 기사 상세 조회
+        if (totalId) {
+            dispatch(
+                getArticle({
+                    totalId,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
         }
-        // 태그 리스트
-        setTagStr((article.tagList || []).join(','));
-        // 기자
-        setSelectedReporter(
-            (article.reporterList || []).map((reporter) => ({
+    }, [dispatch, totalId]);
+
+    useEffect(() => {
+        setTemp({
+            ...article,
+            title: unescapeHtml(article.artTitle),
+            // 분류코드 (중복인 마스터코드 제거)
+            categoryList: [...new Set(article.categoryList)],
+            // 발행일
+            pressDateText: `${article.pressDate.slice(0, 4)}-${article.pressDate.slice(4, 6)}-${article.pressDate.slice(6, 8)}`,
+            // 기자리스트
+            reporterList: article.reporterList.map((reporter) => ({
                 ...reporter,
                 label: reporter.reporterName,
-                value: valueCreator(reporter.reporterName, reporter.reporterEmail),
+                value: reporter.repSeq,
             })),
-        );
+            // 링크
+            serviceUrl: `${ARTICLE_URL}${temp.totalId}`,
+        });
+        // 태그 리스트
+        setTagStr(article.tagList.join(','));
         // 본문
-        setContent(article.content || '');
-    }, [article.categoryList, article.content, article.pressDt, article.reporterList, article.tagList, inRcv]);
+        setContent(article.artContent?.artContent || '');
+    }, [article, temp.totalId]);
 
     return (
         <MokaCard
@@ -156,15 +171,15 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
             <Form>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="출처" value={article?.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="출처" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
                     </Col>
-                    <Col className="p-0 d-flex justify-content-end" xs={9}>
-                        <Button variant="outline-neutral flex-shrink-0" className="ft-12" onClick={() => setHistoryModalShow(true)}>
+                    <Col className="p-0 d-flex justify-content-end align-items-center" xs={9}>
+                        <MokaInputLabel label="발행일" labelWidth={39} inputClassName="ft-12" value={temp.pressDateText} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="기사ID" labelWidth={39} inputClassName="ft-12" value={temp.totalId} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="수신ID" labelWidth={39} inputClassName="ft-12" value={temp.rid} inputProps={{ plaintext: true }} disabled />
+                        <Button variant="outline-neutral flex-shrink-0" className="ft-12" onClick={() => setHistoryModalShow(true)} size="sm">
                             작업정보
                         </Button>
-                        <MokaInputLabel label="발행일" labelWidth={39} inputClassName="ft-12" value={pressDt} inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel label="기사ID" labelWidth={39} inputClassName="ft-12" value={article.totalId} inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel label="수신ID" labelWidth={39} inputClassName="ft-12" value={article.rid} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -174,34 +189,26 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
                             label="분류표"
                             searchIcon={false}
                             labelType="masterCode"
-                            value={selectedMasterCode.join(',')}
+                            value={temp.categoryList.join(',')}
                             onChange={handleMasterCode}
                             maxMenuHeight={150}
                             isMulti
                         />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
-                        <Button variant="outline-neutral" className="ft-12 w-100" onClick={() => setCodeModalShow(true)}>
+                        <Button variant="outline-neutral" className="ft-12 w-100" size="sm" onClick={() => setCodeModalShow(true)}>
                             통합분류표
                         </Button>
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="제목" name="title" className="mb-0" value={article.title} onChange={handleChangeValue} required />
+                        <MokaInputLabel label="제목" name="title" className="mb-0" value={temp.title} onChange={handleChangeValue} required />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="부제목" className="mb-0" value={article.subTitle} inputClassName="bg-white" disabled />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: inRcv ? 320 : 280 }}>
-                        <MokaInputLabel label="본문" as="none" />
-                        <div className="flex-fill input-border">
-                            <MokaEditorCore defaultValue={article.content} value={content} onBlur={handleContentBlur} />
-                        </div>
+                        <MokaInputLabel label="부제목" className="mb-0" value={temp.artSubTitle} inputClassName="bg-white" disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -210,9 +217,9 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
                             label="기자"
                             className="mb-0"
                             as="autocomplete"
-                            value={selectedReporter}
+                            value={temp.reporterList}
                             onChange={handleReporter}
-                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 140 }}
+                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 140, placeholder: '선택한 기자가 없습니다' }}
                         />
                     </Col>
                 </Form.Row>
@@ -222,6 +229,14 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: inRcv ? 320 : 280 }}>
+                        <MokaInputLabel label="본문" as="none" />
+                        <div className="flex-fill input-border">
+                            <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} />
+                        </div>
                     </Col>
                 </Form.Row>
                 {!inRcv && (
@@ -261,15 +276,15 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onC
                 <Form.Row className="mb-2">
                     <Col className="p-0 d-flex align-items-center" xs={12}>
                         <MokaInputLabel label="LINK정보" className="mb-0" as="none" />
-                        <Button variant="outline-neutral" className="ft-12 h-100 mr-2" onClick={handleClickCopy}>
+                        <Button variant="outline-neutral" size="sm" className="ft-12 mr-2" onClick={handleClickCopy}>
                             복사
                         </Button>
-                        <p className="mb-0">중앙: {article.serviceUrl}</p>
+                        <p className="mb-0">중앙: {temp.serviceUrl}</p>
                     </Col>
                 </Form.Row>
 
                 {/* masterCode 모달 */}
-                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
+                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={temp.categoryList} selection="multiple" onSave={handleMasterCode} />
 
                 {/* 작업정보 모달 */}
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />

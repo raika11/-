@@ -74,12 +74,14 @@ const propTypes = {
      * 드롭다운 메뉴의 height
      */
     dropdownHeight: PropTypes.number,
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 const defaultProps = {
     bulk: false,
     sourceType: 'JOONGANG',
     dropdownHeight: 200,
+    width: 195,
 };
 
 /**
@@ -87,7 +89,7 @@ const defaultProps = {
  * (value, onChange 필수로 받음)
  */
 const SourceSelector = (props) => {
-    const { className, isInvalid, value, onChange, sourceType, dropdownHeight } = props;
+    const { className, isInvalid, value, onChange, width, sourceType, dropdownHeight } = props;
     const dispatch = useDispatch();
     const [selectedList, setSelectedList] = useState([]); // 체크된 매체 리스트
     const [renderList, setRenderList] = useState([]); // 렌더링되는 매체 리스트
@@ -208,7 +210,7 @@ const SourceSelector = (props) => {
     }, [onChange, selectedList, renderList, value, findSourceIndex, findSource]);
 
     return (
-        <Dropdown style={{ width: 195 }} className={clsx('flex-fill', className)}>
+        <Dropdown style={{ width }} className={clsx('flex-fill', className)}>
             <Dropdown.Toggle as={CustomToggle} isInvalid={isInvalid} id="dropdown-custom-components">
                 {toggleText}
             </Dropdown.Toggle>

@@ -178,16 +178,7 @@ const RcvArticleSearch = () => {
             <Form.Row className="d-flex mb-2">
                 {/* 검색기간 */}
                 <div className="mr-2">
-                    <MokaInputLabel
-                        as="select"
-                        name="period"
-                        label="수신일자"
-                        labelWidth={50}
-                        className="mb-0"
-                        inputClassName="ft-12"
-                        onChange={handleChangeValue}
-                        value={period.join('')}
-                    >
+                    <MokaInput as="select" name="period" className="ft-12 flex-fill" onChange={handleChangeValue} value={period.join('')}>
                         <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>
@@ -203,7 +194,7 @@ const RcvArticleSearch = () => {
                         <option value="3months" data-number="3" data-date="months">
                             3개월
                         </option>
-                    </MokaInputLabel>
+                    </MokaInput>
                 </div>
 
                 {/* 시작일 */}
@@ -217,7 +208,7 @@ const RcvArticleSearch = () => {
                 </div>
 
                 {/* 섹션 전체 */}
-                <div style={{ width: 110 }} className="mr-2">
+                <div className="mr-2 flex-fill">
                     <MokaInput as="select" name="section" className="ft-12" value={search.depart} onChange={handleChangeValue} disabled>
                         {['경제', '국제', '기타', '문화', '북한', '사회', '스포츠/레저', '정치', '지방'].map((section) => (
                             <option key={section} value={section}>
@@ -228,23 +219,14 @@ const RcvArticleSearch = () => {
                 </div>
 
                 {/* 상태 */}
-                <div style={{ width: 145 }} className="mr-2">
-                    <MokaInputLabel
-                        as="select"
-                        name="status"
-                        label="상태"
-                        labelWidth={25}
-                        className="mb-0"
-                        inputClassName="ft-12"
-                        value={search.status}
-                        onChange={handleChangeValue}
-                    >
+                <div className="mr-2 flex-fill">
+                    <MokaInput as="select" name="status" className="mb-0 ft-12" value={search.status} onChange={handleChangeValue}>
                         {initialState.statusList.map((op) => (
                             <option key={op.id} value={op.id}>
                                 {op.name}
                             </option>
                         ))}
-                    </MokaInputLabel>
+                    </MokaInput>
                 </div>
 
                 {/* 원본/수정만 */}
@@ -260,20 +242,17 @@ const RcvArticleSearch = () => {
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between">
                 {/* 제목 */}
-                <MokaInputLabel
+                <MokaInput
                     name="keyword"
-                    label="제목"
-                    labelWidth={50}
-                    className="mb-0 flex-fill"
-                    inputClassName="ft-12"
+                    className="mb-0 flex-fill ft-12"
                     value={search.keyword}
                     onChange={handleChangeValue}
                     inputProps={{ onKeyPress: handleKeyPress }}
-                    placeholder="검색어를 입력하세요"
+                    placeholder="제목을 입력하세요"
                 />
 
                 {/* 매체 */}
-                <div style={{ width: 195 }} className="ml-2">
+                <div style={{ width: 195 }} className="ml-2 mr-2">
                     <SourceSelector
                         value={sourceList}
                         onChange={(value) => {
@@ -289,13 +268,12 @@ const RcvArticleSearch = () => {
                         isInvalid={error.sourceList}
                     />
                 </div>
-            </Form.Row>
-            <Form.Row className="d-flex mb-2 justify-content-end">
-                <Button variant="searching" className="mr-2 ft-12" onClick={handleSearch}>
+
+                <Button variant="searching" className="mr-2 ft-12 flex-shrink-0" onClick={handleSearch}>
                     검색
                 </Button>
 
-                <Button variant="negative" className="ft-12" onClick={handleClickReset}>
+                <Button variant="negative" className="ft-12 flex-shrink-0" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>

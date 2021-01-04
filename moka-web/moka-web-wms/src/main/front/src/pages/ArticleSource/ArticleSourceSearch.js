@@ -98,7 +98,7 @@ const ArticleSourceSearch = () => {
                     onChange={handleChangeValue}
                     onSearch={handleSearch}
                 />
-                <Button className="ft-12" variant="outline-neutral" onClick={handleClickInitialize}>
+                <Button className="ft-12" variant="negative" onClick={handleClickInitialize}>
                     초기화
                 </Button>
             </div>

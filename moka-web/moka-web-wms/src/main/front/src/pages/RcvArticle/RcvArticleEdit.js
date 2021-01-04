@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
+import { clearArticle } from '@store/article';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
@@ -37,7 +38,12 @@ const RcvArticleEdit = () => {
      */
     const handleCancle = () => {
         history.push('/rcv-article');
-        dispatch(clearRcvArticle());
+
+        if (rcvArticle.totalId && rcvArticle.totalId !== 0) {
+            dispatch(clearArticle());
+        } else {
+            dispatch(clearRcvArticle());
+        }
     };
 
     /**
@@ -118,9 +124,11 @@ const RcvArticleEdit = () => {
         popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, servicePlatform });
     };
 
+    if (!rcvArticle.rid) return null;
+
     return (
         <React.Fragment>
-            {rcvArticle.rid && !rcvArticle.totalId && (
+            {!rcvArticle.totalId || rcvArticle.totalId === 0 ? (
                 <RctArticleForm
                     article={temp}
                     onChange={handleChangeValue}
@@ -131,18 +139,8 @@ const RcvArticleEdit = () => {
                     onPreview={handleClickPreviewOpen}
                     onRegister={handleRegister}
                 />
-            )}
-            {rcvArticle.rid && rcvArticle.totalId && (
-                <ArticleForm
-                    article={temp}
-                    onChange={handleChangeValue}
-                    articleTypeRows={articleTypeRows}
-                    reporterList={reporterList || []}
-                    loading={loading}
-                    onCancle={handleCancle}
-                    onPreview={handleClickPreviewOpen}
-                    inRcv
-                />
+            ) : (
+                <ArticleForm totalId={rcvArticle.totalId} articleTypeRows={articleTypeRows} reporterList={reporterList || []} onCancle={handleCancle} inRcv />
             )}
         </React.Fragment>
     );

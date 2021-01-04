@@ -27,6 +27,11 @@ export const initialState = {
     },
     article: {
         totalId: null,
+        categoryList: [],
+        reporterList: [],
+        tagList: [],
+        pressDate: '',
+        artContent: {},
     },
     invalidList: [],
     contentTypeList: [

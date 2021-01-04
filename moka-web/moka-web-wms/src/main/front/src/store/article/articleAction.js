@@ -26,12 +26,20 @@ export const CLEAR_BULK_SEARCH = 'article/CLEAR_BULK_SEARCH';
 export const clearSearch = createAction(CLEAR_SEARCH);
 export const clearServiceSearch = createAction(CLEAR_SERVICE_SEARCH);
 export const clearBulkSearch = createAction(CLEAR_BULK_SEARCH);
+export const CLEAR_ARTICLE = 'article/CLEAR_ARTICLE';
+export const clearArticle = createAction(CLEAR_ARTICLE);
 
 /**
  * 등록기사 리스트 조회
  */
 export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST');
 export const getArticleList = createAction(GET_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 등록기사 단건 조회
+ */
+export const [GET_ARTICLE, GET_ARTICLE_SUCCESS, GET_ARTICLE_FAILURE] = createRequestActionTypes('article/GET_ARTICLE');
+export const getArticle = createAction(GET_ARTICLE, ({ totalId, callback }) => ({ totalId, callback }));
 
 /**
  * 서비스 기사 리스트 조회

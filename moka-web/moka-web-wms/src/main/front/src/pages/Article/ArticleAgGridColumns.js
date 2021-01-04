@@ -1,7 +1,7 @@
 import React from 'react';
 import { MokaIcon } from '@components';
 import ArticleActionBtn from './components/ArticleActionBtn';
-// import RcvArticlePreviewBtn from './components/RcvArticlePreviewBtn';
+import ArticleViewBtn from './components/ArticleViewBtn';
 // import TitleRenderer from './components/TitleRenderer';
 
 export default [
@@ -21,8 +21,9 @@ export default [
     },
     {
         headerName: '보기',
-        field: 'rcvTime',
-        width: 100,
+        field: 'view',
+        width: 139,
+        cellRendererFramework: (row) => <ArticleViewBtn {...row} />,
     },
     {
         headerName: '제목',
@@ -40,6 +41,7 @@ export default [
             display: 'flex',
             alignItems: 'center',
             fontSize: '12px',
+            whiteSpace: 'pre',
         },
     },
     {

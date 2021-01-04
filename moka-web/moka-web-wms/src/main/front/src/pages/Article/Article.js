@@ -35,7 +35,7 @@ const Article = ({ match }) => {
             <Row className="m-0">
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     {/* 리스트 */}
-                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" header={false}>
+                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="등록 기사 전체">
                         <Suspense>
                             <ArticleList />
                         </Suspense>
@@ -53,7 +53,7 @@ const Article = ({ match }) => {
                         path={[`${match.url}/:totalId`]}
                         exact
                         render={() => (
-                            <div className="absolute-top-right h-100 bg-dark" style={{ width: 590, zIndex: 2 }}>
+                            <div className="absolute-top-right h-100" style={{ width: 640, zIndex: 2 }}>
                                 <ArticleEdit />
                             </div>
                         )}

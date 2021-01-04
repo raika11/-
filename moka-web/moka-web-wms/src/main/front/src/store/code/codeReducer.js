@@ -8,7 +8,7 @@ import * as act from './codeAction';
 export const initialState = {
     master: {
         error: null,
-        list: [],
+        list: null,
         search: {
             usedYn: 'Y',
         },
@@ -45,7 +45,7 @@ export const initialState = {
     // korname으로 검색한 결과를 받는 store
     korname: {
         error: null,
-        list: [],
+        list: null,
         search: {
             searchType: 'korname',
             keyword: '',

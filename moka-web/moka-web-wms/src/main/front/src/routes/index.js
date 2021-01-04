@@ -40,6 +40,7 @@ const TourList = React.lazy(() => import('@pages/TourList'));
 const TourSet = React.lazy(() => import('@pages/TourSet'));
 const TourMsgSet = React.lazy(() => import('@pages/TourMsgSet'));
 const Article = React.lazy(() => import('@pages/Article'));
+const Quiz = React.lazy(() => import('@pages/Survey/Quiz'));
 
 const routes = [
     {
@@ -348,6 +349,16 @@ const routes = [
         name: 'poll',
         displayName: '투표 관리',
         component: Poll,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/quiz',
+        name: 'quiz',
+        displayName: '투표 관리',
+        component: Quiz,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

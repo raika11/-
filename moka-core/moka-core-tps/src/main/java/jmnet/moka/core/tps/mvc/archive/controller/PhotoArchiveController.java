@@ -5,13 +5,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveDTO;
 import jmnet.moka.core.tps.mvc.archive.dto.PhotoArchiveSearchDTO;
@@ -20,8 +23,12 @@ import jmnet.moka.core.tps.mvc.archive.vo.OriginCodeVO;
 import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveDetailVO;
 import jmnet.moka.core.tps.mvc.archive.vo.PhotoArchiveVO;
 import jmnet.moka.core.tps.mvc.archive.vo.PhotoTypeVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/achive/photos")
 @Api(tags = {"포토 아카이브 API"})
+@Slf4j
 public class PhotoArchiveController extends AbstractCommonController {
 
     private final PhotoArchiveService photoArchiveService;
@@ -152,5 +160,35 @@ public class PhotoArchiveController extends AbstractCommonController {
         tpsLogger.success(true);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 이미지 파일 서비스
+     *
+     * @param request HTTP 요청
+     * @return 이미지 byte[]
+     * @throws NoDataException 데이터없음
+     */
+    @ApiOperation(value = "이미지 파일 서비스")
+    @GetMapping(value = "/by-url", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE})
+    public ResponseEntity<byte[]> getPhotoArchiveAsResponseEntity(HttpServletRequest request,
+            @ApiParam("사진URL") @RequestParam(value = "url", required = true) String url) {
+        if (McpString.isEmpty(url)) {
+            log.debug("[NO FILE PATH] {}", url);
+        } else {
+            try {
+                byte[] media = ImageUtil.getImageBytes(url);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setCacheControl(CacheControl
+                        .noCache()
+                        .getHeaderValue());
+
+                ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+                return responseEntity;
+            } catch (Exception e) {
+                log.debug("[FAIL TO FILE LOAD] {}", url);
+            }
+        }
+        return null;
     }
 }

@@ -161,4 +161,32 @@ public class ImageUtil {
             }
         }
     }
+
+    /**
+     * url 이미지
+     *
+     * @param sourceUrl 이미지url
+     * @return 성공여부
+     */
+    public static byte[] getImageBytes(String sourceUrl) {
+        FileOutputStream fos = null;
+        InputStream is = null;
+        try {
+            URL url = new URL(sourceUrl);
+            URLConnection urlConnection = url.openConnection();
+            is = urlConnection.getInputStream();
+            byte[] readBytes = is.readAllBytes();
+            return readBytes;
+        } catch (IOException e) {
+            return null;
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                // no
+            }
+        }
+    }
 }

@@ -25,6 +25,10 @@ export const initialState = {
         pressCategory: null, // 출판 카테고리
         bulkYn: 'all', // 벌크여부(all, Y, N)
     },
+    article: {
+        totalId: null,
+    },
+    invalidList: [],
     contentTypeList: [
         { id: 'all', name: '기사타입 전체' },
         { id: 'P', name: '포토뉴스' },
@@ -80,7 +84,6 @@ export const initialState = {
         },
     },
     imageList: [],
-    invalidList: [],
 };
 
 export default handleActions(
@@ -133,6 +136,12 @@ export default handleActions(
                 draft.search = initialState.search;
             });
         },
+        [act.CLEAR_ARTICLE]: (state) => {
+            return produce(state, (draft) => {
+                draft.article = initialState.article;
+                draft.invalidList = initialState.invalidList;
+            });
+        },
         /**
          * 기사 조회
          */
@@ -148,6 +157,17 @@ export default handleActions(
                 draft.total = initialState.totalCnt;
                 draft.list = initialState.list;
                 draft.error = payload;
+            });
+        },
+        [act.GET_ARTICLE_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.article = body;
+                draft.invalidList = initialState.invalidList;
+            });
+        },
+        [act.GET_ARTICLE_FAILURE]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = body.list;
             });
         },
         /**

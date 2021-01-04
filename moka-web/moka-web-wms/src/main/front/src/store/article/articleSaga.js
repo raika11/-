@@ -11,6 +11,11 @@ import * as api from './articleApi';
 const getArticleList = createRequestSaga(act.GET_ARTICLE_LIST, api.getArticleList);
 
 /**
+ * 기사 단건 조회
+ */
+const getArticle = createRequestSaga(act.GET_ARTICLE, api.getArticle);
+
+/**
  * 서비스기사 목록 조회 (페이지편집)
  */
 const getServiceArticleList = createRequestSaga(act.GET_SERVICE_ARTICLE_LIST, api.getServiceArticleList);
@@ -59,4 +64,5 @@ export default function* saga() {
     yield takeLatest(act.GET_BULK_ARTICLE_LIST, getBulkArticleList);
     yield takeLatest(act.PUT_ARTICLE_EDIT_TITLE, putArticleEditTitle);
     yield takeLatest(act.GET_ARTICLE_IMAGE_LIST, getArticleImageList);
+    yield takeLatest(act.GET_ARTICLE, getArticle);
 }

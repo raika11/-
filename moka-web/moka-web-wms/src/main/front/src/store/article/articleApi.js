@@ -40,3 +40,10 @@ export const getArticleImageList = ({ totalId }) => {
         throw err;
     });
 };
+
+// 기사 단건 조회
+export const getArticle = ({ totalId }) => {
+    return instance.get(`/api/articles/${totalId}`).catch((err) => {
+        throw err;
+    });
+};

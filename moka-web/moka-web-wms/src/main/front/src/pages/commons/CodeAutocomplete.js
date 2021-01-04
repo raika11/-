@@ -1,5 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaInputLabel } from '@components';
 import { initialState, getCodeKornameList, changeKornameSearchOption, GET_CODE_KORNAME_LIST } from '@store/code';
@@ -69,10 +69,13 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     const { label, labelWidth, labelClassName, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType, max } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
-    const { storeSearch, codeList } = useSelector((store) => ({
-        storeSearch: store.code.korname.search,
-        codeList: store.code.korname.list,
-    }));
+    const { storeSearch, codeList } = useSelector(
+        (store) => ({
+            storeSearch: store.code.korname.search,
+            codeList: store.code.korname.list,
+        }),
+        [shallowEqual],
+    );
 
     // state
     const [search, setSearch] = useState(initialState.korname.search);
@@ -136,35 +139,39 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     }, [storeSearch]);
 
     useEffect(() => {
-        dispatch(getCodeKornameList(changeKornameSearchOption(search)));
+        if (!codeList) {
+            dispatch(getCodeKornameList(changeKornameSearchOption(search)));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        setOptions(
-            codeList.map((code) => {
-                const { masterCode, serviceKorname, sectionKorname, contentKorname } = code;
-                let label = '';
+        if (codeList) {
+            setOptions(
+                codeList.map((code) => {
+                    const { masterCode, serviceKorname, sectionKorname, contentKorname } = code;
+                    let label = '';
 
-                if (labelType === 'korname') {
-                    label = serviceKorname;
-                    if (sectionKorname && sectionKorname !== '') {
-                        label += ` > ${sectionKorname}`;
+                    if (labelType === 'korname') {
+                        label = serviceKorname;
+                        if (sectionKorname && sectionKorname !== '') {
+                            label += ` > ${sectionKorname}`;
+                        }
+                        if (contentKorname && contentKorname !== '') {
+                            label += ` > ${contentKorname}`;
+                        }
+                    } else if (labelType === 'masterCode') {
+                        label = masterCode;
                     }
-                    if (contentKorname && contentKorname !== '') {
-                        label += ` > ${contentKorname}`;
-                    }
-                } else if (labelType === 'masterCode') {
-                    label = masterCode;
-                }
 
-                return {
-                    ...code,
-                    value: masterCode,
-                    label,
-                };
-            }),
-        );
+                    return {
+                        ...code,
+                        value: masterCode,
+                        label,
+                    };
+                }),
+            );
+        }
     }, [labelType, codeList]);
 
     useEffect(() => {

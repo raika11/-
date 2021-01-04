@@ -159,65 +159,69 @@ const CodeListModal = (props) => {
 
     useEffect(() => {
         // 마스터코드 조회
-        if (show) {
+        if (show && !masterCodeList) {
             dispatch(getMasterCodeList());
         }
-    }, [dispatch, show]);
+    }, [dispatch, masterCodeList, show]);
 
     useEffect(() => {
-        // 마스터코드 파싱
-        let svl = [],
-            scl = [],
-            cnl = [];
+        if (masterCodeList) {
+            // 마스터코드 파싱
+            let svl = [],
+                scl = [],
+                cnl = [];
 
-        masterCodeList.forEach((element) => {
-            if (element.masterCode.slice(-5) === '00000') {
-                svl.push(element);
-            } else if (element.masterCode.slice(-3) === '000') {
-                scl.push(element);
-            } else {
-                cnl.push(element);
-            }
-        });
+            masterCodeList.forEach((element) => {
+                if (element.masterCode.slice(-5) === '00000') {
+                    svl.push(element);
+                } else if (element.masterCode.slice(-3) === '000') {
+                    scl.push(element);
+                } else {
+                    cnl.push(element);
+                }
+            });
 
-        // 렌더링하기 위해 소분류 데이터 파싱
-        let key = null;
-        const co = cnl.reduce((all, current) => {
-            const parentCode = current.masterCode.slice(0, 4);
-            if (key !== parentCode) {
-                all[parentCode] = [current];
-                key = parentCode;
-            } else {
-                all[parentCode].push(current);
-            }
-            return all;
-        }, {});
+            // 렌더링하기 위해 소분류 데이터 파싱
+            let key = null;
+            const co = cnl.reduce((all, current) => {
+                const parentCode = current.masterCode.slice(0, 4);
+                if (key !== parentCode) {
+                    all[parentCode] = [current];
+                    key = parentCode;
+                } else {
+                    all[parentCode].push(current);
+                }
+                return all;
+            }, {});
 
-        setServiceList(svl);
-        setSectionList(scl);
-        setContentObj(co);
+            setServiceList(svl);
+            setSectionList(scl);
+            setContentObj(co);
+        }
     }, [masterCodeList]);
 
     useEffect(() => {
-        let ns = [];
+        if (masterCodeList) {
+            let ns = [];
 
-        if (!value || value === null) {
-            return;
-        } else if (masterCodeList.length < 1) {
-            return;
-        } else if (typeof value === 'string') {
-            // masterCode만 넘어온 경우
-            ns = [masterCodeList.find((m) => m.masterCode === value)];
-        } else if (Array.isArray(value)) {
-            // masterCode의 array가 넘어온 경우
-            ns = value.map((v) => masterCodeList.find((m) => m.masterCode === v));
-        } else if (typeof value === 'object') {
-            // object가 넘어온 경우
-            ns = [masterCodeList.find((m) => m.masterCode === value.masterCode)];
+            if (!value || value === null) {
+                return;
+            } else if (masterCodeList.length < 1) {
+                return;
+            } else if (typeof value === 'string') {
+                // masterCode만 넘어온 경우
+                ns = [masterCodeList.find((m) => m.masterCode === value)];
+            } else if (Array.isArray(value)) {
+                // masterCode의 array가 넘어온 경우
+                ns = value.map((v) => masterCodeList.find((m) => m.masterCode === v));
+            } else if (typeof value === 'object') {
+                // object가 넘어온 경우
+                ns = [masterCodeList.find((m) => m.masterCode === value.masterCode)];
+            }
+
+            ns = ns.filter((s) => s);
+            setSelectedList(ns);
         }
-
-        ns = ns.filter((s) => s);
-        setSelectedList(ns);
     }, [masterCodeList, value]);
 
     useEffect(() => {

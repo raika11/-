@@ -44,6 +44,11 @@ public class ArticleBasicDTO implements Serializable {
     private Long totalId;
 
     /**
+     * 수신기사아이디
+     */
+    private Long rid;
+    
+    /**
      * 출처
      */
     private String sourceCode;

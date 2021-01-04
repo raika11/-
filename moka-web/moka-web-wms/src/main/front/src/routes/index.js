@@ -357,7 +357,7 @@ const routes = [
     {
         path: '/quiz',
         name: 'quiz',
-        displayName: '투표 관리',
+        displayName: '퀴즈 관리',
         component: Quiz,
         layout: SidebarOpenLayout,
         nonResponsive: true,

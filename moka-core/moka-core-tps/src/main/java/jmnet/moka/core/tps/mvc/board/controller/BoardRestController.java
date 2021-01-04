@@ -148,10 +148,11 @@ public class BoardRestController extends AbstractCommonController {
         Board board = boardService
                 .findBoardBySeq(boardSeq)
                 .orElseThrow(() -> new NoDataException(message));
-
+        /*
         if (!matchedPassword(board, pwd)) {
             throw new InvalidDataException(msg("tps.board.error.pwd-unmatched"));
         }
+        */
 
         BoardDTO dto = modelMapper.map(board, BoardDTO.class);
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.Min;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -194,4 +196,7 @@ public class BoardDTO {
     @ApiModelProperty("주소")
     @Size(max = 512, message = "{tps.board.error.size.addr}")
     private String addr;
+
+    @DTODateTimeFormat
+    private Date regDt;
 }

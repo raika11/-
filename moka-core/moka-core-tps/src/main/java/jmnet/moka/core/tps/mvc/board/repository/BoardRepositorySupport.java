@@ -32,4 +32,6 @@ public interface BoardRepositorySupport {
 
     Optional<Board> findByBoardSeq(Long boardSeq);
 
+    Long countByParentBoardSeq(Long parentBoardSeq, String delYn);
+
 }

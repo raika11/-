@@ -76,11 +76,12 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
+    <!--
     <dependency>
       <groupId>jmnet.moka.core</groupId>
       <artifactId>moka-core-comment</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-    </dependency>
+    </dependency>-->
 
     <dependency>
       <groupId>com.auth0</groupId>

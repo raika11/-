@@ -47,7 +47,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long countAllBoardByParentBoardSeq(Long parentBoardSeq) {
-        return boardRepository.countByParentBoardSeqAndDelYn(parentBoardSeq, MokaConstants.NO);
+        return boardRepository.countByParentBoardSeq(parentBoardSeq, MokaConstants.NO);
     }
 
     @Override

@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { initialState, getArticleList, changeSearchOption } from '@store/article';
+import { getPressCate1 } from '@store/codeMgt';
 import { MokaInput, MokaIcon } from '@components';
 import { SourceSelector, CodeAutocomplete } from '@pages/commons';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
@@ -20,6 +21,7 @@ const SOURCE_LIST_KEY = 'articleSourceList';
 const ArticleSearch = () => {
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.article.search);
+    const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
     const [search, setSearch] = useState(initialState.search);
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
@@ -151,6 +153,12 @@ const ArticleSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
+        if (!pressCate1Rows) {
+            dispatch(getPressCate1());
+        }
+    }, [dispatch, pressCate1Rows]);
+
+    useEffect(() => {
         /**
          * 마운트 시 기사목록 최초 로딩
          *
@@ -221,9 +229,14 @@ const ArticleSearch = () => {
 
                 <Col xs={5} className="p-0 pl-2 d-flex">
                     {/* 출판 카테고리 */}
-                    <MokaInput as="select" className="ft-12 mr-2" disabled>
+                    <MokaInput as="select" className="ft-12 mr-2" name="pressCategory" value={search.pressCategory} onChange={handleChangeValue}>
                         <option hidden>출판</option>
-                        <option>기타코드에서 조회</option>
+                        {pressCate1Rows &&
+                            pressCate1Rows.map((code) => (
+                                <option key={code.id} value={code.id}>
+                                    {code.name}
+                                </option>
+                            ))}
                     </MokaInput>
 
                     {/* 기사타입 */}

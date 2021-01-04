@@ -25,17 +25,19 @@ export const objectToFormData = (obj) => {
  * @param {string} str 문자열
  */
 export const unescapeHtml = (str) => {
-    return str
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&#39;/g, "'")
-        .replace(/&quot;/g, '"')
-        .replace(/&#91;/g, '[')
-        .replace(/&#93;/g, ']')
-        .replace(/&#34;/g, '"')
-        .replace(/&#8216;/g, '‘')
-        .replace(/&#8217;/g, '’')
-        .replace(/&#037;/g, '%')
-        .replace(/&middot;/g, '·');
+    if (str && str !== '') {
+        return str
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&#39;/g, "'")
+            .replace(/&quot;/g, '"')
+            .replace(/&#91;/g, '[')
+            .replace(/&#93;/g, ']')
+            .replace(/&#34;/g, '"')
+            .replace(/&#8216;/g, '‘')
+            .replace(/&#8217;/g, '’')
+            .replace(/&#037;/g, '%')
+            .replace(/&middot;/g, '·');
+    } else return str;
 };

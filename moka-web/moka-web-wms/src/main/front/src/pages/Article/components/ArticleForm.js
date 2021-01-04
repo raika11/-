@@ -4,12 +4,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import copy from 'copy-to-clipboard';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
-import { MokaInputLabel, MokaCard } from '@components';
+import { MokaInputLabel, MokaInput, MokaCard } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import toast from '@utils/toastUtil';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
-const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange, onPreview }) => {
+const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article = {}, onChange, onPreview }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
     const [tagStr, setTagStr] = useState(''); // 태그리스트
@@ -118,10 +118,15 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
 
     useEffect(() => {
         setSelectedMasterCode(article.categoryList || []);
-        if (article.pressDt) {
-            setPressDt(article.pressDt.slice(0, 10));
+        // 발행일
+        if (inRcv) {
+            article.pressDt && setPressDt(article.pressDt.slice(0, 10));
+        } else {
+            article.pressDt && setPressDt(`${article.pressDt.slice(0, 4)}-${article.pressDt.slice(4, 6)}-${article.pressDt.slice(6, 8)}`);
         }
+        // 태그 리스트
         setTagStr((article.tagList || []).join(','));
+        // 기자
         setSelectedReporter(
             (article.reporterList || []).map((reporter) => ({
                 ...reporter,
@@ -129,13 +134,14 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                 value: valueCreator(reporter.reporterName, reporter.reporterEmail),
             })),
         );
+        // 본문
         setContent(article.content || '');
-    }, [article]);
+    }, [article.categoryList, article.content, article.pressDt, article.reporterList, article.tagList, inRcv]);
 
     return (
         <MokaCard
             title="등록기사"
-            className="flex-fill"
+            className="flex-fill w-100"
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
@@ -150,23 +156,15 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
             <Form>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="출처" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="출처" value={article?.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
                     </Col>
                     <Col className="p-0 d-flex justify-content-end" xs={9}>
                         <Button variant="outline-neutral flex-shrink-0" className="ft-12" onClick={() => setHistoryModalShow(true)}>
                             작업정보
                         </Button>
-                        <MokaInputLabel label="발행일 :" labelWidth={43} inputClassName="ft-12" value={pressDt} className="mr-2 mb-0" inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel
-                            label="기사ID :"
-                            labelWidth={43}
-                            inputClassName="ft-12"
-                            value={article.totalId}
-                            className="mb-0"
-                            inputProps={{ plaintext: true }}
-                            disabled
-                        />
-                        <MokaInputLabel label="수신ID :" labelWidth={43} inputClassName="ft-12" value={article.rid} className="mb-0" inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="발행일" labelWidth={39} inputClassName="ft-12" value={pressDt} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="기사ID" labelWidth={39} inputClassName="ft-12" value={article.totalId} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="수신ID" labelWidth={39} inputClassName="ft-12" value={article.rid} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -174,7 +172,6 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                         <CodeAutocomplete
                             max={4}
                             label="분류표"
-                            className="mb-0"
                             searchIcon={false}
                             labelType="masterCode"
                             value={selectedMasterCode.join(',')}
@@ -200,7 +197,7 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: 320 }}>
+                    <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: inRcv ? 320 : 280 }}>
                         <MokaInputLabel label="본문" as="none" />
                         <div className="flex-fill input-border">
                             <MokaEditorCore defaultValue={article.content} value={content} onBlur={handleContentBlur} />
@@ -224,9 +221,43 @@ const ArticleForm = ({ reporterList, inRcv, loading, onCancle, article, onChange
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleTagBlur }} />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
-                        <p className="mb-0 ml-2">콤마(,) 구분입력</p>
+                        <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>
+                {!inRcv && (
+                    <Form.Row className="mb-2">
+                        <Col xs={12} className="d-flex p-0">
+                            <MokaInputLabel label="벌크" as="none" />
+                            <div className="d-flex flex-column flex-fill">
+                                <Form.Row className="align-items-center">
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '기사', custom: true }} />
+                                    </Col>
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '이미지', custom: true }} />
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row className="align-items-center">
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '네이버', custom: true }} />
+                                    </Col>
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '다음', custom: true }} />
+                                    </Col>
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '네이트', custom: true }} />
+                                    </Col>
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '줌', custom: true }} />
+                                    </Col>
+                                    <Col xs={2} className="p-0">
+                                        <MokaInput as="checkbox" inputProps={{ label: '기타', custom: true }} />
+                                    </Col>
+                                </Form.Row>
+                            </div>
+                        </Col>
+                    </Form.Row>
+                )}
                 <Form.Row className="mb-2">
                     <Col className="p-0 d-flex align-items-center" xs={12}>
                         <MokaInputLabel label="LINK정보" className="mb-0" as="none" />

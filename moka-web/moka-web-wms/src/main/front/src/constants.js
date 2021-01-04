@@ -62,6 +62,8 @@ export const CODETYPE_DS_ICON = 'DS_ICON';
 export const CODETYPE_PT = 'PT';
 // 공통코드 : 네이버채널 템플릿
 export const CODETYPE_CHANNEL_TP = 'CHANNEL_TP';
+// 공통코드 : 등록기사 출판 카테고리
+export const CODETYPE_PRESS_CATE1 = 'PRESS_CATE1';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';
@@ -121,3 +123,6 @@ export const snsNames = {
 
 // 디지털스페셜 링크
 export const DIGITAL_SPECIAL_URL = 'https://news.joins.com/DigitalSpecial/';
+
+// 본문 링크
+export const ARTICLE_URL = 'https://news.joins.com/article/';

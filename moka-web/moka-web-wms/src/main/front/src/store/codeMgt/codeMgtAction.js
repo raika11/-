@@ -97,6 +97,7 @@ export const GET_DS_ICON = 'codeMgt/GET_DS_ICON';
 export const GET_ARTICLE_TYPE = 'codeMgt/GET_ARTICLE_TYPE';
 export const GET_PT = 'codeMgt/GET_PT';
 export const GET_CHANNEL_TP = 'codeMgt/GET_CHANNEL_TP';
+export const GET_PRESS_CATE1 = 'codeMgt/GET_PRESS_CATE1';
 export const getTpSize = createAction(GET_TP_SIZE);
 export const getTpZone = createAction(GET_TP_ZONE);
 export const getLang = createAction(GET_LANG);
@@ -115,6 +116,7 @@ export const getDsPreLoc = createAction(GET_DS_PRE_LOC);
 export const getDsIcon = createAction(GET_DS_ICON);
 export const getPt = createAction(GET_PT);
 export const getChannelTp = createAction(GET_CHANNEL_TP);
+export const getPressCate1 = createAction(GET_PRESS_CATE1);
 
 export const [GET_SPECIAL_CHAR_CODE, GET_SPECIAL_CHAR_CODE_SUCCESS, GET_SPECIAL_CHAR_CODE_FAILURE] = createRequestActionTypes('codeMgt/GET_SPECIAL_CHAR_CODE');
 export const getSpecialCharCode = createAction(GET_SPECIAL_CHAR_CODE);

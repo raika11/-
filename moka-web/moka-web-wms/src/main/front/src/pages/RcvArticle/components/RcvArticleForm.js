@@ -125,8 +125,8 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         <MokaInputLabel label="출처" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
                     </Col>
                     <Col className="p-0 d-flex justify-content-end" xs={9}>
-                        <MokaInputLabel label="발행일" labelWidth={40} value={pressDt} className="mr-2 mb-0" inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} className="mb-0" inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="발행일" labelWidth={40} value={pressDt} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -186,7 +186,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlur }} />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
-                        <p className="mb-0 ml-2">콤마(,) 구분입력</p>
+                        <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>
 

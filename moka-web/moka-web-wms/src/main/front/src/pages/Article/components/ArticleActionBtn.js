@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 
 const ArticleActionBtn = ({ data }) => {
     return (
-        <React.Fragment>
+        <div className="d-flex align-items-center h-100">
             <Button size="sm" variant="outline-table-btn" className="mr-1">
                 삭제
             </Button>
@@ -13,7 +13,7 @@ const ArticleActionBtn = ({ data }) => {
             <Button size="sm" variant="outline-table-btn" className="mr-1">
                 FB
             </Button>
-        </React.Fragment>
+        </div>
     );
 };
 

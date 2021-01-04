@@ -52,9 +52,18 @@ const TourListSearch = () => {
                     />
                 </div>
                 <div style={{ width: 360 }}>
-                    <MokaSearchInput className="mr-2" placeholder="단체명을 입력해주세요" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+                    <MokaSearchInput
+                        className="mr-2"
+                        inputClassName="ft-12"
+                        buttonClassName="ft-12"
+                        placeholder="단체명을 입력해주세요"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
                 </div>
-                <Button variant="outline-neutral">초기화</Button>
+                <Button variant="outline-neutral" className="ft-12">
+                    초기화
+                </Button>
             </Form.Row>
         </Form>
     );

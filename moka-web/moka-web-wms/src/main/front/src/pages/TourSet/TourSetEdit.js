@@ -48,7 +48,7 @@ const TourSetEdit = () => {
                     >
                         {[...Array(90)].map((d, idx) => {
                             return (
-                                <option key={idx} value={idx + 1}>
+                                <option key={idx} value={`${idx + 1}`}>
                                     {idx + 1}
                                 </option>
                             );
@@ -68,7 +68,7 @@ const TourSetEdit = () => {
                     >
                         {[...Array(90)].map((d, idx) => {
                             return (
-                                <option key={idx} value={idx + 1}>
+                                <option key={idx} value={`${idx + 1}`}>
                                     {idx + 1}
                                 </option>
                             );
@@ -91,7 +91,7 @@ const TourSetEdit = () => {
                     >
                         {[...Array(90)].map((d, idx) => {
                             return (
-                                <option key={idx} value={idx + 1}>
+                                <option key={idx} value={`${idx + 1}`}>
                                     {idx + 1}
                                 </option>
                             );
@@ -111,7 +111,7 @@ const TourSetEdit = () => {
                     >
                         {[...Array(90)].map((d, idx) => {
                             return (
-                                <option key={idx} value={idx + 1}>
+                                <option key={idx} value={`${idx + 1}`}>
                                     {idx + 1}
                                 </option>
                             );

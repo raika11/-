@@ -50,6 +50,12 @@ public class ArticleBasic implements Serializable {
     private String sourceCode;
 
     /**
+     * 수신기사아이디
+     */
+    @Column(name = "RID", nullable = false)
+    private Long rid;
+
+    /**
      * 등록기사아이디
      */
     @Column(name = "AID", nullable = false)

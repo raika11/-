@@ -37,13 +37,6 @@ public class ArticleBasicVO implements Serializable {
     @Column(name = "TOTAL_ID")
     private Long totalId;
 
-
-    /**
-     * 수신기사아이디
-     */
-    @Column(name = "RID")
-    private Long rid;
-
     /**
      * 출처코드
      */

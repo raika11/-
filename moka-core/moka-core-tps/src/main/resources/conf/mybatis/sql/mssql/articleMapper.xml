@@ -203,8 +203,9 @@
   <resultMap id="ArtReporterMap" type="ArticleReporterVO"/>
   <resultMap id="ArtKeywordMap" type="string"/>
   <resultMap id="bulkSiteMap" type="string"/>
+  <resultMap id="contentMap" type="string"/>
   <select id="findInfo" parameterType="hashMap"
-    resultMap="CodeMap,ArtReporterMap,ArtKeywordMap,bulkSiteMap"
+    resultMap="CodeMap,ArtReporterMap,ArtKeywordMap,bulkSiteMap,contentMap"
     statementType="CALLABLE">
   { call UPA_ARTICLE_BASIC_SEL_BY_INFO(
     #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}

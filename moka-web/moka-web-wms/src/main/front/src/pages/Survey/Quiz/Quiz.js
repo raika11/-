@@ -2,6 +2,9 @@ import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
+import QuizList from '@pages/Survey/Quiz/QuizList';
+import QuizEdit from '@pages/Survey/Quiz/QuizEdit';
+import QuizChildRelationInfo from '@pages/Survey/Quiz/relations/QuizChildRelationInfo';
 
 const Quiz = ({ match }) => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -16,7 +19,9 @@ const Quiz = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={798} className="mr-gutter" titleClassName="mb-0" title="퀴즈 관리">
-                <Suspense fallback={<MokaLoader />}></Suspense>
+                <Suspense fallback={<MokaLoader />}>
+                    <QuizList />
+                </Suspense>
             </MokaCard>
 
             {/* 등록/수정 */}
@@ -30,14 +35,10 @@ const Quiz = ({ match }) => {
                         onSelectNave={(idx) => setActiveTabIdx(idx)}
                         tabs={[
                             <Suspense fallback={<MokaLoader />}>
-                                <MokaCard keys={1} width={750} title="퀴즈 등록">
-                                    <div>투표 등록</div>
-                                </MokaCard>
+                                <QuizEdit />
                             </Suspense>,
                             <Suspense fallback={<MokaLoader />}>
-                                <MokaCard keys={2} width={750} title="관련 정보">
-                                    <div>관련 정보</div>
-                                </MokaCard>
+                                <QuizChildRelationInfo />
                             </Suspense>,
                         ]}
                         tabNavWidth={48}

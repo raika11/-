@@ -525,7 +525,7 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergeArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainType, String artType)
+    public String getMergeUpdateArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainType, String artType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
         // 도메인Id조회
         Domain domainInfo = domainService.findByServiceFlatform(domainType);
@@ -605,6 +605,45 @@ public class MergeServiceImpl implements MergeService {
         StringBuilder sb = dtm.mergeArticle(articlePageItem, totalId, categoryList, reporterList, tagList, updateDto.getArtTitle(), updateDto
                 .getArtContent()
                 .getArtContent());
+
+        String content = sb.toString();
+
+        return content;
+    }
+
+    @Override
+    public String getMergeArticle(Long totalId, String domainType, String artType)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        // 도메인Id조회
+        Domain domainInfo = domainService.findByServiceFlatform(domainType);
+        String domainId = domainInfo != null ? domainInfo.getDomainId() : null;
+        if (domainInfo == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
+        // 기사페이지 정보 조회
+        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        if (articlePage == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        ArticlePageDTO articlePageDto = modelMapper.map(articlePage, ArticlePageDTO.class);
+
+        ArticlePageItem articlePageItem = articlePageDto.toArticlePageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        articlePageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+
+        // 랜더링
+        StringBuilder sb = dtm.merge(articlePageItem, totalId);
 
         String content = sb.toString();
 

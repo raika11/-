@@ -41,6 +41,9 @@ public interface MergeService {
     String getMergeRcvArticle(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 
-    String getMergeArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainType, String artType)
+    String getMergeUpdateArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainType, String artType)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
+
+    String getMergeArticle(Long totalId, String domainType, String artType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 }

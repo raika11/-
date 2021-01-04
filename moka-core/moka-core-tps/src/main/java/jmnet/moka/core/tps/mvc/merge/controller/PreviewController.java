@@ -231,8 +231,26 @@ public class PreviewController extends AbstractCommonController {
         }
     }
 
-    @PostMapping("/article/{totalId}")
-    public void perviewArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
+    /**
+     * 등록기사 수정정보로 미리보기
+     *
+     * @param request         요청
+     * @param response        결과
+     * @param totalId         기사키
+     * @param updateDto       수정정보
+     * @param servicePlatform 서비스플랫폼(P/M)
+     * @param artType         기사타입
+     * @throws InvalidDataException         페이지정보오류
+     * @throws NoDataException              도메인,페이지 정보 없음 오류
+     * @throws IOException                  입출력오류
+     * @throws Exception                    기타오류
+     * @throws TemplateMergeException       tems 머징오류
+     * @throws UnsupportedEncodingException 인코딩오류
+     * @throws TemplateParseException       tems 문법오류
+     * @throws TemplateLoadException        tems 로딩오류
+     */
+    @PostMapping("/article/update/{totalId}")
+    public void perviewUpdateArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
             @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
             @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @Valid ArticleBasicUpdateDTO updateDto, @ApiParam("서비스플랫폼(P/M)") String servicePlatform,
             @ApiParam("기사유형") String artType)
@@ -240,7 +258,43 @@ public class PreviewController extends AbstractCommonController {
             TemplateParseException, TemplateLoadException {
 
         try {
-            String html = mergeService.getMergeArticle(totalId, updateDto, servicePlatform, artType);
+            String html = mergeService.getMergeUpdateArticle(totalId, updateDto, servicePlatform, artType);
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+        } catch (Exception e) {
+            log.error("[FAIL TO MERGE] totalId: {} {}", totalId, e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
+            String html = "<script>alert('" + messageByLocale.get("tps.article.error.preview", request) + "');window.close();</script>";
+            writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
+            //            throw new Exception(messageByLocale.get("tps.merge.error.article-page", request), e);
+        }
+    }
+
+    /**
+     * 등록기사 미리보기
+     *
+     * @param request         요청
+     * @param response        결과
+     * @param totalId         기사키
+     * @param servicePlatform 서비스플랫폼(P/M)
+     * @param artType         기사타입
+     * @throws InvalidDataException         페이지정보오류
+     * @throws NoDataException              도메인,페이지 정보 없음 오류
+     * @throws IOException                  입출력오류
+     * @throws Exception                    기타오류
+     * @throws TemplateMergeException       tems 머징오류
+     * @throws UnsupportedEncodingException 인코딩오류
+     * @throws TemplateParseException       tems 문법오류
+     * @throws TemplateLoadException        tems 로딩오류
+     */
+    @PostMapping("/article/{totalId}")
+    public void perviewArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
+            @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId, @ApiParam("서비스플랫폼(P/M)") String servicePlatform,
+            @ApiParam("기사유형") String artType)
+            throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
+            TemplateParseException, TemplateLoadException {
+
+        try {
+            String html = mergeService.getMergeArticle(totalId, servicePlatform, artType);
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] totalId: {} {}", totalId, e);

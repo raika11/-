@@ -30,6 +30,7 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleBulkSimpleVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleCodeVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentRelVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleContentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
@@ -282,11 +283,8 @@ public class ArticleServiceImpl implements ArticleService {
                     .size() > 0 && listMap
                     .get(4)
                     .get(0) != null) {
-                List<String> contentList = modelMapper.map(listMap.get(4), new TypeReference<List<String>>() {
-                }.getType());
-                if (contentList.size() > 0) {
-                    articleDto.setArtContent(contentList.get(0));
-                }
+                List<ArticleContentVO> contentList = modelMapper.map(listMap.get(4), ArticleContentVO.TYPE);
+                articleDto.setArtContent(contentList.get(0));
             }
         }
 
@@ -405,8 +403,12 @@ public class ArticleServiceImpl implements ArticleService {
         // 본문등록 : UPA_ARTICLE_CONTENT_INS_BY_TOTALID
         Map paramContentMap = new HashMap();
         paramContentMap.put("totalId", articleBasic.getTotalId());
-        paramContentMap.put("serialNo", 1);
-        paramContentMap.put("artContent", updateDto.getArtContent());
+        paramContentMap.put("serialNo", updateDto
+                .getArtContent()
+                .getSerialNo());
+        paramContentMap.put("artContent", updateDto
+                .getArtContent()
+                .getArtContent());
         if (isReturnErr(articleMapper.callUpaArticleContentInsByTotalId(paramContentMap))) {
             return false;
         }

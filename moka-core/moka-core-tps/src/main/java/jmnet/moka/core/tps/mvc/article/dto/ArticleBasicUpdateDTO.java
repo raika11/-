@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleContentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +45,7 @@ public class ArticleBasicUpdateDTO implements Serializable {
     /**
      * 기사본문
      */
-    private String artContent;
+    private ArticleContentVO artContent;
 
     /**
      * 분류코드 목록

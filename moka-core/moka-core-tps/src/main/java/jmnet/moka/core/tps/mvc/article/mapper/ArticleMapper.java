@@ -126,13 +126,13 @@ public interface ArticleMapper extends BaseMapper<ArticleBasicVO, ArticleSearchD
      */
     Integer callUpaArticleTitleInsByDiv(Map<String, Object> param);
 
-    /**
-     * 본문삭제
-     *
-     * @param param
-     * @return 성공여부
-     */
-    Integer callUpaArticleContentDel(Map<String, Object> param);
+    //    /**
+    //     * 본문삭제
+    //     *
+    //     * @param param
+    //     * @return 성공여부
+    //     */
+    //    Integer callUpaArticleContentDel(Map<String, Object> param);
 
     /**
      * 본문등록. 본문이 있을 경우 수정되며, 없는데 serialNo가 다른 본문이 있으면, serialNo++해서 본문 추가함.

@@ -13,7 +13,7 @@ const PollSearch = ({ searchOptions, onChange, onAdd }) => {
 
     return (
         <Form className="pb-2">
-            <Form.Row>
+            <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInputLabel name="group" label="그룹" as="select" labelWidth={25} onChange={handleChangeValue} value={searchOptions.group}>
                         {codes.groups.map((option) => (
@@ -74,7 +74,7 @@ const PollSearch = ({ searchOptions, onChange, onAdd }) => {
                     />
                 </Col>
             </Form.Row>
-            <Form.Row className="justify-content-between">
+            <Form.Row className="justify-content-between mb-2">
                 <Col xs={7}>
                     <Form.Row>
                         <Col xs={3} className="p-0 pr-2">

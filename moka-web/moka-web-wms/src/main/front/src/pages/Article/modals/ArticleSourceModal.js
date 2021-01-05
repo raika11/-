@@ -124,7 +124,7 @@ const ArticleSourceModal = (props) => {
     return (
         <MokaModal
             show={show}
-            onHide={onHide}
+            onHide={handleClickCancle}
             width={600}
             height={600}
             size="md"
@@ -146,7 +146,7 @@ const ArticleSourceModal = (props) => {
                     />
                 </div>
                 <hr className="divider my-2" />
-                <div className="flex-fill overflow-hidden p-2">
+                <div className="flex-fill overflow-hidden pt-2">
                     <Form.Row className="flex-wrap input-border custom-scroll h-100">
                         {renderList.map((source, idx) => (
                             <Col

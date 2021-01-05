@@ -25,7 +25,8 @@ const propTypes = {
     className: PropTypes.string,
     /**
      * 기사코드 값!!! 오직 스트링만 받는다
-     * "1000000" 이거나 "1000000,1100000"
+     * @example
+     * "1000000", "1000000,1100000"
      */
     value: PropTypes.string,
     /**
@@ -34,6 +35,7 @@ const propTypes = {
     onChange: PropTypes.func,
     /**
      * isMulti 체크
+     * @default
      */
     isMulti: PropTypes.bool,
     /**
@@ -49,6 +51,7 @@ const propTypes = {
      * masterCode => 1000000,
      * korname => 대분류 > 중분류 > 소분류
      * contentKorname => 소분류
+     * @default
      */
     labelType: PropTypes.oneOf(['masterCode', 'korname', 'contentKorname']),
     /**
@@ -57,14 +60,13 @@ const propTypes = {
     max: PropTypes.number,
     /**
      * 선택 가능한 마스터코드 종류
-     * [service, section, content]
+     * @default
      */
     selectable: PropTypes.arrayOf(PropTypes.string),
 };
 const defaultProps = {
     isMulti: false,
     searchIcon: true,
-    selection: 'single',
     labelType: 'korname',
     selectable: ['service', 'section', 'content'],
 };

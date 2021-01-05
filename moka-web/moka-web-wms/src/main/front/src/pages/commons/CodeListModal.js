@@ -47,17 +47,23 @@ const propTypes = {
      * 선택가능한 마스터코드의 최대 갯수
      */
     max: PropTypes.number,
+    /**
+     * 선택 가능한 마스터코드 종류
+     * [service, section, content]
+     */
+    selectable: PropTypes.arrayOf(PropTypes.string),
 };
 const defaultProps = {
     title: '분류코드표',
     selection: 'single',
+    selectable: ['service', 'section', 'content'],
 };
 
 /**
  * 기사 분류(masterCode) 코드 선택 모달
  */
 const CodeListModal = (props) => {
-    const { show, onHide, title, onSave, onCancel, selection, value, max, ...rest } = props;
+    const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, ...rest } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_MASTER_CODE_LIST]);
     const masterCodeList = useSelector((store) => store.code.master.list);
@@ -249,9 +255,9 @@ const CodeListModal = (props) => {
                 {/* 분류명, 분류코드 노출, 저장, 초기화 버튼 */}
                 <div>
                     <Form.Row className="flex-wrap">
-                        <Col sm={10} className="p-0 mb-2">
+                        <Col sm={10} className="p-0">
                             <div className="w-100 pr-2 h6">
-                                <div className="input-border pl-1 pr-1 pt-1 h-100">
+                                <div className="input-border pl-1 pr-1 pt-1 h-100" style={{ minHeight: 31 }}>
                                     {selectedList.map((s) => (
                                         <Badge key={s.masterCode} className="mr-1 mb-1 user-select-text" variant="searching">
                                             {s.masterCode}&nbsp;
@@ -292,14 +298,18 @@ const CodeListModal = (props) => {
                                 className={clsx('d-flex align-items-center justify-content-center border-bottom')}
                                 style={{ height: 34, backgroundColor: 'rgb(123 188 222 / 0.1)' }}
                             >
-                                <MokaInput
-                                    as={selection === 'single' ? 'radio' : 'checkbox'}
-                                    name="masterCode"
-                                    className="flex-grow-0 text-dark font-weight-bold mb-0 ft-12"
-                                    id={dep1.masterCode}
-                                    inputProps={{ custom: true, label: dep1.serviceKorname, checked: selectedList.findIndex((s) => s.masterCode === dep1.masterCode) > -1 }}
-                                    onChange={handleChangeValue}
-                                />
+                                {selectable.indexOf('service') > -1 ? (
+                                    <MokaInput
+                                        as={selection === 'single' ? 'radio' : 'checkbox'}
+                                        name="masterCode"
+                                        className="flex-grow-0 text-dark font-weight-bold mb-0 ft-12"
+                                        id={dep1.masterCode}
+                                        inputProps={{ custom: true, label: dep1.serviceKorname, checked: selectedList.findIndex((s) => s.masterCode === dep1.masterCode) > -1 }}
+                                        onChange={handleChangeValue}
+                                    />
+                                ) : (
+                                    <p className="mb-0 font-weight-bold ft-12">{dep1.serviceKorname}</p>
+                                )}
                             </div>
                             <div className={clsx('section flex-fill d-flex flex-column align-items-start')} style={{ minHeight: 0 }}>
                                 {Object.keys(contentObj).map((contentKey) => {
@@ -318,7 +328,7 @@ const CodeListModal = (props) => {
                                         <div key={contentKey} className="d-flex w-100 border-bottom">
                                             {/* 중분류 */}
                                             <Col xs={3} className="p-2 h-auto border-right" style={{ backgroundColor: 'rgb(189 180 142 / 10%)' }}>
-                                                {exist ? (
+                                                {selectable.indexOf('section') > -1 && exist ? (
                                                     <MokaInput
                                                         as={selection === 'single' ? 'radio' : 'checkbox'}
                                                         name="masterCode"
@@ -340,18 +350,22 @@ const CodeListModal = (props) => {
                                                 {contentObj[contentKey].map((dep3) => {
                                                     return (
                                                         <div key={dep3.masterCode} className="float-left ml-1 mb-1">
-                                                            <MokaInput
-                                                                as={selection === 'single' ? 'radio' : 'checkbox'}
-                                                                name="masterCode"
-                                                                className="flex-grow-0 ft-12"
-                                                                id={dep3.masterCode}
-                                                                inputProps={{
-                                                                    custom: true,
-                                                                    label: `[${dep3.masterCode}] ${dep3.contentKorname}`,
-                                                                    checked: selectedList.findIndex((s) => s.masterCode === dep3.masterCode) > -1,
-                                                                }}
-                                                                onChange={handleChangeValue}
-                                                            />
+                                                            {selectable.indexOf('content') > -1 ? (
+                                                                <MokaInput
+                                                                    as={selection === 'single' ? 'radio' : 'checkbox'}
+                                                                    name="masterCode"
+                                                                    className="flex-grow-0 ft-12"
+                                                                    id={dep3.masterCode}
+                                                                    inputProps={{
+                                                                        custom: true,
+                                                                        label: `[${dep3.masterCode}] ${dep3.contentKorname}`,
+                                                                        checked: selectedList.findIndex((s) => s.masterCode === dep3.masterCode) > -1,
+                                                                    }}
+                                                                    onChange={handleChangeValue}
+                                                                />
+                                                            ) : (
+                                                                <p className="mb-0 ft-12">{dep3.contentKorname}</p>
+                                                            )}
                                                         </div>
                                                     );
                                                 })}

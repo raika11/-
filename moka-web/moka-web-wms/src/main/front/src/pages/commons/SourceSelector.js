@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
-import toast from '@utils/toastUtil';
 import { getDeskingSourceList, getTypeSourceList } from '@store/articleSource';
 
 /**

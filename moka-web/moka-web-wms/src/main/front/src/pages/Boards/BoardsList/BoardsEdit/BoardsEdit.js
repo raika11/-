@@ -39,18 +39,21 @@ const BoardsEdit = () => {
         selectboard: store.board.listmenu.selectboard,
     }));
 
-    const [editState, setEditState] = useState(initialEditState);
-    const [editData, setEditData] = useState(editInitData.info);
-    const [replyEditData, setReplyEditData] = useState(editInitData.reply);
-    const [channalList, setChannalList] = useState([]);
-    const [selectReport, setSelectReport] = useState([]);
-    const [uploadFiles, setUploadFiles] = useState([]);
+    const [editState, setEditState] = useState(initialEditState); // 글보기, 글 수정, 답변 달기 , 답변 수정 기능에 edit 컴포넌트를 변경 시켜 주기 위해서 state 를 사용함.
+    const [editData, setEditData] = useState(editInitData.info); // 게시글 정보가 저장되는 state
+    const [replyEditData, setReplyEditData] = useState(editInitData.reply); // 답변 정보가 저장 되는 state.
+    const [channalList, setChannalList] = useState([]); // 채넌 선택.
+    const [selectReport, setSelectReport] = useState([]); // 기자 선택.
+    const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일.
 
+    // 에디터 본문과 uesState 가 공유 가 되지 않아서 useRef 로 처리.
+    // summbernote 로딩이 먼저 된후 state 가 변경되어도 공유가 되지 않아서 useRef 로 처리 함.
     const editContent = useRef(null); // 게시글 본문
     const editReplyContent = useRef(null); // 답변글 본문
 
     let fileinputRef = useRef(null);
 
+    // 파미터 변경 되었을때 기본 state 리셋.
     const basicStateReset = () => {
         setUploadFiles([]);
         setUploadFiles([]);
@@ -306,7 +309,6 @@ const BoardsEdit = () => {
     // 현재 선택된 게시판 채넣 옵션에 따라서 채널 리스트를 가지고 와서 설정.
     useEffect(() => {
         const getchannelTypeItem = (channelType) => {
-            // dtlCd
             // BOARD_DIVC1 -> JPOD.
             // BOARD_DIVC2 -> 기자.
             dispatch(
@@ -408,7 +410,6 @@ const BoardsEdit = () => {
     // 답변 정보 업데이트시.
     useEffect(() => {
         setReplyEditData(contentsreply);
-
         editReplyContent.current = contentsreply.content;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsreply]);
@@ -652,6 +653,7 @@ const BoardsEdit = () => {
                                                         options={{
                                                             lang: 'ko-KR',
                                                             height: 250,
+                                                            // width: 510,
                                                             dialogsInBody: true,
                                                         }}
                                                         onChange={(value) => {
@@ -760,24 +762,24 @@ const BoardsEdit = () => {
                                 if (selectboard.editorYn === 'Y') {
                                     return (
                                         <Form.Row className="mb-2">
-                                            <Col className="p-0">
-                                                <div className="d-flex moka-summernote">
-                                                    <ReactSummernote
-                                                        value={editReplyContent.current !== null ? unescapeHtml(editReplyContent.current) : editReplyContent.current}
-                                                        options={{
-                                                            lang: 'ko-KR',
-                                                            height: 250,
-                                                            dialogsInBody: true,
-                                                        }}
-                                                        onChange={(value) => {
-                                                            handleChangeReplyEditContent(value);
-                                                        }}
-                                                        onImageUpload={(e) => {
-                                                            SummernoteImageUpload(e);
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
+                                            <div className="p-0 d-flex moka-summernote">
+                                                {/* <div className="d-flex moka-summernote"> */}
+                                                <ReactSummernote
+                                                    value={editReplyContent.current !== null ? unescapeHtml(editReplyContent.current) : editReplyContent.current}
+                                                    options={{
+                                                        lang: 'ko-KR',
+                                                        height: 250,
+                                                        dialogsInBody: true,
+                                                    }}
+                                                    onChange={(value) => {
+                                                        handleChangeReplyEditContent(value);
+                                                    }}
+                                                    onImageUpload={(e) => {
+                                                        SummernoteImageUpload(e);
+                                                    }}
+                                                />
+                                                {/* </div> */}
+                                            </div>
                                         </Form.Row>
                                     );
                                 } else {
@@ -822,10 +824,12 @@ const BoardsEdit = () => {
     );
 };
 
+// 에디트 상태 및 에디트 타이틀 명.
 const initialEditState = {
     mode: 'new',
     title: '게시글 등록',
 };
+// 기본 답변 버튼 눌렀을 경우 내용.
 const initialReplyEditState = {
     title: 're: ',
     content: '',

@@ -78,11 +78,13 @@ function* getBoardChannelTypeListSaga() {
     yield put(finishLoading(GET_BOARD_CHANNELTYPE_LIST));
 }
 
+// 게시판 채널 (JPOD, 기자) 리스트 가지고 와서 조합 해서 store 에 저장.
 function* getBoardChannelListSaga({ payload: { type, callback } }) {
     yield put(startLoading(GET_BOARD_CHANNEL_LIST));
     let response;
     let callbackData = {};
     try {
+        // jpod 채널 리스트 목록 가지고 오기.
         if (type === 'BOARD_DIVC1') {
             response = yield call(getBoardJpodChannalList);
 
@@ -101,6 +103,7 @@ function* getBoardChannelListSaga({ payload: { type, callback } }) {
             } else {
                 toast.error(message);
             }
+            // 기자 목록 가지고 오기.
         } else if (type === 'BOARD_DIVC2') {
             response = yield call(getBoardReportersChannalList);
 
@@ -139,7 +142,7 @@ const getSetmenuBoardsListSaga = callApiAfterActions(GET_SETMENU_BOARD_LIST, get
 // 게시판 그룹 리스트 가지고 오기.
 const getBoardsGroupListSaga = callApiAfterActions(GET_BOARD_GROUP_LIST, getBoardGroup, (state) => state.board.boardType);
 
-// 보드 상세 정보.
+// 게시판 상세 정보 가지고 오기.
 function* getBoardInfoSaga({ payload: { boardId } }) {
     yield put(startLoading(GET_SETMENU_BOARD_INFO));
     let response;
@@ -187,6 +190,7 @@ function* saveBoardInfoSaga({ payload: { boardinfo, callback } }) {
     yield put(finishLoading(SAVE_SETMENU_BOARD_INFO));
 }
 
+// 게시판 삭제.
 function* deleteBoardSaga({ payload: { boardId, callback } }) {
     yield put(startLoading(DELETE_SETMENU_BOARD));
     let callbackData = {};
@@ -205,6 +209,7 @@ function* deleteBoardSaga({ payload: { boardId, callback } }) {
     yield put(finishLoading(DELETE_SETMENU_BOARD));
 }
 
+// 게시판 게시글 리스트 가지고 오기.
 function* getListmenuContentsListSaga({ payload: { boardId } }) {
     yield put(startLoading(GET_LISTMENU_CONTENTS_LIST));
 
@@ -231,6 +236,7 @@ function* getListmenuContentsListSaga({ payload: { boardId } }) {
     yield put(finishLoading(GET_LISTMENU_CONTENTS_LIST));
 }
 
+// tree 메뉴에서 게시판 선택시 게시판 정보 가지고 오기 ( 게시판 설정 정보 가지고 오기 위한 용도. )
 function* getListmenuSelectBoardSaga({ payload: { boardId } }) {
     yield put(startLoading(GET_LISTMENU_SELECT_BOARD));
     let response;
@@ -254,6 +260,7 @@ function* getListmenuSelectBoardSaga({ payload: { boardId } }) {
     yield put(finishLoading(GET_LISTMENU_SELECT_BOARD));
 }
 
+// 게시글 정보 가지고 오기.
 function* getListmenuContentsInfoSaga({ payload: { boardId, boardSeq } }) {
     yield put(startLoading(GET_LISTMENU_CONTENTS_INFO));
 
@@ -279,6 +286,7 @@ function* getListmenuContentsInfoSaga({ payload: { boardId, boardSeq } }) {
     yield put(finishLoading(GET_LISTMENU_CONTENTS_INFO));
 }
 
+// 게시글 등록 하기.
 function* saveBoardContentsSaga({ payload: { boardId, contents, files, callback } }) {
     yield put(startLoading(SAVE_BOARD_CONTENTS));
 
@@ -308,6 +316,7 @@ function* saveBoardContentsSaga({ payload: { boardId, contents, files, callback 
     yield put(finishLoading(SAVE_BOARD_CONTENTS));
 }
 
+// 게시글 정보 수정.
 function* updateBoardContentsSaga({ payload: { boardId, boardSeq, contents, files, callback } }) {
     yield put(startLoading(UPDATE_BOARD_CONTENTS));
 
@@ -336,6 +345,7 @@ function* updateBoardContentsSaga({ payload: { boardId, boardSeq, contents, file
     yield put(finishLoading(UPDATE_BOARD_CONTENTS));
 }
 
+// 게시글 삭제.
 function* deleteBoardContentsSaga({ payload: { boardId, boardSeq, callback } }) {
     yield put(startLoading(DELETE_BOARD_CONTENTS));
 
@@ -362,6 +372,7 @@ function* deleteBoardContentsSaga({ payload: { boardId, boardSeq, callback } }) 
     yield put(finishLoading(DELETE_BOARD_CONTENTS));
 }
 
+// 답변 등록 및 수정.
 function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, contents, callback } }) {
     yield put(startLoading(SAVE_BOARD_REPLY));
 
@@ -371,7 +382,6 @@ function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, con
     try {
         // 답변 등록.
         if (parentBoardSeq === null) {
-            console.log('new');
             // 답변 등록.
             response = yield call(saveBoardReply, {
                 boardId: boardId,
@@ -379,7 +389,6 @@ function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, con
                 contents: contents,
             });
         } else {
-            console.log('update');
             // 답변 수정.
             response = yield call(updateBoardReply, {
                 boardId: boardId,
@@ -404,6 +413,7 @@ function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, con
     yield put(finishLoading(SAVE_BOARD_REPLY));
 }
 
+// 게시글 본문 에디터에서 이미지 등록 하기.
 function* uploadBoardContentImageSaga({ payload: { boardId, imageForm, callback } }) {
     yield put(startLoading(UPLOAD_BOARD_CONTENT_IMAGE));
 

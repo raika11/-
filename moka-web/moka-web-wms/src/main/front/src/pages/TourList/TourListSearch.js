@@ -61,7 +61,7 @@ const TourListSearch = () => {
                         onChange={(e) => setKeyword(e.target.value)}
                     />
                 </div>
-                <Button variant="outline-neutral" className="ft-12">
+                <Button variant="negative" className="ft-12">
                     초기화
                 </Button>
             </Form.Row>

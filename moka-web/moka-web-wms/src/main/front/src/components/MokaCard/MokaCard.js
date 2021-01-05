@@ -54,7 +54,7 @@ const propTypes = {
      */
     titleAs: PropTypes.node,
     /**
-     * custom element type for this component (Card.Title)
+     * custom element type for this component (Card.Footer)
      */
     footerAs: PropTypes.node,
     /**

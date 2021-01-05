@@ -29,13 +29,6 @@ const TourListEdit = () => {
         setPwd('');
     };
 
-    /**
-     * 메일 미리보기 버튼
-     */
-    const handleClickPreview = () => {
-        window.open(``, '메일 미리보기');
-    };
-
     return (
         <Form>
             <div style={{ borderBottom: '2px solid #E0E0E0' }}>
@@ -43,9 +36,9 @@ const TourListEdit = () => {
                     <div style={{ width: 280 }}>
                         <MokaInputLabel
                             label="신청일시"
-                            labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                            labelClassName="mr-5 d-flex justify-content-end"
                             className="mb-0 mr-2"
-                            inputClassName="ft-12"
+                            inputClassName=""
                             as="dateTimePicker"
                             value={startDate}
                             inputProps={{ timeFormat: null }}
@@ -78,9 +71,9 @@ const TourListEdit = () => {
                 <div style={{ width: 220 }}>
                     <MokaInputLabel
                         label="신청상태"
-                        labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                        labelClassName="mr-5 d-flex justify-content-end"
                         className="mb-2"
-                        inputClassName="ft-12"
+                        inputClassName=""
                         as="select"
                         value={status}
                         name="status"
@@ -98,9 +91,9 @@ const TourListEdit = () => {
                 {status === 'R' && (
                     <MokaInputLabel
                         label="반려사유"
-                        labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                        labelClassName="mr-5 d-flex justify-content-end"
                         className="mb-2"
-                        inputClassName="ft-12 resize-none"
+                        inputClassName=" resize-none"
                         as="textarea"
                         inputProps={{ rows: 4 }}
                         value={rejectDescpt}
@@ -114,9 +107,9 @@ const TourListEdit = () => {
                 <div style={{ width: 400 }}>
                     <MokaInputLabel
                         label="단체명"
-                        labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                        labelClassName="mr-5 d-flex justify-content-end"
                         className="mb-2"
-                        inputClassName="ft-12"
+                        inputClassName=""
                         value={groupName}
                         onChange={
                             (e) => setGroupName(e.target.value)
@@ -128,9 +121,9 @@ const TourListEdit = () => {
                     <div style={{ width: 280 }}>
                         <MokaInputLabel
                             label="견학인원"
-                            labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                            labelClassName="mr-5 d-flex justify-content-end"
                             className="mb-0 mr-2"
-                            inputClassName="ft-12"
+                            inputClassName=""
                             as="select"
                             value={groupName}
                             name="status"
@@ -168,9 +161,9 @@ const TourListEdit = () => {
                 </Form.Row>
                 <MokaInputLabel
                     label="견학목적"
-                    labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                    labelClassName="mr-5 d-flex justify-content-end"
                     className="mb-2"
-                    inputClassName="ft-12 resize-none"
+                    inputClassName=" resize-none"
                     as="textarea"
                     inputProps={{ rows: 4 }}
                     value={discription}
@@ -182,11 +175,11 @@ const TourListEdit = () => {
                 />
             </div>
             <div className="pt-4" style={{ borderBottom: '2px solid #E0E0E0' }}>
-                <MokaInputLabel label="신청자 정보" labelClassName="ft-12 d-flex justify-content-end" className="mb-2" as="none" />
+                <MokaInputLabel label="신청자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         label="성명"
-                        labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                        labelClassName="mr-5 d-flex justify-content-end"
                         className="mb-0 mr-2"
                         inputProps={{ readOnly: true, plaintext: true }}
                         value={name}
@@ -194,7 +187,7 @@ const TourListEdit = () => {
                     />
                     <MokaInputLabel
                         label="연락처"
-                        labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                        labelClassName="mr-5 d-flex justify-content-end"
                         className="mb-0 mr-2"
                         inputProps={{ readOnly: true, plaintext: true }}
                         value={phone}
@@ -203,7 +196,7 @@ const TourListEdit = () => {
                 </Form.Row>
                 <MokaInputLabel
                     label="이메일"
-                    labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                    labelClassName="mr-5 d-flex justify-content-end"
                     className="mb-2"
                     inputProps={{ readOnly: true, plaintext: true }}
                     value={email}
@@ -212,45 +205,32 @@ const TourListEdit = () => {
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         label="비밀번호(4자리)"
-                        labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                        labelClassName="mr-5 d-flex justify-content-end"
                         className="mb-0 mr-2"
                         value={pwd}
                         onChange={(e) => setPwd(e.target.value)}
                     />
-                    <Button variant="negative" className="ft-12" onClick={handleClickReset}>
+                    <Button variant="negative" className="" onClick={handleClickReset}>
                         비밀번호 초기화
                     </Button>
                 </Form.Row>
             </div>
             <div className="mb-4 pt-4" style={{ borderBottom: '2px solid #E0E0E0' }}>
-                <MokaInputLabel label="담당자 정보" labelClassName="ft-12 d-flex justify-content-end" className="mb-2" as="none" />
-                <MokaInputLabel label="부서" labelClassName="mr-5 ft-12 d-flex justify-content-end" className="mb-2" value={dept} onChange={(e) => setDept(e.target.value)} />
-                <MokaInputLabel label="성명" labelClassName="mr-5 ft-12 d-flex justify-content-end" className="mb-2" value={admin} onChange={(e) => setAdmin(e.target.value)} />
+                <MokaInputLabel label="담당자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
+                <MokaInputLabel label="부서" labelClassName="mr-5 d-flex justify-content-end" className="mb-2" value={dept} onChange={(e) => setDept(e.target.value)} />
+                <MokaInputLabel label="성명" labelClassName="mr-5 d-flex justify-content-end" className="mb-2" value={admin} onChange={(e) => setAdmin(e.target.value)} />
                 <MokaInputLabel
                     label="연락처"
-                    labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                    labelClassName="mr-5 d-flex justify-content-end"
                     className="mb-2"
                     value={adminPhone}
                     onChange={(e) => setAdminPhone(e.target.value)}
                 />
             </div>
-            <div className="mb-2 ft-12 color-secondary">
+            <div className="mb-2  color-secondary">
                 <p className="m-0">※ 최초 한번의 승인/반려 시에만 메일이 발송됩니다.</p>
                 <p className="m-0">※ 신청자의 이메일 정보는 아이디 개념이라 수정할 수 없습니다.</p>
             </div>
-            <Form.Row>
-                <Col xs={7} className="p-0 d-flex justify-content-end">
-                    <Button className="mr-2 ft-12">저장</Button>
-                    <Button variant="negative" className="ft-12">
-                        삭제
-                    </Button>
-                </Col>
-                <Col xs={5} className="p-0 d-flex justify-content-end">
-                    <Button variant="searching" className="ft-12" onClick={handleClickPreview}>
-                        메일 미리보기
-                    </Button>
-                </Col>
-            </Form.Row>
         </Form>
     );
 };

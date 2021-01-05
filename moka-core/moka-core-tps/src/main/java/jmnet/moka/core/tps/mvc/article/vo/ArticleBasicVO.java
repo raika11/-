@@ -171,4 +171,13 @@ public class ArticleBasicVO implements Serializable {
      */
     @Column(name = "CONTENT_KORNAME")
     private String contentKorname;
+
+    /**
+     * 서비스여부
+     */
+    @Column(name = "SERVICE_FLAG")
+    private String serviceFlag;
+
+
+
 }

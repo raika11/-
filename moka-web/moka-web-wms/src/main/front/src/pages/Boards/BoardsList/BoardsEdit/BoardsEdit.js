@@ -51,7 +51,10 @@ const BoardsEdit = () => {
 
     let fileinputRef = useRef(null);
 
-    const tempEvent = () => {};
+    const basicStateReset = () => {
+        editContent.current = null;
+        editReplyContent.current = null;
+    };
 
     // Summernote 컴포넌트 로딩후에 setEditData와 스테이트 공유가 되지 않아서 게시글 내용은 useRef 로 저장후
     // 저장버튼이나 수정버튼 클릭시 formData 에 데이터를 조합 하는 방식으로 변경.
@@ -161,7 +164,7 @@ const BoardsEdit = () => {
                     boardId: null,
                     depth: 0,
                     indent: 0,
-                    content: editContent.current,
+                    content: editContent.current === null ? editContent.current : unescapeHtml(editContent.current),
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
@@ -195,7 +198,7 @@ const BoardsEdit = () => {
                     boardId: null,
                     depth: 0,
                     indent: 0,
-                    content: editContent.current,
+                    content: editContent.current === null ? editContent.current : unescapeHtml(editContent.current),
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
@@ -236,7 +239,7 @@ const BoardsEdit = () => {
                     titlePrefix1: editData.titlePrefix1,
                     titlePrefix2: editData.titlePrefix2,
                     addr: editData.addr,
-                    content: editReplyContent.current,
+                    content: editReplyContent.current === null ? editReplyContent.current : unescapeHtml(editReplyContent.current),
                 },
                 files: { attachFile: [] },
                 callback: ({ header: { success, message }, body }) => {
@@ -288,6 +291,9 @@ const BoardsEdit = () => {
         setUploadFiles([...uploadFiles, event.target.files[0]]);
     };
 
+    const handleDeleteUploadFile = (stateIndex) => {
+        setUploadFiles(uploadFiles.filter((e, i) => i !== stateIndex));
+    };
     useEffect(() => {
         console.log(uploadFiles);
     }, [uploadFiles]);
@@ -344,6 +350,11 @@ const BoardsEdit = () => {
 
     // 등록, 수정, 답변 등록 에 따른 라우터 파라미터 처리.
     useEffect(() => {
+        basicStateReset();
+
+        editContent.current = null;
+        editReplyContent.current = null;
+
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/${parentBoardSeq.current}/reply/${boardSeq.current}`) {
             setEditState({
                 mode: 'reply',
@@ -376,8 +387,18 @@ const BoardsEdit = () => {
 
     // 게시글 정보 업데이트시
     useEffect(() => {
-        console.log(contentsinfo.attaches);
         setEditData(contentsinfo);
+
+        if (contentsinfo.attaches.length > 0) {
+            setUploadFiles(
+                contentsinfo.attaches.map((e, i) => {
+                    return {
+                        seqNo: e.seqNo,
+                        name: e.orgFileName,
+                    };
+                }),
+            );
+        }
         editContent.current = contentsinfo.content;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsinfo]);
@@ -385,6 +406,7 @@ const BoardsEdit = () => {
     // 답변 정보 업데이트시.
     useEffect(() => {
         setReplyEditData(contentsreply);
+
         editReplyContent.current = contentsreply.content;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsreply]);
@@ -625,7 +647,7 @@ const BoardsEdit = () => {
                                                 <div className="d-flex moka-summernote">
                                                     <ReactSummernote
                                                         // value={editContent.current}
-                                                        value={editContent.current !== null ? unescapeHtml(editContent.current) : editContent.current}
+                                                        value={editContent.current !== '' ? unescapeHtml(editContent.current) : editContent.current}
                                                         // value={editData.content}
                                                         options={{
                                                             lang: 'ko-KR',
@@ -695,16 +717,20 @@ const BoardsEdit = () => {
                                                 </Col>
                                             </Form.Row>
                                             <hr />
-                                            <Form.Row className="mb-0">
-                                                <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
-                                                    <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                                        htm_2020122312390123908123.jpg
-                                                    </Col>
-                                                    <Col>
-                                                        <MokaTableEditCancleButton onClick={() => tempEvent()} />
-                                                    </Col>
-                                                </Form.Row>
-                                            </Form.Row>
+                                            {uploadFiles.map((element, index) => {
+                                                return (
+                                                    <Form.Row className="mb-0 pt-1" key={index}>
+                                                        <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
+                                                            <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
+                                                                {element.name}
+                                                            </Col>
+                                                            <Col>
+                                                                <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />
+                                                            </Col>
+                                                        </Form.Row>
+                                                    </Form.Row>
+                                                );
+                                            })}
                                         </>
                                     );
                                 }

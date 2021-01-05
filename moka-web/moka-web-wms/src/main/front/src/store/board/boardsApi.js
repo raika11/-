@@ -29,11 +29,15 @@ const makeBoardContentsFormData = ({ files, contentsData }) => {
     delete contentsData.regName;
 
     var formData = new FormData();
-    // console.log(files[0]);
-    // formData.append('attaches[0]', null);
+
     files.map((element, index) => {
-        formData.append(`attaches[${index}].attachFile`, element);
-        formData.append(`attaches[${index}].seqNo`, 0);
+        if (element.seqNo) {
+            formData.append(`attaches[${index}].attachFile`, element.name);
+            formData.append(`attaches[${index}].seqNo`, element.seqNo);
+        } else {
+            formData.append(`attaches[${index}].attachFile`, element);
+            formData.append(`attaches[${index}].seqNo`, 0);
+        }
 
         return true;
     });

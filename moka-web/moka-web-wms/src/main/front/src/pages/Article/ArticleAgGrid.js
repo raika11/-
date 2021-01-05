@@ -18,6 +18,7 @@ const ArticleAgGrid = () => {
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST]);
     const article = useSelector((store) => store.article.article);
+    const OVP_PREVIEW_URL = useSelector((store) => store.app.OVP_PREVIEW_URL);
     const { total, list, search } = useSelector(({ article }) => ({
         total: article.total,
         list: article.list,
@@ -68,13 +69,14 @@ const ArticleAgGrid = () => {
                         myunPan,
                         serviceTime: data.serviceDaytime ? moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm') : null,
                         handleRowClicked,
+                        ovpFullLink: `${OVP_PREVIEW_URL}?videoId=${data.ovpLink}`,
                     };
                 }),
             );
         } else {
             setRowData([]);
         }
-    }, [handleRowClicked, list]);
+    }, [OVP_PREVIEW_URL, handleRowClicked, list]);
 
     return (
         <MokaTable

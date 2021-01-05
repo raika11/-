@@ -5,8 +5,8 @@ import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { initialState, getRcvArticleList, changeSearchOption } from '@store/rcvArticle';
-import { MokaInput, MokaInputLabel } from '@components';
-import { SourceSelector } from '@pages/commons';
+import { MokaInput } from '@components';
+import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
@@ -152,6 +152,12 @@ const RcvArticleSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
+        if (sourceList) {
+            setSourceOn(true);
+        }
+    }, [sourceList]);
+
+    useEffect(() => {
         /**
          * 마운트 시 기사목록 최초 로딩
          *
@@ -252,20 +258,18 @@ const RcvArticleSearch = () => {
                 />
 
                 {/* 매체 */}
-                <div style={{ width: 195 }} className="ml-2 mr-2">
-                    <SourceSelector
+                <div style={{ width: 195 }} className="d-flex ml-2 mr-2">
+                    <ArticleSourceSelector
+                        className="flex-shrink-0 w-100"
                         value={sourceList}
                         onChange={(value) => {
                             setSourceList(value);
                             setError({ ...error, sourceList: false });
                             if (value !== '') {
-                                setSourceOn(true);
                                 // 로컬스토리지에 저장
                                 setLocalItem({ key: SOURCE_LIST_KEY, value });
                             }
                         }}
-                        sourceType="JOONGANG"
-                        isInvalid={error.sourceList}
                     />
                 </div>
 

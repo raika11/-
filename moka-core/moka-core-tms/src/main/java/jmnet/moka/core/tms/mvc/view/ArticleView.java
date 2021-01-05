@@ -224,6 +224,10 @@ public class ArticleView extends AbstractView {
 
     private void setCodesAndMenus(DataLoader loader, Map<String,Object> articleInfo, MergeContext mergeContext)
             throws DataLoadException {
+        // TODO 키워드 조건으로 Category를 결정한다.
+        // 리셋코리아 ( ResetKorea ), e글중심 (Opinion,eTextCenter)이면 카테고리 변경 (테이블로 관리)
+        // 키워드와 카테고리를 매핑하는 DPS API필요
+
         String masterCode = functions.joinColumn((List<Map<String, Object>>)articleInfo.get("mastercode"),"MASTER_CODE");
         String serviceCode = functions.joinColumn((List<Map<String, Object>>)articleInfo.get("servicemap"),"SERVICE_CODE");
         String sourceCode = (String)((Map<String,Object>)articleInfo.get("basic")).get("SOURCE_CODE");

@@ -11,6 +11,9 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
 export const changeServiceSearchOption = createAction(CHANGE_SERVICE_SEARCH_OPTION, (search) => search);
 export const changeBulkSearchOption = createAction(CHANGE_BULK_SEARCH_OPTION, (search) => search);
 
+export const CHANGE_INVALID_LIST = 'article/CHANGE_INVALID_LIST';
+export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+
 /**
  * 스토어 데이터 삭제
  */
@@ -64,3 +67,9 @@ export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ total
  */
 export const [GET_ARTICLE_IMAGE_LIST, GET_ARTICLE_IMAGE_LIST_SUCCESS, GET_ARTICLE_IMAGE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_IMAGE_LIST');
 export const getArticleImageList = createAction(GET_ARTICLE_IMAGE_LIST, ({ totalId }) => ({ totalId }));
+
+/**
+ * 등록기사 수정
+ */
+export const [SAVE_ARTICLE, SAVE_ARTICLE_SUCCESS, SAVE_ARTICLE_FAILURE] = createRequestActionTypes('article/SAVE_ARTICLE');
+export const saveArticle = createAction(SAVE_ARTICLE, ({ article, callback }) => ({ article, callback }));

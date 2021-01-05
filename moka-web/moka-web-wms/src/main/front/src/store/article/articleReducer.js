@@ -111,6 +111,11 @@ export default handleActions(
                 draft.bulk.search = payload;
             });
         },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
+            });
+        },
         /**
          * 스토어 데이터 초기화
          */

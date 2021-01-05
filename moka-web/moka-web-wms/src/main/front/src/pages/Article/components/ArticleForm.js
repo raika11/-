@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import copy from 'copy-to-clipboard';
-import { initialState, getArticle, GET_ARTICLE } from '@store/article';
+import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle } from '@store/article';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
@@ -17,7 +17,7 @@ import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
     const dispatch = useDispatch();
     const article = useSelector((store) => store.article.article);
-    const loading = useSelector((store) => store.loading[GET_ARTICLE]);
+    const loading = useSelector((store) => store.loading[GET_ARTICLE] || store.loading[SAVE_ARTICLE]);
     const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [content, setContent] = useState(''); // 본문
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
@@ -114,6 +114,28 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
      */
     const handleMobilePreview = () => popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
 
+    /**
+     * 기사 수정
+     */
+    const handleClickSave = () => {
+        // validate 추가
+        const saveObj = {
+            ...temp,
+            artContent: {
+                totalId: temp.totalId,
+                artContent: content,
+            },
+        };
+        dispatch(
+            saveArticle({
+                article: {
+                    reporterList: saveObj.reporterList,
+                    artContent: saveObj.artContent,
+                },
+            }),
+        );
+    };
+
     useEffect(() => {
         // 기사 상세 조회
         if (totalId) {
@@ -133,7 +155,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
     useEffect(() => {
         setTemp({
             ...article,
-            title: unescapeHtml(article.artTitle),
+            artTitle: unescapeHtml(article.artTitle),
             // 분류코드 (중복인 마스터코드 제거)
             categoryList: [...new Set(article.categoryList)],
             // 발행일
@@ -162,7 +184,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
                 { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사수정', className: 'mr-2' },
+                { variant: 'positive', text: '기사수정', className: 'mr-2', onClick: handleClickSave },
                 { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2' },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
@@ -188,10 +210,11 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                             max={4}
                             label="분류표"
                             searchIcon={false}
-                            labelType="masterCode"
+                            labelType="contentKorname"
                             value={temp.categoryList.join(',')}
                             onChange={handleMasterCode}
                             maxMenuHeight={150}
+                            selectable={['content']}
                             isMulti
                         />
                     </Col>
@@ -203,7 +226,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="제목" name="title" className="mb-0" value={temp.title} onChange={handleChangeValue} required />
+                        <MokaInputLabel label="제목" name="title" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} required />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -284,7 +307,15 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                 </Form.Row>
 
                 {/* masterCode 모달 */}
-                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={temp.categoryList} selection="multiple" onSave={handleMasterCode} />
+                <CodeListModal
+                    max={4}
+                    show={codeModalShow}
+                    onHide={() => setCodeModalShow(false)}
+                    value={temp.categoryList}
+                    selection="multiple"
+                    onSave={handleMasterCode}
+                    selectable={['content']}
+                />
 
                 {/* 작업정보 모달 */}
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />

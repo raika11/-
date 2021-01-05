@@ -140,6 +140,8 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                             value={selectedMasterCode.join(',')}
                             onChange={handleMasterCode}
                             maxMenuHeight={150}
+                            labelType="contentKorname"
+                            selectable={['content']}
                             isMulti
                         />
                     </Col>
@@ -187,7 +189,15 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                 </Form.Row>
 
                 {/* masterCode 모달 */}
-                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={selectedMasterCode} selection="multiple" onSave={handleMasterCode} />
+                <CodeListModal
+                    max={4}
+                    show={codeModalShow}
+                    onHide={() => setCodeModalShow(false)}
+                    value={selectedMasterCode}
+                    selection="multiple"
+                    onSave={handleMasterCode}
+                    selectable={['content']}
+                />
             </Form>
         </MokaCard>
     );

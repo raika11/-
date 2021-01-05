@@ -26,7 +26,7 @@ const Article = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <Container className="p-0 position-relative">
+        <Container className="p-0 position-relative" fluid>
             <Helmet>
                 <title>등록 기사 전체</title>
                 <meta name="description" content="등록 기사 전체 페이지입니다." />

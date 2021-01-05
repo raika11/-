@@ -99,6 +99,7 @@ const RcvArticleEdit = () => {
                     callback: ({ header }) => {
                         if (!header.success) {
                             toast.fail(header.message);
+                            history.push('/rcv-article');
                         }
                     },
                 }),
@@ -106,7 +107,7 @@ const RcvArticleEdit = () => {
         } else {
             dispatch(clearRcvArticle());
         }
-    }, [dispatch, rid]);
+    }, [dispatch, history, rid]);
 
     useEffect(() => {
         setTemp({
@@ -140,7 +141,14 @@ const RcvArticleEdit = () => {
                     onRegister={handleRegister}
                 />
             ) : (
-                <ArticleForm totalId={rcvArticle.totalId} articleTypeRows={articleTypeRows} reporterList={reporterList || []} onCancle={handleCancle} inRcv />
+                <ArticleForm
+                    totalId={rcvArticle.totalId}
+                    returnUrl="/rcv-article"
+                    articleTypeRows={articleTypeRows}
+                    reporterList={reporterList || []}
+                    onCancle={handleCancle}
+                    inRcv
+                />
             )}
         </React.Fragment>
     );

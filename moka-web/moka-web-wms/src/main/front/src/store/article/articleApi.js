@@ -51,7 +51,7 @@ export const getArticle = ({ totalId }) => {
 // 기사 수정
 export const putArticle = ({ article }) => {
     const stringData = qs.stringify(article, { arrayFormat: 'indices', allowDots: true });
-    return instance.get(`/api/articles/${article.totalId}`, stringData).catch((err) => {
+    return instance.get(`/api/articles/${article.totalId}?${stringData}`).catch((err) => {
         throw err;
     });
 };

@@ -65,19 +65,6 @@ const TourList = ({ match }) => {
                         )}
                     />
                 </Switch>
-                {/* <Form.Row>
-                <Col xs={7} className="p-0 d-flex justify-content-end">
-                    <Button className="mr-2 ">저장</Button>
-                    <Button variant="negative" className="">
-                        삭제
-                    </Button>
-                </Col>
-                <Col xs={5} className="p-0 d-flex justify-content-end">
-                    <Button variant="searching" className="" onClick={handleClickPreview}>
-                        메일 미리보기
-                    </Button>
-                </Col>
-            </Form.Row> */}
             </div>
         </>
     );

@@ -170,7 +170,11 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
             saveArticle({
                 article: saveObj,
                 callback: ({ header }) => {
-                    console.log(header);
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    } else {
+                        toast.success(header.message);
+                    }
                 },
             }),
         );

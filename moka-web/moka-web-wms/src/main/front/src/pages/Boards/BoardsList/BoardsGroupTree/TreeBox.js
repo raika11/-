@@ -1,9 +1,7 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { MokaLoader, MokaCard, MokaTreeView } from '@components';
-import { tree } from '@pages/Boards/BoardConst';
-import produce from 'immer';
+import React, { useState, useEffect, useRef } from 'react';
+import { MokaLoader } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { GET_BOARD_GROUP_LIST, getBoardGroupList, getListmenuSelectBoard } from '@store/board';
 import clsx from 'clsx';
 
@@ -13,9 +11,8 @@ import TreeItem from './TreeItem';
 const TreeBox = (props) => {
     const dispatch = useDispatch();
     const params = useParams();
-    const history = useHistory();
     const boardId = useRef(null);
-    const { pagePathName, boardType, groupList, loading } = useSelector((store) => ({
+    const { boardType, groupList, loading } = useSelector((store) => ({
         pagePathName: store.board.pagePathName,
         boardType: store.board.boardType,
         groupList: store.board.listmenu.groupList,

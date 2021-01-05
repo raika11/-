@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Form, Col, Button } from 'react-bootstrap';
+import { MokaCard, MokaInputLabel } from '@components';
+import { Form, Col } from 'react-bootstrap';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectItem } from '@pages/Boards/BoardConst';

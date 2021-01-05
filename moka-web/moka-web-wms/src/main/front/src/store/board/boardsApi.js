@@ -27,12 +27,12 @@ export const insertBoard = ({ file }) => {
 const makeBoardContentsFormData = ({ files, contentsData }) => {
     delete contentsData.attaches;
     delete contentsData.regName;
+    delete contentsData.boardInfo;
 
     var formData = new FormData();
 
     files.map((element, index) => {
         if (element.seqNo) {
-            formData.append(`attaches[${index}].attachFile`, element.name);
             formData.append(`attaches[${index}].seqNo`, element.seqNo);
         } else {
             formData.append(`attaches[${index}].attachFile`, element);

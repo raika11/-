@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
-import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import { useParams, useHistory } from 'react-router-dom';
+import { MokaInput, MokaSearchInput } from '@components';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { initialState, changeSetMenuSearchOption, clearSetMenuSearchOption, getSetmenuBoardsList, clearSetmenuBoardInfo } from '@store/board';
 import { selectItem } from '@pages/Boards/BoardConst';

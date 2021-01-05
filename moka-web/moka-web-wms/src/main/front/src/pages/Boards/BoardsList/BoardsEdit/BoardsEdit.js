@@ -52,6 +52,8 @@ const BoardsEdit = () => {
     let fileinputRef = useRef(null);
 
     const basicStateReset = () => {
+        setUploadFiles([]);
+        setUploadFiles([]);
         editContent.current = null;
         editReplyContent.current = null;
     };
@@ -85,7 +87,7 @@ const BoardsEdit = () => {
         [replyEditData, selectboard.editorYn],
     );
 
-    // 게시글 데이터 변경세 스테이트 업데이트.
+    // 게시글 데이터 변경시 스테이트 업데이트.
     const handleChangeFormData = useCallback(
         (e) => {
             const { name, value } = e.target;
@@ -207,6 +209,7 @@ const BoardsEdit = () => {
                         const { boardSeq } = body;
                         history.push(`/${pagePathName}/${boardId.current}/${boardSeq}`);
                         dispatch(getListmenuContentsList({ boardId: boardId.current }));
+                        dispatch(getListmenuContentsInfo({ boardId: boardId.current, boardSeq: boardSeq }));
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -286,17 +289,19 @@ const BoardsEdit = () => {
         }
     }, [dispatch, params]);
 
+    // 이미지 추가 처리.
     const handleChangeFileInput = (event) => {
-        console.log(event.target.files);
-        setUploadFiles([...uploadFiles, event.target.files[0]]);
+        if (uploadFiles.length + 1 > selectboard.allowFileCnt) {
+            messageBox.alert('해당 게시판의 첨부 파일 최대 건수는 2개 입니다.', () => {});
+        } else {
+            setUploadFiles([...uploadFiles, event.target.files[0]]);
+        }
     };
 
+    // 이미지 삭제 처리.
     const handleDeleteUploadFile = (stateIndex) => {
         setUploadFiles(uploadFiles.filter((e, i) => i !== stateIndex));
     };
-    useEffect(() => {
-        console.log(uploadFiles);
-    }, [uploadFiles]);
 
     // 현재 선택된 게시판 채넣 옵션에 따라서 채널 리스트를 가지고 와서 설정.
     useEffect(() => {
@@ -351,9 +356,6 @@ const BoardsEdit = () => {
     // 등록, 수정, 답변 등록 에 따른 라우터 파라미터 처리.
     useEffect(() => {
         basicStateReset();
-
-        editContent.current = null;
-        editReplyContent.current = null;
 
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/${parentBoardSeq.current}/reply/${boardSeq.current}`) {
             setEditState({
@@ -646,9 +648,7 @@ const BoardsEdit = () => {
                                             <Col className="p-0">
                                                 <div className="d-flex moka-summernote">
                                                     <ReactSummernote
-                                                        // value={editContent.current}
                                                         value={editContent.current !== '' ? unescapeHtml(editContent.current) : editContent.current}
-                                                        // value={editData.content}
                                                         options={{
                                                             lang: 'ko-KR',
                                                             height: 250,

@@ -166,7 +166,7 @@ const BoardsEdit = () => {
                     boardId: null,
                     depth: 0,
                     indent: 0,
-                    content: editContent.current === null ? editContent.current : unescapeHtml(editContent.current),
+                    content: editContent.current,
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
@@ -200,7 +200,7 @@ const BoardsEdit = () => {
                     boardId: null,
                     depth: 0,
                     indent: 0,
-                    content: editContent.current === null ? editContent.current : unescapeHtml(editContent.current),
+                    content: editContent.current,
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
@@ -242,7 +242,7 @@ const BoardsEdit = () => {
                     titlePrefix1: editData.titlePrefix1,
                     titlePrefix2: editData.titlePrefix2,
                     addr: editData.addr,
-                    content: editReplyContent.current === null ? editReplyContent.current : unescapeHtml(editReplyContent.current),
+                    content: editReplyContent.current === null ? editReplyContent.current : editReplyContent.current,
                 },
                 files: { attachFile: [] },
                 callback: ({ header: { success, message }, body }) => {

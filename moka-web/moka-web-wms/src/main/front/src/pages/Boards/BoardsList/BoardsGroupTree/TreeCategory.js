@@ -16,10 +16,6 @@ const TreeCategory = (props) => {
     };
 
     useEffect(() => {
-        console.log(open);
-    }, [open]);
-
-    useEffect(() => {
         const setFirstSelected = () => {
             setOpen(true);
         };
@@ -27,13 +23,12 @@ const TreeCategory = (props) => {
         if (listIndex === selected) {
             setFirstSelected();
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <li className="tree-category" key={listIndex} onClick={() => handleClickCategory()}>
-            <div className={clsx('tree-label', { selected: listIndex === selected })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
+            <div className={clsx('tree-label', { selected: false })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <Button size="sm" variant="searching" className="mr-1 flex-shrink-0" onClick={() => handleClickCategory()}>
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>

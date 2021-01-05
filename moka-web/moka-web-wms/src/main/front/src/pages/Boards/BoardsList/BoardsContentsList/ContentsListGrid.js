@@ -1,64 +1,107 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MokaTable } from '@components';
 import { ColumnDefs } from './ContentsListGridColumns';
 import { DISPLAY_PAGE_NUM } from '@/constants';
-
-import { tempRows } from '@pages/Boards/BoardConst';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeListmenuSearchOption, getListmenuContentsList, GET_LISTMENU_CONTENTS_LIST } from '@store/board';
 
 const ContentsListGrid = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const params = useParams();
+    const boardId = useRef(null);
+
+    // 공통 구분값
+    const { pagePathName, search, contentsList, total, loading } = useSelector((store) => ({
+        pagePathName: store.board.pagePathName,
+        boardType: store.board.boardType,
+        channel_list: store.board.channel_list,
+        search: store.board.listmenu.contentsList.search,
+        contentsList: store.board.listmenu.contentsList.list,
+        total: store.board.listmenu.contentsList.total,
+        loading: store.loading[GET_LISTMENU_CONTENTS_LIST],
+    }));
+
+    // 그리드 리스트 state
     const [rowData, setRowData] = useState([]);
 
-    const loading = false;
+    const handleOnRowClicked = ({ selectBoardId, boardSeq, parentBoardSeq }) => {
+        if (boardSeq === parentBoardSeq) {
+            history.push(`/${pagePathName}/${selectBoardId}/${boardSeq}`);
+        } else {
+            history.push(`/${pagePathName}/${selectBoardId}/${parentBoardSeq}/reply/${boardSeq}`);
+        }
+    };
 
-    const tempEvent = () => {};
+    // 그리드에서 페이징 등 목록 다시 가지고 올떄.
+    const handleChangeSearchOption = useCallback(
+        ({ key, value }) => {
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(changeListmenuSearchOption(temp));
+            dispatch(getListmenuContentsList({ boardId: boardId.current }));
+        },
+        [dispatch, search],
+    );
 
+    // store 에서 게시글 목록 변경 되었을때 그리드 리스트 업데이트.
     useEffect(() => {
         const setRowDataState = (element) => {
             setRowData(
                 element.map((data) => {
-                    let regDt = '2020-12-21';
-
                     return {
+                        selectBoardId: data.boardId,
                         boardSeq: data.boardSeq,
+                        parentBoardSeq: data.parentBoardSeq,
                         channelName: data.channelName,
                         titleItem: {
+                            replyFlag: data.boardSeq !== data.parentBoardSeq,
                             title: data.title,
-                            usedYn: data.usedYn,
+                            delYn: data.delYn,
                         },
                         titlePrefix1: data.titlePrefix1,
                         registItem: {
-                            regDt: regDt,
-                            regId: data.regId,
+                            regDt: data.regDt,
+                            regName: data.regName,
                         },
-                        viewCount: data.viewCount,
+                        viewCnt: data.viewCnt,
                         fileItem: {
-                            fileYn: data.fileYn,
-                            file: data.file,
+                            attaches: data.attaches,
                         },
                     };
                 }),
             );
         };
-        tempRows && setRowDataState(tempRows.list);
-    }, []);
+        contentsList && setRowDataState(contentsList);
+    }, [contentsList]);
+
+    // url 에서 현재 선택한 게시판 id 값 설정.
+    useEffect(() => {
+        if (!isNaN(params.boardId) && boardId.current !== params.boardId) {
+            dispatch(getListmenuContentsList({ boardId: params.boardId }));
+            boardId.current = params.boardId;
+        }
+    }, [dispatch, params]);
 
     return (
         <>
             <MokaTable
-                className="h-100"
-                agGridHeight={650}
+                agGridHeight={590}
                 columnDefs={ColumnDefs}
                 rowData={rowData}
                 rowHeight={50}
                 onRowNodeId={(data) => data.boardSeq}
-                onRowClicked={(e) => tempEvent(e)}
+                onRowClicked={(e) => handleOnRowClicked(e)}
                 loading={loading}
-                total={tempRows.total}
-                page={tempRows.page}
-                size={tempRows.size}
+                total={total}
+                page={search.page}
+                size={search.size}
                 displayPageNum={DISPLAY_PAGE_NUM}
-                onChangeSearchOption={() => tempEvent()}
-                selected={11774}
+                onChangeSearchOption={handleChangeSearchOption}
+                selected={params.boardSeq}
             />
         </>
     );

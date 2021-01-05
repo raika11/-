@@ -2,8 +2,8 @@ import React, { Suspense, useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/boards';
-import { MokaLoader } from '@components';
+import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
+import { MokaLoader, MokaCard } from '@components';
 
 const BoardsList = React.lazy(() => import('./Component/BoardsList'));
 const BoardsEdit = React.lazy(() => import('./Component/BoardsEdit'));
@@ -12,8 +12,8 @@ const BoardsSet = () => {
     const dispatch = useDispatch();
     // 공통 구분값 URL
     const { pagePathName, boardType } = useSelector((store) => ({
-        pagePathName: store.boards.pagePathName,
-        boardType: store.boards.boardType,
+        pagePathName: store.board.pagePathName,
+        boardType: store.board.boardType,
     }));
 
     // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
@@ -36,7 +36,15 @@ const BoardsSet = () => {
 
             {/* 리스트 */}
             <Switch>
-                <Route path={[`/${pagePathName}`, `/${pagePathName}/add`, `/${pagePathName}/:boardId`]} exact render={() => <BoardsList />} />
+                <Route
+                    path={[`/${pagePathName}`, `/${pagePathName}/add`, `/${pagePathName}/:boardId`]}
+                    exact
+                    render={() => (
+                        <Suspense fallback={<MokaLoader />}>
+                            <BoardsList />
+                        </Suspense>
+                    )}
+                />
             </Switch>
 
             {/* 수정창 */}

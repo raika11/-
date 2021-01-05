@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { clearStore, initializeParams, getBoardChannelList } from '@store/boards';
+import { clearStore, initializeParams, getBoardChannelTypeList } from '@store/board';
 
 const BoardsSet = React.lazy(() => import('./BoardsSet'));
 const BoardsList = React.lazy(() => import('./BoardsList'));
@@ -61,7 +61,7 @@ const Boards = ({ match }) => {
         const storeInit = ({ pagePathName }) => {
             if (pagePathName !== '') {
                 dispatch(initializeParams(pagesParams));
-                dispatch(getBoardChannelList());
+                dispatch(getBoardChannelTypeList());
             }
         };
         storeInit(pagesParams);

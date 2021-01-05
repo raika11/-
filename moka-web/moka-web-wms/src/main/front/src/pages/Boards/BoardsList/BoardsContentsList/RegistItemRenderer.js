@@ -1,14 +1,15 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
-const RegistItemRenderer = ({ regDt, regId }) => {
+// 등록자 정보
+const RegistItemRenderer = ({ regDt, regName }) => {
     return (
         <>
             <Row>
                 <Col style={{ marginBottom: '-10px' }}>{regDt}</Col>
             </Row>
             <Row>
-                <Col>{regId}</Col>
+                <Col>{regName}</Col>
             </Row>
         </>
     );

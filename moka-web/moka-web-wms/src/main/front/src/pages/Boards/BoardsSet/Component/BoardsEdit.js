@@ -4,7 +4,7 @@ import { Form, Col, Button } from 'react-bootstrap';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectItem } from '@pages/Boards/BoardConst';
-import { initialState, GET_SETMENU_BOARD_INFO, getBoardInfo, getSetmenuBoardsList, saveBoardInfo, deleteBoard } from '@store/boards';
+import { initialState, GET_SETMENU_BOARD_INFO, getBoardInfo, getSetmenuBoardsList, saveBoardInfo, deleteBoard } from '@store/board';
 import toast, { messageBox } from '@utils/toastUtil';
 
 const BoardsEdit = () => {
@@ -13,11 +13,11 @@ const BoardsEdit = () => {
     const paramBoardId = useRef(null);
     const params = useParams();
     // 공통 구분값 URL
-    const { pagePathName, boardType: storeBoardType, boardinfo, loading, channel_list } = useSelector((store) => ({
-        pagePathName: store.boards.pagePathName,
-        boardType: store.boards.boardType,
-        boardinfo: store.boards.setmenu.boardinfo,
-        channel_list: store.boards.channel_list,
+    const { pagePathName, boardType: storeBoardType, boardinfo, loading, channeltype_list } = useSelector((store) => ({
+        pagePathName: store.board.pagePathName,
+        boardType: store.board.boardType,
+        boardinfo: store.board.setmenu.boardinfo,
+        channeltype_list: store.board.channeltype_list,
         loading: store.loading[GET_SETMENU_BOARD_INFO],
     }));
 
@@ -111,6 +111,8 @@ const BoardsEdit = () => {
             boardType: storeBoardType,
         };
 
+        // 파일 등록
+        // 파일 등록 선택후 개수 입력 안했을때.
         if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileCnt) {
             return {
                 state: false,
@@ -118,6 +120,7 @@ const BoardsEdit = () => {
             };
         }
 
+        // 파일 등록 선택후 용량 입력 안했을때.
         if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileSize) {
             return {
                 state: false,
@@ -125,6 +128,7 @@ const BoardsEdit = () => {
             };
         }
 
+        // 파일 등록 선택후 확장자 입력 안했을때.
         if (boardInfoData.fileYn === 'Y' && !boardInfoData.allowFileExt) {
             return {
                 state: false,
@@ -719,7 +723,7 @@ const BoardsEdit = () => {
                             value={boardInfoData.channelType}
                         >
                             <option value="">선택</option>
-                            {channel_list.map((item, index) => (
+                            {channeltype_list.map((item, index) => (
                                 <option key={index} value={item.dtlCd}>
                                     {item.cdNm}
                                 </option>

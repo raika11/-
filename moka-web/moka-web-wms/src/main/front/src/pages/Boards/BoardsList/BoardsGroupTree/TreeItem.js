@@ -11,10 +11,10 @@ const TreeItem = (props) => {
     const history = useHistory();
     const params = useParams();
     const { pagePathName } = useSelector((store) => ({
-        pagePathName: store.boards.pagePathName,
+        pagePathName: store.board.pagePathName,
     }));
 
-    const { nodeId, selected, nodeData, onSelected } = props;
+    const { nodeId, selected, nodeData, onSelected, selectItem } = props;
     const { depth, usedYn, match } = nodeData;
 
     /**
@@ -31,31 +31,9 @@ const TreeItem = (props) => {
         history.push(`/${pagePathName}/${boardId}`);
     };
 
-    // Hook
-    const Example = memo(
-        () => {
-            // ...
-        },
-        (prevProps, nextProps) => {
-            console.log('111111111');
-            return nextProps.value === prevProps.value;
-        },
-    );
-
-    useEffect(() => {
-        const checkSelected = () => {
-            if (!params.boardId) {
-                console.log('error');
-            }
-        };
-        // Example();
-        checkSelected();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <li className="tree-item" onClick={(e) => handleSelected(e)} key={nodeId} data-depth={depth} data-usedyn={usedYn}>
-            <div className={clsx('tree-label', { selected: selected === nodeId })} data-match={match}>
+            <div className={clsx('tree-label', { selected: selectItem })} data-match={match}>
                 <Button variant="searching" size="sm" className="mr-1" disabled>
                     <MokaIcon iconName="fal-minus" />
                 </Button>

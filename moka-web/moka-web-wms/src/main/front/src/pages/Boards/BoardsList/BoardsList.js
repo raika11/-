@@ -1,8 +1,7 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import {} from '@store/boards';
+import { useSelector } from 'react-redux';
 import { MokaLoader } from '@components';
 
 const BoardsGroupTree = React.lazy(() => import('./BoardsGroupTree/BoardsGroupTree'));
@@ -12,7 +11,7 @@ const BoardsEdit = React.lazy(() => import('./BoardsEdit/BoardsEdit'));
 const BoardsList = () => {
     // 공통 구분값 URL
     const { pagePathName } = useSelector((store) => ({
-        pagePathName: store.boards.pagePathName,
+        pagePathName: store.board.pagePathName,
     }));
 
     return (
@@ -26,7 +25,13 @@ const BoardsList = () => {
             {/* 트리 */}
             <Switch>
                 <Route
-                    path={[`/${pagePathName}`, `/${pagePathName}/:boardId`, `/${pagePathName}/:boardId/:boardId`]}
+                    path={[
+                        `/${pagePathName}`,
+                        `/${pagePathName}/:boardId`,
+                        `/${pagePathName}/:boardId/:boardSeq`,
+                        `/${pagePathName}/:boardId/:boardSeq/reply`,
+                        `/${pagePathName}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                    ]}
                     exact
                     render={() => (
                         <Suspense fallback={<MokaLoader />}>
@@ -39,7 +44,12 @@ const BoardsList = () => {
             {/* 리스트 */}
             <Switch>
                 <Route
-                    path={[`/${pagePathName}`, `/${pagePathName}/:boardId`, `/${pagePathName}/:boardId/:boardId`]}
+                    path={[
+                        `/${pagePathName}/:boardId`,
+                        `/${pagePathName}/:boardId/:boardSeq`,
+                        `/${pagePathName}/:boardId/:boardSeq/reply`,
+                        `/${pagePathName}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                    ]}
                     exact
                     render={() => (
                         <Suspense fallback={<MokaLoader />}>
@@ -52,7 +62,12 @@ const BoardsList = () => {
             {/* 수정창 */}
             <Switch>
                 <Route
-                    path={[`/${pagePathName}/:boardId`, `/${pagePathName}/:boardId/:boardId`]}
+                    path={[
+                        `/${pagePathName}/:boardId/add`,
+                        `/${pagePathName}/:boardId/:boardSeq`,
+                        `/${pagePathName}/:boardId/:boardSeq/reply`,
+                        `/${pagePathName}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                    ]}
                     exact
                     render={() => (
                         <Suspense fallback={<MokaLoader />}>

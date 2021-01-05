@@ -3,7 +3,7 @@ import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { initialState, changeSetMenuSearchOption, clearSetMenuSearchOption, getSetmenuBoardsList, clearSetmenuBoardInfo } from '@store/boards';
+import { initialState, changeSetMenuSearchOption, clearSetMenuSearchOption, getSetmenuBoardsList, clearSetmenuBoardInfo } from '@store/board';
 import { selectItem } from '@pages/Boards/BoardConst';
 
 // 검색 박스
@@ -13,9 +13,9 @@ const BoardsListSearchBox = (props) => {
 
     // 공통 구분값 URL
     const { pagePathName, boardType, search } = useSelector((store) => ({
-        pagePathName: store.boards.pagePathName,
-        boardType: store.boards.boardType,
-        search: store.boards.setmenu.search,
+        pagePathName: store.board.pagePathName,
+        boardType: store.board.boardType,
+        search: store.board.setmenu.search,
     }));
 
     const [searchData, setSearchData] = useState(initialState.setmenu.search);

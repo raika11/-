@@ -3,7 +3,7 @@ import { ColumnDefs, tempRows } from './BoardsSetGridColumns';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST, getBoardInfo } from '@store/boards';
+import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST, getBoardInfo } from '@store/board';
 import { useHistory, useParams } from 'react-router-dom';
 import { selectItem } from '@pages/Boards/BoardConst';
 
@@ -13,10 +13,10 @@ const BulkhHotClicAgGrid = () => {
     const params = useParams();
 
     const { boardslist, total, page, size, search, loading, pagePathName } = useSelector((store) => ({
-        pagePathName: store.boards.pagePathName,
-        total: store.boards.setmenu.total,
-        search: store.boards.setmenu.search,
-        boardslist: store.boards.setmenu.list,
+        pagePathName: store.board.pagePathName,
+        total: store.board.setmenu.total,
+        search: store.board.setmenu.search,
+        boardslist: store.board.setmenu.list,
         loading: store.loading[GET_SETMENU_BOARD_LIST],
     }));
 

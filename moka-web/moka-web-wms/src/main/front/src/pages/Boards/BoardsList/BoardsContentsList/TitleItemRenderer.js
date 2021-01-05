@@ -1,12 +1,14 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
-const TitleItemRenderer = ({ title, usedYn }) => {
+// 게시글 타이틀 렌더.
+// 삭제 옵션으로 글자색 변경 처리.
+const TitleItemRenderer = ({ paramsValue: { replyFlag, delYn, title } }) => {
     return (
         <>
-            {usedYn === 'Y' ? (
+            {delYn === 'N' ? (
                 <Row>
-                    <Col>{title}</Col>
+                    <Col>{replyFlag ? `ㄴ ${title}` : title}</Col>
                 </Row>
             ) : (
                 <Row>

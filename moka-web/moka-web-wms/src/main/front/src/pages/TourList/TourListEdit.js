@@ -31,202 +31,187 @@ const TourListEdit = () => {
 
     return (
         <Form>
-            <div style={{ borderBottom: '2px solid #E0E0E0' }}>
-                <Form.Row className="mb-2">
-                    <div style={{ width: 280 }}>
-                        <MokaInputLabel
-                            label="신청일시"
-                            labelClassName="mr-5 d-flex justify-content-end"
-                            className="mb-0 mr-2"
-                            inputClassName=""
-                            as="dateTimePicker"
-                            value={startDate}
-                            inputProps={{ timeFormat: null }}
-                            name="startDate"
-                            onChange={(date) => {
-                                if (typeof date === 'object') {
-                                    setStartDate(date);
-                                } else {
-                                    setStartDate(null);
-                                }
-                                // handleChangeValue
-                            }}
-                        />
-                    </div>
-                    <div style={{ width: 120 }}>
-                        <MokaInput
-                            as="select"
-                            name="time"
-                            value={time}
-                            onChange={
-                                (e) => setTime(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
-                            <option value="10">오전 10시</option>
-                            <option value="14">오후 2시</option>
-                        </MokaInput>
-                    </div>
-                </Form.Row>
-                <div style={{ width: 220 }}>
+            <Form.Row className="mb-2">
+                <div style={{ width: 280 }}>
                     <MokaInputLabel
-                        label="신청상태"
-                        labelClassName="mr-5 d-flex justify-content-end"
-                        className="mb-2"
+                        label="신청일시"
+                        labelClassName="d-flex justify-content-end"
+                        className="mb-0 mr-2"
                         inputClassName=""
+                        as="dateTimePicker"
+                        value={startDate}
+                        inputProps={{ timeFormat: null }}
+                        name="startDate"
+                        onChange={(date) => {
+                            if (typeof date === 'object') {
+                                setStartDate(date);
+                            } else {
+                                setStartDate(null);
+                            }
+                            // handleChangeValue
+                        }}
+                    />
+                </div>
+                <div style={{ width: 120 }}>
+                    <MokaInput
                         as="select"
-                        value={status}
-                        name="status"
+                        name="time"
+                        value={time}
                         onChange={
-                            (e) => setStatus(e.target.value)
+                            (e) => setTime(e.target.value)
                             // handleChangeValue
                         }
                     >
-                        <option value="S">신청</option>
-                        <option value="A">승인</option>
-                        <option value="R">반려</option>
-                        <option value="C">취소</option>
-                    </MokaInputLabel>
+                        <option value="10">오전 10시</option>
+                        <option value="14">오후 2시</option>
+                    </MokaInput>
                 </div>
-                {status === 'R' && (
-                    <MokaInputLabel
-                        label="반려사유"
-                        labelClassName="mr-5 d-flex justify-content-end"
-                        className="mb-2"
-                        inputClassName=" resize-none"
-                        as="textarea"
-                        inputProps={{ rows: 4 }}
-                        value={rejectDescpt}
-                        name="rejectDescpt"
-                        onChange={
-                            (e) => setRejectDescpt(e.target.value)
-                            // handleChangeValue
-                        }
-                    />
-                )}
-                <div style={{ width: 400 }}>
-                    <MokaInputLabel
-                        label="단체명"
-                        labelClassName="mr-5 d-flex justify-content-end"
-                        className="mb-2"
-                        inputClassName=""
-                        value={groupName}
-                        onChange={
-                            (e) => setGroupName(e.target.value)
-                            // handleChangeValue
-                        }
-                    />
-                </div>
-                <Form.Row className="mb-2">
-                    <div style={{ width: 280 }}>
-                        <MokaInputLabel
-                            label="견학인원"
-                            labelClassName="mr-5 d-flex justify-content-end"
-                            className="mb-0 mr-2"
-                            inputClassName=""
-                            as="select"
-                            value={groupName}
-                            name="status"
-                            onChange={
-                                (e) => setGroupName(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
-                            <option value="0">초등학생</option>
-                            <option value="1">중학생</option>
-                            <option value="2">고등학생</option>
-                            <option value="3">대학생</option>
-                            <option value="4">성인</option>
-                        </MokaInputLabel>
-                    </div>
-                    <div style={{ width: 120 }}>
-                        <MokaInput
-                            as="select"
-                            name="people"
-                            value={people}
-                            onChange={
-                                (e) => setPeople(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
-                            {[...Array(11)].map((d, idx) => {
-                                return (
-                                    <option key={idx} value={`${idx + 5}`}>
-                                        {idx + 5}명
-                                    </option>
-                                );
-                            })}
-                        </MokaInput>
-                    </div>
-                </Form.Row>
+            </Form.Row>
+            <div style={{ width: 220 }}>
                 <MokaInputLabel
-                    label="견학목적"
-                    labelClassName="mr-5 d-flex justify-content-end"
+                    label="신청상태"
+                    labelClassName="d-flex justify-content-end"
+                    className="mb-2"
+                    inputClassName=""
+                    as="select"
+                    value={status}
+                    name="status"
+                    onChange={
+                        (e) => setStatus(e.target.value)
+                        // handleChangeValue
+                    }
+                >
+                    <option value="S">신청</option>
+                    <option value="A">승인</option>
+                    <option value="R">반려</option>
+                    <option value="C">취소</option>
+                </MokaInputLabel>
+            </div>
+            {status === 'R' && (
+                <MokaInputLabel
+                    label="반려사유"
+                    labelClassName="d-flex justify-content-end"
                     className="mb-2"
                     inputClassName=" resize-none"
                     as="textarea"
                     inputProps={{ rows: 4 }}
-                    value={discription}
-                    name="status"
+                    value={rejectDescpt}
+                    name="rejectDescpt"
                     onChange={
-                        (e) => setDiscription(e.target.value)
+                        (e) => setRejectDescpt(e.target.value)
+                        // handleChangeValue
+                    }
+                />
+            )}
+            <div style={{ width: 400 }}>
+                <MokaInputLabel
+                    label="단체명"
+                    labelClassName="d-flex justify-content-end"
+                    className="mb-2"
+                    inputClassName=""
+                    value={groupName}
+                    onChange={
+                        (e) => setGroupName(e.target.value)
                         // handleChangeValue
                     }
                 />
             </div>
-            <div className="pt-4" style={{ borderBottom: '2px solid #E0E0E0' }}>
-                <MokaInputLabel label="신청자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
-                <Form.Row className="mb-2">
+            <Form.Row className="mb-2">
+                <div style={{ width: 280 }}>
                     <MokaInputLabel
-                        label="성명"
-                        labelClassName="mr-5 d-flex justify-content-end"
+                        label="견학인원"
+                        labelClassName="d-flex justify-content-end"
                         className="mb-0 mr-2"
-                        inputProps={{ readOnly: true, plaintext: true }}
-                        value={name}
-                        onChange={(e) => e.target.value}
-                    />
-                    <MokaInputLabel
-                        label="연락처"
-                        labelClassName="mr-5 d-flex justify-content-end"
-                        className="mb-0 mr-2"
-                        inputProps={{ readOnly: true, plaintext: true }}
-                        value={phone}
-                        onChange={(e) => e.target.value}
-                    />
-                </Form.Row>
+                        inputClassName=""
+                        as="select"
+                        value={groupName}
+                        name="status"
+                        onChange={
+                            (e) => setGroupName(e.target.value)
+                            // handleChangeValue
+                        }
+                    >
+                        <option value="0">초등학생</option>
+                        <option value="1">중학생</option>
+                        <option value="2">고등학생</option>
+                        <option value="3">대학생</option>
+                        <option value="4">성인</option>
+                    </MokaInputLabel>
+                </div>
+                <div style={{ width: 120 }}>
+                    <MokaInput
+                        as="select"
+                        name="people"
+                        value={people}
+                        onChange={
+                            (e) => setPeople(e.target.value)
+                            // handleChangeValue
+                        }
+                    >
+                        {[...Array(11)].map((d, idx) => {
+                            return (
+                                <option key={idx} value={`${idx + 5}`}>
+                                    {idx + 5}명
+                                </option>
+                            );
+                        })}
+                    </MokaInput>
+                </div>
+            </Form.Row>
+            <MokaInputLabel
+                label="견학목적"
+                labelClassName="d-flex justify-content-end"
+                className="mb-2"
+                inputClassName=" resize-none"
+                as="textarea"
+                inputProps={{ rows: 4 }}
+                value={discription}
+                name="status"
+                onChange={
+                    (e) => setDiscription(e.target.value)
+                    // handleChangeValue
+                }
+            />
+            <hr className="divider" />
+            <MokaInputLabel label="신청자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
+            <Form.Row className="mb-2">
                 <MokaInputLabel
-                    label="이메일"
-                    labelClassName="mr-5 d-flex justify-content-end"
-                    className="mb-2"
+                    label="성명"
+                    labelClassName="d-flex justify-content-end"
+                    className="mb-0 mr-2"
                     inputProps={{ readOnly: true, plaintext: true }}
-                    value={email}
+                    value={name}
                     onChange={(e) => e.target.value}
                 />
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        label="비밀번호(4자리)"
-                        labelClassName="mr-5 d-flex justify-content-end"
-                        className="mb-0 mr-2"
-                        value={pwd}
-                        onChange={(e) => setPwd(e.target.value)}
-                    />
-                    <Button variant="negative" className="" onClick={handleClickReset}>
-                        비밀번호 초기화
-                    </Button>
-                </Form.Row>
-            </div>
-            <div className="mb-4 pt-4" style={{ borderBottom: '2px solid #E0E0E0' }}>
-                <MokaInputLabel label="담당자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
-                <MokaInputLabel label="부서" labelClassName="mr-5 d-flex justify-content-end" className="mb-2" value={dept} onChange={(e) => setDept(e.target.value)} />
-                <MokaInputLabel label="성명" labelClassName="mr-5 d-flex justify-content-end" className="mb-2" value={admin} onChange={(e) => setAdmin(e.target.value)} />
                 <MokaInputLabel
                     label="연락처"
-                    labelClassName="mr-5 d-flex justify-content-end"
-                    className="mb-2"
-                    value={adminPhone}
-                    onChange={(e) => setAdminPhone(e.target.value)}
+                    labelClassName="d-flex justify-content-end"
+                    className="mb-0 mr-2"
+                    inputProps={{ readOnly: true, plaintext: true }}
+                    value={phone}
+                    onChange={(e) => e.target.value}
                 />
-            </div>
+            </Form.Row>
+            <MokaInputLabel
+                label="이메일"
+                labelClassName="d-flex justify-content-end"
+                className="mb-2"
+                inputProps={{ readOnly: true, plaintext: true }}
+                value={email}
+                onChange={(e) => e.target.value}
+            />
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="비밀번호(4자리)" labelClassName="d-flex justify-content-end" className="mb-0 mr-2" value={pwd} onChange={(e) => setPwd(e.target.value)} />
+                <Button variant="negative" className="" onClick={handleClickReset}>
+                    비밀번호 초기화
+                </Button>
+            </Form.Row>
+            <hr className="divider" />
+            <MokaInputLabel label="담당자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
+            <MokaInputLabel label="부서" labelClassName="d-flex justify-content-end" className="mb-2" value={dept} onChange={(e) => setDept(e.target.value)} />
+            <MokaInputLabel label="성명" labelClassName="d-flex justify-content-end" className="mb-2" value={admin} onChange={(e) => setAdmin(e.target.value)} />
+            <MokaInputLabel label="연락처" labelClassName="d-flex justify-content-end" className="mb-2" value={adminPhone} onChange={(e) => setAdminPhone(e.target.value)} />
+            <hr className="divider" />
             <div className="mb-2  color-secondary">
                 <p className="m-0">※ 최초 한번의 승인/반려 시에만 메일이 발송됩니다.</p>
                 <p className="m-0">※ 신청자의 이메일 정보는 아이디 개념이라 수정할 수 없습니다.</p>

@@ -6,7 +6,7 @@ export const selectItem = {
             name: '일반',
         },
         {
-            value: '2',
+            value: '9',
             name: '공지',
         },
     ],

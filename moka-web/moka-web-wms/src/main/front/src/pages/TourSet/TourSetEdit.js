@@ -17,7 +17,7 @@ const TourSetEdit = () => {
             <Form.Row className="mb-3">
                 <MokaInputLabel
                     label="견학신청"
-                    labelClassName="mr-5 d-flex justify-content-end"
+                    labelClassName="d-flex justify-content-end"
                     className="mb-0"
                     as="switch"
                     name="tour"
@@ -34,7 +34,7 @@ const TourSetEdit = () => {
                 />
             </Form.Row>
             <Form.Row className="mb-3">
-                <MokaInputLabel label="신청기간" labelClassName="mr-5 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="신청기간" labelClassName="d-flex justify-content-end" className="mb-0" as="none" />
                 <MokaInputLabel label="오늘자 기준" labelClassName="ml-0 mr-2" className="mb-0" as="none" />
                 <div style={{ width: 80 }}>
                     <MokaInput
@@ -78,7 +78,7 @@ const TourSetEdit = () => {
                 <MokaInputLabel label="일 후까지 신청 가능" labelClassName="ml-3" className="mb-0" as="none" />
             </Form.Row>
             <Form.Row className="mb-3">
-                <MokaInputLabel label="신청인원" labelClassName="mr-5 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="신청인원" labelClassName="d-flex justify-content-end" className="mb-0" as="none" />
                 <div style={{ width: 80 }}>
                     <MokaInput
                         as="select"
@@ -121,7 +121,7 @@ const TourSetEdit = () => {
                 <MokaInputLabel label="명 이하" labelClassName="ml-0 d-flex justify-content-end" className="mb-0" as="none" />
             </Form.Row>
             <Form.Row className="mb-3">
-                <MokaInputLabel label="견학가능요일" labelClassName="mr-5 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="견학가능요일" labelClassName="d-flex justify-content-end" className="mb-0" as="none" />
                 <MokaInputLabel
                     label="일"
                     labelClassName="ml-0"

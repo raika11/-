@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const BoardsList = () => {
     const { boardType } = useSelector((store) => ({
-        boardType: store.boards.boardType,
+        boardType: store.board.boardType,
     }));
 
     const [cardTitle, setCardTitle] = useState('');

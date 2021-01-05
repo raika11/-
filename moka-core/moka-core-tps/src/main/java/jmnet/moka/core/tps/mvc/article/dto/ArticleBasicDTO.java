@@ -166,11 +166,6 @@ public class ArticleBasicDTO implements Serializable {
     private String artTitle;
 
     /**
-     * 기사부제목
-     */
-    private String artSubTitle;
-
-    /**
      * 분류코드 목록
      */
     private List<String> categoryList = new ArrayList<>();

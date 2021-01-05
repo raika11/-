@@ -38,12 +38,6 @@ public class ArticleContentVO implements Serializable {
     private Long totalId;
 
     /**
-     * 순번
-     */
-    @Column(name = "SERIAL_NO")
-    private Long serialNo;
-
-    /**
      * 기사내용
      */
     @Column(name = "ART_CONTENT")

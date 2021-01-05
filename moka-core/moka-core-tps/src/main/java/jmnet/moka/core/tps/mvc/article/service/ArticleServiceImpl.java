@@ -340,9 +340,9 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         // 본문삭제 : UPA_ARTICLE_CONTENT_DEL
-        //        if (isReturnErr(articleMapper.callUpaArticleContentDel(paramMap))) {
-        //            return false;
-        //        }
+        if (isReturnErr(articleMapper.callUpaArticleContentDel(paramMap))) {
+            return false;
+        }
 
         // 분류등록 : UPA_ARTICLE_CODELIST_INS_BY_MASTER_CODE
         Map paramCatMap = new HashMap();
@@ -403,9 +403,6 @@ public class ArticleServiceImpl implements ArticleService {
         // 본문등록 : UPA_ARTICLE_CONTENT_INS_BY_TOTALID
         Map paramContentMap = new HashMap();
         paramContentMap.put("totalId", articleBasic.getTotalId());
-        paramContentMap.put("serialNo", updateDto
-                .getArtContent()
-                .getSerialNo());
         paramContentMap.put("artContent", updateDto
                 .getArtContent()
                 .getArtContent());
@@ -413,7 +410,7 @@ public class ArticleServiceImpl implements ArticleService {
             return false;
         }
 
-        // ARTICLE_BASIC에 제목,기자 수정 : UPA_ARTICLE_BASIC_UPD_BY_TOTALID
+        // ARTICLE_BASIC에 제목,부제목,기자 수정 : UPA_ARTICLE_BASIC_UPD_BY_TOTALID
         String reporters = updateDto
                 .getReporterList()
                 .stream()
@@ -424,6 +421,7 @@ public class ArticleServiceImpl implements ArticleService {
         paramBasicMap.put("totalId", articleBasic.getTotalId());
         paramBasicMap.put("artReporter", reporters);
         paramBasicMap.put("artTitle", updateDto.getArtTitle());
+        paramBasicMap.put("artSubTitle", updateDto.getArtSubTitle());
         if (isReturnErr(articleMapper.callUpaArticleBasicUpdByTotalId(paramBasicMap))) {
             return false;
         }

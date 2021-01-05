@@ -43,9 +43,9 @@ public class ArticleBasicUpdateDTO implements Serializable {
     private String artTitle;
 
     /**
-     * 기사본문
+     * 기사부제목
      */
-    private ArticleContentVO artContent;
+    private String artSubTitle;
 
     /**
      * 분류코드 목록
@@ -61,4 +61,10 @@ public class ArticleBasicUpdateDTO implements Serializable {
      * 추천태그 목록
      */
     private List<String> tagList = new ArrayList<>();
+
+    /**
+     * 기사본문
+     */
+    private ArticleContentVO artContent;
+
 }

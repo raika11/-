@@ -534,19 +534,18 @@
   </insert>
 
   <!--본문삭제-->
-  <!--<delete id="callUpaArticleContentDel" parameterType="hashMap"
+  <delete id="callUpaArticleContentDel" parameterType="hashMap"
     statementType="CALLABLE">
     { call UPA_ARTICLE_CONTENT_DEL(
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
       )}
-  </delete>-->
+  </delete>
 
   <!--본문등록-->
   <insert id="callUpaArticleContentInsByTotalId" parameterType="hashMap"
     statementType="CALLABLE">
     { call UPA_ARTICLE_CONTENT_INS_BY_TOTALID(
       #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{serialNo, mode=IN, jdbcType=INTEGER, javaType=int},
       #{artContent, mode=IN, jdbcType=NVARCHAR, javaType=string}
       )}
   </insert>
@@ -557,7 +556,8 @@
    { call UPA_ARTICLE_BASIC_UPD_BY_TOTALID(
     #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{artReporter, mode=IN, jdbcType=NVARCHAR, javaType=string},
-    #{artTitle, mode=IN, jdbcType=NVARCHAR, javaType=string}
+    #{artTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+    #{artSubTitle, mode=IN, jdbcType=NVARCHAR, javaType=string}
     )}
   </update>
 

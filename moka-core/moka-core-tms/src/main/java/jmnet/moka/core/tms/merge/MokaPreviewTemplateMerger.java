@@ -367,7 +367,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
      * @throws TemplateParseException
      */
     public StringBuilder mergeArticle(ArticlePageItem articlePageItem, Long totalId, List<Map<String, Object>> categoryList,
-            List<Map<String, Object>> reporterList, List<Map<String, Object>> tagList, String title, String content)
+            List<Map<String, Object>> reporterList, List<Map<String, Object>> tagList, String title, String subTitle, String content)
             throws TemplateMergeException, DataLoadException, TemplateParseException {
         MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
         // TMS의 PagePathResolver, MergeHandler에서 설정하는 context 정보를 추가한다.
@@ -393,7 +393,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("totalId", totalId.toString());
         JSONResult jsonResult = loader.getJSONResult("article", paramMap, true);
-        Map<String, Object> articleInfo = rebuildInfoArticle(jsonResult, categoryList, reporterList, tagList, title, content);
+        Map<String, Object> articleInfo = rebuildInfoArticle(jsonResult, categoryList, reporterList, tagList, title, subTitle, content);
         mergeContext.set("article", articleInfo);
         mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + totalId.toString());
         this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -411,7 +411,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     }
 
     private Map<String, Object> rebuildInfoArticle(JSONResult jsonResult, List<Map<String, Object>> categoryList,
-            List<Map<String, Object>> reporterList, List<Map<String, Object>> tagList, String title, String content) {
+            List<Map<String, Object>> reporterList, List<Map<String, Object>> tagList, String title, String subTitle, String content) {
         Map<String, Object> article = new HashMap<>();
         //        article.put("basic", jsonResult.getDataListFirst("BASIC"));
         //        article.put("content", jsonResult.getDataList("CONTENT"));
@@ -425,6 +425,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
         Map<String, Object> basicJson = jsonResult.getDataListFirst("BASIC");
         basicJson.replace("ART_TITLE", title);
+        basicJson.replace("ART_SUB_TITLE", subTitle);
         article.put("basic", basicJson);
         Map<String, Object> contentJson = jsonResult.getDataListFirst("CONTENT");
         contentJson.replace("ART_CONTENT", content);
@@ -432,7 +433,6 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         article.put("reporter", reporterList);
         article.put("mastercode", categoryList);
         article.put("keyword", tagList);
-
 
         return article;
     }

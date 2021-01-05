@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel } from '@/components';
 
 /**
@@ -233,6 +234,10 @@ const TourSetEdit = () => {
                     }
                 />
             </Form.Row>
+            <div className="d-flex justify-content-center">
+                <Button className="mr-2">저장</Button>
+                <Button variant="negative">취소</Button>
+            </div>
         </Form>
     );
 };

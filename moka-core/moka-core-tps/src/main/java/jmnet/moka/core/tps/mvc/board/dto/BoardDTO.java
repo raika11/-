@@ -199,4 +199,7 @@ public class BoardDTO {
 
     @DTODateTimeFormat
     private Date regDt;
+
+    @DTODateTimeFormat
+    private Date modDt;
 }

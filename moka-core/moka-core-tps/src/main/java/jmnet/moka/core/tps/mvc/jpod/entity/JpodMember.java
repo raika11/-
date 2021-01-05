@@ -85,7 +85,7 @@ public class JpodMember implements Serializable {
     /**
      * 출연진 설명
      */
-    @Column(name = "DESC")
+    @Column(name = "MEM_DESC")
     private String desc;
 
 }

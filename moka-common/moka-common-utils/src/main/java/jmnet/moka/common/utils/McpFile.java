@@ -149,6 +149,16 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         return FilenameUtils.getExtension(fileName);
     }
 
+    /**
+     * 파일 경로와 파일명을 분리하여 전달
+     *
+     * @param fileName 파일명
+     * @return 파일 경로, 명 배열
+     */
+    public static String[] getFilepathAndName(String fileName) {
+        return new String[] {FilenameUtils.getPath(fileName), FilenameUtils.getName(fileName)};
+    }
+
 
 
     private static boolean isMatchedName(String name, String... arrs) {

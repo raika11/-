@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -55,7 +56,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * <pre>
@@ -143,7 +143,7 @@ public class BoardRestController extends AbstractCommonController {
             @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
             @ApiParam("게시물 일련번호") @PathVariable("boardSeq") @Min(value = 1, message = "{tps.board.error.pattern.boardSeq}") Long boardSeq,
             @ApiParam("게시물 비밀번호") @RequestParam(value = "pwd", required = false) String pwd)
-            throws NoDataException, InvalidDataException {
+            throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
         Board board = boardService
@@ -185,16 +185,19 @@ public class BoardRestController extends AbstractCommonController {
         board.setDepth(0);
         setPassword(board);
         setRegisterInfo(board, principal);
-        board.setContent(HtmlUtils.htmlEscape(board.getContent()));
+        //board.setContent(HtmlUtils.htmlEscape(board.getContent()));
 
+        BoardInfo boardInfo = boardInfoService
+                .findBoardInfoById(boardId)
+                .orElseThrow(() -> new NoDataException(msg("tps.board-info.error.not-exist")));
+
+        validFileOperation(boardInfo, boardDTO.getAttaches());
 
         Board returnValue = boardService.insertBoard(board);
         returnValue.setParentBoardSeq(returnValue.getBoardSeq());
         boardService.updateBoardParentSeq(returnValue.getBoardSeq(), returnValue.getBoardSeq());
 
-        BoardInfo boardInfo = boardInfoService
-                .findBoardInfoById(boardId)
-                .orElseThrow(() -> new NoDataException(msg("tps.board-info.error.not-exist")));
+
         returnValue.setBoardInfo(boardInfo);
 
         String attachMessage = saveAttachFiles(returnValue, boardDTO.getAttaches());
@@ -235,7 +238,7 @@ public class BoardRestController extends AbstractCommonController {
         Board board = modelMapper.map(boardDTO, Board.class);
         board.setBoardId(boardId);
         board.setParentBoardSeq(parentBoardSeq);
-        board.setContent(HtmlUtils.htmlEscape(board.getContent()));
+        //board.setContent(HtmlUtils.htmlEscape(board.getContent()));
         setRegisterInfo(board, principal);
         setPassword(board);
         try {
@@ -282,7 +285,7 @@ public class BoardRestController extends AbstractCommonController {
         newBoard.setBoardSeq(boardSeq);
         newBoard.setParentBoardSeq(boardSeq);
         newBoard.setDepth(0);
-        newBoard.setContent(HtmlUtils.htmlEscape(newBoard.getContent()));
+        //newBoard.setContent(HtmlUtils.htmlEscape(newBoard.getContent()));
 
         // 오리진 데이터 조회
         Board oldBoard = boardService
@@ -337,7 +340,7 @@ public class BoardRestController extends AbstractCommonController {
         newBoard.setBoardId(boardId);
         newBoard.setBoardSeq(boardSeq);
         newBoard.setParentBoardSeq(parentBoardSeq);
-        newBoard.setContent(HtmlUtils.htmlEscape(newBoard.getContent()));
+        //newBoard.setContent(HtmlUtils.htmlEscape(newBoard.getContent()));
 
         // 오리진 데이터 조회
         Board oldBoard = boardService
@@ -369,13 +372,15 @@ public class BoardRestController extends AbstractCommonController {
      *
      * @param board 게시물 정보
      * @return ResponseEntity
-     * @throws Exception 공통 에러 처리
+     * @throws InvalidDataException 공통 에러 처리
      */
     private ResponseEntity<?> processBoardContents(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
             throws InvalidDataException {
         ActionType actionType = board.getBoardSeq() != null && board.getBoardSeq() > 0 ? ActionType.UPDATE : ActionType.INSERT;
         try {
             // insert or update
+            validFileOperation(board.getBoardInfo(), boardAttachSaveDTOSet);
+
             Board returnValue = actionType == ActionType.UPDATE ? boardService.updateBoard(board) : boardService.insertBoard(board);
 
             String attachMessage = saveAttachFiles(returnValue, boardAttachSaveDTOSet);
@@ -589,28 +594,29 @@ public class BoardRestController extends AbstractCommonController {
         board.setRegIp(HttpHelper.getRemoteAddr());
     }
 
-    private String saveAttachFiles(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
+    private void validFileOperation(BoardInfo boardInfo, List<BoardAttachSaveDTO> boardAttachSaveDTOSet)
             throws InvalidDataException {
+        if (boardAttachSaveDTOSet != null && boardAttachSaveDTOSet.size() > 0) {
+            // 파일 첨부 가능 여부 체크
+            if (McpString
+                    .defaultValue(boardInfo.getFileYn(), MokaConstants.NO)
+                    .equals(MokaConstants.NO)) {
+                throw new InvalidDataException(msg("tps.board.error.file-attach-disable"));
+            }
+
+            // 최대 파일 건수 체크
+            if (boardInfo
+                    .getAllowFileCnt()
+                    .compareTo(boardAttachSaveDTOSet.size()) < 0) {
+                throw new InvalidDataException(msg("tps.board.error.file-limit-count", boardInfo.getAllowFileCnt()));
+            }
+        }
+    }
+
+    private String saveAttachFiles(Board board, List<BoardAttachSaveDTO> boardAttachSaveDTOSet) {
         List<BoardAttach> attaches = board.getAttaches();
+        List<BoardAttach> newAttaches = new ArrayList<>();
 
-        // 파일 첨부 가능 여부 체크
-        if (McpString
-                .defaultValue(board
-                        .getBoardInfo()
-                        .getFileYn(), MokaConstants.NO)
-                .equals(MokaConstants.NO)) {
-            throw new InvalidDataException(msg("tps.board.error.file-attach-disable"));
-        }
-
-        // 최대 파일 건수 체크
-        if (board
-                .getBoardInfo()
-                .getAllowFileCnt()
-                .compareTo(boardAttachSaveDTOSet.size()) < 0) {
-            throw new InvalidDataException(msg("tps.board.error.file-limit-count", board
-                    .getBoardInfo()
-                    .getAllowFileCnt()));
-        }
 
         StringBuilder message = new StringBuilder();
 
@@ -623,7 +629,7 @@ public class BoardRestController extends AbstractCommonController {
                                 .getOriginalFilename());
 
                         // 개별 파일 확장자 검사
-                        if (!board
+                        if (ext != null && !board
                                 .getBoardInfo()
                                 .getAllowFileExt()
                                 .contains(ext)) {
@@ -681,7 +687,7 @@ public class BoardRestController extends AbstractCommonController {
                                             .getSeqNo()
                                             .equals(boardAttach.getSeqNo()));
                                 } else {
-                                    boardService.insertBoardAttach(BoardAttach
+                                    newAttaches.add(boardService.insertBoardAttach(BoardAttach
                                             .builder()
                                             .boardId(board.getBoardId())
                                             .boardSeq(board.getBoardSeq())
@@ -690,14 +696,22 @@ public class BoardRestController extends AbstractCommonController {
                                             .orgFileName(boardAttachSaveDTO
                                                     .getAttachFile()
                                                     .getOriginalFilename())
-                                            .build());
+                                            .build()));
                                 }
                             }
                         }
                     } else {
-                        attaches.removeIf(boardAttach -> boardAttachSaveDTO
-                                .getSeqNo()
-                                .equals(boardAttach.getSeqNo()));
+                        attaches
+                                .stream()
+                                .filter(boardAttach -> boardAttachSaveDTO
+                                        .getSeqNo()
+                                        .equals(boardAttach.getSeqNo()))
+                                .findFirst()
+                                .ifPresent(ba -> {
+                                    newAttaches.add(ba);
+                                    attaches.remove(ba);
+                                });
+
                     }
                 } catch (IOException ex) {
                     log.error("[FAIL TO FILE UPLOAD BOARD] boardseq: {} {}", board.getBoardSeq(), ex.getMessage());
@@ -706,6 +720,9 @@ public class BoardRestController extends AbstractCommonController {
 
             if (attaches != null && attaches.size() > 0) {
                 boardService.deleteAllBoardAttach(attaches);
+            }
+            if (newAttaches.size() > 0) {
+                board.setAttaches(newAttaches);
             }
         }
 
@@ -749,7 +766,7 @@ public class BoardRestController extends AbstractCommonController {
     public ResponseEntity<?> postUploadContentImage(
             @ApiParam("게시판 ID") @PathVariable("boardId") @Size(min = 1, max = 3, message = "{tps.board-info.error.pattern.boardId}") Integer boardId,
             MultipartFile attachFile)
-            throws InvalidDataException, NoDataException, IOException {
+            throws InvalidDataException, IOException {
 
         if (!ImageUtil.isImage(attachFile)) {
             throw new InvalidDataException(msg("tps.board.error.file-ext", attachFile.getOriginalFilename()));
@@ -760,7 +777,7 @@ public class BoardRestController extends AbstractCommonController {
         String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM");
         String saveFilePath = String.format(boardImageSavepath, boardId, yearMonth);
         String imageUrl = pdsUrl;
-        String message = "";
+        String message;
         if (ftpHelper.upload(FtpHelper.PDS, filename, attachFile.getInputStream(), saveFilePath)) {
             imageUrl = pdsUrl + saveFilePath + "/" + filename;
             message = msg("tps.board-info.success.upload");

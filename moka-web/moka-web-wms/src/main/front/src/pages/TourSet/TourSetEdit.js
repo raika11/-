@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel } from '@/components';
 
 /**
@@ -16,8 +17,7 @@ const TourSetEdit = () => {
             <Form.Row className="mb-3">
                 <MokaInputLabel
                     label="견학신청"
-                    labelWidth={100}
-                    labelClassName="mr-5 ft-12 d-flex justify-content-end"
+                    labelClassName="mr-5 d-flex justify-content-end"
                     className="mb-0"
                     as="switch"
                     name="tour"
@@ -34,8 +34,8 @@ const TourSetEdit = () => {
                 />
             </Form.Row>
             <Form.Row className="mb-3">
-                <MokaInputLabel label="신청기간" labelWidth={100} labelClassName="mr-5 ft-12 d-flex justify-content-end" className="mb-0" as="none" />
-                <MokaInputLabel label="오늘자 기준" labelClassName="ml-0 mr-2 ft-12" className="mb-0" as="none" />
+                <MokaInputLabel label="신청기간" labelClassName="mr-5 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="오늘자 기준" labelClassName="ml-0 mr-2" className="mb-0" as="none" />
                 <div style={{ width: 80 }}>
                     <MokaInput
                         as="select"
@@ -55,7 +55,7 @@ const TourSetEdit = () => {
                         })}
                     </MokaInput>
                 </div>
-                <MokaInputLabel label="일 후부터" labelWidth={60} labelClassName="ml-3 mr-2 ft-12" className="mb-0" as="none" />
+                <MokaInputLabel label="일 후부터" labelClassName="mx-2" className="mb-0" as="none" />
                 <div style={{ width: 80 }}>
                     <MokaInput
                         as="select"
@@ -75,10 +75,10 @@ const TourSetEdit = () => {
                         })}
                     </MokaInput>
                 </div>
-                <MokaInputLabel label="일 후까지 신청 가능" labelWidth={100} labelClassName="ml-3 ft-12" className="mb-0" as="none" />
+                <MokaInputLabel label="일 후까지 신청 가능" labelClassName="ml-3" className="mb-0" as="none" />
             </Form.Row>
             <Form.Row className="mb-3">
-                <MokaInputLabel label="신청인원" labelWidth={100} labelClassName="mr-5 ft-12 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="신청인원" labelClassName="mr-5 d-flex justify-content-end" className="mb-0" as="none" />
                 <div style={{ width: 80 }}>
                     <MokaInput
                         as="select"
@@ -98,7 +98,7 @@ const TourSetEdit = () => {
                         })}
                     </MokaInput>
                 </div>
-                <MokaInputLabel label="명 이상~" labelWidth={60} labelClassName="ml-0 mr-3 ft-12 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="명 이상~" labelClassName="ml-0 mr-2 d-flex justify-content-end" className="mb-0" as="none" />
                 <div style={{ width: 80 }}>
                     <MokaInput
                         as="select"
@@ -118,14 +118,13 @@ const TourSetEdit = () => {
                         })}
                     </MokaInput>
                 </div>
-                <MokaInputLabel label="명 이하" labelWidth={50} labelClassName="ml-0 ft-12 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="명 이하" labelClassName="ml-0 d-flex justify-content-end" className="mb-0" as="none" />
             </Form.Row>
             <Form.Row className="mb-3">
-                <MokaInputLabel label="견학가능요일" labelWidth={100} labelClassName="mr-5 ft-12 d-flex justify-content-end" className="mb-0" as="none" />
+                <MokaInputLabel label="견학가능요일" labelClassName="mr-5 d-flex justify-content-end" className="mb-0" as="none" />
                 <MokaInputLabel
                     label="일"
-                    labelWidth={20}
-                    labelClassName="ml-0 mr-3 ft-12"
+                    labelClassName="ml-0"
                     className="mb-0"
                     as="switch"
                     name="sunday"
@@ -141,8 +140,6 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="월"
-                    labelWidth={20}
-                    labelClassName="mr-3 ft-12"
                     className="mb-0"
                     as="switch"
                     name="monday"
@@ -159,8 +156,6 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="화"
-                    labelWidth={20}
-                    labelClassName="mr-3 ft-12"
                     className="mb-0"
                     as="switch"
                     name="tuesday"
@@ -177,8 +172,6 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="수"
-                    labelWidth={20}
-                    labelClassName="mr-3 ft-12"
                     className="mb-0"
                     as="switch"
                     name="wednesday"
@@ -195,8 +188,6 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="목"
-                    labelWidth={20}
-                    labelClassName="mr-3 ft-12"
                     className="mb-0"
                     as="switch"
                     name="thursday"
@@ -213,8 +204,6 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="금"
-                    labelWidth={20}
-                    labelClassName="mr-3 ft-12"
                     className="mb-0"
                     as="switch"
                     name="friday"
@@ -231,8 +220,6 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="토"
-                    labelWidth={20}
-                    labelClassName="mr-3 ft-12"
                     className="mb-0"
                     as="switch"
                     name="saturday"
@@ -247,6 +234,10 @@ const TourSetEdit = () => {
                     }
                 />
             </Form.Row>
+            <div className="d-flex justify-content-center">
+                <Button className="mr-2">저장</Button>
+                <Button variant="negative">취소</Button>
+            </div>
         </Form>
     );
 };

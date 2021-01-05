@@ -3,10 +3,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import clsx from 'clsx';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard, useBreakpoint } from '@components';
+import { clearStore } from '@store/article';
 
 import ArticleEdit from './ArticleEdit';
 const ArticleList = React.lazy(() => import('./ArticleList'));
@@ -15,14 +16,14 @@ const ArticleList = React.lazy(() => import('./ArticleList'));
  * 등록기사 전체
  */
 const Article = ({ match }) => {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const matchPoints = useBreakpoint();
 
-    // React.useEffect(() => {
-    //     return () => {
-    //         dispatch(clearStore());
-    //     };
-    // }, [dispatch]);
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <Container className="p-0 position-relative">
@@ -53,7 +54,7 @@ const Article = ({ match }) => {
                         path={[`${match.url}/:totalId`]}
                         exact
                         render={() => (
-                            <div className="absolute-top-right h-100" style={{ width: 640, zIndex: 2 }}>
+                            <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
                                 <ArticleEdit />
                             </div>
                         )}

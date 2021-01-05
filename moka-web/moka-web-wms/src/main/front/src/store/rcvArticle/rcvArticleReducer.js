@@ -24,7 +24,7 @@ export const initialState = {
         keyword: '',
     },
     statusList: [
-        { id: 'all', name: '전체' },
+        { id: 'all', name: '상태 전체' },
         { id: 'B', name: '작업전' },
         { id: 'Y', name: '등록' },
     ],
@@ -37,6 +37,7 @@ export const initialState = {
         rid: null,
         codeList: [],
         articleSource: {},
+        totalId: null,
         title: '',
     },
     invalidList: [],

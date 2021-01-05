@@ -222,9 +222,10 @@ const ArticleSearch = () => {
                     />
                 </Col>
 
-                {/* 분류 전체 */}
-                <Col xs={2} className="p-0 pl-2">
-                    <CodeAutocomplete placeholder="분류 전체" />
+                {/* 면, 판 */}
+                <Col xs={2} className="p-0 pl-2 d-flex">
+                    <MokaInput placeholder="면" name="pressMyun" className="mr-2 ft-12" onChange={handleChangeValue} value={search.pressMyun} />
+                    <MokaInput placeholder="판" name="pressPan" className="ft-12" onChange={handleChangeValue} value={search.pressPan} />
                 </Col>
 
                 <Col xs={5} className="p-0 pl-2 d-flex">
@@ -275,10 +276,9 @@ const ArticleSearch = () => {
                     <MokaInput className="ft-12" name="keyword" onChange={handleChangeValue} value={search.keyword} onKeyPress={handleKeyPress} placeholder="검색어를 입력하세요" />
                 </Col>
 
-                {/* 면, 판 */}
-                <Col xs={2} className="p-0 pl-2 d-flex">
-                    <MokaInput placeholder="면" name="pressMyun" className="mr-2 ft-12" onChange={handleChangeValue} value={search.pressMyun} />
-                    <MokaInput placeholder="판" name="pressPan" className="ft-12" onChange={handleChangeValue} value={search.pressPan} />
+                {/* 분류 전체 */}
+                <Col xs={4} className="p-0 pl-2">
+                    <CodeAutocomplete placeholder="분류 전체" />
                 </Col>
 
                 {/* 매체 */}
@@ -294,6 +294,7 @@ const ArticleSearch = () => {
                                 setLocalItem({ key: SOURCE_LIST_KEY, value });
                             }
                         }}
+                        width="auto"
                         sourceType="JOONGANG"
                         isInvalid={error.sourceList}
                     />

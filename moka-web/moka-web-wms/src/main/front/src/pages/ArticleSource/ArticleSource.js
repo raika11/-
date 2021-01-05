@@ -36,12 +36,12 @@ const ArticleSource = (props) => {
         <div className="d-flex">
             <Helmet>
                 <title>수신 매체 관리</title>
-                <meta name="description" content="수신매체관리 페이지입니다." />
+                <meta name="description" content="수신 매체 관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/* 수신 매체 리스트 */}
-            <MokaCard header={false} width={812} className="mr-gutter" bodyClassName="d-flex flex-column">
+            <MokaCard width={812} className="mr-gutter" bodyClassName="d-flex flex-column" title="수신 매체 관리">
                 <Suspense>
                     <ArticleSourceList />
                 </Suspense>

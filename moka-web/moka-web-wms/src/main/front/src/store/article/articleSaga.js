@@ -6,12 +6,12 @@ import * as act from './articleAction';
 import * as api from './articleApi';
 
 /**
- * 기사 목록 조회
+ * 등록 기사 목록 조회
  */
 const getArticleList = createRequestSaga(act.GET_ARTICLE_LIST, api.getArticleList);
 
 /**
- * 기사 단건 조회
+ * 등록 기사 단건 조회
  */
 const getArticle = createRequestSaga(act.GET_ARTICLE, api.getArticle);
 
@@ -101,6 +101,16 @@ function* saveArticle({ payload: { article, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 등록기사 삭제
+ */
+const deleteArticle = createRequestSaga(act.DELETE_ARTICLE, api.deleteArticle, true);
+
+/**
+ * 등록기사 중지
+ */
+const stopArticle = createRequestSaga(act.STOP_ARTICLE, api.stopArticle, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
     yield takeLatest(act.GET_SERVICE_ARTICLE_LIST, getServiceArticleList);
@@ -109,4 +119,6 @@ export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_IMAGE_LIST, getArticleImageList);
     yield takeLatest(act.GET_ARTICLE, getArticle);
     yield takeLatest(act.SAVE_ARTICLE, saveArticle);
+    yield takeLatest(act.DELETE_ARTICLE, deleteArticle);
+    yield takeLatest(act.STOP_ARTICLE, stopArticle);
 }

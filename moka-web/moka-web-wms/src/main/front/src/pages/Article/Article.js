@@ -13,9 +13,9 @@ import ArticleEdit from './ArticleEdit';
 const ArticleList = React.lazy(() => import('./ArticleList'));
 
 /**
- * 등록기사 전체
+ * 등록기사
  */
-const Article = ({ match }) => {
+const Article = ({ match, displayName, name }) => {
     const dispatch = useDispatch();
     const matchPoints = useBreakpoint();
 
@@ -28,24 +28,28 @@ const Article = ({ match }) => {
     return (
         <Container className="p-0 position-relative" fluid>
             <Helmet>
-                <title>등록 기사 전체</title>
-                <meta name="description" content="등록 기사 전체 페이지입니다." />
+                <title>{displayName}</title>
+                <meta name="description" content={`${displayName} 페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             <Row className="m-0">
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     {/* 리스트 */}
-                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="등록 기사 전체">
+                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={displayName}>
                         <Suspense>
-                            <ArticleList />
+                            <ArticleList match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
                         </Suspense>
                     </MokaCard>
                 </Col>
 
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
-                        <Route path={[`${match.url}/:totalId`]} exact render={() => <ArticleEdit />} />
+                        <Route
+                            path={[`${match.url}/:totalId`]}
+                            exact
+                            render={() => <ArticleEdit match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />}
+                        />
                     </Col>
                 )}
 
@@ -55,7 +59,7 @@ const Article = ({ match }) => {
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
-                                <ArticleEdit />
+                                <ArticleEdit match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
                             </div>
                         )}
                     />

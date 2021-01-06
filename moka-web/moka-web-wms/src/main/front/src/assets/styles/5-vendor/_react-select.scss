@@ -29,6 +29,10 @@
         .react-select__multi-value {
             margin-right: 2px;
             margin-bottom: 2px;
+            .react-select__multi-value__label {
+                padding-top: 2px;
+                padding-bottom: 2px;
+            }
         }
     }
 

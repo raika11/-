@@ -6,7 +6,7 @@ import { getArticleType } from '@store/codeMgt';
 import { clearArticle } from '@store/article';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 
-const ArticleEdit = () => {
+const ArticleEdit = ({ match }) => {
     const { totalId } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const ArticleEdit = () => {
      * 취소
      */
     const handleCancle = () => {
-        history.push('/article');
+        history.push(match.path);
         dispatch(clearArticle());
     };
 

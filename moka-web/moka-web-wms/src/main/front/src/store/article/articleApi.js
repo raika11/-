@@ -1,7 +1,7 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
 
-// 기사 목록 조회
+// 등록 기사 목록 조회
 export const getArticleList = ({ search }) => {
     const queryString = qs.stringify(search);
     return instance.get(`/api/articles?${queryString}`).catch((err) => {
@@ -41,14 +41,14 @@ export const getArticleImageList = ({ totalId }) => {
     });
 };
 
-// 기사 단건 조회
+// 등록 기사 단건 조회
 export const getArticle = ({ totalId }) => {
     return instance.get(`/api/articles/${totalId}`).catch((err) => {
         throw err;
     });
 };
 
-// 기사 수정
+// 등록 기사 수정 (application/json)
 export const putArticle = ({ article }) => {
     return instance
         .put(`/api/articles/${article.totalId}`, article, {
@@ -59,4 +59,32 @@ export const putArticle = ({ article }) => {
         .catch((err) => {
             throw err;
         });
+};
+
+// 등록 기사 삭제 (delete 아니고 post임)
+export const deleteArticle = ({ totalId }) => {
+    return instance.post(`/api/articles/${totalId}/delete`).catch((err) => {
+        throw err;
+    });
+};
+
+// 등록 기사 중지
+export const stopArticle = ({ totalId }) => {
+    return instance.post(`/api/articles/${totalId}/stop`).catch((err) => {
+        throw err;
+    });
+};
+
+// 등록 기사 cdn 등록 (get임)
+export const registCdn = ({ totalId }) => {
+    return instance.get(`/api/articles/${totalId}/cdn`).catch((err) => {
+        throw err;
+    });
+};
+
+// 등록 기사 편집 히스토리 조회
+export const getArticleHistoryList = ({ search }) => {
+    return instance.get(`/api/articles/${search.totalId}/histories`).catch((err) => {
+        throw err;
+    });
 };

@@ -20,7 +20,7 @@ const SOURCE_LIST_KEY = 'articleSourceList';
 /**
  * 등록기사 검색 컴포넌트
  */
-const ArticleSearch = () => {
+const ArticleSearch = ({ ja, sun }) => {
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.article.search);
     const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
@@ -294,25 +294,27 @@ const ArticleSearch = () => {
                 </Col>
 
                 {/* 분류 전체 */}
-                <Col xs={4} className="p-0 pl-2">
+                <Col xs={!ja && !sun ? 4 : 6} className="p-0 pl-2">
                     <CodeAutocomplete placeholder="분류 전체" value={search.masterCode} onChange={handleChangeMasterCode} />
                 </Col>
 
                 {/* 매체 */}
-                <Col xs={2} className="p-0 pl-2 d-flex">
-                    <ArticleSourceSelector
-                        className="w-100 flex-shrink-0"
-                        value={sourceList}
-                        onChange={(value) => {
-                            setSourceList(value);
-                            setError({ ...error, sourceList: false });
-                            if (value !== '') {
-                                // 로컬스토리지에 저장
-                                setLocalItem({ key: SOURCE_LIST_KEY, value });
-                            }
-                        }}
-                    />
-                </Col>
+                {!ja && !sun && (
+                    <Col xs={2} className="p-0 pl-2 d-flex">
+                        <ArticleSourceSelector
+                            className="w-100 flex-shrink-0"
+                            value={sourceList}
+                            onChange={(value) => {
+                                setSourceList(value);
+                                setError({ ...error, sourceList: false });
+                                if (value !== '') {
+                                    // 로컬스토리지에 저장
+                                    setLocalItem({ key: SOURCE_LIST_KEY, value });
+                                }
+                            }}
+                        />
+                    </Col>
+                )}
 
                 <Col xs={2} className="p-0 pl-2 d-flex">
                     <Button variant="searching" className="mr-2 ft-12 w-50" onClick={handleSearch}>

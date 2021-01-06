@@ -40,9 +40,10 @@ const TitleRenderer = forwardRef((originParam, ref) => {
                 function () {
                     if (ele.current) {
                         let height = ele.current.offsetHeight;
-                        if (height < 34) height = 34;
-                        params.node.setRowHeight(height + 2);
-                        params.api.onRowHeightChanged();
+                        if (height > params.node.rowHeight) {
+                            params.node.setRowHeight(height + 2);
+                            params.api.onRowHeightChanged();
+                        }
                         setShow(true);
                     }
                 },

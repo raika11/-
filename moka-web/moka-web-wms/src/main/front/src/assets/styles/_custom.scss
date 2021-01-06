@@ -297,8 +297,13 @@ body {
     display: flex;
     align-items: baseline;
     justify-content: center;
-
+    overflow: auto;
     .modal-dialog {
+        &.fixed-modal {
+            display: flex;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
         &.react-draggable {
             .modal-header[data-drag-on="true"] {
                 cursor: move;

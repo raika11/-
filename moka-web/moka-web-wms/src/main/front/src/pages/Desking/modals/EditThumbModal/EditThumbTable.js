@@ -57,7 +57,7 @@ const EditThumbTable = (props) => {
 
     return (
         <React.Fragment>
-            <div className="border w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll mb-2 position-relative">
+            <div className="border w-100 custom-scroll flex-fill mb-2 position-relative">
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {loading && <MokaLoader />}
                     {renderList.map((data) => (

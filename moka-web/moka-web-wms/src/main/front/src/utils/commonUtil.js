@@ -42,13 +42,38 @@ const fileDownload = (data, filename, mime) => {
 };
 
 /**
+ * base64 To blob
+ * @param {string} dataURI base64이미지
+ */
+const base64ToBlob = (dataURI) => {
+    let byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+        byteString = atob(dataURI.split(',')[1]);
+    } else {
+        byteString = unescape(dataURI.split(',')[1]);
+    }
+
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    let ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], { type: mimeString });
+};
+
+/**
  * blob To File
  * @param {any} blob blob
  * @param {string} fileName 저장할 파일명
  * @param {string} contentType contentType
  */
 const blobToFile = (blob, fileName, contentType) => {
-    return new File([blob], fileName, { type: contentType });
+    let extension = blob.type.split('/')[1];
+    if (extension === 'jpeg') {
+        extension = 'jpg';
+    }
+    return new File([blob], fileName + `.${extension}`, { type: contentType });
 };
 
 /**
@@ -413,6 +438,7 @@ const cancellablePromise = (promise) => {
 
 export default {
     fileDownload,
+    base64ToBlob,
     blobToFile,
     isEmpty,
     findNode,

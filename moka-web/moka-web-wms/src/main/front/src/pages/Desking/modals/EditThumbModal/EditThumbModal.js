@@ -19,6 +19,7 @@ const defaultValue = {
     id: '',
     dataType: 'represent',
     thumbPath: '',
+    imageOnlnPath: '',
     path: {
         orgPath: '',
         articleImgPath: '',
@@ -75,6 +76,7 @@ const EditThumbModal = (props) => {
                 dataType: 'archive',
                 id: data.id,
                 thumbPath: data.imageThumPath,
+                imageOnlnPath: data.imageOnlnPath,
                 path: {
                     imageOnlnPath: data.imageOnlnPath,
                     imageThumPath: data.imageThumPath,
@@ -86,6 +88,7 @@ const EditThumbModal = (props) => {
                 dataType: 'article',
                 id: data.id,
                 thumbPath: data.compFileUrl,
+                imageOnlnPath: data.compFileUrl,
                 path: {
                     compFileUrl: data.compFileUrl,
                 },
@@ -96,6 +99,7 @@ const EditThumbModal = (props) => {
                 dataType: 'local',
                 id: data.id,
                 thumbPath: data.preview,
+                imageOnlnPath: data.preview,
                 path: {
                     preview: data.preview,
                 },
@@ -120,7 +124,7 @@ const EditThumbModal = (props) => {
                 await fetch(repPhoto.thumbPath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
-                        const file = util.blobToFile(blobFile, `${deskingWorkData.seq}.jpeg`, blobFile.type);
+                        const file = util.blobToFile(blobFile, deskingWorkData.seq, blobFile.type);
                         setFileValue(file);
                         setThumbFileName(repPhoto.thumbPath);
                     });
@@ -154,15 +158,17 @@ const EditThumbModal = (props) => {
     return (
         <MokaModal
             title="대표 이미지 편집"
+            id="image-edit"
             show={show}
             onHide={handleHide}
             width={1200}
-            height={860}
+            height={841}
             size="xl"
             buttons={[
                 { text: '등록', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
+            dialogClassName="fixed-modal"
             bodyClassName="p-0 overflow-x-hidden custom-scroll"
             footerClassName="d-flex justify-content-center"
             draggable
@@ -214,6 +220,7 @@ const EditThumbModal = (props) => {
                         onDeleteClick={handleDeleteClick}
                         onRepClick={handleRepClick}
                         onEditClick={handleEditClick}
+                        setRepPhoto={setRepPhoto}
                     />
                 </div>
             </DndProvider>

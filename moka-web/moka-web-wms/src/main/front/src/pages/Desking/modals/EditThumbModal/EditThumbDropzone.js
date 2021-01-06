@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import produce from 'immer';
 import Button from 'react-bootstrap/Button';
@@ -6,14 +6,21 @@ import { useDrop } from 'react-dnd';
 import { MokaInputLabel, MokaIcon } from '@components';
 import EditThumbCard, { ItemTypes } from './EditThumbCard';
 import toast from '@utils/toastUtil';
+import gifshot from 'gifshot';
+import moment from 'moment';
+import util from '@utils/commonUtil';
+import { API_BASE_URL } from '@/constants';
+
+moment.locale('ko');
 
 const EditThumbDropzone = (props) => {
     const { collapse, setCollapse } = props;
-    const { onThumbClick, onRepClick, onEditClick } = props;
+    const { onThumbClick, onRepClick, onEditClick, setRepPhoto } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
-
+    const [gifInterval, setGifInterval] = useState(0.5);
+    const [btnDisabled, setBtnDisabled] = useState('disabled');
     /**
      * 드롭존으로 사용하기 위한 hook
      */
@@ -75,17 +82,72 @@ const EditThumbDropzone = (props) => {
         );
     };
 
+    const handleMakeGif = () => {
+        let images = [];
+
+        console.log(imgList);
+        // eslint-disable-next-line array-callback-return
+        imgList.map((image) => {
+            if (image.dataType === 'archive') {
+                images.push(`${API_BASE_URL}/api/achive/photos/by-url?url=${encodeURIComponent(image.imageOnlnPath)}`);
+            } else {
+                images.push(image.imageOnlnPath);
+            }
+        });
+
+        gifshot.createGIF(
+            {
+                images: images,
+                crossOrigin: 'Anonymous',
+                gifWidth: 300,
+                gifHeight: 300,
+                interval: gifInterval,
+            },
+            (obj) => {
+                console.log(obj);
+                if (!obj.error) {
+                    const gifImage = URL.createObjectURL(util.base64ToBlob(obj.image));
+                    setRepPhoto({
+                        dataType: 'local',
+                        id: moment().format('YYYYMMDDsss'),
+                        thumbPath: gifImage,
+                        path: {
+                            preview: gifImage,
+                        },
+                    });
+                } else {
+                    toast.error('GIF이미지 생성에 실패했습니다.');
+                }
+            },
+        );
+    };
+
+    const handleChangeValue = ({ target }) => {
+        const { name, value } = target;
+        if (name === 'gifInterval') {
+            setGifInterval(value);
+        }
+    };
+
+    useEffect(() => {
+        if (imgList.length > 1) {
+            setBtnDisabled(false);
+        } else {
+            setBtnDisabled(true);
+        }
+    }, [imgList.length]);
+
     return (
         <div className="d-flex flex-column overflow-hidden" style={{ width: 998 }}>
             {/* 버튼 영역 */}
             <div className="w-100 d-flex align-items-center justify-content-between py-2 px-3">
                 <div>{imgList.length > 0 && <p className="m-0 ft-12">총 : {imgList.length} 건</p>}</div>
                 <div className="d-flex align-items-center">
-                    <Button variant="searching" className="ft-12 mr-2">
+                    <Button variant="searching" className="ft-12 mr-2" onClick={handleMakeGif} disabled={btnDisabled}>
                         GIF 생성
                     </Button>
                     <div style={{ width: 120 }} className="mr-1">
-                        <MokaInputLabel label="간격" labelWidth={45} className="mb-0" disabled />
+                        <MokaInputLabel label="간격" labelWidth={45} className="mb-0" name="gifInterval" value={gifInterval} onChange={handleChangeValue} />
                     </div>
                     <p className="mb-0 mr-3">sce</p>
                     <Button
@@ -103,10 +165,10 @@ const EditThumbDropzone = (props) => {
             </div>
 
             {/* 드롭 영역 */}
-            <div className={clsx('flex-fill', 'custom-scroll', 'px-3', 'is-file-dropzone', { 'dropzone-dragover': isOver })}>
-                <div ref={drop} className="w-100 h-100">
-                    <div className="d-flex flex-wrap align-content-start position-relative pb-1">
-                        <div className="dropzone-dragover-mask" style={{ minHeight: 139 }}></div>
+            <div className={clsx('flex-fill', 'px-3', 'is-file-dropzone', 'pb-3', 'overflow-hidden', 'pt-10', { 'dropzone-dragover': isOver })}>
+                <div ref={drop} className="w-100 h-100 position-relative dropzone-dragover-zone custom-scroll">
+                    <div className="d-flex flex-wrap align-content-start position-relative pb-1 ">
+                        <div className="" style={{ minHeight: 139 }}></div>
                         {imgList.map((data, idx) => (
                             <EditThumbCard
                                 ref={cardRef}

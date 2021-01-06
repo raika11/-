@@ -1,7 +1,7 @@
 import React from 'react';
 import RcvArticleRegisterBtn from './components/RcvArticleRegisterBtn';
 import RcvArticlePreviewBtn from './components/RcvArticlePreviewBtn';
-import TitleRenderer from './components/TitleRenderer';
+import TitleRenderer from '@pages/Article/components/TitleRenderer';
 
 export default [
     {

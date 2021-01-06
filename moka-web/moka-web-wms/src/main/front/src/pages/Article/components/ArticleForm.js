@@ -53,6 +53,10 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                 [name]: value,
             });
         }
+
+        if (name === 'artTitle') {
+            setError({ ...error, artTitle: false });
+        }
     };
 
     /**
@@ -278,10 +282,10 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
             ]}
             loading={loading}
         >
-            <Form className="d-flex flex-column h-100 overflow-hidden">
+            <Form className="d-flex flex-column h-100 overflow-y-hidden">
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="매체" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="매체" inputClassName="ft-12" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
                     </Col>
                     <Col className="p-0 d-flex justify-content-end align-items-center" xs={9}>
                         <MokaInputLabel label="발행일" labelWidth={39} inputClassName="ft-12" value={temp.pressDateText} inputProps={{ plaintext: true }} disabled />

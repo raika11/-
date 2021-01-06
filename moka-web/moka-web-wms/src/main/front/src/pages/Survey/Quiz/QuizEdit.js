@@ -22,8 +22,7 @@ const QuizEdit = () => {
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: '저장', variant: 'positive', onClick: () => console.log('저장'), className: 'mr-05' },
-                //{ text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
-                { text: '취소', variant: 'negative', onClick: () => console.log('test'), className: 'mr-05' },
+                { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
             ]}
             width={750}
         >

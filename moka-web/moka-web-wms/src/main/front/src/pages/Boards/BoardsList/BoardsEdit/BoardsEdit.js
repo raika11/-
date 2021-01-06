@@ -5,7 +5,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { selectItem } from '@pages/Boards/BoardConst';
-import { unescapeHtml } from '@utils/convertUtil';
 import BoardsSummernote from './BoardsSummernote';
 import {
     initialState,
@@ -30,8 +29,9 @@ const BoardsEdit = () => {
     const parentBoardSeq = useRef(null);
 
     // 공통 구분값 URL
-    const { pagePathName, contentsinfo, contentsreply, selectboard } = useSelector((store) => ({
+    const { pagePathName, contentsinfo, contentsreply, selectboard, PDS_URL } = useSelector((store) => ({
         pagePathName: store.board.pagePathName,
+        PDS_URL: store.app.PDS_URL,
         channel_list: store.board.channel_list,
         contentsinfo: store.board.listmenu.contents.info,
         contentsreply: store.board.listmenu.contents.reply,
@@ -331,6 +331,23 @@ const BoardsEdit = () => {
         );
     };
 
+    // 이미지 리스트 클릭시 새텝
+    const handleClickImageName = (element) => {
+        const { file_url } = element;
+        if (file_url) {
+            // window.open(file_url, '', '_blank');
+
+            // const link = document.createElement('a');
+            // link.href = file_url;
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+
+            var win = window.open(file_url, '_blank');
+            win.focus();
+        }
+    };
+
     // 등록, 수정, 답변 등록 에 따른 라우터 파라미터 처리.
     useEffect(() => {
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/${parentBoardSeq.current}/reply/${boardSeq.current}`) {
@@ -383,10 +400,13 @@ const BoardsEdit = () => {
 
         if (contentsinfo.attaches.length > 0) {
             setUploadFiles(
-                contentsinfo.attaches.map((e, i) => {
+                contentsinfo.attaches.map((element, i) => {
+                    const { seqNo, orgFileName, filePath, fileName } = element;
+                    const file_url = PDS_URL && filePath && fileName ? `${PDS_URL}/${filePath}/${fileName}` : '';
                     return {
-                        seqNo: e.seqNo,
-                        name: e.orgFileName,
+                        seqNo: seqNo,
+                        name: orgFileName,
+                        file_url: file_url,
                     };
                 }),
             );
@@ -620,7 +640,8 @@ const BoardsEdit = () => {
                                 </Form.Row>
                             )}
                             {/* 주소 */}
-                            <Form.Row className="mb-2">
+                            {/* 2021-01-06 14:35 추후 논의로 결정하기로. */}
+                            {/* <Form.Row className="mb-2">
                                 <Col className="p-0">
                                     <MokaInputLabel
                                         label="주소"
@@ -632,7 +653,7 @@ const BoardsEdit = () => {
                                         onChange={(e) => handleChangeFormData(e)}
                                     />
                                 </Col>
-                            </Form.Row>
+                            </Form.Row> */}
                             {/* 제목 */}
                             <Form.Row className="mb-2">
                                 <Col className="p-0">
@@ -721,7 +742,7 @@ const BoardsEdit = () => {
                                                     <Form.Row className="mb-0 pt-1" key={index}>
                                                         <Form.Row className="w-100" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                                                             <Col xs={11} className="w-100 h-100 d-flex align-items-center justify-content-start">
-                                                                {element.name}
+                                                                <div onClick={() => handleClickImageName(element)}>{element.name}</div>
                                                             </Col>
                                                             <Col>
                                                                 <MokaTableEditCancleButton onClick={() => handleDeleteUploadFile(index)} />

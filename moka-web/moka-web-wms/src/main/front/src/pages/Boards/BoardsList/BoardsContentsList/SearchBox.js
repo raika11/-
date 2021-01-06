@@ -113,7 +113,7 @@ const SearchBox = (props) => {
             {/* 날짜 */}
             <Form.Row className="d-flex mb-3">
                 {/* 시작 날짜 */}
-                <div style={{ width: 145 }} className="mb-0 pl-1 pr-2">
+                <div style={{ width: 150 }} className="mb-0 pl-1 pr-2">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"

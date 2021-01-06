@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "TB_CMT")
+@Table(name = "TB_COMMENT")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter

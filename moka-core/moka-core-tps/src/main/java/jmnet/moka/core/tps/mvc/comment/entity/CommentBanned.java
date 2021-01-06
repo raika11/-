@@ -26,7 +26,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-@Table(name = "TB_CMT_BANNED")
+@Table(name = "TB_COMMENT_BANNED")
 public class CommentBanned extends BaseAudit {
 
     private static final long serialVersionUID = 1L;

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "TB_CMT_VOTE")
+@Table(name = "TB_COMMENT_VOTE")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -27,8 +27,8 @@ public class CommentVote implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CMT_VOTE_SEQ", nullable = false)
-    private Long voteSeq;
+    @Column(name = "SEQ_NO", nullable = false)
+    private Long seqNo;
 
     @Column(name = "CMT_SEQ", nullable = false)
     private Long cmtSeq;

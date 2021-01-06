@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "TB_CMT_MEMBER")
+@Table(name = "TB_COMMENT_MEMBER")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -28,8 +28,8 @@ public class CommentMember implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SEQ_NO", nullable = false)
-    private Long seqNo;
+    @Column(name = "MEM_SEQ", nullable = false)
+    private Long memSeq;
 
     @Column(name = "USER_ID", nullable = false)
     private String userId;
@@ -46,14 +46,14 @@ public class CommentMember implements Serializable {
     @Column(name = "USER_IMAGE")
     private String userImage;
 
-    @Column(name = "USER_COOKIE")
-    private String userCookie;
-
     @Column(name = "REG_DT")
     private Date regDt;
 
     @Column(name = "MOD_DT")
     private Date modDt;
+
+    @Column(name = "REAL_CHK_DT")
+    private Date regChkDt;
 
     /**
      * 내 댓글 공개 여부

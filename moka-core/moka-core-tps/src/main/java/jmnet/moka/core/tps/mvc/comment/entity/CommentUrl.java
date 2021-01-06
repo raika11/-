@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "TB_CMT_URL")
+@Table(name = "TB_COMMENT_URL")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -34,6 +34,12 @@ public class CommentUrl implements Serializable {
 
     @Column(name = "SECTION", nullable = false)
     private String section;
+
+    @Column(name = "USED_YN", nullable = false)
+    private String usedYn;
+
+    @Column(name = "INFO_DESC", nullable = false)
+    private String infoDesc;
 
     @Column(name = "GROUP_ID")
     private Integer urlGrp = 1;

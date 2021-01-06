@@ -32,7 +32,7 @@ const makeBoardContentsFormData = ({ files, contentsData }) => {
     var formData = new FormData();
 
     files.map((element, index) => {
-        if (element.seqNo) {
+        if (element.seqNo > 0) {
             formData.append(`attaches[${index}].seqNo`, element.seqNo);
         } else {
             formData.append(`attaches[${index}].attachFile`, element);

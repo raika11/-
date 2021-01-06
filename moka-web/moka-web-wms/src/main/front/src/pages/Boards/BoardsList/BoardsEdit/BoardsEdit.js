@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput, MokaTableEditCancleButton, MokaAutocomplete } from '@components';
 import { Form, Col, Button, Row } from 'react-bootstrap';
 import { useParams, useHistory } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { selectItem } from '@pages/Boards/BoardConst';
 import { unescapeHtml } from '@utils/convertUtil';
+import BoardsSummernote from './BoardsSummernote';
 import {
     initialState,
     getListmenuContentsInfo,
@@ -18,8 +19,6 @@ import {
     uploadBoardContentImage,
     getListmenuContentsList,
 } from '@store/board';
-import ReactSummernote from 'react-summernote';
-import 'react-summernote/lang/summernote-ko-KR';
 
 const BoardsEdit = () => {
     const editInitData = initialState.listmenu.contents;
@@ -46,10 +45,8 @@ const BoardsEdit = () => {
     const [selectReport, setSelectReport] = useState([]); // 기자 선택.
     const [uploadFiles, setUploadFiles] = useState([]); // 등록 파일.
 
-    // 에디터 본문과 uesState 가 공유 가 되지 않아서 useRef 로 처리.
-    // summbernote 로딩이 먼저 된후 state 가 변경되어도 공유가 되지 않아서 useRef 로 처리 함.
-    const editContent = useRef(null); // 게시글 본문
-    const editReplyContent = useRef(null); // 답변글 본문
+    const [editContents, setEditContents] = useState('');
+    const [replyEditContents, setReplyEditContents] = useState('');
 
     let fileinputRef = useRef(null);
 
@@ -57,38 +54,7 @@ const BoardsEdit = () => {
     const basicStateReset = () => {
         setUploadFiles([]);
         setUploadFiles([]);
-        editContent.current = null;
-        editReplyContent.current = null;
     };
-
-    // Summernote 컴포넌트 로딩후에 setEditData와 스테이트 공유가 되지 않아서 게시글 내용은 useRef 로 저장후
-    // 저장버튼이나 수정버튼 클릭시 formData 에 데이터를 조합 하는 방식으로 변경.
-    const handleChangeEditContent = useCallback(
-        (e) => {
-            editContent.current = e;
-            if (selectboard.editorYn !== 'Y') {
-                setEditData({
-                    ...editData,
-                    content: editContent.current,
-                });
-            }
-        },
-        [editData, selectboard.editorYn],
-    );
-
-    // 답변 본문 처리.
-    const handleChangeReplyEditContent = useCallback(
-        (e) => {
-            editReplyContent.current = e;
-            if (selectboard.editorYn !== 'Y') {
-                setReplyEditData({
-                    ...replyEditData,
-                    content: e,
-                });
-            }
-        },
-        [replyEditData, selectboard.editorYn],
-    );
 
     // 게시글 데이터 변경시 스테이트 업데이트.
     const handleChangeFormData = useCallback(
@@ -96,7 +62,6 @@ const BoardsEdit = () => {
             const { name, value } = e.target;
             setEditData({
                 ...editData,
-                content: editContent.current,
                 [name]: value,
             });
         },
@@ -160,6 +125,9 @@ const BoardsEdit = () => {
 
     // 게시글 등록 저장 버튼 클릭.
     const handleClickContentsSaveButton = () => {
+        delete editData.regInfo;
+        delete editData.modInfo;
+
         dispatch(
             saveBoardContents({
                 boardId: boardId.current,
@@ -169,7 +137,6 @@ const BoardsEdit = () => {
                     boardId: null,
                     depth: 0,
                     indent: 0,
-                    content: editContent.current,
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
@@ -194,6 +161,9 @@ const BoardsEdit = () => {
 
     // 게시글 수정 버튼 클릭.
     const handleClickUpdateButton = () => {
+        delete editData.regInfo;
+        delete editData.modInfo;
+
         dispatch(
             updateBoardContents({
                 boardId: boardId.current,
@@ -203,7 +173,6 @@ const BoardsEdit = () => {
                     boardId: null,
                     depth: 0,
                     indent: 0,
-                    content: editContent.current,
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
@@ -245,7 +214,6 @@ const BoardsEdit = () => {
                     titlePrefix1: editData.titlePrefix1,
                     titlePrefix2: editData.titlePrefix2,
                     addr: editData.addr,
-                    content: editReplyContent.current === null ? editReplyContent.current : editReplyContent.current,
                 },
                 files: { attachFile: [] },
                 callback: ({ header: { success, message }, body }) => {
@@ -287,8 +255,6 @@ const BoardsEdit = () => {
 
         if (!isNaN(Number(params.parentBoardSeq)) && parentBoardSeq.current !== params.parentBoardSeq) {
             parentBoardSeq.current = params.parentBoardSeq;
-        } else {
-            parentBoardSeq.current = null;
         }
     }, [dispatch, params]);
 
@@ -299,6 +265,7 @@ const BoardsEdit = () => {
         } else {
             setUploadFiles([...uploadFiles, event.target.files[0]]);
         }
+        fileinputRef.current.value = '';
     };
 
     // 이미지 삭제 처리.
@@ -338,8 +305,17 @@ const BoardsEdit = () => {
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
-                        const tempContent = `${editContent.current} <img src="${body}">`;
-                        editContent.current = tempContent;
+                        if (editState.mode === 'new' || editState.mode === 'modify') {
+                            setEditData({
+                                ...editData,
+                                content: `${editData.content} <img src="${body}">`,
+                            });
+                        } else {
+                            setReplyEditData({
+                                ...replyEditData,
+                                content: `${replyEditData.content} <img src="${body}">`,
+                            });
+                        }
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -357,8 +333,6 @@ const BoardsEdit = () => {
 
     // 등록, 수정, 답변 등록 에 따른 라우터 파라미터 처리.
     useEffect(() => {
-        basicStateReset();
-
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/${parentBoardSeq.current}/reply/${boardSeq.current}`) {
             setEditState({
                 mode: 'reply',
@@ -367,6 +341,8 @@ const BoardsEdit = () => {
         }
 
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/${boardSeq.current}/reply`) {
+            parentBoardSeq.current = null;
+            setReplyEditData(editInitData.reply);
             setEditState({
                 mode: 'reply',
                 title: '답변 등록',
@@ -374,6 +350,7 @@ const BoardsEdit = () => {
         }
 
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/${boardSeq.current}`) {
+            parentBoardSeq.current = null;
             setEditState({
                 mode: 'modify',
                 title: '게시글 수정',
@@ -381,6 +358,9 @@ const BoardsEdit = () => {
         }
 
         if (history.location.pathname === `/${pagePathName}/${boardId.current}/add`) {
+            parentBoardSeq.current = null;
+            setEditData(editInitData.info);
+            setEditContents(' ');
             setEditState({
                 mode: 'new',
                 title: '게시글 등록',
@@ -391,7 +371,15 @@ const BoardsEdit = () => {
 
     // 게시글 정보 업데이트시
     useEffect(() => {
-        setEditData(contentsinfo);
+        setEditData({
+            ...contentsinfo,
+            regInfo: `등록 일시: ${contentsinfo && contentsinfo.regDt && contentsinfo.regDt.length > 16 ? contentsinfo.regDt.substr(0, 16) : contentsinfo.regDt} ${
+                contentsinfo.regName
+            }`,
+            modInfo: `수정 일시: ${contentsinfo && contentsinfo.modDt && contentsinfo.modDt.length > 16 ? contentsinfo.modDt.substr(0, 16) : contentsinfo.modDt} ${
+                contentsinfo.regName
+            }`,
+        });
 
         if (contentsinfo.attaches.length > 0) {
             setUploadFiles(
@@ -403,23 +391,41 @@ const BoardsEdit = () => {
                 }),
             );
         }
-        editContent.current = contentsinfo.content;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsinfo]);
 
     // 답변 정보 업데이트시.
     useEffect(() => {
         setReplyEditData(contentsreply);
-        editReplyContent.current = contentsreply.content;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsreply]);
 
+    // 라우터 및 에디드 상태가 답변을때 초기화 처리.
     useEffect(() => {
+        basicStateReset();
         if (editState.mode === 'reply' && history.location.pathname === `/${pagePathName}/${boardId.current}/${boardSeq.current}/reply`) {
             setReplyEditData(initialReplyEditState);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editState]);
+
+    // 게시글 내용이 변경 되었을때. ( 수정및 확인.)
+    useEffect(() => {
+        setEditData({
+            ...editData,
+            content: editContents,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editContents]);
+
+    // 답변내용이 변경 되었을떄. ( 수정및 확인.)
+    useEffect(() => {
+        setReplyEditData({
+            ...replyEditData,
+            content: replyEditContents,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [replyEditContents]);
 
     return (
         <MokaCard
@@ -508,10 +514,10 @@ const BoardsEdit = () => {
                             {editState.mode === 'modify' && (
                                 <Form.Row>
                                     <Col xs={6} style={{ fontSize: '1px' }}>
-                                        {`등록 일시  2020-10-13 11:50 홍길동(hong12)`}
+                                        {`${editData.regInfo}`}
                                     </Col>
                                     <Col xs={6} style={{ fontSize: '1px' }}>
-                                        {`수정 일시  2020-10-13 11:50 홍길동(hong12)`}
+                                        {`${editData.modInfo}`}
                                     </Col>
                                 </Form.Row>
                             )}
@@ -643,27 +649,19 @@ const BoardsEdit = () => {
                             {/* 내용 */}
                             {(function () {
                                 // 게시판 등록시 에디터 사용 유무로 본문은 에디터로 보여 줍니다.
-                                if (selectboard.editorYn === 'Y') {
+                                if (selectboard.editorYn === 'Y' && editState) {
                                     return (
                                         <Form.Row className="mb-2">
                                             <Col className="p-0">
-                                                <div className="d-flex moka-summernote">
-                                                    <ReactSummernote
-                                                        value={editContent.current !== '' ? unescapeHtml(editContent.current) : editContent.current}
-                                                        options={{
-                                                            lang: 'ko-KR',
-                                                            height: 250,
-                                                            // width: 510,
-                                                            dialogsInBody: true,
+                                                <Suspense>
+                                                    <BoardsSummernote
+                                                        contentValue={editData.content}
+                                                        editChange={(value) => {
+                                                            setEditContents(value);
                                                         }}
-                                                        onChange={(value) => {
-                                                            handleChangeEditContent(value);
-                                                        }}
-                                                        onImageUpload={(e) => {
-                                                            SummernoteImageUpload(e);
-                                                        }}
+                                                        editImageUpload={(e) => SummernoteImageUpload(e)}
                                                     />
-                                                </div>
+                                                </Suspense>
                                             </Col>
                                         </Form.Row>
                                     );
@@ -679,10 +677,8 @@ const BoardsEdit = () => {
                                                     inputProps={{ rows: 6 }}
                                                     id="content"
                                                     name="content"
-                                                    value={editContent.current}
-                                                    onChange={(e) => {
-                                                        handleChangeEditContent(e.target.value);
-                                                    }}
+                                                    value={editData.content}
+                                                    onChange={(e) => setEditContents(e.target.value)}
                                                 />
                                             </Col>
                                         </Form.Row>
@@ -706,6 +702,7 @@ const BoardsEdit = () => {
                                                             type="file"
                                                             name="file"
                                                             ref={fileinputRef}
+                                                            // onClick={(e) => (fileinputRef.current = e)}
                                                             onChange={(e) => handleChangeFileInput(e)}
                                                             style={{
                                                                 position: 'absolute',
@@ -759,27 +756,16 @@ const BoardsEdit = () => {
                             {/* 내용 */}
                             {(function () {
                                 // 게시판 등록시 에디터 사용 유무로 본문은 에디터로 보여 줍니다.
-                                if (selectboard.editorYn === 'Y') {
+                                if (selectboard.editorYn === 'Y' && editState) {
                                     return (
                                         <Form.Row className="mb-2">
-                                            <div className="p-0 d-flex moka-summernote">
-                                                {/* <div className="d-flex moka-summernote"> */}
-                                                <ReactSummernote
-                                                    value={editReplyContent.current !== null ? unescapeHtml(editReplyContent.current) : editReplyContent.current}
-                                                    options={{
-                                                        lang: 'ko-KR',
-                                                        height: 250,
-                                                        dialogsInBody: true,
-                                                    }}
-                                                    onChange={(value) => {
-                                                        handleChangeReplyEditContent(value);
-                                                    }}
-                                                    onImageUpload={(e) => {
-                                                        SummernoteImageUpload(e);
-                                                    }}
+                                            <Suspense>
+                                                <BoardsSummernote
+                                                    contentValue={replyEditData.content}
+                                                    editChange={(value) => setReplyEditContents(value)}
+                                                    editImageUpload={(e) => SummernoteImageUpload(e)}
                                                 />
-                                                {/* </div> */}
-                                            </div>
+                                            </Suspense>
                                         </Form.Row>
                                     );
                                 } else {
@@ -794,8 +780,8 @@ const BoardsEdit = () => {
                                                     inputProps={{ rows: 6 }}
                                                     id="Rcontent"
                                                     name="content"
-                                                    value={editReplyContent.current}
-                                                    onChange={(e) => handleChangeReplyEditContent(e.target.value)}
+                                                    value={replyEditData.content}
+                                                    onChange={(e) => setReplyEditContents(e.target.value)}
                                                 />
                                             </Col>
                                         </Form.Row>

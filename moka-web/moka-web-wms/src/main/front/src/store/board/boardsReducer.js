@@ -43,6 +43,10 @@ const initContentInfo = {
     titlePrefix1: null,
     titlePrefix2: null,
     viewCnt: 0,
+    regInfo: '',
+    modInfo: '',
+    regDt: '',
+    modDt: '',
 };
 
 export const initialState = {

@@ -387,6 +387,7 @@ function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, con
                 boardId: boardId,
                 parentBoardSeq: boardSeq,
                 contents: contents,
+                files: [], // 답변은 첨부 파일이 없어서 null 처리
             });
         } else {
             // 답변 수정.
@@ -395,6 +396,7 @@ function* saveBoardReplySaga({ payload: { boardId, parentBoardSeq, boardSeq, con
                 parentBoardSeq: parentBoardSeq,
                 boardSeq: boardSeq,
                 contents: contents,
+                files: [], // 답변은 첨부 파일이 없어서 null 처리
             });
         }
 

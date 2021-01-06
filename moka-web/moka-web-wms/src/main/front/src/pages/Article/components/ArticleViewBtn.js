@@ -39,16 +39,15 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
             <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} className="mr-1 px-1 flex-shrink-0" size="sm" onClick={handleClickPreviewOpen}>
                 {data.compUrl ? '포토' : '보기'}
             </Button>
-            {data.ja && (
-                <div className="article-group-number mr-1" style={{ width: 17, height: 24 }} data-group-number={data.artGroupNum || (data.totalId % 8) + 1}>
-                    {data.artGroupNum || (data.totalId % 8) + 1}
+            {data.ja && data.artGroupNum !== '' && (
+                <div className="article-group-number mr-1" style={{ width: 17, height: 24 }} data-group-number={data.artGroupNum}>
+                    {data.artGroupNum}
                 </div>
             )}
             <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0 px-1" onClick={handleClickCopy} onDoubleClick={handleDoubleClickCopy}>
                 C
             </Button>
-            {/* // {data.ovpYn === 'Y' && ( */}
-            {String(data.totalId) === '23854886' && (
+            {data.ovpYn === 'Y' && (
                 <Button size="sm" variant="outline-table-btn px-1" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
                     B
                 </Button>

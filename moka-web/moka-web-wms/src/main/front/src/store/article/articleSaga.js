@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { createRequestSaga, errorResponse } from '../commons/saga';
 
@@ -58,6 +58,49 @@ function* putArticleEditTitle({ payload }) {
  */
 const getArticleImageList = createRequestSaga(act.getArticleImageList, api.getArticleImageList);
 
+/**
+ * 등록 기사 수정
+ */
+function* saveArticle({ payload: { article, callback } }) {
+    const ACTION = act.SAVE_ARTICLE;
+    let callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.putArticle, { article });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 성공 액션 실행
+            yield put({
+                type: act.SAVE_ARTICLE_SUCCESS,
+                payload: response.data,
+            });
+
+            // 목록 다시 검색
+            const search = yield select((store) => store.article.search);
+            yield put({ type: act.GET_ARTICLE, payload: { search } });
+        } else {
+            const { body } = response.data.body;
+
+            if (body && body.list && Array.isArray(body.list)) {
+                // invalidList 셋팅
+                yield put({
+                    type: act.CHANGE_INVALID_LIST,
+                    payload: response.data.body.list,
+                });
+            }
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
     yield takeLatest(act.GET_SERVICE_ARTICLE_LIST, getServiceArticleList);
@@ -65,4 +108,5 @@ export default function* saga() {
     yield takeLatest(act.PUT_ARTICLE_EDIT_TITLE, putArticleEditTitle);
     yield takeLatest(act.GET_ARTICLE_IMAGE_LIST, getArticleImageList);
     yield takeLatest(act.GET_ARTICLE, getArticle);
+    yield takeLatest(act.SAVE_ARTICLE, saveArticle);
 }

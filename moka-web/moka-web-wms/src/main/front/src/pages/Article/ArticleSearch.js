@@ -8,8 +8,10 @@ import { DB_DATEFORMAT } from '@/constants';
 import { initialState, getArticleList, changeSearchOption } from '@store/article';
 import { getPressCate1 } from '@store/codeMgt';
 import { MokaInput, MokaIcon } from '@components';
-import { SourceSelector, CodeAutocomplete } from '@pages/commons';
+import { CodeAutocomplete } from '@pages/commons';
+import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import toast from '@utils/toastUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
 moment.locale('ko');
@@ -23,8 +25,8 @@ const ArticleSearch = () => {
     const storeSearch = useSelector((store) => store.article.search);
     const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
     const [search, setSearch] = useState(initialState.search);
-    const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
+    const [sourceOn, setSourceOn] = useState(false);
     const [error, setError] = useState({});
     const [period, setPeriod] = useState([3, 'months']);
 
@@ -48,6 +50,14 @@ const ArticleSearch = () => {
         } else {
             setSearch({ ...search, [name]: value });
         }
+    };
+
+    /**
+     * 마스터코드 autocomplete 변경
+     * @param {string} masterCode 마스터코드
+     */
+    const handleChangeMasterCode = (masterCode) => {
+        setSearch({ ...search, masterCode });
     };
 
     /**
@@ -104,6 +114,7 @@ const ArticleSearch = () => {
         if (!REQUIRED_REGEX.test(ns.sourceList)) {
             isInvalid = isInvalid || true;
             setError({ ...error, sourceList: true });
+            toast.warning('매체를 하나 이상 선택하세요');
         }
 
         return !isInvalid;
@@ -157,6 +168,12 @@ const ArticleSearch = () => {
             dispatch(getPressCate1());
         }
     }, [dispatch, pressCate1Rows]);
+
+    useEffect(() => {
+        if (sourceList) {
+            setSourceOn(true);
+        }
+    }, [sourceList]);
 
     useEffect(() => {
         /**
@@ -231,7 +248,7 @@ const ArticleSearch = () => {
                 <Col xs={5} className="p-0 pl-2 d-flex">
                     {/* 출판 카테고리 */}
                     <MokaInput as="select" className="ft-12 mr-2" name="pressCategory" value={search.pressCategory} onChange={handleChangeValue}>
-                        <option hidden>출판</option>
+                        <option>출판 전체</option>
                         {pressCate1Rows &&
                             pressCate1Rows.map((code) => (
                                 <option key={code.id} value={code.id}>
@@ -261,7 +278,7 @@ const ArticleSearch = () => {
             </Form.Row>
             <Form.Row className="mb-2">
                 {/* 검색조건 */}
-                <Col xs={2} className="p-0">
+                <Col xs={1} className="p-0">
                     <MokaInput as="select" name="searchType" className="ft-12" onChange={handleChangeValue} value={search.searchType}>
                         {initialState.searchTypeList.map((tp) => (
                             <option key={tp.id} value={tp.id}>
@@ -278,26 +295,32 @@ const ArticleSearch = () => {
 
                 {/* 분류 전체 */}
                 <Col xs={4} className="p-0 pl-2">
-                    <CodeAutocomplete placeholder="분류 전체" />
+                    <CodeAutocomplete placeholder="분류 전체" value={search.masterCode} onChange={handleChangeMasterCode} />
                 </Col>
 
                 {/* 매체 */}
-                <Col xs={3} className="p-0 pl-2">
-                    <SourceSelector
+                <Col xs={2} className="p-0 pl-2 d-flex">
+                    <ArticleSourceSelector
+                        className="w-100 flex-shrink-0"
                         value={sourceList}
                         onChange={(value) => {
                             setSourceList(value);
                             setError({ ...error, sourceList: false });
                             if (value !== '') {
-                                setSourceOn(true);
                                 // 로컬스토리지에 저장
                                 setLocalItem({ key: SOURCE_LIST_KEY, value });
                             }
                         }}
-                        width="auto"
-                        sourceType="JOONGANG"
-                        isInvalid={error.sourceList}
                     />
+                </Col>
+
+                <Col xs={2} className="p-0 pl-2 d-flex">
+                    <Button variant="searching" className="mr-2 ft-12 w-50" onClick={handleSearch}>
+                        검색
+                    </Button>
+                    <Button variant="negative" className="ft-12 flex-shrink-0 w-50" onClick={handleClickReset}>
+                        초기화
+                    </Button>
                 </Col>
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between align-items-end">
@@ -305,14 +328,7 @@ const ArticleSearch = () => {
                     <MokaIcon iconName="fas-circle" className="mr-1 color-info" />
                     벌크전송기사
                 </p>
-                <div className="d-flex">
-                    <Button variant="searching" className="mr-2 ft-12" onClick={handleSearch}>
-                        검색
-                    </Button>
-                    <Button variant="negative" className="ft-12" onClick={handleClickReset}>
-                        초기화
-                    </Button>
-                </div>
+                <div className="d-flex"></div>
             </Form.Row>
         </Form>
     );

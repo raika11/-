@@ -74,6 +74,9 @@ public class ArticleHandler extends AbstractHandler {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
+        // TODO 노출조건을 처리한다.
+        // DPS API에 노출조건 조회, 멤버십으로 로그인/성인여부 판단
+
         // 도메인 정보를 설정한다.
         String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
         DomainItem domainItem = domainResolver.getDomainInfoById(domainId);

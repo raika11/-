@@ -43,6 +43,10 @@ const initContentInfo = {
     titlePrefix1: null,
     titlePrefix2: null,
     viewCnt: 0,
+    regInfo: '',
+    modInfo: '',
+    regDt: '',
+    modDt: '',
 };
 
 export const initialState = {
@@ -104,8 +108,7 @@ export const initialState = {
                 usedYn: 'Y',
                 searchType: '',
                 keyword: '',
-                // 날짜 수정 해야함.
-                startDt: moment().format('2020-12-01 00:00:00'),
+                startDt: moment().format('YYYY-MM-DD 00:00:00'),
                 endDt: moment().format('YYYY-MM-DD 23:59:00'),
                 titlePrefix1: '',
             },

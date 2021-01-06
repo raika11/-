@@ -27,13 +27,17 @@ export const insertBoard = ({ file }) => {
 const makeBoardContentsFormData = ({ files, contentsData }) => {
     delete contentsData.attaches;
     delete contentsData.regName;
+    delete contentsData.boardInfo;
 
     var formData = new FormData();
-    // console.log(files[0]);
-    // formData.append('attaches[0]', null);
+
     files.map((element, index) => {
-        formData.append(`attaches[${index}].attachFile`, element);
-        formData.append(`attaches[${index}].seqNo`, 0);
+        if (element.seqNo > 0) {
+            formData.append(`attaches[${index}].seqNo`, element.seqNo);
+        } else {
+            formData.append(`attaches[${index}].attachFile`, element);
+            formData.append(`attaches[${index}].seqNo`, 0);
+        }
 
         return true;
     });

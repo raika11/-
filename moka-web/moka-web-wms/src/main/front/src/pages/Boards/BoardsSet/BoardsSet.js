@@ -1,9 +1,9 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
-import { MokaLoader, MokaCard } from '@components';
+import { MokaLoader } from '@components';
 
 const BoardsList = React.lazy(() => import('./Component/BoardsList'));
 const BoardsEdit = React.lazy(() => import('./Component/BoardsEdit'));

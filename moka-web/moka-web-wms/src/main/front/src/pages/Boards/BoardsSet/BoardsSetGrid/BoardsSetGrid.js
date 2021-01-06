@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { ColumnDefs, tempRows } from './BoardsSetGridColumns';
+import React, { useEffect, useState, useCallback } from 'react';
+import { ColumnDefs } from './BoardsSetGridColumns';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST, getBoardInfo } from '@store/board';
+import { changeSetMenuSearchOption, GET_SETMENU_BOARD_LIST } from '@store/board';
 import { useHistory, useParams } from 'react-router-dom';
 import { selectItem } from '@pages/Boards/BoardConst';
 

@@ -5,12 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.JpodTypeCode;
@@ -52,9 +49,9 @@ public class JpodEpisode extends BaseAudit implements Serializable {
     private Long chnlSeq;
 
     //bi-directional many-to-one association to Collection
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CHNL_SEQ", insertable = false, updatable = false)
-    private JpodChannel channel;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "CHNL_SEQ", insertable = false, updatable = false)
+    //private JpodChannel channel;
 
     /**
      * 에피소드회차

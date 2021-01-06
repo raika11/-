@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { MokaCard } from '@components';
 
 import TreeBox from './TreeBox';

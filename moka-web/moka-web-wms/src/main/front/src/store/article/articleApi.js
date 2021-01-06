@@ -47,3 +47,16 @@ export const getArticle = ({ totalId }) => {
         throw err;
     });
 };
+
+// 기사 수정
+export const putArticle = ({ article }) => {
+    return instance
+        .put(`/api/articles/${article.totalId}`, article, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};

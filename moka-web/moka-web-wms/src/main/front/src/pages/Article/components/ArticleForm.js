@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import copy from 'copy-to-clipboard';
-import { initialState, getArticle, GET_ARTICLE } from '@store/article';
+import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle } from '@store/article';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
-import { MokaInputLabel, MokaInput, MokaCard } from '@components';
+import { MokaInputLabel, MokaInput, MokaCard, MokaIcon } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import toast from '@utils/toastUtil';
 import { popupPreview } from '@utils/commonUtil';
@@ -14,11 +17,16 @@ import { unescapeHtml } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
-const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
+/**
+ * 등록기사 수정폼
+ */
+const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/article' }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const article = useSelector((store) => store.article.article);
-    const loading = useSelector((store) => store.loading[GET_ARTICLE]);
+    const loading = useSelector((store) => store.loading[GET_ARTICLE] || store.loading[SAVE_ARTICLE]);
     const [tagStr, setTagStr] = useState(''); // 태그리스트
+    const [repStr, setRepStr] = useState(''); // 기자리스트
     const [content, setContent] = useState(''); // 본문
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
@@ -33,6 +41,8 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
         if (name === 'tagList') {
             // 계속 파싱할 수 없어서
             setTagStr(value);
+        } else if (name === 'repStr') {
+            setRepStr(value);
         } else {
             setTemp({
                 ...temp,
@@ -42,7 +52,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
     };
 
     /**
-     * 태그 input blur시에 onChange 실행
+     * 태그 input blur
      */
     const handleTagBlur = () => {
         setTemp({
@@ -52,11 +62,35 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
     };
 
     /**
-     * 본문 blur 시
+     * 본문 blur
      * @param {string} value editor value
      */
     const handleContentBlur = (value) => {
         setContent(value);
+    };
+
+    /**
+     * 기자 입력 input blur
+     * @param {object} e event
+     */
+    const handleBlurRep = (e) => {
+        const { value } = e.target;
+        let tmpArr = temp.reporterList;
+
+        const result = value.split('.').map((repName) => {
+            let idx = tmpArr.findIndex((t) => t.repName === repName);
+            if (idx > -1) {
+                return tmpArr.splice(idx, 1)[0];
+            } else {
+                return {
+                    repName,
+                };
+            }
+        });
+        setTemp({
+            ...temp,
+            reporterList: result,
+        });
     };
 
     /**
@@ -76,20 +110,21 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
 
     /**
      * 기자 자동완성 변경
-     * @param {array} value value
+     * @param {object} value value
      */
     const handleReporter = (value) => {
-        let result = [];
         if (value) {
-            result = value.map((reporter) => ({
-                ...reporter,
-            }));
+            if (temp.reporterList.findIndex((s) => s.value === value.value) > -1) {
+                toast.warning('이미 선택한 기자입니다');
+            } else {
+                const narr = [...temp.reporterList, value];
+                setTemp({
+                    ...temp,
+                    reporterList: narr,
+                });
+                setRepStr(narr.map((r) => r.repName).join(','));
+            }
         }
-
-        setTemp({
-            ...temp,
-            reporterList: result,
-        });
     };
 
     /**
@@ -114,6 +149,37 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
      */
     const handleMobilePreview = () => popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
 
+    /**
+     * 기사 수정
+     */
+    const handleClickSave = () => {
+        // validate 추가
+        const saveObj = {
+            totalId: temp.totalId,
+            artContent: {
+                totalId: temp.totalId,
+                artContent: content,
+            },
+            reporterList: temp.reporterList,
+            tagList: temp.tagList,
+            artTitle: temp.artTitle,
+            artSubTitle: temp.artSubTitle,
+            categoryList: temp.categoryList,
+        };
+        dispatch(
+            saveArticle({
+                article: saveObj,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    } else {
+                        toast.success(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
     useEffect(() => {
         // 기사 상세 조회
         if (totalId) {
@@ -123,17 +189,18 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                     callback: ({ header }) => {
                         if (!header.success) {
                             toast.fail(header.message);
+                            history.push(returnUrl);
                         }
                     },
                 }),
             );
         }
-    }, [dispatch, totalId]);
+    }, [dispatch, history, returnUrl, totalId]);
 
     useEffect(() => {
         setTemp({
             ...article,
-            title: unescapeHtml(article.artTitle),
+            artTitle: unescapeHtml(article.artTitle),
             // 분류코드 (중복인 마스터코드 제거)
             categoryList: [...new Set(article.categoryList)],
             // 발행일
@@ -141,7 +208,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
             // 기자리스트
             reporterList: article.reporterList.map((reporter) => ({
                 ...reporter,
-                label: reporter.reporterName,
+                label: reporter.repName,
                 value: reporter.repSeq,
             })),
             // 링크
@@ -149,6 +216,8 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
         });
         // 태그 리스트
         setTagStr(article.tagList.join(','));
+        // 기자리스트(text)
+        setRepStr(article.reporterList.map((r) => r.repName).join(','));
         // 본문
         setContent(article.artContent?.artContent || '');
     }, [article, temp.totalId]);
@@ -162,7 +231,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
                 { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사수정', className: 'mr-2' },
+                { variant: 'positive', text: '기사수정', className: 'mr-2', onClick: handleClickSave },
                 { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2' },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
@@ -188,10 +257,11 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                             max={4}
                             label="분류표"
                             searchIcon={false}
-                            labelType="masterCode"
+                            labelType="contentKorname"
                             value={temp.categoryList.join(',')}
                             onChange={handleMasterCode}
                             maxMenuHeight={150}
+                            selectable={['content']}
                             isMulti
                         />
                     </Col>
@@ -203,24 +273,31 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="제목" name="title" className="mb-0" value={temp.title} onChange={handleChangeValue} required />
+                        <MokaInputLabel label="제목" name="artTitle" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} required />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="부제목" className="mb-0" value={temp.artSubTitle} inputClassName="bg-white" disabled />
+                        <MokaInputLabel label="부제목" className="mb-0" name="artSubTitle" value={temp.artSubTitle} inputClassName="bg-white" onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col className="p-0" xs={12}>
-                        <MokaInputLabel
-                            label="기자"
+                    <Col className="p-0" xs={6}>
+                        <MokaInputLabel label="기자" name="repStr" value={repStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurRep }} />
+                    </Col>
+                    <Col className="p-0 d-flex justify-content-center align-items-center" xs={2}>
+                        <p className="mb-0 ft-12">구분자는 마침표(.)</p>
+                    </Col>
+                    <Col className="p-0 d-flex align-items-center" xs={4}>
+                        <MokaInput
                             className="mb-0"
                             as="autocomplete"
-                            value={temp.reporterList}
                             onChange={handleReporter}
-                            inputProps={{ options: reporterList, isMulti: true, className: 'ft-12', maxMenuHeight: 140, placeholder: '선택한 기자가 없습니다' }}
+                            inputProps={{ options: reporterList, className: 'ft-12', maxMenuHeight: 150, placeholder: '기자 선택' }}
                         />
+                        <OverlayTrigger overlay={<Tooltip id="reporter-info">중앙일보 기자인 경우 기자를 선택해주세요</Tooltip>}>
+                            <MokaIcon iconName="fas-info-circle" className="ml-1 color-info" />
+                        </OverlayTrigger>
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -284,7 +361,15 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                 </Form.Row>
 
                 {/* masterCode 모달 */}
-                <CodeListModal max={4} show={codeModalShow} onHide={() => setCodeModalShow(false)} value={temp.categoryList} selection="multiple" onSave={handleMasterCode} />
+                <CodeListModal
+                    max={4}
+                    show={codeModalShow}
+                    onHide={() => setCodeModalShow(false)}
+                    value={temp.categoryList}
+                    selection="multiple"
+                    onSave={handleMasterCode}
+                    selectable={['content']}
+                />
 
                 {/* 작업정보 모달 */}
                 <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />

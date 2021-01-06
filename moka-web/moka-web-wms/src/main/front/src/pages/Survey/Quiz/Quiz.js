@@ -26,7 +26,7 @@ const Quiz = ({ match }) => {
 
             {/* 등록/수정 */}
             <Route
-                path={[`${match.url}/add`, `${match.url}/:quizSeq`]}
+                path={[`${match.url}`, `${match.url}/:quizSeq`]}
                 exact
                 render={(props) => (
                     <MokaIconTabs

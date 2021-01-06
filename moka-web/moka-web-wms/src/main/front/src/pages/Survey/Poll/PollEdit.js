@@ -257,27 +257,7 @@ const PollEdit = () => {
                             inputProps={{ checked: edit.repetitionFlag === 'Y' }}
                         />
                     </Col>
-                    <Col xs={4}>
-                        <MokaInputLabel
-                            as="switch"
-                            label="나도 한마디"
-                            labelWidth={70}
-                            name="commentFlag"
-                            id="commentFlag"
-                            labelClassName="text-right"
-                            onChange={(e) => {
-                                const {
-                                    target: { name, checked },
-                                } = e;
-                                let value = 'N';
-                                if (checked) {
-                                    value = 'Y';
-                                }
-                                handleChangeValue(name, value);
-                            }}
-                            inputProps={{ checked: edit.commentFlag === 'Y' }}
-                        />
-                    </Col>
+                    <Col xs={4}></Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={3}>

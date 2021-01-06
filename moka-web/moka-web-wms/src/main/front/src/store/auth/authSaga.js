@@ -5,6 +5,7 @@ import * as api from './authApi';
 import * as domainApi from '../domain/domainApi';
 import * as authAction from './authAction';
 import { AUTHORIZATION, SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
+
 /**
  * 로그인
  * @param {object} param0.payload
@@ -122,11 +123,13 @@ export function* getUserMenuTree({ payload: { pathName } }) {
         if (response.data.header.success) {
             const menuOpens = {};
             const menuPaths = {};
+            const menuById = {};
             menuPaths['/404'] = '';
             menuPaths['/403'] = '';
-            getOpenMenuParentMenuId(response.data.body.children, pathName, menuOpens, menuPaths);
+            getOpenMenuParentMenuId(response.data.body.children, pathName, menuById, menuOpens, menuPaths);
             response.data.body.menuPaths = menuPaths;
             response.data.body.menuOpens = menuOpens;
+            response.data.body.menuById = menuById;
 
             yield put({
                 type: SUCCESS,
@@ -150,12 +153,13 @@ export function* getUserMenuTree({ payload: { pathName } }) {
     yield put(finishLoading(ACTION));
 }
 
-const getOpenMenuParentMenuId = (menu, pathName, menuOpens, menuPaths, isOpen) => {
+const getOpenMenuParentMenuId = (menu, pathName, menuById, menuOpens, menuPaths, isOpen) => {
     for (let i = 0; i < menu.length; i++) {
         const menuItem = menu[i];
+        menuById[menuItem.menuId] = menuItem;
         isOpen = false;
         if (menuItem.children !== null) {
-            getOpenMenuParentMenuId(menuItem.children, pathName, menuOpens, menuPaths, isOpen);
+            getOpenMenuParentMenuId(menuItem.children, pathName, menuById, menuOpens, menuPaths, isOpen);
             if (isOpen && menuItem.depth !== 1) {
                 menuOpens[menuItem.parentMenuId] = true;
             }
@@ -176,6 +180,7 @@ const getOpenMenuParentMenuId = (menu, pathName, menuOpens, menuPaths, isOpen) =
         }
     }
 };
+
 /**
  * 도메인 목록 검색 => latestDomainId 변경
  */

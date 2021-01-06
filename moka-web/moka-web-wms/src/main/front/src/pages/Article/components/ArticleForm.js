@@ -7,13 +7,14 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import copy from 'copy-to-clipboard';
-import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle } from '@store/article';
+import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList } from '@store/article';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard, MokaIcon } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import toast from '@utils/toastUtil';
-import { popupPreview } from '@utils/commonUtil';
-import { unescapeHtml } from '@utils/convertUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
+import commonUtil from '@utils/commonUtil';
+import { unescapeHtml, invalidListToError } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
@@ -25,6 +26,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
     const history = useHistory();
     const article = useSelector((store) => store.article.article);
     const loading = useSelector((store) => store.loading[GET_ARTICLE] || store.loading[SAVE_ARTICLE]);
+    const invalidList = useSelector((store) => store.article.invalidList);
     const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [repStr, setRepStr] = useState(''); // 기자리스트
     const [content, setContent] = useState(''); // 본문
@@ -32,6 +34,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
     const [temp, setTemp] = useState(initialState.article);
+    const [error, setError] = useState({}); // 에러처리
 
     /**
      * input 변경
@@ -143,18 +146,38 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'P' });
+    const handlePCPreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'P' });
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
+    const handleMobilePreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
+
+    /**
+     * validate
+     * @params {object} articleData 검증할 데이터
+     */
+    const validate = (articleData) => {
+        let isInvalid = false;
+        let errList = [];
+
+        // 제목 체크
+        if (!REQUIRED_REGEX.test(articleData.artTitle)) {
+            errList.push({
+                field: 'artTitle',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        dispatch(changeInvalidList(errList));
+        return !isInvalid;
+    };
 
     /**
      * 기사 수정
      */
     const handleClickSave = () => {
-        // validate 추가
         const saveObj = {
             totalId: temp.totalId,
             artContent: {
@@ -167,18 +190,21 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
             artSubTitle: temp.artSubTitle,
             categoryList: temp.categoryList,
         };
-        dispatch(
-            saveArticle({
-                article: saveObj,
-                callback: ({ header }) => {
-                    if (!header.success) {
-                        toast.fail(header.message);
-                    } else {
-                        toast.success(header.message);
-                    }
-                },
-            }),
-        );
+
+        if (validate(saveObj)) {
+            dispatch(
+                saveArticle({
+                    article: saveObj,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            toast.fail(header.message);
+                        } else {
+                            toast.success(header.message);
+                        }
+                    },
+                }),
+            );
+        }
     };
 
     useEffect(() => {
@@ -233,6 +259,10 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
         setContent(article.artContent?.artContent || '');
     }, [article, temp.totalId]);
 
+    useEffect(() => {
+        setError(invalidListToError(invalidList));
+    }, [invalidList]);
+
     return (
         <MokaCard
             title="등록 기사"
@@ -251,7 +281,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
             <Form className="d-flex flex-column h-100 overflow-hidden">
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="출처" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="매체" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
                     </Col>
                     <Col className="p-0 d-flex justify-content-end align-items-center" xs={9}>
                         <MokaInputLabel label="발행일" labelWidth={39} inputClassName="ft-12" value={temp.pressDateText} inputProps={{ plaintext: true }} disabled />
@@ -284,7 +314,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="제목" name="artTitle" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} required />
+                        <MokaInputLabel label="제목" name="artTitle" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} isInvalid={error.artTitle} required />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">

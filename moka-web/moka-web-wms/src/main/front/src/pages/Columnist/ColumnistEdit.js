@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ColumnistModal from './modals/RepoterlistModal';
 import toast, { messageBox } from '@utils/toastUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
 
 const ColumnistEdit = ({ history }) => {
@@ -234,15 +235,7 @@ const ColumnistEdit = ({ history }) => {
     // 저장시 벨리데이션 에러 표현.
     useEffect(() => {
         if (invalidList !== null && invalidList.length > 0) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
+            setError(invalidListToError(invalidList));
 
             // alert message 동시에 여러개일 경우.
             // messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});

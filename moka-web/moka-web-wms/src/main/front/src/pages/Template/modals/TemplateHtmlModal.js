@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaModalEditor } from '@components';
 import { getTemplate, changeTemplateBody, saveTemplate, clearTemplate, hasRelationList, GET_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
+import { invalidListToError } from '@utils/convertUtil';
 
 const propTypes = {
     editable: PropTypes.bool,
@@ -112,16 +113,7 @@ const TemplateHtmlModal = (props) => {
     }, [template.templateSeq]);
 
     useEffect(() => {
-        if (invalidList.length > 0) {
-            let er = invalidList.reduce(
-                (all, c) => ({
-                    ...all,
-                    [c.field]: true,
-                }),
-                {},
-            );
-            setError(er);
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     return (

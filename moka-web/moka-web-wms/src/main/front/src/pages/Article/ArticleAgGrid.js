@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './ArticleAgGridColumns';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
-import { GET_ARTICLE_LIST, changeSearchOption, getArticleList } from '@store/article';
+import toast, { messageBox } from '@utils/toastUtil';
+import { GET_ARTICLE_LIST, changeSearchOption, getArticleList, stopArticle, deleteArticle, clearArticle } from '@store/article';
 import { DB_DATEFORMAT, ARTICLE_URL } from '@/constants';
 
 moment.locale('ko');
@@ -53,6 +54,62 @@ const ArticleAgGrid = ({ match, ja }) => {
         [history, match.path],
     );
 
+    /**
+     * 삭제
+     */
+    const handleClickDelete = useCallback(
+        ({ totalId }) => {
+            messageBox.confirm(
+                '삭제 후 복구가 불가능합니다.\n그래도 해당 기사를 삭제하시겠습니까?',
+                () => {
+                    dispatch(
+                        deleteArticle({
+                            totalId: totalId,
+                            callback: ({ header }) => {
+                                if (header.success) {
+                                    toast.success(header.message);
+                                    history.push(match.path);
+                                    dispatch(clearArticle());
+                                } else {
+                                    toast.fail(header.message);
+                                }
+                            },
+                        }),
+                    );
+                },
+                () => {},
+            );
+        },
+        [dispatch, history, match.path],
+    );
+
+    /**
+     * 중지
+     */
+    const handleClickStop = useCallback(
+        ({ totalId }) => {
+            messageBox.confirm(
+                '기사가 더이상 서비스 되지 않습니다.\n다시 서비스하려면 기사 수정 기능을 사용하세요.\n계속 하시겠습니까?',
+                () => {
+                    dispatch(
+                        stopArticle({
+                            totalId: totalId,
+                            callback: ({ header }) => {
+                                if (header.success) {
+                                    toast.success(header.message);
+                                } else {
+                                    toast.fail(header.message);
+                                }
+                            },
+                        }),
+                    );
+                },
+                () => {},
+            );
+        },
+        [dispatch],
+    );
+
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
@@ -71,13 +128,15 @@ const ArticleAgGrid = ({ match, ja }) => {
                         handleRowClicked,
                         ovpFullLink: `${OVP_PREVIEW_URL}?videoId=${data.ovpLink}`,
                         ja: ja, // 편집그룹 표기 유무
+                        handleClickDelete,
+                        handleClickStop,
                     };
                 }),
             );
         } else {
             setRowData([]);
         }
-    }, [OVP_PREVIEW_URL, handleRowClicked, ja, list]);
+    }, [OVP_PREVIEW_URL, handleClickDelete, handleClickStop, handleRowClicked, ja, list]);
 
     return (
         <MokaTable
@@ -93,6 +152,7 @@ const ArticleAgGrid = ({ match, ja }) => {
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['sourceName', 'view', 'register']}
             selected={article.totalId}
+            refreshCellsParams={{ columns: ['source'], force: true }}
         />
     );
 };

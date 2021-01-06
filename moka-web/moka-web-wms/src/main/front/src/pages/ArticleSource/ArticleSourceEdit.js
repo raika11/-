@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
 import { MokaInputLabel } from '@/components';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { getArticleSource, clearArticleSource, saveArticleSource, changeInvalidList, getSourceDuplicateCheck } from '@store/articleSource';
 import CodeMappingModal from './modals/CodeMappingModal';
 
@@ -218,15 +219,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
     }, [source]);
 
     useEffect(() => {
-        setError(
-            invalidList.reduce(
-                (all, c) => ({
-                    ...all,
-                    [c.field]: true,
-                }),
-                {},
-            ),
-        );
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     useEffect(() => {

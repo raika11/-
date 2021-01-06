@@ -8,7 +8,7 @@ import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvA
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
-import { popupPreview } from '@utils/commonUtil';
+import commonUtil from '@utils/commonUtil';
 import { unescapeHtml } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
@@ -122,7 +122,7 @@ const RcvArticleEdit = () => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = (servicePlatform) => {
-        popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, servicePlatform });
+        commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, servicePlatform });
     };
 
     if (!rcvArticle.rid) return null;

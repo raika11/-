@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import { invalidListToError } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel } from '@components';
 import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
 
@@ -308,18 +309,7 @@ const DirectLinkEdit = ({ history }) => {
     }, [directLink, dispatch]);
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     // 계속 노출 처리.

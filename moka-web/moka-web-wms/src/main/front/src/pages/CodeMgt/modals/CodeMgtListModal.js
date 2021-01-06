@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaModal, MokaInputLabel } from '@components';
 import { changeInvalidList } from '@store/codeMgt';
+import { invalidListToError } from '@utils/convertUtil';
 
 const propTypes = {
     /**
@@ -123,18 +124,7 @@ const CodeMgtListModal = (props) => {
     };
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     if (type === 'add') {

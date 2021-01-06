@@ -8,7 +8,8 @@ import { MokaCard, MokaInputLabel } from '@components';
 import { previewPage, w3cArticlePage } from '@store/merge';
 import { initialState, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList, clearArticlePage } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
-import { popupPreview } from '@utils/commonUtil';
+import commonUtil from '@utils/commonUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
 const ArticlePageEdit = ({ onDelete }) => {
@@ -61,17 +62,8 @@ const ArticlePageEdit = ({ onDelete }) => {
     }, [articlePage]);
 
     useEffect(() => {
-        // invalidList 처리
         if (invalidList.length > 0) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
+            setError(invalidListToError(invalidList));
             messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
         }
     }, [invalidList]);
@@ -234,7 +226,7 @@ const ArticlePageEdit = ({ onDelete }) => {
                             }),
                             totalId: previewTotalId,
                         };
-                        popupPreview(`${API_BASE_URL}/preview/article-page`, item);
+                        commonUtil.popupPreview(`${API_BASE_URL}/preview/article-page`, item);
                     } else {
                         toast.fail(header.message || '미리보기에 실패하였습니다');
                     }
@@ -260,7 +252,7 @@ const ArticlePageEdit = ({ onDelete }) => {
             totalId: previewTotalId,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
+                    commonUtil.popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
                 } else {
                     toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }

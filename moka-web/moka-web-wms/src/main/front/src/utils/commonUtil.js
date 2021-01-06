@@ -1,5 +1,4 @@
 import produce from 'immer';
-import { ValueFormatterService } from 'ag-grid-community';
 
 /**
  * 파일 다운로드
@@ -292,28 +291,14 @@ const dateFormat = (date, format) => {
     });
 };
 
-export const setDefaultValue = (value, defaultValue = '') => {
+const setDefaultValue = (value, defaultValue = '') => {
     return value !== null && value !== undefined && value !== '' ? value : defaultValue;
 };
 
-export default {
-    fileDownload,
-    blobToFile,
-    isEmpty,
-    findNode,
-    findChildNodeKeys,
-    findParentNodeKeys,
-    makeRCTreeData,
-    makeImgPreview,
-    euckrBytes,
-    dateFormat,
-    setDefaultValue,
-};
-
 /**
- * 미리보기 팝업띄움.
+ * 미리보기 팝업 기능
  */
-export const popupPreview = (targetUrl, params, enctype = null) => {
+const popupPreview = (targetUrl, params, enctype = null) => {
     const form = document.createElement('form');
     form.method = 'post';
     form.action = targetUrl;
@@ -405,12 +390,12 @@ export const popupPreview = (targetUrl, params, enctype = null) => {
  * Delay
  * @param {number} n delay
  */
-export const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
+const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 /**
  * cancellablePromise
  */
-export const cancellablePromise = (promise) => {
+const cancellablePromise = (promise) => {
     let isCanceled = false;
 
     const wrappedPromise = new Promise((resolve, reject) => {
@@ -424,4 +409,21 @@ export const cancellablePromise = (promise) => {
         promise: wrappedPromise,
         cancel: () => (isCanceled = true),
     };
+};
+
+export default {
+    fileDownload,
+    blobToFile,
+    isEmpty,
+    findNode,
+    findChildNodeKeys,
+    findParentNodeKeys,
+    makeRCTreeData,
+    makeImgPreview,
+    euckrBytes,
+    dateFormat,
+    setDefaultValue,
+    delay,
+    cancellablePromise,
+    popupPreview,
 };

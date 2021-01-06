@@ -1,12 +1,12 @@
 import useCancellablePromises from './useCancellablePromises';
-import { cancellablePromise, delay } from '@utils/commonUtil';
+import utils from '@utils/commonUtil';
 
 const useClickPreventionOnDoubleClick = (onClick, onDoubleClick) => {
     const api = useCancellablePromises();
 
     const handleClick = () => {
         api.clearPendingPromises();
-        const waitForClick = cancellablePromise(delay(300));
+        const waitForClick = utils.cancellablePromise(utils.delay(300));
         api.appendPendingPromise(waitForClick);
 
         return waitForClick.promise

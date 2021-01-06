@@ -41,3 +41,20 @@ export const unescapeHtml = (str) => {
             .replace(/&middot;/g, '·');
     } else return str;
 };
+
+/**
+ * invalidList to error object
+ * @param {array} invalidList invalidList
+ */
+export const invalidListToError = (invalidList) => {
+    return Array.isArray(invalidList)
+        ? invalidList.reduce(
+              (all, c) => ({
+                  ...all,
+                  [c.field]: true,
+                  [`${c.field}Message`]: c.reason,
+              }),
+              {},
+          )
+        : {};
+};

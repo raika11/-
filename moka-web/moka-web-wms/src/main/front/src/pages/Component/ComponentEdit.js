@@ -6,9 +6,9 @@ import { MokaCard } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { initialState, getComponent, clearComponent, saveComponent, hasRelationList, changeInvalidList, GET_COMPONENT, SAVE_COMPONENT, DELETE_COMPONENT } from '@store/component';
 import { DB_DATEFORMAT } from '@/constants';
+import { invalidListToError } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-
 import BasicForm from './components/BasicForm';
 import DetailRelationForm from './components/DetailRelationForm';
 import DetailPeriodForm from './components/DetailPeriodForm';
@@ -219,15 +219,7 @@ const ComponentEdit = ({ onDelete }) => {
 
     useEffect(() => {
         if (invalidList) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
+            setError(invalidListToError(invalidList));
         }
     }, [invalidList]);
 

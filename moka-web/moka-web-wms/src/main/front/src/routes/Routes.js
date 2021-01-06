@@ -1,37 +1,36 @@
 import React, { Suspense, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 // routes
 import routes from './index';
 import { getUserMenuTree, changeLatestMenuId } from '@store/auth/authAction';
 import { MokaLoader, ScrollToTop } from '@components';
 
-const Routes = () => {
+const MenuBox = ({ children, menu, path }) => {
+    const history = useHistory();
     const dispatch = useDispatch();
-    const location = useLocation();
-    const { menu } = useSelector((store) => ({
-        menu: store.auth.menu,
-    }));
-
-    let pathName = '';
-    if (location.pathname === '/') {
-        pathName = location.pathname;
-    } else if (location.pathname.length > 0) {
-        pathName = '/' + location.pathname.split('/')[1];
-    }
 
     useEffect(() => {
         if (menu.length === 0) {
-            dispatch(getUserMenuTree({ pathName: pathName }));
+            dispatch(getUserMenuTree({ pathName: path }));
         } else {
-            if (menu.menuPaths[pathName] === undefined) {
-                window.location.href = '/404';
+            if (menu.menuPaths[path] === undefined) {
+                history.push('/404');
             } else {
-                dispatch(changeLatestMenuId(menu.menuPaths[pathName]));
+                dispatch(changeLatestMenuId(menu.menuPaths[path]));
             }
         }
-    }, [dispatch, menu, pathName]);
+    }, [dispatch, history, menu.length, menu.menuPaths, path]);
+
+    return children;
+};
+
+const Routes = () => {
+    const { menu } = useSelector((store) => ({
+        menu: store.auth.menu,
+    }));
 
     return (
         <ScrollToTop>
@@ -42,11 +41,13 @@ const Routes = () => {
                         path={path}
                         {...rest}
                         render={(props) => (
-                            <Layout nonResponsive={nonResponsive} name={name} {...props} {...rest}>
-                                <Suspense fallback={<MokaLoader clsOpt="black" />}>
-                                    <Component {...props} name={name} {...rest} />
-                                </Suspense>
-                            </Layout>
+                            <MenuBox path={path} menu={menu}>
+                                <Layout nonResponsive={nonResponsive} name={name} {...props} {...rest}>
+                                    <Suspense fallback={<MokaLoader clsOpt="black" />}>
+                                        <Component {...props} name={name} {...rest} />
+                                    </Suspense>
+                                </Layout>
+                            </MenuBox>
                         )}
                     />
                 ))}

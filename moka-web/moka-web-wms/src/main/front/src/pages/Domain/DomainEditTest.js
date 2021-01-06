@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { useForm } from 'react-hook-form';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
+import { invalidListToError } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
@@ -111,18 +110,7 @@ const DomainEditTest = ({ history, onDelete }) => {
     }, [dispatch, errors]);
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            setDomainError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
-        }
+        setDomainError(invalidListToError(invalidList));
     }, [invalidList]);
 
     /**

@@ -11,6 +11,7 @@ import { getTpZone } from '@store/codeMgt';
 import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import CopyModal from './modals/CopyModal';
 import AddComponentModal from './modals/AddComponentModal';
 
@@ -41,9 +42,7 @@ const TemplateEdit = ({ onDelete }) => {
     const [thumbSrc, setThumbSrc] = useState();
     const [description, setDescription] = useState('');
     const [btnDisabled, setBtnDisabled] = useState(true);
-
-    // error
-    const [teamplateNameError, setTemplateNameError] = useState(false);
+    const [error, setError] = useState({});
 
     // modal state
     const [copyModalShow, setCopyModalShow] = useState(false);
@@ -66,7 +65,7 @@ const TemplateEdit = ({ onDelete }) => {
         if (name === 'templateName') {
             setTemplateName(value);
             if (REQUIRED_REGEX.test(value)) {
-                setTemplateNameError(false);
+                setError({ ...error, template: false });
             }
         } else if (name === 'templateWidth') {
             setTemplateWidth(value);
@@ -250,7 +249,7 @@ const TemplateEdit = ({ onDelete }) => {
         } else {
             setBtnDisabled(true);
         }
-        setTemplateNameError(false);
+        setError({});
         imgFileRef.current.deleteFile();
     }, [template.templateSeq]);
 
@@ -285,14 +284,7 @@ const TemplateEdit = ({ onDelete }) => {
     }, [dispatch, tpZoneRows]);
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'templateName') {
-                    setTemplateNameError(true);
-                }
-            });
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     return (
@@ -332,7 +324,7 @@ const TemplateEdit = ({ onDelete }) => {
                     name="templateName"
                     onChange={handleChangeValue}
                     placeholder="템플릿명을 입력하세요"
-                    isInvalid={teamplateNameError}
+                    isInvalid={error.template}
                     required
                 />
                 {/* 위치그룹 */}

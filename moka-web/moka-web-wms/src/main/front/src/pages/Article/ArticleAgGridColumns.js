@@ -17,7 +17,7 @@ export default [
     {
         headerName: '보기',
         field: 'view',
-        width: 139,
+        width: 110,
         cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (row) => <ArticleViewBtn {...row} />,
     },
@@ -57,7 +57,7 @@ export default [
     {
         headerName: '기능',
         field: 'register',
-        width: 135,
+        width: 110,
         cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (row) => <ArticleActionBtn {...row} />,
     },

@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import Button from 'react-bootstrap/Button';
-import { popupPreview } from '@utils/commonUtil';
+import commonUtil from '@utils/commonUtil';
 import { API_BASE_URL } from '@/constants';
 
 const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
@@ -12,7 +12,7 @@ const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = () => {
-        popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, servicePlatform: 'P' });
+        commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, servicePlatform: 'P' });
     };
 
     return (

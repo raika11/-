@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import copy from 'copy-to-clipboard';
 import Button from 'react-bootstrap/Button';
-import { popupPreview } from '@utils/commonUtil';
+import utils from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import { API_BASE_URL } from '@/constants';
 import { useClickPreventionOnDoubleClick, MokaModal } from '@components';
@@ -10,10 +10,7 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
     const [previewOn, setPreviewOn] = useState(false);
 
     useImperativeHandle(ref, () => ({
-        refresh: () => {
-            setPreviewOn(false);
-            return false;
-        },
+        refresh: () => false,
     }));
 
     /**
@@ -34,25 +31,25 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = () => {
-        popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, servicePlatform: 'P' });
+        utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, servicePlatform: 'P' });
     };
 
     return (
         <div className="d-flex align-items-center h-100">
-            <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} className="mr-1 flex-shrink-0" size="sm" onClick={handleClickPreviewOpen}>
+            <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} className="mr-1 px-1 flex-shrink-0" size="sm" onClick={handleClickPreviewOpen}>
                 {data.compUrl ? '포토' : '보기'}
             </Button>
             {data.ja && (
-                <div className="article-group-number mr-1" style={{ width: 24, height: 24 }} data-group-number={data.artGroupNum || (data.totalId % 8) + 1}>
+                <div className="article-group-number mr-1" style={{ width: 17, height: 24 }} data-group-number={data.artGroupNum || (data.totalId % 8) + 1}>
                     {data.artGroupNum || (data.totalId % 8) + 1}
                 </div>
             )}
-            <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0" onClick={handleClickCopy} onDoubleClick={handleDoubleClickCopy}>
+            <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0 px-1" onClick={handleClickCopy} onDoubleClick={handleDoubleClickCopy}>
                 C
             </Button>
             {/* // {data.ovpYn === 'Y' && ( */}
             {String(data.totalId) === '23854886' && (
-                <Button size="sm" variant="outline-table-btn" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
+                <Button size="sm" variant="outline-table-btn px-1" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
                     B
                 </Button>
             )}

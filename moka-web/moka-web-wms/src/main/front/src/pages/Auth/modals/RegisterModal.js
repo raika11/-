@@ -7,7 +7,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaModal, MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
-import toast, { messageBox } from '@utils/toastUtil';
+import { messageBox } from '@utils/toastUtil';
+import { invalidListToError } from '@utils/convertUtil';
+
 const propTypes = {
     /**
      * show
@@ -191,17 +193,8 @@ const RegisterModal = (props) => {
     }, [confirmPassword, dispatch, minutes, newSmsCode, password, requestReason, requestSms, userObj.userId]);
 
     useEffect(() => {
-        // invalidList 처리
         if (invalidList.length > 0) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
+            setError(invalidListToError(invalidList));
             messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
         }
     }, [invalidList]);

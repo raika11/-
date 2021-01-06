@@ -9,7 +9,8 @@ import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { DIGITAL_SPECIAL_URL } from '@/constants';
-import { MokaCard, MokaInput, MokaInputLabel, MokaImageInput, MokaCopyTextButton, MokaInputGroup } from '@components';
+import { invalidListToError } from '@utils/convertUtil';
+import { MokaCard, MokaInput, MokaInputLabel, MokaCopyTextButton, MokaInputGroup } from '@components';
 import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial, changeInvalidList, deleteSpecial, DELETE_SPECIAL, SAVE_SPECIAL } from '@store/special';
 
 moment.locale('ko');
@@ -283,16 +284,7 @@ const SpecialEdit = () => {
     }, [special]);
 
     useEffect(() => {
-        setError(
-            invalidList.reduce(
-                (all, c) => ({
-                    ...all,
-                    [c.field]: true,
-                    [`${c.field}Message`]: c.reason,
-                }),
-                {},
-            ),
-        );
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     useEffect(() => {

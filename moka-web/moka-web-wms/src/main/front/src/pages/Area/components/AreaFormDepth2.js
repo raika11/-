@@ -6,7 +6,6 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 import ComponentSelector from './ComponentSelector';
@@ -18,6 +17,7 @@ import { GET_AREA_DEPTH2, GET_AREA_DEPTH3, SAVE_AREA, DELETE_AREA, saveArea, cha
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast, { messageBox } from '@utils/toastUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 
 const AreaFormDepth2 = (props) => {
@@ -418,15 +418,7 @@ const AreaFormDepth2 = (props) => {
     }, [selectedDepth]);
 
     useEffect(() => {
-        setError(
-            invalidList.reduce(
-                (all, c) => ({
-                    ...all,
-                    [c.field]: true,
-                }),
-                {},
-            ),
-        );
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     return (

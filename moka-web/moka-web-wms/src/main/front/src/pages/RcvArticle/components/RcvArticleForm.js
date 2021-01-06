@@ -165,7 +165,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             <Form className="d-flex flex-column h-100">
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="출처" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="매체" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
                     </Col>
                     <Col className="p-0 d-flex justify-content-end" xs={9}>
                         <MokaInputLabel label="발행일" labelWidth={40} value={pressDt} inputProps={{ plaintext: true }} disabled />

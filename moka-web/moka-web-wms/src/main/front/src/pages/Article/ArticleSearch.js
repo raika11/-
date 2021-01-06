@@ -25,7 +25,7 @@ const ArticleSearch = ({ ja, sun }) => {
     const storeSearch = useSelector((store) => store.article.search);
     const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
     const [search, setSearch] = useState(initialState.search);
-    const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '60,61' : getLocalItem(SOURCE_LIST_KEY));
     const [sourceOn, setSourceOn] = useState(false);
     const [error, setError] = useState({});
     const [period, setPeriod] = useState([3, 'months']);

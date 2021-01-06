@@ -71,15 +71,15 @@ button {
 }
 
 .btn-outline-table-btn {
+  @include button-color($gray-900);
   color: $gray-900;
   font-weight: $font-weight-normal;
   background-color: $white;
-  // @include button-hover($black, transparent, $gray-900, $font-weight-bold);
-  // @include button-active($black, transparent, $gray-900, $font-weight-bold);
   @include button-disabled($white, $gray-400);
 }
 
 .btn-outline-table-btn2 {
+  @include button-color($black);
   color: $black;
   font-weight: $font-weight-bold;
   background-color: $white;

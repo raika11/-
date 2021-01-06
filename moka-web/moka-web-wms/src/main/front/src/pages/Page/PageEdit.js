@@ -10,7 +10,8 @@ import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
 import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
 import toast from '@utils/toastUtil';
-import { popupPreview } from '@utils/commonUtil';
+import commonUtil from '@utils/commonUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
@@ -19,22 +20,26 @@ const PageEdit = ({ onDelete }) => {
     const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { page, pageBody, loading, pageTypeRows, latestDomainId, invalidList, PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(
+    const loading = useSelector(
+        ({ loading }) =>
+            loading['page/GET_PAGE'] ||
+            loading['page/POST_PAGE'] ||
+            loading['page/PUT_PAGE'] ||
+            loading['page/DELETE_PAGE'] ||
+            loading['merge/PREVIEW_PAGE'] ||
+            loading['merge/W3C_PAGE'],
+    );
+    const { PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(({ app }) => ({
+        PAGE_TYPE_HTML: app.PAGE_TYPE_HTML,
+        EXCLUDE_PAGE_SERVICE_NAME_LIST: app.EXCLUDE_PAGE_SERVICE_NAME_LIST,
+    }));
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const { page, pageBody, pageTypeRows, invalidList } = useSelector(
         (store) => ({
             page: store.page.page,
             pageBody: store.page.pageBody,
-            loading:
-                store.loading['page/GET_PAGE'] ||
-                store.loading['page/POST_PAGE'] ||
-                store.loading['page/PUT_PAGE'] ||
-                store.loading['page/DELETE_PAGE'] ||
-                store.loading['merge/PREVIEW_PAGE'] ||
-                store.loading['merge/W3C_PAGE'],
             pageTypeRows: store.codeMgt.pageTypeRows,
-            latestDomainId: store.auth.latestDomainId,
             invalidList: store.page.invalidList,
-            PAGE_TYPE_HTML: store.app.PAGE_TYPE_HTML,
-            EXCLUDE_PAGE_SERVICE_NAME_LIST: store.app.EXCLUDE_PAGE_SERVICE_NAME_LIST,
         }),
         [shallowEqual],
     );
@@ -50,64 +55,7 @@ const PageEdit = ({ onDelete }) => {
         moveUrl: false,
     });
     const [btnDisabled, setBtnDisabled] = useState(true);
-
-    // modal state
     const [moveModalShow, setMoveModalShow] = useState(false);
-
-    useEffect(() => {
-        if (!pageTypeRows) dispatch(getPageType());
-
-        // url로 다이렉트로 페이지 조회하는 경우
-        if (paramPageSeq && paramPageSeq !== page.pageSeq) {
-            const option = {
-                pageSeq: paramPageSeq,
-                callback: (result) => {
-                    if (!result.header.success) {
-                        history.push(`/page`);
-                    }
-                },
-            };
-            dispatch(getPage(option));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageTypeRows]);
-
-    useEffect(() => {
-        if (paramPageSeq) {
-            setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-    }, [dispatch, paramPageSeq]);
-
-    useEffect(() => {
-        setTemp({
-            ...page,
-            pageType: page.pageType || PAGE_TYPE_HTML,
-        });
-    }, [PAGE_TYPE_HTML, page]);
-
-    useEffect(() => {
-        // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
-        if (temp.pageType === '' && pageTypeRows?.length > 0) {
-            setTemp({ ...temp, pageType: pageTypeRows[0].dtlCd });
-        }
-    }, [temp, pageTypeRows]);
-
-    useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            setError(
-                invalidList.reduce(
-                    (all, c) => ({
-                        ...all,
-                        [c.field]: true,
-                    }),
-                    {},
-                ),
-            );
-        }
-    }, [invalidList]);
 
     const makePageUrl = useCallback(
         (name, value) => {
@@ -339,7 +287,7 @@ const PageEdit = ({ onDelete }) => {
                     const item = produce(page, (draft) => {
                         draft.pageBody = pageBody;
                     });
-                    popupPreview(`${API_BASE_URL}/preview/page`, item);
+                    commonUtil.popupPreview(`${API_BASE_URL}/preview/page`, item);
                 } else {
                     toast.fail(header.message || '미리보기에 실패하였습니다');
                 }
@@ -361,7 +309,7 @@ const PageEdit = ({ onDelete }) => {
             page: tempPage,
             callback: ({ header, body }) => {
                 if (header.success) {
-                    popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
+                    commonUtil.popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
                 } else {
                     toast.fail(header.message || 'W3C검사에 실패했습니다');
                 }
@@ -379,6 +327,50 @@ const PageEdit = ({ onDelete }) => {
             window.open(url);
         }
     };
+
+    useEffect(() => {
+        if (!pageTypeRows) dispatch(getPageType());
+
+        // url로 다이렉트로 페이지 조회하는 경우
+        if (paramPageSeq && paramPageSeq !== page.pageSeq) {
+            const option = {
+                pageSeq: paramPageSeq,
+                callback: (result) => {
+                    if (!result.header.success) {
+                        history.push(`/page`);
+                    }
+                },
+            };
+            dispatch(getPage(option));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageTypeRows]);
+
+    useEffect(() => {
+        if (paramPageSeq) {
+            setBtnDisabled(false);
+        } else {
+            setBtnDisabled(true);
+        }
+    }, [dispatch, paramPageSeq]);
+
+    useEffect(() => {
+        setTemp({
+            ...page,
+            pageType: page.pageType || PAGE_TYPE_HTML,
+        });
+    }, [PAGE_TYPE_HTML, page]);
+
+    useEffect(() => {
+        // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
+        if (temp.pageType === '' && pageTypeRows?.length > 0) {
+            setTemp({ ...temp, pageType: pageTypeRows[0].dtlCd });
+        }
+    }, [temp, pageTypeRows]);
+
+    useEffect(() => {
+        setError(invalidListToError(invalidList));
+    }, [invalidList]);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${page.pageSeq ? '정보' : '등록'}`} loading={loading}>

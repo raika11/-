@@ -93,6 +93,12 @@ const propTypes = {
      */
     suppressRefreshCellAfterUpdate: PropTypes.bool,
     onRowDataUpdated: PropTypes.func,
+    refreshCellsParams: PropTypes.shape({
+        rowNodes: PropTypes.array,
+        columns: PropTypes.array,
+        force: PropTypes.bool,
+        suppressFlash: PropTypes.bool,
+    }),
 };
 
 const defaultProps = {
@@ -147,6 +153,7 @@ const MokaTable = forwardRef((props, ref) => {
         setGridInstance: setParentGridInstance,
         suppressRefreshCellAfterUpdate,
         onRowDataUpdated,
+        refreshCellsParams,
     } = props;
 
     // drag props
@@ -265,7 +272,7 @@ const MokaTable = forwardRef((props, ref) => {
                 handleSelected();
 
                 if (!suppressRefreshCellAfterUpdate) {
-                    params.api.refreshCells({ force: true });
+                    params.api.refreshCells(refreshCellsParams);
                 }
             });
 
@@ -273,7 +280,7 @@ const MokaTable = forwardRef((props, ref) => {
                 onRowDataUpdated(params);
             }
         },
-        [handleSelected, onRowDataUpdated, suppressRefreshCellAfterUpdate],
+        [handleSelected, onRowDataUpdated, refreshCellsParams, suppressRefreshCellAfterUpdate],
     );
 
     useEffect(() => {

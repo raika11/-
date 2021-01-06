@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -16,8 +17,12 @@ import { unescapeHtml } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
-const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
+/**
+ * 등록기사 수정폼
+ */
+const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/article' }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const article = useSelector((store) => store.article.article);
     const loading = useSelector((store) => store.loading[GET_ARTICLE] || store.loading[SAVE_ARTICLE]);
     const [tagStr, setTagStr] = useState(''); // 태그리스트
@@ -150,17 +155,26 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
     const handleClickSave = () => {
         // validate 추가
         const saveObj = {
-            ...temp,
+            totalId: temp.totalId,
             artContent: {
                 totalId: temp.totalId,
                 artContent: content,
             },
+            reporterList: temp.reporterList,
+            tagList: temp.tagList,
+            artTitle: temp.artTitle,
+            artSubTitle: temp.artSubTitle,
+            categoryList: temp.categoryList,
         };
         dispatch(
             saveArticle({
-                article: {
-                    reporterList: saveObj.reporterList,
-                    artContent: saveObj.artContent,
+                article: saveObj,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        toast.fail(header.message);
+                    } else {
+                        toast.success(header.message);
+                    }
                 },
             }),
         );
@@ -175,12 +189,13 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                     callback: ({ header }) => {
                         if (!header.success) {
                             toast.fail(header.message);
+                            history.push(returnUrl);
                         }
                     },
                 }),
             );
         }
-    }, [dispatch, totalId]);
+    }, [dispatch, history, returnUrl, totalId]);
 
     useEffect(() => {
         setTemp({
@@ -258,12 +273,12 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="제목" name="title" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} required />
+                        <MokaInputLabel label="제목" name="artTitle" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} required />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="부제목" className="mb-0" value={temp.artSubTitle} inputClassName="bg-white" disabled />
+                        <MokaInputLabel label="부제목" className="mb-0" name="artSubTitle" value={temp.artSubTitle} inputClassName="bg-white" onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">

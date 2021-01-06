@@ -46,6 +46,7 @@ const propTypes = {
     headerHeight: PropTypes.number,
     /**
      * 테이블 row의 height
+     * @default
      */
     rowHeight: PropTypes.number,
     /**
@@ -66,6 +67,7 @@ const propTypes = {
     preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
     /**
      * selected row 타입
+     * @default
      */
     rowSelection: PropTypes.oneOf(['single', 'multiple']),
     /**
@@ -74,6 +76,7 @@ const propTypes = {
     selected: PropTypes.any,
     /**
      * 드래그 기능을 직접 구현하는지 (false시 ag-grid의 unmanaged drag 기능이 동작)
+     * @default
      */
     dragManaged: PropTypes.bool,
     onRowDragMove: PropTypes.func,
@@ -86,6 +89,7 @@ const propTypes = {
     setGridInstance: PropTypes.func,
     /**
      * row data update 후 api.refreshCells 호출을 막음
+     * @default
      */
     suppressRefreshCellAfterUpdate: PropTypes.bool,
     onRowDataUpdated: PropTypes.func,

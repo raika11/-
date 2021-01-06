@@ -50,8 +50,13 @@ export const getArticle = ({ totalId }) => {
 
 // 기사 수정
 export const putArticle = ({ article }) => {
-    const stringData = qs.stringify(article, { arrayFormat: 'indices', allowDots: true });
-    return instance.get(`/api/articles/${article.totalId}`, stringData).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(`/api/articles/${article.totalId}`, article, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };

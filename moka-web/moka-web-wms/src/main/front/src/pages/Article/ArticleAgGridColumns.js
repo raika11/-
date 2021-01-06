@@ -9,13 +9,15 @@ export default [
         headerName: '매체/분류',
         colId: 'source',
         width: 150,
-        cellStyle: { fontSize: '12px' },
+        wrapText: true,
+        autoHeight: true,
+        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: ({ data }) => {
             return (
-                <React.Fragment>
+                <div className="ft-12 d-flex align-items-center h-100">
                     {data.bulkFlag === 'Y' && <MokaIcon iconName="fas-circle" className="color-info mr-1" />}
                     {data.sourceName} - {data.contentKorname}
-                </React.Fragment>
+                </div>
             );
         },
     },
@@ -23,6 +25,7 @@ export default [
         headerName: '보기',
         field: 'view',
         width: 139,
+        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (row) => <ArticleViewBtn {...row} />,
     },
     {
@@ -31,6 +34,9 @@ export default [
         flex: 1,
         width: 100,
         tooltipField: 'artTitle',
+        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        wrapText: true,
+        autoHeight: true,
         // cellRendererFramework: (row) => <TitleRenderer {...row} />,
     },
     {
@@ -58,6 +64,7 @@ export default [
         headerName: '기능',
         field: 'register',
         width: 135,
+        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (row) => <ArticleActionBtn {...row} />,
     },
 ];

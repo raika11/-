@@ -7,7 +7,7 @@ const ArticleActionBtn = ({ data }) => {
             <Button size="sm" variant="outline-table-btn2" className="mr-1 flex-shrink-0">
                 삭제
             </Button>
-            <Button size="sm" variant="outline-table-btn2" className="mr-1 flex-shrink-0">
+            <Button size="sm" variant="outline-table-btn2" className="mr-1 flex-shrink-0" disabled={data.serviceFlag !== 'Y'}>
                 중지
             </Button>
             <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0">

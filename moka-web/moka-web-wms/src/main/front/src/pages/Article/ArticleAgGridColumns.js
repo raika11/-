@@ -1,7 +1,7 @@
 import React from 'react';
-import { MokaIcon } from '@components';
 import ArticleActionBtn from './components/ArticleActionBtn';
 import ArticleViewBtn from './components/ArticleViewBtn';
+import SourceRenderer from './components/SourceRenderer';
 // import TitleRenderer from './components/TitleRenderer';
 
 export default [
@@ -11,15 +11,8 @@ export default [
         width: 150,
         wrapText: true,
         autoHeight: true,
-        cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: ({ data }) => {
-            return (
-                <div className="ft-12 d-flex align-items-center h-100">
-                    {data.bulkFlag === 'Y' && <MokaIcon iconName="fas-circle" className="color-info mr-1" />}
-                    {data.sourceName} - {data.contentKorname}
-                </div>
-            );
-        },
+        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellRendererFramework: (row) => <SourceRenderer {...row} />,
     },
     {
         headerName: '보기',
@@ -42,10 +35,11 @@ export default [
     {
         headerName: '면/판',
         field: 'myunPan',
-        width: 50,
+        width: 45,
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             fontSize: '12px',
             whiteSpace: 'pre',
         },

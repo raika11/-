@@ -13,7 +13,7 @@ moment.locale('ko');
 /**
  * 등록기사 AgGrid 컴포넌트
  */
-const ArticleAgGrid = () => {
+const ArticleAgGrid = ({ match, ja }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST]);
@@ -48,9 +48,9 @@ const ArticleAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (data) => {
-            history.push(`/article/${data.totalId}`);
+            history.push(`${match.path}/${data.totalId}`);
         },
-        [history],
+        [history, match.path],
     );
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const ArticleAgGrid = () => {
                 list.map((data) => {
                     // 면판 replace
                     let myunPan = '';
-                    myunPan = `${data.pressMyun || '    '}/${data.pressPan || ''}`;
+                    myunPan = `${data.pressMyun || ''}/${data.pressPan || ''}`;
 
                     return {
                         ...data,
@@ -70,13 +70,14 @@ const ArticleAgGrid = () => {
                         serviceTime: data.serviceDaytime ? moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm') : null,
                         handleRowClicked,
                         ovpFullLink: `${OVP_PREVIEW_URL}?videoId=${data.ovpLink}`,
+                        ja: ja, // 편집그룹 표기 유무
                     };
                 }),
             );
         } else {
             setRowData([]);
         }
-    }, [OVP_PREVIEW_URL, handleRowClicked, list]);
+    }, [OVP_PREVIEW_URL, handleRowClicked, ja, list]);
 
     return (
         <MokaTable
@@ -92,7 +93,6 @@ const ArticleAgGrid = () => {
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['sourceName', 'view', 'register']}
             selected={article.totalId}
-            suppressRefreshCellAfterUpdate
         />
     );
 };

@@ -32,6 +32,7 @@ export const initialState = {
         tagList: [],
         pressDate: '',
         artContent: {},
+        bulkSiteList: [],
     },
     invalidList: [],
     contentTypeList: [

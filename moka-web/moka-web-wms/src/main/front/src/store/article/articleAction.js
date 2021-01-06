@@ -73,3 +73,15 @@ export const getArticleImageList = createAction(GET_ARTICLE_IMAGE_LIST, ({ total
  */
 export const [SAVE_ARTICLE, SAVE_ARTICLE_SUCCESS, SAVE_ARTICLE_FAILURE] = createRequestActionTypes('article/SAVE_ARTICLE');
 export const saveArticle = createAction(SAVE_ARTICLE, ({ article, callback }) => ({ article, callback }));
+
+/**
+ * 등록기사 삭제
+ */
+export const DELETE_ARTICLE = 'article/DELETE_ARTICLE';
+export const deleteArticle = createAction(DELETE_ARTICLE, ({ totalId, callback }) => ({ totalId, callback }));
+
+/**
+ * 등록기사 중지
+ */
+export const STOP_ARTICLE = 'article/STOP_ARTICLE';
+export const stopArticle = createAction(STOP_ARTICLE, ({ totalId, callback }) => ({ totalId, callback }));

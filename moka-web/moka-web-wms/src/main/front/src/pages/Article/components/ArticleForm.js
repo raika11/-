@@ -28,6 +28,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
     const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [repStr, setRepStr] = useState(''); // 기자리스트
     const [content, setContent] = useState(''); // 본문
+    const [bulkSiteObj, setBulkSiteObj] = useState({}); // 벌크 체크
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
     const [temp, setTemp] = useState(initialState.article);
@@ -114,8 +115,8 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
      */
     const handleReporter = (value) => {
         if (value) {
-            if (temp.reporterList.findIndex((s) => s.value === value.value) > -1) {
-                toast.warning('이미 선택한 기자입니다');
+            if (temp.reporterList.findIndex((s) => String(s.value) === String(value.value)) > -1) {
+                toast.warning('포함된 기자입니다');
             } else {
                 const narr = [...temp.reporterList, value];
                 setTemp({
@@ -218,13 +219,23 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
         setTagStr(article.tagList.join(','));
         // 기자리스트(text)
         setRepStr(article.reporterList.map((r) => r.repName).join(','));
+        // 벌크사이트 => obj
+        setBulkSiteObj(
+            article.bulkSiteList.reduce(
+                (all, cu) => ({
+                    ...all,
+                    [cu.siteName]: cu,
+                }),
+                {},
+            ),
+        );
         // 본문
         setContent(article.artContent?.artContent || '');
     }, [article, temp.totalId]);
 
     return (
         <MokaCard
-            title="등록기사"
+            title="등록 기사"
             className="flex-fill w-100"
             footer
             footerClassName="d-flex justify-content-center"
@@ -237,7 +248,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
             ]}
             loading={loading}
         >
-            <Form>
+            <Form className="d-flex flex-column h-100 overflow-hidden">
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
                         <MokaInputLabel label="출처" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
@@ -308,10 +319,10 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col className="p-0 d-flex overflow-hidden" xs={12} style={{ height: inRcv ? 320 : 280 }}>
+                <Form.Row className="mb-2 flex-fill" style={{ height: 295 }}>
+                    <Col className="p-0 d-flex overflow-hidden" xs={12}>
                         <MokaInputLabel label="본문" as="none" />
-                        <div className="flex-fill input-border">
+                        <div className="flex-fill input-border overflow-hidden">
                             <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} />
                         </div>
                     </Col>
@@ -323,27 +334,27 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                             <div className="d-flex flex-column flex-fill">
                                 <Form.Row className="align-items-center">
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '기사', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '기사', custom: true, checked: bulkSiteObj['기사']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '이미지', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '이미지', custom: true, checked: bulkSiteObj['이미지']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                 </Form.Row>
                                 <Form.Row className="align-items-center">
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '네이버', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '네이버', custom: true, checked: bulkSiteObj['네이버']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '다음', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '다음', custom: true, checked: bulkSiteObj['다음']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '네이트', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '네이트', custom: true, checked: bulkSiteObj['네이트']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '줌', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '줌', custom: true, checked: bulkSiteObj['줌']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                     <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '기타', custom: true }} />
+                                        <MokaInput as="checkbox" inputProps={{ label: '기타', custom: true, checked: bulkSiteObj['기타']?.bulkYn === 'Y', readOnly: true }} />
                                     </Col>
                                 </Form.Row>
                             </div>

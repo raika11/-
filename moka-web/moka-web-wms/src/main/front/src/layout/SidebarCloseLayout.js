@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Wrapper from './components/Wrapper';
@@ -16,7 +16,7 @@ import { closeSidebar } from '@store/layout/layoutAction';
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
  */
-const SidebarCloseLayout = ({ children, nonResponsive }) => {
+const SidebarCloseLayout = ({ children, nonResponsive, ...rest }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -25,14 +25,17 @@ const SidebarCloseLayout = ({ children, nonResponsive }) => {
         }, 500);
     }, [dispatch]);
 
-    const layout = () => (
-        <React.Fragment>
-            <Sidebar nonResponsive={nonResponsive} />
-            <Main>
-                <Navbar nonResponsive={nonResponsive} />
-                <Content>{children}</Content>
-            </Main>
-        </React.Fragment>
+    const layout = useCallback(
+        () => (
+            <React.Fragment>
+                <Sidebar nonResponsive={nonResponsive} {...rest} />
+                <Main>
+                    <Navbar nonResponsive={nonResponsive} {...rest} />
+                    <Content>{children}</Content>
+                </Main>
+            </React.Fragment>
+        ),
+        [children, nonResponsive, rest],
     );
 
     if (nonResponsive) {

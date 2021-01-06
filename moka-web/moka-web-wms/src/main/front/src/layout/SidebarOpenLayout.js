@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Wrapper from './components/Wrapper';
@@ -16,21 +16,24 @@ import { openSidebar } from '@store/layout';
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
  */
-const DefaultLayout = ({ children, nonResponsive }) => {
+const DefaultLayout = ({ children, nonResponsive, ...rest }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(openSidebar());
     }, [dispatch]);
 
-    const layout = () => (
-        <React.Fragment>
-            <Sidebar nonResponsive={nonResponsive} />
-            <Main>
-                <Navbar nonResponsive={nonResponsive} />
-                <Content>{children}</Content>
-            </Main>
-        </React.Fragment>
+    const layout = useCallback(
+        () => (
+            <React.Fragment>
+                <Sidebar nonResponsive={nonResponsive} {...rest} />
+                <Main>
+                    <Navbar nonResponsive={nonResponsive} {...rest} />
+                    <Content>{children}</Content>
+                </Main>
+            </React.Fragment>
+        ),
+        [children, nonResponsive, rest],
     );
 
     if (nonResponsive) {

@@ -2,11 +2,11 @@ import React from 'react';
 import ArticleSearch from './ArticleSearch';
 import ArticleAgGrid from './ArticleAgGrid';
 
-const ArticleList = () => {
+const ArticleList = (props) => {
     return (
         <>
-            <ArticleSearch />
-            <ArticleAgGrid />
+            <ArticleSearch {...props} />
+            <ArticleAgGrid {...props} />
         </>
     );
 };

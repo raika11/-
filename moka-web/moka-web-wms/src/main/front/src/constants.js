@@ -126,3 +126,6 @@ export const DIGITAL_SPECIAL_URL = 'https://news.joins.com/DigitalSpecial/';
 
 // 본문 링크
 export const ARTICLE_URL = 'https://news.joins.com/article/';
+
+// 페이스북 디버그 툴 링크 (모바일URL)
+export const FB_DEBUGGER_LINK = 'https://developers.facebook.com/tools/debug/echo/?q=https://mnews.joins.com/article/';

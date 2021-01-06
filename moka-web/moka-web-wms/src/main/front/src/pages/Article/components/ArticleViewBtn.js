@@ -42,21 +42,23 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
             <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} className="mr-1 flex-shrink-0" size="sm" onClick={handleClickPreviewOpen}>
                 {data.compUrl ? '포토' : '보기'}
             </Button>
-            <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0">
-                1
-            </Button>
+            {data.ja && (
+                <div className="article-group-number mr-1" style={{ width: 24, height: 24 }} data-group-number={data.artGroupNum || (data.totalId % 8) + 1}>
+                    {data.artGroupNum || (data.totalId % 8) + 1}
+                </div>
+            )}
             <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0" onClick={handleClickCopy} onDoubleClick={handleDoubleClickCopy}>
                 C
             </Button>
-            {/* {String(data.totalId) === '23854886' && ( */}
-            {data.ovpYn === 'Y' && (
+            {/* // {data.ovpYn === 'Y' && ( */}
+            {String(data.totalId) === '23854886' && (
                 <Button size="sm" variant="outline-table-btn" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
                     B
                 </Button>
             )}
 
             {/* ovp 미리보기 */}
-            <MokaModal show={previewOn} onHide={() => setPreviewOn(false)} size="sm" centered>
+            <MokaModal show={previewOn} onHide={() => setPreviewOn(false)} width={500} size="md" title="영상보기" centered>
                 <iframe src={data.ovpFullLink} title="미리보기" frameBorder="0" className="w-100" style={{ height: 300 }} />
             </MokaModal>
         </div>

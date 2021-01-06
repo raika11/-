@@ -8,7 +8,7 @@ import NavButtons from './NavButtons';
 
 import { toggleSidebar } from '@store/layout/layoutAction';
 
-const MokaNavbar = () => {
+const MokaNavbar = (props) => {
     const dispatch = useDispatch();
 
     /**
@@ -28,7 +28,7 @@ const MokaNavbar = () => {
                     </span>
 
                     {/* breadcrumb */}
-                    <Breadcrumb />
+                    <Breadcrumb {...props} />
                 </div>
 
                 <div className="d-flex align-items-center h-100">

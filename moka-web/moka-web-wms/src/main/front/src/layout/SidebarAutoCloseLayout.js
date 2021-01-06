@@ -20,7 +20,7 @@ let prevWidth = 0;
  * @param {Element} param0.children children
  * @param {boolean} param0.nonResponsive 반응형 여부
  */
-const SidebarAutoCloseLayout = ({ children, nonResponsive }) => {
+const SidebarAutoCloseLayout = ({ children, nonResponsive, ...rest }) => {
     const dispatch = useDispatch();
 
     /**
@@ -48,14 +48,17 @@ const SidebarAutoCloseLayout = ({ children, nonResponsive }) => {
         };
     }, [resizeFunction]);
 
-    const layout = () => (
-        <>
-            <Sidebar nonResponsive={nonResponsive} />
-            <Main>
-                <Navbar nonResponsive={nonResponsive} />
-                <Content>{children}</Content>
-            </Main>
-        </>
+    const layout = useCallback(
+        () => (
+            <>
+                <Sidebar nonResponsive={nonResponsive} {...rest} />
+                <Main>
+                    <Navbar nonResponsive={nonResponsive} {...rest} />
+                    <Content>{children}</Content>
+                </Main>
+            </>
+        ),
+        [children, nonResponsive, rest],
     );
 
     if (nonResponsive) {

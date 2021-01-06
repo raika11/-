@@ -1,10 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import { MokaIcon } from '@components';
 
-const SourceRenderer = (params) => {
+const SourceRenderer = forwardRef((params, ref) => {
     const ele = useRef(null);
 
-    useEffect(() => {
+    const drawHeight = () => {
         setTimeout(
             function () {
                 if (ele.current) {
@@ -17,6 +17,17 @@ const SourceRenderer = (params) => {
             },
             [100],
         );
+    };
+
+    useImperativeHandle(ref, () => ({
+        refresh: () => {
+            drawHeight();
+            return false;
+        },
+    }));
+
+    useEffect(() => {
+        drawHeight();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
@@ -26,6 +37,6 @@ const SourceRenderer = (params) => {
             {params.data.sourceName} - {params.data.contentKorname}
         </div>
     );
-};
+});
 
 export default SourceRenderer;

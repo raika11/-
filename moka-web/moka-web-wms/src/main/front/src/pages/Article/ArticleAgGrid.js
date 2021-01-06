@@ -93,7 +93,6 @@ const ArticleAgGrid = ({ match, ja }) => {
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['sourceName', 'view', 'register']}
             selected={article.totalId}
-            suppressRefreshCellAfterUpdate
         />
     );
 };

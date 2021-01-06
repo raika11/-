@@ -8,12 +8,16 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +52,13 @@ public class ArticleBasic implements Serializable {
      */
     @Column(name = "SOURCE_CODE", nullable = false)
     private String sourceCode;
+
+    /**
+     * 매체
+     */
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "SOURCE_CODE", referencedColumnName = "SOURCE_CODE", nullable = false, insertable = false, updatable = false)
+    private ArticleSource articleSource;
 
     /**
      * 수신기사아이디

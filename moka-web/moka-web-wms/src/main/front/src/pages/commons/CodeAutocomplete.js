@@ -107,16 +107,22 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 }
             }
         } else {
-            // 리스트의 length가 max보다 크면 waning 노출
-            if (max) {
-                if (value.length > max) {
-                    toast.warning(`최대 ${max}개까지 선택할 수 있습니다.`);
-                    return;
+            if (value !== null) {
+                // 리스트의 length가 max보다 크면 waning 노출
+                if (max) {
+                    if (value.length > max) {
+                        toast.warning(`최대 ${max}개까지 선택할 수 있습니다.`);
+                        return;
+                    }
                 }
-            }
-            // typeof value === array
-            if (onChange) {
-                onChange(value);
+                // typeof value === array
+                if (onChange) {
+                    onChange(value);
+                }
+            } else {
+                if (onChange) {
+                    onChange([]);
+                }
             }
         }
     };

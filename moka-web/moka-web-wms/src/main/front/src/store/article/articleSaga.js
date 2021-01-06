@@ -104,12 +104,61 @@ function* saveArticle({ payload: { article, callback } }) {
 /**
  * 등록기사 삭제
  */
-const deleteArticle = createRequestSaga(act.DELETE_ARTICLE, api.deleteArticle, true);
+function* deleteArticle({ payload: { totalId, callback } }) {
+    const ACTION = act.DELETE_ARTICLE;
+    let callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.deleteArticle, { totalId });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select((store) => store.article.search);
+            yield put({ type: act.GET_ARTICLE, payload: { search } });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * 등록기사 중지
  */
-const stopArticle = createRequestSaga(act.STOP_ARTICLE, api.stopArticle, true);
+function* stopArticle({ payload: { totalId, callback } }) {
+    const ACTION = act.STOP_ARTICLE;
+    let callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        const response = yield call(api.stopArticle, { totalId });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 다시 검색
+            const search = yield select((store) => store.article.search);
+            yield put({ type: act.GET_ARTICLE, payload: { search } });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 등록기사 히스토리 조회
+ */
+const getArticleHistoryList = createRequestSaga(act.GET_ARTICLE_HISTORY_LIST, api.getArticleHistoryList);
 
 export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
@@ -121,4 +170,5 @@ export default function* saga() {
     yield takeLatest(act.SAVE_ARTICLE, saveArticle);
     yield takeLatest(act.DELETE_ARTICLE, deleteArticle);
     yield takeLatest(act.STOP_ARTICLE, stopArticle);
+    yield takeLatest(act.GET_ARTICLE_HISTORY_LIST, getArticleHistoryList);
 }

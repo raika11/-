@@ -141,7 +141,7 @@ const ArticleAgGrid = ({ match, ja }) => {
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
-            columnDefs={columnDefs}
+            columnDefs={ja ? columnDefs : columnDefs.map((def) => (def.field === 'view' ? { ...def, width: 90 } : def))}
             rowData={rowData}
             onRowNodeId={(data) => data.totalId}
             onRowClicked={handleRowClicked}

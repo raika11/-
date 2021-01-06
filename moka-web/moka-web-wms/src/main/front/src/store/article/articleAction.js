@@ -31,6 +31,8 @@ export const clearServiceSearch = createAction(CLEAR_SERVICE_SEARCH);
 export const clearBulkSearch = createAction(CLEAR_BULK_SEARCH);
 export const CLEAR_ARTICLE = 'article/CLEAR_ARTICLE';
 export const clearArticle = createAction(CLEAR_ARTICLE);
+export const CLEAR_HISTORY = 'article/CLEAR_HISTORY';
+export const clearHistory = createAction(CLEAR_HISTORY);
 
 /**
  * 등록기사 리스트 조회
@@ -85,3 +87,9 @@ export const deleteArticle = createAction(DELETE_ARTICLE, ({ totalId, callback }
  */
 export const STOP_ARTICLE = 'article/STOP_ARTICLE';
 export const stopArticle = createAction(STOP_ARTICLE, ({ totalId, callback }) => ({ totalId, callback }));
+
+/**
+ * 등록기사 히스토리 조회
+ */
+export const [GET_ARTICLE_HISTORY_LIST, GET_ARTICLE_HISTORY_LIST_SUCCESS, GET_ARTICLE_HISTORY_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_HISTORY_LIST');
+export const getArticleHistoryList = createAction(GET_ARTICLE_HISTORY_LIST, ({ search, callback }) => ({ search, callback }));

@@ -300,7 +300,7 @@ public class ArticleRestController extends AbstractCommonController {
     }
 
     /**
-     * 등록기사 삭제
+     * 등록기사 중지
      *
      * @param totalId 기사키
      * @return 등록기사정보
@@ -326,9 +326,9 @@ public class ArticleRestController extends AbstractCommonController {
 
             String message = "";
             if (insertOk) {
-                message = msg("tps.common.success.delete");
+                message = msg("ttps.article.success.stop");
             } else {
-                message = msg("tps.common.error.delete");
+                message = msg("tps.article.error.stop");
             }
 
             // 수신기사정보 조회
@@ -342,7 +342,7 @@ public class ArticleRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO ARTICE_IUD INSERT]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO ARTICE_IUD INSERT]", e, true);
-            throw new Exception(msg("tps.common.error.delete"), e);
+            throw new Exception(msg("tps.article.error.stop"), e);
         }
     }
 
@@ -408,7 +408,7 @@ public class ArticleRestController extends AbstractCommonController {
             boolean sendOk = articleService.insertCdn(totalId, cdnResultDto);
             cdnResultDto.setSuccess(sendOk);
             String message = sendOk ? msg("tps.articles.success.cdn") : msg("tps.articles.error.cdn");
-            
+
             ResultDTO<CdnUploadResultDTO> resultDto = new ResultDTO<>(cdnResultDto, message);
             tpsLogger.success(ActionType.SELECT);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);

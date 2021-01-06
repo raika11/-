@@ -12,6 +12,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.mvc.bright.dto.OvpSaveDTO;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSearchDTO;
 import jmnet.moka.core.tps.mvc.bright.vo.BrightcoveCredentailVO;
 import jmnet.moka.core.tps.mvc.bright.vo.OvpVO;
@@ -271,5 +272,30 @@ public class BrightcoveServiceImpl implements BrightcoveService {
             }
         }
         return null;
+    }
+
+    public ResponseEntity<?> createVideo(OvpSaveDTO saveDTO) {
+        BrightcoveCredentailVO credentail = getClientCredentials();
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
+        //headers.add("X-API-KEY", apiKey);
+        String requestUrl = cmsBaseUrl;
+        requestUrl = String.format(requestUrl + "/%s/videos", account);
+
+        String params = "";
+        try {
+            params = ResourceMapper
+                    .getDefaultObjectMapper()
+                    .writeValueAsString(saveDTO);
+        } catch (IOException ex) {
+            log.error(ex.toString());
+        }
+
+        ResponseEntity<String> responseEntity = restTemplateHelper.post(requestUrl, params, headers);
+
+
+        return responseEntity;
     }
 }

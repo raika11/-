@@ -55,32 +55,28 @@ public class Comment implements Serializable {
     @Column(name = "CMT_DECLARE_CNT", nullable = false)
     private Integer declareCnt = 0;
 
-    @Column(name = "CMT_VOTE_SEQ", nullable = false)
-    private Long voteSeq = 0l;
 
     @Column(name = "CMT_CONTENT")
     private String cont;
 
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "MEM_ID", nullable = false)
     private String userId;
 
-    @Column(name = "USER_NAME", nullable = false)
+    @Column(name = "MEM_NM", nullable = false)
     private String userName;
 
-    @Column(name = "USER_SITE", nullable = false)
+    @Column(name = "MEM_SITE", nullable = false)
     private String userSite;
 
-    @Column(name = "USER_IMAGE")
+    @Column(name = "MEM_IMAGE")
     private String userImage;
 
     @Column(name = "REG_DT", nullable = false)
     private Date regDt;
 
-    @Column(name = "USER_IP")
+    @Column(name = "MEM_IP")
     private String userIp;
 
-    @Column(name = "SNSAID")
-    private String snsaid;
 
     @Column(name = "REG_DEV")
     private String regDev;

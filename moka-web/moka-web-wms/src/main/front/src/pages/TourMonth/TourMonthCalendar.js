@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
@@ -10,27 +10,36 @@ import SetHolidayModal from './modals/SetHolidayModal';
 import SummaryHolidayModal from './modals/SummaryHolidayModal';
 import CancelHolidayModal from './modals/CancelHolidayModal';
 
-const demoEvents = [
-    {
-        title: '신정',
-        start: '2021-01-01',
-    },
-    {
-        title: '테스트',
-        start: '2021-01-07',
-        end: '2021-01-10',
-    },
-    { title: '중앙대학교사범대학 부속고등학교', start: '2021-01-12T16:00:00' },
-];
-
 const holidayEl = document.createElement('div');
-const holidayText = document.createTextNode('휴일 지정');
+holidayEl.innerHTML = '휴일 지정';
+holidayEl.className = 'fc-set-holiday';
+
+const demoEvents = {
+    events: [
+        {
+            id: '1',
+            title: '신정',
+            start: '2021-01-01',
+            allDay: true,
+            holiday: true,
+        },
+        {
+            id: '2',
+            title: '테스트',
+            start: '2021-01-07',
+            end: '2021-01-10',
+        },
+        { title: '중앙대학교사범대학 부속고등학교', start: '2021-01-12T10:00:00' },
+    ],
+    color: '#FF3907',
+    // display: block, list-item, background (event obj)
+};
 
 const TourMonthCalendar = () => {
     const cellRef = useRef(null);
-    const [holiday, setHoliday] = useState(false);
-    const [summary, setSummary] = useState(false);
-    const [cancel, setCancel] = useState(false);
+    const [holidayModal, setHolidayModal] = useState(false);
+    const [summaryModal, setSummaryModal] = useState(false);
+    const [cancelModal, setCancelModal] = useState(false);
 
     return (
         <>
@@ -46,33 +55,75 @@ const TourMonthCalendar = () => {
                     center: 'title',
                     right: false,
                 }}
-                // locale="ko"
+                locale="ko"
                 events={demoEvents}
                 bootstrapFontAwesome={false}
-                // editable={false}
-                // dayHeaderClassNames={(date) => }
-                titleFormat={(date) => {
-                    return `${date.date.month + 1}월 ${date.date.year}`;
+                titleFormat={(title) => {
+                    return `${title.date.month + 1}월 ${title.date.year}`;
                 }}
-                dayHeaderContent={(date) => {
-                    let weekList = ['일', '월', '화', '수', '목', '금', '토'];
-                    return weekList[date.dow];
+                eventTimeFormat={(time) => {
+                    return `${time.date.hour}시`;
                 }}
-                eventClick={(date) => {
-                    console.log(date);
-                    setCancel(true);
-                    // date.el.style.borderColor = 'red';
+                // eventContent={(content) => {
+                //     console.log(content);
+                //     if (content.event.extendedProps.holiday) {
+                //         content.backgroundColor = 'blue';
+                //     }
+                // }}
+                dayCellDidMount={(cellData) => {
+                    // console.log(cellData);
+                    // console.log(cellData.view.calendar.getEvents());
+                    let frame = cellData.el;
+                    frame.style.cursor = 'pointer';
+
+                    frame.firstChild.addEventListener('mouseenter', function () {
+                        const events = this.querySelectorAll('.fc-daygrid-day-events');
+
+                        if (!this.querySelector('.fc-event')) {
+                            this.appendChild(holidayEl);
+                        }
+
+                        // events.forEach((event) => {
+                        //     if (event.style['padding-bottom'] === '') {
+                        //         frame.firstChild.appendChild(holidayEl);
+                        //     }
+                        // });
+
+                        // console.log(events);
+                        // if (events.style['padding-bottom'] === '') {
+                        // }
+                    });
+                    frame.firstChild.addEventListener('mouseleave', function () {
+                        if (this.querySelector('.fc-set-holiday')) {
+                            this.removeChild(holidayEl);
+                        }
+                    });
+
+                    // if (!frame.querySelector('.fc-daygrid-event')) {
+
+                    // }
                 }}
                 dateClick={(date) => {
                     console.log(date);
-                    console.log(cellRef);
-                    alert('Clicked on: ' + date.dateStr);
+                    let frame = date.dayEl;
+                    if (!frame.querySelector('.fc-daygrid-event')) {
+                        setHolidayModal(true);
+                    }
                     // date.dayEl.style.backgroundColor = 'red';
                 }}
+                eventClick={(eventData) => {
+                    console.log(eventData);
+                    if (eventData.event.allDay) {
+                        setCancelModal(true);
+                    } else {
+                        setSummaryModal(true);
+                    }
+                    // date.el.style.borderColor = 'red';
+                }}
             />
-            <SetHolidayModal show={holiday} onHide={() => setHoliday(false)} />
-            <SummaryHolidayModal show={summary} onHide={() => setSummary(false)} />
-            <CancelHolidayModal show={cancel} onHide={() => setCancel(false)} />
+            <SetHolidayModal show={holidayModal} onHide={() => setHolidayModal(false)} />
+            <SummaryHolidayModal show={summaryModal} onHide={() => setSummaryModal(false)} />
+            <CancelHolidayModal show={cancelModal} onHide={() => setCancelModal(false)} />
         </>
     );
 };

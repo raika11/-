@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.core.dps.api.forward.Forward;
+import jmnet.moka.core.dps.api.forward.ForwardHandler;
 import jmnet.moka.core.dps.excepton.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +31,11 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
 	@Autowired
 	private CacheManager cacheManager;
-	
+
+	public MokaApiRequestHandler(ForwardHandler forwardHandler) {
+		super(forwardHandler);
+	}
+
 	/**
 	 * @see jmnet.moka.core.dps.api.handler.DefaultApiRequestHandler#apiRequest(java.lang.String, java.lang.String, java.util.Map)
 	 */
@@ -60,13 +66,21 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 		try {
 
             ApiResolver apiResolver = new ApiResolver(request);
+			Map<String, String> httpParamMap = HttpHelper.getParamMap(request);
+
             // Api가 존재하지 않을 경우
             if (this.apiRequestHelper.apiRequestExists(apiResolver) == false) {
-                return this.getApiNotFoundResponse(request, apiResolver);
+				Forward forward = this.forwardHandler.getForward(request);
+				if (forward != null) {
+					apiResolver = new ApiResolver(forward.getApiPath(),forward.getApiId());
+					forward.rebuildHttpParameter(request, httpParamMap);
+				} else {
+					return this.getApiNotFoundResponse(request, apiResolver);
+				}
             }
 
             ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,
-                    apiResolver, HttpHelper.getParamMap(request));
+                    apiResolver, httpParamMap);
 
 			// Method가 일치하는지 확인한다.
 			if ( !apiContext.getApi().getMethod().matches(request.getMethod())) {

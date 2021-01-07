@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.core.dps.api.ApiCacheHelper;
+import jmnet.moka.core.dps.api.forward.Forward;
+import jmnet.moka.core.dps.api.forward.ForwardHandler;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +46,8 @@ import jmnet.moka.core.dps.excepton.ParameterException;
 public class DefaultApiRequestHandler implements ApiRequestHandler {
 
     public static final Logger logger = LoggerFactory.getLogger(DefaultApiRequestHandler.class);
-    private HashMap<Class<?>, RequestHandler> requestHandlerMap;
+    protected ForwardHandler forwardHandler;
+    protected HashMap<Class<?>, RequestHandler> requestHandlerMap;
 
     @Autowired
     private GenericApplicationContext appContext;
@@ -70,7 +73,8 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
 
     protected static Map<String, String> EMPTY_PARAM_MAP = new HashMap<String, String>(0);
 
-    public DefaultApiRequestHandler() {
+    public DefaultApiRequestHandler(ForwardHandler forwardHandler) {
+        this.forwardHandler = forwardHandler;
         this.requestHandlerMap = new HashMap<Class<?>, RequestHandler>(8);
     }
 
@@ -221,10 +225,17 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     public ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
             ApiResolver apiResolver = new ApiResolver(request);
+            Map<String, String> httpParamMap = HttpHelper.getParamMap(request);
 
-            // api가 존재하지 않을 경우
-            if (this.apiRequestHelper.apiRequestExists(apiResolver)) {
-                return getApiNotFoundResponse(request, apiResolver);
+            // Api가 존재하지 않을 경우
+            if (this.apiRequestHelper.apiRequestExists(apiResolver) == false) {
+                Forward forward = this.forwardHandler.getForward(request);
+                if (forward != null) {
+                    apiResolver = new ApiResolver(forward.getApiPath(),forward.getApiId());
+                    forward.rebuildHttpParameter(request, httpParamMap);
+                } else {
+                    return this.getApiNotFoundResponse(request, apiResolver);
+                }
             }
 
             ApiContext apiContext = new ApiContext(this.apiRequestHelper, this.apiParameterChecker,

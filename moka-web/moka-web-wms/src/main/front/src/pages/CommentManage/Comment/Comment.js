@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
-import { clearStore } from '@store/commentManage/comment';
+import { clearStore } from '@store/commentManage';
 
 const CommentList = React.lazy(() => import('./CommentLIst'));
 

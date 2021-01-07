@@ -42,6 +42,7 @@ const TourSet = React.lazy(() => import('@pages/TourSet'));
 const TourMsgSet = React.lazy(() => import('@pages/TourMsgSet'));
 const Article = React.lazy(() => import('@pages/Article'));
 const Quiz = React.lazy(() => import('@pages/Survey/Quiz'));
+const CommentBanned = React.lazy(() => import('@pages/CommentManage/Banned'));
 
 const routes = [
     {
@@ -490,6 +491,36 @@ const routes = [
         name: 'boards-list',
         displayName: '게시글 게시판 관리',
         component: Boards,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/banned-id',
+        name: 'Banned-id',
+        displayName: '차단ID 관리',
+        component: CommentBanned,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/banned-ip',
+        name: 'Banned-ip',
+        displayName: '차단IP 관리',
+        component: CommentBanned,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/banned-word',
+        name: 'Banned-word',
+        displayName: '금지어 관리',
+        component: CommentBanned,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

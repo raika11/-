@@ -16,6 +16,7 @@ moment.locale('ko');
 const EditThumbDropzone = (props) => {
     const { collapse, setCollapse } = props;
     const { onThumbClick, onRepClick, onEditClick, setRepPhoto } = props;
+    const { cropWidth, cropHeight } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
@@ -84,8 +85,6 @@ const EditThumbDropzone = (props) => {
 
     const handleMakeGif = () => {
         let images = [];
-
-        console.log(imgList);
         // eslint-disable-next-line array-callback-return
         imgList.map((image) => {
             if (image.dataType === 'archive') {
@@ -104,7 +103,6 @@ const EditThumbDropzone = (props) => {
                 interval: gifInterval,
             },
             (obj) => {
-                console.log(obj);
                 if (!obj.error) {
                     const gifImage = URL.createObjectURL(util.base64ToBlob(obj.image));
                     setRepPhoto({

@@ -40,7 +40,6 @@ const EditThumbModal = (props) => {
     const [cardData, setCardData] = useState({});
     const [repPhoto, setRepPhoto] = useState(defaultValue);
     const [showViewModal, setShowViewModal] = useState(false);
-
     /**
      * 썸네일 클릭
      * @param {object} data 썸네일 클릭 팝업 데이터
@@ -124,7 +123,7 @@ const EditThumbModal = (props) => {
                 await fetch(repPhoto.thumbPath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
-                        const file = util.blobToFile(blobFile, deskingWorkData.seq, blobFile.type);
+                        const file = util.blobToFile(blobFile, deskingWorkData.seq);
                         setFileValue(file);
                         setThumbFileName(repPhoto.thumbPath);
                     });
@@ -214,6 +213,8 @@ const EditThumbModal = (props) => {
 
                     {/* GIF 생성 드롭존 */}
                     <EditThumbDropzone
+                        cropWidth={cropWidth}
+                        cropHeight={cropHeight}
                         collapse={collapse}
                         setCollapse={setCollapse}
                         onThumbClick={handleThumbClick}

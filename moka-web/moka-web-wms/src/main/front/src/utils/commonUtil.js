@@ -66,14 +66,13 @@ const base64ToBlob = (dataURI) => {
  * blob To File
  * @param {any} blob blob
  * @param {string} fileName 저장할 파일명
- * @param {string} contentType contentType
  */
-const blobToFile = (blob, fileName, contentType) => {
+const blobToFile = (blob, fileName) => {
     let extension = blob.type.split('/')[1];
     if (extension === 'jpeg') {
         extension = 'jpg';
     }
-    return new File([blob], fileName + `.${extension}`, { type: contentType });
+    return new File([blob], fileName + `.${extension}`, { lastModified: new Date().getTime(), type: blob.type });
 };
 
 /**

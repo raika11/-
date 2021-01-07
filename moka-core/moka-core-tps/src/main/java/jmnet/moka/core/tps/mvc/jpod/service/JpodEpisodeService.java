@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeDetail;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
 import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeVO;
@@ -39,12 +40,20 @@ public interface JpodEpisodeService {
     Optional<JpodEpisode> findJpodEpisodeById(Long episodeSeq);
 
     /**
+     * 에피소드 상세 정보에 키워드, 참여자, 관련 기사 목록까지 같이 조회
+     *
+     * @param episodeSeq 에피소드 일련번호
+     * @return 에피소드 정보
+     */
+    Optional<JpodEpisodeDetail> findJpodEpisodeDetailById(Long episodeSeq);
+
+    /**
      * jpod 에피소드 신규 등록
      *
      * @param episode 에피소드 정보
      * @return 등록 결과
      */
-    JpodEpisode insertJpodEpisode(JpodEpisode episode);
+    JpodEpisodeDetail insertJpodEpisode(JpodEpisodeDetail episode);
 
     /**
      * jpod 에피소드 수정
@@ -52,7 +61,16 @@ public interface JpodEpisodeService {
      * @param episode 에피소드 정보
      * @return JpodEpisode
      */
-    JpodEpisode updateJpodEpisode(JpodEpisode episode);
+    JpodEpisodeDetail updateJpodEpisode(JpodEpisodeDetail episode);
+
+    /**
+     * 사용여부 수정
+     *
+     * @param epsdSeq 에피소드 일련번호
+     * @param usedYn  사용여부
+     * @return 결과
+     */
+    long updateJpodEpisodeUseYn(Long epsdSeq, String usedYn);
 
     /**
      * jpod 에피소드 일련번호로 삭제

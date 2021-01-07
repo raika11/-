@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
@@ -59,12 +59,13 @@ const TourMonthCalendar = () => {
                 events={demoEvents}
                 bootstrapFontAwesome={false}
                 titleFormat={(title) => {
-                    return `${title.date.month + 1}월 ${title.date.year}`;
+                    return `${title.date.year}년 ${title.date.month + 1}월`;
                 }}
                 eventTimeFormat={(time) => {
                     return `${time.date.hour}시`;
                 }}
                 // eventContent={(content) => {
+                //     이벤트 컨텐츠 제어
                 //     console.log(content);
                 //     if (content.event.extendedProps.holiday) {
                 //         content.backgroundColor = 'blue';
@@ -77,21 +78,13 @@ const TourMonthCalendar = () => {
                     frame.style.cursor = 'pointer';
 
                     frame.firstChild.addEventListener('mouseenter', function () {
-                        const events = this.querySelectorAll('.fc-daygrid-day-events');
+                        const events = this.querySelector('.fc-daygrid-day-events');
 
-                        if (!this.querySelector('.fc-event')) {
-                            this.appendChild(holidayEl);
+                        if (events.style['padding-bottom'] === '') {
+                            if (!events.querySelector('.fc-daygrid-event-harness')) {
+                                this.appendChild(holidayEl);
+                            }
                         }
-
-                        // events.forEach((event) => {
-                        //     if (event.style['padding-bottom'] === '') {
-                        //         frame.firstChild.appendChild(holidayEl);
-                        //     }
-                        // });
-
-                        // console.log(events);
-                        // if (events.style['padding-bottom'] === '') {
-                        // }
                     });
                     frame.firstChild.addEventListener('mouseleave', function () {
                         if (this.querySelector('.fc-set-holiday')) {
@@ -105,9 +98,12 @@ const TourMonthCalendar = () => {
                 }}
                 dateClick={(date) => {
                     console.log(date);
-                    let frame = date.dayEl;
-                    if (!frame.querySelector('.fc-daygrid-event')) {
-                        setHolidayModal(true);
+                    let frame = date.dayEl,
+                        events = frame.querySelector('.fc-daygrid-day-events');
+                    if (events.style['padding-bottom'] === '') {
+                        if (!events.querySelector('.fc-daygrid-event-harness')) {
+                            setHolidayModal(true);
+                        }
                     }
                     // date.dayEl.style.backgroundColor = 'red';
                 }}

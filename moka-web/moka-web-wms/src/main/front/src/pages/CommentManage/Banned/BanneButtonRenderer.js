@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 
 // 등록자 정보
 const BanneButtonRenderer = (props) => {

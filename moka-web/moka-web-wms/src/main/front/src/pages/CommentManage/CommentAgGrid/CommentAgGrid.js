@@ -10,9 +10,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 const CommentAgGrid = (props) => {
     const { loading, total, page, size, columnDefs, localeText, onColumnResized, onColumnVisible, onGridReady, changeSearchOption, frameworkComponents } = props;
 
-    const tempEvent = (e) => {
-        console.log(e);
-    };
+    const tempEvent = (e) => {};
 
     const onColumnValueChanged = (e) => {
         console.log('Event Value Changed', e);

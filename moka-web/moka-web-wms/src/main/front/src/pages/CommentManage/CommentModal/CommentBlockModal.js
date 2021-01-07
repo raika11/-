@@ -52,10 +52,6 @@ const CommentBlockModal = (props) => {
         setData(inputData);
     }, [inputData]);
 
-    useEffect(() => {
-        console.log(ModalUsage);
-    }, [ModalUsage]);
-
     return (
         <MokaModal
             width={600}

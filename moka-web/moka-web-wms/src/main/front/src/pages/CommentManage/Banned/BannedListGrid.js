@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { GET_COMMENT_LIST, changeSearchOption, getCommentList } from '@store/commentManage';
+import { useSelector } from 'react-redux';
 import { bannedIdList } from '@pages/CommentManage/CommentConst';
 import CommentAgGrid from '@pages/CommentManage/CommentAgGrid';
 import BanneButtonRenderer from './BanneButtonRenderer';

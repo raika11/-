@@ -1,10 +1,8 @@
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaLoader } from '@components';
 import { Switch, Route } from 'react-router-dom';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
-import { clearStore, initializeBannedParams } from '@store/commentManage';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { initializeBannedParams } from '@store/commentManage';
+import { useDispatch } from 'react-redux';
 
 const BannedList = React.lazy(() => import('./BannedList'));
 

@@ -97,12 +97,6 @@ public class RcvArticleBasic implements Serializable {
     private String subTitle;
 
     /**
-     * 부서
-     */
-    @Column(name = "DEPART")
-    private String depart;
-
-    /**
      * 출판일시
      */
     @Column(name = "PRESS_DT")

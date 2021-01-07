@@ -63,9 +63,6 @@ public class RcvArticleSearchDTO extends SearchDTO {
     @NotNull(message = "{tps.rcv-article.error.notnull.sourceList}")
     private String sourceList;
 
-    @ApiModelProperty("부서")
-    private String depart;
-
     @ApiModelProperty("등록상태(Y,B)")
     @Pattern(regexp = "^(all)|(Y)|(B)$", message = "{tps.rcv-article.error.pattern.status}")
     private String status;

@@ -24,15 +24,6 @@
     #{endDay, mode=IN, jdbcType=VARCHAR, javaType=string},
 
     <choose>
-      <when test='depart != "all" and depart != null and depart != ""'>
-        #{depart},
-      </when>
-      <otherwise>
-        NULL,
-      </otherwise>
-    </choose>
-
-    <choose>
       <when test='status != "all" and status != null and status == "Y"'>
         #{status},
       </when>

@@ -87,11 +87,6 @@ public class RcvArticleBasicDTO implements Serializable {
     private String subTitle;
 
     /**
-     * 부서
-     */
-    private String depart;
-
-    /**
      * 출판일시
      */
     @DTODateTimeFormat

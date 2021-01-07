@@ -13,8 +13,8 @@ const MessageSettings = () => {
 
             <MokaCard
                 width={772}
-                titleClassName="mb-0"
                 title="견학 메세지 설정"
+                titleClassName="mb-0"
                 footer
                 footerButtons={[
                     { text: '저장', variant: 'positive', className: 'mr-2' },

@@ -1,12 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
-import columnDefs, { rowData } from './TourListAgGridColumns';
+import columnDefs, { rowData } from './MicAgendaAgGridColumns';
 
-/**
- * 신청목록 AgGrid
- */
-const TourListAgGrid = () => {
+const MicAgendaAgGrid = () => {
     const history = useHistory();
     const [total] = useState(0);
     const [loading] = useState(false);
@@ -23,26 +20,26 @@ const TourListAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (row) => {
-            history.push(`/tour-list/${row.seqNo}`);
+            history.push(`/mic/${row.seqNo}`);
         },
         [history],
     );
 
     return (
         <MokaTable
-            agGridHeight={632}
+            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
             onRowNodeId={(params) => params.seqNo}
             onRowClicked={handleRowClicked}
-            loading={loading}
+            // loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            // selected={rowData[0].seqNo}
+            // selected={rowData.seqNo}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );
 };
 
-export default TourListAgGrid;
+export default MicAgendaAgGrid;

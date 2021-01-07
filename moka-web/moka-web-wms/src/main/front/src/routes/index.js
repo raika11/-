@@ -43,6 +43,7 @@ const TourMsgSet = React.lazy(() => import('@pages/TourMsgSet'));
 const Article = React.lazy(() => import('@pages/Article'));
 const Quiz = React.lazy(() => import('@pages/Survey/Quiz'));
 const CommentBanned = React.lazy(() => import('@pages/CommentManage/Banned'));
+const Mic = React.lazy(() => import('@pages/Mic'));
 
 const routes = [
     {
@@ -486,16 +487,7 @@ const routes = [
         exact: false,
         strict: true,
     },
-    {
-        path: '/boards-list',
-        name: 'boards-list',
-        displayName: '게시글 게시판 관리',
-        component: Boards,
-        layout: SidebarOpenLayout,
-        nonResponsive: true,
-        exact: false,
-        strict: true,
-    },
+
     {
         path: '/banned-id',
         name: 'Banned-id',
@@ -523,6 +515,16 @@ const routes = [
         component: CommentBanned,
         layout: SidebarOpenLayout,
         nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/mic',
+        name: 'mic',
+        displayName: '시민 마이크',
+        component: Mic,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
         exact: false,
         strict: true,
     },

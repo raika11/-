@@ -59,12 +59,13 @@ const TourMonthCalendar = () => {
                 events={demoEvents}
                 bootstrapFontAwesome={false}
                 titleFormat={(title) => {
-                    return `${title.date.month + 1}월 ${title.date.year}`;
+                    return `${title.date.year}년 ${title.date.month + 1}월`;
                 }}
                 eventTimeFormat={(time) => {
                     return `${time.date.hour}시`;
                 }}
                 // eventContent={(content) => {
+                //     이벤트 컨텐츠 제어
                 //     console.log(content);
                 //     if (content.event.extendedProps.holiday) {
                 //         content.backgroundColor = 'blue';

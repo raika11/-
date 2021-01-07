@@ -44,12 +44,13 @@ const EditThumbArticleImageListTable = (props) => {
                 dataType: 'article',
                 compFileUrl: `${PDS_URL}${data.compFileUrl}`,
                 thumbPath: `${PDS_URL}${data.compFileUrl}`,
+                imageOnlnPath: `${PDS_URL}${data.compFileUrl}`,
             })),
         );
     }, [PDS_URL, imageList]);
 
     return (
-        <div className="border rounded w-100 custom-scroll flex-fill overflow-hidden overflow-y-scroll">
+        <div className="border w-100 custom-scroll flex-fill">
             <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                 {loading && <MokaLoader />}
                 {renderList.map((data) => (

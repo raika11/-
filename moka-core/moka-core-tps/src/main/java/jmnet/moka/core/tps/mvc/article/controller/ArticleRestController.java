@@ -28,12 +28,14 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -420,9 +422,9 @@ public class ArticleRestController extends AbstractCommonController {
     }
 
     @ApiOperation("기사수정")
-    @PutMapping("/{totalId}")
+    @PutMapping(value = "/{totalId}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> putArticle(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
-            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @Valid ArticleBasicUpdateDTO updateDto)
+            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @RequestBody @Valid ArticleBasicUpdateDTO updateDto)
             throws Exception {
 
         // 기사 상세조회

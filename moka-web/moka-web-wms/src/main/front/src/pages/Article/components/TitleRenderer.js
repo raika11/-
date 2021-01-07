@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import React, { useState, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import clsx from 'clsx';
 import Badge from 'react-bootstrap/Badge';

@@ -37,7 +37,7 @@ const Special = ({ match }) => {
 
             {/* 등록/수정 */}
             <Switch>
-                <Route path={[`${match.url}/add`, `${match.url}/:seqNo`]}>
+                <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]}>
                     <SpecialEdit />
                 </Route>
             </Switch>

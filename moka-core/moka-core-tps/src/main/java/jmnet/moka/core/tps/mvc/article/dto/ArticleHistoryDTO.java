@@ -7,8 +7,10 @@ package jmnet.moka.core.tps.mvc.article.dto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -74,4 +76,15 @@ public class ArticleHistoryDTO implements Serializable {
      * 입력/수정/삭제 구분
      */
     private String iudDiv = TpsConstants.WORKTYPE_UPDATE;
+
+    /**
+     * 작업일자
+     */
+    @DTODateTimeFormat
+    private Date regDt;
+
+    /**
+     * 작업자ID
+     */
+    private String regId;
 }

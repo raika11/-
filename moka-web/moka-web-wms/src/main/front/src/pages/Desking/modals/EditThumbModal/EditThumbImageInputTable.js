@@ -54,7 +54,7 @@ const EditThumbImageInput = (props) => {
                 if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
                     const id = moment().format('YYYYMMDDsss') + `_${idx}`;
                     const preview = URL.createObjectURL(f);
-                    result.push({ id: id, File: f, preview, dataType: 'local', thumbPath: preview });
+                    result.push({ id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: preview });
                 } else {
                     // 이미지 파일이 아닌경우
                     toast.warning('이미지 파일만 등록할 수 있습니다.');
@@ -79,23 +79,27 @@ const EditThumbImageInput = (props) => {
         <Dropzone noClick noKeyboard onDrop={onDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} preventDropOnDocument>
             {({ getRootProps, getInputProps }) => {
                 return (
-                    <div {...getRootProps()} className={clsx('w-100 flex-fill overflow-hidden position-relative', className)} ref={wrapRef} style={{ height: 420 }} as="div">
+                    <div
+                        {...getRootProps()}
+                        className={clsx('w-100 flex-fill overflow-hidden position-relative', className)}
+                        ref={wrapRef}
+                        style={{ height: 420, padding: 2 }}
+                        as="div"
+                    >
                         {/* default text */}
                         <span className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none p-3" style={{ whiteSpace: 'pre-wrap' }}>
                             <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
                             Drop files to attach, or browse
                         </span>
 
-                        <div className="d-flex flex-wrap align-content-start custom-scroll p-1 h-100 overflow-y-scroll is-file-dropzone">
+                        <div className="d-flex flex-wrap align-content-start custom-scroll p-1 h-100 dropzone-border dropzone-dragover-zone is-file-dropzone">
                             {/* 이미지 미리보기 */}
                             {files.map((data) => (
                                 <EditThumbCard ref={cardRef} key={data.id} img={data.thumbPath} data={data} dataType={data.dataType} onRepClick={onRepClick} />
                             ))}
 
                             <input {...getInputProps()} />
-
-                            {/* drag over mask */}
-                            <div className="dropzone-dragover-mask dropzone-border" />
+                            <div className="dropzone-dragover-mask " />
                         </div>
                     </div>
                 );

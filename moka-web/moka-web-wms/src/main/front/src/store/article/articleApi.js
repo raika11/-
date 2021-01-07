@@ -84,7 +84,7 @@ export const registCdn = ({ totalId }) => {
 
 // 등록 기사 편집 히스토리 조회
 export const getArticleHistoryList = ({ search }) => {
-    return instance.get(`/api/articles/${search.totalId}/histories`).catch((err) => {
+    return instance.get(`/api/articles/${search.totalId}/histories?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

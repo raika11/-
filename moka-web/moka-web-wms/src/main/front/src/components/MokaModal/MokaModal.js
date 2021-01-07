@@ -25,6 +25,10 @@ const propTypes = {
      */
     className: PropTypes.string,
     /**
+     * dialogClassName
+     */
+    dialogClassName: PropTypes.string,
+    /**
      * headerClassName
      */
     headerClassName: PropTypes.string,
@@ -135,6 +139,7 @@ const MokaModal = (props) => {
         centered,
         footer,
         className,
+        dialogClassName,
         headerClassName,
         titleClassName,
         bodyClassName,
@@ -154,7 +159,7 @@ const MokaModal = (props) => {
     const DraggableModal = useCallback(
         (props) => (
             <div
-                className={clsx('react-draggable-container', {
+                className={clsx('react-draggable-container custom-scroll', {
                     'align-items-center': centered,
                 })}
             >
@@ -173,10 +178,11 @@ const MokaModal = (props) => {
             onHide={onHide}
             backdrop={false}
             animation={false}
-            scrollable="true"
+            scrollable={'fixed-modal'.indexOf(dialogClassName) === -1 ? true : false}
             dialogAs={DraggableModal}
             enforceFocus={false}
             size={size}
+            dialogClassName={dialogClassName}
             {...rest}
         >
             {/* 타이틀 */}

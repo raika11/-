@@ -33,7 +33,7 @@ const Reserved = ({ match }) => {
             {/* 예약어 정보 */}
             <Switch>
                 <Route
-                    path={[`${match.url}/add`, `${match.url}/:reservedSeq`]}
+                    path={[`${match.path}/add`, `${match.path}/:reservedSeq`]}
                     exact
                     render={() => (
                         <MokaCard width={780} title="예약어 정보" loading={loading}>

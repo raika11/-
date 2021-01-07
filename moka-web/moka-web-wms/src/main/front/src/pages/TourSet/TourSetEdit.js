@@ -124,6 +124,7 @@ const TourSetEdit = () => {
                 <MokaInputLabel label="견학가능요일" labelClassName="d-flex justify-content-end" className="mb-0" as="none" />
                 <MokaInputLabel
                     label="일"
+                    labelWidth={13}
                     labelClassName="ml-0"
                     className="mb-0"
                     as="switch"
@@ -140,6 +141,7 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="월"
+                    labelWidth={13}
                     className="mb-0"
                     as="switch"
                     name="monday"
@@ -156,6 +158,7 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="화"
+                    labelWidth={13}
                     className="mb-0"
                     as="switch"
                     name="tuesday"
@@ -172,6 +175,7 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="수"
+                    labelWidth={13}
                     className="mb-0"
                     as="switch"
                     name="wednesday"
@@ -188,6 +192,7 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="목"
+                    labelWidth={13}
                     className="mb-0"
                     as="switch"
                     name="thursday"
@@ -204,6 +209,7 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="금"
+                    labelWidth={13}
                     className="mb-0"
                     as="switch"
                     name="friday"
@@ -220,6 +226,7 @@ const TourSetEdit = () => {
                 />
                 <MokaInputLabel
                     label="토"
+                    labelWidth={13}
                     className="mb-0"
                     as="switch"
                     name="saturday"

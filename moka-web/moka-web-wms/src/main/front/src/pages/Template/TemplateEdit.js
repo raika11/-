@@ -386,10 +386,9 @@ const TemplateEdit = ({ onDelete }) => {
                             대표이미지
                             <br />
                             <Button
-                                className="mt-1"
+                                className="mt-1 w-100"
                                 size="sm"
                                 variant="negative"
-                                style={{ width: 68 }}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();

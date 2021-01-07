@@ -18,7 +18,19 @@ const HolidayRegistrationModal = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({}), []);
 
     return (
-        <MokaModal title="휴일 등록" headerClassName="justify-content-start" width={400} show={show} onHide={onHide} centered draggable>
+        <MokaModal
+            title="휴일 등록"
+            headerClassName="justify-content-start"
+            width={400}
+            show={show}
+            onHide={onHide}
+            centered
+            buttons={[
+                { text: '등록', variant: 'primary' },
+                { text: '취소', variant: 'negative', onClick: () => onHide() },
+            ]}
+            draggable
+        >
             <Form>
                 <Form.Row className="mb-2">
                     <Col xs={10}>
@@ -58,12 +70,6 @@ const HolidayRegistrationModal = forwardRef((props, ref) => {
                     </Col>
                 </Form.Row>
             </Form>
-            <div className="d-flex justify-content-center">
-                <Button className="mr-2">등록</Button>
-                <Button variant="negative" onClick={onHide}>
-                    취소
-                </Button>
-            </div>
         </MokaModal>
     );
 });

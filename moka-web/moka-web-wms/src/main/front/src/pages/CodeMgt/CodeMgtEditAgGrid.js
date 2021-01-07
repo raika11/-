@@ -8,10 +8,10 @@ import columnDefs from './CodeMgtEditAgGridColumns';
 import CodeMgtEditModal from './modals/CodeMgtEditModal';
 
 const CodeMgtEditAgGrid = (props) => {
+    const { onSave, onDelete, match } = props;
     const { grpCd } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const { onSave, onDelete } = props;
     const { cdList, total, search, loading } = useSelector((store) => ({
         cdList: store.codeMgt.cdList,
         total: store.codeMgt.cdTotal,
@@ -63,11 +63,11 @@ const CodeMgtEditAgGrid = (props) => {
      */
     const handleRowClicked = useCallback(
         (cd) => {
-            history.push(`/codeMgt/${grpCd}/${cd.cdSeq}`);
+            history.push(`${match.path}/${grpCd}/${cd.cdSeq}`);
             setShowEditModal(true);
             dispatch(getCodeMgt(cd.cdSeq));
         },
-        [dispatch, grpCd, history],
+        [dispatch, grpCd, history, match.path],
     );
 
     return (
@@ -86,7 +86,9 @@ const CodeMgtEditAgGrid = (props) => {
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={cdList.cdSeq}
             />
-            <CodeMgtEditModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onSave} onDelete={onDelete} />
+
+            {/* 코드 수정 모달 */}
+            <CodeMgtEditModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onSave} onDelete={onDelete} match={match} />
         </>
     );
 };

@@ -8,7 +8,7 @@ const PollAgGrid = ({ searchOptions }) => {
             <MokaTable
                 columnDefs={columnDefs}
                 onRowNodeId={(row) => row.id}
-                agGridHeight={645}
+                agGridHeight={585}
                 rowData={rowData}
                 page={searchOptions.page}
                 size={searchOptions.size}

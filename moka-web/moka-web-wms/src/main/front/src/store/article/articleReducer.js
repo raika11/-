@@ -89,6 +89,15 @@ export const initialState = {
             contentType: null, // 기사타입
         },
     },
+    // 등록 기사 수정 히스토리
+    history: {
+        total: 0,
+        error: null,
+        list: [],
+        search: {
+            totalId: null,
+        },
+    },
     imageList: [],
 };
 
@@ -121,13 +130,6 @@ export default handleActions(
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
-        // [act.CLEAR_LIST]: (state) => {
-        //     return produce(state, (draft) => {
-        //         draft.total = initialState.total;
-        //         draft.list = initialState.list;
-        //         draft.error = initialState.error;
-        //     });
-        // },
         [act.CLEAR_SERVICE_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.service.total = initialState.service.total;
@@ -151,6 +153,11 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.article = initialState.article;
                 draft.invalidList = initialState.invalidList;
+            });
+        },
+        [act.CLEAR_HISTORY]: (state) => {
+            return produce(state, (draft) => {
+                draft.history = initialState.history;
             });
         },
         /**
@@ -226,6 +233,23 @@ export default handleActions(
         [act.GET_ARTICLE_IMAGE_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.imageList = initialState.imageList;
+            });
+        },
+        /**
+         * 등록기사 히스토리 조회
+         */
+        [act.GET_ARTICLE_HISTORY_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.history.total = body.totalCnt;
+                draft.history.list = body.list;
+                draft.history.error = initialState.history.error;
+            });
+        },
+        [act.GET_ARTICLE_HISTORY_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.history.total = initialState.history.total;
+                draft.history.list = initialState.history.list;
+                draft.history.error = payload;
             });
         },
     },

@@ -46,6 +46,21 @@
   }
 }
 
+@mixin button-focus($color, $background, $border-color: null, $font-weight: null) {
+  &:not(:disabled):not(.disabled):focus,
+  &:not(:disabled):not(.disabled).focus {
+    color: $color;
+    background: $background;
+    border-color: $background;
+    @if ($border-color) {
+      border-color: $border-color;
+    }
+    @if($font-weight) {
+      font-weight: $font-weight;
+    }
+  }
+}
+
 @mixin button-color-active($color) {
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { loginJwt } from '@store/auth';
+import { useHistory } from 'react-router-dom';
 import { call, delay } from 'redux-saga/effects';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
@@ -15,6 +16,7 @@ import RegisterModal from './modals/RegisterModal';
 
 const SignIn = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
     const [showUnlockModal, setShowUnlockModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -84,7 +86,8 @@ const SignIn = () => {
     return (
         <React.Fragment>
             <Main className="h-100 w-100 signin-main" style={{ background: '#080808 url(' + loginBg + ') no-repeat center / cover' }}>
-                <div className="d-flex h-100 w-100 justify-content-center" style={{ background: 'rgb(60, 65, 93, 0.69)' }}>
+                {/*<div className="d-flex h-100 w-100 justify-content-center" style={{ background: 'rgb(60, 65, 93, 0.69)' }}>*/}
+                <div className="d-flex h-100 w-100 justify-content-center">
                     <div className="d-flex flex-column">
                         <Row className="h-100">
                             <Col className="mx-auto d-table h-100">

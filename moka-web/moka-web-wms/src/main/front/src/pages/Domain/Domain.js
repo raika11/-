@@ -119,7 +119,7 @@ const Domain = ({ match }) => {
 
             {/* 도메인 정보 */}
             <Route
-                path={[`${match.url}/add`, `${match.url}/:domainId`]}
+                path={[`${match.path}/add`, `${match.path}/:domainId`]}
                 exact
                 render={() => (
                     <MokaCard title="도메인 등록" width={820} headerClassName="d-flex justify-content-between align-item-center" height={CARD_DEFAULT_HEIGHT} loading={loading}>

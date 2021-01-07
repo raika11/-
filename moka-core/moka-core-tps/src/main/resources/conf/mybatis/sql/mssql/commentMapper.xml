@@ -26,7 +26,7 @@
 
   <select id="findAll" parameterType="CommentSearchDTO" resultMap="CommentMap"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_CMT_LIST_SEL(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_COMMENT_LIST_SEL(
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{contentId, mode=IN, jdbcType=VARCHAR, javaType=string},

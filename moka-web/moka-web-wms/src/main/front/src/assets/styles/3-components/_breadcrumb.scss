@@ -1,3 +1,7 @@
 .breadcrumb {
     letter-spacing: -0.56px;
+
+    .breadcrumb-item[data-current="true"] {
+        color: $positive;
+    }
 }

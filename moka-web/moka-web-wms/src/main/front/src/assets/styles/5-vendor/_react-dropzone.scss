@@ -10,19 +10,22 @@
         left: 0;
         right: 0;
         bottom: 0;
-
-        &.dropzone-border {
-            border: 1px solid $input-border-color;
-            border-radius: $border-radius;
-        }
+    }
+    &.dropzone-border {
+        outline: 1px solid $gray-300;
+        border-radius: $border-radius;
     }
 }
 
-.dropzone-dragover {
-    .dropzone-dragover-mask {
+.dropzone-dragover {    
+    .dropzone-dragover-zone {
         background: rgba($white, 0.3) !important;
-        border: 3px dashed $orange !important;
-        border-radius: 5px !important;
+        outline: 2px dashed $orange !important;
+        -webkit-outline-radius: 5px !important;
         transition: border-color 0.24s ease-in-out !important;
+        box-sizing: border-box;
+    }
+    &.dropzone-border {
+        outline-color: 1px solid transparent;
     }
 }

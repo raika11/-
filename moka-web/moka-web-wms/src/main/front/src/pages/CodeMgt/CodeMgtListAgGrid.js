@@ -24,7 +24,7 @@ import CodeMgtListModal from './modals/CodeMgtListModal';
 /**
  * 기타코드 리스트 AgGrid
  */
-const CodeMgtListAgGrid = () => {
+const CodeMgtListAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { total, grpList, grp, search: storeSearch, cdSearch, loading } = useSelector(
@@ -99,7 +99,7 @@ const CodeMgtListAgGrid = () => {
         setSelectedData({});
         dispatch(clearGrp());
         dispatch(clearCdList());
-        history.push('/codeMgt');
+        history.push(match.path);
         setShowAddModal(true);
     };
 
@@ -108,11 +108,11 @@ const CodeMgtListAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (grpList) => {
-            history.push(`/codeMgt/${grpList.grpCd}`);
+            history.push(`${match.path}/${grpList.grpCd}`);
             dispatch(getCodeMgtGrp(grpList.grpCd));
             dispatch(clearCdList());
         },
-        [dispatch, history],
+        [dispatch, history, match.path],
     );
 
     /**
@@ -157,7 +157,7 @@ const CodeMgtListAgGrid = () => {
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success('등록하였습니다.');
-                        history.push(`/codeMgt/${codeGrp.grpCd}`);
+                        history.push(`${match.path}/${codeGrp.grpCd}`);
                     } else {
                         toast.fail(header.message);
                     }
@@ -192,7 +192,7 @@ const CodeMgtListAgGrid = () => {
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success('삭제하였습니다.');
-                            history.push('/codeMgt');
+                            history.push(match.path);
                         } else {
                             toast.fail(header.message);
                         }
@@ -249,6 +249,7 @@ const CodeMgtListAgGrid = () => {
                     그룹 등록
                 </Button>
             </Form.Row>
+
             {/* table */}
             <MokaTable
                 className="overflow-hidden flex-fill"
@@ -266,8 +267,28 @@ const CodeMgtListAgGrid = () => {
                 selected={cdSearch.grpCd}
                 preventRowClickCell={['edit']}
             />
-            <CodeMgtListModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onClickSave} onDelete={onClickDelete} data={selectedData} />
-            <CodeMgtListModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onClickSave} onDelete={onClickDelete} data={selectedData} />
+
+            {/* 그룹 등록 모달 */}
+            <CodeMgtListModal
+                type="add"
+                show={showAddModal}
+                onHide={() => setShowAddModal(false)}
+                onSave={onClickSave}
+                onDelete={onClickDelete}
+                data={selectedData}
+                match={match}
+            />
+
+            {/* 그룹 수정 모달 */}
+            <CodeMgtListModal
+                type="edit"
+                show={showEditModal}
+                onHide={() => setShowEditModal(false)}
+                onSave={onClickSave}
+                onDelete={onClickDelete}
+                data={selectedData}
+                match={match}
+            />
         </>
     );
 };

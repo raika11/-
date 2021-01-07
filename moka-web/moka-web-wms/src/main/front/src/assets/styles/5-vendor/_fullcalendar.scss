@@ -1,8 +1,27 @@
-.fc-theme-bootstrap {
-    margin-bottom: $spacer * 2;
+/**
+* 견학 월별 현황의 스타일을 조정
+*/
+.fc-prev-button, .fc-next-button {
+    @include button-variant($searching, $searching);
 }
 
 .fc-col-header-cell.fc-day.fc-day-sun {
-    color:#FF6E4D;
+    color: $secondary;
+}
+
+.fc-event-background {
+    background-color: $primary;
+}
+
+.fc-event-time {
+    font-weight: bold;
+}
+
+.fc-set-holiday {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%, -50%);
+    color: $secondary;
 }
 

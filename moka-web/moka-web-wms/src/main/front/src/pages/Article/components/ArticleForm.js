@@ -6,10 +6,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import copy from 'copy-to-clipboard';
 import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList } from '@store/article';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
-import { MokaInputLabel, MokaInput, MokaCard, MokaIcon } from '@components';
+import { MokaInputLabel, MokaInput, MokaCard, MokaIcon, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
 import toast from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
@@ -130,20 +129,8 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                     ...temp,
                     reporterList: narr,
                 });
-                setRepStr(narr.map((r) => r.repName).join(','));
+                setRepStr(narr.map((r) => r.repName).join('.'));
             }
-        }
-    };
-
-    /**
-     * 복사
-     */
-    const handleClickCopy = () => {
-        if (temp.serviceUrl) {
-            copy(temp.serviceUrl);
-            toast.success('복사하였습니다');
-        } else {
-            toast.warning('복사할 URL이 없습니다');
         }
     };
 
@@ -248,7 +235,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
         // 태그 리스트
         setTagStr(article.tagList.join(','));
         // 기자리스트(text)
-        setRepStr(article.reporterList.map((r) => r.repName).join(','));
+        setRepStr(article.reporterList.map((r) => r.repName).join('.'));
         // 벌크사이트 => obj
         setBulkSiteObj(
             article.bulkSiteList.reduce(
@@ -396,12 +383,15 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                     </Form.Row>
                 )}
                 <Form.Row className="mb-2">
-                    <Col className="p-0 d-flex align-items-center" xs={12}>
-                        <MokaInputLabel label="LINK정보" className="mb-0" as="none" />
-                        <Button variant="outline-neutral" size="sm" className="ft-12 mr-2" onClick={handleClickCopy}>
-                            복사
-                        </Button>
-                        <p className="mb-0">중앙: {temp.serviceUrl}</p>
+                    <Col className="p-0" xs={12}>
+                        <MokaInputGroup
+                            label="LINK정보"
+                            value={temp.serviceUrl}
+                            className="mb-2"
+                            inputClassName="bg-white"
+                            append={<MokaCopyTextButton copyText={temp.serviceUrl} successText="복사하였습니다" />}
+                            disabled
+                        />
                     </Col>
                 </Form.Row>
 
@@ -417,7 +407,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                 />
 
                 {/* 작업정보 모달 */}
-                <ArticleHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
+                <ArticleHistoryModal totalId={article.totalId} show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
             </Form>
         </MokaCard>
     );

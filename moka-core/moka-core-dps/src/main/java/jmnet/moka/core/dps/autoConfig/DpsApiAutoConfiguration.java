@@ -1,15 +1,24 @@
 package jmnet.moka.core.dps.autoConfig;
 
+import com.google.common.base.Predicate;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.dps.api.ApiParameterChecker;
+import jmnet.moka.core.dps.api.ApiRequestHandlerMapping;
+import jmnet.moka.core.dps.api.ApiRequestHelper;
+import jmnet.moka.core.dps.api.ext.ApiPeriodicTask;
+import jmnet.moka.core.dps.api.ext.ApiPeriodicTaskManager;
+import jmnet.moka.core.dps.api.ext.AsyncRequestTaskManager;
+import jmnet.moka.core.dps.api.forward.ForwardHandler;
 import jmnet.moka.core.dps.api.handler.module.category.CategoryParser;
 import jmnet.moka.core.dps.api.handler.module.menu.MenuParser;
+import jmnet.moka.core.dps.api.model.Api;
+import jmnet.moka.core.dps.excepton.ParameterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +38,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import com.google.common.base.Predicate;
-import jmnet.moka.core.dps.api.ApiParameterChecker;
-import jmnet.moka.core.dps.api.ApiRequestHandlerMapping;
-import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.api.ext.ApiPeriodicTask;
-import jmnet.moka.core.dps.api.ext.ApiPeriodicTaskManager;
-import jmnet.moka.core.dps.api.ext.AsyncRequestTaskManager;
-import jmnet.moka.core.dps.api.model.Api;
-import jmnet.moka.core.dps.excepton.ParameterException;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -79,6 +79,8 @@ public class DpsApiAutoConfiguration {
 	private String apiRequestHandlerBeanName;
 	@Value("${dps.apiRequest.handler.method}")
 	private String apiRequestHandlerMethod;
+	@Value("${dps.config.forward}")
+	private String configForwardPath;
 
 	@Value("${dps.periodicTask.thread.count}")
 	private int periodicTaskThreadCount;
@@ -163,11 +165,19 @@ public class DpsApiAutoConfiguration {
                 .apiInfo(dataApiInfo);
     }
 
+    @Bean
+	public ForwardHandler forwardHandler()
+			throws ParserConfigurationException, XPathExpressionException, IOException {
+    	return new ForwardHandler(this.configForwardPath);
+	}
+
+
 	@Bean(name="apiRequestHandlerMapping")
-    public HandlerMapping apiRequestHandlerMapping() throws ClassNotFoundException {
+    public HandlerMapping apiRequestHandlerMapping(@Autowired ForwardHandler forwardHandler)
+			throws ClassNotFoundException, NoSuchMethodException {
         ApiRequestHandlerMapping handlerMapping =
                 new ApiRequestHandlerMapping(appContext, apiRequestHandlerClass,
-                apiRequestHandlerBeanName, apiRequestHandlerMethod);
+                apiRequestHandlerBeanName, apiRequestHandlerMethod, forwardHandler);
         handlerMapping.setInterceptors(dpsHandlerInterceptor());
 
         //RequestMappingHandlerMapping의 Order는 0이므로 이보다 먼저 수행

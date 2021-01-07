@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import Modal from 'react-bootstrap/Modal';
+import ModalDialog from 'react-bootstrap/ModalDialog';
 
 const propTypes = {
     /**
@@ -25,22 +26,20 @@ const propTypes = {
  * icon, outline 추가한 Alert
  */
 const MokaMessageBox = (props) => {
-    const { title, icon, headerClassName, message } = props;
+    const { title, headerClassName, message } = props;
 
     return (
-        <div className="message-box">
-            {title ? (
-                <div className={clsx('modal-header', headerClassName)}>
-                    {icon ? <div className="modal-icon h3 mr-10 mb-0">{icon}</div> : ''}
+        <ModalDialog className="message-box">
+            {title && (
+                <Modal.Header className={headerClassName}>
                     <div className="modal-title h4">{title}</div>
-                </div>
-            ) : (
-                ''
+                </Modal.Header>
             )}
-            <div className="modal-body pd-20">
-                <div className="message" dangerouslySetInnerHTML={{ __html: message }} />
-            </div>
-        </div>
+
+            <Modal.Body>
+                <div className="message text-center" dangerouslySetInnerHTML={{ __html: message }} />
+            </Modal.Body>
+        </ModalDialog>
     );
 };
 MokaMessageBox.propTypes = propTypes;

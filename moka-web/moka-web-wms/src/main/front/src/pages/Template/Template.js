@@ -182,7 +182,7 @@ const Template = ({ match }) => {
             </MokaCard>
 
             <Route
-                path={[`${match.url}/add`, `${match.url}/:templateSeq`]}
+                path={[`${match.path}/add`, `${match.path}/:templateSeq`]}
                 exact
                 render={() => (
                     <React.Fragment>

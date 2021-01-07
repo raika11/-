@@ -157,7 +157,7 @@ const routes = [
         strict: true,
     },
     {
-        path: '/codeMgt',
+        path: '/code-mgt',
         name: 'CodeMgt',
         displayName: '기타코드관리',
         component: CodeMgt,

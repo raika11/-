@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaInputLabel } from '@/components';
@@ -200,10 +201,20 @@ const TourListEdit = () => {
                 onChange={(e) => e.target.value}
             />
             <Form.Row className="mb-2">
-                <MokaInputLabel label="비밀번호(4자리)" labelClassName="d-flex justify-content-end" className="mb-0 mr-2" value={pwd} onChange={(e) => setPwd(e.target.value)} />
-                <Button variant="negative" className="" onClick={handleClickReset}>
-                    비밀번호 초기화
-                </Button>
+                <Col xs={6} className="px-0">
+                    <MokaInputLabel
+                        label="비밀번호\n(4자리)"
+                        labelClassName="d-flex justify-content-end"
+                        className="mb-0 mr-2"
+                        value={pwd}
+                        onChange={(e) => setPwd(e.target.value)}
+                    />
+                </Col>
+                <Col xs={6} className="px-0 d-flex align-items-center">
+                    <Button variant="negative" size="sm" onClick={handleClickReset}>
+                        비밀번호 초기화
+                    </Button>
+                </Col>
             </Form.Row>
             <hr className="divider" />
             <MokaInputLabel label="담당자 정보" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />

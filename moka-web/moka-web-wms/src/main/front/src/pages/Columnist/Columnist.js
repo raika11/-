@@ -33,7 +33,7 @@ const Columnist = ({ match }) => {
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route path={([`${match.url}/add`], [`${match.url}/:seqNo`])} exact render={(props) => <ColumnistEdit {...props} />} />
+            <Route path={([`${match.path}/add`], [`${match.path}/:seqNo`])} exact render={(props) => <ColumnistEdit {...props} />} />
         </div>
     );
 };

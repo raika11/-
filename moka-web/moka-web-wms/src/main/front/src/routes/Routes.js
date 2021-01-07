@@ -24,7 +24,7 @@ const MenuBox = ({ children, menu, path }) => {
         }
     }, [dispatch, history, menu.length, menu.menuPaths, path]);
 
-    return children;
+    return React.cloneElement(children, { menuPaths: menu.menuPaths, menuById: menu.menuById });
 };
 
 const Routes = () => {

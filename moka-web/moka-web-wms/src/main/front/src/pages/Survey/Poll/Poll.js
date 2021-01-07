@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIcon, MokaIconTabs, MokaLoader } from '@components';
+import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
 import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
 
@@ -19,7 +19,7 @@ const Poll = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={950} className="mr-gutter" titleClassName="mb-0" header={false}>
+            <MokaCard width={950} className="mr-gutter" titleClassName="mb-0" title="투표 관리">
                 <Suspense fallback={<MokaLoader />}>
                     <PollList />
                 </Suspense>
@@ -46,7 +46,7 @@ const Poll = ({ match }) => {
                         placement="left"
                         tabNavs={[
                             { title: '투표 정보', text: 'Info' },
-                            { title: '관련 기사페이지', text: '관련' },
+                            { title: '관련 정보페이지', text: '관련' },
                         ]}
                     />
                 )}

@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import { MokaSearchInput } from '@components';
 import { initialState, changeSearchOption, getReporterList } from '@store/reporter';
 import ReporterSearchListModal from './modals/ReporterSearchListModal';
@@ -68,26 +66,19 @@ const ReporterMgrSearch = () => {
     };
 
     return (
-        <Form>
-            <Form.Row>
-                <Col xs={7} className="p-0 mb-2">
-                    <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} placeholder="기자 이름을 검색하세요" name="keyword" />
-
-                    {/* 팝업 모달 테스트를 위한 부분 추후 1주일 안에 삭제할 예정임.
-                    <MokaSearchInput
-                        className="w-100"
-                        placeholder="(모달팝업)기자 이름을 검색해주세요."
-                        onChange={handleChangeSearchOption}
-                        value={decodeURIComponent(search.keyword)}
-                        onSearch={() => setDatasetApiListModalShow(true)}
-                        inputProps={{ readOnly: true }}
-                        name="keyword"
-                    />
-                    */}
-                </Col>
-            </Form.Row>
+        <React.Fragment>
+            <MokaSearchInput
+                className="mb-3"
+                inputClassName="ft-12"
+                buttonClassName="ft-12"
+                value={search.keyword}
+                onChange={handleChangeSearchOption}
+                onSearch={handleSearch}
+                placeholder="기자 이름을 검색하세요"
+                name="keyword"
+            />
             <ReporterSearchListModal show={datasetApiListModalShow} onHide={() => setDatasetApiListModalShow(false)} onClickSave={handleClicktListModalSave} />
-        </Form>
+        </React.Fragment>
     );
 };
 

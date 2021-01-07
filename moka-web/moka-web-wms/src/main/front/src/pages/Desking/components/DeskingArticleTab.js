@@ -82,6 +82,7 @@ const DeskingArticleTab = (props) => {
                     />
                 );
             }
+            return null;
         });
     };
 

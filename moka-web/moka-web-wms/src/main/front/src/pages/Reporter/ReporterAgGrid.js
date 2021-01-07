@@ -9,7 +9,7 @@ import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/r
 /**
  * 기자 목록 AgGrid
  */
-const ReporterMgrAgGrid = () => {
+const ReporterMgrAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [reporterRows, setRepoterRows] = useState([]);
@@ -53,9 +53,9 @@ const ReporterMgrAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (list) => {
-            history.push(`/reporter/${list.id}`);
+            history.push(`${match.path}/${list.id}`);
         },
-        [history],
+        [history, match.path],
     );
 
     return (
@@ -70,6 +70,7 @@ const ReporterMgrAgGrid = () => {
             page={search.page}
             size={search.size}
             selected={reporter.repSeq}
+            preventRowClickCell={['reporterPage']}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

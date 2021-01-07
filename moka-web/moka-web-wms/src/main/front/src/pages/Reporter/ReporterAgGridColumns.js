@@ -6,13 +6,15 @@ export const columnDefs = [
         headerName: '번호',
         field: 'repSeq',
         cellStyle: { fontSize: '12px' },
-        width: 80,
+        tooltipField: 'repSeq',
+        width: 70,
     },
     {
         headerName: '아이디',
         field: 'joinsId',
         cellStyle: { fontSize: '12px' },
-        width: 80,
+        tooltipField: 'joinsId',
+        width: 100,
     },
     {
         headerName: '이름',
@@ -24,30 +26,27 @@ export const columnDefs = [
         headerName: '소속',
         field: 'belong',
         cellStyle: { fontSize: '12px' },
-        width: 180,
+        width: 200,
+        tooltipField: 'belong',
         flex: 1,
     },
     {
         headerName: '이메일',
         field: 'repEmail1',
         cellStyle: { fontSize: '12px' },
-        width: 160,
-        flex: 1,
+        tooltipField: 'repEmail1',
+        width: 180,
     },
-    {
-        headerName: '노출여부',
-        field: 'usedYn',
-        cellStyle: { fontSize: '12px', textAlign: 'center' },
-        width: 70,
-    },
+    // {
+    //     headerName: '노출여부',
+    //     field: 'usedYn',
+    //     cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    //     width: 64,
+    // },
     {
         headerName: '',
         field: 'reporterPage',
-        width: 90,
-        flex: 1,
-        cellRendererFramework: (row) => {
-            const { data } = row;
-            return <ReporterPageButton {...row} data={data} />;
-        },
+        width: 95,
+        cellRendererFramework: (row) => <ReporterPageButton {...row} />,
     },
 ];

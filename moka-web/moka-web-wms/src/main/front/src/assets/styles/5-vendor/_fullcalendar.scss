@@ -1,10 +1,8 @@
-.fc-theme-bootstrap {
-    margin-bottom: $spacer * 2;
-}
-
+/**
+* 견학 월별 현황의 스타일을 조정
+*/
 .fc-prev-button, .fc-next-button {
-    background-color: $searching;
-    border-color: $searching;
+    @include button-variant($searching, $searching);
 }
 
 .fc-col-header-cell.fc-day.fc-day-sun {

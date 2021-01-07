@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.jpod.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,8 +10,12 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodEpisode;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodEpisodeRelArt;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodKeyword;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodMember;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -38,7 +43,7 @@ public class JpodEpisodeRepositorySupportImpl extends TpsQueryDslRepositorySuppo
 
         JPQLQuery<JpodEpisode> query = from(qJpodEpisode);
         // 채널명
-        if (search.getChnlSeq() > 0) {
+        if (search.getChnlSeq() != null && search.getChnlSeq() > 0) {
             query.where(qJpodEpisode.chnlSeq.eq(search.getChnlSeq()));
         }
         // 에피소드명
@@ -68,5 +73,52 @@ public class JpodEpisodeRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         QueryResults<JpodEpisode> list = query.fetchResults();
 
         return new PageImpl<JpodEpisode>(list.getResults(), search.getPageable(), list.getTotal());
+    }
+
+    @Override
+    @Transactional
+    public long updateUsedYn(Long epsdSeq, String usedYn) {
+        QJpodEpisode qJpodEpisode = QJpodEpisode.jpodEpisode;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qJpodEpisode.epsdSeq.eq(epsdSeq));
+        return update(qJpodEpisode)
+                .where(builder)
+                .set(qJpodEpisode.usedYn, usedYn)
+                .execute();
+    }
+
+
+    @Transactional
+    public long deleteKeywordByEpsdSeq(Long epsdSeq) {
+        QJpodKeyword qJpodKeyword = QJpodKeyword.jpodKeyword;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qJpodKeyword.epsdSeq.eq(epsdSeq));
+        return delete(qJpodKeyword)
+                .where(builder)
+                .execute();
+    }
+
+    @Transactional
+    public long deleteArticleByEpsdSeq(Long epsdSeq) {
+        QJpodEpisodeRelArt qJpodEpisodeRelArt = QJpodEpisodeRelArt.jpodEpisodeRelArt;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qJpodEpisodeRelArt.id.epsdSeq.eq(epsdSeq));
+        return delete(qJpodEpisodeRelArt)
+                .where(builder)
+                .execute();
+    }
+
+    @Transactional
+    public long deleteMemberByEpsdSeq(Long epsdSeq) {
+        QJpodMember qJpodMember = QJpodMember.jpodMember;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qJpodMember.epsdSeq.eq(epsdSeq));
+        return delete(qJpodMember)
+                .where(builder)
+                .execute();
     }
 }

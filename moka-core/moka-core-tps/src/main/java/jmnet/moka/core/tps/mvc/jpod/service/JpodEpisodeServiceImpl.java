@@ -2,12 +2,15 @@ package jmnet.moka.core.tps.mvc.jpod.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeDetail;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
 import jmnet.moka.core.tps.mvc.jpod.mapper.JpodEpisodeMapper;
+import jmnet.moka.core.tps.mvc.jpod.repository.JpodEpisodeDetailRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodEpisodeRelArtRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodEpisodeRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodKeywordRepository;
@@ -33,6 +36,8 @@ public class JpodEpisodeServiceImpl implements JpodEpisodeService {
 
     private final JpodEpisodeRepository jpodEpisodeRepository;
 
+    private final JpodEpisodeDetailRepository jpodEpisodeDetailRepository;
+
     private final JpodEpisodeMapper jpodEpisodeMapper;
 
     private final JpodKeywordRepository jpodKeywordRepository;
@@ -41,10 +46,11 @@ public class JpodEpisodeServiceImpl implements JpodEpisodeService {
 
     private final JpodMemberRepository jpodMemberRepository;
 
-    public JpodEpisodeServiceImpl(JpodEpisodeRepository jpodEpisodeRepository, JpodEpisodeMapper jpodEpisodeMapper,
-            JpodKeywordRepository jpodKeywordRepository, JpodEpisodeRelArtRepository jpodEpisodeRelArtRepository,
+    public JpodEpisodeServiceImpl(JpodEpisodeRepository jpodEpisodeRepository, JpodEpisodeDetailRepository jpodEpisodeDetailRepository,
+            JpodEpisodeMapper jpodEpisodeMapper, JpodKeywordRepository jpodKeywordRepository, JpodEpisodeRelArtRepository jpodEpisodeRelArtRepository,
             JpodMemberRepository jpodMemberRepository) {
         this.jpodEpisodeRepository = jpodEpisodeRepository;
+        this.jpodEpisodeDetailRepository = jpodEpisodeDetailRepository;
         this.jpodEpisodeMapper = jpodEpisodeMapper;
         this.jpodKeywordRepository = jpodKeywordRepository;
         this.jpodEpisodeRelArtRepository = jpodEpisodeRelArtRepository;
@@ -63,13 +69,97 @@ public class JpodEpisodeServiceImpl implements JpodEpisodeService {
     }
 
     @Override
-    public JpodEpisode insertJpodEpisode(JpodEpisode episode) {
-        return jpodEpisodeRepository.save(episode);
+    public Optional<JpodEpisodeDetail> findJpodEpisodeDetailById(Long episodeSeq) {
+        return jpodEpisodeDetailRepository.findById(episodeSeq);
     }
 
     @Override
-    public JpodEpisode updateJpodEpisode(JpodEpisode episode) {
-        return jpodEpisodeRepository.save(episode);
+    public JpodEpisodeDetail insertJpodEpisode(JpodEpisodeDetail episode) {
+        final JpodEpisodeDetail newEpisode = saveJpodEpisodeDetail(episode);
+
+        episode
+                .getKeywords()
+                .forEach(jpodKeyword -> {
+                    jpodKeyword.setEpsdSeq(newEpisode.getEpsdSeq());
+                    jpodKeywordRepository.save(jpodKeyword);
+                });
+
+        episode
+                .getMembers()
+                .forEach(jpodMember -> {
+                    jpodMember.setEpsdSeq(newEpisode.getEpsdSeq());
+                    jpodMemberRepository.save(jpodMember);
+                });
+
+        episode
+                .getArticles()
+                .forEach(jpodEpisodeRelArt -> {
+                    jpodEpisodeRelArt
+                            .getId()
+                            .setEpsdSeq(newEpisode.getEpsdSeq());
+                    jpodEpisodeRelArtRepository.save(jpodEpisodeRelArt);
+                });
+
+
+        return episode;
+    }
+
+    public JpodEpisodeDetail saveJpodEpisodeDetail(JpodEpisodeDetail episode) {
+
+        if (episode.getEpsdSeq() != null && episode.getEpsdSeq() > 0) {
+            jpodEpisodeRepository.deleteArticleByEpsdSeq(episode.getEpsdSeq());
+            jpodEpisodeRepository.deleteKeywordByEpsdSeq(episode.getEpsdSeq());
+            jpodEpisodeRepository.deleteMemberByEpsdSeq(episode.getEpsdSeq());
+        }
+
+        if (episode.getKeywords() != null) {
+            AtomicInteger atomicInteger = new AtomicInteger(0);
+            episode
+                    .getKeywords()
+                    .forEach(jpodKeyword -> {
+                        jpodKeyword.setChnlSeq(episode.getChnlSeq());
+                        jpodKeyword.setEpsdSeq(episode.getEpsdSeq());
+                        jpodKeyword.setOrdNo(atomicInteger.addAndGet(1));
+                    });
+        }
+
+        if (episode.getMembers() != null) {
+            episode
+                    .getMembers()
+                    .forEach(jpodMember -> {
+                        jpodMember.setChnlSeq(episode.getChnlSeq());
+                        jpodMember.setEpsdSeq(episode.getEpsdSeq());
+                    });
+        }
+
+        if (episode.getArticles() != null) {
+            AtomicInteger atomicInteger = new AtomicInteger(0);
+            episode
+                    .getArticles()
+                    .forEach(jpodEpisodeRelArt -> {
+                        jpodEpisodeRelArt
+                                .getId()
+                                .setChnlSeq(episode.getChnlSeq());
+                        jpodEpisodeRelArt
+                                .getId()
+                                .setEpsdSeq(episode.getEpsdSeq());
+                        jpodEpisodeRelArt.setOrdNo(atomicInteger.addAndGet(1));
+                    });
+        }
+
+        return jpodEpisodeDetailRepository.save(episode);
+    }
+
+
+
+    @Override
+    public JpodEpisodeDetail updateJpodEpisode(JpodEpisodeDetail episode) {
+        return saveJpodEpisodeDetail(episode);
+    }
+
+    @Override
+    public long updateJpodEpisodeUseYn(Long epsdSeq, String usedYn) {
+        return jpodEpisodeRepository.updateUsedYn(epsdSeq, usedYn);
     }
 
 

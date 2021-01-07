@@ -18,5 +18,44 @@ import org.springframework.data.domain.Page;
  */
 public interface JpodEpisodeRepositorySupport {
 
+    /**
+     * 에피소드 목록 조회
+     *
+     * @param search 검색 조건
+     * @return 검색 결과
+     */
     Page<JpodEpisode> findAllJpodEpisode(JpodEpisodeSearchDTO search);
+
+    /**
+     * 사용 여부 변경
+     *
+     * @param epsdSeq 에피소드 일련번호
+     * @param usedYn  사용여부
+     * @return 성공여부
+     */
+    long updateUsedYn(Long epsdSeq, String usedYn);
+
+    /**
+     * 에피소드 일련번호 키워드 삭제
+     *
+     * @param epsdSeq 에피소드 일련번호
+     * @return 삭제여부
+     */
+    long deleteKeywordByEpsdSeq(Long epsdSeq);
+
+    /**
+     * 에피소드 일련번호 관련기사 삭제
+     *
+     * @param epsdSeq 에피소드 일련번호
+     * @return 삭제여부
+     */
+    long deleteArticleByEpsdSeq(Long epsdSeq);
+
+    /**
+     * 에피소드 일련번호 참여자 삭제
+     *
+     * @param epsdSeq 에피소드 일련번호
+     * @return 삭제여부
+     */
+    long deleteMemberByEpsdSeq(Long epsdSeq);
 }

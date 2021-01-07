@@ -192,7 +192,7 @@ const ArticlePage = ({ match }) => {
             </MokaCard>
 
             <Route
-                path={[`${match.url}/add`, `${match.url}/:artPageSeq`]}
+                path={[`${match.path}/add`, `${match.path}/:artPageSeq`]}
                 exact
                 render={() => (
                     <React.Fragment>

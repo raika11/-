@@ -50,7 +50,7 @@ const ArticleSource = (props) => {
             {/* 수신 매체 편집 */}
             <Switch>
                 <Route
-                    path={[`${match.url}/add`, `${match.url}/:sourceCode`]}
+                    path={[`${match.path}/add`, `${match.path}/:sourceCode`]}
                     exact
                     render={({ match }) => {
                         const { params } = match;

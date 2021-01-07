@@ -33,7 +33,7 @@ const Desking = ({ match }) => {
 
             {/* 데스킹 트리 */}
             <Switch>
-                <Route path={[match.url, `${match.url}/:areaSeq`]} exact render={() => <DeskingTree />} />
+                <Route path={[match.path, `${match.path}/:areaSeq`]} exact render={() => <DeskingTree />} />
             </Switch>
 
             {/* 워크 */}

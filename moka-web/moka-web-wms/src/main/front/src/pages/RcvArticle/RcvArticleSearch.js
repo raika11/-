@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { initialState, getRcvArticleList, changeSearchOption } from '@store/rcvArticle';
-import { MokaInput } from '@components';
+import { MokaInput, MokaSearchInput } from '@components';
 import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
@@ -213,17 +213,6 @@ const RcvArticleSearch = () => {
                     <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endDay} />
                 </div>
 
-                {/* 섹션 전체 */}
-                <div className="mr-2 flex-fill">
-                    <MokaInput as="select" name="section" className="ft-12" value={search.depart} onChange={handleChangeValue} disabled>
-                        {['경제', '국제', '기타', '문화', '북한', '사회', '스포츠/레저', '정치', '지방'].map((section) => (
-                            <option key={section} value={section}>
-                                {section}
-                            </option>
-                        ))}
-                    </MokaInput>
-                </div>
-
                 {/* 상태 */}
                 <div className="mr-2 flex-fill">
                     <MokaInput as="select" name="status" className="mb-0 ft-12" value={search.status} onChange={handleChangeValue}>
@@ -236,7 +225,7 @@ const RcvArticleSearch = () => {
                 </div>
 
                 {/* 원본/수정만 */}
-                <div style={{ width: 110 }}>
+                <div className="flex-fill mr-2">
                     <MokaInput as="select" name="modify" className="ft-12" value={search.modify} onChange={handleChangeValue}>
                         {initialState.modifyList.map((op) => (
                             <option key={op.id} value={op.id}>
@@ -245,37 +234,35 @@ const RcvArticleSearch = () => {
                         ))}
                     </MokaInput>
                 </div>
-            </Form.Row>
-            <Form.Row className="d-flex mb-2 justify-content-between">
-                {/* 제목 */}
-                <MokaInput
-                    name="keyword"
-                    className="mb-0 flex-fill ft-12"
-                    value={search.keyword}
-                    onChange={handleChangeValue}
-                    inputProps={{ onKeyPress: handleKeyPress }}
-                    placeholder="제목을 입력하세요"
-                />
 
                 {/* 매체 */}
-                <div style={{ width: 195 }} className="d-flex ml-2 mr-2">
-                    <ArticleSourceSelector
-                        className="flex-shrink-0 w-100"
-                        value={sourceList}
-                        onChange={(value) => {
-                            setSourceList(value);
-                            setError({ ...error, sourceList: false });
-                            if (value !== '') {
-                                // 로컬스토리지에 저장
-                                setLocalItem({ key: SOURCE_LIST_KEY, value });
-                            }
-                        }}
-                    />
-                </div>
-
-                <Button variant="searching" className="mr-2 ft-12 flex-shrink-0" onClick={handleSearch}>
-                    검색
-                </Button>
+                <ArticleSourceSelector
+                    className="flex-shrink-0 flex-fill"
+                    value={sourceList}
+                    onChange={(value) => {
+                        setSourceList(value);
+                        setError({ ...error, sourceList: false });
+                        if (value !== '') {
+                            // 로컬스토리지에 저장
+                            setLocalItem({ key: SOURCE_LIST_KEY, value });
+                        }
+                    }}
+                />
+                {/* <div style={{ width: 195 }} className="d-flex ml-2 mr-2">
+                
+                </div> */}
+            </Form.Row>
+            <Form.Row className="d-flex mb-2 justify-content-between">
+                <MokaSearchInput
+                    name="keyword"
+                    className="mr-2 flex-fill ft-12"
+                    inputClassName="ft-12"
+                    buttonClassName="ft-12"
+                    value={search.keyword}
+                    onChange={handleChangeValue}
+                    placeholder="제목을 입력하세요"
+                    onSearch={handleSearch}
+                />
 
                 <Button variant="negative" className="ft-12 flex-shrink-0" onClick={handleClickReset}>
                     초기화

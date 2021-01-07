@@ -112,7 +112,7 @@ const Component = ({ match }) => {
             </MokaCard>
 
             <Route
-                path={[`${match.url}/add`, `${match.url}/:componentSeq`]}
+                path={[`${match.path}/add`, `${match.path}/:componentSeq`]}
                 exact
                 render={() => (
                     <React.Fragment>

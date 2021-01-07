@@ -88,7 +88,7 @@ const EditThumbDropzone = (props) => {
         // eslint-disable-next-line array-callback-return
         imgList.map((image) => {
             if (image.dataType === 'archive') {
-                images.push(`${API_BASE_URL}/api/app/image-proxy/${encodeURIComponent(image.imageOnlnPath)}`);
+                images.push(`${API_BASE_URL}/api/app/image-proxy?url=${encodeURIComponent(image.imageOnlnPath)}`);
             } else {
                 images.push(image.imageOnlnPath);
             }

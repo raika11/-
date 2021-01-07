@@ -72,7 +72,7 @@ const blobToFile = (blob, fileName) => {
     if (extension === 'jpeg') {
         extension = 'jpg';
     }
-    return new File([blob], fileName + `.${extension}`, { lastModified: new Date().getTime(), type: blob.type });
+    return new File([blob], fileName + `.${extension}`, { type: blob.type });
 };
 
 /**

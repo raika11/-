@@ -5,9 +5,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.tps.common.code.JpodMemberTypeCode;
 import lombok.AllArgsConstructor;
@@ -87,5 +90,12 @@ public class JpodMember implements Serializable {
      */
     @Column(name = "MEM_DESC")
     private String desc;
+
+    /**
+     * 에피소드 정보
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EPSD_SEQ", nullable = false, insertable = false, updatable = false)
+    private JpodEpisode episode;
 
 }

@@ -46,7 +46,7 @@ const Article = ({ match, displayName, name }) => {
                 {(matchPoints.md || matchPoints.lg) && (
                     <Col md={5} className="p-0">
                         <Route
-                            path={[`${match.url}/:totalId`]}
+                            path={[`${match.path}/:totalId`]}
                             exact
                             render={() => <ArticleEdit match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />}
                         />
@@ -55,7 +55,7 @@ const Article = ({ match, displayName, name }) => {
 
                 {(matchPoints.xs || matchPoints.sm) && (
                     <Route
-                        path={[`${match.url}/:totalId`]}
+                        path={[`${match.path}/:totalId`]}
                         exact
                         render={() => (
                             <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>

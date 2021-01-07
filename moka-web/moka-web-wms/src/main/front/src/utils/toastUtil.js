@@ -1,6 +1,6 @@
 import React from 'react';
 import { toastr } from 'react-redux-toastr';
-import { MokaMessageBox, MokaIcon } from '@components';
+import { MokaMessageBox } from '@components';
 
 const DEFAULT_TITLE = {
     SUCCESS: '성공',
@@ -140,7 +140,7 @@ export const messageBox = {
                     cancel: true, // move the cancel button to the end
                 },
             ],
-            component: () => <MokaMessageBox icon={<MokaIcon iconName="fal-info-circle" />} title={DEFAULT_TITLE.ALERT} message={message} />,
+            component: () => <MokaMessageBox title={DEFAULT_TITLE.ALERT} message={message} />,
         };
         toastr.confirm('', confirmOption);
     },
@@ -175,7 +175,7 @@ export const messageBox = {
                     cancel: true, // move the cancel button to the end
                 },
             ],
-            component: () => <MokaMessageBox icon={<MokaIcon iconName="fal-question-circle" />} title={DEFAULT_TITLE.CONFIRM} headerClassName="confirm-header" message={message} />,
+            component: () => <MokaMessageBox title={DEFAULT_TITLE.CONFIRM} headerClassName="confirm-header" message={message} />,
         };
         toastr.confirm('', confirmOption);
     },

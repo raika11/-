@@ -6,26 +6,30 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 
 import moment from 'moment';
-
-import { initialState, getCommentList, changeSearchOption } from '@store/commentManage/comment';
+import CommentBlockModal from '@pages/CommentManage/CommentModal/CommentBlockModal';
+import { initialState, getCommentList, changeSearchOption } from '@store/commentManage';
 
 /**
  * 컨테이너 검색 컴포넌트
  */
 const CommentSearch = () => {
+    const modalUsage = {
+        usage: 'comment',
+    };
     const dispatch = useDispatch();
-    const [search, setSearch] = useState(initialState.search);
+    const [defaultInputModalState, setDefaultInputModalState] = useState(false);
+    const [search, setSearch] = useState(initialState.comments.search);
     const [keyword, setKeyword] = useState('');
     const [startDt, setStartDt] = useState(new Date());
     let dayOfMonth = startDt.getDate();
     startDt.setDate(dayOfMonth - 7);
     const [endDt, setEndDt] = useState(new Date());
     const { searchMediaList, searchStatusList, searchOrderList, searchIdTypeList, searchTypeList } = useSelector((store) => ({
-        searchMediaList: store.comment.searchMediaList,
-        searchStatusList: store.comment.searchStatusList,
-        searchOrderList: store.comment.searchOrderList,
-        searchIdTypeList: store.comment.searchIdTypeList,
-        searchTypeList: store.comment.searchTypeList,
+        searchMediaList: store.comment.common.searchMediaList,
+        searchStatusList: store.comment.common.searchStatusList,
+        searchOrderList: store.comment.common.searchOrderList,
+        searchIdTypeList: store.comment.common.searchIdTypeList,
+        searchTypeList: store.comment.common.searchTypeList,
     }));
 
     useEffect(() => {
@@ -110,12 +114,16 @@ const CommentSearch = () => {
         }
     };
 
+    const handleClickSymbolSave = (e) => {
+        console.log(e);
+    };
+
     return (
         <Form className="mb-10">
             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
                 <MokaInput as="select" value={search.searchMedia} onChange={handleChangeSearchOption} name="searchMedia">
-                    {searchMediaList.map((media) => (
-                        <option key={media.id} value={media.id}>
+                    {searchMediaList.map((media, index) => (
+                        <option key={index} value={media.id}>
                             {media.name}
                         </option>
                     ))}
@@ -136,8 +144,8 @@ const CommentSearch = () => {
             </div>
             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
                 <MokaInput as="select" value={search.searchStatus} onChange={handleChangeSearchOption} name="searchStatus">
-                    {searchStatusList.map((status) => (
-                        <option key={status.id} value={status.id}>
+                    {searchStatusList.map((status, index) => (
+                        <option key={index} value={status.id}>
                             {status.name}
                         </option>
                     ))}
@@ -145,8 +153,8 @@ const CommentSearch = () => {
             </div>
             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
                 <MokaInput as="select" value={search.searchOrder} onChange={handleChangeSearchOption} name="searchOrder">
-                    {searchOrderList.map((order) => (
-                        <option key={order.id} value={order.id}>
+                    {searchOrderList.map((order, index) => (
+                        <option key={index} value={order.id}>
                             {order.name}
                         </option>
                     ))}
@@ -154,8 +162,8 @@ const CommentSearch = () => {
             </div>
             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
                 <MokaInput as="select" value={search.searchIdType} onChange={handleChangeSearchOption} name="searchIdType">
-                    {searchIdTypeList.map((idType) => (
-                        <option key={idType.id} value={idType.id}>
+                    {searchIdTypeList.map((idType, index) => (
+                        <option key={index} value={idType.id}>
                             {idType.name}
                         </option>
                     ))}
@@ -179,13 +187,22 @@ const CommentSearch = () => {
                 </Button>
             </div>
             <div className="d-inline-block float-right">
-                <Button variant="positive" className="mr-2">
+                <Button variant="positive" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
                     차단등록
                 </Button>
-                <Button variant="negative" className="mr-2">
+                <Button variant="negative" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
                     삭제
                 </Button>
             </div>
+            {defaultInputModalState && (
+                <CommentBlockModal
+                    ModalUsage={modalUsage}
+                    show={defaultInputModalState}
+                    onHide={() => {
+                        setDefaultInputModalState(false);
+                    }}
+                />
+            )}
         </Form>
     );
 };

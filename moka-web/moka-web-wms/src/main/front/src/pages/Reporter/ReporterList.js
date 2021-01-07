@@ -5,11 +5,11 @@ import AgGrid from './ReporterAgGrid';
 /**
  * 기자 목록
  */
-const ReporterList = () => {
+const ReporterList = (props) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search {...props} />
+            <AgGrid {...props} />
         </>
     );
 };

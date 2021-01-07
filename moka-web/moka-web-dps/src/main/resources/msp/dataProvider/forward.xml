@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forwardConfig>
+	<forward path="/article/{total_id}">
+		<description>기사정보</description>
+		<api path="moka_api" id="article" />
+		<parameter>
+			<total_id to="totalId"/>
+		</parameter>
+	</forward>
+</forwardConfig>

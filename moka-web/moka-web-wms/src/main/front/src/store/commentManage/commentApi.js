@@ -1,5 +1,5 @@
 import qs from 'qs';
-import instance from '../../commons/axios';
+import instance from '../commons/axios';
 
 // 댓글목록 조회
 export const getCommentList = ({ search }) => {

@@ -32,7 +32,7 @@ import snsSaga from '@store/snsManage/snsSaga';
 import brightSaga from '@store/bright/brightSaga';
 import bulksSaga from '@store/bulks/bulksSaga';
 import specialSaga from '@store/special/specialSaga';
-import commentSaga from '@store/commentManage/comment/commentSaga';
+import commentSaga from '@store/commentManage/commentSaga';
 import boardSaga from '@store/board/boardsSaga';
 
 export default function* rootSaga() {

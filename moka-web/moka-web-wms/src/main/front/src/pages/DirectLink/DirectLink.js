@@ -36,7 +36,7 @@ const DirectLink = ({ match }) => {
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route path={[`${match.url}/add`, `${match.url}/:linkSeq`]} exact render={(props) => <DirectLinkEdit {...props} />} />
+            <Route path={[`${match.path}/add`, `${match.path}/:linkSeq`]} exact render={(props) => <DirectLinkEdit {...props} />} />
         </div>
     );
 };

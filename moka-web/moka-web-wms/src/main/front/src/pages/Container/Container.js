@@ -215,7 +215,7 @@ const Container = ({ match }) => {
             </MokaCard>
 
             <Route
-                path={[`${match.url}/add`, `${match.url}/:containerSeq`]}
+                path={[`${match.path}/add`, `${match.path}/:containerSeq`]}
                 exact
                 render={() => (
                     <>

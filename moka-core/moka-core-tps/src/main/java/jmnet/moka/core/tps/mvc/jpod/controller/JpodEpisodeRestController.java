@@ -24,8 +24,10 @@ import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeDTO;
+import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeDetailDTO;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeDetail;
 import jmnet.moka.core.tps.mvc.jpod.service.JpodEpisodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,9 +88,7 @@ public class JpodEpisodeRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "Jpod 에피소드 목록 조회")
     @GetMapping("/episodes")
-    public ResponseEntity<?> getEpisodeList(
-            @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
-            @SearchParam JpodEpisodeSearchDTO search) {
+    public ResponseEntity<?> getEpisodeList(@SearchParam JpodEpisodeSearchDTO search) {
 
         ResultListDTO<JpodEpisodeDTO> resultListMessage = new ResultListDTO<>();
 
@@ -123,15 +123,17 @@ public class JpodEpisodeRestController extends AbstractCommonController {
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data");
-        JpodEpisode jpodEpisode = jpodEpisodeService
-                .findJpodEpisodeById(chnlSeq)
+        JpodEpisodeDetail jpodEpisode = jpodEpisodeService
+                .findJpodEpisodeDetailById(epsdSeq)
                 .orElseThrow(() -> new NoDataException(message));
 
-        JpodEpisodeDTO dto = modelMapper.map(jpodEpisode, JpodEpisodeDTO.class);
+        JpodEpisodeDetailDTO dto = modelMapper.map(jpodEpisode, JpodEpisodeDetailDTO.class);
+
+
 
         tpsLogger.success(ActionType.SELECT);
 
-        ResultDTO<JpodEpisodeDTO> resultDto = new ResultDTO<>(dto);
+        ResultDTO<JpodEpisodeDetailDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -149,23 +151,23 @@ public class JpodEpisodeRestController extends AbstractCommonController {
     @PostMapping("/{chnlSeq}/episodes")
     public ResponseEntity<?> postJpodEpisode(
             @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
-            @Valid JpodEpisodeDTO jpodEpisodeDTO, @RequestParam(value = "shrImgFile", required = false) MultipartFile shrImgFile,
+            @Valid JpodEpisodeDetailDTO jpodEpisodeDTO, @RequestParam(value = "shrImgFile", required = false) MultipartFile shrImgFile,
             @RequestParam(value = "katalkImgFile", required = false) MultipartFile katalkImgFile)
             throws InvalidDataException, Exception {
 
         // JpodEpisodeDTO -> JpodEpisode 변환
-        JpodEpisode jpodEpisode = modelMapper.map(jpodEpisodeDTO, JpodEpisode.class);
+        JpodEpisodeDetail jpodEpisode = modelMapper.map(jpodEpisodeDTO, JpodEpisodeDetail.class);
 
         try {
 
             // insert
             jpodEpisode = uploadImage(jpodEpisode, shrImgFile, katalkImgFile);
-            JpodEpisode returnValue = jpodEpisodeService.insertJpodEpisode(jpodEpisode);
+            JpodEpisodeDetail returnValue = jpodEpisodeService.insertJpodEpisode(jpodEpisode);
 
 
             // 결과리턴
-            JpodEpisodeDTO dto = modelMapper.map(returnValue, JpodEpisodeDTO.class);
-            ResultDTO<JpodEpisodeDTO> resultDto = new ResultDTO<>(dto, msg("tps.jpod-channel.success.save"));
+            JpodEpisodeDetailDTO dto = modelMapper.map(returnValue, JpodEpisodeDetailDTO.class);
+            ResultDTO<JpodEpisodeDetailDTO> resultDto = new ResultDTO<>(dto, msg("tps.jpod-channel.success.save"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.INSERT);
@@ -192,28 +194,29 @@ public class JpodEpisodeRestController extends AbstractCommonController {
     @ApiOperation(value = "JpodEpisode 수정")
     @PutMapping(("/{chnlSeq}/episodes/{epsdSeq}"))
     public ResponseEntity<?> putJpodEpisode(HttpServletRequest request,
-            @ApiParam("에피소드 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") String chnlSeq,
-            @Valid JpodEpisodeDTO jpodEpisodeDTO, @RequestParam(value = "shrImgFile", required = false) MultipartFile shrImgFile,
+            @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
+            @ApiParam("에피소드 일련번호") @PathVariable("epsdSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.epsdSeq}") Long epsdSeq,
+            @Valid JpodEpisodeDetailDTO jpodEpisodeDTO, @RequestParam(value = "shrImgFile", required = false) MultipartFile shrImgFile,
             @RequestParam(value = "katalkImgFile", required = false) MultipartFile katalkImgFile)
             throws Exception {
 
         // JpodEpisodeDTO -> JpodEpisode 변환
         String infoMessage = msg("tps.common.error.no-data");
-        JpodEpisode newJpodEpisode = modelMapper.map(jpodEpisodeDTO, JpodEpisode.class);
+        JpodEpisodeDetail newJpodEpisode = modelMapper.map(jpodEpisodeDTO, JpodEpisodeDetail.class);
 
         // 오리진 데이터 조회
         JpodEpisode orgJpodEpisode = jpodEpisodeService
-                .findJpodEpisodeById(newJpodEpisode.getChnlSeq())
+                .findJpodEpisodeById(epsdSeq)
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
             // update
             newJpodEpisode = uploadImage(newJpodEpisode, shrImgFile, katalkImgFile);
-            JpodEpisode returnValue = jpodEpisodeService.updateJpodEpisode(newJpodEpisode);
+            JpodEpisodeDetail returnValue = jpodEpisodeService.updateJpodEpisode(newJpodEpisode);
 
             // 결과리턴
-            JpodEpisodeDTO dto = modelMapper.map(returnValue, JpodEpisodeDTO.class);
-            ResultDTO<JpodEpisodeDTO> resultDto = new ResultDTO<>(dto, msg("tps.jpod-channel.success.save"));
+            JpodEpisodeDetailDTO dto = modelMapper.map(returnValue, JpodEpisodeDetailDTO.class);
+            ResultDTO<JpodEpisodeDetailDTO> resultDto = new ResultDTO<>(dto, msg("tps.jpod-channel.success.save"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -242,7 +245,8 @@ public class JpodEpisodeRestController extends AbstractCommonController {
     @ApiOperation(value = "JpodEpisode 사용여부 수정")
     @PutMapping("/{chnlSeq}/episodes/{epsdSeq}/used")
     public ResponseEntity<?> putJpodEpisodeUsedYn(HttpServletRequest request,
-            @ApiParam("에피소드 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
+            @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
+            @ApiParam("에피소드 일련번호") @PathVariable("epsdSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.epsdSeq}") Long epsdSeq,
             @ApiParam("사용여부") @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
             @RequestParam(value = "usedYn", defaultValue = MokaConstants.YES) String usedYn)
             throws InvalidDataException, NoDataException, Exception {
@@ -259,7 +263,7 @@ public class JpodEpisodeRestController extends AbstractCommonController {
         try {
             // usedYn 수정
             jpodEpisode.setUsedYn(usedYn);
-            jpodEpisodeService.updateJpodEpisode(jpodEpisode);
+            jpodEpisodeService.updateJpodEpisodeUseYn(epsdSeq, usedYn);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -289,25 +293,26 @@ public class JpodEpisodeRestController extends AbstractCommonController {
     @ApiOperation(value = "JpodEpisode 삭제")
     @DeleteMapping("/{chnlSeq}/episodes/{epsdSeq}")
     public ResponseEntity<?> deleteJpodEpisode(HttpServletRequest request,
-            @ApiParam("에피소드 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq)
+            @ApiParam("에피소드 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
+            @ApiParam("에피소드 일련번호") @PathVariable("epsdSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.epsdSeq}") Long epsdSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 
         // JpodEpisode 데이터 조회
         String noContentMessage = msg("tps.common.error.no-data");
         JpodEpisode jpodEpisode = jpodEpisodeService
-                .findJpodEpisodeById(chnlSeq)
+                .findJpodEpisodeById(epsdSeq)
                 .orElseThrow(() -> new NoDataException(noContentMessage));
 
         try {
             // 삭제
             jpodEpisodeService.deleteJpodEpisode(jpodEpisode);
-
+            
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.jpod-channel.delete.save"));
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg("tps.jpod-episode.success.delete"));
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -329,7 +334,7 @@ public class JpodEpisodeRestController extends AbstractCommonController {
      * @throws InvalidDataException 데이터 오류 처리
      * @throws IOException          파일 오류 처리
      */
-    public JpodEpisode uploadImage(JpodEpisode jpodEpisode, MultipartFile shrImgFile, MultipartFile katalkImgFile)
+    public JpodEpisodeDetail uploadImage(JpodEpisodeDetail jpodEpisode, MultipartFile shrImgFile, MultipartFile katalkImgFile)
             throws InvalidDataException, IOException {
 
         // 커버 이미지 업로드

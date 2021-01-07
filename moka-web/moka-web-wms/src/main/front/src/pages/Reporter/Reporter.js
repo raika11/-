@@ -2,14 +2,13 @@ import React, { Suspense } from 'react';
 import Helmet from 'react-helmet';
 import { useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { MokaCard, MokaLoader } from '@components';
+import { MokaCard } from '@components';
 import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
 
-// relations
+import ReporterEdit from './ReporterEdit';
 const ReporterList = React.lazy(() => import('./ReporterList'));
-const ReporterEdit = React.lazy(() => import('./ReporterEdit'));
 
-const ReporterMgr = () => {
+const Reporter = ({ match }) => {
     const { loading } = useSelector((store) => ({
         loading: store.loading[GET_REPORTER] || store.loading[CHANGE_REPORTER],
     }));
@@ -23,26 +22,24 @@ const ReporterMgr = () => {
             </Helmet>
 
             {/* 기자 목록 */}
-            <MokaCard title="기자 목록" width={830} className="mr-4" headerClassName="pb-0" bodyClassName="d-flex flex-column" titleClassName="mb-0">
+            <MokaCard title="기자 목록" width={830} className="mr-4" bodyClassName="d-flex flex-column">
                 <Suspense>
-                    <ReporterList />
+                    <ReporterList match={match} />
                 </Suspense>
             </MokaCard>
 
             {/* 기자 정보 */}
             <Route
-                path={[`/reporter/:repSeq`]}
+                path={[`${match.path}/:repSeq`]}
                 exact
                 render={(props) => (
-                    <Suspense fallback={<MokaLoader />}>
-                        <MokaCard title="기자 정보" width={730} headerClassName="pb-0" titleClassName="mb-0" loading={loading}>
-                            <ReporterEdit />
-                        </MokaCard>
-                    </Suspense>
+                    <MokaCard title="기자 정보" width={730} loading={loading}>
+                        <ReporterEdit match={match} />
+                    </MokaCard>
                 )}
             />
         </div>
     );
 };
 
-export default ReporterMgr;
+export default Reporter;

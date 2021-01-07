@@ -43,7 +43,6 @@ public class ApiRequestHelper implements ApiListingScannerPlugin {
     private String configSysBasePath;
 	private String apiXmlFileName;
     private String defaultConfigXml;
-    //    private DefaultApiConfig defaultApiConfig;
 
     @Autowired
     public ApiRequestHelper(String configBasePath, String configSysBasePath, String apiXmlFileName,
@@ -151,6 +150,9 @@ public class ApiRequestHelper implements ApiListingScannerPlugin {
 	}
 	
     public boolean apiRequestExists(ApiResolver apiResolver) {
+        if ( apiResolver.getPath() == null || apiResolver.getId() == null) {
+            return false;
+        }
 		return  getApi(this.apiConfigMappingMap.get(apiResolver.getPath()), apiResolver.getId()) == null? false:true;
 	}
 

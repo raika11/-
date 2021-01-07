@@ -1,11 +1,11 @@
 import React from 'react';
-import AgGrid from './CommentAgGrid';
+import CommentGrid from './CommentGrid';
 import Search from './CommentSearch';
 const CommentLIst = (props) => {
     return (
         <>
             <Search />
-            <AgGrid />
+            <CommentGrid />
         </>
     );
 };

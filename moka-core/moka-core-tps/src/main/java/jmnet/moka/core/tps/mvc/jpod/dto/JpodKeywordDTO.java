@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.jpod.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +51,8 @@ public class JpodKeywordDTO implements Serializable {
      * 키워드
      */
     @ApiModelProperty(value = "키워드")
+    @NotEmpty(message = "{tps.jpod-episode.error.notempty.keyword}")
+    @Size(max = 255, message = "{tps.jpod-episode.error.size.keyword}")
     private String keyword;
 
 }

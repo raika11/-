@@ -29,7 +29,7 @@ const Special = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+            <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" title="디지털 스페셜">
                 <Suspense>
                     <SpecialList />
                 </Suspense>
@@ -37,7 +37,7 @@ const Special = ({ match }) => {
 
             {/* 등록/수정 */}
             <Switch>
-                <Route path={[`${match.url}/add`, `${match.url}/:seqNo`]}>
+                <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]}>
                     <SpecialEdit />
                 </Route>
             </Switch>

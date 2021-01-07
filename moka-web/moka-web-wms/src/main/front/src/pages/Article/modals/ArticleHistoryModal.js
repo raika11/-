@@ -50,6 +50,8 @@ const ArticleHistoryModal = (props) => {
                         if (masterCodeList) {
                             const result = masterCodeList.find((m) => m.masterCode === code);
                             return fullText === '' ? `[${result.masterCode}]${result.contentKorname}` : `${fullText},[${result.masterCode}]${result.contentKorname}`;
+                        } else {
+                            return '';
                         }
                     }, '');
 

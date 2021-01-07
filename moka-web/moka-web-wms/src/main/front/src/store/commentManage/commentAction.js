@@ -7,6 +7,10 @@ import { createRequestActionTypes } from '@store/commons/saga';
 export const CHANGE_SEARCH_OPTION = 'comment/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 
+// 차단 메뉴 구분값 처리.
+export const INITIALIZE_BANNED_PARAMS = 'comment/INITIALIZE_BANNED_PARAMS';
+export const initializeBannedParams = createAction(INITIALIZE_BANNED_PARAMS);
+
 /**
  * 스토어 데이터 삭제
  */

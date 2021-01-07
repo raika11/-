@@ -26,13 +26,14 @@
     color: $gray-500;
 }
 
-@mixin toast-footer {
+@mixin toast-footer($element: button) {
     display: flex;
     justify-content: space-between;
     padding: 0;
 
-    button {
+    #{$element} {
         @include button-variant($white, $white);
+        box-shadow: none !important;
         margin: 0;
         flex: 1 1 auto !important;
         border: 0;

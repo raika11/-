@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.jpod.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,19 +21,21 @@ public class JpodEpisodeRelArtDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "서비스기사아이디")
-    private Long totalId;
+    private JpodEpisodeRelArtId id;
 
     @ApiModelProperty(value = "링크 순서")
     private Integer ordNo = 1;
 
     @ApiModelProperty(value = "링크 제목")
+    @Size(max = 510, message = "{tps.jpod-episode.error.size.relTitle}")
     private String relTitle;
 
     @ApiModelProperty(value = "링크 URL")
+    @Size(max = 200, message = "{tps.jpod-episode.error.size.relLink}")
     private String relLink;
 
     @ApiModelProperty(value = "링크 타겟")
+    @Size(max = 24, message = "{tps.jpod-episode.error.size.relLinkTarget}")
     private String relLinkTarget;
 
 }

@@ -12,9 +12,9 @@ import { clearCdList, initialState, getCodeMgtList, changeCdSearchOption, getCod
  * 기타코드 편집 검색
  */
 const CodeMgtEditSearch = (props) => {
+    const { onSave, onDelete, match } = props;
     const { grpCd } = useParams();
     const dispatch = useDispatch();
-    const { onSave, onDelete } = props;
     const { search: storeSearch, grp } = useSelector((store) => ({
         search: store.codeMgt.cdSearch,
         grp: store.codeMgt.grp,
@@ -113,7 +113,10 @@ const CodeMgtEditSearch = (props) => {
                     코드 등록
                 </Button>
             </Col>
-            <CodeMgtEditModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} />
+
+            {/* 코드 수정 모달 */}
+            <CodeMgtEditModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} match={match} />
+
             <MokaModal
                 draggable
                 show={showAlertModal}

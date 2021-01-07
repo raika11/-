@@ -1,7 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import Form from 'react-bootstrap/Form';
-import { MokaCard, MokaInput } from '@/components';
+import { MokaCard, MokaInputLabel } from '@/components';
 
 const MessageSettings = () => {
     return (
@@ -23,81 +22,66 @@ const MessageSettings = () => {
                 ]}
                 footerClassName="justify-content-center"
             >
-                <Form.Group className="d-flex align-items-start">
-                    <Form.Label className="pt-1 mr-2 d-flex flex-column align-items-end" style={{ width: 66 }} htmlFor="none">
-                        <p className="mb-0">견학 신청/안내</p>
-                        <p className="mb-0">'신청 방법'</p>
-                    </Form.Label>
-                    <MokaInput
-                        as="textarea"
-                        className="mb-3 resize-none"
-                        inputProps={{ rows: 3 }}
-                        // name=""
-                        // value={}
-                        onChange={(e) => e.target.value}
-                        // isInvalid={}
-                    />
-                </Form.Group>
-                <Form.Group className="d-flex align-items-start">
-                    <Form.Label className="pt-1 mr-2 d-flex flex-column align-items-end" style={{ width: 66 }} htmlFor="none">
-                        <p className="mb-0">견학 신청/안내</p>
-                        <p className="mb-0">'견학 신청'</p>
-                    </Form.Label>
-                    <MokaInput
-                        as="textarea"
-                        className="mb-3 resize-none"
-                        inputProps={{ rows: 3 }}
-                        // name=""
-                        // value={}
-                        onChange={(e) => e.target.value}
-                        // isInvalid={}
-                    />
-                </Form.Group>
-                <Form.Group className="d-flex align-items-start">
-                    <Form.Label className="pt-1 mr-2 d-flex flex-column align-items-end" style={{ width: 66 }} htmlFor="none">
-                        <p className="mb-0">견학 신청/안내</p>
-                        <p className="mb-0">'견학 시 유의사항'</p>
-                    </Form.Label>
-                    <MokaInput
-                        as="textarea"
-                        className="mb-3 resize-none"
-                        inputProps={{ rows: 3 }}
-                        // name=""
-                        // value={}
-                        onChange={(e) => e.target.value}
-                        // isInvalid={}
-                    />
-                </Form.Group>
-                <Form.Group className="d-flex align-items-start">
-                    <Form.Label className="pt-1 mr-2 d-flex flex-column align-items-end" style={{ width: 66 }} htmlFor="none">
-                        <p className="mb-0">견학 신청/안내</p>
-                        <p className="mb-0">'관람 및 주차 안내'</p>
-                    </Form.Label>
-                    <MokaInput
-                        as="textarea"
-                        className="mb-3 resize-none"
-                        inputProps={{ rows: 3 }}
-                        // name=""
-                        // value={}
-                        onChange={(e) => e.target.value}
-                        // isInvalid={}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-0 d-flex align-items-start">
-                    <Form.Label className="pt-1 mr-2 d-flex flex-column align-items-end" style={{ width: 66 }} htmlFor="none">
-                        <p className="mb-0">질의응답</p>
-                        <p className="mb-0">'자주 하는 질문'</p>
-                    </Form.Label>
-                    <MokaInput
-                        as="textarea"
-                        className="mb-3 resize-none"
-                        inputProps={{ rows: 9 }}
-                        // name=""
-                        // value={}
-                        onChange={(e) => e.target.value}
-                        // isInvalid={}
-                    />
-                </Form.Group>
+                <MokaInputLabel
+                    label="견학 신청/안내\n'신청 방법'"
+                    labelClassName="justify-content-end"
+                    className="mb-2"
+                    as="textarea"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 4 }}
+                    // name=""
+                    // value={}
+                    onChange={(e) => e.target.value}
+                    // isInvalid={}
+                />
+                <MokaInputLabel
+                    label="견학 신청/안내\'견학 신청'"
+                    labelClassName="justify-content-end"
+                    className="mb-2"
+                    as="textarea"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 4 }}
+                    // name=""
+                    // value={}
+                    onChange={(e) => e.target.value}
+                    // isInvalid={}
+                />
+                <MokaInputLabel
+                    label="견학 신청/안내\n'견학 시 유의사항'"
+                    labelClassName="justify-content-end"
+                    className="mb-2"
+                    as="textarea"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 4 }}
+                    // name=""
+                    // value={}
+                    onChange={(e) => e.target.value}
+                    // isInvalid={}
+                />
+                <MokaInputLabel
+                    label="견학 신청/안내\n'관람 및 주차 안내'"
+                    labelClassName="justify-content-end"
+                    className="mb-2"
+                    as="textarea"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 4 }}
+                    // name=""
+                    // value={}
+                    onChange={(e) => e.target.value}
+                    // isInvalid={}
+                />
+                <MokaInputLabel
+                    label="질의응답\n'자주하는 질문'"
+                    labelClassName="justify-content-end"
+                    className="mb-2"
+                    as="textarea"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 9 }}
+                    // name=""
+                    // value={}
+                    onChange={(e) => e.target.value}
+                    // isInvalid={}
+                />
             </MokaCard>
         </>
     );

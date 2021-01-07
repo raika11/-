@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import produce from 'immer';
 import Button from 'react-bootstrap/Button';
 import { useDrop } from 'react-dnd';
-import { MokaInputLabel, MokaIcon } from '@components';
+import { MokaIcon, MokaInputLabel } from '@components';
 import EditThumbCard, { ItemTypes } from './EditThumbCard';
 import toast from '@utils/toastUtil';
 import gifshot from 'gifshot';
@@ -88,7 +88,7 @@ const EditThumbDropzone = (props) => {
         // eslint-disable-next-line array-callback-return
         imgList.map((image) => {
             if (image.dataType === 'archive') {
-                images.push(`${API_BASE_URL}/api/achive/photos/by-url?url=${encodeURIComponent(image.imageOnlnPath)}`);
+                images.push(`${API_BASE_URL}/api/app/image-proxy/${encodeURIComponent(image.imageOnlnPath)}`);
             } else {
                 images.push(image.imageOnlnPath);
             }

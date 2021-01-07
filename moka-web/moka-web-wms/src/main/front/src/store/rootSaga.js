@@ -34,6 +34,7 @@ import bulksSaga from '@store/bulks/bulksSaga';
 import specialSaga from '@store/special/specialSaga';
 import commentSaga from '@store/commentManage/commentSaga';
 import boardSaga from '@store/board/boardsSaga';
+import seoMetaSaga from '@store/seoMeta/seoMetaSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -71,5 +72,6 @@ export default function* rootSaga() {
         specialSaga(),
         commentSaga(),
         boardSaga(),
+        seoMetaSaga(),
     ]);
 }

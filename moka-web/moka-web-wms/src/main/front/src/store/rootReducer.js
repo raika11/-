@@ -37,6 +37,7 @@ import bulks from '@store/bulks/bulksReducer';
 import special from '@store/special/specialReducer';
 import comment from '@store/commentManage/commentReducer';
 import board from '@store/board/boardsReducer';
+import seoMeta from '@store/seoMeta/seoMetaReducer';
 
 export default combineReducers({
     toastr,
@@ -76,4 +77,5 @@ export default combineReducers({
     special,
     comment,
     board,
+    seoMeta,
 });

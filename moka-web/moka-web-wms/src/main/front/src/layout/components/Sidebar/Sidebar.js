@@ -8,9 +8,9 @@ import SidebarCategory from './SidebarCategory';
 import SidebarItem from './SidebarItem';
 import logo from '@assets/images/img_logo.png';
 
-// .json => api 변경
-//import menu from './menu.json';
-
+/**
+ * 사이드바
+ */
 const Sidebar = () => {
     const dispatch = useDispatch();
     const { menu } = useSelector((store) => ({

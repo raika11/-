@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { loginJwt } from '@store/auth';
+import { useHistory } from 'react-router-dom';
 import { call, delay } from 'redux-saga/effects';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
@@ -15,6 +16,7 @@ import RegisterModal from './modals/RegisterModal';
 
 const SignIn = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
     const [showUnlockModal, setShowUnlockModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);

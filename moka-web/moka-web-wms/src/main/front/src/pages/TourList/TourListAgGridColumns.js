@@ -9,13 +9,15 @@ export default [
         headerName: '견학일',
         field: 'date',
         cellStyle: { fontSize: '12px' },
-        width: 100,
+        width: 80,
     },
     {
         headerName: '단체명',
         field: 'groupName',
         cellStyle: { fontSize: '12px' },
         width: 300,
+        tooltipField: 'groupName',
+        flex: 1,
     },
     {
         headerName: '인원',
@@ -33,7 +35,7 @@ export default [
         headerName: '연락처',
         field: 'phone',
         cellStyle: { fontSize: '12px' },
-        width: 110,
+        width: 100,
     },
     {
         headerName: '상태',
@@ -45,7 +47,7 @@ export default [
         headerName: '등록일',
         field: 'regDt',
         cellStyle: { fontSize: '12px' },
-        flex: 1,
+        width: 80,
     },
 ];
 

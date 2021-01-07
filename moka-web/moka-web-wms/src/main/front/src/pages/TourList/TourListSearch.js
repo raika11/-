@@ -12,9 +12,16 @@ const TourListSearch = () => {
     const [startDate, setStartDate] = useState(moment().format(DB_DATEFORMAT));
     const [endDate, setEndDate] = useState(moment().format(DB_DATEFORMAT));
     const [keyword, setKeyword] = useState('');
+
+    const handleClickReset = () => {
+        setStartDate(moment().format(DB_DATEFORMAT));
+        setEndDate(moment().format(DB_DATEFORMAT));
+        setKeyword('');
+    };
+
     return (
         <Form>
-            <Form.Row className="mb-2">
+            <Form.Row className="mb-2 d-flex">
                 <div style={{ width: 140 }}>
                     <MokaInput
                         className="mb-0 mr-2"
@@ -51,7 +58,7 @@ const TourListSearch = () => {
                         }}
                     />
                 </div>
-                <div style={{ width: 360 }}>
+                <div className="flex-fill">
                     <MokaSearchInput
                         className="mr-2"
                         inputClassName="ft-12"
@@ -61,7 +68,7 @@ const TourListSearch = () => {
                         onChange={(e) => setKeyword(e.target.value)}
                     />
                 </div>
-                <Button variant="negative" className="ft-12">
+                <Button variant="negative" className="ft-12" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>

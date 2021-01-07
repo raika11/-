@@ -6,13 +6,7 @@ import { MokaModal, MokaInputLabel } from '@components';
 import { clearCd } from '@store/codeMgt';
 
 const propTypes = {
-    /**
-     * show
-     */
     show: PropTypes.bool.isRequired,
-    /**
-     * hide 함수
-     */
     onHide: PropTypes.func.isRequired,
     /**
      * type 모달 type
@@ -36,11 +30,11 @@ const defaultProps = {
 /**
  * 기타코드 편집 모달 컴포넌트
  */
-const CodeMgtListModal = (props) => {
+const CodeMgtEditModal = (props) => {
+    const { show, onHide, type, onSave, onDelete, match } = props;
     const { grpCd } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const { show, onHide, type, onSave, onDelete } = props;
     const { cd } = useSelector((store) => ({
         cd: store.codeMgt.cd,
     }));
@@ -146,9 +140,9 @@ const CodeMgtListModal = (props) => {
         if (validate(code)) {
             onSave(code);
             onHide();
-            history.push(`/codeMgt/${grpCd}`);
+            history.push(`${match.path}/${grpCd}`);
         }
-    }, [grpCd, history, onHide, onSave, stateObj]);
+    }, [grpCd, history, match.path, onHide, onSave, stateObj]);
 
     /**
      * 삭제
@@ -162,9 +156,9 @@ const CodeMgtListModal = (props) => {
         if (code) {
             onDelete(code);
             onHide();
-            history.push(`/codeMgt/${grpCd}`);
+            history.push(`${match.path}/${grpCd}`);
         }
-    }, [grpCd, history, onDelete, onHide, stateObj]);
+    }, [grpCd, history, match.path, onDelete, onHide, stateObj]);
 
     return (
         <>
@@ -218,7 +212,7 @@ const CodeMgtListModal = (props) => {
                     show={show}
                     onHide={() => {
                         onHide();
-                        history.push(`/codeMgt/${grpCd}`);
+                        history.push(`${match.path}/${grpCd}`);
                         dispatch(clearCd());
                     }}
                     title="코드 수정"
@@ -262,7 +256,7 @@ const CodeMgtListModal = (props) => {
     );
 };
 
-CodeMgtListModal.propTypes = propTypes;
-CodeMgtListModal.defaultProps = defaultProps;
+CodeMgtEditModal.propTypes = propTypes;
+CodeMgtEditModal.defaultProps = defaultProps;
 
-export default CodeMgtListModal;
+export default CodeMgtEditModal;

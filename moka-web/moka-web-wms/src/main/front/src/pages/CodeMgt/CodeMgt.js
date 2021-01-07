@@ -31,18 +31,18 @@ const CodeMgt = ({ match }) => {
                 {/* 기타코드 리스트 */}
                 <MokaCard width={260} className="mr-gutter" bodyClassName="d-flex flex-column" header={false}>
                     <Suspense>
-                        <CodeMgtList />
+                        <CodeMgtList match={match} />
                     </Suspense>
                 </MokaCard>
 
                 <Switch>
                     <Route
-                        path={[`${match.url}/:grpCd`, `${match.url}/:grpCd/:cdSeq`]}
+                        path={[`${match.path}/:grpCd`, `${match.path}/:grpCd/:cdSeq`]}
                         exact
                         render={() => (
                             <MokaCard width={1300} bodyClassName="d-flex flex-column" header={false}>
                                 {/* 기타코드 편집 */}
-                                <CodeMgtEdit />
+                                <CodeMgtEdit match={match} />
                             </MokaCard>
                         )}
                     />

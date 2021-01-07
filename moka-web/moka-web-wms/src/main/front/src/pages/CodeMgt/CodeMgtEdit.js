@@ -2,16 +2,14 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import toast, { messageBox } from '@utils/toastUtil';
-
+import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, getCodeMgtDuplicateCheck } from '@store/codeMgt';
 import Search from './CodeMgtEditSearch';
 import AgGrid from './CodeMgtEditAgGrid';
-
-import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, getCodeMgtDuplicateCheck } from '@store/codeMgt';
 
 /**
  * 기타코드 편집
  */
-const CodeMgtEdit = () => {
+const CodeMgtEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { cd } = useSelector((store) => ({
@@ -35,7 +33,7 @@ const CodeMgtEdit = () => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success('수정하였습니다.');
-                        history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
+                        history.push(`${match.path}/${body.codeMgtGrp.grpCd}`);
                         dispatch(clearCd());
                     } else {
                         toast.fail(header.message);
@@ -62,7 +60,7 @@ const CodeMgtEdit = () => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success('등록하였습니다.');
-                        history.push(`/codeMgt/${body.codeMgtGrp.grpCd}`);
+                        history.push(`${match.path}/${body.codeMgtGrp.grpCd}`);
                         dispatch(clearCd());
                     } else {
                         toast.fail(header.message);
@@ -98,7 +96,7 @@ const CodeMgtEdit = () => {
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success('삭제하였습니다.');
-                            history.push(`/codeMgt/${code.grpCd}`);
+                            history.push(`${match.path}/${code.grpCd}`);
                         } else {
                             toast.fail(header.message);
                         }
@@ -136,8 +134,8 @@ const CodeMgtEdit = () => {
 
     return (
         <>
-            <Search onSave={onClickSave} onDelete={onClickDelete} />
-            <AgGrid onSave={onClickSave} onDelete={onClickDelete} />
+            <Search onSave={onClickSave} onDelete={onClickDelete} match={match} />
+            <AgGrid onSave={onClickSave} onDelete={onClickDelete} match={match} />
         </>
     );
 };

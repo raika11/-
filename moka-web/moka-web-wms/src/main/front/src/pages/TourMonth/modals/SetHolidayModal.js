@@ -15,15 +15,6 @@ const SetHolidayModal = (props) => {
             onHide={onHide}
             headerClassName="justify-content-start"
             bodyClassName="pb-0"
-            // footerClassName="justify-content-center border-top-0"
-            // footer={
-            //     <>
-            //         <Button className="mr-2">저장</Button>
-            //         <Button variant="negative" onClick={() => onHide()}>
-            //             취소
-            //         </Button>
-            //     </>
-            // }
             buttons={[
                 { text: '저장', variant: 'primary' },
                 { text: '취소', variant: 'negative', onClick: () => onHide() },

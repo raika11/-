@@ -172,6 +172,9 @@ public class JpodEpisodeServiceImpl implements JpodEpisodeService {
 
     @Override
     public void deleteJpodEpisode(JpodEpisode jpodEpisode) {
+        jpodEpisodeRepository.deleteArticleByEpsdSeq(jpodEpisode.getEpsdSeq());
+        jpodEpisodeRepository.deleteKeywordByEpsdSeq(jpodEpisode.getEpsdSeq());
+        jpodEpisodeRepository.deleteMemberByEpsdSeq(jpodEpisode.getEpsdSeq());
         jpodEpisodeRepository.delete(jpodEpisode);
     }
 

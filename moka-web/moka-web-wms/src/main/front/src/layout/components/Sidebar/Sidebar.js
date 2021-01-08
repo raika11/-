@@ -11,7 +11,7 @@ import logo from '@assets/images/img_logo.png';
 /**
  * 사이드바
  */
-const Sidebar = () => {
+const Sidebar = ({ match }) => {
     const dispatch = useDispatch();
     const { menu } = useSelector((store) => ({
         menu: store.auth.menu,
@@ -63,7 +63,13 @@ const Sidebar = () => {
                             {menu.children
                                 ? menu.children.map((depth1) =>
                                       depth1.children ? (
-                                          <SidebarCategory key={depth1.menuId} nodeData={depth1} open={sidebarOpenItem[depth1.menuId]} onClick={() => changeNodeToggle(depth1)}>
+                                          <SidebarCategory
+                                              key={depth1.menuId}
+                                              nodeData={depth1}
+                                              open={sidebarOpenItem[depth1.menuId]}
+                                              onClick={() => changeNodeToggle(depth1)}
+                                              match={match}
+                                          >
                                               <>
                                                   {depth1.children.map((depth2) =>
                                                       depth2.children ? (
@@ -72,24 +78,23 @@ const Sidebar = () => {
                                                               nodeData={depth2}
                                                               open={sidebarOpenItem[depth2.menuId]}
                                                               onClick={() => changeNodeToggle(depth2)}
+                                                              match={match}
                                                           >
-                                                              <>
-                                                                  {depth2.children.map((depth3) => (
-                                                                      // 3depth
-                                                                      <SidebarItem key={depth3.menuId} nodeData={depth3} />
-                                                                  ))}
-                                                              </>
+                                                              {depth2.children.map((depth3) => (
+                                                                  // 3depth
+                                                                  <SidebarItem key={depth3.menuId} nodeData={depth3} match={match} />
+                                                              ))}
                                                           </SidebarCategory>
                                                       ) : (
                                                           // 2depth
-                                                          <SidebarItem key={depth2.menuId} nodeData={depth2} />
+                                                          <SidebarItem key={depth2.menuId} nodeData={depth2} match={match} />
                                                       ),
                                                   )}
                                               </>
                                           </SidebarCategory>
                                       ) : (
                                           // 1depth
-                                          <SidebarItem key={depth1.menuId} nodeData={depth1} />
+                                          <SidebarItem key={depth1.menuId} nodeData={depth1} match={match} />
                                       ),
                                   )
                                 : ''}

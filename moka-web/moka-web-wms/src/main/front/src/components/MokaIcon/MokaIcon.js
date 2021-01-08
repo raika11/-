@@ -71,7 +71,7 @@ import {
     faInfoCircle as fasInfoCircle,
 } from '@moka/fontawesome-pro-solid-svg-icons';
 import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
-import { faImage as fadImage } from '@moka/fontawesome-pro-duotone-svg-icons';
+import { faImage as fadImage, faThumbsUp as fadThumbsUp, faThumbsDown as fadThumbsDown } from '@moka/fontawesome-pro-duotone-svg-icons';
 import { faFacebook as fabFacebook, faTwitter as fabTwitter, faFacebookSquare as fabFacebookSquare, faTwitterSquare as fabTwitterSquare } from '@fortawesome/free-brands-svg-icons';
 
 // 아이콘 등록 (fal)
@@ -147,6 +147,8 @@ library.add(fasInfoCircle);
 
 // 아이콘 등록 (fad)
 library.add(fadImage);
+library.add(fadThumbsUp);
+library.add(fadThumbsDown);
 
 // 아이콘 등록 (fab)
 library.add(fabFacebook);
@@ -172,6 +174,7 @@ const defaultProps = {};
  */
 const MokaIcon = (props) => {
     const { iconName, className, ...rest } = props;
+    // console.log(iconName);
 
     if (typeof iconName === 'string') {
         const prefix = iconName.slice(0, 4);
@@ -189,6 +192,7 @@ const MokaIcon = (props) => {
         } else if (prefix === 'fad-') {
             iconArray = ['fad', rIconName];
         }
+        // console.log(iconArray);
 
         return <FontAwesomeIcon icon={iconArray} className={className} {...rest} />;
     } else if (Array.isArray(iconName)) {

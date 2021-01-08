@@ -8,21 +8,22 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 
 public interface RequestHandler {
-    public final static JexlBuilder jexlb = new JexlBuilder();
-    public final static JexlEngine jexl = jexlb.create();
+    JexlBuilder jexlb = new JexlBuilder();
+    JexlEngine jexl = jexlb.create();
 
-    public static final String CONTEXT_ARH = "$arh";
-    public static final String CONTEXT_API_CONTEXT = "$ac";
-    public static final String CONTEXT_PARAM = "$param";
-    public static final String CONTEXT_MERGER = "$merger";
+    String CONTEXT_ARH = "$arh";
+    String CONTEXT_API_CONTEXT = "$ac";
+    String CONTEXT_PARAM = "$param";
+    String CONTEXT_MERGER = "$merger";
 
-    public ApiResult processRequest(ApiContext apiContext);
+    ApiResult processRequest(ApiContext apiContext);
 
-    public void processAsyncRequest(AsyncRequestContext asyncRequestContext);
+    void processAsyncRequest(AsyncRequestContext asyncRequestContext);
 
-    public default String makeRequestKey(ApiContext apiContext) {
+    default String makeRequestKey(ApiContext apiContext) {
         Api api = apiContext.getApi();
-        return String.format("%s_%s_%d", api.getApiConfig()
-                                            .getPath(), api.getId(), apiContext.getCurrentRequestIndex());
+        return String.format("%s_%s_%d", api
+                .getApiConfig()
+                .getPath(), api.getId(), apiContext.getCurrentRequestIndex());
     }
 }

@@ -1,6 +1,8 @@
 package jmnet.moka.core.dps.api;
 
 import static java.util.Collections.singleton;
+
+import com.fasterxml.classmate.TypeResolver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,19 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.http.HttpMethod;
-import com.fasterxml.classmate.TypeResolver;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.api.model.ApiConfig;
 import jmnet.moka.core.dps.api.model.DefaultApiConfig;
 import jmnet.moka.core.dps.api.model.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.ResponseMessageBuilder;

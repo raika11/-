@@ -11,7 +11,6 @@ import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.Collection;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.SearchQueryResult;
-import jmnet.moka.core.dps.api.model.Api;
 
 public class SearchEngineModule implements ModuleInterface {
     private static final String PARAM_KEY = "Key";

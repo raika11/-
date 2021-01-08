@@ -5,7 +5,8 @@ package jmnet.moka.core.tps.common.code;
  */
 public enum SnsTypeCode {
     FB("FB", "Facebook"),
-    TW("TW", "Twitter");
+    TW("TW", "Twitter"),
+    JA("JA", "JA");
 
     private String code;
     private String name;

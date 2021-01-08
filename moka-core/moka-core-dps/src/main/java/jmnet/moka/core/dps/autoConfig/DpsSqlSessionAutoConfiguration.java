@@ -1,5 +1,6 @@
 package jmnet.moka.core.dps.autoConfig;
 
+import java.io.IOException;
 import jmnet.moka.core.dps.db.session.DpsSqlSessionFactory;
 import jmnet.moka.core.dps.db.session.JavaConfigSqlSessionFactory;
 import jmnet.moka.core.dps.db.session.XmlConfigSqlSessionFactory;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
-import java.io.IOException;
 
 @Configuration
 @PropertySource("classpath:dps-auto.properties")

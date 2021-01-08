@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
@@ -36,7 +36,6 @@ const demoEvents = {
 };
 
 const TourMonthCalendar = () => {
-    const cellRef = useRef(null);
     const [holidayModal, setHolidayModal] = useState(false);
     const [summaryModal, setSummaryModal] = useState(false);
     const [cancelModal, setCancelModal] = useState(false);
@@ -44,8 +43,7 @@ const TourMonthCalendar = () => {
     return (
         <>
             <FullCalendar
-                ref={cellRef}
-                height={685}
+                height="100%"
                 plugins={[bootstrapPlugin, interactionPlugin, dayGridPlugin, timeGridPlugin]}
                 themeSystem="bootstrap"
                 initialView="dayGridMonth"

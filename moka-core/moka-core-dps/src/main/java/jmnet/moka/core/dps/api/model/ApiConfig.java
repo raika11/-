@@ -1,10 +1,10 @@
 package jmnet.moka.core.dps.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ApiConfig  {
     private static final List<Api> EMPTY_API_LIST = new ArrayList<Api>();

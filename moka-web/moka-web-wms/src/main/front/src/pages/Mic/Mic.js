@@ -22,8 +22,8 @@ const Mic = ({ match }) => {
 
             <Row>
                 {/* 아젠다 목록 */}
-                <Col sm={12} md={5} className="p-0">
-                    <MokaCard title="아젠다 목록" titleClassName="mb-0" bodyClassName="d-flex flex-column" className="w-100 pr-gutter">
+                <Col sm={12} md={5} className="p-0 pr-gutter">
+                    <MokaCard title="아젠다 목록" titleClassName="mb-0" bodyClassName="d-flex flex-column" className="w-100">
                         <Suspense>
                             <AgendaList />
                         </Suspense>

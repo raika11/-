@@ -15,7 +15,7 @@
     ],
     "private": false,
     "publishConfig": {
-        @moka:registry": "https://pri-nexus.joongang.co.kr/repository/npm-private/"
+        "@moka:registry" : "https://pri-nexus.joongang.co.kr/repository/npm-private/"
     },
     "description": "TOAST UI Component: ImageEditor",
     "keywords": [

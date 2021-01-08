@@ -71,19 +71,6 @@ const DeskingWorkAgGrid = (props) => {
     }, [deskingWorks]);
 
     /**
-     * ag-grid onGridReady
-     * @param {object} params onGridReady params
-     */
-    const handleGridReady = (params) => {
-        setComponentAgGridInstances(
-            produce(componentAgGridInstances, (draft) => {
-                draft[agGridIndex] = params;
-            }),
-        );
-        setGridInstance(params);
-    };
-
-    /**
      * cell별 설정에 따라서 RowClick 호출
      * @param {object} params ag-grid data
      */
@@ -136,7 +123,9 @@ const DeskingWorkAgGrid = (props) => {
      * @param {*} displayedRows 기사목록
      * @param {*} overNode target기사
      */
-    const mainToMain = (api, displayedRows, overNode) => {
+    const mainToMain = useCallback((api, displayedRows, overNode) => {
+        let result = [];
+
         // selected 정렬
         let selected = api.getSelectedNodes().sort(function (a, b) {
             if (a.data.contentOrd === b.data.contentOrd) {
@@ -150,8 +139,9 @@ const DeskingWorkAgGrid = (props) => {
             }
         });
 
+        // overNode가 없으면 첫번째 데이터로, 있으면 overNode의 order 밑으로 이동
         // selected 순번 수정
-        let contentOrd = overNode.data.contentOrd;
+        let contentOrd = !overNode ? 0 : overNode.data.contentOrd;
         selected.forEach((node) => {
             if (!node.data.rel) {
                 contentOrd++;
@@ -165,7 +155,7 @@ const DeskingWorkAgGrid = (props) => {
 
         // 겹치는 순번에서 selected를 우선으로 정렬
         let selectedSeqs = selected.map((node) => node.data.contentId);
-        let result = displayedRows.sort(function (a, b) {
+        result = displayedRows.sort(function (a, b) {
             if (a.contentOrd === b.contentOrd) {
                 if (a.relOrd === b.relOrd) {
                     if (a.rel === b.rel) {
@@ -205,7 +195,7 @@ const DeskingWorkAgGrid = (props) => {
             }
         });
 
-        // 순번 1부터 지정
+        // 기사의 contentOrd 순번 1부터 지정
         contentOrd = 0;
         result.forEach((node) => {
             if (!node.rel) {
@@ -215,7 +205,7 @@ const DeskingWorkAgGrid = (props) => {
         });
 
         return result;
-    };
+    }, []);
 
     /**
      * 패밀리내에서 관련기사간 이동
@@ -351,7 +341,7 @@ const DeskingWorkAgGrid = (props) => {
                 }),
             );
         },
-        [component.datasetSeq, component.seq, dispatch],
+        [component.datasetSeq, component.seq, dispatch, mainToMain],
     );
 
     /**
@@ -404,8 +394,12 @@ const DeskingWorkAgGrid = (props) => {
             const workElement = findWork(params.api.gridOptionsWrapper.layoutElements[0]);
             if (!workElement) return null;
             if (workElement.classList.contains('disabled')) return null;
-            workElement.removeChild(hoverBox);
-            clearWorkStyle(workElement);
+
+            const elements = document.elementsFromPoint(params.event.clientX, params.event.clientY);
+            if (!elements.find((e) => e.classList.contains('button-group'))) {
+                workElement.removeChild(hoverBox);
+                clearWorkStyle(workElement);
+            }
         },
         [hoverNode, nextNode],
     );
@@ -420,12 +414,10 @@ const DeskingWorkAgGrid = (props) => {
             const sameNode = draggingNode === overNode;
 
             handleRowDragLeave(params);
-
             if (sameNode) return;
 
             let rollback = true,
                 type = '';
-
             if (draggingNode.data.rel) {
                 // 관련기사인 경우 (같은 주기사 내, 주기사 <=> 관련기사 교체)
                 if (overNode.data.parentContentId === draggingNode.data.parentContentId) {
@@ -478,7 +470,6 @@ const DeskingWorkAgGrid = (props) => {
                             arr.push(node);
                         }
                     });
-                    // params.api.redrawRows({ rowNodes: arr });
                     params.api.resetRowHeights();
                     setHoverNode(null);
                     setNextNode(null);
@@ -496,6 +487,76 @@ const DeskingWorkAgGrid = (props) => {
     const getRowHeight = useCallback((params) => {
         return params.data.rel ? 42 : 53;
     }, []);
+
+    /**
+     * ag-grid onGridReady
+     * @param {object} params onGridReady params
+     */
+    const handleGridReady = useCallback(
+        (params) => {
+            setComponentAgGridInstances(
+                produce(componentAgGridInstances, (draft) => {
+                    draft[agGridIndex] = params;
+                }),
+            );
+            setGridInstance(params);
+
+            // 컴포넌트 워크 타이틀에 드롭존 추가
+            const workElement = findWork(params.api.gridOptionsWrapper.layoutElements[0]);
+            const titleElement = workElement.querySelector('.button-group');
+            if (!workElement) return null;
+            const dropzone = {
+                getContainer: () => titleElement,
+                onDragEnter: (source) => {
+                    if (!source.node.data.rel) {
+                        // 주기사만 가능
+                        if (!workElement.querySelector('.is-over')) {
+                            workElement.appendChild(hoverBox);
+                        }
+                        workElement.classList.add('hover');
+                    }
+                },
+                onDragLeave: (source) => {
+                    clearWorkStyle(workElement);
+                    if (source.type === 'rowDragEnd') {
+                        workElement.removeChild(hoverBox);
+                    } else {
+                        const elements = document.elementsFromPoint(source.event.clientX, source.event.clientY);
+                        if (!elements.find((e) => e.classList.contains('component-work'))) {
+                            workElement.removeChild(hoverBox);
+                        }
+                    }
+                },
+                onDragStop: (source) => {
+                    let displayedRows = [];
+
+                    for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
+                        displayedRows.push(params.api.getDisplayedRowAtIndex(i).data);
+                    }
+
+                    // 첫번째로 데이터 추가
+                    const result = mainToMain(source.api, displayedRows, null);
+                    setDraggingNodeData(source.node.data);
+                    dispatch(
+                        putDeskingWorkListSort({
+                            componentWorkSeq: component.seq,
+                            datasetSeq: component.datasetSeq,
+                            list: result,
+                            callback: ({ header }) => {
+                                if (header.success) {
+                                    params.api.deselectAll();
+                                }
+                            },
+                        }),
+                    );
+                    dropzone.onDragLeave(source);
+                },
+            };
+            params.api.removeRowDropZone(dropzone);
+            params.api.addRowDropZone(dropzone);
+        },
+        [agGridIndex, component.datasetSeq, component.seq, componentAgGridInstances, dispatch, mainToMain, setComponentAgGridInstances],
+    );
 
     return (
         <div className="ag-theme-moka-desking-grid position-relative px-1">

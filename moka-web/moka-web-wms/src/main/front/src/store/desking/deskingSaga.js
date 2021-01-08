@@ -6,7 +6,7 @@ import * as api from './deskingApi';
 import * as act from './deskingAction';
 import { DEFAULT_LANG } from '@/constants';
 
-const dragResult = {
+const DRAG_STOP_RESULT = {
     existRow: { success: false, message: '이미 존재하는 기사입니다' },
     unmovableRow: { success: false, message: '관련기사를 포함한 주기사를 이동하세요' },
     incorrectRow: { success: false, message: '올바른 주기사를 선택하세요' },
@@ -133,28 +133,34 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
 const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK_TEMPLATE, api.putComponentWorkTemplate, 'work');
 
 /**
- * 데스킹 워크의 관련기사 rowNode 생성
+ * 데스킹 워크의 관련기사 생성
+ * @param {object} data 기사 데이터
+ * @param {number} relOrd 관련기사 순서
+ * @param {object} parentData 주기사 데이터
+ * @param {object} component 컴포넌트워크 데이터
+ * @param {object} etc 그 외 데이터
  */
 const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
-    let key = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
+    const cid = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
 
-    if (!parentData || parentData.contentId === null) {
-        return dragResult.incorrectRow;
-    }
+    // 주기사 데이터 없음 => 에러
+    if (!parentData || parentData.contentId === null) return DRAG_STOP_RESULT.incorrectRow;
 
-    const existRow = component.deskingWorks.filter((desking) => desking.contentId === key);
-    if (existRow && existRow.length > 0) {
-        return dragResult.existRow;
-    }
+    // 이미 존재하는 기사 => 에러
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === cid);
+    if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
 
     let appendData = null;
     if (data.gridType === 'ARTICLE') {
         const { areaComp, domain } = etc;
 
-        // domain.servicePlatform === 'M' 이면 data.artEditMobTitle
-        let title = domain?.servicePlatform === 'P' ? data.artEditTitle || data.artJamTitle || data.artTitle : data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
-
-        // deskingPart에 TITLE이 없으면 원본 기사 제목으로 셋팅한다
+        // 타이틀 변경, 1. 도메인에 따라 PC/M 타이틀 설정, 2. 데스킹파트 설정
+        let title = '';
+        if (domain?.servicePlatform === 'P') {
+            title = data.artEditTitle || data.artJamTitle || data.artTitle;
+        } else if (domain.servicePlatform === 'M') {
+            title = data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
+        }
         if (areaComp?.deskingPart && areaComp?.deskingPart.indexOf('TITLE') < 0) {
             title = data.artTitle;
         }
@@ -193,29 +199,36 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
 
 /**
  * 데스킹 워크의 rowNode 생성
+ * @param {object} data 기사 데이터
+ * @param {number} contentOrd 기사 순서
+ * @param {object} component 컴포넌트워크 데이터
+ * @param {object} etc 그 외 데이터
  */
 const makeRowNode = (data, contentOrd, component, etc) => {
-    let key = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
+    const cid = data.gridType === 'ARTICLE' ? String(data.totalId) : data.contentId;
 
-    if (!data || key === null) {
-        return dragResult.incorrectRow;
-    }
+    // 데이터가 없거나 기사키가 올바르지 않음 => 에러
+    if (!data || cid === null) return DRAG_STOP_RESULT.incorrectRow;
 
-    const existRow = component.deskingWorks.filter((desking) => desking.contentId === key);
-    if (existRow && existRow.length > 0) {
-        return dragResult.existRow;
-    }
+    // 이미 존재하는 기사 => 에러
+    const existRow = component.deskingWorks.filter((desking) => desking.contentId === cid);
+    if (existRow && existRow.length > 0) return DRAG_STOP_RESULT.existRow;
 
     let appendData = null;
-
     if (data.gridType === 'ARTICLE') {
-        const { areaComp, domain } = etc;
+        const { areaComp, domain, isNaverChannel } = etc;
 
-        // domain.servicePlatform === 'M' 이면 data.artEditMobTitle
-        let title = domain?.servicePlatform === 'P' ? data.artEditTitle || data.artJamTitle || data.artTitle : data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
-
-        // deskingPart에 TITLE이 없으면 원본 기사 제목으로 셋팅한다
+        // 타이틀 변경, 1. 도메인에 따라 PC/M 타이틀 설정, 2. 데스킹파트 설정, 3. 네이버채널일 경우 원본 제목
+        let title = '';
+        if (domain?.servicePlatform === 'P') {
+            title = data.artEditTitle || data.artJamTitle || data.artTitle;
+        } else if (domain.servicePlatform === 'M') {
+            title = data.artEditMobTitle || data.artJamMobTitle || data.artTitle;
+        }
         if (areaComp?.deskingPart && areaComp?.deskingPart.indexOf('TITLE') < 0) {
+            title = data.artTitle;
+        }
+        if (isNaverChannel) {
             title = data.artTitle;
         }
 
@@ -267,6 +280,7 @@ const makeRowNode = (data, contentOrd, component, etc) => {
 function* deskingDragStop({ payload }) {
     const { source, target, srcComponent, tgtComponent, areaComp, callback } = payload;
     const domain = yield select((store) => store.desking.area.domain);
+    const isNaverChannel = yield select(({ desking }) => desking.isNaverChannel);
 
     let overIndex = -1,
         addRelArt = false,
@@ -299,7 +313,7 @@ function* deskingDragStop({ payload }) {
             let contentOrdering = insertIndex - 1;
             sourceNode.some((node) => {
                 if (!node.data.rel) contentOrdering++;
-                const result = makeRowNode(node.data, contentOrdering, tgtComponent, { domain, areaComp });
+                const result = makeRowNode(node.data, contentOrdering, tgtComponent, { domain, areaComp, isNaverChannel });
                 if (result.success) {
                     ans.push(result.list);
                     return false;
@@ -311,7 +325,7 @@ function* deskingDragStop({ payload }) {
             });
         } else if (typeof sourceNode === 'object') {
             // 기사 1개 이동
-            const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent, { domain, areaComp });
+            const result = makeRowNode(sourceNode.data, insertIndex, tgtComponent, { domain, areaComp, isNaverChannel });
             if (result.success) ans.push(result.list);
             else callback && callback({ header: result });
         }
@@ -352,7 +366,7 @@ function* deskingDragStop({ payload }) {
         if (bMoveComponents) {
             const movable = getMoveMode(sourceNode, null);
             if (!movable && callback) {
-                yield call(callback, { header: dragResult.unmovableRow });
+                yield call(callback, { header: DRAG_STOP_RESULT.unmovableRow });
                 return;
             }
         }
@@ -366,7 +380,7 @@ function* deskingDragStop({ payload }) {
         if (bMoveComponents) {
             const movable = getMoveMode(sourceNode, targetRowData);
             if (!movable && callback) {
-                yield call(callback, { header: dragResult.unmovableRow });
+                yield call(callback, { header: DRAG_STOP_RESULT.unmovableRow });
                 return;
             }
         }
@@ -402,32 +416,29 @@ function* deskingDragStop({ payload }) {
     }
 
     if (appendNodes.length < 1) return;
-
     if (bMoveComponents) {
         // 이동
-        const option = {
-            componentWorkSeq: tgtComponent.seq,
-            datasetSeq: tgtComponent.datasetSeq,
-            srcComponentWorkSeq: srcComponent.seq,
-            srcDatasetSeq: srcComponent.datasetSeq,
-            list: appendNodes,
-            callback,
-        };
         yield put({
             type: act.POST_DESKING_WORK_LIST_MOVE,
-            payload: option,
+            payload: {
+                componentWorkSeq: tgtComponent.seq,
+                datasetSeq: tgtComponent.datasetSeq,
+                srcComponentWorkSeq: srcComponent.seq,
+                srcDatasetSeq: srcComponent.datasetSeq,
+                list: appendNodes,
+                callback,
+            },
         });
     } else {
         // 추가
-        const option = {
-            componentWorkSeq: tgtComponent.seq,
-            datasetSeq: tgtComponent.datasetSeq,
-            list: appendNodes,
-            callback,
-        };
         yield put({
             type: act.POST_DESKING_WORK_LIST,
-            payload: option,
+            payload: {
+                componentWorkSeq: tgtComponent.seq,
+                datasetSeq: tgtComponent.datasetSeq,
+                list: appendNodes,
+                callback,
+            },
         });
     }
 }
@@ -593,8 +604,6 @@ export default function* saga() {
     yield takeLatest(act.POST_SAVE_PUBLISH_COMPONENT_WORK, postSavePublishComponentWork);
     yield takeLatest(act.POST_RESERVE_COMPONENT_WORK, postReserveComponentWork);
     yield takeLatest(act.DELETE_RESERVE_COMPONENT_WORK, deleteReserveComponentWork);
-    // yield takeLatest(act.POST_COMPONENT_WORK, postComponentWorkSaga);
-    // yield takeLatest(act.HAS_OTHER_SAVED, hasOtherSavedSaga);
 
     // 컴포넌트 워크의 데스킹 (편집기사)
     yield takeLatest(act.PUT_DESKING_WORK, putDeskingWork);
@@ -602,11 +611,9 @@ export default function* saga() {
     yield takeLatest(act.POST_DESKING_WORK_LIST_MOVE, postDeskingWorkListMove);
     yield takeLatest(act.PUT_DESKING_WORK_LIST_SORT, putDeskingWorkListSort);
     yield takeLatest(act.POST_DESKING_WORK, postDeskingWork);
-
-    // yield takeLatest(act.PUT_DESKING_WORK_PRIORITY, putDeskingWorkPriority);
     yield takeLatest(act.DELETE_DESKING_WORK_LIST, deleteDeskingWorkList);
 
-    // drag 관련
+    // 데스킹 드래그 관련
     yield takeEvery(act.DESKING_DRAG_STOP, deskingDragStop);
 
     // 히스토리

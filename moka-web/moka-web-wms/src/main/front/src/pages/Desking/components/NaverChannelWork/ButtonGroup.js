@@ -159,7 +159,7 @@ const ButtonGroup = (props) => {
     }, [handleClickSave, handleClickPublish, viewN, component.dataType]);
 
     return (
-        <div className="px-2 py-1">
+        <div className="px-2 py-1 button-group">
             <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                 {/* 예약(안씀) + 타이틀 */}
                 <Col className="d-flex align-items-center p-0 position-static" xs={8}>

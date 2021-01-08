@@ -2,7 +2,7 @@
 
 $sni-filename:   "summernote";
 $sni-font-name:  "summernote";
-$sni-font-path:  "/font" !default;
+$sni-font-path:  "../font" !default;
 $sni-css-prefix: note-icon !default;
 
 // Path
@@ -12,7 +12,8 @@ $sni-css-prefix: note-icon !default;
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-  src: url("#{$sni-font-path}/summernote.eot?#iefix") format("embedded-opentype"), url("#{$sni-font-path}/summernote.woff2") format("woff2"), url("#{$sni-font-path}/summernote.woff") format("woff"), url("./font/summernote.ttf") format("truetype");}
+  src: url("#{$sni-font-path}/summernote.eot?#iefix") format("embedded-opentype"), url("#{$sni-font-path}/summernote.woff2") format("woff2"), url("#{$sni-font-path}/summernote.woff") format("woff"), url("#{$sni-font-path}/summernote.ttf") format("truetype");
+}
 
 // Core
 
@@ -28,7 +29,7 @@ $sni-css-prefix: note-icon !default;
   vertical-align: middle;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  speak: none;
+  speak-as: none;
 }
 
 // Extras

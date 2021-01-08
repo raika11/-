@@ -1,22 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { initialState } from '@store/seoMeta';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { getSeoMeta, getSeoMetaList, initialState, saveSeoMeta } from '@store/seoMeta';
 import produce from 'immer';
+import toast from '@utils/toastUtil';
 
 const labelWidth = 50;
 const SEOMetaEdit = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const { totalId } = useParams();
+
     const [edit, setEdit] = useState(initialState.seoMeta);
-    const { seoMeta } = useSelector((store) => ({
+    const { seoMeta, search } = useSelector((store) => ({
         seoMeta: store.seoMeta.seoMeta,
+        search: store.seoMeta.search,
     }));
 
     const handleChangeValue = (name, value) => {
-        console.log(name, value);
         setEdit(
             produce(edit, (draft) => {
                 draft[name] = value;
+            }),
+        );
+    };
+
+    const handleClickSave = () => {
+        dispatch(
+            saveSeoMeta({
+                data: edit,
+                callback: (response) => {
+                    dispatch(getSeoMeta(totalId));
+                    dispatch(getSeoMetaList(search));
+                    toast.result(response);
+                },
             }),
         );
     };
@@ -25,8 +44,21 @@ const SEOMetaEdit = () => {
         setEdit(seoMeta);
     }, [seoMeta]);
 
+    useEffect(() => {
+        dispatch(getSeoMeta(totalId));
+    }, [dispatch, totalId]);
+
     return (
-        <MokaCard title="공유 메타데이터 관리" className="flex-fill">
+        <MokaCard
+            title="공유 메타데이터 관리"
+            className="flex-fill"
+            footerClassName="justify-content-center"
+            footerButtons={[
+                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
+                { text: '취소', variant: 'negative', onClick: () => console.log('cancel'), className: 'mr-2' },
+            ]}
+            footer
+        >
             <Form className="pb-2">
                 <Form.Row className="mb-2">
                     <Col xs={12}>
@@ -78,16 +110,7 @@ const SEOMetaEdit = () => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12}>
-                        <MokaInputLabel
-                            label="키워드"
-                            name="keyword"
-                            labelWidth={labelWidth}
-                            value={edit.keyword}
-                            onChange={(e) => {
-                                const { name, value } = e.target;
-                                handleChangeValue(name, value);
-                            }}
-                        />
+                        <MokaInputLabel label="키워드" name="keyword" labelWidth={labelWidth} value={edit.keyword} disabled={true} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">

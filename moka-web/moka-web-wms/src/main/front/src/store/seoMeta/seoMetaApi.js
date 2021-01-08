@@ -9,7 +9,7 @@ export const getSeoMetaList = ({ search }) => {
 };
 
 export const getSeoMeta = (totalId) => {
-    return instance.get(`/api/sns/${totalId}`).catch((err) => {
+    return instance.get(`/api/sns/${totalId}?snsType=JA`).catch((err) => {
         throw err;
     });
 };

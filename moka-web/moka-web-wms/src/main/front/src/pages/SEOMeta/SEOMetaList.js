@@ -6,8 +6,11 @@ import { getSeoMetaList } from '@store/seoMeta';
 
 const SEOMetaList = () => {
     const dispatch = useDispatch();
-    const { search } = useSelector((store) => ({
+    const { list, search, total, totalId } = useSelector((store) => ({
+        list: store.seoMeta.list,
         search: store.seoMeta.search,
+        total: store.seoMeta.total,
+        totalId: store.seoMeta.totalId,
     }));
 
     useEffect(() => {
@@ -17,7 +20,7 @@ const SEOMetaList = () => {
     return (
         <>
             <SEOMetaSearch searchOptions={search} />
-            <SEOMetaAgGrid />
+            <SEOMetaAgGrid rows={list} searchOptions={search} total={total} />
         </>
     );
 };

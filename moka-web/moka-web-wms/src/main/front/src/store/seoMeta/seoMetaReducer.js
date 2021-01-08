@@ -47,11 +47,26 @@ export default handleActions(
             });
         },
 
-        [actions.CHANGE_SEARCH_OPTIONS]: (state, payload) => {
+        [actions.CHANGE_SEO_META_SEARCH_OPTIONS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
             });
         },
+
+        /** 서버연동 **/
+        [actions.GET_SEO_META_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.list = body.list;
+                draft.total = body.totalCnt;
+            });
+        },
+        [actions.GET_SEO_META_LIST_FAILURE]: (state, payload) => {},
+        [actions.GET_SEO_META_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.seoMeta = payload;
+            });
+        },
+        [actions.GET_SEO_META_FAILURE]: (state, payload) => {},
     },
     initialState,
 );

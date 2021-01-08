@@ -14,8 +14,8 @@ export const clearSeoMetaList = createAction(CLEAR_LIST);
 export const CLEAR_SEARCH = 'seoMeta/CLEAR_SEARCH';
 export const clearSearch = createAction(CLEAR_SEARCH);
 
-export const CHANGE_SEARCH_OPTIONS = 'seoMeta/CHANGE_SEARCH_OPTIONS';
-export const changeSearchOptions = createAction(CHANGE_SEARCH_OPTIONS);
+export const CHANGE_SEO_META_SEARCH_OPTIONS = 'seoMeta/CHANGE_SEARCH_OPTIONS';
+export const changeSeoMetaSearchOptions = createAction(CHANGE_SEO_META_SEARCH_OPTIONS);
 
 // API
 export const [GET_SEO_META, GET_SEO_META_SUCCESS, GET_SEO_META_FAILURE] = createRequestActionTypes('seoMeta/GET_SEO_META');

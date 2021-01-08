@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>0. Design</title>
+        <link
+            type="text/css"
+            href="https://uicdn.toast.com/tui-color-picker/v2.2.3/tui-color-picker.css"
+            rel="stylesheet"
+        />
+        <link type="text/css" href="../dist/@ssc/tui-image-editor.css" rel="stylesheet" />
+        <style>
+            @import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tui-image-editor-container"></div>
+        <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.0/fabric.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://uicdn.toast.com/tui-color-picker/v2.2.3/tui-color-picker.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"
+        ></script>
+        <script type="text/javascript" src="../dist/@ssc/tui-image-editor.js"></script>
+        <script type="text/javascript" src="./js/theme/white-theme.js"></script>
+        <script type="text/javascript" src="./js/theme/black-theme.js"></script>
+        <script>
+            // Image editor
+            var imageEditor = new tui.ImageEditor('#tui-image-editor-container', {
+                includeUI: {
+                    title: '이미지 편집',
+                    lang: 'ko-KR',
+                    loadImage: {
+                        path: 'img/sampleImage2.png',
+                        name: 'SampleImage',
+                    },
+                    initMenu: 'filter',
+                    menuBarPosition: 'bottom',
+                    isDownloadButton: true,
+                    etc: {
+                        crop: {
+                            width: 400,
+                            height: 200,
+                        },
+                        watermark: [
+                            {
+                                title: '서울시스템 로고(Full)',
+                                image: [
+                                    {
+                                        name: '320X53',
+                                        path: 'http://localhost:8080/examples/img/watermark/ssc_large.png',
+                                    },
+                                    {
+                                        name: '160X27',
+                                        path: 'http://localhost:8080/examples/img/watermark/ssc_small.png',
+                                    },
+                                ],
+                            },
+                            {
+                                title: '서울시스템 로고(분할)',
+                                image: [
+                                    {
+                                        name: '204X53',
+                                        path: 'http://localhost:8080/examples/img/watermark/ssc_title.png',
+                                    },
+                                    {
+                                        name: '116X53',
+                                        path: 'http://localhost:8080/examples/img/watermark/ssc_eng.png',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                },
+                cssMaxWidth: 800,
+                cssMaxHeight: 800,
+                usageStatistics: false,
+                callback: {
+                    apply: function(url, name) {
+                        console.log(url, name);
+                    },
+                    cancel: function() {
+                        console.log('cancel');
+                    },
+                },
+            });
+            window.onresize = function() {
+                imageEditor.ui.resizeEditor();
+            };
+        </script>
+    </body>
+</html>

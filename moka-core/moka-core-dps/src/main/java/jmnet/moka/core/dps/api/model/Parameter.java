@@ -1,13 +1,11 @@
 package jmnet.moka.core.dps.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.dps.api.ApiParser;
-
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.Date;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.dps.api.ApiParser;
 
 public class Parameter {
     private String name;

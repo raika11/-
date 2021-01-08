@@ -1,8 +1,5 @@
 package jmnet.moka.core.dps.api.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.exception.CacheException;
@@ -11,6 +8,9 @@ import jmnet.moka.core.dps.api.ApiCacheHelper;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.model.PurgeRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PurgeRequestHandler implements RequestHandler {
 	public final transient Logger logger = LoggerFactory.getLogger(getClass());

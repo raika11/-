@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.common.cache.exception.CacheException;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.excepton.ParameterException;
+import org.springframework.http.ResponseEntity;
 
 /**
  * <pre>
@@ -28,7 +28,7 @@ public interface ApiRequestHandler {
 	 * @return requestHandler
 	 * @throws ClassNotFoundException 클래스 예외
 	 */
-	public RequestHandler getRequestHandler(Class<?> requestHandlerBeanType) throws ClassNotFoundException;
+	RequestHandler getRequestHandler(Class<?> requestHandlerBeanType) throws ClassNotFoundException;
 	
 	/**
 	 * <pre>
@@ -39,7 +39,7 @@ public interface ApiRequestHandler {
 	 * @throws ParameterException 파라미터 예외
 	 * @throws ClassNotFoundException 클래스 예외
 	 */
-	public ApiResult processApi(ApiContext apiContext) throws ParameterException, ClassNotFoundException;
+	ApiResult processApi(ApiContext apiContext) throws ParameterException, ClassNotFoundException;
 	
 	/**
 	 * <pre>
@@ -51,7 +51,7 @@ public interface ApiRequestHandler {
 	 * @throws ParameterException 파라미터 예외
 	 * @throws ClassNotFoundException 클래스 예외
 	 */
-	public ApiResult processApi(ApiContext apiContext, boolean asyncOnly) throws ParameterException, ClassNotFoundException;
+	ApiResult processApi(ApiContext apiContext, boolean asyncOnly) throws ParameterException, ClassNotFoundException;
 	
 	/**
 	 * <pre>
@@ -62,7 +62,7 @@ public interface ApiRequestHandler {
 	 * @param parameterMap 파라미터 맵
 	 * @return api 결과
 	 */
-    public ApiResult apiRequest(String path, String id, Map<String, String> parameterMap);
+    ApiResult apiRequest(String path, String id, Map<String, String> parameterMap);
 	
 	/**
 	 * <pre>
@@ -72,7 +72,7 @@ public interface ApiRequestHandler {
 	 * @param response http 응답
 	 * @return api 결과
 	 */
-	public ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response);
+	ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response);
 	
 	/**
 	 * <pre>
@@ -81,7 +81,7 @@ public interface ApiRequestHandler {
 	 * @param path api경로
 	 * @param id api id
 	 */
-	public void apiPeriodicRequest(String path, String id);
+	void apiPeriodicRequest(String path, String id);
 	
 	/**
      * <pre>
@@ -91,7 +91,7 @@ public interface ApiRequestHandler {
      * @param request http 요청
      * @param response http 응답
      */
-    public List<Map<String, Object>> purge(HttpServletRequest request,
+    List<Map<String, Object>> purge(HttpServletRequest request,
             HttpServletResponse response) throws CacheException;
 	
     /**
@@ -102,7 +102,7 @@ public interface ApiRequestHandler {
      * @param request http 요청
      * @param response http 응답
      */
-    public List<Map<String, Object>> purgeStartsWith(HttpServletRequest request,
+    List<Map<String, Object>> purgeStartsWith(HttpServletRequest request,
             HttpServletResponse response) throws CacheException;
 
 }

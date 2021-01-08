@@ -6,11 +6,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 public interface DpsSqlSessionFactory {
 
-    public void load(String configLocations) throws IOException;
+    void load(String configLocations) throws IOException;
 
-	public void add(String name, SqlSessionFactory sqlSessionFactory);
+	void add(String name, SqlSessionFactory sqlSessionFactory);
 	
-	public SqlSession getSqlSession(String dsName) ;
+	SqlSession getSqlSession(String dsName) ;
 	
-	public void destory();
+	void destory();
 }

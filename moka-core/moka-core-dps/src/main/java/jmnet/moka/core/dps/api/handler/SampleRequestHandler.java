@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.model.SampleRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SampleRequestHandler implements RequestHandler {
 	public final transient Logger logger = LoggerFactory.getLogger(getClass());

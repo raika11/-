@@ -9,7 +9,7 @@ import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption } from '@st
 /**
  * 사이트 바로 가기 AgGrid 컴포넌트
  */
-const DirectLinkAgGrid = () => {
+const DirectLinkAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -44,9 +44,9 @@ const DirectLinkAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (data) => {
-            history.push(`/direct-link/${data.linkSeq}`);
+            history.push(`${match.path}/${data.linkSeq}`);
         },
-        [history],
+        [history, match.path],
     );
 
     /**
@@ -76,7 +76,7 @@ const DirectLinkAgGrid = () => {
 
     // 싸이트 바로 가기 버튼 클릭시 input disabled 변경.
     const handleEditNewMode = () => {
-        history.push({ pathname: '/direct-link/add' });
+        history.push({ pathname: `${match.path}/add` });
     };
 
     return (

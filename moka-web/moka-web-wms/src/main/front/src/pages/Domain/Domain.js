@@ -25,7 +25,7 @@ const Domain = ({ match }) => {
      * 도메인 등록
      */
     const handleAddClickDomain = () => {
-        history.push('/domain/add');
+        history.push(`${match.path}/add`);
     };
 
     /**
@@ -43,7 +43,7 @@ const Domain = ({ match }) => {
                             // 삭제 성공
                             if (header.success) {
                                 toast.success(header.message);
-                                history.push('/domain');
+                                history.push(match.path);
                             }
                             // 삭제 실패
                             else {
@@ -112,7 +112,7 @@ const Domain = ({ match }) => {
                     </Button>
                 </div>
                 <Suspense>
-                    <DomainList onDelete={handleClickDelete} />
+                    <DomainList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -122,7 +122,7 @@ const Domain = ({ match }) => {
                 exact
                 render={() => (
                     <MokaCard title="도메인 등록" width={820} headerClassName="d-flex justify-content-between align-item-center" height={CARD_DEFAULT_HEIGHT} loading={loading}>
-                        <DomainEdit onDelete={handleClickDelete} />
+                        <DomainEdit onDelete={handleClickDelete} baseUrl={match.path} />
                     </MokaCard>
                 )}
             />

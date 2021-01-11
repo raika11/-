@@ -35,10 +35,6 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
     const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
-        dispatch(getAreaListDepth1());
-    }, [dispatch]);
-
-    useEffect(() => {
         setRowData(
             list.map((l) => ({
                 ...l,
@@ -48,8 +44,10 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
     }, [list, onDelete]);
 
     useEffect(() => {
+        dispatch(getAreaListDepth1());
+
         // areaSeq가 있으면 2뎁스 리스트 조회 + 상세 데이터 조회
-        if (areaSeq && areaSeq !== 'undefined') {
+        if (areaSeq) {
             dispatch(
                 getAreaListDepth2(
                     changeSearchOptionDepth2({
@@ -59,13 +57,15 @@ const AreaAgGrid1D = ({ match, onDelete }) => {
                 ),
             );
             dispatch(getAreaDepth1({ areaSeq }));
-        } else if (areaSeq === 'undefined') {
-            history.push('/area');
         } else {
+            dispatch(clearArea(1));
+            dispatch(clearArea(2));
+            dispatch(clearArea(3));
             dispatch(clearList(2));
             dispatch(clearList(3));
+            dispatch(changeSelectedDepth(1));
         }
-    }, [areaSeq, dispatch, history]);
+    }, [areaSeq, dispatch, history, match.path]);
 
     /**
      * 목록에서 Row클릭

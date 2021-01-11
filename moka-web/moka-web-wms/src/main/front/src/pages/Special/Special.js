@@ -31,14 +31,14 @@ const Special = ({ match }) => {
             {/* 리스트 */}
             <MokaCard width={840} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" title="디지털 스페셜">
                 <Suspense>
-                    <SpecialList />
+                    <SpecialList match={match} />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정 */}
             <Switch>
                 <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]}>
-                    <SpecialEdit />
+                    <SpecialEdit match={match} />
                 </Route>
             </Switch>
         </div>

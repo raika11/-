@@ -14,9 +14,8 @@ import { MokaInput, MokaInputLabel } from '@components';
 
 /**
  * 도메인 상세/수정/등록
- * @param history rect-router-dom useHistroy
  */
-const DomainEditTest = ({ history, onDelete }) => {
+const DomainEditTest = ({ history, onDelete, baseUrl }) => {
     const dispatch = useDispatch();
     const { domainId: paramId } = useParams();
     const { register, handleSubmit, setValue, errors } = useForm();
@@ -163,7 +162,7 @@ const DomainEditTest = ({ history, onDelete }) => {
                                 callback: (response) => {
                                     if (response.header.success) {
                                         toast.success(response.header.message);
-                                        history.push(`/domain/${domainId}`);
+                                        history.push(`${baseUrl}/${domainId}`);
                                     } else {
                                         toast.fail(response.header.message);
                                     }
@@ -186,8 +185,7 @@ const DomainEditTest = ({ history, onDelete }) => {
      * 취소
      */
     const handleClickCancle = () => {
-        dispatch(clearDomain());
-        history.push('/domain');
+        history.push(baseUrl);
     };
 
     /**
@@ -205,6 +203,13 @@ const DomainEditTest = ({ history, onDelete }) => {
             insertDomain(saveData);
         }
     };
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearDomain());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="d-flex justify-content-center mb-20">

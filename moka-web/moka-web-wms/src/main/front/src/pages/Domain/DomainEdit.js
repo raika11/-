@@ -13,9 +13,8 @@ import { MokaInput, MokaInputLabel } from '@components';
 
 /**
  * 도메인 상세/수정/등록
- * @param history rect-router-dom useHisotry
  */
-const DomainEdit = ({ history, onDelete }) => {
+const DomainEdit = ({ history, onDelete, match }) => {
     const { domainId: paramId } = useParams();
     const elLang = useRef();
     const elApiCodeId = useRef();
@@ -203,7 +202,7 @@ const DomainEdit = ({ history, onDelete }) => {
                                 callback: (response) => {
                                     if (response.header.success) {
                                         toast.success('등록하였습니다.');
-                                        history.push(`/domain/${domainId}`);
+                                        history.push(`${match.path}/${domainId}`);
                                     } else {
                                         toast.fail('실패하였습니다.');
                                     }

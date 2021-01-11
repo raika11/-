@@ -9,7 +9,7 @@ import { getSpecialList, changeSearchOption, GET_SPECIAL_LIST } from '@store/spe
 
 moment.locale('ko');
 
-const SpecialAgGrid = () => {
+const SpecialAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -41,9 +41,9 @@ const SpecialAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (special) => {
-            history.push(`/special/${special.seqNo}`);
+            history.push(`${match.path}/${special.seqNo}`);
         },
-        [history],
+        [history, match.path],
     );
 
     useEffect(() => {

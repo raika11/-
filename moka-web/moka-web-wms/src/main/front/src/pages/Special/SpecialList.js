@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './SpecialSearch';
 import AgGrid from './SpecialAgGrid';
 
-const SpecialList = () => {
+const SpecialList = (props) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search {...props} />
+            <AgGrid {...props} />
         </>
     );
 };

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import toast, { messageBox } from '@utils/toastUtil';
-import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, getCodeMgtDuplicateCheck } from '@store/codeMgt';
+import { saveCodeMgt, deleteCodeMgt, changeCd, clearCd, clearGrp, clearCdList, getCodeMgtDuplicateCheck } from '@store/codeMgt';
 import Search from './CodeMgtEditSearch';
 import AgGrid from './CodeMgtEditAgGrid';
 
@@ -131,6 +131,15 @@ const CodeMgtEdit = ({ match }) => {
             }),
         );
     };
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearCd());
+            dispatch(clearGrp());
+            dispatch(clearCdList());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>

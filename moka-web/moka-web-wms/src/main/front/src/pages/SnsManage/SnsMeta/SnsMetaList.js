@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import Search from './SnsMetaSearch';
 import AgGrid from './SnsMetaAgGrid';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSNSMetaList } from '@store/snsManage/snsAction';
-import { GET_SNS_META_LIST } from '@store/snsManage';
+import { changeSnsMetaSearchOptions, getSNSMetaList } from '@store/snsManage/snsAction';
+import { GET_SNS_META_LIST, initialState } from '@store/snsManage';
 
 const SnsMetaList = () => {
     const dispatch = useDispatch();
@@ -15,13 +15,24 @@ const SnsMetaList = () => {
         loading: store.loading[GET_SNS_META_LIST],
     }));
 
+    const handleClickSearch = (options) => {
+        dispatch(changeSnsMetaSearchOptions(options));
+    };
+
+    const handleClickReset = (onReset) => {
+        if (onReset instanceof Function) {
+            onReset(initialState.meta.search);
+        }
+        dispatch(changeSnsMetaSearchOptions(initialState.meta.search));
+    };
+
     useEffect(() => {
         dispatch(getSNSMetaList({ payload: search }));
     }, [dispatch, search]);
 
     return (
         <>
-            <Search searchOptions={search} />
+            <Search searchOptions={search} onSearch={handleClickSearch} onReset={handleClickReset} />
             <AgGrid rows={list} searchOptions={search} total={total} loading={loading} selected={totalId} />
         </>
     );

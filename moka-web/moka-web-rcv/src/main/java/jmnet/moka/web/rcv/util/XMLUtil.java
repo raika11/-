@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.springframework.core.io.Resource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,7 +33,7 @@ public class XMLUtil {
     private DocumentBuilderFactory factory;
     private DocumentBuilder builder;
 
-    public Document getDocument(File file)
+    public Document getDocument(Resource resource)
             throws ParserConfigurationException, IOException, SAXException {
         if (factory == null) {
             factory = DocumentBuilderFactory.newInstance();
@@ -41,7 +42,7 @@ public class XMLUtil {
             builder = factory.newDocumentBuilder();
         }
 
-        return builder.parse(file);
+        return builder.parse(resource.getInputStream());
     }
 
     public XPath getXPath() {

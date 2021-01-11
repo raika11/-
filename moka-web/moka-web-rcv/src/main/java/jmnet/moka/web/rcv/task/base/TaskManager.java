@@ -82,11 +82,8 @@ public class TaskManager {
         final String envFile = rcvConfiguration.getTaskManagerEnvFile();
         try {
             if (!McpString.isNullOrEmpty(envFile)) {
-                final File file = new File(ResourceMapper.getAbsolutePath(envFile));
-                if (file.exists()) {
-                    XMLUtil xu = new XMLUtil();
-                    return load(xu.getDocument(file), xu);
-                }
+                XMLUtil xu = new XMLUtil();
+                return load(xu.getDocument(ResourceMapper.getResouerceResolver().getResource(envFile)), xu);
             }
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException ignored) {
         }
@@ -135,12 +132,9 @@ public class TaskManager {
         try {
             if (McpString.isNullOrEmpty(envFile))
                 return;
-            final File file = new File(ResourceMapper.getAbsolutePath(envFile));
-            if (!file.exists())
-                return;
 
             XMLUtil xu = new XMLUtil();
-            Document doc = xu.getDocument(file);
+            Document doc = xu.getDocument(ResourceMapper.getResouerceResolver().getResource(envFile));
 
             if( !xu.getString( doc, "./SmsSendList/@sendYn", "N" ).equals("Y") )
                 return;

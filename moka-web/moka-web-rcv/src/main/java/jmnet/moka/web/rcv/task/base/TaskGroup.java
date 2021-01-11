@@ -51,11 +51,8 @@ public class TaskGroup {
 
         final String envFile = xu.getString(node, "./@envFile", "");
         if (!McpString.isNullOrEmpty(envFile)) {
-            final File file = new File(ResourceMapper.getAbsolutePath(envFile));
-            if (file.exists()) {
-                XMLUtil xub = new XMLUtil();
-                loadTask(xub.getDocument(file), xub);
-            }
+            XMLUtil xub = new XMLUtil();
+            loadTask(xub.getDocument(ResourceMapper.getResouerceResolver().getResource(envFile)), xub);
         }
     }
 

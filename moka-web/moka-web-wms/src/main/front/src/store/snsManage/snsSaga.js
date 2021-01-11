@@ -38,8 +38,6 @@ function toSnsMetaViewData({ snsShare, article }) {
 
     const { serviceFlag, artTitle, artSummary, artThumb, artRegDt } = articleBasic;
 
-    console.log(new Date(snsRegDt));
-
     return {
         totalId: commonUtil.setDefaultValue(totalId),
         fb: {

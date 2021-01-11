@@ -17,4 +17,34 @@
       fileWaitTime="3s"
       retryCount="3"/>
   </Task>
+  <Task class="jmnet.moka.web.rcv.task.cpxml.CpXmlTask"
+    name="JTBC"
+    idx="81"
+    sourceCode="d9"
+    receiveImage="N"
+    retryCount="3"
+    pdsUploadKeyTitle="JTBC"
+    editYn="N"
+    intervalTime="10s">
+    <TaskInput dirInput="/box/rcv/cp/JTBC"
+      dirSuccess="/box/rcv/cp/JTBC/comp"
+      dirFailed="/box/rcv/cp/JTBC/error"
+      fileFilter="*.xml"
+      fileWaitTime="3s"
+      retryCount="3"/>
+  </Task>
+
+  <Task class="jmnet.moka.web.rcv.task.weathershko.WeatherShkoTask"
+    name="날씨 데이터 업로드"
+    retryCount="3"
+    editYn="N"
+    intervalTime="10s">
+    <TaskInput dirInput="/box/rcv/cp/Kweather"
+      dirSuccess="/box/rcv/cp/Kweather/comp"
+      dirFailed="/box/rcv/cp/Kweather/error"
+      fileFilter="shko.xml"
+      fileWaitTime="3s"
+      retryCount="3"/>
+  </Task>
+
 </TaskGroup>

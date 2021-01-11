@@ -32,8 +32,7 @@ public class XmlGenProcess {
         switch (operation) {
             case "I":
             case "U": {
-                xmlGenService.selectSectCodeByContCode(articleTotal);
-                if( articleTotal.getSectCode() == null || articleTotal.getServCode() == null ){
+                if( articleTotal.getMasterCodeList().size() == 0 ){
                     throw new RcvDataAccessException( "중앙일보 분류코드에 없는 코드가 넘어옴");
                 }
                 componentManager.doComponentProcess();

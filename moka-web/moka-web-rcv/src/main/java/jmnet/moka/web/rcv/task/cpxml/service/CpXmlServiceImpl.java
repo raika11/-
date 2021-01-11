@@ -1,7 +1,7 @@
 package jmnet.moka.web.rcv.task.cpxml.service;
 
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
-import jmnet.moka.web.rcv.task.cpxml.mapper.CpXmlMapper;
+import jmnet.moka.web.rcv.mapper.moka.CpXmlMapper;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleTotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpCategoryVo;

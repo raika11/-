@@ -17,9 +17,6 @@ import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
  * @since 2020-12-03 003 오후 5:40
  */
 public interface XmlGenService {
-    void selectSectCodeByContCode( JamArticleTotalVo jamArticle)
-            throws RcvDataAccessException;
-
     void insertUpdateArticleData(JamArticleTotalVo jamArticleTotalVo, XmlGenComponentManager componentManager)
             throws RcvDataAccessException;
 

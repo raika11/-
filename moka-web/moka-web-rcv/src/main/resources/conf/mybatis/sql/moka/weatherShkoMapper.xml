@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.rcv.mapper.moka.WeatherShkoMapper">
+  <select id="callUsp15ReRegionKweatherIns" resultType="WeatherShkoTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_15RE_REGION_KWEATHER_INS(
+      #{curArea.tm, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArea.areaCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArea.areaName, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArea.icon, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curArea.temp, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArea.maxTemp, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArea.minTemp, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curArea.pm10Value, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curArea.pm10Grade, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+</mapper>
+

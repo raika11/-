@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<SmsSendList sendYn="N">
+  <User sendYn="N" name="박성원1" phone="01033246294"/>
+  <User sendYn="Y" name="박성원2" phone="01033246294"/>
+</SmsSendList>

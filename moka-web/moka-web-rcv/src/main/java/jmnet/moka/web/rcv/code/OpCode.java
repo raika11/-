@@ -18,4 +18,5 @@ public class OpCode {
     public static final int RESUME = 3;
     public static final int LISTTASK = 4;
     public static final int STOP = -1;
+    public static final int FORCE_EXECUTE = 10;
 }

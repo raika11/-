@@ -2,6 +2,7 @@ package jmnet.moka.web.rcv.task.base;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,17 @@ public class TaskGroup {
                     continue;
                 }
             }
-            task.operation(opCode, id, responseMap);
+            task.operation(opCode, responseMap);
+        }
+    }
+
+    public void operation(int opCode, Type type)
+            throws InterruptedException {
+        for (Task<?> task : this.tasks) {
+            if( task.getClass() == type ) {
+                task.operation(opCode);
+                break;
+            }
         }
     }
 }

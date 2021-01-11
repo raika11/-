@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkDumpEnv>
+  <Global>
+    <opEmail>frogie@joins.com</opEmail>
+    <Targets>
+      <Target>
+        <TargetName>JA</TargetName>
+        <CrTxt><![CDATA[{_CRLF_}[☞ 중앙일보 구독신청 http://subscribe.joins.com/]  [☞ 중앙일보 기사 구매 http://conbox.joins.com/] {_CRLF_}[ⓒ 중앙일보 : JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrTxt>
+        <CrHtml><![CDATA[▶ <a href="https://joongang.co.kr" target="_blank">중앙일보 '홈페이지'</a> / <a href="https://www.facebook.com/joongang" target="_joins_nw">'페이스북' 친구추가</a>{_CRLF_}▶<a href="https://ssully.joins.com/?ch=bulk" target="_blank"> 이슈를 쉽게 정리해주는 '썰리'</a><br/>{_CRLF_}ⓒ중앙일보(https://joongang.co.kr), 무단 전재 및 재배포 금지]]></CrHtml>
+        <CrHtmlNaver><![CDATA[ⓒ중앙일보(https://joongang.co.kr), 무단 전재 및 재배포 금지]]></CrHtmlNaver>
+      </Target>
+      <Target>
+        <TargetName>SD</TargetName>
+        <CrTxt><![CDATA[[ⓒ중앙SUNDAY(http://sunday.joins.com) and JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrTxt>
+        <CrHtml><![CDATA[ ▶ 중앙SUNDAY <a href='https://news.joins.com/sunday' target='_joins_nw'>[홈페이지]</a>{_CRLF_}▶ <a href='https://post.naver.com/my.nhn?memberNo=24386473' target='_joins_nw'>[네이버포스트]</a> <a href='http://me2.do/52Lt5TBq' target='_joins_nw'>[PDF열람]</a><br/>{_CRLF_}ⓒ중앙SUNDAY<a href='https://news.joins.com/sunday' target='_joins_nw'>(https://news.joins.com/sunday)</a> and 중앙일보<a href='https://joongang.co.kr' target='_blank'>(https://joongang.co.kr)</a> 무단 전재 및 재배포 금지]]></CrHtml>
+        <CrHtmlNaver/>
+      </Target>
+    </Targets>
+  </Global>
+</BulkDumpEnv>

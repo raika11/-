@@ -41,7 +41,7 @@ public abstract class Task<T> extends TaskBase {
         load(node, xu);
     }
 
-    protected TaskManager getTaskManager() {
+    public TaskManager getTaskManager() {
         return parentGroup.getTaskManager();
     }
 
@@ -78,16 +78,14 @@ public abstract class Task<T> extends TaskBase {
             throws RcvDataAccessException;
 
     protected void doAfterProcess(T taskInputData)
-            throws RcvDataAccessException {
+            throws RcvDataAccessException, InterruptedException {
         ((TaskInputData) taskInputData).deleteTempFiles();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void run() {
-        while (!Thread
-                .currentThread()
-                .isInterrupted() && !isEnd()) {
+        while (!Thread.currentThread().isInterrupted() && !isEnd()) {
             while (!isPause() && !isEnd()) {
                 try {
                     if( canLoadTask() ) {
@@ -128,5 +126,10 @@ public abstract class Task<T> extends TaskBase {
             this.sleep(isPause());
         }
         setEnd(true);
+
+        stopServer();
+    }
+
+    protected void stopServer() {
     }
 }

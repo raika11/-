@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.rcv.mapper.moka.XmlGenMapper">
+  <select id="callUpaArticleBasicInsByJamIdOrRid" parameterType="JamArticleTotalVo"
+    resultType="Integer"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_BASIC_INS_BY_JAMID_OR_RID(
+      #{mainData.mediaCode.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDatetime, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      #{mainData.paperProp.pressDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.paperProp.pan, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{pressCategoryCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.paperProp.myun, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.paperProp.ho, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.paperProp.position, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{totalBasicInfo.reporters, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      '', /*summary */
+      #{artThumb, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.tmplType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.artType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      'Y', /*SERVICE_FLAG */
+      #{mainData.articleProp.embargo, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.id.orgId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{mainData.subTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <select id="callUpaArticleBasicDelByJamIdOrRid" parameterType="JamArticleTotalVo"
+    resultType="Integer"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_BASIC_DEL_BY_JAMID_OR_RID(
+      #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <insert id="callUpaArticleServiceIns" parameterType="JamArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_SERVICE_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.loginFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.adultFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkimgFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.geoLoc.addrKr, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.geoLoc.lat, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.geoLoc.lng, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalBasicInfo.breakingNews, mode=IN, jdbcType=INTEGER, javaType=Integer},
+      #{totalBasicInfo.breakingNewsCnt, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.articleProp.onTheSceneReporting, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.bulkSite, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.delSite, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUpaArticleTitleIns" parameterType="JamArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_TITLE_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpa15ReArticleReporterDel" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_ARTICLE_REPORTER_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </delete>
+
+  <insert id="callUpa15ReArticleReporterIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_ARTICLE_REPORTER_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curIndex, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curReporter.name, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curReporter.email, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpaArticleKeywordDel" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_KEYWORD_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
+  <insert id="callUpaArticleKeywordIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_KEYWORD_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curIndex, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curKeyword, mode=IN, jdbcType=NVARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpaArticleCodeListDel" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_CODELIST_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
+  <insert id="callUpaArticleCodeListIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_CODELIST_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curMasterCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curIndex, mode=IN, jdbcType=INTEGER, javaType=int},
+      'Y', /*SERVICE_FLAG */
+      #{mainData.artType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{serviceDatetime, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      #{mainData.paperProp.ho, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.pcTitle, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUpa15ReComponentMgtIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_COMPONENT_MGT_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curCompType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      '',
+      #{curCompId, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpa15ReComponentDel" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_COMPONENT_DEL(
+      #{curCompId, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
+  <insert id="callUpa15ReComponentIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_COMPONENT_INS(
+      #{curCompId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curItem.type, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curIndex, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{isSrc, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{curItem.url, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.title, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      '', /* COMP_ALIGN */
+      #{curItem.width, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.height, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.ksize, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.bulk, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.desc.dispYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.desc.value, mode=IN, jdbcType=NVARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpa15ArticleMultiDel" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_ARTICLE_MULTI_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
+  <insert id="callUpa15ArticleMultiIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_ARTICLE_MULTI_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      0,
+      'Y',
+      #{curIndex, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curItem.type, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.compId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.varcharKey, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.title, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{curItem.link, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.thumbImg, mode=IN, jdbcType=VARCHAR, javaType=string},
+      '',
+      '',
+      #{mainData.workerInfo.workerId, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <delete id="callUpaArticleContentDel" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_CONTENT_DEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
+  <insert id="callUpaArticleContentIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_CONTENT_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      1,
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      'H',
+      #{mainData.contents.body, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUsp15ReXmlZenArtIudComplete" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_15RE_XMLZEN_ART_IUD_COMPLETE(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUspArticleIudStop" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_ARTICLE_IUD_STOP(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUspBulkMgtIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_MGT_INS(
+      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+</mapper>

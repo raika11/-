@@ -3,19 +3,20 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
-import { useDispatch } from 'react-redux';
-import { changeSnsSendArticleSearchOptions } from '@store/snsManage';
 
-const FbArtSearch = ({ searchOptions }) => {
-    const dispatch = useDispatch();
+const FbArtSearch = ({ searchOptions, onSearch, onReset }) => {
     const [options, setOptions] = useState(searchOptions);
 
     const handleSearchReset = () => {
-        console.log('handleSearchReset');
+        if (onReset instanceof Function) {
+            onReset(setOptions);
+        }
     };
 
     const handleClickSearch = () => {
-        dispatch(changeSnsSendArticleSearchOptions(options));
+        if (onSearch instanceof Function) {
+            onSearch(options);
+        }
     };
 
     const handleChangeValue = ({ target: { name, value } }) => {

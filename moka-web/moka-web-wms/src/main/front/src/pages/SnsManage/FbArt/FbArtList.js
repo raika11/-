@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Search from './FbArtSearch';
 import AgGrid from './FbArtAgGrid';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_SNS_SEND_ARTICLE_LIST, getSnsSendArticleList } from '@store/snsManage';
+import { changeSnsSendArticleSearchOptions, GET_SNS_SEND_ARTICLE_LIST, getSnsSendArticleList, initialState } from '@store/snsManage';
 
 const FbArtList = () => {
     const dispatch = useDispatch();
@@ -13,13 +13,25 @@ const FbArtList = () => {
         totalId: store.sns.meta.meta.totalId,
         loading: store.loading[GET_SNS_SEND_ARTICLE_LIST],
     }));
+
+    const handleClickSearch = (options) => {
+        dispatch(changeSnsSendArticleSearchOptions(options));
+    };
+
+    const handleClickReset = (onReset) => {
+        if (onReset instanceof Function) {
+            onReset(initialState.sendArticle.search);
+        }
+        dispatch(changeSnsSendArticleSearchOptions(initialState.sendArticle.search));
+    };
+
     useEffect(() => {
         dispatch(getSnsSendArticleList(search));
     }, [dispatch, search]);
 
     return (
         <>
-            <Search searchOptions={search} />
+            <Search searchOptions={search} onSearch={handleClickSearch} onReset={handleClickReset} />
             <AgGrid rows={list} searchOptions={search} total={total} selected={totalId} loading={loading} />
         </>
     );

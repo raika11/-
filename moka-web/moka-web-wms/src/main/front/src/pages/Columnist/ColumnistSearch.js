@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaSearchInput } from '@components';
 import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
 
-const ColumnistSearch = () => {
+const ColumnistSearch = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -56,7 +56,7 @@ const ColumnistSearch = () => {
     // 신규등록 버튼 처리.
     const handleNewColumnlist = () => {
         dispatch(clearColumnist());
-        history.push(`/columnist/add`);
+        history.push(`${match.path}/add`);
     };
 
     // 검색 스토어 연결.
@@ -84,7 +84,7 @@ const ColumnistSearch = () => {
             </Col>
 
             {/* 이름 검색 */}
-            <Col xs={4} className="p-0 mr-2">
+            <Col xs={10} className="p-0 d-flex">
                 <MokaSearchInput
                     name="keyword"
                     placeholder={'칼럼니스트 이름 검색'}
@@ -93,17 +93,18 @@ const ColumnistSearch = () => {
                     onSearch={handleSearch}
                     buttonClassName="ft-12"
                     inputClassName="ft-12"
+                    className="flex-fill mr-2"
                 />
+
+                {/* 초기화 버튼 */}
+                <Button variant="negative" onClick={handleSearchReset} className="ft-12 mr-2 flex-shrink-0">
+                    초기화
+                </Button>
+
+                <Button variant="positive" onClick={handleNewColumnlist} className="ft-12 flex-shrink-0">
+                    신규등록
+                </Button>
             </Col>
-
-            {/* 초기화 버튼 */}
-            <Button variant="negative" onClick={handleSearchReset} className="ft-12 mr-2">
-                초기화
-            </Button>
-
-            <Button variant="positive" onClick={handleNewColumnlist} className="ft-12">
-                신규등록
-            </Button>
         </Form.Row>
     );
 };

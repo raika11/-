@@ -2,7 +2,7 @@ package jmnet.moka.web.rcv.task.jamxml.service;
 
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
-import jmnet.moka.web.rcv.task.jamxml.mapper.XmlGenMapper;
+import jmnet.moka.web.rcv.mapper.moka.XmlGenMapper;
 import jmnet.moka.web.rcv.task.jamxml.process.XmlGenComponentManager;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
@@ -36,16 +36,6 @@ public class XmlGenServiceImpl implements XmlGenService {
 
     public XmlGenServiceImpl(XmlGenMapper xmlGenMapper) {
         this.xmlGenMapper = xmlGenMapper;
-    }
-
-    @Override
-    public void selectSectCodeByContCode(JamArticleTotalVo jamArticle)
-            throws RcvDataAccessException {
-        try {
-            xmlGenMapper.callUpaJamMasterCodeSel(jamArticle);
-        } catch (DataAccessException e) {
-            throw new RcvDataAccessException(e.getCause());
-        }
     }
 
     @Override
@@ -88,24 +78,11 @@ public class XmlGenServiceImpl implements XmlGenService {
 
             // TB_ARTICLE_CODELIST
             xmlGenMapper.callUpaArticleCodeListDel(articleTotal);
-            if(!McpString.isNullOrEmpty(articleTotal.getTotalBasicInfo().getCategory1() )){
-                articleTotal.setCurIndex(1);
-                articleTotal.setCurCategory(articleTotal.getTotalBasicInfo().getCategory1());
-                xmlGenMapper.callUpaArticleCodeListIns(articleTotal);
-            }
-            if(!McpString.isNullOrEmpty(articleTotal.getTotalBasicInfo().getCategory2() )){
-                articleTotal.setCurIndex(2);
-                articleTotal.setCurCategory(articleTotal.getTotalBasicInfo().getCategory2());
-                xmlGenMapper.callUpaArticleCodeListIns(articleTotal);
-            }
-            if(!McpString.isNullOrEmpty(articleTotal.getTotalBasicInfo().getCategory3() )){
-                articleTotal.setCurIndex(3);
-                articleTotal.setCurCategory(articleTotal.getTotalBasicInfo().getCategory3());
-                xmlGenMapper.callUpaArticleCodeListIns(articleTotal);
-            }
-            if(!McpString.isNullOrEmpty(articleTotal.getTotalBasicInfo().getCategory4() )){
-                articleTotal.setCurIndex(4);
-                articleTotal.setCurCategory(articleTotal.getTotalBasicInfo().getCategory4());
+
+            articleTotal.setCurIndex(0);
+            for( String masterCode : articleTotal.getMasterCodeList() ) {
+                articleTotal.setCurIndex(articleTotal.getCurIndex() + 1);
+                articleTotal.setCurMasterCode( masterCode );
                 xmlGenMapper.callUpaArticleCodeListIns(articleTotal);
             }
 
@@ -144,6 +121,7 @@ public class XmlGenServiceImpl implements XmlGenService {
     @Override
     public void afterProcessArticleData(JamArticleTotalVo articleTotal)
             throws RcvDataAccessException {
+        xmlGenMapper.callUspBulkMgtIns(articleTotal);
         xmlGenMapper.callUsp15ReXmlZenArtIudComplete(articleTotal);
     }
 
@@ -161,7 +139,7 @@ public class XmlGenServiceImpl implements XmlGenService {
                 if( item.getDesc().getValue().length() > 500 )
                     item.getDesc().setValue( item.getDesc().getValue().substring(0, 500) );
                 item.getDesc().setValue( RcvUtil.remvConvSpecialChar( item.getDesc().getValue()));
-                item.setUrl(item.getArtThumb());
+                item.setUrl(item.getArtUrl());
                 if( McpString.isNullOrEmpty(item.getBulk()))
                     item.setBulk( "N");
                 if( item.getTitle() == null )

@@ -53,11 +53,12 @@ public class RcvArtRegToJamArticleTotalProcess {
             return null;
 
         /* 자동치환 분류코드표 (포털, 일단)은 범위에 들어가지 않는다. */
-        rcvArtRegService.getUspRcvCodeConvSelByRid( articleTotal);
-        if( article.getCategoies().get(0).getCode() == null ) {
+        rcvArtRegService.getUspRcvCodeConvSelByRid( articleTotal );
+        if( McpString.isNullOrEmpty( articleTotal.getCurMasterCode() )) {
             taskInputData.logError("Rid=[{}] code not mapping move to TB_RCV_ARTICLE_BASIC_NOTMATCH ");
             return null;
         }
+        articleTotal.getMasterCodeList().add(articleTotal.getCurMasterCode());
 
 /*
         ** 노컷(NOCUT) 이미지 캡션 추가 ..
@@ -121,9 +122,7 @@ public class RcvArtRegToJamArticleTotalProcess {
         else
             compMap.put("compType", new String[] {"I"} );
 
-        if( !McpString.isNullOrEmpty(articleTotal.getSectCode())  ) {
-            rcvArtRegService.getRcvArticleComponent(articleTotal, compMap, rcvConfiguration);
-        }
+        rcvArtRegService.getRcvArticleComponent(articleTotal, compMap, rcvConfiguration);
 
         rcvArtRegService.getRcvArticleKeyword(articleTotal);
 

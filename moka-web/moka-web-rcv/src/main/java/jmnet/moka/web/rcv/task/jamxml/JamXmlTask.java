@@ -10,9 +10,9 @@ import jmnet.moka.web.rcv.task.base.TaskGroup;
 import jmnet.moka.web.rcv.task.jamxml.process.JamXmlProcess;
 import jmnet.moka.web.rcv.task.jamxml.process.XmlGenProcess;
 import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
-import jmnet.moka.web.rcv.task.jamxml.service.XmlGenService;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.CategoryVo;
 import jmnet.moka.web.rcv.taskinput.FileTaskInput;
 import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
 import jmnet.moka.web.rcv.util.XMLUtil;
@@ -79,7 +79,7 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
     protected boolean doVerifyData(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData) {
         final JamArticleTotalVo articleTotal = taskInputData.getTotalData();
         if (articleTotal == null) {
-            log.error("JamArticleTotalVo를 생성할 수 없습니다.");
+            log.error("XML 파싱 에러, JamArticleTotalVo를 생성할 수 없습니다.");
             return false;
         }
         articleTotal.setArtHistoryStep(0);
@@ -111,7 +111,6 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
     protected void doProcess(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
             throws RcvDataAccessException {
 
-        final XmlGenService xmlGenService = getTaskManager().getXmlGenService();
         final JamXmlService jamXmlService = getTaskManager().getJamXmlService();
         final JamArticleTotalVo articleTotal = taskInputData.getTotalData();
 
@@ -127,9 +126,9 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
         articleTotal.setSourceCode(this.sourceCode);
         articleTotal.setXmlFileNM(taskInputData.getFile().toPath().getFileName().toString());
 
-        xmlGenService.selectSectCodeByContCode(articleTotal);
-        if( articleTotal.getSectCode() == null || articleTotal.getServCode() == null ){
-            articleTotal.logError("중앙일보 분류코드에 없는 코드가 넘어옴,  selectSectCodeByContCode Error");
+
+        if(!doProcessSelectMasterCode(articleTotal, articleTotal.getMainData(), jamXmlService)) {
+            articleTotal.logError("중앙일보 분류코드에 없는 코드가 넘어옴,  doProcessSelectMasterCode Error");
             return;
         }
 
@@ -146,9 +145,32 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
         taskInputData.setSuccess( true );
     }
 
+    private boolean doProcessSelectMasterCode(JamArticleTotalVo articleTotal, JamArticleVo article, JamXmlService jamXmlService)
+    {
+        //noinspection LoopStatementThatDoesntLoop,ConstantConditions
+        do {
+            articleTotal.getMasterCodeList().clear();
+            if( article.getCategoies().size() == 0 )
+                break;
+            for(CategoryVo category : article.getCategoies() ) {
+                articleTotal.setCurContCode(category.getCode());
+                articleTotal.setCurMasterCode(null);
+                jamXmlService.selectMasterCodeByContCode(articleTotal);
+                if (McpString.isNullOrEmpty(articleTotal.getCurMasterCode()))
+                    continue;
+                articleTotal.getMasterCodeList().add(articleTotal.getCurMasterCode());
+            }
+            if( article.getCategoies().size() == 0 )
+                break;
+            return true;
+        }while( false );
+
+        return false;
+    }
+
     @Override
     protected void doAfterProcess(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
-            throws RcvDataAccessException {
+            throws RcvDataAccessException, InterruptedException {
         super.doAfterProcess(taskInputData);
 
         taskInputData.doAfterProcess();

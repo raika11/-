@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './ComponentSearch';
 import AgGrid from './ComponentAgGrid';
 
-const ComponentList = ({ onDelete }) => {
+const ComponentList = ({ onDelete, match }) => {
     return (
         <>
             <Search />
-            <AgGrid onDelete={onDelete} />
+            <AgGrid onDelete={onDelete} match={match} />
         </>
     );
 };

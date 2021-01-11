@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { getTpZone } from '@store/codeMgt';
-import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
+import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -18,7 +18,7 @@ import AddComponentModal from './modals/AddComponentModal';
 /**
  * 템플릿 등록/수정 컴포넌트
  */
-const TemplateEdit = ({ onDelete }) => {
+const TemplateEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector((store) => store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE]);
@@ -112,7 +112,7 @@ const TemplateEdit = ({ onDelete }) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`/template/${body.templateSeq}`);
+                        history.push(`${match.path}/${body.templateSeq}`);
                     } else {
                         toast.fail(header.message);
                     }
@@ -239,8 +239,7 @@ const TemplateEdit = ({ onDelete }) => {
      * 취소 버튼
      */
     const handleClickCancle = () => {
-        history.push('/template');
-        dispatch(clearTemplate());
+        history.push(match.path);
     };
 
     useEffect(() => {

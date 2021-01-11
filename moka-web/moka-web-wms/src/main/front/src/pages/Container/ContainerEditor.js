@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeContainerBody, getContainer, clearContainer } from '@store/container';
@@ -86,6 +85,13 @@ const ContainerEditor = (props) => {
             setError({});
         }
     }, [invalidList]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearContainer());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCardEditor

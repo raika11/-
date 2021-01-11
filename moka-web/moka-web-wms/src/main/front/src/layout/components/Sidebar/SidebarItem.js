@@ -34,9 +34,9 @@ const SidebarItem = (props) => {
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    if (match.path !== nodeData.menuUrl) {
-                        history.push(nodeData.menuUrl);
-                    }
+                    // if (match.path !== nodeData.menuUrl) {
+                    history.push(nodeData.menuUrl);
+                    // }
                 }}
             >
                 {nodeData.iconName && (

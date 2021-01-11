@@ -51,41 +51,6 @@
       "description": "Description for rcv.pds.ftp.port."
     },
     {
-      "name": "spring.datasource.auto-commit",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.auto-commit."
-    },
-    {
-      "name": "spring.datasource.min-idle",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.min-idle."
-    },
-    {
-      "name": "spring.datasource.max-idle",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.max-idle."
-    },
-    {
-      "name": "spring.datasource.max-wait",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.max-wait."
-    },
-    {
-      "name": "spring.datasource.max-active",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.max-active."
-    },
-    {
-      "name": "spring.datasource.initial-size",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.initial-size."
-    },
-    {
-      "name": "spring.datasource.validation-query",
-      "type": "java.lang.String",
-      "description": "Description for spring.datasource.validation-query."
-    },
-    {
       "name": "rcv.taskmanager.smsListEnvFile",
       "type": "java.lang.String",
       "description": "Description for rcv.taskmanager.smsListEnvFile."
@@ -129,5 +94,95 @@
       "name": "rcv.jamapiurl.ilg",
       "type": "java.lang.String",
       "description": "Description for rcv.jamapiurl.ilg."
+    },
+    {
+      "name": "moka.spring.datasource.validation-query",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.validation-query."
+    },
+    {
+      "name": "moka.spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.initial-size."
+    },
+    {
+      "name": "moka.spring.datasource.max-active",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.max-active."
+    },
+    {
+      "name": "moka.spring.datasource.max-wait",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.max-wait."
+    },
+    {
+      "name": "moka.spring.datasource.max-idle",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.max-idle."
+    },
+    {
+      "name": "moka.spring.datasource.min-idle",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.min-idle."
+    },
+    {
+      "name": "moka.spring.datasource.auto-commit",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.auto-commit."
+    },
+    {
+      "name": "idb.spring.datasource.validation-query",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.validation-query."
+    },
+    {
+      "name": "idb.spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.initial-size."
+    },
+    {
+      "name": "idb.spring.datasource.max-active",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.max-active."
+    },
+    {
+      "name": "idb.spring.datasource.max-wait",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.max-wait."
+    },
+    {
+      "name": "idb.spring.datasource.max-idle",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.max-idle."
+    },
+    {
+      "name": "idb.spring.datasource.min-idle",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.min-idle."
+    },
+    {
+      "name": "idb.spring.datasource.auto-commit",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.auto-commit."
+    },
+    {
+      "name": "rcv.ooyala.account",
+      "type": "java.lang.String",
+      "description": "Description for rcv.ooyala.account."
+    },
+    {
+      "name": "rcv.ooyala.clientId",
+      "type": "java.lang.String",
+      "description": "Description for rcv.ooyala.clientId."
+    },
+    {
+      "name": "rcv.ooyala.clientSecret",
+      "type": "java.lang.String",
+      "description": "Description for rcv.ooyala.clientSecret."
+    },
+    {
+      "name": "rcv.ooyala.accessTokenUrl",
+      "type": "java.lang.String",
+      "description": "Description for rcv.ooyala.accessTokenUrl."
     }
   ] }

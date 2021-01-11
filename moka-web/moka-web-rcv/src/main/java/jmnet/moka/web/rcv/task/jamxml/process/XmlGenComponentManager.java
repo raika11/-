@@ -202,6 +202,7 @@ public class XmlGenComponentManager {
                 break;
             }
 
+            item.setArtUrl(fileUrl);
             item.setArtThumb(fileUrl + fileName_120);
         } while (false);
     }

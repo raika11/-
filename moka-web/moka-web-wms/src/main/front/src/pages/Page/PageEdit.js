@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
 import { previewPage, w3cPage } from '@store/merge';
-import { initialState, getPage, changePage, savePage, changeInvalidList } from '@store/page';
+import { initialState, getPage, changePage, savePage, changeInvalidList, clearPage } from '@store/page';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -371,6 +371,13 @@ const PageEdit = ({ onDelete }) => {
     useEffect(() => {
         setError(invalidListToError(invalidList));
     }, [invalidList]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearPage());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${page.pageSeq ? '정보' : '등록'}`} loading={loading}>

@@ -3,7 +3,9 @@ package jmnet.moka.web.rcv.taskinput;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
+import jmnet.moka.web.rcv.util.RcvStringUtil;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -19,6 +21,7 @@ import lombok.Getter;
  */
 
 @Getter
+@Slf4j
 public class DBTaskInputData extends TaskInputData {
     final List<Map<String, Object>> inputData;
 
@@ -28,6 +31,6 @@ public class DBTaskInputData extends TaskInputData {
 
     @Override
     public void logError(String s, Object... message) {
-
+        log.error(RcvStringUtil.format(s, message));
     }
 }

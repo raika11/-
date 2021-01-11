@@ -27,6 +27,7 @@ public abstract class TaskBase implements Runnable, TaskService {
     private Thread thread;
     private boolean isEnd;
     private boolean isPause;
+    private boolean isForcedExecute;
     private int sleepTime = 1000;     // 기본 1초
 
     protected abstract String getTaskName();
@@ -39,7 +40,13 @@ public abstract class TaskBase implements Runnable, TaskService {
     }
 
     @Override
-    public void operation(int opCode, String id, Map<String, Object> responseMap)
+    public void operation(int opCode)
+            throws InterruptedException {
+        operation( opCode, null);
+    }
+
+    @Override
+    public void operation(int opCode, Map<String, Object> responseMap)
             throws InterruptedException {
         switch (opCode) {
             case OpCode.SERVE: {
@@ -54,7 +61,6 @@ public abstract class TaskBase implements Runnable, TaskService {
                 if (!this.isEnd) {
                     this.isEnd = true;
                     this.thread.interrupt();
-
                     if (this.thread.isAlive()) {
                         this.thread.join();
                     }
@@ -81,6 +87,12 @@ public abstract class TaskBase implements Runnable, TaskService {
                 }
                 break;
             }
+            case OpCode.FORCE_EXECUTE: {
+                if (this.isAlive() && !this.isPaused() ) {
+                    isForcedExecute = true;
+                }
+                break;
+            }
             default:
                 break;
         }
@@ -103,6 +115,10 @@ public abstract class TaskBase implements Runnable, TaskService {
                 final int countLoop = isPause ? 100 : this.getSleepTime() / sleepTimer;
                 for (int i = 0; i < countLoop; i++) {
                     if (this.isEnd) {
+                        break;
+                    }
+                    if( this.isForcedExecute ) {
+                        this.isForcedExecute = false;
                         break;
                     }
                     if (isPause && !this.isPause) {

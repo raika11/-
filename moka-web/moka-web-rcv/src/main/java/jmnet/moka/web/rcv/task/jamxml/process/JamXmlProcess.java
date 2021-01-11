@@ -48,7 +48,7 @@ public class JamXmlProcess {
         //스타기자 타입 (커버:Z, 와이드:Y, 인터뷰:X, 갤러리:W, 영상:V)이고, 스타기자인 경우 첫번째 이미지 썸네일을 생성하고 워터마크를 적용한다.
         if (("Z,Y,X,W,V").contains(article.getTmplType())) {
             if (!JamXmlProcessHelper.doProcess_StarImage(taskInputData, articleTotal, taskManager, jamXmlService)) {
-                articleTotal.logError("스타 기자 이미지 처리 에러  selectSectCodeByContCode Error");
+                articleTotal.logError("스타 기자 이미지 처리 에러  doProcess_StarImage Error");
                 throw new RcvDataAccessException("스타 기자 이미지 처리 에러");
             }
         }

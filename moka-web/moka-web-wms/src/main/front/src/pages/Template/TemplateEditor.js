@@ -82,6 +82,13 @@ const TemplateEditor = (props) => {
         }
     }, [invalidList]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(clearTemplate());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <MokaCardEditor
             className="mr-gutter flex-fill"

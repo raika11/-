@@ -70,7 +70,6 @@ const ReporterEdit = ({ match }) => {
      * 취소
      */
     const handleClickCancle = () => {
-        dispatch(clearReporter());
         history.push(match.path);
     };
 
@@ -95,6 +94,13 @@ const ReporterEdit = ({ match }) => {
             rMail4: reporter.repEmail2 || ''.split('|')[3] || '',
         });
     }, [reporter]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearReporter());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>

@@ -291,26 +291,26 @@ public class ReporterSimpleDTO implements Serializable {
     /**
      * 등록일시
      */
-    @ApiModelProperty(hidden = true)
-    private String regDt;
+    //@ApiModelProperty(hidden = true)
+    //private Date regDt;
 
     /**
      * 기등록자
      */
-    @ApiModelProperty(hidden = true)
-    private String regId;
+    //@ApiModelProperty(hidden = true)
+    //private String regId;
 
     /**
      * 수정일시
      */
-    @ApiModelProperty(hidden = true)
-    private String modDt;
+    //@ApiModelProperty(hidden = true)
+    //private Date modDt;
 
     /**
      * 수정자
      */
-    @ApiModelProperty(hidden = true)
-    private String modId;
+    //@ApiModelProperty(hidden = true)
+    //private String modId;
 
     /**
      * 기자한마디

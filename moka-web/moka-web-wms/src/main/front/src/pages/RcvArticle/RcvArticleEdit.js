@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
-import { clearArticle } from '@store/article';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
@@ -12,7 +11,7 @@ import commonUtil from '@utils/commonUtil';
 import { unescapeHtml } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
-const RcvArticleEdit = () => {
+const RcvArticleEdit = ({ match }) => {
     const { rid } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -37,13 +36,7 @@ const RcvArticleEdit = () => {
      * 취소
      */
     const handleCancle = () => {
-        history.push('/rcv-article');
-
-        if (rcvArticle.totalId && rcvArticle.totalId !== 0) {
-            dispatch(clearArticle());
-        } else {
-            dispatch(clearRcvArticle());
-        }
+        history.push(match.path);
     };
 
     /**
@@ -56,8 +49,8 @@ const RcvArticleEdit = () => {
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push('/rcv-article');
-                        dispatch(clearRcvArticle());
+                        history.push(match.path, { update: true });
+                        // dispatch(clearRcvArticle());
                     } else {
                         toast.fail(header.message);
                     }
@@ -99,7 +92,7 @@ const RcvArticleEdit = () => {
                     callback: ({ header }) => {
                         if (!header.success) {
                             toast.fail(header.message);
-                            history.push('/rcv-article');
+                            history.push(match.path);
                         }
                     },
                 }),
@@ -107,7 +100,14 @@ const RcvArticleEdit = () => {
         } else {
             dispatch(clearRcvArticle());
         }
-    }, [dispatch, history, rid]);
+    }, [dispatch, history, match.path, rid]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearRcvArticle());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setTemp({

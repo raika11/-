@@ -10,7 +10,7 @@ import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.DescVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ReporterVo;
-import jmnet.moka.web.rcv.task.rcvartreg.mapper.RcvArtRegMapper;
+import jmnet.moka.web.rcv.mapper.moka.RcvArtRegMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

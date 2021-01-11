@@ -12,7 +12,7 @@ import CopyModal from './modals/CopyModal';
 /**
  * 템플릿 AgGrid 컴포넌트
  */
-const TemplateAgGrid = ({ onDelete }) => {
+const TemplateAgGrid = ({ onDelete, match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -55,6 +55,13 @@ const TemplateAgGrid = ({ onDelete }) => {
         [history],
     );
 
+    /**
+     * 등록버튼
+     */
+    const handleClickAdd = useCallback(() => {
+        history.push(`${match.path}/add`);
+    }, [history, match.path]);
+
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
@@ -87,7 +94,7 @@ const TemplateAgGrid = ({ onDelete }) => {
                     }}
                 />
                 <div className="pt-0">
-                    <Button variant="positive" onClick={() => history.push('/template/add')} className="ft-12">
+                    <Button variant="positive" onClick={handleClickAdd} className="ft-12">
                         템플릿 등록
                     </Button>
                 </div>

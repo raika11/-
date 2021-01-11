@@ -16,10 +16,8 @@ import java.util.Map;
  */
 
 interface TaskService {
-    @SuppressWarnings("unused")
-    void operation(int opCode, String id, Map<String, Object> responseMap) throws InterruptedException;
-    @SuppressWarnings("unused")
+    void operation(int opCode) throws InterruptedException;
+    void operation(int opCode, Map<String, Object> responseMap) throws InterruptedException;
     boolean isAlive();
-    @SuppressWarnings("unused")
     boolean isPaused();
 }

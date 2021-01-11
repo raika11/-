@@ -18,9 +18,9 @@ const FbArtList = () => {
         dispatch(changeSnsSendArticleSearchOptions(options));
     };
 
-    const handleClickReset = (onReset) => {
-        if (onReset instanceof Function) {
-            onReset(initialState.sendArticle.search);
+    const handleClickReset = (callback) => {
+        if (callback instanceof Function) {
+            callback(initialState.sendArticle.search);
         }
         dispatch(changeSnsSendArticleSearchOptions(initialState.sendArticle.search));
     };

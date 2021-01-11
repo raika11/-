@@ -19,9 +19,9 @@ const SnsMetaList = () => {
         dispatch(changeSnsMetaSearchOptions(options));
     };
 
-    const handleClickReset = (onReset) => {
-        if (onReset instanceof Function) {
-            onReset(initialState.meta.search);
+    const handleClickReset = (callback) => {
+        if (callback instanceof Function) {
+            callback(initialState.meta.search);
         }
         dispatch(changeSnsMetaSearchOptions(initialState.meta.search));
     };

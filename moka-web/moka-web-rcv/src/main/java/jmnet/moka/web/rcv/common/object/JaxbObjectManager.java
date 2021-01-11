@@ -7,7 +7,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
-import jmnet.moka.web.rcv.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.rcv.task.pubxml.vo.PubNewsMLVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
@@ -36,7 +35,6 @@ public class JaxbObjectManager {
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(CpArticleListVo.class) );
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(PubNewsMLVo.class) );
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(WeatherShkoVo.class) );
-            listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(BulkDumpEnv.class));
         } catch (JAXBException ignore) {
         }
     }

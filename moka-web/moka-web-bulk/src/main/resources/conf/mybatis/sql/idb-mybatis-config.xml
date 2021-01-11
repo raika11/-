@@ -14,8 +14,8 @@
         <!-- <setting name="defaultStatementTimeout" value="60000" /> -->
     </settings>
     <typeAliases>
-        <package name="jmnet.moka.web.rcv.task.bulkdump.vo" />
-        <package name="jmnet.moka.web.rcv.task.bulkdump.process.joongang" />
+        <package name="jmnet.moka.web.bulk.task.bulkdump.vo" />
+        <package name="jmnet.moka.web.bulk.task.bulkdump.process.joongang" />
     </typeAliases>
     <typeHandlers>
         <typeHandler javaType="java.lang.Character" jdbcType="VARCHAR"

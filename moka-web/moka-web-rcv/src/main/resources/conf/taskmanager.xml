@@ -9,6 +9,4 @@
     envFile="classpath:conf/taskgroup3.xml"/>
   <TaskGroup name="데이터베이스 Scheduler Importer"
     envFile="classpath:conf/taskgroup4.xml"/>
-  <TaskGroup name="Bulk"
-    envFile="classpath:conf/taskgroup5.xml"/>
 </TaskManager>

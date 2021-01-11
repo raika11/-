@@ -17,7 +17,6 @@ import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -43,7 +42,6 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 @Configuration
 @AutoConfigureBefore({DataSourceAutoConfiguration.class, MybatisAutoConfiguration.class})
-@AutoConfigureAfter(IdbMybatisConfiguration.class)
 @MapperScan(basePackages = "jmnet.moka.web.rcv.mapper.moka")
 public class MokaMybatisConfiguration extends AbstractMybatisConfiguration {
     @Primary

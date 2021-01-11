@@ -2,7 +2,6 @@ package jmnet.moka.web.rcv.config;
 
 import jmnet.moka.web.rcv.task.base.TaskManager;
 import lombok.Getter;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -56,10 +55,6 @@ public class MokaRcvConfiguration {
 //    @Bean
 //    @ConfigurationProperties(prefix = "rcv.pdsback.ftp")
 //    public FtpConfig getPdsBackFtpConfig() { return new FtpConfig(); }
-
-    @Bean
-    @ConfigurationProperties(prefix = "rcv.ooyala")
-    public OoyalaConfig getOoyalaConfig() { return new OoyalaConfig(); }
 
     @Bean
     TaskManager taskManager() {

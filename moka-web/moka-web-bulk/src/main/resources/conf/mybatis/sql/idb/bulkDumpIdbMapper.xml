@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jmnet.moka.web.rcv.mapper.idb.BulkDumpIdbMapper">
+<mapper namespace="jmnet.moka.web.bulk.mapper.idb.BulkDumpIdbMapper">
   <select id="callUspBulkDdrefListSel" parameterType="HashMap" resultType="HashMap"
     statementType="CALLABLE">
     <![CDATA[

@@ -4,5 +4,110 @@
       "name": "system.id",
       "type": "java.lang.String",
       "description": "Description for system.id."
-  }
-] }
+    },
+    {
+      "name": "bulk.taskmanager.envfile",
+      "type": "java.lang.String",
+      "description": "Description for bulk.taskmanager.envfile."
+    },
+    {
+      "name": "bulk.taskmanager.smsListEnvFile",
+      "type": "java.lang.String",
+      "description": "Description for bulk.taskmanager.smsListEnvFile."
+    },
+    {
+      "name": "bulk.tempDir",
+      "type": "java.lang.String",
+      "description": "Description for bulk.tempDir."
+    },
+    {
+      "name": "bulk.ooyala.account",
+      "type": "java.lang.String",
+      "description": "Description for bulk.ooyala.account."
+    },
+    {
+      "name": "bulk.ooyala.clientId",
+      "type": "java.lang.String",
+      "description": "Description for bulk.ooyala.clientId."
+    },
+    {
+      "name": "bulk.ooyala.clientSecret",
+      "type": "java.lang.String",
+      "description": "Description for bulk.ooyala.clientSecret."
+    },
+    {
+      "name": "bulk.ooyala.accessTokenUrl",
+      "type": "java.lang.String",
+      "description": "Description for bulk.ooyala.accessTokenUrl."
+    },
+    {
+      "name": "moka.spring.datasource.validation-query",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.validation-query."
+    },
+    {
+      "name": "moka.spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.initial-size."
+    },
+    {
+      "name": "moka.spring.datasource.max-active",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.max-active."
+    },
+    {
+      "name": "moka.spring.datasource.max-wait",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.max-wait."
+    },
+    {
+      "name": "moka.spring.datasource.max-idle",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.max-idle."
+    },
+    {
+      "name": "moka.spring.datasource.min-idle",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.min-idle."
+    },
+    {
+      "name": "moka.spring.datasource.auto-commit",
+      "type": "java.lang.String",
+      "description": "Description for moka.spring.datasource.auto-commit."
+    },
+    {
+      "name": "idb.spring.datasource.validation-query",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.validation-query."
+    },
+    {
+      "name": "idb.spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.initial-size."
+    },
+    {
+      "name": "idb.spring.datasource.max-active",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.max-active."
+    },
+    {
+      "name": "idb.spring.datasource.max-wait",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.max-wait."
+    },
+    {
+      "name": "idb.spring.datasource.max-idle",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.max-idle."
+    },
+    {
+      "name": "idb.spring.datasource.min-idle",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.min-idle."
+    },
+    {
+      "name": "idb.spring.datasource.auto-commit",
+      "type": "java.lang.String",
+      "description": "Description for idb.spring.datasource.auto-commit."
+    }
+  ] }

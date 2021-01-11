@@ -14,8 +14,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
-import jmnet.moka.web.rcv.task.bulkdump.service.BulkDumpService;
-import jmnet.moka.web.rcv.task.bulkloader.service.BulkLoaderService;
 import jmnet.moka.web.rcv.task.calljamapi.service.CallJamApiService;
 import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
 import jmnet.moka.web.rcv.task.cpxml.service.CpXmlService;
@@ -74,13 +72,7 @@ public class TaskManager {
     ArtAfterIudService artAfterIudService;
 
     @Autowired
-    BulkLoaderService bulkLoaderService;
-
-    @Autowired
     WeatherShkoService weatherShkoService;
-
-    @Autowired
-    BulkDumpService bulkDumpService;
 
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;

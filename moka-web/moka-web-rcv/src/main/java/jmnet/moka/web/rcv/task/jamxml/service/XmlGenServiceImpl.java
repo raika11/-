@@ -226,6 +226,10 @@ public class XmlGenServiceImpl implements XmlGenService {
                 else
                     item.setThumbImg( "" );
 
+                if( item.getCompId() == null ){
+                    item.setCompId("0");
+                }
+
                 articleTotal.setCurIndex(++curIndex);
                 articleTotal.setCurItem(item);
                 xmlGenMapper.callUpa15ArticleMultiIns(articleTotal);

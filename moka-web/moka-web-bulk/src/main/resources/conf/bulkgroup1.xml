@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskGroup>
-  <Task class="jmnet.moka.web.rcv.task.bulkloader.BulkLoaderTask"
+  <Task class="jmnet.moka.web.bulk.task.bulkloader.BulkLoaderTask"
     name="벌크 Loader"
     intervalTime="10s">
   </Task>
 
-  <Task class="jmnet.moka.web.rcv.task.bulkdump.BulkDumpTask"
+  <Task class="jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask"
     name="벌크 Dump"
     bulkDumpClientCount="10"
     bulkDumpEnvFile="classpath:conf/bulkdumpenv.xml"

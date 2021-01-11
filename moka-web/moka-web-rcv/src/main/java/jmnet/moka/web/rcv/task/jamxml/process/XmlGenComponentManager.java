@@ -123,7 +123,7 @@ public class XmlGenComponentManager {
                             setType("MC");
                             setUrl(article.getCoverImg().getPcUrl() );
                             setJoinKey( article.getCoverImg().getBgColor());
-                            setTitle( "");
+                            setTitle("");
                         }
                     });
                 }
@@ -136,7 +136,7 @@ public class XmlGenComponentManager {
                             setType("ME");
                             setUrl(article.getCoverImg().getMoUrl() );
                             setJoinKey( article.getCoverImg().getBgColor());
-                            setTitle( "");
+                            setTitle("");
                         }
                     });
                 }

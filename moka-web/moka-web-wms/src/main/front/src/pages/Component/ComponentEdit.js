@@ -182,7 +182,7 @@ const ComponentEdit = ({ onDelete, match }) => {
      * 취소
      */
     const handleClickCancle = () => {
-        history.push(match.patch);
+        history.push(match.path);
     };
 
     useEffect(() => {

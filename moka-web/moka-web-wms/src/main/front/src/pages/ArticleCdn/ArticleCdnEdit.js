@@ -74,7 +74,7 @@ const ArticleCdnEdit = ({ match }) => {
                         <MokaInput className="bg-white" value={temp.artTitle} isInvalid={error.totalId} disabled />
                     </Col>
                     <Col xs={2} className="p-0 pl-2 d-flex">
-                        <Button variant="searching" size="sm" className="w-100 ft-12">
+                        <Button variant="searching" className="w-100 ft-12">
                             기사 검색
                         </Button>
                     </Col>

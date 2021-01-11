@@ -10,10 +10,13 @@ const ArticleCdnEdit = ({ match }) => {
     const { totalId } = useParams();
     const history = useHistory();
     const [temp, setTemp] = useState({
+        //필드명 모름
         totalId: '23854897',
         artTitle: '결혼 보름만에 사라진 신랑, 시부모도 신혼집도 다 가짜였다',
         usedYn: 'Y',
         description: '',
+        regId: 'ssc01',
+        regDate: '2020-03-16 08:31:19',
     });
     const [error] = useState({});
 
@@ -115,8 +118,10 @@ const ArticleCdnEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0 d-flex">
+                    <Col xs={12} className="p-0 d-flex align-items-center">
                         <MokaInputLabel label="등록정보" labelWidth={90} as="none" />
+                        <p className="mb-0 mr-2">{temp.regId}</p>
+                        <p className="mb-0">{temp.regDate}</p>
                     </Col>
                 </Form.Row>
             </Form>

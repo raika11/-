@@ -6,7 +6,7 @@ import Form2 from './components/AreaFormDepth2';
 import toast from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
-const AreaEdit = ({ onDelete }) => {
+const AreaEdit = ({ onDelete, match }) => {
     const { selectedDepth, areaError } = useSelector((store) => ({
         selectedDepth: store.area.selectedDepth,
         areaError: store.area.areaError,
@@ -49,10 +49,10 @@ const AreaEdit = ({ onDelete }) => {
     return (
         <React.Fragment>
             {/* 1뎁스 폼 */}
-            {selectedDepth === 1 && <Form1 onDelete={onDelete} />}
+            {selectedDepth === 1 && <Form1 match={match} onDelete={onDelete} />}
             {/* 2뎁스 & 3뎁스 폼 */}
             {selectedDepth !== 1 && (
-                <Form2 onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} onDelete={onDelete} page={page} setPage={setPage} depth={selectedDepth} />
+                <Form2 match={match} onShowModal={setModalShow} onChangeModalDomainId={setModalDomainId} onDelete={onDelete} page={page} setPage={setPage} depth={selectedDepth} />
             )}
 
             {/* 페이지 검색 모달 */}

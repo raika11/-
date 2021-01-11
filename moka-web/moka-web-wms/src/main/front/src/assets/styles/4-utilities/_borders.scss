@@ -38,5 +38,6 @@
 }
 .input-border {
   border: $input-border-width solid $input-border-color;
+  border-radius: $border-radius;
   @include form-control-focus($ignore-warning: true);
 }

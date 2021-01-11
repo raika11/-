@@ -26,7 +26,7 @@ const Reserved = ({ match }) => {
             {/* 예약어 목록 */}
             <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="예약어 검색">
                 <Suspense>
-                    <ReservedList />
+                    <ReservedList match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -37,7 +37,7 @@ const Reserved = ({ match }) => {
                     exact
                     render={() => (
                         <MokaCard width={780} title="예약어 정보" loading={loading}>
-                            <ReservedEdit />
+                            <ReservedEdit match={match} />
                         </MokaCard>
                     )}
                 />

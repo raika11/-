@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './DirectLinkSearch';
 import AgGrid from './DirectLinkAgGrid';
 
-const DirectLinkList = () => {
+const DirectLinkList = (props) => {
     return (
         <React.Fragment>
-            <Search />
-            <AgGrid />
+            <Search {...props} />
+            <AgGrid {...props} />
         </React.Fragment>
     );
 };

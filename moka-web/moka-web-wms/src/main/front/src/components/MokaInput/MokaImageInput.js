@@ -216,7 +216,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                         className={clsx(
-                            'd-inline-flex align-items-center justify-content-center is-file-dropzone dropzone-border cursor-pointer position-relative bg-white overflow-hidden',
+                            'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
                             className,
                             { 'is-invalid': isInvalid },
                         )}
@@ -253,7 +253,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         </span>
 
                         {/* drag over mask */}
-                        <div className="dropzone-dragover-mask dropzone-border" />
+                        <div className="dropzone-dragover-mask input-border" />
                     </Figure>
                 );
             }}

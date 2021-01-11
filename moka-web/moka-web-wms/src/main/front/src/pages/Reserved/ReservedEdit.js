@@ -12,7 +12,7 @@ import { deleteReserved, getReserved, duplicateCheck, clearReserved, changeReser
 /**
  * 예약어 정보 컴포넌트
  */
-const ReservedEdit = () => {
+const ReservedEdit = ({ match }) => {
     const { reservedSeq: paramSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -116,7 +116,7 @@ const ReservedEdit = () => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`/reserved/${body.reservedSeq}`);
+                        history.push(`${match.path}/${body.reservedSeq}`);
                     } else {
                         toast.fail(header.message);
                     }
@@ -205,7 +205,7 @@ const ReservedEdit = () => {
                     domainId: latestDomainId,
                     reservedSeq: reservedSeq,
                 };
-                dispatch(deleteReserved({ callback: () => history.push('/reserved'), reservedSet }));
+                dispatch(deleteReserved({ callback: () => history.push(match.path), reservedSet }));
             },
             () => {},
         );
@@ -215,8 +215,7 @@ const ReservedEdit = () => {
      * 취소 버튼
      */
     const handleClickCancle = () => {
-        dispatch(clearReserved());
-        history.push('/reserved');
+        history.push(match.path);
     };
 
     useEffect(() => {
@@ -232,6 +231,13 @@ const ReservedEdit = () => {
             });
         }
     }, [invalidList]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearReserved());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Form>
@@ -249,10 +255,10 @@ const ReservedEdit = () => {
                 />
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-0 d-flex align-items-center">
-                    <Button variant="positive" className="mr-05" onClick={handleClickSave}>
+                    <Button variant="positive" className="mr-2" onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button variant="negative" className="mr-05" onClick={handleClickCancle}>
+                    <Button variant="negative" className="mr-2" onClick={handleClickCancle}>
                         취소
                     </Button>
                     <Button variant="negative" onClick={handleClickDelete} disabled={!reserved.reservedId}>

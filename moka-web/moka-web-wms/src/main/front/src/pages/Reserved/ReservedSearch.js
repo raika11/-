@@ -10,7 +10,7 @@ import { changeLatestDomainId } from '@store/auth';
 /**
  * 예약어 검색
  */
-const ReservedSearch = () => {
+const ReservedSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { latestDomainId, domainList, search: storeSearch } = useSelector((store) => ({
@@ -60,7 +60,7 @@ const ReservedSearch = () => {
     const handleChangeSearchOption = (e) => {
         if (e.target.name === 'domainId') {
             dispatch(changeLatestDomainId(e.target.value));
-            history.push('/reserved');
+            history.push(match.path);
         } else if (e.target.name === 'searchType') {
             setSearch({
                 ...search,

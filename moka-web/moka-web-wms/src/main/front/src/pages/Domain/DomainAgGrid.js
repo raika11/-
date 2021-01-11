@@ -8,8 +8,7 @@ import { columnDefs } from './DomainAgGridColumns';
 /**
  * 도메인 AgGrid 목록
  */
-const DomainAgGrid = (props) => {
-    const { onDelete } = props;
+const DomainAgGrid = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
@@ -42,7 +41,7 @@ const DomainAgGrid = (props) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((rowData) => history.push(`/domain/${rowData.domainId}`), [history]);
+    const handleRowClicked = useCallback((rowData) => history.push(`${match.path}/${rowData.domainId}`), [history, match.path]);
 
     useEffect(() => {
         setSearch(storeSearch);

@@ -7,7 +7,6 @@ import { MokaInput, MokaTable } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import {
     GET_CODE_MGT_GRP_LIST,
-    clearGrp,
     clearCdList,
     getCodeMgtGrpList,
     getCodeMgtGrp,
@@ -97,8 +96,6 @@ const CodeMgtListAgGrid = ({ match }) => {
 
     const handleAddClick = () => {
         setSelectedData({});
-        dispatch(clearGrp());
-        dispatch(clearCdList());
         history.push(match.path);
         setShowAddModal(true);
     };

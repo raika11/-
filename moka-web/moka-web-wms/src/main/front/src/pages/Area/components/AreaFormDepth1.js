@@ -10,7 +10,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
 import { saveArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
 
-const AreaFormDepth1 = ({ onDelete }) => {
+const AreaFormDepth1 = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { area, areaListDepth2 } = useSelector((store) => ({
@@ -58,7 +58,7 @@ const AreaFormDepth1 = ({ onDelete }) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`/area/${body.areaSeq}`);
+                        history.push(`${match.path}/${body.areaSeq}`);
                     } else {
                         toast.fail(header.message);
                     }
@@ -161,7 +161,7 @@ const AreaFormDepth1 = ({ onDelete }) => {
                         <Button className="mr-10" variant="positive" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" className="ml-10" onClick={handleClickDelete} disabled={!temp.areaSeq}>
+                        <Button variant="negative" onClick={handleClickDelete} disabled={!temp.areaSeq}>
                             삭제
                         </Button>
                     </Card.Footer>

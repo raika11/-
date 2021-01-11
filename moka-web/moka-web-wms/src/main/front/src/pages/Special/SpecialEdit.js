@@ -290,6 +290,7 @@ const SpecialEdit = () => {
     useEffect(() => {
         return () => {
             dispatch(changeInvalidList([]));
+            dispatch(clearSpecial());
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

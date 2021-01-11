@@ -5,11 +5,11 @@ import AgGrid from './ReservedAgGrid';
 /**
  * 예약어 목록
  */
-const ReservedList = () => {
+const ReservedList = (props) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search {...props} />
+            <AgGrid {...props} />
         </>
     );
 };

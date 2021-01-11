@@ -9,7 +9,7 @@ import { changeSearchOption, getReservedList, GET_RESERVED_LIST } from '@store/r
 /**
  * 예약어 AgGrid 컴포넌트
  */
-const ReservedAgGrid = () => {
+const ReservedAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { total, list, search, reserved, loading } = useSelector((store) => ({
@@ -37,12 +37,12 @@ const ReservedAgGrid = () => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((reserved) => history.push(`/reserved/${reserved.reservedSeq}`), [history]);
+    const handleRowClicked = useCallback((reserved) => history.push(`${match.path}/${reserved.reservedSeq}`), [history, match.path]);
 
     /**
      * 예약어 등록 버튼 클릭
      */
-    const handleAddClick = useCallback(() => history.push('/reserved/add'), [history]);
+    const handleAddClick = useCallback(() => history.push(`${match.path}/add`), [history, match.path]);
 
     return (
         <>

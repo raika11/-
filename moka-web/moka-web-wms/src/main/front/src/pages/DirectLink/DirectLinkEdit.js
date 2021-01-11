@@ -14,7 +14,7 @@ import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, save
 /**
  * 사이트 바로 가기 등록/수정창
  */
-const DirectLinkEdit = ({ history }) => {
+const DirectLinkEdit = ({ history, match }) => {
     const dispatch = useDispatch();
     const { linkSeq } = useParams();
     const imgFileRef = useRef(null);
@@ -276,7 +276,7 @@ const DirectLinkEdit = ({ history }) => {
 
     //취소 버튼.
     const handleClickCancleButton = () => {
-        history.push(`/direct-link`);
+        history.push(match.path);
     };
 
     // 정보 조회.
@@ -330,6 +330,13 @@ const DirectLinkEdit = ({ history }) => {
     useEffect(() => {
         setInputBoxDisabled(false);
         setTemp({});
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearDirectLink());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

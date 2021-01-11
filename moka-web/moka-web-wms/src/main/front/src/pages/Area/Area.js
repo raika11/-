@@ -116,7 +116,7 @@ const Area = ({ match }) => {
 
             {/* 편집영역 등록/수정 */}
             <Suspense>
-                <AreaEdit onDelete={handleClickDelete} />
+                <AreaEdit match={match} onDelete={handleClickDelete} />
             </Suspense>
         </div>
     );

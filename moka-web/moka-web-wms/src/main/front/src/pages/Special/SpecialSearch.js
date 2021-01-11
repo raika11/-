@@ -9,7 +9,7 @@ import { initialState } from '@store/special';
 import { changeSearchOption, getSpecialList } from '@store/special';
 import { getPt } from '@store/codeMgt';
 
-const SpecialSearch = () => {
+const SpecialSearch = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const ptRows = useSelector((store) => store.codeMgt.ptRows);
@@ -30,7 +30,7 @@ const SpecialSearch = () => {
      * 페이지등록 버튼
      */
     const handleClickAdd = () => {
-        history.push('/special/add');
+        history.push(`${match.path}/add`);
     };
 
     /**
@@ -84,9 +84,9 @@ const SpecialSearch = () => {
                         ))}
                     </MokaInput>
                 </Col>
-                <Col xs={4} className="p-0">
+                <Col xs={7} className="p-0 d-flex">
                     <MokaSearchInput
-                        className="m-0"
+                        className="flex-fill mr-2"
                         inputClassName="ft-12"
                         buttonClassName="ft-12"
                         name="keyword"
@@ -94,9 +94,8 @@ const SpecialSearch = () => {
                         onChange={handleChangeValue}
                         onSearch={handleSearch}
                     />
-                </Col>
-                <Col xs={3} className="p-0 d-flex justify-content-end">
-                    <Button variant="positive" className="ft-12" onClick={handleClickAdd}>
+
+                    <Button variant="positive" className="ft-12 flex-shrink-0" onClick={handleClickAdd}>
                         페이지 등록
                     </Button>
                 </Col>

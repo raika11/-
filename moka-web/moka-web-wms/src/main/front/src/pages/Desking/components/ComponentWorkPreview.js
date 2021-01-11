@@ -55,13 +55,13 @@ const ComponentWorkPreview = ({ show }) => {
         doc.open();
         doc.write(previewContent || '');
 
-        if (previewContent) {
-            let style = document.createElement('style');
-            style.textContent = 'body { margin: 0px; }';
-            setTimeout(function () {
-                doc.head && doc.head.appendChild(style);
-            }, 300);
-        }
+        // if (previewContent) {
+        //     let style = document.createElement('style');
+        //     style.textContent = 'body { margin: 0px; }';
+        //     setTimeout(function () {
+        //         doc.head && doc.head.appendChild(style);
+        //     }, 300);
+        // }
         doc.close();
     }, [previewContent]);
 

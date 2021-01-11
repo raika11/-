@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { changeSeoMetaSearchOptions } from '@store/seoMeta';
 
-const SEOMetaAgGrid = ({ rows, searchOptions, total }) => {
+const SEOMetaAgGrid = ({ selected, rows, searchOptions, total, loading }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
@@ -43,6 +43,13 @@ const SEOMetaAgGrid = ({ rows, searchOptions, total }) => {
                 total={total}
                 onRowNodeId={(row) => row.id}
                 onChangeSearchOption={handleChangeSearchOptions}
+                onRowClicked={(data, param) => {
+                    if (param.type === 'cellClicked' && param.column.colId === 'title') {
+                        window.open(`https://mnews.joins.com/article/${param.data.id}`, 'articlePop', 'width=500');
+                    }
+                }}
+                selected={selected}
+                loading={loading}
             />
         </>
     );

@@ -5,7 +5,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import produce from 'immer';
 
-const SEOMetaSearch = ({ searchOptions }) => {
+const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
     const [options, setOptions] = useState(searchOptions);
     const [disabled, setDisabled] = useState({ date: true });
@@ -43,6 +43,18 @@ const SEOMetaSearch = ({ searchOptions }) => {
                 draft[name] = value;
             }),
         );
+    };
+
+    const handleClickSearch = () => {
+        if (onSearch instanceof Function) {
+            onSearch(options);
+        }
+    };
+
+    const handleClickReset = () => {
+        if (onReset instanceof Function) {
+            onReset(setOptions);
+        }
     };
 
     return (
@@ -110,10 +122,13 @@ const SEOMetaSearch = ({ searchOptions }) => {
                             const { name, value } = e.target;
                             handleChangeValue(name, value);
                         }}
+                        onSearch={handleClickSearch}
                     />
                 </Col>
                 <Col xs={1} className="p-0">
-                    <Button variant="negative">초기화</Button>
+                    <Button variant="negative" onClick={handleClickReset}>
+                        초기화
+                    </Button>
                 </Col>
             </Form.Row>
         </Form>

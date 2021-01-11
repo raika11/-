@@ -45,6 +45,7 @@ const Quiz = React.lazy(() => import('@pages/Survey/Quiz'));
 const CommentBanned = React.lazy(() => import('@pages/CommentManage/Banned'));
 const Mic = React.lazy(() => import('@pages/Mic'));
 const SEOMeta = React.lazy(() => import('@pages/SEOMeta'));
+const ArticleCdn = React.lazy(() => import('@pages/ArticleCdn'));
 
 const routes = [
     {
@@ -543,6 +544,16 @@ const routes = [
         name: 'seo-meta',
         displayName: 'SEO 메타관리',
         component: SEOMeta,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article-cdn',
+        name: 'articleCdn',
+        displayName: '트래픽 분산(기사) 관리',
+        component: ArticleCdn,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

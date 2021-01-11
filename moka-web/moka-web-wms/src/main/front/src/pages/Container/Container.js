@@ -97,7 +97,7 @@ const Container = ({ match }) => {
                             callback: ({ header }) => {
                                 if (header.success) {
                                     toast.success(header.message);
-                                    history.push('/container');
+                                    history.push(match.path);
                                 } else {
                                     toast.error(header.message);
                                 }
@@ -108,7 +108,7 @@ const Container = ({ match }) => {
                 () => {},
             );
         },
-        [dispatch, history],
+        [dispatch, history, match.path],
     );
 
     /**
@@ -210,7 +210,7 @@ const Container = ({ match }) => {
                 onExpansion={handleListExpansion}
             >
                 <Suspense>
-                    <ContainerList onDelete={handleClickDelete} />
+                    <ContainerList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -220,7 +220,7 @@ const Container = ({ match }) => {
                 render={() => (
                     <>
                         {/* 에디터 */}
-                        <ContainerEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                        <ContainerEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} match={match} />
 
                         {/* 탭 */}
                         <MokaIconTabs
@@ -229,7 +229,7 @@ const Container = ({ match }) => {
                             onSelectNav={(idx) => setActiveTabIdx(idx)}
                             tabWidth={412}
                             tabs={[
-                                <ContainerEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />,
+                                <ContainerEdit show={activeTabIdx === 0} onDelete={handleClickDelete} match={match} />,
                                 <Suspense fallback={<MokaLoader />}>
                                     <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_CT} relSeq={container.containerSeq} />
                                 </Suspense>,

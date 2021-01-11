@@ -7,7 +7,7 @@ import { MokaTable } from '@components';
 import columnDefs from './ContainerAgGridColumns';
 import { GET_CONTAINER_LIST, getContainerList, changeSearchOption } from '@store/container';
 
-const ContainerAgGrid = ({ onDelete }) => {
+const ContainerAgGrid = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { total, list, search, container, loading } = useSelector((store) => ({
@@ -24,7 +24,7 @@ const ContainerAgGrid = ({ onDelete }) => {
     /**
      * 컨테이너 등록 버튼 클릭
      */
-    const handleAddClick = useCallback(() => history.push('/container/add'), [history]);
+    const handleAddClick = useCallback(() => history.push(`${match.path}/add`), [history, match.path]);
 
     /**
      * 목록에서 Row클릭

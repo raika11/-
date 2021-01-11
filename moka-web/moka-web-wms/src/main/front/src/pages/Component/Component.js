@@ -21,10 +21,7 @@ const RelationInContainerList = React.lazy(() => import('@pages/Container/compon
 const Component = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const { component } = useSelector((store) => ({
-        component: store.component.component,
-    }));
+    const component = useSelector(({ component }) => component.component);
 
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -45,7 +42,7 @@ const Component = ({ match }) => {
                                 // 삭제 성공
                                 if (header.success) {
                                     toast.success(header.message);
-                                    history.push('/component');
+                                    history.push(match.path);
                                 }
                                 // 삭제 실패
                                 else {
@@ -58,7 +55,7 @@ const Component = ({ match }) => {
                 () => {},
             );
         },
-        [dispatch, history],
+        [dispatch, history, match.path],
     );
 
     /**
@@ -107,7 +104,7 @@ const Component = ({ match }) => {
             {/* 리스트 */}
             <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="컴포넌트 검색">
                 <Suspense>
-                    <ComponentList onDelete={handleClickDelete} />
+                    <ComponentList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -117,7 +114,7 @@ const Component = ({ match }) => {
                 render={() => (
                     <React.Fragment>
                         {/* 등록/수정 */}
-                        <ComponentEdit onDelete={handleClickDelete} />
+                        <ComponentEdit onDelete={handleClickDelete} match={match} />
 
                         {/* 탭 */}
                         <MokaIconTabs

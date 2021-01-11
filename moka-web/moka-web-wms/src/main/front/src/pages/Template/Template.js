@@ -177,7 +177,7 @@ const Template = ({ match }) => {
                 foldable
             >
                 <Suspense>
-                    <TemplateList onDelete={handleClickDelete} />
+                    <TemplateList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -187,7 +187,7 @@ const Template = ({ match }) => {
                 render={() => (
                     <React.Fragment>
                         {/* 에디터 */}
-                        <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                        <TemplateEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} match={match} />
 
                         {/* 탭 */}
                         <Suspense>
@@ -197,7 +197,7 @@ const Template = ({ match }) => {
                                 onSelectNav={(idx) => setActiveTabIdx(idx)}
                                 tabWidth={412}
                                 tabs={[
-                                    <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />,
+                                    <TemplateEdit show={activeTabIdx === 0} onDelete={handleClickDelete} match={match} />,
                                     <Suspense fallback={<MokaLoader />}>
                                         <RelationInPageList show={activeTabIdx === 1} relSeqType={ITEM_TP} relSeq={template.templateSeq} />
                                     </Suspense>,

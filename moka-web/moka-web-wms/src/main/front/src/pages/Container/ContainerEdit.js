@@ -6,12 +6,12 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList, clearContainer } from '@store/container';
+import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
  * 컨테이너 정보/수정 컴포넌트
  */
-const ContainerEdit = ({ onDelete }) => {
+const ContainerEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector((store) => store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER]);
@@ -93,7 +93,7 @@ const ContainerEdit = ({ onDelete }) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`/container/${body.containerSeq}`);
+                        history.push(`${match.path}/${body.containerSeq}`);
                     } else {
                         toast.warning(header.message);
                     }
@@ -168,8 +168,7 @@ const ContainerEdit = ({ onDelete }) => {
      * 취소버튼
      */
     const handleClickCancle = () => {
-        dispatch(clearContainer());
-        history.push('/container');
+        history.push(match.path);
     };
 
     useEffect(() => {

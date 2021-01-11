@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList } from '@store/article';
+import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList, clearArticle } from '@store/article';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard, MokaIcon, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
@@ -254,10 +255,17 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
         setError(invalidListToError(invalidList));
     }, [invalidList]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(clearArticle());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <MokaCard
             title="등록 기사"
-            className="flex-fill w-100"
+            className={clsx('flex-fill', { 'w-100': !inRcv })}
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[

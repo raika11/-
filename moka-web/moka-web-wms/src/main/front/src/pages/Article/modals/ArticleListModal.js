@@ -9,11 +9,14 @@ import { CodeAutocomplete, SourceSelector } from '@pages/commons';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaModal, MokaInput, MokaInputLabel, MokaSearchInput, MokaTable } from '@/components';
 import GroupNumberRenderer from '../components/ArticleDeskList/GroupNumberRenderer';
-import columnDefs from './ArticleSearchModalColumns';
+import columnDefs from './ArticleListModalColumns';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_SERVICE_ARTICLE_LIST, initialState, getServiceArticleList, changeServiceSearchOption, clearServiceList } from '@store/article';
 
-const ArticleSearchModal = (props) => {
+/**
+ * 서비스기사 목록 (모달)
+ */
+const ArticleListModal = (props) => {
     const { show, onHide, media } = props;
 
     const dispatch = useDispatch();
@@ -374,4 +377,4 @@ const ArticleSearchModal = (props) => {
     );
 };
 
-export default ArticleSearchModal;
+export default ArticleListModal;

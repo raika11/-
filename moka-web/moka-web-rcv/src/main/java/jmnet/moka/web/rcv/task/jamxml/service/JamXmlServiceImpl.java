@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
-import jmnet.moka.web.rcv.task.jamxml.mapper.JamXmlMapper;
+import jmnet.moka.web.rcv.mapper.moka.JamXmlMapper;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -40,6 +40,16 @@ public class JamXmlServiceImpl implements JamXmlService {
             map.put("tmpRepList", tmpRepList);
             map.put("tmpKwdList", tmpKwdList);
             return jamXmlMapper.callUpaIssueSeriesReporterSelByRepseq(map);
+        } catch (DataAccessException e) {
+            throw new RcvDataAccessException(e.getCause());
+        }
+    }
+
+    @Override
+    public void selectMasterCodeByContCode(JamArticleTotalVo jamArticle)
+            throws RcvDataAccessException{
+        try {
+            jamXmlMapper.callUpaTotalMappingSel(jamArticle);
         } catch (DataAccessException e) {
             throw new RcvDataAccessException(e.getCause());
         }

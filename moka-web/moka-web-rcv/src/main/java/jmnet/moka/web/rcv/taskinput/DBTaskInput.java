@@ -23,6 +23,5 @@ public abstract class  DBTaskInput extends TaskInput {
     @Override
     public void load(Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
-
     }
 }

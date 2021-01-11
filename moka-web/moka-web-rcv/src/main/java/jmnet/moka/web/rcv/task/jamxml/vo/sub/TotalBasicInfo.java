@@ -31,10 +31,6 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TotalBasicInfo {
     private String reporters;
-    private String category1;
-    private String category2;
-    private String category3;
-    private String category4;
     private Integer breakingNews;
     private int breakingNewsCnt;
 
@@ -75,11 +71,6 @@ public class TotalBasicInfo {
         article.setListTitle( RcvUtil.remvConvSpecialChar(article.getListTitle() ) );
         article.setSubTitle( RcvUtil.remvConvSpecialChar(article.getSubTitle() ) );
         article.getContents().setBody( RcvUtil.remvConvSpecialChar(article.getContents().getBody() ) );
-
-        this.setCategory1(article.getCategoies().get(0).getCode());
-        this.setCategory2(article.getCategoies().size() >= 2 ? article.getCategoies().get(1).getCode() : "");
-        this.setCategory3(article.getCategoies().size() >= 3 ? article.getCategoies().get(2).getCode() : "");
-        this.setCategory4(article.getCategoies().size() >= 4 ? article.getCategoies().get(3).getCode() : "");
 
         // summary 는 UPA_15RE_ARTICLE_IUD_PROC procedure 에서 처리한다.
         // articleTotal.setSummary( RcvUtil.getSummaryText( article.getContents().getBody()));

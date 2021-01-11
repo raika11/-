@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from 'react-bootstrap/Button';
 import { MokaTable } from '@components';
 import columnDefs from './ColumnistAgGridColumns';
-import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
+import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
-const ColumnistAgGrid = () => {
+const ColumnistAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
@@ -22,7 +21,7 @@ const ColumnistAgGrid = () => {
 
     // 목록에서 아이템 클릭시 수정 모드.
     const handleClickListRow = (data) => {
-        history.push(`/columnist/${data.seqNo}`);
+        history.push(`${match.path}/${data.seqNo}`);
     };
 
     // 검색
@@ -68,7 +67,7 @@ const ColumnistAgGrid = () => {
                 size={search.size}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
-                selected={columnist.seqNo === '' ? '' : columnist.seqNo}
+                selected={columnist.seqNo}
             />
         </React.Fragment>
     );

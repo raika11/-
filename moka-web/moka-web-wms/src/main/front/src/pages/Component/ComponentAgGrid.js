@@ -10,7 +10,7 @@ import { GET_COMPONENT_LIST, getComponentList, changeSearchOption } from '@store
 /**
  * 컴포넌트 AgGrid 컴포넌트
  */
-const ComponentAgGrid = ({ onDelete }) => {
+const ComponentAgGrid = ({ onDelete, match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -53,16 +53,16 @@ const ComponentAgGrid = ({ onDelete }) => {
      */
     const handleRowClicked = useCallback(
         (component) => {
-            history.push(`/component/${component.componentSeq}`);
+            history.push(`${match.path}/${component.componentSeq}`);
         },
-        [history],
+        [history, match.path],
     );
 
     return (
         <>
             {/* 버튼 그룹 */}
             <div className="d-flex mb-10 justify-content-end">
-                <Button variant="positive" onClick={() => history.push('/component/add')} className="ft-12">
+                <Button variant="positive" onClick={() => history.push(`${match.path}/add`)} className="ft-12">
                     컴포넌트 등록
                 </Button>
             </div>

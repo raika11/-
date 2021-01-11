@@ -13,7 +13,7 @@ import { getPageTree, changeSearchOption, initialState, clearPage } from '@store
 /**
  * 페이지 검색 컴포넌트
  */
-const PageSearch = () => {
+const PageSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { latestDomainId, domainList, search: storeSearch } = useSelector(
@@ -42,8 +42,8 @@ const PageSearch = () => {
                 }),
             ),
         );
-        history.push('/page');
-    }, [dispatch, history, search]);
+        history.push(match.patch);
+    }, [dispatch, history, match.patch, search]);
 
     useEffect(() => {
         // latestDomainId 변경 => 템플릿의 search.domainId 변경
@@ -65,11 +65,9 @@ const PageSearch = () => {
     const handleChangeDomain = useCallback(
         (e) => {
             dispatch(changeLatestDomainId(e.target.value));
-
-            dispatch(clearPage());
-            history.push('/page');
+            history.push(match.path);
         },
-        [dispatch, history],
+        [dispatch, history, match.path],
     );
 
     return (

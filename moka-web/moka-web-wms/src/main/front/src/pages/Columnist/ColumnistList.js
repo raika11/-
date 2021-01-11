@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './ColumnistSearch';
 import AgGrid from './ColumnistAgGrid';
 
-const ColumnistList = () => {
+const ColumnistList = (props) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search {...props} />
+            <AgGrid {...props} />
         </>
     );
 };

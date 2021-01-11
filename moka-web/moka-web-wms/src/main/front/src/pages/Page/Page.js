@@ -27,7 +27,7 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 /**
  * 페이지 관리
  */
-const Page = () => {
+const Page = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -135,7 +135,7 @@ const Page = () => {
                             callback: (response) => {
                                 if (response.header.success) {
                                     toast.success(response.header.message);
-                                    history.push('/page');
+                                    history.push(match.path);
                                 } else {
                                     toast.fail(response.header.message);
                                 }
@@ -147,7 +147,7 @@ const Page = () => {
                 );
             }
         },
-        [dispatch, findNode, history, tree],
+        [dispatch, findNode, history, match.path, tree],
     );
 
     /**
@@ -223,18 +223,18 @@ const Page = () => {
                 bodyClassName="d-flex flex-column"
             >
                 <Suspense>
-                    <PageList onDelete={handleClickDelete} />
+                    <PageList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
 
             <Switch>
                 <Route
-                    path={['/page', '/page/:pageSeq']}
+                    path={[`${match.path}/add`, `${match.path}/:pageSeq`]}
                     exact
                     render={() => (
                         <>
                             {/* 에디터 */}
-                            <PageEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} />
+                            <PageEditor expansion={expansionState[1]} onExpansion={handleEditorExpansion} match={match} />
 
                             {/* 탭 */}
                             <MokaIconTabs
@@ -245,7 +245,7 @@ const Page = () => {
                                 tabWidth={412}
                                 tabs={[
                                     <Suspense>
-                                        <PageEdit onDelete={handleClickDelete} />
+                                        <PageEdit onDelete={handleClickDelete} match={match} />
                                     </Suspense>,
                                     <Suspense>
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickPageLoad} />

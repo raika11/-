@@ -2,7 +2,7 @@ package jmnet.moka.web.rcv.task.artafteriud.service;
 
 import java.util.List;
 import java.util.Map;
-import jmnet.moka.web.rcv.task.artafteriud.mapper.ArtAfterIudMapper;
+import jmnet.moka.web.rcv.mapper.moka.ArtAfterIudMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

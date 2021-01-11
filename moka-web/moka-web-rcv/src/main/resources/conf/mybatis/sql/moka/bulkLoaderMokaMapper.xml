@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.rcv.mapper.moka.BulkLoaderMokaMapper">
+  <select id="callUspBulkMgtListSel" resultType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_MGT_LIST_SEL(
+      )
+      }
+    ]]>
+  </select>
+
+  <delete id="callUspBulkMgtDel" parameterType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_MGT_DEL(
+      #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+</mapper>
+

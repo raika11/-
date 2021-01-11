@@ -4,26 +4,28 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
 import { useDispatch } from 'react-redux';
-import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { initialState } from '@store/snsManage/snsReducer';
 
-const SnsMetaSearch = ({ searchOptions }) => {
+const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
     const [disabled, setDisabled] = useState({ date: true });
     const [options, setOptions] = useState(searchOptions);
-    const dispatch = useDispatch();
 
     const handleSearchReset = () => {
         setDateType('today');
         setDisabled({ date: true });
-        setOptions(initialState.meta.search);
-        dispatch(changeSnsMetaSearchOptions(initialState.meta.search));
+
+        if (onReset instanceof Function) {
+            onReset(setOptions);
+        }
     };
 
     const handleClickSearch = () => {
-        dispatch(changeSnsMetaSearchOptions(options));
+        if (onSearch instanceof Function) {
+            onSearch(options);
+        }
+
         /*dispatch(getSNSMetaList({ payload: options }));*/
     };
 

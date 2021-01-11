@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import produce from 'immer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AgGridReact } from 'ag-grid-react';
-
 import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
 import DeskingReadyGrid from '@pages/Desking/components/DeskingReadyGrid';
@@ -11,6 +10,7 @@ import { unescapeHtml } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { putDeskingWorkListSort } from '@store/desking';
 import { findWork, makeHoverBox, getRow, getRowIndex, getMoveMode, clearHoverStyle, clearNextStyle, clearWorkStyle, findNextMainRow, addNextRowStyle } from '@utils/agGridUtil';
+import { param } from 'jquery';
 
 let hoverBox = makeHoverBox();
 
@@ -21,10 +21,7 @@ const DeskingWorkAgGrid = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete, deskingPart } = props;
     const { deskingWorks } = component;
     const dispatch = useDispatch();
-
-    const { IR_URL } = useSelector((store) => ({
-        IR_URL: store.app.IR_URL,
-    }));
+    const IR_URL = useSelector(({ app }) => app.IR_URL);
 
     // state
     const [rowData, setRowData] = useState([]);
@@ -119,9 +116,9 @@ const DeskingWorkAgGrid = (props) => {
 
     /**
      * 주기사간 이동(주기사의 관련기사 포함 이동)
-     * @param {*} api agGrid api
-     * @param {*} displayedRows 기사목록
-     * @param {*} overNode target기사
+     * @param {object} api agGrid api
+     * @param {array} displayedRows 기사목록
+     * @param {object} overNode target기사
      */
     const mainToMain = useCallback((api, displayedRows, overNode) => {
         let result = [];
@@ -209,9 +206,9 @@ const DeskingWorkAgGrid = (props) => {
 
     /**
      * 패밀리내에서 관련기사간 이동
-     * @param {} draggingNode 이동하는 기사
-     * @param {*} displayedRows 기사목록
-     * @param {*} overNode target기사
+     * @param {object} draggingNode 이동하는 기사
+     * @param {array} displayedRows 기사목록
+     * @param {object} overNode target기사
      */
     const relToRel = (draggingNode, displayedRows, overNode) => {
         // overNode기준으로 source의 순번을 조정
@@ -257,9 +254,9 @@ const DeskingWorkAgGrid = (props) => {
 
     /**
      * 패밀리내에서 관련기사를 주기사로 이동
-     * @param {} draggingNode 이동하는 기사
-     * @param {*} displayedRows 기사목록
-     * @param {*} overNode target기사
+     * @param {object} draggingNode 이동하는 기사
+     * @param {array} displayedRows 기사목록
+     * @param {object} overNode target기사
      */
     const relToMain = (draggingNode, displayedRows, overNode) => {
         let moveForward = draggingNode.childIndex > overNode.childIndex;
@@ -333,10 +330,8 @@ const DeskingWorkAgGrid = (props) => {
                     componentWorkSeq: component.seq,
                     datasetSeq: component.datasetSeq,
                     list: result,
-                    callback: ({ header }) => {
-                        if (header.success) {
-                            api.deselectAll();
-                        }
+                    callback: () => {
+                        api.deselectAll();
                     },
                 }),
             );
@@ -394,9 +389,7 @@ const DeskingWorkAgGrid = (props) => {
             const workElement = findWork(params.api.gridOptionsWrapper.layoutElements[0]);
             if (!workElement) return null;
             if (workElement.classList.contains('disabled')) return null;
-
-            const elements = document.elementsFromPoint(params.event.clientX, params.event.clientY);
-            if (!elements.find((e) => e.classList.contains('button-group'))) {
+            if (workElement.contains(hoverBox)) {
                 workElement.removeChild(hoverBox);
                 clearWorkStyle(workElement);
             }
@@ -414,7 +407,10 @@ const DeskingWorkAgGrid = (props) => {
             const sameNode = draggingNode === overNode;
 
             handleRowDragLeave(params);
-            if (sameNode) return;
+            if (sameNode) {
+                params.api.deselectAll();
+                return;
+            }
 
             let rollback = true,
                 type = '';
@@ -461,8 +457,6 @@ const DeskingWorkAgGrid = (props) => {
     const handleRowDataUpdated = useCallback(
         (params) => {
             setTimeout(function () {
-                params.api.refreshCells({ force: true });
-
                 if (draggingNodeData) {
                     let arr = [];
                     params.api.forEachNode((node) => {
@@ -470,10 +464,14 @@ const DeskingWorkAgGrid = (props) => {
                             arr.push(node);
                         }
                     });
+                    params.api.redrawRows({ rowNodes: arr });
                     params.api.resetRowHeights();
                     setHoverNode(null);
                     setNextNode(null);
                     setDraggingNodeData(null);
+                } else {
+                    params.api.redrawRows();
+                    params.api.resetRowHeights();
                 }
             });
         },
@@ -490,6 +488,8 @@ const DeskingWorkAgGrid = (props) => {
 
     /**
      * ag-grid onGridReady
+     * 1) componentAgGridInstances에 grid 추가
+     * 2) .button-group 드롭존 추가
      * @param {object} params onGridReady params
      */
     const handleGridReady = useCallback(
@@ -519,37 +519,37 @@ const DeskingWorkAgGrid = (props) => {
                 onDragLeave: (source) => {
                     clearWorkStyle(workElement);
                     if (source.type === 'rowDragEnd') {
-                        workElement.removeChild(hoverBox);
+                        if (workElement.querySelector('.is-over')) {
+                            workElement.removeChild(hoverBox);
+                        }
                     } else {
-                        const elements = document.elementsFromPoint(source.event.clientX, source.event.clientY);
-                        if (!elements.find((e) => e.classList.contains('component-work'))) {
+                        if (workElement.contains(hoverBox)) {
                             workElement.removeChild(hoverBox);
                         }
                     }
                 },
                 onDragStop: (source) => {
-                    let displayedRows = [];
+                    if (!source.node.data.rel) {
+                        // 주기사만 가능
+                        let displayedRows = [];
 
-                    for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
-                        displayedRows.push(params.api.getDisplayedRowAtIndex(i).data);
+                        for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
+                            displayedRows.push(params.api.getDisplayedRowAtIndex(i).data);
+                        }
+
+                        // 첫번째로 데이터 추가
+                        const result = mainToMain(source.api, displayedRows, null);
+                        setDraggingNodeData(source.node.data);
+                        dispatch(
+                            putDeskingWorkListSort({
+                                componentWorkSeq: component.seq,
+                                datasetSeq: component.datasetSeq,
+                                list: result,
+                                callback: () => params.api.deselectAll(),
+                            }),
+                        );
+                        dropzone.onDragLeave(source);
                     }
-
-                    // 첫번째로 데이터 추가
-                    const result = mainToMain(source.api, displayedRows, null);
-                    setDraggingNodeData(source.node.data);
-                    dispatch(
-                        putDeskingWorkListSort({
-                            componentWorkSeq: component.seq,
-                            datasetSeq: component.datasetSeq,
-                            list: result,
-                            callback: ({ header }) => {
-                                if (header.success) {
-                                    params.api.deselectAll();
-                                }
-                            },
-                        }),
-                    );
-                    dropzone.onDragLeave(source);
                 },
             };
             params.api.removeRowDropZone(dropzone);

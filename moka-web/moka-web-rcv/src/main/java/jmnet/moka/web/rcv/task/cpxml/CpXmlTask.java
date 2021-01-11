@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.rcv.code.OpCode;
 import jmnet.moka.web.rcv.common.task.Task;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
@@ -16,6 +17,7 @@ import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleListVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleTotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
+import jmnet.moka.web.rcv.task.rcvartreg.RcvArtRegTask;
 import jmnet.moka.web.rcv.taskinput.FileTaskInput;
 import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
 import jmnet.moka.web.rcv.util.FtpUtil;
@@ -76,7 +78,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
     protected boolean doVerifyData(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData) {
         final CpArticleTotalVo cpArticleTotalVo = taskInputData.getTotalData();
         if (cpArticleTotalVo == null) {
-            log.error("cp ArticleTotalVo를 생성할 수 없습니다.");
+            log.error("XML 파싱 에러, cp ArticleTotalVo를 생성할 수 없습니다.");
             return false;
         }
 
@@ -239,9 +241,11 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
 
     @Override
     protected void doAfterProcess(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
-            throws RcvDataAccessException {
+            throws RcvDataAccessException, InterruptedException {
         super.doAfterProcess(taskInputData);
 
         taskInputData.doAfterProcess();
+
+        getTaskManager().operation(OpCode.FORCE_EXECUTE, RcvArtRegTask.class);
     }
 }

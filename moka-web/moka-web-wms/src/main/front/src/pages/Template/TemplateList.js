@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './TemplateSearch';
 import AgGrid from './TemplateAgGrid';
 
-const TemplateList = ({ onDelete }) => {
+const TemplateList = ({ onDelete, match }) => {
     return (
         <>
             <Search />
-            <AgGrid onDelete={onDelete} />
+            <AgGrid onDelete={onDelete} match={match} />
         </>
     );
 };

@@ -66,6 +66,7 @@ public class ItemVo implements Serializable {
     private String poster;
 
     private String title;
+    private String artUrl;
     private String artThumb;
     private String compId;
     private String varcharKey;

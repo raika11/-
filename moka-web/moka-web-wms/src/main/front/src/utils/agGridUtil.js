@@ -21,8 +21,17 @@ export const getRowIndex = (event) => {
     return -1;
 };
 
+/**
+ * .component-work 찾음
+ * @param {*} node node
+ */
 export const findWork = (node) => (node && node.classList.contains('component-work') ? node : node.parentElement ? findWork(node.parentElement) : null);
 
+/**
+ * 현재 node 기준으로 다음 메인 기사 찾아서 리턴
+ * @param {*} node node
+ * @returns {object} { type: none|last|last-rel|next, node: node }
+ */
 export const findNextMainRow = (node) => {
     let result = { type: 'none', node: null };
     if (node) {
@@ -52,6 +61,11 @@ export const findNextMainRow = (node) => {
     return result;
 };
 
+/**
+ * 현재 node 기준으로 이전 메인 기사 찾아서 리턴
+ * @param {*} node node
+ * @returns {object} { type: none|first|prev, node: node }
+ */
 export const findPreviousMainRow = (node) => {
     let result = { type: 'none', node: null };
     if (node) {
@@ -81,12 +95,19 @@ export const findPreviousMainRow = (node) => {
     return result;
 };
 
+/**
+ * .component-work 안에 추가할 hoverBox element
+ */
 export const makeHoverBox = () => {
     let hoberBox = document.createElement('div');
     hoberBox.classList.add('is-over');
     return hoberBox;
 };
 
+/**
+ * next 클래스 추가
+ * @param {*} node node
+ */
 export const clearNextStyle = (node) => {
     if (node) {
         node.classList.remove('next');
@@ -94,6 +115,10 @@ export const clearNextStyle = (node) => {
     }
 };
 
+/**
+ * hover 클래스 제거
+ * @param {*} node node
+ */
 export const clearHoverStyle = (node) => {
     if (node) {
         node.classList.remove('hover');
@@ -102,10 +127,18 @@ export const clearHoverStyle = (node) => {
     }
 };
 
+/**
+ * workElement의 hover 클래스 제거
+ * @param {*} node node
+ */
 export const clearWorkStyle = (node) => {
     node.classList.remove('hover');
 };
 
+/**
+ * hover 클래스 제거
+ * @param {object} nextRow
+ */
 export const addNextRowStyle = (nextRow) => {
     if (nextRow.type === 'none') return;
     if (nextRow.type === 'next') {

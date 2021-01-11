@@ -22,6 +22,9 @@ public interface JamXmlService {
     List<Map<String, String>> selectIssueSeriesReporter(String tmpRepList, String tmpKwdList)
             throws RcvDataAccessException;
 
+    void selectMasterCodeByContCode(JamArticleTotalVo jamArticle)
+            throws RcvDataAccessException;
+
     void insertReceiveJobStep( JamArticleTotalVo articleTotal, String errorMessage )
             throws RcvDataAccessException;
 

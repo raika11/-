@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.util;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -105,10 +106,10 @@ public class RcvImageUtil {
                 newHeight = maxHeight;
             }
 
-            BufferedImage output = new BufferedImage(newWidth, newHeight, image.getType());
-
+            BufferedImage output = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
             Graphics g = output.createGraphics();
-            g.drawImage(image, 0, 0, newWidth, newHeight, null);
+            //g.drawImage(image, 0, 0, newWidth, newHeight, null);
+            g.drawImage( image, 0, 0, newWidth, newHeight, Color.WHITE, null);
             g.dispose();
 
             ImageIO.write(output, "JPG", file);

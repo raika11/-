@@ -352,7 +352,16 @@ const SnsMetaEdit = () => {
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
                         <MokaInputLabel as="none" label="예약" />
-                        <Form.Check label="예약 노출" type="checkbox" name="fb-isReserve" className="mr-2" onChange={handleChangeCheckedValue} checked={edit.fb.isReserve} custom />
+                        <Form.Check
+                            label="예약 노출"
+                            type="checkbox"
+                            name="fb-isReserve"
+                            id="fb-isReserve"
+                            className="mr-2"
+                            onChange={handleChangeCheckedValue}
+                            checked={edit.fb.isReserve}
+                            custom
+                        />
                         <MokaInput
                             as="dateTimePicker"
                             name="fb-reserveDt"
@@ -478,7 +487,16 @@ const SnsMetaEdit = () => {
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
                         <MokaInputLabel as="none" label="예약" />
-                        <Form.Check label="예약 노출" type="checkbox" className="mr-2" name="tw-isReserve" onChange={handleChangeCheckedValue} checked={edit.tw.isReserve} custom />
+                        <Form.Check
+                            label="예약 노출"
+                            type="checkbox"
+                            className="mr-2"
+                            name="tw-isReserve"
+                            id="tw-isReserve"
+                            onChange={handleChangeCheckedValue}
+                            checked={edit.tw.isReserve}
+                            custom
+                        />
                         <MokaInput
                             as="dateTimePicker"
                             name="tw-reserveDt"

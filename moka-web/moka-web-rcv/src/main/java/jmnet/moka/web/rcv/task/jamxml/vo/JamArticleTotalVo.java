@@ -1,6 +1,8 @@
 package jmnet.moka.web.rcv.task.jamxml.vo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,8 +41,7 @@ public class JamArticleTotalVo extends TotalVo<JamArticleVo> {
 
     private int totalId;
 
-    private String servCode;
-    private String sectCode;
+    private List<String> masterCodeList = new ArrayList<>();
 
     private int artHistoryId;
     private int artHistoryStep;
@@ -57,7 +58,8 @@ public class JamArticleTotalVo extends TotalVo<JamArticleVo> {
     private int curIndex;
     private ReporterVo curReporter;
     private String curKeyword;
-    private String curCategory;
+    private String curContCode;
+    private String curMasterCode;
     private String curCompType;
     private int curCompId;
     private ItemVo curItem;

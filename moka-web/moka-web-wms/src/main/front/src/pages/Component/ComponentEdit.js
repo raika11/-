@@ -18,7 +18,7 @@ import DetailPagingForm from './components/DetailPagingForm';
 /**
  * 컴포넌트 정보/수정 컴포넌트
  */
-const ComponentEdit = ({ onDelete }) => {
+const ComponentEdit = ({ onDelete, match }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -89,7 +89,7 @@ const ComponentEdit = ({ onDelete }) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`/component/${body.componentSeq}`);
+                        history.push(`${match.path}/${body.componentSeq}`);
                     } else {
                         toast.fail(header.message);
                     }
@@ -182,8 +182,7 @@ const ComponentEdit = ({ onDelete }) => {
      * 취소
      */
     const handleClickCancle = () => {
-        history.push('/component');
-        dispatch(clearComponent());
+        history.push(match.patch);
     };
 
     useEffect(() => {
@@ -222,6 +221,13 @@ const ComponentEdit = ({ onDelete }) => {
             setError(invalidListToError(invalidList));
         }
     }, [invalidList]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearComponent());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '정보' : '등록'}`} className="flex-fill mr-gutter" loading={loading} bodyClassName="pb-0 d-flex flex-column">

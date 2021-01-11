@@ -2,6 +2,7 @@ package jmnet.moka.web.rcv.task.base;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -13,12 +14,15 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
+import jmnet.moka.web.rcv.task.bulkdump.service.BulkDumpService;
+import jmnet.moka.web.rcv.task.bulkloader.service.BulkLoaderService;
 import jmnet.moka.web.rcv.task.calljamapi.service.CallJamApiService;
-import jmnet.moka.web.rcv.task.cppubxml.service.CpPubXmlService;
+import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
 import jmnet.moka.web.rcv.task.cpxml.service.CpXmlService;
 import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
 import jmnet.moka.web.rcv.task.jamxml.service.XmlGenService;
 import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
+import jmnet.moka.web.rcv.task.weathershko.service.WeatherShkoService;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.Getter;
@@ -58,7 +62,7 @@ public class TaskManager {
     CpXmlService cpXmlService;
 
     @Autowired
-    CpPubXmlService cpPubXmlService;
+    PubXmlService pubXmlService;
 
     @Autowired
     RcvArtRegService rcvArtRegService;
@@ -68,6 +72,15 @@ public class TaskManager {
 
     @Autowired
     ArtAfterIudService artAfterIudService;
+
+    @Autowired
+    BulkLoaderService bulkLoaderService;
+
+    @Autowired
+    WeatherShkoService weatherShkoService;
+
+    @Autowired
+    BulkDumpService bulkDumpService;
 
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;
@@ -114,6 +127,13 @@ public class TaskManager {
             throws InterruptedException {
         for (TaskGroup taskGroup : this.taskGroups) {
             taskGroup.operation(opCode, id, responseMap);
+        }
+    }
+
+    public void operation(int opCode, Type type)
+            throws InterruptedException {
+        for (TaskGroup taskGroup : this.taskGroups) {
+            taskGroup.operation(opCode, type);
         }
     }
 

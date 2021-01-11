@@ -214,7 +214,7 @@ const routes = [
         displayName: '기자관리',
         component: Reporter,
         layout: SidebarOpenLayout,
-        nonResponsive: true,
+        nonResponsive: false,
         exact: false,
         strict: true,
     },

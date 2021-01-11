@@ -34,11 +34,15 @@ export default [
     {
         headerName: '상태정보',
         field: 'status',
-        width: 80,
+        width: 63,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         cellRendererFramework: ({ value }) => {
             let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
+            return (
+                <div className="d-flex align-items-center h-100 justify-content-center">
+                    <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />
+                </div>
+            );
         },
     },
     {

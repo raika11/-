@@ -26,14 +26,14 @@ const Columnist = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={940} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" header={false}>
+            <MokaCard width={940} className="mr-gutter" bodyClassName="d-flex flex-column" title="칼럼니스트 관리">
                 <Suspense>
-                    <ColumnistList />
+                    <ColumnistList match={match} />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정창 */}
-            <Route path={([`${match.path}/add`], [`${match.path}/:seqNo`])} exact render={(props) => <ColumnistEdit {...props} />} />
+            <Route path={([`${match.path}/add`], [`${match.path}/:seqNo`])} exact render={(props) => <ColumnistEdit {...props} match={match} />} />
         </div>
     );
 };

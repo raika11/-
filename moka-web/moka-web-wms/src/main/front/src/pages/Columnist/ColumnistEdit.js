@@ -10,7 +10,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
 
-const ColumnistEdit = ({ history }) => {
+const ColumnistEdit = ({ history, match }) => {
     const dispatch = useDispatch();
     const { seqNo } = useParams();
     const imgFileRef = useRef(null);
@@ -167,6 +167,7 @@ const ColumnistEdit = ({ history }) => {
                 callback: (response) => {
                     if (response.header.success) {
                         setError(setErrorInitialize);
+                        history.push(`${match.path}/${response.body.seqNo}`);
                         toast.success(response.header.message);
                     }
                 },
@@ -198,7 +199,7 @@ const ColumnistEdit = ({ history }) => {
     // 취소 버튼 클릭.
     const handleClickCancleButton = () => {
         dispatch(clearColumnist());
-        history.push(`/columnist`);
+        history.push(match.path);
     };
 
     // 기자번호 삭제.
@@ -277,7 +278,9 @@ const ColumnistEdit = ({ history }) => {
             setSelectRepoterData(repoterDataInitialize);
             // setEditDisabled(setEditDisabledInitialize);
             setError(setErrorInitialize);
+            dispatch(clearColumnist());
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

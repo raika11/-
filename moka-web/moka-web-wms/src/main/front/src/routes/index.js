@@ -488,7 +488,16 @@ const routes = [
         exact: false,
         strict: true,
     },
-
+    {
+        path: '/boards-list',
+        name: 'boards-list',
+        displayName: '게시글 게시판 관리',
+        component: Boards,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
     {
         path: '/banned-id',
         name: 'Banned-id',

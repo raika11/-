@@ -130,6 +130,7 @@ public abstract class Task<T> extends TaskBase {
         stopServer();
     }
 
+    @SuppressWarnings("EmptyMethod")
     protected void stopServer() {
     }
 }

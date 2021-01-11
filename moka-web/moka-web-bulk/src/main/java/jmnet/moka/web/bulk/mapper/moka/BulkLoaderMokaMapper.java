@@ -1,4 +1,4 @@
-package jmnet.moka.web.rcv.mapper.moka;
+package jmnet.moka.web.bulk.mapper.moka;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.web.rcv.mapper.moka
+ * Package : jmnet.moka.web.bulk.mapper.moka
  * ClassName : BulkLoaderMokaMapper
  * Created : 2020-12-11 011 sapark
  * </pre>

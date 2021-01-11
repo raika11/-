@@ -46,6 +46,11 @@ public class RcvArtRegServiceImpl implements RcvArtRegService{
     }
 
     @Override
+    public void setUspRcvArticleIudDelete(Map<String, Object> compMap) {
+        rcvArtRegMapper.callUspRcvArticleIudDelete(compMap);
+    }
+
+    @Override
     public void getUspRcvCodeConvSelByRid(JamArticleTotalVo articleTotal) {
         rcvArtRegMapper.callUspRcvCodeConvSelByRid(articleTotal);
     }

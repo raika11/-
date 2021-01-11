@@ -12,6 +12,17 @@
     ]]>
   </select>
 
+  <delete id="callUspRcvArticleIudDelete" parameterType="HashMap" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_RCV_ARTICLE_IUD_DEL(
+      #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{IUD_RID, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
   <delete id="callUspRcvArticleIudComplete" parameterType="JamArticleTotalVo" statementType="CALLABLE">
     <![CDATA[
     {

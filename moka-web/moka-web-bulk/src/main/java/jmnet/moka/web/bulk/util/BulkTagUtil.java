@@ -1,4 +1,4 @@
-package jmnet.moka.web.rcv.util;
+package jmnet.moka.web.bulk.util;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -8,15 +8,15 @@ import java.util.regex.Pattern;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.web.rcv.util
- * ClassName : RcvTagUtil
+ * Package : jmnet.moka.web.bulk.util
+ * ClassName : BulkTagUtil
  * Created : 2021-01-05 005 sapark
  * </pre>
  *
  * @author sapark
  * @since 2021-01-05 005 오전 11:50
  */
-public class RcvTagUtil {
+public class BulkTagUtil {
     public static String ripTag(String str, String start, String end) {
         do {
             final int first = str.toLowerCase().indexOf(start.toLowerCase());

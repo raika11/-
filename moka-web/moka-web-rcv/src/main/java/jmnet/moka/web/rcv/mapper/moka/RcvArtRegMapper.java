@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 public interface RcvArtRegMapper {
     List<Map<String, Object>> callUspRcvArticleIudSel();
     void callUspRcvArticleIudComplete( JamArticleTotalVo articleTotal );
+    void callUspRcvArticleIudDelete(Map<String, Object> compMap);
 
     void callUspRcvCodeConvSelByRid( JamArticleTotalVo articleTotal );
     List<Map<String, String>> callUspRcvArticleReporterSelByRid(JamArticleTotalVo articleTotal);

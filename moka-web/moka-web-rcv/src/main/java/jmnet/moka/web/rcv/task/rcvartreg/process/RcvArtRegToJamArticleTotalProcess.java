@@ -55,7 +55,7 @@ public class RcvArtRegToJamArticleTotalProcess {
         /* 자동치환 분류코드표 (포털, 일단)은 범위에 들어가지 않는다. */
         rcvArtRegService.getUspRcvCodeConvSelByRid( articleTotal );
         if( McpString.isNullOrEmpty( articleTotal.getCurMasterCode() )) {
-            taskInputData.logError("Rid=[{}] code not mapping move to TB_RCV_ARTICLE_BASIC_NOTMATCH ");
+            taskInputData.logError("Rid=[{}] code not mapping move to TB_RCV_ARTICLE_BASIC_NOTMATCH ", articleTotal.getRid());
             return null;
         }
         articleTotal.getMasterCodeList().add(articleTotal.getCurMasterCode());

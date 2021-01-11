@@ -83,6 +83,7 @@ public class RcvImageUtil {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean resizeMaxWidthHeight(String targetImage, String sourceUrl, int maxWidth, int maxHeight) {
         try {
             File file = new File(targetImage);

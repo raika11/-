@@ -15,6 +15,7 @@ import jmnet.moka.web.rcv.task.rcvartreg.process.RcvArtRegToJamArticleTotalProce
 import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
 import jmnet.moka.web.rcv.taskinput.DBTaskInput;
 import jmnet.moka.web.rcv.taskinput.DBTaskInputData;
+import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import org.w3c.dom.Node;
 
@@ -60,7 +61,7 @@ public class RcvArtRegTask extends Task<DBTaskInputData> {
         final RcvArtRegService rcvArtRegService = getTaskManager().getRcvArtRegService();
         for( Map<String, Object> map : taskInputData.getInputData() ) {
             try {
-                doProcessChild(taskInputData, RcvArtRegToJamArticleTotalProcess.getJamArticleTotalVo(map, rcvArtRegService, rcvConfiguration, taskInputData));
+                doProcessChild(map, taskInputData, RcvArtRegToJamArticleTotalProcess.getJamArticleTotalVo(map, rcvArtRegService, rcvConfiguration, taskInputData));
                 rcvArtRegService.insertReceiveJobStep( map, "");
             }
             catch (Exception e){
@@ -70,10 +71,15 @@ public class RcvArtRegTask extends Task<DBTaskInputData> {
         }
     }
 
-    private void doProcessChild(DBTaskInputData taskInputData, JamArticleTotalVo articleTotal) {
-        XmlGenProcess.doProcess( taskInputData, articleTotal, getTaskManager());
-
+    private void doProcessChild(Map<String, Object> map, DBTaskInputData taskInputData, JamArticleTotalVo articleTotal) {
         final RcvArtRegService rcvArtRegService = getTaskManager().getRcvArtRegService();
-        rcvArtRegService.setUspRcvArticleIudComplete(articleTotal);
+        if( articleTotal == null ){
+            taskInputData.logError("데이터를 찾을 수 없거나 코드가 없습니다. RID = {} , IUD = {} ", RcvUtil.getMapStringData(map,"IUD_RID"), RcvUtil.getMapStringData(map,"IUD"));
+            rcvArtRegService.setUspRcvArticleIudDelete(map);
+        }
+        else {
+            XmlGenProcess.doProcess(taskInputData, articleTotal, getTaskManager());
+            rcvArtRegService.setUspRcvArticleIudComplete(articleTotal);
+        }
     }
 }

@@ -1,34 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaImage, MokaInputLabel } from '@/components';
+import ImageUploadButton from './components/ImageUploadButton';
+import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
+import { EditThumbModal } from '@pages/Desking/modals';
 
-export const options = [
+const options = [
     { value: 'test1', label: '정치' },
     { value: 'test2', label: '사회' },
     { value: 'test3', label: '경제' },
 ];
 
-const MicAgendaEdit = () => {
+const deskingData = {
+    artType: 'B',
+    bodyHead: null,
+    componentSeq: 55,
+    componentWorkSeq: 15583,
+    contentId: '23854068',
+    contentOrd: 1,
+    contentOrdEx: '01',
+    contentType: null,
+    datasetSeq: 73,
+    deskingPart: 'THUMB_FILE_NAME,TITLE_LOC,TITLE,SUB_TITLE,BODY_HEAD',
+    deskingSeq: 7712,
+    distDt: '2020-08-21 21:26:24',
+    gridType: 'DESKING',
+    iconFileName: null,
+    irThumbFileName: 'https://stg-wimage.joongang.co.kr/1000/politics/202012/23854068_73_20201222154141.jpeg',
+    lang: 'KR',
+    linkTarget: null,
+    linkUrl: null,
+    nameplate: null,
+    nameplateTarget: null,
+    nameplateUrl: null,
+    parentContentId: null,
+    regDt: '2021-01-12 14:13:14',
+    rel: false,
+    relOrd: 1,
+    relOrdEx: '',
+    relSeqs: [77360],
+    seq: 77359,
+    sourceCode: '3',
+    subTitle: null,
+    thumbFileName: 'https://stg-wimage.joongang.co.kr/1000/politics/202012/23854068_73_20201222154141.jpeg',
+    thumbHeight: 180,
+    thumbSize: 50149,
+    thumbWidth: 290,
+    title: '檢, ‘공금으로 어록집 발간 의혹’ 이찬희 변협회장 불기소 처분',
+    titleLoc: null,
+    titlePrefix: null,
+    titlePrefixLoc: null,
+    titleSize: null,
+    vodUrl: null,
+};
+
+const MicAgendaEdit = (props) => {
+    const { seqNo } = useParams();
     const [temp, setTemp] = useState({});
     const [defaultValue, setDefaultValue] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
+    const [showPollModal, setShowPollModal] = useState(false);
     const [showAsModal, setShowAsModal] = useState(false);
-    // const handleChangeCategory = (list) => {
-    //     let result = [];
-    //     if (list) {
-    //         result = list.map((c) => c.value);
-    //     }
-    //     setCategoryList(result);
-    // };
+    const [showEtModal, setShowEtModal] = useState(false);
+
     const handleClickSave = () => {};
+
     const handleClickCancel = () => {};
+
     const handleClickDelete = () => {};
-    const handleClickVote = () => {};
+
+    const handleClickPoll = () => {
+        setShowPollModal(true);
+    };
+
     const handleClickArticleSearch = () => {
         setShowAsModal(true);
+    };
+
+    const handleClickThumbAdd = () => {
+        setShowEtModal(true);
     };
 
     useEffect(() => {
@@ -51,11 +105,18 @@ const MicAgendaEdit = () => {
             className="w-100"
             footerClassName="justify-content-center"
             footer
-            footerButtons={[
-                { text: '수정', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancel },
-                { text: '삭제', variant: 'negative', onClick: handleClickDelete },
-            ]}
+            footerButtons={
+                seqNo
+                    ? [
+                          { text: '수정', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
+                          { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancel },
+                          { text: '삭제', variant: 'negative', onClick: handleClickDelete },
+                      ]
+                    : [
+                          { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
+                          { text: '취소', variant: 'negative', onClick: handleClickCancel },
+                      ]
+            }
         >
             <Form>
                 <Form.Row className="mb-2">
@@ -142,7 +203,7 @@ const MicAgendaEdit = () => {
                     <MokaInputLabel
                         label="관련기사 URL"
                         labelClassName="d-flex justify-content-end"
-                        className="mb-0"
+                        className="mb-0 flex-fill"
                         name="articleUrl"
                         value={temp.articleUrl}
                         onChange={(e) => setTemp({ ...temp, articleUrl: e.target.value })}
@@ -238,16 +299,18 @@ const MicAgendaEdit = () => {
                     // isInvalid={}
                 />
                 <Form.Row className="mb-3">
-                    <MokaInputLabel
-                        label="찬반 투표"
-                        labelClassName="d-flex justify-content-end"
-                        className="mb-0 mr-2"
-                        name="vote"
-                        value={temp.vote}
-                        onChange={(e) => setTemp({ ...temp, vote: e.target.value })}
-                        // isInvalid={}
-                    />
-                    <Button variant="searching" onClick={handleClickVote}>
+                    <Col xs={6} className="p-0">
+                        <MokaInputLabel
+                            label="찬반 투표"
+                            labelClassName="d-flex justify-content-end"
+                            className="mb-0 mr-2"
+                            name="vote"
+                            value={temp.vote}
+                            onChange={(e) => setTemp({ ...temp, vote: e.target.value })}
+                            // isInvalid={}
+                        />
+                    </Col>
+                    <Button variant="searching" onClick={handleClickPoll}>
                         투표 찾기
                     </Button>
                 </Form.Row>
@@ -256,10 +319,12 @@ const MicAgendaEdit = () => {
                         <div className="d-flex">
                             <MokaInputLabel label="배경이미지(PC)\n(800*600)" labelClassName="d-flex justify-content-end" className="mb-0" as="none" />
                             <div className="d-flex flex-column">
-                                <MokaImage img={temp.pcImg} width={280} height={170} className="mb-1" />
+                                <MokaImage img={temp.pcImg} alt="배경이미지(PC) (800*600)" width={280} height={170} className="mb-1" size="sm" />
                                 <div className="d-flex justify-content-between">
-                                    <Button variant="positive">신규 등록</Button>
-                                    <Button variant="negative">삭제</Button>
+                                    <ImageUploadButton fileUrl={(url) => setTemp({ ...temp, pcImg: url })} />
+                                    <Button variant="negative" size="sm">
+                                        삭제
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -268,10 +333,12 @@ const MicAgendaEdit = () => {
                         <div className="d-flex">
                             <MokaInputLabel label="배경이미지(모바일)\n(600*500)" labelClassName="d-flex justify-content-end" className="mb-0" as="none" />
                             <div className="d-flex flex-column">
-                                <MokaImage img={temp.mobileImg} width={280} height={170} className="mb-1" />
+                                <MokaImage img={temp.mobileImg} alt="배경이미지(모바일) (600*500)" width={280} height={170} className="mb-1" />
                                 <div className="d-flex justify-content-between">
-                                    <Button variant="positive">신규 등록</Button>
-                                    <Button variant="negative">삭제</Button>
+                                    <ImageUploadButton fileUrl={(url) => setTemp({ ...temp, mobileImg: url })} size="sm" />
+                                    <Button variant="negative" size="sm">
+                                        삭제
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +354,7 @@ const MicAgendaEdit = () => {
                     <div>
                         <MokaImage img={temp.articleImg1} width={180} height={170} className="mb-1" />
                         <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm">
+                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
                                 신규 등록
                             </Button>
                             <Button variant="negative" size="sm">
@@ -321,7 +388,7 @@ const MicAgendaEdit = () => {
                 </Form.Row>
                 <Form.Row className="mb-3 align-items-center">
                     <div className="d-flex flex-column align-items-center">
-                        <MokaInputLabel label="관련 기사 1" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
+                        <MokaInputLabel label="관련 기사 2" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
                         <Button variant="negative" style={{ width: 66 }}>
                             삭제
                         </Button>
@@ -329,7 +396,7 @@ const MicAgendaEdit = () => {
                     <div>
                         <MokaImage img={temp.articleImg2} width={180} height={170} className="mb-1" />
                         <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm">
+                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
                                 신규 등록
                             </Button>
                             <Button variant="negative" size="sm">
@@ -363,7 +430,7 @@ const MicAgendaEdit = () => {
                 </Form.Row>
                 <Form.Row className="mb-3 align-items-center">
                     <div className="d-flex flex-column align-items-center">
-                        <MokaInputLabel label="관련 기사 1" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
+                        <MokaInputLabel label="관련 기사 3" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
                         <Button variant="negative" style={{ width: 66 }}>
                             삭제
                         </Button>
@@ -371,7 +438,7 @@ const MicAgendaEdit = () => {
                     <div>
                         <MokaImage img={temp.articleImg3} width={180} height={170} className="mb-1" />
                         <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm">
+                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
                                 신규 등록
                             </Button>
                             <Button variant="negative" size="sm">
@@ -405,7 +472,7 @@ const MicAgendaEdit = () => {
                 </Form.Row>
                 <Form.Row className="mb-3 align-items-center">
                     <div className="d-flex flex-column align-items-center">
-                        <MokaInputLabel label="관련 기사 1" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
+                        <MokaInputLabel label="관련 기사 4" labelClassName="d-flex justify-content-end" className="mb-2" as="none" />
                         <Button variant="negative" style={{ width: 66 }}>
                             삭제
                         </Button>
@@ -413,7 +480,7 @@ const MicAgendaEdit = () => {
                     <div>
                         <MokaImage img={temp.articleImg4} width={180} height={170} className="mb-1" />
                         <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm">
+                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
                                 신규 등록
                             </Button>
                             <Button variant="negative" size="sm">
@@ -446,7 +513,9 @@ const MicAgendaEdit = () => {
                     </div>
                 </Form.Row>
             </Form>
+            <RelationPollModal show={showPollModal} onHide={() => setShowPollModal(false)} />
             <ArticleListModal show={showAsModal} onHide={() => setShowAsModal(false)} />
+            <EditThumbModal show={showEtModal} onHide={() => setShowEtModal(false)} deskingWorkData={deskingData} />
         </MokaCard>
     );
 };

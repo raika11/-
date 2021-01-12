@@ -4,10 +4,11 @@ import { columnDefs } from '@pages/Survey/Poll/components/RelationPollAgGridColu
 
 const RelationPollModalAgGridComponent = ({ polls, onAdd }) => {
     const handleClickAdd = (data) => {
-        console.log('polls', polls);
-        console.log('data', data);
+        // console.log('polls', polls);
+        // console.log('data', data);
         onAdd([...polls, { id: data.id, title: data.title }]);
     };
+
     return (
         <MokaTable
             columnDefs={columnDefs}

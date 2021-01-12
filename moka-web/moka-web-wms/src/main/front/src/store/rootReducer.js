@@ -38,6 +38,7 @@ import special from '@store/special/specialReducer';
 import comment from '@store/commentManage/commentReducer';
 import board from '@store/board/boardsReducer';
 import seoMeta from '@store/seoMeta/seoMetaReducer';
+import jpod from '@store/jpod/jpodReducer';
 
 export default combineReducers({
     toastr,
@@ -78,4 +79,5 @@ export default combineReducers({
     comment,
     board,
     seoMeta,
+    jpod,
 });

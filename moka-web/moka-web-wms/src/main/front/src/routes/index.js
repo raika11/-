@@ -44,6 +44,8 @@ const Mic = React.lazy(() => import('@pages/Mic'));
 const SEOMeta = React.lazy(() => import('@pages/SEOMeta'));
 const ArticleCdn = React.lazy(() => import('@pages/ArticleCdn'));
 const SearchLog = React.lazy(() => import('@pages/Search/SearchLog'));
+const JpodChannel = React.lazy(() => import('@pages/Jpod/JpodChannel'));
+const JpodEpisode = React.lazy(() => import('@pages/Jpod/JpodEpisode'));
 
 const routes = [
     {
@@ -562,6 +564,26 @@ const routes = [
         name: 'search-log',
         displayName: '검색 로그',
         component: SearchLog,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/jpod-channel',
+        name: 'jpod-channel',
+        displayName: 'Jpod 채널관리',
+        component: JpodChannel,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/jpod-episode',
+        name: 'jpod-episode',
+        displayName: 'Jpod 에피소드관리',
+        component: JpodEpisode,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

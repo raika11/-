@@ -16,7 +16,7 @@ const SetHolidayModal = (props) => {
             headerClassName="justify-content-start"
             bodyClassName="pb-0"
             buttons={[
-                { text: '저장', variant: 'primary' },
+                { text: '저장', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: () => onHide() },
             ]}
             draggable

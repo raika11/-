@@ -26,7 +26,7 @@ const SummaryHolidayModal = (props) => {
             onHide={onHide}
             headerClassName="justify-content-start"
             bodyClassName="pb-0"
-            buttons={[{ text: '상세 보기', variant: 'primary', onClick: handleClickTour }]}
+            buttons={[{ text: '상세 보기', variant: 'positive', onClick: handleClickTour }]}
             draggable
         >
             <Form>

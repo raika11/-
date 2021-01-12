@@ -29,7 +29,7 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 데이터셋 리스트 공통 모달
+ * 기자 목록 모달
  */
 const RepoterlistModal = (props) => {
     const dispatch = useDispatch();

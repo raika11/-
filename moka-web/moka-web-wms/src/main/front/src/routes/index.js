@@ -36,15 +36,13 @@ const Poll = React.lazy(() => import('@pages/Survey/Poll'));
 const RcvArticle = React.lazy(() => import('@pages/RcvArticle'));
 const Comment = React.lazy(() => import('@pages/CommentManage/Comment'));
 const Boards = React.lazy(() => import('@pages/Boards'));
-const TourMonth = React.lazy(() => import('@pages/TourMonth'));
-const TourList = React.lazy(() => import('@pages/TourList'));
-const TourSet = React.lazy(() => import('@pages/TourSet'));
-const TourMsgSet = React.lazy(() => import('@pages/TourMsgSet'));
+const Tour = React.lazy(() => import('@pages/Tour'));
 const Article = React.lazy(() => import('@pages/Article'));
 const Quiz = React.lazy(() => import('@pages/Survey/Quiz'));
 const CommentBanned = React.lazy(() => import('@pages/CommentManage/Banned'));
 const Mic = React.lazy(() => import('@pages/Mic'));
 const SEOMeta = React.lazy(() => import('@pages/SEOMeta'));
+const ArticleCdn = React.lazy(() => import('@pages/ArticleCdn'));
 
 const routes = [
     {
@@ -412,7 +410,7 @@ const routes = [
         path: '/tour-month',
         name: '/tour-month',
         displayName: '월별 현황',
-        component: TourMonth,
+        component: Tour,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,
@@ -422,7 +420,7 @@ const routes = [
         path: '/tour-list',
         name: '/tour-list',
         displayName: '신청 목록',
-        component: TourList,
+        component: Tour,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,
@@ -432,7 +430,7 @@ const routes = [
         path: '/tour-set',
         name: 'tour-set',
         displayName: '기본 설정',
-        component: TourSet,
+        component: Tour,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,
@@ -442,7 +440,7 @@ const routes = [
         path: '/tour-message',
         name: 'tour-message',
         displayName: '메세지 설정',
-        component: TourMsgSet,
+        component: Tour,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,
@@ -543,6 +541,16 @@ const routes = [
         name: 'seo-meta',
         displayName: 'SEO 메타관리',
         component: SEOMeta,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/article-cdn',
+        name: 'articleCdn',
+        displayName: '트래픽 분산(기사) 관리',
+        component: ArticleCdn,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaImage, MokaInputLabel } from '@/components';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 export const options = [
     { value: 'test1', label: '정치' },
@@ -14,6 +15,7 @@ const MicAgendaEdit = () => {
     const [temp, setTemp] = useState({});
     const [defaultValue, setDefaultValue] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
+    const [showAsModal, setShowAsModal] = useState(false);
     // const handleChangeCategory = (list) => {
     //     let result = [];
     //     if (list) {
@@ -25,6 +27,9 @@ const MicAgendaEdit = () => {
     const handleClickCancel = () => {};
     const handleClickDelete = () => {};
     const handleClickVote = () => {};
+    const handleClickArticleSearch = () => {
+        setShowAsModal(true);
+    };
 
     useEffect(() => {
         let cts = [];
@@ -308,7 +313,9 @@ const MicAgendaEdit = () => {
                                 value={temp.articleTitle1}
                                 onChange={(e) => setTemp({ ...temp, articleTitle1: e.target.value })}
                             />
-                            <Button variant="searching">기사 찾기</Button>
+                            <Button variant="searching" onClick={handleClickArticleSearch}>
+                                기사 찾기
+                            </Button>
                         </Form.Row>
                     </div>
                 </Form.Row>
@@ -348,7 +355,9 @@ const MicAgendaEdit = () => {
                                 value={temp.articleTitle2}
                                 onChange={(e) => setTemp({ ...temp, articleTitle2: e.target.value })}
                             />
-                            <Button variant="searching">기사 찾기</Button>
+                            <Button variant="searching" onClick={handleClickArticleSearch}>
+                                기사 찾기
+                            </Button>
                         </Form.Row>
                     </div>
                 </Form.Row>
@@ -388,7 +397,9 @@ const MicAgendaEdit = () => {
                                 value={temp.articleTitle3}
                                 onChange={(e) => setTemp({ ...temp, articleTitle3: e.target.value })}
                             />
-                            <Button variant="searching">기사 찾기</Button>
+                            <Button variant="searching" onClick={handleClickArticleSearch}>
+                                기사 찾기
+                            </Button>
                         </Form.Row>
                     </div>
                 </Form.Row>
@@ -428,11 +439,14 @@ const MicAgendaEdit = () => {
                                 value={temp.articleTitle4}
                                 onChange={(e) => setTemp({ ...temp, articleTitle4: e.target.value })}
                             />
-                            <Button variant="searching">기사 찾기</Button>
+                            <Button variant="searching" onClick={handleClickArticleSearch}>
+                                기사 찾기
+                            </Button>
                         </Form.Row>
                     </div>
                 </Form.Row>
             </Form>
+            <ArticleListModal show={showAsModal} onHide={() => setShowAsModal(false)} />
         </MokaCard>
     );
 };

@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.comment.vo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,12 +50,13 @@ public class CommentVO implements Serializable {
     @Builder.Default
     private Integer hateCnt = 0;
 
-    private String userId;
+    private String memId;
 
-    private String userName;
+    private String memNm;
 
-    private String userImage;
+    private String memImage;
 
+    @DTODateTimeFormat
     private Date regDt;
 
     /**
@@ -62,9 +64,9 @@ public class CommentVO implements Serializable {
      */
     private String status;
 
-    private String userIp;
+    private String memIp;
 
-    private String userSite;
+    private String memSite;
 
     @Builder.Default
     private Integer declareCnt = 0;

@@ -144,7 +144,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
 
     /**
-     * SNS 공유 목록 조회
+     * SNS 상세 조회
      *
      * @param totalId 기사ID
      * @param snsType sns 유형

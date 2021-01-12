@@ -36,10 +36,16 @@ public class CommentVote implements Serializable {
     @Column(name = "VOTE_VALUE", nullable = false)
     private Integer voteValue = 0;
 
-    @Column(name = "VOTE_IP", nullable = false)
-    private String voteIP;
+    @Column(name = "MEM_SEQ", nullable = false)
+    private Long memSeq;
 
     @Column(name = "REG_DT", nullable = false)
     private Date regDt;
+
+    @Column(name = "REG_IP", nullable = false)
+    private String regIp;
+
+    @Column(name = "PC_ID", nullable = false)
+    private String pcId;
 
 }

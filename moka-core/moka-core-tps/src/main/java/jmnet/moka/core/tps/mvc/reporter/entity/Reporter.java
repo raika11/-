@@ -156,7 +156,7 @@ public class Reporter extends BaseAudit {
      * 댓글수
      */
     @Column(name = "REPLY_CNT", updatable = false)
-    private String replyCnt;
+    private Integer replyCnt;
 
     /**
      * 필진타입 (J1:기자필진,J2:외부필진,J3:그룹필진,J0:필진해지)

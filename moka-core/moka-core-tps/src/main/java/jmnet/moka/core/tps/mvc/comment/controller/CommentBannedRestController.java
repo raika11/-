@@ -12,12 +12,18 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedDTO;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSaveDTO;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
+import jmnet.moka.core.tps.mvc.comment.service.CommentBannedService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,6 +55,12 @@ public class CommentBannedRestController extends AbstractCommonController {
     @Autowired
     private ActionLogger actionLogger;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private CommentBannedService commentBannedService;
+
 
     /**
      * 댓글목록조회
@@ -62,7 +74,36 @@ public class CommentBannedRestController extends AbstractCommonController {
 
         ResultListDTO<CommentBannedDTO> resultListMessage = new ResultListDTO<>();
 
+        Page<CommentBanned> commentBanneds = commentBannedService.findAllCommentBanned(search);
+        resultListMessage.setList(modelMapper.map(commentBanneds.getContent(), CommentBannedDTO.TYPE));
+        resultListMessage.setTotalCnt(commentBanneds.getTotalElements());
+
+        tpsLogger.success(ActionType.SELECT);
+
         ResultDTO<ResultListDTO<CommentBannedDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 댓글목록조회
+     *
+     * @param seqNo 댓글차단일련번호
+     * @return 댓글차단정보
+     */
+    @ApiOperation(value = "차단 정보 조회")
+    @GetMapping("/{seqNo}")
+    public ResponseEntity<?> getCommentBlock(
+            @ApiParam("댓글차단 일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.group.error.pattern.groupCd}") Long seqNo)
+            throws NoDataException {
+
+        CommentBanned commentBanned = commentBannedService
+                .findCommentBannedBySeq(seqNo)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        tpsLogger.success(ActionType.SELECT);
+
+        ResultDTO<CommentBannedDTO> resultDto = new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class));
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -76,9 +117,15 @@ public class CommentBannedRestController extends AbstractCommonController {
     @ApiOperation(value = "차단 등록")
     @PostMapping
     public ResponseEntity<?> postCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO, @ApiParam(hidden = true) @NotNull Principal principal)
-            throws MokaException {
+            throws NoDataException {
 
-        ResultDTO<CommentBannedSaveDTO> resultDto = new ResultDTO<>(commentBannedSaveDTO, msg(""));
+        CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
+        commentBanned = commentBannedService.insertCommentBanned(commentBanned);
+
+        ResultDTO<CommentBannedDTO> resultDto =
+                new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class), msg("tps.common.success.insert"));
+
+        tpsLogger.success(ActionType.INSERT);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -86,18 +133,29 @@ public class CommentBannedRestController extends AbstractCommonController {
     /**
      * 차단 정보 수정
      *
-     * @param commentBannedDTO 댓글 차단 정보
-     * @param blockSeq         차단 일련번호
+     * @param commentBannedSaveDTO 댓글 차단 정보
+     * @param seqNo                차단 일련번호
      * @return 등록된 댓글정보
      */
     @ApiOperation(value = "차단 수정")
-    @PutMapping("/{blockSeq}")
+    @PutMapping("/{seqNo}")
     public ResponseEntity<?> putCommentBlock(
-            @ApiParam("차단 일련번호") @PathVariable("blockSeq") @Min(value = 1, message = "{comment.error.pattern.blockSeq}") Long blockSeq,
-            @Valid CommentBannedSaveDTO commentBannedDTO, @ApiParam(hidden = true) @NotNull Principal principal)
-            throws MokaException {
+            @ApiParam("차단 일련번호") @PathVariable("seqNo") @Min(value = 1, message = "{comment.error.pattern.blockSeq}") Long seqNo,
+            @Valid CommentBannedSaveDTO commentBannedSaveDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+            throws NoDataException {
 
-        ResultDTO<CommentBannedSaveDTO> resultDto = new ResultDTO<>(commentBannedDTO, msg(""));
+        commentBannedService
+                .findCommentBannedBySeq(seqNo)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
+        commentBanned.setSeqNo(seqNo);
+        commentBanned = commentBannedService.updateCommentBanned(commentBanned);
+
+        tpsLogger.success(ActionType.UPDATE);
+
+        ResultDTO<CommentBannedDTO> resultDto =
+                new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class), msg("tps.common.success.update"));
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

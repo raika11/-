@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,7 +47,8 @@ public class Comment implements Serializable {
      * A:노출,N:관리자삭제,D:사용자삭제
      */
     @Column(name = "CMT_STATUS")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private CommentStatusType status = CommentStatusType.A;
 
     @Column(name = "CMT_LIKE_CNT", nullable = false)
     private Integer likeCnt = 0;
@@ -55,28 +59,26 @@ public class Comment implements Serializable {
     @Column(name = "CMT_DECLARE_CNT", nullable = false)
     private Integer declareCnt = 0;
 
-
     @Column(name = "CMT_CONTENT")
     private String cont;
 
     @Column(name = "MEM_ID", nullable = false)
-    private String userId;
+    private String memId;
 
     @Column(name = "MEM_NM", nullable = false)
-    private String userName;
+    private String memNm;
 
     @Column(name = "MEM_SITE", nullable = false)
-    private String userSite;
+    private String memSite;
 
     @Column(name = "MEM_IMAGE")
-    private String userImage;
+    private String memImage;
 
     @Column(name = "REG_DT", nullable = false)
     private Date regDt;
 
     @Column(name = "MEM_IP")
-    private String userIp;
-
+    private String memIp;
 
     @Column(name = "REG_DEV")
     private String regDev;

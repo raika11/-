@@ -9,6 +9,9 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
+import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.entity.QComment;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
 import jmnet.moka.core.tps.mvc.reporter.entity.QReporter;
 import jmnet.moka.core.tps.mvc.reporter.entity.Reporter;
@@ -56,12 +59,33 @@ public class ReporterRepositorySupportImpl extends TpsQueryDslRepositorySupport 
 
         JPQLQuery<Reporter> query = queryFactory.selectFrom(reporter);
         query = getQuerydsl().applyPagination(pageable, query);
-        //QueryResults<Reporter> list = query.innerJoin(reporter., domain).fetchJoin().where(builder).fetchResults();
         QueryResults<Reporter> list = query
                 .where(builder)
                 .fetchResults();
-        //QueryResults<Reporter> list = query.where(builder).leftJoin(codeMgt).leftJoin(codeMgt).leftJoin(codeMgt).fetchResults();
 
         return new PageImpl<Reporter>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @Override
+    public long updateReplyCnt(String regSeq, String regId, int cnt) {
+        QReporter qReporter = QReporter.reporter;
+        QComment qComment = QComment.comment;
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qReporter.repSeq.eq(regSeq));
+
+        JPQLQuery<Comment> query = queryFactory.selectFrom(qComment);
+        Comment comment = query
+                .where(qComment.contentId.eq(regSeq)
+                                         /*.and(qComment.urlSeq.eq(5))*/
+                                         .and(qComment.status.eq(CommentStatusType.A))
+                                         .and(qComment.memId.ne(regId)))
+                .orderBy(qComment.cmtSeq.desc())
+                .fetchFirst();
+
+        return update(qReporter)
+                .set(qReporter.replyCnt, qReporter.replyCnt.add(cnt))
+                .set(qReporter.userTalk, comment != null ? comment.getCont() : null)
+                .where(builder)
+                .execute();
     }
 }

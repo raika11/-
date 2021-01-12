@@ -45,17 +45,17 @@ public class CommentDTO implements Serializable {
 
     private String cont;
 
-    private String userId;
+    private String memId;
 
-    private String userName;
+    private String memNm;
 
-    private String userSite;
+    private String memSite;
 
-    private String userImage;
+    private String memImage;
 
     private Date regDt;
 
-    private String userIp;
+    private String memIp;
 
     private String snsaid;
 

@@ -17,4 +17,6 @@ import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
  * @since 2020-12-28 15:45
  */
 public interface CommentMapper extends BaseMapper<CommentVO, CommentSearchDTO> {
+
+    //long deleteBySeq(Long cmtSeq);
 }

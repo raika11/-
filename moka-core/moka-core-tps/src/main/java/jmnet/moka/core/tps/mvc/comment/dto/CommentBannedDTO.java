@@ -1,8 +1,12 @@
 package jmnet.moka.core.tps.mvc.comment.dto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.Date;
-import jmnet.moka.core.tps.mvc.comment.code.CommentBannedType;
+import java.util.List;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +26,13 @@ public class CommentBannedDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final Type TYPE = new TypeReference<List<CommentBannedDTO>>() {
+    }.getType();
+
     /**
      * 일련번호
      */
-    private Integer bannedIdx;
+    private Long seqNo;
 
     /**
      * 금지타입 I/U/W - 아이피/사용자/단어
@@ -42,7 +49,15 @@ public class CommentBannedDTO implements Serializable {
      */
     private String tagValue;
 
-    private String tagResult;
+    /**
+     * 태그 구분
+     */
+    private String tagDiv;
+
+    /**
+     * 태그 구분 코드
+     */
+    private CodeMgtDTO tagDivCode;
 
     /**
      * 등록일시

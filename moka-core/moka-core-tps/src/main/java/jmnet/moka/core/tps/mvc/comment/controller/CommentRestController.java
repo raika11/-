@@ -4,25 +4,27 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.Principal;
-import javax.validation.Valid;
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.mvc.comment.dto.CommentDTO;
+import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
+import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.service.CommentService;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,8 +46,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"댓글 API"})
 public class CommentRestController extends AbstractCommonController {
 
+
     @Autowired
-    private ActionLogger actionLogger;
+    private CommentService commentService;
 
     /**
      * 댓글목록조회
@@ -59,6 +62,11 @@ public class CommentRestController extends AbstractCommonController {
 
         ResultListDTO<CommentVO> resultListMessage = new ResultListDTO<>();
 
+        List<CommentVO> commentList = commentService.findAllComment(search);
+
+        resultListMessage.setTotalCnt(search.getTotal());
+        resultListMessage.setList(commentList);
+
         ResultDTO<ResultListDTO<CommentVO>> resultDto = new ResultDTO<>(resultListMessage);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -67,18 +75,23 @@ public class CommentRestController extends AbstractCommonController {
     /**
      * 삭제
      *
-     * @param commentDTO 등록할 댓글정보
+     * @param cmtSeq 등록할 댓글정보
      * @return 등록된 댓글정보
      */
     @ApiOperation(value = "댓글 삭제")
-    @PostMapping("/{commentSeq}/{psn}")
+    @DeleteMapping("/{cmtSeq}")
     public ResponseEntity<?> deleteComment(
-            @ApiParam("댓글 ID") @PathVariable("commentSeq") @Min(value = 1, message = "{comment.error.pattern.commentSeq}") Long commentSeq,
-            @ApiParam("댓글 ID") @PathVariable("psn") @Min(value = 1, message = "{comment.error.pattern.psn}") Long psn, @Valid CommentDTO commentDTO,
+            @ApiParam("댓글 ID") @PathVariable("cmtSeq") @Min(value = 1, message = "{comment.error.pattern.cmtSeq}") Long cmtSeq,
             @ApiParam(hidden = true) @NotNull Principal principal)
-            throws MokaException {
+            throws MokaException, NoDataException {
 
-        ResultDTO<CommentDTO> resultDto = new ResultDTO<>(commentDTO, msg(""));
+        Comment comment = commentService
+                .findCommentBySeq(cmtSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        long result = commentService.updateCommentStatus(comment, CommentStatusType.N);
+
+        ResultDTO<Long> resultDto = new ResultDTO<>(result, msg("tps.common.success.delete"));
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

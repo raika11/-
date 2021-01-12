@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.comment.dto;
 
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.tps.mvc.comment.code.CommentBannedType;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,4 +22,5 @@ public class CommentBannedSearchDTO extends SearchDTO {
 
     private CommentBannedType tagType = CommentBannedType.W;
 
+    private String tagDiv;
 }

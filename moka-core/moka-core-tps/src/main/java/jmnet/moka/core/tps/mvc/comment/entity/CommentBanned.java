@@ -4,18 +4,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
-import jmnet.moka.core.tps.mvc.comment.code.CommentBannedType;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * 댓글금지
@@ -37,7 +43,7 @@ public class CommentBanned extends BaseAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
-    private Integer seqNo;
+    private Long seqNo;
 
     /**
      * 금지타입 I/U/W - 아이피/사용자/단어
@@ -60,6 +66,15 @@ public class CommentBanned extends BaseAudit {
     @Column(name = "TAG_VALUE")
     @Builder.Default
     private String tagValue = "";
+
+    @Column(name = "TAG_DIV")
+    @Builder.Default
+    private String tagDiv = "";
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "TAG_DIV", referencedColumnName = "DTL_CD", insertable = false, updatable = false)
+    private CodeMgt tagDivCode;
 
     /**
      * 태그설명

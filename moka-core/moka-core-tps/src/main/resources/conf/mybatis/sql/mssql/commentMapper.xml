@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jmnet.moka.core.comment.mvc.comment.mapper.CommentMapper">
+<mapper namespace="jmnet.moka.core.tps.mvc.comment.mapper.CommentMapper">
 
   <resultMap type="CommentVO" id="CommentMap">
     <id property="urlSeq" column="URL_SEQ"/>
@@ -11,13 +11,13 @@
     <result property="cont" column="CMT_CONTENT"/>
     <result property="likeCnt" column="CMT_LIKE_CNT"/>
     <result property="hateCnt" column="CMT_HATE_CNT"/>
-    <result property="userId" column="USER_ID"/>
-    <result property="userName" column="USER_NAME"/>
-    <result property="userImage" column="USER_IMAGE"/>
+    <result property="memId" column="USER_ID"/>
+    <result property="memNm" column="USER_NAME"/>
+    <result property="memImage" column="USER_IMAGE"/>
     <result property="regDt" column="REG_DT"/>
     <result property="status" column="CMT_STATUS"/>
-    <result property="userIp" column="USER_IP"/>
-    <result property="userSite" column="USER_SITE"/>
+    <result property="memIp" column="USER_IP"/>
+    <result property="memSite" column="USER_SITE"/>
     <result property="declareCnt" column="CMT_DECLARE_CNT"/>
     <result property="urlGrp" column="CMT_URL_GRP"/>
     <result property="reCnt" column="re_count"/>
@@ -26,21 +26,29 @@
 
   <select id="findAll" parameterType="CommentSearchDTO" resultMap="CommentMap"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_COMMENT_LIST_SEL(
+    {call UPA_COMMENT_LIST_SEL(
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{contentId, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{refer, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{orderType, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{domain, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{orderType, mode=IN, jdbcType=VARCHAR, javaType=jmnet.moka.common.data.mybatis.support.EnumCode},
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{status, mode=IN, jdbcType=VARCHAR, javaType=jmnet.moka.common.data.mybatis.support.EnumCode},
     #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{userType, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{memType, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{searchType, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{referType, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string}
+    #{groupId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     )}
   </select>
+
+  <!--<select id="deleteBySeq" parameterType="hashMap" resultType="java.lang.Long"
+    statementType="CALLABLE">
+		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_15RE_COMMENT_DEL(
+			#{cmtSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+		) }
+  </select>-->
 
 </mapper>

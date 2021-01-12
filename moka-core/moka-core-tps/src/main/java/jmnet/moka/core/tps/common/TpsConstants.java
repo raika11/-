@@ -203,4 +203,7 @@ public class TpsConstants {
     // 일반 게시물
     public static final String BOARD_GENERAL_CONTENT = "1";
 
+
+    public static final String CMT_TAG_DIV = "CMT_TAG_DIV";
+
 }

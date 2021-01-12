@@ -31,20 +31,20 @@ public class CommentMember implements Serializable {
     @Column(name = "MEM_SEQ", nullable = false)
     private Long memSeq;
 
-    @Column(name = "USER_ID", nullable = false)
-    private String userId;
+    @Column(name = "MEM_ID", nullable = false)
+    private String memId;
 
-    @Column(name = "USER_KEY")
-    private String userKey;
+    @Column(name = "MEM_KEY")
+    private String memKey;
 
-    @Column(name = "USER_NAME")
-    private String userName;
+    @Column(name = "MEM_NM")
+    private String memNm;
 
-    @Column(name = "USER_SITE")
-    private String userSite;
+    @Column(name = "MEM_SITE")
+    private String memSite;
 
-    @Column(name = "USER_IMAGE")
-    private String userImage;
+    @Column(name = "MEM_IMAGE")
+    private String memImage;
 
     @Column(name = "REG_DT")
     private Date regDt;

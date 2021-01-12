@@ -34,6 +34,8 @@ public abstract class Task<T> extends TaskBase {
     private TaskInput taskInput;
     private final TaskGroup parentGroup;
     private int retryCount;
+    private long tickLogTime;
+    private long tickLogInterval;
 
     public Task(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
@@ -50,6 +52,9 @@ public abstract class Task<T> extends TaskBase {
     protected void load(Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
         this.name = xu.getString(node, "./@name", "task");
+
+        this.tickLogInterval = TimeHumanizer.parse(xu.getString(node, "./@logIntervalTime", "1m"));
+        this.tickLogTime = System.currentTimeMillis() + this.tickLogInterval;
 
         int intervalTime = TimeHumanizer.parse(xu.getString(node, "./@intervalTime", "10s"));
         if (intervalTime < 50) {
@@ -91,6 +96,7 @@ public abstract class Task<T> extends TaskBase {
                     if( canLoadTask() ) {
                         TaskInputData taskInputData = taskInput.getTaskInputData();
                         if (taskInputData != null) {
+                            this.tickLogTime = System.currentTimeMillis() + tickLogInterval;
                             if (doVerifyData((T) taskInputData)) {
                                 int retryCount = this.retryCount;
                                 do {
@@ -116,6 +122,11 @@ public abstract class Task<T> extends TaskBase {
                             if (taskInputData.isSuccess()) {
                                 continue;
                             }
+                        }else {
+                            if( this.tickLogTime < System.currentTimeMillis() ) {
+                                this.tickLogTime = System.currentTimeMillis() + this.tickLogInterval;
+                                doIdleProcess();
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -128,6 +139,10 @@ public abstract class Task<T> extends TaskBase {
         setEnd(true);
 
         stopServer();
+    }
+
+    protected void doIdleProcess() {
+        log.info( "{} 정상적으로 작업 대기 중입니다.", getTaskName());
     }
 
     protected void stopServer() {

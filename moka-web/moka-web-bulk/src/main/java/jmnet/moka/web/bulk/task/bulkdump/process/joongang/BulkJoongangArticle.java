@@ -402,7 +402,7 @@ public class BulkJoongangArticle extends BulkArticle {
         contentHtmlNate = "<b>" + getSubTitle().toString() + "</b>\r\n\r\n" + contentHtmlNate.trim();
 
         for( String videoMapKey : videoMap.keySet() ) {
-            log.info(videoMap.get(videoMapKey));
+//            log.info(videoMap.get(videoMapKey));
             contentHtmlNate = contentHtmlNate.replace( videoMapKey,
                     videoMap.get(videoMapKey).replaceAll(
                             "(?i)<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.+youtube.+))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>",
@@ -604,7 +604,7 @@ public class BulkJoongangArticle extends BulkArticle {
         Matcher matcherOvp = PATTERN_ContentTag_naverVodOoyala.matcher(contentNaver);
         int naverOvpCount = 1;
         while( matcherOvp.find() ) {
-            log.info( "group {}", matcherOvp.group() );
+//            log.info( "group {}", matcherOvp.group() );
             contentNaver = StringUtils.replaceOnce(contentNaver, matcherOvp.group(),  String.format("<!-- naver_news_vod_%d -->", naverOvpCount++));
         }
 

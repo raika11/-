@@ -95,7 +95,7 @@ const ChannelEdit = ({ match }) => {
             if (name === 'day0') {
                 setEditDays(['day0', 'day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7']);
             } else {
-                setEditDays([editDays.filter((e) => e !== 'day0'), name]);
+                setEditDays([...editDays.filter((e) => e !== 'day0'), name]);
             }
         } else {
             if (name === 'day0') {

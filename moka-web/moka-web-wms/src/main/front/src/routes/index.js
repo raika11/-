@@ -43,6 +43,7 @@ const CommentBanned = React.lazy(() => import('@pages/CommentManage/Banned'));
 const Mic = React.lazy(() => import('@pages/Mic'));
 const SEOMeta = React.lazy(() => import('@pages/SEOMeta'));
 const ArticleCdn = React.lazy(() => import('@pages/ArticleCdn'));
+const SearchLog = React.lazy(() => import('@pages/Search/SearchLog'));
 
 const routes = [
     {
@@ -551,6 +552,16 @@ const routes = [
         name: 'articleCdn',
         displayName: '트래픽 분산(기사) 관리',
         component: ArticleCdn,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/search-log',
+        name: 'search-log',
+        displayName: '검색 로그',
+        component: SearchLog,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

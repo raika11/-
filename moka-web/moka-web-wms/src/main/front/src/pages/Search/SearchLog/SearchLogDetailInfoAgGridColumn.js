@@ -6,10 +6,8 @@ export const columnDefs = [
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
-        headerName: (param) => {
-            console.log(param);
-        },
-        field: 'keyword',
+        headerName: '검색일',
+        field: 'searchDate',
         width: 212,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },

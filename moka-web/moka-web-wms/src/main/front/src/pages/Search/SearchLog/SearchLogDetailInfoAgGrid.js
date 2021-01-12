@@ -9,21 +9,21 @@ const SearchLogDetailInfoAgGrid = () => {
             rowData={[
                 {
                     rank: '1',
-                    keyword: '운세',
+                    searchDate: '2021-01-12',
                     allCount: 2331,
                     pcCount: 1197,
                     mobileCount: 1134,
                 },
                 {
                     rank: '2',
-                    keyword: '오늘의운세',
+                    searchDate: '2020-11-04',
                     allCount: 2331,
                     pcCount: 1197,
                     mobileCount: 1134,
                 },
                 {
                     rank: '3',
-                    keyword: '조현종',
+                    searchDate: '2020-10-02',
                     allCount: 2331,
                     pcCount: 1197,
                     mobileCount: 1134,

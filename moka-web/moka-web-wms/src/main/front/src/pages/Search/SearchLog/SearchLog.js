@@ -20,7 +20,7 @@ const SearchLog = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            <Route path={[`${match.url}/:totalId`]} exact render={(props) => <SearchLogDetailInfo {...props} />} />
+            <Route path={[`${match.url}/:keyword`]} exact render={(props) => <SearchLogDetailInfo {...props} />} />
         </div>
     );
 };

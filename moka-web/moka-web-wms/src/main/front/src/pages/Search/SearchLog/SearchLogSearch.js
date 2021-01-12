@@ -5,8 +5,9 @@ import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import toast from '@utils/toastUtil';
 
-const SearchLogSearch = ({ searchOptions }) => {
+const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
     const [disabled, setDisabled] = useState({ date: true });
     //TODO: options default 정의 필요
@@ -29,6 +30,20 @@ const SearchLogSearch = ({ searchOptions }) => {
                     draft[name] = value;
                 }),
             );
+        }
+    };
+
+    const handleClickSearch = () => {
+        toast.info(`검색 ${JSON.stringify(options)}`);
+        if (onSearch instanceof Function) {
+            onSearch(options);
+        }
+    };
+
+    const handleClickReset = () => {
+        toast.info('초기화');
+        if (onReset instanceof Function) {
+            onReset();
         }
     };
 
@@ -143,10 +158,13 @@ const SearchLogSearch = ({ searchOptions }) => {
                             handleChangeValue(name, value);
                         }}
                         value={options.keyword}
+                        onSearch={handleClickSearch}
                     />
                 </Col>
                 <Col xs={1} className="text-right">
-                    <Button variant="negative">초기화</Button>
+                    <Button variant="negative" onClick={handleClickReset}>
+                        초기화
+                    </Button>
                 </Col>
             </Form.Row>
         </Form>

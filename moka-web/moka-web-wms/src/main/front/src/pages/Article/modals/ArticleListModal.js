@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
@@ -13,11 +14,21 @@ import columnDefs from './ArticleListModalColumns';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_SERVICE_ARTICLE_LIST, initialState, getServiceArticleList, changeServiceSearchOption, clearServiceList } from '@store/article';
 
+const propTypes = {
+    show: PropTypes.bool,
+    onHide: PropTypes.func,
+    /**
+     * 기사 클릭 시 동작
+     */
+    onRowClicked: PropTypes.func,
+};
+const defaultProps = {};
+
 /**
  * 서비스기사 목록 (모달)
  */
 const ArticleListModal = (props) => {
-    const { show, onHide, media } = props;
+    const { show, onHide, media, onRowClicked } = props;
 
     const dispatch = useDispatch();
 
@@ -140,7 +151,9 @@ const ArticleListModal = (props) => {
      * @param {object} data data
      */
     const handleRowClicked = (row) => {
-        console.log(row);
+        if (onRowClicked) {
+            onRowClicked(row);
+        }
     };
 
     /**
@@ -376,5 +389,8 @@ const ArticleListModal = (props) => {
         </MokaModal>
     );
 };
+
+ArticleListModal.propTypes = propTypes;
+ArticleListModal.defaultProps = defaultProps;
 
 export default ArticleListModal;

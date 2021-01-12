@@ -5,10 +5,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { ARTICLE_URL, MOBILE_ARTICLE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 const ArticleCdnEdit = ({ match }) => {
     const { totalId } = useParams();
     const history = useHistory();
+    const [modalShow, setModalShow] = useState(false);
     const [temp, setTemp] = useState({
         //필드명 모름
         totalId: '23854897',
@@ -74,7 +76,7 @@ const ArticleCdnEdit = ({ match }) => {
                         <MokaInput className="bg-white" value={temp.artTitle} isInvalid={error.totalId} disabled />
                     </Col>
                     <Col xs={2} className="p-0 pl-2 d-flex">
-                        <Button variant="searching" className="w-100 ft-12">
+                        <Button variant="searching" className="w-100 ft-12" onClick={() => setModalShow(true)}>
                             기사 검색
                         </Button>
                     </Col>
@@ -125,6 +127,20 @@ const ArticleCdnEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
             </Form>
+
+            {/* 기사리스트 모달 */}
+            <ArticleListModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                onRowClicked={(row) => {
+                    setTemp({
+                        ...temp,
+                        totalId: row.totalId,
+                        artTitle: row.artTitle,
+                    });
+                    setModalShow(false);
+                }}
+            />
         </MokaCard>
     );
 };

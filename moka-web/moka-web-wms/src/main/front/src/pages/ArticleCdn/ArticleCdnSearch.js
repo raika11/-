@@ -44,7 +44,7 @@ const ArticleCdnSearch = ({ match }) => {
     };
 
     return (
-        <Form className="mb-3">
+        <Form className="mb-2">
             <Form.Row className="mb-2 d-flex">
                 <div className="flex-fill mr-2">
                     <MokaInput className="ft-12" placeholder="제목을 입력하세요" value={search.title} name="title" onChange={handleChangeValue} onKeyPress={handleKeyPress} />

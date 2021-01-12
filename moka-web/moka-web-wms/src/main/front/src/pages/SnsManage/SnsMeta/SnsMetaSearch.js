@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import toast from '@utils/toastUtil';
-import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import commonUtil from '@utils/commonUtil';
 
 const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
@@ -30,50 +30,47 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     };
 
     const handleChangeValue = (name, value) => {
-        if (name === 'startDt') {
-            const startDt = new Date(value);
-            const endDt = new Date(options.endDt);
+        if (name === 'dateType') {
+            setDateType(value);
+        } else {
+            if (name === 'startDt') {
+                const startDt = new Date(value);
+                const endDt = new Date(options.endDt);
 
-            if (startDt > endDt) {
-                toast.warning('시작일은 종료일 보다 클 수 없습니다.');
-                return;
-            }
-        } else if (name === 'endDt') {
-            const startDt = new Date(options.startDt);
-            const endDt = new Date(value);
+                if (startDt > endDt) {
+                    toast.warning('시작일은 종료일 보다 클 수 없습니다.');
+                    return;
+                }
+            } else if (name === 'endDt') {
+                const startDt = new Date(options.startDt);
+                const endDt = new Date(value);
 
-            if (endDt < startDt) {
-                toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
-                return;
+                if (endDt < startDt) {
+                    toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
+                    return;
+                }
             }
+
+            setOptions({ ...options, [name]: value });
         }
-
-        setOptions({ ...options, [name]: value });
     };
 
-    const handleChangeDateType = (name, value) => {
-        let startDt = options.startDt;
-        let endDt = moment().format(DB_DATEFORMAT);
-        setDisabled({ ...disabled, date: true });
-        switch (value) {
-            case 'today':
-                startDt = moment().format(DB_DATEFORMAT);
-                break;
-            case 'thisWeek':
-                startDt = moment(new Date(new Date().getTime() - new Date().getDay() * 24 * 60 * 60 * 1000)).format(DB_DATEFORMAT);
-                break;
-            case 'thisMonth':
-                startDt = moment(new Date(new Date().setDate(1))).format(DB_DATEFORMAT);
-                break;
-            case 'direct':
-                setDisabled({ ...disabled, date: false });
-                break;
-            default:
-                break;
+    useEffect(() => {
+        if (dateType === 'direct') {
+            setDisabled({ ...disabled, date: false });
+        } else {
+            const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
+            setOptions({ ...options, startDt, endDt });
+            setDisabled({ ...disabled, date: true });
         }
-        setDateType(value);
-        setOptions({ ...options, startDt, endDt });
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateType]);
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(searchOptions)) {
+            setOptions(searchOptions);
+        }
+    }, [searchOptions]);
 
     return (
         <Form>
@@ -88,7 +85,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                             const {
                                 target: { name, value },
                             } = event;
-                            handleChangeDateType(name, value);
+                            handleChangeValue(name, value);
                         }}
                     >
                         <option value="today">오늘</option>
@@ -105,7 +102,14 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         value={options.startDt}
                         onChange={(param) => {
                             const selectDate = param._d;
-                            const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                            const date = moment()
+                                .set('year', selectDate.getFullYear())
+                                .set('month', selectDate.getMonth())
+                                .set('date', selectDate.getDate())
+                                .set('hour', 0)
+                                .set('minute', 0)
+                                .set('seconds', 0)
+                                .format(DB_DATEFORMAT);
                             handleChangeValue('startDt', date);
                         }}
                         inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
@@ -120,7 +124,14 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         value={options.endDt}
                         onChange={(param) => {
                             const selectDate = param._d;
-                            const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 23, 59, 59)).format(DB_DATEFORMAT);
+                            const date = moment()
+                                .set('year', selectDate.getFullYear())
+                                .set('month', selectDate.getMonth())
+                                .set('date', selectDate.getDate())
+                                .set('hour', 23)
+                                .set('minute', 59)
+                                .set('seconds', 59)
+                                .format(DB_DATEFORMAT);
                             handleChangeValue('endDt', date);
                         }}
                         inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}

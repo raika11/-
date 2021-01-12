@@ -1,4 +1,7 @@
 import produce from 'immer';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
+import toast from '@utils/toastUtil';
 
 /**
  * 파일 다운로드
@@ -435,6 +438,43 @@ const cancellablePromise = (promise) => {
     };
 };
 
+/**
+ * dateType에 따른 날짜를 가져온다.(종료일은 오늘)
+ * @param dateType 날짜 타입(today: 오늘, thisWeek: 이번주, thisMonth: 이번달, thisYear: 올해)
+ * @returns {{startDt: string, endDt: string}}
+ */
+export const toRangeDateForDateType = (dateType) => {
+    const today = moment();
+    let startDt = today;
+    const endDt = today.set('hour', 23).set('minute', 59).set('seconds', 59).format(DB_DATEFORMAT);
+    switch (dateType) {
+        case 'today':
+            startDt = today;
+            break;
+        case 'thisWeek':
+            startDt = today.day(0);
+            break;
+        case 'thisMonth':
+            startDt = today.set('date', 1);
+            break;
+        case 'thisYear':
+            startDt = today.set('month', 0).set('date', 1);
+            break;
+        default:
+            break;
+    }
+    startDt = startDt.set('hour', 0).set('minute', 0).set('seconds', 0).format(DB_DATEFORMAT);
+
+    return { startDt, endDt };
+};
+
+export const validateForDateRange = (startDt, endDt) => {
+    const diff = moment(endDt).diff(moment(startDt));
+
+    let message = '시작일은 종료일 보다 클 수 없습니다.';
+    message = '종료일은 시작일 보다 작을 수 없습니다.';
+};
+
 export default {
     fileDownload,
     base64ToBlob,
@@ -451,4 +491,6 @@ export default {
     delay,
     cancellablePromise,
     popupPreview,
+    toRangeDateForDateType,
+    validateForDateRange,
 };

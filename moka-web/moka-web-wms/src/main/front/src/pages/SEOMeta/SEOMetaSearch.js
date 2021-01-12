@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import produce from 'immer';
+import commonUtil from '@utils/commonUtil';
 
 const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
-    const [options, setOptions] = useState(searchOptions);
+    const [options, setOptions] = useState({});
     const [disabled, setDisabled] = useState({ date: true });
 
     const handleChangeDateType = (name, value) => {
@@ -38,11 +39,15 @@ const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     };
 
     const handleChangeValue = (name, value) => {
-        setOptions(
-            produce(options, (draft) => {
-                draft[name] = value;
-            }),
-        );
+        if (name === 'dateType') {
+            setDateType(value);
+        } else {
+            setOptions(
+                produce(options, (draft) => {
+                    draft[name] = value;
+                }),
+            );
+        }
     };
 
     const handleClickSearch = () => {
@@ -52,10 +57,28 @@ const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     };
 
     const handleClickReset = () => {
+        setDateType('today');
         if (onReset instanceof Function) {
             onReset(setOptions);
         }
     };
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(searchOptions)) {
+            setOptions(searchOptions);
+        }
+    }, [searchOptions]);
+
+    useEffect(() => {
+        if (dateType === 'direct') {
+            setDisabled({ ...disabled, date: false });
+        } else {
+            const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
+            setOptions({ ...options, startDt, endDt });
+            setDisabled({ ...disabled, date: true });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateType]);
 
     return (
         <Form className="pb-2">
@@ -66,7 +89,8 @@ const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         name="dateType"
                         onChange={(e) => {
                             const { name, value } = e.target;
-                            handleChangeDateType(name, value);
+                            //handleChangeDateType(name, value);
+                            handleChangeValue(name, value);
                         }}
                         value={dateType}
                     >

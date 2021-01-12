@@ -25,4 +25,21 @@ public interface JpodChannelRepositorySupport {
      * @return 채널 목록
      */
     Page<JpodChannel> findAllJpodChannel(JpodChannelSearchDTO search);
+
+    /**
+     * J팟 채널 일련번호 키워드 삭제
+     *
+     * @param chnlSeq J팟 채널 일련번호
+     * @return 삭제여부
+     */
+    long deleteKeywordByChnlSeq(Long chnlSeq);
+    
+
+    /**
+     * J팟 채널 일련번호 참여자 삭제
+     *
+     * @param chnlSeq J팟 채널 일련번호
+     * @return 삭제여부
+     */
+    long deleteMemberByChnlSeq(Long chnlSeq);
 }

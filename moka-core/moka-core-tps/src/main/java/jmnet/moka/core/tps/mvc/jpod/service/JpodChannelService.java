@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
 import org.springframework.data.domain.Page;
 
 /**
@@ -48,7 +50,7 @@ public interface JpodChannelService {
      * @param channel JpodChannel
      * @return 저장 결과
      */
-    JpodChannel insertJpodChannel(JpodChannel channel);
+    JpodChannel insertJpodChannel(JpodChannel channel, List<JpodKeyword> keywords, List<JpodMember> members);
 
     /**
      * 채널 정보 수정
@@ -56,7 +58,15 @@ public interface JpodChannelService {
      * @param channel JpodChannel
      * @return 수정 결과
      */
-    JpodChannel updateJpodChannel(JpodChannel channel);
+    JpodChannel updateJpodChannel(JpodChannel channel, List<JpodKeyword> keywords, List<JpodMember> members);
+
+    /**
+     * 채널 정보 사용 여부 수정
+     *
+     * @param channel JpodChannel
+     * @return 수정 결과
+     */
+    JpodChannel updateJpodChannelUsedYn(JpodChannel channel);
 
     /**
      * 채널 일련번호로 삭제
@@ -71,4 +81,19 @@ public interface JpodChannelService {
      * @param jpodChannel 채널 정보
      */
     void deleteJpodChannel(JpodChannel jpodChannel);
+
+
+    /**
+     * 채널 키워드 목록 조회
+     *
+     * @return 채널 키워드 목록
+     */
+    List<JpodKeyword> findAllJpodChannelKeyword(Long chnlSeq);
+
+    /**
+     * 채널 진행자 목록 조회
+     *
+     * @return 채널 진행자 목록
+     */
+    List<JpodMember> findAllJpodChannelMember(Long chnlSeq);
 }

@@ -51,7 +51,8 @@ public class JpodMember implements Serializable {
      * 에피소드일련번호
      */
     @Column(name = "EPSD_SEQ", nullable = false)
-    private Long epsdSeq;
+    @Builder.Default
+    private Long epsdSeq = 0L;
 
     /**
      * CM:채널진행자, CP:채널패널, EG:에피소드게스트

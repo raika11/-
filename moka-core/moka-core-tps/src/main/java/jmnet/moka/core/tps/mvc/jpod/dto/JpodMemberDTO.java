@@ -1,7 +1,10 @@
 package jmnet.moka.core.tps.mvc.jpod.dto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,6 +25,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class JpodMemberDTO implements Serializable {
+
+    public static final Type TYPE = new TypeReference<List<JpodMemberDTO>>() {
+    }.getType();
 
     private static final long serialVersionUID = 1L;
 

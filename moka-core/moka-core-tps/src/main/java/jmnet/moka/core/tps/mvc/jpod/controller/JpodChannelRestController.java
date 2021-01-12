@@ -1,11 +1,12 @@
 package jmnet.moka.core.tps.mvc.jpod.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -24,8 +25,13 @@ import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelDTO;
+import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelDetailDTO;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
+import jmnet.moka.core.tps.mvc.jpod.dto.JpodKeywordDTO;
+import jmnet.moka.core.tps.mvc.jpod.dto.JpodMemberDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
+import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
 import jmnet.moka.core.tps.mvc.jpod.service.JpodChannelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -108,14 +114,13 @@ public class JpodChannelRestController extends AbstractCommonController {
     /**
      * JpodChannel정보 조회
      *
-     * @param request 요청
      * @param chnlSeq JpodChannel아이디 (필수)
      * @return JpodChannel정보
      * @throws NoDataException JpodChannel 정보가 없음
      */
     @ApiOperation(value = "JpodChannel 조회")
     @GetMapping("/{chnlSeq}")
-    public ResponseEntity<?> getJpodChannel(HttpServletRequest request,
+    public ResponseEntity<?> getJpodChannel(
             @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq)
             throws NoDataException {
 
@@ -124,11 +129,14 @@ public class JpodChannelRestController extends AbstractCommonController {
                 .findJpodChannelBySeq(chnlSeq)
                 .orElseThrow(() -> new NoDataException(message));
 
-        JpodChannelDTO dto = modelMapper.map(jpodChannel, JpodChannelDTO.class);
+        JpodChannelDetailDTO dto = modelMapper.map(jpodChannel, JpodChannelDetailDTO.class);
+
+        dto.setKeywords(modelMapper.map(jpodChannelService.findAllJpodChannelKeyword(chnlSeq), JpodKeywordDTO.TYPE));
+        dto.setMembers(modelMapper.map(jpodChannelService.findAllJpodChannelMember(chnlSeq), JpodMemberDTO.TYPE));
 
         tpsLogger.success(ActionType.SELECT);
 
-        ResultDTO<JpodChannelDTO> resultDto = new ResultDTO<>(dto);
+        ResultDTO<JpodChannelDetailDTO> resultDto = new ResultDTO<>(dto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -136,7 +144,6 @@ public class JpodChannelRestController extends AbstractCommonController {
     /**
      * 등록
      *
-     * @param request        요청
      * @param jpodChannelDTO 등록할 JpodChannel정보
      * @return 등록된 JpodChannel정보
      * @throws InvalidDataException 데이타 유효성 오류
@@ -144,7 +151,7 @@ public class JpodChannelRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "JpodChannel 등록")
     @PostMapping
-    public ResponseEntity<?> postJpodChannel(HttpServletRequest request, @Valid JpodChannelDTO jpodChannelDTO,
+    public ResponseEntity<?> postJpodChannel(@Valid JpodChannelDetailDTO jpodChannelDTO,
             @RequestParam(value = "chnlImgFile", required = false) MultipartFile chnlImgFile,
             @RequestParam(value = "chnlThumbFile", required = false) MultipartFile chnlThumbFile,
             @RequestParam(value = "chnlImgMobFile", required = false) MultipartFile chnlImgMobFile)
@@ -154,10 +161,16 @@ public class JpodChannelRestController extends AbstractCommonController {
         JpodChannel jpodChannel = modelMapper.map(jpodChannelDTO, JpodChannel.class);
 
         try {
+            Type membersType = new TypeReference<List<JpodMember>>() {
+            }.getType();
+            Type keywordsType = new TypeReference<List<JpodKeyword>>() {
+            }.getType();
+            List<JpodMember> members = modelMapper.map(jpodChannelDTO.getMembers(), membersType);
+            List<JpodKeyword> keywords = modelMapper.map(jpodChannelDTO.getKeywords(), keywordsType);
 
             // insert
             jpodChannel = uploadImage(jpodChannel, chnlImgFile, chnlThumbFile, chnlImgMobFile);
-            JpodChannel returnValue = jpodChannelService.insertJpodChannel(jpodChannel);
+            JpodChannel returnValue = jpodChannelService.insertJpodChannel(jpodChannel, keywords, members);
 
 
             // 결과리턴
@@ -180,7 +193,6 @@ public class JpodChannelRestController extends AbstractCommonController {
     /**
      * 수정
      *
-     * @param request        요청
      * @param chnlSeq        JpodChannel아이디
      * @param jpodChannelDTO 수정할 JpodChannel정보
      * @return 수정된 JpodChannel정보
@@ -188,9 +200,9 @@ public class JpodChannelRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "JpodChannel 수정")
     @PutMapping("/{chnlSeq}")
-    public ResponseEntity<?> putJpodChannel(HttpServletRequest request,
+    public ResponseEntity<?> putJpodChannel(
             @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") String chnlSeq,
-            @Valid JpodChannelDTO jpodChannelDTO, @RequestParam(value = "chnlImgFile", required = false) MultipartFile chnlImgFile,
+            @Valid JpodChannelDetailDTO jpodChannelDTO, @RequestParam(value = "chnlImgFile", required = false) MultipartFile chnlImgFile,
             @RequestParam(value = "chnlThumbFile", required = false) MultipartFile chnlThumbFile,
             @RequestParam(value = "chnlImgMobFile", required = false) MultipartFile chnlImgMobFile)
             throws Exception {
@@ -200,14 +212,20 @@ public class JpodChannelRestController extends AbstractCommonController {
         JpodChannel newJpodChannel = modelMapper.map(jpodChannelDTO, JpodChannel.class);
 
         // 오리진 데이터 조회
-        JpodChannel orgJpodChannel = jpodChannelService
+        jpodChannelService
                 .findJpodChannelBySeq(newJpodChannel.getChnlSeq())
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
+            Type membersType = new TypeReference<List<JpodMember>>() {
+            }.getType();
+            Type keywordsType = new TypeReference<List<JpodKeyword>>() {
+            }.getType();
+            List<JpodMember> members = modelMapper.map(jpodChannelDTO.getMembers(), membersType);
+            List<JpodKeyword> keywords = modelMapper.map(jpodChannelDTO.getKeywords(), keywordsType);
             // update
             newJpodChannel = uploadImage(newJpodChannel, chnlImgFile, chnlThumbFile, chnlImgMobFile);
-            JpodChannel returnValue = jpodChannelService.updateJpodChannel(newJpodChannel);
+            JpodChannel returnValue = jpodChannelService.updateJpodChannel(newJpodChannel, keywords, members);
 
             // 결과리턴
             JpodChannelDTO dto = modelMapper.map(returnValue, JpodChannelDTO.class);
@@ -229,7 +247,6 @@ public class JpodChannelRestController extends AbstractCommonController {
     /**
      * 삭제
      *
-     * @param request 요청
      * @param chnlSeq 삭제 할 JpodChannel아이디 (필수)
      * @param usedYn  사용 여부
      * @return 삭제성공여부
@@ -239,9 +256,9 @@ public class JpodChannelRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "JpodChannel 사용여부 수정")
     @PutMapping("/{chnlSeq}/used")
-    public ResponseEntity<?> putJpodChannelUsedYn(HttpServletRequest request,
+    public ResponseEntity<?> putJpodChannelUsedYn(
             @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq,
-            @ApiParam("사용여부") @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
+            @ApiParam("사용여부") @Pattern(regexp = "[Y|N]$", message = "{tps.common.error.pattern.usedYn}")
             @RequestParam(value = "usedYn", defaultValue = MokaConstants.YES) String usedYn)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -257,7 +274,7 @@ public class JpodChannelRestController extends AbstractCommonController {
         try {
             // usedYn 수정
             jpodChannel.setUsedYn(usedYn);
-            jpodChannelService.updateJpodChannel(jpodChannel);
+            jpodChannelService.updateJpodChannelUsedYn(jpodChannel);
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
@@ -277,7 +294,6 @@ public class JpodChannelRestController extends AbstractCommonController {
     /**
      * 삭제
      *
-     * @param request 요청
      * @param chnlSeq 삭제 할 JpodChannel아이디 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
@@ -286,7 +302,7 @@ public class JpodChannelRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "JpodChannel 삭제")
     @DeleteMapping("/{chnlSeq}")
-    public ResponseEntity<?> deleteJpodChannel(HttpServletRequest request,
+    public ResponseEntity<?> deleteJpodChannel(
             @ApiParam("채널 일련번호") @PathVariable("chnlSeq") @Min(value = 0, message = "{tps.jpod-channel.error.min.chnlSeq}") Long chnlSeq)
             throws InvalidDataException, NoDataException, Exception {
 
@@ -378,13 +394,12 @@ public class JpodChannelRestController extends AbstractCommonController {
         }
 
         // 액션 로그에 성공 로그 출력
-        tpsLogger.success(ActionType.UPLOAD);
+        tpsLogger.success(ActionType.UPLOAD, message);
 
         return imageUrl;
     }
 
-    public boolean deleteFile(String imgUrl)
-            throws InvalidDataException, IOException {
+    public boolean deleteFile(String imgUrl) {
 
         String saveFilePath = imgUrl.replaceAll(pdsUrl, "");
 

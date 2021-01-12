@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.jpod.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,6 +9,8 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodChannel;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodKeyword;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodMember;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -61,5 +64,32 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         QueryResults<JpodChannel> list = query.fetchResults();
 
         return new PageImpl<JpodChannel>(list.getResults(), search.getPageable(), list.getTotal());
+    }
+
+    @Override
+    public long deleteKeywordByChnlSeq(Long chnlSeq) {
+        QJpodKeyword qJpodKeyword = QJpodKeyword.jpodKeyword;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qJpodKeyword.chnlSeq
+                .eq(chnlSeq)
+                .and(qJpodKeyword.epsdSeq.eq(0L)));
+        return delete(qJpodKeyword)
+                .where(builder)
+                .execute();
+    }
+
+
+    @Override
+    public long deleteMemberByChnlSeq(Long chnlSeq) {
+        QJpodMember qJpodMember = QJpodMember.jpodMember;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qJpodMember.chnlSeq
+                .eq(chnlSeq)
+                .and(qJpodMember.epsdSeq.eq(0L)));
+        return delete(qJpodMember)
+                .where(builder)
+                .execute();
     }
 }

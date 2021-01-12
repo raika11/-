@@ -28,9 +28,9 @@ import lombok.Setter;
 @Setter
 @Builder
 @ApiModel("J팟 채널 DTO")
-public class JpodChannelDTO implements Serializable {
+public class JpodChannelDetailDTO implements Serializable {
 
-    public static final Type TYPE = new TypeReference<List<JpodChannelDTO>>() {
+    public static final Type TYPE = new TypeReference<List<JpodChannelDetailDTO>>() {
     }.getType();
 
     private static final long serialVersionUID = 1L;
@@ -127,5 +127,11 @@ public class JpodChannelDTO implements Serializable {
     @ApiModelProperty(value = "등록일시", hidden = true)
     @DTODateTimeFormat
     private Date regDt;
+
+    @ApiModelProperty("키워드 목록")
+    private List<JpodKeywordDTO> keywords;
+
+    @ApiModelProperty("방송 진행자 목록")
+    private List<JpodMemberDTO> members;
 
 }

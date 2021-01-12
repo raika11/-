@@ -48,7 +48,8 @@ public class JpodKeyword implements Serializable {
      * 에피소드SEQ
      */
     @Column(name = "EPSD_SEQ", nullable = false)
-    private Long epsdSeq;
+    @Builder.Default
+    private Long epsdSeq = 0L;
 
     /**
      * 순서

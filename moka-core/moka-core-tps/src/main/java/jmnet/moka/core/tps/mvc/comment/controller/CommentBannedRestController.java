@@ -3,15 +3,13 @@ package jmnet.moka.core.tps.mvc.comment.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.security.Principal;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.exception.MokaException;
-import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -22,7 +20,6 @@ import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
 import jmnet.moka.core.tps.mvc.comment.service.CommentBannedService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -52,14 +50,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"댓글 차단(IP/ID/금지어) API"})
 public class CommentBannedRestController extends AbstractCommonController {
 
-    @Autowired
-    private ActionLogger actionLogger;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private CommentBannedService commentBannedService;
+    private final CommentBannedService commentBannedService;
+
+    public CommentBannedRestController(ModelMapper modelMapper, CommentBannedService commentBannedService) {
+        this.modelMapper = modelMapper;
+        this.commentBannedService = commentBannedService;
+    }
 
 
     /**
@@ -94,7 +93,7 @@ public class CommentBannedRestController extends AbstractCommonController {
     @ApiOperation(value = "차단 정보 조회")
     @GetMapping("/{seqNo}")
     public ResponseEntity<?> getCommentBlock(
-            @ApiParam("댓글차단 일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.group.error.pattern.groupCd}") Long seqNo)
+            @ApiParam("댓글차단 일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.comment-banned.error.pattern.seqNo}") Long seqNo)
             throws NoDataException {
 
         CommentBanned commentBanned = commentBannedService
@@ -116,8 +115,7 @@ public class CommentBannedRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "차단 등록")
     @PostMapping
-    public ResponseEntity<?> postCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO, @ApiParam(hidden = true) @NotNull Principal principal)
-            throws NoDataException {
+    public ResponseEntity<?> postCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO) {
 
         CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
         commentBanned = commentBannedService.insertCommentBanned(commentBanned);
@@ -140,8 +138,8 @@ public class CommentBannedRestController extends AbstractCommonController {
     @ApiOperation(value = "차단 수정")
     @PutMapping("/{seqNo}")
     public ResponseEntity<?> putCommentBlock(
-            @ApiParam("차단 일련번호") @PathVariable("seqNo") @Min(value = 1, message = "{comment.error.pattern.blockSeq}") Long seqNo,
-            @Valid CommentBannedSaveDTO commentBannedSaveDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+            @ApiParam("차단 일련번호") @PathVariable("seqNo") @Min(value = 1, message = "{tps.comment-banned.error.pattern.seqNo}") Long seqNo,
+            @Valid CommentBannedSaveDTO commentBannedSaveDTO)
             throws NoDataException {
 
         commentBannedService
@@ -161,19 +159,56 @@ public class CommentBannedRestController extends AbstractCommonController {
     }
 
     /**
+     * 차단 정보 삭제/복원
+     *
+     * @param seqNo 차단 일련번호
+     * @return 성공여부
+     */
+    @ApiOperation(value = "차단 정보 삭제/복원")
+    @PutMapping("/{seqNo}/used")
+    public ResponseEntity<?> putCommentBlockUsedYn(
+            @ApiParam("차단 일련번호") @PathVariable("seqNo") @Min(value = 1, message = "{tps.comment-banned.error.pattern.seqNo}") Long seqNo,
+            @ApiParam("사용여부") @Pattern(regexp = "[Y|N]$", message = "{tps.common.error.pattern.usedYn}")
+            @RequestParam(value = "usedYn", defaultValue = MokaConstants.YES) String usedYn)
+            throws NoDataException {
+
+        CommentBanned commentBanned = commentBannedService
+                .findCommentBannedBySeq(seqNo)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        commentBanned.setUsedYn(usedYn);
+        commentBanned = commentBannedService.updateCommentBanned(commentBanned);
+
+        tpsLogger.success(ActionType.UPDATE);
+
+        ResultDTO<CommentBannedDTO> resultDto =
+                new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class), msg("tps.common.success.update"));
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
      * 차단 정보 삭제
      *
-     * @param blockSeq 차단 일련번호
+     * @param seqNo 차단 일련번호
      * @return 성공여부
      */
     @ApiOperation(value = "차단 삭제")
-    @DeleteMapping("/{blockSeq}")
+    @DeleteMapping("/{seqNo}")
     public ResponseEntity<?> deleteCommentBlock(
-            @ApiParam("차단 일련번호") @PathVariable("blockSeq") @Min(value = 1, message = "{comment.error.pattern.blockSeq}") Long blockSeq,
-            @ApiParam(hidden = true) @NotNull Principal principal)
-            throws MokaException {
+            @ApiParam("차단 일련번호") @PathVariable("seqNo") @Min(value = 1, message = "{tps.comment-banned.error.pattern.seqNo}") Long seqNo)
+            throws NoDataException {
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(true, msg(""));
+        CommentBanned commentBanned = commentBannedService
+                .findCommentBannedBySeq(seqNo)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        commentBannedService.deleteCommentBanned(commentBanned);
+
+        tpsLogger.success(ActionType.DELETE);
+
+        ResultDTO<CommentBannedDTO> resultDto =
+                new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class), msg("tps.common.success.delete"));
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

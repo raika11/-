@@ -6,15 +6,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectItem } from '@pages/Boards/BoardConst';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, changeChannelSearchOption } from '@store/jpod';
+import { initialState, GET_CHANNELS, changeJpodSearchOption, getChannels } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
 const ChannelSearchBox = ({ match }) => {
-    const [searchData, setSearchData] = useState(initialState.channel.list.search);
+    const [searchData, setSearchData] = useState(initialState.channel.jpod.search);
     const history = useHistory();
     const dispatch = useDispatch();
     const { search } = useSelector((store) => ({
-        search: store.jpod.channel.list.search,
+        search: store.jpod.channel.jpod.search,
     }));
 
     const handleSearchChange = (e) => {
@@ -25,11 +25,12 @@ const ChannelSearchBox = ({ match }) => {
         });
     };
     const handleClickSearchButton = () => {
-        dispatch(changeChannelSearchOption(searchData));
+        dispatch(changeJpodSearchOption(searchData));
+        dispatch(getChannels());
     };
     const handleClickSearchResetButton = () => {
-        setSearchData(initialState.channels.list.search);
-        dispatch(changeChannelSearchOption(initialState.channels.list.search));
+        setSearchData(initialState.channel.jpod.search);
+        dispatch(changeJpodSearchOption(initialState.channel.jpod.search));
         history.push(`${match.path}`);
     };
     const handleNewButton = () => {
@@ -59,6 +60,12 @@ const ChannelSearchBox = ({ match }) => {
             [name]: date,
         });
     };
+
+    useEffect(() => {
+        dispatch(getChannels());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             <Form>

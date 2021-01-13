@@ -11,16 +11,20 @@ import {
     CLEAR_CHANNEL_PODTY,
     GET_CHANNEL_PODTY_LIST_SUCCESS,
     SELECT_CHANNEL_PODTY,
+    CHANGE_JPOD_SEARCH_OPTION,
+    GET_CHANNELS_SUCCESS,
+    GET_CHANNEL_INFO_SUCCESS,
+    CLEAR_CHANNEL_INFO,
 } from './jpodAction';
 
 export const initialState = {
     channel: {
-        list: {
+        jpod: {
             total: 0,
             list: [],
             search: {
                 page: 0,
-                sort: 'channelId,desc',
+                sort: 'chnlSeq,desc',
                 size: PAGESIZE_OPTIONS[0],
                 usedYn: 'Y',
                 startDt: moment().format('YYYY-MM-DD 00:00:00'),
@@ -44,7 +48,7 @@ export const initialState = {
             total: 0,
             list: [],
         },
-        selectReporter: [],
+        selectReporter: null,
         selectPodty: [],
         channelInfo: {
             usedYn: 'Y', // 사용유무
@@ -88,7 +92,7 @@ export default handleActions(
         },
         [SELECT_REPORTER]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.channel.selectReporter = [...state.channel.selectReporter, payload];
+                draft.channel.selectReporter = payload;
             });
         },
         // 팟티 검색 모달.
@@ -106,6 +110,28 @@ export default handleActions(
         [SELECT_CHANNEL_PODTY]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.channel.selectPodty = payload;
+            });
+        },
+
+        [CHANGE_JPOD_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.channel.jpod.search = payload;
+            });
+        },
+        [GET_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.channel.jpod.list = body.list;
+                draft.channel.jpod.total = body.totalCnt;
+            });
+        },
+        [GET_CHANNEL_INFO_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.channel.channelInfo = body;
+            });
+        },
+        [CLEAR_CHANNEL_INFO]: (state) => {
+            return produce(state, (draft) => {
+                draft.channel.channelInfo = initialState.channel.channelInfo;
             });
         },
     },

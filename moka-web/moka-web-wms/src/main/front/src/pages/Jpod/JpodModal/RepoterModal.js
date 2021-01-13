@@ -31,12 +31,7 @@ const RepoterModal = (props) => {
 
     const [searchData, setSearchData] = useState(search);
 
-    const [tempValue, setTempValue] = useState(null);
-    const tempEvent = (e) => {
-        console.log(e);
-    };
-
-    const t_commentSeq = 121213;
+    const t_commentSeq = null;
 
     /**
      * 닫기

@@ -4,16 +4,24 @@ import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_REPORTER_LIST, saveJpodChannel } from '@store/jpod';
+import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
+import { useParams, useHistory } from 'react-router-dom';
+
+import ChannelEditReporterForm from './ChannelEditReporterForm';
+
+const reporterCountConst = [0, 1, 2, 3, 4, 5];
 
 const ChannelEdit = ({ match }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
+    const params = useParams();
     const [editName] = useState(false);
     const imgFileRef1 = useRef(null);
     const imgFileRef2 = useRef(null);
     const imgFileRef3 = useRef(null);
+    const selectChnlSeq = useRef(null);
 
     const [podtyChannelModalState, setPodtyChannelModalState] = useState(false);
     const [repoterModalState, setRepoterModalState] = useState(false);
@@ -26,9 +34,10 @@ const ChannelEdit = ({ match }) => {
     const [Thumbfile, setThumbfile] = useState(null);
     const [Mobfile, setMobfile] = useState(null);
 
-    const { selectReporter, selectPodty, loading } = useSelector((store) => ({
+    const { selectReporter, selectPodty, loading, channelInfo } = useSelector((store) => ({
         selectReporter: store.jpod.channel.selectReporter,
         selectPodty: store.jpod.channel.selectPodty,
+        channelInfo: store.jpod.channel.channelInfo,
         loading: store.loading[GET_REPORTER_LIST],
     }));
 
@@ -44,6 +53,24 @@ const ChannelEdit = ({ match }) => {
     const handleChangeReporters = ({ e, index }) => {
         const { name, value } = e.target;
         setEditSelectRepoters(editSelectRepoters.map((item, i) => (i === index ? { ...item, [name]: value } : item)));
+    };
+
+    const resetReporter = () => {
+        setEditSelectRepoters(
+            reporterCountConst.map((element) => {
+                return {
+                    chnlSeq: '',
+                    desc: '',
+                    epsdSeq: '',
+                    memDiv: '',
+                    memMemo: '',
+                    memNm: '',
+                    memRepSeq: '',
+                    nickNm: '',
+                    seqNo: '',
+                };
+            }),
+        );
     };
 
     // 등록 정보 변경 처리.
@@ -108,16 +135,33 @@ const ChannelEdit = ({ match }) => {
 
     // 진행자 삭제 버튼 처리.
     const handleClickReporterDelete = (index) => {
-        setEditSelectRepoters(editSelectRepoters.filter((e, i) => i !== index));
+        let tempList = editSelectRepoters.filter((e, i) => i !== index);
+        tempList = [
+            ...tempList,
+            {
+                chnlSeq: '',
+                desc: '',
+                epsdSeq: '',
+                memDiv: '',
+                memMemo: '',
+                memNm: '',
+                memRepSeq: '',
+                nickNm: '',
+                seqNo: '',
+            },
+        ];
+        setEditSelectRepoters(tempList);
     };
 
     // 저장버튼
     const handleClickSaveButton = () => {
         // post 데이터를 조합 하기 힘들어서 redux 타기전에 폼을 만듬.
-        console.log('handleClickSaveButton');
-
         var formData = new FormData();
-        // let formData = {};
+
+        if (selectChnlSeq.current && selectChnlSeq.current !== 'add') {
+            formData.append('chnlSeq', selectChnlSeq.current);
+        }
+
         formData.append('keywords[0].ordNo', 0);
         formData.append('keywords[0].keyword', !editData.keywords || editData.keywords === undefined ? '' : editData.keywords);
 
@@ -137,13 +181,13 @@ const ChannelEdit = ({ match }) => {
         });
 
         if (Imgfile) {
-            formData.append(`chnlImgFile`, Imgfile);
+            formData.append(`chnlImgFile`, Imgfile[0]);
         }
         if (Thumbfile) {
-            formData.append(`chnlThumbFile`, Thumbfile);
+            formData.append(`chnlThumbFile`, Thumbfile[0]);
         }
         if (Mobfile) {
-            formData.append(`chnlImgMobFile`, Mobfile);
+            formData.append(`chnlImgMobFile`, Mobfile[0]);
         }
 
         formData.append(`usedYn`, editData.usedYn);
@@ -155,6 +199,16 @@ const ChannelEdit = ({ match }) => {
 
         formData.append(`chnlSdt`, chnlSdt);
         formData.append(`chnlEdt`, chnlEdt);
+
+        if (editData.chnlImg) {
+            formData.append(`chnlImg`, editData.chnlImg);
+        }
+        if (editData.chnlThumb) {
+            formData.append(`chnlThumb`, editData.chnlThumb);
+        }
+        if (editData.chnlImgMob) {
+            formData.append(`chnlImgMob`, editData.chnlImgMob);
+        }
         // formData.append(`chnlImg`, editData.chnlImg);
         // formData.append(`chnlThumb`, editData.chnlThumb);
         // formData.append(`chnlImgMob`, editData.chnlImgMob);
@@ -170,20 +224,21 @@ const ChannelEdit = ({ match }) => {
 
         dispatch(
             saveJpodChannel({
-                type: 'save',
+                chnlSeq: selectChnlSeq.current === 'add' ? null : selectChnlSeq.current,
                 channelinfo: formData,
                 callback: ({ header: { success, message }, body }) => {
                     console.log(success, message);
                     if (success === true) {
                         toast.success(message);
-                        // const { boardId } = body;
-                        // if (body.boardId) {
-                        // 리스트를 다시 가지고 옴.
-                        // dispatch(getSetmenuBoardsList());
-                        // 게시판 정보 값도 다시 가지고 옴.
-                        // dispatch(getBoardInfo({ boardId: body.boardId }));
-                        // history.push(`/${pagePathName}/${boardId}`);
-                        // }
+                        const { chnlSeq } = body;
+                        if (chnlSeq) {
+                            // 리스트를 다시 가지고 옴.
+                            dispatch(getChannels());
+                            // 게시판 정보 값도 다시 가지고 옴.
+                            dispatch(clearChannelInfo());
+                            dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+                            history.push(`${match.path}/${chnlSeq}`);
+                        }
                     } else {
                         const { totalCnt, list } = body;
                         if (totalCnt > 0 && Array.isArray(list)) {
@@ -220,10 +275,22 @@ const ChannelEdit = ({ match }) => {
     };
 
     useEffect(() => {
-        if (selectReporter && selectReporter.length > 0) {
-            console.log(selectReporter);
-            setEditSelectRepoters(selectReporter);
+        if (selectReporter) {
+            let status = false;
+            setEditSelectRepoters(
+                editSelectRepoters.map((e) => {
+                    const { memMemo, memNm, memRepSeq, nickNm, seqNo } = e;
+
+                    if (status === false && memMemo === '' && memNm === '' && memRepSeq === '' && nickNm === '' && seqNo === '') {
+                        status = true;
+                        return selectReporter;
+                    } else {
+                        return e;
+                    }
+                }),
+            );
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectReporter]);
 
     useEffect(() => {
@@ -238,9 +305,97 @@ const ChannelEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectPodty]);
 
+    // 그리드에서 리스트 클릭후 스토어 업데이트 되었을떄.
     useEffect(() => {
-        // console.log(editData);
-    }, [editData]);
+        const setBasic = ({ usedYn, chnlNm, chnlMemo, chnlSdt, chnlEdt, podtyChnlSrl, podtyUrl, keywords, chnlImg, chnlImgMob, chnlThumb }) => {
+            // 키워드 업데이트시 ordNo 를 어떻게 할껀지?
+            const keyword = Array.isArray(keywords) && keywords.length > 0 ? keywords[0].keyword : '';
+            setEditData({
+                ...editData,
+                usedYn: usedYn,
+                chnlNm: chnlNm,
+                chnlMemo: chnlMemo,
+                chnlSdt: chnlSdt,
+                chnlEdt: chnlEdt,
+                podty_castSrl: podtyChnlSrl,
+                channel_podty: podtyUrl,
+                keywords: keyword,
+                chnlImg: chnlImg,
+                chnlImgMob: chnlImgMob,
+                chnlThumb: chnlThumb,
+            });
+        };
+
+        // 진행자 설정.
+        const setMember = (members) => {
+            if (Array.isArray(members) && members.length > 0) {
+                setEditSelectRepoters(
+                    reporterCountConst.map((index) => {
+                        return {
+                            chnlSeq: members[index] && members[index].chnlSeq ? members[index].chnlSeq : '',
+                            desc: members[index] && members[index].desc ? members[index].desc : '',
+                            epsdSeq: members[index] && members[index].epsdSeq ? members[index].epsdSeq : '',
+                            memDiv: members[index] && members[index].memDiv ? members[index].memDiv : '',
+                            memMemo: members[index] && members[index].memMemo ? members[index].memMemo : '',
+                            memNm: members[index] && members[index].memNm ? members[index].memNm : '',
+                            memRepSeq: members[index] && members[index].memRepSeq ? members[index].memRepSeq : '',
+                            nickNm: members[index] && members[index].nickNm ? members[index].nickNm : '',
+                            seqNo: members[index] && members[index].seqNo ? members[index].seqNo : '',
+                        };
+                    }),
+                );
+            }
+        };
+
+        // 방송요일 설정.
+        const setChnlDy = (chnlDy) => {
+            const tempArray = [];
+            if (chnlDy === null) {
+                setEditDays([]);
+                return;
+            }
+            if (chnlDy.length === 7) {
+                tempArray.push('day0');
+            }
+
+            for (var i = 0; i < chnlDy.length; i++) {
+                let tmpChar = chnlDy.charAt(i);
+                tempArray.push(`day${tmpChar}`);
+            }
+            setEditDays(tempArray);
+        };
+
+        if (channelInfo === initialState.channel.channelInfo) {
+            setEditData(initialState.channel.channelInfo);
+            resetReporter();
+            setEditDays([]);
+            setImgfile(null);
+            setThumbfile(null);
+            setMobfile(null);
+            return;
+        }
+
+        setBasic(channelInfo);
+        setMember(channelInfo.members);
+        setChnlDy(channelInfo.chnlDy);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [channelInfo]);
+
+    useEffect(() => {
+        if (!isNaN(Number(params.chnlSeq)) && selectChnlSeq.current !== params.chnlSeq) {
+            dispatch(clearChannelInfo());
+            dispatch(getChannelInfo({ chnlSeq: params.chnlSeq }));
+        } else if (selectChnlSeq.current !== params.chnlSeq && params.chnlSeq === 'add') {
+            dispatch(clearChannelInfo());
+        }
+        selectChnlSeq.current = params.chnlSeq;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params]);
+
+    useEffect(() => {
+        resetReporter();
+    }, []);
 
     return (
         <MokaCard
@@ -481,85 +636,83 @@ const ChannelEdit = ({ match }) => {
                         검색
                     </Button>
                 </Form.Row>
-                {(function () {
-                    // 강제 6개.
-                    return [0, 1, 2, 3, 4, 5].map((e, index) => {
-                        return (
-                            <Form.Row className="mb-2" key={index}>
-                                <div className="d-flex align-items-center form-group">
-                                    <div
-                                        className="px-0 mb-0 position-relative flex-shrink-0 form-label"
-                                        style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}
-                                    ></div>
-                                </div>
-                                <Col className="p-0">
-                                    <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
-                                        <Col className="d-flex w-100 h-50 align-items-center">
-                                            <div style={{ width: '60px' }}>
-                                                <MokaInput
-                                                    id="memRepSeq"
-                                                    name="memRepSeq"
-                                                    className="ft-12"
-                                                    value={editSelectRepoters[index] && editSelectRepoters[index].memRepSeq}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`기자번호`}
-                                                    disabled={true}
-                                                />
-                                            </div>
-                                            <div style={{ width: '160px' }}>
-                                                <MokaInput
-                                                    id="memNm"
-                                                    name="memNm"
-                                                    className="ft-12"
-                                                    value={editSelectRepoters[index] && editSelectRepoters[index].memNm}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`기자명`}
-                                                />
-                                            </div>
-                                            <div className="pl-3" style={{ width: '115px' }}>
-                                                <MokaInput
-                                                    id="repTitle"
-                                                    name="repTitle"
-                                                    className="ft-12"
-                                                    value={editSelectRepoters[index] && editSelectRepoters[index].repTitle}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`직책`}
-                                                />
-                                            </div>
-                                            <div className="pl-3" style={{ width: '115px' }}>
-                                                <MokaInput
-                                                    id="nickNm"
-                                                    name="nickNm"
-                                                    className="ft-12"
-                                                    value={editSelectRepoters[index] && editSelectRepoters[index].nickNm}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`닉네임`}
-                                                />
-                                            </div>
-                                            <div className="pl-3" style={{ width: '70px' }}>
-                                                <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
-                                                    삭제
-                                                </Button>
-                                            </div>
-                                        </Col>
-                                        <Col xs={12} className="p-0 h-50 d-flex align-items-center">
-                                            <Col xs={12}>
-                                                <MokaInput
-                                                    id="memMemo"
-                                                    name="memMemo"
-                                                    className="ft-12"
-                                                    value={editSelectRepoters[index] && editSelectRepoters[index].memMemo}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`설명`}
-                                                />
-                                            </Col>
+                {editSelectRepoters.map((element, index) => {
+                    return (
+                        <Form.Row className="mb-2" key={index}>
+                            <div className="d-flex align-items-center form-group">
+                                <div
+                                    className="px-0 mb-0 position-relative flex-shrink-0 form-label"
+                                    style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}
+                                ></div>
+                            </div>
+                            <Col className="p-0">
+                                <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
+                                    <Col className="d-flex w-100 h-50 align-items-center">
+                                        <div style={{ width: '60px' }}>
+                                            <MokaInput
+                                                id="memRepSeq"
+                                                name="memRepSeq"
+                                                className="ft-12"
+                                                value={element.memRepSeq}
+                                                onChange={(e) => handleChangeReporters({ e, index })}
+                                                placeholder={`기자번호`}
+                                                disabled={true}
+                                            />
+                                        </div>
+                                        <div style={{ width: '160px' }}>
+                                            <MokaInput
+                                                id="memNm"
+                                                name="memNm"
+                                                className="ft-12"
+                                                value={element.memNm}
+                                                onChange={(e) => handleChangeReporters({ e, index })}
+                                                placeholder={`기자명`}
+                                            />
+                                        </div>
+                                        <div className="pl-3" style={{ width: '115px' }}>
+                                            <MokaInput
+                                                id="repTitle"
+                                                name="repTitle"
+                                                className="ft-12"
+                                                value={element.repTitle}
+                                                onChange={(e) => handleChangeReporters({ e, index })}
+                                                placeholder={`직책`}
+                                            />
+                                        </div>
+                                        <div className="pl-3" style={{ width: '115px' }}>
+                                            <MokaInput
+                                                id="nickNm"
+                                                name="nickNm"
+                                                className="ft-12"
+                                                value={element.nickNm}
+                                                onChange={(e) => handleChangeReporters({ e, index })}
+                                                placeholder={`닉네임`}
+                                            />
+                                        </div>
+                                        <div className="pl-3" style={{ width: '70px' }}>
+                                            <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
+                                                삭제
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                    <Col xs={12} className="p-0 h-50 d-flex align-items-center">
+                                        <Col xs={12}>
+                                            <MokaInput
+                                                id="memMemo"
+                                                name="memMemo"
+                                                className="ft-12"
+                                                value={element.memMemo}
+                                                onChange={(e) => handleChangeReporters({ e, index })}
+                                                placeholder={`설명`}
+                                            />
                                         </Col>
                                     </Col>
                                 </Col>
-                            </Form.Row>
-                        );
-                    });
-                })()}
+                            </Col>
+                        </Form.Row>
+                    );
+                })}
+
                 <hr />
                 <Form.Row className="mb-2">
                     <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={60} />
@@ -583,7 +736,8 @@ const ChannelEdit = ({ match }) => {
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    // imgFileRef1.current.deleteFile();
+                                    imgFileRef1.current.deleteFile();
+                                    setImgfile(null);
                                 }}
                             >
                                 삭제
@@ -594,7 +748,7 @@ const ChannelEdit = ({ match }) => {
                     inputProps={{
                         height: 80,
                         width: 600, // width: '100%' number type 에러남.
-                        img: null,
+                        img: editData.chnlImg,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                     }}
                     onChange={(file) =>
@@ -625,7 +779,8 @@ const ChannelEdit = ({ match }) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            // imgFileRef2.current.deleteFile();
+                                            imgFileRef2.current.deleteFile();
+                                            setThumbfile(null);
                                         }}
                                     >
                                         삭제
@@ -636,6 +791,7 @@ const ChannelEdit = ({ match }) => {
                             inputProps={{
                                 height: 80,
                                 width: 400, // width: '100%' number type 에러남.
+                                img: editData.chnlImgMob,
                             }}
                             onChange={(file) =>
                                 handleChangeFIle({
@@ -666,7 +822,8 @@ const ChannelEdit = ({ match }) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            // imgFileRef3.current.deleteFile();
+                                            imgFileRef3.current.deleteFile();
+                                            setMobfile(null);
                                         }}
                                     >
                                         삭제
@@ -677,6 +834,7 @@ const ChannelEdit = ({ match }) => {
                             inputProps={{
                                 height: 80,
                                 width: 200, // width: '100%' number type 에러남.
+                                img: editData.chnlImgMob,
                             }}
                             onChange={(file) =>
                                 handleChangeFIle({

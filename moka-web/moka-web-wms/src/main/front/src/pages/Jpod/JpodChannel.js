@@ -4,12 +4,14 @@ import { Switch, Route } from 'react-router-dom';
 import { MokaLoader } from '@components';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/jpod';
+import { useParams, useHistory } from 'react-router-dom';
 
 const ChannelList = React.lazy(() => import('./Channel/ChannelList'));
 const ChannelEdit = React.lazy(() => import('./Channel/ChannelEdit'));
 
 const JpodChannel = ({ match }) => {
     const dispatch = useDispatch();
+    const params = useParams();
 
     useEffect(() => {
         return () => {
@@ -26,14 +28,23 @@ const JpodChannel = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <Suspense fallback={<MokaLoader />}>
-                <ChannelList match={match} />
-            </Suspense>
+
+            <Switch>
+                <Route
+                    path={[`${match.path}`, `${match.path}/add`, `${match.path}/:chnlSeq`]}
+                    exact
+                    render={() => (
+                        <Suspense fallback={<MokaLoader />}>
+                            <ChannelList match={match} />
+                        </Suspense>
+                    )}
+                />
+            </Switch>
 
             {/* 등록 / 수정창 */}
             <Switch>
                 <Suspense fallback={<MokaLoader />}>
-                    <Route path={([`${match.path}/add`], [`${match.path}/:channelSeq`])} exact render={(props) => <ChannelEdit {...props} match={match} />} />
+                    <Route path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])} exact render={(props) => <ChannelEdit {...props} match={match} />} />
                 </Suspense>
             </Switch>
         </div>

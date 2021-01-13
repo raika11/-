@@ -2,20 +2,20 @@ export const localeText = { noRowsToShow: '조회 결과가 없습니다.', load
 export const columnDefs = [
     {
         headerName: 'ID',
-        field: 'channelId',
+        field: 'chnlSeq',
         width: 50,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '개설일',
-        field: 'startDt',
+        field: 'chnlSdt',
         width: 90,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        tooltipField: 'startDt',
+        tooltipField: 'chnlSdt',
     },
     {
         headerName: '이미지',
-        field: 'image',
+        field: 'chnlThumb',
         width: 90,
         cellRenderer: 'imageRenderer',
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
@@ -23,19 +23,19 @@ export const columnDefs = [
     },
     {
         headerName: '채널명',
-        field: 'name',
+        field: 'chnlNm',
         width: 200,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         // autoHeight: true,
-        tooltipField: 'name',
+        tooltipField: 'chnlNm',
     },
     {
         headerName: '설명',
-        field: 'bio',
+        field: 'chnlMemo',
         width: 80,
         flex: 1,
         // warpText: 1,
-        tooltipField: 'bio',
+        tooltipField: 'chnlMemo',
         autoHeight: true,
         cellStyle: {
             boxSizing: 'border-box',

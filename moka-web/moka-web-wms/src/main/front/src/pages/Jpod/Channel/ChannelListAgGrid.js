@@ -1,39 +1,83 @@
-import React, { useEffect, Suspense, useState } from 'react';
+import React, { useEffect, Suspense, useState, useCallback, useRef } from 'react';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './ChannelListAgGridColumns';
 import { tempChannelList } from '@pages/Jpod/JpodConst';
 import ImageRenderer from './ImageRenderer';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { initialState, GET_CHANNELS, changeJpodSearchOption, getChannels, getChannelInfo, clearChannelInfo } from '@store/jpod';
 
 const ChannelListAgGrid = ({ match }) => {
+    const dispatch = useDispatch();
+    const params = useParams();
+    const selectChnlSeq = useRef(null);
+    const { search, list, loading, total } = useSelector((store) => ({
+        search: store.jpod.channel.jpod.search,
+        list: store.jpod.channel.jpod.list,
+        total: store.jpod.channel.jpod.total,
+        loading: store.loading[GET_CHANNELS],
+    }));
+
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
-    const loading = false;
     const t_commentSeq = 121213;
 
-    const handleClickListRow = ({ channelId }) => {
-        history.push(`${match.path}/${channelId}`);
+    const handleClickListRow = ({ chnlSeq }) => {
+        history.push(`${match.path}/${chnlSeq}`);
+        dispatch(clearChannelInfo());
+        dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
     };
-    const handleChangeSearchOption = () => {};
+
+    // grid 에서 상태 변경시 리스트를 가지고 오기.
+    const handleChangeSearchOption = useCallback(
+        ({ key, value }) => {
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(changeJpodSearchOption(temp));
+            dispatch(getChannels());
+        },
+        [dispatch, search],
+    );
+
+    // useEffect(() => {
+    //     console.log(params.chnlSeq);
+    //     if (!isNaN(Number(params.chnlSeq)) && selectChnlSeq.current !== params.chnlSeq) {
+    //         selectChnlSeq.current = params.chnlSeq;
+    //         dispatch(clearChannelInfo());
+    //         dispatch(getChannelInfo({ chnlSeq: params.chnlSeq }));
+    //     } else if (params.chnlSeq === 'add') {
+    //         console.log('add');
+    //         // dispatch(clearChannelInfo());
+    //     }
+    // }, [dispatch, params]);
 
     useEffect(() => {
-        setRowData(
-            tempChannelList.list.map((element) => {
-                let startDt = element.startDt && element.startDt.length > 10 ? element.startDt.substr(0, 10) : element.startDt;
+        setRowData([]);
+        const inirGridRow = (data) => {
+            setRowData(
+                data.map((element) => {
+                    let chnlSdt = element.chnlSdt && element.chnlSdt.length > 10 ? element.chnlSdt.substr(0, 10) : element.chnlSdt;
+                    return {
+                        chnlSeq: element.chnlSeq,
+                        chnlSdt: chnlSdt,
+                        chnlThumb: element.chnlThumb,
+                        chnlNm: element.chnlNm,
+                        chnlMemo: element.chnlMemo,
+                        roundinfo: `0/0`,
+                        subscribe: ``,
+                    };
+                }),
+            );
+        };
 
-                return {
-                    channelId: element.channelId,
-                    startDt: startDt,
-                    image: element.image,
-                    name: element.name,
-                    bio: element.bio,
-                    roundinfo: `${element.roundinfo.total}/${element.roundinfo.round}`,
-                    subscribe: element.subscribe,
-                };
-            }),
-        );
-    }, []);
+        if (list.length > 0) {
+            inirGridRow(list);
+        }
+    }, [list]);
 
     return (
         <MokaTable
@@ -41,15 +85,15 @@ const ChannelListAgGrid = ({ match }) => {
             columnDefs={columnDefs}
             rowData={rowData}
             rowHeight={80}
-            onRowNodeId={(data) => data.channelId}
+            onRowNodeId={(data) => data.chnlSeq}
             onRowClicked={(e) => handleClickListRow(e)}
             loading={loading}
-            total={tempChannelList.total}
-            page={tempChannelList.page}
-            size={tempChannelList.size}
+            total={total}
+            page={search.page}
+            size={search.size}
             displayPageNum={DISPLAY_PAGE_NUM}
             onChangeSearchOption={handleChangeSearchOption}
-            selected={t_commentSeq}
+            selected={params.chnlSeq}
             frameworkComponents={{ ImageRenderer: ImageRenderer }}
         />
     );

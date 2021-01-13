@@ -1,15 +1,13 @@
-import React, { useEffect, Suspense, useState, useRef } from 'react';
-import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
-import { Form, Col, Button, Row } from 'react-bootstrap';
+import React, { useEffect, useState, useRef } from 'react';
+import { MokaCard, MokaInputLabel, MokaInput } from '@components';
+import { Form, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels } from '@store/jpod';
+import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, deleteJpodChannel } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';
-
-import ChannelEditReporterForm from './ChannelEditReporterForm';
 
 const reporterCountConst = [0, 1, 2, 3, 4, 5];
 
@@ -76,7 +74,15 @@ const ChannelEdit = ({ match }) => {
     // 등록 정보 변경 처리.
     const handleChangeChannelEditData = (e) => {
         const { name, value, checked } = e.target;
-        if (name === 'usedYn') {
+
+        if (name === 'channel_out') {
+            setEditData({
+                ...editData,
+                podty_castSrl: 0,
+                channel_podty: '',
+                channel_out: value,
+            });
+        } else if (name === 'usedYn') {
             setEditData({
                 ...editData,
                 usedYn: checked ? 'Y' : 'N',
@@ -153,9 +159,38 @@ const ChannelEdit = ({ match }) => {
         setEditSelectRepoters(tempList);
     };
 
+    const checkValidation = () => {
+        console.log({
+            channel_out: editData.channel_out,
+            podty_castSrl: editData.podty_castSrl,
+            channel_podty: editData.channel_podty,
+        });
+        if (editData.channel_out === '' && (editData.podty_castSrl === '' || editData.channel_podty === '')) {
+            messageBox.alert('팟티를 입력해 주세요.', () => {});
+            return true;
+        }
+
+        if (editData.chnlNm === '') {
+            messageBox.alert('채널명을 입력해 주세요.', () => {});
+            return true;
+        }
+
+        if (editDays.length === 0) {
+            messageBox.alert('방송 요일을 선택해 주세요.', () => {});
+            return true;
+        }
+
+        return false;
+    };
+
     // 저장버튼
     const handleClickSaveButton = () => {
         // post 데이터를 조합 하기 힘들어서 redux 타기전에 폼을 만듬.
+
+        // 벨리데이션 체크.
+        if (checkValidation()) {
+            return;
+        }
         var formData = new FormData();
 
         if (selectChnlSeq.current && selectChnlSeq.current !== 'add') {
@@ -172,12 +207,15 @@ const ChannelEdit = ({ match }) => {
             const nickNm = !element.nickNm || element.nickNm === undefined ? '' : element.nickNm;
             const memMemo = !element.memMemo || element.memMemo === undefined ? '' : element.memMemo;
 
-            formData.append(`members[${index}].memDiv`, memDiv);
-            formData.append(`members[${index}].memNm`, memNm);
-            formData.append(`members[${index}].memRepSeq`, memRepSeq);
-            formData.append(`members[${index}].nickNm`, nickNm);
-            formData.append(`members[${index}].memMemo`, memMemo);
-            formData.append(`members[${index}].desc`, index);
+            if (memNm) {
+                formData.append(`members[${index}].memDiv`, memDiv);
+                formData.append(`members[${index}].memNm`, memNm);
+                formData.append(`members[${index}].memRepSeq`, memRepSeq);
+                formData.append(`members[${index}].nickNm`, nickNm);
+                formData.append(`members[${index}].memMemo`, memMemo);
+                formData.append(`members[${index}].desc`, index);
+            }
+            return [];
         });
 
         if (Imgfile) {
@@ -209,18 +247,23 @@ const ChannelEdit = ({ match }) => {
         if (editData.chnlImgMob) {
             formData.append(`chnlImgMob`, editData.chnlImgMob);
         }
-        // formData.append(`chnlImg`, editData.chnlImg);
-        // formData.append(`chnlThumb`, editData.chnlThumb);
-        // formData.append(`chnlImgMob`, editData.chnlImgMob);
-        // formData.append(`chnlImg`, ' ');
-        // formData.append(`chnlThumb`, ' ');
-        // formData.append(`chnlImgMob`, ' ');
 
         const chnlDy = editDays.join('').replace(/day/gi, '').replace('0', '');
         formData.append(`chnlDy`, chnlDy);
 
-        formData.append(`podtyChnlSrl`, editData.podty_castSrl);
-        formData.append(`podtyUrl`, editData.channel_podty);
+        if (editData.channel_out.length > 0) {
+            formData.append(`podtyChnlSrl`, 0);
+            formData.append(`podtyUrl`, editData.channel_out);
+        } else {
+            formData.append(`podtyChnlSrl`, editData.podty_castSrl);
+            formData.append(`podtyUrl`, editData.channel_podty);
+        }
+
+        // formData 출력.
+        // for (let [key, value] of formData) {
+        //     console.log(`${key}: ${value}`);
+        // }
+        // return;
 
         dispatch(
             saveJpodChannel({
@@ -257,6 +300,39 @@ const ChannelEdit = ({ match }) => {
     // 취소 버튼
     const handleCancleSaveButton = () => {};
 
+    // 삭제 버튼 임시.
+    const handleClickDeleteButton = () => {
+        dispatch(
+            deleteJpodChannel({
+                chnlSeq: selectChnlSeq.current,
+                callback: ({ header: { success, message }, body }) => {
+                    console.log(success, message);
+                    if (success === true) {
+                        toast.success(message);
+                        const { chnlSeq } = body;
+                        if (chnlSeq) {
+                            // 리스트를 다시 가지고 옴.
+                            dispatch(getChannels());
+                            // 게시판 정보 값도 다시 가지고 옴.
+                            dispatch(clearChannelInfo());
+                            dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+                            history.push(`${match.path}/${chnlSeq}`);
+                        }
+                    } else {
+                        const { totalCnt, list } = body;
+                        if (totalCnt > 0 && Array.isArray(list)) {
+                            // 에러 메시지 확인.
+                            messageBox.alert(list[0].reason, () => {});
+                        } else {
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+                            messageBox.alert(message, () => {});
+                        }
+                    }
+                },
+            }),
+        );
+    };
+
     // 이미지 파일 변경시 각 스테이트 업데이트.
     const handleChangeFIle = ({ name, file }) => {
         switch (name) {
@@ -276,6 +352,11 @@ const ChannelEdit = ({ match }) => {
 
     useEffect(() => {
         if (selectReporter) {
+            const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
+            if (tmpCh.length === 0) {
+                toast.warning('진행자는 6명까지 선택 할수 있습니다.');
+                return;
+            }
             let status = false;
             setEditSelectRepoters(
                 editSelectRepoters.map((e) => {
@@ -300,6 +381,7 @@ const ChannelEdit = ({ match }) => {
                 ...editData,
                 podty_castSrl: castSrl,
                 channel_podty: shareUrl,
+                channel_out: '',
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -307,9 +389,20 @@ const ChannelEdit = ({ match }) => {
 
     // 그리드에서 리스트 클릭후 스토어 업데이트 되었을떄.
     useEffect(() => {
-        const setBasic = ({ usedYn, chnlNm, chnlMemo, chnlSdt, chnlEdt, podtyChnlSrl, podtyUrl, keywords, chnlImg, chnlImgMob, chnlThumb }) => {
+        const setBasic = ({ usedYn, chnlNm, chnlMemo, chnlSdt, chnlEdt, podtyChnlSrl, podtyUrl, keywords, chnlImg, chnlImgMob, chnlThumb, episodeStat }) => {
+            let t_podtyChnlSrl = null;
+            let t_channel_podty = '';
+            let t_channel_out = '';
+
             // 키워드 업데이트시 ordNo 를 어떻게 할껀지?
             const keyword = Array.isArray(keywords) && keywords.length > 0 ? keywords[0].keyword : '';
+            if (podtyChnlSrl === 0) {
+                t_podtyChnlSrl = 0;
+                t_channel_out = podtyUrl;
+            } else {
+                t_podtyChnlSrl = podtyChnlSrl;
+                t_channel_podty = podtyUrl;
+            }
             setEditData({
                 ...editData,
                 usedYn: usedYn,
@@ -317,12 +410,14 @@ const ChannelEdit = ({ match }) => {
                 chnlMemo: chnlMemo,
                 chnlSdt: chnlSdt,
                 chnlEdt: chnlEdt,
-                podty_castSrl: podtyChnlSrl,
-                channel_podty: podtyUrl,
+                podty_castSrl: t_podtyChnlSrl,
+                channel_podty: t_channel_podty,
+                channel_out: t_channel_out,
                 keywords: keyword,
                 chnlImg: chnlImg,
                 chnlImgMob: chnlImgMob,
                 chnlThumb: chnlThumb,
+                episodeStat: episodeStat,
             });
         };
 
@@ -365,6 +460,8 @@ const ChannelEdit = ({ match }) => {
             setEditDays(tempArray);
         };
 
+        // 에피소트 스테이트
+
         if (channelInfo === initialState.channel.channelInfo) {
             setEditData(initialState.channel.channelInfo);
             resetReporter();
@@ -389,7 +486,6 @@ const ChannelEdit = ({ match }) => {
             dispatch(clearChannelInfo());
         }
         selectChnlSeq.current = params.chnlSeq;
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
@@ -412,7 +508,8 @@ const ChannelEdit = ({ match }) => {
                     className: 'mr-2',
                     onClick: handleClickSaveButton,
                 },
-                { text: '취소', variant: 'negative', onClick: handleCancleSaveButton },
+                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleCancleSaveButton },
+                { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton },
             ]}
         >
             <Form className="mb-gutter">
@@ -475,10 +572,16 @@ const ChannelEdit = ({ match }) => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
-                    <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
-                    <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col>
-                </Form.Row>
+                {editData.episodeStat && (
+                    <Form.Row className="mb-2">
+                        <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
+                        {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
+                        <Col className="p-0">{`* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : ${
+                            editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``
+                        }`}</Col>
+                    </Form.Row>
+                )}
+
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -738,6 +841,10 @@ const ChannelEdit = ({ match }) => {
                                     e.stopPropagation();
                                     imgFileRef1.current.deleteFile();
                                     setImgfile(null);
+                                    setEditData({
+                                        ...editData,
+                                        chnlImg: null,
+                                    });
                                 }}
                             >
                                 삭제
@@ -781,6 +888,10 @@ const ChannelEdit = ({ match }) => {
                                             e.stopPropagation();
                                             imgFileRef2.current.deleteFile();
                                             setThumbfile(null);
+                                            setEditData({
+                                                ...editData,
+                                                chnlThumb: null,
+                                            });
                                         }}
                                     >
                                         삭제
@@ -824,6 +935,10 @@ const ChannelEdit = ({ match }) => {
                                             e.stopPropagation();
                                             imgFileRef3.current.deleteFile();
                                             setMobfile(null);
+                                            setEditData({
+                                                ...editData,
+                                                chnlImgMob: null,
+                                            });
                                         }}
                                     >
                                         삭제

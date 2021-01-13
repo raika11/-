@@ -43,3 +43,7 @@ export const getChannelInfo = createAction(GET_CHANNEL_INFO, ({ chnlSeq }) => ({
 // 채널 저장 처리.
 export const [SAVE_JPOD_CHANNEL, SAVE_JPOD_CHANNEL_SUCCESS, SAVE_JPOD_CHANNEL_FAILURE] = createRequestActionTypes('jpod/SAVE_JPOD_CHANNEL');
 export const saveJpodChannel = createAction(SAVE_JPOD_CHANNEL, ({ chnlSeq, channelinfo, callback }) => ({ chnlSeq, channelinfo, callback }));
+
+// 채널 삭제.
+export const [DELETE_JPOD_CHANNEL] = createRequestActionTypes('jpod/DELETE_JPOD_CHANNEL');
+export const deleteJpodChannel = createAction(DELETE_JPOD_CHANNEL, ({ chnlSeq, callback }) => ({ chnlSeq, callback }));

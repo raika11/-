@@ -1,18 +1,16 @@
-import React, { useEffect, Suspense, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './ChannelListAgGridColumns';
-import { tempChannelList } from '@pages/Jpod/JpodConst';
 import ImageRenderer from './ImageRenderer';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { initialState, GET_CHANNELS, changeJpodSearchOption, getChannels, getChannelInfo, clearChannelInfo } from '@store/jpod';
+import { GET_CHANNELS, changeJpodSearchOption, getChannels, getChannelInfo, clearChannelInfo } from '@store/jpod';
 
 const ChannelListAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const params = useParams();
-    const selectChnlSeq = useRef(null);
     const { search, list, loading, total } = useSelector((store) => ({
         search: store.jpod.channel.jpod.search,
         list: store.jpod.channel.jpod.list,
@@ -22,7 +20,6 @@ const ChannelListAgGrid = ({ match }) => {
 
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
-    const t_commentSeq = 121213;
 
     const handleClickListRow = ({ chnlSeq }) => {
         history.push(`${match.path}/${chnlSeq}`);
@@ -42,18 +39,6 @@ const ChannelListAgGrid = ({ match }) => {
         },
         [dispatch, search],
     );
-
-    // useEffect(() => {
-    //     console.log(params.chnlSeq);
-    //     if (!isNaN(Number(params.chnlSeq)) && selectChnlSeq.current !== params.chnlSeq) {
-    //         selectChnlSeq.current = params.chnlSeq;
-    //         dispatch(clearChannelInfo());
-    //         dispatch(getChannelInfo({ chnlSeq: params.chnlSeq }));
-    //     } else if (params.chnlSeq === 'add') {
-    //         console.log('add');
-    //         // dispatch(clearChannelInfo());
-    //     }
-    // }, [dispatch, params]);
 
     useEffect(() => {
         setRowData([]);

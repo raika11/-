@@ -1,20 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Form, Col } from 'react-bootstrap';
-import { MokaModal, MokaCard, MokaInputLabel, MokaInput, MokaSearchInput } from '@components';
-import { blockReason } from '@pages/CommentManage/CommentConst';
-import { MokaTable } from '@components';
+import { MokaModal, MokaSearchInput, MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './RepoterModalGridColumns';
-import { tempRepoterList } from '@pages/Jpod/JpodConst';
-
 import { GET_REPORTER_LIST, getReporterList, clearReporter, changeReporterSearchOption } from '@store/jpod';
-
-import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-/**
- * ModalBody로 Input 한개 있는 Modal
- */
 const RepoterModal = (props) => {
     const dispatch = useDispatch();
 
@@ -25,52 +16,16 @@ const RepoterModal = (props) => {
         loading: store.loading[GET_REPORTER_LIST],
     }));
 
-    const { show, onHide, inputData, onSave, ModalUsage } = props;
-    const [data, setData] = useState({ title: '', value: '', isInvalid: false });
+    const { show, onHide } = props;
     const [rowData, setRowData] = useState([]);
 
     const [searchData, setSearchData] = useState(search);
 
-    const t_commentSeq = null;
-
-    /**
-     * 닫기
-     */
     const handleClickHide = () => {
-        // setData({ title: '', value: '', isInvalid: false });
         onHide();
     };
 
-    /**
-     * input 값 변경
-     * @param {object} e 이벤트
-     */
-    const handleChangeValue = (e) => {
-        setData({
-            ...data,
-            value: e.target.value,
-        });
-    };
-
-    /**
-     * 저장 버튼 클릭 이벤트
-     */
-    const handleClickSave = () => {
-        onSave(data, invalidCheckCallback);
-    };
-
-    const invalidCheckCallback = (isInvalid) => {
-        setData({ ...data, isInvalid });
-    };
-
-    /**
-     * inputData 값 변경
-     */
-    useEffect(() => {
-        setData(inputData);
-    }, [inputData]);
-
-    const handleClickListRow = ({ channelId }) => {
+    const handleClickListRow = () => {
         // history.push(`${match.path}/${channelId}`);
     };
 
@@ -81,7 +36,8 @@ const RepoterModal = (props) => {
                 temp['page'] = 0;
             }
             setRowData([]);
-            dispatch(changeReporterSearchOption(searchData));
+            setSearchData(temp);
+            dispatch(changeReporterSearchOption(temp));
             dispatch(getReporterList());
         },
         [dispatch, searchData],
@@ -164,11 +120,6 @@ const RepoterModal = (props) => {
                             onSearch={() => handleClickSearchButton()}
                         />
                     </Col>
-                    <Col xs={1} className="mr-0">
-                        {/* <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
-                            초기화
-                        </Button> */}
-                    </Col>
                 </Form.Row>
             </Form>
             <MokaTable
@@ -184,7 +135,7 @@ const RepoterModal = (props) => {
                 size={search.size}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={(e) => handleChangeSearchOption(e)}
-                selected={t_commentSeq}
+                selected={null}
             />
         </MokaModal>
     );

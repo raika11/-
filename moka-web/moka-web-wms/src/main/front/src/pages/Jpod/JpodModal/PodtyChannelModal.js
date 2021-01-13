@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col } from 'react-bootstrap';
-import { MokaModal, MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { blockReason } from '@pages/CommentManage/CommentConst';
-import { MokaTable } from '@components';
-import { DISPLAY_PAGE_NUM } from '@/constants';
+import { MokaModal, MokaTable } from '@components';
 import { columnDefs } from './PodtyChannelModalGridColumns';
-import { tempChannelList } from '@pages/Jpod/JpodConst';
-import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { GET_CHANNEL_PODTY_LIST, getChannelPodtyList, clearChannelPodty, selectChannelPodty } from '@store/jpod';
 
@@ -15,41 +9,17 @@ import { GET_CHANNEL_PODTY_LIST, getChannelPodtyList, clearChannelPodty, selectC
  */
 const PodtyChannelModal = (props) => {
     const dispatch = useDispatch();
-    const { show, onHide, inputData, onSave, ModalUsage } = props;
-    const [data, setData] = useState({ title: '', value: '', isInvalid: false });
+    const { show, onHide } = props;
     const [rowData, setRowData] = useState([]);
 
-    const [tempValue, setTempValue] = useState(null);
-    const tempEvent = (e) => {
-        console.log(e);
-    };
-
-    const t_commentSeq = 121213;
-
-    const { total, list, search, loading } = useSelector((store) => ({
-        total: store.jpod.channel.podty.total,
+    const { list, loading } = useSelector((store) => ({
         list: store.jpod.channel.podty.list,
         loading: store.loading[GET_CHANNEL_PODTY_LIST],
     }));
 
-    /**
-     * 닫기
-     */
     const handleClickHide = () => {
-        // setData({ title: '', value: '', isInvalid: false });
         onHide();
     };
-
-    const invalidCheckCallback = (isInvalid) => {
-        setData({ ...data, isInvalid });
-    };
-
-    /**
-     * inputData 값 변경
-     */
-    useEffect(() => {
-        setData(inputData);
-    }, [inputData]);
 
     const handleClickListRow = ({ info }) => {
         dispatch(selectChannelPodty(info));

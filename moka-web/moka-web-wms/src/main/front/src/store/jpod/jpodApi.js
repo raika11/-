@@ -56,3 +56,10 @@ export const updateJpodChannel = ({ chnlSeq, channelinfo }) => {
             throw err;
         });
 };
+
+// 채널 삭제.
+export const deleteJpodChannel = ({ chnlSeq }) => {
+    return instance.delete(`/api/jpods/${chnlSeq}`).catch((err) => {
+        throw err;
+    });
+};

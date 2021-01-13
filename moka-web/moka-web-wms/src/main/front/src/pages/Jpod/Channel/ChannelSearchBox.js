@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
@@ -6,16 +6,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectItem } from '@pages/Boards/BoardConst';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, GET_CHANNELS, changeJpodSearchOption, getChannels } from '@store/jpod';
+import { initialState, changeJpodSearchOption, getChannels } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
 const ChannelSearchBox = ({ match }) => {
     const [searchData, setSearchData] = useState(initialState.channel.jpod.search);
     const history = useHistory();
     const dispatch = useDispatch();
-    const { search } = useSelector((store) => ({
-        search: store.jpod.channel.jpod.search,
-    }));
 
     const handleSearchChange = (e) => {
         const { name, value } = e.target;
@@ -32,6 +29,7 @@ const ChannelSearchBox = ({ match }) => {
         setSearchData(initialState.channel.jpod.search);
         dispatch(changeJpodSearchOption(initialState.channel.jpod.search));
         history.push(`${match.path}`);
+        dispatch(getChannels());
     };
     const handleNewButton = () => {
         history.push(`${match.path}/add`);

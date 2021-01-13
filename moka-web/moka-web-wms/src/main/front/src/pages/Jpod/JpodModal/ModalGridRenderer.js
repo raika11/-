@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { selectReporter } from '@store/jpod';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // 등록자 정보
 export const ChannelMoveButtonRenderer = ({ shareUrl }) => {

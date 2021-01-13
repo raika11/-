@@ -1,8 +1,8 @@
-import React, { useEffect, Suspense } from 'react';
+import React from 'react';
 import { MokaCard } from '@components';
 import ChannelSearchBox from './ChannelSearchBox';
 import ChannelListAgGrid from './ChannelListAgGrid';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const ChannelList = ({ match }) => {
     const params = useParams();

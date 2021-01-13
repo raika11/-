@@ -26,7 +26,7 @@ const SystemLogSearch = ({ searchOptions }) => {
     return (
         <Form className="pb-2">
             <Form.Row className="mb-2">
-                <Col xs={3}>
+                <Col xs={4}>
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -48,7 +48,7 @@ const SystemLogSearch = ({ searchOptions }) => {
                         }}
                     />
                 </Col>
-                <Col xs={3}>
+                <Col xs={4}>
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -70,7 +70,7 @@ const SystemLogSearch = ({ searchOptions }) => {
                         }}
                     />
                 </Col>
-                <Col xs={3}>
+                <Col xs={4}>
                     <MokaInput
                         as="select"
                         name="successYn"
@@ -84,9 +84,6 @@ const SystemLogSearch = ({ searchOptions }) => {
                         <option value="Y">성공</option>
                         <option value="N">실패</option>
                     </MokaInput>
-                </Col>
-                <Col xs={3}>
-                    <Button variant="negative">초기화</Button>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
@@ -115,6 +112,9 @@ const SystemLogSearch = ({ searchOptions }) => {
                             handleChangeValue(name, value);
                         }}
                     />
+                </Col>
+                <Col xs={2}>
+                    <Button variant="negative">초기화</Button>
                 </Col>
             </Form.Row>
         </Form>

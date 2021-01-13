@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeStatVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -133,5 +134,8 @@ public class JpodChannelDetailDTO implements Serializable {
 
     @ApiModelProperty("방송 진행자 목록")
     private List<JpodMemberDTO> members;
+
+    @ApiModelProperty(value = "방송 통계", hidden = true)
+    private JpodEpisodeStatVO episodeStat;
 
 }

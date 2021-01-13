@@ -13,6 +13,7 @@ import jmnet.moka.core.tps.mvc.jpod.entity.QJpodKeyword;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodMember;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -67,6 +68,7 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
     }
 
     @Override
+    @Transactional
     public long deleteKeywordByChnlSeq(Long chnlSeq) {
         QJpodKeyword qJpodKeyword = QJpodKeyword.jpodKeyword;
 
@@ -81,6 +83,7 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
 
 
     @Override
+    @Transactional
     public long deleteMemberByChnlSeq(Long chnlSeq) {
         QJpodMember qJpodMember = QJpodMember.jpodMember;
 

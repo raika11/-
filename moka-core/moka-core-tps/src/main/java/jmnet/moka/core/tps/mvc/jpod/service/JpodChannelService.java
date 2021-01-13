@@ -6,6 +6,7 @@ import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
+import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeStatVO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -96,4 +97,6 @@ public interface JpodChannelService {
      * @return 채널 진행자 목록
      */
     List<JpodMember> findAllJpodChannelMember(Long chnlSeq);
+
+    JpodEpisodeStatVO findEpisodeStat(Long chnlSeq);
 }

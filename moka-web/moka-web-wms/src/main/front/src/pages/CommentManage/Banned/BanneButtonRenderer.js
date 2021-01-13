@@ -17,19 +17,17 @@ const BanneButtonRenderer = (props) => {
         // console.log(value);
     });
     return (
-        <>
-            <div>
-                {value === 'Y' ? (
-                    <Button variant="positive" className="mr-2" onClick={() => tempEvent()}>
-                        차단
-                    </Button>
-                ) : (
-                    <Button variant="negative" className="mr-2" onClick={() => tempEvent()}>
-                        복원
-                    </Button>
-                )}
-            </div>
-        </>
+        <div className="d-flex align-items-center">
+            {value === 'Y' ? (
+                <Button variant="outline-table-btn2" className="mr-2" size="sm" onClick={() => tempEvent()}>
+                    차단
+                </Button>
+            ) : (
+                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={() => tempEvent()}>
+                    복원
+                </Button>
+            )}
+        </div>
     );
 };
 

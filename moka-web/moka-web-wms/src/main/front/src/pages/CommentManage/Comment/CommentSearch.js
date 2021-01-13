@@ -120,7 +120,7 @@ const CommentSearch = () => {
                             <MokaInput
                                 as="dateTimePicker"
                                 label="시작일"
-                                inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: '', inputClassName: 'ft-12' }}
+                                inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                                 name="startDt"
                                 value={startDt}
                                 onChange={handleChangeStartDt}
@@ -130,7 +130,7 @@ const CommentSearch = () => {
                             <MokaInput
                                 as="dateTimePicker"
                                 label="종료일"
-                                inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: '', inputClassName: 'ft-12' }}
+                                inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                                 name="endDt"
                                 value={endDt}
                                 onChange={handleChangeEndDt}
@@ -194,14 +194,14 @@ const CommentSearch = () => {
                                 buttonClassName="ft-12"
                             />
                         </Col>
-                        <Col xs={4} className="p-0 d-flex">
-                            <Button variant="outline-neutral" className="flex-shrink-0 mr-2 flex-fill ft-12">
+                        <Col xs={4} className="p-0 d-flex justify-content-end">
+                            <Button variant="outline-neutral" className="flex-shrink-0 mr-2 ft-12">
                                 새로고침
                             </Button>
-                            <Button variant="positive" className="mr-2 flex-shrink-0 flex-fill ft-12" onClick={() => setDefaultInputModalState(true)}>
+                            <Button variant="positive" className="mr-2 flex-shrink-0 ft-12" onClick={() => setDefaultInputModalState(true)}>
                                 차단등록
                             </Button>
-                            <Button variant="negative" className="flex-shrink-0 flex-fill ft-12" onClick={() => setDefaultInputModalState(true)}>
+                            <Button variant="negative" className="flex-shrink-0 ft-12" onClick={() => setDefaultInputModalState(true)}>
                                 삭제
                             </Button>
                         </Col>

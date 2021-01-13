@@ -22,7 +22,7 @@ const Comment = () => {
     }, [dispatch]);
 
     return (
-        <Container fliud>
+        <Container fluid>
             <Helmet>
                 <title>댓글 관리</title>
                 <meta name="description" content="댓글 관리 페이지 입니다." />

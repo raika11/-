@@ -46,6 +46,7 @@ const ArticleCdn = React.lazy(() => import('@pages/ArticleCdn'));
 const SearchLog = React.lazy(() => import('@pages/Search/SearchLog'));
 const JpodChannel = React.lazy(() => import('@pages/Jpod/JpodChannel'));
 const JpodEpisode = React.lazy(() => import('@pages/Jpod/JpodEpisode'));
+const SystemLog = React.lazy(() => import('@pages/SystemLog'));
 
 const routes = [
     {
@@ -584,6 +585,16 @@ const routes = [
         name: 'jpod-episode',
         displayName: 'Jpod 에피소드관리',
         component: JpodEpisode,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/bo-log',
+        name: 'system-log',
+        displayName: '로그 관리',
+        component: SystemLog,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

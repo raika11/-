@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaInput } from '@/components';
+import MicTableSwitch from '../components/MicTableSwitch';
 
 export default [
     {
@@ -25,19 +25,9 @@ export default [
         headerName: '사용',
         field: 'usedYn',
         width: 50,
-        cellStyle: { alignItems: 'center' },
+        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (params) => {
-            return (
-                <MokaInput
-                    as="switch"
-                    id="switch-usedYn"
-                    inputProps={{
-                        custom: true,
-                        checked: params.value === 'Y' ? true : false,
-                    }}
-                    onChange={(e) => e.target.checked}
-                />
-            );
+            return <MicTableSwitch data={params.data.usedYn} id="usedYn" />;
         },
     },
 ];

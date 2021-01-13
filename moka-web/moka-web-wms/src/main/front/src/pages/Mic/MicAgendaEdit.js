@@ -321,7 +321,7 @@ const MicAgendaEdit = (props) => {
                             <div className="d-flex flex-column">
                                 <MokaImage img={temp.pcImg} alt="배경이미지(PC) (800*600)" width={280} height={170} className="mb-1" size="sm" />
                                 <div className="d-flex justify-content-between">
-                                    <ImageUploadButton fileUrl={(url) => setTemp({ ...temp, pcImg: url })} />
+                                    <ImageUploadButton fileUrl={(url) => setTemp({ ...temp, pcImg: url })} size="sm" />
                                     <Button variant="negative" size="sm">
                                         삭제
                                     </Button>

@@ -34,13 +34,14 @@ const BannerModal = (props) => {
     };
 
     return (
-        <MokaModal title="다른 주제 공통 배너 관리" show={show} onHide={handleHide} size="xl" headerClassName="justify-content-start">
+        <MokaModal title="다른 주제 공통 배너 관리" height={800} show={show} onHide={handleHide} size="xl" headerClassName="justify-content-start">
             <Container className="p-0" fluid>
                 <Row>
-                    <Col className="p-0 custom-scroll d-flex flex-column" style={{ minWidth: 500, minHeight: 650 }}>
+                    <Col className="p-0 custom-scroll d-flex flex-column" style={{ width: 500, height: 695 }}>
                         <div className="mb-2 d-flex justify-content-end">
                             <Button
                                 variant="positive"
+                                className="ft-12"
                                 onClick={() => {
                                     setShowEdit(true);
                                     setSeqNo(null);
@@ -51,9 +52,9 @@ const BannerModal = (props) => {
                         </div>
                         <MokaTable
                             className="overflow-hidden flex-fill"
-                            rowHeight={100}
                             columnDefs={columnDefs}
                             rowData={rowData}
+                            rowHeight={100}
                             onRowNodeId={(params) => params.seqNo}
                             onRowClicked={handleRowClicked}
                             // loading={loading}
@@ -66,7 +67,7 @@ const BannerModal = (props) => {
                         />
                     </Col>
                     {showEdit === true && (
-                        <Col className="p-0 ml-2" style={{ minWidth: 500, minHeight: 650 }}>
+                        <Col className="p-0 ml-2">
                             <MokaCard
                                 title={seqNo ? '공통 배너 수정' : '공통 배너 등록'}
                                 titleClassName="mb-0"

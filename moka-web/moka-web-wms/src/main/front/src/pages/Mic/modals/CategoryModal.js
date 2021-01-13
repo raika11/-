@@ -14,6 +14,7 @@ const CategoryModal = (props) => {
 
     return (
         <MokaModal
+            height={685}
             title="카테고리 관리"
             show={show}
             onHide={onHide}
@@ -28,10 +29,18 @@ const CategoryModal = (props) => {
         >
             <Container className="p-0" fluid>
                 <Row>
-                    <Col xs={12} className="p-0" style={{ Width: 500 }}>
+                    <Col xs={12} className="p-0">
                         <div className="d-flex mb-2">
-                            <MokaSearchInput placeholder="카테고리명을 입력하세요" className="mr-2 flex-fill" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-                            <Button variant="positive">등록</Button>
+                            <MokaSearchInput
+                                buttonClassName="ft-12"
+                                placeholder="카테고리명을 입력하세요"
+                                className="mr-2 flex-fill"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                            />
+                            <Button variant="positive" className="ft-12">
+                                등록
+                            </Button>
                         </div>
                         <div className="ag-theme-moka-desking-grid position-relative">
                             <AgGridReact

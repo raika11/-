@@ -134,6 +134,8 @@ public class JpodChannelRestController extends AbstractCommonController {
         dto.setKeywords(modelMapper.map(jpodChannelService.findAllJpodChannelKeyword(chnlSeq), JpodKeywordDTO.TYPE));
         dto.setMembers(modelMapper.map(jpodChannelService.findAllJpodChannelMember(chnlSeq), JpodMemberDTO.TYPE));
 
+        dto.setEpisodeStat(jpodChannelService.findEpisodeStat(chnlSeq));
+
         tpsLogger.success(ActionType.SELECT);
 
         ResultDTO<JpodChannelDetailDTO> resultDto = new ResultDTO<>(dto);

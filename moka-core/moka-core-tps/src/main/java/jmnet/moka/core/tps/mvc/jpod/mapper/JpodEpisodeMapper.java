@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.jpod.mapper;
 
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
+import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeStatVO;
 import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeVO;
 
 /**
@@ -22,4 +23,6 @@ public interface JpodEpisodeMapper extends BaseMapper<JpodEpisodeVO, JpodEpisode
     void deleteAllMember(JpodEpisodeVO episodeVO);
 
     void deleteAllArticle(JpodEpisodeVO episodeVO);
+
+    JpodEpisodeStatVO findEpisodeStat(Long chnlSeq);
 }

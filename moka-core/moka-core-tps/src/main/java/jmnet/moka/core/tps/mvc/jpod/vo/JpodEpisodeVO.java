@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
 /**
  * <pre>
@@ -18,6 +19,7 @@ import lombok.Setter;
  * @author ince
  * @since 2020-11-09 17:37
  */
+@Alias("JpodEpisodeVO")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

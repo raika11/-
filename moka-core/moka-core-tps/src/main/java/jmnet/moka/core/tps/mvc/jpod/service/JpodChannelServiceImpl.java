@@ -7,9 +7,11 @@ import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodKeyword;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodMember;
+import jmnet.moka.core.tps.mvc.jpod.mapper.JpodEpisodeMapper;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodChannelRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodKeywordRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodMemberRepository;
+import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeStatVO;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +36,15 @@ public class JpodChannelServiceImpl implements JpodChannelService {
 
     private final JpodMemberRepository jpodMemberRepository;
 
+    private final JpodEpisodeMapper jpodEpisodeMapper;
+
 
     public JpodChannelServiceImpl(JpodChannelRepository jpodChannelRepository, JpodKeywordRepository jpodKeywordRepository,
-            JpodMemberRepository jpodMemberRepository) {
+            JpodMemberRepository jpodMemberRepository, JpodEpisodeMapper jpodEpisodeMapper) {
         this.jpodChannelRepository = jpodChannelRepository;
         this.jpodKeywordRepository = jpodKeywordRepository;
         this.jpodMemberRepository = jpodMemberRepository;
+        this.jpodEpisodeMapper = jpodEpisodeMapper;
     }
 
 
@@ -92,6 +97,11 @@ public class JpodChannelServiceImpl implements JpodChannelService {
     @Override
     public List<JpodMember> findAllJpodChannelMember(Long chnlSeq) {
         return jpodMemberRepository.findAllByChnlSeqAndEpsdSeqOrderBySeqNoAsc(chnlSeq, 0L);
+    }
+
+    @Override
+    public JpodEpisodeStatVO findEpisodeStat(Long chnlSeq) {
+        return jpodEpisodeMapper.findEpisodeStat(chnlSeq);
     }
 
     public JpodChannel saveJpodEpisodeDetail(JpodChannel jpodChannel, List<JpodKeyword> keywords, List<JpodMember> members) {

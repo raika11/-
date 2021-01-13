@@ -49,7 +49,7 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
         return new DBTaskInput() {
             @Override
             public TaskInputData getTaskInputData() {
-                return new DBTaskInputData(callJamApiService.getUpaJamRcvArtHistSelList());
+                return DBTaskInputData.newDBTaskInputData(callJamApiService.getUpaJamRcvArtHistSelList());
             }
         };
     }
@@ -58,7 +58,7 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
     protected boolean doVerifyData(DBTaskInputData taskInputData) {
         if( taskInputData.getInputData().size() == 0 ) {
             final CallJamApiService callJamApiService = getTaskManager().getCallJamApiService();
-            log.info("do : TB_JAM_RCV_ART_HIST -> TB_JAM_RCV_ART_HIST_SUCC");
+            log.info( "{} TB_JAM_RCV_ART_HIST -> TB_JAM_RCV_ART_HIST_SUCC 이전 작업 완료", getTaskName() );
             callJamApiService.deleteReceiveJobStep();
             return false;
         }
@@ -98,7 +98,7 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
             String json = this.objectMapper.writeValueAsString(mapList);
             json = "recvResult={\"RECV_RESULT\": ".concat(json.replace("&#39;", "").concat("}"));
 
-            log.info("sendJamApi begin {} ", jamApiUrl);
+            log.info("{} {} 호출 시작", getTaskName(), jamApiUrl);
             final String req = RcvUtil.SendUrlPostRequest( jamApiUrl, json );
 
             boolean success = false;
@@ -111,12 +111,12 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
             }
 
             if( success ) {
-                log.info("sendJamApi end {} ", jamApiUrl);
+                log.info("{} {} 호출 완료", getTaskName(), jamApiUrl);
                 final CallJamApiService callJamApiService = getTaskManager().getCallJamApiService();
                 callJamApiService.insertReceiveJobStep(mapList);
             }
             else
-                log.error("sendJamApi FAILED {} ", jamApiUrl);
+                log.error("{} {} 호출 실패 !!", getTaskName(), jamApiUrl);
 
         } catch (Exception e) {
             log.error( "Jam Api Error {}", jamApiUrl);

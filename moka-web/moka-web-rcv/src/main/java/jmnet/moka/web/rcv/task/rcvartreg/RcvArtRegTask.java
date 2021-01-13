@@ -11,6 +11,7 @@ import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.task.base.TaskGroup;
 import jmnet.moka.web.rcv.task.jamxml.process.XmlGenProcess;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.rcvartreg.process.RcvArtRegToJamArticleTotalProcess;
 import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
 import jmnet.moka.web.rcv.taskinput.DBTaskInput;
@@ -43,7 +44,7 @@ public class RcvArtRegTask extends Task<DBTaskInputData> {
         return new DBTaskInput() {
             @Override
             public TaskInputData getTaskInputData() {
-                return new DBTaskInputData(rcvArtRegService.getUspRcvArticleIudSelList());
+                return DBTaskInputData.newDBTaskInputData(rcvArtRegService.getUspRcvArticleIudSelList());
             }
         };
     }
@@ -74,12 +75,15 @@ public class RcvArtRegTask extends Task<DBTaskInputData> {
     private void doProcessChild(Map<String, Object> map, DBTaskInputData taskInputData, JamArticleTotalVo articleTotal) {
         final RcvArtRegService rcvArtRegService = getTaskManager().getRcvArtRegService();
         if( articleTotal == null ){
-            taskInputData.logError("데이터를 찾을 수 없거나 코드가 없습니다. RID = {} , IUD = {} ", RcvUtil.getMapStringData(map,"IUD_RID"), RcvUtil.getMapStringData(map,"IUD"));
+            taskInputData.logError("{} 데이터를 찾을 수 없거나 코드가 없습니다. IUD=[{}] - RID={}", getTaskName(), RcvUtil.getMapStringData(map,"IUD"), RcvUtil.getMapStringData(map,"IUD_RID"));
             rcvArtRegService.setUspRcvArticleIudDelete(map);
         }
         else {
+            JamArticleVo article = articleTotal.getMainData();
+            articleTotal.logInfo( "{} IUD=[{}] RID=[{}] [{}] 수신 기사 -> 등록 기사 등록 시작", getTaskName(), article.getIud(), articleTotal.getRid(), article.getPcTitle() );
             XmlGenProcess.doProcess(taskInputData, articleTotal, getTaskManager());
             rcvArtRegService.setUspRcvArticleIudComplete(articleTotal);
+            articleTotal.logInfo( "{} IUD=[{}] RID=[{}] [{}] 수신 기사 -> 등록 기사 등록 완료", getTaskName(), article.getIud(), articleTotal.getRid(), article.getPcTitle() );
         }
     }
 }

@@ -117,7 +117,7 @@ public class JamXmlProcessHelper {
                                 articleTotal.logError("PDS Image Upload Failed !! {} {}", uploadPath, imageFileName);
                             }
                             else
-                                articleTotal.logInfo("UploadToService middle PDS Image Upload Success {} {}", uploadPath, imageFileName);
+                                articleTotal.logInfo("   -- UploadToService middle PDS Image Upload Success {} {}", uploadPath, imageFileName);
                         }
                         else
                             articleTotal.logError("image download failed {}", url);

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { GET_CHANNEL_PODTY_LIST, getChannelPodtyList, clearChannelPodty, selectChannelPodty } from '@store/jpod';
 
 /**
- * ModalBody로 Input 한개 있는 Modal
+ * 팟티 검색 모달.
  */
 const PodtyChannelModal = (props) => {
     const dispatch = useDispatch();
@@ -17,15 +17,18 @@ const PodtyChannelModal = (props) => {
         loading: store.loading[GET_CHANNEL_PODTY_LIST],
     }));
 
+    // 닫기 버튼
     const handleClickHide = () => {
         onHide();
     };
 
+    // 목록 클릭 store 를 업데이트후 모달창 닫기.
     const handleClickListRow = ({ info }) => {
         dispatch(selectChannelPodty(info));
         onHide();
     };
 
+    // store list 가 변경되면 grid 목록 업데이트.
     useEffect(() => {
         const initGridRow = (data) => {
             setRowData(
@@ -50,6 +53,7 @@ const PodtyChannelModal = (props) => {
         }
     }, [list]);
 
+    // 모달창이 열리면 팟티 목록 가져오기.
     useEffect(() => {
         if (show === true) {
             dispatch(getChannelPodtyList());

@@ -14,6 +14,7 @@ const ChannelSearchBox = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
+    // 검색 항목 변경시 스테이트 업데이트.
     const handleSearchChange = (e) => {
         const { name, value } = e.target;
         setSearchData({
@@ -21,19 +22,27 @@ const ChannelSearchBox = ({ match }) => {
             [name]: value,
         });
     };
+
+    // 검색 버튼 처리.
     const handleClickSearchButton = () => {
         dispatch(changeJpodSearchOption(searchData));
         dispatch(getChannels());
     };
+
+    // 초기화 버튼 클릭.
     const handleClickSearchResetButton = () => {
         setSearchData(initialState.channel.jpod.search);
         dispatch(changeJpodSearchOption(initialState.channel.jpod.search));
         history.push(`${match.path}`);
         dispatch(getChannels());
     };
+
+    // 등록 버튼
     const handleNewButton = () => {
         history.push(`${match.path}/add`);
     };
+
+    // 검색 날짜 변경 처리.
     const handleDateChange = (name, date) => {
         if (name === 'startDt') {
             const startDt = new Date(date);
@@ -59,6 +68,7 @@ const ChannelSearchBox = ({ match }) => {
         });
     };
 
+    // 최초 로딩시 목록 가져오기.
     useEffect(() => {
         dispatch(getChannels());
         // eslint-disable-next-line react-hooks/exhaustive-deps

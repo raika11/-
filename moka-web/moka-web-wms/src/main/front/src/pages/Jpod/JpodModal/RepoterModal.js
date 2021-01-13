@@ -6,6 +6,7 @@ import { columnDefs } from './RepoterModalGridColumns';
 import { GET_REPORTER_LIST, getReporterList, clearReporter, changeReporterSearchOption } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
 
+// 기자 검색 모달.
 const RepoterModal = (props) => {
     const dispatch = useDispatch();
 
@@ -25,10 +26,12 @@ const RepoterModal = (props) => {
         onHide();
     };
 
+    // 목록 클릭( 등록 버튼이 따로 있어서 처리하진 않음.)
     const handleClickListRow = () => {
         // history.push(`${match.path}/${channelId}`);
     };
 
+    // 그리드 상태 변경 처리.
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...searchData, [key]: value };
@@ -43,6 +46,7 @@ const RepoterModal = (props) => {
         [dispatch, searchData],
     );
 
+    // 검색 값 변경 처리.
     const handleSearchChange = (e) => {
         const { name, value } = e.target;
         setSearchData({
@@ -51,6 +55,7 @@ const RepoterModal = (props) => {
         });
     };
 
+    // 검색 버튼
     const handleClickSearchButton = () => {
         setRowData([]);
         dispatch(changeReporterSearchOption(searchData));
@@ -62,6 +67,7 @@ const RepoterModal = (props) => {
             setRowData(
                 data.map((element) => {
                     return {
+                        // 스토어에 넘겨줄 데이터들.
                         repoterInfo: {
                             memRepSeq: element.repSeq,
                             joinsId: element.joinsId,
@@ -87,6 +93,7 @@ const RepoterModal = (props) => {
         }
     }, [list]);
 
+    // 모달창이 열리면 목록 가져 오기.
     useEffect(() => {
         if (show === true) {
             dispatch(getReporterList());

@@ -15,23 +15,23 @@ const ChannelEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
-    const [editName] = useState(false);
-    const imgFileRef1 = useRef(null);
-    const imgFileRef2 = useRef(null);
-    const imgFileRef3 = useRef(null);
-    const selectChnlSeq = useRef(null);
+    const imgFileRef1 = useRef(null); // 이미지 ref
+    const imgFileRef2 = useRef(null); // 썸네일 이미지 ref
+    const imgFileRef3 = useRef(null); // 모바일용 이미지 ref
+    const selectChnlSeq = useRef(null); // 선택한 채널 번호.
 
-    const [podtyChannelModalState, setPodtyChannelModalState] = useState(false);
-    const [repoterModalState, setRepoterModalState] = useState(false);
+    const [podtyChannelModalState, setPodtyChannelModalState] = useState(false); // 팟티 검색 모달에서 선택한 팟티 정보.
+    const [repoterModalState, setRepoterModalState] = useState(false); // 기자검색 모달에서 선택한 기자 정보.
 
-    const [editData, setEditData] = useState(initialState.channel.channelInfo);
-    const [editSelectRepoters, setEditSelectRepoters] = useState([]);
-    const [editDays, setEditDays] = useState([]);
+    const [editData, setEditData] = useState(initialState.channel.channelInfo); // 기본 채널 등록 정보.
+    const [editSelectRepoters, setEditSelectRepoters] = useState([]); // 하단 친행자 리스트
+    const [editDays, setEditDays] = useState([]); // 방송 요일용 스테이트
 
-    const [Imgfile, setImgfile] = useState(null);
-    const [Thumbfile, setThumbfile] = useState(null);
-    const [Mobfile, setMobfile] = useState(null);
+    const [Imgfile, setImgfile] = useState(null); // 선택한 이미지 파일용 스테이트
+    const [Thumbfile, setThumbfile] = useState(null); // 선택한 썸네일 용 이미지 스테이트
+    const [Mobfile, setMobfile] = useState(null); // 선택한 모바일용 이미지 스테이트
 
+    // 스토어 연결.
     const { selectReporter, selectPodty, loading, channelInfo } = useSelector((store) => ({
         selectReporter: store.jpod.channel.selectReporter,
         selectPodty: store.jpod.channel.selectPodty,
@@ -39,10 +39,12 @@ const ChannelEdit = ({ match }) => {
         loading: store.loading[GET_REPORTER_LIST],
     }));
 
+    // 팟티검색 버튼 (모달)
     const handleClickPadtySearch = () => {
         setPodtyChannelModalState(true);
     };
 
+    // 기자검색 버튼
     const handleClickSearchRepoterButton = () => {
         setRepoterModalState(true);
     };
@@ -53,6 +55,7 @@ const ChannelEdit = ({ match }) => {
         setEditSelectRepoters(editSelectRepoters.map((item, i) => (i === index ? { ...item, [name]: value } : item)));
     };
 
+    // 기본 진행자 스테트 리셋용.
     const resetReporter = () => {
         setEditSelectRepoters(
             reporterCountConst.map((element) => {
@@ -76,6 +79,7 @@ const ChannelEdit = ({ match }) => {
         const { name, value, checked } = e.target;
 
         if (name === 'channel_out') {
+            // 외부 채널 이용시 기존 팟티 선택 채널정보 리셋.
             setEditData({
                 ...editData,
                 podty_castSrl: 0,
@@ -124,15 +128,18 @@ const ChannelEdit = ({ match }) => {
     // 방송요일 변경 처리.
     const handleChannelDay = (e) => {
         const { name, checked } = e.target;
+
         if (checked === true) {
+            // 매일 일떄 모든 요일을 스테이트에 담아둔다.
             if (name === 'day0') {
                 setEditDays(['day0', 'day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7']);
             } else {
+                // 단건일 경우 해당 정보만 업데이트
                 setEditDays([...editDays.filter((e) => e !== 'day0'), name]);
             }
         } else {
             if (name === 'day0') {
-                setEditDays([]);
+                setEditDays([]); // 메일 true -> false 로 변경시 스테이트 초기화.
             } else {
                 setEditDays(editDays.filter((e) => e !== 'day0').filter((e) => e !== name));
             }
@@ -141,6 +148,7 @@ const ChannelEdit = ({ match }) => {
 
     // 진행자 삭제 버튼 처리.
     const handleClickReporterDelete = (index) => {
+        // 삭제를 누르면 배열에서 삭제 후 마지막을 디폴트 값으로 채움
         let tempList = editSelectRepoters.filter((e, i) => i !== index);
         tempList = [
             ...tempList,
@@ -159,6 +167,7 @@ const ChannelEdit = ({ match }) => {
         setEditSelectRepoters(tempList);
     };
 
+    // 벨리데이션 처리.
     const checkValidation = () => {
         console.log({
             channel_out: editData.channel_out,
@@ -193,13 +202,16 @@ const ChannelEdit = ({ match }) => {
         }
         var formData = new FormData();
 
+        // 선택한 채널 정보가 있으면 업데이트 처리.
         if (selectChnlSeq.current && selectChnlSeq.current !== 'add') {
             formData.append('chnlSeq', selectChnlSeq.current);
         }
 
+        // 키워드 처리.
         formData.append('keywords[0].ordNo', 0);
         formData.append('keywords[0].keyword', !editData.keywords || editData.keywords === undefined ? '' : editData.keywords);
 
+        // 선택한 진행자가 있을경우 form 값에 순서대로 추가.
         editSelectRepoters.map((element, index) => {
             const memDiv = !element.memDiv || element.memDiv === undefined ? 'CM' : element.memDiv;
             const memNm = !element.memNm || element.memNm === undefined ? '' : element.memNm;
@@ -218,26 +230,33 @@ const ChannelEdit = ({ match }) => {
             return [];
         });
 
+        // 기존 데이터에 업로드한 이미지가 있을경우..
         if (Imgfile) {
             formData.append(`chnlImgFile`, Imgfile[0]);
         }
+
+        // 기존 데이터에  업로드한 썸네일이 있을경우
         if (Thumbfile) {
             formData.append(`chnlThumbFile`, Thumbfile[0]);
         }
+
+        // 기존 데이터에 업로드한 모바일 용 이미지가 있을경우.
         if (Mobfile) {
             formData.append(`chnlImgMobFile`, Mobfile[0]);
         }
 
-        formData.append(`usedYn`, editData.usedYn);
-        formData.append(`chnlNm`, editData.chnlNm);
-        formData.append(`chnlMemo`, editData.chnlMemo);
+        formData.append(`usedYn`, editData.usedYn); // 사용유무
+        formData.append(`chnlNm`, editData.chnlNm); // 채널명
+        formData.append(`chnlMemo`, editData.chnlMemo); // 채널 소개.
 
+        // 날짜 선택시 분시초 를 제거 해줌
         let chnlSdt = editData.chnlSdt && editData.chnlSdt.length > 10 ? editData.chnlSdt.substr(0, 10) : editData.chnlSdt;
         let chnlEdt = editData.chnlEdt && editData.chnlEdt.length > 10 ? editData.chnlEdt.substr(0, 10) : editData.chnlEdt;
 
         formData.append(`chnlSdt`, chnlSdt);
         formData.append(`chnlEdt`, chnlEdt);
 
+        // 이미지, 썸네일, 모바일용 이미지를 선택 한 경우.
         if (editData.chnlImg) {
             formData.append(`chnlImg`, editData.chnlImg);
         }
@@ -248,18 +267,21 @@ const ChannelEdit = ({ match }) => {
             formData.append(`chnlImgMob`, editData.chnlImgMob);
         }
 
+        // 방송요일 배열을 조합해서 숫자만 남겨서 등록. (ex. 1234)
         const chnlDy = editDays.join('').replace(/day/gi, '').replace('0', '');
         formData.append(`chnlDy`, chnlDy);
 
+        // 외부채널을 입력한 경우 파티채널 고유 겂이 없기 떄문에 0으로 설정.
         if (editData.channel_out.length > 0) {
             formData.append(`podtyChnlSrl`, 0);
             formData.append(`podtyUrl`, editData.channel_out);
         } else {
+            // 팟티 채널을 선택경우는 선택한 정보로 전송.
             formData.append(`podtyChnlSrl`, editData.podty_castSrl);
             formData.append(`podtyUrl`, editData.channel_podty);
         }
 
-        // formData 출력.
+        // formData 출력(테스트).
         // for (let [key, value] of formData) {
         //     console.log(`${key}: ${value}`);
         // }
@@ -298,9 +320,11 @@ const ChannelEdit = ({ match }) => {
     };
 
     // 취소 버튼
-    const handleCancleSaveButton = () => {};
+    const handleCancleSaveButton = () => {
+        history.push(`${match.path}`);
+    };
 
-    // 삭제 버튼 임시.
+    // 삭제 버튼 - 임시 -
     const handleClickDeleteButton = () => {
         dispatch(
             deleteJpodChannel({
@@ -333,7 +357,7 @@ const ChannelEdit = ({ match }) => {
         );
     };
 
-    // 이미지 파일 변경시 각 스테이트 업데이트.
+    // 이미지 파일 변경시 해당 스테이트 업데이트.
     const handleChangeFIle = ({ name, file }) => {
         switch (name) {
             case 'chnlImgFile':
@@ -350,6 +374,8 @@ const ChannelEdit = ({ match }) => {
         }
     };
 
+    // 기자 검색 모달 창에서 기자를 선택 하면 store 에 업데이트를 해주고
+    // 스토어가 변경 되면 진행자 스테이트를 업데이트 해줌.
     useEffect(() => {
         if (selectReporter) {
             const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
@@ -371,9 +397,12 @@ const ChannelEdit = ({ match }) => {
                 }),
             );
         }
+        // 기자 선택 스토어가 변경 되었을 경우만 실행.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectReporter]);
 
+    // 팟티 검색 모달 창에서 팟티가 선택이 되면 스토어에 등록후 스토어가 업데이트가 되면
+    // 해당값을 스테이트에 등록.
     useEffect(() => {
         if (selectPodty && selectPodty.castSrl) {
             const { castSrl, shareUrl } = selectPodty;
@@ -384,6 +413,7 @@ const ChannelEdit = ({ match }) => {
                 channel_out: '',
             });
         }
+        // 팟티가 선택되었을 경우만 실행.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectPodty]);
 
@@ -422,6 +452,7 @@ const ChannelEdit = ({ match }) => {
         };
 
         // 진행자 설정.
+        // reporterCountConst 고정 개수로 6를 값이 있든 없든 배열을 생성 하준다.
         const setMember = (members) => {
             if (Array.isArray(members) && members.length > 0) {
                 setEditSelectRepoters(
@@ -460,8 +491,6 @@ const ChannelEdit = ({ match }) => {
             setEditDays(tempArray);
         };
 
-        // 에피소트 스테이트
-
         if (channelInfo === initialState.channel.channelInfo) {
             setEditData(initialState.channel.channelInfo);
             resetReporter();
@@ -478,6 +507,7 @@ const ChannelEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [channelInfo]);
 
+    // url 이 변경 되었을 경우 처리. ( 채널 고유 번호 및 add)
     useEffect(() => {
         if (!isNaN(Number(params.chnlSeq)) && selectChnlSeq.current !== params.chnlSeq) {
             dispatch(clearChannelInfo());
@@ -496,7 +526,7 @@ const ChannelEdit = ({ match }) => {
     return (
         <MokaCard
             className="overflow-hidden flex-fill"
-            title={`J팟 채널 ${editName ? '정보' : '등록'}`}
+            title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
             titleClassName="mb-0"
             loading={loading}
             footer
@@ -513,6 +543,7 @@ const ChannelEdit = ({ match }) => {
             ]}
         >
             <Form className="mb-gutter">
+                {/* 사용여부 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
@@ -525,6 +556,7 @@ const ChannelEdit = ({ match }) => {
                         />
                     </Col>
                 </Form.Row>
+                {/* 팟티 채널 */}
                 <Form.Row className="mb-2">
                     <Col xs={10} className="p-0">
                         <MokaInputLabel
@@ -544,6 +576,7 @@ const ChannelEdit = ({ match }) => {
                         </Button>
                     </Col>
                 </Form.Row>
+                {/* 외부 채널 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -558,6 +591,7 @@ const ChannelEdit = ({ match }) => {
                         />
                     </Col>
                 </Form.Row>
+                {/* 채널명 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -581,7 +615,7 @@ const ChannelEdit = ({ match }) => {
                         }`}</Col>
                     </Form.Row>
                 )}
-
+                {/* 채널 소개 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
@@ -599,6 +633,7 @@ const ChannelEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
+                    {/* 개설일 */}
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label={`개설일`}
@@ -616,6 +651,7 @@ const ChannelEdit = ({ match }) => {
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
+                    {/* 종료일 */}
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label={`종료일`}
@@ -634,6 +670,7 @@ const ChannelEdit = ({ match }) => {
                         />
                     </Col>
                 </Form.Row>
+                {/* 방송요일 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`방송요일`} labelWidth={60} as="none" />
                     <MokaInputLabel
@@ -718,10 +755,11 @@ const ChannelEdit = ({ match }) => {
                         onChange={(e) => handleChannelDay(e)}
                     />
                 </Form.Row>
+                {/* 테그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
-                            label={`태그`}
+                            label={`테그`}
                             labelWidth={60}
                             className="mb-0"
                             id="keywords"
@@ -733,12 +771,14 @@ const ChannelEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
                 <hr />
+                {/* 진행자 검색(모달) */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`진행자`} labelWidth={60} as="none" />
                     <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
                         검색
                     </Button>
                 </Form.Row>
+                {/* 기본 6개 를 뿌려준다. */}
                 {editSelectRepoters.map((element, index) => {
                     return (
                         <Form.Row className="mb-2" key={index}>
@@ -828,7 +868,7 @@ const ChannelEdit = ({ match }) => {
                     isInvalid={null}
                     label={
                         <React.Fragment>
-                            이미지
+                            커버이미지
                             <br />
                             (1920*360)
                             <br />
@@ -866,6 +906,7 @@ const ChannelEdit = ({ match }) => {
                     }
                     labelClassName="justify-content-end"
                 />
+                {/* 모바일용 */}
                 <Form.Row className="mb-2">
                     <Col xs={7}>
                         <MokaInputLabel
@@ -873,9 +914,10 @@ const ChannelEdit = ({ match }) => {
                             className="w-100 mb-2"
                             name="chnlThumbFile"
                             isInvalid={null}
+                            labelWidth={60}
                             label={
                                 <React.Fragment>
-                                    이미지
+                                    모바일용
                                     <br />
                                     (750*330)
                                     <br />
@@ -886,55 +928,8 @@ const ChannelEdit = ({ match }) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            imgFileRef2.current.deleteFile();
-                                            setThumbfile(null);
-                                            setEditData({
-                                                ...editData,
-                                                chnlThumb: null,
-                                            });
-                                        }}
-                                    >
-                                        삭제
-                                    </Button>
-                                </React.Fragment>
-                            }
-                            ref={imgFileRef2}
-                            inputProps={{
-                                height: 80,
-                                width: 400, // width: '100%' number type 에러남.
-                                img: editData.chnlImgMob,
-                            }}
-                            onChange={(file) =>
-                                handleChangeFIle({
-                                    name: 'chnlThumbFile',
-                                    file: file,
-                                })
-                            }
-                            labelClassName="justify-content-end"
-                        />
-                    </Col>
-                    <Col xs={5}>
-                        <MokaInputLabel
-                            as="imageFile"
-                            className="w-100 mb-2"
-                            name="chnlImgMobFile"
-                            id="chnlImgMobFile"
-                            isInvalid={null}
-                            label={
-                                <React.Fragment>
-                                    이미지
-                                    <br />
-                                    (150*150)
-                                    <br />
-                                    <Button
-                                        className="mt-1"
-                                        size="sm"
-                                        variant="negative"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
                                             imgFileRef3.current.deleteFile();
-                                            setMobfile(null);
+                                            setThumbfile(null);
                                             setEditData({
                                                 ...editData,
                                                 chnlImgMob: null,
@@ -948,7 +943,7 @@ const ChannelEdit = ({ match }) => {
                             ref={imgFileRef3}
                             inputProps={{
                                 height: 80,
-                                width: 200, // width: '100%' number type 에러남.
+                                width: 400, // width: '100%' number type 에러남.
                                 img: editData.chnlImgMob,
                             }}
                             onChange={(file) =>
@@ -960,14 +955,64 @@ const ChannelEdit = ({ match }) => {
                             labelClassName="justify-content-end"
                         />
                     </Col>
+                    {/* 썸네일 이미지 */}
+                    <Col xs={5}>
+                        <MokaInputLabel
+                            as="imageFile"
+                            className="w-100 mb-2"
+                            name="chnlImgMobFile"
+                            id="chnlImgMobFile"
+                            isInvalid={null}
+                            label={
+                                <React.Fragment>
+                                    썸네일
+                                    <br />
+                                    (150*150)
+                                    <br />
+                                    <Button
+                                        className="mt-1"
+                                        size="sm"
+                                        variant="negative"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            imgFileRef2.current.deleteFile();
+                                            setMobfile(null);
+                                            setEditData({
+                                                ...editData,
+                                                chnlThumb: null,
+                                            });
+                                        }}
+                                    >
+                                        삭제
+                                    </Button>
+                                </React.Fragment>
+                            }
+                            ref={imgFileRef2}
+                            inputProps={{
+                                height: 80,
+                                width: 200, // width: '100%' number type 에러남.
+                                img: editData.chnlThumb,
+                            }}
+                            onChange={(file) =>
+                                handleChangeFIle({
+                                    name: 'chnlThumbFile',
+                                    file: file,
+                                })
+                            }
+                            labelClassName="justify-content-end"
+                        />
+                    </Col>
                 </Form.Row>
             </Form>
+            {/* 팟티 채널 모달 창. */}
             <PodtyChannelModal
                 show={podtyChannelModalState}
                 onHide={() => {
                     setPodtyChannelModalState(false);
                 }}
             />
+            {/* 진행자(기자) 검색 모달 창. */}
             <RepoterModal
                 show={repoterModalState}
                 onHide={() => {

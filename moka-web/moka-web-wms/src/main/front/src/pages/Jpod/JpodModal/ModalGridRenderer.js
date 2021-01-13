@@ -3,7 +3,7 @@ import { Button, Col } from 'react-bootstrap';
 import { selectReporter } from '@store/jpod';
 import { useDispatch } from 'react-redux';
 
-// 등록자 정보
+// 팟티 채널 새창 이동 버튼
 export const ChannelMoveButtonRenderer = ({ shareUrl }) => {
     const handleClickMoveButton = () => {
         window.open(shareUrl, '_blank', 'noopener,noreferrer');
@@ -19,6 +19,7 @@ export const ChannelMoveButtonRenderer = ({ shareUrl }) => {
     );
 };
 
+// 진행자 검색시 해당 값을 스토어에 업데이트 해준다.
 export const RepoterAddButtonRenderer = ({ repoterInfo }) => {
     const dispatch = useDispatch();
 

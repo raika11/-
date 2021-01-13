@@ -11,6 +11,7 @@ import { GET_CHANNELS, changeJpodSearchOption, getChannels, getChannelInfo, clea
 const ChannelListAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const params = useParams();
+    // 스토어 연결.
     const { search, list, loading, total } = useSelector((store) => ({
         search: store.jpod.channel.jpod.search,
         list: store.jpod.channel.jpod.list,
@@ -21,6 +22,7 @@ const ChannelListAgGrid = ({ match }) => {
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
 
+    // 목록 클릭 했을때.
     const handleClickListRow = ({ chnlSeq }) => {
         history.push(`${match.path}/${chnlSeq}`);
         dispatch(clearChannelInfo());

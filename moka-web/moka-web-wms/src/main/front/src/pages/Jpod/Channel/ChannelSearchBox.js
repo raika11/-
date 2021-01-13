@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { selectItem } from '@pages/Boards/BoardConst';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';

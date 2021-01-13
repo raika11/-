@@ -783,10 +783,7 @@ const ChannelEdit = ({ match }) => {
                     return (
                         <Form.Row className="mb-2" key={index}>
                             <div className="d-flex align-items-center form-group">
-                                <div
-                                    className="px-0 mb-0 position-relative flex-shrink-0 form-label"
-                                    style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}
-                                ></div>
+                                <div className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ width: '60px' }}></div>
                             </div>
                             <Col className="p-0">
                                 <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
@@ -860,60 +857,65 @@ const ChannelEdit = ({ match }) => {
                 <Form.Row className="mb-2">
                     <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={60} />
                 </Form.Row>
+
                 {/* 이미지 */}
-                <MokaInputLabel
-                    as="imageFile"
-                    className="w-100 mb-2"
-                    name="chnlImgMobFile"
-                    isInvalid={null}
-                    label={
-                        <React.Fragment>
-                            커버이미지
-                            <br />
-                            (1920*360)
-                            <br />
-                            <Button
-                                className="mt-1"
-                                size="sm"
-                                variant="negative"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    imgFileRef1.current.deleteFile();
-                                    setImgfile(null);
-                                    setEditData({
-                                        ...editData,
-                                        chnlImg: null,
-                                    });
-                                }}
-                            >
-                                삭제
-                            </Button>
-                        </React.Fragment>
-                    }
-                    ref={imgFileRef1}
-                    inputProps={{
-                        height: 80,
-                        width: 600, // width: '100%' number type 에러남.
-                        img: editData.chnlImg,
-                        selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
-                    }}
-                    onChange={(file) =>
-                        handleChangeFIle({
-                            name: 'chnlImgFile',
-                            file: file,
-                        })
-                    }
-                    labelClassName="justify-content-end"
-                />
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        as="imageFile"
+                        className="w-100 mb-2"
+                        name="chnlImgMobFile"
+                        isInvalid={null}
+                        inputClassName="flex-fill"
+                        label={
+                            <React.Fragment>
+                                커버이미지
+                                <br />
+                                (1920*360)
+                                <br />
+                                <Button
+                                    className="mt-1"
+                                    size="sm"
+                                    variant="negative"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        imgFileRef1.current.deleteFile();
+                                        setImgfile(null);
+                                        setEditData({
+                                            ...editData,
+                                            chnlImg: null,
+                                        });
+                                    }}
+                                >
+                                    삭제
+                                </Button>
+                            </React.Fragment>
+                        }
+                        ref={imgFileRef1}
+                        inputProps={{
+                            height: 80,
+                            // width: 600, // width: '100%' number type 에러남.
+                            img: editData.chnlImg,
+                            selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                        }}
+                        onChange={(file) =>
+                            handleChangeFIle({
+                                name: 'chnlImgFile',
+                                file: file,
+                            })
+                        }
+                        labelClassName="justify-content-end"
+                    />
+                </Form.Row>
                 {/* 모바일용 */}
                 <Form.Row className="mb-2">
                     <Col xs={7}>
                         <MokaInputLabel
                             as="imageFile"
-                            className="w-100 mb-2"
+                            className="mb-2"
                             name="chnlThumbFile"
                             isInvalid={null}
+                            inputClassName="flex-fill"
                             labelWidth={60}
                             label={
                                 <React.Fragment>
@@ -943,7 +945,7 @@ const ChannelEdit = ({ match }) => {
                             ref={imgFileRef3}
                             inputProps={{
                                 height: 80,
-                                width: 400, // width: '100%' number type 에러남.
+                                // width: 400, // width: '100%' number type 에러남.
                                 img: editData.chnlImgMob,
                             }}
                             onChange={(file) =>
@@ -956,13 +958,14 @@ const ChannelEdit = ({ match }) => {
                         />
                     </Col>
                     {/* 썸네일 이미지 */}
-                    <Col xs={5}>
+                    <Col xs={5} className="p-0 pt-1 pl-1">
                         <MokaInputLabel
                             as="imageFile"
                             className="w-100 mb-2"
                             name="chnlImgMobFile"
                             id="chnlImgMobFile"
                             isInvalid={null}
+                            inputClassName="d-flex flex-fill"
                             label={
                                 <React.Fragment>
                                     썸네일
@@ -991,7 +994,6 @@ const ChannelEdit = ({ match }) => {
                             ref={imgFileRef2}
                             inputProps={{
                                 height: 80,
-                                width: 200, // width: '100%' number type 에러남.
                                 img: editData.chnlThumb,
                             }}
                             onChange={(file) =>
@@ -1000,7 +1002,7 @@ const ChannelEdit = ({ match }) => {
                                     file: file,
                                 })
                             }
-                            labelClassName="justify-content-end"
+                            // labelClassName="justify-content-end"
                         />
                     </Col>
                 </Form.Row>

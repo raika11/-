@@ -1,11 +1,18 @@
 package jmnet.moka.core.tms.template.loader;
 
+import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.map.listener.EntryEvictedListener;
+import com.hazelcast.map.listener.EntryExpiredListener;
+import com.hazelcast.map.listener.EntryRemovedListener;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.HazelcastCache;
+import jmnet.moka.common.cache.hazelcast.HazelcastMapListener;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
@@ -62,10 +69,11 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         this.cacheable = cacheable;
         this.itemExpireTime = itemExpireTime;
         HazelcastInstance hzInstance = null;
+        HazelcastCache hzCache = null;
         try {
             CacheManager cacheManager = appContext.getBean(CacheManager.class);
             if (cacheManager != null) {
-                HazelcastCache hzCache = (HazelcastCache) cacheManager.getCache(HazelcastCache.class);
+                hzCache = (HazelcastCache) cacheManager.getCache(HazelcastCache.class);
                 hzInstance = hzCache
                         .getHazelcastDelegator()
                         .getHazelcastInstance();
@@ -77,6 +85,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (hzInstance != null && cacheable) {
             this.mergeItemMap = hzInstance.getMap("mergeItem");
             this.uri2ItemMap = hzInstance.getMap("uri2Item");
+            hzCache.getHazelcastDelegator().addListener((IMap<String,String>)this.uri2ItemMap);
         } else {
             this.uri2ItemMap = new ConcurrentHashMap<>();
             this.mergeItemMap = new ConcurrentHashMap<>();
@@ -144,6 +153,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         String itemKey = KeyResolver.makeItemKey(this.domainId, pageItem.getItemType(), pageItem.getItemId());
         if (uri != null) {
             this.uri2ItemMap.put(uri, itemKey);
+            logger.debug("Uri added:{} {}", this.domainId, uri);
         }
     }
 
@@ -157,6 +167,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         if (uri != null) {
             // uri case-insensitive를 위해 소문자로 변환
             this.uri2ItemMap.remove(uri);
+            logger.debug("Uri removed:{} {}", this.domainId, uri);
         }
     }
 

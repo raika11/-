@@ -134,7 +134,7 @@ const RepoterModal = (props) => {
                 columnDefs={columnDefs}
                 rowData={rowData}
                 rowHeight={50}
-                onRowNodeId={(data) => data.channelId}
+                onRowNodeId={(data) => data.repoterSeq}
                 onRowClicked={(e) => handleClickListRow(e)}
                 loading={loading}
                 total={total}

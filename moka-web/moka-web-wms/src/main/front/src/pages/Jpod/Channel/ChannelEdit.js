@@ -169,11 +169,6 @@ const ChannelEdit = ({ match }) => {
 
     // 벨리데이션 처리.
     const checkValidation = () => {
-        console.log({
-            channel_out: editData.channel_out,
-            podty_castSrl: editData.podty_castSrl,
-            channel_podty: editData.channel_podty,
-        });
         if (editData.channel_out === '' && (editData.podty_castSrl === '' || editData.channel_podty === '')) {
             messageBox.alert('팟티를 입력해 주세요.', () => {});
             return true;
@@ -292,7 +287,6 @@ const ChannelEdit = ({ match }) => {
                 chnlSeq: selectChnlSeq.current === 'add' ? null : selectChnlSeq.current,
                 channelinfo: formData,
                 callback: ({ header: { success, message }, body }) => {
-                    console.log(success, message);
                     if (success === true) {
                         toast.success(message);
                         const { chnlSeq } = body;
@@ -790,7 +784,6 @@ const ChannelEdit = ({ match }) => {
                                     <Col className="d-flex w-100 h-50 align-items-center">
                                         <div style={{ width: '60px' }}>
                                             <MokaInput
-                                                id="memRepSeq"
                                                 name="memRepSeq"
                                                 className="ft-12"
                                                 value={element.memRepSeq}
@@ -801,7 +794,6 @@ const ChannelEdit = ({ match }) => {
                                         </div>
                                         <div style={{ width: '160px' }}>
                                             <MokaInput
-                                                id="memNm"
                                                 name="memNm"
                                                 className="ft-12"
                                                 value={element.memNm}
@@ -811,7 +803,6 @@ const ChannelEdit = ({ match }) => {
                                         </div>
                                         <div className="pl-3" style={{ width: '115px' }}>
                                             <MokaInput
-                                                id="repTitle"
                                                 name="repTitle"
                                                 className="ft-12"
                                                 value={element.repTitle}
@@ -821,7 +812,6 @@ const ChannelEdit = ({ match }) => {
                                         </div>
                                         <div className="pl-3" style={{ width: '115px' }}>
                                             <MokaInput
-                                                id="nickNm"
                                                 name="nickNm"
                                                 className="ft-12"
                                                 value={element.nickNm}
@@ -838,7 +828,6 @@ const ChannelEdit = ({ match }) => {
                                     <Col xs={12} className="p-0 h-50 d-flex align-items-center">
                                         <Col xs={12}>
                                             <MokaInput
-                                                id="memMemo"
                                                 name="memMemo"
                                                 className="ft-12"
                                                 value={element.memMemo}

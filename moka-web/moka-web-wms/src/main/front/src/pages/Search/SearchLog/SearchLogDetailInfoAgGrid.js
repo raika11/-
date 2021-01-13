@@ -5,6 +5,7 @@ import { columnDefs } from '@pages/Search/SearchLog/SearchLogDetailInfoAgGridCol
 const SearchLogDetailInfoAgGrid = () => {
     return (
         <MokaTable
+            paging={false}
             columnDefs={columnDefs}
             rowData={[
                 {
@@ -30,7 +31,8 @@ const SearchLogDetailInfoAgGrid = () => {
                 },
             ]}
             className="ag-grid-align-center"
-            agGridHeight={430}
+            onRowNodeId={(row) => row.rank}
+            agGridHeight={650}
             size={20}
             page={0}
             total={3}

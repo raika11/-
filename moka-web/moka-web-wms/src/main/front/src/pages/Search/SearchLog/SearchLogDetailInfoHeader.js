@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 
-const SearchLogDetailInfoHeader = () => {
+const SearchLogDetailInfoHeader = ({ keyword }) => {
     const [type, setType] = useState('date');
     return (
         <Form>
             <Form.Row className="mb-2 align-items-center">
                 <Col xs={6}>
-                    <MokaInputLabel label="검색어" inputProps={{ disabled: true }} value="운세" />
+                    <MokaInputLabel label="검색어" inputProps={{ disabled: true }} value={keyword} />
                 </Col>
                 <Col xs={2} className="text-right">
                     <MokaInputLabel

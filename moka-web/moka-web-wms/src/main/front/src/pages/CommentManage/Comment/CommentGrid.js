@@ -3,7 +3,8 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { GET_COMMENT_LIST, changeSearchOption, getCommentList } from '@store/commentManage';
 import { tempCommentList } from '@pages/CommentManage/CommentConst';
 import CommentAgGrid from '@pages/CommentManage/CommentAgGrid';
-import { commentColumnDefs, localeText } from './CommentAgGridColumns';
+import { useBreakpoint } from '@components';
+import { columnDefs, localeText, smColumnDefs } from './CommentAgGridColumns';
 import InfoItemRenderer from './InfoItemRenderer';
 
 /**
@@ -15,7 +16,8 @@ const CommentGrid = () => {
     const [gridApi, setGridApi] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
     const [listRows, setListRows] = useState([]);
-    const { list, total, search, loading } = useSelector(
+    const matchPoints = useBreakpoint();
+    const { search, loading } = useSelector(
         (store) => ({
             list: store.comment.comments.list,
             total: store.comment.comments.total,
@@ -109,7 +111,7 @@ const CommentGrid = () => {
         <>
             <CommentAgGrid
                 loading={loading}
-                columnDefs={commentColumnDefs}
+                columnDefs={matchPoints.xs || matchPoints.sm ? smColumnDefs : columnDefs}
                 localeText={localeText}
                 onColumnResized={(e) => onColumnResized(e)}
                 onColumnVisible={(e) => onColumnVisible(e)}

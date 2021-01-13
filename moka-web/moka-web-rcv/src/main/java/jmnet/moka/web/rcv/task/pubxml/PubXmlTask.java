@@ -55,7 +55,7 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
                         return true;
                     }
                 } catch (Exception e) {
-                    log.error("File preprocess error {}", file);
+                    log.error("{} {} : 정상적인 XML 파일이 아닙니다. : pre-Process error", getTaskName(), file);
                 }
                 return false;
             }
@@ -77,13 +77,13 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
     protected boolean doVerifyData(FileTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData) {
         final PubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
         if (newsMLTotal == null) {
-            log.error("XML 파싱 에러, pub NewsMLTotalVo를 생성할 수 없습니다.");
+            log.error("{} {} : 정상적인 XML 파일이 아닙니다. : XML 파싱 에러", getTaskName(), taskInputData.getFile());
             return false;
         }
 
         final PubNewsMLVo newsML = newsMLTotal.getMainData();
         if (newsML == null) {
-            newsMLTotal.logError("정상적인 XML 파일이 아닙니다. {}", taskInputData.getFile());
+            newsMLTotal.logError("{} {} : 정상적인 XML 파일이 아닙니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
 
@@ -92,7 +92,7 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
                 .doFilenameParse(FilenameUtils.getBaseName(taskInputData
                         .getFile()
                         .toString()), this.sourceCode)) {
-            newsMLTotal.logError("파일 이름 룰이 정상이 아닙니다. {}", taskInputData.getFile());
+            newsMLTotal.logError("{} {} : 파일 이름 룰이 정상이 아닙니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
 
@@ -131,10 +131,12 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
             throws RcvDataAccessException {
         final PubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
         if (newsMLTotal.getXmlFileName().isPassProcess()) {
-            newsMLTotal.logInfo("해당 파일은 처리 대상 xml 이 아닙니다. {} {}", taskInputData.getFile(), newsMLTotal.getXmlFileName().getPassReason());
+            newsMLTotal.logInfo("{} 해당 파일은 처리 대상 xml 이 아닙니다. {} {}", getName(), taskInputData.getFile(), newsMLTotal.getXmlFileName().getPassReason());
             taskInputData.setSuccess(true);
             return;
         }
+        newsMLTotal.logInfo("{} {} 등록 시작", getTaskName(), taskInputData.getFile());
+
         newsMLTotal.setSourceCode(this.sourceCode);
         newsMLTotal.setXmlBody(taskInputData.getTaskInput().getSourceBuffer());
 
@@ -147,10 +149,10 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
         }
 
         if (McpString.isNullOrEmpty(retValue) || !retValue.equals("SU")) {
-            newsMLTotal.logError("Xml Database Insert/Update Error [{}] {}", retValue, taskInputData.getFile());
+            newsMLTotal.logError("{} {} Xml Database Insert/Update Error [{}] ", getTaskName(), taskInputData.getFile(), retValue);
         } else {
             taskInputData.setSuccess(true);
-            newsMLTotal.logInfo("Xml Database Insert/Update Success !! [{}] {}", retValue, taskInputData.getFile());
+            newsMLTotal.logInfo("{} {} 등록 완료 [{}]", getTaskName(), taskInputData.getFile(), retValue);
         }
     }
 

@@ -79,29 +79,29 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
     protected boolean doVerifyData(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData) {
         final JamArticleTotalVo articleTotal = taskInputData.getTotalData();
         if (articleTotal == null) {
-            log.error("XML 파싱 에러, JamArticleTotalVo를 생성할 수 없습니다.");
+            log.error("{} {} : XML 파싱 에러, JamArticleTotalVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
         articleTotal.setArtHistoryStep(0);
 
         final JamArticleVo article = articleTotal.getMainData();
         if (article == null) {
-            articleTotal.logError("정상적인 XML 파일이 아닙니다. {}", taskInputData.getFile());
+            articleTotal.logError("{} {} : 정상적인 XML 파일이 아닙니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
 
         if (McpString.isNullOrEmpty(article .getIud())) {
-            articleTotal.logError("iud flag 없음 {}", taskInputData.getFile());
+            articleTotal.logError("{} {} : 정상적인 XML 파일이 아닙니다. : iud flag 없음", getTaskName(), taskInputData.getFile());
             return false;
         }
 
         if (McpString.isNullOrEmpty(article .getTitle())) {
-            articleTotal.logError("title 없음 {}", taskInputData.getFile());
+            articleTotal.logError("{} {} : 정상적인 XML 파일이 아닙니다. : title 없음", getTaskName(), taskInputData.getFile());
             return false;
         }
 
         if (article.getCategoies().size() == 0) {
-            articleTotal.logError("분류 코드 없음 {}", taskInputData.getFile());
+            articleTotal.logError("{} {} : 정상적인 XML 파일이 아닙니다. : 분류 코드 없음 없음", getTaskName(), taskInputData.getFile());
             return false;
         }
         return true;
@@ -113,6 +113,9 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
 
         final JamXmlService jamXmlService = getTaskManager().getJamXmlService();
         final JamArticleTotalVo articleTotal = taskInputData.getTotalData();
+        final JamArticleVo article = articleTotal.getMainData();
+
+        articleTotal.logInfo( "{} 파일 [{}] {} [{}]-{} 시작", getTaskName(), taskInputData.getFile().getName(), article.getIud(), article.getTitle() );
 
         /*
         //        int sourceCode = this.sourceCode;
@@ -128,7 +131,7 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
 
 
         if(!doProcessSelectMasterCode(articleTotal, articleTotal.getMainData(), jamXmlService)) {
-            articleTotal.logError("중앙일보 분류코드에 없는 코드가 넘어옴,  doProcessSelectMasterCode Error");
+            articleTotal.logError(" {} 중앙일보 분류코드에 없는 코드가 넘어옴,  doProcessSelectMasterCode Error", getTaskName());
             return;
         }
 
@@ -143,6 +146,8 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
         XmlGenProcess.doProcess( taskInputData, articleTotal, getTaskManager());
 
         taskInputData.setSuccess( true );
+
+        articleTotal.logInfo( "{} 파일 [{}] {} [{}]-{} 완료", getTaskName(), taskInputData.getFile().getName(), article.getIud(), article.getTitle() );
     }
 
     private boolean doProcessSelectMasterCode(JamArticleTotalVo articleTotal, JamArticleVo article, JamXmlService jamXmlService)
@@ -181,7 +186,9 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
             if (taskInputData.isSuccess())
                 jamXmlService.insertReceiveJobStep(articleTotal, "");
             else {
-                jamXmlService.insertReceiveJobStep(articleTotal, articleTotal.getErrorMessageList());
+                final JamArticleVo article = articleTotal.getMainData();
+                if(article != null && !McpString.isNullOrEmpty(article.getIud()))
+                    jamXmlService.insertReceiveJobStep(articleTotal, articleTotal.getErrorMessageList());
                 // getTaskManager().sendErrorSMS("[JamRecv] XML 처리 오류");
             }
         }

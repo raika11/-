@@ -78,21 +78,19 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
     protected boolean doVerifyData(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData) {
         final CpArticleTotalVo cpArticleTotalVo = taskInputData.getTotalData();
         if (cpArticleTotalVo == null) {
-            log.error("XML 파싱 에러, cp ArticleTotalVo를 생성할 수 없습니다.");
+            log.error("{} {} : XML 파싱 에러, cp ArticleTotalVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
 
         final CpArticleListVo articleList = cpArticleTotalVo.getMainData();
 
         if (articleList == null) {
-            cpArticleTotalVo.logError("정상적인 XML 파일이 아닙니다. {}", taskInputData.getFile());
+            cpArticleTotalVo.logError("{} {} : 정상적인 XML 파일이 아닙니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
 
-        if (articleList.getArticles() == null || articleList
-                .getArticles()
-                .size() == 0) {
-            cpArticleTotalVo.logError("처리할 article 이 없는 XML 파일입니다. {}", taskInputData.getFile());
+        if (articleList.getArticles() == null || articleList.getArticles().size() == 0) {
+            cpArticleTotalVo.logError("{} {} : 처리할 article 이 없는 XML 파일입니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
 
@@ -138,6 +136,8 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
         final CpArticleVo article = cpArticleTotalVo.getCurArticle();
         final MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();
 
+        cpArticleTotalVo.logInfo( "{} 파일 [{}] {} [{}]-{} 시작", getTaskName(), taskInputData.getFile().getName(), article.getIud(), article.getTitle() );
+
         for (CpComponentVo component : article.getComponents()) {
             if (!component.getType().equals("I")) {
                 continue;
@@ -152,7 +152,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
                 // 로컬이미지 다운로드(FTP 에 이미지파일도 함께 올려주는 경우)
                 imageFileName = Path.of(component.getUrl()).getFileName().toString();
                 localFilePath = Path.of(taskInputData.getTaskInput().getDirScan().getPath(), imageFileName).toString();
-                log.info("local file {}, {}", imageFileName, localFilePath);
+                log.debug("{} local file {}, {}", getTaskName(), imageFileName, localFilePath);
             } else {
                 final int equalPos = component
                         .getUrl()
@@ -174,7 +174,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
                 // 외부 이미지 로컬에 저장
                 localFilePath = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
                 if (!RcvImageUtil.downloadImage(component.getUrl(), localFilePath)) {
-                    log.error("image download failed {}", component.getUrl());
+                    cpArticleTotalVo.logError("{} image download failed {}", getTaskName(), component.getUrl());
                     localFilePath = "";
                 }
             }
@@ -183,7 +183,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
                         .replace("\r", "")
                         .replace("\n", "");
 
-                log.info("local file {}, {}", imageFileName, localFilePath);
+                log.debug("{} local file {}, {}", getTaskName(), imageFileName, localFilePath);
 
                 final String uploadPath = "/news/component/"
                         .concat(this.pdsUploadKeyTitle)
@@ -200,14 +200,14 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
                  */
 
                 if (!FtpUtil.uploadFle(rcvConfiguration.getPdsFtpConfig(), localFilePath, uploadPath, imageFileName)) {
-                    log.error("PDS Image Upload Failed !! {} {}", uploadPath, imageFileName);
+                    cpArticleTotalVo.logError(" {} PDS Image Upload Failed !! {} {}", getTaskName(), uploadPath, imageFileName);
                 } else {
                     final String serviceImageUrl = rcvConfiguration
                             .getImageWebSvrUrl()
                             .concat(uploadPath)
                             .concat(imageFileName);
 
-                    log.info("PDS  Image Upload Success !! {} {} {}", serviceImageUrl, uploadPath, imageFileName);
+                    cpArticleTotalVo.logInfo("  {} PDS  Image Upload Success !! {} {} {}", getTaskName(), serviceImageUrl, uploadPath, imageFileName);
 
                     // 본문에 이미지태그가 안들어오는 기사들은 상단에 가운데정렬 이미지로 추가한다.
                     if (this.sourceCode.equals("j4") ) {
@@ -237,6 +237,8 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
 
         final CpXmlService cpXmlService = getTaskManager().getCpXmlService();
         cpXmlService.doInsertUpdateArticleData(cpArticleTotalVo);
+
+        cpArticleTotalVo.logInfo( "{} 파일 [{}] {} [{}]-{} 완료", getTaskName(), taskInputData.getFile().getName(), article.getIud(), article.getTitle() );
     }
 
     @Override

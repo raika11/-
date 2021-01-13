@@ -288,8 +288,8 @@ $card-border-width: 0 !default;
 $card-border-color: transparent !default;
 $card-cap-bg: $white !default;
 $card-shadow: 0 0 .875rem 0 rgba($dark, 0.05) !default;
-$card-title-font-weight: $font-weight-bold !default;
-$card-title-color: $gray-700 !default;
+$card-title-font-weight: 700 !default;
+$card-title-color: $gray-900 !default;
 
 // Tables
 $table-accent-bg: $gray-100 !default;

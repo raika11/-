@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <TaskManager>
-  <TaskGroup name="Jam XML Importer"
+  <TaskGroup name="Jam XML RCV"
     envFile="classpath:conf/taskgroup1.xml"/>
-  <TaskGroup name="CP XML Importer"
+  <TaskGroup name="CP XML RCV"
     envFile="classpath:conf/taskgroup2.xml"/>
-  <TaskGroup name="CP XML 조판 Importer"
+  <TaskGroup name="CP XML 조판 RCV"
     envFile="classpath:conf/taskgroup3.xml"/>
-  <TaskGroup name="데이터베이스 Scheduler Importer"
+  <TaskGroup name="Scheduler RCV"
     envFile="classpath:conf/taskgroup4.xml"/>
 </TaskManager>

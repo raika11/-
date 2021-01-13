@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.dps.api.forward.Forward;
 import jmnet.moka.core.dps.api.forward.ForwardHandler;
 import jmnet.moka.core.dps.excepton.ApiException;
@@ -31,6 +33,9 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
 	@Autowired
 	private CacheManager cacheManager;
+
+	@Autowired
+	private ActionLogger actionLogger;
 
 	public MokaApiRequestHandler(ForwardHandler forwardHandler) {
 		super(forwardHandler);
@@ -63,6 +68,8 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 	 * @see jmnet.moka.core.dps.api.handler.DefaultApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	public ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response)  {
+		String remoteIp = HttpHelper.getRemoteAddr(request);
+		long startTime = System.currentTimeMillis();
 		try {
 
             ApiResolver apiResolver = new ApiResolver(request);
@@ -75,6 +82,10 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 					apiResolver = new ApiResolver(forward.getApiPath(),forward.getApiId());
 					forward.rebuildHttpParameter(request, httpParamMap);
 				} else {
+					actionLogger.fail(remoteIp, ActionType.SELECT,
+							System.currentTimeMillis() - startTime,
+							String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
+							"Api Not Found"));
 					return this.getApiNotFoundResponse(request, apiResolver);
 				}
             }
@@ -84,6 +95,10 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 
 			// Method가 일치하는지 확인한다.
 			if ( !apiContext.getApi().getMethod().matches(request.getMethod())) {
+				actionLogger.fail(remoteIp, ActionType.SELECT,
+						System.currentTimeMillis() - startTime,
+						String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
+								"Method Not Allowed"));
 				return this.getMethodNotAllowedResponse(request, apiResolver);
 			}
 
@@ -93,9 +108,14 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 			if ( !isPermittedIp(request,apiContext) && referer == null) {
 				ApiResult errorResult = ApiResult.createApiErrorResult(new ApiException("Access Denied",
 						apiContext.getApiPath(), apiContext.getApiId()));
+				actionLogger.fail(remoteIp, ActionType.SELECT,
+						System.currentTimeMillis() - startTime,
+						String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(),
+								"Access Denied"));
 				ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
 																 .header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
 																 .body(errorResult);
+				return responseEntity;
 			} else {
 				accessControllAllowOrigin =  getAccessControllAllowOrigin(referer,apiContext);
 			}
@@ -123,11 +143,17 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 								ApiCacheHelper.setCache(apiContext, this.cacheManager, apiResult);
 					}
 				} catch (JsonProcessingException e) {
+					actionLogger.error(remoteIp, ActionType.SELECT,
+							System.currentTimeMillis() - startTime,
+							String.format( "%s/%s : %s", apiResolver.getPath(),apiResolver.getId(), e.toString()), e);
 					logger.error("api Request:{} {} : {}", apiContext.getApiPath(), apiContext.getApiId(), e.toString(), e);
 
 				}
 			}
 			responseEntity = ResponseEntity.ok().headers(responseHeaders).body(cachedString);
+			actionLogger.success(remoteIp, ActionType.SELECT,
+					System.currentTimeMillis() - startTime,
+					String.format("%s/%s", apiResolver.getPath(), apiResolver.getId()));
 			return responseEntity;
 		} catch (ParameterException|ClassNotFoundException e) {
 			logger.error("api Request:{}",e.toString(), e);
@@ -135,6 +161,10 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 			ResponseEntity<?> responseEntity = ResponseEntity.badRequest()
 					.header("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString())
 					.body(errorResult);
+			actionLogger.error(remoteIp, ActionType.SELECT,
+					System.currentTimeMillis() - startTime,
+					String.format( "%s : %s", request.getRequestURI(),
+							e.toString()), e);
 			return responseEntity;
 		}
 	}	

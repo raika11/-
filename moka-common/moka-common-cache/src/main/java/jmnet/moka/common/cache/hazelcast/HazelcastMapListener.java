@@ -1,19 +1,20 @@
 package jmnet.moka.common.cache.hazelcast;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.MapEvent;
 import com.hazelcast.map.listener.EntryAddedListener;
 import com.hazelcast.map.listener.EntryEvictedListener;
 import com.hazelcast.map.listener.EntryExpiredListener;
 import com.hazelcast.map.listener.EntryRemovedListener;
+import com.hazelcast.map.listener.MapClearedListener;
+import com.hazelcast.map.listener.MapEvictedListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HazelcastMapListener
         implements EntryAddedListener<String, String>, EntryEvictedListener<String, String>,
-        EntryRemovedListener<String, String>, EntryExpiredListener<String, String> {
+        EntryRemovedListener<String, String>, EntryExpiredListener<String, String>, MapClearedListener, MapEvictedListener{
     private static final Logger logger = LoggerFactory.getLogger(HazelcastMapListener.class);
-
-
 
     @Override
     public void entryAdded(EntryEvent<String, String> event) {
@@ -43,15 +44,15 @@ public class HazelcastMapListener
         logger.debug("Expired key '{}' to cache : {}", event.getKey(), event.getName());
     }
 
-//    @Override
-//    public void mapCleared(MapEvent event) {
-//        logger.debug("Cleared Map '{}'", event.getName());
-//    }
-//
-//    @Override
-//    public void mapEvicted(MapEvent event) {
-//        logger.debug("Evicted Map '{}'", event.getName());
-//    }
+    @Override
+    public void mapCleared(MapEvent event) {
+        logger.debug("Cleared Map '{}'", event.getName());
+    }
+
+    @Override
+    public void mapEvicted(MapEvent event) {
+        logger.debug("Evicted Map '{}'", event.getName());
+    }
 
 
 }

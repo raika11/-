@@ -1,6 +1,6 @@
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 
-export const commentColumnDefs = [
+export const columnDefs = [
     {
         colId: 'checkbox',
         width: 24,
@@ -85,6 +85,81 @@ export const commentColumnDefs = [
         field: 'media',
         tooltipField: 'media',
         width: 150,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+];
+
+export const smColumnDefs = [
+    {
+        colId: 'checkbox',
+        width: 24,
+        checkboxSelection: true,
+        suppressMenu: true,
+        headerCheckboxSelection: true,
+        cellStyle: { width: '24px' },
+    },
+    {
+        headerName: '신고',
+        field: 'report',
+        tooltipField: 'report',
+        width: 60,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: 'ID',
+        field: 'commentSeq',
+        tooltipField: 'commentSeq',
+        width: 100,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '댓글내용',
+        field: 'comment',
+        tooltipField: 'comment',
+        width: 250,
+        flex: 1,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '사용자ID',
+        field: 'userId',
+        tooltipField: 'userId',
+        width: 100,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '이름',
+        field: 'userName',
+        width: 100,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '등록IP',
+        field: 'ip',
+        tooltipField: 'ip',
+        width: 130,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '계정',
+        field: 'source',
+        tooltipField: 'source',
+        width: 100,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '등록일시',
+        field: 'regDt',
+        tooltipField: 'regDt',
+        width: 150,
+        cellStyle: { display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '정보',
+        field: 'recommend',
+        tooltipField: 'recommend',
+        width: 100,
+        cellRenderer: 'infoRenderer',
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
 ];

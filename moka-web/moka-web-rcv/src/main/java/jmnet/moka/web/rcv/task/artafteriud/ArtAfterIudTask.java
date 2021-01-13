@@ -45,7 +45,7 @@ public class ArtAfterIudTask extends Task<DBTaskInputData> {
         return new DBTaskInput() {
             @Override
             public TaskInputData getTaskInputData() {
-                return new DBTaskInputData(artAfterIudService.getUspArticleIudList());
+                return DBTaskInputData.newDBTaskInputData(artAfterIudService.getUspArticleIudList());
             }
         };
     }
@@ -84,16 +84,19 @@ public class ArtAfterIudTask extends Task<DBTaskInputData> {
 
         switch ( article.getIud() ){
             case "U":
-                log.info("TotalId={} 기사 수동 Update", articleTotal.getTotalId());
+                articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 Update 시작", getTaskName(), articleTotal.getTotalId() );
                 xmlGenService.afterProcessArticleData(articleTotal);
+                articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 Update 완료", getTaskName(), articleTotal.getTotalId() );
                 break;
             case "E":
-                log.info("TotalId={} 기사 수동 Stop", articleTotal.getTotalId());
+                articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 Stop 시작", getTaskName(), articleTotal.getTotalId() );
                 xmlGenService.stopArticleData(articleTotal);
+                articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 Stop 완료", getTaskName(), articleTotal.getTotalId() );
                 break;
             case "D":
-                log.info("TotalId={} 기사 수동 삭제", articleTotal.getTotalId());
+                articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 삭제 시작", getTaskName(), articleTotal.getTotalId() );
                 xmlGenService.deleteArticleData(articleTotal);
+                articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 삭제 완료", getTaskName(), articleTotal.getTotalId() );
                 break;
         }
 

@@ -44,16 +44,16 @@ public class WeatherShkoTask extends Task<FileTaskInputData<WeatherShkoTotalVo, 
     protected boolean doVerifyData(FileTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData) {
         final WeatherShkoTotalVo weatherShkoTotal = taskInputData.getTotalData();
         if (weatherShkoTotal == null) {
-            log.error("XML 파싱 에러, WeatherShkoTotalVo를 생성할 수 없습니다.");
+            log.error("{} 파일 [{}] XML 파싱 에러, WeatherShkoTotalVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
         final WeatherShkoVo weatherShko = weatherShkoTotal.getMainData();
         if( weatherShko == null ){
-            log.error("XML 파싱 에러, weatherShkoVo를 생성할 수 없습니다.");
+            log.error("{} 파일 [{}] XML 파싱 에러, weatherShkoVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
         if( weatherShko.getAreas() == null || weatherShko.getAreas().size() == 0 ){
-            log.error("XML 파싱 에러, 처리할 데이터가 없습니다.");
+            log.error("{} 파일 [{}] XML 파싱 에러, 처리할 데이터가 없습니다.", getTaskName(), taskInputData.getFile());
             return false;
         }
         return true;
@@ -67,11 +67,15 @@ public class WeatherShkoTask extends Task<FileTaskInputData<WeatherShkoTotalVo, 
 
         final WeatherShkoService weatherShkoService = getTaskManager().getWeatherShkoService();
 
+        log.info("{} 파일 [{}] 작업 시작", getTaskName(), taskInputData.getFile());
+
         for(WeatherShkoAreaVo area : weatherShko.getAreas()){
             weatherShkoTotal.setCurArea(area);
             weatherShkoService.insertRegionKweather(weatherShkoTotal);
-            log.info( "Area {}({}) Insert", area.getAreaName(), area.getAreaCode());
+            log.info( "  {} Area {}({}) Insert", getTaskName(), area.getAreaName(), area.getAreaCode());
         }
+
+        log.info("{} 파일 [{}] 작업 완료", getTaskName(), taskInputData.getFile());
 
         taskInputData.setSuccess(true);
     }

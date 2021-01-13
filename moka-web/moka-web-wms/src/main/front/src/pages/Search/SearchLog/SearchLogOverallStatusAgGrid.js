@@ -17,6 +17,7 @@ const SearchLogOverallStatusAgGrid = () => {
             ]}
             className="ag-grid-align-center"
             agGridHeight={100}
+            onRowNodeId={(row) => row.searchCount}
         />
     );
 };

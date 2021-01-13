@@ -1,8 +1,10 @@
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore } from '@store/commentManage';
 
 const CommentList = React.lazy(() => import('./CommentLIst'));
@@ -20,7 +22,7 @@ const Comment = () => {
     }, [dispatch]);
 
     return (
-        <div className="d-flex">
+        <Container fliud>
             <Helmet>
                 <title>댓글 관리</title>
                 <meta name="description" content="댓글 관리 페이지 입니다." />
@@ -28,20 +30,16 @@ const Comment = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard
-                className="mb-0 flex-fill"
-                height={CARD_DEFAULT_HEIGHT}
-                headerClassName="d-flex justify-content-between align-item-center"
-                bodyClassName="d-flex flex-column"
-                title="댓글 관리"
-                titleClassName="mb-0"
-                minWidth={1360}
-            >
-                <Suspense>
-                    <CommentList />
-                </Suspense>
-            </MokaCard>
-        </div>
+            <Row>
+                <Col xs={12} className="p-0">
+                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="댓글 관리">
+                        <Suspense>
+                            <CommentList />
+                        </Suspense>
+                    </MokaCard>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

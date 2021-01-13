@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaSearchInput } from '@components';
-
 import moment from 'moment';
+import { MokaInput, MokaSearchInput, useBreakpoint } from '@components';
 import CommentBlockModal from '@pages/CommentManage/CommentModal/CommentBlockModal';
 import { initialState, getCommentList, changeSearchOption } from '@store/commentManage';
+moment.locale('ko');
 
 /**
  * 컨테이너 검색 컴포넌트
@@ -31,6 +32,7 @@ const CommentSearch = () => {
         searchIdTypeList: store.comment.common.searchIdTypeList,
         searchTypeList: store.comment.common.searchTypeList,
     }));
+    const matchPoints = useBreakpoint();
 
     useEffect(() => {
         dispatch(
@@ -61,38 +63,14 @@ const CommentSearch = () => {
      * @param {*} e 이벤트
      */
     const handleChangeSearchOption = ({ name, value }) => {
-        if (name === 'searchMedia') {
-            setSearch({
-                ...search,
-                searchMedia: value,
-            });
-        } else if (name === 'searchStatus') {
-            setSearch({
-                ...search,
-                searchStatus: value,
-            });
-        } else if (name === 'searchOrder') {
-            setSearch({
-                ...search,
-                searchOrder: value,
-            });
-        } else if (name === 'searchIdType') {
-            setSearch({
-                ...search,
-                searchIdType: value,
-            });
-        } else if (name === 'searchType') {
-            setSearch({
-                ...search,
-                searchType: value,
-            });
-        } else if (name === 'keyword') {
+        if (name === 'keyword') {
             setKeyword(value);
+        } else {
+            setSearch({ ...search, [name]: value });
         }
     };
 
     const handleChangeStartDt = (date) => {
-        console.log(date);
         const dateTime = moment(date).format('YYYY-MM-DD');
         if (typeof date === 'object') {
             setSearch({
@@ -114,86 +92,123 @@ const CommentSearch = () => {
         }
     };
 
-    const handleClickSymbolSave = (e) => {
-        console.log(e);
-    };
+    // const handleClickSymbolSave = (e) => {
+    //     console.log(e);
+    // };
 
     return (
-        <Form className="mb-10">
-            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                <MokaInput as="select" value={search.searchMedia} onChange={handleChangeSearchOption} name="searchMedia">
-                    {searchMediaList.map((media, index) => (
-                        <option key={index} value={media.id}>
-                            {media.name}
-                        </option>
-                    ))}
-                </MokaInput>
-            </div>
-            <div className="mr-10 d-inline-block" style={{ width: 146 }}>
-                <MokaInput
-                    as="dateTimePicker"
-                    label="시작일"
-                    inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: '' }}
-                    name="startDt"
-                    value={startDt}
-                    onChange={handleChangeStartDt}
-                />
-            </div>
-            <div className="mr-10 d-inline-block" style={{ width: 146 }}>
-                <MokaInput as="dateTimePicker" label="종료일" inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: '' }} name="endDt" value={endDt} onChange={handleChangeEndDt} />
-            </div>
-            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                <MokaInput as="select" value={search.searchStatus} onChange={handleChangeSearchOption} name="searchStatus">
-                    {searchStatusList.map((status, index) => (
-                        <option key={index} value={status.id}>
-                            {status.name}
-                        </option>
-                    ))}
-                </MokaInput>
-            </div>
-            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                <MokaInput as="select" value={search.searchOrder} onChange={handleChangeSearchOption} name="searchOrder">
-                    {searchOrderList.map((order, index) => (
-                        <option key={index} value={order.id}>
-                            {order.name}
-                        </option>
-                    ))}
-                </MokaInput>
-            </div>
-            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                <MokaInput as="select" value={search.searchIdType} onChange={handleChangeSearchOption} name="searchIdType">
-                    {searchIdTypeList.map((idType, index) => (
-                        <option key={index} value={idType.id}>
-                            {idType.name}
-                        </option>
-                    ))}
-                </MokaInput>
-            </div>
-            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                <MokaInput as="select" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
-                    {searchTypeList.map((type) => (
-                        <option key={type.id} value={type.id}>
-                            {type.name}
-                        </option>
-                    ))}
-                </MokaInput>
-            </div>
-            <div className="mr-10 d-inline-block">
-                <MokaSearchInput value={keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
-            </div>
-            <div className="d-inline-block">
-                <Button variant="outline-neutral" className="d-flex">
-                    새로고침
-                </Button>
-            </div>
-            <div className="d-inline-block float-right">
-                <Button variant="positive" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
-                    차단등록
-                </Button>
-                <Button variant="negative" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
-                    삭제
-                </Button>
-            </div>
+        <Form className="mb-3">
+            <Form.Row className="flex-wrap">
+                <Col
+                    xs={12}
+                    md={6}
+                    className={clsx('p-0', {
+                        'pr-2': matchPoints.md || matchPoints.lg,
+                    })}
+                >
+                    <Form.Row>
+                        <Col xs={2} className="p-0 pr-2">
+                            <MokaInput as="select" value={search.searchMedia} className="ft-12" onChange={handleChangeSearchOption} name="searchMedia">
+                                {searchMediaList.map((media, index) => (
+                                    <option key={index} value={media.id}>
+                                        {media.name}
+                                    </option>
+                                ))}
+                            </MokaInput>
+                        </Col>
+                        <Col xs={3} className="p-0 pr-2">
+                            <MokaInput
+                                as="dateTimePicker"
+                                label="시작일"
+                                inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: '', inputClassName: 'ft-12' }}
+                                name="startDt"
+                                value={startDt}
+                                onChange={handleChangeStartDt}
+                            />
+                        </Col>
+                        <Col xs={3} className="p-0 pr-2">
+                            <MokaInput
+                                as="dateTimePicker"
+                                label="종료일"
+                                inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: '', inputClassName: 'ft-12' }}
+                                name="endDt"
+                                value={endDt}
+                                onChange={handleChangeEndDt}
+                            />
+                        </Col>
+                        <Col xs={2} className="p-0 pr-2">
+                            <MokaInput as="select" value={search.searchStatus} onChange={handleChangeSearchOption} name="searchStatus" className="ft-12">
+                                {searchStatusList.map((status, index) => (
+                                    <option key={index} value={status.id}>
+                                        {status.name}
+                                    </option>
+                                ))}
+                            </MokaInput>
+                        </Col>
+                        <Col xs={2} className="p-0">
+                            <MokaInput as="select" value={search.searchOrder} onChange={handleChangeSearchOption} name="searchOrder" className="ft-12">
+                                {searchOrderList.map((order, index) => (
+                                    <option key={index} value={order.id}>
+                                        {order.name}
+                                    </option>
+                                ))}
+                            </MokaInput>
+                        </Col>
+                    </Form.Row>
+                </Col>
+
+                <Col
+                    xs={12}
+                    md={6}
+                    className={clsx('p-0', {
+                        'pt-2': matchPoints.xs || matchPoints.sm,
+                    })}
+                >
+                    <Form.Row>
+                        <Col xs={2} className="p-0 pr-2">
+                            <MokaInput as="select" value={search.searchIdType} onChange={handleChangeSearchOption} name="searchIdType" className="ft-12">
+                                {searchIdTypeList.map((idType, index) => (
+                                    <option key={index} value={idType.id}>
+                                        {idType.name}
+                                    </option>
+                                ))}
+                            </MokaInput>
+                        </Col>
+                        <Col xs={2} className="p-0 pr-2">
+                            <MokaInput as="select" value={search.searchType} onChange={handleChangeSearchOption} name="searchType" className="ft-12">
+                                {searchTypeList.map((type) => (
+                                    <option key={type.id} value={type.id}>
+                                        {type.name}
+                                    </option>
+                                ))}
+                            </MokaInput>
+                        </Col>
+                        <Col xs={4} className="p-0 pr-2 d-flex">
+                            <MokaSearchInput
+                                value={keyword}
+                                onChange={handleChangeSearchOption}
+                                onSearch={handleSearch}
+                                name="keyword"
+                                className="flex-fill"
+                                inputClassName="ft-12"
+                                buttonClassName="ft-12"
+                            />
+                        </Col>
+                        <Col xs={4} className="p-0 d-flex">
+                            <Button variant="outline-neutral" className="flex-shrink-0 mr-2 flex-fill ft-12">
+                                새로고침
+                            </Button>
+                            <Button variant="positive" className="mr-2 flex-shrink-0 flex-fill ft-12" onClick={() => setDefaultInputModalState(true)}>
+                                차단등록
+                            </Button>
+                            <Button variant="negative" className="flex-shrink-0 flex-fill ft-12" onClick={() => setDefaultInputModalState(true)}>
+                                삭제
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                </Col>
+            </Form.Row>
+
             {defaultInputModalState && (
                 <CommentBlockModal
                     ModalUsage={modalUsage}

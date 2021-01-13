@@ -205,7 +205,9 @@ const MokaCard = forwardRef((props, ref) => {
                         titleAs
                     ) : (
                         <React.Fragment>
-                            <Card.Title className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>{title}</Card.Title>
+                            <Card.Title as="h2" className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>
+                                {title}
+                            </Card.Title>
                             {createHeaderButtons()}
                         </React.Fragment>
                     )}

@@ -188,7 +188,13 @@ const MokaModal = (props) => {
             {/* 타이틀 */}
             <Modal.Header className={headerClassName} style={headerStyle} id="draggable-modal-title" data-drag-on={draggable} closeButton>
                 {draggable && <div id={`draggable-handle-${id}`} data-drag-handle="true" />}
-                {titleAs ? titleAs : <Modal.Title className={titleClassName}>{title}</Modal.Title>}
+                {titleAs ? (
+                    titleAs
+                ) : (
+                    <Modal.Title as="h2" className={titleClassName}>
+                        {title}
+                    </Modal.Title>
+                )}
             </Modal.Header>
 
             {/* 컨텐츠 */}

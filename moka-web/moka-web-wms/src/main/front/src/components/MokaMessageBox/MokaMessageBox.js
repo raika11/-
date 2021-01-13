@@ -32,7 +32,7 @@ const MokaMessageBox = (props) => {
         <ModalDialog className="message-box">
             {title && (
                 <Modal.Header className={headerClassName}>
-                    <div className="modal-title h4">{title}</div>
+                    <Modal.Title as="h2">{title}</Modal.Title>
                 </Modal.Header>
             )}
 

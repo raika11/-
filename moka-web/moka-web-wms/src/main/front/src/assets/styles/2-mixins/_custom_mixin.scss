@@ -33,6 +33,7 @@
 
     #{$element} {
         @include button-variant($white, $white);
+        font-size: $h3-font-size;
         box-shadow: none !important;
         margin: 0;
         flex: 1 1 auto !important;

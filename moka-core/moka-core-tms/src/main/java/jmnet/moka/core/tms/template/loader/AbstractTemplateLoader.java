@@ -83,8 +83,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader<MergeItem
         }
 
         if (hzInstance != null && cacheable) {
-            this.mergeItemMap = hzInstance.getMap("mergeItem");
-            this.uri2ItemMap = hzInstance.getMap("uri2Item");
+            this.mergeItemMap = hzInstance.getMap(this.domainId+"_mergeItem");
+            this.uri2ItemMap = hzInstance.getMap(this.domainId+"_uri2Item");
             hzCache.getHazelcastDelegator().addListener((IMap<String,String>)this.uri2ItemMap);
         } else {
             this.uri2ItemMap = new ConcurrentHashMap<>();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col, Button, Row } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -78,7 +78,7 @@ const ChannelSearchBox = ({ match }) => {
         <>
             <Form>
                 <Form.Row className="d-flex mb-3">
-                    <Col xs={2.5}>
+                    <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0"
@@ -92,8 +92,8 @@ const ChannelSearchBox = ({ match }) => {
                             }}
                             inputProps={{ timeFormat: null }}
                         />
-                    </Col>
-                    <Col xs={2.5}>
+                    </div>
+                    <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0"
@@ -107,17 +107,17 @@ const ChannelSearchBox = ({ match }) => {
                             }}
                             inputProps={{ timeFormat: null }}
                         />
-                    </Col>
-                    <Col xs={2}>
-                        <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
+                    </div>
+                    <div className="mb-0 pl-1 pr-2">
+                        <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             {selectItem.usedYn.map((item, index) => (
                                 <option key={index} value={item.value}>
                                     {item.name}
                                 </option>
                             ))}
                         </MokaInput>
-                    </Col>
-                    <Col xs={3}>
+                    </div>
+                    <div className="mb-0 pl-1 pr-2" style={{ width: 260 }}>
                         <MokaSearchInput
                             id="keyword"
                             name="keyword"
@@ -126,17 +126,17 @@ const ChannelSearchBox = ({ match }) => {
                             onChange={(e) => handleSearchChange(e)}
                             onSearch={() => handleClickSearchButton()}
                         />
-                    </Col>
-                    <Col xs={1} className="mr-0">
+                    </div>
+                    <div className="mr-0 pl-1 pr-2">
                         <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
                             초기화
                         </Button>
-                    </Col>
-                    <Col xs={1} className="mr-0">
+                    </div>
+                    <div className="mr-0 pl-1 pr-2">
                         <Button variant="positive" onClick={() => handleNewButton()}>
                             채널등록
                         </Button>
-                    </Col>
+                    </div>
                 </Form.Row>
             </Form>
         </>

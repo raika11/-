@@ -563,7 +563,7 @@ const ChannelEdit = ({ match }) => {
                     <Col xs={10} className="p-0">
                         <MokaInputLabel
                             label={`팟티\n(채널연결)`}
-                            labelWidth={60}
+                            labelWidth={64}
                             className="mb-0"
                             id="podtyChnlSrl"
                             name="podtyChnlSrl"
@@ -584,7 +584,7 @@ const ChannelEdit = ({ match }) => {
                     <Col className="p-0">
                         <MokaInputLabel
                             label={`외부 채널\n(URL)`}
-                            labelWidth={60}
+                            labelWidth={64}
                             className="mb-0"
                             id="podtyUrl"
                             name="podtyUrl"
@@ -599,7 +599,7 @@ const ChannelEdit = ({ match }) => {
                     <Col className="p-0">
                         <MokaInputLabel
                             label={`채널명`}
-                            labelWidth={60}
+                            labelWidth={64}
                             className="mb-0"
                             id="chnlNm"
                             name="chnlNm"
@@ -623,7 +623,7 @@ const ChannelEdit = ({ match }) => {
                     <Col className="p-0">
                         <MokaInputLabel
                             label={`채널 소개`}
-                            labelWidth={60}
+                            labelWidth={64}
                             as="textarea"
                             className="mb-2"
                             inputClassName="resize-none"
@@ -640,7 +640,7 @@ const ChannelEdit = ({ match }) => {
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label={`개설일`}
-                            labelWidth={60}
+                            labelWidth={64}
                             as="dateTimePicker"
                             className="mb-0"
                             name="chnlSdt"
@@ -658,7 +658,7 @@ const ChannelEdit = ({ match }) => {
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label={`종료일`}
-                            labelWidth={60}
+                            labelWidth={64}
                             as="dateTimePicker"
                             className="mb-0"
                             name="chnlEdt"
@@ -675,7 +675,7 @@ const ChannelEdit = ({ match }) => {
                 </Form.Row>
                 {/* 방송요일 */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`방송요일`} labelWidth={60} as="none" />
+                    <MokaInputLabel label={`방송요일`} labelWidth={64} as="none" />
                     <MokaInputLabel
                         className="d-felx p-0 pl-0 pr-0"
                         as="switch"
@@ -763,7 +763,7 @@ const ChannelEdit = ({ match }) => {
                     <Col className="p-0">
                         <MokaInputLabel
                             label={`태그`}
-                            labelWidth={60}
+                            labelWidth={64}
                             className="mb-0"
                             id="keywords"
                             name="keywords"
@@ -776,7 +776,7 @@ const ChannelEdit = ({ match }) => {
                 <hr />
                 {/* 진행자 검색(모달) */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`진행자`} labelWidth={60} as="none" />
+                    <MokaInputLabel label={`진행자`} labelWidth={64} as="none" />
                     <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
                         검색
                     </Button>
@@ -853,7 +853,7 @@ const ChannelEdit = ({ match }) => {
 
                 <hr />
                 <Form.Row className="mb-2">
-                    <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={60} />
+                    <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={64} />
                 </Form.Row>
 
                 {/* 이미지 */}

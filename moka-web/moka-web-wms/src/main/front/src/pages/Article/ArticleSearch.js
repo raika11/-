@@ -221,22 +221,8 @@ const ArticleSearch = ({ ja, sun }) => {
 
                 {/* 시작일, 종료일 */}
                 <Col xs={4} className="p-0 pl-2 d-flex">
-                    <MokaInput
-                        as="dateTimePicker"
-                        className="mr-1"
-                        inputClassName="ft-12"
-                        inputProps={{ timeFormat: null }}
-                        onChange={handleChangeSDate}
-                        value={search.startServiceDay}
-                    />
-                    <MokaInput
-                        as="dateTimePicker"
-                        className="ml-1"
-                        inputClassName="ft-12"
-                        inputProps={{ timeFormat: null }}
-                        onChange={handleChangeEDate}
-                        value={search.endServiceDay}
-                    />
+                    <MokaInput as="dateTimePicker" className="mr-1" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
+                    <MokaInput as="dateTimePicker" className="ml-1" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endServiceDay} />
                 </Col>
 
                 {/* 면, 판 */}

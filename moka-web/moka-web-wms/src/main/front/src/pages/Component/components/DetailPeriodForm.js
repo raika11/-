@@ -97,7 +97,7 @@ const DetailPeriodForm = (props) => {
                             </div>
                             ~
                             <div style={{ width: 185 }} className="ml-2">
-                                <MokaDateTimePicker disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} isInvalid={error.periodEndDt} inputClassName="ft-12" />
+                                <MokaDateTimePicker disabled={disabled} value={component.periodEndDt} onChange={handleEndDt} isInvalid={error.periodEndDt} />
                             </div>
                         </Col>
                     </Form.Row>

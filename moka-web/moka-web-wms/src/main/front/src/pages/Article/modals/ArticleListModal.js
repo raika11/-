@@ -276,22 +276,8 @@ const ArticleListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 시작일, 종료일 */}
                     <Col xs={4} className="p-0 d-flex">
-                        <MokaInput
-                            as="dateTimePicker"
-                            inputClassName="ft-12"
-                            inputProps={{ timeFormat: null }}
-                            className="mr-2"
-                            onChange={handleChangeSDate}
-                            value={search.startServiceDay}
-                        />
-                        <MokaInput
-                            as="dateTimePicker"
-                            inputClassName="ft-12"
-                            inputProps={{ timeFormat: null }}
-                            className="mr-2"
-                            onChange={handleChangeEDate}
-                            value={search.endServiceDay}
-                        />
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-2" onChange={handleChangeSDate} value={search.startServiceDay} />
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-2" onChange={handleChangeEDate} value={search.endServiceDay} />
                     </Col>
                     {/* 검색 조건 */}
                     <Col xs={2} className="p-0">

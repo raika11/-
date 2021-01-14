@@ -205,12 +205,12 @@ const RcvArticleSearch = () => {
 
                 {/* 시작일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startDay} />
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startDay} />
                 </div>
 
                 {/* 종료일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endDay} />
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endDay} />
                 </div>
 
                 {/* 상태 */}

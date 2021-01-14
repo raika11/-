@@ -241,12 +241,12 @@ const ArticleDeskSearch = (props) => {
 
                 {/* 시작일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
                 </div>
 
                 {/* 종료일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputClassName="ft-12" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endServiceDay} />
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endServiceDay} />
                 </div>
 
                 {/* 검색 조건 */}
@@ -261,18 +261,10 @@ const ArticleDeskSearch = (props) => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput
-                    className="flex-fill mr-2"
-                    inputClassName="ft-12"
-                    buttonClassName="ft-12"
-                    name="keyword"
-                    value={search.keyword}
-                    onChange={handleChangeValue}
-                    onSearch={handleSearch}
-                />
+                <MokaSearchInput className="flex-fill mr-2" inputClassName="ft-12" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
-                <Button variant="negative" className="ft-12" onClick={handleClickReset}>
+                <Button variant="negative" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>
@@ -328,7 +320,7 @@ const ArticleDeskSearch = (props) => {
                 </div>
                 {!isNaverChannel && (
                     <React.Fragment>
-                        <Button variant="outline-neutral" className="ft-12" onClick={() => setModalShow(true)}>
+                        <Button variant="outline-neutral" onClick={() => setModalShow(true)}>
                             그룹지정
                         </Button>
                         {/* 그룹지정 변경 모달 */}

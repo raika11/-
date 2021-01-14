@@ -71,7 +71,7 @@ const PageSearch = ({ match }) => {
     );
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput as="select" className="ft-12" value={search.domainId || undefined} onChange={handleChangeDomain}>

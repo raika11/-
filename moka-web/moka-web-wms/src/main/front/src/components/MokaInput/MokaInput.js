@@ -204,7 +204,7 @@ const MokaInput = forwardRef((props, ref) => {
     }
 
     return (
-        <>
+        <React.Fragment>
             <Type ref={inputRef} {...contextProps}>
                 {children}
             </Type>
@@ -213,7 +213,7 @@ const MokaInput = forwardRef((props, ref) => {
                     <Tooltip id={`input-invalid-${name}`}>{invalidMessage}</Tooltip>
                 </Overlay>
             )}
-        </>
+        </React.Fragment>
     );
 });
 

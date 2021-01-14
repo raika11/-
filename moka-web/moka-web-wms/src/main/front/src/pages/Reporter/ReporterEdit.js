@@ -111,8 +111,8 @@ const ReporterEdit = ({ match }) => {
                 <div className="flex-fill d-flex align-items-center justify-content-between ml-4">
                     <div className="d-flex flex-column">
                         <p className="mb-gutter">
-                            <span className="h5 mr-1">{temp.repName}</span>
-                            <span className="h5 font-weight-normal">기자</span>
+                            <span className="h3 mr-1">{temp.repName}</span>
+                            <span className="h3 font-weight-normal">기자</span>
                         </p>
                         <div className="d-flex">
                             <MokaInput

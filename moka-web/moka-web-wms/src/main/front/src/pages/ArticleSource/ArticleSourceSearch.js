@@ -89,20 +89,12 @@ const ArticleSourceSearch = () => {
                         <option value="N">미수신</option>
                     </MokaInput>
                 </div>
-                <MokaSearchInput
-                    className="mr-2"
-                    inputClassName="ft-12"
-                    buttonClassName="ft-12"
-                    value={search.keyword}
-                    name="keyword"
-                    onChange={handleChangeValue}
-                    onSearch={handleSearch}
-                />
-                <Button className="ft-12" variant="negative" onClick={handleClickInitialize}>
+                <MokaSearchInput className="mr-2" inputClassName="ft-12" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
+                <Button variant="negative" onClick={handleClickInitialize}>
                     초기화
                 </Button>
             </div>
-            <Button className="ft-12" variant="positive" onClick={handleClickAdd}>
+            <Button variant="positive" onClick={handleClickAdd}>
                 신규 등록
             </Button>
         </div>

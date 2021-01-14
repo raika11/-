@@ -25,7 +25,6 @@ const TourListSearch = () => {
                 <div style={{ width: 140 }}>
                     <MokaInput
                         className="mb-0 mr-2"
-                        inputClassName="ft-12"
                         as="dateTimePicker"
                         value={startDate}
                         inputProps={{ timeFormat: null }}
@@ -43,7 +42,6 @@ const TourListSearch = () => {
                 <div style={{ width: 140 }}>
                     <MokaInput
                         className="mb-0 mr-2"
-                        inputClassName="ft-12"
                         as="dateTimePicker"
                         value={endDate}
                         inputProps={{ timeFormat: null }}

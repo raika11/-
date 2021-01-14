@@ -8,14 +8,15 @@ import EditThumbCard, { ItemTypes } from './EditThumbCard';
 import toast from '@utils/toastUtil';
 import gifshot from 'gifshot';
 import moment from 'moment';
-import util from '@utils/commonUtil';
-import { API_BASE_URL } from '@/constants';
+import commonUtil from '@utils/commonUtil';
+import { IMAGE_PROXY_API } from '@/constants';
+import imageEditer from '@utils/imageEditorUtil';
 
 moment.locale('ko');
 
 const EditThumbDropzone = (props) => {
     const { collapse, setCollapse } = props;
-    const { onThumbClick, onRepClick, onEditClick, setRepPhoto } = props;
+    const { onThumbClick, onRepClick, setRepPhoto } = props;
     const { cropWidth, cropHeight } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
@@ -70,6 +71,25 @@ const EditThumbDropzone = (props) => {
         [imgList],
     );
 
+    const handleEditClick = (data) => {
+        imageEditer.create(
+            data.imageOnlnPath,
+            (imageSrc) => {
+                data.imageOnlnPath = imageSrc;
+                data.preview = imageSrc;
+                data.thumbPath = imageSrc;
+
+                setImgList(
+                    produce(imgList, (draft) => {
+                        draft.splice(data.index + 1, 0, data);
+                        draft.splice(data.index, 1);
+                    }),
+                );
+            },
+            { cropWidth: 300, cropHeight: 300 },
+        );
+    };
+
     /**
      * 드롭 카드 아이템 삭제 버튼 클릭
      */
@@ -88,7 +108,7 @@ const EditThumbDropzone = (props) => {
         // eslint-disable-next-line array-callback-return
         imgList.map((image) => {
             if (image.dataType === 'archive') {
-                images.push(`${API_BASE_URL}/api/app/image-proxy?url=${encodeURIComponent(image.imageOnlnPath)}`);
+                images.push(`${IMAGE_PROXY_API}${encodeURIComponent(image.imageOnlnPath)}`);
             } else {
                 images.push(image.imageOnlnPath);
             }
@@ -104,7 +124,7 @@ const EditThumbDropzone = (props) => {
             },
             (obj) => {
                 if (!obj.error) {
-                    const gifImage = URL.createObjectURL(util.base64ToBlob(obj.image));
+                    const gifImage = URL.createObjectURL(commonUtil.base64ToBlob(obj.image));
                     setRepPhoto({
                         dataType: 'local',
                         id: moment().format('YYYYMMDDsss'),
@@ -182,7 +202,7 @@ const EditThumbDropzone = (props) => {
                                 onThumbClick={onThumbClick}
                                 onDeleteClick={handleDeleteDropCard}
                                 onRepClick={onRepClick}
-                                onEditClick={onEditClick}
+                                onEditClick={handleEditClick}
                             />
                         ))}
                     </div>

@@ -14,6 +14,8 @@ import TitlePrefixForm from './TitlePrefixForm';
 import VodUrlForm from './VodUrlForm';
 import { EditThumbModal } from '@pages/Desking/modals';
 import mapping, { fontSizeObj } from '@pages/Desking/deskingPartMapping';
+import imageEditer from '@utils/imageEditorUtil';
+import commonUtil from '@utils/commonUtil';
 
 const urlRegex = /[Uu]rl$/;
 
@@ -170,6 +172,25 @@ const EditDeskingWorkModal = (props) => {
         };
     }, []);
 
+    const handleEditClick = () => {
+        console.log(temp, deskingWorkData);
+        imageEditer.create(
+            temp.thumbFileName,
+            (imageSrc) => {
+                (async () => {
+                    await fetch(imageSrc)
+                        .then((r) => r.blob())
+                        .then((blobFile) => {
+                            const file = commonUtil.blobToFile(blobFile, deskingWorkData.seq);
+                            setFileValue(file);
+                            setTemp({ ...temp, irImg: imageSrc, thumbFileName: imageSrc });
+                        });
+                })();
+            },
+            { cropWidth: 300, cropHeight: 300 },
+        );
+    };
+
     return (
         <>
             <MokaModal
@@ -229,7 +250,7 @@ const EditDeskingWorkModal = (props) => {
                                         <Button variant="positive" size="sm" onClick={() => setShowModal(true)} className="mb-2">
                                             신규등록
                                         </Button>
-                                        <Button variant="outline-neutral" size="sm">
+                                        <Button variant="outline-neutral" size="sm" onClick={handleEditClick}>
                                             편집
                                         </Button>
                                     </div>

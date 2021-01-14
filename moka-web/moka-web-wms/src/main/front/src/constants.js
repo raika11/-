@@ -130,3 +130,6 @@ export const MOBILE_ARTICLE_URL = 'https://mnews.joins.com/article/';
 
 // 페이스북 디버그 툴 링크 (모바일URL)
 export const FB_DEBUGGER_LINK = 'https://developers.facebook.com/tools/debug/echo/?q=https://mnews.joins.com/article/';
+
+// 이미지 CROSS ORAGIN 우회 API
+export const IMAGE_PROXY_API = `${API_BASE_URL}/api/app/image-proxy?url=`;

@@ -13,7 +13,8 @@ import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
 import toast from '@utils/toastUtil';
-import util from '@utils/commonUtil';
+import commonUtil from '@utils/commonUtil';
+import imageEditer from '@utils/imageEditorUtil';
 
 const defaultValue = {
     id: '',
@@ -40,6 +41,7 @@ const EditThumbModal = (props) => {
     const [cardData, setCardData] = useState({});
     const [repPhoto, setRepPhoto] = useState(defaultValue);
     const [showViewModal, setShowViewModal] = useState(false);
+
     /**
      * 썸네일 클릭
      * @param {object} data 썸네일 클릭 팝업 데이터
@@ -112,7 +114,24 @@ const EditThumbModal = (props) => {
     /**
      * 카드의 이미지 편집 버튼 클릭
      */
-    const handleEditClick = () => {};
+    const handleEditClick = () => {
+        console.log(repPhoto);
+        imageEditer.create(
+            repPhoto.imageOnlnPath ? repPhoto.imageOnlnPath : repPhoto.thumbPath,
+            (imageSrc) => {
+                setRepPhoto({
+                    ...repPhoto,
+                    dataType: 'local',
+                    thumbPath: imageSrc,
+                    imageOnlnPath: imageSrc,
+                    path: {
+                        preview: imageSrc,
+                    },
+                });
+            },
+            { cropWidth: 300, cropHeight: 300 },
+        );
+    };
 
     /**
      * 이미지 편집 등록 버튼 클릭
@@ -123,7 +142,7 @@ const EditThumbModal = (props) => {
                 await fetch(repPhoto.thumbPath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
-                        const file = util.blobToFile(blobFile, deskingWorkData.seq);
+                        const file = commonUtil.blobToFile(blobFile, deskingWorkData.seq);
                         setFileValue(file);
                         setThumbFileName(repPhoto.thumbPath);
                     });
@@ -157,7 +176,6 @@ const EditThumbModal = (props) => {
     return (
         <MokaModal
             title="대표 이미지 편집"
-            id="image-edit"
             show={show}
             onHide={handleHide}
             width={1200}
@@ -180,7 +198,7 @@ const EditThumbModal = (props) => {
                         // 아카이브 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
                             <EditThumbSearch />
-                            <EditThumbTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} onEditClick={handleEditClick} />
+                            <EditThumbTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
                         </div>,
 
                         // 본문 소재 리스트 탭
@@ -190,7 +208,7 @@ const EditThumbModal = (props) => {
 
                         // 내 PC 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbImageInputTable onRepClick={handleRepClick} onEditClick={handleEditClick} />
+                            <EditThumbImageInputTable onRepClick={handleRepClick} />
                         </div>,
                     ]}
                     tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
@@ -220,7 +238,6 @@ const EditThumbModal = (props) => {
                         onThumbClick={handleThumbClick}
                         onDeleteClick={handleDeleteClick}
                         onRepClick={handleRepClick}
-                        onEditClick={handleEditClick}
                         setRepPhoto={setRepPhoto}
                     />
                 </div>

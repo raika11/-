@@ -227,7 +227,7 @@ const LookupTemplateList = (props) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 검색조건 */}
-                    <Col xs={4} className="p-0 pr-2">
+                    <Col xs={5} className="p-0 pr-2">
                         <MokaInput
                             as="select"
                             value={search.searchType}
@@ -249,7 +249,7 @@ const LookupTemplateList = (props) => {
                         </MokaInput>
                     </Col>
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0">
+                    <Col xs={7} className="p-0">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {

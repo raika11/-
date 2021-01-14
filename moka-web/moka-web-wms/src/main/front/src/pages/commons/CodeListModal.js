@@ -257,7 +257,7 @@ const CodeListModal = (props) => {
                     <Form.Row className="flex-wrap">
                         <Col sm={10} className="p-0">
                             <div className="w-100 pr-2 h6">
-                                <div className="input-border pl-1 pr-1 pt-1 h-100" style={{ minHeight: 31 }}>
+                                <div className="input-border pl-1 pr-1 pt-1 h-100" style={{ minHeight: 29 }}>
                                     {selectedList.map((s) => (
                                         <Badge key={s.masterCode} className="mr-1 mb-1 pt-1 user-select-text" variant="searching">
                                             {s.masterCode}&nbsp;

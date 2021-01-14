@@ -79,7 +79,6 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                     <MokaInput
                         as="select"
                         value={dateType}
-                        className="ft-12"
                         name="dateType"
                         onChange={(event) => {
                             const {
@@ -112,7 +111,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                                 .format(DB_DATEFORMAT);
                             handleChangeValue('startDt', date);
                         }}
-                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                        inputProps={{ timeFormat: null }}
                         disabled={disabled.date}
                     />
                 </div>
@@ -134,7 +133,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                                 .format(DB_DATEFORMAT);
                             handleChangeValue('endDt', date);
                         }}
-                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                        inputProps={{ timeFormat: null }}
                         disabled={disabled.date}
                     />
                 </div>
@@ -142,7 +141,6 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                     <MokaInput
                         as="select"
                         value={options.searchType}
-                        className="m-0 ft-12"
                         name="searchType"
                         onChange={(event) => {
                             const {
@@ -165,12 +163,10 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         handleChangeValue(name, value);
                     }}
                     className="mr-2 flex-fill"
-                    buttonClassName="ft-12"
-                    inputClassName="ft-12"
                     onSearch={handleClickSearch}
                 />
                 {/* 초기화 버튼 */}
-                <Button variant="negative" onClick={handleSearchReset} className="flex-shrink-0 ft-12">
+                <Button variant="negative" onClick={handleSearchReset} className="flex-shrink-0">
                     초기화
                 </Button>
             </Form.Row>

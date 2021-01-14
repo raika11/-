@@ -109,6 +109,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
         let result = [];
         if (list) {
             result = list.map((code) => code.masterCode);
+            setError({ ...error, categoryList: false });
         }
         setTemp({
             ...temp,
@@ -157,6 +158,14 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
         if (!REQUIRED_REGEX.test(articleData.artTitle)) {
             errList.push({
                 field: 'artTitle',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+        // 마스터코드 체크
+        if (!REQUIRED_REGEX.test(articleData.categoryList.join(''))) {
+            errList.push({
+                field: 'categoryList',
                 reason: '',
             });
             isInvalid = isInvalid || true;
@@ -302,6 +311,8 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                             onChange={handleMasterCode}
                             maxMenuHeight={150}
                             selectable={['content']}
+                            isInvalid={error.categoryList}
+                            required
                             isMulti
                         />
                     </Col>

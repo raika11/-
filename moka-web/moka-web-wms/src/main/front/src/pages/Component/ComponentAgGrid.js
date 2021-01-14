@@ -13,12 +13,11 @@ import { GET_COMPONENT_LIST, getComponentList, changeSearchOption } from '@store
 const ComponentAgGrid = ({ onDelete, match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
-    const { total, list, search, loading, component } = useSelector((store) => ({
+    const loading = useSelector(({ loading }) => loading[GET_COMPONENT_LIST]);
+    const { total, list, search, component } = useSelector((store) => ({
         total: store.component.total,
         list: store.component.list,
         search: store.component.search,
-        loading: store.loading[GET_COMPONENT_LIST],
         component: store.component.component,
     }));
 
@@ -62,7 +61,7 @@ const ComponentAgGrid = ({ onDelete, match }) => {
         <>
             {/* 버튼 그룹 */}
             <div className="d-flex mb-10 justify-content-end">
-                <Button variant="positive" onClick={() => history.push(`${match.path}/add`)} className="ft-12">
+                <Button variant="positive" onClick={() => history.push(`${match.path}/add`)}>
                     컴포넌트 등록
                 </Button>
             </div>

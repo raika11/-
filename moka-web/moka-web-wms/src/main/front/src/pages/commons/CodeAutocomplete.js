@@ -63,6 +63,8 @@ const propTypes = {
      * @default
      */
     selectable: PropTypes.arrayOf(PropTypes.string),
+    required: PropTypes.bool,
+    isInvalid: PropTypes.bool,
 };
 const defaultProps = {
     isMulti: false,
@@ -75,7 +77,23 @@ const defaultProps = {
  * 기사 분류(masterCode) 데이터를 가져오는 자동완성
  */
 const CodeAutocomplete = forwardRef((props, ref) => {
-    const { label, labelWidth, labelClassName, className, value, onChange, isMulti, placeholder, searchIcon, maxMenuHeight, labelType, max, selectable } = props;
+    const {
+        label,
+        labelWidth,
+        labelClassName,
+        className,
+        value,
+        onChange,
+        isMulti,
+        placeholder,
+        searchIcon,
+        maxMenuHeight,
+        labelType,
+        max,
+        selectable,
+        required,
+        isInvalid,
+    } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
     const { storeSearch, codeList } = useSelector(
@@ -236,6 +254,8 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 value={defaultValue}
                 placeholder={placeholder}
                 onChange={handleChangeValue}
+                required={required}
+                isInvalid={isInvalid}
                 inputProps={{ options, isMulti, isLoading: loading, searchIcon: searchIcon, onClickSearchIcon: handleClickSearchIcon, maxMenuHeight: maxMenuHeight }}
             />
 

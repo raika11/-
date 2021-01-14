@@ -46,7 +46,7 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
                 </MokaInputLabel>
             </Col>
             <Col xs={3} className="p-0 pl-2">
-                <MokaInput as="select" className="ft-12" name="titlePrefixLoc" value={temp.titlePrefixLoc} onChange={onChange}>
+                <MokaInput as="select" name="titlePrefixLoc" value={temp.titlePrefixLoc} onChange={onChange}>
                     <option hidden>선택</option>
                     {filteredLocRows &&
                         filteredLocRows.map((code) => (

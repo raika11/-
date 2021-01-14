@@ -31,7 +31,7 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
             </Col>
             {isUrl && (
                 <Col xs={2} className="p-0">
-                    <MokaInput as="select" name={urlTarget} value={temp[urlTarget] || '_self'} className="ft-12" onChange={onChange}>
+                    <MokaInput as="select" name={urlTarget} value={temp[urlTarget] || '_self'} onChange={onChange}>
                         <option value="_self">본창</option>
                         <option value="_blank">새창</option>
                     </MokaInput>

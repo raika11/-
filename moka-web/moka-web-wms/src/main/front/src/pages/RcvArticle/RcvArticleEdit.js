@@ -8,6 +8,7 @@ import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { unescapeHtml } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
@@ -21,6 +22,7 @@ const RcvArticleEdit = ({ match }) => {
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
     const [reporterList, setReporterList] = useState([]);
     const [temp, setTemp] = useState(initialState.rcvArticle);
+    const [error, setError] = useState({});
 
     /**
      * temp 값 변경
@@ -43,20 +45,24 @@ const RcvArticleEdit = ({ match }) => {
      * 수신기사 등록
      */
     const handleRegister = () => {
-        dispatch(
-            postRcvArticle({
-                rcvArticle: temp,
-                callback: ({ header }) => {
-                    if (header.success) {
-                        toast.success(header.message);
-                        history.push(match.path, { update: true });
-                        // dispatch(clearRcvArticle());
-                    } else {
-                        toast.fail(header.message);
-                    }
-                },
-            }),
-        );
+        if (!REQUIRED_REGEX.test(temp.categoryList.join(''))) {
+            setError({ ...error, categoryList: true });
+        } else {
+            dispatch(
+                postRcvArticle({
+                    rcvArticle: temp,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            history.push(match.path, { update: true });
+                            // dispatch(clearRcvArticle());
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        }
     };
 
     useEffect(() => {
@@ -132,6 +138,8 @@ const RcvArticleEdit = ({ match }) => {
             {!rcvArticle.totalId || rcvArticle.totalId === 0 ? (
                 <RctArticleForm
                     article={temp}
+                    error={error}
+                    setError={setError}
                     onChange={handleChangeValue}
                     articleTypeRows={articleTypeRows}
                     reporterList={reporterList || []}

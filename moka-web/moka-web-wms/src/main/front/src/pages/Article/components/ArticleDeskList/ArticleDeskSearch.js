@@ -264,7 +264,7 @@ const ArticleDeskSearch = (props) => {
                 <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
-                <Button variant="negative" onClick={handleClickReset}>
+                <Button variant="negative" className="flex-shrink-0" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>
@@ -291,18 +291,18 @@ const ArticleDeskSearch = (props) => {
                     />
 
                     {/* 면 */}
-                    <div style={{ width: 85 }} className="mr-2">
-                        <MokaInputLabel label="면" labelWidth={25} name="pressMyun" value={search.pressMyun} onChange={handleChangeValue} disabled={searchDisabled} />
+                    <div style={{ width: 60 }} className="mr-2">
+                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} disabled={searchDisabled} />
                     </div>
 
                     {/* 판 */}
-                    <div style={{ width: 85 }} className="mr-2">
-                        <MokaInputLabel label="판" labelWidth={25} name="pressPan" value={search.pressPan} onChange={handleChangeValue} disabled={searchDisabled} />
+                    <div style={{ width: 60 }} className="mr-2">
+                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={searchDisabled} />
                     </div>
                 </div>
                 {!isNaverChannel && (
                     <React.Fragment>
-                        <Button variant="outline-neutral" onClick={() => setModalShow(true)}>
+                        <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
                             그룹지정
                         </Button>
                         {/* 그룹지정 변경 모달 */}

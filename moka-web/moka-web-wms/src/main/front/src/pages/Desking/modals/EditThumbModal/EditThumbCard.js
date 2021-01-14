@@ -281,7 +281,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                                     >
                                         <MokaIcon iconName="fas-pencil" />
                                     </Button>
-                                    <Button className="ft-12" style={{ position: 'absolute', bottom: '1px', left: '1px' }} as="a">
+                                    <Button size="sm" style={{ position: 'absolute', bottom: '5px', left: '5px' }} as="a">
                                         대표 이미지
                                     </Button>
                                 </React.Fragment>

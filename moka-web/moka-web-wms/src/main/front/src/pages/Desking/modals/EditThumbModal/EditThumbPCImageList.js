@@ -31,7 +31,7 @@ moment.locale('ko');
  * local 이미지파일 input + dropzone
  * react-dropzone 사용
  */
-const EditThumbImageInput = (props) => {
+const EditThumbPCImageList = (props) => {
     const { className, onRepClick } = props;
 
     // state
@@ -92,14 +92,14 @@ const EditThumbImageInput = (props) => {
                             Drop files to attach, or browse
                         </span>
 
-                        <div className="d-flex flex-wrap align-content-start custom-scroll p-1 h-100 dropzone-border dropzone-dragover-zone is-file-dropzone">
+                        <div className="d-flex flex-wrap align-content-start custom-scroll p-1 h-100 dropzone-dragover-zone is-file-dropzone">
                             {/* 이미지 미리보기 */}
                             {files.map((data) => (
                                 <EditThumbCard ref={cardRef} key={data.id} img={data.thumbPath} data={data} dataType={data.dataType} onRepClick={onRepClick} />
                             ))}
 
                             <input {...getInputProps()} />
-                            <div className="dropzone-dragover-mask " />
+                            <div className="dropzone-dragover-mask input-border" />
                         </div>
                     </div>
                 );
@@ -108,7 +108,7 @@ const EditThumbImageInput = (props) => {
     );
 };
 
-EditThumbImageInput.propTypes = propTypes;
-EditThumbImageInput.defaultProps = defaultProps;
+EditThumbPCImageList.propTypes = propTypes;
+EditThumbPCImageList.defaultProps = defaultProps;
 
-export default EditThumbImageInput;
+export default EditThumbPCImageList;

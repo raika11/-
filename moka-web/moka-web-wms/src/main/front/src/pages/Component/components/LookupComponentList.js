@@ -169,7 +169,7 @@ const LookupComponentList = (props) => {
                 </MokaInput>
                 {/* 검색조건, 키워드 */}
                 <Form.Row>
-                    <Col xs={4} className="p-0 pr-2">
+                    <Col xs={5} className="p-0 pr-2">
                         <MokaInput
                             as="select"
                             value={search.searchType}
@@ -190,7 +190,7 @@ const LookupComponentList = (props) => {
                             ))}
                         </MokaInput>
                     </Col>
-                    <Col xs={8} className="p-0">
+                    <Col xs={7} className="p-0">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {

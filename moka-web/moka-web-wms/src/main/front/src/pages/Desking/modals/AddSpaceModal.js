@@ -172,7 +172,7 @@ const AddSpaceModal = (props) => {
                                     />
                                 </Col>
                                 <Col xs={2} className="p-0">
-                                    <MokaInput as="select" name="linkTarget" value={linkTarget || '_self'} onChange={handleChangeValue} className="ft-12">
+                                    <MokaInput as="select" name="linkTarget" value={linkTarget || '_self'} onChange={handleChangeValue}>
                                         <option value="_self">본창</option>
                                         <option value="_blank">새창</option>
                                     </MokaInput>

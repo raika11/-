@@ -18,9 +18,9 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 기사 내 이미지 목록 테이블
+ * 기사 내 이미지 목록
  */
-const EditThumbArticleImageListTable = (props) => {
+const EditThumbArticleImageList = (props) => {
     const { deskingWorkData, onRepClick } = props;
     const dispatch = useDispatch();
     const imageList = useSelector((store) => store.article.imageList);
@@ -50,7 +50,7 @@ const EditThumbArticleImageListTable = (props) => {
     }, [PDS_URL, imageList]);
 
     return (
-        <div className="border w-100 custom-scroll flex-fill">
+        <div className="input-border w-100 custom-scroll flex-fill">
             <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                 {loading && <MokaLoader />}
                 {renderList.map((data) => (
@@ -61,7 +61,7 @@ const EditThumbArticleImageListTable = (props) => {
     );
 };
 
-EditThumbArticleImageListTable.propTypes = propTypes;
-EditThumbArticleImageListTable.defaultProps = defaultProps;
+EditThumbArticleImageList.propTypes = propTypes;
+EditThumbArticleImageList.defaultProps = defaultProps;
 
-export default EditThumbArticleImageListTable;
+export default EditThumbArticleImageList;

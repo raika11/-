@@ -78,7 +78,7 @@ const MicAgendaSearch = () => {
                         </Button>
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2 d-flex justify-content-end">
+                <Form.Row className="mb-2 float-right">
                     <Button className="mr-2" variant="outline-neutral" onClick={handleClickBanner}>
                         다른 주제 공통 배너
                     </Button>

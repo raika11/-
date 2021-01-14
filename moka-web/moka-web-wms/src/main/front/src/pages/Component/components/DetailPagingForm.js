@@ -33,7 +33,7 @@ const DetailPagingForm = (props) => {
                     <MokaInputLabel
                         label="리스트노출건수"
                         labelWidth={90}
-                        labelClassName="ml-0 ft-13 font-weight-normal"
+                        labelClassName="ml-0 font-weight-normal"
                         className="mb-0"
                         type="number"
                         value={component.perPageCount}
@@ -47,7 +47,7 @@ const DetailPagingForm = (props) => {
                 <MokaInputLabel
                     label="페이징사용여부"
                     labelWidth={90}
-                    labelClassName="ml-0 ft-13 font-weight-normal"
+                    labelClassName="ml-0 font-weight-normal"
                     className="mb-0"
                     id="paging-yn"
                     as="switch"

@@ -1,10 +1,10 @@
-import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useRef, useEffect } from 'react';
 import { MokaIcon } from '@components';
 
 const SourceRenderer = forwardRef((params, ref) => {
     const ele = useRef(null);
 
-    const drawHeight = () => {
+    const drawHeight = useCallback(() => {
         setTimeout(
             function () {
                 if (ele.current) {
@@ -17,7 +17,7 @@ const SourceRenderer = forwardRef((params, ref) => {
             },
             [100],
         );
-    };
+    }, [params.api, params.node]);
 
     useImperativeHandle(ref, () => ({
         refresh: () => {
@@ -28,11 +28,10 @@ const SourceRenderer = forwardRef((params, ref) => {
 
     useEffect(() => {
         drawHeight();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]);
+    }, [drawHeight]);
 
     return (
-        <div className="ft-12 d-flex align-items-center h-100" ref={ele}>
+        <div className="ft-12 d-flex align-items-center h-auto" ref={ele}>
             {params.data.bulkflag === 'Y' && <MokaIcon iconName="fas-circle" className="color-info mr-1" />}
             <span>
                 {params.data.sourceName} - {params.data.contentKorname}

@@ -167,7 +167,6 @@ const Menu = () => {
                 buttons={[
                     // 메뉴 추가 버튼
                     {
-                        className: 'p-0 mr-10',
                         depth: '1',
                         parentmenuid: rootParentMenuId,
                         onClick: handleNewMenu,
@@ -175,7 +174,6 @@ const Menu = () => {
                     },
                     // 메뉴 순서변경 저장 버튼
                     {
-                        className: 'p-0',
                         depth: '1',
                         parentmenuid: rootParentMenuId,
                         onClick: handleSaveOrder,
@@ -197,7 +195,6 @@ const Menu = () => {
                 buttons={[
                     // 메뉴 추가 버튼
                     {
-                        className: 'p-0 mr-10',
                         depth: '2',
                         parentmenuid: largeMenuId,
                         onClick: handleNewMenu,
@@ -205,7 +202,6 @@ const Menu = () => {
                     },
                     // 메뉴 순서변경 저장 버튼
                     {
-                        className: 'p-0',
                         depth: '2',
                         parentmenuid: largeMenuId,
                         onClick: handleSaveOrder,
@@ -227,7 +223,6 @@ const Menu = () => {
                 buttons={[
                     // 메뉴 추가 버튼
                     {
-                        className: 'p-0 mr-10',
                         depth: '3',
                         parentmenuid: middleMenuId,
                         onClick: handleNewMenu,
@@ -235,7 +230,6 @@ const Menu = () => {
                     },
                     // 메뉴 순서변경 저장 버튼
                     {
-                        className: 'p-0',
                         depth: '3',
                         parentmenuid: middleMenuId,
                         onClick: handleSaveOrder,

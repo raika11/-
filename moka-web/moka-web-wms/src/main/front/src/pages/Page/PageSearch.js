@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 
 import { changeLatestDomainId } from '@store/auth';
-import { getPageTree, changeSearchOption, initialState, clearPage } from '@store/page';
+import { getPageTree, changeSearchOption, initialState } from '@store/page';
 
 /**
  * 페이지 검색 컴포넌트

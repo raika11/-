@@ -9,12 +9,12 @@ const TemplateEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { templateSeq } = useParams();
     const dispatch = useDispatch();
-    const { templateBody, template, invalidList, latestDomainId, loading } = useSelector((store) => ({
+    const loading = useSelector(({ loading }) => loading[GET_TEMPLATE] || loading[DELETE_TEMPLATE] || loading[SAVE_TEMPLATE]);
+    const latestDomainId = useSelector(({ auth }) => auth.latsetDomainId);
+    const { templateBody, template, invalidList } = useSelector((store) => ({
         templateBody: store.template.templateBody,
         template: store.template.template,
         invalidList: store.template.invalidList,
-        latestDomainId: store.auth.latestDomainId,
-        loading: store.loading[GET_TEMPLATE] || store.loading[DELETE_TEMPLATE] || store.loading[SAVE_TEMPLATE],
     }));
 
     // state

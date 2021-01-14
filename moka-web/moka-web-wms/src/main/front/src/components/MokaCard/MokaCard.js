@@ -3,9 +3,8 @@ import clsx from 'clsx';
 import produce from 'immer';
 import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
-
-import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
 import Button from 'react-bootstrap/Button';
+import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
 import { MokaIcon, MokaLoader } from '@components';
 
 const propTypes = {
@@ -155,7 +154,7 @@ const MokaCard = forwardRef((props, ref) => {
     /**
      * 헤더의 버튼 생성 함수
      */
-    const createHeaderButtons = () => {
+    const createHeaderButtons = (cx) => {
         const headerButtons = produce(buttons, (draft) => {
             if (foldable) {
                 draft.push({
@@ -169,7 +168,7 @@ const MokaCard = forwardRef((props, ref) => {
 
         if (headerButtons.length > 0) {
             return (
-                <div className="d-flex align-items-center">
+                <div className="d-flex absolute-top-right" style={{ marginTop: 17, marginRight: cx ? 4 : 20 }}>
                     {headerButtons.map((btnProps, idx) => {
                         const { ref: btnRef, variant: btnVariant, onClick: btnOnClick, text: btnText, icon: btnIcon, className: btnClassName, foldIcon, ...rest } = btnProps;
                         return (
@@ -177,7 +176,10 @@ const MokaCard = forwardRef((props, ref) => {
                                 key={idx}
                                 ref={btnRef}
                                 variant={btnVariant || 'white'}
-                                className={clsx('p-0', btnClassName, { 'd-none': foldable && !localExpandState && !foldIcon, 'mr-1': idx < headerButtons.length - 1 })}
+                                className={clsx('p-0 d-flex align-items-center justify-content-center', btnClassName, {
+                                    'd-none': cx && !foldIcon,
+                                    'mr-1': idx < headerButtons.length - 1,
+                                })}
                                 onClick={btnOnClick}
                                 {...rest}
                             >
@@ -199,7 +201,7 @@ const MokaCard = forwardRef((props, ref) => {
         >
             {loading && <MokaLoader />}
             {header && (
-                <Card.Header className={clsx({ 'd-flex': foldable, 'justify-content-between': foldable, 'align-items-center': foldable }, headerClassName)}>
+                <Card.Header className={clsx({ 'd-flex': foldable, 'position-relative': foldable }, headerClassName)}>
                     {/* 카드 타이틀 */}
                     {titleAs ? (
                         titleAs
@@ -208,7 +210,7 @@ const MokaCard = forwardRef((props, ref) => {
                             <Card.Title as="h2" className={clsx({ 'd-none': foldable && !localExpandState }, titleClassName)}>
                                 {title}
                             </Card.Title>
-                            {createHeaderButtons()}
+                            {createHeaderButtons(foldable && !localExpandState)}
                         </React.Fragment>
                     )}
                 </Card.Header>

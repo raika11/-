@@ -91,7 +91,6 @@ const DetailPeriodForm = (props) => {
                                     value={component.periodStartDt}
                                     onChange={handleStartDt}
                                     isInvalid={error.periodStartDt}
-                                    inputProps={{ inputClassName: 'ft-12' }}
                                     className="mb-0"
                                 />
                             </div>

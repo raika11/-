@@ -74,7 +74,7 @@ const PageSearch = ({ match }) => {
         <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
-                <MokaInput as="select" className="ft-12" value={search.domainId || undefined} onChange={handleChangeDomain}>
+                <MokaInput as="select" value={search.domainId || undefined} onChange={handleChangeDomain}>
                     {domainList.map((domain) => (
                         <option key={domain.domainId} value={domain.domainId}>
                             {domain.domainName}
@@ -82,7 +82,7 @@ const PageSearch = ({ match }) => {
                     ))}
                 </MokaInput>
             </Form.Row>
-            <Form.Group as={Row} className="mb-2">
+            <Form.Row>
                 {/* 검색조건 */}
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput
@@ -94,7 +94,6 @@ const PageSearch = ({ match }) => {
                                 searchType: e.target.value,
                             });
                         }}
-                        className="ft-12"
                     >
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -113,12 +112,10 @@ const PageSearch = ({ match }) => {
                                 keyword: e.target.value,
                             });
                         }}
-                        inputClassName="ft-12"
-                        buttonClassName="ft-12"
                         onSearch={handleSearch}
                     />
                 </Col>
-            </Form.Group>
+            </Form.Row>
         </Form>
     );
 };

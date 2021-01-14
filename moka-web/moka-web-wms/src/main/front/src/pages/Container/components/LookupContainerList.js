@@ -170,7 +170,6 @@ const LookupContainerList = (props) => {
                 <Form.Row>
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput
-                            className="ft-12"
                             as="select"
                             value={search.searchType}
                             onChange={(e) => {
@@ -199,8 +198,6 @@ const LookupContainerList = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            inputClassName="ft-12"
-                            buttonClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>
@@ -210,7 +207,7 @@ const LookupContainerList = (props) => {
             {/* 버튼 그룹 */}
             {seqType !== ITEM_CT && (
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="positive" onClick={() => window.open('/container')} className="ft-12">
+                    <Button variant="positive" onClick={() => window.open('/container')}>
                         컨테이너 등록
                     </Button>
                 </div>

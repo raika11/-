@@ -3,21 +3,20 @@ package jmnet.moka.core.tms.merge;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.support.GenericApplicationContext;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
-import jmnet.moka.common.template.loader.TemplateLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
@@ -46,7 +45,8 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
      * @param defaultApiPath api경로
      */
     public MokaDomainTemplateMerger(GenericApplicationContext appContext,
-                                    String defaultApiHost, String defaultApiPath, boolean defaultApiHostPathUse) {
+                                    String defaultApiHost, String defaultApiPath, boolean defaultApiHostPathUse)
+            throws TemplateMergeException, TemplateParseException {
         this.appContext = appContext;
         this.templateMergerMap = new HashMap<String, MokaTemplateMerger>(16);
         this.defaultDataLoader =
@@ -63,6 +63,13 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
         }
         logger.debug("Default HttpProxyDataLoader Created: {} {}", defaultApiHost, defaultApiPath);
         this.defaultApiHostPathUse = defaultApiHostPathUse;
+
+        // domain별 TemplateLoader를 미리 생성한다.
+        DomainResolver domainResolver = appContext.getBean(DomainResolver.class);
+        for (MergeItem domainItem : domainResolver.getDomainInfoList()) {
+            String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
+            this.getTemplateMerger(domainId);
+        }
     }
 
     /**
@@ -71,7 +78,8 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
      * </pre>
      *
      */
-    private void loadDataLoaderMap() {
+    private void loadDataLoaderMap()
+            throws TemplateMergeException, TemplateParseException {
         HashMap<String, DataLoader> domainDataLoaderMap = new HashMap<String, DataLoader>(8);
         HashMap<String, DataLoader> targetDataLoaderMap = new HashMap<String, DataLoader>(8);
 
@@ -99,6 +107,7 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
                 logger.debug("HttpProxyDataLoader Created: {} {} {} {}", domainUrl, domainId,
                         apiHost, apiPath);
             }
+
         }
         if (domainDataLoaderMap.size() > 0) {
             this.dataLoaderMap = domainDataLoaderMap;
@@ -168,20 +177,24 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
         }
         MokaTemplateMerger tm = this.templateMergerMap.get(domainId);
         if (tm == null) {
-            try {
-                DataLoader domainDataLoader = this.dataLoaderMap.get(domainId);
-                if (domainDataLoader != null) {
-                    AbstractTemplateLoader templateLoader =
-                            this.appContext.getBean(AbstractTemplateLoader.class, domainId);
-                    tm = new MokaTemplateMerger(this.appContext, domainId, templateLoader,
-                            domainDataLoader, this.defaultDataLoader, defaultApiHostPathUse);
-                    this.templateMergerMap.put(domainId, tm);
-                    logger.debug("Domain Template Merger Created : {}", domainId);
-                } else {
-                    throw new IOException("Domain DataLoader Not Found:" + domainId);
+            synchronized (this) {
+                tm = this.templateMergerMap.get(domainId);
+                if ( tm == null) {
+                    try {
+                        DataLoader domainDataLoader = this.dataLoaderMap.get(domainId);
+                        if (domainDataLoader != null) {
+                            AbstractTemplateLoader templateLoader = this.appContext.getBean(AbstractTemplateLoader.class, domainId);
+                            tm = new MokaTemplateMerger(this.appContext, domainId, templateLoader, domainDataLoader, this.defaultDataLoader,
+                                    defaultApiHostPathUse);
+                            this.templateMergerMap.put(domainId, tm);
+                            logger.debug("Domain Template Merger Created : {}", domainId);
+                        } else {
+                            throw new IOException("Domain DataLoader Not Found:" + domainId);
+                        }
+                    } catch (IOException e) {
+                        throw new TemplateMergeException("Domain Template Merger Creation Fail", e);
+                    }
                 }
-            } catch (IOException e) {
-                throw new TemplateMergeException("Domain Template Merger Creation Fail", e);
             }
         }
         return tm;

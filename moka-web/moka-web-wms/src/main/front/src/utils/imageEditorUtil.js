@@ -8,12 +8,7 @@ import { IMAGE_PROXY_API } from '@/constants';
 export const imageEditor = {
     create: (imageSrc, onApply, options) => {
         if (imageSrc) {
-            const hostname = document.location.hostname.split('.');
-            let domain = '';
-            for (let i = 1; i < hostname.length; i++) {
-                domain += `.${hostname[i]}`;
-            }
-            if (!imageSrc.startsWith('blob') && imageSrc.indexOf(domain) <= 0) {
+            if (!imageSrc.startsWith('blob')) {
                 imageSrc = IMAGE_PROXY_API + imageSrc;
             }
             ReactDOM.render(<MokaImageEditor />, document.getElementById('mokaImageEditor'));

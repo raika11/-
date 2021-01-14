@@ -46,7 +46,7 @@ const AreaComp = ({ areaComp, areaComps, index, onChange, disabled, setAreaComps
                 </Col>
             )}
             <Col xs={2} className="p-0">
-                <MokaInput as="select" name="compAlign" value={areaComp.compAlign} onChange={(e) => onChange(e, index)} className="ft-12" disabled={disabled}>
+                <MokaInput as="select" name="compAlign" value={areaComp.compAlign} onChange={(e) => onChange(e, index)} disabled={disabled}>
                     <option value={AREA_COMP_ALIGN_LEFT}>Left 영역</option>
                     <option value={AREA_COMP_ALIGN_RIGHT}>Right 영역</option>
                 </MokaInput>

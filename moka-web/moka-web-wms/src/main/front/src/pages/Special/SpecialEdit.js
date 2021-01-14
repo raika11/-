@@ -301,7 +301,7 @@ const SpecialEdit = () => {
             loading={loading}
             titleAs={
                 <div className="w-100 d-flex">
-                    <p className="m-0 h5 font-weight-bold">디지털 스페셜 페이지 {special.seqNo ? '수정' : '등록'}</p>
+                    <h2 className="mb-0">디지털 스페셜 페이지 {special.seqNo ? '수정' : '등록'}</h2>
                     <p className="m-0 pl-2 ft-12 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
@@ -348,7 +348,7 @@ const SpecialEdit = () => {
                                     label="사용여부"
                                     labelWidth={72}
                                     className="mb-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     as="switch"
                                     name="usedYn"
                                     id="usedYn-switch"
@@ -361,7 +361,7 @@ const SpecialEdit = () => {
                                     label="검색여부"
                                     labelWidth={72}
                                     className="mb-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     as="switch"
                                     name="schYn"
                                     id="schYn-switch"
@@ -374,7 +374,7 @@ const SpecialEdit = () => {
                                     label="리스트 노출"
                                     labelWidth={72}
                                     className="mb-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     as="switch"
                                     name="listYn"
                                     id="listYn-switch"
@@ -390,7 +390,7 @@ const SpecialEdit = () => {
                                     label="페이지 코드"
                                     labelWidth={72}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     as="select"
                                     name="pageCd"
                                     value={temp.pageCd}
@@ -413,7 +413,7 @@ const SpecialEdit = () => {
                                     label="회차"
                                     labelWidth={50}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="ordinal"
                                     required
                                     value={temp.ordinal}
@@ -425,7 +425,7 @@ const SpecialEdit = () => {
                         </Form.Row>
                         {/* 검색키워드 */}
                         <Form.Row className="mb-3">
-                            <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" as="none" />
+                            <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-3" labelClassName="mr-3" as="none" />
                             <div className="w-100 d-flex flex-column">
                                 <MokaInput
                                     name="schKwd"
@@ -440,7 +440,7 @@ const SpecialEdit = () => {
                         </Form.Row>
                         {/* 제목 */}
                         <Form.Row className="mb-3">
-                            <MokaInputLabel label="제목" labelWidth={72} className="mb-3" labelClassName="mr-3 ft-12" required as="none" />
+                            <MokaInputLabel label="제목" labelWidth={72} className="mb-3" labelClassName="mr-3" required as="none" />
                             <div className="w-100 d-flex flex-column">
                                 <MokaInput
                                     name="pageTitle"
@@ -461,7 +461,7 @@ const SpecialEdit = () => {
                                     as="dateTimePicker"
                                     labelWidth={72}
                                     className="mb-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="pageSdate"
                                     inputProps={{ timeFormat: null }}
                                     value={temp.pageSdate}
@@ -476,7 +476,7 @@ const SpecialEdit = () => {
                                     as="dateTimePicker"
                                     labelWidth={72}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="pageEdate"
                                     inputProps={{ timeFormat: null }}
                                     value={temp.pageEdate}
@@ -492,7 +492,7 @@ const SpecialEdit = () => {
                 <MokaInputLabel
                     label="PC URL"
                     labelWidth={110}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     className="mb-3"
                     name="pcUrl"
                     value={temp.pcUrl}
@@ -505,7 +505,7 @@ const SpecialEdit = () => {
                 <MokaInputLabel
                     label="Mobile URL"
                     labelWidth={110}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     className="mb-3"
                     name="mobUrl"
                     value={temp.mobUrl}
@@ -518,7 +518,7 @@ const SpecialEdit = () => {
                 <MokaInputGroup
                     label="중계페이지 URL"
                     labelWidth={110}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     value={articleUrl}
                     className="mb-3"
                     append={<MokaCopyTextButton copyText={articleUrl} />}
@@ -528,7 +528,7 @@ const SpecialEdit = () => {
                 <MokaInputLabel
                     label="광고추척 PC URL"
                     labelWidth={110}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     className="mb-3"
                     placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) http://dgate.opap.co.kr/imp/?ssn=566&adsn=7478&cresn=5362`}
                     name="joinsAdTag"
@@ -539,7 +539,7 @@ const SpecialEdit = () => {
                 <MokaInputLabel
                     label="광고추적 Mobile URL"
                     labelWidth={110}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     className="mb-3"
                     placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) http://dgate.opap.co.kr/imp/?ssn=566&adsn=7478&cresn=5362`}
                     name="joinsAdTagMob"
@@ -550,7 +550,7 @@ const SpecialEdit = () => {
                 <MokaInputLabel
                     label="구글 웹로그 코드"
                     labelWidth={110}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     className="mb-3"
                     placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) UA-40895666-10`}
                     name="googleTag"
@@ -572,7 +572,7 @@ const SpecialEdit = () => {
                     labelWidth={110}
                     className="mb-3"
                     inputProps={{ rows: 3 }}
-                    labelClassName="mr-3 ft-12"
+                    labelClassName="mr-3"
                     name="pageDesc"
                     value={temp.pageDesc}
                     onChange={handleChangeValue}
@@ -586,7 +586,7 @@ const SpecialEdit = () => {
                             label="부서명"
                             labelWidth={110}
                             className="m-0"
-                            labelClassName="mr-3 ft-12"
+                            labelClassName="mr-3"
                             name="repDeptName"
                             value={temp.repDeptName}
                             onChange={handleChangeValue}
@@ -612,33 +612,17 @@ const SpecialEdit = () => {
                             label="개발 담당자 이름"
                             className="m-0"
                             labelWidth={110}
-                            labelClassName="mr-3 ft-12"
+                            labelClassName="mr-3"
                             name="devName"
                             value={temp.devName}
                             onChange={handleChangeValue}
                         />
                     </Col>
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel
-                            label="이메일"
-                            labelWidth={70}
-                            className="m-0"
-                            labelClassName="mr-3 ft-12"
-                            name="devEmail"
-                            value={temp.devEmail}
-                            onChange={handleChangeValue}
-                        />
+                        <MokaInputLabel label="이메일" labelWidth={70} className="m-0" labelClassName="mr-3" name="devEmail" value={temp.devEmail} onChange={handleChangeValue} />
                     </Col>
                     <Col xs={3} className="p-0 pl-2">
-                        <MokaInputLabel
-                            label="전화번호"
-                            labelWidth={70}
-                            className="m-0"
-                            labelClassName="mr-3 ft-12"
-                            name="devPhone"
-                            value={temp.devPhone}
-                            onChange={handleChangeValue}
-                        />
+                        <MokaInputLabel label="전화번호" labelWidth={70} className="m-0" labelClassName="mr-3" name="devPhone" value={temp.devPhone} onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
                 {special.seqNo && (
@@ -650,7 +634,7 @@ const SpecialEdit = () => {
                                     label="등록자"
                                     labelWidth={110}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="regId"
                                     value={temp.regId}
                                     inputProps={{ plaintext: true, readOnly: true }}
@@ -661,7 +645,7 @@ const SpecialEdit = () => {
                                     label="등록일시"
                                     labelWidth={70}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="regDt"
                                     value={temp.regDt}
                                     inputProps={{ plaintext: true, readOnly: true }}
@@ -675,7 +659,7 @@ const SpecialEdit = () => {
                                     label="수정자"
                                     labelWidth={110}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="modId"
                                     value={temp.modId}
                                     inputProps={{ plaintext: true, readOnly: true }}
@@ -686,7 +670,7 @@ const SpecialEdit = () => {
                                     label="수정일시"
                                     labelWidth={70}
                                     className="m-0"
-                                    labelClassName="mr-3 ft-12"
+                                    labelClassName="mr-3"
                                     name="modDt"
                                     value={temp.modDt}
                                     inputProps={{ plaintext: true, readOnly: true }}

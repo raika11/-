@@ -87,7 +87,7 @@ const MokaInputLabel = forwardRef((props, ref) => {
         <Form.Group className={clsx('d-flex align-items-center', className)} style={{ height: as === 'switch' ? 31 : undefined }}>
             {label && (
                 <Form.Label
-                    className={clsx('px-0 mb-0 position-relative flex-shrink-0', labelClassName)}
+                    className={clsx('px-0 mb-0 position-relative flex-shrink-0 ft-12', labelClassName)}
                     style={{ width: labelWidth, minWidth: labelWidth, marginRight: 12, marginLeft: 8 }}
                     htmlFor="none"
                 >

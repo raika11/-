@@ -107,7 +107,7 @@ const Domain = ({ match }) => {
                 width={480}
             >
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button variant="positive" className="ft-12" onClick={handleAddClickDomain}>
+                    <Button variant="positive" onClick={handleAddClickDomain}>
                         도메인 등록
                     </Button>
                 </div>

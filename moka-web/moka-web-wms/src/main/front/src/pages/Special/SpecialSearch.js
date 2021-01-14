@@ -65,7 +65,7 @@ const SpecialSearch = ({ match }) => {
         <Form>
             <Form.Row className="mb-3">
                 <Col xs={3} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0 ft-12" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>
+                    <MokaInput as="select" className="m-0" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>
                         <option value="all">페이지 코드 전체</option>
                         {ptRows &&
                             ptRows.map((cd) => (
@@ -76,7 +76,7 @@ const SpecialSearch = ({ match }) => {
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0 ft-12" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                    <MokaInput as="select" className="m-0" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
@@ -85,17 +85,9 @@ const SpecialSearch = ({ match }) => {
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0 d-flex">
-                    <MokaSearchInput
-                        className="flex-fill mr-2"
-                        inputClassName="ft-12"
-                        buttonClassName="ft-12"
-                        name="keyword"
-                        value={search.keyword}
-                        onChange={handleChangeValue}
-                        onSearch={handleSearch}
-                    />
+                    <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
-                    <Button variant="positive" className="ft-12 flex-shrink-0" onClick={handleClickAdd}>
+                    <Button variant="positive" className="flex-shrink-0" onClick={handleClickAdd}>
                         페이지 등록
                     </Button>
                 </Col>

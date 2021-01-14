@@ -66,7 +66,6 @@ const ArticlePageSearch = () => {
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    className="ft-12"
                     value={search.domainId || undefined}
                     onChange={(e) => {
                         dispatch(changeLatestDomainId(e.target.value));
@@ -92,7 +91,6 @@ const ArticlePageSearch = () => {
                                 searchType: e.target.value,
                             });
                         }}
-                        className="ft-12"
                     >
                         {searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -111,8 +109,6 @@ const ArticlePageSearch = () => {
                                 keyword: e.target.value,
                             });
                         }}
-                        inputClassName="ft-12"
-                        buttonClassName="ft-12"
                         onSearch={handleSearch}
                     />
                 </Col>

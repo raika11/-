@@ -72,7 +72,6 @@ const ComponentSearch = () => {
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    className="ft-12"
                     value={search.domainId || undefined}
                     onChange={(e) => {
                         dispatch(changeLatestDomainId(e.target.value));
@@ -89,7 +88,6 @@ const ComponentSearch = () => {
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    className="ft-12"
                     value={search.templateGroup}
                     onChange={(e) => {
                         setSearch({
@@ -119,7 +117,6 @@ const ComponentSearch = () => {
                                 searchType: e.target.value,
                             });
                         }}
-                        className="ft-12"
                     >
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -138,8 +135,6 @@ const ComponentSearch = () => {
                                 keyword: e.target.value,
                             });
                         }}
-                        inputClassName="ft-12"
-                        buttonClassName="ft-12"
                         onSearch={handleSearch}
                     />
                 </Col>

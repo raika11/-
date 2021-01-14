@@ -61,7 +61,7 @@ const ContainerAgGrid = ({ onDelete, match }) => {
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={handleAddClick} className="ft-12">
+                <Button variant="positive" onClick={handleAddClick}>
                     컨테이너 등록
                 </Button>
             </div>

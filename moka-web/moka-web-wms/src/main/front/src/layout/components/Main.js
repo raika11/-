@@ -9,6 +9,7 @@ import clsx from 'clsx';
 const Main = ({ className, children, ...rest }) => (
     <div className={clsx('main', 'custom-scroll', className)} {...rest}>
         {children}
+        <div id="mokaImageEditor" />
     </div>
 );
 

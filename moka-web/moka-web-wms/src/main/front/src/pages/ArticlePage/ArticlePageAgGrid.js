@@ -63,7 +63,7 @@ const ArticlePageAgGrid = ({ onDelete }) => {
     return (
         <>
             <div className="mb-2 d-flex justify-content-end">
-                <Button variant="positive" onClick={() => history.push('/article-page/add')} className="ft-12">
+                <Button variant="positive" onClick={() => history.push('/article-page/add')}>
                     기사페이지 등록
                 </Button>
             </div>

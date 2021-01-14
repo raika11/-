@@ -199,7 +199,6 @@ const PageListModal = (props) => {
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput
                             as="select"
-                            className="mb-0 ft-12"
                             value={search.searchType}
                             onChange={(e) => {
                                 setSearch({
@@ -225,8 +224,6 @@ const PageListModal = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            inputClassName="ft-12"
-                            buttonClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>

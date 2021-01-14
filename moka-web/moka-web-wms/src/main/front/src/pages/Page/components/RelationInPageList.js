@@ -122,12 +122,7 @@ const RelationInPageList = (props) => {
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
                 <Form.Row className="mb-2">
-                    <MokaInput
-                        as="select"
-                        className="ft-12"
-                        value={search.domainId || undefined}
-                        onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}
-                    >
+                    <MokaInput as="select" value={search.domainId || undefined} onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}>
                         {domainList.map((domain) => (
                             <option key={domain.domainId} value={domain.domainId}>
                                 {domain.domainName}
@@ -139,7 +134,7 @@ const RelationInPageList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={() => history.push('/page')} className="ft-12">
+                <Button variant="positive" onClick={() => history.push('/page')}>
                     페이지 등록
                 </Button>
             </div>

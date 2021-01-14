@@ -164,14 +164,6 @@ const EditThumbCard = forwardRef((props, ref) => {
         previewImg(img);
     }, [img]);
 
-    const handleEdit = (e) => {
-        e.stopPropagation();
-
-        if (onEditClick) {
-            console.log('edit click');
-        }
-    };
-
     return (
         <div className={clsx('p-2', className)} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
             <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })}>
@@ -259,7 +251,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         variant="searching"
                                         className="border-0 p-0 moka-table-button"
                                         style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={handleEdit}
+                                        onClick={(e) => onEditClick(data)}
                                     >
                                         <MokaIcon iconName="fas-pencil" />
                                     </Button>
@@ -283,7 +275,9 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         variant="searching"
                                         className="border-0 p-0 moka-table-button"
                                         style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
-                                        onClick={handleEdit}
+                                        onClick={(e) => {
+                                            onEditClick(data);
+                                        }}
                                     >
                                         <MokaIcon iconName="fas-pencil" />
                                     </Button>

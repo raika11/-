@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import produce from 'immer';
 import { Helmet } from 'react-helmet';
 
-import { MokaCard, MokaIcon } from '@components';
+import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
@@ -222,7 +222,7 @@ const Page = ({ match }) => {
                 onExpansion={handleListExpansion}
                 bodyClassName="d-flex flex-column"
             >
-                <Suspense>
+                <Suspense fallback={<MokaLoader />}>
                     <PageList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
@@ -245,22 +245,22 @@ const Page = ({ match }) => {
                                 tabWidth={412}
                                 tabs={[
                                     <PageEdit onDelete={handleClickDelete} match={match} />,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickPageLoad} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <LookupContainerList show={activeTabIdx === 2} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <LookupComponentList show={activeTabIdx === 3} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <PageChildAdList />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <HistoryList show={activeTabIdx === 6} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickHistLoad} />
                                     </Suspense>,
                                 ]}

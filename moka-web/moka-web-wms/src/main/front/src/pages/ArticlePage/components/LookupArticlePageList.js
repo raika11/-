@@ -230,7 +230,6 @@ const LookupArticlePageList = (props) => {
                 <Form.Row>
                     <Col xs={5} className="p-0 pr-2">
                         <MokaInput
-                            className="ft-12"
                             as="select"
                             value={search.searchType}
                             onChange={(e) => {
@@ -256,8 +255,6 @@ const LookupArticlePageList = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            inputClassName="ft-12"
-                            buttonClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>

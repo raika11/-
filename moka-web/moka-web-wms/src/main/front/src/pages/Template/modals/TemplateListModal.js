@@ -313,7 +313,7 @@ const TemplateListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 도메인 */}
                     <Col xs={7} className="p-0 pr-2">
-                        <MokaInput as="select" className="ft-12" value={search.domainId} name="domainId" onChange={handleChangeValue}>
+                        <MokaInput as="select" value={search.domainId} name="domainId" onChange={handleChangeValue}>
                             {domainList.map((domain) => (
                                 <option key={domain.domainId} value={domain.domainId}>
                                     {domain.domainName}
@@ -323,7 +323,7 @@ const TemplateListModal = (props) => {
                     </Col>
                     {/* 템플릿 위치그룹 */}
                     <Col xs={5} className="p-0">
-                        <MokaInput as="select" value={search.templateGroup} className="ft-12" name="templateGroup" onChange={handleChangeValue}>
+                        <MokaInput as="select" value={search.templateGroup} name="templateGroup" onChange={handleChangeValue}>
                             <option value="all">위치그룹 전체</option>
                             {tpZoneRows &&
                                 tpZoneRows.map((cd) => (
@@ -337,7 +337,7 @@ const TemplateListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 템플릿 사이즈 */}
                     <Col xs={3} className="p-0 pr-2">
-                        <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize} className="ft-12">
+                        <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>
                             <option value="all">사이즈 전체</option>
                             {tpSizeRows &&
                                 tpSizeRows.map((cd) => (
@@ -349,7 +349,7 @@ const TemplateListModal = (props) => {
                     </Col>
                     {/* 검색조건 */}
                     <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="select" value={search.searchType} className="ft-12" name="searchType" onChange={handleChangeValue}>
+                        <MokaInput as="select" value={search.searchType} name="searchType" onChange={handleChangeValue}>
                             {initialState.searchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
@@ -359,15 +359,7 @@ const TemplateListModal = (props) => {
                     </Col>
                     <Col xs={7} className="p-0 d-flex">
                         {/* 키워드 */}
-                        <MokaSearchInput
-                            className="pr-2 flex-fill"
-                            buttonClassName="ft-12"
-                            inputClassName="ft-12"
-                            value={search.keyword}
-                            name="keyword"
-                            onChange={handleChangeValue}
-                            onSearch={handleSearch}
-                        />
+                        <MokaSearchInput className="pr-2 flex-fill" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
                         {/* 버튼 그룹 */}
                         <MokaTableTypeButton defaultActiveKey={listType} onSelect={(selectedKey) => setListType(selectedKey)} />
                     </Col>

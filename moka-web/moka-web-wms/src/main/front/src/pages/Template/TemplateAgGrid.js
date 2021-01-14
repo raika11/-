@@ -94,7 +94,7 @@ const TemplateAgGrid = ({ onDelete, match }) => {
                     }}
                 />
                 <div className="pt-0">
-                    <Button variant="positive" onClick={handleClickAdd} className="ft-12">
+                    <Button variant="positive" onClick={handleClickAdd}>
                         템플릿 등록
                     </Button>
                 </div>

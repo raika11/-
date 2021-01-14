@@ -259,7 +259,7 @@ const CodeListModal = (props) => {
                             <div className="w-100 pr-2 h6">
                                 <div className="input-border pl-1 pr-1 pt-1 h-100" style={{ minHeight: 31 }}>
                                     {selectedList.map((s) => (
-                                        <Badge key={s.masterCode} className="mr-1 mb-1 user-select-text" variant="searching">
+                                        <Badge key={s.masterCode} className="mr-1 mb-1 pt-1 user-select-text" variant="searching">
                                             {s.masterCode}&nbsp;
                                             {s.masterCode.slice(-5) === '00000' ? s.serviceKorname : s.masterCode.slice(-3) === '000' ? s.sectionKorname : s.contentKorname}
                                             <MokaIcon iconName="fas-times" className="ml-1 cursor-pointer" onClick={() => spliceList(s.masterCode)} />
@@ -302,13 +302,13 @@ const CodeListModal = (props) => {
                                     <MokaInput
                                         as={selection === 'single' ? 'radio' : 'checkbox'}
                                         name="masterCode"
-                                        className="flex-grow-0 text-dark font-weight-bold mb-0 ft-12"
+                                        className="flex-grow-0 text-dark font-weight-bold mb-0"
                                         id={dep1.masterCode}
                                         inputProps={{ custom: true, label: dep1.serviceKorname, checked: selectedList.findIndex((s) => s.masterCode === dep1.masterCode) > -1 }}
                                         onChange={handleChangeValue}
                                     />
                                 ) : (
-                                    <p className="mb-0 font-weight-bold ft-12">{dep1.serviceKorname}</p>
+                                    <p className="mb-0 font-weight-bold">{dep1.serviceKorname}</p>
                                 )}
                             </div>
                             <div className={clsx('section flex-fill d-flex flex-column align-items-start')} style={{ minHeight: 0 }}>

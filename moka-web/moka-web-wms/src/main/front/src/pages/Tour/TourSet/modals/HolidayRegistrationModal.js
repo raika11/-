@@ -37,7 +37,7 @@ const HolidayRegistrationModal = forwardRef((props, ref) => {
                     <Col xs={10}>
                         <MokaInputLabel
                             label="휴일명"
-                            labelClassName="mr-3 ft-12 d-flex justify-content-end"
+                            labelClassName="mr-3 d-flex justify-content-end"
                             className="mb-0"
                             name="holidayName"
                             value={holidayName}
@@ -52,7 +52,7 @@ const HolidayRegistrationModal = forwardRef((props, ref) => {
                     <Col xs={10}>
                         <MokaInputLabel
                             label="날짜"
-                            labelClassName="mr-3 ft-12 d-flex justify-content-end"
+                            labelClassName="mr-3 d-flex justify-content-end"
                             as="dateTimePicker"
                             value={holiday}
                             inputProps={{ timeFormat: null }}

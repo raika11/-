@@ -386,7 +386,7 @@ const routes = [
         displayName: '댓글 관리',
         component: Comment,
         layout: SidebarOpenLayout,
-        nonResponsive: false,
+        nonResponsive: true,
         exact: false,
         strict: true,
     },

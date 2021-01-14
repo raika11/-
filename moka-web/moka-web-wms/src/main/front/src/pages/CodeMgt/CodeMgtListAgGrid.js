@@ -230,7 +230,6 @@ const CodeMgtListAgGrid = ({ match }) => {
                 <MokaInput
                     as="checkbox"
                     id="secret-check"
-                    className="ft-12"
                     style={{ lineHeight: '21px' }}
                     value={search.secretYn}
                     onChange={(e) => {

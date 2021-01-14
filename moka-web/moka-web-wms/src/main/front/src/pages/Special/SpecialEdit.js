@@ -302,7 +302,7 @@ const SpecialEdit = () => {
             titleAs={
                 <div className="w-100 d-flex">
                     <h2 className="mb-0">디지털 스페셜 페이지 {special.seqNo ? '수정' : '등록'}</h2>
-                    <p className="m-0 pl-2 ft-12 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
+                    <p className="m-0 pl-2 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
             headerClassName="border-bottom"

@@ -11,15 +11,13 @@ const CancelHolidayModal = (props) => {
             title="휴일 지정 취소"
             show={show}
             onHide={onHide}
-            headerClassName="d-flex justify-content-start"
-            bodyClassName="pb-0"
             buttons={[
                 { text: '저장', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: () => onHide() },
             ]}
-            draggable
+            centered
         >
-            <p>확인을 클릭하시면 휴일 지정이 해제됩니다.</p>
+            <p className="mb-0">확인을 클릭하시면 휴일 지정이 해제됩니다.</p>
         </MokaModal>
     );
 };

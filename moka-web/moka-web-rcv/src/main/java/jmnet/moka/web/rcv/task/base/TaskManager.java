@@ -13,6 +13,7 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
+import jmnet.moka.web.rcv.service.SmsUtilService;
 import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
 import jmnet.moka.web.rcv.task.calljamapi.service.CallJamApiService;
 import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
@@ -74,6 +75,9 @@ public class TaskManager {
     @Autowired
     WeatherShkoService weatherShkoService;
 
+    @Autowired
+    SmsUtilService smsUtilService;
+
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;
     }
@@ -127,37 +131,6 @@ public class TaskManager {
     }
 
     public void sendErrorSMS(String message) {
-        final String envFile = rcvConfiguration.getSmsListEnvFile();
-
-        try {
-            if (McpString.isNullOrEmpty(envFile))
-                return;
-
-            XMLUtil xu = new XMLUtil();
-            Document doc = xu.getDocument(ResourceMapper.getResouerceResolver().getResource(envFile));
-
-            if( !xu.getString( doc, "./SmsSendList/@sendYn", "N" ).equals("Y") )
-                return;
-
-            final String sendMsg = message + "\n로그 : https://joongang.co.kr/8nep";
-            NodeList nl = xu.getNodeList(doc, "//User");
-            for (int i = 0; i < nl.getLength(); i++) {
-                if( !xu.getString(nl.item(i), "./@sendYn", "N" ).equals("Y")  )
-                    continue;
-
-                final String phoneNumber = xu.getString(nl.item(i), "./@phone", "" );
-                if( McpString.isNullOrEmpty(phoneNumber))
-                    continue;
-
-                final String strSmsCall = "https://app.joins.com/SMS/?callback=02-2031-1805&phone=" + phoneNumber + "&ap=&uh=&msg=" + URLEncoder.encode(sendMsg,
-                        StandardCharsets.UTF_8);
-                if( RcvUtil.sendUrlGetRequest(strSmsCall) == null )
-                    log.error("SMS failed {}", strSmsCall);
-                else
-                    log.info("SMS success {}", strSmsCall);
-            }
-
-        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException ignored) {
-        }
+        smsUtilService.sendSms(message);
     }
 }

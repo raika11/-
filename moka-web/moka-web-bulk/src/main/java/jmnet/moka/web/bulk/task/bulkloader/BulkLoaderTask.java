@@ -43,7 +43,7 @@ public class BulkLoaderTask extends Task<DBTaskInputData> {
         return new DBTaskInput() {
             @Override
             public TaskInputData getTaskInputData() {
-                return new DBTaskInputData(bulkLoaderService.getUspBulkMgtListSel());
+                return DBTaskInputData.newDBTaskInputData(bulkLoaderService.getUspBulkMgtListSel());
             }
         };
     }
@@ -69,9 +69,9 @@ public class BulkLoaderTask extends Task<DBTaskInputData> {
         final String iud = BulkUtil.getMapStringData(map, "IUD");
 
         if(!McpString.isNullOrEmpty(totalId) && !McpString.isNullOrEmpty(iud)) {
-            log.info( "Bulk load seqNo = {}, totalId = {}, iud = {} Start ", seqNo, totalId, iud);
+            log.info( "{} Bulk load seqNo=[{}], totalId=[{}], iud =[{}] Start ", getTaskName(), seqNo, totalId, iud);
             bulkLoaderService.insertBulkLoaderData( map );
-            log.info( "Bulk load seqNo = {}, totalId = {}, iud = {} End ", seqNo, totalId, iud);
+            log.info( "{} Bulk load seqNo=[{}], totalId=[{}], iud =[{}] End ", getTaskName(), seqNo, totalId, iud);
         }
     }
 }

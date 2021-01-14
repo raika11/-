@@ -39,14 +39,24 @@ public class JaxbObjectUnmarshallerImpl<T> implements JaxbObjectUnmarshaller {
     }
 
     public BasicVo getBasicVoFromXml(File file)
-            throws XMLStreamException, JAXBException {
-        XMLInputFactory xif = XMLInputFactory.newFactory();
-        XMLStreamReader xsr = xif.createXMLStreamReader(new StreamSource(file));
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        JAXBElement<T> jb = unmarshaller.unmarshal(xsr, this.objectType);
-        BasicVo vo = (BasicVo) jb.getValue();
-        xsr.close();
-        return vo;
+            throws XMLStreamException {
+        XMLStreamReader xsr = null;
+        try {
+            XMLInputFactory xif = XMLInputFactory.newFactory();
+            xsr = xif.createXMLStreamReader(new StreamSource(file));
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            JAXBElement<T> jb = unmarshaller.unmarshal(xsr, this.objectType);
+            BasicVo vo = (BasicVo) jb.getValue();
+            xsr.close();
+            return vo;
+        } catch (XMLStreamException | JAXBException e) {
+            try {
+                if( xsr != null )
+                    xsr.close();
+            }catch (Exception ignore){
+            }
+            throw new XMLStreamException(e);
+        }
     }
 
     public BasicVo getBasicVoFromString(String string)

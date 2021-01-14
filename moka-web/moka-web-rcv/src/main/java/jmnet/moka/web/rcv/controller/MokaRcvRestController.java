@@ -1,9 +1,11 @@
 package jmnet.moka.web.rcv.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.web.rcv.code.OpCode;
 import jmnet.moka.web.rcv.task.base.TaskManager;
 import lombok.extern.slf4j.Slf4j;
@@ -83,5 +85,19 @@ public class MokaRcvRestController {
             // no operation
         }
         return responseMap;
+    }
+
+    @GetMapping("/sms/smsTest")
+    public String doSmsTest() {
+        log.info("doSmsTest");
+        taskManager.getSmsUtilService().sendSms("sms" + McpDate.dateTimeStr(new Date()));
+        return "doSmsTest";
+    }
+
+    @GetMapping("/sms/smsPause")
+    public String doSmsPause() {
+        log.info("doSmsPause");
+        taskManager.getSmsUtilService().pause();
+        return "doSmsTest";
     }
 }

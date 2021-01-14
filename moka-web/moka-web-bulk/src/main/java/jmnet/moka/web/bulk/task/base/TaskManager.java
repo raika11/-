@@ -1,10 +1,7 @@
 package jmnet.moka.web.bulk.task.base;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +10,13 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
+import jmnet.moka.web.bulk.service.SmsUtilService;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkloader.service.BulkLoaderService;
-import jmnet.moka.web.bulk.util.BulkUtil;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -50,6 +46,9 @@ public class TaskManager {
 
     @Autowired
     BulkDumpService bulkDumpService;
+
+    @Autowired
+    SmsUtilService smsUtilService;
 
     public TaskManager(MokaBulkConfiguration bulkConfiguration) {
         this.bulkConfiguration = bulkConfiguration;
@@ -105,37 +104,6 @@ public class TaskManager {
     }
 
     public void sendErrorSMS(String message) {
-        final String envFile = bulkConfiguration.getSmsListEnvFile();
-
-        try {
-            if (McpString.isNullOrEmpty(envFile))
-                return;
-
-            XMLUtil xu = new XMLUtil();
-            Document doc = xu.getDocument(ResourceMapper.getResouerceResolver().getResource(envFile));
-
-            if( !xu.getString( doc, "./SmsSendList/@sendYn", "N" ).equals("Y") )
-                return;
-
-            final String sendMsg = message + "\n로그 : https://joongang.co.kr/8nep";
-            NodeList nl = xu.getNodeList(doc, "//User");
-            for (int i = 0; i < nl.getLength(); i++) {
-                if( !xu.getString(nl.item(i), "./@sendYn", "N" ).equals("Y")  )
-                    continue;
-
-                final String phoneNumber = xu.getString(nl.item(i), "./@phone", "" );
-                if( McpString.isNullOrEmpty(phoneNumber))
-                    continue;
-
-                final String strSmsCall = "https://app.joins.com/SMS/?callback=02-2031-1805&phone=" + phoneNumber + "&ap=&uh=&msg=" + URLEncoder.encode(sendMsg,
-                        StandardCharsets.UTF_8);
-                if( BulkUtil.sendUrlGetRequest(strSmsCall) == null )
-                    log.error("SMS failed {}", strSmsCall);
-                else
-                    log.info("SMS success {}", strSmsCall);
-            }
-
-        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException ignored) {
-        }
+        smsUtilService.sendSms(message);
     }
 }

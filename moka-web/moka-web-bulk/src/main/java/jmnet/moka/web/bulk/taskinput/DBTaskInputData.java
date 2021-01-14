@@ -25,8 +25,22 @@ import lombok.extern.slf4j.Slf4j;
 public class DBTaskInputData extends TaskInputData {
     final List<Map<String, Object>> inputData;
 
-    public DBTaskInputData(List<Map<String, Object>> inputData) {
+    private DBTaskInputData(List<Map<String, Object>> inputData) {
         this.inputData = inputData;
+    }
+
+    static public DBTaskInputData newDBTaskInputData(List<Map<String, Object>> inputData) {
+        //noinspection LoopStatementThatDoesntLoop
+        do {
+            if( inputData == null )
+                break;
+            if( inputData.size() == 0 )
+                break;
+
+            return new DBTaskInputData(inputData);
+        }while( true );
+
+        return null;
     }
 
     @Override

@@ -203,4 +203,7 @@ public class MokaConstants {
      * request header의 메뉴 ID key
      */
     public static final String HEADER_MENU_ID = "x-menuid";
+
+    public static final String DEFAULT_CHARSET = "UTF-8";
+    public static final int EXCEL_CELL_VALUE_MAX_LENGTH = 255;
 }

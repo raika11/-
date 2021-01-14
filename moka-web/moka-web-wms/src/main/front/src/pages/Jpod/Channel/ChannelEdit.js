@@ -195,7 +195,7 @@ const ChannelEdit = ({ match }) => {
 
     // 저장버튼
     const handleClickSaveButton = () => {
-        // post 데이터를 조합 하기 힘들어서 redux 타기전에 폼을 만듬.
+        // post 데이터를 조합 하기 힘들어서 redux 타기전에 폼값을 만듬.
 
         // 벨리데이션 체크.
         if (checkValidation()) {
@@ -203,7 +203,7 @@ const ChannelEdit = ({ match }) => {
         }
         var formData = new FormData();
 
-        // 선택한 채널 정보가 있으면 업데이트 처리.
+        // 그리드에서 선택한 채널 정보(seq값)가 있으면 업데이트 간주.
         if (selectChnlSeq.current && selectChnlSeq.current !== 'add') {
             formData.append('chnlSeq', selectChnlSeq.current);
         }
@@ -276,7 +276,7 @@ const ChannelEdit = ({ match }) => {
         const chnlDy = editDays.join('').replace(/day/gi, '').replace('0', '');
         formData.append(`chnlDy`, chnlDy);
 
-        // 팟티 채널을 선택경우는 선택한 정보로 전송.
+        // 채널 정보.
         formData.append(`podtyChnlSrl`, editData.podtyChnlSrl);
         formData.append(`podtyUrl`, editData.podtyUrl);
 
@@ -297,7 +297,7 @@ const ChannelEdit = ({ match }) => {
                         if (chnlSeq) {
                             // 리스트를 다시 가지고 옴.
                             dispatch(getChannels());
-                            // 게시판 정보 값도 다시 가지고 옴.
+                            // 채널 정보 값도 다시 가지고 옴.
                             dispatch(clearChannelInfo());
                             dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
                             history.push(`${match.path}/${chnlSeq}`);
@@ -334,7 +334,7 @@ const ChannelEdit = ({ match }) => {
                         if (chnlSeq) {
                             // 리스트를 다시 가지고 옴.
                             dispatch(getChannels());
-                            // 게시판 정보 값도 다시 가지고 옴.
+                            // 채널 정보 값도 다시 가지고 옴.
                             dispatch(clearChannelInfo());
                             dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
                             history.push(`${match.path}/${chnlSeq}`);
@@ -467,16 +467,19 @@ const ChannelEdit = ({ match }) => {
                 return;
             }
             if (chnlDy.length === 7) {
+                // 길이가 7이면 전체 매일 이기 때문에 day0(매일을 먼저 등록.)
                 tempArray.push('day0');
             }
 
             for (var i = 0; i < chnlDy.length; i++) {
+                // 개수 많큼 배열에 day를 추가 해줌.
                 let tmpChar = chnlDy.charAt(i);
                 tempArray.push(`day${tmpChar}`);
             }
             setEditDays(tempArray);
         };
 
+        // channelInfo 스토어가 변경 되었지만 initial 값과 같으면 기본 정보 state 를 리셋.
         if (channelInfo === initialState.channel.channelInfo) {
             handleResetEditBasicData();
             return;
@@ -502,7 +505,7 @@ const ChannelEdit = ({ match }) => {
     }, [params]);
 
     useEffect(() => {
-        resetReporter();
+        resetReporter(); // 최초에 한번 혹시 몰라서 진행자 배열 스테이트를 초기화 해줌.
     }, []);
 
     return (

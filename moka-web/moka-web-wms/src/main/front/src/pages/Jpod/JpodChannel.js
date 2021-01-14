@@ -22,7 +22,7 @@ const JpodChannel = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>Jpod - 채널 관리</title>
+                <title>채널 관리</title>
                 <meta name="description" content="Jpod - 채널 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>

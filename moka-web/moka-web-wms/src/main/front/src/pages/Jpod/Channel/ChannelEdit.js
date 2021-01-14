@@ -175,20 +175,26 @@ const ChannelEdit = ({ match }) => {
 
     // 벨리데이션 처리.
     const checkValidation = () => {
-        if (editData.podtyUrl === '' || editData.podtyChnlSrl === '') {
-            messageBox.alert('팟티를 입력해 주세요.', () => {});
-            return true;
-        }
+        // if (editData.podtyUrl === '' || editData.podtyChnlSrl === '') {
+        //     messageBox.alert('팟티를 입력해 주세요.', () => {});
+        //     return true;
+        // }
 
         if (editData.chnlNm === '') {
             messageBox.alert('채널명을 입력해 주세요.', () => {});
             return true;
         }
 
-        if (editDays.length === 0) {
-            messageBox.alert('방송 요일을 선택해 주세요.', () => {});
+        const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
+        if (tmpCh.length === reporterCountConst.length) {
+            messageBox.alert('진행자를 1명 이상 선택해 주세요.', () => {});
             return true;
         }
+
+        // if (editDays.length === 0) {
+        //     messageBox.alert('방송 요일을 선택해 주세요.', () => {});
+        //     return true;
+        // }
 
         return false;
     };
@@ -278,7 +284,9 @@ const ChannelEdit = ({ match }) => {
 
         // 채널 정보.
         formData.append(`podtyChnlSrl`, editData.podtyChnlSrl);
-        formData.append(`podtyUrl`, editData.podtyUrl);
+        if (editData.podtyUrl && editData.podtyUrl.length > 0 && editData.podtyUrl.trim().length > 0) {
+            formData.append(`podtyUrl`, editData.podtyUrl);
+        }
 
         // // formData 출력(테스트).
         // for (let [key, value] of formData) {
@@ -323,36 +331,36 @@ const ChannelEdit = ({ match }) => {
     };
 
     // 삭제 버튼 - 임시 -
-    const handleClickDeleteButton = () => {
-        dispatch(
-            deleteJpodChannel({
-                chnlSeq: selectChnlSeq.current,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        const { chnlSeq } = body;
-                        if (chnlSeq) {
-                            // 리스트를 다시 가지고 옴.
-                            dispatch(getChannels());
-                            // 채널 정보 값도 다시 가지고 옴.
-                            dispatch(clearChannelInfo());
-                            dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
-                            history.push(`${match.path}/${chnlSeq}`);
-                        }
-                    } else {
-                        const { totalCnt, list } = body;
-                        if (totalCnt > 0 && Array.isArray(list)) {
-                            // 에러 메시지 확인.
-                            messageBox.alert(list[0].reason, () => {});
-                        } else {
-                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
-                            messageBox.alert(message, () => {});
-                        }
-                    }
-                },
-            }),
-        );
-    };
+    // const handleClickDeleteButton = () => {
+    //     dispatch(
+    //         deleteJpodChannel({
+    //             chnlSeq: selectChnlSeq.current,
+    //             callback: ({ header: { success, message }, body }) => {
+    //                 if (success === true) {
+    //                     toast.success(message);
+    //                     const { chnlSeq } = body;
+    //                     if (chnlSeq) {
+    //                         // 리스트를 다시 가지고 옴.
+    //                         dispatch(getChannels());
+    //                         // 채널 정보 값도 다시 가지고 옴.
+    //                         dispatch(clearChannelInfo());
+    //                         dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+    //                         history.push(`${match.path}/${chnlSeq}`);
+    //                     }
+    //                 } else {
+    //                     const { totalCnt, list } = body;
+    //                     if (totalCnt > 0 && Array.isArray(list)) {
+    //                         // 에러 메시지 확인.
+    //                         messageBox.alert(list[0].reason, () => {});
+    //                     } else {
+    //                         // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+    //                         messageBox.alert(message, () => {});
+    //                     }
+    //                 }
+    //             },
+    //         }),
+    //     );
+    // };
 
     // 이미지 파일 변경시 해당 스테이트 업데이트.
     const handleChangeFIle = ({ name, file }) => {

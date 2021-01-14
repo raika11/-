@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
@@ -58,7 +58,10 @@ const deskingData = {
     vodUrl: null,
 };
 
-const MicAgendaEdit = (props) => {
+/**
+ * 시민 마이크 아젠다 등록, 수정
+ */
+const MicAgendaEdit = () => {
     const { seqNo } = useParams();
     const [temp, setTemp] = useState({});
     const [defaultValue, setDefaultValue] = useState(null);
@@ -86,6 +89,12 @@ const MicAgendaEdit = (props) => {
     };
 
     useEffect(() => {
+        if (!seqNo) {
+            setTemp({});
+        }
+    }, [seqNo]);
+
+    useEffect(() => {
         let cts = [];
         let values = categoryList
             .join(',')
@@ -100,7 +109,7 @@ const MicAgendaEdit = (props) => {
 
     return (
         <MokaCard
-            title="아젠다 수정"
+            title={seqNo ? '아젠다 수정' : '아젠다 등록'}
             titleClassName="mb-0"
             className="w-100"
             footerClassName="justify-content-center"
@@ -125,8 +134,8 @@ const MicAgendaEdit = (props) => {
                         labelClassName="d-flex justify-content-end"
                         className="mb-0 mr-2"
                         as="switch"
-                        name="usedYn"
-                        id="switch-usedYn"
+                        name="agendausedYn"
+                        id="mic-agenda-usedYn"
                         inputProps={{
                             custom: true,
                             checked: temp.usedYn === 'Y',
@@ -142,7 +151,7 @@ const MicAgendaEdit = (props) => {
                         className="mb-0"
                         as="switch"
                         name="menu"
-                        id="switch-menu"
+                        id="mic-agenda-menu"
                         inputProps={{
                             custom: true,
                             checked: temp.menu === 'Y',

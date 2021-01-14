@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaInput } from '@/components';
+import CategorySelectRenderer from '../components/CategorySelectRenderer';
 
 export const columnDefs = [
     {
@@ -15,38 +15,35 @@ export const columnDefs = [
     },
     {
         headerName: '카테고리명',
-        width: 200,
         field: 'categoryName',
         cellStyle: { fontSize: '12px' },
         flex: 1,
-        autoHeight: true,
         cellRenderer: 'editor',
     },
     {
         headerName: '사용유무',
-        width: 80,
+        width: 100,
         field: 'usedYn',
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: ({ value }) => {
+        cellRendererFramework: (params) => {
             return (
-                <MokaInput as="select" className="ft-12" value={value} onChange={(e) => e.target.value}>
-                    <option value="Y">사용</option>
-                    <option value="N">사용안함</option>
-                </MokaInput>
+                <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                    <CategorySelectRenderer {...params} />
+                </div>
             );
         },
     },
 ];
 
 export const rowData = [
-    { orderNm: '', categoryName: '19대 대선', usedYn: 'Y' },
-    { orderNm: '', categoryName: '정치', usedYn: 'Y' },
-    { orderNm: '', categoryName: '사회', usedYn: 'Y' },
-    { orderNm: '', categoryName: '민생', usedYn: 'Y' },
-    { orderNm: '', categoryName: '국제', usedYn: 'Y' },
-    { orderNm: '', categoryName: '라이브/문화', usedYn: 'Y' },
-    { orderNm: '', categoryName: '더,오래', usedYn: 'Y' },
-    { orderNm: '', categoryName: '경제', usedYn: 'Y' },
-    { orderNm: '', categoryName: '연애', usedYn: 'Y' },
-    { orderNm: '', categoryName: '카테고리', usedYn: 'Y' },
+    { orderNm: '1', categoryName: '19대 대선', usedYn: 'Y' },
+    { orderNm: '2', categoryName: '정치', usedYn: 'Y' },
+    { orderNm: '3', categoryName: '사회', usedYn: 'Y' },
+    { orderNm: '4', categoryName: '민생', usedYn: 'Y' },
+    { orderNm: '5', categoryName: '국제', usedYn: 'Y' },
+    { orderNm: '6', categoryName: '라이브/문화', usedYn: 'Y' },
+    { orderNm: '7', categoryName: '더,오래', usedYn: 'Y' },
+    { orderNm: '8', categoryName: '경제', usedYn: 'Y' },
+    { orderNm: '9', categoryName: '연애', usedYn: 'Y' },
+    { orderNm: '10', categoryName: '카테고리', usedYn: 'Y' },
 ];

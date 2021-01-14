@@ -8,6 +8,9 @@ import BannerModal from './modals/BannerModal';
 import CategoryModal from './modals/CategoryModal';
 import AgendaOrderModal from './modals/AgendaOrderModal';
 
+/**
+ * 시민 마이크 아젠다 검색
+ */
 const MicAgendaSearch = () => {
     const history = useHistory();
     const [agendaName, setAgendaName] = useState('');

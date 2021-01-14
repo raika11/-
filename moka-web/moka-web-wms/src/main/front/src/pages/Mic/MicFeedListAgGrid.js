@@ -5,9 +5,11 @@ import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader, MokaPagination } from '@/components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import columnDefs, { rowData, localeText } from './MicFeedListAgGridColumns';
-import MicTableSwitch from './components/MicTableSwitch';
-import FeedRegisterModal from './modals/FeedRegisterModal';
+import FeedEditModal from './modals/FeedEditModal';
 
+/**
+ * 시민 마이크 피드 목록 AgGrid
+ */
 const MicFeedListAgGrid = () => {
     const [total] = useState(0);
     const [loading] = useState(false);
@@ -48,6 +50,7 @@ const MicFeedListAgGrid = () => {
 
     const handleClickAdd = () => {
         setShowFrModal(true);
+        setRd(null);
     };
 
     /**
@@ -81,7 +84,6 @@ const MicFeedListAgGrid = () => {
                     defaultColDef={{
                         wrapText: true,
                         autoHeight: true,
-                        // resizable: true,
                     }}
                     onGridReady={onGridReady}
                     getRowNodeId={(params) => params.commentSeq}
@@ -102,19 +104,7 @@ const MicFeedListAgGrid = () => {
                     pageSizes={PAGESIZE_OPTIONS}
                 />
             </div>
-            {/* <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
-                rowData={rowData}
-                onRowNodeId={(params) => params.seqNo}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                total={total}
-                page={search.page}
-                size={search.size}
-                onChangeSearchOption={handleChangeSearchOption}
-            /> */}
-            <FeedRegisterModal show={showFrModal} onHide={() => setShowFrModal(false)} data={rd} />
+            <FeedEditModal show={showFrModal} onHide={() => setShowFrModal(false)} data={rd} />
         </>
     );
 };

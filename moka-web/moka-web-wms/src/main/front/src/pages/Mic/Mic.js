@@ -11,6 +11,9 @@ import MicPostList from './MicPostList';
 
 const AgendaList = React.lazy(() => import('./MicAgendaList'));
 
+/**
+ * 시민 마이크
+ */
 const Mic = ({ match }) => {
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 

@@ -3,6 +3,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.poll.mapper.TrendpollStatMapper">
 
+  <resultMap type="TrendpollCntVO" id="AllCntMap">
+    <result property="voteCnt" column="VOTE_CNT"/>
+  </resultMap>
+
+  <resultMap type="TrendpollCntVO" id="DailyCntMap">
+    <result property="voteCnt" column="VOTE_CNT"/>
+  </resultMap>
+
+  <resultMap type="TrendpollCntVO" id="DeviceCntMap">
+    <result property="voteCnt" column="VOTE_CNT"/>
+    <result property="pcVoteCnt" column="PC_VOTE_CNT"/>
+    <result property="mobileVoteCnt" column="MOBILE_VOTE_CNT"/>
+  </resultMap>
+
   <resultMap type="TrendpollStatVO" id="AllStatMap">
     <id property="itemSeq" column="ITEM_SEQ"/>
     <result property="title" column="TITLE"/>
@@ -30,6 +44,17 @@
     resultMap="AllStatMap,DailyStatMap,DeviceStatMap"
     statementType="CALLABLE">
     {call UPA_TRENDPOLL_STAT_SEL(
+			#{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+			#{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+      #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}
+		) }
+  </select>
+
+  <!-- 투표 건수 조회 -->
+  <select id="findByParamForCntMapList" parameterType="TrendpollStatSearchDTO"
+    resultMap="AllCntMap,DailyCntMap,DeviceCntMap"
+    statementType="CALLABLE">
+    {call UPA_TRENDPOLL_CNT_SEL(
 			#{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
 			#{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
       #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}

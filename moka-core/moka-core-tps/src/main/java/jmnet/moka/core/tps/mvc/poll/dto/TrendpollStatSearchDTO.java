@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
-import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,8 +33,8 @@ public class TrendpollStatSearchDTO {
     @ApiModelProperty(value = "투표일련번호", hidden = true)
     private Long pollSeq;
 
-    @ApiModelProperty("상태 A:전체,D:기간별(날짜별),T:기간내 디바이스별")
-    private PollStatCode statType;
+    //@ApiModelProperty("상태 A:전체,D:기간별(날짜별),T:기간내 디바이스별")
+    //private PollStatCode statType;
 
     @ApiModelProperty("검색시작일")
     @DTODateTimeFormat

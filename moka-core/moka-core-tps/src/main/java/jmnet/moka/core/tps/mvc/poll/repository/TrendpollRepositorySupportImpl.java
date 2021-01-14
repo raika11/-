@@ -6,6 +6,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.QTrendpoll;
@@ -41,6 +42,10 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
         Pageable pageable = searchDTO.getPageable();
         QTrendpoll qTrendpoll = QTrendpoll.trendpoll;
         QTrendpollItem qTrendpollItem = QTrendpollItem.trendpollItem;
+
+        QMemberInfo qRegMember = new QMemberInfo("regMember");
+        QMemberInfo qModMember = new QMemberInfo("modMember");
+
         JPQLQuery<Trendpoll> query = from(qTrendpoll);
 
         if (McpString.isNotEmpty(searchDTO.getPollGroup())) {
@@ -102,7 +107,10 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
 
 
 
-        QueryResults<Trendpoll> list = query.fetchResults();
+        QueryResults<Trendpoll> list = query
+                .leftJoin(qTrendpoll.regMember, qRegMember)
+                .leftJoin(qTrendpoll.modMember, qModMember)
+                .fetchResults();
 
         return new PageImpl<Trendpoll>(list.getResults(), pageable, list.getTotal());
     }

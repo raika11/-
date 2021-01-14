@@ -3,7 +3,10 @@ package jmnet.moka.core.tps.mvc.poll.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.models.Response;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -22,12 +25,17 @@ import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import jmnet.moka.core.tps.mvc.poll.entity.TrendpollDetail;
+import jmnet.moka.core.tps.mvc.poll.entity.TrendpollVote;
 import jmnet.moka.core.tps.mvc.poll.service.TrendpollService;
+import jmnet.moka.core.tps.mvc.poll.vo.TrendpollCntVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -198,16 +206,62 @@ public class TrendpollRestController extends AbstractCommonController {
             @SearchParam TrendpollStatSearchDTO search) {
 
         ResultListDTO<TrendpollDTO> resultListMessage = new ResultListDTO<>();
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
+
+        List<List<TrendpollCntVO>> trendpollsCnt = trendpollService.findAllTrendpollVoteCnt(search);
+        resultMapDTO.addBodyAttribute(PollStatCode.A.getCode() + "_CNT",
+                trendpollsCnt != null && trendpollsCnt.size() > 0 ? trendpollsCnt.get(0) : null);
+        resultMapDTO.addBodyAttribute(PollStatCode.D.getCode() + "_CNT",
+                trendpollsCnt != null && trendpollsCnt.size() > 1 ? trendpollsCnt.get(1) : null);
+        resultMapDTO.addBodyAttribute(PollStatCode.T.getCode() + "_CNT",
+                trendpollsCnt != null && trendpollsCnt.size() > 2 ? trendpollsCnt.get(2) : null);
 
         List<List<TrendpollStatVO>> trendpolls = trendpollService.findAllTrendpollVoteStat(search);
 
-        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
-        resultMapDTO.addBodyAttribute(PollStatCode.A.getCode(), trendpolls != null && trendpolls.size() > 0 ? trendpolls.get(0) : null);
-        resultMapDTO.addBodyAttribute(PollStatCode.D.getCode(), trendpolls != null && trendpolls.size() > 1 ? trendpolls.get(1) : null);
-        resultMapDTO.addBodyAttribute(PollStatCode.T.getCode(), trendpolls != null && trendpolls.size() > 2 ? trendpolls.get(2) : null);
+
+        resultMapDTO.addBodyAttribute(PollStatCode.A.getCode() + "_STAT", trendpolls != null && trendpolls.size() > 0 ? trendpolls.get(0) : null);
+        resultMapDTO.addBodyAttribute(PollStatCode.D.getCode() + "_STAT", trendpolls != null && trendpolls.size() > 1 ? trendpolls.get(1) : null);
+        resultMapDTO.addBodyAttribute(PollStatCode.T.getCode() + "_STAT", trendpolls != null && trendpolls.size() > 2 ? trendpolls.get(2) : null);
 
         tpsLogger.success(ActionType.SELECT);
 
         return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "투표 목록 엑셀 다운로드", response = Response.class)
+    @GetMapping(value = "/{pollSeq}/excel", produces = {"application/vnd.ms-excel"})
+    public TrendpollExcelView getExcel(
+            @ApiParam("투표 일련번호") @PathVariable("pollSeq") @Min(value = 1, message = "{tps.poll.error.pattern.pollSeq}") Long pollSeq,
+            @ApiParam(hidden = true) ModelMap map)
+            throws Exception {
+
+        TrendpollExcelView excelView = new TrendpollExcelView();
+        // 최종 페이지
+        int totalPages = 0;
+        int size = 200;
+        // 현재 페이지
+        AtomicInteger currentPage = new AtomicInteger(0);
+
+
+        Page<TrendpollVote> list = trendpollService.findAllTrendpollVote(pollSeq, PageRequest.of(currentPage.getAndAdd(1), size));
+
+        totalPages = list.getTotalPages();
+
+        List<TrendpollVote> resultList = new ArrayList<>();
+        if (totalPages > 0) {
+            resultList.addAll(list.getContent());
+            while (currentPage.get() < totalPages) {
+                list = trendpollService.findAllTrendpollVote(pollSeq, PageRequest.of(currentPage.getAndAdd(1), size));
+                resultList.addAll(list.getContent());
+            }
+        }
+        String[] columns = new String[] {"선택 항목", "디바이스 구분", "등록일시", "등록IP주소", "로그인SITE", "회원ID", "PC_ID"};
+
+        map.addAttribute("title", "투표 통계");
+        map.addAttribute("columnList", CollectionUtils.arrayToList(columns));
+        map.addAttribute("resultList", resultList);
+        excelView.setAttributesMap(map);
+
+        return excelView;
     }
 }

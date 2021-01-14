@@ -58,11 +58,11 @@ export const initialState = {
             chnlImg: '', // 커버 이미지.
             chnlThumb: '', // 썸네일 이미지
             podtyUrl: '', // 파치채널
-            chnlEdt: moment().format('YYYY-MM-DD'), // 채널 종료일
+            chnlEdt: '', // 채널 종료일
             chnlDy: 0, // 채널 방송 요일.
             chnlImgMob: '', // 모바일용 이미지
-            podtyChnlSrl: 0, // 파치태널SRL
-            chnlImgFile: '', // 이미지
+            podtyChnlSrl: `0`, // 파치태널SRL
+            chnlImgFile: '', // 커버 이미지
             chnlThumbFile: '', // 썸네일
             chnlImgMobFile: '', // 모바일.
         },
@@ -83,6 +83,7 @@ export default handleActions(
         [CLEAR_REPORTER]: (state) => {
             return produce(state, (draft) => {
                 draft.channel.reporter = initialState.channel.reporter;
+                draft.channel.selectReporter = initialState.channel.selectReporter;
             });
         },
         [CHANGE_REPORTER_SEARCH_OPTION]: (state, { payload }) => {

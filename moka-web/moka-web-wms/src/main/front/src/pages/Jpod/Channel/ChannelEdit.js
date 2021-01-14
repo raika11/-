@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, deleteJpodChannel } from '@store/jpod';
+import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, deleteJpodChannel, clearReporter } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';
@@ -15,7 +15,7 @@ const ChannelEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
-    const imgFileRef1 = useRef(null); // 이미지 ref
+    const imgFileRef1 = useRef(null); // 커버 이미지 ref
     const imgFileRef2 = useRef(null); // 썸네일 이미지 ref
     const imgFileRef3 = useRef(null); // 모바일용 이미지 ref
     const selectChnlSeq = useRef(null); // 선택한 채널 번호.
@@ -74,19 +74,25 @@ const ChannelEdit = ({ match }) => {
         );
     };
 
+    // 기본 데이터 리셋용
+    const handleResetEditBasicData = () => {
+        dispatch(clearReporter());
+        setEditData(initialState.channel.channelInfo);
+        resetReporter();
+        setEditDays([]);
+        setImgfile(null);
+        setThumbfile(null);
+        setMobfile(null);
+        imgFileRef1.current.deleteFile();
+        imgFileRef2.current.deleteFile();
+        imgFileRef3.current.deleteFile();
+    };
+
     // 등록 정보 변경 처리.
     const handleChangeChannelEditData = (e) => {
         const { name, value, checked } = e.target;
 
-        if (name === 'channel_out') {
-            // 외부 채널 이용시 기존 팟티 선택 채널정보 리셋.
-            setEditData({
-                ...editData,
-                podty_castSrl: 0,
-                channel_podty: '',
-                channel_out: value,
-            });
-        } else if (name === 'usedYn') {
+        if (name === 'usedYn') {
             setEditData({
                 ...editData,
                 usedYn: checked ? 'Y' : 'N',
@@ -169,7 +175,7 @@ const ChannelEdit = ({ match }) => {
 
     // 벨리데이션 처리.
     const checkValidation = () => {
-        if (editData.channel_out === '' && (editData.podty_castSrl === '' || editData.channel_podty === '')) {
+        if (editData.podtyUrl === '' || editData.podtyChnlSrl === '') {
             messageBox.alert('팟티를 입력해 주세요.', () => {});
             return true;
         }
@@ -244,12 +250,15 @@ const ChannelEdit = ({ match }) => {
         formData.append(`chnlNm`, editData.chnlNm); // 채널명
         formData.append(`chnlMemo`, editData.chnlMemo); // 채널 소개.
 
-        // 날짜 선택시 분시초 를 제거 해줌
-        let chnlSdt = editData.chnlSdt && editData.chnlSdt.length > 10 ? editData.chnlSdt.substr(0, 10) : editData.chnlSdt;
-        let chnlEdt = editData.chnlEdt && editData.chnlEdt.length > 10 ? editData.chnlEdt.substr(0, 10) : editData.chnlEdt;
-
-        formData.append(`chnlSdt`, chnlSdt);
-        formData.append(`chnlEdt`, chnlEdt);
+        // 개설일, 종료일 처리.
+        if (editData.chnlSdt && editData.chnlSdt.length > 0) {
+            let chnlSdt = editData.chnlSdt && editData.chnlSdt.length > 10 ? editData.chnlSdt.substr(0, 10) : editData.chnlSdt;
+            formData.append(`chnlSdt`, chnlSdt);
+        }
+        if (editData.chnlEdt && editData.chnlEdt.length > 0) {
+            let chnlEdt = editData.chnlEdt && editData.chnlEdt.length > 10 ? editData.chnlEdt.substr(0, 10) : editData.chnlEdt;
+            formData.append(`chnlEdt`, chnlEdt);
+        }
 
         // 이미지, 썸네일, 모바일용 이미지를 선택 한 경우.
         if (editData.chnlImg) {
@@ -266,17 +275,11 @@ const ChannelEdit = ({ match }) => {
         const chnlDy = editDays.join('').replace(/day/gi, '').replace('0', '');
         formData.append(`chnlDy`, chnlDy);
 
-        // 외부채널을 입력한 경우 파티채널 고유 겂이 없기 떄문에 0으로 설정.
-        if (editData.channel_out.length > 0) {
-            formData.append(`podtyChnlSrl`, 0);
-            formData.append(`podtyUrl`, editData.channel_out);
-        } else {
-            // 팟티 채널을 선택경우는 선택한 정보로 전송.
-            formData.append(`podtyChnlSrl`, editData.podty_castSrl);
-            formData.append(`podtyUrl`, editData.channel_podty);
-        }
+        // 팟티 채널을 선택경우는 선택한 정보로 전송.
+        formData.append(`podtyChnlSrl`, editData.podtyChnlSrl);
+        formData.append(`podtyUrl`, editData.podtyUrl);
 
-        // formData 출력(테스트).
+        // // formData 출력(테스트).
         // for (let [key, value] of formData) {
         //     console.log(`${key}: ${value}`);
         // }
@@ -314,7 +317,7 @@ const ChannelEdit = ({ match }) => {
     };
 
     // 취소 버튼
-    const handleCancleSaveButton = () => {
+    const handleClickCancleButton = () => {
         history.push(`${match.path}`);
     };
 
@@ -324,7 +327,6 @@ const ChannelEdit = ({ match }) => {
             deleteJpodChannel({
                 chnlSeq: selectChnlSeq.current,
                 callback: ({ header: { success, message }, body }) => {
-                    console.log(success, message);
                     if (success === true) {
                         toast.success(message);
                         const { chnlSeq } = body;
@@ -377,6 +379,7 @@ const ChannelEdit = ({ match }) => {
                 toast.warning('진행자는 6명까지 선택 할수 있습니다.');
                 return;
             }
+
             let status = false;
             setEditSelectRepoters(
                 editSelectRepoters.map((e) => {
@@ -402,9 +405,8 @@ const ChannelEdit = ({ match }) => {
             const { castSrl, shareUrl } = selectPodty;
             setEditData({
                 ...editData,
-                podty_castSrl: castSrl,
-                channel_podty: shareUrl,
-                channel_out: '',
+                podtyChnlSrl: castSrl,
+                podtyUrl: shareUrl,
             });
         }
         // 팟티가 선택되었을 경우만 실행.
@@ -414,19 +416,9 @@ const ChannelEdit = ({ match }) => {
     // 그리드에서 리스트 클릭후 스토어 업데이트 되었을떄.
     useEffect(() => {
         const setBasic = ({ usedYn, chnlNm, chnlMemo, chnlSdt, chnlEdt, podtyChnlSrl, podtyUrl, keywords, chnlImg, chnlImgMob, chnlThumb, episodeStat }) => {
-            let t_podtyChnlSrl = null;
-            let t_channel_podty = '';
-            let t_channel_out = '';
-
             // 키워드 업데이트시 ordNo 를 어떻게 할껀지?
             const keyword = Array.isArray(keywords) && keywords.length > 0 ? keywords[0].keyword : '';
-            if (podtyChnlSrl === 0) {
-                t_podtyChnlSrl = 0;
-                t_channel_out = podtyUrl;
-            } else {
-                t_podtyChnlSrl = podtyChnlSrl;
-                t_channel_podty = podtyUrl;
-            }
+
             setEditData({
                 ...editData,
                 usedYn: usedYn,
@@ -434,9 +426,8 @@ const ChannelEdit = ({ match }) => {
                 chnlMemo: chnlMemo,
                 chnlSdt: chnlSdt,
                 chnlEdt: chnlEdt,
-                podty_castSrl: t_podtyChnlSrl,
-                channel_podty: t_channel_podty,
-                channel_out: t_channel_out,
+                podtyChnlSrl: podtyChnlSrl === 0 ? `0` : podtyChnlSrl,
+                podtyUrl: podtyUrl,
                 keywords: keyword,
                 chnlImg: chnlImg,
                 chnlImgMob: chnlImgMob,
@@ -486,12 +477,7 @@ const ChannelEdit = ({ match }) => {
         };
 
         if (channelInfo === initialState.channel.channelInfo) {
-            setEditData(initialState.channel.channelInfo);
-            resetReporter();
-            setEditDays([]);
-            setImgfile(null);
-            setThumbfile(null);
-            setMobfile(null);
+            handleResetEditBasicData();
             return;
         }
 
@@ -508,6 +494,7 @@ const ChannelEdit = ({ match }) => {
             dispatch(getChannelInfo({ chnlSeq: params.chnlSeq }));
         } else if (selectChnlSeq.current !== params.chnlSeq && params.chnlSeq === 'add') {
             dispatch(clearChannelInfo());
+            handleResetEditBasicData();
         }
         selectChnlSeq.current = params.chnlSeq;
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -525,16 +512,33 @@ const ChannelEdit = ({ match }) => {
             loading={loading}
             footer
             footerClassName="d-flex justify-content-center"
-            footerButtons={[
-                {
-                    text: '저장',
-                    variant: 'positive',
-                    className: 'mr-2',
-                    onClick: handleClickSaveButton,
-                },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleCancleSaveButton },
-                { text: '삭제', variant: 'negative', onClick: handleClickDeleteButton },
-            ]}
+            footerAs={
+                <>
+                    {(function () {
+                        return (
+                            <Row className="justify-content-md-center text-center">
+                                <Col className="mp-0 pr-0">
+                                    <Button variant="positive" onClick={() => handleClickSaveButton()}>
+                                        저장
+                                    </Button>
+                                </Col>
+                                <Col className="mp-0 pr-0">
+                                    <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                        취소
+                                    </Button>
+                                </Col>
+                                {!isNaN(Number(selectChnlSeq.current)) && (
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="negative" onClick={() => handleClickDeleteButton()}>
+                                            삭제
+                                        </Button>
+                                    </Col>
+                                )}
+                            </Row>
+                        );
+                    })()}
+                </>
+            }
         >
             <Form className="mb-gutter">
                 {/* 사용여부 */}
@@ -557,10 +561,10 @@ const ChannelEdit = ({ match }) => {
                             label={`팟티\n(채널연결)`}
                             labelWidth={60}
                             className="mb-0"
-                            id="channel_podty"
-                            name="channel_podty"
+                            id="podtyChnlSrl"
+                            name="podtyChnlSrl"
                             placeholder=""
-                            value={editData.channel_podty}
+                            value={editData.podtyChnlSrl}
                             onChange={(e) => handleChangeChannelEditData(e)}
                         />
                     </Col>
@@ -577,10 +581,10 @@ const ChannelEdit = ({ match }) => {
                             label={`외부 채널\n(URL)`}
                             labelWidth={60}
                             className="mb-0"
-                            id="channel_out"
-                            name="channel_out"
+                            id="podtyUrl"
+                            name="podtyUrl"
                             placeholder=""
-                            value={editData.channel_out}
+                            value={editData.podtyUrl}
                             onChange={(e) => handleChangeChannelEditData(e)}
                         />
                     </Col>
@@ -905,7 +909,7 @@ const ChannelEdit = ({ match }) => {
                             name="chnlThumbFile"
                             isInvalid={null}
                             inputClassName="flex-fill"
-                            labelWidth={60}
+                            labelWidth={65}
                             label={
                                 <React.Fragment>
                                     모바일용

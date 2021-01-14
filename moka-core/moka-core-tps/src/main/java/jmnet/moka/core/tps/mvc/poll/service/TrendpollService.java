@@ -1,10 +1,13 @@
 package jmnet.moka.core.tps.mvc.poll.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
+import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import jmnet.moka.core.tps.mvc.poll.entity.TrendpollDetail;
+import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -69,4 +72,13 @@ public interface TrendpollService {
      * @return 저장 된 투표 정보
      */
     long updateTrendpollStatus(Long pollSeq, PollStatusCode status);
+
+
+    /**
+     * 투표 현황 목록 조회
+     *
+     * @param search 검색 조건
+     * @return 투표 목록 조회 결과
+     */
+    List<List<TrendpollStatVO>> findAllTrendpollVoteStat(TrendpollStatSearchDTO search);
 }

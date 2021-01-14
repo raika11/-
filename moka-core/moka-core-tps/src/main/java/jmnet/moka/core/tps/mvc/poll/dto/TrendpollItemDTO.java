@@ -27,7 +27,7 @@ public class TrendpollItemDTO implements Serializable {
     /**
      * 항목일련번호
      */
-    @ApiModelProperty(value = "항목일련번호")
+    @ApiModelProperty(value = "항목일련번호", hidden = true)
     private Long itemSeq;
 
     /**
@@ -39,7 +39,7 @@ public class TrendpollItemDTO implements Serializable {
     /**
      * 순서
      */
-    @ApiModelProperty(value = "순서")
+    @ApiModelProperty(value = "순서", hidden = true)
     private Integer ordNo = 1;
 
     /**
@@ -53,7 +53,8 @@ public class TrendpollItemDTO implements Serializable {
      */
     @ApiModelProperty(value = "등록일시", hidden = true)
     @DTODateTimeFormat
-    private Date regDt;
+    @Builder.Default
+    private Date regDt = new Date();
 
     /**
      * 이미지경로

@@ -24,6 +24,7 @@ import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
+import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -129,6 +130,8 @@ public class AppRestController {
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
 
         result.put("PHOTO_ARCHIVE_CODE", PhotoArchiveMenuCode.toList());
+
+        result.put("TRENDPOLL_STAT_CODE", PollStatCode.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

@@ -22,4 +22,8 @@ public interface TrendpollRepositorySupport {
     Page<Trendpoll> findAllTrendpoll(TrendpollSearchDTO searchDTO);
 
     long updateTrendpollStatus(Long pollSeq, PollStatusCode status);
+
+    long deleteItemByPollSeq(Long pollSeq);
+
+    long deleteContentsByPollSeq(Long pollSeq);
 }

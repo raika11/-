@@ -61,7 +61,8 @@ public class TrendpollItem implements Serializable {
      * 등록일시
      */
     @Column(name = "REG_DT", nullable = false)
-    private Date regDt;
+    @Builder.Default
+    private Date regDt = new Date();
 
     /**
      * 이미지경로

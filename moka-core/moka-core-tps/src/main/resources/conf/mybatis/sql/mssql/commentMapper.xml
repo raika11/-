@@ -11,13 +11,13 @@
     <result property="cont" column="CMT_CONTENT"/>
     <result property="likeCnt" column="CMT_LIKE_CNT"/>
     <result property="hateCnt" column="CMT_HATE_CNT"/>
-    <result property="memId" column="USER_ID"/>
-    <result property="memNm" column="USER_NAME"/>
-    <result property="memImage" column="USER_IMAGE"/>
+    <result property="memId" column="MEM_ID"/>
+    <result property="memNm" column="MEM_NM"/>
+    <result property="memImage" column="MEM_IMAGE"/>
     <result property="regDt" column="REG_DT"/>
     <result property="status" column="CMT_STATUS"/>
-    <result property="memIp" column="USER_IP"/>
-    <result property="memSite" column="USER_SITE"/>
+    <result property="memIp" column="MEM_IP"/>
+    <result property="memSite" column="MEM_SITE"/>
     <result property="declareCnt" column="CMT_DECLARE_CNT"/>
     <result property="urlGrp" column="CMT_URL_GRP"/>
     <result property="reCnt" column="re_count"/>

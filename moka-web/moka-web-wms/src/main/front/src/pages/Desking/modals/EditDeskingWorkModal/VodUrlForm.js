@@ -19,7 +19,7 @@ const VodUrlForm = ({ temp, setTemp }) => {
 
     return (
         <Form.Row className="mb-2">
-            <MokaInputLabel label="영상" labelClassName="ft-12 pr-3" className="m-0" as="none" />
+            <MokaInputLabel label="영상" labelClassName="pr-3" className="m-0" as="none" />
             <div className="w-100">
                 <MokaSearchInput
                     placeholder="URL을 선택하세요"
@@ -27,8 +27,7 @@ const VodUrlForm = ({ temp, setTemp }) => {
                     value={temp.vodUrl}
                     onSearch={() => setShow(true)}
                     inputProps={{ readOnly: true }}
-                    inputClassName="bg-white ft-12"
-                    buttonClassName="ft-12"
+                    inputClassName="bg-white"
                 />
             </div>
 

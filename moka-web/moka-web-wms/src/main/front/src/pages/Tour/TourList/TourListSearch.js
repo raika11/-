@@ -57,16 +57,9 @@ const TourListSearch = () => {
                     />
                 </div>
                 <div className="flex-fill">
-                    <MokaSearchInput
-                        className="mr-2"
-                        inputClassName="ft-12"
-                        buttonClassName="ft-12"
-                        placeholder="단체명을 입력해주세요"
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                    />
+                    <MokaSearchInput className="mr-2" placeholder="단체명을 입력해주세요" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                 </div>
-                <Button variant="negative" className="ft-12" onClick={handleClickReset}>
+                <Button variant="negative" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>

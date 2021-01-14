@@ -191,98 +191,82 @@ const EditDeskingWorkModal = (props) => {
     };
 
     return (
-        <>
-            <MokaModal
-                titleAs={
-                    <div className="w-100 d-flex flex-column">
-                        <div className="p-0 d-flex h4 mb-0">
-                            <p className="m-0 mr-2">{deskingWorkData.rel ? `0${deskingWorkData.relOrd}`.substr(-2) : `0${deskingWorkData.contentOrd}`.substr(-2)}</p>
-                            <p className="m-0">{deskingWorkData.title}</p>
-                        </div>
-                        <div className="p-0 d-flex ft-12">
-                            <p className="m-0 mr-3">ID: {deskingWorkData.contentId}</p>
-                            <p className="m-0">
-                                (cp{component.componentSeq} {component.componentName})
-                            </p>
-                        </div>
+        <MokaModal
+            titleAs={
+                <div className="w-100 d-flex flex-column">
+                    <div className="p-0 d-flex h2 mb-0">
+                        <p className="m-0 mr-2">{deskingWorkData.rel ? `0${deskingWorkData.relOrd}`.substr(-2) : `0${deskingWorkData.contentOrd}`.substr(-2)}</p>
+                        <p className="m-0">{deskingWorkData.title}</p>
                     </div>
-                }
-                width={650}
-                size="lg"
-                show={show}
-                onHide={onHide}
-                buttons={[
-                    { variant: 'positive', text: '저장', onClick: handleClickSave },
-                    { variant: 'negative', text: '취소', onClick: handleHide },
-                ]}
-                footerClassName="d-flex justify-content-center"
-                bodyClassName="custom-scroll"
-                loading={loading}
-                id={`cid-${deskingWorkData.contentId}`}
-                draggable
-            >
-                <Form>
-                    {deskingPart.map((partKey) => {
-                        const mappingData = mapping[partKey];
+                    <div className="p-0 d-flex">
+                        <p className="m-0 mr-3">ID: {deskingWorkData.contentId}</p>
+                        <p className="m-0">
+                            (cp{component.componentSeq} {component.componentName})
+                        </p>
+                    </div>
+                </div>
+            }
+            width={650}
+            size="lg"
+            show={show}
+            onHide={onHide}
+            buttons={[
+                { variant: 'positive', text: '저장', onClick: handleClickSave },
+                { variant: 'negative', text: '취소', onClick: handleHide },
+            ]}
+            footerClassName="d-flex justify-content-center"
+            bodyClassName="custom-scroll"
+            loading={loading}
+            id={`cid-${deskingWorkData.contentId}`}
+            draggable
+        >
+            <Form>
+                {deskingPart.map((partKey) => {
+                    const mappingData = mapping[partKey];
 
-                        // 제목(기타코드), 대표이미지, 약물(기타코드), 아이콘(기타코드), 말머리(기타코드), 제목/부제위치(기타코드), 영상은 예외처리
-                        if (partKey === 'TITLE') {
-                            return (
-                                <TitleForm
-                                    key={partKey}
-                                    show={show}
-                                    mappingData={mappingData}
-                                    onChange={handleChangeValue}
-                                    temp={temp}
-                                    titleListType={titleListType}
-                                    error={error}
-                                />
-                            );
-                        } else if (partKey === 'THUMB_FILE_NAME') {
-                            return (
-                                <Form.Row key={partKey} className="mb-2">
-                                    <div className="d-flex">
-                                        <MokaInputLabel as="none" label="대표\n이미지" labelClassName="ft-12 pr-3" className="mb-0" />
-                                        <MokaImage img={temp.irImg} width={216} height={150} />
-                                    </div>
-                                    <div className="d-flex flex-column justify-content-end ml-2">
-                                        <Button variant="positive" size="sm" onClick={() => setShowModal(true)} className="mb-2">
-                                            신규등록
-                                        </Button>
-                                        <Button variant="outline-neutral" size="sm" onClick={handleEditClick}>
-                                            편집
-                                        </Button>
-                                    </div>
-                                </Form.Row>
-                            );
-                        } else if (partKey === 'SPECIAL_CHAR') {
-                            return (
-                                <Form.Row key={partKey} className="mb-2">
-                                    <MokaInputLabel
-                                        label="약물"
-                                        labelClassName="ft-12 pr-3"
-                                        className="mb-0 w-100"
-                                        value={specialChar}
-                                        inputProps={{ plaintext: true, readOnly: true }}
-                                    />
-                                </Form.Row>
-                            );
-                        } else if (partKey === 'ICON_FILE_NAME') {
-                            return <IconForm show={show} key={partKey} temp={temp} setTemp={setTemp} onChange={handleChangeValue} />;
-                        } else if (partKey === 'TITLE_PREFIX') {
-                            return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} deskingPartStr={deskingPartStr} />;
-                        } else if (partKey === 'TITLE_LOC') {
-                            return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
-                        } else if (partKey === 'VOD_URL') {
-                            return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
-                        } else if (mappingData) {
-                            return <TextForm key={partKey} mappingData={mappingData} temp={temp} urlRegex={urlRegex} onChange={handleChangeValue} error={error} />;
-                        } else {
-                            return null;
-                        }
-                    })}
-                </Form>
-            </MokaModal>
+                    // 제목(기타코드), 대표이미지, 약물(기타코드), 아이콘(기타코드), 말머리(기타코드), 제목/부제위치(기타코드), 영상은 예외처리
+                    if (partKey === 'TITLE') {
+                        return (
+                            <TitleForm key={partKey} show={show} mappingData={mappingData} onChange={handleChangeValue} temp={temp} titleListType={titleListType} error={error} />
+                        );
+                    } else if (partKey === 'THUMB_FILE_NAME') {
+                        return (
+                            <Form.Row key={partKey} className="mb-2">
+                                <div className="d-flex">
+                                    <MokaInputLabel as="none" label="대표\n이미지" labelClassName="pr-3" className="mb-0" />
+                                    <MokaImage img={temp.irImg} width={216} height={150} />
+                                </div>
+                                <div className="d-flex flex-column justify-content-end ml-2">
+                                    <Button variant="positive" size="sm" onClick={() => setShowModal(true)} className="mb-2">
+                                        신규등록
+                                    </Button>
+                                    <Button variant="outline-neutral" size="sm" onClick={handleEditClick}>
+                                        편집
+                                    </Button>
+                                </div>
+                            </Form.Row>
+                        );
+                    } else if (partKey === 'SPECIAL_CHAR') {
+                        return (
+                            <Form.Row key={partKey} className="mb-2">
+                                <MokaInputLabel label="약물" labelClassName="pr-3" className="mb-0 w-100" value={specialChar} inputProps={{ plaintext: true, readOnly: true }} />
+                            </Form.Row>
+                        );
+                    } else if (partKey === 'ICON_FILE_NAME') {
+                        return <IconForm show={show} key={partKey} temp={temp} setTemp={setTemp} onChange={handleChangeValue} />;
+                    } else if (partKey === 'TITLE_PREFIX') {
+                        return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} deskingPartStr={deskingPartStr} />;
+                    } else if (partKey === 'TITLE_LOC') {
+                        return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
+                    } else if (partKey === 'VOD_URL') {
+                        return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
+                    } else if (mappingData) {
+                        return <TextForm key={partKey} mappingData={mappingData} temp={temp} urlRegex={urlRegex} onChange={handleChangeValue} error={error} />;
+                    } else {
+                        return null;
+                    }
+                })}
+            </Form>
 
             {/* 대표이미지 신규등록 모달 */}
             <EditThumbModal
@@ -295,7 +279,7 @@ const EditDeskingWorkModal = (props) => {
                 thumbFileName={temp.thumbFileName}
                 setThumbFileName={handleThumbFileName}
             />
-        </>
+        </MokaModal>
     );
 };
 

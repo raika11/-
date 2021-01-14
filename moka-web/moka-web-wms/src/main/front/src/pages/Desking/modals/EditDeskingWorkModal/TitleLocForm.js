@@ -22,16 +22,7 @@ const DeskingWorkTitleLocForm = ({ show, temp, onChange }) => {
     return (
         <Form.Row className="mb-2">
             <Col xs={4} className="p-0">
-                <MokaInputLabel
-                    as="select"
-                    label="제목/\n부제위치"
-                    labelClassName="ft-12 pr-3"
-                    className="mb-0 w-100"
-                    inputClassName="ft-12"
-                    value={temp.titleLoc}
-                    name="titleLoc"
-                    onChange={onChange}
-                >
+                <MokaInputLabel as="select" label="제목/\n부제위치" labelClassName="pr-3" className="mb-0 w-100" value={temp.titleLoc} name="titleLoc" onChange={onChange}>
                     <option hidden>선택</option>
                     {dsTitleLocRows &&
                         dsTitleLocRows.map((code) => (

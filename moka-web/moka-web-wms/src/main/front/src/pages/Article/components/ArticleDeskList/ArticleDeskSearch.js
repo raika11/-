@@ -220,7 +220,7 @@ const ArticleDeskSearch = (props) => {
             <Form.Row className="d-flex mb-2">
                 {/* 검색기간 */}
                 <div style={{ width: 78 }} className="mr-2">
-                    <MokaInput as="select" name="period" className="ft-12" onChange={handleChangeValue} value={period.join('')}>
+                    <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
                         <option value="2days" data-number="2" data-date="days">
                             2일
                         </option>
@@ -251,7 +251,7 @@ const ArticleDeskSearch = (props) => {
 
                 {/* 검색 조건 */}
                 <div style={{ width: 110 }} className="mr-2">
-                    <MokaInput as="select" name="searchType" className="ft-12" value={search.searchType} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
@@ -261,7 +261,7 @@ const ArticleDeskSearch = (props) => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput className="flex-fill mr-2" inputClassName="ft-12" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
                 <Button variant="negative" onClick={handleClickReset}>
@@ -292,30 +292,12 @@ const ArticleDeskSearch = (props) => {
 
                     {/* 면 */}
                     <div style={{ width: 85 }} className="mr-2">
-                        <MokaInputLabel
-                            label="면"
-                            labelWidth={25}
-                            className="mb-0 ft-12"
-                            inputClassName="ft-12"
-                            name="pressMyun"
-                            value={search.pressMyun}
-                            onChange={handleChangeValue}
-                            disabled={searchDisabled}
-                        />
+                        <MokaInputLabel label="면" labelWidth={25} name="pressMyun" value={search.pressMyun} onChange={handleChangeValue} disabled={searchDisabled} />
                     </div>
 
                     {/* 판 */}
                     <div style={{ width: 85 }} className="mr-2">
-                        <MokaInputLabel
-                            label="판"
-                            labelWidth={25}
-                            className="mb-0 ft-12"
-                            inputClassName="ft-12"
-                            name="pressPan"
-                            value={search.pressPan}
-                            onChange={handleChangeValue}
-                            disabled={searchDisabled}
-                        />
+                        <MokaInputLabel label="판" labelWidth={25} name="pressPan" value={search.pressPan} onChange={handleChangeValue} disabled={searchDisabled} />
                     </div>
                 </div>
                 {!isNaverChannel && (

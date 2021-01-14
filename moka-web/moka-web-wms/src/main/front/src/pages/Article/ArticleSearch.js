@@ -200,7 +200,7 @@ const ArticleSearch = ({ ja, sun }) => {
             <Form.Row className="mb-2">
                 {/* 검색기간 */}
                 <Col xs={1} className="p-0">
-                    <MokaInput as="select" name="period" className="ft-12" onChange={handleChangeValue} value={period.join('')}>
+                    <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
                         <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>
@@ -227,13 +227,13 @@ const ArticleSearch = ({ ja, sun }) => {
 
                 {/* 면, 판 */}
                 <Col xs={2} className="p-0 pl-2 d-flex">
-                    <MokaInput placeholder="면" name="pressMyun" className="mr-2 ft-12" onChange={handleChangeValue} value={search.pressMyun} />
-                    <MokaInput placeholder="판" name="pressPan" className="ft-12" onChange={handleChangeValue} value={search.pressPan} />
+                    <MokaInput placeholder="면" name="pressMyun" className="mr-2" onChange={handleChangeValue} value={search.pressMyun} />
+                    <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} />
                 </Col>
 
                 <Col xs={5} className="p-0 pl-2 d-flex">
                     {/* 출판 카테고리 */}
-                    <MokaInput as="select" className="ft-12 mr-2" name="pressCategory" value={search.pressCategory} onChange={handleChangeValue}>
+                    <MokaInput as="select" className="mr-2" name="pressCategory" value={search.pressCategory} onChange={handleChangeValue}>
                         <option>출판 전체</option>
                         {pressCate1Rows &&
                             pressCate1Rows.map((code) => (
@@ -244,7 +244,7 @@ const ArticleSearch = ({ ja, sun }) => {
                     </MokaInput>
 
                     {/* 기사타입 */}
-                    <MokaInput as="select" name="contentType" onChange={handleChangeValue} value={search.contentType} className="ft-12 mr-2">
+                    <MokaInput as="select" name="contentType" onChange={handleChangeValue} value={search.contentType} className="mr-2">
                         {initialState.contentTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
@@ -253,7 +253,7 @@ const ArticleSearch = ({ ja, sun }) => {
                     </MokaInput>
 
                     {/* 벌크 */}
-                    <MokaInput as="select" name="bulkYn" onChange={handleChangeValue} value={search.bulkYn} className="ft-12">
+                    <MokaInput as="select" name="bulkYn" onChange={handleChangeValue} value={search.bulkYn}>
                         {initialState.bulkYnList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
@@ -265,7 +265,7 @@ const ArticleSearch = ({ ja, sun }) => {
             <Form.Row className="mb-2">
                 {/* 검색조건 */}
                 <Col xs={1} className="p-0">
-                    <MokaInput as="select" name="searchType" className="ft-12" onChange={handleChangeValue} value={search.searchType}>
+                    <MokaInput as="select" name="searchType" onChange={handleChangeValue} value={search.searchType}>
                         {initialState.searchTypeList.map((tp) => (
                             <option key={tp.id} value={tp.id}>
                                 {tp.name}
@@ -276,7 +276,7 @@ const ArticleSearch = ({ ja, sun }) => {
 
                 {/* 검색어 */}
                 <Col xs={3} className="p-0 pl-2">
-                    <MokaInput className="ft-12" name="keyword" onChange={handleChangeValue} value={search.keyword} onKeyPress={handleKeyPress} placeholder="검색어를 입력하세요" />
+                    <MokaInput name="keyword" onChange={handleChangeValue} value={search.keyword} onKeyPress={handleKeyPress} placeholder="검색어를 입력하세요" />
                 </Col>
 
                 {/* 분류 전체 */}
@@ -312,7 +312,7 @@ const ArticleSearch = ({ ja, sun }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between align-items-end">
-                <p className="mb-0 ft-12">
+                <p className="mb-0">
                     <MokaIcon iconName="fas-circle" className="mr-1 color-info" />
                     벌크전송기사
                 </p>

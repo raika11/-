@@ -132,7 +132,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
 
             {openReserve && (
                 <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 27, right: 0, zIndex: 1 }}>
-                    <div style={{ width: 168 }}>
+                    <div style={{ width: 180 }}>
                         <MokaInput as="dateTimePicker" size="sm" value={reserveDt} onChange={handleDate} isInvalid={error} />
                     </div>
                     <div className="d-flex align-items-center">

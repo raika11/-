@@ -71,7 +71,7 @@ const EditForm = () => {
             {/* 리스트 */}
             <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} title="편집폼 관리" bodyClassName="d-flex flex-column" width={480}>
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button variant="positive" onClick={handleAddClickEditForm} className="ft-12">
+                    <Button variant="positive" onClick={handleAddClickEditForm}>
                         편집폼 추가
                     </Button>
                 </div>

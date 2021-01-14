@@ -47,11 +47,9 @@ const ArticleCdnSearch = ({ match }) => {
         <Form className="mb-2">
             <Form.Row className="mb-2 d-flex">
                 <div className="flex-fill mr-2">
-                    <MokaInput className="ft-12" placeholder="제목을 입력하세요" value={search.title} name="title" onChange={handleChangeValue} onKeyPress={handleKeyPress} />
+                    <MokaInput placeholder="제목을 입력하세요" value={search.title} name="title" onChange={handleChangeValue} onKeyPress={handleKeyPress} />
                 </div>
                 <MokaSearchInput
-                    inputClassName="ft-12"
-                    buttonClassName="ft-12"
                     placeholder="기사 ID를 입력하세요"
                     value={search.totalId}
                     name="totalId"
@@ -59,12 +57,12 @@ const ArticleCdnSearch = ({ match }) => {
                     onChange={handleChangeValue}
                     onSearch={handleSearch}
                 />
-                <Button variant="negative" className="flex-shrink-0 ft-12" onClick={handleReset}>
+                <Button variant="negative" className="flex-shrink-0" onClick={handleReset}>
                     초기화
                 </Button>
             </Form.Row>
             <Form.Row className="d-flex justify-content-end">
-                <Button variant="positive" className="ft-12" onClick={() => history.push(`${match.path}/add`)}>
+                <Button variant="positive" onClick={() => history.push(`${match.path}/add`)}>
                     등록
                 </Button>
             </Form.Row>

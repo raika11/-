@@ -66,7 +66,7 @@ const MemberSearch = () => {
         <Form className="mb-3">
             <Form.Group as={Row}>
                 <Col xs={3} className="p-0 pr-2">
-                    <MokaInput as="select" className="ft-12" value={search.status} onChange={handleChangeSearchOption} name="searchStatus">
+                    <MokaInput as="select" value={search.status} onChange={handleChangeSearchOption} name="searchStatus">
                         <option key="all" value="">
                             전체
                         </option>
@@ -78,7 +78,7 @@ const MemberSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInput as="select" className="ft-12" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
+                    <MokaInput as="select" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
                         {searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
@@ -87,7 +87,7 @@ const MemberSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0">
-                    <MokaSearchInput value={keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" inputClassName="ft-12" buttonClassName="ft-12" />
+                    <MokaSearchInput value={keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
                 </Col>
             </Form.Group>
         </Form>

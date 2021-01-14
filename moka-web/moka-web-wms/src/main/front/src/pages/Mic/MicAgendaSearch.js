@@ -61,42 +61,34 @@ const MicAgendaSearch = () => {
         <>
             <Form>
                 <Form.Row className="mb-2">
-                    <MokaInput className="ft-12 mb-0 mr-2" placeholder="아젠다 명을 입력해주세요" value={agendaName} onChange={(e) => setAgendaName(e.target.value)} />
+                    <MokaInput className="mb-0 mr-2" placeholder="아젠다 명을 입력해주세요" value={agendaName} onChange={(e) => setAgendaName(e.target.value)} />
                     <Col className="p-0" xs={4}>
-                        <MokaInputLabel
-                            label="메뉴 노출"
-                            labelClassName="ft-12"
-                            className="mb-0 mr-2"
-                            inputClassName="ft-12"
-                            as="select"
-                            value={showMenu}
-                            onChange={(e) => setShowMenu(e.target.value)}
-                        >
+                        <MokaInputLabel label="메뉴 노출" className="mb-0 mr-2" as="select" value={showMenu} onChange={(e) => setShowMenu(e.target.value)}>
                             <option value="">전체 노출</option>
                             <option value="Y">최상단</option>
                             <option value="N">비노출</option>
                         </MokaInputLabel>
                     </Col>
                     <Col className="p-0 d-flex">
-                        <Button className="ft-12 mr-2" variant="searching" onClick={handleClickSearch}>
+                        <Button className="mr-2" variant="searching" onClick={handleClickSearch}>
                             검색
                         </Button>
-                        <Button className="ft-12" variant="negative" onClick={handleClickReset}>
+                        <Button variant="negative" onClick={handleClickReset}>
                             초기화
                         </Button>
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2 d-flex justify-content-end">
-                    <Button className="ft-12 mr-2" variant="outline-neutral" onClick={handleClickBanner}>
+                    <Button className="mr-2" variant="outline-neutral" onClick={handleClickBanner}>
                         다른 주제 공통 배너
                     </Button>
-                    <Button className="ft-12 mr-2" variant="outline-neutral" onClick={handleClickCategory}>
+                    <Button className="mr-2" variant="outline-neutral" onClick={handleClickCategory}>
                         카테고리
                     </Button>
-                    <Button className="ft-12 mr-2" variant="outline-neutral" onClick={handleClickOrderAgenda}>
+                    <Button className="mr-2" variant="outline-neutral" onClick={handleClickOrderAgenda}>
                         아젠다 순서
                     </Button>
-                    <Button className="ft-12" variant="positive" onClick={handleClickAdd}>
+                    <Button variant="positive" onClick={handleClickAdd}>
                         등록
                     </Button>
                 </Form.Row>

@@ -36,7 +36,7 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
                 value={children}
                 inputProps={{ readOnly: true }}
                 placeholder="매체를 선택하세요"
-                inputClassName="bg-white ft-12 cursor-pointer"
+                inputClassName="bg-white cursor-pointer"
                 isInvalid={isInvalid}
                 append={
                     <Button variant="searching">
@@ -80,7 +80,7 @@ const defaultProps = {
     bulk: false,
     sourceType: 'JOONGANG',
     dropdownHeight: 200,
-    width: 195,
+    width: 210,
 };
 
 /**
@@ -220,7 +220,7 @@ const SourceSelector = (props) => {
                         key={cd.sourceCode}
                         name="sourceList"
                         onChange={handleChangeValue}
-                        className={clsx('ft-12', {
+                        className={clsx({
                             'mb-2': idx !== renderList.length - 1,
                         })}
                         as="checkbox"

@@ -306,7 +306,7 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
                         />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
-                        <Button variant="outline-neutral" className="ft-12 w-100" size="sm" onClick={() => setCodeModalShow(true)}>
+                        <Button variant="outline-neutral" className="w-100" size="sm" onClick={() => setCodeModalShow(true)}>
                             통합분류표
                         </Button>
                     </Col>

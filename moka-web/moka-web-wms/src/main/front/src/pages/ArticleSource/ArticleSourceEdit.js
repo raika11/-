@@ -434,12 +434,12 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                     </Col>
                 </Form.Row>
             </Form>
-            <div className="p-2 border rounded">
-                <p className="ft-12 mb-2 color-danger">** 신규 매체 추가시 작업 순서</p>
-                <p className="ft-12 mb-0">1. 데이터 수신을 위한 계정 설정 및 FTP 가상디렉토리 추가</p>
-                <p className="ft-12 mb-0">2. 업체 아이디명의 가상디렉토리 설정 FTP 접근포트는 가능하면 8021로 설정</p>
-                <p className="ft-12 mb-2">3. 업체에서 접근할 IP를 확인하고 시스템팀에 방화벽 오픈 요청</p>
-                <p className="ft-12 mb-0">...</p>
+            <div className="p-3 input-border">
+                <p className="mb-2 color-danger">** 신규 매체 추가시 작업 순서</p>
+                <p className="mb-0">1. 데이터 수신을 위한 계정 설정 및 FTP 가상디렉토리 추가</p>
+                <p className="mb-0">2. 업체 아이디명의 가상디렉토리 설정 FTP 접근포트는 가능하면 8021로 설정</p>
+                <p className="mb-2">3. 업체에서 접근할 IP를 확인하고 시스템팀에 방화벽 오픈 요청</p>
+                <p className="mb-0">...</p>
             </div>
             <CodeMappingModal show={show} onHide={() => setShow(false)} data={temp} />
         </>

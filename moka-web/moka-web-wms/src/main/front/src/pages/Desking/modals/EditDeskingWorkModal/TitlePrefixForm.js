@@ -35,16 +35,7 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
     return (
         <Form.Row className="mb-2">
             <Col xs={4} className="p-0">
-                <MokaInputLabel
-                    as="select"
-                    label="말머리"
-                    labelClassName="ft-12 pr-3"
-                    className="mb-0 w-100"
-                    inputClassName="ft-12"
-                    value={temp.titlePrefix}
-                    name="titlePrefix"
-                    onChange={onChange}
-                >
+                <MokaInputLabel as="select" label="말머리" labelClassName="pr-3" className="mb-0 w-100" value={temp.titlePrefix} name="titlePrefix" onChange={onChange}>
                     <option hidden>선택</option>
                     {dsPreRows &&
                         dsPreRows.map((code) => (

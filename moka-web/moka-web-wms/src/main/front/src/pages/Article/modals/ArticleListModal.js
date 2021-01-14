@@ -281,7 +281,7 @@ const ArticleListModal = (props) => {
                     </Col>
                     {/* 검색 조건 */}
                     <Col xs={2} className="p-0">
-                        <MokaInput as="select" name="searchType" className="mr-2 ft-12" value={search.searchType} onChange={handleChangeValue}>
+                        <MokaInput as="select" name="searchType" className="mr-2" value={search.searchType} onChange={handleChangeValue}>
                             {initialState.searchTypeList.map((searchType) => (
                                 <option key={searchType.id} value={searchType.id}>
                                     {searchType.name}
@@ -291,15 +291,7 @@ const ArticleListModal = (props) => {
                     </Col>
                     {/* 키워드 */}
                     <Col xs={6} className="p-0">
-                        <MokaSearchInput
-                            className="ml-2 flex-fill"
-                            inputClassName="ft-12"
-                            buttonClassName="ft-12"
-                            name="keyword"
-                            value={search.keyword}
-                            onChange={handleChangeValue}
-                            onSearch={handleSearch}
-                        />
+                        <MokaSearchInput className="ml-2 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -328,8 +320,7 @@ const ArticleListModal = (props) => {
                         <MokaInputLabel
                             label="면"
                             labelWidth={25}
-                            className="mb-0 mr-2 ft-12"
-                            inputClassName="ft-12"
+                            className="mb-0 mr-2"
                             name="pressMyun"
                             value={search.pressMyun}
                             onChange={handleChangeValue}
@@ -338,20 +329,11 @@ const ArticleListModal = (props) => {
                     </Col>
                     {/* 판 */}
                     <Col xs={2} className="p-0">
-                        <MokaInputLabel
-                            label="판"
-                            labelWidth={25}
-                            className="mb-0 ft-12"
-                            inputClassName="ft-12"
-                            name="pressPan"
-                            value={search.pressPan}
-                            onChange={handleChangeValue}
-                            disabled={searchDisabled}
-                        />
+                        <MokaInputLabel label="판" labelWidth={25} name="pressPan" value={search.pressPan} onChange={handleChangeValue} disabled={searchDisabled} />
                     </Col>
                     {/* 초기화 */}
                     <Col xs={1} className="p-0 d-flex justify-content-end">
-                        <Button variant="negative" className="ft-12" onClick={handleClickReset}>
+                        <Button variant="negative" onClick={handleClickReset}>
                             초기화
                         </Button>
                     </Col>

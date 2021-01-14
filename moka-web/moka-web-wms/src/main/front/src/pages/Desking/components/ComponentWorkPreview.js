@@ -70,7 +70,7 @@ const ComponentWorkPreview = ({ show }) => {
             {loading && <MokaLoader />}
             <div className="d-flex align-items-center justify-content-between mb-2" style={{ height: 30 }}>
                 <p className="h5 mb-0">미리보기</p>
-                <Button variant="outline-neutral ft-12" onClick={handleClickPreview} disabled={!area.page}>
+                <Button variant="outline-neutral" onClick={handleClickPreview} disabled={!area.page}>
                     전체화면으로 보기
                 </Button>
             </div>

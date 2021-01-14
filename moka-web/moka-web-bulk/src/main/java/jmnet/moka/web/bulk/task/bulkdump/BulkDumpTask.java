@@ -90,7 +90,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
                 }
 
                 log.debug("Get getUspBulkDdrefListSel top {} and over seqNo [{}]", waitExecutorCount, currentSeqNo);
-                return new DBTaskInputData(bulkDumpService.getUspBulkDdrefListSel(waitExecutorCount, currentSeqNo));
+                return DBTaskInputData.newDBTaskInputData(bulkDumpService.getUspBulkDdrefListSel(waitExecutorCount, currentSeqNo));
             }
         };
     }

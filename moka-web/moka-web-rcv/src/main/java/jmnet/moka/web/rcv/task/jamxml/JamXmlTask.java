@@ -187,9 +187,10 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
                 jamXmlService.insertReceiveJobStep(articleTotal, "");
             else {
                 final JamArticleVo article = articleTotal.getMainData();
-                if(article != null && !McpString.isNullOrEmpty(article.getIud()))
+                if(article != null && !McpString.isNullOrEmpty(article.getIud())) {
                     jamXmlService.insertReceiveJobStep(articleTotal, articleTotal.getErrorMessageList());
-                // getTaskManager().sendErrorSMS("[JamRecv] XML 처리 오류");
+                    getTaskManager().sendErrorSMS(String.format("[JamRecv] XML 처리 오류 [%s]", taskInputData.getFile()));
+                }
             }
         }
     }

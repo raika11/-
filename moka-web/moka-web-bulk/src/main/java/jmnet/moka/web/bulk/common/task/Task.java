@@ -142,7 +142,7 @@ public abstract class Task<T> extends TaskBase {
     }
 
     protected void doIdleProcess() {
-        log.info( "{} 정상적으로 작업 대기 중입니다.", getTaskName());
+        log.info( " >> {} 정상적으로 작업 대기 중입니다.", getTaskName());
     }
 
     protected void stopServer() {

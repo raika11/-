@@ -89,13 +89,11 @@ const MokaCardEditor = forwardRef((props, ref) => {
             buttons={[
                 // 워드랩 버튼
                 {
-                    className: 'p-0 mr-10',
                     onClick: handleWordWrap,
                     icon: <MokaIcon iconName={wordWrap ? 'fal-arrow-to-right' : 'fal-repeat'} />,
                 },
                 // 확장 버튼
                 {
-                    className: 'p-0',
                     onClick: handleExpansion,
                     icon: <MokaIcon iconName={expansion ? 'fal-compress-arrows-alt' : 'fal-expand-arrows'} />,
                 },

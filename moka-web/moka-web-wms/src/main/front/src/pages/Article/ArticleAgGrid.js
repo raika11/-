@@ -111,37 +111,32 @@ const ArticleAgGrid = ({ match, ja }) => {
     );
 
     useEffect(() => {
-        if (list.length > 0) {
-            setRowData(
-                list.map((data) => {
-                    // 면판 replace
-                    let myunPan = '';
-                    myunPan = `${data.pressMyun || ''}/${data.pressPan || ''}`;
+        setRowData(
+            list.map((data) => {
+                // 면판 replace
+                let myunPan = '';
+                myunPan = `${data.pressMyun || ''}/${data.pressPan || ''}`;
 
-                    return {
-                        ...data,
-                        artTitle: unescapeHtml(data.artTitle),
-                        artUrl: `${ARTICLE_URL}${data.totalId}`,
-                        regDt: moment(data.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm'),
-                        myunPan,
-                        serviceTime: data.serviceDaytime ? moment(data.serviceDaytime, DB_DATEFORMAT).format('HH:mm') : null,
-                        handleRowClicked,
-                        ovpFullLink: `${OVP_PREVIEW_URL}?videoId=${data.ovpLink}`,
-                        ja: ja, // 편집그룹 표기 유무
-                        handleClickDelete,
-                        handleClickStop,
-                    };
-                }),
-            );
-        } else {
-            setRowData([]);
-        }
+                return {
+                    ...data,
+                    artTitle: unescapeHtml(data.artTitle),
+                    artUrl: `${ARTICLE_URL}${data.totalId}`,
+                    regDt: moment(data.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm'),
+                    myunPan,
+                    handleRowClicked,
+                    ovpFullLink: `${OVP_PREVIEW_URL}?videoId=${data.ovpLink}`,
+                    ja, // 편집그룹 표기 유무
+                    handleClickDelete,
+                    handleClickStop,
+                };
+            }),
+        );
     }, [OVP_PREVIEW_URL, handleClickDelete, handleClickStop, handleRowClicked, ja, list]);
 
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
-            columnDefs={ja ? columnDefs : columnDefs.map((def) => (def.field === 'view' ? { ...def, width: 90 } : def))}
+            columnDefs={columnDefs.map((def) => (def.field === 'view' ? { ...def, width: !ja ? 90 : def.width } : def))}
             rowData={rowData}
             onRowNodeId={(data) => data.totalId}
             onRowClicked={handleRowClicked}
@@ -150,7 +145,7 @@ const ArticleAgGrid = ({ match, ja }) => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            preventRowClickCell={['sourceName', 'view', 'register']}
+            preventRowClickCell={['view', 'register']}
             selected={article.totalId}
             refreshCellsParams={{ columns: ['source'], force: true }}
         />

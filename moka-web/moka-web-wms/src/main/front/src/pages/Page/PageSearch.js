@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 
 import { changeLatestDomainId } from '@store/auth';
-import { getPageTree, changeSearchOption, initialState, clearPage } from '@store/page';
+import { getPageTree, changeSearchOption, initialState } from '@store/page';
 
 /**
  * 페이지 검색 컴포넌트
@@ -71,7 +71,7 @@ const PageSearch = ({ match }) => {
     );
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput as="select" className="ft-12" value={search.domainId || undefined} onChange={handleChangeDomain}>

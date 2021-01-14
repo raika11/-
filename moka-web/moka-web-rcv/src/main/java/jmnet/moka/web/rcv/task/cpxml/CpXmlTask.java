@@ -232,6 +232,8 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
                     }
                 }
                 component.setUrl(uploadPath.concat(imageFileName));
+
+                log.debug(" ----- {}, URL {} ", getTaskName(), component.getUrl());
             }
         }
 

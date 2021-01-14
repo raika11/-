@@ -13,8 +13,8 @@ import { clearStore as clearHistoryStore } from '@store/history';
 import toast, { messageBox } from '@utils/toastUtil';
 
 import PageEditor from './PageEditor';
+import PageEdit from './PageEdit';
 const PageList = React.lazy(() => import('./PageList'));
-const PageEdit = React.lazy(() => import('./PageEdit'));
 
 // relations
 const LookupPageList = React.lazy(() => import('@pages/Page/components/LookupPageList'));
@@ -244,9 +244,7 @@ const Page = ({ match }) => {
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabWidth={412}
                                 tabs={[
-                                    <Suspense>
-                                        <PageEdit onDelete={handleClickDelete} match={match} />
-                                    </Suspense>,
+                                    <PageEdit onDelete={handleClickDelete} match={match} />,
                                     <Suspense>
                                         <LookupPageList show={activeTabIdx === 1} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickPageLoad} />
                                     </Suspense>,

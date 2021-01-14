@@ -129,7 +129,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
                     onChange={props.onChange}
                     onKeyDown={props.onKeyDown}
                     value={props.value}
-                    className={clsx(props.className, inputClassName, { 'is-invalid': isInvalid })}
+                    className={clsx(props.className, 'ft-12', inputClassName, { 'is-invalid': isInvalid })}
                     placeholder={placeholder || dateTimeFormat}
                     disabled={disabled}
                     mask={dateTimeFormat.replace(/y|m|d|h|s/gi, '9')}

@@ -83,7 +83,7 @@ const MokaTreeView = (props) => {
     };
 
     return (
-        <div className={clsx('border custom-scroll treeview', className)} style={{ height }}>
+        <div className={clsx('input-border custom-scroll treeview', className)} style={{ height }}>
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading && data && (

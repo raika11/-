@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useCallback } from 'react';
+import React, { Suspense, useEffect, useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -13,22 +13,23 @@ import logo from '@assets/images/img_logo.png';
  */
 const Sidebar = ({ match }) => {
     const dispatch = useDispatch();
+    const scrollbarRef = useRef(null);
     const { menu } = useSelector((store) => ({
         menu: store.auth.menu,
     }));
-
-    const { sidebarIsOpen, sidebarIsSticky, sidebarOpenItem } = useSelector((state) => ({
+    const { sidebarIsOpen, sidebarIsSticky } = useSelector((state) => ({
         sidebarIsOpen: state.layout.sidebarIsOpen,
         sidebarIsSticky: state.layout.sidebarIsSticky,
-        sidebarOpenItem: state.layout.sidebarOpenItem,
     }));
+    const sidebarOpenItem = useSelector(({ layout }) => layout.sidebarOpenItem);
 
     useEffect(() => {
         // 사이드바 오픈 아이템 초기화
         if (menu.children !== undefined && Object.keys(sidebarOpenItem).length < 1) {
             dispatch(initSidebarOpenItem(menu.menuOpens));
         }
-    }, [dispatch, menu, sidebarOpenItem]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, menu]);
 
     const changeNodeToggle = useCallback(
         ({ menuId }) => {
@@ -38,6 +39,9 @@ const Sidebar = ({ match }) => {
                     toggleValue: !sidebarOpenItem[menuId],
                 }),
             );
+            if (scrollbarRef.current) {
+                scrollbarRef.current.updateScroll();
+            }
         },
         [sidebarOpenItem, dispatch],
     );
@@ -51,7 +55,7 @@ const Sidebar = ({ match }) => {
                 })}
             >
                 <div className="sidebar-content">
-                    <PerfectScrollbar options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'] }}>
+                    <PerfectScrollbar ref={scrollbarRef} options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'], wheelSpeed: 0.5 }}>
                         <Link className="sidebar-brand mt-3" to="/">
                             <span>
                                 <img src={logo} alt="joongang" />
@@ -67,7 +71,11 @@ const Sidebar = ({ match }) => {
                                               key={depth1.menuId}
                                               nodeData={depth1}
                                               open={sidebarOpenItem[depth1.menuId]}
-                                              onClick={() => changeNodeToggle(depth1)}
+                                              onClick={(e) => {
+                                                  e.preventDefault();
+                                                  e.stopPropagation();
+                                                  changeNodeToggle(depth1);
+                                              }}
                                               match={match}
                                           >
                                               <>
@@ -77,7 +85,11 @@ const Sidebar = ({ match }) => {
                                                               key={depth2.menuId}
                                                               nodeData={depth2}
                                                               open={sidebarOpenItem[depth2.menuId]}
-                                                              onClick={() => changeNodeToggle(depth2)}
+                                                              onClick={(e) => {
+                                                                  e.preventDefault();
+                                                                  e.stopPropagation();
+                                                                  changeNodeToggle(depth2);
+                                                              }}
                                                               match={match}
                                                           >
                                                               {depth2.children.map((depth3) => (

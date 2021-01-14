@@ -69,8 +69,6 @@ const ReporterMgrSearch = () => {
         <React.Fragment>
             <MokaSearchInput
                 className="mb-3"
-                inputClassName="ft-12"
-                buttonClassName="ft-12"
                 value={search.keyword}
                 onChange={handleChangeSearchOption}
                 onSearch={handleSearch}

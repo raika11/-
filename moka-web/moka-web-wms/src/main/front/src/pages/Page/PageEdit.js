@@ -409,15 +409,7 @@ const PageEdit = ({ onDelete }) => {
                     </Col>
                     {/* 사용여부 */}
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel
-                            as="switch"
-                            className="mb-2"
-                            label="사용여부"
-                            id="usedYn"
-                            name="usedYn"
-                            inputProps={{ checked: temp.usedYn === 'Y' }}
-                            onChange={handleChangeValue}
-                        />
+                        <MokaInputLabel as="switch" label="사용여부" id="usedYn" name="usedYn" inputProps={{ checked: temp.usedYn === 'Y' }} onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
                 {/* 페이지 URL */}
@@ -473,7 +465,7 @@ const PageEdit = ({ onDelete }) => {
                         />
                     </Col>
                     <Col xs={4} className="px-0 pl-2">
-                        <MokaInputLabel label="순서" labelWidth={43} value={temp.pageOrd} name="pageOrd" onChange={handleChangeValue} required isInvalid={error.pageOrd} />
+                        <MokaInputLabel label="순서" labelWidth={27} value={temp.pageOrd} name="pageOrd" onChange={handleChangeValue} required isInvalid={error.pageOrd} />
                     </Col>
                 </Form.Row>
                 {/* 이동URL */}

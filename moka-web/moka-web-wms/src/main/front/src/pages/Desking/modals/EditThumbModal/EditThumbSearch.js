@@ -74,7 +74,7 @@ const EditThumbSearch = () => {
             <div className="mr-2" style={{ width: 140 }}>
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                    inputProps={{ timeFormat: null }}
                     value={startDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -95,7 +95,7 @@ const EditThumbSearch = () => {
             <div className="mr-2" style={{ width: 140 }}>
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                    inputProps={{ timeFormat: null }}
                     value={finishDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {

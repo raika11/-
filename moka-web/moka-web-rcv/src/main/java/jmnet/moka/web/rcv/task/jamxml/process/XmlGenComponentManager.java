@@ -99,6 +99,7 @@ public class XmlGenComponentManager {
                 {
                     setType("HP");
                     setUrl(item.getPoster());
+                    setArtUrl(item.getPoster());
                     setWidth("0");
                     setHeight("0");
                     setKsize("0");
@@ -202,7 +203,7 @@ public class XmlGenComponentManager {
                 break;
             }
 
-            item.setArtUrl(fileUrl);
+            item.setArtUrl(fileUrl + fileName);
             item.setArtThumb(fileUrl + fileName_120);
         } while (false);
     }

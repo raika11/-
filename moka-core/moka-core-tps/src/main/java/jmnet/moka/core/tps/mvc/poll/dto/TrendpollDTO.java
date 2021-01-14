@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollDivCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollTypeCode;
@@ -158,5 +159,15 @@ public class TrendpollDTO implements Serializable {
     @ApiModelProperty(value = "등록일시", hidden = true)
     @DTODateTimeFormat
     private Date regDt;
+
+    @ApiModelProperty(value = "등록자", hidden = true)
+    private MemberSimpleDTO regMember;
+
+    @ApiModelProperty(value = "수정일시", hidden = true)
+    @DTODateTimeFormat
+    private Date modDt;
+
+    @ApiModelProperty(value = "수정자", hidden = true)
+    private MemberSimpleDTO modMember;
 
 }

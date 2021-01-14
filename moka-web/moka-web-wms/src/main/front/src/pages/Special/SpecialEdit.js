@@ -463,7 +463,7 @@ const SpecialEdit = () => {
                                     className="mb-0"
                                     labelClassName="mr-3 ft-12"
                                     name="pageSdate"
-                                    inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                                    inputProps={{ timeFormat: null }}
                                     value={temp.pageSdate}
                                     onChange={handleChangeSdate}
                                     isInvalid={error.pageSdate}
@@ -478,7 +478,7 @@ const SpecialEdit = () => {
                                     className="m-0"
                                     labelClassName="mr-3 ft-12"
                                     name="pageEdate"
-                                    inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                                    inputProps={{ timeFormat: null }}
                                     value={temp.pageEdate}
                                     onChange={handleChangeEdate}
                                     isInvalid={error.pageEdate}

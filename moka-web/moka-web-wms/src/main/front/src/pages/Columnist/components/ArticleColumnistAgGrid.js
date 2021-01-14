@@ -1,13 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useCallback, useEffect, forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
-import columnDefs from './ColumnistAgGridColumns';
+import columnDefs from './ArticleColumnistAgGridColumns';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
-const ColumnistAgGrid = ({ match }) => {
-    const history = useHistory();
+const ArticleColumnistAgGrid = forwardRef((props, ref) => {
+    const { onDragStop, dropTargetAgGrid } = props;
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
 
@@ -21,7 +20,7 @@ const ColumnistAgGrid = ({ match }) => {
 
     // 목록에서 아이템 클릭시 수정 모드.
     const handleClickListRow = (data) => {
-        history.push(`${match.path}/${data.seqNo}`);
+        // history.push(`${match.path}/${data.seqNo}`);
     };
 
     // 검색
@@ -54,6 +53,7 @@ const ColumnistAgGrid = ({ match }) => {
     return (
         <React.Fragment>
             <MokaTable
+                ref={ref}
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
@@ -66,9 +66,11 @@ const ColumnistAgGrid = ({ match }) => {
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={columnist.seqNo}
+                dragManaged={false}
+                animateRows={false}
             />
         </React.Fragment>
     );
-};
+});
 
-export default ColumnistAgGrid;
+export default ArticleColumnistAgGrid;

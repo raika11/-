@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
+import ArticleColumnistList from '@/pages/Columnist/components/ArticleColumnistList';
 import { deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
 
@@ -12,12 +13,13 @@ const DeskingArticleTab = (props) => {
     const isNaverChannel = useSelector((store) => store.desking.isNaverChannel);
 
     // state
-    const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼 리스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
+    const [tabNavs] = useState(['기사', '영상', '이슈키워드', '기자', '칼럼니스트']); // 컴포넌트 폼여부에 따라 리스트 변경o
     const [navIdx, setNavIdx] = useState(0);
 
     // ref
     const articleRef = useRef(null);
     const mediaRef = useRef(null);
+    const columnistRef = useRef(null);
 
     /**
      * 기사 드래그 끝났을 때 액션
@@ -79,6 +81,21 @@ const DeskingArticleTab = (props) => {
                         show={navIdx === idx && show}
                         isNaverChannel={isNaverChannel}
                         media
+                    />
+                );
+            }
+            // 기자 조회 컴포넌트
+            // 칼럼 리스트 컴포넌트
+            else if (nav === '칼럼니스트') {
+                return (
+                    <ArticleColumnistList
+                        className="pb-3"
+                        ref={columnistRef}
+                        selectedComponent={{}}
+                        dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
+                        // onDragStop={}
+                        show={navIdx === idx && show}
                     />
                 );
             }

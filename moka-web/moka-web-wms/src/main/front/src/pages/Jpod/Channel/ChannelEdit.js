@@ -531,13 +531,13 @@ const ChannelEdit = ({ match }) => {
                                         취소
                                     </Button>
                                 </Col>
-                                {!isNaN(Number(selectChnlSeq.current)) && (
+                                {/* {!isNaN(Number(selectChnlSeq.current)) && (
                                     <Col className="mp-0 pr-0">
                                         <Button variant="negative" onClick={() => handleClickDeleteButton()}>
                                             삭제
                                         </Button>
                                     </Col>
-                                )}
+                                )} */}
                             </Row>
                         );
                     })()}
@@ -569,6 +569,7 @@ const ChannelEdit = ({ match }) => {
                             name="podtyChnlSrl"
                             placeholder=""
                             value={editData.podtyChnlSrl}
+                            inputProps={{ readOnly: true }}
                             onChange={(e) => handleChangeChannelEditData(e)}
                         />
                     </Col>
@@ -761,7 +762,7 @@ const ChannelEdit = ({ match }) => {
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
-                            label={`테그`}
+                            label={`태그`}
                             labelWidth={60}
                             className="mb-0"
                             id="keywords"
@@ -790,7 +791,7 @@ const ChannelEdit = ({ match }) => {
                             <Col className="p-0">
                                 <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
                                     <Col className="d-flex w-100 h-50 align-items-center">
-                                        <div style={{ width: '60px' }}>
+                                        <div style={{ width: '70px' }}>
                                             <MokaInput
                                                 name="memRepSeq"
                                                 className="ft-12"

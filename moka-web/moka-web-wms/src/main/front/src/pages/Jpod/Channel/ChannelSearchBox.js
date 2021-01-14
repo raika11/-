@@ -3,7 +3,7 @@ import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { selectItem } from '@pages/Boards/BoardConst';
+import { selectItem } from '@pages/Jpod/JpodConst';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
 import { initialState, changeJpodSearchOption, getChannels } from '@store/jpod';
@@ -78,7 +78,7 @@ const ChannelSearchBox = ({ match }) => {
         <>
             <Form>
                 <Form.Row className="d-flex mb-3">
-                    <Col xs={2}>
+                    <Col xs={2.5}>
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0"
@@ -93,7 +93,7 @@ const ChannelSearchBox = ({ match }) => {
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
-                    <Col xs={2}>
+                    <Col xs={2.5}>
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0"
@@ -110,7 +110,6 @@ const ChannelSearchBox = ({ match }) => {
                     </Col>
                     <Col xs={2}>
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
-                            <option hidden>선택</option>
                             {selectItem.usedYn.map((item, index) => (
                                 <option key={index} value={item.value}>
                                     {item.name}
@@ -118,7 +117,7 @@ const ChannelSearchBox = ({ match }) => {
                             ))}
                         </MokaInput>
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={3}>
                         <MokaSearchInput
                             id="keyword"
                             name="keyword"

@@ -1,3 +1,20 @@
+export const selectItem = {
+    usedYn: [
+        {
+            value: '',
+            name: '전체',
+        },
+        {
+            value: 'Y',
+            name: '사용',
+        },
+        {
+            value: 'N',
+            name: '중지',
+        },
+    ],
+};
+
 export const tempChannelList = {
     size: 20,
     total: 4,

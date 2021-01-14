@@ -58,7 +58,7 @@ const ChannelEdit = ({ match }) => {
     // 기본 진행자 스테트 리셋용.
     const resetReporter = () => {
         setEditSelectRepoters(
-            reporterCountConst.map((element) => {
+            reporterCountConst.map(() => {
                 return {
                     chnlSeq: '',
                     desc: '',
@@ -219,6 +219,7 @@ const ChannelEdit = ({ match }) => {
             const memRepSeq = !element.memRepSeq || element.memRepSeq === undefined ? '' : element.memRepSeq;
             const nickNm = !element.nickNm || element.nickNm === undefined ? '' : element.nickNm;
             const memMemo = !element.memMemo || element.memMemo === undefined ? '' : element.memMemo;
+            const desc = !element.desc || element.desc === undefined ? '' : element.desc;
 
             if (memNm) {
                 formData.append(`members[${index}].memDiv`, memDiv);
@@ -226,7 +227,7 @@ const ChannelEdit = ({ match }) => {
                 formData.append(`members[${index}].memRepSeq`, memRepSeq);
                 formData.append(`members[${index}].nickNm`, nickNm);
                 formData.append(`members[${index}].memMemo`, memMemo);
-                formData.append(`members[${index}].desc`, index);
+                formData.append(`members[${index}].desc`, desc);
             }
             return [];
         });
@@ -807,9 +808,9 @@ const ChannelEdit = ({ match }) => {
                                         </div>
                                         <div className="pl-3" style={{ width: '115px' }}>
                                             <MokaInput
-                                                name="repTitle"
+                                                name="memMemo"
                                                 className="ft-12"
-                                                value={element.repTitle}
+                                                value={element.memMemo}
                                                 onChange={(e) => handleChangeReporters({ e, index })}
                                                 placeholder={`직책`}
                                             />
@@ -832,9 +833,9 @@ const ChannelEdit = ({ match }) => {
                                     <Col xs={12} className="p-0 h-50 d-flex align-items-center">
                                         <Col xs={12}>
                                             <MokaInput
-                                                name="memMemo"
+                                                name="desc"
                                                 className="ft-12"
-                                                value={element.memMemo}
+                                                value={element.desc}
                                                 onChange={(e) => handleChangeReporters({ e, index })}
                                                 placeholder={`설명`}
                                             />

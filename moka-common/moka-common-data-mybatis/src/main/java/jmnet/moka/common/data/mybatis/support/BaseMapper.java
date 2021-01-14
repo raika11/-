@@ -222,9 +222,21 @@ public interface BaseMapper<T, P> {
      * </pre>
      *
      * @param id
-     * @return Map<String, Object>
+     * @return List<List < Object>>
      * @throws RuntimeException
      */
     List<List<Object>> findByIdForMapList(Object id)
+            throws RuntimeException;
+
+    /**
+     * <pre>
+     * 조회 조건에 해당하는 Map 데이타 조회
+     * </pre>
+     *
+     * @param param
+     * @return List<List < Object>>
+     * @throws RuntimeException
+     */
+    List<List<T>> findByParamForMapList(P param)
             throws RuntimeException;
 }

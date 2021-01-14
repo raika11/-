@@ -1,6 +1,11 @@
 package jmnet.moka.core.tps.mvc.poll.code;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import jmnet.moka.common.data.mybatis.support.EnumCode;
+import jmnet.moka.common.utils.MapBuilder;
 
 /**
  * <pre>
@@ -101,6 +106,41 @@ public final class PollCode {
 
         public String getName() {
             return name;
+        }
+    }
+
+
+    public enum PollStatCode implements EnumCode {
+        A("A", "전체결과 - PIE차트 형태"),
+        D("D", "Daily - Stack 히스토그램"),
+        T("T", "Target Device - Stack 히스토그램");
+
+        private String code;
+        private String name;
+
+        PollStatCode(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static List<Map<String, Object>> toList() {
+
+            return Arrays
+                    .stream(PollStatCode.values())
+                    .map(code -> MapBuilder
+                            .getInstance()
+                            .add("code", code.code)
+                            .add("name", code.name)
+                            .getMap())
+                    .collect(Collectors.toList());
         }
     }
 }

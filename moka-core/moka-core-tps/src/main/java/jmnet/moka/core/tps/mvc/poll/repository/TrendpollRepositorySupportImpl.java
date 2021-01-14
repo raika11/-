@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.poll.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -9,11 +10,13 @@ import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.QTrendpoll;
 import jmnet.moka.core.tps.mvc.poll.entity.QTrendpollItem;
+import jmnet.moka.core.tps.mvc.poll.entity.QTrendpollRelate;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -105,7 +108,39 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
     }
 
     @Override
+    @Transactional
     public long updateTrendpollStatus(Long pollSeq, PollStatusCode status) {
-        return 0;
+        QTrendpoll trendpoll = QTrendpoll.trendpoll;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(trendpoll.pollSeq.eq(pollSeq));
+        return update(trendpoll)
+                .set(trendpoll.status, status)
+                .where(builder)
+                .execute();
+    }
+
+    @Override
+    @Transactional
+    public long deleteItemByPollSeq(Long pollSeq) {
+        QTrendpollItem trendpollItem = QTrendpollItem.trendpollItem;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(trendpollItem.pollSeq.eq(pollSeq));
+        return delete(trendpollItem)
+                .where(builder)
+                .execute();
+    }
+
+    @Override
+    @Transactional
+    public long deleteContentsByPollSeq(Long pollSeq) {
+        QTrendpollRelate trendpollRelate = QTrendpollRelate.trendpollRelate;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(trendpollRelate.pollSeq.eq(pollSeq));
+        return delete(trendpollRelate)
+                .where(builder)
+                .execute();
     }
 }

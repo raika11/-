@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollDivCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollTypeCode;
@@ -17,7 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 투표
@@ -155,8 +155,8 @@ public class TrendpollDTO implements Serializable {
     @ApiModelProperty(value = "제목")
     private String title;
 
-    @DateTimeFormat
     @ApiModelProperty(value = "등록일시", hidden = true)
+    @DTODateTimeFormat
     private Date regDt;
 
 }

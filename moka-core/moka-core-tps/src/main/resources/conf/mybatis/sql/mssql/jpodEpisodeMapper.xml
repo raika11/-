@@ -14,7 +14,7 @@
 
   <delete id="deleteAllMember" parameterType="JpodEpisodeVO"
     statementType="CALLABLE">
-    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_MEMEBER_DEL(
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_JPOD_MEMBER_DEL(
     #{chnlSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{epsdSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
     )}

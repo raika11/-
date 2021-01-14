@@ -115,7 +115,6 @@ const EditThumbModal = (props) => {
      * 카드의 이미지 편집 버튼 클릭
      */
     const handleEditClick = () => {
-        console.log(repPhoto);
         imageEditer.create(
             repPhoto.imageOnlnPath ? repPhoto.imageOnlnPath : repPhoto.thumbPath,
             (imageSrc) => {

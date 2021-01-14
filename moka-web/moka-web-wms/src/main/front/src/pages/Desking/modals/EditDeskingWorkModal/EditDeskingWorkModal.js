@@ -173,7 +173,6 @@ const EditDeskingWorkModal = (props) => {
     }, []);
 
     const handleEditClick = () => {
-        console.log(temp, deskingWorkData);
         imageEditer.create(
             temp.thumbFileName,
             (imageSrc) => {

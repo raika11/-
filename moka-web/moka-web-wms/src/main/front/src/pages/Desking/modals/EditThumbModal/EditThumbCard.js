@@ -276,7 +276,6 @@ const EditThumbCard = forwardRef((props, ref) => {
                                         className="border-0 p-0 moka-table-button"
                                         style={{ position: 'absolute', bottom: '5px', right: '5px', opacity: '0.8' }}
                                         onClick={(e) => {
-                                            console.log(data);
                                             onEditClick(data);
                                         }}
                                     >

@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaSearchInput } from '@components';
-import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
+import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist, clearStore } from '@store/columnist';
 
 const ColumnistDeskSearch = (props) => {
     const { show } = props;
@@ -66,6 +66,8 @@ const ColumnistDeskSearch = (props) => {
     useEffect(() => {
         if (show) {
             dispatch(getColumnistList());
+        } else {
+            dispatch(clearStore());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);

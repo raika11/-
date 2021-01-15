@@ -473,7 +473,11 @@ const DeskingWorkAgGrid = (props) => {
                     setNextNode(null);
                     setDraggingNodeData(null);
                 } else {
-                    params.api.refreshCells();
+                    params.api.redrawRows();
+                    // params.api.refreshCells({
+                    //     columns: ['relOrdEx', 'checkbox', 'relTitle', 'contentOrdEx', 'irThumbFileName', 'title'],
+                    //     force: true,
+                    // });
                     params.api.resetRowHeights();
                 }
             });
@@ -520,22 +524,18 @@ const DeskingWorkAgGrid = (props) => {
                         setOnTitle(true);
                     }
                 },
-                onDragLeave: (source) => {
-                    clearWorkStyle(workElement);
-                    setOnTitle(false);
-                    if (source.type === 'rowDragEnd') {
+                onDragLeave: () => {
+                    if (!draggingNodeData) {
+                        clearWorkStyle(workElement);
                         if (workElement.querySelector('.is-over')) {
                             workElement.removeChild(hoverBox);
                         }
-                    } else {
-                        if (workElement.contains(hoverBox)) {
-                            workElement.removeChild(hoverBox);
-                        }
                     }
+                    setOnTitle(false);
                 },
                 onDragStop: (source) => {
-                    if (!source.node.data.rel) {
-                        // 주기사만 가능
+                    if (!source.node.data.rel && source.node.childIndex > 0) {
+                        // 주기사이고 첫번째 기사 아닌 것만 이동
                         let displayedRows = [];
 
                         for (let i = 0; i < params.api.getDisplayedRowCount(); i++) {
@@ -553,14 +553,15 @@ const DeskingWorkAgGrid = (props) => {
                                 callback: () => params.api.deselectAll(),
                             }),
                         );
-                        dropzone.onDragLeave(source);
                     }
+                    source.api.deselectAll();
+                    dropzone.onDragLeave(source);
                 },
             };
             params.api.removeRowDropZone(dropzone);
             params.api.addRowDropZone(dropzone);
         },
-        [agGridIndex, component.datasetSeq, component.seq, componentAgGridInstances, dispatch, mainToMain, setComponentAgGridInstances],
+        [agGridIndex, component.datasetSeq, component.seq, componentAgGridInstances, dispatch, draggingNodeData, mainToMain, setComponentAgGridInstances],
     );
 
     return (

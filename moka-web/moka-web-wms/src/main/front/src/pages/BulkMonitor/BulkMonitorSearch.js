@@ -11,6 +11,7 @@ import { SourceSelector } from '@pages/commons';
  */
 const BulkMonitorSearch = () => {
     const [search, setSearch] = useState();
+    const [sourceList, setSourceList] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [searchType, setSearchType] = useState('');
@@ -22,7 +23,7 @@ const BulkMonitorSearch = () => {
             <Form>
                 <Form.Row>
                     <div className="d-flex align-items-center">
-                        <SourceSelector className="mr-2" />
+                        <SourceSelector className="mr-2" value={sourceList} sourceType="BULK" onChange={(value) => setSourceList(value)} />
 
                         {/* 시작일 종료일 */}
                         <div style={{ width: 150 }}>

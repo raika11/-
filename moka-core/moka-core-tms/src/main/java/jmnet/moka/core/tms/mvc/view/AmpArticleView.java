@@ -105,6 +105,9 @@ public class AmpArticleView extends AbstractView {
                 cached = this.cacheManager.get(cacheType, cacheKey);
                 if ( cached != null) { // cache가 있을 경우
                     writeArticle(request, response, cached);
+                    actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                            System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
+                            articleId);
                     return;
                 }
             }

@@ -69,7 +69,7 @@ const ComponentWorkPreview = ({ show }) => {
         <div className="px-card py-20 position-relative">
             {loading && <MokaLoader />}
             <div className="d-flex align-items-center justify-content-between mb-2" style={{ height: 30 }}>
-                <p className="h5 mb-0">미리보기</p>
+                <h2 className="mb-0">미리보기</h2>
                 <Button variant="outline-neutral" onClick={handleClickPreview} disabled={!area.page}>
                     전체화면으로 보기
                 </Button>

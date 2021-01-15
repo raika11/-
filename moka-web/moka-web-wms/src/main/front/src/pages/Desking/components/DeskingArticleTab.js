@@ -2,14 +2,19 @@ import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
-import ArticleColumnistList from '@/pages/Columnist/components/ArticleColumnistList';
+import { ReporterDeskList } from '@/pages/Reporter/components';
+import { ColumnistDeskList } from '@/pages/Columnist/components';
 import { deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
 
+/**
+ * 페이지편집 > 기사보기
+ */
 const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances, show } = props;
     const dispatch = useDispatch();
     const area = useSelector((store) => store.desking.area);
+    const selectedComponent = useSelector((store) => store.desking.selectedComponent);
     const isNaverChannel = useSelector((store) => store.desking.isNaverChannel);
 
     // state
@@ -19,6 +24,7 @@ const DeskingArticleTab = (props) => {
     // ref
     const articleRef = useRef(null);
     const mediaRef = useRef(null);
+    const reporterRef = useRef(null);
     const columnistRef = useRef(null);
 
     /**
@@ -60,7 +66,7 @@ const DeskingArticleTab = (props) => {
                     <ArticleDeskList
                         className="pb-3"
                         ref={articleRef}
-                        selectedComponent={{}}
+                        selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx && show}
@@ -74,7 +80,7 @@ const DeskingArticleTab = (props) => {
                     <ArticleDeskList
                         className="pb-3"
                         ref={mediaRef}
-                        selectedComponent={{}}
+                        selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
@@ -85,10 +91,23 @@ const DeskingArticleTab = (props) => {
                 );
             }
             // 기자 조회 컴포넌트
+            else if (nav === '기자') {
+                return (
+                    <ReporterDeskList
+                        className="pb-3"
+                        ref={reporterRef}
+                        selectedComponent={{}}
+                        dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
+                        // onDragStop={}
+                        show={navIdx === idx && show}
+                    />
+                );
+            }
             // 칼럼 리스트 컴포넌트
             else if (nav === '칼럼니스트') {
                 return (
-                    <ArticleColumnistList
+                    <ColumnistDeskList
                         className="pb-3"
                         ref={columnistRef}
                         selectedComponent={{}}

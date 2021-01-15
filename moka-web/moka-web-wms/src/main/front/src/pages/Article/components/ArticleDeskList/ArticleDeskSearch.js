@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaInput, MokaSearchInput } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { SourceSelector } from '@pages/commons';
@@ -36,7 +36,7 @@ const ArticleDeskSearch = (props) => {
     const [error, setError] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(null);
-    const [period, setPeriod] = useState([2, 'days']);
+    const [period, setPeriod] = useState([3, 'months']);
 
     /**
      * 입력값 변경
@@ -151,7 +151,7 @@ const ArticleDeskSearch = (props) => {
         dispatch(
             changeSearchOption({
                 ...initialSearch,
-                masterCode: selectedComponent.masterCode || null,
+                masterCode: selectedComponent.schCodeId || null,
                 startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
                 page: 0,
@@ -189,17 +189,15 @@ const ArticleDeskSearch = (props) => {
          * 종료일 : 현재 시간(시분초o) - period 설정 일수
          */
         if (show) {
-            // const date = new Date();
-            // const startServiceDay = search.startServiceDay || moment(date).add(-24, 'hours');
-            // const endServiceDay = search.endServiceDay || moment(date);
-            const startServiceDay = search.startServiceDay ? moment(search.startServiceDay).format(DB_DATEFORMAT) : '2020-08-21 00:00:00';
-            const endServiceDay = search.endServiceDay ? moment(search.endServiceDay).format(DB_DATEFORMAT) : '2020-08-22 00:00:00';
+            const date = new Date();
+            const startServiceDay = search.startServiceDay || moment(date).subtract(period[0], period[1]);
+            const endServiceDay = search.endServiceDay || moment(date);
             let ns = {
                 ...search,
-                masterCode: selectedComponent.masterCode || null,
+                masterCode: selectedComponent.schCodeId || null,
                 sourceList,
-                startServiceDay,
-                endServiceDay,
+                startServiceDay: moment(startServiceDay).format(DB_DATEFORMAT),
+                endServiceDay: moment(endServiceDay).format(DB_DATEFORMAT),
                 contentType: media ? 'M' : null,
                 page: 0,
             };
@@ -213,7 +211,7 @@ const ArticleDeskSearch = (props) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent.masterCode, sourceOn, show]);
+    }, [selectedComponent.schCodeId, sourceOn, show]);
 
     return (
         <Form>

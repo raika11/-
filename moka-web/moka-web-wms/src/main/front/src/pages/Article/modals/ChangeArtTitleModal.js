@@ -82,15 +82,15 @@ const ChangeArtGroupModal = (props) => {
     useEffect(() => {
         if (show) {
             if (artData.artEditTitle && artData.artEditTitle !== '') {
-                setWebTitle(artData.artEditTitle);
+                setWebTitle(unescapeHtml(artData.artEditTitle));
             } else if (artData.artJamTitle && artData.artJamTitle !== '') {
-                setWebTitle(artData.artJamTitle);
+                setWebTitle(unescapeHtml(artData.artJamTitle));
             }
 
             if (artData.artEditMobTitle && artData.artEditMobTitle !== '') {
-                setMobTitle(artData.artEditMobTitle);
+                setMobTitle(unescapeHtml(artData.artEditMobTitle));
             } else if (artData.artJamMobTitle && artData.artJamMobTitle !== '') {
-                setMobTitle(artData.artJamMobTitle);
+                setMobTitle(unescapeHtml(artData.artJamMobTitle));
             }
         }
     }, [show, artData]);

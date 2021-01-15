@@ -81,8 +81,8 @@ const propTypes = {
     dragManaged: PropTypes.bool,
     onRowDragMove: PropTypes.func,
     onRowDragEnd: PropTypes.func,
-    frameworkComponents: PropTypes.object,
     animateRows: PropTypes.bool,
+    frameworkComponents: PropTypes.object,
     /**
      * 쓰는 곳에서 grid Instance를 state로 관리할 때, gridReady시 state 변경
      */
@@ -92,7 +92,13 @@ const propTypes = {
      * @default
      */
     suppressRefreshCellAfterUpdate: PropTypes.bool,
+    /**
+     * ag-grid onRowDataUpdated
+     */
     onRowDataUpdated: PropTypes.func,
+    /**
+     * onRowDataUpdated 후 refreshCells 호출 시 전달하는 params
+     */
     refreshCellsParams: PropTypes.shape({
         rowNodes: PropTypes.array,
         columns: PropTypes.array,
@@ -125,6 +131,7 @@ const defaultProps = {
  */
 const rowClassRules = {
     'usedyn-n': (params) => params.data.usedYn === 'N',
+    'deskingyn-y': (params) => params.data.deskingYn === 'Y',
 };
 
 /**

@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect, forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
-import columnDefs from './ArticleColumnistAgGridColumns';
+import columnDefs from './ColumnistDeskAgGridColumns';
 import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store/columnist';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
-const ArticleColumnistAgGrid = forwardRef((props, ref) => {
+const ColumnistDeskAgGrid = forwardRef((props, ref) => {
     const { onDragStop, dropTargetAgGrid } = props;
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
@@ -73,4 +73,4 @@ const ArticleColumnistAgGrid = forwardRef((props, ref) => {
     );
 });
 
-export default ArticleColumnistAgGrid;
+export default ColumnistDeskAgGrid;

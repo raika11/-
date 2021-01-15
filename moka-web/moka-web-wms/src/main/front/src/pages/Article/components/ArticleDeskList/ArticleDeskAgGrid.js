@@ -84,7 +84,8 @@ const ArticleDeskAgGrid = forwardRef((props, ref) => {
 
                 // 면판 replace
                 let myunPan = '';
-                if (art.pressMyun && art.pressMyun.replace(/\s/g, '') !== '') myunPan = `${art.pressMyun}/${art.pressPan}`;
+                // if (art.pressMyun && art.pressMyun.replace(/\s/g, '') !== '') myunPan = `${art.pressMyun}/${art.pressPan}`;
+                myunPan = `${art.pressMyun || ''}/${art.pressPan || ''}`;
 
                 // 출고시간/수정시간 replace
                 let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');

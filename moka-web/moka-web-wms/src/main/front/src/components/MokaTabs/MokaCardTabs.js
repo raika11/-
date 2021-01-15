@@ -72,20 +72,20 @@ const MokaCardTabs = (props) => {
     };
 
     return (
-        <div className={clsx('tab', 'card-tab', 'flex-fill', className)} style={{ width, height }}>
+        <div className={clsx('tab card-tab flex-fill', className)} style={{ width, height }}>
             <Tab.Container id={id} defaultActiveKey={0}>
                 <div className="d-flex px-card">
                     <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
                         {tabNavs.map((nav, idx) => (
                             <Nav.Item key={idx}>
-                                <Nav.Link eventKey={idx} className="h5">
+                                <Nav.Link eventKey={idx} className="h4">
                                     {nav}
                                 </Nav.Link>
                             </Nav.Item>
                         ))}
                     </Nav>
                 </div>
-                <div className={clsx('d-flex', 'custom-scroll', tabContentWrapperClassName)}>
+                <div className={clsx('d-flex custom-scroll', tabContentWrapperClassName)}>
                     <Tab.Content className={clsx('p-0', tabContentClass)}>
                         {tabs.map((tab, idx) => (
                             <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">

@@ -28,6 +28,7 @@ const DeskingWorkAgGrid = (props) => {
     const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
     const [nextNode, setNextNode] = useState(null);
+    const [onTitle, setOnTitle] = useState(false);
     const [draggingNodeData, setDraggingNodeData] = useState(null);
 
     useEffect(() => {
@@ -386,15 +387,17 @@ const DeskingWorkAgGrid = (props) => {
         (params) => {
             clearHoverStyle(hoverNode);
             clearNextStyle(nextNode);
-            const workElement = findWork(params.api.gridOptionsWrapper.layoutElements[0]);
-            if (!workElement) return null;
-            if (workElement.classList.contains('disabled')) return null;
-            if (workElement.contains(hoverBox)) {
-                workElement.removeChild(hoverBox);
-                clearWorkStyle(workElement);
+            if (!onTitle) {
+                const workElement = findWork(params.api.gridOptionsWrapper.layoutElements[0]);
+                if (!workElement) return;
+                if (workElement.classList.contains('disabled')) return;
+                if (workElement.contains(hoverBox)) {
+                    workElement.removeChild(hoverBox);
+                    clearWorkStyle(workElement);
+                }
             }
         },
-        [hoverNode, nextNode],
+        [hoverNode, nextNode, onTitle],
     );
 
     /**
@@ -470,7 +473,7 @@ const DeskingWorkAgGrid = (props) => {
                     setNextNode(null);
                     setDraggingNodeData(null);
                 } else {
-                    params.api.redrawRows();
+                    params.api.refreshCells();
                     params.api.resetRowHeights();
                 }
             });
@@ -514,10 +517,12 @@ const DeskingWorkAgGrid = (props) => {
                             workElement.appendChild(hoverBox);
                         }
                         workElement.classList.add('hover');
+                        setOnTitle(true);
                     }
                 },
                 onDragLeave: (source) => {
                     clearWorkStyle(workElement);
+                    setOnTitle(false);
                     if (source.type === 'rowDragEnd') {
                         if (workElement.querySelector('.is-over')) {
                             workElement.removeChild(hoverBox);

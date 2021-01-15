@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaSearchInput } from '@components';
-import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
+import { initialState, getColumnistList, changeSearchOption, clearSearchOption } from '@store/columnist';
 
 const ColumnistDeskSearch = (props) => {
     const { show } = props;
@@ -51,12 +51,6 @@ const ColumnistDeskSearch = (props) => {
         [dispatch, search],
     );
 
-    // 신규등록 버튼 처리.
-    const handleNewColumnlist = () => {
-        // dispatch(clearColumnist());
-        // history.push(`${match.path}/add`);
-    };
-
     // 검색 스토어 연결.
     useEffect(() => {
         setSearch(storeSearch);
@@ -95,10 +89,6 @@ const ColumnistDeskSearch = (props) => {
                 {/* 초기화 버튼 */}
                 <Button variant="negative" onClick={handleSearchReset} className="mr-2 flex-shrink-0">
                     초기화
-                </Button>
-
-                <Button variant="positive" onClick={handleNewColumnlist} className="flex-shrink-0">
-                    신규등록
                 </Button>
             </Col>
         </Form.Row>

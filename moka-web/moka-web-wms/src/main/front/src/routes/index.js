@@ -47,6 +47,7 @@ const SearchLog = React.lazy(() => import('@pages/Search/SearchLog'));
 const JpodChannel = React.lazy(() => import('@pages/Jpod/JpodChannel'));
 const JpodEpisode = React.lazy(() => import('@pages/Jpod/JpodEpisode'));
 const SystemLog = React.lazy(() => import('@pages/SystemLog'));
+const BulkMonitor = React.lazy(() => import('@pages/BulkMonitor'));
 
 const routes = [
     {
@@ -595,6 +596,16 @@ const routes = [
         name: 'system-log',
         displayName: '로그 관리',
         component: SystemLog,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/bulk-monitor-ja',
+        name: 'bulk-monitor-ja',
+        displayName: '벌크 모니터링',
+        component: BulkMonitor,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

@@ -6,7 +6,8 @@ import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaSearchInput } from '@components';
 import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
 
-const ArticleColumnistSearch = () => {
+const ColumnistDeskSearch = (props) => {
+    const { show } = props;
     const dispatch = useDispatch();
 
     // store
@@ -63,10 +64,11 @@ const ArticleColumnistSearch = () => {
 
     // 최초 로딩.
     useEffect(() => {
-        // 첫화면 로딩 시 리스트 조회
-        dispatch(getColumnistList());
+        if (show) {
+            dispatch(getColumnistList());
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [show]);
 
     return (
         <Form.Row className="mb-3">
@@ -103,4 +105,4 @@ const ArticleColumnistSearch = () => {
     );
 };
 
-export default ArticleColumnistSearch;
+export default ColumnistDeskSearch;

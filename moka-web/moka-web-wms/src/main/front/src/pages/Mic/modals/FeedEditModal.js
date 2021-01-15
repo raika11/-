@@ -48,7 +48,6 @@ const FeedEditModal = (props) => {
             <Form>
                 <MokaInputLabel
                     label="사용여부"
-                    labelClassName="d-flex justify-content-end"
                     className="mb-2"
                     id="mic-feed-usedYn"
                     as="switch"
@@ -64,14 +63,7 @@ const FeedEditModal = (props) => {
                 />
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel
-                            label="피드타입"
-                            labelClassName="d-flex justify-content-end"
-                            as="select"
-                            name="feedType"
-                            value={feedType}
-                            onChange={(e) => setFeedType(e.target.value)}
-                        >
+                        <MokaInputLabel label="피드타입" as="select" name="feedType" value={feedType} onChange={(e) => setFeedType(e.target.value)}>
                             <option value="">단문</option>
                             <option value="I">이미지</option>
                             <option value="M">동영상</option>
@@ -79,10 +71,9 @@ const FeedEditModal = (props) => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
-                <MokaInputLabel label="제목" labelClassName="d-flex justify-content-end" className="mb-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <MokaInputLabel label="제목" className="mb-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <MokaInputLabel
                     label="내용"
-                    labelClassName="d-flex justify-content-end"
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 3 }}

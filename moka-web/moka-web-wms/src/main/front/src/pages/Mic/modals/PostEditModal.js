@@ -44,7 +44,6 @@ const PostEditModal = (props) => {
             <Form>
                 <MokaInputLabel
                     label="작성자"
-                    labelClassName="d-flex justify-content-end"
                     className="mb-2"
                     name="writer"
                     inputProps={{ plaintext: true, readOnly: true }}
@@ -53,7 +52,6 @@ const PostEditModal = (props) => {
                 />
                 <MokaInputLabel
                     label="단문"
-                    labelClassName="d-flex justify-content-end"
                     inputClassName="resize-none"
                     className="mb-2"
                     as="textarea"
@@ -62,18 +60,10 @@ const PostEditModal = (props) => {
                     value={post}
                     onChange={(e) => setPost(e.target.value)}
                 />
-                <MokaInputLabel label="페이지 URL" labelClassName="d-flex justify-content-end" className="mb-2" name="url" value={url} onChange={(e) => setUrl(e.target.value)} />
-                <MokaInputLabel
-                    label="페이지 제목"
-                    labelClassName="d-flex justify-content-end"
-                    className="mb-2"
-                    name="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+                <MokaInputLabel label="페이지 URL" className="mb-2" name="url" value={url} onChange={(e) => setUrl(e.target.value)} />
+                <MokaInputLabel label="페이지 제목" className="mb-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <MokaInputLabel
                     label="페이지 요약"
-                    labelClassName="d-flex justify-content-end"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -83,14 +73,7 @@ const PostEditModal = (props) => {
                     onChange={(e) => setSum(e.target.value)}
                 />
                 <Form.Row className="align-items-center">
-                    <MokaInputLabel
-                        label="페이지 이미지"
-                        labelClassName="d-flex justify-content-end"
-                        className="mr-2 flex-fill"
-                        name="image"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                    />
+                    <MokaInputLabel label="페이지 이미지" className="mr-2 flex-fill" name="image" value={image} onChange={(e) => setImage(e.target.value)} />
                     <div>
                         <ImageUploadButton text="업로드" fileUrl={(url) => setImage(url)} className="mr-2" />
                         <Button variant="negative">삭제</Button>

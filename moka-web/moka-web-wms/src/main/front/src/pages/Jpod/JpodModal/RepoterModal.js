@@ -11,13 +11,13 @@ const RepoterModal = (props) => {
     const dispatch = useDispatch();
 
     const { total, list, search, loading } = useSelector((store) => ({
-        total: store.jpod.channel.reporter.total,
-        list: store.jpod.channel.reporter.list,
-        search: store.jpod.channel.reporter.search,
+        total: store.jpod.reporter.total,
+        list: store.jpod.reporter.list,
+        search: store.jpod.reporter.search,
         loading: store.loading[GET_REPORTER_LIST],
     }));
 
-    const { show, onHide } = props;
+    const { show, onHide, selectType } = props;
     const [rowData, setRowData] = useState([]);
 
     const [searchData, setSearchData] = useState(search);
@@ -69,6 +69,7 @@ const RepoterModal = (props) => {
                     return {
                         // 스토어에 넘겨줄 데이터들.
                         repoterInfo: {
+                            selectType: selectType,
                             memRepSeq: element.repSeq,
                             joinsId: element.joinsId,
                             memNm: element.repName,
@@ -91,7 +92,7 @@ const RepoterModal = (props) => {
         if (list) {
             initGridRow(list);
         }
-    }, [list]);
+    }, [list, selectType]);
 
     // 모달창이 열리면 목록 가져 오기.
     useEffect(() => {

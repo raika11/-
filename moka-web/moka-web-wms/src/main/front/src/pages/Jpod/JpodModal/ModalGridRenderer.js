@@ -25,8 +25,8 @@ export const RepoterAddButtonRenderer = ({ repoterInfo }) => {
 
     const handleClickButton = () => {
         dispatch(selectReporter(repoterInfo));
-        dispatch(selectReporter(repoterInfo));
     };
+
     return (
         <>
             <Col className="pt-2">

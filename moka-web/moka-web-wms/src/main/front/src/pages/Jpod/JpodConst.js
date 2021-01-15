@@ -1,10 +1,6 @@
 export const selectItem = {
     usedYn: [
         {
-            value: '',
-            name: '전체',
-        },
-        {
             value: 'Y',
             name: '사용',
         },
@@ -14,7 +10,6 @@ export const selectItem = {
         },
     ],
 };
-
 export const tempChannelList = {
     size: 20,
     total: 4,
@@ -142,6 +137,44 @@ export const tempRepoterList = {
             belong: '편집국',
             repTitle: `논설위원`,
             repEmail: `test@test.com`,
+        },
+    ],
+};
+
+export const tempPodCastList = {
+    size: 20,
+    total: 4,
+    page: 1,
+    list: [
+        {
+            seq: 1101,
+            title: `Going around like a revolving door`,
+            status: 'Y',
+            regDt: '2021-01-15 09:09:00',
+        },
+        {
+            seq: 1100,
+            title: `A dearth of hum...`,
+            status: 'Y',
+            regDt: '2021-01-15 09:09:00',
+        },
+        {
+            seq: 1199,
+            title: `0611`,
+            status: 'Y',
+            regDt: '2021-01-15 09:09:00',
+        },
+        {
+            seq: 1198,
+            title: `0526`,
+            status: 'Y',
+            regDt: '2021-01-15 09:09:00',
+        },
+        {
+            seq: 1197,
+            title: `0602`,
+            status: 'N',
+            regDt: '2021-01-15 09:09:00',
         },
     ],
 };

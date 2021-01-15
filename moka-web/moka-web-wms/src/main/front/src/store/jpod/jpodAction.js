@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
 
-export const CLEAR_STORE = 'board/CLEAR_STORE';
+export const CLEAR_STORE = 'jpod/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
 // 진행자 검색 모달
@@ -22,7 +22,18 @@ export const getChannelPodtyList = createAction(GET_CHANNEL_PODTY_LIST, (actions
 export const SELECT_CHANNEL_PODTY = 'jpod/SELECT_CHANNEL_PODTY';
 export const selectChannelPodty = createAction(SELECT_CHANNEL_PODTY, (actions) => actions);
 
-// 채널
+// 팟티 에피소드 모달
+export const CLEAR_PODTY_EPISODE = 'jpod/CLEAR_PODTY_EPISODE';
+export const clearPodtyEpisode = createAction(CLEAR_PODTY_EPISODE);
+export const CHANGE_PODTY_EPISODE_CASTSRL = 'jpod/CHANGE_PODTY_EPISODE_CASTSRL';
+export const changePodtyEpisodeCastsrl = createAction(CHANGE_PODTY_EPISODE_CASTSRL, (actions) => actions);
+export const [GET_PODTY_EPISODE_LIST, GET_PODTY_EPISODE_LIST_SUCCESS, GET_PODTY_EPISODE_LIST_FAILURE] = createRequestActionTypes('jpod/GET_PODTY_EPISODE_LIST');
+export const getPodtyEpisodeList = createAction(GET_PODTY_EPISODE_LIST, (actions) => actions);
+export const SELECT_PODTY_EPISODE = 'jpod/SELECT_PODTY_EPISODE';
+export const selectPodtyEpisode = createAction(SELECT_PODTY_EPISODE, (actions) => actions);
+
+/* 채널 */
+// 채널 리셋.
 export const CLEAR_CHANNELS = 'jpod/CLEAR_CHANNELS';
 export const clearChannels = createAction(CLEAR_CHANNELS);
 
@@ -47,3 +58,27 @@ export const saveJpodChannel = createAction(SAVE_JPOD_CHANNEL, ({ chnlSeq, chann
 // 채널 삭제.
 export const [DELETE_JPOD_CHANNEL] = createRequestActionTypes('jpod/DELETE_JPOD_CHANNEL');
 export const deleteJpodChannel = createAction(DELETE_JPOD_CHANNEL, ({ chnlSeq, callback }) => ({ chnlSeq, callback }));
+
+/* 에피소드 */
+export const CLEAR_EPISODE = 'jpod/CLEAR_EPISODE';
+export const clearEpisode = createAction(CLEAR_EPISODE);
+
+// 검색 옵션 처리.
+export const CHANGE_EPISODES_SEARCH_OPTION = 'jpod/CHANGE_EPISODES_SEARCH_OPTION';
+export const changeEpisodesSearchOption = createAction(CHANGE_EPISODES_SEARCH_OPTION, (actions) => actions);
+
+// 채널 리스트 가지고 오기. ( 등록, 수정, 검색등에 사용.)
+export const [GET_EPISODE_JPOD_CHANNELS, GET_EPISODE_JPOD_CHANNELS_SUCCESS, GET_EPISODE_JPOD_CHANNELS_FAILURE] = createRequestActionTypes('jpod/GET_EPISODE_JPOD_CHANNELS');
+export const getEpisodeJpodChannels = createAction(GET_EPISODE_JPOD_CHANNELS, (actions) => actions);
+
+// 에피소드 목록 가지고 오기.
+export const [GET_EPISODES, GET_EPISODES_SUCCESS, GET_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES');
+export const getEpisodes = createAction(GET_EPISODES, (actions) => actions);
+
+// 에피소드 정보 초기화.
+export const CLEAR_EPISODE_INFO = 'jpod/CLEAR_EPISODE_INFO';
+export const clearEpisodeInfo = createAction(CLEAR_EPISODE_INFO);
+
+// 에피소드 정보 가지고 오기.
+export const [GET_EPISODES_INFO, GET_EPISODES_INFO_SUCCESS, GET_EPISODES_INFO_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES_INFO');
+export const getEpisodesInfo = createAction(GET_EPISODES_INFO, ({ chnlSeq, epsdSeq }) => ({ chnlSeq, epsdSeq }));

@@ -4,14 +4,12 @@ import { Switch, Route } from 'react-router-dom';
 import { MokaLoader } from '@components';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/jpod';
-import { useParams, useHistory } from 'react-router-dom';
 
 const ChannelList = React.lazy(() => import('./Channel/ChannelList'));
 const ChannelEdit = React.lazy(() => import('./Channel/ChannelEdit'));
 
 const JpodChannel = ({ match }) => {
     const dispatch = useDispatch();
-    const params = useParams();
 
     useEffect(() => {
         return () => {
@@ -23,7 +21,7 @@ const JpodChannel = ({ match }) => {
         <div className="d-flex">
             <Helmet>
                 <title>채널 관리</title>
-                <meta name="description" content="Jpod - 채널 관리페이지입니다." />
+                <meta name="description" content="채널 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 

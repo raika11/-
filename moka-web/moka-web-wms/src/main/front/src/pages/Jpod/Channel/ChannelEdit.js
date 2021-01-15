@@ -32,9 +32,9 @@ const ChannelEdit = ({ match }) => {
     const [Mobfile, setMobfile] = useState(null); // 선택한 모바일용 이미지 스테이트
 
     // 스토어 연결.
-    const { selectReporter, selectPodty, loading, channelInfo } = useSelector((store) => ({
-        selectReporter: store.jpod.channel.selectReporter,
-        selectPodty: store.jpod.channel.selectPodty,
+    const { selectReporter, selectPodtyChannel, loading, channelInfo } = useSelector((store) => ({
+        selectReporter: store.jpod.selectReporter,
+        selectPodtyChannel: store.jpod.selectPodtyChannel,
         channelInfo: store.jpod.channel.channelInfo,
         loading: store.loading[GET_REPORTER_LIST],
     }));
@@ -410,8 +410,8 @@ const ChannelEdit = ({ match }) => {
     // 팟티 검색 모달 창에서 팟티가 선택이 되면 스토어에 등록후 스토어가 업데이트가 되면
     // 해당값을 스테이트에 등록.
     useEffect(() => {
-        if (selectPodty && selectPodty.castSrl) {
-            const { castSrl, shareUrl } = selectPodty;
+        if (selectPodtyChannel && selectPodtyChannel.castSrl) {
+            const { castSrl, shareUrl } = selectPodtyChannel;
             setEditData({
                 ...editData,
                 podtyChnlSrl: castSrl,
@@ -420,7 +420,7 @@ const ChannelEdit = ({ match }) => {
         }
         // 팟티가 선택되었을 경우만 실행.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectPodty]);
+    }, [selectPodtyChannel]);
 
     // 그리드에서 리스트 클릭후 스토어 업데이트 되었을떄.
     useEffect(() => {
@@ -1023,6 +1023,7 @@ const ChannelEdit = ({ match }) => {
             {/* 진행자(기자) 검색 모달 창. */}
             <RepoterModal
                 show={repoterModalState}
+                selectType={`CM`}
                 onHide={() => {
                     setRepoterModalState(false);
                 }}

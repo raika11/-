@@ -113,7 +113,7 @@ const Dashboard = () => {
                     buttons={[
                         {
                             variant: 'white',
-                            icon: <MokaIcon iconName="fal-coffee" />,
+                            icon: <MokaIcon iconName="fas-info-circle" />,
                             onClick: () => {
                                 toast.success('성공하였습니다');
                             },
@@ -392,13 +392,13 @@ const Dashboard = () => {
                         <Form className="py-3 px-card h-100 custom-scroll">
                             {/* Form 예제 */}
                             {/* text input */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>1) 기본 텍스트 인풋</Form.Label>
                                 <Form.Control placeholder="입력창입니다" />
                             </Form.Group>
 
                             {/* inline text input */}
-                            <Form.Group as={Row}>
+                            <Form.Group as={Row} className="mb-2">
                                 <Col xs={2} className="p-0 pr-2">
                                     <Form.Label>* 인라인1</Form.Label>
                                 </Col>
@@ -417,13 +417,13 @@ const Dashboard = () => {
                             </Form.Row>
 
                             {/* textarea */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>2) Textarea</Form.Label>
                                 <Form.Control as="textarea" />
                             </Form.Group>
 
                             {/* select */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>3) Select</Form.Label>
                                 <Form.Control as="select" className="mb-1">
                                     <option value="">기본 셀렉트</option>
@@ -439,7 +439,7 @@ const Dashboard = () => {
                             </Form.Group>
 
                             {/* checkbox */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>4) Checkbox</Form.Label>
                                 <Form.Check label="default checkbox" type="checkbox" name="checkbox-test" />
                                 <Form.Check label="default checkbox2" type="checkbox" name="checkbox-test" checked={checked} onChange={() => setChecked(!checked)} />
@@ -447,7 +447,7 @@ const Dashboard = () => {
                             </Form.Group>
 
                             {/* radiobutton */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>5) Radiobutton</Form.Label>
                                 <Form.Check type="radio" label="default radio" name="radio" />
                                 <Form.Check type="radio" label="default radio2" name="radio" />
@@ -455,26 +455,26 @@ const Dashboard = () => {
                             </Form.Group>
 
                             {/* Switch */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>6) Switch (기본이 custom)</Form.Label>
                                 <Form.Check type="switch" label="default check" id="custom-switch" />
                                 <Form.Check type="switch" label="default check" id="d-custom-switch" disabled />
                             </Form.Group>
 
                             {/* File */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>7) 파일</Form.Label>
                                 <Form.File id="custom-file" label="Custom file input" custom />
                             </Form.Group>
 
                             {/* Input Mask */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>8) InputMask</Form.Label>
                                 <InputMask mask="(999) 9999-9999">{(inputProps) => <Form.Control {...inputProps} />}</InputMask>
                             </Form.Group>
 
                             {/* 달력 */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>9) Datetime picker</Form.Label>
                                 <MokaDateTimePicker className="mb-3" placeholder="날짜를 선택해주세요" />
                                 <MokaDateTimePicker className="mb-3" dateFormat={false} />
@@ -482,7 +482,7 @@ const Dashboard = () => {
                             </Form.Group>
 
                             {/* 앞에 뭐 들어가는 input */}
-                            <Form.Group>
+                            <Form.Group className="mb-2">
                                 <Form.Label>10) Input Group</Form.Label>
                                 <MokaPrependLinkInput
                                     className="mb-3"
@@ -751,7 +751,7 @@ const Dashboard = () => {
                     tabNavs={[
                         { title: 'Modal 예제', text: 'Modal' },
                         { title: '이미지drop', text: 'Drop' },
-                        { title: '리스트', icon: <MokaIcon iconName="fal-coffee" /> },
+                        { title: '리스트', icon: <MokaIcon iconName="fas-info-circle" /> },
                     ]}
                 />
             </div>

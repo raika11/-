@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deskingDragStop } from '@store/desking';
-import { addDeskingWorkDropzone } from '@utils/agGridUtil';
+import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import toast from '@utils/toastUtil';
 
 /**

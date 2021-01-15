@@ -4,7 +4,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtml } from '@utils/convertUtil';
-import { addDeskingWorkDropzone } from '@utils/agGridUtil';
+import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import { GET_SERVICE_ARTICLE_LIST, GET_BULK_ARTICLE_LIST, getServiceArticleList, getBulkArticleList, changeBulkSearchOption, changeServiceSearchOption } from '@store/article';
 import columnDefs from './ArticleDeskAgGridColums';
 import GroupNumberRenderer from './GroupNumberRenderer';

@@ -1,6 +1,7 @@
 import { takeLatest, takeEvery, put, call, select } from 'redux-saga/effects';
 import { createRequestSaga, errorResponse } from '@store/commons/saga';
-import { getRowIndex, getMoveMode } from '@utils/agGridUtil';
+import { getRowIndex } from '@utils/agGridUtil';
+import { getMoveMode } from '@utils/deskingUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import * as api from './deskingApi';
 import * as act from './deskingAction';

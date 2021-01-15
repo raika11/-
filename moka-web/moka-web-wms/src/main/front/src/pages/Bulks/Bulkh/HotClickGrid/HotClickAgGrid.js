@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs, rowClassRules } from './HotClickAgGridColumns';
-import { findWork, makeHoverBox, getRow, findNextMainRow } from '@utils/agGridUtil';
+import { getRow } from '@utils/agGridUtil';
+import { findWork, makeHoverBox, findNextMainRow } from '@utils/deskingUtil';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeHotClickList } from '@store/bulks';
 

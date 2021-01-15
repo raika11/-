@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, { useEffect, useState, forwardRef, useCallback } from 'react';
 import clsx from 'clsx';
 import produce from 'immer';
 import PropTypes from 'prop-types';
@@ -140,58 +140,65 @@ const MokaCard = forwardRef((props, ref) => {
     /**
      * 카드 확장
      */
-    const handleExpansion = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handleExpansion = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-        if (onExpansion) {
-            onExpansion(!localExpandState);
-        } else {
-            setLocalExpandState(!localExpandState);
-        }
-    };
+            if (onExpansion) {
+                onExpansion(!localExpandState);
+            } else {
+                setLocalExpandState(!localExpandState);
+            }
+        },
+        [localExpandState, onExpansion],
+    );
 
     /**
      * 헤더의 버튼 생성 함수
      */
-    const createHeaderButtons = (cx) => {
-        const headerButtons = produce(buttons, (draft) => {
-            if (foldable) {
-                draft.push({
-                    variant: 'white',
-                    icon: <MokaIcon iconName="fal-angle-double-left" rotation={localExpandState ? 0 : 180} />,
-                    onClick: handleExpansion,
-                    foldIcon: true,
-                });
-            }
-        });
+    const createHeaderButtons = useCallback(
+        (cx) => {
+            const headerButtons = produce(buttons, (draft) => {
+                if (foldable) {
+                    draft.push({
+                        variant: 'white',
+                        icon: <MokaIcon iconName="fal-angle-double-left" rotation={localExpandState ? 0 : 180} />,
+                        onClick: handleExpansion,
+                        foldIcon: true,
+                    });
+                }
+            });
 
-        if (headerButtons.length > 0) {
-            return (
-                <div className="d-flex absolute-top-right" style={{ marginTop: 17, marginRight: cx ? 4 : 20 }}>
-                    {headerButtons.map((btnProps, idx) => {
-                        const { ref: btnRef, variant: btnVariant, onClick: btnOnClick, text: btnText, icon: btnIcon, className: btnClassName, foldIcon, ...rest } = btnProps;
-                        return (
-                            <Button
-                                key={idx}
-                                ref={btnRef}
-                                variant={btnVariant || 'white'}
-                                className={clsx('p-0 d-flex align-items-center justify-content-center', btnClassName, {
-                                    'd-none': cx && !foldIcon,
-                                    'mr-1': idx < headerButtons.length - 1,
-                                })}
-                                onClick={btnOnClick}
-                                {...rest}
-                            >
-                                {btnIcon || btnText}
-                            </Button>
-                        );
-                    })}
-                </div>
-            );
-        }
-        return null;
-    };
+            if (headerButtons.length > 0) {
+                return (
+                    <div className="d-flex absolute-top-right" style={{ marginTop: 17, marginRight: cx ? 4 : 20 }}>
+                        {headerButtons.map((btnProps, idx) => {
+                            const { ref: btnRef, variant: btnVariant, onClick: btnOnClick, text: btnText, icon: btnIcon, className: btnClassName, foldIcon, ...rest } = btnProps;
+                            return (
+                                <Button
+                                    key={idx}
+                                    ref={btnRef}
+                                    variant={btnVariant || 'white'}
+                                    className={clsx('p-0 align-items-center justify-content-center', btnClassName, {
+                                        'd-flex': !cx,
+                                        'd-none': cx && !foldIcon,
+                                        'mr-1': idx < headerButtons.length - 1,
+                                    })}
+                                    onClick={btnOnClick}
+                                    {...rest}
+                                >
+                                    {btnIcon || btnText}
+                                </Button>
+                            );
+                        })}
+                    </div>
+                );
+            }
+            return null;
+        },
+        [buttons, foldable, handleExpansion, localExpandState],
+    );
 
     return (
         <Card

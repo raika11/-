@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import produce from 'immer';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
@@ -9,8 +9,8 @@ import DeskingEditorRenderer from './DeskingEditorRenderer';
 import { unescapeHtml } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { putDeskingWorkListSort } from '@store/desking';
-import { findWork, makeHoverBox, getRow, getRowIndex, getMoveMode, clearHoverStyle, clearNextStyle, clearWorkStyle, findNextMainRow, addNextRowStyle } from '@utils/agGridUtil';
-import { param } from 'jquery';
+import { getRow, getRowIndex } from '@utils/agGridUtil';
+import { findWork, makeHoverBox, getMoveMode, clearHoverStyle, clearNextStyle, clearWorkStyle, findNextMainRow, addNextRowStyle } from '@utils/deskingUtil';
 
 let hoverBox = makeHoverBox();
 
@@ -21,7 +21,7 @@ const DeskingWorkAgGrid = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete, deskingPart } = props;
     const { deskingWorks } = component;
     const dispatch = useDispatch();
-    const IR_URL = useSelector(({ app }) => app.IR_URL);
+    // const IR_URL = useSelector(({ app }) => app.IR_URL);
 
     // state
     const [rowData, setRowData] = useState([]);

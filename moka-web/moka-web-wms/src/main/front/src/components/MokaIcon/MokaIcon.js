@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 import {
-    faCoffee as falCoffee,
     faAngleDoubleLeft as falAngleDoubleLeft,
     faSearch as falSearch,
     faExpandArrows as falExpandArrows,
@@ -77,7 +76,6 @@ import { faImage as fadImage, faThumbsUp as fadThumbsUp, faThumbsDown as fadThum
 import { faFacebook as fabFacebook, faTwitter as fabTwitter, faFacebookSquare as fabFacebookSquare, faTwitterSquare as fabTwitterSquare } from '@fortawesome/free-brands-svg-icons';
 
 // 아이콘 등록 (fal)
-library.add(falCoffee);
 library.add(falAngleDoubleLeft);
 library.add(falSearch);
 library.add(falExpandArrows);
@@ -178,7 +176,6 @@ const defaultProps = {};
  */
 const MokaIcon = (props) => {
     const { iconName, className, ...rest } = props;
-    // console.log(iconName);
 
     if (typeof iconName === 'string') {
         const prefix = iconName.slice(0, 4);
@@ -196,7 +193,6 @@ const MokaIcon = (props) => {
         } else if (prefix === 'fad-') {
             iconArray = ['fad', rIconName];
         }
-        // console.log(iconArray);
 
         return <FontAwesomeIcon icon={iconArray} className={className} {...rest} />;
     } else if (Array.isArray(iconName)) {

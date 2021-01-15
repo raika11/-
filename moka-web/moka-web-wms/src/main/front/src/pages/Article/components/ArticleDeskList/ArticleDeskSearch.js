@@ -147,12 +147,12 @@ const ArticleDeskSearch = (props) => {
         e.stopPropagation();
 
         const date = new Date();
-
+        setPeriod([2, 'days']);
         dispatch(
             changeSearchOption({
                 ...initialSearch,
                 masterCode: selectedComponent.schCodeId || null,
-                startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
+                startServiceDay: moment(date).subtract(2, 'days').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
                 page: 0,
             }),

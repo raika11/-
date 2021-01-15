@@ -3,6 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
 import columnDefs, { rowData } from './MicAgendaAgGridColumns';
 
+/**
+ * 시민 마이크 아젠다 목록 Ag Grid
+ */
 const MicAgendaAgGrid = () => {
     const history = useHistory();
     const [total] = useState(0);

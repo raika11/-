@@ -1,3 +1,6 @@
+import React from 'react';
+import PostSelectRenderer from './components/PostSelectRenderer';
+
 export default [
     {
         headerName: '번호',
@@ -26,9 +29,9 @@ export default [
     {
         headerName: '상태',
         field: 'state',
-        cellRenderer: 'MicAgGridSelect',
         width: 90,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        cellRendererFramework: (params) => <PostSelectRenderer {...params} />,
     },
     {
         headerName: '등록일',

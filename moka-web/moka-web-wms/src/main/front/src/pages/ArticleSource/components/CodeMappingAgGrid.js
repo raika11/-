@@ -21,7 +21,7 @@ const CodeMappingAgGrid = (props) => {
         <div className="d-flex flex-column">
             {/* 등록 */}
             <div className="mb-2 d-flex justify-content-end">
-                <Button className="ft-12" style={{ borderRadius: '3px 3px 3px 3px' }} variant="outline-table-btn" onClick={handleClickAdd}>
+                <Button style={{ borderRadius: '3px 3px 3px 3px' }} variant="outline-table-btn" onClick={handleClickAdd}>
                     신규 등록
                 </Button>
             </div>

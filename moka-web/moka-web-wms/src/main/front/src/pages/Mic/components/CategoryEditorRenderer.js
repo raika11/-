@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { MokaInput } from '@components';
 
 /**
  * 카테고리 제목 수정
  */
-const CategoryEditorRenderer = (params) => {
-    const { data } = params;
+const CategoryEditorRenderer = forwardRef((params, ref) => {
     // state
-    const [categoryName, setCategoryName] = useState(data.categoryName);
+    const field = params.colDef.field;
+    const data = params.data;
     const [error, setError] = useState(false);
+    const [name, setName] = useState('');
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: () => {
+                return false;
+            },
+        }),
+        [],
+    );
 
     // const validate = () => {
     //     const regex = /[^\s\t\n]+/;
@@ -22,7 +33,21 @@ const CategoryEditorRenderer = (params) => {
     //     return true;
     // };
 
-    return <MokaInput className="ft-12" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} isInvalid={error} />;
-};
+    const handleChangeValue = (e) => {
+        setName(e.target.value);
+    };
+
+    const handleBlur = (e) => {
+        params.setValue(e.target.value);
+    };
+
+    useEffect(() => {
+        if (data && field) {
+            setName(data[field]);
+        }
+    }, [data, field]);
+
+    return <MokaInput className="ft-12" value={name} onChange={handleChangeValue} onBlur={handleBlur} isInvalid={error} />;
+});
 
 export default CategoryEditorRenderer;

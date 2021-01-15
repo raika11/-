@@ -26,7 +26,7 @@ public class MokaTmsApplicationListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        actionLogger.success("SYSTEM", LoggerCodes.ActionType.STARTUP, 0L);
+        actionLogger.success("SYSTEM", LoggerCodes.ActionType.STARTUP, System.currentTimeMillis() - startTime);
     }
 
     @Override

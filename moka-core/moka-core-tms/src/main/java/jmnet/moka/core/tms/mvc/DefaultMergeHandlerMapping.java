@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
 import jmnet.moka.core.tms.mvc.handler.AbstractHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class DefaultMergeHandlerMapping extends AbstractHandlerMapping {
 
     @Override
     protected Object getHandlerInternal(HttpServletRequest request) throws Exception {
-
+        // 시작시간 설정
+        request.setAttribute(MokaConstants.MERGE_START_TIME, System.currentTimeMillis());
         String domainId = domainResolver.getDomainId(request);
 
         String paramDomain = request.getParameter("testDomain");

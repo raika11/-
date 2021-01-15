@@ -184,7 +184,7 @@ const RcvArticleSearch = () => {
             <Form.Row className="d-flex mb-2">
                 {/* 검색기간 */}
                 <div className="mr-2">
-                    <MokaInput as="select" name="period" className="ft-12 flex-fill" onChange={handleChangeValue} value={period.join('')}>
+                    <MokaInput as="select" name="period" className="flex-fill" onChange={handleChangeValue} value={period.join('')}>
                         <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>
@@ -215,7 +215,7 @@ const RcvArticleSearch = () => {
 
                 {/* 상태 */}
                 <div className="mr-2 flex-fill">
-                    <MokaInput as="select" name="status" className="mb-0 ft-12" value={search.status} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="status" value={search.status} onChange={handleChangeValue}>
                         {initialState.statusList.map((op) => (
                             <option key={op.id} value={op.id}>
                                 {op.name}
@@ -226,7 +226,7 @@ const RcvArticleSearch = () => {
 
                 {/* 원본/수정만 */}
                 <div className="flex-fill mr-2">
-                    <MokaInput as="select" name="modify" className="ft-12" value={search.modify} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="modify" value={search.modify} onChange={handleChangeValue}>
                         {initialState.modifyList.map((op) => (
                             <option key={op.id} value={op.id}>
                                 {op.name}
@@ -255,16 +255,14 @@ const RcvArticleSearch = () => {
             <Form.Row className="d-flex mb-2 justify-content-between">
                 <MokaSearchInput
                     name="keyword"
-                    className="mr-2 flex-fill ft-12"
-                    inputClassName="ft-12"
-                    buttonClassName="ft-12"
+                    className="mr-2 flex-fill"
                     value={search.keyword}
                     onChange={handleChangeValue}
                     placeholder="제목을 입력하세요"
                     onSearch={handleSearch}
                 />
 
-                <Button variant="negative" className="ft-12 flex-shrink-0" onClick={handleClickReset}>
+                <Button variant="negative" className="flex-shrink-0" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>

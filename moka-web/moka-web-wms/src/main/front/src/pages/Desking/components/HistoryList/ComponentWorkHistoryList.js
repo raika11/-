@@ -29,7 +29,7 @@ const ComponentWorkHistoryList = (props) => {
         <div style={{ width: 400 }} className="pr-3">
             <Form>
                 {/* 컴포넌트 명 */}
-                <MokaInput as="select" className="mb-2 ft-12" onChange={handleChangeValue} name="componentSeq" value={search.componentSeq}>
+                <MokaInput as="select" className="mb-2" onChange={handleChangeValue} name="componentSeq" value={search.componentSeq}>
                     <option hidden>컴포넌트 명</option>
                     {componentList.map((comp) => (
                         <option key={comp.componentSeq} value={comp.componentSeq}>
@@ -40,7 +40,7 @@ const ComponentWorkHistoryList = (props) => {
                 {/* 날짜 검색 */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="p-0 pr-2">
-                        <MokaInput as="select" className="mb-0 ft-12" value={search.status} name="status" onChange={handleChangeValue}>
+                        <MokaInput as="select" value={search.status} name="status" onChange={handleChangeValue}>
                             <option value={DESK_HIST_PUBLISH}>전송 기록</option>
                             <option value={DESK_HIST_SAVE}>임시저장 기록</option>
                         </MokaInput>
@@ -53,7 +53,6 @@ const ComponentWorkHistoryList = (props) => {
                             className="mb-0 w-100"
                             inputProps={{
                                 timeFormat: null,
-                                inputClassName: 'ft-12',
                             }}
                             value={search.regDt}
                             onChange={handleDate}
@@ -63,7 +62,7 @@ const ComponentWorkHistoryList = (props) => {
                 <Form.Row className="mb-2">
                     {/* 검색조건 */}
                     <Col xs={4} className="p-0 pr-2">
-                        <MokaInput as="select" className="mb-0 ft-12" value={search.searchType} name="keyword" onChange={handleChangeValue}>
+                        <MokaInput as="select" value={search.searchType} name="keyword" onChange={handleChangeValue}>
                             {initialState.searchTypeList.map((searchType) => (
                                 <option value={searchType.id} key={searchType.id}>
                                     {searchType.name}

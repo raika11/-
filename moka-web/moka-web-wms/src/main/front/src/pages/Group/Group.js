@@ -49,7 +49,7 @@ const Group = () => {
                 height={CARD_DEFAULT_HEIGHT}
             >
                 <div className="mb-2 d-flex justify-content-end">
-                    <Button variant="positive" onClick={handleClickAddGroup} className="ft-12">
+                    <Button variant="positive" onClick={handleClickAddGroup}>
                         그룹 추가
                     </Button>
                 </div>

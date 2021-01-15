@@ -4,11 +4,10 @@ import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader, MokaPagination } from '@/components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import columnDefs, { rowData, localeText } from './MicPostListAgGridColumns';
-import MicAgGridSelect from './components/MicAgGridSelect';
 import PostEditMadal from './modals/PostEditModal';
 
 /**
- * 포스트 목록
+ * 시민 마이크 포스트 목록 AgGrid
  */
 const MicPostListAgGrid = () => {
     const [total] = useState(0);
@@ -72,16 +71,14 @@ const MicPostListAgGrid = () => {
                     defaultColDef={{
                         wrapText: true,
                         autoHeight: true,
-                        // resizable: true,
                     }}
                     onGridReady={onGridReady}
-                    getRowNodeId={(params) => params.commentSeq}
+                    getRowNodeId={(params) => params.seqNo}
                     columnDefs={columnDefs}
                     localeText={localeText}
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
                     onCellClicked={handleRowClicked}
-                    frameworkComponents={{ MicAgGridSelect: MicAgGridSelect }}
                 />
             </div>
             <div className="mt-3">
@@ -94,23 +91,6 @@ const MicPostListAgGrid = () => {
                     pageSizes={PAGESIZE_OPTIONS}
                 />
             </div>
-            {/* 
-            <div className="d-flex justify-content-end">
-                <p>{total}건</p>
-            </div>
-            <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
-                rowData={rowData}
-                onRowNodeId={(params) => params.seqNo}
-                onRowClicked={handleRowClicked}
-                loading={loading}
-                showTotalString={false}
-                total={total}
-                page={search.page}
-                size={search.size}
-                onChangeSearchOption={handleChangeSearchOption}
-            /> */}
             <PostEditMadal show={showPeModal} onHide={() => setShowPeModal(false)} data={rd} />
         </>
     );

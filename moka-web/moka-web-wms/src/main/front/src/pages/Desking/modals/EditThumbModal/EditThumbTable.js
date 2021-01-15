@@ -15,7 +15,7 @@ const EditThumbTable = (props) => {
 
     const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
     const loading = useSelector((store) => store.loading[GET_PHOTO_LIST]);
-    const { total, archiveList, search, photo } = useSelector((store) => ({
+    const { total, archiveList, search } = useSelector((store) => ({
         total: store.photoArchive.total,
         archiveList: store.photoArchive.list,
         search: store.photoArchive.search,
@@ -57,7 +57,7 @@ const EditThumbTable = (props) => {
 
     return (
         <React.Fragment>
-            <div className="border w-100 custom-scroll flex-fill mb-2 position-relative">
+            <div className="input-border w-100 custom-scroll flex-fill mb-2 position-relative">
                 <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
                     {loading && <MokaLoader />}
                     {renderList.map((data) => (

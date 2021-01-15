@@ -3,33 +3,44 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel } from '@/components';
 
-const FeedRegisterModal = (props) => {
+/**
+ * 시민 마이크 피드 편집 모달
+ */
+const FeedEditModal = (props) => {
     const { show, onHide, data } = props;
 
-    const [usedYn, setUsedYn] = useState('Y');
+    const [usedYn, setUsedYn] = useState('');
     const [feedType, setFeedType] = useState('');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
+    const handleHide = () => {
+        setUsedYn('N');
+        setFeedType('');
+        setTitle('');
+        setContent('');
+        onHide();
+    };
+
     useEffect(() => {
-        if (data) {
+        if (show && data) {
             setUsedYn(data.usedYn);
             setTitle(data.title);
             setContent(data.content);
         }
-    }, [data]);
+    }, [show, data]);
 
     return (
         <MokaModal
             width={500}
             size="md"
             show={show}
-            onHide={onHide}
-            title="관리자 피딩 등록"
+            onHide={handleHide}
+            title={data ? '관리자 피딩 수정' : '관리자 피딩 등록'}
             headerClassName="justify-content-start"
             buttons={[
                 { text: data ? '수정' : '저장', variant: 'positive' },
-                { text: '취소', variant: 'negative', onClick: onHide },
+                { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             draggable
         >
@@ -37,12 +48,11 @@ const FeedRegisterModal = (props) => {
             <Form>
                 <MokaInputLabel
                     label="사용여부"
-                    labelClassName="d-flex justify-content-end"
                     className="mb-2"
+                    id="mic-feed-usedYn"
                     as="switch"
                     name="usedYn"
                     inputProps={{ custom: true, checked: usedYn === 'Y' }}
-                    value={usedYn}
                     onChange={(e) => {
                         if (e.target.checked) {
                             setUsedYn('Y');
@@ -53,14 +63,7 @@ const FeedRegisterModal = (props) => {
                 />
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel
-                            label="피드타입"
-                            labelClassName="d-flex justify-content-end"
-                            as="select"
-                            name="feedType"
-                            value={feedType}
-                            onChange={(e) => setFeedType(e.target.value)}
-                        >
+                        <MokaInputLabel label="피드타입" as="select" name="feedType" value={feedType} onChange={(e) => setFeedType(e.target.value)}>
                             <option value="">단문</option>
                             <option value="I">이미지</option>
                             <option value="M">동영상</option>
@@ -68,10 +71,9 @@ const FeedRegisterModal = (props) => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
-                <MokaInputLabel label="제목" labelClassName="d-flex justify-content-end" className="mb-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <MokaInputLabel label="제목" className="mb-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <MokaInputLabel
                     label="내용"
-                    labelClassName="d-flex justify-content-end"
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 3 }}
@@ -84,4 +86,4 @@ const FeedRegisterModal = (props) => {
     );
 };
 
-export default FeedRegisterModal;
+export default FeedEditModal;

@@ -15,7 +15,7 @@ export default [
     {
         headerName: '작업일시',
         field: 'regDt',
-        width: 200,
+        width: 130,
         cellClassRules: {
             'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_HIST_PUBLISH,
             'ft-12': () => true,

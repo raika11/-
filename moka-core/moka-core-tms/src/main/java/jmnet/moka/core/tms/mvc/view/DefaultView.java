@@ -15,6 +15,9 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.MergeItem;
@@ -48,6 +51,9 @@ public class DefaultView extends AbstractView {
 
     @Autowired(required = false)
     private CacheManager cacheManager;
+
+    @Autowired
+    private ActionLogger actionLogger;
 
     @Override
     protected boolean generatesDownloadContent() {
@@ -154,8 +160,14 @@ public class DefaultView extends AbstractView {
                 sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                 writer.append(sb);
             }
+            actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
+                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    path);
         } catch (Exception e) {
             logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
+            actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
+                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    path +" "+ e.getMessage());
             throw e;
         } finally {
             if (writer != null) {

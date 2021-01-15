@@ -12,6 +12,8 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
@@ -51,6 +53,9 @@ public class DefaultHandler extends AbstractHandler {
     @Autowired
     private MokaDomainTemplateMerger domainTemplateMerger;
 
+    @Autowired
+    private ActionLogger actionLogger;
+
     private List<String> mergeItemList;
 
     public DefaultHandler() {
@@ -73,6 +78,7 @@ public class DefaultHandler extends AbstractHandler {
         try {
             String itemKey = this.domainTemplateMerger.getItemKey(domainId, requestPath);
             MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
+            mergeContext.set(MokaConstants.MERGE_START_TIME, request.getAttribute(MokaConstants.MERGE_START_TIME));
             this.setDeviceType(request, mergeContext);
             mergeContext.set(MokaConstants.MERGE_DOMAIN_ID, domainId);
             if (itemKey != null) {
@@ -101,6 +107,9 @@ public class DefaultHandler extends AbstractHandler {
             return this.handlerMethod;
         } catch (TemplateMergeException e) {
             logger.warn("Page Item not found: {} {}", domainId, requestPath);
+            actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
+                    (long)request.getAttribute(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    String.format("Page Item not found:%s %s",domainId, requestPath));
         }
         return null;
     }
@@ -132,6 +141,9 @@ public class DefaultHandler extends AbstractHandler {
             }
         } catch (TemplateLoadException | TemplateParseException | TemplateMergeException e) {
             logger.error("MergeItem Find Fail: {} {}", domainId, requestPath, e);
+            actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
+                    (long)request.getAttribute(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    String.format("Page Item not found:%s %s",domainId, requestPath));
             return false;
         }
     }

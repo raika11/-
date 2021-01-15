@@ -8,7 +8,7 @@ import toast from '@utils/toastUtil';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard, MokaInput, MokaIcon } from '@components';
 
-const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview, onRegister }) => {
+const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview, onRegister, error, setError }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
     const [repStr, setRepStr] = useState('');
@@ -78,6 +78,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
         let result = [];
         if (list) {
             result = list.map((code) => code.masterCode);
+            setError({ ...error, categoryList: false });
         }
         onChange({
             key: 'categoryList',
@@ -184,6 +185,8 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                             onChange={handleMasterCode}
                             maxMenuHeight={150}
                             selectable={['content']}
+                            isInvalid={error.categoryList}
+                            required
                             isMulti
                         />
                     </Col>

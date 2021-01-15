@@ -53,8 +53,6 @@ const ColumnistAgGrid = ({ match }) => {
 
     return (
         <React.Fragment>
-            {/* 버튼 그룹 */}
-
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}

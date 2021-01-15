@@ -7,6 +7,12 @@ const queries = {
     lg: '(min-width: 1920px)',
 };
 
+/**
+ * window.matchMedia 를 사용하여 window 크기(xs, sm, md, lg) 리턴
+ * @example
+ * { xs: false, sm: true, md: false, lg: false }
+ * @returns {Object} 현재 breakpoint
+ */
 const useBreakpoint = () => {
     const [queryMatch, setQueryMatch] = useState({});
 

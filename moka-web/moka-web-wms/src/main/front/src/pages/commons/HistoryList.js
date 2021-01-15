@@ -167,29 +167,14 @@ const HistoryList = (props) => {
     }, [handleClickLoad, list]);
 
     return (
-        <MokaCard title="히스토리" titleClassName="mb-0" bodyClassName="d-flex flex-column">
+        <MokaCard title="히스토리" bodyClassName="d-flex flex-column">
             <Form>
                 {/* 날짜 검색 */}
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        label="날짜"
-                        as="dateTimePicker"
-                        labelWidth={28}
-                        className="mb-0 w-100"
-                        inputProps={{
-                            timeFormat: null,
-                            inputClassName: 'ft-12',
-                        }}
-                        value={moment(search.regDt, DB_DATEFORMAT)}
-                        onChange={handleDate}
-                    />
-                </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 검색조건 */}
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInput
                             as="select"
-                            className="ft-12"
                             value={search.searchType || undefined}
                             onChange={(e) => {
                                 setSearch({
@@ -205,8 +190,21 @@ const HistoryList = (props) => {
                             ))}
                         </MokaInput>
                     </Col>
+                    <Col xs={8} className="p-0">
+                        <MokaInput
+                            as="dateTimePicker"
+                            className="mb-0 w-100"
+                            inputProps={{
+                                timeFormat: null,
+                            }}
+                            value={moment(search.regDt, DB_DATEFORMAT)}
+                            onChange={handleDate}
+                        />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0 mb-0">
+                    <Col xs={12} className="p-0 mb-0">
                         <MokaSearchInput
                             value={search.keyword}
                             onChange={(e) => {
@@ -215,8 +213,6 @@ const HistoryList = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            buttonClassName="ft-12"
-                            inputClassName="ft-12"
                             onSearch={handleSearch}
                         />
                     </Col>

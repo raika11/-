@@ -76,20 +76,20 @@ const ArticleSourceSearch = () => {
         <div className="mb-3 d-flex align-items-center justify-content-between">
             <div className="d-flex">
                 <div style={{ width: 100 }} className="mr-2">
-                    <MokaInput className="ft-12" as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         <option value="all">전체</option>
                         <option value="sourceName">매체명</option>
                         <option value="sourceCode">매체코드</option>
                     </MokaInput>
                 </div>
                 <div style={{ width: 130 }} className="mr-2">
-                    <MokaInput className="ft-12" as="select" name="rcvUsedYn" value={search.rcvUsedYn} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="rcvUsedYn" value={search.rcvUsedYn} onChange={handleChangeValue}>
                         <option value="all">CP수신여부(전체)</option>
                         <option value="Y">수신</option>
                         <option value="N">미수신</option>
                     </MokaInput>
                 </div>
-                <MokaSearchInput className="mr-2" inputClassName="ft-12" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput className="mr-2" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
                 <Button variant="negative" onClick={handleClickInitialize}>
                     초기화
                 </Button>

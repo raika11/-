@@ -230,7 +230,6 @@ const CodeMgtListAgGrid = ({ match }) => {
                 <MokaInput
                     as="checkbox"
                     id="secret-check"
-                    className="ft-12"
                     style={{ lineHeight: '21px' }}
                     value={search.secretYn}
                     onChange={(e) => {
@@ -242,7 +241,7 @@ const CodeMgtListAgGrid = ({ match }) => {
                     }}
                     inputProps={{ label: '숨김 코드', custom: true }}
                 />
-                <Button variant="positive" onClick={handleAddClick} className="ft-12">
+                <Button variant="positive" onClick={handleAddClick}>
                     그룹 등록
                 </Button>
             </Form.Row>

@@ -163,9 +163,8 @@ const ButtonGroup = (props) => {
             <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                 {/* 예약(안씀) + 타이틀 */}
                 <Col className="d-flex align-items-center p-0 position-static" xs={8}>
-                    {/* <ReserveComponentWork component={component} workStatus={workStatus} /> */}
                     <OverlayTrigger overlay={<Tooltip>{tooltipText}</Tooltip>}>
-                        <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
+                        <p className="mb-0 component-title text-truncate">{title}</p>
                     </OverlayTrigger>
                 </Col>
 
@@ -181,7 +180,7 @@ const ButtonGroup = (props) => {
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
                         <Dropdown style={{ position: 'unset' }}>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-naverchannel-edit" />
-                            <Dropdown.Menu className="ft-12">{createDropdownItem()}</Dropdown.Menu>
+                            <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
                         </Dropdown>
                     </MokaOverlayTooltipButton>
                 </Col>

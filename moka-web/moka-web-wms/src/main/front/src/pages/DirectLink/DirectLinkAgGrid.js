@@ -84,7 +84,7 @@ const DirectLinkAgGrid = ({ match }) => {
             {/* 버튼 그룹 */}
             <div className="d-flex justify-content-end mb-10">
                 <div className="pt-0">
-                    <Button variant="positive" onClick={() => handleEditNewMode()} className="ft-12">
+                    <Button variant="positive" onClick={() => handleEditNewMode()}>
                         사이트 바로 가기 추가
                     </Button>
                 </div>

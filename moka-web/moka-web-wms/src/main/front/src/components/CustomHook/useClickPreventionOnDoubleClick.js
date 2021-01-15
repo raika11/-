@@ -1,6 +1,11 @@
 import useCancellablePromises from './useCancellablePromises';
 import utils from '@utils/commonUtil';
 
+/**
+ * click, doubleclick 분리
+ * @param {func} onClick 클릭 이벤트
+ * @param {func} onDoubleClick 더블클릭 이벤트
+ */
 const useClickPreventionOnDoubleClick = (onClick, onDoubleClick) => {
     const api = useCancellablePromises();
 

@@ -27,7 +27,11 @@ export default [
         width: 50,
         cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (params) => {
-            return <MicTableSwitch data={params.data.usedYn} id="usedYn" />;
+            return (
+                <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                    <MicTableSwitch {...params} />
+                </div>
+            );
         },
     },
 ];

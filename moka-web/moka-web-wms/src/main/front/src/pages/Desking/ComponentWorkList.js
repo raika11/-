@@ -167,7 +167,7 @@ const ComponentWorkList = (props) => {
                                 labelWidth={47}
                                 as="select"
                                 labelClassName="ml-0"
-                                className="ft-12 h-100 mb-0"
+                                className="h-100 mb-0"
                                 value={componentWorkList.length > 0 ? componentWorkList[0].templateSeq : null}
                                 inputProps={{ size: 'sm', 'data-workseq': componentWorkList.length > 0 ? componentWorkList[0].seq : '' }}
                                 onChange={handleChangeTemplate}
@@ -184,7 +184,7 @@ const ComponentWorkList = (props) => {
                     ) : (
                         <React.Fragment>
                             <div style={{ width: 170 }}>
-                                <MokaInput as="select" className="ft-12 h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
+                                <MokaInput as="select" className="h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
                                     <option hidden>비활성 영역 보기</option>
                                     {disabledList.map((work) => (
                                         <option key={work.seq} value={work.seq}>
@@ -193,7 +193,7 @@ const ComponentWorkList = (props) => {
                                     ))}
                                 </MokaInput>
                             </div>
-                            <Button variant="outline-neutral" className="ft-12 flex-shrink-0" onClick={handleClickPreview}>
+                            <Button variant="outline-neutral" className="flex-shrink-0" onClick={handleClickPreview}>
                                 페이지 미리보기
                             </Button>
                         </React.Fragment>

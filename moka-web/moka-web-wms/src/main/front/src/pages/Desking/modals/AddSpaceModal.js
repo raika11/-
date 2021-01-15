@@ -128,7 +128,7 @@ const AddSpaceModal = (props) => {
                                     <MokaInputLabel
                                         label="제목"
                                         labelWidth={56}
-                                        labelClassName="ft-12 mr-3"
+                                        labelClassName="mr-3"
                                         inputClassName="resize-none custom-scroll"
                                         className="mb-0"
                                         name="title"
@@ -147,7 +147,7 @@ const AddSpaceModal = (props) => {
                                     <MokaInputLabel
                                         label="리드문"
                                         labelWidth={60}
-                                        labelClassName="ft-12 pr-3"
+                                        labelClassName="pr-3"
                                         inputClassName="resize-none custom-scroll"
                                         className="mb-0"
                                         name="bodyHead"
@@ -163,7 +163,7 @@ const AddSpaceModal = (props) => {
                                     <MokaInputLabel
                                         label="URL"
                                         labelWidth={60}
-                                        labelClassName="ft-12 pr-3"
+                                        labelClassName="pr-3"
                                         className="mb-0"
                                         placeholder="URL을 입력하세요"
                                         name="linkUrl"
@@ -172,7 +172,7 @@ const AddSpaceModal = (props) => {
                                     />
                                 </Col>
                                 <Col xs={2} className="p-0">
-                                    <MokaInput as="select" name="linkTarget" value={linkTarget || '_self'} onChange={handleChangeValue} className="ft-12">
+                                    <MokaInput as="select" name="linkTarget" value={linkTarget || '_self'} onChange={handleChangeValue}>
                                         <option value="_self">본창</option>
                                         <option value="_blank">새창</option>
                                     </MokaInput>

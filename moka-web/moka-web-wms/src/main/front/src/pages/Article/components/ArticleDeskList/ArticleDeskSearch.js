@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaInput, MokaSearchInput } from '@components';
 import { CodeAutocomplete } from '@pages/commons';
 import { ChangeArtGroupModal } from '@pages/Article/modals';
 import { SourceSelector } from '@pages/commons';
@@ -36,7 +36,7 @@ const ArticleDeskSearch = (props) => {
     const [error, setError] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
     const [sourceList, setSourceList] = useState(null);
-    const [period, setPeriod] = useState([2, 'days']);
+    const [period, setPeriod] = useState([3, 'months']);
 
     /**
      * 입력값 변경
@@ -151,7 +151,7 @@ const ArticleDeskSearch = (props) => {
         dispatch(
             changeSearchOption({
                 ...initialSearch,
-                masterCode: selectedComponent.masterCode || null,
+                masterCode: selectedComponent.schCodeId || null,
                 startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
                 page: 0,
@@ -189,17 +189,15 @@ const ArticleDeskSearch = (props) => {
          * 종료일 : 현재 시간(시분초o) - period 설정 일수
          */
         if (show) {
-            // const date = new Date();
-            // const startServiceDay = search.startServiceDay || moment(date).add(-24, 'hours');
-            // const endServiceDay = search.endServiceDay || moment(date);
-            const startServiceDay = search.startServiceDay ? moment(search.startServiceDay).format(DB_DATEFORMAT) : '2020-08-21 00:00:00';
-            const endServiceDay = search.endServiceDay ? moment(search.endServiceDay).format(DB_DATEFORMAT) : '2020-08-22 00:00:00';
+            const date = new Date();
+            const startServiceDay = search.startServiceDay || moment(date).subtract(period[0], period[1]);
+            const endServiceDay = search.endServiceDay || moment(date);
             let ns = {
                 ...search,
-                masterCode: selectedComponent.masterCode || null,
+                masterCode: selectedComponent.schCodeId || null,
                 sourceList,
-                startServiceDay,
-                endServiceDay,
+                startServiceDay: moment(startServiceDay).format(DB_DATEFORMAT),
+                endServiceDay: moment(endServiceDay).format(DB_DATEFORMAT),
                 contentType: media ? 'M' : null,
                 page: 0,
             };
@@ -213,14 +211,14 @@ const ArticleDeskSearch = (props) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent.masterCode, sourceOn, show]);
+    }, [selectedComponent.schCodeId, sourceOn, show]);
 
     return (
         <Form>
             <Form.Row className="d-flex mb-2">
                 {/* 검색기간 */}
                 <div style={{ width: 78 }} className="mr-2">
-                    <MokaInput as="select" name="period" className="ft-12" onChange={handleChangeValue} value={period.join('')}>
+                    <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
                         <option value="2days" data-number="2" data-date="days">
                             2일
                         </option>
@@ -251,7 +249,7 @@ const ArticleDeskSearch = (props) => {
 
                 {/* 검색 조건 */}
                 <div style={{ width: 110 }} className="mr-2">
-                    <MokaInput as="select" name="searchType" className="ft-12" value={search.searchType} onChange={handleChangeValue}>
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
                                 {searchType.name}
@@ -261,10 +259,10 @@ const ArticleDeskSearch = (props) => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput className="flex-fill mr-2" inputClassName="ft-12" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 {/* 초기화 */}
-                <Button variant="negative" onClick={handleClickReset}>
+                <Button variant="negative" className="flex-shrink-0" onClick={handleClickReset}>
                     초기화
                 </Button>
             </Form.Row>
@@ -291,36 +289,18 @@ const ArticleDeskSearch = (props) => {
                     />
 
                     {/* 면 */}
-                    <div style={{ width: 85 }} className="mr-2">
-                        <MokaInputLabel
-                            label="면"
-                            labelWidth={25}
-                            className="mb-0 ft-12"
-                            inputClassName="ft-12"
-                            name="pressMyun"
-                            value={search.pressMyun}
-                            onChange={handleChangeValue}
-                            disabled={searchDisabled}
-                        />
+                    <div style={{ width: 60 }} className="mr-2">
+                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} disabled={searchDisabled} />
                     </div>
 
                     {/* 판 */}
-                    <div style={{ width: 85 }} className="mr-2">
-                        <MokaInputLabel
-                            label="판"
-                            labelWidth={25}
-                            className="mb-0 ft-12"
-                            inputClassName="ft-12"
-                            name="pressPan"
-                            value={search.pressPan}
-                            onChange={handleChangeValue}
-                            disabled={searchDisabled}
-                        />
+                    <div style={{ width: 60 }} className="mr-2">
+                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={searchDisabled} />
                     </div>
                 </div>
                 {!isNaverChannel && (
                     <React.Fragment>
-                        <Button variant="outline-neutral" onClick={() => setModalShow(true)}>
+                        <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
                             그룹지정
                         </Button>
                         {/* 그룹지정 변경 모달 */}

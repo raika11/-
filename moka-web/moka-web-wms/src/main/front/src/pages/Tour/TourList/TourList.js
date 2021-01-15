@@ -47,10 +47,11 @@ const TourList = ({ match }) => {
                                     <>
                                         <Col className="p-0"></Col>
                                         <Col className="p-0 d-flex justify-content-center">
-                                            <Button className="mr-2 ">저장</Button>
-                                            <Button variant="negative" className="">
+                                            <Button className="mr-2">저장</Button>
+                                            <Button variant="negative" className="mr-2">
                                                 삭제
                                             </Button>
+                                            <Button variant="negative">취소</Button>
                                         </Col>
                                         <Col className="p-0 d-flex justify-content-end">
                                             <Button variant="searching" onClick={handleClickPreview}>

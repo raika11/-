@@ -6,9 +6,13 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaImageInput, MokaInputLabel, MokaModal, MokaTable } from '@/components';
 import columnDefs, { rowData } from './BannerModalAgGridColumns';
 
+/**
+ * 시민 마이크 다른 주제 공통 배너 모달
+ */
 const BannerModal = (props) => {
     const { show, onHide } = props;
 
+    const [gridApi, setGridApi] = useState(null);
     const [total] = useState(0);
     const [loading] = useState(false);
     const [search] = useState({ page: 1, size: 10 });
@@ -34,7 +38,7 @@ const BannerModal = (props) => {
     };
 
     return (
-        <MokaModal title="다른 주제 공통 배너 관리" height={800} show={show} onHide={handleHide} size="xl" headerClassName="justify-content-start">
+        <MokaModal title="다른 주제 공통 배너 관리" height={800} show={show} onHide={handleHide} size="xl" headerClassName="justify-content-start" draggable>
             <Container className="p-0" fluid>
                 <Row>
                     <Col className="p-0 custom-scroll d-flex flex-column" style={{ width: 500, height: 695 }}>

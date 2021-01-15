@@ -18,7 +18,13 @@ export default [
         },
         cellRendererFramework: (row) => {
             const { data } = row;
-            return data.parentContentId ? <p className="text-info">└</p> : data.contentId;
+            return data.parentContentId ? (
+                <div className="d-flex justify-content-center">
+                    <p className="text-info">└</p>
+                </div>
+            ) : (
+                data.contentId
+            );
         },
     },
     {

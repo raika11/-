@@ -567,7 +567,7 @@ const AreaFormDepth2 = (props) => {
 
                         {/* 세로형/가로형 선택 */}
                         <Col xs={2} className="p-0">
-                            <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue} className="ft-12">
+                            <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue}>
                                 <option value={AREA_ALIGN_V}>세로형</option>
                                 {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
                             </MokaInput>

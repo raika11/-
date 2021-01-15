@@ -225,7 +225,7 @@ const MemberEdit = () => {
                 {/* 등록일시 */}
                 <MokaInputLabel className="mb-2" label="등록일시" value={member.regDt} name="regDt" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 최종 접속일시 */}
-                <MokaInputLabel className="mb-2" label="최종 접속일시" value={member.lastLoginDt} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
+                <MokaInputLabel className="mb-2" label="최종\n접속일시" value={member.lastLoginDt} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
 
                 {/* 버튼 */}
                 {member.memberId && (

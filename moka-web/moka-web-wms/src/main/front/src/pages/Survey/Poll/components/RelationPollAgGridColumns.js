@@ -13,6 +13,7 @@ export const columnDefs = [
                 <Row className="d-flex w-100 align-items-center justify-content-center mr-0">
                     <Col className="w-100">
                         <Button
+                            size="sm"
                             variant="outline-table-btn"
                             onClick={() => {
                                 if (!commonUtil.isEmpty(param.data.onAdd) && param.data.onAdd instanceof Function) {

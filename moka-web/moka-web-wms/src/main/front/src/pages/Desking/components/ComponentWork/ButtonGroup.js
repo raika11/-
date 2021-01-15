@@ -243,13 +243,13 @@ const ButtonGroup = (props) => {
     }, [handleClickSave, handleClickPublish, handleClickSavePublish, viewN, component.dataType]);
 
     return (
-        <div className="px-2 py-1 button-group">
+        <div className="px-2 pt-2 pb-1 button-group">
             <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                 {/* 예약 + 타이틀 */}
                 <Col className="d-flex align-items-center p-0 position-static" xs={8}>
                     <ReserveComponentWork component={component} workStatus={workStatus} />
                     <OverlayTrigger overlay={<Tooltip>{tooltipText}</Tooltip>}>
-                        <p className="ft-12 mb-0 component-title text-truncate">{title}</p>
+                        <p className="mb-0 pr-1 component-title text-truncate">{title}</p>
                     </OverlayTrigger>
                 </Col>
 
@@ -272,7 +272,7 @@ const ButtonGroup = (props) => {
                     <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
                         <Dropdown style={{ position: 'unset' }}>
                             <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
-                            <Dropdown.Menu className="ft-12">{createDropdownItem()}</Dropdown.Menu>
+                            <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
                         </Dropdown>
                     </MokaOverlayTooltipButton>
                 </Col>
@@ -297,14 +297,14 @@ const ButtonGroup = (props) => {
                 topAs={
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <div className="d-flex">
-                            <span className="ft-12 font-weight-bold mr-2">컴포넌트명</span>
-                            <a className="ft-12 font-weight-bold" onClick={() => window.open(`/component/${component?.componentSeq}`)}>
+                            <span className="font-weight-bold mr-2">컴포넌트명</span>
+                            <a className="font-weight-bold" onClick={() => window.open(`/component/${component?.componentSeq}`)}>
                                 ID{component?.componentSeq}_{component?.componentName}
                             </a>
                         </div>
                         <div className="d-flex">
-                            <span className="ft-12 font-weight-bold mr-2">사용 템플릿명</span>
-                            <a className="ft-12 font-weight-bold" onClick={() => window.open(`/template/${component?.templateSeq}`)}>
+                            <span className="font-weight-bold mr-2">사용 템플릿명</span>
+                            <a className="font-weight-bold" onClick={() => window.open(`/template/${component?.templateSeq}`)}>
                                 ID{component?.templateSeq}_{component?.templateName}
                             </a>
                         </div>

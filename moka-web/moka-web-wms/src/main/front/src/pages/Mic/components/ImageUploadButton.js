@@ -19,7 +19,7 @@ const defaultProps = {
 };
 
 /**
- * 이미지 업로드 버튼
+ * 시민 마이크 이미지 업로드 버튼
  */
 const ImageUploadButton = (props) => {
     const { text, fileUrl, ...rest } = props;

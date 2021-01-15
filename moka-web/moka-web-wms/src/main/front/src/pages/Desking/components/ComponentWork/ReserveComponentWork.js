@@ -132,18 +132,18 @@ const ReserveComponentWork = ({ component, workStatus }) => {
 
             {openReserve && (
                 <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 27, right: 0, zIndex: 1 }}>
-                    <div style={{ width: 168 }}>
+                    <div style={{ width: 180 }}>
                         <MokaInput as="dateTimePicker" size="sm" value={reserveDt} onChange={handleDate} isInvalid={error} />
                     </div>
                     <div className="d-flex align-items-center">
-                        <Button variant="positive" className="mr-2" size="sm" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-1" size="sm" onClick={handleClickSave}>
                             전송
                         </Button>
                         <Button variant="negative" size="sm" onClick={handleClickCancle}>
                             취소
                         </Button>
                         {reservation && (
-                            <Button variant="negative" size="sm" className="ml-2" onClick={handleClickDelete}>
+                            <Button variant="negative" size="sm" className="ml-1" onClick={handleClickDelete}>
                                 삭제
                             </Button>
                         )}

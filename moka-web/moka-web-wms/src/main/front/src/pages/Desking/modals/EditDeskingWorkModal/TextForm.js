@@ -20,7 +20,7 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
                 <MokaInputLabel
                     as={as}
                     label={label}
-                    labelClassName="ft-12 pr-3"
+                    labelClassName="pr-3"
                     name={field}
                     className="mb-0 w-100"
                     value={temp[field]}
@@ -31,13 +31,9 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
             </Col>
             {isUrl && (
                 <Col xs={2} className="p-0">
-                    <MokaInput as="select" name={urlTarget} value={temp[urlTarget] || '_self'} className="ft-12" onChange={onChange}>
-                        <option value="_self" className="ft-12">
-                            본창
-                        </option>
-                        <option value="_blank" className="ft-12">
-                            새창
-                        </option>
+                    <MokaInput as="select" name={urlTarget} value={temp[urlTarget] || '_self'} onChange={onChange}>
+                        <option value="_self">본창</option>
+                        <option value="_blank">새창</option>
                     </MokaInput>
                 </Col>
             )}

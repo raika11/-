@@ -402,7 +402,7 @@ const DirectLinkEdit = ({ history, match }) => {
                         />
                     </Col>
                     <Col xs={3} className="pl-2">
-                        <Button variant="outline-neutral" onClick={validateLink} className="ft-12 h-100">
+                        <Button variant="outline-neutral" onClick={validateLink} className="h-100">
                             유효성 검사
                         </Button>
                     </Col>

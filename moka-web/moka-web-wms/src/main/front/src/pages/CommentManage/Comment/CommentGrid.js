@@ -3,8 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { GET_COMMENT_LIST, changeSearchOption, getCommentList } from '@store/commentManage';
 import { tempCommentList } from '@pages/CommentManage/CommentConst';
 import CommentAgGrid from '@pages/CommentManage/CommentAgGrid';
-import { useBreakpoint } from '@components';
-import { columnDefs, localeText, smColumnDefs } from './CommentAgGridColumns';
+import { columnDefs, localeText } from './CommentAgGridColumns';
 import InfoItemRenderer from './InfoItemRenderer';
 
 /**
@@ -16,7 +15,6 @@ const CommentGrid = () => {
     const [gridApi, setGridApi] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
     const [listRows, setListRows] = useState([]);
-    const matchPoints = useBreakpoint();
     const { search, loading } = useSelector(
         (store) => ({
             list: store.comment.comments.list,
@@ -108,18 +106,16 @@ const CommentGrid = () => {
     }, [listRows, gridReadyState, gridApi, gridColumnApi]);
 
     return (
-        <>
-            <CommentAgGrid
-                loading={loading}
-                columnDefs={matchPoints.xs || matchPoints.sm ? smColumnDefs : columnDefs}
-                localeText={localeText}
-                onColumnResized={(e) => onColumnResized(e)}
-                onColumnVisible={(e) => onColumnVisible(e)}
-                onGridReady={(e) => onGridReady(e)}
-                changeSearchOption={(e) => handleChangeSearchOption(e)}
-                frameworkComponents={{ infoRenderer: InfoItemRenderer }}
-            />
-        </>
+        <CommentAgGrid
+            loading={loading}
+            columnDefs={columnDefs}
+            localeText={localeText}
+            onColumnResized={(e) => onColumnResized(e)}
+            onColumnVisible={(e) => onColumnVisible(e)}
+            onGridReady={(e) => onGridReady(e)}
+            changeSearchOption={(e) => handleChangeSearchOption(e)}
+            frameworkComponents={{ infoRenderer: InfoItemRenderer }}
+        />
     );
 };
 

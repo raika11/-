@@ -7,8 +7,8 @@ import { MokaModal, MokaCardTabs } from '@components';
 import { clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
-import EditThumbImageInputTable from './EditThumbImageInputTable';
-import EditThumbArticleImageListTable from './EditThumbArticleImageListTable';
+import EditThumbPCImageList from './EditThumbPCImageList';
+import EditThumbArticleImageList from './EditThumbArticleImageList';
 import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
 import ThumbViewModal from './ThumbViewModal';
@@ -202,12 +202,12 @@ const EditThumbModal = (props) => {
 
                         // 본문 소재 리스트 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbArticleImageListTable deskingWorkData={deskingWorkData} onRepClick={handleRepClick} />
+                            <EditThumbArticleImageList deskingWorkData={deskingWorkData} onRepClick={handleRepClick} />
                         </div>,
 
                         // 내 PC 탭
                         <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbImageInputTable onRepClick={handleRepClick} />
+                            <EditThumbPCImageList onRepClick={handleRepClick} />
                         </div>,
                     ]}
                     tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}

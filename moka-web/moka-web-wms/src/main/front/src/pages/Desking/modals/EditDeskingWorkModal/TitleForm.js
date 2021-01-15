@@ -59,7 +59,6 @@ const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) 
                             )}
                         </React.Fragment>
                     }
-                    labelClassName="ft-12"
                     name={field}
                     className="mb-0 w-100"
                     value={temp[field]}

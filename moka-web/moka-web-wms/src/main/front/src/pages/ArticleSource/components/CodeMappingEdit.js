@@ -103,8 +103,6 @@ const CodeMappingEdit = (props) => {
                     <MokaInputLabel
                         label="매체 분류 코드"
                         labelWidth={80}
-                        labelClassName="ft-12"
-                        inputClassName="ft-12"
                         className="mr-2"
                         value={temp.frCode}
                         onChange={(e) => {
@@ -131,7 +129,6 @@ const CodeMappingEdit = (props) => {
                 <CodeAutocomplete
                     label="분류 코드"
                     labelWidth={50}
-                    labelClassName="ft-12"
                     name="masterCode"
                     placeholder="분류 선택"
                     value={temp.toCode}

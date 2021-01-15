@@ -2,6 +2,9 @@ import React from 'react';
 import { MokaCard } from '@/components';
 import AgGrid from './MicPostListAgGrid';
 
+/**
+ * 시민 마이크 포스트 목록
+ */
 const MicPostList = () => {
     return (
         <MokaCard title="포스트 목록" titleClassName="mb-0" className="w-100" bodyClassName="d-flex flex-column">

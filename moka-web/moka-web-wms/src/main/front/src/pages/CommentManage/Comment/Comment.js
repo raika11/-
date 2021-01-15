@@ -1,9 +1,6 @@
 import React, { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/commentManage';
 
@@ -22,7 +19,7 @@ const Comment = () => {
     }, [dispatch]);
 
     return (
-        <Container fluid>
+        <div className="d-flex">
             <Helmet>
                 <title>댓글 관리</title>
                 <meta name="description" content="댓글 관리 페이지 입니다." />
@@ -30,16 +27,12 @@ const Comment = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <Row>
-                <Col xs={12} className="p-0">
-                    <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="댓글 관리">
-                        <Suspense>
-                            <CommentList />
-                        </Suspense>
-                    </MokaCard>
-                </Col>
-            </Row>
-        </Container>
+            <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="댓글 관리">
+                <Suspense>
+                    <CommentList />
+                </Suspense>
+            </MokaCard>
+        </div>
     );
 };
 

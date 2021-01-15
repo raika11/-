@@ -424,9 +424,8 @@ const DatasetEdit = ({ onDelete }) => {
                 </Form.Row>
                 {/* 데이터셋명 */}
                 <Form.Row className="mb-2">
-                    <Col xs={7} className="p-0">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
-                            className="mb-0"
                             label="데이터셋명"
                             name="datasetName"
                             value={datasetName}

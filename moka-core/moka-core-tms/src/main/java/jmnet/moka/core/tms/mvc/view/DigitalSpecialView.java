@@ -16,6 +16,9 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaTemplateMerger;
 import org.slf4j.Logger;
@@ -47,6 +50,9 @@ public class DigitalSpecialView extends AbstractView {
 
     @Autowired(required = false)
     private CacheManager cacheManager;
+
+    @Autowired
+    private ActionLogger actionLogger;
 
     @Autowired
     private HttpProxy httpProxy;
@@ -98,20 +104,16 @@ public class DigitalSpecialView extends AbstractView {
                 url = (String)map.get("MOB_URL");
             }
             response.setContentType("text/html; charset=UTF-8");
-            PrintWriter writer;
-            try {
-                writer = response.getWriter();
-                writer.print(this.httpProxy.getString(url));
-                writer.close();
-            } catch (IOException | URISyntaxException e) {
-                e.printStackTrace();
-            }
-        } catch (TemplateMergeException e) {
-            e.printStackTrace();
-        } catch (TemplateParseException e) {
-            e.printStackTrace();
-        } catch (DataLoadException e) {
-            e.printStackTrace();
+            PrintWriter writer = response.getWriter();
+            writer.print(this.httpProxy.getString(url));
+            writer.close();
+            actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.DIGITAL_SPECIAL,
+                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    digitalSpecialId);
+        } catch (Exception e) {
+            actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.DIGITAL_SPECIAL,
+                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    digitalSpecialId +" "+ e.getMessage());
         }
     }
 

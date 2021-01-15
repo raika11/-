@@ -135,8 +135,7 @@ const EditHtmlModal = (props) => {
                 label="컴포넌트명"
                 labelWidth={80}
                 className="w-100"
-                labelClassName="ft-12 font-weight-bold mr-3"
-                inputClassName="ft-12"
+                labelClassName="font-weight-bold mr-3"
                 inputProps={{ readOnly: true, plaintext: true }}
                 value={component.componentName}
             />

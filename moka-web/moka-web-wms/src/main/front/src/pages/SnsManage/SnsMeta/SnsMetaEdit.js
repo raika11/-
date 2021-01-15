@@ -327,7 +327,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100">
-                        <MokaInputLabel as="none" label="SNS 이미지\n(850*350px)" />
+                        <MokaInputLabel as="none" label="SNS 이미지\n850*350px" />
                         <div className="d-flex flex-column mr-2 flex-fill">
                             <Figure.Image className="mb-1" src={meta.fb.imgUrl} />
                             <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
@@ -352,15 +352,13 @@ const SnsMetaEdit = () => {
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
                         <MokaInputLabel as="none" label="예약" />
-                        <Form.Check
-                            label="예약 노출"
-                            type="checkbox"
+                        <MokaInput
+                            as="checkbox"
                             name="fb-isReserve"
                             id="fb-isReserve"
                             className="mr-2"
                             onChange={handleChangeCheckedValue}
-                            checked={edit.fb.isReserve}
-                            custom
+                            inputProps={{ label: '예약 노출', checked: edit.fb.isReserve, custom: true }}
                         />
                         <MokaInput
                             as="dateTimePicker"
@@ -369,7 +367,7 @@ const SnsMetaEdit = () => {
                             onChange={(e) => {
                                 handleChangeTextValue({ target: { name: 'fb-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
                             }}
-                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm', inputClassName: 'ft-12' }}
+                            inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
                             disabled={!edit.fb.isReserve}
                         />
                     </div>
@@ -462,7 +460,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100">
-                        <MokaInputLabel as="none" label="SNS 이미지\n(850*350px)" />
+                        <MokaInputLabel as="none" label="SNS 이미지\n850*350px" />
                         <div className="d-flex flex-column mr-2 flex-fill">
                             <Figure.Image className="mb-1" src={edit.tw.imgUrl} />
                             <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
@@ -487,15 +485,13 @@ const SnsMetaEdit = () => {
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
                         <MokaInputLabel as="none" label="예약" />
-                        <Form.Check
-                            label="예약 노출"
-                            type="checkbox"
-                            className="mr-2"
+                        <MokaInput
+                            as="checkbox"
                             name="tw-isReserve"
                             id="tw-isReserve"
+                            className="mr-2"
                             onChange={handleChangeCheckedValue}
-                            checked={edit.tw.isReserve}
-                            custom
+                            inputProps={{ label: '예약 노출', checked: edit.tw.isReserve, custom: true }}
                         />
                         <MokaInput
                             as="dateTimePicker"

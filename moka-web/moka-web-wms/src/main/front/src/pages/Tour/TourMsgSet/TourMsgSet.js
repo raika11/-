@@ -24,7 +24,6 @@ const MessageSettings = () => {
             >
                 <MokaInputLabel
                     label="견학 신청/안내\n'신청 방법'"
-                    labelClassName="justify-content-end"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -36,7 +35,6 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\'견학 신청'"
-                    labelClassName="justify-content-end"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -48,7 +46,6 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\n'견학 시 유의사항'"
-                    labelClassName="justify-content-end"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -60,7 +57,6 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\n'관람 및 주차 안내'"
-                    labelClassName="justify-content-end"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -72,7 +68,6 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="질의응답\n'자주하는 질문'"
-                    labelClassName="justify-content-end"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"

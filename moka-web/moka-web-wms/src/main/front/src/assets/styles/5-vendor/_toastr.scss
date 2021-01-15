@@ -86,7 +86,7 @@
                     @include button-color-active($positive);
                 }
 
-                &.rrt-cancle-btn {
+                &.rrt-cancel-btn {
                     @include button-color($negative);
                     @include button-color-active($negative);
                 }

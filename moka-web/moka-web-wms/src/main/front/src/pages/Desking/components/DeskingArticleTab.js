@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import { ArticleDeskList } from '@/pages/Article/components';
+import { ReporterDeskList } from '@/pages/Reporter/components';
 import { ColumnistDeskList } from '@/pages/Columnist/components';
 import { deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
@@ -23,6 +24,7 @@ const DeskingArticleTab = (props) => {
     // ref
     const articleRef = useRef(null);
     const mediaRef = useRef(null);
+    const reporterRef = useRef(null);
     const columnistRef = useRef(null);
 
     /**
@@ -89,6 +91,19 @@ const DeskingArticleTab = (props) => {
                 );
             }
             // 기자 조회 컴포넌트
+            else if (nav === '기자') {
+                return (
+                    <ReporterDeskList
+                        className="pb-3"
+                        ref={reporterRef}
+                        selectedComponent={{}}
+                        dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
+                        // onDragStop={}
+                        show={navIdx === idx && show}
+                    />
+                );
+            }
             // 칼럼 리스트 컴포넌트
             else if (nav === '칼럼니스트') {
                 return (

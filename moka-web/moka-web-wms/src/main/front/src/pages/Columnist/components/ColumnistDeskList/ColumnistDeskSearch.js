@@ -66,8 +66,6 @@ const ColumnistDeskSearch = (props) => {
     useEffect(() => {
         if (show) {
             dispatch(getColumnistList());
-        } else {
-            dispatch(clearStore());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);

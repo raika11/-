@@ -6,10 +6,14 @@ import { ColumnistDeskList } from '@/pages/Columnist/components';
 import { deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
 
+/**
+ * 페이지편집 > 기사보기
+ */
 const DeskingArticleTab = (props) => {
     const { componentList, componentAgGridInstances, show } = props;
     const dispatch = useDispatch();
     const area = useSelector((store) => store.desking.area);
+    const selectedComponent = useSelector((store) => store.desking.selectedComponent);
     const isNaverChannel = useSelector((store) => store.desking.isNaverChannel);
 
     // state
@@ -60,7 +64,7 @@ const DeskingArticleTab = (props) => {
                     <ArticleDeskList
                         className="pb-3"
                         ref={articleRef}
-                        selectedComponent={{}}
+                        selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         onDragStop={handleArticleDragStop}
                         show={navIdx === idx && show}
@@ -74,7 +78,7 @@ const DeskingArticleTab = (props) => {
                     <ArticleDeskList
                         className="pb-3"
                         ref={mediaRef}
-                        selectedComponent={{}}
+                        selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}

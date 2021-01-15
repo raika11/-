@@ -95,14 +95,6 @@
                 border-bottom-style: none;
             }
 
-            // usedyn-n row
-            &.usedyn-n {
-                @include disabled-font;
-                // button {
-                //     color: rgba($black, 0.6);
-                // }
-            }
-
             &:nth-of-type(odd) {
                 background-color: $table-accent-bg;
             }
@@ -113,6 +105,19 @@
 
             &.ag-row-selected {
                 background-color: var(--ag-selected-row-background-color, rgba(33, 150, 243, 0.3));
+            }
+
+            // usedyn-n row
+            &.usedyn-n {
+                @include disabled-font;
+                // button {
+                //     color: rgba($black, 0.6);
+                // }
+            }
+
+            // deskingyn-y row
+            &.deskingyn-y {
+                background-color: #fffcde;
             }
         }
     }

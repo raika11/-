@@ -34,14 +34,19 @@ export default [
     {
         headerName: 'ID\n기사유형',
         width: 75,
+        // width: 93,
         field: 'artIdType',
         cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
             whiteSpace: 'pre-wrap',
             lineHeight: '20px',
+            display: '-webkit-box',
             fontSize: '12px',
+            '-webkit-line-clamp': 2,
+            '-webkit-box-orient': 'vertical',
+            overflow: 'hidden',
+            paddingTop: '5px',
         },
+        tooltipField: 'artTypeName',
         cellClass: 'user-select-text',
     },
     {
@@ -58,7 +63,7 @@ export default [
         cellStyle: { width: '36px' },
     },
     {
-        headerName: '제 목',
+        headerName: '제목',
         field: 'escapeTitle',
         width: 186,
         flex: 1,
@@ -80,12 +85,14 @@ export default [
     },
     {
         headerName: '면/판',
-        width: 50,
+        width: 45,
         field: 'myunPan',
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             fontSize: '12px',
+            whiteSpace: 'pre',
         },
     },
     {

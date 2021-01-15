@@ -41,7 +41,6 @@ import seoMeta from '@store/seoMeta/seoMetaReducer';
 import jpod from '@store/jpod/jpodReducer';
 
 export default combineReducers({
-    jpod,
     toastr,
     app,
     loading,
@@ -80,4 +79,5 @@ export default combineReducers({
     comment,
     board,
     seoMeta,
+    jpod,
 });

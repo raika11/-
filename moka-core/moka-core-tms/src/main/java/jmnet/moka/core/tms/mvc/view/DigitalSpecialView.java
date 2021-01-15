@@ -108,11 +108,11 @@ public class DigitalSpecialView extends AbstractView {
             writer.print(this.httpProxy.getString(url));
             writer.close();
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.DIGITAL_SPECIAL,
-                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
                     digitalSpecialId);
         } catch (Exception e) {
             actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.DIGITAL_SPECIAL,
-                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
                     digitalSpecialId +" "+ e.getMessage());
         }
     }

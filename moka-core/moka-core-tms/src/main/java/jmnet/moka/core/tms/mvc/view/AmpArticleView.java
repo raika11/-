@@ -120,12 +120,12 @@ public class AmpArticleView extends AbstractView {
             this.cacheManager.set(cacheType, cacheKey, sb.toString());
             writeArticle(request, response, sb.toString());
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.AMP_ARTICLE,
-                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
                     articleId);
         } catch (TemplateMergeException | TemplateParseException | DataLoadException e) {
             e.printStackTrace();
             actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.AMP_ARTICLE,
-                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
                     articleId +" "+ e.getMessage());
         }
 

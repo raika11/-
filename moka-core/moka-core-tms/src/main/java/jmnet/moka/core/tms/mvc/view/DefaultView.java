@@ -161,12 +161,12 @@ public class DefaultView extends AbstractView {
                 writer.append(sb);
             }
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
-                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
                     path);
         } catch (Exception e) {
             logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
             actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
-                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
                     path +" "+ e.getMessage());
             throw e;
         } finally {

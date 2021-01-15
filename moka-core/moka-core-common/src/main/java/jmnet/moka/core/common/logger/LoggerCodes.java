@@ -32,6 +32,11 @@ public final class LoggerCodes {
         FILE_COPY("FILE_COPY", "파일 복사"),
         FILE_MOVE("FILE_MOVE", "파일 이동"),
         FILE_OVERWRITE("FILE_OVERWRITE", "파일 덮어쓰기"),
+        API("API","DPS API"),
+        PAGE("PAGE","TMS PAGE"),
+        ARTICLE("ARTICLE","TMS ARTICLE"),
+        AMP_ARTICLE("AMP_ARTICLE","TMS AMP ARTICLE"),
+        DIGITAL_SPECIAL("DIGITAL_SPECIAL","TMS DIGITAL SPECIAL"),
         UNKNOWN("UNKNOWN", "알수없음");
 
         private String code;

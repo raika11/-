@@ -19,6 +19,9 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.MokaFunctions;
@@ -53,6 +56,9 @@ public class ArticleView extends AbstractView {
 
     @Autowired(required = false)
     private CacheManager cacheManager;
+
+    @Autowired
+    private ActionLogger actionLogger;
 
     private MokaFunctions functions = new MokaFunctions();
     private static Pattern PATTERN_BR = Pattern.compile("<br\\/?>(\\s|&nbsp;)*?<br\\/?>", Pattern.CASE_INSENSITIVE);
@@ -114,12 +120,14 @@ public class ArticleView extends AbstractView {
                         this.getArticlePageId(templateMerger, domainId, articleInfo), mergeContext);
             this.cacheManager.set(cacheType, cacheKey, sb.toString());
             writeArticle(request, response, sb.toString());
-        } catch (TemplateMergeException e) {
+            actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    articleId);
+        } catch (TemplateMergeException | TemplateParseException | DataLoadException e) {
             e.printStackTrace();
-        } catch (TemplateParseException e) {
-            e.printStackTrace();
-        } catch (DataLoadException e) {
-            e.printStackTrace();
+            actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.ARTICLE,
+                    (long)mergeContext.get(MokaConstants.MERGE_START_TIME) - System.currentTimeMillis(),
+                    articleId +" "+ e.getMessage());
         }
     }
 

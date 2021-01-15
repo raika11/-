@@ -6,20 +6,17 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package jmnet.moka.web.tms;
-
-import jmnet.moka.core.common.logger.ActionLogger;
-import jmnet.moka.core.common.logger.LoggerCodes;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
+package jmnet.moka.web.dps;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import jmnet.moka.core.common.logger.ActionLogger;
+import jmnet.moka.core.common.logger.LoggerCodes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
-public class MokaTmsApplicationListener implements ServletContextListener {
+public class MokaDpsApplicationListener implements ServletContextListener {
     @Autowired
     private ActionLogger actionLogger;
     private long startTime = System.currentTimeMillis();

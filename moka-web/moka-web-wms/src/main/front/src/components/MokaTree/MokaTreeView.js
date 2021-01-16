@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import MokaTreeCategory from './MokaTreeCategory';
 import MokaTreeItem from './MokaTreeItem';
 import { MokaLoader } from '@components';
@@ -61,10 +62,11 @@ const defaultProps = {
 };
 
 /**
- * 트리뷰 컴포넌트
+ * 페이지관리 > 트리뷰 컴포넌트
  */
 const MokaTreeView = (props) => {
     const { data, height, loading, className } = props;
+    const scrollbarRef = useRef(null);
 
     /**
      * 트리아이템 생성 함수
@@ -74,7 +76,7 @@ const MokaTreeView = (props) => {
 
         if (nodes) {
             return (
-                <MokaTreeCategory key={pageSeq} nodeId={String(pageSeq)} nodeData={nodeData} {...props}>
+                <MokaTreeCategory key={pageSeq} scrollbarRef={scrollbarRef} nodeId={String(pageSeq)} nodeData={nodeData} {...props}>
                     {nodes.map(createTreeItem)}
                 </MokaTreeCategory>
             );
@@ -83,11 +85,17 @@ const MokaTreeView = (props) => {
     };
 
     return (
-        <div className={clsx('input-border custom-scroll treeview', className)} style={{ height }}>
+        <PerfectScrollbar
+            className={clsx('treeview', className)}
+            style={{ height }}
+            ref={scrollbarRef}
+            options={{ handlers: ['drag-thumb', 'keyboard', 'wheel', 'touch'], wheelSpeed: 0.5 }}
+        >
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading && data && (
                     <MokaTreeCategory
+                        scrollbarRef={scrollbarRef}
                         nodeId={String(data.pageSeq)}
                         nodeData={{
                             pageName: data.pageName,
@@ -106,7 +114,7 @@ const MokaTreeView = (props) => {
                     </MokaTreeCategory>
                 )}
             </ul>
-        </div>
+        </PerfectScrollbar>
     );
 };
 

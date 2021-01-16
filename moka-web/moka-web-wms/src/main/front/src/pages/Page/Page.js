@@ -122,9 +122,9 @@ const Page = ({ match }) => {
 
                 let msg;
                 if (fnode.node.nodes && fnode.node.nodes.length > 0) {
-                    msg = `하위 페이지도 삭제됩니다. ${item.pageName}(${item.pageUrl})을(를) 삭제하시겠습니까?`;
+                    msg = `하위 페이지도 삭제됩니다.\n${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`;
                 } else {
-                    msg = `${item.pageSeq}_${item.pageName}(${item.pageUrl})을(를) 삭제하시겠습니까?`;
+                    msg = `${item.pageSeq}_${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`;
                 }
 
                 messageBox.confirm(

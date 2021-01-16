@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
-
 import { MokaIcon } from '@components';
 import MokaTreeLabel from './MokaTreeLabel';
 
@@ -46,7 +45,7 @@ const defaultProps = {
 };
 
 const MokaTreeCategory = (props) => {
-    const { nodeId, selected, nodeData, children, expanded, onExpansion, onSelected, labelHoverButtons } = props;
+    const { nodeId, selected, nodeData, children, expanded, onExpansion, onSelected, labelHoverButtons, scrollbarRef } = props;
     const { depth, usedYn, match } = nodeData;
     const [open, setOpen] = useState(false);
     const controls = `sidebar-collapse-${nodeId}`;
@@ -68,6 +67,9 @@ const MokaTreeCategory = (props) => {
         if (onExpansion) {
             onExpansion(nodeData, e);
         }
+        if (scrollbarRef?.current) {
+            scrollbarRef.current.updateScroll();
+        }
     };
 
     /**
@@ -85,7 +87,12 @@ const MokaTreeCategory = (props) => {
     return (
         <li className="tree-category" key={nodeId} onClick={handleSelected} data-depth={depth} data-usedyn={usedYn}>
             <div className={clsx('tree-label', { selected: nodeId === selected })} aria-controls={controls} aria-expanded={open} data-toggle="collapse" data-match={match}>
-                <Button size="sm" variant="searching" className="mr-1" onClick={handleExpanded}>
+                <Button
+                    size="sm"
+                    variant={selected === nodeId ? 'info' : 'searching'}
+                    className={clsx('d-flex align-items-center justify-content-center mr-1')}
+                    onClick={handleExpanded}
+                >
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
                 <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />

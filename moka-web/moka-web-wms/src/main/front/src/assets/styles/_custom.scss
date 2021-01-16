@@ -380,12 +380,15 @@ body {
         }
 
         .tree-label {
+            height: 40px;
             padding: 7px 7px;
             display: flex;
             align-items: center;
             position: relative;
             user-select: none;
             cursor: pointer;
+            color: #5f6368;
+            font-weight: $font-weight-bold;
 
             & button {
                 width: 18px;
@@ -394,13 +397,16 @@ body {
             }
 
             &:hover {
-                background-color: $gray-500;
+                background-color: rgba(0,0,0,.04);
+                border: solid transparent;
+                border-width: 1px 1px 1px 0;
+                padding-bottom: 0;
+                padding-right: 0;
+                padding-top: 0;
+                border-radius: 0 66px 66px 0;
             }
 
             &:hover {
-                span { 
-                    color: $white;
-                }
                 > .tree-buttons {
                     visibility: visible;
 
@@ -422,8 +428,18 @@ body {
         }
 
         .selected {
-            background: $gray-400;
-            color: $black;
+            background-color: #e8f0fe;
+            border: solid transparent;
+            border-width: 1px 1px 1px 0;
+            padding-bottom: 0;
+            padding-right: 0;
+            padding-top: 0;
+            border-radius: 0 66px 66px 0;
+            color: #1967d2;
+
+            &:hover {
+                background-color: #e8f0fe;
+            }
         }
 
         /*2뎁스 padding*/
@@ -451,6 +467,11 @@ body {
         > .tree-category > div ul li div ul div ul li div ul .tree-category div ul li .tree-label {
             padding-left: 140px;
         }
+    }
+
+    /** 스크롤바 **/
+    .ps__thumb-y {
+        background-color: $gray-300;
     }
 }
 

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Figure from 'react-bootstrap/Figure';
+import Image from 'react-bootstrap/Image';
 import util from '@utils/commonUtil';
 import not_found from '@assets/images/not_found.png';
 
@@ -80,7 +81,7 @@ const MokaImage = (props) => {
             as="div"
         >
             {/* 이미지 미리보기 */}
-            <Figure.Image width={width} height={height} className="mb-0" alt={alt} src={imgSrc} ref={imgRef} />
+            <Image width={width} height={height} className="mb-0" alt={alt} src={imgSrc} ref={imgRef} />
         </Figure>
     );
 };

@@ -20,7 +20,7 @@ const BulkMonitorSearch = () => {
 
     return (
         <>
-            <Form>
+            <Form className="mb-2">
                 <Form.Row>
                     <div className="d-flex align-items-center">
                         <SourceSelector className="mr-2" value={sourceList} sourceType="BULK" onChange={(value) => setSourceList(value)} />
@@ -76,7 +76,7 @@ const BulkMonitorSearch = () => {
                             </MokaInput>
                         </div>
                         <div className="mr-2" style={{ width: 370 }}>
-                            <MokaInput className="mr-2" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+                            <MokaInput className="mr-2" placeholder="검색어를 입력하세요" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                         </div>
                         <MokaInput
                             as="checkbox"
@@ -98,11 +98,11 @@ const BulkMonitorSearch = () => {
                     </div>
                 </Form.Row>
             </Form>
-            <div className="d-flex">
-                <p>최종 갱신 시간</p>
-                <p>시간</p>
-                <p>[30초 후 갱신]</p>
-                <p>커스텀 스위치</p>
+            <div className="d-flex mb-5">
+                <p className="mb-0 mr-3">최종 갱신 시간</p>
+                <p className="mb-0 mr-3">2021-01-18 08:57:27</p>
+                <p className="mb-0 mr-2">[30초 후 갱신]</p>
+                <p className="mb-0">커스텀 스위치</p>
             </div>
         </>
     );

@@ -7,7 +7,8 @@ import columnDefs, { rowData } from './BulkMonitorSumAgGridColumns';
  */
 const BulKMonitorSumAgGrid = () => {
     return (
-        <MokaCard className="mb-5" width={710} height={150} header={false}>
+        <MokaCard className="mb-5" bodyClassName="d-flex align-items-center" width={805} height={150} header={false}>
+            <p className="mb-0 mr-3">벌크 현황 정보</p>
             <MokaTable className="flex-fill ag-grid-align-center" columnDefs={columnDefs} onRowNodeId={(params) => params.progress} rowData={rowData} paging={false} />
         </MokaCard>
     );

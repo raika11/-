@@ -28,7 +28,6 @@ export const initialState = {
         status: [
             { key: 'S', value: '서비스 중' },
             { key: 'T', value: '일시 중지' },
-            { key: 'D', value: '서비스 종료' },
         ],
     },
     search: {
@@ -42,6 +41,7 @@ export const initialState = {
         endDt: '',
         status: '',
     },
+    total: 0,
     list: [],
 };
 
@@ -49,6 +49,7 @@ export default handleActions(
     {
         [action.GET_POLL_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
+                draft.total = payload.data.body.totalCnt;
                 draft.list = payload.data.body.list;
             });
         },

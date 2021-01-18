@@ -36,15 +36,20 @@ export const columnDefs = [
         field: 'startDt',
         width: 130,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        children: [
+            {
+                headerName: '수정날짜',
+                field: 'modDt',
+                width: 130,
+                cellStyle: { fontSize: '12px', lineHeight: '16px' },
+                cellRendererFramework: (param) => {
+                    return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
+                },
+            },
+        ],
     },
     {
-        headerName: '종료일',
-        field: 'endDt',
-        width: 130,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
-    },
-    {
-        headerName: '미리보기',
+        headerName: '보기',
         field: 'preview',
         width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '60px' },
@@ -52,8 +57,8 @@ export const columnDefs = [
             return (
                 <div className="w-100 h-100 d-flex align-items-center justify-content-center">
                     <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
-                        <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent shadow-none" onClick={() => console.log('preview')}>
-                            <MokaIcon iconName="fal-file-search" size={'md'} />
+                        <Button variant="white" className="border-0 p-0 bg-transparent shadow-none" onClick={() => console.log('preview')}>
+                            <MokaIcon iconName="fal-file-search" style={{ fontSize: '24px' }} />
                         </Button>
                     </OverlayTrigger>
                 </div>
@@ -69,7 +74,7 @@ export const columnDefs = [
                 headerName: '수정날짜',
                 field: 'modDt',
                 width: 130,
-                cellStyle: { fontSize: '12px' },
+                cellStyle: { fontSize: '12px', lineHeight: '16px' },
                 cellRendererFramework: (param) => {
                     return <MultiRowColumnComponent values={[param.data.regDt, param.value]} />;
                 },
@@ -86,7 +91,7 @@ export const columnDefs = [
                 headerName: '수정자',
                 field: 'modeMember',
                 width: 100,
-                cellStyle: { fontSize: '12px' },
+                cellStyle: { fontSize: '12px', lineHeight: '16px' },
                 cellRendererFramework: (param) => {
                     return <MultiRowColumnComponent values={[param.data.regMember, param.value]} />;
                 },

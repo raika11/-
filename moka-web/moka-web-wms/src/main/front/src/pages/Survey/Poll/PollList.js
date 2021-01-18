@@ -8,8 +8,9 @@ import { getPollList } from '@store/survey/poll/pollAction';
 const PollList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { search, list, codes } = useSelector((store) => ({
+    const { search, list, codes, total } = useSelector((store) => ({
         search: store.poll.search,
+        total: store.poll.total,
         list: store.poll.list,
         codes: store.poll.codes,
     }));
@@ -29,7 +30,7 @@ const PollList = () => {
     return (
         <>
             <PollSearch searchOptions={search} codes={codes} onAdd={handleClickAdd} />
-            <PollAgGrid searchOptions={search} rows={list} />
+            <PollAgGrid searchOptions={search} rows={list} total={total} />
         </>
     );
 };

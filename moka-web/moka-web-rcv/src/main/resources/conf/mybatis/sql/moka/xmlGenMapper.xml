@@ -252,17 +252,6 @@
     ]]>
   </insert>
 
-  <delete id="callUpaArticleContentDel" parameterType="JamArticleTotalVo"
-    statementType="CALLABLE">
-    <![CDATA[
-    {
-      call UPA_ARTICLE_CONTENT_DEL(
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
-      )
-      }
-    ]]>
-  </delete>
-
   <insert id="callUpaArticleContentIns" parameterType="JamArticleTotalVo"
     statementType="CALLABLE">
     <![CDATA[
@@ -278,6 +267,28 @@
       ' ',
       'H',
       #{mainData.contents.body, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUpaArticleHistoryIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_HISTORY_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.workerInfo.workerId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalBasicInfo.masterCodes, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{totalBasicInfo.reporters, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{mainData.subTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{totalBasicInfo.keywords, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkimgFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.bulkSite, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.delSite, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string}
       )
       }
     ]]>

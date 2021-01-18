@@ -27,6 +27,9 @@ public class XmlGenProcess {
         final JamArticleVo article = articleTotal.getMainData();
         final XmlGenService xmlGenService = taskManager.getXmlGenService();
 
+        if( McpString.isNullOrEmpty(articleTotal.getMainData().getWorkerInfo().getWorkerId()))
+            articleTotal.getMainData().getWorkerInfo().setWorkerId("SYSTEM");
+
         XmlGenComponentManager componentManager = new XmlGenComponentManager(taskInputData, articleTotal, taskManager.getRcvConfiguration());
         final String operation = article.getIud().trim();
         switch (operation) {

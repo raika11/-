@@ -31,6 +31,8 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TotalBasicInfo {
     private String reporters;
+    private String keywords;
+    private String masterCodes;
     private Integer breakingNews;
     private int breakingNewsCnt;
 
@@ -49,6 +51,8 @@ public class TotalBasicInfo {
             }
         }
         this.setReporters(article.getReporterNameList());
+        this.setKeywords(article.getKeywordTagList());
+        this.setMasterCodes(articleTotal.getMasterCodeListComma());
 
         articleTotal.setServiceDate( McpDate.dateStr(articleTotal.getServiceDatetime(), "yyyyMMdd"));
         if (McpString.isNullOrEmpty(article.getPaperProp().getPressDate())) {

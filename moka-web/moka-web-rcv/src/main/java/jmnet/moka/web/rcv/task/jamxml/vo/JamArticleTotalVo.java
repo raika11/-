@@ -6,7 +6,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.vo.TotalVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.CategoryVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ReporterVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.TotalBasicInfo;
@@ -67,5 +69,16 @@ public class JamArticleTotalVo extends TotalVo<JamArticleVo> {
 
     public JamArticleTotalVo(JamArticleVo value) {
         super(value);
+    }
+
+    public String getMasterCodeListComma() {
+        String sRet = "";
+        for( String code : masterCodeList){
+            if (!McpString.isNullOrEmpty(sRet)) {
+                sRet = sRet.concat(",");
+            }
+            sRet = sRet.concat(code);
+        }
+        return sRet;
     }
 }

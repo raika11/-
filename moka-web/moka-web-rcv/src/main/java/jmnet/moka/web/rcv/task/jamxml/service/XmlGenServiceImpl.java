@@ -43,6 +43,7 @@ public class XmlGenServiceImpl implements XmlGenService {
     public void deleteArticleData(JamArticleTotalVo articleTotal)
             throws RcvDataAccessException {
         xmlGenMapper.callUpaArticleBasicDelByJamIdOrRid(articleTotal);
+        xmlGenMapper.callUpaArticleHistoryIns(articleTotal);
         afterProcessArticleData( articleTotal );
     }
 
@@ -111,6 +112,9 @@ public class XmlGenServiceImpl implements XmlGenService {
                 articleTotal.setCurKeyword(keyword);
                 xmlGenMapper.callUpaArticleKeywordIns(articleTotal);
             }
+
+            // TB_ARTICLE_HISTORY
+            xmlGenMapper.callUpaArticleHistoryIns(articleTotal);
 
             afterProcessArticleData( articleTotal );
         } catch (DataAccessException e) {

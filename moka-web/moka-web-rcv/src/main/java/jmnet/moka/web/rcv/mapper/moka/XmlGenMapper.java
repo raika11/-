@@ -33,8 +33,8 @@ public interface XmlGenMapper {
     void callUpa15ReComponentIns( JamArticleTotalVo articleTotal);
     void callUpa15ArticleMultiDel( JamArticleTotalVo articleTotal);
     void callUpa15ArticleMultiIns( JamArticleTotalVo articleTotal);
-    void callUpaArticleContentDel( JamArticleTotalVo articleTotal);
     void callUpaArticleContentIns( JamArticleTotalVo articleTotal);
+    void callUpaArticleHistoryIns( JamArticleTotalVo articleTotal);
 
     void callUpaArticleBasicDelByJamIdOrRid( JamArticleTotalVo articleTotal);
     void callUsp15ReXmlZenArtIudComplete( JamArticleTotalVo articleTotal);

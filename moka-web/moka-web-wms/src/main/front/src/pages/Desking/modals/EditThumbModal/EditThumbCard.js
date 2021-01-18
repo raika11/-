@@ -165,7 +165,7 @@ const EditThumbCard = forwardRef((props, ref) => {
     }, [img]);
 
     return (
-        <div className={clsx('p-2', className)} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
+        <div className={clsx(className, 'p-2')} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
             <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })}>
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div

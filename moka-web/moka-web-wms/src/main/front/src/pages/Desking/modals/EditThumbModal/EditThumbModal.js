@@ -7,7 +7,6 @@ import { MokaModal, MokaCardTabs } from '@components';
 import { clearStore } from '@store/photoArchive';
 import EditThumbSearch from './EditThumbSearch';
 import EditThumbTable from './EditThumbTable';
-import EditThumbPCImageList from './EditThumbPCImageList';
 import EditThumbArticleImageList from './EditThumbArticleImageList';
 import EditThumbDropzone from './EditThumbDropzone';
 import EditThumbCard from './EditThumbCard';
@@ -204,18 +203,13 @@ const EditThumbModal = (props) => {
                         <div className="px-card py-2 d-flex h-100 flex-column">
                             <EditThumbArticleImageList deskingWorkData={deskingWorkData} onRepClick={handleRepClick} />
                         </div>,
-
-                        // 내 PC 탭
-                        <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbPCImageList onRepClick={handleRepClick} />
-                        </div>,
                     ]}
-                    tabNavs={['아카이브', '본문 소재 리스트', '내 PC']}
+                    tabNavs={['아카이브', '본문 소재 리스트']}
                     fill
                 />
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
                     {/* 대표사진 */}
-                    <div className="deskthumb-main d-flex pt-3 justify-content-center" style={{ width: 202 }}>
+                    <div className="deskthumb-main d-flex justify-content-center align-items-center" style={{ width: 202 }}>
                         {repPhoto.thumbPath && repPhoto.thumbPath !== '' && (
                             <EditThumbCard
                                 img={repPhoto.thumbPath}

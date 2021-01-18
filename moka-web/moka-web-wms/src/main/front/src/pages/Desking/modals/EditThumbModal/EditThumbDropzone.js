@@ -11,6 +11,8 @@ import moment from 'moment';
 import commonUtil from '@utils/commonUtil';
 import { IMAGE_PROXY_API } from '@/constants';
 import imageEditer from '@utils/imageEditorUtil';
+import { NativeTypes } from 'react-dnd-html5-backend';
+import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 
 moment.locale('ko');
 
@@ -23,34 +25,52 @@ const EditThumbDropzone = (props) => {
     const cardRef = useRef(null);
     const [gifInterval, setGifInterval] = useState(0.5);
     const [btnDisabled, setBtnDisabled] = useState('disabled');
+
     /**
      * 드롭존으로 사용하기 위한 hook
      */
     const [{ isOver }, drop] = useDrop({
         // 지정된 유형 소스에 의해 생성된 항목에만 반응
-        accept: ItemTypes.GIF,
+        accept: [ItemTypes.GIF, NativeTypes.FILE],
         drop: (item, monitor) => {
             // 새 아이템만 등록
             if (item.move) return;
+
             if (imgList.findIndex((img) => img.id === item.id) > -1) {
                 toast.warning('이미 드롭된 이미지 입니다.');
                 return;
             }
 
-            if (addIndex > -1) {
-                setImgList(
-                    produce(imgList, (draft) => {
-                        draft.splice(addIndex, 0, item);
-                    }),
-                );
+            if (item.type === 'gif') {
+                if (addIndex > -1) {
+                    setImgList(
+                        produce(imgList, (draft) => {
+                            draft.splice(addIndex, 0, item);
+                        }),
+                    );
+                } else {
+                    setImgList(
+                        produce(imgList, (draft) => {
+                            draft.push(item);
+                        }),
+                    );
+                }
             } else {
-                setImgList(
-                    produce(imgList, (draft) => {
-                        draft.push(item);
-                    }),
-                );
-            }
+                let imageFiles = [];
+                item.files.forEach((f, idx) => {
+                    if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
+                        const id = moment().format('YYYYMMDDsss') + `_${idx}`;
+                        const preview = URL.createObjectURL(f);
+                        imageFiles.push({ id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: preview });
+                    } else {
+                        // 이미지 파일이 아닌경우
+                        toast.warning('이미지 파일만 등록할 수 있습니다.');
+                    }
+                });
 
+                const arr = imgList.concat(imageFiles);
+                setImgList(arr);
+            }
             setAddIndex(-1);
         },
         collect: (monitor) => ({
@@ -184,13 +204,21 @@ const EditThumbDropzone = (props) => {
 
             {/* 드롭 영역 */}
             <div className={clsx('flex-fill', 'px-3', 'is-file-dropzone', 'pb-3', 'overflow-hidden', 'pt-10')}>
-                <div ref={drop} className={clsx('w-100 h-100 position-relative custom-scroll ', { 'dropzone-dragover': isOver })}>
-                    <div className="d-flex flex-wrap align-content-start position-relative pb-1">
-                        <div className="" style={{ minHeight: 139 }}></div>
+                <div ref={drop} className={clsx('w-100 h-100 position-relative p-1', { 'dropzone-dragover': isOver })}>
+                    <div className="d-flex flex-wrap h-100 align-content-start custom-scroll position-relative">
+                        {/* default text */}
+                        {imgList.length === 0 ? (
+                            <span className="absolute-top w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none p-3" style={{ whiteSpace: 'pre-wrap' }}>
+                                <MokaIcon iconName="fal-cloud-upload" className="mr-2" />
+                                Drop files to attach, or browse
+                            </span>
+                        ) : (
+                            ''
+                        )}
                         {imgList.map((data, idx) => (
                             <EditThumbCard
                                 ref={cardRef}
-                                width={191}
+                                width={190}
                                 height={135}
                                 className="flex-shrink-0"
                                 key={idx}

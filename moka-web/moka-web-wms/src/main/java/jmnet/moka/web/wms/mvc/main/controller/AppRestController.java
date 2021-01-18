@@ -82,12 +82,6 @@ public class AppRestController {
     @Value("${photo.archive.url}")
     private String photoArchiveUrl;
 
-    @Value("${crop.width}")
-    private String cropWidth;
-
-    @Value("${crop.height}")
-    private String cropHeight;
-
     @Value("${watermark.path}")
     private String watermarkPath;
 
@@ -122,8 +116,6 @@ public class AppRestController {
                 .add("IR_URL", irUrl)                                                // ir Url
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
                 .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
-                .add("CROP_WIDTH", cropWidth)                                        // 편집이미지 crop 기본 가로사이즈
-                .add("CROP_HEIGHT", cropHeight)                                      // 편집이미지 crop 기본 세로사이즈
                 .add("WATERMARK_PATH", watermarkPath)                                // 워터마크 이미지 경로
                 .getMap();
 

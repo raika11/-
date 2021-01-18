@@ -702,13 +702,13 @@ public class DeskingServiceImpl implements DeskingService {
     @Override
     @Transactional
     public void deleteDeskingWorkList(List<DeskingWorkVO> deleteDeksingList, Long datasetSeq, String regId) {
-        List<Long> deleteIdList = deleteDeksingList
-                .stream()
-                .map(DeskingWorkVO::getSeq)
-                .collect(Collectors.toList());
-
         // 삭제
         if (deleteDeksingList != null && deleteDeksingList.size() > 0) {
+            List<Long> deleteIdList = deleteDeksingList
+                    .stream()
+                    .map(DeskingWorkVO::getSeq)
+                    .collect(Collectors.toList());
+
             for (DeskingWorkVO vo : deleteDeksingList) {
                 // 주기사삭제시, 관련기사도 삭제
                 if (vo.getRelSeqs() != null && vo

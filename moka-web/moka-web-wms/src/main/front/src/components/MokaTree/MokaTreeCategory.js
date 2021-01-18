@@ -97,7 +97,7 @@ const MokaTreeCategory = (props) => {
                 </Button>
                 <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />
             </div>
-            <Collapse in={open} timeout={3000}>
+            <Collapse in={open} timeout={0}>
                 <div id={controls}>
                     <ul id="item" className="list-unstyled">
                         {children}

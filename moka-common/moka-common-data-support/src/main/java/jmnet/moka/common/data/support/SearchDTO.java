@@ -384,7 +384,9 @@ public class SearchDTO implements Serializable {
         if (this.sort == null && McpString.isNotEmpty(defaultSort)) {
             this.setSort(Collections.singletonList(this.defaultSort));
         } else {
-            sortList.addAll(this.sort);
+            if ( this.sort != null) {
+                sortList.addAll(this.sort);
+            }
         }
         List<String> sortByColumnList = new ArrayList<>();
         for (String sort : sortList) {

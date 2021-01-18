@@ -61,7 +61,7 @@ public class SearchParamResolver implements HandlerMethodArgumentResolver {
 
     @Override
     @Nullable
-    public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
             @Nullable WebDataBinderFactory binderFactory)
             throws Exception {
 

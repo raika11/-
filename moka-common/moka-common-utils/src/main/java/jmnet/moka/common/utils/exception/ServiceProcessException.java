@@ -24,10 +24,14 @@ public class ServiceProcessException extends RuntimeException {
 
 	public ServiceProcessException(Exception e, HttpStatus httpStatus) {
 		super();
-		int statusCode = httpStatus.value();
-		if (statusCode >= 400 && statusCode < 500) {
-			BadRequestException ire = new BadRequestException(httpStatus, e, e.getMessage());
-			this.exception = ire;
+		if ( httpStatus != null) {
+			int statusCode = httpStatus.value();
+			if (statusCode >= 400 && statusCode < 500) {
+				BadRequestException ire = new BadRequestException(httpStatus, e, e.getMessage());
+				this.exception = ire;
+			} else {
+				this.exception = e;
+			}
 		} else {
 			this.exception = e;
 		}

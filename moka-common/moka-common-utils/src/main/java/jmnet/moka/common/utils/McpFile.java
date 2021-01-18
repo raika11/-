@@ -253,7 +253,9 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     private static void mkDestdir(final String filePath) {
         File destDirectory = new File(filePath);
         if (!destDirectory.exists()) {
-            destDirectory.mkdirs();
+            if ( !destDirectory.mkdirs() ) {
+                logger.error("Can't make directory:{}",destDirectory.getAbsolutePath());
+            }
         }
     }
 
@@ -496,7 +498,9 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         File file = new File(filePath);
         File dir = new File(file.getParent());
         if (!dir.exists()) {
-            dir.mkdirs();
+            if ( !dir.mkdirs() ) {
+                throw new FileNotFoundException("Can't make directory:"+dir.getAbsolutePath());
+            }
         }
         FileOutputStream fos = null;
         try {
@@ -530,7 +534,9 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         File file = new File(filePath);
         File dir = new File(file.getParent());
         if (!dir.exists()) {
-            dir.mkdirs();
+            if ( !dir.mkdirs()) {
+                throw new FileNotFoundException("Can't make directory:"+dir.getAbsolutePath());
+            }
         }
 
         try (BufferedWriter output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getPath()), DEFAULT_CHARSET))) {

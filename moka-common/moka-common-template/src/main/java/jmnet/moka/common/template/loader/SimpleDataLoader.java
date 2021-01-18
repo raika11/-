@@ -19,8 +19,8 @@ import jmnet.moka.common.template.exception.DataLoadException;
 
 public class SimpleDataLoader extends AbstractDataLoader {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleDataLoader.class);
-	public static int DEFAULT_BUFFER_SIZE = 2048;
-	public static String DEFAULT_ENCODING = "UTF-8";
+	public static final int DEFAULT_BUFFER_SIZE = 2048;
+	public static final String DEFAULT_ENCODING = "UTF-8";
 	private String apiHost;
 	private String apiPath;
 	

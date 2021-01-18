@@ -116,7 +116,9 @@ public class TemplateRoot extends TemplateElement {
                     templateRoot = merger.getParsedTemplate(ITEM_AD,
                             ((TemplateElement) templateNode).getAttribute(ATTR_ID));
                 }
-                templateRoot.templateTree(merger, treeNode);
+                if ( templateRoot != null) {
+					templateRoot.templateTree(merger, treeNode);
+				}
             }
         }
 	}
@@ -175,6 +177,9 @@ public class TemplateRoot extends TemplateElement {
             case TYPE_AD:
             case TYPE_CT:
                 templateIdList.add("NOT IMPLEMENTED");
+			default:
+				// no default case
+				;
         }
         return templateIdList;
     }

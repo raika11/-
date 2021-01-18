@@ -337,13 +337,13 @@ public class McpString extends StringUtils {
             return null;
         }
         if (value instanceof Integer) {
-            return (Long) value;
+            return ((Integer) value).longValue();
         } else if (value instanceof BigDecimal) {
             return ((BigDecimal) value).longValue();
         } else if (value instanceof BigInteger) {
             return ((BigInteger) value).longValue();
         } else if (value instanceof Long) {
-            return ((Long) value).longValue();
+            return (Long) value;
         }
         return (Long) value;
     }

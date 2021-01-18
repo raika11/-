@@ -19,8 +19,8 @@ public class TemplateParseException extends Exception {
     public static final int CYCLE_TEMPLATE = 4;
 	public static final int UNEXPECTED = 99;
 	
-    public static final String[] messages = {"태그 문법 오류", "종료태그 불일치 오류", "속성 문법 오류", "토큰 문법 오류"};
-    public static final String UNEXPECTED_MESSAGE = "예상치 못한 오류";
+    private static final String[] messages = {"태그 문법 오류", "종료태그 불일치 오류", "속성 문법 오류", "토큰 문법 오류"};
+	private static final String UNEXPECTED_MESSAGE = "예상치 못한 오류";
 	
 	private int lineNumber;
     private int errorCode;

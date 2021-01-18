@@ -107,6 +107,9 @@ public class TemplateParser {
                 case ELEMENT_NONE:
                     parent.addChildren(ei.createTemplateTextAndToken(previous, false));
                     previous = parent.getLast();
+				default:
+					// no default case
+					;
 			}
 		}
         return false;

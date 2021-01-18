@@ -183,9 +183,9 @@ const EditThumbDropzone = (props) => {
             </div>
 
             {/* 드롭 영역 */}
-            <div className={clsx('flex-fill', 'px-3', 'is-file-dropzone', 'pb-3', 'overflow-hidden', 'pt-10', { 'dropzone-dragover': isOver })}>
-                <div ref={drop} className="w-100 h-100 position-relative dropzone-dragover-zone custom-scroll">
-                    <div className="d-flex flex-wrap align-content-start position-relative pb-1 ">
+            <div className={clsx('flex-fill', 'px-3', 'is-file-dropzone', 'pb-3', 'overflow-hidden', 'pt-10')}>
+                <div ref={drop} className={clsx('w-100 h-100 position-relative custom-scroll ', { 'dropzone-dragover': isOver })}>
+                    <div className="d-flex flex-wrap align-content-start position-relative pb-1">
                         <div className="" style={{ minHeight: 139 }}></div>
                         {imgList.map((data, idx) => (
                             <EditThumbCard

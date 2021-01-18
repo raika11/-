@@ -74,7 +74,7 @@ public class DataMerger extends AbstractElementMerger {
 			} else if ( url != null) {
 				jsonResult = loader.getJSONResult(url, parameterMap, false);
 			} else {
-				throw new TemplateMergeException("Data api/url Attribute Not Found: "+ url, element );
+				throw new TemplateMergeException("Data api/url Attribute Not Found: ", element );
 			}
 			context.set(data, jsonResult);
 			// TOTAL 예외 처리

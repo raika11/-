@@ -142,16 +142,16 @@ public class CacheConfigParser {
 			switch ( timeUnit) {
 			case 's' :
 			case 'S' :
-                    return (long) (timeValue * 1000);
+                    return timeValue * 1000L;
 			case 'm' :
 			case 'M' :
-                    return (long) (timeValue * 1000 * 60);
+                    return timeValue * 1000L * 60;
 			case 'h' :
 			case 'H' :
-                    return (long) (timeValue * 1000 * 60 * 60);
+                    return timeValue * 1000L * 60 * 60;
 			case 'd' :
 			case 'D' :
-                    return (long) (timeValue * 1000L * 60 * 60 * 24);
+                    return timeValue * 1000L * 60 * 60 * 24;
 			}
             return (long) defaultValue;
 		} else {

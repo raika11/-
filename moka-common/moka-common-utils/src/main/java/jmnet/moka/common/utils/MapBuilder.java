@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -118,12 +119,10 @@ public class MapBuilder {
     public MultiValueMap<String, Object> getMultiValueMap(boolean isUnderScore, String[] ignoreUnderScore)
             throws Exception {
         MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<String, Object>();
-        Set<String> sets = map.keySet();
-        Iterator<String> keys = sets.iterator();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            if (map.get(key) instanceof List<?>) {
-                List<?> list = (List<?>) map.get(key);
+        for ( Entry<String,Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            if (entry.getValue() instanceof List<?>) {
+                List<?> list = (List<?>) entry.getValue();
                 for (Object obj : list) {
                     if (obj instanceof String) {
                         if (isUnderScore && ArrayUtils.indexOf(ignoreUnderScore, key) == -1) {
@@ -136,23 +135,23 @@ public class MapBuilder {
                         keySet.forEach((skey) -> multiValueMap.add(skey, McpString.nvl(subMap.get(skey), "")));
                     }
                 }
-            } else if (map.get(key) instanceof String[]) {
-                String[] list = (String[]) map.get(key);
+            } else if (entry.getValue() instanceof String[]) {
+                String[] list = (String[]) entry.getValue();
                 if (isUnderScore && ArrayUtils.indexOf(ignoreUnderScore, key) == -1) {
                     key = McpString.convertCamelToSnake(key);
                 }
                 for (String obj : list) {
                     multiValueMap.add(key, obj);
                 }
-            } else if (map.get(key) instanceof Object[]) {
-                Object[] objList = (Object[]) map.get(key);
+            } else if (entry.getValue() instanceof Object[]) {
+                Object[] objList = (Object[]) entry.getValue();
                 for (Object obj : objList) {
                     Map<String, Object> subMap = BeanConverter.toMap(obj, isUnderScore, ignoreUnderScore);
                     Set<String> keySet = subMap.keySet();
                     keySet.forEach((skey) -> multiValueMap.add(skey, McpString.nvl(subMap.get(skey), "")));
                 }
             } else {
-                Object value = map.get(key);
+                Object value = entry.getValue();
                 if (value != null) {
                     if (isUnderScore && ArrayUtils.indexOf(ignoreUnderScore, key) == -1) {
                         key = McpString.convertCamelToSnake(key);
@@ -189,12 +188,9 @@ public class MapBuilder {
     public String getQueryString(boolean firstCheck, boolean encode)
             throws Exception {
         String queryString = "";
-
-        Set<String> sets = map.keySet();
-        Iterator<String> keys = sets.iterator();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            if (map.get(key) != null) {
+        for(Entry<String,Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            if (entry.getValue() != null) {
                 if (firstCheck) {
                     if (StringUtils.isEmpty(queryString)) {
                         queryString += "?";
@@ -204,7 +200,7 @@ public class MapBuilder {
                 } else {
                     queryString += "&";
                 }
-                String value = encode ? URLEncoder.encode((String) map.get(key), "UTF-8") : (String) map.get(key);
+                String value = encode ? URLEncoder.encode((String) entry.getValue(), "UTF-8") : (String) entry.getValue();
                 queryString += key + "=" + value;
             }
         }
@@ -221,22 +217,17 @@ public class MapBuilder {
      */
     public String getQueryString(MultiValueMap<String, Object> params) {
         String queryString = "";
-
-        Set<String> sets = params.keySet();
-        Iterator<String> keys = sets.iterator();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            List<Object> list = params.get(key);
-            for (Object obj : list) {
+        Set<Entry<String,List<Object>>> entrySet = params.entrySet();
+        for ( Entry<String,List<Object>> entry : entrySet){
+            String key = entry.getKey();
+            for (Object obj : entry.getValue()) {
                 if (StringUtils.isEmpty(queryString)) {
                     queryString += "?";
                 } else {
                     queryString += "&";
                 }
-
                 queryString += key + "=" + obj;
             }
-
         }
         return queryString;
     }

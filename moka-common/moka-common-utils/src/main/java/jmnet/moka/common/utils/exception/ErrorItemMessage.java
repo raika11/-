@@ -1,6 +1,7 @@
 package jmnet.moka.common.utils.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 
 /**
  * 
@@ -12,7 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author ince
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ErrorItemMessage {
+public class ErrorItemMessage implements Serializable {
+	private static final long serialVersionUID = 5572113616847158374L;
 	/** 오류 발생 오브젝트 명 **/
 	private String resource;
 

@@ -43,7 +43,7 @@ public class FileProxyItem {
 	 */
 	public byte[] getByteArray() throws IOException {
 		if ( this.byteArray == null || this.lastCached + cacheTime < System.currentTimeMillis() ) {
-			synchronized(this) {
+			synchronized(this.file) {
 				// 대기중이 였던 thread는 통과하게 한다.
 				if ( this.byteArray == null || this.lastCached + cacheTime < System.currentTimeMillis() ) {
 					this.load();
@@ -52,7 +52,9 @@ public class FileProxyItem {
 		} else {
 			logger.debug("File {} : CACHED", file.getAbsolutePath());
 		}
-		return byteArray;
+		final byte[] cloned = new byte[this.byteArray.length];
+		System.arraycopy(this.byteArray, 0, cloned,0,this.byteArray.length);
+		return cloned;
 	}
 	
 	/**

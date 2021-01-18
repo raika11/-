@@ -150,9 +150,9 @@ public class Constants {
 	public final static String WRAP_ITEM_ID = "itemId";
 	public final static String WRAP_ITEM_START = "<div data-mte-type=\"${"+WRAP_ITEM_TYPE+"}\" data-mte-id=\"${"+WRAP_ITEM_ID+"}\">";
 	public final static String WRAP_ITEM_END = "</div>";
-	public final static HashMap<String,Short> name2NodeTypeMap = new HashMap<String, Short>();
-	public final static HashMap<String,String> name2ItemMap = new HashMap<String, String>();
-	public final static List<String> RESERVED_VARIABLES = new ArrayList<String>(64);
+	public static HashMap<String,Short> name2NodeTypeMap = new HashMap<String, Short>();
+	public static HashMap<String,String> name2ItemMap = new HashMap<String, String>();
+	public static List<String> RESERVED_VARIABLES = new ArrayList<String>(64);
 	
 	static {
 		name2NodeTypeMap.put(EL_CT, TYPE_CT);

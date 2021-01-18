@@ -46,7 +46,10 @@ public class DTOModelMapper extends RequestResponseBodyMethodProcessor {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Object dto = super.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
-        Object id = getEntityId(dto);
+        Object id = null;
+        if (dto != null) {
+            id = getEntityId(dto);
+        }
         if (id == null) {
             return modelMapper.map(dto, parameter.getParameterType());
         } else {

@@ -95,7 +95,11 @@ public class FileTemplateLoader implements TemplateLoader<String> {
 		} catch ( Exception e) {
 			logger.debug("Template Loaded Fail And Will Retry : {} {} {}", type, id, makePath(type, id));
 			// assistanceTemplateLoader로 다시 조회한다.
-			template = this.assistantTemplateLoader.getItem(type, id);
+			try {
+				template = this.assistantTemplateLoader.getItem(type, id);
+			} catch ( Exception e1) {
+				throw e1;
+			}
 		}
 		
 		if ( cacheable ) this.templateMap.put(makeKey(type,id), template);

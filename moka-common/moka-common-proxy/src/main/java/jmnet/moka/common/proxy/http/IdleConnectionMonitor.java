@@ -23,7 +23,7 @@ public class IdleConnectionMonitor extends Thread {
     public void run() {
         try {
             while (!shutdown) {
-                synchronized (this) {
+                synchronized (this.connectionManager) {
                     wait(intervalSec * 1000);
                     if (connectionManager != null) {
                         connectionManager.closeExpiredConnections();
@@ -38,7 +38,7 @@ public class IdleConnectionMonitor extends Thread {
 
     public void shutdown() {
         shutdown = true;
-        synchronized (this) {
+        synchronized (this.connectionManager) {
             notifyAll();
         }
     }

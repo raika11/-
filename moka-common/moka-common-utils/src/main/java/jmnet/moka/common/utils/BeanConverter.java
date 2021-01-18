@@ -313,7 +313,7 @@ public final class BeanConverter {
         } else if (paramType == String.class) {
             setter.invoke(bean, Boolean.getBoolean((String) value));
         } else {
-            setter.invoke(bean, Boolean.getBoolean((String) value));
+            setter.invoke(bean, Boolean.getBoolean(value.toString()));
         }
         if (v == 1) {
             setter.invoke(bean, Boolean.TRUE);
@@ -539,7 +539,7 @@ public final class BeanConverter {
         }
         T[] list = (T[]) Array.newInstance(clazz, rows.length);
 
-        if (rows != null && rows.length > 0) {
+        if (rows.length > 0) {
             int i = 0;
             for (T row : rows) {
                 T target = BeanUtils.instantiate(clazz);

@@ -47,14 +47,14 @@ public class ErrorMessage implements Serializable {
 	 * @return timestamp
 	 */
 	public Date getTimestamp() {
-		return timestamp;
+		return new Date(this.timestamp.getTime());
 	}
 
 	/**
 	 * @param timestamp
 	 */
 	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+		this.timestamp = new Date(this.timestamp.getTime());
 	}
 
 	/**

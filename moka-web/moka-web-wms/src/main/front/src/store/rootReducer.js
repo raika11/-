@@ -39,6 +39,7 @@ import comment from '@store/commentManage/commentReducer';
 import board from '@store/board/boardsReducer';
 import seoMeta from '@store/seoMeta/seoMetaReducer';
 import jpod from '@store/jpod/jpodReducer';
+import poll from '@store/survey/poll/pollReducer';
 
 export default combineReducers({
     toastr,
@@ -80,4 +81,5 @@ export default combineReducers({
     board,
     seoMeta,
     jpod,
+    poll,
 });

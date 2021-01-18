@@ -1,14 +1,22 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
 import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
+import { useDispatch } from 'react-redux';
+import { getPollCategoryCodes, getPollGroupCodes } from '@store/survey/poll/pollAction';
 
 const PollList = React.lazy(() => import('@pages/Survey/Poll/PollList'));
 const PollEdit = React.lazy(() => import('@pages/Survey/Poll/PollEdit'));
 
 const Poll = ({ match }) => {
+    const dispatch = useDispatch();
     const [activeTabIdx, setActiveTabIdx] = useState(0);
+
+    useEffect(() => {
+        dispatch(getPollCategoryCodes());
+        dispatch(getPollGroupCodes());
+    }, [dispatch]);
 
     return (
         <div className="d-flex">

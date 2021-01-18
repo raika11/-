@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import Button from 'react-bootstrap/Button';
-import { codes } from '@pages/Survey/Poll/PollAgGridColumns';
+import commonUtil from '@utils/commonUtil';
+import produce from 'immer';
 
-const PollSearch = ({ searchOptions, onChange, onAdd }) => {
+const PollSearch = ({ searchOptions, codes, onSearch, onAdd }) => {
+    const [options, setOptions] = useState({});
     const handleChangeValue = ({ target: { name, value } }) => {
-        onChange({ ...searchOptions, [name]: value });
+        setOptions(
+            produce(options, (draft) => {
+                draft[name] = value;
+            }),
+        );
     };
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(searchOptions)) {
+            setOptions(searchOptions);
+        }
+    }, [searchOptions]);
 
     return (
         <Form className="pb-2">
             <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInputLabel name="group" label="그룹" as="select" labelWidth={25} onChange={handleChangeValue} value={searchOptions.group}>
-                        {codes.groups.map((option) => (
+                    <MokaInputLabel name="group" label="그룹" as="select" labelWidth={25} onChange={handleChangeValue} value={options.group}>
+                        {codes.group.map((option) => (
                             <option key={option.key} value={option.key}>
                                 {option.value}
                             </option>
@@ -24,7 +36,7 @@ const PollSearch = ({ searchOptions, onChange, onAdd }) => {
                     </MokaInputLabel>
                 </Col>
                 <Col xs={3} className="p-0 pr-2">
-                    <MokaInputLabel name="status" label="투표 상태" as="select" labelWidth={55} onChange={handleChangeValue} value={searchOptions.status}>
+                    <MokaInputLabel name="status" label="투표 상태" as="select" labelWidth={55} onChange={handleChangeValue} value={options.status}>
                         <option key="0" value="0"></option>
                         {codes.status.map((option) => (
                             <option key={option.key} value={option.key}>
@@ -34,9 +46,9 @@ const PollSearch = ({ searchOptions, onChange, onAdd }) => {
                     </MokaInputLabel>
                 </Col>
                 <Col xs={2} className="p-0 pr-2">
-                    <MokaInputLabel name="section" label="분류" as="select" labelWidth={25} onChange={handleChangeValue} value={searchOptions.section}>
+                    <MokaInputLabel name="section" label="분류" as="select" labelWidth={25} onChange={handleChangeValue} value={options.section}>
                         <option key="0" value="0"></option>
-                        {codes.servcode.map((option) => (
+                        {codes.category.map((option) => (
                             <option key={option.key} value={option.key}>
                                 {option.value}
                             </option>
@@ -78,14 +90,14 @@ const PollSearch = ({ searchOptions, onChange, onAdd }) => {
                 <Col xs={7}>
                     <Form.Row>
                         <Col xs={3} className="p-0 pr-2">
-                            <MokaInput as="select" name="searchType" value={searchOptions.searchType} onChange={handleChangeValue}>
+                            <MokaInput as="select" name="searchType" value={options.searchType} onChange={handleChangeValue}>
                                 <option value="1">투표 ID</option>
                                 <option value="2">투표 제목</option>
                                 <option value="3">투표 답변</option>
                             </MokaInput>
                         </Col>
                         <Col xs={7} className="p-0 pr-2">
-                            <MokaSearchInput name="keyword" value={searchOptions.keyword} onChange={handleChangeValue} />
+                            <MokaSearchInput name="keyword" value={options.keyword} onChange={handleChangeValue} />
                         </Col>
                         <Col xs={1} className="p-0">
                             <Button variant="negative">초기화</Button>

@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PollSearch from '@pages/Survey/Poll/PollSearch';
 import PollAgGrid from '@pages/Survey/Poll/PollAgGrid';
 import { useHistory } from 'react-router-dom';
-import { PAGESIZE_OPTIONS } from '@/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPollList } from '@store/survey/poll/pollAction';
 
 const PollList = () => {
     const history = useHistory();
-    const [search, setSearch] = useState({ group: '1', status: '0', section: '0', searchType: '1', page: 0, size: PAGESIZE_OPTIONS[0], total: 1, keyword: '' });
+    const dispatch = useDispatch();
+    const { search, list, codes } = useSelector((store) => ({
+        search: store.poll.search,
+        list: store.poll.list,
+        codes: store.poll.codes,
+    }));
 
     const handleClickAdd = () => {
         history.push('/poll/add');
     };
 
+    useEffect(() => {
+        dispatch(getPollList({ search }));
+    }, [dispatch, search]);
+
+    useEffect(() => {
+        console.log(list);
+    }, [list]);
+
     return (
         <>
-            <PollSearch searchOptions={search} onChange={setSearch} onAdd={handleClickAdd} />
-            <PollAgGrid searchOptions={search} />
+            <PollSearch searchOptions={search} codes={codes} onAdd={handleClickAdd} />
+            <PollAgGrid searchOptions={search} rows={list} />
         </>
     );
 };

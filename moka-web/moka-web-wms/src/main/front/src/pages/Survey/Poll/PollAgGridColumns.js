@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import MultiRowColumnComponent from '@pages/Survey/Poll/components/MultiRowColumnComponent';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { MokaIcon, MokaTableDeleteButton } from '@components';
 
 export const columnDefs = [
     {
@@ -11,7 +14,7 @@ export const columnDefs = [
     },
     {
         headerName: '분류',
-        field: 'section',
+        field: 'category',
         width: 70,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
@@ -31,29 +34,29 @@ export const columnDefs = [
     {
         headerName: '시작일',
         field: 'startDt',
-        width: 70,
+        width: 130,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
     {
         headerName: '종료일',
         field: 'endDt',
-        width: 80,
+        width: 130,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
     {
         headerName: '미리보기',
         field: 'preview',
-        width: 80,
+        width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '60px' },
         cellRendererFramework: (param) => {
             return (
-                <Row className="d-flex w-100 align-items-center justify-content-center mr-0">
-                    <Col className="w-100">
-                        <Button variant={param.value.variant} onClick={param.value.handleClick} size="sm">
-                            {param.value.name}
+                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                    <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
+                        <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent shadow-none" onClick={() => console.log('preview')}>
+                            <MokaIcon iconName="fal-file-search" size={'md'} />
                         </Button>
-                    </Col>
-                </Row>
+                    </OverlayTrigger>
+                </div>
             );
         },
     },
@@ -64,7 +67,7 @@ export const columnDefs = [
         children: [
             {
                 headerName: '수정날짜',
-                field: 'regDt',
+                field: 'modDt',
                 width: 130,
                 cellStyle: { fontSize: '12px' },
                 cellRendererFramework: (param) => {
@@ -75,17 +78,17 @@ export const columnDefs = [
     },
     {
         headerName: '등록자',
-        field: 'regMod',
+        field: 'regMember',
         width: 70,
         cellStyle: { fontSize: '12px' },
         children: [
             {
                 headerName: '수정자',
-                field: 'regMod',
+                field: 'modeMember',
                 width: 100,
                 cellStyle: { fontSize: '12px' },
                 cellRendererFramework: (param) => {
-                    return <MultiRowColumnComponent values={[`${param.data.regName}(${param.data.regId})`, `${param.data.modName}(${param.data.modId})`]} />;
+                    return <MultiRowColumnComponent values={[param.data.regMember, param.value]} />;
                 },
             },
         ],
@@ -96,11 +99,7 @@ export const columnDefs = [
         width: 50,
         cellStyle: { fontSize: '12px', lineHeight: '60px' },
         cellRendererFramework: (param) => {
-            return (
-                <Button variant={param.value.variant} onClick={param.value.handleClick} size="sm">
-                    {param.value.name}
-                </Button>
-            );
+            return <MokaTableDeleteButton />;
         },
     },
 ];
@@ -157,8 +156,8 @@ export const codes = {
         { key: '17', value: '포털news' },
     ],
     status: [
-        { key: 'D', value: '종료' },
-        { key: 'S', value: '서비스중' },
+        { key: 'D', value: '서비스 종료' },
+        { key: 'S', value: '서비스 중' },
         { key: 'T', value: '일시중지' },
     ],
     servcode: [

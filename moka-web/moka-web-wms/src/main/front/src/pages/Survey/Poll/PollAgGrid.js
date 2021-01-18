@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { columnDefs, rowData } from '@pages/Survey/Poll/PollAgGridColumns';
 
-const PollAgGrid = ({ searchOptions }) => {
+const PollAgGrid = ({ searchOptions, rows }) => {
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        setRowData(rows);
+    }, [rows]);
     return (
         <>
             <MokaTable

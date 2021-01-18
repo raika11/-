@@ -5,13 +5,10 @@ const MultiRowColumnComponent = ({ values }) => {
     return (
         <>
             {values.map((value, index) => (
-                <div className="d-flex">
-                    <p className="mb-0 flex-fill text-truncate" key={index}>
-                        {value}
-                    </p>
+                <div className="d-flex" key={index}>
+                    <p className="mb-0 flex-fill text-truncate">{value}</p>
                 </div>
             ))}
-            <p className="mb-0 flex-fill text-truncate">hh</p>
         </>
     );
 };

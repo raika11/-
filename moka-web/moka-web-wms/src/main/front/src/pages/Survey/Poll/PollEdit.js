@@ -23,7 +23,7 @@ const PollEdit = () => {
     return (
         <MokaCard
             title="투표 등록"
-            className="flex-fill"
+            className="w-100"
             footer
             footerClassName="justify-content-center"
             footerButtons={[

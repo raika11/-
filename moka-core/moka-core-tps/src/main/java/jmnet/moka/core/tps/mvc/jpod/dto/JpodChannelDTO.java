@@ -132,13 +132,15 @@ public class JpodChannelDTO implements Serializable {
     /**
      * 채널 에피소드 수, 목록 조회시 사용
      */
+    @ApiModelProperty(value = "채널 에피소드 수", hidden = true)
     @Builder.Default
     @Transient
     private Long totalEpsdCnt = 0l;
 
     /**
-     * 채널 에피소드 수, 목록 조회시 사용
+     * 최근 에피소드 회차, 목록 조회시 사용
      */
+    @ApiModelProperty(value = "최근 에피소드 회차", hidden = true)
     @Transient
     private String lastEpsdNo;
 

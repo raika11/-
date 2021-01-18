@@ -77,28 +77,40 @@ public class JpodEpisodeServiceImpl implements JpodEpisodeService {
     public JpodEpisodeDetail insertJpodEpisode(JpodEpisodeDetail episode) {
         final JpodEpisodeDetail newEpisode = saveJpodEpisodeDetail(episode);
 
-        episode
+        if (episode.getKeywords() != null && episode
                 .getKeywords()
-                .forEach(jpodKeyword -> {
-                    jpodKeyword.setEpsdSeq(newEpisode.getEpsdSeq());
-                    jpodKeywordRepository.save(jpodKeyword);
-                });
+                .size() > 0) {
+            episode
+                    .getKeywords()
+                    .forEach(jpodKeyword -> {
+                        jpodKeyword.setEpsdSeq(newEpisode.getEpsdSeq());
+                        jpodKeywordRepository.save(jpodKeyword);
+                    });
+        }
 
-        episode
+        if (episode.getMembers() != null && episode
                 .getMembers()
-                .forEach(jpodMember -> {
-                    jpodMember.setEpsdSeq(newEpisode.getEpsdSeq());
-                    jpodMemberRepository.save(jpodMember);
-                });
+                .size() > 0) {
+            episode
+                    .getMembers()
+                    .forEach(jpodMember -> {
+                        jpodMember.setEpsdSeq(newEpisode.getEpsdSeq());
+                        jpodMemberRepository.save(jpodMember);
+                    });
+        }
 
-        episode
+        if (episode.getArticles() != null && episode
                 .getArticles()
-                .forEach(jpodEpisodeRelArt -> {
-                    jpodEpisodeRelArt
-                            .getId()
-                            .setEpsdSeq(newEpisode.getEpsdSeq());
-                    jpodEpisodeRelArtRepository.save(jpodEpisodeRelArt);
-                });
+                .size() > 0) {
+            episode
+                    .getArticles()
+                    .forEach(jpodEpisodeRelArt -> {
+                        jpodEpisodeRelArt
+                                .getId()
+                                .setEpsdSeq(newEpisode.getEpsdSeq());
+                        jpodEpisodeRelArtRepository.save(jpodEpisodeRelArt);
+                    });
+        }
 
 
         return episode;

@@ -5,9 +5,11 @@ const RcvArticleRegisterBtn = ({ data }) => {
     if (data.serviceDaytime) return null;
 
     return (
-        <Button variant="outline-table-btn" size="sm" onClick={() => data.handleRegister(data)}>
-            등록
-        </Button>
+        <div className="h-100 d-flex align-items-center justify-content-center">
+            <Button variant="outline-table-btn" size="sm" onClick={() => data.handleRegister(data)}>
+                등록
+            </Button>
+        </div>
     );
 };
 

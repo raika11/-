@@ -21,11 +21,11 @@ const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
     };
 
     return (
-        <React.Fragment>
+        <div className="h-100 d-flex align-items-center justify-content-center">
             <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} size="sm" onClick={handleClickPreviewOpen}>
                 {data.compUrl ? '포토' : '보기'}
             </Button>
-        </React.Fragment>
+        </div>
     );
 });
 

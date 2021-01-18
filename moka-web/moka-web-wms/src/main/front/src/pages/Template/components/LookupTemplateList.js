@@ -189,7 +189,7 @@ const LookupTemplateList = (props) => {
 
     return (
         <MokaCard titleClassName="mb-0" title="관련 템플릿" bodyClassName="d-flex flex-column">
-            <Form className="mb-10">
+            <Form className="mb-2">
                 <Form.Row className="mb-2">
                     {/* 템플릿 위치그룹 */}
                     <Col xs={7} className="p-0 pr-2">
@@ -225,7 +225,7 @@ const LookupTemplateList = (props) => {
                         </MokaInput>
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row>
                     {/* 검색조건 */}
                     <Col xs={5} className="p-0 pr-2">
                         <MokaInput
@@ -265,7 +265,7 @@ const LookupTemplateList = (props) => {
             </Form>
 
             {/* 버튼 그룹 */}
-            <div className="d-flex mb-10">
+            <div className="d-flex mb-2">
                 <MokaTableTypeButton onSelect={(selectedKey) => setListType(selectedKey)} />
                 <div className="pt-0">
                     <Button variant="positive" onClick={() => window.open('/template')}>

@@ -70,7 +70,7 @@ const BasicForm = (props) => {
             </Form.Row>
             {/* 컴포넌트명 */}
             <MokaInputLabel
-                className="mb-2 w-100"
+                className="w-100"
                 label="설명"
                 placeholder="설명을 입력하세요"
                 value={component.description}

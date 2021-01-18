@@ -285,7 +285,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={8} className="p-0">
+                            <Col xs={9} className="p-0">
                                 <MokaInputLabel label="XML포맷 출처" labelWidth={100} as="select" value={temp.joinsXmlFormat} name="joinsXmlFormat" onChange={handleChangeValue}>
                                     <option value="Y">조인스</option>
                                     <option value="N">CP 업체</option>
@@ -293,7 +293,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={8} className="p-0">
+                            <Col xs={9} className="p-0">
                                 <MokaInputLabel label="본문 이미지" labelWidth={100} as="select" value={temp.receiveImgYn} name="receiveImgYn" onChange={handleChangeValue}>
                                     <option value="Y">이미지 FTP 수신</option>
                                     <option value="N">외부 이미지</option>

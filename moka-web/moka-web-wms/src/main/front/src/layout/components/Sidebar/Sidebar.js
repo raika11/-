@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { changeSidebarOpenItem, initSidebarOpenItem } from '@store/layout/layoutAction';
 import SidebarCategory from './SidebarCategory';
@@ -12,6 +12,7 @@ import logo from '@assets/images/img_logo.png';
  * 사이드바
  */
 const Sidebar = ({ match }) => {
+    const location = useLocation();
     const dispatch = useDispatch();
     const scrollbarRef = useRef(null);
     const { menu } = useSelector((store) => ({
@@ -45,6 +46,12 @@ const Sidebar = ({ match }) => {
         },
         [sidebarOpenItem, dispatch],
     );
+
+    useEffect(() => {
+        if (scrollbarRef.current) {
+            scrollbarRef.current.updateScroll();
+        }
+    }, [location]);
 
     return (
         <Suspense>

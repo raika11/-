@@ -411,11 +411,11 @@ const DatasetEdit = ({ onDelete }) => {
                             </Button>
                         </div>
                         <div className="d-flex">
-                            <Button variant="positive" className="mr-2" onClick={handleClickSave}>
+                            <Button variant="positive" onClick={handleClickSave}>
                                 저장
                             </Button>
                             {datasetSeq && (
-                                <Button variant="negative" onClick={handleClickDelete}>
+                                <Button variant="negative" className="ml-2" onClick={handleClickDelete}>
                                     삭제
                                 </Button>
                             )}
@@ -437,11 +437,11 @@ const DatasetEdit = ({ onDelete }) => {
                     </Col>
                 </Form.Row>
                 {/* 데이터타입 */}
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <Col xs={3} className="p-0">
                         <MokaInputLabel
                             as="radio"
-                            className="mb-0 h-100"
+                            className="h-100"
                             label="데이터"
                             value="N"
                             id="dataset-type1"
@@ -450,21 +450,21 @@ const DatasetEdit = ({ onDelete }) => {
                             name="autoCreateYn"
                         />
                     </Col>
-                    <Col xs={1} className="p-0 mr-10">
-                        <MokaInput
-                            as="radio"
-                            className="mb-0 h-100 align-items-center d-flex"
-                            value="Y"
-                            id="dataset-type2"
-                            inputProps={{ custom: true, label: '자동', checked: autoCreateYn === 'Y' }}
-                            onChange={handleChangeValue}
-                            name="autoCreateYn"
-                        />
-                    </Col>
-                    <Col xs={5} className="p-0 d-flex">
+                    <Col xs={9} className="p-0 d-flex">
+                        <div className="mr-3 flex-shrink-0">
+                            <MokaInput
+                                as="radio"
+                                value="Y"
+                                id="dataset-type2"
+                                inputProps={{ custom: true, label: '자동', checked: autoCreateYn === 'Y' }}
+                                onChange={handleChangeValue}
+                                name="autoCreateYn"
+                            />
+                        </div>
+
                         {autoCreateYn === 'Y' && (
                             <MokaSearchInput
-                                className="w-100"
+                                className="flex-fill"
                                 placeholder="데이터를 선택해주세요"
                                 value={decodeURIComponent(dataApiUrl)}
                                 onSearch={() => setDatasetApiListModalShow(true)}
@@ -484,22 +484,20 @@ const DatasetEdit = ({ onDelete }) => {
                     <Form>
                         {/* 데이터셋의 파라미터에 따라 변경됨 */}
                         {autoCreateYn === 'Y' && dataApiParamShape && (
-                            <>
-                                <DatasetParameter
-                                    dataApiParamShapes={dataApiParamShape}
-                                    dataApiParam={dataApiParam}
-                                    onChange={setDataApiParam}
-                                    options={options}
-                                    isInvalid={invalid}
-                                    onChangeValid={setInvalid}
-                                />
-                            </>
+                            <DatasetParameter
+                                dataApiParamShapes={dataApiParamShape}
+                                dataApiParam={dataApiParam}
+                                onChange={setDataApiParam}
+                                options={options}
+                                isInvalid={invalid}
+                                onChangeValid={setInvalid}
+                            />
                         )}
                         <MokaInputLabel
                             label="설명"
                             as="textarea"
                             name="description"
-                            labelWidth={80}
+                            labelWidth={90}
                             className="mb-0"
                             inputClassName="resize-none"
                             inputProps={{ rows: 7 }}

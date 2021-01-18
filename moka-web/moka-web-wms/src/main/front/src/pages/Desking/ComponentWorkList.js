@@ -13,7 +13,7 @@ import { ComponentWork, NaverChannelWork } from './components';
  */
 const ComponentWorkList = (props) => {
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_COMPONENT_WORK_LIST] || store.loading[PUT_COMPONENT_WORK_TEMPLATE]);
+    const loading = useSelector(({ loading }) => loading[GET_COMPONENT_WORK_LIST] || loading[PUT_COMPONENT_WORK_TEMPLATE]);
     const { area, isNaverChannel } = useSelector((store) => ({
         area: store.desking.area,
         isNaverChannel: store.desking.isNaverChannel,

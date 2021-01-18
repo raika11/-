@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-
-import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
+import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, GET_DATASET_LIST_MODAL, getDatasetApiList } from '@store/dataset';
 import columnDefs from './DatasetApiListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
@@ -183,9 +182,7 @@ const DatsetListModal = (props) => {
                 <Form.Row className="mb-2">
                     {/* 검색 조건 */}
                     <Col xs={4} className="p-0 pr-2">
-                        <MokaInputLabel
-                            label="구분"
-                            labelWidth={45}
+                        <MokaInput
                             as="select"
                             className="mb-0"
                             value={search.searchType}
@@ -201,7 +198,7 @@ const DatsetListModal = (props) => {
                                     {type.name}
                                 </option>
                             ))}
-                        </MokaInputLabel>
+                        </MokaInput>
                     </Col>
                     {/* 키워드 */}
                     <Col xs={8} className="p-0">

@@ -1,4 +1,8 @@
 .custom-radio {
+    min-height: $input-height;
+    display: flex;
+    align-items: center;
+
     .custom-control-label::before {
         top: 0;
     }
@@ -6,4 +10,4 @@
     .custom-control-label::after {
         top: 0;
     }
-  }
+}

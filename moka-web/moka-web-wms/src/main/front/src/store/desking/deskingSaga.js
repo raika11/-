@@ -64,7 +64,7 @@ function* getComponentWorkList({ payload }) {
         callbackData,
         isNaverChannel = false;
 
-    yield startLoading(ACTION);
+    yield put(startLoading(ACTION));
     try {
         response = yield call(api.getComponentWorkList, { areaSeq });
         callbackData = { ...response.data, isNaverChannel };

@@ -1,6 +1,5 @@
 import React from 'react';
-import { MokaModal, MokaSearchInput, MokaInputLabel } from '@components';
-
+import { MokaModal, MokaSearchInput, MokaInput } from '@components';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -39,9 +38,9 @@ const AutoDatasetListModal = (props) => {
                 {/* 검색 */}
                 <Form.Group as={Row}>
                     <Col xs={4} className="px-0 my-auto pr-2">
-                        <MokaInputLabel label="구분" as="select" labelWidth={33} className="mb-0">
+                        <MokaInput as="select" className="mb-0">
                             <option>전체</option>
-                        </MokaInputLabel>
+                        </MokaInput>
                     </Col>
                     <Col xs={8} className="px-0 my-auto">
                         <MokaSearchInput />

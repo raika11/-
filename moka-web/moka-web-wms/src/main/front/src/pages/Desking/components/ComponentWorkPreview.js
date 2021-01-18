@@ -12,10 +12,9 @@ import { MokaLoader } from '@components';
 const ComponentWorkPreview = ({ show }) => {
     const dispatch = useDispatch();
     const [previewContent, setPreviewContent] = useState(null);
-
-    const { area, loading, componentList } = useSelector((store) => ({
+    const loading = useSelector(({ loading }) => loading[PREVIEW_AREA_MODAL]);
+    const { area, componentList } = useSelector((store) => ({
         area: store.desking.area,
-        loading: store.loading[PREVIEW_AREA_MODAL],
         componentList: store.desking.list,
     }));
 
@@ -74,6 +73,9 @@ const ComponentWorkPreview = ({ show }) => {
                     전체화면으로 보기
                 </Button>
             </div>
+
+            {/* iframe 클릭 막기 */}
+            <div className="absolute-top" style={{ bottom: 0, top: 58 }} />
 
             <iframe ref={iframeRef} title="컴포넌트미리보기" frameBorder="0" className="w-100" style={{ height: 733 }} />
         </div>

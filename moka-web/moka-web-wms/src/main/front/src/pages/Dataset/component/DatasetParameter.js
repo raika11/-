@@ -165,24 +165,17 @@ const DatasetParameter = (props) => {
                 }
 
                 renderer = (
-                    <>
-                        <Form.Label className={clsx('px-0', 'mb-0', 'position-relative', 'mr-3')} style={{ width: 80 }} key={`${name}_label`}>
-                            {required && <span className="required-text">*</span>}
-                            {desc}
-                        </Form.Label>
-                        <Col xs={10}>
-                            <MokaAutocomplete
-                                key={`${name}_select`}
-                                options={options[type]}
-                                closeMenuOnSelect={true}
-                                isMulti={isMultiple}
-                                searchIcon={true}
-                                value={value}
-                                onChange={(value, event) => handleChangeAutoCompleteValue(event, name, value)}
-                                required={required}
-                            />
-                        </Col>
-                    </>
+                    <MokaInputLabel
+                        key={`${name}_label`}
+                        label={desc}
+                        className="flex-fill"
+                        as="autocomplete"
+                        labelWidth={90}
+                        inputProps={{ options: options[type], closeMenuOnSelect: true, isMulti: isMultiple, searchIcon: false }}
+                        required={required}
+                        value={value}
+                        onChange={(value, event) => handleChangeAutoCompleteValue(event, name, value)}
+                    />
                 );
             } else {
                 if (dataApiParam && dataApiParam[name]) {
@@ -194,7 +187,7 @@ const DatasetParameter = (props) => {
                 renderer = (
                     <MokaInputLabel
                         label={desc}
-                        labelWidth={80}
+                        labelWidth={90}
                         className="flex-fill mb-0"
                         value={value}
                         onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}

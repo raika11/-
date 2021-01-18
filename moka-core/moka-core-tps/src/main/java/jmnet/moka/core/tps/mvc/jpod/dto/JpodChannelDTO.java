@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -127,5 +128,18 @@ public class JpodChannelDTO implements Serializable {
     @ApiModelProperty(value = "등록일시", hidden = true)
     @DTODateTimeFormat
     private Date regDt;
+
+    /**
+     * 채널 에피소드 수, 목록 조회시 사용
+     */
+    @Builder.Default
+    @Transient
+    private Long totalEpsdCnt = 0l;
+
+    /**
+     * 채널 에피소드 수, 목록 조회시 사용
+     */
+    @Transient
+    private String lastEpsdNo;
 
 }

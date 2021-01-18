@@ -50,7 +50,7 @@ public class JpodChannelServiceImpl implements JpodChannelService {
 
     @Override
     public Page<JpodChannel> findAllJpodChannel(JpodChannelSearchDTO search) {
-        return jpodChannelRepository.findAllJpodChannel(search);
+        return jpodChannelRepository.findAllJpodChannelWithEpCnt(search);
     }
 
     @Override

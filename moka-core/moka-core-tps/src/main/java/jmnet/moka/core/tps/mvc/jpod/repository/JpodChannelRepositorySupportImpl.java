@@ -2,6 +2,9 @@ package jmnet.moka.core.tps.mvc.jpod.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
@@ -9,6 +12,7 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodChannel;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodKeyword;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodMember;
 import org.springframework.data.domain.Page;
@@ -29,9 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySupport implements JpodChannelRepositorySupport {
 
-    public JpodChannelRepositorySupportImpl(JPAQueryFactory queryFactory) {
+    private final JPAQueryFactory queryFactory;
 
+    public JpodChannelRepositorySupportImpl(JPAQueryFactory queryFactory) {
         super(JpodChannel.class);
+        this.queryFactory = queryFactory;
     }
 
     @Override
@@ -60,6 +66,55 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         if (McpString.isYes(search.getUseTotal())) {
             query = getQuerydsl().applyPagination(search.getPageable(), query);
         }
+
+
+        QueryResults<JpodChannel> list = query.fetchResults();
+
+        return new PageImpl<JpodChannel>(list.getResults(), search.getPageable(), list.getTotal());
+    }
+
+    @Override
+    public Page<JpodChannel> findAllJpodChannelWithEpCnt(JpodChannelSearchDTO search) {
+        // J팟 채널
+        QJpodChannel qJpodChannel = QJpodChannel.jpodChannel;
+        // 채널별 에피소드
+        QJpodEpisode qJpodEpisode = QJpodEpisode.jpodEpisode;
+
+
+        JPQLQuery<JpodChannel> query = from(qJpodChannel);
+
+        if (McpString.isNotEmpty(search.getKeyword())) {
+            query.where(qJpodChannel.chnlNm.contains(search.getKeyword()));
+        }
+        if (McpString.isNotEmpty(search.getUsedYn())) {
+            query.where(qJpodChannel.usedYn.eq(search.getUsedYn()));
+        }
+        if (search.getStartDt() != null && search.getEndDt() != null) {
+            query.where(qJpodChannel.regDt.between(search.getStartDt(), search.getEndDt()));
+        } else if (search.getStartDt() != null) {
+            query.where(qJpodChannel.regDt.goe(search.getStartDt()));
+        } else if (search.getEndDt() != null) {
+            query.where(qJpodChannel.regDt.loe(search.getEndDt()));
+        } else {
+            // 아무것도 안함
+        }
+
+        if (McpString.isYes(search.getUseTotal())) {
+            query = getQuerydsl().applyPagination(search.getPageable(), query);
+        }
+
+        query
+                .select(Projections.fields(JpodChannel.class, qJpodChannel.chnlSeq, qJpodChannel.regDt, qJpodChannel.chnlSdt, qJpodChannel.chnlNm,
+                        qJpodChannel.chnlMemo, qJpodChannel.chnlImg, qJpodChannel.chnlThumb, qJpodChannel.chnlImgMob, ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(qJpodEpisode.epsdSeq.count())
+                                        .from(qJpodEpisode)
+                                        .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "totalEpsdCnt"), ExpressionUtils.as(JPAExpressions
+                                .select(qJpodEpisode.epsdNo.max())
+                                .from(qJpodEpisode)
+                                .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "lastEpsdNo")))
+                .from(qJpodChannel);
+
 
 
         QueryResults<JpodChannel> list = query.fetchResults();

@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import jmnet.moka.core.common.MokaConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -106,4 +107,16 @@ public class JpodChannel extends jmnet.moka.core.tps.common.entity.BaseAudit imp
     @Column(name = "PODTY_CHNL_SRL", nullable = false)
     private Integer podtyChnlSrl = 0;
 
+    /**
+     * 채널 에피소드 수, 목록 조회시 사용
+     */
+    @Builder.Default
+    @Transient
+    private Long totalEpsdCnt = 0l;
+
+    /**
+     * 채널 에피소드 수, 목록 조회시 사용
+     */
+    @Transient
+    private String lastEpsdNo;
 }

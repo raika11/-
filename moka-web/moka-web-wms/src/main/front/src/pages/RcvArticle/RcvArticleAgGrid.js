@@ -79,17 +79,18 @@ const RcvArticleAgGrid = () => {
      * https://www.ag-grid.com/documentation/javascript/grid-events/
      */
     const handleRowRendered = useCallback((params) => {
-        params.api.forEachNode((rowNode) => {
-            const titleCell = params.api.getCellRendererInstances({ columns: ['title'], rowNodes: [rowNode] });
-            if (titleCell[0]) {
-                let height = titleCell[0].getGui().offsetHeight;
-                // line-height 보다 크면
-                if (height > 21) {
-                    rowNode.setRowHeight(height + 8);
+        setTimeout(function () {
+            params.api.forEachNode((rowNode) => {
+                const titleCell = params.api.getCellRendererInstances({ columns: ['title'], rowNodes: [rowNode] });
+                if (titleCell[0]) {
+                    let height = titleCell[0].getGui().offsetHeight;
+                    if (height + 8 > rowNode.rowHeight) {
+                        rowNode.setRowHeight(height + 8);
+                    }
                 }
-            }
+            });
+            params.api.onRowHeightChanged();
         });
-        params.api.onRowHeightChanged();
     }, []);
 
     useEffect(() => {

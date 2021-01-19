@@ -71,9 +71,16 @@ export const getEpisodes = ({ search }) => {
     });
 };
 
-// 에피소트 정보 조회.
+// 에피소드 정보 조회.
 export const getEpisodesInfo = ({ chnlSeq, epsdSeq }) => {
     return instance.get(`/api/jpod/${chnlSeq}/episodes/${epsdSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 에피소드 채널 조회.
+export const getEpisodeChannels = ({ search }) => {
+    return instance.get(`/api/jpods?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

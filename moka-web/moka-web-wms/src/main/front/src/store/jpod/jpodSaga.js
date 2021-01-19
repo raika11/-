@@ -35,6 +35,7 @@ import {
     updateJpodEpisode,
     getBrightOvp,
     saveBrightOvp,
+    getEpisodeChannels,
 } from './jpodApi';
 
 const getReporterListSaga = callApiAfterActions(GET_REPORTER_LIST, getReporterList, (store) => store.jpod.reporter);
@@ -42,7 +43,7 @@ const getChannelPodtyListsaga = callApiAfterActions(GET_CHANNEL_PODTY_LIST, getP
 const getChannelsSaga = callApiAfterActions(GET_CHANNELS, getJpods, (store) => store.jpod.channel.jpod);
 const getEpisodesSaga = callApiAfterActions(GET_EPISODES, getEpisodes, (store) => store.jpod.episode.episodes);
 const getPodtyEpisodeListSaga = callApiAfterActions(GET_PODTY_EPISODE_LIST, getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
-const getEpisodeGubunChannelsSaga = callApiAfterActions(GET_EPISODE_GUBUN_CHANNELS, getPodtyChannels, (store) => store.jpod.episode.episodes);
+const getEpisodeGubunChannelsSaga = callApiAfterActions(GET_EPISODE_GUBUN_CHANNELS, getEpisodeChannels, (store) => store.jpod.episode.channel);
 
 // 채널 등록 수정.
 function* saveChannelInfoSaga({ payload: { chnlSeq, channelinfo, callback } }) {

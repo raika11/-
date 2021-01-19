@@ -515,8 +515,8 @@ const ChannelEdit = ({ match }) => {
                         <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={90} value={editData.chnlSeq} onChange={(e) => handleEditDataChange(e)}>
                             <option value="">채널 전체</option>
                             {channel_list.map((item, index) => (
-                                <option key={index} value={item.castSrl}>
-                                    {item.getCastName}
+                                <option key={index} value={item.podtyChnlSrl}>
+                                    {item.chnlNm}
                                 </option>
                             ))}
                         </MokaInputLabel>

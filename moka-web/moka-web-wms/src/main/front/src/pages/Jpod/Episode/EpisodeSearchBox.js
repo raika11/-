@@ -88,8 +88,8 @@ const EpisodeSearchBox = ({ match }) => {
                         <MokaInput as="select" name="chnlSeq" id="chnlSeq" value={searchData.chnlSeq} onChange={(e) => handleSearchChange(e)}>
                             <option value="">채널 전체</option>
                             {channel_list.map((item, index) => (
-                                <option key={index} value={item.castSrl}>
-                                    {item.getCastName}
+                                <option key={index} value={item.podtyChnlSrl}>
+                                    {item.chnlNm}
                                 </option>
                             ))}
                         </MokaInput>

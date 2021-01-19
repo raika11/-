@@ -104,7 +104,7 @@ export const initialState = {
             search: {
                 page: 0,
                 sort: 'chnlSeq,desc',
-                size: PAGESIZE_OPTIONS[0],
+                // size: PAGESIZE_OPTIONS[0],
                 usedYn: 'Y',
                 useTotal: 'Y',
             },

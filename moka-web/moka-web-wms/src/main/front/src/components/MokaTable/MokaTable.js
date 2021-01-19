@@ -35,6 +35,9 @@ const propTypes = {
      * agGrid getRowNodeId()
      */
     onRowNodeId: PropTypes.func,
+    /**
+     * ag-grid div의 heigt
+     */
     agGridHeight: PropTypes.number,
     /**
      * 테이블 헤더 여부
@@ -50,21 +53,17 @@ const propTypes = {
      */
     rowHeight: PropTypes.number,
     /**
-     * 로딩 텍스트
-     */
-    localeText: PropTypes.object,
-    /**
-     * row clicked
+     * 테이블 행 클릭 이벤트
      */
     onRowClicked: PropTypes.func,
+    /**
+     * 테이블 행 클릭 이벤트를 타지 않는 field(cell) 리스트
+     */
+    preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
     /**
      * selection이 변경되었을 때(ex, selected 변경, 혹은 체크박스 클릭) 바인드 함수
      */
     onSelectionChanged: PropTypes.func,
-    /**
-     * row click 이벤트 막는 cell의 필드 리스트
-     */
-    preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
     /**
      * selected row 타입
      * @default
@@ -79,9 +78,9 @@ const propTypes = {
      * @default
      */
     dragManaged: PropTypes.bool,
-    onRowDragMove: PropTypes.func,
-    onRowDragEnd: PropTypes.func,
-    animateRows: PropTypes.bool,
+    /**
+     * 추가적인 frameworkComponents
+     */
     frameworkComponents: PropTypes.object,
     /**
      * 쓰는 곳에서 grid Instance를 state로 관리할 때, gridReady시 state 변경
@@ -108,7 +107,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
+    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
     loading: false,
     paging: true,
     dragManaged: false,
@@ -138,14 +137,12 @@ const rowClassRules = {
  * 공통 테이블 (ag-grid 사용)
  */
 const MokaTable = forwardRef((props, ref) => {
-    // table props
     const {
         className,
         columnDefs,
         rowData,
         onRowNodeId,
         agGridHeight,
-        localeText,
         onRowClicked,
         onSelectionChanged,
         loading,
@@ -161,13 +158,21 @@ const MokaTable = forwardRef((props, ref) => {
         suppressRefreshCellAfterUpdate,
         onRowDataUpdated,
         refreshCellsParams,
+        dragManaged,
+        // 페이지네이션 props
+        paginationClassName,
+        paging,
+        total,
+        page,
+        size,
+        pageSizes,
+        paginationSize,
+        displayPageNum,
+        onChangeSearchOption,
+        showTotalString,
+        // 그 외 ag-grid의 props
+        ...rest
     } = props;
-
-    // drag props
-    const { dragManaged, onRowDragMove, onRowDragEnd } = props;
-
-    // paging props
-    const { paginationClassName, paging, total, page, size, pageSizes, paginationSize, displayPageNum, onChangeSearchOption, showTotalString } = props;
 
     // gridApi state
     const [gridApi, setGridApi] = useState(null);
@@ -300,24 +305,20 @@ const MokaTable = forwardRef((props, ref) => {
             <div className={clsx('ag-theme-moka-grid position-relative', className, { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
                 {loading && <MokaLoader />}
                 <AgGridReact
+                    {...rest}
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
                     headerHeight={headerHeight}
                     rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
-                    animateRows={animateRows}
-                    localeText={localeText}
                     rowClassRules={rowClassRules}
                     onCellClicked={handleCellClicked}
                     onSelectionChanged={handleSelectionChanged}
                     onGridReady={onGridReady}
                     rowSelection={rowSelection}
-                    rowDragManaged={dragManaged}
                     suppressMoveWhenRowDragging={dragManaged}
                     suppressMovableColumns
-                    onRowDragMove={onRowDragMove}
-                    onRowDragEnd={onRowDragEnd}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     frameworkComponents={{ imageRenderer: ImageRenderer, ...frameworkComponents }}

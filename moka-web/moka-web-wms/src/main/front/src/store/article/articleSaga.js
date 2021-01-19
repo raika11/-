@@ -40,7 +40,7 @@ function* putArticleEditTitle({ payload }) {
 
         if (response.data.header.success) {
             // 기사리스트 다시 조회
-            yield put({ type: act.GET_ARTICLE_LIST });
+            yield put({ type: act.GET_SERVICE_ARTICLE_LIST });
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -79,7 +79,7 @@ function* saveArticle({ payload: { article, callback } }) {
 
             // 목록 다시 검색
             const search = yield select((store) => store.article.search);
-            yield put({ type: act.GET_ARTICLE, payload: { search } });
+            yield put({ type: act.GET_ARTICLE_LIST, payload: { search } });
         } else {
             const { body } = response.data.body;
 
@@ -116,7 +116,7 @@ function* deleteArticle({ payload: { totalId, callback } }) {
         if (response.data.header.success) {
             // 목록 다시 검색
             const search = yield select((store) => store.article.search);
-            yield put({ type: act.GET_ARTICLE, payload: { search } });
+            yield put({ type: act.GET_ARTICLE_LIST, payload: { search } });
         }
     } catch (e) {
         callbackData = errorResponse(e);
@@ -143,7 +143,7 @@ function* stopArticle({ payload: { totalId, callback } }) {
         if (response.data.header.success) {
             // 목록 다시 검색
             const search = yield select((store) => store.article.search);
-            yield put({ type: act.GET_ARTICLE, payload: { search } });
+            yield put({ type: act.GET_ARTICLE_LIST, payload: { search } });
         }
     } catch (e) {
         callbackData = errorResponse(e);

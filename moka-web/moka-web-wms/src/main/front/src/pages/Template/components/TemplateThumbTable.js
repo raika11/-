@@ -106,7 +106,7 @@ const TemplateThumbTable = (props) => {
 
     return (
         <>
-            <div className={clsx('mb-3 border', className)} style={{ height: tableHeight }}>
+            <div className={clsx('mb-3 input-border', className)} style={{ height: tableHeight }}>
                 {loading && <MokaLoader />}
                 <div className="d-flex flex-wrap align-content-start custom-scroll overflow-y-scroll p-05 h-100">
                     {rowData.map((data) => (

@@ -800,7 +800,7 @@ const ChannelEdit = ({ match }) => {
                 <hr />
                 {/* 진행자( 고정 패널 ) */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`진행자(고정패널)`} labelWidth={90} as="none" />
+                    <MokaInputLabel label={`진행자(고정패널)`} labelWidth={95} as="none" />
                     <Button
                         xs={12}
                         variant="searching"
@@ -886,7 +886,7 @@ const ChannelEdit = ({ match }) => {
                 })}
                 <hr />
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`진행자(게스트)`} labelWidth={90} as="none" />
+                    <MokaInputLabel label={`진행자(게스트)`} labelWidth={95} as="none" />
                     <Button
                         xs={12}
                         variant="searching"

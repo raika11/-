@@ -52,7 +52,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     private static final String DEFAULT_ARTICLE_TYPE = "B";
 
     protected static Map<String, String> itemApiMap = new HashMap<String, String>();
-    private static Map<String, String> artTypeToArticlePageIdMap = new HashMap<>();
+    private Map<String, String> artTypeToArticlePageIdMap = new HashMap<>();
 
     static {
         itemApiMap.put(MokaConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);

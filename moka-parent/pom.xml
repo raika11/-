@@ -97,44 +97,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>3.1.12</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<failOnError>true</failOnError>
-					<!-- 
-					<includeFilterFile>${session.executionRootDirectory}/spotbugs-security-include.xml</includeFilterFile>
-					<excludeFilterFile>${session.executionRootDirectory}/spotbugs-security-exclude.xml</excludeFilterFile>
-					-->
-					<plugins>
-						<!-- Install findsecbugs plugin -->
-						<plugin>
-						<groupId>com.h3xstream.findsecbugs</groupId>
-						<artifactId>findsecbugs-plugin</artifactId>
-						<version>1.10.1</version> 
-						</plugin>
-					</plugins>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>3.0.0</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.11.0</version>
-				<configuration>
-					<outputEncoding>UTF-8</outputEncoding>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
+
 </project>

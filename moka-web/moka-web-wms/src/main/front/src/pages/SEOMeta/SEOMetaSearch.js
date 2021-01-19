@@ -5,6 +5,7 @@ import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import produce from 'immer';
 import commonUtil from '@utils/commonUtil';
+import toast from '@utils/toastUtil';
 
 const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     const [dateType, setDateType] = useState('today');
@@ -42,6 +43,23 @@ const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
         if (name === 'dateType') {
             setDateType(value);
         } else {
+            if (name === 'startDt') {
+                const startDt = new Date(value);
+                const endDt = new Date(options.endDt);
+
+                if (startDt > endDt) {
+                    toast.warning('시작일은 종료일 보다 클 수 없습니다.');
+                    return;
+                }
+            } else if (name === 'endDt') {
+                const startDt = new Date(options.startDt);
+                const endDt = new Date(value);
+
+                if (endDt < startDt) {
+                    toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
+                    return;
+                }
+            }
             setOptions(
                 produce(options, (draft) => {
                     draft[name] = value;
@@ -108,6 +126,13 @@ const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         placeholder="YYYY-MM-DD"
                         inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                         value={options.startDt}
+                        onChange={(param) => {
+                            let selectDate = param._d;
+                            if (selectDate) {
+                                selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                            }
+                            handleChangeValue('startDt', selectDate);
+                        }}
                         disabled={disabled.date}
                     />
                 </Col>
@@ -119,6 +144,13 @@ const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         placeholder="YYYY-MM-DD"
                         inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
                         value={options.endDt}
+                        onChange={(param) => {
+                            let selectDate = param._d;
+                            if (selectDate) {
+                                selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                            }
+                            handleChangeValue('endDt', selectDate);
+                        }}
                         disabled={disabled.date}
                     />
                 </Col>

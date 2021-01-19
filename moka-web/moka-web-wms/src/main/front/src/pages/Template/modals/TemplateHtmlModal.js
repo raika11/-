@@ -74,7 +74,7 @@ const TemplateHtmlModal = (props) => {
                         // 관련 아이템 있음
                         else {
                             messageBox.confirm(
-                                '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
+                                '다른 곳에서 사용 중인 템플릿입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
                                 () => {
                                     submitTemplate();
                                 },

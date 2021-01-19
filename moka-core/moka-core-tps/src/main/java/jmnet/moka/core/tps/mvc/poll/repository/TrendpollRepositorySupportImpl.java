@@ -90,7 +90,7 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
                     query.where(qTrendpoll.pollSeq.eq(Long.parseLong(searchDTO.getKeyword())));
                 } else if (searchDTO
                         .getSearchType()
-                        .equals("ITEM_TITLE")) {
+                        .equals("itemTitle")) {
                     query.where(qTrendpoll.pollSeq.in(JPAExpressions
                             .selectFrom(qTrendpollItem)
                             .select(qTrendpollItem.pollSeq)

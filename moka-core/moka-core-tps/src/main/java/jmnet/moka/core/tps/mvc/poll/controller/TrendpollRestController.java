@@ -180,7 +180,7 @@ public class TrendpollRestController extends AbstractCommonController {
             @ApiParam("사용여부") @NotNull(message = "{tps.poll.error.notnull.status}") @RequestParam(value = "status") PollStatusCode status)
             throws NoDataException {
 
-        Trendpoll trendpoll = trendpollService
+        trendpollService
                 .findTrendpollBySeq(pollSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
@@ -205,7 +205,6 @@ public class TrendpollRestController extends AbstractCommonController {
             @ApiParam("투표 일련번호") @PathVariable("pollSeq") @Min(value = 1, message = "{tps.poll.error.pattern.pollSeq}") Long pollSeq,
             @SearchParam TrendpollStatSearchDTO search) {
 
-        ResultListDTO<TrendpollDTO> resultListMessage = new ResultListDTO<>();
         ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
 
         List<List<TrendpollCntVO>> trendpollsCnt = trendpollService.findAllTrendpollVoteCnt(search);
@@ -232,12 +231,11 @@ public class TrendpollRestController extends AbstractCommonController {
     @GetMapping(value = "/{pollSeq}/excel", produces = {"application/vnd.ms-excel"})
     public TrendpollExcelView getExcel(
             @ApiParam("투표 일련번호") @PathVariable("pollSeq") @Min(value = 1, message = "{tps.poll.error.pattern.pollSeq}") Long pollSeq,
-            @ApiParam(hidden = true) ModelMap map)
-            throws Exception {
+            @ApiParam(hidden = true) ModelMap map) {
 
         TrendpollExcelView excelView = new TrendpollExcelView();
         // 최종 페이지
-        int totalPages = 0;
+        int totalPages;
         int size = 200;
         // 현재 페이지
         AtomicInteger currentPage = new AtomicInteger(0);

@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import { ITEM_PG, ITEM_AP, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
-import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaInputLabel } from '@components';
+import { MokaCard, MokaTable, MokaSearchInput, MokaInput } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
 import toast from '@utils/toastUtil';
 import columDefs from './HistoryListColumns';

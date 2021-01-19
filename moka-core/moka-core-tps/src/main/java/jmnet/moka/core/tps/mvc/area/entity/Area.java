@@ -187,14 +187,15 @@ public class Area extends BaseAudit {
      * @return 동일한게 있으면 true
      */
     public boolean isEqualComp(AreaComp comp) {
+        if ( comp == null) return false;
         Optional<AreaComp> find = areaComps
                 .stream()
                 .filter(c -> {
-                    if (c
+                    if (c!=null && c
                             .getComponent()
-                            .getComponentSeq() == comp
+                            .getComponentSeq().longValue() == comp
                             .getComponent()
-                            .getComponentSeq()) {
+                            .getComponentSeq().longValue()) {
                         return true;
                     } else {
                         return false;

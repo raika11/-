@@ -147,7 +147,7 @@ public class RcvArticleServiceImpl implements RcvArticleService {
         for (String category : updateDto.getCategoryList()) {
             paramCatMap.put("code", category);
             paramCatMap.put("ord", ord);
-            if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeIns(paramCatMap))) {
+            if (isReturnErr(rcvArticleMapper.callUspRcvArticleCodeInsByMasterCode(paramCatMap))) {
                 return false;
             }
             ord++;

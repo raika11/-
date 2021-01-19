@@ -54,7 +54,7 @@ public interface RcvArticleMapper extends BaseMapper<RcvArticleBasicVO, RcvArtic
      * @param param rid: 수신기사키, sourceCode: 매체코드, category: 분류정보
      * @return 성공여부
      */
-    Integer callUspRcvArticleCodeIns(Map<String, Object> param);
+    Integer callUspRcvArticleCodeInsByMasterCode(Map<String, Object> param);
 
     /**
      * 분류코드 삭제

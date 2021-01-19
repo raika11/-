@@ -14,7 +14,11 @@ import {
     GET_EPISODES_INFO,
     GET_EPISODES_INFO_SUCCESS,
     GET_PODTY_EPISODE_LIST,
-    GET_EPISODE_JPOD_CHANNELS,
+    GET_EPISODE_GUBUN_CHANNELS,
+    SAVE_JPOD_EPISODE,
+    GET_BRIGHT_OVP,
+    GET_BRIGHT_OVP_SUCCESS,
+    SAVE_BRIGHTOVP,
 } from './jpodAction';
 import {
     getReporterList,
@@ -27,6 +31,10 @@ import {
     getEpisodes,
     getEpisodesInfo,
     getPodtyEpisodesList,
+    saveJpodEpisode,
+    updateJpodEpisode,
+    getBrightOvp,
+    saveBrightOvp,
 } from './jpodApi';
 
 const getReporterListSaga = callApiAfterActions(GET_REPORTER_LIST, getReporterList, (store) => store.jpod.reporter);
@@ -34,7 +42,7 @@ const getChannelPodtyListsaga = callApiAfterActions(GET_CHANNEL_PODTY_LIST, getP
 const getChannelsSaga = callApiAfterActions(GET_CHANNELS, getJpods, (store) => store.jpod.channel.jpod);
 const getEpisodesSaga = callApiAfterActions(GET_EPISODES, getEpisodes, (store) => store.jpod.episode.episodes);
 const getPodtyEpisodeListSaga = callApiAfterActions(GET_PODTY_EPISODE_LIST, getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
-const getEpisodeJpodChannelsSaga = callApiAfterActions(GET_EPISODE_JPOD_CHANNELS, getPodtyChannels, (store) => store.jpod.episode.channel);
+const getEpisodeGubunChannelsSaga = callApiAfterActions(GET_EPISODE_GUBUN_CHANNELS, getPodtyChannels, (store) => store.jpod.episode.episodes);
 
 // 채널 등록 수정.
 function* saveChannelInfoSaga({ payload: { chnlSeq, channelinfo, callback } }) {
@@ -63,6 +71,35 @@ function* saveChannelInfoSaga({ payload: { chnlSeq, channelinfo, callback } }) {
     }
 
     yield put(finishLoading(SAVE_JPOD_CHANNEL));
+}
+
+// 에피소드 정보 등록 수정.
+function* saveJpodEpisodeSaga({ payload: { chnlSeq, epsdSeq, episodeinfo, callback } }) {
+    yield put(startLoading(SAVE_JPOD_EPISODE));
+
+    let callbackData = {};
+    let response;
+
+    try {
+        if (chnlSeq && epsdSeq) {
+            response = yield call(updateJpodEpisode, { chnlSeq: chnlSeq, epsdSeq: epsdSeq, episodeinfo: episodeinfo });
+        } else {
+            response = yield call(saveJpodEpisode, { chnlSeq: chnlSeq, episodeinfo: episodeinfo });
+        }
+
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(SAVE_JPOD_EPISODE));
 }
 
 // 채널 정보 가지고 오기.
@@ -140,6 +177,70 @@ function* getEpisodesInfoSaga({ payload: { chnlSeq, epsdSeq } }) {
     yield put(finishLoading(GET_EPISODES_INFO));
 }
 
+// 브라이트 코브 목록 조회.
+function* getBrightOvpSaga() {
+    yield put(startLoading(GET_BRIGHT_OVP));
+
+    let response;
+    try {
+        const search = yield select((state) => state.jpod.brightOvp.search);
+        response = yield call(getBrightOvp, { search: search });
+        const {
+            status,
+            data: { body },
+        } = response;
+        if (status !== 200) {
+            throw new Error('네트워크가 불안정 합니다. 다시 시도해 주세요.');
+        }
+        const resultObject = JSON.parse(body);
+        const list = resultObject.map((element) => {
+            return {
+                id: element.id,
+                account_id: element.account_id,
+                name: element.name,
+                complete: element.complete,
+                state: element.state,
+                created_at: element.created_at,
+            };
+        });
+        yield put({ type: GET_BRIGHT_OVP_SUCCESS, payload: { list: list, total: list.length } });
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(GET_BRIGHT_OVP));
+}
+
+// 브라이트 코브 저장.
+function* saveBrightovpSaga({ payload: { ovpdata, callback } }) {
+    yield put(startLoading(SAVE_BRIGHTOVP));
+
+    let callbackData = {};
+    let response;
+
+    try {
+        if (ovpdata) {
+            response = yield call(saveBrightOvp, { ovpdata: ovpdata });
+        }
+
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(SAVE_BRIGHTOVP));
+}
+
 export default function* jpodSaga() {
     yield takeLatest(GET_REPORTER_LIST, getReporterListSaga); // 기자 검색 모달 리스트
     yield takeLatest(GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga); // 팟티 검색 모달 리스트
@@ -151,5 +252,8 @@ export default function* jpodSaga() {
     yield takeLatest(GET_EPISODES_INFO, getEpisodesInfoSaga); // 에피소드 리스트 가지고 오기.
 
     yield takeLatest(GET_PODTY_EPISODE_LIST, getPodtyEpisodeListSaga); // 에피소드 리스트 가지고 오기.
-    yield takeLatest(GET_EPISODE_JPOD_CHANNELS, getEpisodeJpodChannelsSaga); // 에피소드 리스트 가지고 오기.
+    yield takeLatest(GET_EPISODE_GUBUN_CHANNELS, getEpisodeGubunChannelsSaga); // 에피소드 구분용 채널 리스트 가지고 오기 ( 등록, 수정, 검색 등에 사용).
+    yield takeLatest(SAVE_JPOD_EPISODE, saveJpodEpisodeSaga); // 에피소드 등록.
+    yield takeLatest(GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
+    yield takeLatest(SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
 }

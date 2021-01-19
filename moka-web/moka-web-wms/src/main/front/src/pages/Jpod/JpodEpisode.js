@@ -4,7 +4,6 @@ import { Switch, Route } from 'react-router-dom';
 import { MokaLoader } from '@components';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/jpod';
-import { useParams } from 'react-router-dom';
 
 const EpisodeList = React.lazy(() => import('./Episode/EpisodeList'));
 const EpisodeEdit = React.lazy(() => import('./Episode/EpisodeEdit'));
@@ -43,7 +42,7 @@ const JpodEpisode = ({ match }) => {
             <Switch>
                 <Suspense fallback={<MokaLoader />}>
                     <Route
-                        path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
+                        path={[`${match.path}/:chnlSeq/:epsdSeq`, `${match.path}/:chnlSeq`, `${match.path}/add`]}
                         exact
                         render={(props) => <EpisodeEdit {...props} match={match} />}
                     />

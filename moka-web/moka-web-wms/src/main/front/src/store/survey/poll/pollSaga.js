@@ -38,8 +38,8 @@ function toPollList(list, codes) {
         const modDt = data.modDt && moment(data.modDt).format(DB_DATEFORMAT);
         return {
             id: data.pollSeq,
-            category: toKorFromCode(data.pollCategory, codes.category),
-            group: toKorFromCode(data.pollGroup, codes.group),
+            category: toKorFromCode(data.pollCategory, codes.pollCategory),
+            group: toKorFromCode(data.pollGroup, codes.pollGroup),
             status: toKorFromCode(data.status, codes.status),
             title: unescapeHtml(data.title),
             regDt,
@@ -75,8 +75,27 @@ function* getPollList({ type, payload }) {
     yield put(finishLoading(type));
 }
 
+function* getPoll({ type, payload }) {
+    yield put(startLoading(type));
+    try {
+        const response = yield call(pollApi.getPoll, payload);
+
+        if (response.data.header.success) {
+            yield put({
+                type: `${type}_SUCCESS`,
+                payload: response.data.body,
+            });
+        } else {
+        }
+    } catch (e) {
+        console.log(e);
+    }
+    yield put(finishLoading(type));
+}
+
 export default function* pollSaga() {
     yield takeLatest(action.GET_POLL_CATEGORY_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_GROUP_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_LIST, getPollList);
+    yield takeLatest(action.GET_POLL, getPoll);
 }

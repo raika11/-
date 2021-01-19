@@ -187,7 +187,7 @@ const MokaTable = forwardRef((props, ref) => {
     useImperativeHandle(
         ref,
         () => ({
-            gridApi: instance.api,
+            gridApi: instance?.api,
             grid: instance,
         }),
         [instance],

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectItem } from '@pages/Jpod/JpodConst';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, changeEpisodesSearchOption, getEpisodes, getEpisodeJpodChannels } from '@store/jpod';
+import { initialState, changeEpisodesSearchOption, getEpisodes, getEpisodeGubunChannels, clearEpisodeInfo } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
 const EpisodeSearchBox = ({ match }) => {
@@ -14,8 +14,8 @@ const EpisodeSearchBox = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const { channel } = useSelector((store) => ({
-        channel: store.jpod.episode.channel,
+    const { channel_list } = useSelector((store) => ({
+        channel_list: store.jpod.episode.channel.list,
     }));
 
     // 검색 항목 변경시 스테이트 업데이트.
@@ -67,13 +67,15 @@ const EpisodeSearchBox = ({ match }) => {
         });
     };
 
+    // 등록 버튼 클릭.
     const handleNewButton = () => {
         history.push(`${match.path}/add`);
+        dispatch(clearEpisodeInfo());
     };
 
     // 최초 로딩시 목록 가져오기.
     useEffect(() => {
-        dispatch(getEpisodeJpodChannels());
+        dispatch(getEpisodeGubunChannels()); // 채널 목록.
         dispatch(getEpisodes());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -84,8 +86,8 @@ const EpisodeSearchBox = ({ match }) => {
                 <Form.Row className="d-flex mb-3">
                     <Col xs={2}>
                         <MokaInput as="select" name="chnlSeq" id="chnlSeq" value={searchData.chnlSeq} onChange={(e) => handleSearchChange(e)}>
-                            <option>채널 전체</option>
-                            {channel.map((item, index) => (
+                            <option value="">채널 전체</option>
+                            {channel_list.map((item, index) => (
                                 <option key={index} value={item.castSrl}>
                                     {item.getCastName}
                                 </option>

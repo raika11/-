@@ -21,9 +21,13 @@ import {
     GET_EPISODES_INFO_SUCCESS,
     CLEAR_PODTY_EPISODE,
     CHANGE_PODTY_EPISODE_CASTSRL,
-    GET_EPISODE_JPOD_CHANNELS_SUCCESS,
+    GET_EPISODE_GUBUN_CHANNELS_SUCCESS,
     GET_PODTY_EPISODE_LIST_SUCCESS,
     SELECT_PODTY_EPISODE,
+    GET_BRIGHT_OVP_SUCCESS,
+    CLEAR_BRIGHT_OVP,
+    SELECT_BRIGHTOVP,
+    CHANGE_BRIGHTOVP_SEARCH_OPTION,
 } from './jpodAction';
 
 export const initialState = {
@@ -64,17 +68,18 @@ export const initialState = {
             list: [],
             search: {
                 page: 0,
-                sort: 'chnlSeq,desc',
+                sort: 'epsdSeq,desc',
                 size: PAGESIZE_OPTIONS[0],
                 usedYn: 'Y',
                 startDt: '',
                 endDt: '',
                 keyword: '',
                 chnlSeq: '',
+                podtyChnlSrl: '',
             },
         },
         episodeInfo: {
-            chnlSeq: 0,
+            chnlSeq: '',
             epsdDate: '',
             epsdFile: null,
             epsdMemo: '',
@@ -87,6 +92,7 @@ export const initialState = {
             playCnt: 0,
             playTime: '',
             podtyEpsdSrl: 0,
+            podtyChnlSrl: '',
             replyCnt: 0,
             scbCnt: 0,
             shareCnt: 0,
@@ -94,7 +100,16 @@ export const initialState = {
             usedYn: 'Y',
             viewCnt: 0,
         },
-        channel: [],
+        channel: {
+            search: {
+                page: 0,
+                sort: 'chnlSeq,desc',
+                size: PAGESIZE_OPTIONS[0],
+                usedYn: 'Y',
+                useTotal: 'Y',
+            },
+            list: [],
+        },
     },
     reporter: {
         total: 0,
@@ -117,9 +132,22 @@ export const initialState = {
         total: 0,
         list: [],
     },
+    brightOvp: {
+        total: 0,
+        list: [],
+        search: {
+            page: 0,
+            size: 20,
+            searchType: 'all',
+            keyword: '',
+            useTotal: 'Y',
+            folderId: '',
+        },
+    },
     selectReporter: null,
     selectPodtyChannel: {},
     selectPodtyEpisode: {},
+    selectBrightOvp: {},
 };
 
 export default handleActions(
@@ -212,7 +240,7 @@ export default handleActions(
         // 에피소드 정보 초기화 리스트.
         [CLEAR_EPISODE_INFO]: (state) => {
             return produce(state, (draft) => {
-                draft.episode.episodeInfo = initialState.episode.episodes.episodeInfo;
+                draft.episode.episodeInfo = initialState.episode.episodeInfo;
             });
         },
         // 에피소드 조회 성공.
@@ -234,9 +262,9 @@ export default handleActions(
             });
         },
         // 에피소드 에서 사용할 채널 목록( 검색 , 등록, 수정)
-        [GET_EPISODE_JPOD_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
+        [GET_EPISODE_GUBUN_CHANNELS_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.episode.channel = body.list;
+                draft.episode.channel.list = body.list;
             });
         },
         // 에피소드 에서 사용할 채널 목록( 검색 , 등록, 수정)
@@ -250,6 +278,32 @@ export default handleActions(
         [SELECT_PODTY_EPISODE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.selectPodtyEpisode = payload;
+            });
+        },
+        // 브라이트 코브 초기화.
+        [CLEAR_BRIGHT_OVP]: (state) => {
+            return produce(state, (draft) => {
+                draft.brightOvp = initialState.brightOvp;
+            });
+        },
+        // 브라이트 코브 목록.
+        [GET_BRIGHT_OVP_SUCCESS]: (state, { payload: { list, total } }) => {
+            return produce(state, (draft) => {
+                draft.brightOvp.list = list;
+                draft.brightOvp.total = total;
+            });
+        },
+        // 브라이트 코브 목록.
+        [SELECT_BRIGHTOVP]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.selectBrightOvp = payload;
+            });
+        },
+        // 기자 검색 모달 검색 옵션 처리.
+        [CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state, { payload }) => {
+            console.log(payload);
+            return produce(state, (draft) => {
+                // draft.brightOvp.search = payload;
             });
         },
     },

@@ -35,7 +35,7 @@ const Poll = ({ match }) => {
 
             {/* 등록/수정창 */}
             <Route
-                path={[`${match.url}/add`, `${match.url}/:voteSeq`]}
+                path={[`${match.url}/add`, `${match.url}/:pollSeq`]}
                 exact
                 render={(props) => (
                     <MokaIconTabs

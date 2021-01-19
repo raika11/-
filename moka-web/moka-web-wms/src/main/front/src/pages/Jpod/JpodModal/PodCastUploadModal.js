@@ -1,99 +1,85 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Form, Col, Button, Row } from 'react-bootstrap';
-import { MokaModal, MokaTable, MokaInputLabel } from '@components';
-import { columnDefs } from './PodCastModalGridColumns';
-import { tempPodCastList } from '@pages/Jpod/JpodConst';
-import { useSelector, useDispatch } from 'react-redux';
-import { GET_PODTY_EPISODE_LIST, getPodtyEpisodeList, clearPodtyEpisode, selectPodtyEpisode, changePodtyEpisodeCastsrl } from '@store/jpod';
+import { Form, Col } from 'react-bootstrap';
+import { MokaModal, MokaInputLabel } from '@components';
+import { useDispatch } from 'react-redux';
+import { saveBrightovp } from '@store/jpod';
+import toast, { messageBox } from '@utils/toastUtil';
 
+// 기본 정보 설정.
+const editinitialState = {
+    epsdNm: '',
+};
+
+// 파일 업로드 모달창.
 const PodCastUploadModal = (props) => {
     const dispatch = useDispatch();
-    const { show, onHide, chnlseq } = props;
-    const [rowData, setRowData] = useState([]);
+    const { show, onHide, epsdNm } = props;
 
     const fileinputRef = useRef(null);
-
-    const { list, loading } = useSelector((store) => ({
-        list: store.jpod.podtyEpisode.list,
-        loading: store.loading[GET_PODTY_EPISODE_LIST],
-    }));
-
-    const tempEvent = () => {};
+    const [editData, setEditData] = useState(editinitialState);
+    const [selectFile, setSelectFile] = useState(null);
 
     // 닫기 버튼
     const handleClickHide = () => {
         onHide();
     };
 
-    // 목록 클릭 store 를 업데이트후 모달창 닫기.
-    const handleClickListRow = ({ info }) => {
-        // dispatch(selectPodtyEpisode(info));
-        onHide();
+    // 저장 버튼 클릭.
+    const handleClickSaveButton = () => {
+        var formData = new FormData();
+        formData.append(`mediaFile`, selectFile);
+        formData.append(`name`, editData.title);
+
+        dispatch(
+            saveBrightovp({
+                ovpdata: formData,
+                callback: ({ header: { success, message }, body }) => {
+                    if (success === true) {
+                        toast.success(message);
+                        const { chnlSeq, epsdSeq } = body;
+                        if ((chnlSeq, epsdSeq)) {
+                        }
+                    } else {
+                        const { totalCnt, list } = body;
+                        if (totalCnt > 0 && Array.isArray(list)) {
+                            // 에러 메시지 확인.
+                            messageBox.alert(list[0].reason, () => {});
+                        } else {
+                            // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+                            messageBox.alert(message, () => {});
+                        }
+                    }
+                },
+            }),
+        );
     };
 
-    const handleClickSaveButton = () => {};
+    // 정보 변경 처리.
+    const handleChangeEditData = (e) => {
+        const { name, value } = e.target;
+        setEditData({
+            ...editData,
+            [name]: value,
+        });
+    };
 
-    // store list 가 변경되면 grid 목록 업데이트.
-    // useEffect(() => {
-    //     const initGridRow = (data) => {
-    //         setRowData(
-    //             data.map((element) => {
-    //                 let crtDt = element.crtDt && element.crtDt.length > 10 ? element.crtDt.substr(0, 10) : element.crtDt;
-    //                 return {
-    //                     episodeSrl: element.episodeSrl,
-    //                     title: element.title,
-    //                     crtDt: crtDt,
-    //                     castSrl: element.castSrl,
-    //                     trackCnt: element.trackCnt,
-    //                     author: element.author,
-    //                     shareUrl: element.shareUrl,
-    //                     info: element,
-    //                 };
-    //             }),
-    //         );
-    //     };
+    // 파일 선택시 처리.
+    const handleChangeSelectFile = (e) => {
+        setSelectFile(e.target.files[0]);
+        setEditData({
+            ...editData,
+            input_file: e.target.files[0].name,
+        });
+    };
 
-    //     if (list.length > 0) {
-    //         initGridRow(list);
-    //     }
-    // }, [list]);
+    // 최초 모달창 로딩시 채널명 설정.
     useEffect(() => {
-        const initGridRow = (data) => {
-            setRowData(
-                data.map((element) => {
-                    let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 10) : element.regDt;
-                    return {
-                        seq: element.seq,
-                        title: element.title,
-                        status: element.status,
-                        regDt: regDt,
-                    };
-                }),
-            );
-        };
-
-        if (tempPodCastList.list.length > 0) {
-            initGridRow(tempPodCastList.list);
-        }
+        setEditData({
+            ...editData,
+            epsdNm: epsdNm,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // 모달창이 열리면 팟티 목록 가져오고, 닫으면 목록 초기화.
-    useEffect(() => {
-        // if (show === true) {
-        //     dispatch(getPodtyEpisodeList());
-        // } else {
-        //     dispatch(clearPodtyEpisode());
-        // }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]);
-
-    // 에피소드 정보에서 채널 선택해서 스토어 변경되면 Castsrl 값 설정.
-    useEffect(() => {
-        // if (chnlseq) {
-        //     dispatch(changePodtyEpisodeCastsrl(chnlseq));
-        // }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chnlseq]);
 
     return (
         <>
@@ -101,7 +87,7 @@ const PodCastUploadModal = (props) => {
                 width={900}
                 show={show}
                 onHide={handleClickHide}
-                title={`미디어 업로드`}
+                title={`브라이트 코브 업로드`}
                 size="md"
                 bodyClassName="overflow-x-hidden custom-scroll"
                 footerClassName="d-flex justify-content-center"
@@ -114,27 +100,55 @@ const PodCastUploadModal = (props) => {
                 <Form>
                     <Form.Row className="mb-2">
                         <Col className="p-0">
-                            <MokaInputLabel label={`채널명`} labelWidth={64} className="mb-0" id="chnlNm" name="chnlNm" placeholder="" value={''} onChange={(e) => tempEvent(e)} />
+                            <MokaInputLabel
+                                label={`채널명`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="epsdNm"
+                                name="epsdNm"
+                                placeholder=""
+                                value={editData.epsdNm}
+                                onChange={(e) => handleChangeEditData(e)}
+                            />
                         </Col>
                     </Form.Row>
                     <Form.Row className="mb-2">
                         <Col className="p-0">
-                            <MokaInputLabel label={`제목`} labelWidth={64} className="mb-0" id="chnlNm" name="chnlNm" placeholder="" value={''} onChange={(e) => tempEvent(e)} />
+                            <MokaInputLabel
+                                label={`제목`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="title"
+                                name="title"
+                                placeholder=""
+                                value={editData.title}
+                                onChange={(e) => handleChangeEditData(e)}
+                            />
                         </Col>
                     </Form.Row>
                     <Form.Row className="mb-2">
                         <Col xs={10} className="p-0">
-                            <MokaInputLabel label={`파일`} labelWidth={64} className="mb-0" id="chnlNm" name="chnlNm" placeholder="" value={''} onChange={(e) => tempEvent(e)} />
+                            <MokaInputLabel
+                                label={`파일`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="input_file"
+                                name="input_file"
+                                placeholder=""
+                                ref={fileinputRef}
+                                value={editData.input_file}
+                                onChange={(e) => handleChangeEditData(e)}
+                            />
                         </Col>
                         <Col xs={2} className="p-0 text-right">
                             <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
-                                등록
+                                파일선택
                                 <input
                                     type="file"
                                     name="file"
                                     ref={fileinputRef}
                                     // onClick={(e) => (fileinputRef.current = e)}
-                                    onChange={(e) => tempEvent(e)}
+                                    onChange={(e) => handleChangeSelectFile(e)}
                                     style={{
                                         position: 'absolute',
                                         fontSize: '50px',

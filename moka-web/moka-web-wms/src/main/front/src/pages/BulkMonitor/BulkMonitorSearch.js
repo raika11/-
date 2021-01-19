@@ -10,13 +10,27 @@ import { SourceSelector } from '@pages/commons';
  * 벌크 모니터링 검색
  */
 const BulkMonitorSearch = () => {
-    const [search, setSearch] = useState();
+    const [search, setSearch] = useState({});
     const [sourceList, setSourceList] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [searchType, setSearchType] = useState('');
     const [keyword, setKeyword] = useState('');
+    const [renew, setRenew] = useState(false);
     const [error, setError] = useState(false);
+
+    const handleClickSearch = () => {
+        setRenew(true);
+    };
+
+    const handleClickReset = () => {
+        setSourceList(null);
+        setStartDate(null);
+        setEndDate(null);
+        setSearchType('');
+        setKeyword('');
+        setRenew(false);
+    };
 
     return (
         <>
@@ -91,18 +105,34 @@ const BulkMonitorSearch = () => {
                                 }
                             }}
                         />
-                        <Button variant="searching" className="mr-2">
+                        <Button variant="searching" className="mr-2" onClick={handleClickSearch}>
                             검색
                         </Button>
-                        <Button variant="outline-neutral">초기화</Button>
+                        <Button variant="outline-neutral" onClick={handleClickReset}>
+                            초기화
+                        </Button>
                     </div>
                 </Form.Row>
             </Form>
-            <div className="d-flex mb-5">
+            <div className="mb-5 d-flex align-items-center">
                 <p className="mb-0 mr-3">최종 갱신 시간</p>
                 <p className="mb-0 mr-3">2021-01-18 08:57:27</p>
                 <p className="mb-0 mr-2">[30초 후 갱신]</p>
-                <p className="mb-0">커스텀 스위치</p>
+                <div style={{ width: 120 }}>
+                    <MokaInput
+                        as="switch"
+                        name="renew"
+                        id="bulk-monitor-renew"
+                        inputProps={{ custom: true, checked: renew === true }}
+                        onChange={(e) => {
+                            if (e.target.checked) {
+                                setRenew(true);
+                            } else {
+                                setRenew(false);
+                            }
+                        }}
+                    />
+                </div>
             </div>
         </>
     );

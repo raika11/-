@@ -14,7 +14,7 @@ const SEOMetaList = () => {
         loading: store.loading[GET_SEO_META_LIST],
     }));
 
-    const handleClickSearch = (options) => {
+    const handleChangeSearchOption = (options) => {
         dispatch(changeSeoMetaSearchOptions(options));
     };
 
@@ -22,7 +22,7 @@ const SEOMetaList = () => {
         if (callback instanceof Function) {
             callback(initialState.search);
         }
-        dispatch(changeSeoMetaSearchOptions(initialState.search));
+        handleChangeSearchOption(initialState.search);
     };
 
     useEffect(() => {
@@ -31,8 +31,8 @@ const SEOMetaList = () => {
 
     return (
         <>
-            <SEOMetaSearch searchOptions={search} onSearch={handleClickSearch} onReset={handleClickReset} />
-            <SEOMetaAgGrid rows={list} searchOptions={search} total={total} selected={totalId} loading={loading} />
+            <SEOMetaSearch searchOptions={search} onSearch={handleChangeSearchOption} onReset={handleClickReset} />
+            <SEOMetaAgGrid rows={list} searchOptions={search} total={total} selected={totalId} loading={loading} onChangeSearchOption={handleChangeSearchOption} />
         </>
     );
 };

@@ -16,5 +16,14 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
 
+  <Match>
+    <Or>
+      <Class name="~jmnet\.moka\..*\.entity\..*$" />
+      <Class name="~jmnet\.moka\..*\.dto\..*$" />
+      <Class name="~jmnet\.moka\..*\.vo\..*$" />
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
 </FindBugsFilter>
 

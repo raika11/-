@@ -110,6 +110,7 @@ const ChannelSearchBox = ({ match }) => {
                     </div>
                     <div className="mb-0 pl-1 pr-2">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
+                            <option value="">전체</option>
                             {selectItem.usedYn.map((item, index) => (
                                 <option key={index} value={item.value}>
                                     {item.name}

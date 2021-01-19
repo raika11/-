@@ -70,7 +70,7 @@ export const initialState = {
                 page: 0,
                 sort: 'epsdSeq,desc',
                 size: PAGESIZE_OPTIONS[0],
-                usedYn: 'Y',
+                usedYn: '',
                 startDt: '',
                 endDt: '',
                 keyword: '',

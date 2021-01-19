@@ -133,7 +133,7 @@ const EpisodeSearchBox = ({ match }) => {
                 <Form.Row className="d-flex mb-3">
                     <Col xs={2}>
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
-                            <option>선택</option>
+                            <option value="">전체</option>
                             {selectItem.usedYn.map((item, index) => (
                                 <option key={index} value={item.value}>
                                     {item.name}

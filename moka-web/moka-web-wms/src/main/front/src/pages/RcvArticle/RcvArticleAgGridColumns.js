@@ -20,9 +20,9 @@ export default [
         headerName: '구분',
         field: 'sourceName',
         width: 70,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         cellRendererFramework: ({ data }) => (
             <div
+                className="h-100 d-flex align-items-center ft-12"
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -51,7 +51,7 @@ export default [
         wrapText: true,
         autoHeight: true,
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <TitleRenderer {...row} />,
+        cellRendererFramework: (row) => <TitleRenderer {...row} inRcv />,
     },
     {
         headerName: '입력',

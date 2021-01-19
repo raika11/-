@@ -17,6 +17,7 @@
     	<failOnMissingWebXml>false</failOnMissingWebXml>
     	<tests.skip>true</tests.skip>
     	<maven.test.skip>true</maven.test.skip>
+		  <spotbugs.excludeFilterFile>spotbugs-security-exclude.xml</spotbugs.excludeFilterFile>
  	</properties>
 
 	<repositories>

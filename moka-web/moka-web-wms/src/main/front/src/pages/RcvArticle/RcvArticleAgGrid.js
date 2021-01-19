@@ -74,6 +74,25 @@ const RcvArticleAgGrid = () => {
         [dispatch],
     );
 
+    /**
+     * ag-grid queue empty 시점에서 실행
+     * https://www.ag-grid.com/documentation/javascript/grid-events/
+     */
+    const handleRowRendered = useCallback((params) => {
+        setTimeout(function () {
+            params.api.forEachNode((rowNode) => {
+                const titleCell = params.api.getCellRendererInstances({ columns: ['title'], rowNodes: [rowNode] });
+                if (titleCell[0]) {
+                    let height = titleCell[0].getGui().offsetHeight;
+                    if (height + 8 > rowNode.rowHeight) {
+                        rowNode.setRowHeight(height + 8);
+                    }
+                }
+            });
+            params.api.onRowHeightChanged();
+        });
+    }, []);
+
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
@@ -108,6 +127,7 @@ const RcvArticleAgGrid = () => {
             preventRowClickCell={['sourceName', 'preview', 'register']}
             selected={rcvArticle.rid}
             suppressRefreshCellAfterUpdate
+            onAnimationQueueEmpty={handleRowRendered}
         />
     );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MokaCard, MokaTable } from '@/components';
+import { MokaTable } from '@/components';
 import columnDefs, { rowData } from './BulkMonitorSumAgGridColumns';
 
 /**
@@ -7,10 +7,10 @@ import columnDefs, { rowData } from './BulkMonitorSumAgGridColumns';
  */
 const BulKMonitorSumAgGrid = () => {
     return (
-        <MokaCard className="mb-5" bodyClassName="d-flex align-items-center" width={805} height={150} header={false}>
+        <div className="mb-5 d-flex align-items-center" style={{ width: 758 }}>
             <p className="mb-0 mr-3">벌크 현황 정보</p>
             <MokaTable className="flex-fill ag-grid-align-center" columnDefs={columnDefs} onRowNodeId={(params) => params.progress} rowData={rowData} paging={false} />
-        </MokaCard>
+        </div>
     );
 };
 

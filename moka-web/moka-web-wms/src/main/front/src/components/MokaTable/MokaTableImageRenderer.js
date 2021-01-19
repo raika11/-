@@ -19,10 +19,8 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
         refresh: (params) => {
             if (params.data[field] !== data[field]) {
                 setData(params.data);
-                return true;
-            } else {
-                return false;
             }
+            return false;
         },
     }));
 

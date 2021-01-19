@@ -42,11 +42,11 @@ const Quiz = React.lazy(() => import('@pages/Survey/Quiz'));
 const CommentBanned = React.lazy(() => import('@pages/CommentManage/Banned'));
 const Mic = React.lazy(() => import('@pages/Mic'));
 const SEOMeta = React.lazy(() => import('@pages/SEOMeta'));
-const ArticleCdn = React.lazy(() => import('@pages/ArticleCdn'));
 const SearchLog = React.lazy(() => import('@pages/Search/SearchLog'));
 const JpodChannel = React.lazy(() => import('@pages/Jpod/JpodChannel'));
 const JpodEpisode = React.lazy(() => import('@pages/Jpod/JpodEpisode'));
 const SystemLog = React.lazy(() => import('@pages/SystemLog'));
+const SystemMonitor = React.lazy(() => import('@pages/SystemMonitor'));
 const BulkMonitor = React.lazy(() => import('@pages/BulkMonitor'));
 
 const routes = [
@@ -555,7 +555,7 @@ const routes = [
         path: '/article-cdn',
         name: 'articleCdn',
         displayName: '트래픽 분산(기사) 관리',
-        component: ArticleCdn,
+        component: SystemMonitor,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

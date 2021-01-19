@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@components';
 import { SourceSelector } from '@pages/commons';

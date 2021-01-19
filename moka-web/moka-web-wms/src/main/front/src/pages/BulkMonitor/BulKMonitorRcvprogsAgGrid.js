@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
-import { MokaCard, MokaLoader, MokaPagination } from '@/components';
+import { MokaLoader, MokaPagination } from '@/components';
 import columnDefs, { list } from './BulKMonitorRcvprogsAgGridColumns.js';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import RcvProgsRenderer from './components/RcvProgsRenderer.js';
@@ -83,37 +83,35 @@ const BulKMonitorRcvprogsAgGrid = () => {
 
     return (
         <>
-            <MokaCard className="w-100" bodyClassName="d-flex flex-column" height={500} header={false}>
-                <div className={clsx('ag-theme-moka-grid ag-grid-align-center position-relative overflow-hidden flex-fill')}>
-                    {loading && <MokaLoader />}
-                    <AgGridReact
-                        rowData={rowData}
-                        defaultColDef={{
-                            wrapText: true,
-                            autoHeight: true,
-                        }}
-                        // onGridReady={onGridReady}
-                        getRowNodeId={(params) => params.seqNo}
-                        columnDefs={columnDefs}
-                        frameworkComponents={{ RcvProgsRenderer: RcvProgsRenderer }}
-                        // localeText={localeText}
-                        getRowHeight={getRowHeight}
-                        onColumnResized={onColumnResized}
-                        onColumnVisible={onColumnVisible}
-                        onCellClicked={handleRowClicked}
-                    />
-                </div>
-                <div className="mt-3">
-                    <MokaPagination
-                        total={total}
-                        page={search.page}
-                        size={search.size}
-                        displayPageNum={DISPLAY_PAGE_NUM}
-                        onChangeSearchOption={handleChangeSearchOption}
-                        pageSizes={PAGESIZE_OPTIONS}
-                    />
-                </div>
-            </MokaCard>
+            <div className={clsx('ag-theme-moka-grid ag-grid-align-center position-relative overflow-hidden flex-fill')}>
+                {loading && <MokaLoader />}
+                <AgGridReact
+                    rowData={rowData}
+                    defaultColDef={{
+                        wrapText: true,
+                        autoHeight: true,
+                    }}
+                    // onGridReady={onGridReady}
+                    getRowNodeId={(params) => params.seqNo}
+                    columnDefs={columnDefs}
+                    frameworkComponents={{ RcvProgsRenderer: RcvProgsRenderer }}
+                    // localeText={localeText}
+                    getRowHeight={getRowHeight}
+                    onColumnResized={onColumnResized}
+                    onColumnVisible={onColumnVisible}
+                    onCellClicked={handleRowClicked}
+                />
+            </div>
+            <div className="mt-3">
+                <MokaPagination
+                    total={total}
+                    page={search.page}
+                    size={search.size}
+                    displayPageNum={DISPLAY_PAGE_NUM}
+                    onChangeSearchOption={handleChangeSearchOption}
+                    pageSizes={PAGESIZE_OPTIONS}
+                />
+            </div>
             <RcvprogsModal show={showRcvprogsModal} onHide={() => setShowRcvprogsModal(false)} data={modalData} />
         </>
     );

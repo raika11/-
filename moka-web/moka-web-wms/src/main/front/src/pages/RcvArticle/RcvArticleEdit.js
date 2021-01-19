@@ -53,7 +53,12 @@ const RcvArticleEdit = ({ match }) => {
         } else {
             dispatch(
                 postRcvArticle({
-                    rcvArticle: temp,
+                    rid: temp.rid,
+                    rcvArticle: {
+                        categoryList: temp.categoryList,
+                        reporterList: temp.reporterList,
+                        tagList: temp.tagList,
+                    },
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);

@@ -16,9 +16,9 @@ export const getRcvArticle = ({ rid }) => {
 };
 
 // 수신기사 => 등록기사 부가정보 수정하면서 등록(application/json)
-export const postRcvArticle = ({ rcvArticle }) => {
+export const postRcvArticle = ({ rcvArticle, rid }) => {
     return instance
-        .post(`/api/rcv-articles/articles/${rcvArticle.rid}`, rcvArticle, {
+        .post(`/api/rcv-articles/articles/${rid}`, rcvArticle, {
             headers: {
                 'Content-Type': 'application/json',
             },

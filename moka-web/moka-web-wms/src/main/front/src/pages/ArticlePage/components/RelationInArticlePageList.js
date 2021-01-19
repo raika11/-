@@ -135,7 +135,7 @@ const RelationInArticlePageList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={() => history.push('/article-page')}>
+                <Button variant="positive" onClick={() => window.open('/article-page/add')}>
                     기사페이지 등록
                 </Button>
             </div>

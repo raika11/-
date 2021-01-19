@@ -126,7 +126,7 @@ const RelationInContainerList = (props) => {
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end mb-2">
-                <Button variant="positive" onClick={() => history.push('/container')}>
+                <Button variant="positive" onClick={() => window.open('/container/add')}>
                     컨테이너 등록
                 </Button>
             </div>

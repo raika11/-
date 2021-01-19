@@ -33,18 +33,12 @@ public interface CdnArticleService {
     Optional<CdnArticle> findCdnArticleById(Long totalId);
 
     /**
-     * CDN기사 등록
+     * CDN기사 등록/수정
      *
      * @param article 기사정보
-     * @return 등록된 CDN 기사
+     * @return 등록/수정 된 CDN 기사
      */
-    CdnArticle insertCdnArticle(CdnArticle article);
+    CdnArticle saveCdnArticle(CdnArticle article)
+            throws Exception;
 
-    /**
-     * CDN기사 수정
-     *
-     * @param article 수정기사정보
-     * @return 수정된 기사정보
-     */
-    CdnArticle updateCdnArticle(CdnArticle article);
 }

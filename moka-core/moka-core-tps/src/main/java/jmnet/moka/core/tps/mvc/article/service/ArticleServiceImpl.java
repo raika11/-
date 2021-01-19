@@ -67,24 +67,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Value("${bulk.site.name}")
     private String[] bulkSiteName;
 
-    @Value("${pds.url}")
-    private String pdsUrl;
-
-    @Value("${cdn.joongang.svr.ftp.root}")
-    private String cdnFtpRoot;
-
-    @Value("${cdn.joongang.svr.ftp.root.image}")
-    private String cdnFtpRootImage;
-
-    @Value("${cdn.joongang.svr.web.domain}")
-    private String cdnWebDomain;
-
-    @Value("${cdn.joongang.temp.filepath}")
-    private String cdnTempFilepath;
-
-    @Value("${cdn.joongang.temp.imgpath}")
-    private String cdnTempImgpath;
-
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
             ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper) {
         this.articleBasicRepository = articleBasicRepository;

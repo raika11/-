@@ -136,7 +136,7 @@ public class CdnArticleRestController extends AbstractCommonController {
 
         try {
             CdnArticle article = modelMapper.map(articleDto, CdnArticle.class);
-            CdnArticle returnValue = cdnArticleService.insertCdnArticle(article);
+            CdnArticle returnValue = cdnArticleService.saveCdnArticle(article);
             CdnArticleDTO dto = modelMapper.map(returnValue, CdnArticleDTO.class);
 
             String message = msg("tps.common.success.insert");
@@ -173,7 +173,7 @@ public class CdnArticleRestController extends AbstractCommonController {
                 });
         try {
             CdnArticle article = modelMapper.map(articleDto, CdnArticle.class);
-            CdnArticle returnValue = cdnArticleService.updateCdnArticle(article);
+            CdnArticle returnValue = cdnArticleService.saveCdnArticle(article);
 
             CdnArticleDTO dto = modelMapper.map(returnValue, CdnArticleDTO.class);
 

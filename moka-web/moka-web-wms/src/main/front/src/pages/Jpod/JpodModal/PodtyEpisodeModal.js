@@ -5,11 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { GET_PODTY_EPISODE_LIST, getPodtyEpisodeList, clearPodtyEpisode, selectPodtyEpisode, changePodtyEpisodeCastsrl } from '@store/jpod';
 
 /**
- * 팟티 검색 모달.
+ * 팟티 에피소드 검색 모달.
  */
 const PodtyEpisodeModal = (props) => {
     const dispatch = useDispatch();
-    const { show, onHide, chnlseq } = props;
+    const { show, onHide, chnlSeq } = props;
     const [rowData, setRowData] = useState([]);
 
     const { list, loading } = useSelector((store) => ({
@@ -56,6 +56,7 @@ const PodtyEpisodeModal = (props) => {
     // 모달창이 열리면 팟티 목록 가져오고, 닫으면 목록 초기화.
     useEffect(() => {
         if (show === true) {
+            // dispatch(clearPodtyEpisode());
             dispatch(getPodtyEpisodeList());
         } else {
             dispatch(clearPodtyEpisode());
@@ -65,11 +66,11 @@ const PodtyEpisodeModal = (props) => {
 
     // 에피소드 정보에서 채널 선택해서 스토어 변경되면 Castsrl 값 설정.
     useEffect(() => {
-        if (chnlseq) {
-            dispatch(changePodtyEpisodeCastsrl(chnlseq));
+        if (chnlSeq) {
+            dispatch(changePodtyEpisodeCastsrl(chnlSeq));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chnlseq]);
+    }, [chnlSeq]);
 
     return (
         <MokaModal

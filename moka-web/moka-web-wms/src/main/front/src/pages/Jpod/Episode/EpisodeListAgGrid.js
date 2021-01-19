@@ -4,7 +4,6 @@ import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './EpisodeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {} from '@pages/Jpod/JpodConst';
 
 import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, clearEpisodeInfo, getEpisodesInfo } from '@store/jpod';
 
@@ -20,8 +19,8 @@ const EpisodeListAgGrid = ({ match }) => {
         total: store.jpod.episode.episodes.total,
         loading: store.loading[GET_EPISODES],
     }));
+
     // 목록 클릭 했을때.
-    // const handleClickListRow = ({ epsdSeq }) => {
     const handleClickListRow = ({ chnlSeq, epsdSeq }) => {
         history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
         dispatch(clearEpisodeInfo());
@@ -42,6 +41,7 @@ const EpisodeListAgGrid = ({ match }) => {
         [dispatch, search],
     );
 
+    // store 에피소드 목록이 변경 되었을때 그리드 데이터 설정.
     useEffect(() => {
         const inirGridRow = (data) => {
             setRowData(
@@ -62,6 +62,7 @@ const EpisodeListAgGrid = ({ match }) => {
         };
 
         if (list.length > 0) {
+            setRowData([]);
             inirGridRow(list);
         }
     }, [list]);

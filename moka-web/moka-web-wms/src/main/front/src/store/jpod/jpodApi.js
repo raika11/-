@@ -84,3 +84,49 @@ export const getPodtyEpisodesList = ({ castSrl }) => {
         throw err;
     });
 };
+
+// 에피소드 등록 처리.
+export const saveJpodEpisode = ({ chnlSeq, episodeinfo }) => {
+    return instance
+        .post(`/api/jpod/${chnlSeq}/episodes`, episodeinfo, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 에피소드 업데이트 처리.
+export const updateJpodEpisode = ({ chnlSeq, epsdSeq, episodeinfo }) => {
+    return instance
+        .put(`/api/jpod/${chnlSeq}/episodes/${epsdSeq}`, episodeinfo, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 브라이트 코브 몰록 조회.
+export const getBrightOvp = ({ search }) => {
+    return instance.get(`/api/ovp?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 브라이트 코브 저장.
+export const saveBrightOvp = ({ ovpdata }) => {
+    return instance
+        .post(`/api/ovp`, ovpdata, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};

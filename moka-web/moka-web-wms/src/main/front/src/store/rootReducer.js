@@ -42,6 +42,7 @@ import jpod from '@store/jpod/jpodReducer';
 import poll from '@store/survey/poll/pollReducer';
 
 export default combineReducers({
+    jpod,
     toastr,
     app,
     loading,
@@ -80,6 +81,5 @@ export default combineReducers({
     comment,
     board,
     seoMeta,
-    jpod,
     poll,
 });

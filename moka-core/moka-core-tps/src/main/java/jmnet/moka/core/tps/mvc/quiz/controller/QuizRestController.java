@@ -27,10 +27,12 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuestionDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizDetailDTO;
+import jmnet.moka.core.tps.mvc.quiz.dto.QuizRelDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizSearchDTO;
 import jmnet.moka.core.tps.mvc.quiz.entity.Question;
 import jmnet.moka.core.tps.mvc.quiz.entity.Quiz;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizDetail;
+import jmnet.moka.core.tps.mvc.quiz.entity.QuizRel;
 import jmnet.moka.core.tps.mvc.quiz.service.QuestionService;
 import jmnet.moka.core.tps.mvc.quiz.service.QuizService;
 import lombok.extern.slf4j.Slf4j;
@@ -124,7 +126,7 @@ public class QuizRestController extends AbstractCommonController {
     @ApiOperation(value = "퀴즈 조회")
     @GetMapping("/{quizSeq}")
     public ResponseEntity<?> getQuiz(HttpServletRequest request,
-            @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Size(min = 1, max = 3, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq)
+            @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Size(min = 1, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq)
             throws NoDataException {
 
         String message = msg("tps.common.error.no-data", request);
@@ -138,9 +140,7 @@ public class QuizRestController extends AbstractCommonController {
                 .size() > 0) {
             quiz
                     .getQuizQuestions()
-                    .forEach(quizQuestion -> {
-                        questions.add(quizQuestion.getQuestion());
-                    });
+                    .forEach(quizQuestion -> questions.add(quizQuestion.getQuestion()));
 
         }
 
@@ -187,7 +187,7 @@ public class QuizRestController extends AbstractCommonController {
 
             StringBuilder resultMessage = new StringBuilder(msg("tps.quiz.success.save"));
 
-            if (fileUploadMessages != null && fileUploadMessages.size() > 0) {
+            if (fileUploadMessages.size() > 0) {
                 resultMessage.append(McpString.toCommaDelimitedString(fileUploadMessages.toArray(new String[0])));
             }
 
@@ -207,23 +207,67 @@ public class QuizRestController extends AbstractCommonController {
     }
 
     /**
+     * 관련 자료 등록
+     *
+     * @param quizRelDTOs 등록할 관련자료
+     * @return 등록된 퀴즈정보
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "퀴즈 관련 자료 등록")
+    @PostMapping(value = "/{quizSeq}/rels", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> postQuizRels(
+            @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Min(value = 1, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq,
+            List<@Valid QuizRelDTO> quizRelDTOs)
+            throws InvalidDataException, Exception {
+
+        try {
+            String message = msg("tps.common.error.no-data");
+            quizService
+                    .findQuizBySeq(quizSeq)
+                    .orElseThrow(() -> new NoDataException(message));
+
+            // 문항부터 저장하고, 퀴즈 등록 트랜잭션 처리
+            List<QuizRel> quizRels = modelMapper.map(quizRelDTOs, new TypeReference<List<QuizRel>>() {
+            }.getType());
+
+            quizRels = quizService.insertQuizRels(quizSeq, quizRels);
+
+            // 결과리턴
+            List<QuizDetailDTO> dtoList = modelMapper.map(quizRels, QuizRelDTO.TYPE);
+
+            ResultDTO<List<QuizDetailDTO>> resultDto = new ResultDTO<>(dtoList, msg("tps.quiz.success.save"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT QUIZ RELACTIONS]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.quiz.error.save"), e);
+        }
+    }
+
+    /**
      * 수정
      *
-     * @param request 요청
      * @param quizSeq 퀴즈일련번호
      * @param quizDTO 수정할 퀴즈정보
      * @return 수정된 퀴즈정보
      * @throws Exception 그외 모든 에러
      */
     @ApiOperation(value = "퀴즈 수정")
-    @PutMapping("/{quizSeq}")
-    public ResponseEntity<?> putQuiz(HttpServletRequest request,
+    @PutMapping(value = "/{quizSeq}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> putQuiz(
             @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Min(value = 1, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq,
             @Valid QuizDetailDTO quizDTO)
             throws Exception {
 
         // QuizDTO -> Quiz 변환
-        String infoMessage = msg("tps.common.error.no-data", request);
+        String infoMessage = msg("tps.common.error.no-data");
 
         // 오리진 데이터 조회
         quizService
@@ -234,10 +278,6 @@ public class QuizRestController extends AbstractCommonController {
 
             QuizDetail newQuiz = modelMapper.map(quizDTO, QuizDetail.class);
             newQuiz.setQuizSeq(quizSeq);
-
-            List<String> fileUploadMessages = saveUploadImage(quizDTO);
-
-
 
             List<Question> questions = modelMapper.map(quizDTO.getQuestions(), new TypeReference<List<Question>>() {
             }.getType());
@@ -259,7 +299,52 @@ public class QuizRestController extends AbstractCommonController {
             log.error("[FAIL TO UPDATE QUIZ]", e);
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, e);
-            throw new Exception(msg("tps.quiz.error.save", request), e);
+            throw new Exception(msg("tps.quiz.error.save"), e);
+        }
+    }
+
+    /**
+     * 퀴즈 관련 자료 수정
+     *
+     * @param quizRelDTOs 등록할 관련자료
+     * @return 등록된 퀴즈정보
+     * @throws InvalidDataException 데이타 유효성 오류
+     * @throws Exception            예외처리
+     */
+    @ApiOperation(value = "퀴즈 관련 자료 수정")
+    @PutMapping(value = "/{quizSeq}/rels", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> putQuizRels(
+            @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Min(value = 1, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq,
+            List<@Valid QuizRelDTO> quizRelDTOs)
+            throws InvalidDataException, Exception {
+
+        try {
+            String message = msg("tps.common.error.no-data");
+            quizService
+                    .findQuizBySeq(quizSeq)
+                    .orElseThrow(() -> new NoDataException(message));
+            
+            // 문항부터 저장하고, 퀴즈 등록 트랜잭션 처리
+            List<QuizRel> quizRels = modelMapper.map(quizRelDTOs, new TypeReference<List<QuizRel>>() {
+            }.getType());
+
+            quizRels = quizService.updateQuizRels(quizSeq, quizRels);
+
+            // 결과리턴
+            List<QuizDetailDTO> dtoList = modelMapper.map(quizRels, QuizRelDTO.TYPE);
+
+            ResultDTO<List<QuizDetailDTO>> resultDto = new ResultDTO<>(dtoList, msg("tps.quiz.success.save"));
+
+            // 액션 로그에 성공 로그 출력
+            tpsLogger.success(ActionType.INSERT);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE QUIZ RELACTIONS]", e);
+            // 액션 로그에 오류 내용 출력
+            tpsLogger.error(ActionType.INSERT, e);
+            throw new Exception(msg("tps.quiz.error.save"), e);
         }
     }
 
@@ -277,7 +362,7 @@ public class QuizRestController extends AbstractCommonController {
     @ApiOperation(value = "퀴즈 삭제")
     @DeleteMapping("/{quizSeq}")
     public ResponseEntity<?> deleteQuiz(HttpServletRequest request,
-            @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Size(min = 1, max = 3, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq)
+            @ApiParam("퀴즈코드") @PathVariable("quizSeq") @Size(min = 1, message = "{tps.quiz.error.pattern.quizSeq}") Long quizSeq)
             throws InvalidDataException, NoDataException, Exception {
 
 

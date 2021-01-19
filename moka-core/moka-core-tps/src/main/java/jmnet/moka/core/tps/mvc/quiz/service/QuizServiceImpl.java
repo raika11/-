@@ -77,14 +77,12 @@ public class QuizServiceImpl implements QuizService {
         Quiz newQuiz = insertQuiz(quiz);
         AtomicInteger order = new AtomicInteger(0);
         List<QuizQuestion> quizQuestions = new ArrayList<>();
-        questions.forEach(question -> {
-            quizQuestions.add(QuizQuestion
-                    .builder()
-                    .ordNo(order.addAndGet(1))
-                    .questionSeq(question.getQuestionSeq())
-                    .quizSeq(newQuiz.getQuizSeq())
-                    .build());
-        });
+        questions.forEach(question -> quizQuestions.add(QuizQuestion
+                .builder()
+                .ordNo(order.addAndGet(1))
+                .questionSeq(question.getQuestionSeq())
+                .quizSeq(newQuiz.getQuizSeq())
+                .build()));
 
         quizQuestionRepository.saveAll(quizQuestions);
 
@@ -118,18 +116,26 @@ public class QuizServiceImpl implements QuizService {
         return newQuiz;
     }
 
+    @Override
+    public List<QuizRel> insertQuizRels(Long quizSeq, List<QuizRel> quizRels) {
+        AtomicInteger order = new AtomicInteger(0);
+        quizRels.forEach(quizRel -> {
+            quizRel.setQuizSeq(quizSeq);
+            quizRel.setOrdNo(order.addAndGet(1));
+        });
+        return quizRelRepository.saveAll(quizRels);
+    }
+
     private List<QuizQuestion> saveAllQuizQuestion(List<Question> questions, Long quizSeq) {
         List<QuizQuestion> quizQuestions = new ArrayList<>();
         AtomicInteger order = new AtomicInteger(0);
         if (questions != null && questions.size() > 0) {
-            questions.forEach(question -> {
-                quizQuestions.add(QuizQuestion
-                        .builder()
-                        .ordNo(order.addAndGet(1))
-                        .questionSeq(question.getQuestionSeq())
-                        .quizSeq(quizSeq)
-                        .build());
-            });
+            questions.forEach(question -> quizQuestions.add(QuizQuestion
+                    .builder()
+                    .ordNo(order.addAndGet(1))
+                    .questionSeq(question.getQuestionSeq())
+                    .quizSeq(quizSeq)
+                    .build()));
             return quizQuestionRepository.saveAll(quizQuestions);
         }
         return null;
@@ -164,6 +170,17 @@ public class QuizServiceImpl implements QuizService {
         newQuiz.setQuizRels(saveAllQuizRel(quiz.getQuizRels(), newQuiz.getQuizSeq()));
 
         return newQuiz;
+    }
+
+    @Override
+    public List<QuizRel> updateQuizRels(Long quizSeq, List<QuizRel> quizRels) {
+        quizRepository.deleteQuizRelByQuizSeq(quizSeq);
+        AtomicInteger order = new AtomicInteger(0);
+        quizRels.forEach(quizRel -> {
+            quizRel.setQuizSeq(quizSeq);
+            quizRel.setOrdNo(order.addAndGet(1));
+        });
+        return quizRelRepository.saveAll(quizRels);
     }
 
     @Override

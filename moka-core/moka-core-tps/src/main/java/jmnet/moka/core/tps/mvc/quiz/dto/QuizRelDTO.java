@@ -1,7 +1,10 @@
 package jmnet.moka.core.tps.mvc.quiz.dto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,6 +26,9 @@ import lombok.Setter;
 public class QuizRelDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static final Type TYPE = new TypeReference<List<QuizRelDTO>>() {
+    }.getType();
 
     /**
      * 일련번호

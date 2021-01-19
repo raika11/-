@@ -24,6 +24,7 @@ export const columnDefs = [
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
         cellClass: 'ag-grid-cell-left',
+        tooltipField: 'title',
     },
     {
         headerName: '상태',

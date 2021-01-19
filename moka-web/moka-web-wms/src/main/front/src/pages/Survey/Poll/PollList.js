@@ -36,8 +36,6 @@ const PollList = () => {
         dispatch(getPollList(search));
     }, [dispatch, search]);
 
-    useEffect(() => {}, [list]);
-
     return (
         <>
             <PollSearch searchOptions={search} codes={codes} onAdd={handleClickAdd} onSearch={handleChangeSearchOption} onReset={handleClickReset} />

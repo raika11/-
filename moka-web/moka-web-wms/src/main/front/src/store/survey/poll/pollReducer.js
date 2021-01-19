@@ -4,30 +4,34 @@ import produce from 'immer';
 
 export const initialState = {
     poll: {
-        group: '',
-        servcode: '1',
-        graphType: 'W',
-        type: 'M',
-        sdate: null,
-        edate: null,
+        pollSeq: null,
+        pollGroup: '',
+        pollCategory: '0100',
+        pollDiv: 'W',
+        pollType: 'M',
+        startDt: null,
+        endDt: null,
         status: 'T',
-        loginFlag: 'Y',
-        repetitionFlag: 'Y',
-        bbsFlag: 'Y',
+        loginYn: 'Y',
+        repetitionYn: 'Y',
+        mainYn: 'N',
+        bbsYn: 'Y',
         bbsUrl: '',
-        commentFlag: 'Y',
-        itemCount: 2,
-        itemvalueLimit: 1,
-        question: {
-            title: '',
-        },
+        replyYn: 'Y',
+        itemCnt: 2,
+        allowAnswCnt: 1,
+        pollItems: [],
     },
     codes: {
-        category: [],
-        group: [],
+        pollCategory: [],
+        pollGroup: [],
         status: [
             { key: 'S', value: '서비스 중' },
             { key: 'T', value: '일시 중지' },
+        ],
+        pollDiv: [
+            { key: 'W', value: '일반형' },
+            { key: 'V', value: '비교형' },
         ],
     },
     search: {
@@ -58,14 +62,19 @@ export default handleActions(
                 draft.list = payload.data.body.list;
             });
         },
+        [action.GET_POLL_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.poll = payload;
+            });
+        },
         [action.GET_POLL_CATEGORY_CODES_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.codes.category = payload;
+                draft.codes.pollCategory = payload;
             });
         },
         [action.GET_POLL_GROUP_CODES_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.codes.group = payload;
+                draft.codes.pollGroup = payload;
             });
         },
     },

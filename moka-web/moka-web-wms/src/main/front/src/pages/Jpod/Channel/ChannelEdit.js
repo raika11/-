@@ -4,7 +4,7 @@ import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, deleteJpodChannel, clearReporter } from '@store/jpod';
+import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, clearReporter } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';

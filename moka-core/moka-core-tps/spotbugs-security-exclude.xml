@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+  This file contains some false positive bugs detected by spotbugs. Their
+  false positive nature has been analyzed individually and they have been
+  put here to instruct spotbugs it must ignore them.
+-->
+<FindBugsFilter>
+
+  <!-- the following serialization classes already takes care of non-serializable parts. -->
+  <Match>
+    <Or>
+      <Class name="~jmnet\.moka\..*\.entity\..*$" />
+      <Class name="~jmnet\.moka\..*\.dto\..*$" />
+      <Class name="~jmnet\.moka\..*\.vo\..*$" />
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+
+</FindBugsFilter>
+

@@ -48,13 +48,15 @@ const ChannelListAgGrid = ({ match }) => {
             setRowData(
                 data.map((element) => {
                     let chnlSdt = element.chnlSdt && element.chnlSdt.length > 10 ? element.chnlSdt.substr(0, 10) : element.chnlSdt;
+                    const totalEpsdCnt = element.totalEpsdCnt ? element.totalEpsdCnt : 0;
+                    const lastEpsdNo = element.lastEpsdNo ? element.lastEpsdNo : 0;
                     return {
                         chnlSeq: element.chnlSeq,
                         chnlSdt: chnlSdt,
                         chnlThumb: element.chnlThumb,
                         chnlNm: element.chnlNm,
                         chnlMemo: element.chnlMemo,
-                        roundinfo: `0/0`,
+                        roundinfo: `${totalEpsdCnt}/${lastEpsdNo}`,
                         subscribe: ``,
                     };
                 }),

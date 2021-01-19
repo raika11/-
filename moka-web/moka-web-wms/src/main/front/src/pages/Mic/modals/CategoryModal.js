@@ -25,7 +25,6 @@ const CategoryModal = (props) => {
             show={show}
             onHide={onHide}
             size="md"
-            headerClassName="justify-content-start"
             bodyClassName="pb-2"
             buttons={[
                 {

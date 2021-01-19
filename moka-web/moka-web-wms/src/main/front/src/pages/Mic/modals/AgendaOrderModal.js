@@ -24,7 +24,6 @@ const AgendaOrderModal = (props) => {
             show={show}
             onHide={onHide}
             size="sm"
-            headerClassName="justify-content-start"
             bodyClassName="pb-2"
             buttons={[
                 {

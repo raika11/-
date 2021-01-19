@@ -55,6 +55,24 @@ const ArticleAgGrid = ({ match, ja }) => {
     );
 
     /**
+     * ag-grid queue empty 시점에서 실행
+     * https://www.ag-grid.com/documentation/javascript/grid-events/
+     */
+    const handleRowRendered = useCallback((params) => {
+        params.api.forEachNode((rowNode) => {
+            // autoHeight 셀 = 매체, 제목
+            const cells = params.api.getCellRendererInstances({ columns: ['source', 'artTitle'], rowNodes: [rowNode] });
+            if (cells.length === 2) {
+                const height = cells[0].getGui().offsetHeight > cells[1].getGui().offsetHeight ? cells[0].getGui().offsetHeight : cells[1].getGui().offsetHeight;
+                if (height > 21) {
+                    rowNode.setRowHeight(height + 8);
+                }
+            }
+        });
+        params.api.onRowHeightChanged();
+    }, []);
+
+    /**
      * 삭제
      */
     const handleClickDelete = useCallback(
@@ -147,7 +165,8 @@ const ArticleAgGrid = ({ match, ja }) => {
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['view', 'register']}
             selected={article.totalId}
-            refreshCellsParams={{ columns: ['source'], force: true }}
+            suppressRefreshCellAfterUpdate
+            onAnimationQueueEmpty={handleRowRendered}
         />
     );
 };

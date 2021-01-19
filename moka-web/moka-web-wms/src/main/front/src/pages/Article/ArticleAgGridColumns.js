@@ -2,12 +2,12 @@ import React from 'react';
 import ArticleActionBtn from './components/ArticleActionBtn';
 import ArticleViewBtn from './components/ArticleViewBtn';
 import SourceRenderer from './components/SourceRenderer';
-// import TitleRenderer from './components/TitleRenderer';
+import TitleRenderer from './components/TitleRenderer';
 
 export default [
     {
         headerName: '매체/분류',
-        colId: 'source',
+        field: 'source',
         width: 150,
         wrapText: true,
         autoHeight: true,
@@ -30,7 +30,7 @@ export default [
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
         wrapText: true,
         autoHeight: true,
-        // cellRendererFramework: (row) => <TitleRenderer {...row} />,
+        cellRendererFramework: (row) => <TitleRenderer {...row} />,
     },
     {
         headerName: '면/판',

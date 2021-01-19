@@ -184,6 +184,7 @@ const ArticleSearch = ({ ja, sun }) => {
          */
         const date = new Date();
         const startServiceDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
+        // const startServiceDay = moment(date).subtract(1, 'years').format(DB_DATEFORMAT);
         const endServiceDay = moment(date).format(DB_DATEFORMAT);
         const ns = { ...search, sourceList, startServiceDay, endServiceDay, page: 0 };
 

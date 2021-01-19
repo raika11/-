@@ -48,6 +48,7 @@ const JpodEpisode = React.lazy(() => import('@pages/Jpod/JpodEpisode'));
 const SystemLog = React.lazy(() => import('@pages/SystemLog'));
 const SystemMonitor = React.lazy(() => import('@pages/SystemMonitor'));
 const BulkMonitor = React.lazy(() => import('@pages/BulkMonitor'));
+const Apis = React.lazy(() => import('@pages/Apis'));
 
 const routes = [
     {
@@ -606,6 +607,16 @@ const routes = [
         name: 'bulk-monitor-ja',
         displayName: '벌크 모니터링',
         component: BulkMonitor,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/apis',
+        name: 'apis',
+        displayName: 'API 관리',
+        component: Apis,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

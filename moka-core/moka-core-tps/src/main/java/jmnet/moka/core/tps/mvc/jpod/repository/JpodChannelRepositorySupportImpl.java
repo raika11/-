@@ -105,11 +105,11 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
 
         query
                 .select(Projections.fields(JpodChannel.class, qJpodChannel.chnlSeq, qJpodChannel.regDt, qJpodChannel.chnlSdt, qJpodChannel.chnlNm,
-                        qJpodChannel.chnlMemo, qJpodChannel.chnlImg, qJpodChannel.chnlThumb, qJpodChannel.chnlImgMob, ExpressionUtils.as(
-                                JPAExpressions
-                                        .select(qJpodEpisode.epsdSeq.count())
-                                        .from(qJpodEpisode)
-                                        .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "totalEpsdCnt"), ExpressionUtils.as(JPAExpressions
+                        qJpodChannel.chnlMemo, qJpodChannel.chnlImg, qJpodChannel.chnlThumb, qJpodChannel.chnlImgMob, qJpodChannel.podtyChnlSrl,
+                        ExpressionUtils.as(JPAExpressions
+                                .select(qJpodEpisode.epsdSeq.count())
+                                .from(qJpodEpisode)
+                                .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "totalEpsdCnt"), ExpressionUtils.as(JPAExpressions
                                 .select(qJpodEpisode.epsdNo.max())
                                 .from(qJpodEpisode)
                                 .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "lastEpsdNo")))

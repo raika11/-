@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
-import { clearArticle } from '@store/article';
+import { clearArticle, getArticleList } from '@store/article';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 
 const ArticleEdit = ({ match }) => {
@@ -12,6 +12,7 @@ const ArticleEdit = ({ match }) => {
     const dispatch = useDispatch();
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
+    const search = useSelector(({ article }) => article.search);
     const [reporterList, setReporterList] = useState([]);
 
     /**
@@ -21,6 +22,11 @@ const ArticleEdit = ({ match }) => {
         history.push(match.path);
         dispatch(clearArticle());
     };
+
+    /**
+     * 등록기사 수정 후
+     */
+    const reloadList = () => dispatch(getArticleList({ search }));
 
     useEffect(() => {
         // 기사타입 조회
@@ -47,7 +53,7 @@ const ArticleEdit = ({ match }) => {
 
     return (
         <React.Fragment>
-            <ArticleForm totalId={totalId} articleTypeRows={articleTypeRows} reporterList={reporterList || []} onCancle={handleCancle} />
+            <ArticleForm totalId={totalId} articleTypeRows={articleTypeRows} reporterList={reporterList || []} onCancle={handleCancle} onSave={reloadList} />
         </React.Fragment>
     );
 };

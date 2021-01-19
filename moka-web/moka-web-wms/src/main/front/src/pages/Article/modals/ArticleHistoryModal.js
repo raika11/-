@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaTable } from '@components';
 import { getArticleHistoryList, clearHistory, GET_ARTICLE_HISTORY_LIST } from '@store/article';
 import { getMasterCodeList } from '@store/code';
+import { unescapeHtml } from '@utils/convertUtil';
 import columnDefs from './ArticleHistoryModalColumns';
 
 /**
@@ -57,7 +58,7 @@ const ArticleHistoryModal = (props) => {
 
                 return {
                     ...hist,
-                    title: `${hist.artTitle}\n${hist.artSubTitle}`,
+                    title: `${unescapeHtml(hist.artTitle)}\n${unescapeHtml(hist.artSubTitle)}`,
                     masterCodeText,
                 };
             }),

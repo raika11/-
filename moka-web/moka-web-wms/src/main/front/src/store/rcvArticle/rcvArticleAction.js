@@ -37,7 +37,7 @@ export const getRcvArticleModal = createAction(GET_RCV_ARTICLE_MODAL, ({ rid, ca
  * 수신기사 => 등록기사 부가정보 수정하면서 등록
  */
 export const POST_RCV_ARTICLE = 'rcvArticle/POST_RCV_ARTICLE';
-export const postRcvArticle = createAction(POST_RCV_ARTICLE, ({ rcvArticle, callback }) => ({ rcvArticle, callback }));
+export const postRcvArticle = createAction(POST_RCV_ARTICLE, ({ rcvArticle, rid, callback }) => ({ rcvArticle, rid, callback }));
 
 /**
  * 수신기사 => 등록기사 등록만

@@ -21,7 +21,7 @@ import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 /**
  * 등록기사 수정폼
  */
-const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/article' }) => {
+const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl = '/article' }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const article = useSelector((store) => store.article.article);
@@ -196,11 +196,12 @@ const ArticleForm = ({ totalId, reporterList, inRcv, onCancle, returnUrl = '/art
             dispatch(
                 saveArticle({
                     article: saveObj,
-                    callback: ({ header }) => {
+                    callback: ({ header, body }) => {
                         if (!header.success) {
                             toast.fail(header.message);
                         } else {
                             toast.success(header.message);
+                            if (typeof onSave === 'function') onSave(body);
                         }
                     },
                 }),

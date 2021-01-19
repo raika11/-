@@ -46,5 +46,17 @@
     "remotePath": "/box/mokaftp/pds",
     "connectTimeout": 0,
     "readTimeout": 0
+  },
+  "CDN": {
+    "host": "uy3yr+c6novUoRg+0u4hCA==",
+    "port": "ldzL+teaAU0=",
+    "user": "DF1b1+AdbEw=",
+    "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
+    "passive": true,
+    "encoding": "",
+    "tempPath": "",
+    "remotePath": "/box/mokaftp/static/cdn",
+    "connectTimeout": 0,
+    "readTimeout": 0
   }
 }

@@ -48,14 +48,14 @@
     "readTimeout": 0
   },
   "CDN": {
-    "host": "V2cWjTD9JO5SWznHCwWo7pSHt6z/y3HL",
-    "port": "7zP8LDX9hL8=",
-    "user": "G1t/9fR+ZQYQw5/Ays45SQ==",
-    "passwd": "G1t/9fR+ZQYtNXcJowHW0g==",
+    "host": "uy3yr+c6novUoRg+0u4hCA==",
+    "port": "ldzL+teaAU0=",
+    "user": "DF1b1+AdbEw=",
+    "passwd": "+XRlTKp2JmGRo7AS/rrQ6w==",
     "passive": true,
     "encoding": "",
     "tempPath": "",
-    "remotePath": "",
+    "remotePath": "/box/mokaftp/static/cdn",
     "connectTimeout": 0,
     "readTimeout": 0
   }

@@ -15,7 +15,7 @@ export const columnDefs = [
     {
         headerName: '분류',
         field: 'category',
-        width: 70,
+        width: 80,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },
     {

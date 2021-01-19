@@ -33,10 +33,10 @@ export const initialState = {
     search: {
         page: 0,
         size: 20,
-        searchType: '',
+        searchType: 'title',
         keyword: '',
-        pollDiv: '',
-        pollType: '',
+        pollGroup: 'A',
+        pollCategory: '',
         startDt: '',
         endDt: '',
         status: '',
@@ -47,6 +47,11 @@ export const initialState = {
 
 export default handleActions(
     {
+        [action.CHANGE_POLL_SEARCH_OPTIONS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.search = payload;
+            });
+        },
         [action.GET_POLL_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.total = payload.data.body.totalCnt;

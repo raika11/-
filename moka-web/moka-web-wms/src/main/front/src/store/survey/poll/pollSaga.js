@@ -56,7 +56,7 @@ function* getPollList({ type, payload }) {
     yield put(startLoading(type));
     try {
         const response = yield call(pollApi.getPollList, { search: payload });
-        console.log(response);
+
         if (response.data.header.success) {
             const codes = yield select((store) => store.poll.codes);
             const list = toPollList(response.data.body.list, codes);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { tempColumnDefs } from './SnsMetaAgGridColumns';
+import { columnDefs } from './SnsMetaAgGridColumns';
 import { MokaTable } from '@components';
 import { useDispatch } from 'react-redux';
 import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
@@ -25,7 +25,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     return (
         <MokaTable
             agGridHeight={650}
-            columnDefs={tempColumnDefs}
+            columnDefs={columnDefs}
             rowData={rowData}
             rowHeight={65}
             onRowNodeId={(row) => row.id}

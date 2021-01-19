@@ -80,6 +80,12 @@ export default handleActions(
                 draft.meta.meta = initialState.meta.meta;
             });
         },
+        [action.CLEAR_SNS_META_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.meta.list = initialState.meta.list;
+                draft.meta.total = initialState.meta.total;
+            });
+        },
         [action.GET_SNS_META_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.meta.list = body.list;

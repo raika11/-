@@ -3,7 +3,7 @@ import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Figure } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta, saveSnsMeta, publishSnsMeta, getSNSMetaList } from '@store/snsManage';
+import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta, saveSnsMeta, publishSnsMeta, getSnsMetaList, clearSnsMetaList } from '@store/snsManage';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
@@ -107,13 +107,14 @@ const SnsMetaEdit = () => {
             ];
         }
         if (validSaveData(data, 'send')) {
+            dispatch(clearSnsMetaList());
             dispatch(
                 publishSnsMeta({
                     totalId: edit.totalId,
                     data,
                     callback: (response) => {
                         dispatch(getSnsMeta(totalId));
-                        dispatch(getSNSMetaList({ payload: search }));
+                        dispatch(getSnsMetaList({ payload: search }));
                         toast.result(response);
                     },
                 }),
@@ -128,13 +129,14 @@ const SnsMetaEdit = () => {
         ];
 
         if (validSaveData(data)) {
+            dispatch(clearSnsMetaList());
             dispatch(
                 saveSnsMeta({
                     totalId: edit.totalId,
                     data,
                     callback: (response) => {
                         dispatch(getSnsMeta(totalId));
-                        dispatch(getSNSMetaList({ payload: search }));
+                        dispatch(getSnsMetaList({ payload: search }));
                         toast.result(response);
                     },
                 }),

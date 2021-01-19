@@ -1,24 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MokaCard, MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { codes } from '@pages/Survey/Poll/PollAgGridColumns';
 import { initialState } from '@store/survey/poll/pollReducer';
 import PollDetailQuestionComponent from '@pages/Survey/Poll/components/PollDetailQuestionComponent';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPoll, GET_POLL } from '@store/survey/poll/pollAction';
+import commonUtil from '@utils/commonUtil';
 
 const PollEdit = () => {
+    const { pollSeq } = useParams();
+    const dispatch = useDispatch();
     const history = useHistory();
     const [edit, setEdit] = useState(initialState.poll);
     const [isSet, setIsSet] = useState(false);
     const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
+
+    const { codes, poll, loading } = useSelector((store) => ({
+        codes: store.poll.codes,
+        poll: store.poll.poll,
+        loading: store.loading[GET_POLL],
+    }));
+
     const handleChangeValue = (name, value, type) => {
         if (type === 'number') {
             value = parseInt(value);
         }
         setEdit({ ...edit, [name]: value });
     };
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(pollSeq)) {
+            dispatch(getPoll(pollSeq));
+        }
+    }, [dispatch, pollSeq]);
+
+    useEffect(() => {
+        setEdit(poll);
+    }, [poll]);
 
     return (
         <MokaCard
@@ -31,11 +52,34 @@ const PollEdit = () => {
                 { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
             ]}
             width={570}
+            loading={loading}
         >
             <Form>
-                <Form.Row className="mb-2">
-                    <Col xs={3}>
-                        <MokaInputLabel as="switch" label="메인노출" labelWidth={70} labelClassName="text-right" />
+                <Form.Row className="mb-2 justify-content-between">
+                    <Col xs={6}>
+                        <MokaInputLabel
+                            as="select"
+                            label="서비스 상태"
+                            labelWidth={70}
+                            name="status"
+                            labelClassName="text-right"
+                            value={edit.status}
+                            onChange={(e) => {
+                                const {
+                                    target: { name, value },
+                                } = e;
+                                handleChangeValue(name, value);
+                            }}
+                        >
+                            {codes.status.map((option) => (
+                                <option key={option.key} value={option.key}>
+                                    {option.value}
+                                </option>
+                            ))}
+                        </MokaInputLabel>
+                    </Col>
+                    <Col xs={6}>
+                        <MokaInputLabel label="투표ID" labelWidth={70} name="pollSeq" labelClassName="text-right" value={edit.pollSeq} disabled={true} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2 justify-content-between">
@@ -46,7 +90,7 @@ const PollEdit = () => {
                             name="group"
                             labelWidth={70}
                             labelClassName="text-right"
-                            value={edit.group}
+                            value={edit.pollGroup}
                             onChange={(e) => {
                                 const {
                                     target: { name, value },
@@ -54,7 +98,7 @@ const PollEdit = () => {
                                 handleChangeValue(name, value);
                             }}
                         >
-                            {codes.groups.map((option) => (
+                            {codes.pollGroup.map((option) => (
                                 <option key={option.key} value={option.key}>
                                     {option.value}
                                 </option>
@@ -66,9 +110,9 @@ const PollEdit = () => {
                             as="select"
                             label="분류"
                             labelWidth={70}
-                            name="servcode"
+                            name="pollCategory"
                             labelClassName="text-right"
-                            value={edit.servcode}
+                            value={edit.pollCategory}
                             onChange={(e) => {
                                 const {
                                     target: { name, value },
@@ -76,7 +120,7 @@ const PollEdit = () => {
                                 handleChangeValue(name, value);
                             }}
                         >
-                            {codes.servcode.map((option) => (
+                            {codes.pollCategory.map((option) => (
                                 <option key={option.key} value={option.key}>
                                     {option.value}
                                 </option>
@@ -90,9 +134,9 @@ const PollEdit = () => {
                             as="select"
                             label="레이아웃"
                             labelWidth={70}
-                            name="graphType"
+                            name="pollDiv"
                             labelClassName="text-right"
-                            value={edit.graphType}
+                            value={edit.pollDiv}
                             onChange={(e) => {
                                 const {
                                     target: { name, value },
@@ -100,7 +144,7 @@ const PollEdit = () => {
                                 handleChangeValue(name, value);
                             }}
                         >
-                            {codes.graphType.map((option) => (
+                            {codes.pollDiv.map((option) => (
                                 <option key={option.key} value={option.key}>
                                     {option.value}
                                 </option>
@@ -114,7 +158,7 @@ const PollEdit = () => {
                             as="radio"
                             value="M"
                             labelWidth={30}
-                            inputProps={{ custom: true, label: 'text형', checked: edit.type === 'M' }}
+                            inputProps={{ custom: true, label: 'text형', checked: edit.pollType === 'T' }}
                             onChange={(e) => {
                                 const {
                                     target: { name, value },
@@ -131,7 +175,7 @@ const PollEdit = () => {
                             as="radio"
                             value="P"
                             labelWidth={30}
-                            inputProps={{ custom: true, label: '이미지형', checked: edit.type === 'P' }}
+                            inputProps={{ custom: true, label: '이미지형', checked: edit.pollType === 'P' }}
                             onChange={(e) => {
                                 const {
                                     target: { name, value },
@@ -148,7 +192,7 @@ const PollEdit = () => {
                             as="radio"
                             value="V"
                             labelWidth={85}
-                            inputProps={{ custom: true, label: 'text형+이미지형', checked: edit.type === 'V' }}
+                            inputProps={{ custom: true, label: 'text형+이미지형', checked: edit.pollType === 'M' }}
                             onChange={(e) => {
                                 const {
                                     target: { name, value },
@@ -172,7 +216,7 @@ const PollEdit = () => {
                             labelWidth={70}
                             name="sdate"
                             labelClassName="text-right"
-                            value={edit.sdate}
+                            value={edit.startDt}
                             onChange={(data) => {
                                 handleChangeValue('sdate', data._d);
                             }}
@@ -183,7 +227,7 @@ const PollEdit = () => {
                         <MokaInput
                             as="dateTimePicker"
                             name="edate"
-                            value={edit.edate}
+                            value={edit.endDt}
                             onChange={(data) => {
                                 handleChangeValue('sdate', data._d);
                             }}
@@ -218,10 +262,32 @@ const PollEdit = () => {
                     <Col xs={3}>
                         <MokaInputLabel
                             as="switch"
+                            label="메인노출"
+                            labelWidth={70}
+                            labelClassName="text-right"
+                            name="mainYn"
+                            id="mainYn"
+                            onChange={(e) => {
+                                const {
+                                    target: { name, checked },
+                                } = e;
+                                let value = 'N';
+                                if (checked) {
+                                    value = 'Y';
+                                }
+
+                                handleChangeValue(name, value);
+                            }}
+                            inputProps={{ checked: edit.mainYn === 'Y' }}
+                        />
+                    </Col>
+                    <Col xs={3}>
+                        <MokaInputLabel
+                            as="switch"
                             label="로그인"
                             labelWidth={70}
-                            name="loginFlag"
-                            id="loginFlag"
+                            name="loginYn"
+                            id="loginYn"
                             labelClassName="text-right"
                             onChange={(e) => {
                                 const {
@@ -233,7 +299,29 @@ const PollEdit = () => {
                                 }
                                 handleChangeValue(name, value);
                             }}
-                            inputProps={{ checked: edit.loginFlag === 'Y' }}
+                            inputProps={{ checked: edit.loginYn === 'Y' }}
+                        />
+                    </Col>
+                    <Col xs={2}>
+                        <MokaInputLabel
+                            as="switch"
+                            label="댓글"
+                            labelWidth={50}
+                            labelClassName="text-right"
+                            name="replyYn"
+                            id="replyYn"
+                            onChange={(e) => {
+                                const {
+                                    target: { name, checked },
+                                } = e;
+                                let value = 'N';
+                                if (checked) {
+                                    value = 'Y';
+                                }
+
+                                handleChangeValue(name, value);
+                            }}
+                            inputProps={{ checked: edit.replyYn === 'Y' }}
                         />
                     </Col>
                     <Col xs={4}>
@@ -241,8 +329,8 @@ const PollEdit = () => {
                             as="switch"
                             label="중복 투표 제한"
                             labelWidth={120}
-                            name="repetitionFlag"
-                            id="repetitionFlag"
+                            name="repetitionYn"
+                            id="repetitionYn"
                             labelClassName="text-right mr-1"
                             onChange={(e) => {
                                 const {
@@ -254,10 +342,9 @@ const PollEdit = () => {
                                 }
                                 handleChangeValue(name, value);
                             }}
-                            inputProps={{ checked: edit.repetitionFlag === 'Y' }}
+                            inputProps={{ checked: edit.repetitionYn === 'Y' }}
                         />
                     </Col>
-                    <Col xs={4}></Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={3}>
@@ -265,8 +352,8 @@ const PollEdit = () => {
                             as="switch"
                             label="게시판"
                             labelWidth={70}
-                            name="bbsFlag"
-                            id="bbsFlag"
+                            name="bbsYn"
+                            id="bbsYn"
                             labelClassName="text-right"
                             onChange={(e) => {
                                 const {
@@ -278,11 +365,11 @@ const PollEdit = () => {
                                 }
                                 handleChangeValue(name, value);
                             }}
-                            inputProps={{ checked: edit.bbsFlag === 'Y' }}
+                            inputProps={{ checked: edit.bbsYn === 'Y' }}
                         />
                     </Col>
-                    {edit.bbsFlag === 'Y' && (
-                        <Col xs={6}>
+                    {edit.bbsYn === 'Y' && (
+                        <Col xs={9}>
                             <MokaInputLabel
                                 label="url"
                                 labelWidth={35}
@@ -300,17 +387,20 @@ const PollEdit = () => {
                     )}
                 </Form.Row>
                 <Form.Row className="d-flex justify-content-center mb-2">
-                    <MokaCard title="투표 정보 설정" height={130} className="w-100" headerClassName="pb-0">
-                        <Form.Row className="mb-2">
+                    <MokaCard height={65} className="w-100" header={false} bodyClassName="pt-3 pb-3">
+                        <Form.Row className="align-items-center h-100">
+                            <Col xs={2} className="d-flex h-100 align-items-center" style={{ borderRight: '1px solid' }}>
+                                <h4 className="text-center pr-2 mb-0">투표 설정</h4>
+                            </Col>
                             <Col xs={4}>
                                 <MokaInputLabel
                                     type="number"
                                     label="보기 개수"
-                                    labelWidth={70}
-                                    name="itemCount"
-                                    labelClassName="text-left ml-0"
+                                    labelWidth={80}
+                                    name="itemCnt"
+                                    labelClassName="text-right"
                                     className="pl-0"
-                                    value={edit.itemCount}
+                                    value={edit.itemCnt}
                                     onChange={(e) => {
                                         const {
                                             target: { name, value, type },
@@ -319,16 +409,17 @@ const PollEdit = () => {
                                         handleChangeValue(name, value, type);
                                     }}
                                     disabled={isSet}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
                                 />
                             </Col>
-                            <Col xs={5}>
+                            <Col xs={4}>
                                 <MokaInputLabel
                                     type="number"
                                     label="허용 답변 수"
                                     labelWidth={80}
-                                    name="itemvalueLimit"
+                                    name="allowAnswCnt"
                                     className="text-right"
-                                    value={edit.itemvalueLimit}
+                                    value={edit.allowAnswCnt}
                                     onChange={(e) => {
                                         const {
                                             target: { name, value, type },
@@ -339,7 +430,7 @@ const PollEdit = () => {
                                     inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
                                 />
                             </Col>
-                            <Col xs={3} className="p-0  pr-2 text-right">
+                            <Col xs={2} className="p-0  pr-2 text-right">
                                 <Button
                                     variant="positive"
                                     onClick={() => {
@@ -353,7 +444,7 @@ const PollEdit = () => {
                         </Form.Row>
                     </MokaCard>
                 </Form.Row>
-                {edit.itemCount > 0 && isSet && (
+                {edit.itemCnt > 0 && isSet && (
                     <Form.Row className="mb-2">
                         <MokaCard
                             className="flex-fill pl-0"

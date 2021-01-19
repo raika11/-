@@ -49,7 +49,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         }}
                         value={options.pollGroup}
                     >
-                        {codes.group.map((option) => (
+                        {codes.pollGroup.map((option) => (
                             <option key={option.key} value={option.key}>
                                 {option.value}
                             </option>
@@ -89,7 +89,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                         <option key="0" value="">
                             분류 전체
                         </option>
-                        {codes.category.map((option) => (
+                        {codes.pollCategory.map((option) => (
                             <option key={option.key} value={option.key}>
                                 {option.value}
                             </option>
@@ -131,7 +131,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="justify-content-between mb-2">
-                <Col xs={7} className="p-0">
+                <Col xs={8} className="p-0">
                     <Form.Row>
                         <Col xs={3} className="p-0 pr-2">
                             <MokaInput
@@ -159,14 +159,14 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                                 onSearch={handleClickSearch}
                             />
                         </Col>
-                        <Col xs={1} className="p-0">
+                        <Col xs={2} className="p-0">
                             <Button variant="negative" onClick={handleClickReset}>
                                 초기화
                             </Button>
                         </Col>
                     </Form.Row>
                 </Col>
-                <Col xs={5} className="p-0  pr-2 text-right">
+                <Col xs={2} className="p-0  pr-2 text-right">
                     <Button variant="positive" onClick={onAdd}>
                         투표 등록
                     </Button>

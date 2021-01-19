@@ -127,7 +127,7 @@ const Container = ({ match }) => {
                             if (!body) deleteCallback(container);
                             // 관련 아이템 있음
                             else {
-                                messageBox.alert('사용 중인 템플릿입니다.\n삭제할 수 없습니다.');
+                                messageBox.alert('사용 중인 컨테이너입니다.\n삭제할 수 없습니다.');
                             }
                         } else {
                             toast.error(header.message);
@@ -177,9 +177,9 @@ const Container = ({ match }) => {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
-                // } else if (itemType === ITEM_AD) {
-                //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             }
+            // } else if (itemType === ITEM_AD) {
+            //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             dispatch(appendTag(tag));
         },
         [dispatch],

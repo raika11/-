@@ -92,6 +92,7 @@ const LookupTemplateList = (props) => {
                 ...search,
                 widthMin: null,
                 widthMax: null,
+                templateWidth: e.target.value,
             });
             return;
         }
@@ -101,12 +102,14 @@ const LookupTemplateList = (props) => {
                 ...search,
                 widthMin: Number(widthmin),
                 widthMax: Number(widthmax),
+                templateWidth: e.target.value,
             });
         } catch (err) {
             setSearch({
                 ...search,
                 widthMin: null,
                 widthMax: null,
+                templateWidth: 'all',
             });
         }
     };

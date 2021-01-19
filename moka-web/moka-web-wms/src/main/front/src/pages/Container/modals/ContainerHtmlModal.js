@@ -6,17 +6,17 @@ import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * 컨테이너 TEMS 소스 보여주는 모달
- * (수정 불가, local state만 사용)
+ * 수정할 경우 => containerSeq && containerSave
+ * @param {boolean} props.containerSave 컨테이너 본문 수정 가능한지
  */
 const ContainerHtmlModal = (props) => {
     const { show, onHide, containerSeq, containerSave = false } = props;
     const dispatch = useDispatch();
-
-    const { container, containerBody, invalidList, loading } = useSelector((store) => ({
+    const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[SAVE_CONTAINER]);
+    const { container, containerBody, invalidList } = useSelector((store) => ({
         container: store.container.container,
         containerBody: store.container.containerBody,
         invalidList: store.container.invalidList,
-        loading: store.loading[GET_CONTAINER] || store.loading[SAVE_CONTAINER],
     }));
 
     // state

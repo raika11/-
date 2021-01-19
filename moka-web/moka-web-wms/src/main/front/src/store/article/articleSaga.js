@@ -76,10 +76,7 @@ function* saveArticle({ payload: { article, callback } }) {
                 type: act.SAVE_ARTICLE_SUCCESS,
                 payload: response.data,
             });
-
-            // 목록 다시 검색
-            const search = yield select((store) => store.article.search);
-            yield put({ type: act.GET_ARTICLE_LIST, payload: { search } });
+            // 목록 조회 로직은 여기에 추가하지 않음 (수신/등록 분기해야하므로 개별 처리)
         } else {
             const { body } = response.data.body;
 

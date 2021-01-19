@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
-import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE } from '@store/rcvArticle';
+import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE, getRcvArticleList } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm';
 import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
@@ -17,7 +17,10 @@ const RcvArticleEdit = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
-    const rcvArticle = useSelector((store) => store.rcvArticle.rcvArticle);
+    const { search, rcvArticle } = useSelector(({ rcvArticle }) => ({
+        rcvArticle: rcvArticle.rcvArticle,
+        search: rcvArticle.search,
+    }));
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
     const [reporterList, setReporterList] = useState([]);
@@ -64,6 +67,11 @@ const RcvArticleEdit = ({ match }) => {
             );
         }
     };
+
+    /**
+     * 등록기사 수정 후
+     */
+    const reloadList = () => dispatch(getRcvArticleList({ search }));
 
     useEffect(() => {
         // 기사타입 조회
@@ -155,6 +163,7 @@ const RcvArticleEdit = ({ match }) => {
                     articleTypeRows={articleTypeRows}
                     reporterList={reporterList || []}
                     onCancle={handleCancle}
+                    onSave={reloadList}
                     inRcv
                 />
             )}

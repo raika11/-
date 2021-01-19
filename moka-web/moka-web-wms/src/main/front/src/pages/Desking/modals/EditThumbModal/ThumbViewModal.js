@@ -64,7 +64,7 @@ const ThumbViewModal = (props) => {
                     </div>
                 </div>
             }
-            headerClassName="justify-content-start color-white"
+            headerClassName="color-white"
             bodyClassName="p-0"
             footerClassName="m-0 border-top-0"
             headerStyle={{ backgroundColor: '#373D53', height: '60px' }}

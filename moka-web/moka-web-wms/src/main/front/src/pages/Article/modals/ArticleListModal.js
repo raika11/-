@@ -261,17 +261,7 @@ const ArticleListModal = (props) => {
     }, [IR_URL, PDS_URL, list]);
 
     return (
-        <MokaModal
-            title="기사 검색 팝업"
-            show={show}
-            onHide={onHide}
-            size="lg"
-            width={1000}
-            height={800}
-            headerClassName="justify-content-start"
-            bodyClassName="d-flex flex-column"
-            draggable
-        >
+        <MokaModal title="기사 검색 팝업" show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
             <Form>
                 <Form.Row className="mb-2">
                     {/* 시작일, 종료일 */}

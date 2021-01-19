@@ -21,7 +21,6 @@ const HolidayRegistrationModal = forwardRef((props, ref) => {
         <MokaModal
             title="휴일 등록"
             size="md"
-            headerClassName="justify-content-start"
             width={400}
             show={show}
             onHide={onHide}

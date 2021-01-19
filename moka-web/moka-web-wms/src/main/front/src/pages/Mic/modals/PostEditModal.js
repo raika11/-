@@ -32,7 +32,6 @@ const PostEditModal = (props) => {
             show={show}
             onHide={onHide}
             title="사용자 포스트 관리"
-            headerClassName="justify-content-start"
             buttons={[
                 { text: '저장', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: onHide },

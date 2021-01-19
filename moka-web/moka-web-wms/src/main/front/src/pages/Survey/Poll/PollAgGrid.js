@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { columnDefs, rowData } from '@pages/Survey/Poll/PollAgGridColumns';
+import produce from 'immer';
 
-const PollAgGrid = ({ searchOptions, rows }) => {
+const PollAgGrid = ({ searchOptions, total, rows, loading, onChangeSearchOption }) => {
     const [rowData, setRowData] = useState([]);
+
+    const handleChangeSearchOptions = (option) => {
+        if (onChangeSearchOption instanceof Function) {
+            onChangeSearchOption(
+                produce(searchOptions, (draft) => {
+                    draft[option.key] = option.value;
+                }),
+            );
+        }
+    };
 
     useEffect(() => {
         setRowData(rows);
@@ -17,8 +28,10 @@ const PollAgGrid = ({ searchOptions, rows }) => {
                 rowData={rowData}
                 page={searchOptions.page}
                 size={searchOptions.size}
-                total={searchOptions.total}
+                total={total}
                 rowHeight={65}
+                loading={loading}
+                onChangeSearchOption={handleChangeSearchOptions}
                 className="ag-grid-align-center"
             />
         </>

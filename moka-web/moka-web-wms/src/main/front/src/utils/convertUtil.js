@@ -31,6 +31,7 @@ export const unescapeHtml = (str) => {
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
             .replace(/&#39;/g, "'")
+            .replace(/&#039;/g, "'")
             .replace(/&quot;/g, '"')
             .replace(/&#91;/g, '[')
             .replace(/&#93;/g, ']')

@@ -4,6 +4,9 @@ import * as pollApi from './pollApi';
 import * as codeMgtApi from '@store/codeMgt/codeMgtApi';
 import { finishLoading, startLoading } from '@store/loading';
 import produce from 'immer';
+import { unescapeHtml } from '@utils/convertUtil';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
 
 function toOptionCodes(list) {
     return list.map((data) => ({
@@ -29,16 +32,20 @@ function toKorFromCode(code, codes) {
 
 function toPollList(list, codes) {
     return list.map((data) => {
+        const startDt = data.startDt && moment(data.startDt).format(DB_DATEFORMAT);
+        const endDt = data.endDt && moment(data.endDt).format(DB_DATEFORMAT);
+        const regDt = data.regDt && moment(data.regDt).format(DB_DATEFORMAT);
+        const modDt = data.modDt && moment(data.modDt).format(DB_DATEFORMAT);
         return {
             id: data.pollSeq,
             category: toKorFromCode(data.pollCategory, codes.category),
             group: toKorFromCode(data.pollGroup, codes.group),
             status: toKorFromCode(data.status, codes.status),
-            title: data.title,
-            regDt: data.regDt,
-            modDt: data.modDt,
-            startDt: data.startDt,
-            endDt: data.endDt,
+            title: unescapeHtml(data.title),
+            regDt,
+            modDt,
+            startDt,
+            endDt,
             regMember: data.regMember,
             modMember: data.modMember,
         };
@@ -49,7 +56,7 @@ function* getPollList({ type, payload }) {
     yield put(startLoading(type));
     try {
         const response = yield call(pollApi.getPollList, { search: payload });
-        console.log(response);
+
         if (response.data.header.success) {
             const codes = yield select((store) => store.poll.codes);
             const list = toPollList(response.data.body.list, codes);

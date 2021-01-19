@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+  This file contains some false positive bugs detected by spotbugs. Their
+  false positive nature has been analyzed individually and they have been
+  put here to instruct spotbugs it must ignore them.
+-->
+<FindBugsFilter>
+
+  <!-- the following serialization classes already takes care of non-serializable parts. -->
+  <Match>
+    <Class name="~jmnet\.moka\..*$" />
+    <Bug pattern="MS_SHOULD_BE_FINAL" />
+  </Match>
+  <Match>
+    <Class name="~jmnet\.moka\..*$" />
+    <Bug pattern="MS_PKGPROTECT" />
+  </Match>
+
+  <Match>
+    <Class name="jmnet.moka.common.utils.McpFile" />
+    <Bug pattern="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE" />
+  </Match>
+
+</FindBugsFilter>
+

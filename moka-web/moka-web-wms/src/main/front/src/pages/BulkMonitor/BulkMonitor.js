@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import { MokaCard } from '@/components';
 import BulkMonitorSearch from './BulkMonitorSearch';
 import BulKMonitorSumAgGrid from './BulKMonitorSumAgGrid';
 import BulKMonitorRcvprogsAgGrid from './BulKMonitorRcvprogsAgGrid';
@@ -16,16 +17,18 @@ const BulkMonitor = () => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            {/* 벌크 모니터링 검색 */}
-            <BulkMonitorSearch />
+            <MokaCard title="벌크 모니터링" bodyClassName="d-flex flex-column" width={1596}>
+                {/* 벌크 모니터링 검색 */}
+                <BulkMonitorSearch />
 
-            <div className="d-flex justify-content-center">
-                {/* 벌크 모니터링 현황 정보 */}
-                <BulKMonitorSumAgGrid />
-            </div>
+                <div className="d-flex justify-content-center">
+                    {/* 벌크 모니터링 현황 정보 */}
+                    <BulKMonitorSumAgGrid />
+                </div>
 
-            {/* 벌크 모니터링 목록 */}
-            <BulKMonitorRcvprogsAgGrid />
+                {/* 벌크 모니터링 목록 */}
+                <BulKMonitorRcvprogsAgGrid />
+            </MokaCard>
         </>
     );
 };

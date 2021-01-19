@@ -31,6 +31,7 @@ const MicPostListAgGrid = () => {
             // setGridRowData(params);
         }, 500);
     };
+
     const onColumnResized = (params) => {
         params.api.resetRowHeights();
     };
@@ -38,14 +39,6 @@ const MicPostListAgGrid = () => {
     const onColumnVisible = (params) => {
         params.api.resetRowHeights();
     };
-
-    useEffect(() => {
-        if (gridApi) {
-            setTimeout(function () {
-                gridApi.setRowData(rowData);
-            }, 500);
-        }
-    }, [gridApi]);
 
     const handleRowClicked = useCallback((row) => {
         if (row.colDef.field === 'state') {
@@ -59,6 +52,14 @@ const MicPostListAgGrid = () => {
     const handleChangeSearchOption = useCallback((search) => {
         console.log(search);
     }, []);
+
+    useEffect(() => {
+        if (gridApi) {
+            setTimeout(function () {
+                gridApi.setRowData(rowData);
+            }, 500);
+        }
+    }, [gridApi]);
 
     return (
         <>

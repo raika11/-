@@ -38,7 +38,7 @@ const BannerModal = (props) => {
     };
 
     return (
-        <MokaModal title="다른 주제 공통 배너 관리" height={800} show={show} onHide={handleHide} size="xl" headerClassName="justify-content-start" draggable>
+        <MokaModal title="다른 주제 공통 배너 관리" height={800} show={show} onHide={handleHide} size="xl" draggable>
             <Container className="p-0" fluid>
                 <Row>
                     <Col className="p-0 custom-scroll d-flex flex-column" style={{ width: 500, height: 695 }}>

@@ -2,7 +2,6 @@ import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaModal, MokaInputLabel } from '@/components';
 
@@ -21,7 +20,6 @@ const HolidayRegistrationModal = forwardRef((props, ref) => {
         <MokaModal
             title="휴일 등록"
             size="md"
-            headerClassName="justify-content-start"
             width={400}
             show={show}
             onHide={onHide}

@@ -5,8 +5,8 @@ import { createRequestActionTypes } from '@store/commons/saga';
 export const CLEAR_STORE = 'poll/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 
-export const CLEAR_SEO_META = 'poll/CLEAR_SEO_META';
-export const clearSeoMeta = createAction(CLEAR_SEO_META);
+export const CLEAR_POLL = 'poll/CLEAR_POLL';
+export const clearSeoMeta = createAction(CLEAR_POLL);
 
 export const CLEAR_LIST = 'poll/CLEAR_LIST';
 export const clearSeoMetaList = createAction(CLEAR_LIST);
@@ -14,8 +14,8 @@ export const clearSeoMetaList = createAction(CLEAR_LIST);
 export const CLEAR_SEARCH = 'poll/CLEAR_SEARCH';
 export const clearSearch = createAction(CLEAR_SEARCH);
 
-export const CHANGE_SEO_META_SEARCH_OPTIONS = 'poll/CHANGE_SEARCH_OPTIONS';
-export const changeSeoMetaSearchOptions = createAction(CHANGE_SEO_META_SEARCH_OPTIONS);
+export const CHANGE_POLL_SEARCH_OPTIONS = 'poll/CHANGE_SEARCH_OPTIONS';
+export const changePollSearchOptions = createAction(CHANGE_POLL_SEARCH_OPTIONS);
 
 // API
 export const [GET_POLL, GET_POLL_SUCCESS, GET_POLL_FAILURE] = createRequestActionTypes('poll/GET_POLL');

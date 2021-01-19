@@ -36,8 +36,13 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
 
     return (
         <div className="d-flex align-items-center h-100">
-            <Button variant={data.compUrl ? 'table-btn' : 'outline-table-btn'} className="mr-1 px-1 flex-shrink-0" size="sm" onClick={handleClickPreviewOpen}>
-                {data.compUrl ? '포토' : '보기'}
+            <Button
+                variant={data.artThumb && data.artThumb !== '' ? 'table-btn' : 'outline-table-btn'}
+                className="mr-1 px-1 flex-shrink-0"
+                size="sm"
+                onClick={handleClickPreviewOpen}
+            >
+                {data.artThumb && data.artThumb !== '' ? '포토' : '보기'}
             </Button>
             {data.ja && data.artGroupNum !== '' && (
                 <div className="article-group-number mr-1" style={{ width: 17, height: 24 }} data-group-number={data.artGroupNum}>

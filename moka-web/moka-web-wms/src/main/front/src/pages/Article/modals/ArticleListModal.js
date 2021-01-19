@@ -8,9 +8,9 @@ import Button from 'react-bootstrap/Button';
 import { unescapeHtml } from '@utils/convertUtil';
 import { CodeAutocomplete, SourceSelector } from '@pages/commons';
 import { DB_DATEFORMAT } from '@/constants';
-import { MokaModal, MokaInput, MokaInputLabel, MokaSearchInput, MokaTable } from '@/components';
-import GroupNumberRenderer from '../components/ArticleDeskList/GroupNumberRenderer';
-import columnDefs from './ArticleListModalColumns';
+import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@/components';
+import GroupNumberRenderer from '@pages/Article/components/ArticleDeskList/GroupNumberRenderer';
+import columnDefs from '@pages/Article/components/ArticleDeskList/ArticleDeskAgGridColums';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { GET_SERVICE_ARTICLE_LIST, initialState, getServiceArticleList, changeServiceSearchOption, clearServiceList } from '@store/article';
 
@@ -25,14 +25,11 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 서비스기사 목록 (모달)
+ * 기사 검색 모달
  */
 const ArticleListModal = (props) => {
     const { show, onHide, media, onRowClicked } = props;
-
     const dispatch = useDispatch();
-
-    // initial
     const storeSearch = useSelector((store) => store.article.service.search);
     const list = useSelector((store) => store.article.service.list);
     const total = useSelector((store) => store.article.service.total);
@@ -230,8 +227,7 @@ const ArticleListModal = (props) => {
                 if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
 
                 // 면판 replace
-                let myunPan = '';
-                if (art.pressMyun && art.pressMyun.replace(/\s/g, '') !== '') myunPan = `${art.pressMyun}/${art.pressPan}`;
+                let myunPan = `${art.pressMyun || ''}/${art.pressPan || ''}`;
 
                 // 출고시간/수정시간 replace
                 let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');
@@ -261,27 +257,17 @@ const ArticleListModal = (props) => {
     }, [IR_URL, PDS_URL, list]);
 
     return (
-        <MokaModal
-            title="기사 검색 팝업"
-            show={show}
-            onHide={onHide}
-            size="lg"
-            width={1000}
-            height={800}
-            headerClassName="justify-content-start"
-            bodyClassName="d-flex flex-column"
-            draggable
-        >
+        <MokaModal title="기사 검색" show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
             <Form>
                 <Form.Row className="mb-2">
                     {/* 시작일, 종료일 */}
-                    <Col xs={4} className="p-0 d-flex">
-                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-2" onChange={handleChangeSDate} value={search.startServiceDay} />
-                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-2" onChange={handleChangeEDate} value={search.endServiceDay} />
+                    <Col xs={4} className="p-0 pr-2 d-flex">
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-1" onChange={handleChangeSDate} value={search.startServiceDay} />
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="ml-2" onChange={handleChangeEDate} value={search.endServiceDay} />
                     </Col>
                     {/* 검색 조건 */}
-                    <Col xs={2} className="p-0">
-                        <MokaInput as="select" name="searchType" className="mr-2" value={search.searchType} onChange={handleChangeValue}>
+                    <Col xs={2} className="p-0 pr-2">
+                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                             {initialState.searchTypeList.map((searchType) => (
                                 <option key={searchType.id} value={searchType.id}>
                                     {searchType.name}
@@ -291,18 +277,17 @@ const ArticleListModal = (props) => {
                     </Col>
                     {/* 키워드 */}
                     <Col xs={6} className="p-0">
-                        <MokaSearchInput className="ml-2 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                        <MokaSearchInput className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 분류 전체 */}
-                    <Col xs={4} className="p-0">
-                        <CodeAutocomplete name="masterCode" className="mb-0 mr-2" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
+                    <Col xs={4} className="p-0 pr-2">
+                        <CodeAutocomplete name="masterCode" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
                     </Col>
                     {/* 매체 전체 */}
-                    <Col xs={3} className="p-0">
+                    <Col xs={3} className="p-0 pr-2">
                         <SourceSelector
-                            className="mr-2"
                             value={sourceList}
                             onChange={(value) => {
                                 setSourceList(value);
@@ -311,28 +296,21 @@ const ArticleListModal = (props) => {
                                     setSourceOn(true);
                                 }
                             }}
+                            width="100%"
                             sourceType={'DESKING'}
                             isInvalid={valError.sourceList}
                         />
                     </Col>
                     {/* 면 */}
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel
-                            label="면"
-                            labelWidth={25}
-                            className="mb-0 mr-2"
-                            name="pressMyun"
-                            value={search.pressMyun}
-                            onChange={handleChangeValue}
-                            disabled={searchDisabled}
-                        />
+                    <Col xs={1} className="p-0 pr-2">
+                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} disabled={searchDisabled} />
                     </Col>
                     {/* 판 */}
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel label="판" labelWidth={25} name="pressPan" value={search.pressPan} onChange={handleChangeValue} disabled={searchDisabled} />
+                    <Col xs={1} className="p-0 pr-2">
+                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={searchDisabled} />
                     </Col>
                     {/* 초기화 */}
-                    <Col xs={1} className="p-0 d-flex justify-content-end">
+                    <Col xs={3} className="p-0 d-flex justify-content-end">
                         <Button variant="negative" onClick={handleClickReset}>
                             초기화
                         </Button>
@@ -342,7 +320,7 @@ const ArticleListModal = (props) => {
             <MokaTable
                 className="article-list overflow-hidden flex-fill"
                 headerHeight={50}
-                columnDefs={columnDefs}
+                columnDefs={columnDefs.filter((c, i) => i !== 0 && i !== 1)}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}
                 onRowClicked={handleRowClicked}

@@ -25,14 +25,26 @@ export default [
         field: 'usedYn',
         width: 55,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (params) => <MicTableSwitch {...params} />,
+        cellRendererFramework: (params) => {
+            return (
+                <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                    <MicTableSwitch {...params} />
+                </div>
+            );
+        },
     },
     {
         headerName: '최상단',
         field: 'menu',
         width: 55,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (params) => <MicTableSwitch {...params} />,
+        cellRendererFramework: (params) => {
+            return (
+                <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                    <MicTableSwitch {...params} />
+                </div>
+            );
+        },
     },
 ];
 

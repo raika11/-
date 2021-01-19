@@ -13,6 +13,7 @@ export default [
         field: 'post',
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         flex: 1,
+        tooltipField: 'post',
     },
     {
         headerName: '작성자',
@@ -30,8 +31,21 @@ export default [
         headerName: '상태',
         field: 'state',
         width: 90,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (params) => <PostSelectRenderer {...params} />,
+        cellStyle: {
+            fontSize: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            height: '38px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+        },
+        cellRendererFramework: (params) => {
+            return (
+                <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                    <PostSelectRenderer {...params} />
+                </div>
+            );
+        },
     },
     {
         headerName: '등록일',
@@ -86,6 +100,15 @@ export const rowData = [
     {
         seqNo: '154',
         post: '결과 발표났는지 궁금합니다. 어디서 알 수 있는지요',
+        writer: '최예다운',
+        count: '3',
+        state: '0',
+        regDt: '2021-01-17',
+    },
+    {
+        seqNo: '154',
+        post:
+            '2월 18일 당첨자 발표 예정이라고 하셨는데 오늘 2월 28일 인데 당선자 확정 됐나요. 다 봐도 우리만큼 할아버지와 손주가 닮은 사람은 없는 것 같은데... 담장 좀 주세요,, 결과를2월 18일 당첨자 발표 예정이라고 하셨는데 오늘 2월 28일 인데 당선자 확정 됐나요. 다 봐도 우리만큼 할아버지와 손주가 닮은 사람은 없는 것 같은데... 담장 좀 주세요,, 결과를2월 18일 당첨자 발표 예정이라고 하셨는데 오늘 2월 28일 인데 당선자 확정 됐나요. 다 봐도 우리만큼 할아버지와 손주가 닮은 사람은 없는 것 같은데... 담장 좀 주세요,, 결과를2월 18일 당첨자 발표 예정이라고 하셨는데 오늘 2월 28일 인데 당선자 확정 됐나요. 다 봐도 우리만큼 할아버지와 손주가 닮은 사람은 없는 것 같은데... 담장 좀 주세요,, 결과를',
         writer: '최예다운',
         count: '3',
         state: '0',

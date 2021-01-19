@@ -35,6 +35,9 @@ const propTypes = {
      * agGrid getRowNodeId()
      */
     onRowNodeId: PropTypes.func,
+    /**
+     * ag-grid div의 heigt
+     */
     agGridHeight: PropTypes.number,
     /**
      * 테이블 헤더 여부
@@ -50,21 +53,17 @@ const propTypes = {
      */
     rowHeight: PropTypes.number,
     /**
-     * 로딩 텍스트
-     */
-    localeText: PropTypes.object,
-    /**
-     * row clicked
+     * 테이블 행 클릭 이벤트
      */
     onRowClicked: PropTypes.func,
+    /**
+     * 테이블 행 클릭 이벤트를 타지 않는 field(cell) 리스트
+     */
+    preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
     /**
      * selection이 변경되었을 때(ex, selected 변경, 혹은 체크박스 클릭) 바인드 함수
      */
     onSelectionChanged: PropTypes.func,
-    /**
-     * row click 이벤트 막는 cell의 필드 리스트
-     */
-    preventRowClickCell: PropTypes.arrayOf(PropTypes.string),
     /**
      * selected row 타입
      * @default
@@ -79,9 +78,9 @@ const propTypes = {
      * @default
      */
     dragManaged: PropTypes.bool,
-    onRowDragMove: PropTypes.func,
-    onRowDragEnd: PropTypes.func,
-    animateRows: PropTypes.bool,
+    /**
+     * 추가적인 frameworkComponents
+     */
     frameworkComponents: PropTypes.object,
     /**
      * 쓰는 곳에서 grid Instance를 state로 관리할 때, gridReady시 state 변경
@@ -108,7 +107,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    localeText: { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' },
+    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
     loading: false,
     paging: true,
     dragManaged: false,
@@ -138,14 +137,12 @@ const rowClassRules = {
  * 공통 테이블 (ag-grid 사용)
  */
 const MokaTable = forwardRef((props, ref) => {
-    // table props
     const {
         className,
         columnDefs,
         rowData,
         onRowNodeId,
         agGridHeight,
-        localeText,
         onRowClicked,
         onSelectionChanged,
         loading,
@@ -161,16 +158,24 @@ const MokaTable = forwardRef((props, ref) => {
         suppressRefreshCellAfterUpdate,
         onRowDataUpdated,
         refreshCellsParams,
+        dragManaged,
+        // 페이지네이션 props
+        paginationClassName,
+        paging,
+        total,
+        page,
+        size,
+        pageSizes,
+        paginationSize,
+        displayPageNum,
+        onChangeSearchOption,
+        showTotalString,
+        // 그 외 ag-grid의 props
+        ...rest
     } = props;
 
-    // drag props
-    const { dragManaged, onRowDragMove, onRowDragEnd } = props;
-
-    // paging props
-    const { paginationClassName, paging, total, page, size, pageSizes, paginationSize, displayPageNum, onChangeSearchOption, showTotalString } = props;
-
-    // gridApi state
-    const [gridApi, setGridApi] = useState(null);
+    const [instance, setInstance] = useState(null);
+    const divRef = useRef(null);
 
     /**
      * 2020-11-27 09:35 MokaTable 외부에서 selected 값이 바껴도 unseleced가 동작 되지 않아서
@@ -182,23 +187,29 @@ const MokaTable = forwardRef((props, ref) => {
     useImperativeHandle(
         ref,
         () => ({
-            gridApi: gridApi,
+            gridApi: instance.api,
+            grid: instance,
         }),
-        [gridApi],
+        [instance],
     );
 
     /**
-     * agGrid 로딩 전 인스턴스 설정
-     * @param {object} params grid object
+     * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행
+     * (selected 값이 있을 때 select함)
      */
-    const onGridReady = useCallback(
+    const handleSelected = useCallback(
         (params) => {
-            setGridApi(params.api);
-            if (setParentGridInstance) {
-                setParentGridInstance(params);
+            if (!params) return;
+            if (selected || initSelected.current !== selected) {
+                params.api.deselectAll();
+                const selectedNode = params.api.getRowNode(selected);
+                if (selectedNode) {
+                    selectedNode.selectThisNode(true);
+                    initSelected.current = selected;
+                }
             }
         },
-        [setParentGridInstance],
+        [selected],
     );
 
     /**
@@ -213,36 +224,6 @@ const MokaTable = forwardRef((props, ref) => {
         },
         [onRowClicked, preventRowClickCell],
     );
-
-    /**
-     * ag-grid가 화면에 그릴 row data가 변경되었을 때 실행
-     * (selected 값이 있을 때 select함)
-     *
-     * 2020-11-27 09:38 selected 값이 변경 되어도 deselectAll 이 실행 되지 않아서 기존 선택된 ROW 가 유지되는 부분이 있어서 아래 처럼 수정.
-     * 혹시 문제가 생기면 아래 기존 소스로 변경 부탁 드립니다.
-     */
-    const handleSelected = useCallback(() => {
-        if (!gridApi) return;
-        if (selected || initSelected.current !== selected) {
-            gridApi.deselectAll();
-            const selectedNode = gridApi.getRowNode(selected);
-            if (selectedNode) {
-                selectedNode.selectThisNode(true);
-                initSelected.current = selected;
-            }
-        }
-    }, [selected, gridApi]);
-
-    // 2020-11-27 09:40 기존 소스.
-    // const handleSelected = useCallback(() => {
-    //     if (selected && gridApi) {
-    //         gridApi.deselectAll();
-    //         const selectedNode = gridApi.getRowNode(selected);
-    //         if (selectedNode) {
-    //             selectedNode.selectThisNode(true);
-    //         }
-    //     }
-    // }, [selected, gridApi]);
 
     /**
      * selection 변경 시 실행
@@ -275,8 +256,13 @@ const MokaTable = forwardRef((props, ref) => {
      */
     const handleRowDataUpdated = useCallback(
         (params) => {
+            // scroll To Top
+            if (divRef.current) {
+                divRef.current.querySelector('.ag-body-viewport').scrollTop = 0;
+            }
+
             setTimeout(function () {
-                handleSelected();
+                handleSelected(params);
 
                 if (!suppressRefreshCellAfterUpdate) {
                     params.api.refreshCells(refreshCellsParams);
@@ -290,34 +276,44 @@ const MokaTable = forwardRef((props, ref) => {
         [handleSelected, onRowDataUpdated, refreshCellsParams, suppressRefreshCellAfterUpdate],
     );
 
+    /**
+     * agGrid 로딩 전 인스턴스 설정
+     * @param {object} params grid object
+     */
+    const onGridReady = useCallback(
+        (params) => {
+            setInstance(params);
+            if (setParentGridInstance) {
+                setParentGridInstance(params);
+            }
+        },
+        [setParentGridInstance],
+    );
+
     useEffect(() => {
-        handleSelected();
-    }, [handleSelected]);
+        handleSelected(instance);
+    }, [instance, handleSelected]);
 
     return (
         <React.Fragment>
             {/* ag-grid */}
-            <div className={clsx('ag-theme-moka-grid position-relative', className, { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }}>
+            <div className={clsx('ag-theme-moka-grid position-relative', className, { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }} ref={divRef}>
                 {loading && <MokaLoader />}
                 <AgGridReact
+                    {...rest}
                     immutableData
                     columnDefs={columnDefs}
                     rowData={rowData}
                     headerHeight={headerHeight}
                     rowHeight={rowHeight}
                     getRowNodeId={onRowNodeId}
-                    animateRows={animateRows}
-                    localeText={localeText}
                     rowClassRules={rowClassRules}
                     onCellClicked={handleCellClicked}
                     onSelectionChanged={handleSelectionChanged}
                     onGridReady={onGridReady}
                     rowSelection={rowSelection}
-                    rowDragManaged={dragManaged}
                     suppressMoveWhenRowDragging={dragManaged}
                     suppressMovableColumns
-                    onRowDragMove={onRowDragMove}
-                    onRowDragEnd={onRowDragEnd}
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     frameworkComponents={{ imageRenderer: ImageRenderer, ...frameworkComponents }}

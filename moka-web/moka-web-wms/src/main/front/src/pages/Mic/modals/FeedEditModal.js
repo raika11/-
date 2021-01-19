@@ -37,7 +37,6 @@ const FeedEditModal = (props) => {
             show={show}
             onHide={handleHide}
             title={data ? '관리자 피딩 수정' : '관리자 피딩 등록'}
-            headerClassName="justify-content-start"
             buttons={[
                 { text: data ? '수정' : '저장', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: handleHide },

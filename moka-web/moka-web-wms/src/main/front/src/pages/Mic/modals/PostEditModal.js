@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaModal, MokaInputLabel } from '@/components';
 import ImageUploadButton from '../components/ImageUploadButton';
@@ -32,7 +31,6 @@ const PostEditModal = (props) => {
             show={show}
             onHide={onHide}
             title="사용자 포스트 관리"
-            headerClassName="justify-content-start"
             buttons={[
                 { text: '저장', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: onHide },

@@ -256,11 +256,6 @@ const MokaTable = forwardRef((props, ref) => {
      */
     const handleRowDataUpdated = useCallback(
         (params) => {
-            // scroll To Top
-            if (divRef.current) {
-                divRef.current.querySelector('.ag-body-viewport').scrollTop = 0;
-            }
-
             setTimeout(function () {
                 handleSelected(params);
 

@@ -222,6 +222,11 @@ public class QuizRestController extends AbstractCommonController {
             throws InvalidDataException, Exception {
 
         try {
+            String message = msg("tps.common.error.no-data");
+            quizService
+                    .findQuizBySeq(quizSeq)
+                    .orElseThrow(() -> new NoDataException(message));
+
             // 문항부터 저장하고, 퀴즈 등록 트랜잭션 처리
             List<QuizRel> quizRels = modelMapper.map(quizRelDTOs, new TypeReference<List<QuizRel>>() {
             }.getType());
@@ -314,6 +319,11 @@ public class QuizRestController extends AbstractCommonController {
             throws InvalidDataException, Exception {
 
         try {
+            String message = msg("tps.common.error.no-data");
+            quizService
+                    .findQuizBySeq(quizSeq)
+                    .orElseThrow(() -> new NoDataException(message));
+            
             // 문항부터 저장하고, 퀴즈 등록 트랜잭션 처리
             List<QuizRel> quizRels = modelMapper.map(quizRelDTOs, new TypeReference<List<QuizRel>>() {
             }.getType());

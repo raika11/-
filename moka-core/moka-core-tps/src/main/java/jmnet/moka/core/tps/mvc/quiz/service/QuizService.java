@@ -39,9 +39,13 @@ public interface QuizService {
 
     QuizDetail insertQuizDetail(QuizDetail quiz, List<Question> questions);
 
+    List<QuizRel> insertQuizRels(Long quizSeq, List<QuizRel> quizRels);
+
     Quiz updateQuiz(Quiz quiz);
 
     QuizDetail updateQuizDetail(QuizDetail quiz, List<Question> questions);
+
+    List<QuizRel> updateQuizRels(Long quizSeq, List<QuizRel> quizRels);
 
     long deleteQuiz(Quiz quiz);
 

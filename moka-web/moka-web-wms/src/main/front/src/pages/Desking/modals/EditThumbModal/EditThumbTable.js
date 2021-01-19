@@ -58,18 +58,20 @@ const EditThumbTable = (props) => {
     return (
         <React.Fragment>
             <div className="input-border w-100 custom-scroll flex-fill mb-2 position-relative">
-                <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
+                <div className="d-flex flex-wrap align-content-start pt-10 pl-10 overflow-hidden">
                     {loading && <MokaLoader />}
                     {renderList.map((data) => (
                         <EditThumbCard
-                            width={226}
-                            height={188}
+                            className="mb-10 mr-10"
+                            width={'calc(20% - 10px)'}
+                            height={180}
                             key={data.nid}
                             img={data.thumbPath}
                             data={data}
                             onThumbClick={onThumbClick}
                             onRepClick={onRepClick}
                             dataType={data.dataType}
+                            boxShadow="0px 8px 10px -1px #bbb"
                         />
                     ))}
                 </div>

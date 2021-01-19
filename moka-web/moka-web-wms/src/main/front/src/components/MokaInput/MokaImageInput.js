@@ -140,25 +140,6 @@ const MokaImageInput = forwardRef((props, ref) => {
     );
 
     /**
-     * 이미지 프리뷰 생성
-     */
-    const previewImg = useCallback((src) => {
-        util.makeImgPreview(
-            src,
-            imgRef.current,
-            wrapRef.current,
-            () => {
-                setImgSrc(src);
-                imageShow();
-            },
-            () => {
-                setImgSrc(src);
-                imageShow();
-            },
-        );
-    }, []);
-
-    /**
      * 파일 드롭
      * @param {array} acceptedFiles input의 file객체(array)
      */
@@ -171,7 +152,8 @@ const MokaImageInput = forwardRef((props, ref) => {
                 return;
             }
             setAlert(false);
-            previewImg(URL.createObjectURL(acceptedFiles[0]));
+            setImgSrc(URL.createObjectURL(acceptedFiles[0]));
+            imageShow();
             if (setFileValue) {
                 setFileValue(acceptedFiles[0]);
             }
@@ -198,11 +180,12 @@ const MokaImageInput = forwardRef((props, ref) => {
 
     useEffect(() => {
         if (img) {
-            previewImg(img);
+            setImgSrc(img);
+            imageShow();
         } else {
             imageHide();
         }
-    }, [img, previewImg]);
+    }, [img]);
 
     return (
         <Dropzone onDrop={onDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} preventDropOnDocument>
@@ -225,7 +208,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         as="div"
                     >
                         {/* 이미지 미리보기 */}
-                        <Figure.Image width={width} height={height} className="mb-0" alt={alt} src={imgSrc} ref={imgRef} />
+                        <Figure.Image width={width} height={height} className="center-image" alt={alt} src={imgSrc} ref={imgRef} />
 
                         {/* input file */}
                         {alert === false && imgSrc === null && <input {...inputProps} />}

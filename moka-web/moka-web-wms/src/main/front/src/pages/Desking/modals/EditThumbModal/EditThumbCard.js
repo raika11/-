@@ -24,6 +24,10 @@ const propTypes = {
      */
     height: PropTypes.number,
     /**
+     * 컴포넌트 그림자 style
+     */
+    boxShadow: PropTypes.string,
+    /**
      * card 이동 시 실행하는 함수
      */
     moveCard: PropTypes.func,
@@ -68,7 +72,7 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { width, height, data, img, alt, selected, className, moveCard, setAddIndex, dataType } = props;
+    const { width, height, data, img, alt, selected, className, moveCard, setAddIndex, dataType, boxShadow } = props;
     // 대표 사진 설정 props
     const { represent } = props;
     const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
@@ -142,30 +146,8 @@ const EditThumbCard = forwardRef((props, ref) => {
         }),
     });
 
-    const previewImg = (src) => {
-        util.makeImgPreview(
-            src,
-            imgRef.current,
-            wrapperRef.current,
-            () => {
-                if (imgRef.current) {
-                    imgRef.current.src = src;
-                }
-            },
-            () => {
-                if (imgRef.current) {
-                    imgRef.current.src = src;
-                }
-            },
-        );
-    };
-
-    useEffect(() => {
-        previewImg(img);
-    }, [img]);
-
     return (
-        <div className={clsx(className, 'p-2')} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
+        <div className={className} style={{ width, height, boxShadow, opacity: isDragging ? 0.5 : 1 }}>
             <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })}>
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div
@@ -180,7 +162,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                             setRepButtonColor('');
                         }}
                     >
-                        <img alt={alt} ref={imgRef} />
+                        <img src={img} className="center-image" alt={alt} ref={imgRef} />
 
                         <div className="w-100 h-100 absolute-top">
                             {/* 마우스 오버 -> 대표 사진 등록 버튼 생성 */}

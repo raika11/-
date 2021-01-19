@@ -51,10 +51,21 @@ const EditThumbArticleImageList = (props) => {
 
     return (
         <div className="input-border w-100 custom-scroll flex-fill">
-            <div className="d-flex flex-wrap align-content-start p-1 overflow-hidden">
+            <div className="d-flex flex-wrap align-content-start pt-10 pl-10 overflow-hidden">
                 {loading && <MokaLoader />}
                 {renderList.map((data) => (
-                    <EditThumbCard width={226} height={188} key={data.seqNo} img={data.thumbPath} data={data} dataType={data.dataType} onRepClick={onRepClick} articleImg />
+                    <EditThumbCard
+                        className="mb-10 mr-10"
+                        width={'calc(20% - 10px)'}
+                        height={188}
+                        boxShadow="0px 8px 10px -1px #bbb"
+                        key={data.seqNo}
+                        img={data.thumbPath}
+                        data={data}
+                        dataType={data.dataType}
+                        onRepClick={onRepClick}
+                        articleImg
+                    />
                 ))}
             </div>
         </div>

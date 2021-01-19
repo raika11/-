@@ -177,7 +177,7 @@ const EditThumbModal = (props) => {
             show={show}
             onHide={handleHide}
             width={1200}
-            height={841}
+            height={820}
             size="xl"
             buttons={[
                 { text: '등록', variant: 'positive', onClick: handleClickSave },
@@ -210,16 +210,15 @@ const EditThumbModal = (props) => {
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
                     {/* 대표사진 */}
                     <div className="deskthumb-main d-flex justify-content-center align-items-center" style={{ width: 202 }}>
-                        {repPhoto.thumbPath && repPhoto.thumbPath !== '' && (
-                            <EditThumbCard
-                                img={repPhoto.thumbPath}
-                                dataType={repPhoto.dataType}
-                                onThumbClick={handleThumbClick}
-                                onDeleteClick={handleDeleteClick}
-                                onEditClick={handleEditClick}
-                                represent
-                            />
-                        )}
+                        <EditThumbCard
+                            className="p-2"
+                            img={repPhoto.thumbPath}
+                            dataType={repPhoto.dataType}
+                            onThumbClick={handleThumbClick}
+                            onDeleteClick={handleDeleteClick}
+                            onEditClick={handleEditClick}
+                            represent
+                        />
                     </div>
 
                     {/* GIF 생성 드롭존 */}

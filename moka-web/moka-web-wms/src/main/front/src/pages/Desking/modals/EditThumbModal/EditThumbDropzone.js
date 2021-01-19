@@ -203,7 +203,7 @@ const EditThumbDropzone = (props) => {
             </div>
 
             {/* 드롭 영역 */}
-            <div className={clsx('flex-fill', 'px-3', 'is-file-dropzone', 'pb-3', 'overflow-hidden', 'pt-10')}>
+            <div className="flex-fill px-3 is-file-dropzone pb-3 overflow-hidden">
                 <div ref={drop} className={clsx('w-100 h-100 position-relative p-1', { 'dropzone-dragover': isOver })}>
                     <div className="d-flex flex-wrap h-100 align-content-start custom-scroll position-relative">
                         {/* default text */}
@@ -218,9 +218,9 @@ const EditThumbDropzone = (props) => {
                         {imgList.map((data, idx) => (
                             <EditThumbCard
                                 ref={cardRef}
-                                width={190}
-                                height={135}
-                                className="flex-shrink-0"
+                                width={'calc(20% - 8px)'}
+                                height={125}
+                                className={clsx('flex-shrink-0 mr-2', imgList.length > 5 ? 'mb-2' : '')}
                                 key={idx}
                                 dataType="drop"
                                 data={{ ...data, move: true, index: idx, dataType: 'drop' }}

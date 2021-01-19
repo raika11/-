@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image';
 import { MokaModal } from '@components';
@@ -22,9 +21,6 @@ const defaultProps = {
 
 const ThumbViewModal = (props) => {
     const { show, onHide, data, alt } = props;
-
-    const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
-
     const [display, setDisplay] = useState(true);
 
     return (
@@ -67,12 +63,13 @@ const ThumbViewModal = (props) => {
             headerClassName="color-white"
             bodyClassName="p-0"
             footerClassName="m-0 border-top-0"
+            bodyStyle={{ backgroundColor: '#272C3F' }}
             headerStyle={{ backgroundColor: '#373D53', height: '60px' }}
             footerStyle={{ backgroundColor: '#373D53', height: '40px' }}
             draggable
         >
-            <div style={{ width: '800px', height: '540px', cursor: 'pointer' }} onClick={() => (display ? setDisplay(false) : setDisplay(true))}>
-                {data.imageOnlnPath && <Image className="w-100 h-100" src={`${PHOTO_ARCHIVE_URL}${data.imageOnlnPath}`} alt={alt} />}
+            <div className="w-100 h-100" onClick={() => (display ? setDisplay(false) : setDisplay(true))}>
+                {data.imageOnlnPath && <Image className="center-image" src={data.imageOnlnPath} alt={alt} />}
             </div>
         </MokaModal>
     );

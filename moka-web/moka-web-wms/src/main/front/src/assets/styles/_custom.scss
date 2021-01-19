@@ -114,14 +114,15 @@ body {
     @include custom-scroll;
 }
 
-.portrait {
-    height: 100%;
-    width: auto;
-}
-
-.landscape {
-    height: auto;
-    width: 100%;
+.center-image {
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    bottom: 0;
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
 }
 
 .pointer-events-none {

@@ -70,23 +70,6 @@ const TemplateThumbCard = forwardRef((props, ref) => {
     const imgRef = useRef(null);
     const wrapperRef = useRef(null);
 
-    // 이미지 landscape, portrait 설정
-    useEffect(() => {
-        if (imgRef.current !== null) {
-            util.makeImgPreview(
-                imgRef.current.src,
-                imgRef.current,
-                wrapperRef.current,
-                () => {
-                    imgRef.current.style.visibility = 'visible';
-                },
-                () => {
-                    imgRef.current.style.visibility = 'visible';
-                },
-            );
-        }
-    }, []);
-
     /**
      * 커스텀 토글 버튼 아이콘 생성
      */
@@ -149,7 +132,7 @@ const TemplateThumbCard = forwardRef((props, ref) => {
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div className="w-100 h-100 absolute-top">
                         <div ref={wrapperRef} className="w-100 h-100 d-flex align-item-centers rounded-top justify-content-center overflow-hidden" onClick={handleThumbClick}>
-                            {img && <BSImage src={img} alt={alt} ref={imgRef} style={{ visibility: 'hidden' }} />}
+                            {img && <BSImage src={img} alt={alt} ref={imgRef} className="center-image" />}
                             {!img && (
                                 <div className="w-100 d-flex align-items-center justify-content-center bg-light">
                                     <MokaIcon iconName="fad-image" size="2x" className="color-gray200" />

@@ -86,11 +86,16 @@ const Page = ({ match }) => {
 
     /**
      * 노드 찾기 (재귀)
-     * @returns {object} { findSeq: page.pageSeq,node: null, path: [String(pageTree.pageSeq)] };
+     * @returns {object} { findSeq: page.pageSeq, node: null, path: [String(pageTree.pageSeq)] };
      */
     const findNode = useCallback((findInfo, rootNode) => {
         if (rootNode.pageSeq === findInfo.findSeq) {
-            return produce(findInfo, (draft) => draft);
+            const strSeq = String(rootNode.parentPageSeq);
+            return produce(findInfo, (draft) => {
+                if (draft.path.indexOf(strSeq) < 0) {
+                    draft.path.push(strSeq);
+                }
+            });
         }
 
         if (rootNode.nodes && rootNode.nodes.length > 0) {
@@ -119,6 +124,7 @@ const Page = ({ match }) => {
                 let findInfo = {
                     findSeq: item.pageSeq,
                     node: null,
+                    path: [],
                 };
                 let fnode = findNode(findInfo, tree);
 

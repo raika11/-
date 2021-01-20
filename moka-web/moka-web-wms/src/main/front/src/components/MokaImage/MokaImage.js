@@ -41,7 +41,9 @@ const MokaImage = (props) => {
     const [src, setImgSrc] = useState(null);
 
     useEffect(() => {
-        if (!img) {
+        if (img) {
+            setImgSrc(img);
+        } else {
             setImgSrc(not_found);
         }
     }, [img]);

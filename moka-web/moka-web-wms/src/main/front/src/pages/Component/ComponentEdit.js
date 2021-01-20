@@ -73,6 +73,14 @@ const ComponentEdit = ({ onDelete, match }) => {
             });
             isInvalid = isInvalid || true;
         }
+        // 데이터셋 체크 (자동일 때)
+        if (temp.dataType === 'AUTO' && !temp.dataset?.datasetSeq) {
+            errList.push({
+                field: 'dataset',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
 
         dispatch(changeInvalidList(errList));
         return !isInvalid;
@@ -181,9 +189,7 @@ const ComponentEdit = ({ onDelete, match }) => {
     /**
      * 취소
      */
-    const handleClickCancle = () => {
-        history.push(match.path);
-    };
+    const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
@@ -211,15 +217,11 @@ const ComponentEdit = ({ onDelete, match }) => {
         // 컴포넌트ID가 있을 때 데이터 조회
         if (componentSeq) {
             dispatch(getComponent({ componentSeq: componentSeq }));
-        } else {
-            dispatch(clearComponent());
         }
     }, [dispatch, componentSeq]);
 
     useEffect(() => {
-        if (invalidList) {
-            setError(invalidListToError(invalidList));
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     useEffect(() => {

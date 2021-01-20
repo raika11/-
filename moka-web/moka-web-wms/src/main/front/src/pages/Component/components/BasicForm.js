@@ -83,7 +83,7 @@ const BasicForm = (props) => {
             />
 
             {/* 복사 모달 */}
-            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={component.componentSeq} />
+            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} componentSeq={component.componentSeq} componentName={component.componentName} />
         </Form>
     );
 };

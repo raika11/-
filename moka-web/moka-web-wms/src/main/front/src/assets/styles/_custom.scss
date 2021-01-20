@@ -539,6 +539,10 @@ body {
     font-size: 13px;
 }
 
+.monaco-editor .monaco-findInput {
+    max-width: 231px !important;
+}
+
 /* -----------------------
 * 기사관리
 * ---------------------- */

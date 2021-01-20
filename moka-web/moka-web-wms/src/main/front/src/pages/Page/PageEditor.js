@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { W3C_PAGE, PREVIEW_PAGE } from '@store/merge';
-import { changePageBody, GET_PAGE, SAVE_PAGE, DELETE_PAGE } from '@store/page';
+import { getPage, changePageBody, GET_PAGE, SAVE_PAGE, DELETE_PAGE } from '@store/page';
 
 /**
  * 페이지 본문 에디터
  */
 const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
+    const { pageSeq } = useParams();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[PREVIEW_PAGE] || loading[W3C_PAGE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const { pageBody, page, invalidList, inputTag } = useSelector(
-        (store) => ({
-            pageBody: store.page.pageBody,
-            page: store.page.page,
-            invalidList: store.page.invalidList,
-            inputTag: store.page.inputTag,
-        }),
-        [shallowEqual],
-    );
+    const { pageBody, page, invalidList, inputTag } = useSelector((store) => ({
+        pageBody: store.page.pageBody,
+        page: store.page.page,
+        invalidList: store.page.invalidList,
+        inputTag: store.page.inputTag,
+    }));
 
     // state
     const [title, setTitle] = useState('페이지 편집');
@@ -29,9 +28,15 @@ const PageEditor = (props) => {
     const [defaultValue, setDefaultValue] = useState('');
 
     /**
-     * 타이틀 변경
+     * onBlur
+     * @param {string} value 에디터 내용
      */
+    const handleBlur = (value) => dispatch(changePageBody(value));
+
     useEffect(() => {
+        /**
+         * 타이틀 변경
+         */
         if (page.pageSeq) {
             setTitle(`페이지 편집(${page.pageSeq}_${page.pageName})`);
         } else {
@@ -61,6 +66,13 @@ const PageEditor = (props) => {
     }, [dispatch, page]);
 
     useEffect(() => {
+        // 페이지 상세 데이터 조회
+        if (pageSeq) {
+            dispatch(getPage({ pageSeq }));
+        }
+    }, [dispatch, pageSeq]);
+
+    useEffect(() => {
         // 본문 에러만 체크
         const bodyErrorList = invalidList.filter((e) => e.field === 'pageBody');
         if (bodyErrorList.length > 0) {
@@ -72,12 +84,6 @@ const PageEditor = (props) => {
             setError({});
         }
     }, [invalidList]);
-
-    /**
-     * onBlur
-     * @param {string} value 에디터 내용
-     */
-    const handleBlur = (value) => dispatch(changePageBody(value));
 
     return (
         <MokaCardEditor

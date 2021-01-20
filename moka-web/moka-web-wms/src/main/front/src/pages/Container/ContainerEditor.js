@@ -9,13 +9,13 @@ const ContainerEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { containerSeq } = useParams();
     const dispatch = useDispatch();
-    const { containerBody, container, invalidList, latestDomainId, appendTag, loading } = useSelector((store) => ({
-        containerBody: store.container.containerBody,
-        container: store.container.container,
-        invalidList: store.container.invalidList,
-        latestDomainId: store.auth.latestDomainId,
-        appendTag: store.container.appendTag,
-        loading: store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER],
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
+    const { containerBody, container, invalidList, appendTag } = useSelector(({ container }) => ({
+        containerBody: container.containerBody,
+        container: container.container,
+        invalidList: container.invalidList,
+        appendTag: container.appendTag,
     }));
 
     // state
@@ -60,28 +60,18 @@ const ContainerEditor = (props) => {
         // 컨테이너seq가 있을 때 데이터를 조회
         if (containerSeq) {
             dispatch(getContainer({ containerSeq: containerSeq }));
-        } else {
-            dispatch(clearContainer());
         }
     }, [dispatch, containerSeq]);
 
     useEffect(() => {
-        let isInvalid = false;
-
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'containerBody') {
-                    setError({
-                        line: Number(i.extra),
-                        message: i.reason,
-                    });
-                    isInvalid = isInvalid || true;
-                }
+        // 본문 에러만 체크
+        const bodyErrorList = invalidList.filter((e) => e.field === 'containerBody');
+        if (bodyErrorList.length > 0) {
+            setError({
+                line: Number(bodyErrorList[0].extra),
+                message: bodyErrorList[0].reason,
             });
-        }
-
-        if (!isInvalid) {
+        } else {
             setError({});
         }
     }, [invalidList]);

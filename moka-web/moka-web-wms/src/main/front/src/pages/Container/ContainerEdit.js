@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel, MokaInputGroup, MokaCopyTextButton } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, saveContainer, changeContainer, hasRelationList } from '@store/container';
 
 /**
@@ -26,9 +27,7 @@ const ContainerEdit = ({ onDelete, match }) => {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [containerSeq, setContainerSeq] = useState('');
     const [containerName, setContainerName] = useState('');
-
-    // error
-    const [containerNameError, setContainerNameError] = useState(false);
+    const [error, setError] = useState({});
 
     useEffect(() => {
         // 컨테이너 데이터 셋팅
@@ -45,7 +44,7 @@ const ContainerEdit = ({ onDelete, match }) => {
         if (name === 'containerName') {
             setContainerName(value);
             if (REQUIRED_REGEX.test(value)) {
-                setContainerNameError(false);
+                setError({ ...error, [name]: false });
             }
         }
     };
@@ -72,14 +71,7 @@ const ContainerEdit = ({ onDelete, match }) => {
     };
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'containerName') {
-                    setContainerNameError(true);
-                }
-            });
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     /**
@@ -95,7 +87,14 @@ const ContainerEdit = ({ onDelete, match }) => {
                         toast.success(header.message);
                         history.push(`${match.path}/${body.containerSeq}`);
                     } else {
-                        toast.warning(header.message);
+                        if (body?.list) {
+                            const bodyChk = body.list.filter((e) => e.field === 'containerBody');
+                            if (bodyChk.length > 0) {
+                                messageBox.alert('Tems 문법 사용이 비정상적으로 사용되었습니다\n수정 확인후 다시 저장해 주세요', () => {});
+                                return;
+                            }
+                        }
+                        toast.fail(header.message);
                     }
                 },
             }),
@@ -143,9 +142,7 @@ const ContainerEdit = ({ onDelete, match }) => {
                         else {
                             messageBox.confirm(
                                 '다른 곳에서 사용 중입니다.\n변경 시 전체 수정 반영됩니다.\n수정하시겠습니까?',
-                                () => {
-                                    submitContainer(container);
-                                },
+                                () => submitContainer(container),
                                 () => {},
                             );
                         }
@@ -172,12 +169,8 @@ const ContainerEdit = ({ onDelete, match }) => {
     };
 
     useEffect(() => {
-        if (container.containerSeq) {
-            setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-        setContainerNameError(false);
+        container.containerSeq ? setBtnDisabled(false) : setBtnDisabled(true);
+        setError({});
     }, [container.containerSeq]);
 
     return (
@@ -207,7 +200,7 @@ const ContainerEdit = ({ onDelete, match }) => {
                     placeholder="컨테이너명을 입력하세요"
                     value={containerName}
                     onChange={handleChangeValue}
-                    isInvalid={containerNameError}
+                    isInvalid={error.containerName}
                     required
                 />
                 {/* 입력태그 */}

@@ -50,6 +50,7 @@ const propTypes = {
     style: PropTypes.object,
     /**
      * InputGroup의 isInvalid
+     * @default
      */
     isInvalid: PropTypes.bool,
     /**

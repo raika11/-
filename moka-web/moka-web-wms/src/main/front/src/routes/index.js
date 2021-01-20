@@ -622,6 +622,16 @@ const routes = [
         exact: false,
         strict: true,
     },
+    {
+        path: '/schedule',
+        name: 'schedule',
+        displayName: '스케줄 서버 관리',
+        component: SystemMonitor,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
 ];
 
 export default routes;

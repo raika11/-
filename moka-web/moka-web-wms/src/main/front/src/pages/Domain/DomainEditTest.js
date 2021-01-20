@@ -324,7 +324,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl }) => {
 
                 {/* API 경로 */}
                 <Form.Row className="mb-2">
-                    <Col xs={9} className="p-0">
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel label="API 경로" as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
                             {apiRows &&
                                 apiRows.map((row) => (

@@ -78,6 +78,7 @@ const DomainAgGrid = ({ onDelete, match }) => {
             size={search.size}
             selected={domain.domainId}
             onChangeSearchOption={handleChangeSearchOption}
+            preventRowClickCell={['delete']}
         />
     );
 };

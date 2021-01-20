@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import toast, { messageBox } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { MokaInputLabel } from '@components';
-import { deleteReserved, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
+import { getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
 /**
  * 예약어 정보 컴포넌트
  */
-const ReservedEdit = ({ match }) => {
+const ReservedEdit = ({ match, onDelete }) => {
     const { reservedSeq: paramSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -195,28 +195,9 @@ const ReservedEdit = ({ match }) => {
     };
 
     /**
-     * 삭제 버튼
-     */
-    const handleClickDelete = () => {
-        messageBox.confirm(
-            `${reservedId}를 삭제하시겠습니까?`,
-            () => {
-                const reservedSet = {
-                    domainId: latestDomainId,
-                    reservedSeq: reservedSeq,
-                };
-                dispatch(deleteReserved({ callback: () => history.push(match.path), reservedSet }));
-            },
-            () => {},
-        );
-    };
-
-    /**
      * 취소 버튼
      */
-    const handleClickCancle = () => {
-        history.push(match.path);
-    };
+    const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
         // invalidList 처리
@@ -258,12 +239,14 @@ const ReservedEdit = ({ match }) => {
                     <Button variant="positive" className="mr-2" onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button variant="negative" className="mr-2" onClick={handleClickCancle}>
+                    <Button variant="negative" onClick={handleClickCancle}>
                         취소
                     </Button>
-                    <Button variant="negative" onClick={handleClickDelete} disabled={!reserved.reservedId}>
-                        삭제
-                    </Button>
+                    {reserved.reservedSeq && (
+                        <Button variant="negative" className="ml-2" onClick={() => onDelete(reserved)}>
+                            삭제
+                        </Button>
+                    )}
                 </Form.Group>
             </Form.Group>
             {/* 예약어 */}
@@ -285,7 +268,7 @@ const ReservedEdit = ({ match }) => {
             </Form.Row>
             {/* 값 */}
             <Form.Row>
-                <Col xs={7} className="p-0">
+                <Col xs={12} className="p-0">
                     <MokaInputLabel
                         label="값"
                         labelWidth={80}
@@ -301,11 +284,13 @@ const ReservedEdit = ({ match }) => {
             </Form.Row>
             {/* 예약어 설명 */}
             <MokaInputLabel
+                as="textarea"
                 label="예약어 설명"
                 labelWidth={80}
                 className="mb-0"
                 placeholder="설명을 입력하세요"
                 name="description"
+                inputProps={{ rows: 5 }}
                 onChange={handleChangeValue}
                 value={description}
             />

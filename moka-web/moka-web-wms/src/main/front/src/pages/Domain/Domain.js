@@ -34,7 +34,7 @@ const Domain = ({ match }) => {
      */
     const deleteCallback = (domain) => {
         messageBox.confirm(
-            `${domain.domainId}_${domain.domainName}을 정말 삭제하시겠습니까?`,
+            '해당 도메인과 메인페이지가 삭제 됩니다',
             () => {
                 dispatch(
                     deleteDomain({
@@ -73,7 +73,7 @@ const Domain = ({ match }) => {
                             deleteCallback(domain);
                         } else {
                             // 관련 아이템 있음
-                            toast.fail('사용 중인 도메인은 삭제할 수 없습니다');
+                            messageBox.alert('해당 도메인은 사용페이지가 있어서 삭제할 수 없습니다', () => {});
                         }
                     } else {
                         toast.fail(header.message);

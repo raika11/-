@@ -18,6 +18,11 @@ export const initialState = {
         searchType: 'all',
         keyword: '',
     },
+    searchTypeList: [
+        { id: 'all', name: '전체' },
+        { id: 'reservedId', name: '예약어' },
+        { id: 'reservedValue', name: '값' },
+    ],
     reserved: {},
     reservedError: null,
     latestReservedSeq: null,

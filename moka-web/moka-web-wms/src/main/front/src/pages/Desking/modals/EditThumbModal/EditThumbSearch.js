@@ -25,7 +25,14 @@ const EditThumbSearch = () => {
     const [error, setError] = useState({});
 
     const handleSearch = () => {
-        dispatch(getPhotoList(changeSearchOption(search)));
+        dispatch(
+            getPhotoList(
+                changeSearchOption({
+                    ...search,
+                    page: 0,
+                }),
+            ),
+        );
     };
 
     useEffect(() => {

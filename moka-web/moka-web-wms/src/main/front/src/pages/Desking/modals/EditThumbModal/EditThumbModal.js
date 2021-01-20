@@ -180,7 +180,7 @@ const EditThumbModal = (props) => {
             height={820}
             size="xl"
             buttons={[
-                { text: '등록', variant: 'positive', onClick: handleClickSave },
+                { text: '적용', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             dialogClassName="fixed-modal"

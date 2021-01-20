@@ -79,6 +79,17 @@ public class CdnArticleServiceImpl implements CdnArticleService {
                     .equals(MokaConstants.YES), cdnArticleDoaminList[i], cdnArticleSaveFilepathList[i], cdnArticleUrlList[i]);
             if (ok) {
                 inserted = true;
+
+                // cdn url세팅
+                if (i == 0) {
+                    article.setCdnUrlNews(cdnArticleUrlList[i] + "/" + article
+                            .getTotalId()
+                            .toString() + ".html");
+                } else {
+                    article.setCdnUrlMnews(cdnArticleUrlList[i] + "/" + article
+                            .getTotalId()
+                            .toString() + ".html");
+                }
             }
         }
         // cdn upload가 하나라도 되면, 디비에 등록한다.

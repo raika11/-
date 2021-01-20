@@ -164,7 +164,7 @@ public class CdnArticleRestController extends AbstractCommonController {
             @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") @Min(value = 0, message = "{tps.cdn-article.error.min.totalId}") Long totalId,
             @ApiParam("CDN기사정보") @RequestBody @Valid CdnArticleDTO articleDto)
             throws Exception {
-        cdnArticleService
+        CdnArticle orgArticle = cdnArticleService
                 .findCdnArticleById(totalId)
                 .orElseThrow(() -> {
                     String message = msg("tps.common.error.no-data");
@@ -173,6 +173,9 @@ public class CdnArticleRestController extends AbstractCommonController {
                 });
         try {
             CdnArticle article = modelMapper.map(articleDto, CdnArticle.class);
+            article.setRegDt(orgArticle.getRegDt());
+            article.setRegId(orgArticle.getRegId());
+
             CdnArticle returnValue = cdnArticleService.saveCdnArticle(article);
 
             CdnArticleDTO dto = modelMapper.map(returnValue, CdnArticleDTO.class);

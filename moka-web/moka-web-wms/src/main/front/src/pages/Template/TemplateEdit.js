@@ -32,52 +32,30 @@ const TemplateEdit = ({ onDelete, match }) => {
     }));
 
     // state
-    const [templateName, setTemplateName] = useState('');
-    const [templateWidth, setTemplateWidth] = useState('');
-    const [cropWidth, setCropWidth] = useState('');
-    const [cropHeight, setCropHeight] = useState('');
-    const [templateGroup, setTemplateGroup] = useState(undefined);
-    const [templateThumb, setTemplateThumb] = useState(undefined);
+    const [temp, setTemp] = useState({});
     const [fileValue, setFileValue] = useState(null);
     const [thumbSrc, setThumbSrc] = useState();
-    const [description, setDescription] = useState('');
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [error, setError] = useState({});
-
-    // modal state
     const [copyModalShow, setCopyModalShow] = useState(false);
     const [addComponentModalShow, setAddComponentModalShow] = useState(false);
-    // const [copyModalData, setCopyModalData] = useState({
-    //     title: '템플릿명',
-    //     value: '',
-    //     isInvalid: false,
-    // });
 
     // ref
     const imgFileRef = useRef(null);
 
     /**
-     * 각 항목별 값 변경
+     * 입력값 변경
      */
     const handleChangeValue = ({ target }) => {
         const { name, value } = target;
 
         if (name === 'templateName') {
-            setTemplateName(value);
             if (REQUIRED_REGEX.test(value)) {
                 setError({ ...error, templateName: false });
             }
-        } else if (name === 'templateWidth') {
-            setTemplateWidth(value);
-        } else if (name === 'cropWidth') {
-            setCropWidth(value);
-        } else if (name === 'cropHeight') {
-            setCropHeight(value);
-        } else if (name === 'templateGroup') {
-            setTemplateGroup(value);
-        } else if (name === 'description') {
-            setDescription(value);
         }
+
+        setTemp({ ...temp, [name]: value });
     };
 
     /**
@@ -114,6 +92,13 @@ const TemplateEdit = ({ onDelete, match }) => {
                         toast.success(header.message);
                         history.push(`${match.path}/${body.templateSeq}`);
                     } else {
+                        if (body?.list) {
+                            const bodyChk = body.list.filter((e) => e.field === 'templateBody');
+                            if (bodyChk.length > 0) {
+                                messageBox.alert('Tems 문법 사용이 비정상적으로 사용되었습니다\n수정 확인후 다시 저장해 주세요', () => {});
+                                return;
+                            }
+                        }
                         toast.fail(header.message);
                     }
                 },
@@ -159,88 +144,31 @@ const TemplateEdit = ({ onDelete, match }) => {
         e.preventDefault();
         e.stopPropagation();
 
-        let temp = {
-            ...template,
-            templateName,
-            templateWidth,
-            cropWidth,
-            cropHeight,
-            templateGroup,
-            templateThumb,
-            description,
+        let saveObj = {
+            ...temp,
             templateThumbnailFile: fileValue,
         };
 
-        if (validate(temp)) {
+        if (validate(saveObj)) {
             if (!template.templateSeq || template.templateSeq === '') {
                 // 새 템플릿 저장 시에 도메인ID 셋팅
-                temp.domain = { domainId: latestDomainId };
-                saveCallback(temp);
+                saveObj.domain = { domainId: latestDomainId };
+                saveCallback(saveObj);
             } else {
-                checkRelationList(temp);
+                checkRelationList(saveObj);
             }
         }
     };
 
     /**
-     * 템플릿 복사 모달 hide
-     */
-    // const handleHideCopyModal = () => {
-    //     setCopyModalData({
-    //         title: '템플릿명',
-    //         value: '',
-    //         isInvalid: false,
-    //     });
-    //     setCopyModalShow(false);
-    // };
-
-    /**
-     * 템플릿 복사 모달 > 저장 버튼
-     * @param {object} returnData 템플릿 복사 데이터
-     */
-    // const handleClickCopy = (returnData) => {
-    //     if (returnData.value.length > 0) {
-    //         setCopyModalData({
-    //             ...returnData,
-    //             isInvalid: false,
-    //         });
-    //         dispatch(
-    //             copyTemplate({
-    //                 domainId: template.domain.domainId,
-    //                 templateSeq: template.templateSeq,
-    //                 templateName: returnData.value,
-    //                 callback: ({ header, body }) => {
-    //                     if (header.success) {
-    //                         handleHideCopyModal();
-    //                         toast.success(header.message);
-    //                         history.push(`/template/${body.templateSeq}`);
-    //                     } else {
-    //                         toast.fail(header.message);
-    //                     }
-    //                 },
-    //             }),
-    //         );
-    //     } else {
-    //         setCopyModalData({
-    //             ...returnData,
-    //             isInvalid: true,
-    //         });
-    //     }
-    // };
-
-    /**
      * 삭제 버튼
      */
-    const handleClickDelete = () => {
-        onDelete(template);
-    };
+    const handleClickDelete = () => onDelete(template);
 
     /**
      * 취소 버튼
      */
-    const handleClickCancle = () => {
-        history.push(match.path);
-    };
+    const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
         if (template.templateSeq) {
@@ -254,29 +182,25 @@ const TemplateEdit = ({ onDelete, match }) => {
 
     useEffect(() => {
         // 스토어에서 가져온 템플릿 데이터 셋팅
-        setTemplateName(template.templateName || '');
-        setCropWidth(template.cropWidth || 0);
-        setCropHeight(template.cropHeight || 0);
-        setDescription(template.description || '');
-        setTemplateWidth(template.templateWidth || 0);
-        setTemplateGroup(template.templateGroup || '');
-        setTemplateThumb(template.templateThumb);
-    }, [template]);
-
-    useEffect(() => {
-        if (templateThumb && templateThumb !== '') {
-            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${templateThumb}`);
+        setTemp({
+            ...template,
+            cropWidth: template.cropWidth || 0,
+            cropHeight: template.cropHeight || 0,
+            templateWidth: template.templateWidth || 0,
+        });
+        if (template.templateThumb && template.templateThumb !== '') {
+            setThumbSrc(`${API_BASE_URL}${UPLOAD_PATH_URL}/${template.templateThumb}`);
         } else {
             setThumbSrc(null);
         }
-    }, [UPLOAD_PATH_URL, templateThumb]);
+    }, [UPLOAD_PATH_URL, template]);
 
     useEffect(() => {
         // 위치 그룹 데이터가 없을 경우 0번째 데이터 셋팅
-        if (templateGroup === '' && tpZoneRows && tpZoneRows.length > 0) {
-            setTemplateGroup(tpZoneRows[0].dtlCd);
+        if (temp.templateGroup === '' && tpZoneRows && tpZoneRows.length > 0) {
+            setTemp({ ...temp, templateGroup: tpZoneRows[0].dtlCd });
         }
-    }, [templateGroup, tpZoneRows]);
+    }, [temp, tpZoneRows]);
 
     useEffect(() => {
         if (!tpZoneRows) dispatch(getTpZone());
@@ -319,7 +243,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                 <MokaInputLabel
                     className="mb-2"
                     label="템플릿명"
-                    value={templateName}
+                    value={temp.templateName}
                     name="templateName"
                     onChange={handleChangeValue}
                     placeholder="템플릿명을 입력하세요"
@@ -327,7 +251,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                     required
                 />
                 {/* 위치그룹 */}
-                <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={templateGroup} onChange={handleChangeValue} name="templateGroup">
+                <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={temp.templateGroup} onChange={handleChangeValue} name="templateGroup">
                     {tpZoneRows &&
                         tpZoneRows.map((cd) => (
                             <option key={cd.dtlCd} value={cd.dtlCd}>
@@ -341,7 +265,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                         <MokaInputLabel
                             className="mb-0"
                             label="사이즈"
-                            value={templateWidth}
+                            value={temp.templateWidth}
                             onChange={handleChangeValue}
                             inputClassName="ft-12"
                             type="number"
@@ -354,7 +278,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                             labelWidth={36}
                             labelClassName="mr-2"
                             className="mb-0"
-                            value={cropWidth}
+                            value={temp.cropWidth}
                             name="cropWidth"
                             onChange={handleChangeValue}
                             inputClassName="ft-12"
@@ -362,7 +286,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                         />
                     </Col>
                     <Col xs={3} className="d-flex align-items-center p-0 pl-2">
-                        x <MokaInput className="ml-2 mb-0 ft-12" value={cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" />{' '}
+                        x <MokaInput className="ml-2 mb-0 ft-12" value={temp.cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" />{' '}
                     </Col>
                 </Row>
                 {/* 입력태그 */}
@@ -392,22 +316,21 @@ const TemplateEdit = ({ onDelete, match }) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     imgFileRef.current.deleteFile();
-                                    setTemplateThumb(null);
+                                    setTemp({ ...temp, templateThumb: null });
                                 }}
                             >
                                 삭제
                             </Button>
                         </>
                     }
-                    inputProps={{ width: 284, height: 280, img: thumbSrc, alt: templateName, setFileValue }}
+                    inputProps={{ width: 284, height: 280, img: thumbSrc, alt: temp.templateName, setFileValue }}
                     className="mb-2"
                 />
                 {/* 설명 */}
-                <MokaInputLabel label="설명" placeholder="내용설명" value={description} onChange={handleChangeValue} name="description" />
+                <MokaInputLabel label="설명" placeholder="내용설명" value={temp.description} onChange={handleChangeValue} name="description" />
             </Form>
 
             {/* 템플릿복사 Modal */}
-            {/* <DefaultInputModal show={copyModalShow} onHide={handleHideCopyModal} onSave={handleClickCopy} title="템플릿 설정복사" inputData={copyModalData} /> */}
             <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={template} />
 
             {/* 컴포넌트생성 Modal */}

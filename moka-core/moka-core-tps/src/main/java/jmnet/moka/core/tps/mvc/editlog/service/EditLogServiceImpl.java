@@ -1,6 +1,5 @@
 package jmnet.moka.core.tps.mvc.editlog.service;
 
-import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import jmnet.moka.common.utils.McpString;
@@ -36,11 +35,6 @@ public class EditLogServiceImpl implements EditLogService {
     @Override
     public Page<EditLog> findAllEditLog(EditLogSearchDTO search) {
         return editLogRepository.findAllEditLog(search);
-    }
-
-    @Override
-    public List<EditLog> findAllEditLog() {
-        return editLogRepository.findAll();
     }
 
     @Override

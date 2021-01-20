@@ -30,7 +30,7 @@ public class DBTaskInputData extends TaskInputData {
     }
 
     static public DBTaskInputData newDBTaskInputData(List<Map<String, Object>> inputData) {
-        //noinspection LoopStatementThatDoesntLoop
+        //noinspection ConstantConditions,LoopStatementThatDoesntLoop
         do {
             if( inputData == null )
                 break;
@@ -38,7 +38,7 @@ public class DBTaskInputData extends TaskInputData {
                 break;
 
             return new DBTaskInputData(inputData);
-        }while( true );
+        }while( false );
 
         return null;
     }

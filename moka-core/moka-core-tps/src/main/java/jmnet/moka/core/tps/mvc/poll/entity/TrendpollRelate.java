@@ -69,14 +69,9 @@ public class TrendpollRelate implements Serializable {
     /**
      * 이미지경로
      */
-    @Column(name = "IMG_PATH")
-    private String imgPath;
+    @Column(name = "IMG_URL")
+    private String imgUrl;
 
-    /**
-     * 이미지명
-     */
-    @Column(name = "IMG_NAME")
-    private String imgName;
 
     /**
      * 링크URL

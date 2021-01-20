@@ -3,8 +3,8 @@ package jmnet.moka.core.tps.mvc.editlog.service;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.mvc.editlog.dto.EditLogSearchDTO;
 import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
 import jmnet.moka.core.tps.mvc.editlog.repository.EditLogRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <pre>
- *
+ * 편집로그 Service Implementation class
  * Project : moka
  * Package : jmnet.moka.core.tps.mvc.editlog.service
  * ClassName : EditLogServiceImpl
@@ -34,8 +34,8 @@ public class EditLogServiceImpl implements EditLogService {
     }
 
     @Override
-    public Page<EditLog> findAllEditLog(SearchDTO search) {
-        return editLogRepository.findAll(search.getPageable());
+    public Page<EditLog> findAllEditLog(EditLogSearchDTO search) {
+        return editLogRepository.findAllEditLog(search);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class EditLogServiceImpl implements EditLogService {
     }
 
     @Override
-    public Optional<EditLog> findEditLogById(Long logSeq) {
-        return editLogRepository.findById(logSeq);
+    public Optional<EditLog> findEditLogBySeq(Long logSeq) {
+        return editLogRepository.findEditLog(logSeq);
     }
 
     @Override

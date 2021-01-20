@@ -60,6 +60,8 @@ const ContainerEditor = (props) => {
         // 컨테이너seq가 있을 때 데이터를 조회
         if (containerSeq) {
             dispatch(getContainer({ containerSeq: containerSeq }));
+        } else {
+            dispatch(clearContainer());
         }
     }, [dispatch, containerSeq]);
 

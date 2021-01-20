@@ -61,6 +61,8 @@ const TemplateEditor = (props) => {
         // 템플릿seq가 있을 때 데이터 조회
         if (templateSeq) {
             dispatch(getTemplate({ templateSeq: templateSeq }));
+        } else {
+            dispatch(clearTemplate());
         }
     }, [dispatch, templateSeq]);
 

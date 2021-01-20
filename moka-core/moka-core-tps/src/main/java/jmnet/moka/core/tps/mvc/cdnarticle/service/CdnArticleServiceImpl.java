@@ -86,10 +86,18 @@ public class CdnArticleServiceImpl implements CdnArticleService {
 
     }
 
-    private boolean uploadCdn(Long totalId, boolean usedYn, String cdnDoamin, String cdnSaveFilepath, String cdnArticleUrl)
+    @Override
+    public void clearCacheCdnArticle(Long totalId) {
+        for (int i = 0; i < cdnArticleDoaminList.length; i++) {
+            String url = cdnPurgeUrl + cdnArticleDoaminList[i] + "/" + totalId.toString() + ".html";
+            restTemplateHelper.get(url);
+        }
+    }
+
+    private boolean uploadCdn(Long totalId, boolean usedYn, String articleDoamin, String cdnSaveFilepath, String cdnArticleUrl)
             throws Exception {
 
-        String articleUrl = cdnDoamin + "/article/" + totalId.toString();
+        String articleUrl = articleDoamin + "/article/" + totalId.toString();   // 중앙 기사 서비스 URL
         String articleHtml = "";
 
         if (usedYn) {
@@ -105,7 +113,7 @@ public class CdnArticleServiceImpl implements CdnArticleService {
             articleHtml = articleHtml.replaceAll(staticUrl + "/joongang_15re/scripts/lib/", cdnWebDomain + "/ui/script/lib/");
 
             //기자정보 링크 치환
-            articleHtml = articleHtml.replaceAll("href=\"reporter\"", "href=\"" + cdnDoamin + "/reporter/");
+            articleHtml = articleHtml.replaceAll("href=\"/reporter/", "href=\"" + articleDoamin + "/reporter/");
 
             //JA트래커가 CDN 아티클이라고 인식하도록 플래그 추가
             articleHtml = articleHtml.replaceAll("<!-- End JA Tracker Script -->",
@@ -133,4 +141,6 @@ public class CdnArticleServiceImpl implements CdnArticleService {
         }
         return true;
     }
+
+
 }

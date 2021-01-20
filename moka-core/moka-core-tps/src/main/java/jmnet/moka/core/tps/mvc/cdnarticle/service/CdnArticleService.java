@@ -41,4 +41,10 @@ public interface CdnArticleService {
     CdnArticle saveCdnArticle(CdnArticle article)
             throws Exception;
 
+    /**
+     * CDN기사 캐시삭제
+     *
+     * @param totalId 기사키
+     */
+    void clearCacheCdnArticle(Long totalId);
 }

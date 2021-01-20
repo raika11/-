@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import Collapse from 'react-bootstrap/Collapse';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon } from '@components';
-import MokaTreeLabel from './MokaTreeLabel';
+import TreeLabel from './TreeLabel';
 
 const propTypes = {
     /**
@@ -95,7 +95,7 @@ const MokaTreeCategory = (props) => {
                 >
                     <MokaIcon iconName={open ? 'fal-minus' : 'fal-plus'} />
                 </Button>
-                <MokaTreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />
+                <TreeLabel nodeId={nodeId} nodeData={nodeData} labelHoverButtons={labelHoverButtons} />
             </div>
             <Collapse in={open} timeout={0}>
                 <div id={controls}>

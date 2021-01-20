@@ -2,13 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
-import { GET_PAGE_TREE, getPage, insertSubPage } from '@store/page/pageAction';
-import { MokaTreeView, MokaIcon } from '@components';
+import { MokaIcon } from '@components';
+import { GET_PAGE_TREE, getPage, insertSubPage } from '@store/page';
+import PageTreeView from './components/PageTreeView';
 
 /**
  * 페이지 Tree 컴포넌트
  */
-const PageTree = ({ onDelete, match }) => {
+const PageTree = ({ onDelete, match, findNode }) => {
     const { pageSeq: paramPageSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -21,34 +22,10 @@ const PageTree = ({ onDelete, match }) => {
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 
-    // 부모노드 찾기(재귀함수)
-    // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
-    const findNode = useCallback((findInfo, rootNode) => {
-        if (rootNode.pageSeq === findInfo.findSeq) {
-            return produce(findInfo, (draft) => draft);
-        }
-
-        if (rootNode.nodes && rootNode.nodes.length > 0) {
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const newInfo = produce(findInfo, (draft) => {
-                    draft.node = rootNode.nodes[i];
-                    draft.path.push(String(rootNode.nodes[i].pageSeq));
-                });
-                const fnode = findNode(newInfo, rootNode.nodes[i]);
-                if (fnode !== null && fnode.node !== null) {
-                    return fnode;
-                }
-            }
-            return null;
-        }
-        return null;
-    }, []);
-
     useEffect(() => {
         if (tree) {
             if (page.pageSeq) {
-                // 최초로딩일때만 트리노드 확장
-                // if (expanded.length <= 0) {
+                // 최초 로딩일때만 트리노드 확장
                 let findInfo = {
                     findSeq: page.pageSeq,
                     node: null,
@@ -74,26 +51,20 @@ const PageTree = ({ onDelete, match }) => {
                 if (!bDirectLoading && !bSubInsert) {
                     setExpanded([]);
                     setSelected('');
-
-                    const option = {
-                        pageSeq: tree.pageSeq,
-                        // callback: (result) => {
-                        //     if (result) history.push(`/page/${pageTree.pageSeq}`);
-                        // }
-                    };
-                    dispatch(getPage(option));
+                    dispatch(
+                        getPage({
+                            page: tree.pageSeq,
+                        }),
+                    );
                 }
             }
-            // if (selected === '' && expanded.length === 0) {
-            //     setExpanded([String(tree.pageSeq)]);
-            //     setSelected(String(tree.pageSeq));
-            // }
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tree, page, history, findNode, paramPageSeq, dispatch]);
 
     /**
-     * 트리 클릭. 페이지 수정창 로드
+     * 트리 클릭
      * @param {object} item
      */
     const handleClick = useCallback(
@@ -113,7 +84,7 @@ const PageTree = ({ onDelete, match }) => {
     );
 
     /**
-     * 트리에서 추가버튼 클릭.
+     * 트리 아이템의 추가 버튼(+)
      * @param {object} item
      */
     const handleInsertSub = useCallback(
@@ -131,7 +102,7 @@ const PageTree = ({ onDelete, match }) => {
     );
 
     return (
-        <MokaTreeView
+        <PageTreeView
             className="h-100"
             data={tree}
             loading={loading}

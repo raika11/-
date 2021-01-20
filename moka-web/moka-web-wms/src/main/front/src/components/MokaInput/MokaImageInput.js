@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
 import Figure from 'react-bootstrap/Figure';
-
-import util from '@utils/commonUtil';
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 import { MokaAlert, MokaIcon } from '@components';
 
@@ -15,14 +13,17 @@ const propTypes = {
     className: PropTypes.string,
     /**
      * width
+     * @default
      */
     width: PropTypes.number,
     /**
      * height
+     * @default
      */
     height: PropTypes.number,
     /**
      * 사진이 아닌 타입이 들어왔을 때 나타나는 alert props
+     * @default
      */
     alertProps: PropTypes.shape({
         outline: PropTypes.bool,
@@ -46,10 +47,12 @@ const propTypes = {
     onChange: PropTypes.func,
     /**
      * 이미지 alt
+     * @default
      */
     alt: PropTypes.string,
     /**
      * 업로드 가능 이미지 타입
+     * @default
      */
     selectAccept: PropTypes.array,
     /**
@@ -126,19 +129,6 @@ const MokaImageInput = forwardRef((props, ref) => {
         setAlert(false);
     }, [setFileValue]);
 
-    // 리턴 ref 설정
-    useImperativeHandle(
-        ref,
-        () => ({
-            inputRef: inputRef.current,
-            imgRef: imgRef.current,
-            wrapRef: wrapRef.current,
-            defaultTextRef: defaultRef.current,
-            deleteFile: deleteFile,
-        }),
-        [deleteFile],
-    );
-
     /**
      * 파일 드롭
      * @param {array} acceptedFiles input의 file객체(array)
@@ -186,6 +176,19 @@ const MokaImageInput = forwardRef((props, ref) => {
             imageHide();
         }
     }, [img]);
+
+    // 리턴 ref 설정
+    useImperativeHandle(
+        ref,
+        () => ({
+            inputRef: inputRef.current,
+            imgRef: imgRef.current,
+            wrapRef: wrapRef.current,
+            defaultTextRef: defaultRef.current,
+            deleteFile: deleteFile,
+        }),
+        [deleteFile],
+    );
 
     return (
         <Dropzone onDrop={onDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} preventDropOnDocument>

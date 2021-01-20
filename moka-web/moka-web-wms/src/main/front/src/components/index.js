@@ -10,7 +10,7 @@ export * from './MokaCard';
 export * from './MokaIcon';
 export { default as MokaPagination } from './MokaPagination';
 export * from './MokaTable';
-export { default as MokaTreeView } from './MokaTree';
+export * from './MokaTree';
 export { default as MokaLoader } from './MokaLoader';
 export { default as Moka } from './ComponentFactory';
 export * from './MokaButton';

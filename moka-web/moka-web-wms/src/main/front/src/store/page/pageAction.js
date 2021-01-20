@@ -53,7 +53,7 @@ export const getPageListModal = createAction(GET_PAGE_LIST_MODAL, ({ search, cal
  */
 export const CHANGE_PAGE_BODY = 'page/CHANGE_PAGE_BODY';
 export const CHANGE_PAGE = 'page/CHANGE_PAGE';
-export const CHANGE_INVALID_LIST = 'domain/CHANGE_INVALID_LIST';
+export const CHANGE_INVALID_LIST = 'page/CHANGE_INVALID_LIST';
 export const changePageBody = createAction(CHANGE_PAGE_BODY, (pageBody) => pageBody);
 export const changePage = createAction(CHANGE_PAGE, (page) => page);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
@@ -83,20 +83,6 @@ export const deletePage = createAction(DELETE_PAGE, ({ pageSeq, callback }) => (
  * 관련아이템 데이터 조회
  */
 export const HAS_RELATION_LIST = 'page/HAS_RELATION_LIST';
-
-/**
- * 히스토리 검색조건 변경
- */
-export const CHANGE_SEARCH_HIST_OPTION = 'page/CHANGE_SEARCH_HIST_OPTION';
-export const changeSearchHistOption = createAction(CHANGE_SEARCH_HIST_OPTION, (search) => search);
-
-/**
- * 히스토리 데이터 조회
- */
-export const [GET_HISTORY_LIST, GET_HISTORY_LIST_SUCCESS, GET_HISTORY_LIST_FAILURE] = createRequestActionTypes('page/GET_HISTORY_LIST');
-export const [GET_HISTORY, GET_HISTORY_SUCCESS, GET_HISTORY_FAILURE] = createRequestActionTypes('page/GET_HISTORY');
-export const getHistoryList = createAction(GET_HISTORY_LIST, (...actions) => actions);
-export const getHistory = createAction(GET_HISTORY, ({ pageSeq, histSeq }) => ({ pageSeq, histSeq }));
 
 /**
  * 태그삽입

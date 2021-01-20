@@ -23,7 +23,7 @@ const PollDetailBasicPhotoAnswerComponent = ({ items, hasUrl }) => {
                         },
                     }}
                 />*/
-                <PollPhotoComponent key={index} width="100px" height="100px" src={item.imgPath && item.imgName && `https://pds.joins.com/${item.imgPath}${item.imgName}`}>
+                <PollPhotoComponent key={index} width="100px" height="100px" src={item.imgUrl}>
                     150x150
                 </PollPhotoComponent>
             ))}

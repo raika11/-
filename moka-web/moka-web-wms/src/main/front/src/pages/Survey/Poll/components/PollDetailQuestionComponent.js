@@ -20,7 +20,7 @@ const PollDetailQuestionComponent = ({ division, items, count, type, onChange })
             if (items.length === 0) {
                 const initItems = [];
                 for (let itemCnt = 0; itemCnt < count; itemCnt++) {
-                    initItems.push({ imgName: '', imgPath: '', linkUrl: '', title: '' });
+                    initItems.push({ imgUrl: '', linkUrl: '', title: '' });
                 }
                 setEditItems(initItems);
             } else {

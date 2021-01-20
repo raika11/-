@@ -207,7 +207,7 @@ const LookupContainerList = (props) => {
             {/* 버튼 그룹 */}
             {seqType !== ITEM_CT && (
                 <div className="d-flex mb-10 justify-content-end">
-                    <Button variant="positive" onClick={() => window.open('/container')}>
+                    <Button variant="positive" onClick={() => window.open('/container/add')}>
                         컨테이너 등록
                     </Button>
                 </div>

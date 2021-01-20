@@ -66,6 +66,10 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> insertAllQuestion(List<Question> questions) {
+        // 신규 등록 이므로 pk값 초기화 처리
+        questions.forEach(question -> {
+            question.setQuestionSeq(null);
+        });
         List<Question> newQuestions = questionRepository.saveAll(questions);
 
         if (newQuestions.size() > 0) {

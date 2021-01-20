@@ -18,11 +18,11 @@ const propTypes = {
     /**
      * width 컴포넌트의 가로 사이즈
      */
-    width: PropTypes.number,
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
      * height 이미지의 세로 사이즈
      */
-    height: PropTypes.number,
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
      * 컴포넌트 그림자 style
      */

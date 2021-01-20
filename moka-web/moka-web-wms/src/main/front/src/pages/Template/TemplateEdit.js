@@ -65,7 +65,7 @@ const TemplateEdit = ({ onDelete, match }) => {
         if (name === 'templateName') {
             setTemplateName(value);
             if (REQUIRED_REGEX.test(value)) {
-                setError({ ...error, template: false });
+                setError({ ...error, templateName: false });
             }
         } else if (name === 'templateWidth') {
             setTemplateWidth(value);
@@ -323,7 +323,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                     name="templateName"
                     onChange={handleChangeValue}
                     placeholder="템플릿명을 입력하세요"
-                    isInvalid={error.template}
+                    isInvalid={error.templateName}
                     required
                 />
                 {/* 위치그룹 */}

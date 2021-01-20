@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import MokaTreeCategory from './MokaTreeCategory';
-import MokaTreeItem from './MokaTreeItem';
+import TreeCategory from './TreeCategory';
+import TreeItem from './TreeItem';
 import { MokaLoader } from '@components';
 
 const propTypes = {
@@ -64,7 +64,7 @@ const defaultProps = {
 /**
  * 페이지관리 > 트리뷰 컴포넌트
  */
-const MokaTreeView = (props) => {
+const PageTreeView = (props) => {
     const { data, height, loading, className } = props;
     const scrollbarRef = useRef(null);
 
@@ -76,12 +76,12 @@ const MokaTreeView = (props) => {
 
         if (nodes) {
             return (
-                <MokaTreeCategory key={pageSeq} scrollbarRef={scrollbarRef} nodeId={String(pageSeq)} nodeData={nodeData} {...props}>
+                <TreeCategory key={pageSeq} scrollbarRef={scrollbarRef} nodeId={String(pageSeq)} nodeData={nodeData} {...props}>
                     {nodes.map(createTreeItem)}
-                </MokaTreeCategory>
+                </TreeCategory>
             );
         }
-        return <MokaTreeItem key={pageSeq} nodeId={String(pageSeq)} nodeData={nodeData} {...props} />;
+        return <TreeItem key={pageSeq} nodeId={String(pageSeq)} nodeData={nodeData} {...props} />;
     };
 
     return (
@@ -94,7 +94,7 @@ const MokaTreeView = (props) => {
             <ul className="list-unstyled tree-list">
                 {loading && <MokaLoader />}
                 {!loading && data && (
-                    <MokaTreeCategory
+                    <TreeCategory
                         scrollbarRef={scrollbarRef}
                         nodeId={String(data.pageSeq)}
                         nodeData={{
@@ -111,14 +111,14 @@ const MokaTreeView = (props) => {
                             data.nodes.map((nodes, idx) => {
                                 return createTreeItem(nodes, idx);
                             })}
-                    </MokaTreeCategory>
+                    </TreeCategory>
                 )}
             </ul>
         </PerfectScrollbar>
     );
 };
 
-MokaTreeView.propTypes = propTypes;
-MokaTreeView.defaultProps = defaultProps;
+PageTreeView.propTypes = propTypes;
+PageTreeView.defaultProps = defaultProps;
 
-export default MokaTreeView;
+export default PageTreeView;

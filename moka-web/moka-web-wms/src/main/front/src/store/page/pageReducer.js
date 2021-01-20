@@ -186,7 +186,9 @@ export default handleActions(
                 draft.invalidList = payload;
             });
         },
-        // 트리에서 서브 페이지 추가
+        /**
+         * 트리에서 서브 페이지 추가
+         */
         [act.INSERT_SUB_PAGE]: (state, { payload: { parent, latestDomainId } }) => ({
             ...state,
             page: {

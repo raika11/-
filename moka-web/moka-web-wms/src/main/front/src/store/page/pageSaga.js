@@ -1,7 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
-
 import * as api from './pageApi';
 import * as act from './pageAction';
 
@@ -78,13 +77,12 @@ function* savePage({ payload: { actions, callback } }) {
             // 목록 다시 검색
             yield put({ type: act.GET_PAGE_TREE });
         } else {
-            const { body } = response.data.body;
-
+            const { body } = response.data;
             if (body && body.list && Array.isArray(body.list)) {
                 // invalidList 셋팅
                 yield put({
                     type: act.CHANGE_INVALID_LIST,
-                    payload: response.data.body.list,
+                    payload: body.list,
                 });
             }
         }
@@ -162,16 +160,6 @@ function* hasRelationList({ payload: { pageSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
-/**
- * 히스토리 목록 조회
- */
-const getHistoryList = callApiAfterActions(act.GET_HISTORY_LIST, api.getHistoryList, (store) => store.pageHistory);
-
-/**
- * 히스토리 조회
- */
-const getHistory = createRequestSaga(act.GET_HISTORY, api.getHistory);
-
 /** saga */
 export default function* saga() {
     yield takeLatest(act.GET_PAGE_TREE, getPageTree);
@@ -179,8 +167,6 @@ export default function* saga() {
     yield takeLatest(act.SAVE_PAGE, savePage);
     yield takeLatest(act.DELETE_PAGE, deletePage);
     yield takeLatest(act.HAS_RELATION_LIST, hasRelationList);
-    yield takeLatest(act.GET_HISTORY_LIST, getHistoryList);
-    yield takeLatest(act.GET_HISTORY, getHistory);
     yield takeLatest(act.GET_PAGE_LOOKUP_LIST, getPageLookupList);
     yield takeLatest(act.GET_PAGE_MODAL, getPageModal);
     yield takeLatest(act.GET_PAGE_LIST_MODAL, getPageListModal);

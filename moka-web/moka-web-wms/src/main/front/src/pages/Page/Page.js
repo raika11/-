@@ -84,8 +84,10 @@ const Page = ({ match }) => {
         );
     };
 
-    // 노드 찾기(재귀함수)
-    // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
+    /**
+     * 노드 찾기 (재귀)
+     * @returns {object} { findSeq: page.pageSeq,node: null, path: [String(pageTree.pageSeq)] };
+     */
     const findNode = useCallback((findInfo, rootNode) => {
         if (rootNode.pageSeq === findInfo.findSeq) {
             return produce(findInfo, (draft) => draft);
@@ -151,7 +153,7 @@ const Page = ({ match }) => {
     );
 
     /**
-     * tems태그 삽입
+     * 본문에 TEMS 태그 삽입
      */
     const handleAppendTag = useCallback(
         (row, itemType) => {
@@ -162,9 +164,9 @@ const Page = ({ match }) => {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
-                // } else if (itemType === ITEM_AD) {
-                //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             }
+            // } else if (itemType === ITEM_AD) {
+            //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             dispatch(appendTag(tag));
         },
         [dispatch],
@@ -201,8 +203,7 @@ const Page = ({ match }) => {
             dispatch(clearStore());
             dispatch(clearHistoryStore());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -223,7 +224,7 @@ const Page = ({ match }) => {
                 bodyClassName="d-flex flex-column"
             >
                 <Suspense fallback={<MokaLoader />}>
-                    <PageList onDelete={handleClickDelete} match={match} />
+                    <PageList onDelete={handleClickDelete} match={match} findNode={findNode} />
                 </Suspense>
             </MokaCard>
 

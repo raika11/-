@@ -33,9 +33,9 @@ const App = () => {
         dispatch(getDomainList());
 
         // 5분마다 도메인리스트 다시 조회
-        setInterval(function () {
-            dispatch(getDomainList());
-        }, 300000);
+        // setInterval(function () {
+        //     dispatch(getDomainList());
+        // }, 300000);
     }, [dispatch]);
 
     if (!APP_LOADING && !APP_ERROR) {

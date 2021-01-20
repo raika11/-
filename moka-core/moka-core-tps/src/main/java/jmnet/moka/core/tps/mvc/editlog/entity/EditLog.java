@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import lombok.AllArgsConstructor;
@@ -104,4 +105,10 @@ public class EditLog implements Serializable {
      */
     @Column(name = "ERR_MSG")
     private String errMsg;
+
+    /**
+     * 메뉴코드
+     */
+    @Transient
+    private String menuNm;
 }

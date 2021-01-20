@@ -15,7 +15,6 @@ import jmnet.moka.core.tps.mvc.editlog.entity.QEditLog;
 import jmnet.moka.core.tps.mvc.menu.entity.QMenu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 /**
  * <pre>
@@ -89,10 +88,8 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
             // 아무것도 안함
         }
 
-        Pageable pageable = searchDTO.getPageable();
-        if (McpString.isYes(searchDTO.getUseTotal())) {
-            query = getQuerydsl().applyPagination(pageable, query);
-        }
+        // 데이터가 많은 관계로 full 검색 기능 없이 무조건 페이징 처리한다.
+        query = getQuerydsl().applyPagination(searchDTO.getPageable(), query);
 
         QueryResults<EditLog> list = query
                 .select(Projections.fields(EditLog.class, qEditLog.seqNo, qEditLog.regDt, qEditLog.action, qEditLog.successYn, qEditLog.regIp,
@@ -102,7 +99,7 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
                                 .where(qMenu.menuId.eq(qEditLog.menuId)), "menuNm")))
                 .fetchResults();
 
-        return new PageImpl<>(list.getResults(), pageable, list.getTotal());
+        return new PageImpl<>(list.getResults(), searchDTO.getPageable(), list.getTotal());
     }
 
 

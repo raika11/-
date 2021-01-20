@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { getPageTree, changeSearchOption, initialState } from '@store/page';
+import { getPageTree, changeSearchOption, initialState, clearPage } from '@store/page';
 
 /**
  * 페이지 검색 컴포넌트
@@ -42,6 +42,7 @@ const PageSearch = ({ match }) => {
 
         if (name === 'domainId') {
             dispatch(changeLatestDomainId(e.target.value));
+            dispatch(clearPage());
             history.push(match.path);
         } else {
             setSearch({ ...search, [name]: value });

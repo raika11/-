@@ -119,15 +119,23 @@ export const exportEditFormPartHistoryXml = (history) => {
 // Edit Form 저장
 export const importEditFormXmlFile = ({ xmlFile, importForm }) => {
     var formData = new FormData();
-    formData.append('file', xmlFile);
-    if (importForm && importForm.formSeq) {
-        formData.append('formSeq', importForm.formSeq);
-    }
-    if (importForm && importForm.partSeq) {
-        formData.append('partSeq', importForm.partSeq);
-    }
+    formData.append('pollItems[0].title', '항목1');
+    formData.append('pollItems[0].imgFile', xmlFile);
+    formData.append('pollItems[1].title', '항목2');
+    formData.append('pollItems[1].imgFile', xmlFile);
+
+    formData.append('pollGroup', 'P');
+    formData.append('pollCategory', 'AA');
+    formData.append('pollDiv', 'W');
+    formData.append('pollType', 'P');
+    formData.append('allowAnswCnt', 3);
+    formData.append('voteCnt', 2);
+    formData.append('startDt', '2021-01-20 00:00:00');
+    formData.append('endDt', '2021-02-20 00:00:00');
+    formData.append('title', '투표 테스트');
+
     return instance
-        .post(`/api/edit-forms/import-xml`, formData, {
+        .post(`/api/polls`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

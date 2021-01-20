@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
-import { MokaInput, MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaInput, MokaSearchInput } from '@components';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import Button from 'react-bootstrap/Button';
@@ -20,7 +20,11 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
 
     const handleClickSearch = () => {
         if (onSearch instanceof Function) {
-            onSearch(options);
+            onSearch(
+                produce(options, (draft) => {
+                    draft['page'] = 0;
+                }),
+            );
         }
     };
 
@@ -144,7 +148,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                                 }}
                             >
                                 <option value="title">투표 제목</option>
-                                <option value="2">투표 보기</option>
+                                <option value="itemTitle">투표 보기</option>
                                 <option value="pollSeq">투표 ID</option>
                             </MokaInput>
                         </Col>

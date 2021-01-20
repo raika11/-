@@ -7,7 +7,7 @@ import PollDetailQuestionComponent from '@pages/Survey/Poll/components/PollDetai
 import { useHistory, useParams } from 'react-router-dom';
 import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPoll, GET_POLL } from '@store/survey/poll/pollAction';
+import { getPoll, GET_POLL, clearPoll } from '@store/survey/poll/pollAction';
 import commonUtil from '@utils/commonUtil';
 
 const PollEdit = () => {
@@ -34,11 +34,18 @@ const PollEdit = () => {
     useEffect(() => {
         if (!commonUtil.isEmpty(pollSeq)) {
             dispatch(getPoll(pollSeq));
+        } else {
+            dispatch(clearPoll());
         }
     }, [dispatch, pollSeq]);
 
     useEffect(() => {
         setEdit(poll);
+        if (!commonUtil.isEmpty(poll.pollSeq)) {
+            setIsSet(true);
+        } else {
+            setIsSet(false);
+        }
     }, [poll]);
 
     return (
@@ -153,10 +160,10 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type1"
                             as="radio"
-                            value="M"
+                            value="T"
                             labelWidth={30}
                             inputProps={{ custom: true, label: 'text형', checked: edit.pollType === 'T' }}
                             onChange={(e) => {
@@ -170,7 +177,7 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type2"
                             as="radio"
                             value="P"
@@ -187,10 +194,10 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={3} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type3"
                             as="radio"
-                            value="V"
+                            value="M"
                             labelWidth={85}
                             inputProps={{ custom: true, label: 'text형+이미지형', checked: edit.pollType === 'M' }}
                             onChange={(e) => {
@@ -453,17 +460,15 @@ const PollEdit = () => {
                                 <MokaInputLabel
                                     as="textarea"
                                     onChange={(e) => {
-                                        setEdit({ ...edit, question: { title: e.target.value } });
+                                        setEdit({ ...edit, title: e.target.value });
                                     }}
-                                    value={edit.question.title}
+                                    value={edit.title}
                                     label="Q."
                                     labelWidth={20}
                                 />
                             }
                         >
-                            {[...Array(edit.itemCount)].map((n, index) => (
-                                <PollDetailQuestionComponent key={index} label1={`보기${index + 1}`} label2={`url`} type={edit.type} />
-                            ))}
+                            <PollDetailQuestionComponent count={edit.itemCnt} division={edit.pollDiv} type={edit.pollType} items={edit.pollItems} />
                         </MokaCard>
                     </Form.Row>
                 )}

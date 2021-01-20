@@ -65,16 +65,10 @@ public class TrendpollItem implements Serializable {
     private Date regDt = new Date();
 
     /**
-     * 이미지경로
-     */
-    @Column(name = "IMG_PATH")
-    private String imgPath;
-
-    /**
      * 이미지명
      */
-    @Column(name = "IMG_NAME")
-    private String imgName;
+    @Column(name = "IMG_URL")
+    private String imgUrl;
 
     /**
      * 링크URL

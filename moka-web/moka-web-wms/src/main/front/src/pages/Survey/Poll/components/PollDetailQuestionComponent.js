@@ -1,15 +1,39 @@
-import React, { useState } from 'react';
-import { Form, Col, Figure } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
-import { BLANK_IMAGE_PATH, IR_URL } from '@/constants';
-import Button from 'react-bootstrap/Button';
+import React, { useEffect, useState } from 'react';
+import PollDetailBasicTextAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicTextAnswerComponent';
+import commonUtil from '@utils/commonUtil';
+import PollDetailBasicPhotoAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicPhotoAnswerComponent';
 
-const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
-    const [value1, setValue1] = useState('');
-    const [value2, setValue2] = useState('');
+const PollDetailQuestionComponent = ({ division, items, count, type, onChange }) => {
+    const [editItems, setEditItems] = useState([]);
+
+    let AnswerComponent = null;
+    if (division === 'W') {
+        if (type === 'T') {
+            AnswerComponent = PollDetailBasicTextAnswerComponent;
+        } else if (type === 'P') {
+            AnswerComponent = PollDetailBasicPhotoAnswerComponent;
+        }
+    }
+
+    useEffect(() => {
+        if (count > 0) {
+            if (items.length === 0) {
+                const initItems = [];
+                for (let itemCnt = 0; itemCnt < count; itemCnt++) {
+                    initItems.push({ imgUrl: '', linkUrl: '', title: '' });
+                }
+                setEditItems(initItems);
+            } else {
+                setEditItems(items);
+            }
+        }
+    }, [count, items]);
+
     return (
-        <Form.Row style={{ alignItems: 'center' }} className="mb-2">
-            {type !== 'P' && (
+        <>
+            {!commonUtil.isEmpty(AnswerComponent) && <AnswerComponent items={editItems} hasUrl={false} />}
+
+            {/*{type !== 'P' && (
                 <Col className="flex-fill">
                     <Form.Row className="mb-2">
                         <Col xs={12}>
@@ -40,7 +64,7 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
                 </Col>
             )}
 
-            {type !== 'M' && (
+            {type !== 'T' && (
                 <Col xs={3}>
                     <Form.Row>
                         <Col xs={12} className="mb-2 text-center">
@@ -60,8 +84,8 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
                         </Col>
                     </Form.Row>
                 </Col>
-            )}
-        </Form.Row>
+            )}*/}
+        </>
     );
 };
 

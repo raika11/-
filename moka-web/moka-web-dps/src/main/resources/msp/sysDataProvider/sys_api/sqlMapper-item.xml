@@ -201,6 +201,12 @@
     WHERE ART_PAGE_SEQ = #{id}
   </select>
 
+  <select id="cdnArticleList" parameterType="hashmap" resultType="map">
+    SELECT TOTAL_ID, CDN_URL_NEWS, CDN_URL_MNEWS
+    FROM TB_CDN_ARTICLE
+    WHERE USED_YN = 'Y'
+  </select>
+
   <select id="articlePageId" parameterType="hashmap" resultType="map">
     SELECT [ART_PAGE_SEQ]
     FROM TB_WMS_ARTICLE_PAGE

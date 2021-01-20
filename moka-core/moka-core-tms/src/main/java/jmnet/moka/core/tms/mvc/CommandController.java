@@ -1,8 +1,10 @@
 package jmnet.moka.core.tms.mvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.ref.Reference;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +77,9 @@ public class CommandController {
     @Lazy
     @Autowired
     private DomainResolver domainResolver;
+
+    @Autowired
+    private CdnRedirector cdnRedirector;
 
     @Qualifier("domainTemplateMerger")
     @Autowired
@@ -251,6 +257,32 @@ public class CommandController {
             }
         } catch (Exception e) {
             logger.warn("Reserved Purge Failed:{}", e.getMessage());
+            return responseException(e);
+        }
+    }
+
+    @ApiOperation(value = "CDN 기사 변경", nickname = "CDNChange")
+    @RequestMapping(method = RequestMethod.POST, path = "/command/cdnChange",
+            produces = "application/json")
+    @ApiImplicitParams({@ApiImplicitParam(name = "cdnArticle", value = "CDN 기사 목록", required = true,
+            dataType = "string", paramType = "query", defaultValue = "")})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class),
+                           @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> _cdnUpdate(HttpServletRequest request,
+            HttpServletResponse response) {
+        try {
+            String cdnArticle = request.getParameter("cdnArticle");
+            if (McpString.isNotEmpty(cdnArticle)) {
+                ObjectMapper mapper = ResourceMapper.getDefaultObjectMapper();
+                List<Map<String,Object>> cdnRedirectList = mapper.readValue(cdnArticle, new TypeReference<List<Map<String,Object>>>(){});
+                this.cdnRedirector.updateCdnRedirect(cdnRedirectList);
+            } else {
+                throw new CacheException("domainId not found");
+            }
+            ResultDTO<String> resultDTO = new ResultDTO<String>("CDN Article Updated");
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.warn("CDN Article update Failed:{}", e.getMessage());
             return responseException(e);
         }
     }

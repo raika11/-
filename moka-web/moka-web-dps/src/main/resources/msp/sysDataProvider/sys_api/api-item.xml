@@ -85,6 +85,12 @@
       id
     </keys>
   </api>
+  <api id="cdnArticle.list" expire="0">
+    <description>CDN으로 트래픽 분산된 기사와 URL정보를 반환한다.</description>
+    <parameter/>
+    <request>dps.item.cdnArticleList</request>
+    <keys/>
+  </api>
   <api id="articlePageId" expire="0">
     <description>기사타입에 해당하는 기사페이지 Id를 반환한다.</description>
     <parameter>

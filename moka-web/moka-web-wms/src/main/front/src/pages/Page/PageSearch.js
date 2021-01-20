@@ -1,12 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
-
 import { changeLatestDomainId } from '@store/auth';
 import { getPageTree, changeSearchOption, initialState } from '@store/page';
 
@@ -16,20 +13,12 @@ import { getPageTree, changeSearchOption, initialState } from '@store/page';
 const PageSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch } = useSelector(
-        (store) => ({
-            latestDomainId: store.auth.latestDomainId,
-            domainList: store.auth.domainList,
-            search: store.page.search,
-        }),
-        shallowEqual,
-    );
+    const { latestDomainId, domainList } = useSelector(({ auth }) => ({
+        latestDomainId: auth.latestDomainId,
+        domainList: auth.domainList,
+    }));
+    const storeSearch = useSelector(({ page }) => page.search);
     const [search, setSearch] = React.useState(initialState.search);
-
-    useEffect(() => {
-        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
-        setSearch(storeSearch);
-    }, [storeSearch]);
 
     /**
      * 검색
@@ -42,11 +31,29 @@ const PageSearch = ({ match }) => {
                 }),
             ),
         );
-        history.push(match.patch);
-    }, [dispatch, history, match.patch, search]);
+    }, [dispatch, search]);
+
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+
+        if (name === 'domainId') {
+            dispatch(changeLatestDomainId(e.target.value));
+            history.push(match.path);
+        } else {
+            setSearch({ ...search, [name]: value });
+        }
+    };
 
     useEffect(() => {
-        // latestDomainId 변경 => 템플릿의 search.domainId 변경
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        // latestDomainId 변경 => search.domainId 변경
         if (latestDomainId && latestDomainId !== search.domainId) {
             dispatch(
                 getPageTree(
@@ -59,22 +66,11 @@ const PageSearch = ({ match }) => {
         }
     }, [dispatch, latestDomainId, search]);
 
-    /**
-     * 도메인 변경. 다른검색조건 초기화(즉시조회)
-     */
-    const handleChangeDomain = useCallback(
-        (e) => {
-            dispatch(changeLatestDomainId(e.target.value));
-            history.push(match.path);
-        },
-        [dispatch, history, match.path],
-    );
-
     return (
         <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
-                <MokaInput as="select" value={search.domainId || undefined} onChange={handleChangeDomain}>
+                <MokaInput as="select" name="domainId" value={search.domainId} onChange={handleChangeValue}>
                     {domainList.map((domain) => (
                         <option key={domain.domainId} value={domain.domainId}>
                             {domain.domainName}
@@ -85,16 +81,7 @@ const PageSearch = ({ match }) => {
             <Form.Row>
                 {/* 검색조건 */}
                 <Col xs={4} className="p-0 pr-2">
-                    <MokaInput
-                        as="select"
-                        value={search.searchType || undefined}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                searchType: e.target.value,
-                            });
-                        }}
-                    >
+                    <MokaInput as="select" value={search.searchType} name="searchType" onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
@@ -104,16 +91,7 @@ const PageSearch = ({ match }) => {
                 </Col>
                 {/* 키워드 */}
                 <Col xs={8} className="p-0">
-                    <MokaSearchInput
-                        value={search.keyword}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                keyword: e.target.value,
-                            });
-                        }}
-                        onSearch={handleSearch}
-                    />
+                    <MokaSearchInput value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
                 </Col>
             </Form.Row>
         </Form>

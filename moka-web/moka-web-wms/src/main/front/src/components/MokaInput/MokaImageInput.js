@@ -208,7 +208,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                         as="div"
                     >
                         {/* 이미지 미리보기 */}
-                        <Figure.Image width={width} height={height} className="center-image" alt={alt} src={imgSrc} ref={imgRef} />
+                        <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} />
 
                         {/* input file */}
                         {alert === false && imgSrc === null && <input {...inputProps} />}

@@ -2,11 +2,11 @@ import React from 'react';
 import Search from './ArticlePageSearch';
 import AgGrid from './ArticlePageAgGrid';
 
-const articlePageList = ({ onDelete }) => {
+const articlePageList = (props) => {
     return (
         <>
-            <Search />
-            <AgGrid onDelete={onDelete} />
+            <Search {...props} />
+            <AgGrid {...props} />
         </>
     );
 };

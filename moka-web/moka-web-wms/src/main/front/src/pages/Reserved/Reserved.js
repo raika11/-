@@ -24,7 +24,7 @@ const Reserved = ({ match }) => {
      */
     const handleClickDelete = (reserved) => {
         if (reserved.usedYn === 'Y') {
-            messageBox.alert('사용중인 값입니다\n삭제할 수 없습니다');
+            messageBox.alert('사용 중인 값입니다.\n삭제할 수 없습니다.');
         } else {
             messageBox.confirm(
                 '선택하신 예약어를 삭제하시겠습니까?',

@@ -44,7 +44,7 @@ const TemplateEditor = (props) => {
             setDefalutValue('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [template.templateSeq]);
+    }, [template.templateSeq, template.templateName]);
 
     useEffect(() => {
         // 템플릿의 도메인ID를 latestDomainId에 저장

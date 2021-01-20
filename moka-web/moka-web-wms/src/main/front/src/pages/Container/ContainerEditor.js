@@ -43,7 +43,7 @@ const ContainerEditor = (props) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [container.containerSeq]);
+    }, [container.containerSeq, container.containerName]);
 
     useEffect(() => {
         // 컨테이너의 도메인ID를 latestDomainId에 저장

@@ -126,13 +126,13 @@ function* saveArticlePage({ payload: { actions, callback } }) {
             // 목록 다시 검색
             yield put({ type: act.GET_ARTICLE_PAGE_LIST });
         } else {
-            const { body } = response.data.body;
+            const { body } = response.data;
 
             if (body && body.list && Array.isArray(body.list)) {
                 // invalidList 셋팅
                 yield put({
                     type: act.CHANGE_INVALID_LIST,
-                    payload: response.data.body.list,
+                    payload: body.list,
                 });
             }
         }

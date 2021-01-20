@@ -42,7 +42,7 @@ const ArticlePageEditor = (props) => {
             setDefalutValue('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [articlePage.artPageSeq]);
+    }, [articlePage.artPageSeq, articlePage.artPageName]);
 
     useEffect(() => {
         // 기사페이지의 도메인ID를 latestDomainId에 저장
@@ -65,23 +65,24 @@ const ArticlePageEditor = (props) => {
     }, [dispatch, artPageSeq]);
 
     useEffect(() => {
-        let isInvalid = false;
-
-        // invalidList 처리
-        invalidList.forEach((i) => {
-            if (i.field === 'artPageBody') {
-                setError({
-                    line: Number(i.extra),
-                    message: i.reason,
-                });
-                isInvalid = isInvalid || true;
-            }
-        });
-
-        if (!isInvalid) {
+        // 본문 에러만 체크
+        const bodyErrorList = invalidList.filter((e) => e.field === 'artPageBody');
+        if (bodyErrorList.length > 0) {
+            setError({
+                line: Number(bodyErrorList[0].extra),
+                message: bodyErrorList[0].reason,
+            });
+        } else {
             setError({});
         }
     }, [invalidList]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearArticlePage());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCardEditor

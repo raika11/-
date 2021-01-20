@@ -1,35 +1,25 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
-
 import { changeLatestDomainId } from '@store/auth';
 import { getArticlePageList, changeSearchOption, initialState } from '@store/articlePage';
+
 /**
  * 관련 기사페이지 검색 컴포넌트
  */
-const ArticlePageSearch = () => {
+const ArticlePageSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch, searchTypeList } = useSelector(
-        (store) => ({
-            latestDomainId: store.auth.latestDomainId,
-            domainList: store.auth.domainList,
-            search: store.articlePage.search,
-            searchTypeList: store.articlePage.searchTypeList,
-        }),
-        shallowEqual,
-    );
+    const { latestDomainId, domainList } = useSelector(({ auth }) => ({
+        latestDomainId: auth.latestDomainId,
+        domainList: auth.domainList,
+    }));
+    const storeSearch = useSelector(({ articlePage }) => articlePage.search);
     const [search, setSearch] = React.useState(initialState.search);
-
-    useEffect(() => {
-        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
-        setSearch(storeSearch);
-    }, [storeSearch]);
 
     /**
      * 검색
@@ -46,7 +36,7 @@ const ArticlePageSearch = () => {
     }, [dispatch, search]);
 
     useEffect(() => {
-        // latestDomainId 변경 => 템플릿의 search.domainId 변경
+        // latestDomainId 변경 => search.domainId 변경
         if (latestDomainId !== search.domainId) {
             dispatch(
                 getArticlePageList(
@@ -60,16 +50,20 @@ const ArticlePageSearch = () => {
         }
     }, [dispatch, latestDomainId, search]);
 
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
     return (
         <Form className="mb-2">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput
                     as="select"
-                    value={search.domainId || undefined}
+                    value={search.domainId}
                     onChange={(e) => {
                         dispatch(changeLatestDomainId(e.target.value));
-                        history.push('/article-page');
+                        history.push(match.path);
                     }}
                 >
                     {domainList.map((domain) => (
@@ -81,10 +75,10 @@ const ArticlePageSearch = () => {
             </Form.Row>
             <Form.Group as={Row}>
                 {/* 검색조건 */}
-                <Col xs={4} className="p-0 pr-2">
+                <Col xs={5} className="p-0 pr-2">
                     <MokaInput
                         as="select"
-                        value={search.searchType || undefined}
+                        value={search.searchType}
                         onChange={(e) => {
                             setSearch({
                                 ...search,
@@ -92,7 +86,7 @@ const ArticlePageSearch = () => {
                             });
                         }}
                     >
-                        {searchTypeList.map((type) => (
+                        {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>
@@ -100,7 +94,7 @@ const ArticlePageSearch = () => {
                     </MokaInput>
                 </Col>
                 {/* 검색어 */}
-                <Col xs={8} className="p-0">
+                <Col xs={7} className="p-0">
                     <MokaSearchInput
                         value={search.keyword}
                         onChange={(e) => {

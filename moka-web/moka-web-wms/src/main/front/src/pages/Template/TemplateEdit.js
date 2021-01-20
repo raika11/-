@@ -99,7 +99,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                                 return;
                             }
                         }
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),

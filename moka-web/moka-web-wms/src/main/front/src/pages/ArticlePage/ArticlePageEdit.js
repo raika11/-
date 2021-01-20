@@ -12,7 +12,7 @@ import commonUtil from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
-const ArticlePageEdit = ({ onDelete }) => {
+const ArticlePageEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector(
@@ -44,32 +44,8 @@ const ArticlePageEdit = ({ onDelete }) => {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [previewTotalId, setPreviewTotalId] = useState('');
 
-    useEffect(() => {
-        if (articlePage.artPageSeq) {
-            setBtnDisabled(false);
-        } else {
-            changeArtType(initialState.articlePage.artType);
-            setBtnDisabled(true);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, articlePage.artPageSeq]);
-
-    useEffect(() => {
-        setTemp({
-            ...articlePage,
-        });
-        setPreviewTotalId(articlePage.previewTotalId);
-    }, [articlePage]);
-
-    useEffect(() => {
-        if (invalidList.length > 0) {
-            setError(invalidListToError(invalidList));
-            messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
-        }
-    }, [invalidList]);
-
     /**
-     * 각 항목별 값 변경
+     * 입력값 변경
      */
     const handleChangeValue = useCallback(
         ({ target }) => {
@@ -135,25 +111,43 @@ const ArticlePageEdit = ({ onDelete }) => {
     );
 
     /**
-     * 페이지 등록
-     * @param {object} tmp 페이지
+     * 기사페이지 저장 호출
+     * @param {object} tmp 기사페이지
+     */
+    const saveCallback = useCallback(
+        (tmp) => {
+            dispatch(
+                saveArticlePage({
+                    actions: [changeArticlePage(tmp)],
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            history.push(`${match.path}/${body.artPageSeq}`);
+                        } else {
+                            if (body?.list) {
+                                const bodyChk = body.list.filter((e) => e.field === 'artPageBody');
+                                if (bodyChk.length > 0) {
+                                    messageBox.alert('Tems 문법 사용이 비정상적으로 사용되었습니다\n수정 확인후 다시 저장해 주세요', () => {});
+                                    return;
+                                }
+                            }
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch, history, match.path],
+    );
+
+    /**
+     * 기사페이지 저장
+     * @param {object} tmp 기사페이지
      */
     const submitPage = useCallback(
         (tmp) => {
             if (tmp.artPageSeq) {
-                dispatch(
-                    saveArticlePage({
-                        actions: [changeArticlePage(tmp)],
-                        callback: ({ header, body }) => {
-                            if (header.success) {
-                                toast.success(header.message);
-                                history.push(`/article-page/${body.artPageSeq}`);
-                            } else {
-                                messageBox.alert(header.message);
-                            }
-                        },
-                    }),
-                );
+                saveCallback(tmp);
             } else {
                 dispatch(
                     existsArtType({
@@ -167,30 +161,18 @@ const ArticlePageEdit = ({ onDelete }) => {
                                 setError({ ...error, artType: true });
                                 messageBox.alert(header.message);
                             } else {
-                                dispatch(
-                                    saveArticlePage({
-                                        actions: [changeArticlePage(tmp)],
-                                        callback: ({ header, body }) => {
-                                            if (header.success) {
-                                                toast.success(header.message);
-                                                history.push(`/article-page/${body.artPageSeq}`);
-                                            } else {
-                                                messageBox.alert(header.message);
-                                            }
-                                        },
-                                    }),
-                                );
+                                saveCallback(tmp);
                             }
                         },
                     }),
                 );
             }
         },
-        [dispatch, error, history, latestDomainId],
+        [dispatch, error, latestDomainId, saveCallback],
     );
 
     /**
-     * 저장 이벤트
+     * 저장 클릭
      * @param {object} e 이벤트
      */
     const handleClickSave = (e) => {
@@ -234,7 +216,7 @@ const ArticlePageEdit = ({ onDelete }) => {
             };
             dispatch(previewPage(option));
         } else {
-            toast.error('기사ID를 입력해 주세요.');
+            messageBox.alert('기사ID를 입력하세요');
         }
     }, [artPageBody, articlePage, dispatch, previewTotalId]);
 
@@ -242,32 +224,55 @@ const ArticlePageEdit = ({ onDelete }) => {
      * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
      */
     const handleClickW3COpen = useCallback(() => {
-        const tempPage = produce(articlePage, (draft) => {
-            draft.artPageBody = artPageBody;
-        });
+        if (previewTotalId) {
+            const tempPage = produce(articlePage, (draft) => {
+                draft.artPageBody = artPageBody;
+            });
 
-        const option = {
-            content: artPageBody,
-            articlePage: tempPage,
-            totalId: previewTotalId,
-            callback: ({ header, body }) => {
-                if (header.success) {
-                    commonUtil.popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
-                } else {
-                    toast.fail(header.message || 'W3C검사에 실패했습니다');
-                }
-            },
-        };
-        dispatch(w3cArticlePage(option));
+            const option = {
+                content: artPageBody,
+                articlePage: tempPage,
+                totalId: previewTotalId,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        commonUtil.popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
+                    } else {
+                        toast.fail(header.message || 'W3C검사에 실패했습니다');
+                    }
+                },
+            };
+            dispatch(w3cArticlePage(option));
+        } else {
+            messageBox.alert('기사ID를 입력하세요');
+        }
     }, [articlePage, artPageBody, dispatch, previewTotalId]);
 
     /**
      * 취소 버튼
      */
-    const handleClickCancle = () => {
-        history.push('/article-page');
-        dispatch(clearArticlePage());
-    };
+    const handleClickCancle = () => history.push(match.path);
+
+    useEffect(() => {
+        if (articlePage.artPageSeq) {
+            setBtnDisabled(false);
+        } else {
+            changeArtType(initialState.articlePage.artType);
+            setBtnDisabled(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, articlePage.artPageSeq]);
+
+    useEffect(() => {
+        setTemp(articlePage);
+        setPreviewTotalId(articlePage.previewTotalId);
+    }, [articlePage]);
+
+    useEffect(() => {
+        if (invalidList.length > 0) {
+            setError(invalidListToError(invalidList));
+            messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
+        }
+    }, [invalidList]);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title={`기사페이지 ${articlePage.artPageSeq ? '정보' : '등록'}`} loading={loading}>

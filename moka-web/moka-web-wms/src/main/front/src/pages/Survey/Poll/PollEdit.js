@@ -9,6 +9,7 @@ import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPoll, GET_POLL, clearPoll } from '@store/survey/poll/pollAction';
 import commonUtil from '@utils/commonUtil';
+import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
 
 const PollEdit = () => {
     const { pollSeq } = useParams();
@@ -447,6 +448,7 @@ const PollEdit = () => {
                             }
                         >
                             {edit.pollDiv === 'W' && <PollDetailBasicAnswerContainer count={edit.itemCnt} type={edit.pollType} items={edit.pollItems} />}
+                            {edit.pollDiv === 'V' && <PollDetailCompareAnswerContainer type={edit.pollType} items={edit.pollItems} />}
                         </MokaCard>
                     </Form.Row>
                 )}

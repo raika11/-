@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PollDetailBasicTextAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicTextAnswerComponent';
 import commonUtil from '@utils/commonUtil';
 import PollDetailBasicPhotoAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicPhotoAnswerComponent';
+import PollDetailBasicCombineAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicCombineAnswerComponent';
 
 const PollDetailQuestionComponent = ({ division, items, count, type, onChange }) => {
     const [editItems, setEditItems] = useState([]);
@@ -12,6 +13,8 @@ const PollDetailQuestionComponent = ({ division, items, count, type, onChange })
             AnswerComponent = PollDetailBasicTextAnswerComponent;
         } else if (type === 'P') {
             AnswerComponent = PollDetailBasicPhotoAnswerComponent;
+        } else if (type === 'M') {
+            AnswerComponent = PollDetailBasicCombineAnswerComponent;
         }
     }
 
@@ -31,7 +34,7 @@ const PollDetailQuestionComponent = ({ division, items, count, type, onChange })
 
     return (
         <>
-            {!commonUtil.isEmpty(AnswerComponent) && <AnswerComponent items={editItems} hasUrl={false} />}
+            {!commonUtil.isEmpty(AnswerComponent) && editItems.map((editItem, index) => <AnswerComponent item={editItem} index={index} hasUrl={false} />)}
 
             {/*{type !== 'P' && (
                 <Col className="flex-fill">

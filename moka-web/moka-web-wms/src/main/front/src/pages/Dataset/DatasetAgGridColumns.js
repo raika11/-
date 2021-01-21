@@ -35,11 +35,15 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 36,
+        width: 35,
         cellStyle: { fontSize: '12px' },
         cellRendererFramework: (row) => {
             const { data } = row;
-            return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
+            if (data.autoCreateYn === 'Y') {
+                return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;
+            } else {
+                return null;
+            }
         },
     },
 ];

@@ -54,6 +54,10 @@ const Dataset = ({ match }) => {
      * 삭제 클릭
      */
     const handleClickDelete = (dataset) => {
+        if (dataset.autoCreateYn !== 'Y') {
+            messageBox.alert('수동 데이터셋은 삭제할 수 없습니다.');
+            return;
+        }
         dispatch(
             hasRelationList({
                 datasetSeq: dataset.datasetSeq,

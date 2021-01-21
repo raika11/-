@@ -36,16 +36,18 @@ public class FtpClientPool extends BaseObjectPool<FTPClient> {
      * @param ftpClientFactory ftp factory
      * @throws Exception 에러 처리
      */
-    public FtpClientPool(FtpClientFactory ftpClientFactory)
-            throws Exception {
+    public FtpClientPool(FtpClientFactory ftpClientFactory) {
         this(DEFAULT_POOL_SIZE, ftpClientFactory);
     }
 
-    public FtpClientPool(int poolSize, FtpClientFactory factory)
-            throws Exception {
+    public FtpClientPool(int poolSize, FtpClientFactory factory) {
         this.ftpClientFactory = factory;
         ftpBlockingQueue = new ArrayBlockingQueue<>(poolSize);
         initPool(poolSize);
+    }
+
+    public FtpClientFactory getFactory() {
+        return this.ftpClientFactory;
     }
 
     /**
@@ -54,11 +56,14 @@ public class FtpClientPool extends BaseObjectPool<FTPClient> {
      * @param maxPoolSize maximum number of connections
      * @throws Exception 에러 처리
      */
-    private void initPool(int maxPoolSize)
-            throws Exception {
+    private void initPool(int maxPoolSize) {
         for (int i = 0; i < maxPoolSize; i++) {
             // Add objects to the pool
-            addObject();
+            try {
+                addObject();
+            } catch (Exception ex) {
+                log.error(ex.toString());
+            }
         }
     }
 

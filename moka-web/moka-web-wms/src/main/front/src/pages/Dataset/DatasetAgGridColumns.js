@@ -7,14 +7,15 @@ export const columnDefs = [
         headerName: 'ID',
         field: 'datasetSeq',
         cellStyle: { fontSize: '12px' },
+        tooltipField: 'datasetSeq',
         width: 50,
     },
     {
         headerName: '데이터셋명',
         field: 'datasetName',
-        // cellClass: 'ag-cell-center',
+        tooltipField: 'datasetName',
         cellStyle: { fontSize: '12px' },
-        width: 204,
+        width: 190,
         flex: 1,
     },
     {
@@ -34,7 +35,7 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 50,
+        width: 36,
         cellStyle: { fontSize: '12px' },
         cellRendererFramework: (row) => {
             const { data } = row;

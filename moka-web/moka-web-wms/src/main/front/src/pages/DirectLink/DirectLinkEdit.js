@@ -340,7 +340,29 @@ const DirectLinkEdit = ({ history, match }) => {
     }, []);
 
     return (
-        <MokaCard width={535} title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
+        <MokaCard
+            width={535}
+            title={`사이트 바로 가기 ${linkSeq ? '정보' : '등록'}`}
+            titleClassName="mb-0"
+            loading={loading}
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={[
+                {
+                    text: '저장',
+                    variant: 'positive',
+                    onClick: handleClickSave,
+                    className: 'mr-2',
+                    disabled: inputBoxDisabled,
+                },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleClickCancleButton,
+                    disabled: inputBoxDisabled,
+                },
+            ]}
+        >
             <Form className="mb-gutter">
                 {/* 사용여부 */}
                 <Form.Row className="mb-2">
@@ -534,17 +556,6 @@ const DirectLinkEdit = ({ history, match }) => {
                     </Col>
                 </Form.Row>
             </Form>
-
-            <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                <div className="d-flex justify-content-center">
-                    <Button variant="positive" className="mr-05" onClick={handleClickSave} disabled={inputBoxDisabled}>
-                        저장
-                    </Button>
-                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={inputBoxDisabled}>
-                        취소
-                    </Button>
-                </div>
-            </div>
         </MokaCard>
     );
 };

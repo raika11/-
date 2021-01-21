@@ -4,11 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
-import { initialState, GET_DATASET_LIST_MODAL, getDatasetApiList } from '@store/dataset';
+import { initialState, GET_DATASET_API_LIST, getDatasetApiList } from '@store/dataset';
 import columnDefs from './DatasetApiListModalColumns';
 import { MODAL_PAGESIZE_OPTIONS } from '@/constants';
-
-export const { searchTypeList } = initialState;
 
 const propTypes = {
     show: PropTypes.bool,
@@ -39,11 +37,8 @@ const defaultProps = {};
 const DatsetListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
-
-    const { apiCodeId, loading } = useSelector((store) => ({
-        apiCodeId: store.dataset.search.apiCodeId,
-        loading: store.loading[GET_DATASET_LIST_MODAL],
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_DATASET_API_LIST]);
+    const apiCodeId = useSelector(({ dataset }) => dataset.search.apiCodeId);
 
     // state
     const [search, setSearch] = useState(initialState.search);
@@ -53,11 +48,6 @@ const DatsetListModal = (props) => {
     const [selectedDataset, setSelectedDataset] = useState({});
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
-
-    useEffect(() => {
-        // 선택된 값 셋팅
-        setSelected(defaultSelected);
-    }, [defaultSelected]);
 
     /**
      * 리스트 조회 콜백
@@ -85,6 +75,7 @@ const DatsetListModal = (props) => {
     const handleHide = () => {
         setRowData([]);
         setTotal(initialState.total);
+        setSearch({});
         setError(null);
         setCnt(0);
         onHide();
@@ -137,6 +128,9 @@ const DatsetListModal = (props) => {
         setSelected(data.id);
     }, []);
 
+    /**
+     * 목록 셀렉트
+     */
     const handleSelectionChanged = useCallback(
         (selectedNodes) => {
             if (selectedNodes.length > 0) {
@@ -149,6 +143,11 @@ const DatsetListModal = (props) => {
         },
         [selected],
     );
+
+    useEffect(() => {
+        // 선택된 값 셋팅
+        setSelected(defaultSelected);
+    }, [defaultSelected]);
 
     useEffect(() => {
         if (show && cnt < 1) {
@@ -193,7 +192,7 @@ const DatsetListModal = (props) => {
                                 });
                             }}
                         >
-                            {searchTypeList.map((type) => (
+                            {initialState.apiSearchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>
@@ -210,9 +209,7 @@ const DatsetListModal = (props) => {
                                     keyword: e.target.value,
                                 });
                             }}
-                            onSearch={() => {
-                                handleSearch(search);
-                            }}
+                            onSearch={() => handleSearch(search)}
                         />
                     </Col>
                 </Form.Row>

@@ -1,12 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
-
 import { changeLatestDomainId } from '@store/auth';
 import { getComponentList, changeSearchOption, initialState } from '@store/component';
 import { getTpZone } from '@store/codeMgt';

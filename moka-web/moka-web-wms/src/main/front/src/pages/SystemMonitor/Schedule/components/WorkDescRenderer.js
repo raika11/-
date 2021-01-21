@@ -1,7 +1,10 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import { unescapeHtml } from '@utils/convertUtil';
 
-const RunStateDeseRenderer = forwardRef(({ data }, ref) => {
+/**
+ * 테이블 URL, 배포 경로, 설명
+ */
+const WorkDescRenderer = forwardRef(({ data }, ref) => {
     useImperativeHandle(ref, () => ({
         refresh: () => false,
     }));
@@ -19,4 +22,4 @@ const RunStateDeseRenderer = forwardRef(({ data }, ref) => {
     );
 });
 
-export default RunStateDeseRenderer;
+export default WorkDescRenderer;

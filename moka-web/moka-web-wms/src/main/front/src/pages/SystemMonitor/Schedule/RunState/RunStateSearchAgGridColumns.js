@@ -1,7 +1,7 @@
 import React from 'react';
-import RunStateDescRenderer from './components/RunStateDescRenderer';
-import RunStateDtRenderer from './components/RunStateDtRenderer';
-import RunStateErrorRenderer from './components/RunStateErrorRenderer';
+import WorkDescRenderer from '../components/WorkDescRenderer';
+import WorkDateRenderer from '../components/WorkDateRenderer';
+import WorkErrorRenderer from '../components/WorkErrorRenderer';
 
 export default [
     {
@@ -28,21 +28,21 @@ export default [
         cellStyle: { lineHeight: '18px', height: '60px' },
         autoHeight: true,
         flex: 1,
-        cellRendererFramework: (row) => <RunStateDescRenderer {...row} />,
+        cellRendererFramework: (row) => <WorkDescRenderer {...row} />,
     },
     {
         headerName: '결과/시간(ms)',
         field: 'stateDt',
         cellStyle: { fontSize: '12px' },
         width: 100,
-        cellRendererFramework: (row) => <RunStateDtRenderer {...row} />,
+        cellRendererFramework: (row) => <WorkDateRenderer {...row} />,
     },
     {
         headerName: '마지막 실행 정보',
         field: 'lastInfo',
         cellStyle: { fontSize: '12px' },
         width: 150,
-        cellRendererFramework: (row) => <RunStateErrorRenderer {...row} />,
+        cellRendererFramework: (row) => <WorkErrorRenderer {...row} />,
         tooltipField: 'error',
     },
 ];
@@ -56,7 +56,7 @@ export const rowData = [
         route: '=>{ND@192.168.71.232}CMS_rss.joins.comjoins_money_list.xml',
         desc: '[JOINS 뉴스 RSS 생성]',
         create: '200/0',
-        distribute: '-1/0',
+        deploy: '-1/0',
         lastDt: '2020-01-06 15:20:22',
         error: 'FTP 접속 오류로 배포 실패 FTP 접속 오류로 배포 실패 FTP 접속 오류로 배포 실패 FTP 접속 오류로 배포 실패',
     },
@@ -68,7 +68,7 @@ export const rowData = [
         route: '=> {FTP@ftp.static.joins.com}/data/bulk/kbcard/JA.xml',
         desc: '[[KB카드]중앙일보 골프 데이터]',
         create: '200/78',
-        distribute: '0/94',
+        deploy: '0/94',
         lastDt: '2020-01-06 15:00:00',
         error: null,
     },

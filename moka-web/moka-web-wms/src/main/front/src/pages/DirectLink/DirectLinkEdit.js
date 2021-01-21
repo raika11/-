@@ -11,6 +11,7 @@ import { MokaCard, MokaInputLabel } from '@components';
 import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
 
 const DATEFORMAT = 'YYYY-MM-DD';
+const URL_ERROR = '정확한 URL을 입력하세요';
 
 /**
  * 사이트 바로 가기 등록/수정창
@@ -110,7 +111,7 @@ const DirectLinkEdit = ({ history, match }) => {
             if (!validateLinkCheck()) {
                 errList.push({
                     field: 'linkUrl',
-                    reason: '정확한 URL을 입력해 주세요.',
+                    reason: URL_ERROR,
                 });
                 isInvalid = isInvalid || true;
             }
@@ -151,7 +152,7 @@ const DirectLinkEdit = ({ history, match }) => {
 
     // URL 체크.
     const validateLink = () => {
-        setError({ ...error, linkUrl: validateLinkCheck() });
+        setError({ ...error, linkUrl: !validateLinkCheck(), linkUrlMessage: URL_ERROR });
     };
 
     /**
@@ -364,7 +365,15 @@ const DirectLinkEdit = ({ history, match }) => {
                 {/* 링크 */}
                 <Form.Row className="mb-2">
                     <Col xs={9} className="p-0">
-                        <MokaInputLabel label="LINK" className="mb-0" name="linkUrl" value={temp.linkUrl} onChange={handleChangeValue} isInvalid={error.linkUrl} />
+                        <MokaInputLabel
+                            label="LINK"
+                            className="mb-0"
+                            name="linkUrl"
+                            value={temp.linkUrl}
+                            onChange={handleChangeValue}
+                            isInvalid={error.linkUrl}
+                            invalidMessage={error.linkUrlMessage}
+                        />
                     </Col>
                     <Col xs={3} className="p-0 pl-2">
                         <Button variant="outline-neutral" onClick={validateLink} className="w-100">
@@ -464,9 +473,8 @@ const DirectLinkEdit = ({ history, match }) => {
                             ref={imgFileRef}
                             inputProps={{
                                 width: '100%',
-                                // width: 50,
                                 height: 90,
-                                img: `${temp.imgUrl}?${temp.linkSeq}`,
+                                img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null,
                                 selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                                 setFileValue,
                             }}

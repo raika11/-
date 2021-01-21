@@ -29,7 +29,7 @@ const DirectLink = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={1040} className="mr-gutter" bodyClassName="d-flex flex-column" title="사이트 바로 가기">
+            <MokaCard width={940} className="mr-gutter" bodyClassName="d-flex flex-column" title="사이트 바로 가기">
                 <Suspense>
                     <DirectLinkList match={match} />
                 </Suspense>

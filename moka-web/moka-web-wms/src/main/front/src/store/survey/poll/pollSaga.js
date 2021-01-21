@@ -30,7 +30,7 @@ function toKorFromCode(code, codes) {
     return codeItem ? codeItem.value : '';
 }
 
-function toPollList(list, codes) {
+function toPollListData(list, codes) {
     return list.map((data) => {
         const startDt = data.startDt && moment(data.startDt).format(DB_DATEFORMAT);
         const endDt = data.endDt && moment(data.endDt).format(DB_DATEFORMAT);
@@ -59,7 +59,7 @@ function* getPollList({ type, payload }) {
 
         if (response.data.header.success) {
             const codes = yield select((store) => store.poll.codes);
-            const list = toPollList(response.data.body.list, codes);
+            const list = toPollListData(response.data.body.list, codes);
             yield put({
                 type: `${type}_SUCCESS`,
                 payload: produce(response, (draft) => {
@@ -75,15 +75,23 @@ function* getPollList({ type, payload }) {
     yield put(finishLoading(type));
 }
 
+function toPollData(poll) {
+    return {
+        ...poll,
+        title: unescapeHtml(poll.title),
+    };
+}
+
 function* getPoll({ type, payload }) {
     yield put(startLoading(type));
     try {
         const response = yield call(pollApi.getPoll, payload);
 
         if (response.data.header.success) {
+            const poll = toPollData(response.data.body);
             yield put({
                 type: `${type}_SUCCESS`,
-                payload: response.data.body,
+                payload: poll,
             });
         } else {
         }

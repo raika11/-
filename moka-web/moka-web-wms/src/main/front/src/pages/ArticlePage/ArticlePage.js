@@ -15,6 +15,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import ArticlePageEditor from './ArticlePageEditor';
 import ArticlePageEdit from './ArticlePageEdit';
 const ArticlePageList = React.lazy(() => import('./ArticlePageList'));
+
 // relations
 const LookupArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/LookupArticlePageList'));
 const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
@@ -187,7 +188,7 @@ const ArticlePage = ({ match }) => {
                 foldable
             >
                 <Suspense>
-                    <ArticlePageList onDelete={handleClickDelete} />
+                    <ArticlePageList match={match} onDelete={handleClickDelete} />
                 </Suspense>
             </MokaCard>
 
@@ -206,7 +207,7 @@ const ArticlePage = ({ match }) => {
                             onSelectNav={(idx) => setActiveTabIdx(idx)}
                             tabWidth={412}
                             tabs={[
-                                <ArticlePageEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />,
+                                <ArticlePageEdit show={activeTabIdx === 0} match={match} onDelete={handleClickDelete} />,
                                 <Suspense fallback={<MokaLoader />}>
                                     <LookupArticlePageList show={activeTabIdx === 1} seqType={ITEM_AP} seq={articlePage.artPageSeq} onLoad={handleClickArticlePageLoad} />
                                 </Suspense>,

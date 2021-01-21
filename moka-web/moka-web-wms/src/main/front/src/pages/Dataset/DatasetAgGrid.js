@@ -8,40 +8,22 @@ import { useHistory } from 'react-router-dom';
 /**
  * 데이터셋 AgGrid 컴포넌트
  */
-const DatasetAgGrid = (props) => {
-    const { onDelete } = props;
+const DatasetAgGrid = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
     const [datasetRows, setDatasetRows] = useState([]);
-
-    const { dataset, list, search: storeSearch, total, loading } = useSelector(
-        (store) => ({
-            dataset: store.dataset.dataset,
-            list: store.dataset.list,
-            search: store.dataset.search,
-            total: store.dataset.total,
-            loading: store.loading[GET_DATASET_LIST],
+    const loading = useSelector(({ loading }) => loading[GET_DATASET_LIST]);
+    const { dataset, list, search: storeSearch, total } = useSelector(
+        ({ dataset }) => ({
+            dataset: dataset.dataset,
+            list: dataset.list,
+            search: dataset.search,
+            total: dataset.total,
         }),
         shallowEqual,
     );
 
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
-    useEffect(() => {
-        setDatasetRows(
-            list.map((row) => ({
-                id: String(row.datasetSeq),
-                datasetSeq: row.datasetSeq,
-                datasetName: row.datasetName,
-                autoCreateYn: row.autoCreateYn,
-                usedYn: row.usedYn,
-                onDelete,
-            })),
-        );
-    }, [list, onDelete]);
     /**
      * 테이블에서 검색옵션 변경
      */
@@ -59,7 +41,24 @@ const DatasetAgGrid = (props) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback((rowData) => history.push(`/dataset/${rowData.datasetSeq}`), [history]);
+    const handleRowClicked = useCallback((rowData) => history.push(`${match.path}/${rowData.datasetSeq}`), [history, match.path]);
+
+    useEffect(() => {
+        setDatasetRows(
+            list.map((row) => ({
+                id: String(row.datasetSeq),
+                datasetSeq: row.datasetSeq,
+                datasetName: row.datasetName,
+                autoCreateYn: row.autoCreateYn,
+                usedYn: row.usedYn,
+                onDelete,
+            })),
+        );
+    }, [list, onDelete]);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     return (
         <MokaTable
@@ -75,6 +74,7 @@ const DatasetAgGrid = (props) => {
             onChangeSearchOption={handleChangeSearchOption}
             onRowClicked={handleRowClicked}
             suppressRefreshCellAfterUpdate
+            preventRowClickCell={['delete']}
         />
     );
 };

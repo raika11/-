@@ -2,67 +2,78 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
-
 import { ITEM_DS } from '@/constants';
-import { MokaCard, MokaIcon } from '@components';
-import { MokaIconTabs } from '@/components/MokaTabs';
+import { MokaCard, MokaIcon, MokaLoader, MokaIconTabs } from '@components';
 import { useDispatch } from 'react-redux';
 import { clearStore, deleteDataset, hasRelationList } from '@store/dataset';
 import toast, { messageBox } from '@utils/toastUtil';
 
-const DatasetEdit = React.lazy(() => import('./DatasetEdit'));
+import DatasetEdit from './DatasetEdit';
+import RelationInPageList from '@pages/Page/components/RelationInPageList';
 const DatasetList = React.lazy(() => import('./DatasetList'));
-
-// relations
-const RelationInPageList = React.lazy(() => import('@pages/Page/components/RelationInPageList'));
 const RelationInArticlePageList = React.lazy(() => import('@pages/ArticlePage/components/RelationInArticlePageList'));
 const RelationInContainerList = React.lazy(() => import('@pages/Container/components/RelationInContainerList'));
 const RelationInComponentList = React.lazy(() => import('@pages/Component/components/RelationInComponentList'));
 
-const Dataset = () => {
+/**
+ * 데이터셋 관리
+ */
+const Dataset = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const { dataset } = useSelector((store) => ({ dataset: store.dataset.dataset }));
+    const dataset = useSelector(({ dataset }) => dataset.dataset);
 
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
-    const deleteCallback = (response) => {
-        const { header, body, payload } = response;
-        if (header.success) {
-            if (!body) {
+    /**
+     * 삭제 콜백
+     * @param {object} dataset dataset
+     */
+    const deleteCallback = (dataset) => {
+        messageBox.confirm(
+            `${dataset.datasetSeq}을(를) 삭제 하시겠습니까?`,
+            () => {
                 dispatch(
                     deleteDataset({
-                        datasetSeq: payload.datasetSeq,
+                        datasetSeq: dataset.datasetSeq,
                         callback: (response) => {
                             if (response.header.success) {
-                                history.push('/dataset');
+                                history.push(match.path);
                             }
                             toast.result(response);
                         },
                     }),
                 );
-            } else {
-                toast.result(response);
-            }
-        } else {
-            toast.result(response);
-        }
-    };
-
-    const handleClickDelete = (dataset) => {
-        messageBox.confirm(
-            `${dataset.datasetSeq}을(를) 정말 삭제 하시겠습니까?`,
-            () => {
-                dispatch(
-                    hasRelationList({
-                        datasetSeq: dataset.datasetSeq,
-                        callback: deleteCallback,
-                    }),
-                );
             },
             () => {},
+        );
+    };
+
+    /**
+     * 삭제 클릭
+     */
+    const handleClickDelete = (dataset) => {
+        if (dataset.autoCreateYn !== 'Y') {
+            messageBox.alert('수동 데이터셋은 삭제할 수 없습니다.');
+            return;
+        }
+        dispatch(
+            hasRelationList({
+                datasetSeq: dataset.datasetSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        // 관련 아이템 없음
+                        if (!body) deleteCallback(dataset);
+                        // 관련 아이템 있음
+                        else {
+                            messageBox.alert('사용 중인 데이터셋입니다.\n삭제할 수 없습니다.');
+                        }
+                    } else {
+                        toast.error(header.message);
+                    }
+                },
+            }),
         );
     };
 
@@ -83,34 +94,30 @@ const Dataset = () => {
             {/* 리스트 */}
             <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="데이터셋 검색">
                 <Suspense>
-                    <DatasetList onDelete={handleClickDelete} />
+                    <DatasetList onDelete={handleClickDelete} match={match} />
                 </Suspense>
             </MokaCard>
 
             <Switch>
                 <Route
-                    path={['/dataset', '/dataset/:datasetSeq']}
+                    path={[`${match.path}/add`, `${match.path}/:datasetSeq`]}
                     exact
                     render={() => (
                         <>
-                            <Suspense>
-                                <DatasetEdit onDelete={handleClickDelete} />
-                            </Suspense>
+                            <DatasetEdit onDelete={handleClickDelete} match={match} />
                             <MokaIconTabs
                                 foldable={false}
                                 tabWidth={412}
                                 onSelectNav={(idx) => setActiveTabIdx(idx)}
                                 tabs={[
-                                    <Suspense>
-                                        <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
-                                    </Suspense>,
-                                    <Suspense>
+                                    <RelationInPageList show={activeTabIdx === 0} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />,
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInArticlePageList show={activeTabIdx === 1} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInContainerList show={activeTabIdx === 2} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
-                                    <Suspense>
+                                    <Suspense fallback={<MokaLoader />}>
                                         <RelationInComponentList show={activeTabIdx === 3} relSeqType={ITEM_DS} relSeq={dataset.datasetSeq} />
                                     </Suspense>,
                                 ]}

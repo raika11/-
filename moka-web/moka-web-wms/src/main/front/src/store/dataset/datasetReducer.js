@@ -21,12 +21,19 @@ export const initialState = {
         { id: 'datasetSeq', name: '데이터셋ID' },
         { id: 'datasetName', name: '데이터셋명' },
     ],
+    autoCreateYnSearchTypeList: [
+        { id: 'all', name: '데이터 전체' },
+        { id: 'Y', name: '자동' },
+        { id: 'N', name: '수동' },
+    ],
     apiSearchTypeList: [
         { id: 'all', name: '전체' },
         { id: 'idLike', name: 'API명' },
         { id: 'description', name: 'API설명' },
     ],
-    dataset: {},
+    dataset: {
+        autoCreateYn: 'Y',
+    },
     datasetError: null,
     invalidList: [],
 };

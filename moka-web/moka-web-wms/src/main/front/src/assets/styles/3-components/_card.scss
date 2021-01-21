@@ -22,7 +22,9 @@
 }
 
 .card-footer {
-  padding: $card-spacer-y $card-spacer-x;
+  padding: 24px 0 32px 0;
+  margin: 0px $card-spacer-x;
+  border-top: 1px solid $gray-400;
 }
 
 .card-actions {

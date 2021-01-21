@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { MokaAutocomplete, MokaInputLabel } from '@components';
+import { MokaInputLabel } from '@components';
 import Form from 'react-bootstrap/Form';
-import { Col } from 'react-bootstrap';
-import clsx from 'clsx';
 import { API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, API_PARAM_HINT_CODE_ID } from '@/constants';
 
 const DatasetParameter = (props) => {
-    const { dataApiParamShapes, onChange, dataApiParam, options, isInvalid, onChangeValid } = props;
+    const { dataApiParamShapes, onChange, dataApiParam, options, isInvalid, onChangeValid, loading } = props;
     const [fieldInfos, setFieldInfos] = useState(dataApiParamShapes);
 
     /**
@@ -126,8 +124,10 @@ const DatasetParameter = (props) => {
     );
 
     useEffect(() => {
-        setFieldInfos(dataApiParamShapes);
-    }, [dataApiParamShapes]);
+        if (!loading) {
+            setFieldInfos(dataApiParamShapes);
+        }
+    }, [dataApiParamShapes, loading]);
 
     /**
      * 동적 입력창 렌더링
@@ -167,7 +167,7 @@ const DatasetParameter = (props) => {
                 renderer = (
                     <MokaInputLabel
                         key={`${name}_label`}
-                        label={desc}
+                        label={desc || ' '}
                         className="flex-fill"
                         as="autocomplete"
                         labelWidth={90}
@@ -186,7 +186,7 @@ const DatasetParameter = (props) => {
 
                 renderer = (
                     <MokaInputLabel
-                        label={desc}
+                        label={desc || ' '}
                         labelWidth={90}
                         className="flex-fill mb-0"
                         value={value}

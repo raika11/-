@@ -211,7 +211,7 @@ const PageEdit = ({ onDelete }) => {
                                     return;
                                 }
                             }
-                            toast.fail(header.message);
+                            messageBox.alert(header.message);
                         }
                     },
                 }),

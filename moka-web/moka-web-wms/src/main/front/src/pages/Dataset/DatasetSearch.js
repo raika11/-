@@ -3,48 +3,35 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaSearchInput, MokaInput } from '@components';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getApi } from '@store/codeMgt';
 import { changeSearchOption, getDatasetList, initialState } from '@store/dataset';
 import { useHistory } from 'react-router-dom';
 
-const defaultAutoCreateYn = [
-    { id: 'all', name: '데이터 전체' },
-    { id: 'Y', name: '자동' },
-    { id: 'N', name: '수동' },
-];
-const defaultSearchType = [
-    { id: 'all', name: '데이터셋 전체' },
-    { id: 'datasetSeq', name: '데이터셋ID' },
-    { id: 'datasetName', name: '데이터셋명' },
-];
-
 /**
  * 데이터셋 검색 컴포넌트
  */
-const DatasetSearch = () => {
+const DatasetSearch = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const { apiRows, search: storeSearch } = useSelector(
-        (store) => ({
-            apiRows: store.codeMgt.apiRows,
-            search: store.dataset.search,
-        }),
-        shallowEqual,
-    );
-
+    const apiRows = useSelector(({ codeMgt }) => codeMgt.apiRows);
+    const storeSearch = useSelector(({ dataset }) => dataset.search);
     const [search, setSearch] = useState(initialState.search);
 
+    /**
+     * 입력 값 변경
+     */
     const handleChangeSearchValue = ({ target }) => {
         const { value, name } = target;
-
         setSearch({
             ...search,
             [name]: value,
         });
     };
 
+    /**
+     * 검색
+     */
     const handleClickSearch = useCallback(() => {
         dispatch(
             getDatasetList(
@@ -56,11 +43,13 @@ const DatasetSearch = () => {
         );
     }, [dispatch, search]);
 
+    /**
+     * 데이터셋 등록
+     */
     const handleClickAddDataSet = (event) => {
         event.preventDefault();
         event.stopPropagation();
-
-        history.push('/dataset');
+        history.push(`${match.path}/add`);
     };
 
     useEffect(() => {
@@ -103,24 +92,22 @@ const DatasetSearch = () => {
                 </Col>
                 <Col xs={4} className="p-0">
                     <MokaInput as="select" name="autoCreateYn" onChange={handleChangeSearchValue} value={search.autoCreateYn}>
-                        {defaultAutoCreateYn &&
-                            defaultAutoCreateYn.map((autoCreateYn) => (
-                                <option key={autoCreateYn.id} value={autoCreateYn.id}>
-                                    {autoCreateYn.name}
-                                </option>
-                            ))}
+                        {initialState.autoCreateYnSearchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
                 <Col xs={5} className="p-0 pr-2">
                     <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue} value={search.searchType}>
-                        {defaultSearchType &&
-                            defaultSearchType.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
                 <Col xs={7} className="p-0">

@@ -3,12 +3,13 @@ import { MokaCard, MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/survey/poll/pollReducer';
-import PollDetailQuestionComponent from '@pages/Survey/Poll/components/PollDetailQuestionComponent';
+import PollDetailBasicAnswerContainer from '@pages/Survey/Poll/components/PollDetailBasicAnswerContainer';
 import { useHistory, useParams } from 'react-router-dom';
 import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPoll, GET_POLL } from '@store/survey/poll/pollAction';
+import { getPoll, GET_POLL, clearPoll } from '@store/survey/poll/pollAction';
 import commonUtil from '@utils/commonUtil';
+import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
 
 const PollEdit = () => {
     const { pollSeq } = useParams();
@@ -34,11 +35,18 @@ const PollEdit = () => {
     useEffect(() => {
         if (!commonUtil.isEmpty(pollSeq)) {
             dispatch(getPoll(pollSeq));
+        } else {
+            dispatch(clearPoll());
         }
     }, [dispatch, pollSeq]);
 
     useEffect(() => {
         setEdit(poll);
+        if (!commonUtil.isEmpty(poll.pollSeq)) {
+            setIsSet(true);
+        } else {
+            setIsSet(false);
+        }
     }, [poll]);
 
     return (
@@ -143,6 +151,7 @@ const PollEdit = () => {
                                 } = e;
                                 handleChangeValue(name, value);
                             }}
+                            disabled={isSet}
                         >
                             {codes.pollDiv.map((option) => (
                                 <option key={option.key} value={option.key}>
@@ -153,10 +162,10 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type1"
                             as="radio"
-                            value="M"
+                            value="T"
                             labelWidth={30}
                             inputProps={{ custom: true, label: 'text형', checked: edit.pollType === 'T' }}
                             onChange={(e) => {
@@ -170,7 +179,7 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type2"
                             as="radio"
                             value="P"
@@ -187,10 +196,10 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={3} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type3"
                             as="radio"
-                            value="V"
+                            value="M"
                             labelWidth={85}
                             inputProps={{ custom: true, label: 'text형+이미지형', checked: edit.pollType === 'M' }}
                             onChange={(e) => {
@@ -234,30 +243,7 @@ const PollEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col xs={6}>
-                        <MokaInputLabel
-                            as="select"
-                            label="서비스 상태"
-                            labelWidth={70}
-                            name="status"
-                            labelClassName="text-right"
-                            value={edit.status}
-                            onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
-                            }}
-                        >
-                            {codes.status.map((option) => (
-                                <option key={option.key} value={option.key}>
-                                    {option.value}
-                                </option>
-                            ))}
-                        </MokaInputLabel>
-                    </Col>
-                </Form.Row>
+
                 <Form.Row className="mb-2">
                     <Col xs={3}>
                         <MokaInputLabel
@@ -409,7 +395,7 @@ const PollEdit = () => {
                                         handleChangeValue(name, value, type);
                                     }}
                                     disabled={isSet}
-                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 2 }}
                                 />
                             </Col>
                             <Col xs={4}>
@@ -427,7 +413,7 @@ const PollEdit = () => {
                                         handleChangeValue(name, value, type);
                                     }}
                                     disabled={isSet}
-                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 1 }}
                                 />
                             </Col>
                             <Col xs={2} className="p-0  pr-2 text-right">
@@ -447,23 +433,22 @@ const PollEdit = () => {
                 {edit.itemCnt > 0 && isSet && (
                     <Form.Row className="mb-2">
                         <MokaCard
-                            className="flex-fill pl-0"
+                            className="flex-fill pl-0 h-100"
                             minHeight="300px"
                             titleAs={
                                 <MokaInputLabel
                                     as="textarea"
                                     onChange={(e) => {
-                                        setEdit({ ...edit, question: { title: e.target.value } });
+                                        setEdit({ ...edit, title: e.target.value });
                                     }}
-                                    value={edit.question.title}
+                                    value={edit.title}
                                     label="Q."
                                     labelWidth={20}
                                 />
                             }
                         >
-                            {[...Array(edit.itemCount)].map((n, index) => (
-                                <PollDetailQuestionComponent key={index} label1={`보기${index + 1}`} label2={`url`} type={edit.type} />
-                            ))}
+                            {edit.pollDiv === 'W' && <PollDetailBasicAnswerContainer count={edit.itemCnt} type={edit.pollType} items={edit.pollItems} />}
+                            {edit.pollDiv === 'V' && <PollDetailCompareAnswerContainer type={edit.pollType} items={edit.pollItems} />}
                         </MokaCard>
                     </Form.Row>
                 )}

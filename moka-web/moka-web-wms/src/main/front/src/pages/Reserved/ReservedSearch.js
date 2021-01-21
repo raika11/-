@@ -86,9 +86,11 @@ const ReservedSearch = ({ match }) => {
             <Form.Row>
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput as="select" value={search.searchType || 'all'} onChange={handleChangeSearchOption} name="searchType">
-                        <option value="all">전체</option>
-                        <option value="reservedId">코드</option>
-                        <option value="reservedValue">값</option>
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
                     </MokaInput>
                 </Col>
                 <Col xs={8} className="p-0">

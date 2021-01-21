@@ -34,7 +34,6 @@ export const columnDefs = [
                 flex: 1,
                 headerClass: 'ag-grid-sns-meta-header',
                 cellRendererFramework: (params) => {
-                    console.log(params);
                     return <ListTitleRenderer title={params.data.title} summary={params.data.summary} />;
                 },
             },

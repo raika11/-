@@ -186,8 +186,8 @@ const LookupTemplateList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     useEffect(() => {
-        if (!tpSizeRows) dispatch(getTpZone());
-        if (!tpZoneRows) dispatch(getTpSize());
+        if (!tpSizeRows) dispatch(getTpSize());
+        if (!tpZoneRows) dispatch(getTpZone());
     }, [dispatch, tpSizeRows, tpZoneRows]);
 
     return (

@@ -12,3 +12,11 @@ $font-sizes: 9, 10, 11, 12, 13, 14, 15, 16;
         font-size: #{$size}px;
     }
 }
+
+.pre {
+  white-space: pre;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+}

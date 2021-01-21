@@ -6,7 +6,7 @@ import { MokaModal, MokaInputLabel } from '@components';
  * ModalBody로 Input 한개 있는 Modal
  */
 const DefaultInputModal = (props) => {
-    const { title, show, onHide, inputData, onSave } = props;
+    const { title, show, onHide, inputData, onSave, ...rest } = props;
     const [data, setData] = useState({ title: '', value: '', isInvalid: false });
 
     /**
@@ -59,6 +59,7 @@ const DefaultInputModal = (props) => {
             ]}
             footerClassName="justify-content-center"
             draggable
+            {...rest}
         >
             <Form>
                 <MokaInputLabel label={data.title} labelWidth={90} className="mb-0" value={data.value} onChange={handleChangeValue} isInvalid={data.isInvalid} />

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.models.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,16 +12,24 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpFile;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.common.util.ImageUtil;
+import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollDetailDTO;
+import jmnet.moka.core.tps.mvc.poll.dto.TrendpollItemDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
@@ -30,9 +39,11 @@ import jmnet.moka.core.tps.mvc.poll.service.TrendpollService;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollCntVO;
 import jmnet.moka.core.tps.mvc.poll.vo.TrendpollStatVO;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
@@ -60,13 +71,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/polls")
 @Api(tags = {"투표 API"})
 public class TrendpollRestController extends AbstractCommonController {
+
+    @Value("${poll.image.save.filepath}")
+    private String pollImageSavepath;
+
+    @Value("${image.url}")
+    private String imageDomain;
+
     private final ModelMapper modelMapper;
 
     private final TrendpollService trendpollService;
 
-    public TrendpollRestController(ModelMapper modelMapper, TrendpollService trendpollService) {
+    private final FtpHelper ftpHelper;
+
+    public TrendpollRestController(ModelMapper modelMapper, TrendpollService trendpollService, FtpHelper ftpHelper) {
         this.modelMapper = modelMapper;
         this.trendpollService = trendpollService;
+        this.ftpHelper = ftpHelper;
     }
 
 
@@ -123,14 +144,22 @@ public class TrendpollRestController extends AbstractCommonController {
      * @return 등록된 정보
      */
     @ApiOperation(value = "투표 등록")
-    @PostMapping
-    public ResponseEntity<?> postTrendpoll(@Valid TrendpollDetailDTO trendpollSaveDTO) {
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> postTrendpoll(@Valid TrendpollDetailDTO trendpollSaveDTO)
+            throws InvalidDataException, Exception {
+
+        List<String> fileUploadMessages = saveUploadImage(trendpollSaveDTO);
 
         TrendpollDetail trendpoll = modelMapper.map(trendpollSaveDTO, TrendpollDetail.class);
         trendpoll = trendpollService.insertTrendpoll(trendpoll);
 
-        ResultDTO<TrendpollDetailDTO> resultDto =
-                new ResultDTO<>(modelMapper.map(trendpoll, TrendpollDetailDTO.class), msg("tps.common.success.insert"));
+        StringBuilder resultMessage = new StringBuilder(msg("tps.common.success.insert"));
+
+        if (fileUploadMessages.size() > 0) {
+            resultMessage.append(McpString.toCommaDelimitedString(fileUploadMessages.toArray(new String[0])));
+        }
+
+        ResultDTO<TrendpollDetailDTO> resultDto = new ResultDTO<>(modelMapper.map(trendpoll, TrendpollDetailDTO.class), resultMessage.toString());
 
         tpsLogger.success(ActionType.INSERT);
 
@@ -149,11 +178,13 @@ public class TrendpollRestController extends AbstractCommonController {
     public ResponseEntity<?> putTrendpoll(
             @ApiParam("투표 일련번호") @PathVariable("pollSeq") @Min(value = 1, message = "{tps.poll.error.pattern.pollSeq}") Long pollSeq,
             @Valid TrendpollDetailDTO trendpollSaveDTO)
-            throws NoDataException {
+            throws NoDataException, InvalidDataException, Exception {
 
         trendpollService
                 .findTrendpollBySeq(pollSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        List<String> fileUploadMessages = saveUploadImage(trendpollSaveDTO);
 
         TrendpollDetail trendpoll = modelMapper.map(trendpollSaveDTO, TrendpollDetail.class);
         trendpoll.setPollSeq(pollSeq);
@@ -161,8 +192,13 @@ public class TrendpollRestController extends AbstractCommonController {
 
         tpsLogger.success(ActionType.UPDATE);
 
-        ResultDTO<TrendpollDetailDTO> resultDto =
-                new ResultDTO<>(modelMapper.map(trendpoll, TrendpollDetailDTO.class), msg("tps.common.success.update"));
+        StringBuilder resultMessage = new StringBuilder(msg("tps.common.success.update"));
+
+        if (fileUploadMessages.size() > 0) {
+            resultMessage.append(McpString.toCommaDelimitedString(fileUploadMessages.toArray(new String[0])));
+        }
+
+        ResultDTO<TrendpollDetailDTO> resultDto = new ResultDTO<>(modelMapper.map(trendpoll, TrendpollDetailDTO.class), resultMessage.toString());
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
@@ -261,5 +297,52 @@ public class TrendpollRestController extends AbstractCommonController {
         excelView.setAttributesMap(map);
 
         return excelView;
+    }
+
+    /**
+     * 본문에 첨부되는 이미지 업로드
+     *
+     * @return 등록된 게시판정보
+     */
+    private List<String> saveUploadImage(TrendpollDetailDTO trendpollDetailDTO)
+            throws InvalidDataException, IOException {
+
+        List<String> uploadMessages = new ArrayList<>();
+
+
+        List<TrendpollItemDTO> pollItems = trendpollDetailDTO.getPollItems();
+        if (pollItems != null && pollItems.size() > 0) {
+            for (TrendpollItemDTO trendpollItemDTO : pollItems) {
+                if (trendpollItemDTO.getImgFile() != null) {
+                    if (!ImageUtil.isImage(trendpollItemDTO.getImgFile())) {
+                        uploadMessages.add(msg("tps.quiz.error.file-ext", trendpollItemDTO
+                                .getImgFile()
+                                .getOriginalFilename()));
+                    }
+
+                    String ext = McpFile.getExtension(trendpollItemDTO
+                            .getImgFile()
+                            .getOriginalFilename());
+                    String filename = UUIDGenerator.uuid() + "." + ext;
+                    String yearMonth = McpDate.dateStr(McpDate.now(), "yyyy/MM/dd");
+                    String saveFilePath = String.format(pollImageSavepath, yearMonth);
+                    String imageUrl = imageDomain;
+
+                    if (ftpHelper.upload(FtpHelper.IMAGES, filename, trendpollItemDTO
+                            .getImgFile()
+                            .getInputStream(), saveFilePath)) {
+                        imageUrl = imageUrl + saveFilePath + "/" + filename;
+                        trendpollItemDTO.setImgUrl(imageUrl);
+                    } else {
+                        uploadMessages.add(msg("tps.quiz-question.error.upload", filename));
+                    }
+                }
+            }
+        }
+
+        // 액션 로그에 성공 로그 출력
+        tpsLogger.success(ActionType.UPLOAD);
+
+        return uploadMessages;
     }
 }

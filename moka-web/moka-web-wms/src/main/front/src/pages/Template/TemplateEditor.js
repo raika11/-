@@ -5,6 +5,9 @@ import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth/authAction';
 import { changeTemplateBody, getTemplate, clearTemplate, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template/templateAction';
 
+/**
+ * 템플릿 본문 에디터
+ */
 const TemplateEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { templateSeq } = useParams();
@@ -41,7 +44,7 @@ const TemplateEditor = (props) => {
             setDefalutValue('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [template.templateSeq]);
+    }, [template.templateSeq, template.templateName]);
 
     useEffect(() => {
         // 템플릿의 도메인ID를 latestDomainId에 저장
@@ -64,20 +67,14 @@ const TemplateEditor = (props) => {
     }, [dispatch, templateSeq]);
 
     useEffect(() => {
-        let isInvalid = false;
-
-        // invalidList 처리
-        invalidList.forEach((i) => {
-            if (i.field === 'templateBody') {
-                setError({
-                    line: Number(i.extra),
-                    message: i.reason,
-                });
-                isInvalid = isInvalid || true;
-            }
-        });
-
-        if (!isInvalid) {
+        // 본문 에러만 체크
+        const bodyErrorList = invalidList.filter((e) => e.field === 'templateBody');
+        if (bodyErrorList.length > 0) {
+            setError({
+                line: Number(bodyErrorList[0].extra),
+                message: bodyErrorList[0].reason,
+            });
+        } else {
             setError({});
         }
     }, [invalidList]);

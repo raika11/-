@@ -203,7 +203,13 @@ public class TpsConstants {
     // 일반 게시물
     public static final String BOARD_GENERAL_CONTENT = "1";
 
-
+    // 댓글 태그 구분 그룹 코드
     public static final String CMT_TAG_DIV = "CMT_TAG_DIV";
+
+    // HTTP METHOD 기타코드 그룹 코드
+    public static final String HTTP_METHOD_GRP_CD = "HTTP_METHOD";
+
+    // API 그룹 코드
+    public static final String API_TYPE_GRP_CD = "API_TYPE";
 
 }

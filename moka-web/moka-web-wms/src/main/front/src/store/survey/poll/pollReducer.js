@@ -51,6 +51,11 @@ export const initialState = {
 
 export default handleActions(
     {
+        [action.CLEAR_POLL]: (state) => {
+            return produce(state, (draft) => {
+                draft.poll = initialState.poll;
+            });
+        },
         [action.CHANGE_POLL_SEARCH_OPTIONS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;

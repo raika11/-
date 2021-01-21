@@ -262,6 +262,9 @@ const SpecialEdit = () => {
         if (special.seqNo) {
             setArticleUrl(`${DIGITAL_SPECIAL_URL}${special.seqNo}`);
         }
+        if (imgFileRef.current) {
+            imgFileRef.current.deleteFile();
+        }
     }, [special.seqNo]);
 
     useEffect(() => {
@@ -305,9 +308,7 @@ const SpecialEdit = () => {
                     <p className="m-0 pl-2 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
-            headerClassName="border-bottom"
-            titleClassName="mb-0"
-            footerClassName="justify-content-center border-top"
+            footerClassName="justify-content-center"
             footerButtons={footerBtns}
             footer
         >
@@ -342,7 +343,7 @@ const SpecialEdit = () => {
                     </Col>
                     {/* 사용여부/검색여부/리스트노출 */}
                     <Col xs={8} className="p-0 d-flex flex-column">
-                        <Form.Row className="d-flex align-items-center justify-content-between mb-3">
+                        <Form.Row className="d-flex align-items-center justify-content-between mb-2">
                             <Col xs={4} className="p-0">
                                 <MokaInputLabel
                                     label="사용여부"
@@ -384,7 +385,7 @@ const SpecialEdit = () => {
                             </Col>
                         </Form.Row>
                         {/* 페이지코드/회차 */}
-                        <Form.Row className="mb-3">
+                        <Form.Row className="mb-2">
                             <Col xs={7} className="p-0 pr-3">
                                 <MokaInputLabel
                                     label="페이지 코드"
@@ -424,8 +425,8 @@ const SpecialEdit = () => {
                             </Col>
                         </Form.Row>
                         {/* 검색키워드 */}
-                        <Form.Row className="mb-3">
-                            <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-3" labelClassName="mr-3" as="none" />
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-2" labelClassName="mr-3" as="none" />
                             <div className="w-100 d-flex flex-column">
                                 <MokaInput
                                     name="schKwd"
@@ -439,8 +440,8 @@ const SpecialEdit = () => {
                             </div>
                         </Form.Row>
                         {/* 제목 */}
-                        <Form.Row className="mb-3">
-                            <MokaInputLabel label="제목" labelWidth={72} className="mb-3" labelClassName="mr-3" required as="none" />
+                        <Form.Row className="mb-2">
+                            <MokaInputLabel label="제목" labelWidth={72} className="mb-2" labelClassName="mr-3" required as="none" />
                             <div className="w-100 d-flex flex-column">
                                 <MokaInput
                                     name="pageTitle"
@@ -454,7 +455,7 @@ const SpecialEdit = () => {
                             </div>
                         </Form.Row>
                         {/* 서비스시작일/서비스종료일 */}
-                        <Form.Row className="mb-3">
+                        <Form.Row className="mb-2">
                             <Col xs={6} className="p-0 pr-2">
                                 <MokaInputLabel
                                     label="서비스 시작일"
@@ -493,7 +494,7 @@ const SpecialEdit = () => {
                     label="PC URL"
                     labelWidth={110}
                     labelClassName="mr-3"
-                    className="mb-3"
+                    className="mb-2"
                     name="pcUrl"
                     value={temp.pcUrl}
                     onChange={handleChangeValue}
@@ -506,7 +507,7 @@ const SpecialEdit = () => {
                     label="Mobile URL"
                     labelWidth={110}
                     labelClassName="mr-3"
-                    className="mb-3"
+                    className="mb-2"
                     name="mobUrl"
                     value={temp.mobUrl}
                     onChange={handleChangeValue}
@@ -520,7 +521,7 @@ const SpecialEdit = () => {
                     labelWidth={110}
                     labelClassName="mr-3"
                     value={articleUrl}
-                    className="mb-3"
+                    className="mb-2"
                     append={<MokaCopyTextButton copyText={articleUrl} />}
                     disabled
                 />
@@ -529,7 +530,7 @@ const SpecialEdit = () => {
                     label="광고추척 PC URL"
                     labelWidth={110}
                     labelClassName="mr-3"
-                    className="mb-3"
+                    className="mb-2"
                     placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) http://dgate.opap.co.kr/imp/?ssn=566&adsn=7478&cresn=5362`}
                     name="joinsAdTag"
                     value={temp.joinsAdTag}
@@ -540,7 +541,7 @@ const SpecialEdit = () => {
                     label="광고추적 Mobile URL"
                     labelWidth={110}
                     labelClassName="mr-3"
-                    className="mb-3"
+                    className="mb-2"
                     placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) http://dgate.opap.co.kr/imp/?ssn=566&adsn=7478&cresn=5362`}
                     name="joinsAdTagMob"
                     value={temp.joinsAdTagMob}
@@ -551,7 +552,7 @@ const SpecialEdit = () => {
                     label="구글 웹로그 코드"
                     labelWidth={110}
                     labelClassName="mr-3"
-                    className="mb-3"
+                    className="mb-2"
                     placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) UA-40895666-10`}
                     name="googleTag"
                     value={temp.googleTag}
@@ -570,7 +571,7 @@ const SpecialEdit = () => {
                     }
                     as="textarea"
                     labelWidth={110}
-                    className="mb-3"
+                    className="mb-2"
                     inputProps={{ rows: 3 }}
                     labelClassName="mr-3"
                     name="pageDesc"
@@ -580,7 +581,7 @@ const SpecialEdit = () => {
                     invalidMessage={error.pageDescMessage}
                 />
                 {/* 부서명 */}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label="부서명"
@@ -606,7 +607,7 @@ const SpecialEdit = () => {
                     </Col>
                 </Form.Row>
                 {/* 개발담당자 정보 */}
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <Col xs={4} className="p-0 pr-2">
                         <MokaInputLabel
                             label="개발 담당자 이름"
@@ -628,7 +629,7 @@ const SpecialEdit = () => {
                 {special.seqNo && (
                     <React.Fragment>
                         {/* 등록 정보 */}
-                        <Form.Row className="mb-3">
+                        <Form.Row className="mb-2">
                             <Col xs={4} className="p-0">
                                 <MokaInputLabel
                                     label="등록자"
@@ -653,7 +654,7 @@ const SpecialEdit = () => {
                             </Col>
                         </Form.Row>
                         {/* 수정 정보 */}
-                        <Form.Row className="mb-3">
+                        <Form.Row className="mb-2">
                             <Col xs={4} className="p-0">
                                 <MokaInputLabel
                                     label="수정자"

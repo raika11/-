@@ -22,7 +22,6 @@ const ComponentEdit = ({ onDelete, match }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-
     const loading = useSelector((store) => store.loading[GET_COMPONENT] || store.loading[SAVE_COMPONENT] || store.loading[DELETE_COMPONENT]);
     const latestDomainId = useSelector((store) => store.auth.latestDomainId);
     const { MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector((store) => ({
@@ -217,6 +216,8 @@ const ComponentEdit = ({ onDelete, match }) => {
         // 컴포넌트ID가 있을 때 데이터 조회
         if (componentSeq) {
             dispatch(getComponent({ componentSeq: componentSeq }));
+        } else {
+            dispatch(clearComponent());
         }
     }, [dispatch, componentSeq]);
 

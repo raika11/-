@@ -1,15 +1,46 @@
-import React, { useState } from 'react';
-import { Form, Col, Figure } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
-import { BLANK_IMAGE_PATH, IR_URL } from '@/constants';
-import Button from 'react-bootstrap/Button';
+import React, { useEffect, useState } from 'react';
+import commonUtil from '@utils/commonUtil';
+import PollDetailBasicTextAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicTextAnswerComponent';
+import PollDetailBasicPhotoAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicPhotoAnswerComponent';
+import PollDetailBasicCombineAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicCombineAnswerComponent';
 
-const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
-    const [value1, setValue1] = useState('');
-    const [value2, setValue2] = useState('');
+const PollDetailBasicAnswerContainer = ({ items, count, type, onChange }) => {
+    const [editItems, setEditItems] = useState([]);
+
+    let AnswerComponent = null;
+    switch (type) {
+        case 'T':
+            AnswerComponent = PollDetailBasicTextAnswerComponent;
+            break;
+        case 'P':
+            AnswerComponent = PollDetailBasicPhotoAnswerComponent;
+            break;
+        case 'M':
+            AnswerComponent = PollDetailBasicCombineAnswerComponent;
+            break;
+        default:
+            break;
+    }
+
+    useEffect(() => {
+        if (count > 0) {
+            if (items.length === 0) {
+                const initItems = [];
+                for (let itemCnt = 0; itemCnt < count; itemCnt++) {
+                    initItems.push({ imgUrl: '', linkUrl: '', title: '' });
+                }
+                setEditItems(initItems);
+            } else {
+                setEditItems(items);
+            }
+        }
+    }, [count, items]);
+
     return (
-        <Form.Row style={{ alignItems: 'center' }} className="mb-2">
-            {type !== 'P' && (
+        <>
+            {!commonUtil.isEmpty(AnswerComponent) && editItems.map((editItem, index) => <AnswerComponent item={editItem} index={index} hasUrl={false} />)}
+
+            {/*{type !== 'P' && (
                 <Col className="flex-fill">
                     <Form.Row className="mb-2">
                         <Col xs={12}>
@@ -40,7 +71,7 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
                 </Col>
             )}
 
-            {type !== 'M' && (
+            {type !== 'T' && (
                 <Col xs={3}>
                     <Form.Row>
                         <Col xs={12} className="mb-2 text-center">
@@ -60,9 +91,9 @@ const PollDetailQuestionComponent = ({ label1, label2, type, onChange }) => {
                         </Col>
                     </Form.Row>
                 </Col>
-            )}
-        </Form.Row>
+            )}*/}
+        </>
     );
 };
 
-export default PollDetailQuestionComponent;
+export default PollDetailBasicAnswerContainer;

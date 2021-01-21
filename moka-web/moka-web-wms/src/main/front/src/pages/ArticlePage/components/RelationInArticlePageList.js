@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
-import columnDefs from './RelationInArticlePageListColumns';
+import { getPreviewTotalId } from '@store/articlePage';
+import toast from '@utils/toastUtil';
+import { previewPage } from '@store/merge';
+import util from '@utils/commonUtil';
 import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_DS } from '@/constants';
+import columnDefs from './RelationInArticlePageListColumns';
 
 const propTypes = {
     /**
@@ -21,6 +23,7 @@ const propTypes = {
     relSeq: PropTypes.number,
     /**
      * show === true이면 리스트를 조회한다
+     * @default
      */
     show: PropTypes.bool,
 };
@@ -36,26 +39,22 @@ const defaultProps = {
  */
 const RelationInArticlePageList = (props) => {
     const { show, relSeqType, relSeq } = props;
-    const history = useHistory();
     const dispatch = useDispatch();
-
-    const { search: storeSearch, list, total, error, loading, latestDomainId, domainList } = useSelector((store) => ({
+    const loading = useSelector(({ loading }) => loading[GET_RELATION_LIST]);
+    const { domainList, latestDomainId } = useSelector(({ auth }) => ({
+        domainList: auth.domainList,
+        latestDomainId: auth.latestDomainId,
+    }));
+    const { search: storeSearch, list, total, error } = useSelector((store) => ({
         search: store.relation.search,
         list: store.relation.list,
         total: store.relation.total,
         error: store.relation.error,
-        loading: store.loading[GET_RELATION_LIST],
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
     }));
 
     // state
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
 
     /**
      * 테이블 검색옵션 변경
@@ -72,17 +71,51 @@ const RelationInArticlePageList = (props) => {
      * row의 링크 버튼 클릭
      * @param {object} data row 데이터
      */
-    const handleClickLink = (data) => {
-        window.open(`/article-page/${data.artPageSeq}`);
-    };
+    const handleClickLink = (data) => window.open(`/article-page/${data.artPageSeq}`);
 
     /**
-     * preview 버튼 클릭
+     * 미리보기 버튼 클릭
      * @param {object} data row data
      */
-    const handleClickPreview = (data) => {
-        window.open(`//${data.domain.domainUrl}/article/${data.totalId}`);
-    };
+    const handleClickPreview = useCallback(
+        (data) => {
+            dispatch(
+                getPreviewTotalId({
+                    artType: data.artType,
+                    callback: (response) => {
+                        if (response.header.success) {
+                            if (response.body === null) {
+                                toast.error('미리보기용 기사ID가 존재하지 않습니다.');
+                            } else {
+                                const option = {
+                                    content: data.artPageBody,
+                                    callback: ({ header, body }) => {
+                                        if (header.success) {
+                                            const item = {
+                                                ...data,
+                                                totalId: response.body,
+                                            };
+                                            util.popupPreview('/preview/article-page', item);
+                                        } else {
+                                            toast.error(header.message || '미리보기에 실패하였습니다');
+                                        }
+                                    },
+                                };
+                                dispatch(previewPage(option));
+                            }
+                        } else {
+                            toast.error('미리보기용 기사ID 조회에 실패하였습니다.');
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch],
+    );
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     useEffect(() => {
         setRowData(
@@ -92,7 +125,7 @@ const RelationInArticlePageList = (props) => {
                 handleClickPreview,
             })),
         );
-    }, [list]);
+    }, [handleClickPreview, list]);
 
     useEffect(() => {
         return () => {

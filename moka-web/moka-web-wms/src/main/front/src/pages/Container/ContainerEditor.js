@@ -43,7 +43,7 @@ const ContainerEditor = (props) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [container.containerSeq]);
+    }, [container.containerSeq, container.containerName]);
 
     useEffect(() => {
         // 컨테이너의 도메인ID를 latestDomainId에 저장
@@ -60,6 +60,8 @@ const ContainerEditor = (props) => {
         // 컨테이너seq가 있을 때 데이터를 조회
         if (containerSeq) {
             dispatch(getContainer({ containerSeq: containerSeq }));
+        } else {
+            dispatch(clearContainer());
         }
     }, [dispatch, containerSeq]);
 

@@ -8,7 +8,7 @@ import toast from '@utils/toastUtil';
 import moment from 'moment';
 import { invalidListToError } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel } from '@components';
-import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList, deleteDirectLink } from '@store/directLink';
+import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList } from '@store/directLink';
 
 const DATEFORMAT = 'YYYY-MM-DD';
 const URL_ERROR = '정확한 URL을 입력하세요';
@@ -479,6 +479,9 @@ const DirectLinkEdit = ({ history, match }) => {
                                 setFileValue,
                             }}
                             labelClassName="justify-content-end"
+                            isInvalid={error.directLinkThumbnailFile}
+                            invalidMessage={error.directLinkThumbnailFileMessage}
+                            onChange={() => setError({ ...error, directLinkThumbnailFile: false })}
                         />
                     </Col>
                 </Form.Row>

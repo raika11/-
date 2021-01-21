@@ -12,7 +12,7 @@ moment.locale('ko');
 const SpecialAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const ptRows = useSelector((store) => store.codeMgt.ptRows);
     const { specialList, total } = useSelector((store) => ({
         specialList: store.special.list,
         total: store.special.total,
@@ -51,10 +51,11 @@ const SpecialAgGrid = ({ match }) => {
             specialList.map((sp) => ({
                 ...sp,
                 pageSdate: sp.pageSdate && `${sp.pageSdate.substr(0, 4)}-${sp.pageSdate.substr(4, 2)}-${sp.pageSdate.substr(6, 2)}`,
+                pageCdName: ptRows.find((p) => p.dtlCd === String(sp.pageCd))?.cdNm,
                 regDtText: moment(sp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD'),
             })),
         );
-    }, [specialList]);
+    }, [ptRows, specialList]);
 
     return (
         <MokaTable

@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import PollDetailBasicTextAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicTextAnswerComponent';
 import commonUtil from '@utils/commonUtil';
+import PollDetailBasicTextAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicTextAnswerComponent';
 import PollDetailBasicPhotoAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicPhotoAnswerComponent';
 import PollDetailBasicCombineAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicCombineAnswerComponent';
 
-const PollDetailQuestionComponent = ({ division, items, count, type, onChange }) => {
+const PollDetailBasicAnswerContainer = ({ items, count, type, onChange }) => {
     const [editItems, setEditItems] = useState([]);
 
     let AnswerComponent = null;
-    if (division === 'W') {
-        if (type === 'T') {
+    switch (type) {
+        case 'T':
             AnswerComponent = PollDetailBasicTextAnswerComponent;
-        } else if (type === 'P') {
+            break;
+        case 'P':
             AnswerComponent = PollDetailBasicPhotoAnswerComponent;
-        } else if (type === 'M') {
+            break;
+        case 'M':
             AnswerComponent = PollDetailBasicCombineAnswerComponent;
-        }
+            break;
+        default:
+            break;
     }
 
     useEffect(() => {
@@ -92,4 +96,4 @@ const PollDetailQuestionComponent = ({ division, items, count, type, onChange })
     );
 };
 
-export default PollDetailQuestionComponent;
+export default PollDetailBasicAnswerContainer;

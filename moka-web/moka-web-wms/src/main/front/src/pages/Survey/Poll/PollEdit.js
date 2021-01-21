@@ -416,7 +416,7 @@ const PollEdit = () => {
                                         handleChangeValue(name, value, type);
                                     }}
                                     disabled={isSet}
-                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 2 }}
                                 />
                             </Col>
                             <Col xs={4}>
@@ -434,7 +434,7 @@ const PollEdit = () => {
                                         handleChangeValue(name, value, type);
                                     }}
                                     disabled={isSet}
-                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 1 }}
                                 />
                             </Col>
                             <Col xs={2} className="p-0  pr-2 text-right">
@@ -454,7 +454,7 @@ const PollEdit = () => {
                 {edit.itemCnt > 0 && isSet && (
                     <Form.Row className="mb-2">
                         <MokaCard
-                            className="flex-fill pl-0"
+                            className="flex-fill pl-0 h-100"
                             minHeight="300px"
                             titleAs={
                                 <MokaInputLabel

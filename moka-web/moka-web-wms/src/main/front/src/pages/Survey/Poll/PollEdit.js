@@ -3,7 +3,7 @@ import { MokaCard, MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/survey/poll/pollReducer';
-import PollDetailQuestionComponent from '@pages/Survey/Poll/components/PollDetailQuestionComponent';
+import PollDetailBasicAnswerContainer from '@pages/Survey/Poll/components/PollDetailBasicAnswerContainer';
 import { useHistory, useParams } from 'react-router-dom';
 import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -150,6 +150,7 @@ const PollEdit = () => {
                                 } = e;
                                 handleChangeValue(name, value);
                             }}
+                            disabled={isSet}
                         >
                             {codes.pollDiv.map((option) => (
                                 <option key={option.key} value={option.key}>
@@ -241,30 +242,7 @@ const PollEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col xs={6}>
-                        <MokaInputLabel
-                            as="select"
-                            label="서비스 상태"
-                            labelWidth={70}
-                            name="status"
-                            labelClassName="text-right"
-                            value={edit.status}
-                            onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
-                            }}
-                        >
-                            {codes.status.map((option) => (
-                                <option key={option.key} value={option.key}>
-                                    {option.value}
-                                </option>
-                            ))}
-                        </MokaInputLabel>
-                    </Col>
-                </Form.Row>
+
                 <Form.Row className="mb-2">
                     <Col xs={3}>
                         <MokaInputLabel
@@ -468,7 +446,7 @@ const PollEdit = () => {
                                 />
                             }
                         >
-                            <PollDetailQuestionComponent count={edit.itemCnt} division={edit.pollDiv} type={edit.pollType} items={edit.pollItems} />
+                            {edit.pollDiv === 'W' && <PollDetailBasicAnswerContainer count={edit.itemCnt} type={edit.pollType} items={edit.pollItems} />}
                         </MokaCard>
                     </Form.Row>
                 )}

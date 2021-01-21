@@ -22,39 +22,51 @@ const RunStateSearch = () => {
         [search],
     );
 
+    const handleClickReset = () => {
+        setSearch({ ...search, group: 'all', cycle: 'all', type: 'all', server: 'all', state: 'all', searchType: 'all', keyword: '' });
+    };
+
     return (
         <Form className="mb-2">
             <div className="mb-2 d-flex align-items-center justify-content-between">
                 {/* 기타코드에서 가져옴 'GEN_CATE' */}
-                <MokaInputLabel label="분류" as="select" name="group" className="mr-2" value={search.group} onChange={handleChangeValue}>
-                    <option vlaue="all">전체</option>
-                </MokaInputLabel>
-                <MokaInputLabel label="주기" as="select" name="cycle" className="mr-2" value={search.cycle} onChange={handleChangeValue}>
-                    <option vlaue="all">전체</option>
-                    <option vlaue="30s">30초</option>
-                    <option vlaue="1m">1분</option>
-                    <option vlaue="2m">2분</option>
-                    <option vlaue="5m">5분</option>
-                    <option vlaue="10m">10분</option>
-                    <option vlaue="20m">20분</option>
-                    <option vlaue="30m">30분</option>
-                    <option vlaue="1h">1시간</option>
-                    <option vlaue="12h">12시간</option>
-                    <option vlaue="24h">24시간</option>
-                </MokaInputLabel>
-                <MokaInputLabel label="타입" as="select" name="type" className="mr-2" value={search.type} onChange={handleChangeValue}>
+                <div style={{ width: 150 }}>
+                    <MokaInputLabel label="분류" labelWidth={30} as="select" name="group" className="mr-2" value={search.group} onChange={handleChangeValue}>
+                        <option vlaue="all">전체</option>
+                    </MokaInputLabel>
+                </div>
+                <div style={{ width: 150 }}>
+                    <MokaInputLabel label="주기" labelWidth={30} as="select" name="cycle" className="mr-2" value={search.cycle} onChange={handleChangeValue}>
+                        <option vlaue="all">전체</option>
+                        <option vlaue="30s">30초</option>
+                        <option vlaue="1m">1분</option>
+                        <option vlaue="2m">2분</option>
+                        <option vlaue="5m">5분</option>
+                        <option vlaue="10m">10분</option>
+                        <option vlaue="20m">20분</option>
+                        <option vlaue="30m">30분</option>
+                        <option vlaue="1h">1시간</option>
+                        <option vlaue="12h">12시간</option>
+                        <option vlaue="24h">24시간</option>
+                    </MokaInputLabel>
+                </div>
+                <MokaInputLabel label="타입" labelWidth={30} as="select" name="type" className="mr-2" value={search.type} onChange={handleChangeValue}>
                     <option vlaue="all">전체</option>
                     <option vlaue="ftp">FTP</option>
                     <option vlaue="copyNetwork">네트워크 복사</option>
                 </MokaInputLabel>
-                <MokaInputLabel label="배포 서버" as="select" name="server" className="mr-2" value={search.server} onChange={handleChangeValue}>
-                    <option vlaue="all">전체</option>
-                </MokaInputLabel>
-                <MokaInputLabel label="상태" as="select" name="state" value={search.state} onChange={handleChangeValue}>
-                    <option vlaue="all">전체</option>
-                    <option vlaue="success">성공</option>
-                    <option vlaue="fail">실패</option>
-                </MokaInputLabel>
+                <div style={{ width: 180 }}>
+                    <MokaInputLabel label="배포 서버" labelWidth={50} as="select" name="server" className="mr-2" value={search.server} onChange={handleChangeValue}>
+                        <option vlaue="all">전체</option>
+                    </MokaInputLabel>
+                </div>
+                <div style={{ width: 150 }}>
+                    <MokaInputLabel label="상태" labelWidth={30} as="select" name="state" value={search.state} onChange={handleChangeValue}>
+                        <option vlaue="all">전체</option>
+                        <option vlaue="success">성공</option>
+                        <option vlaue="fail">실패</option>
+                    </MokaInputLabel>
+                </div>
             </div>
             <div className="d-flex align-items-center justify-content-between">
                 <div className="d-flex">
@@ -74,7 +86,9 @@ const RunStateSearch = () => {
                     <Button variant="searching" className="mr-2">
                         검색
                     </Button>
-                    <Button variant="outline-neutral">초기화</Button>
+                    <Button variant="outline-neutral" onClick={handleClickReset}>
+                        초기화
+                    </Button>
                 </div>
             </div>
         </Form>

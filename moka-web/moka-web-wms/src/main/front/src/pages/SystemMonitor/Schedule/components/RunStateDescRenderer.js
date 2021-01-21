@@ -13,8 +13,8 @@ const RunStateDeseRenderer = forwardRef(({ data }, ref) => {
                     {data.url}
                 </a>
             </div>
-            <p className="mb-0">{unescapeHtml(data.route)}</p>
-            <p className="mb-0">{unescapeHtml(data.desc)}</p>
+            <p className="mb-0 color-secondary">{unescapeHtml(data.route)}</p>
+            <p className="mb-0 color-success">{unescapeHtml(data.desc)}</p>
         </div>
     );
 });

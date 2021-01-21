@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 // import { Route, Switch } from 'react-router-dom';
 import { MokaCardTabs } from '@/components';
-import ScheduleWorkState from './ScheduleWorkState';
+import RunState from './RunState';
 
 const Schedule = ({ match }) => {
     return (
@@ -17,7 +17,7 @@ const Schedule = ({ match }) => {
                 width={1596}
                 tabContentClass="h-100"
                 tabs={[
-                    <ScheduleWorkState />,
+                    <RunState />,
                     // <ScheduleWorkList />,
                     // <ScheduleDeleteWorkList />,
                     // <ScheduleServer />

@@ -30,6 +30,8 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkDTO;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkGroupDTO;
@@ -145,7 +147,14 @@ public class AppRestController {
 
         result.put("TRENDPOLL_STAT_CODE", PollStatCode.toList());
 
-        result.put("WATERMARK", getWatermarkGroupList());
+        // 워터마크 목록
+        result.put("WATERMARK_LIST", getWatermarkGroupList());
+
+        // 댓글 상태 구분
+        result.put("COMMENT_STATUS_CODE", CommentStatusType.toList());
+
+        // 댓글 정렬 구분
+        result.put("COMMENT_ORDER_CODE", CommentOrderType.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

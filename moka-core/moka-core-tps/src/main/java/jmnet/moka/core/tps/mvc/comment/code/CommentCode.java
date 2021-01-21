@@ -1,6 +1,11 @@
 package jmnet.moka.core.tps.mvc.comment.code;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import jmnet.moka.common.data.mybatis.support.EnumCode;
+import jmnet.moka.common.utils.MapBuilder;
 
 /**
  * <pre>
@@ -58,6 +63,18 @@ public final class CommentCode {
         public String getName() {
             return name;
         }
+
+        public static List<Map<String, Object>> toList() {
+
+            return Arrays
+                    .stream(CommentStatusType.values())
+                    .map(code -> MapBuilder
+                            .getInstance()
+                            .add("code", code.code)
+                            .add("name", code.name)
+                            .getMap())
+                    .collect(Collectors.toList());
+        }
     }
 
 
@@ -81,6 +98,18 @@ public final class CommentCode {
 
         public String getName() {
             return name;
+        }
+
+        public static List<Map<String, Object>> toList() {
+
+            return Arrays
+                    .stream(CommentOrderType.values())
+                    .map(code -> MapBuilder
+                            .getInstance()
+                            .add("code", code.code)
+                            .add("name", code.name)
+                            .getMap())
+                    .collect(Collectors.toList());
         }
     }
 }

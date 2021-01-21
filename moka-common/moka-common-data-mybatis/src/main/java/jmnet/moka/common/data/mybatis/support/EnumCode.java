@@ -14,4 +14,5 @@ package jmnet.moka.common.data.mybatis.support;
  */
 public interface EnumCode {
     String getCode();
+
 }

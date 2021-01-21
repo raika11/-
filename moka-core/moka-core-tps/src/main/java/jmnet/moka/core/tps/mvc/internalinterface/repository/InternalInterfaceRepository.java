@@ -11,5 +11,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface InternalInterfaceRepository
         extends JpaRepository<InternalInterface, Long>, JpaSpecificationExecutor<InternalInterface>, InternalInterfaceRepositorySupport {
 
-    Optional<InternalInterface> findBySeqNoAndDelYn(Long aLong, String delYn);
+    /**
+     * API관리 상세조회
+     *
+     * @param seqNo API 일련번호
+     * @param delYn 삭제여부
+     * @return API정보
+     */
+    Optional<InternalInterface> findBySeqNoAndDelYn(Long seqNo, String delYn);
 }

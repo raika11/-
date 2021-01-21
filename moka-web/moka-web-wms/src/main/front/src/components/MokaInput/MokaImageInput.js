@@ -15,12 +15,12 @@ const propTypes = {
      * width
      * @default
      */
-    width: PropTypes.number,
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
      * height
      * @default
      */
-    height: PropTypes.number,
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
      * 사진이 아닌 타입이 들어왔을 때 나타나는 alert props
      * @default

@@ -8,6 +8,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 
 // cell renderer
 import ImageRenderer from './MokaTableImageRenderer';
+import UsedYnRenderer from './MokaTableUsedYnRenderer';
 
 const propTypes = {
     ...paginationPropTypes,
@@ -311,7 +312,7 @@ const MokaTable = forwardRef((props, ref) => {
                     suppressMovableColumns
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    frameworkComponents={{ imageRenderer: ImageRenderer, ...frameworkComponents }}
+                    frameworkComponents={{ imageRenderer: ImageRenderer, usedYnRenderer: UsedYnRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}

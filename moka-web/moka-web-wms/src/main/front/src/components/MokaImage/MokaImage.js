@@ -9,6 +9,10 @@ const propTypes = {
      */
     className: PropTypes.string,
     /**
+     * img 태그 className
+     */
+    imgClassName: PropTypes.string,
+    /**
      * width
      */
     width: PropTypes.number,
@@ -35,7 +39,7 @@ const defaultProps = {
  * 이미지 컴포넌트(Figure)
  */
 const MokaImage = (props) => {
-    const { width, height, img, className, alt } = props;
+    const { width, height, img, className, alt, imgClassName } = props;
     const wrapRef = useRef(null);
     const imgRef = useRef(null);
     const [src, setImgSrc] = useState(null);
@@ -51,7 +55,7 @@ const MokaImage = (props) => {
     return (
         <div className={clsx('d-inline-flex align-items-center justify-content-center position-relative bg-white input-border', className)} style={{ width, height }} ref={wrapRef}>
             {/* 이미지 미리보기 */}
-            <img alt={alt} src={src} ref={imgRef} className="center-image" />
+            <img alt={alt} src={src} ref={imgRef} className={clsx('center-image', imgClassName)} />
         </div>
     );
 };

@@ -31,6 +31,15 @@
     ));
 }
 
+.table-row {
+    &:hover {
+        background-color: var(--ag-row-hover-color, rgba(33, 150, 243, 0.1));
+    }
+    &.selected {
+        background-color: var(--ag-selected-row-background-color, rgba(33, 150, 243, 0.3));
+    }
+}
+
 .ag-theme-moka-grid {
     &.ag-header-no {
         .ag-header {

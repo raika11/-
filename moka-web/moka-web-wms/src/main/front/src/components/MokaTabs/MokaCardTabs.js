@@ -20,6 +20,10 @@ const propTypes = {
      */
     width: PropTypes.number,
     /**
+     * Nav Item width
+     */
+    navWidth: PropTypes.number,
+    /**
      * 탭 컨텐츠의 className
      */
     tabContentClass: PropTypes.string,
@@ -56,7 +60,7 @@ const defaultProps = {
  * 카드 외형 + 상단에 탭이 달린 컴포넌트 (SSC 개발)
  */
 const MokaCardTabs = (props) => {
-    const { className, fill, id, tabs, tabNavs, width, height, tabContentClass, tabContentWrapperClassName, onSelectNav } = props;
+    const { className, fill, id, tabs, tabNavs, width, navWidth, height, tabContentClass, tabContentWrapperClassName, onSelectNav } = props;
     const [activeKey, setActiveKey] = useState(0);
 
     /**
@@ -77,7 +81,7 @@ const MokaCardTabs = (props) => {
                 <div className="d-flex px-card">
                     <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
                         {tabNavs.map((nav, idx) => (
-                            <Nav.Item key={idx}>
+                            <Nav.Item key={idx} style={{ width: navWidth }}>
                                 <Nav.Link eventKey={idx} className="h4">
                                     {nav}
                                 </Nav.Link>

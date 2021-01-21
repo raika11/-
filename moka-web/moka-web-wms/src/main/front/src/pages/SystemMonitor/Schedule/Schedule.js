@@ -17,6 +17,7 @@ const Schedule = ({ match }) => {
 
             <MokaCardTabs
                 width={1596}
+                navWidth={120}
                 tabContentClass="h-100"
                 tabs={[<RunState match={match} />, <Work match={match} />, <DeleteWork match={match} />, <DeployServer match={match} />]}
                 tabNavs={['작업 실행상태', '작업 목록', '삭제 작업 목록', '배포 서버 관리']}

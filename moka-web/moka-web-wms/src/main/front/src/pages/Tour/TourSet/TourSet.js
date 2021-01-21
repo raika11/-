@@ -23,9 +23,7 @@ const TourSet = () => {
                 </MokaCard>
 
                 {/* 견학 기본설정 */}
-                <MokaCard width={790} titleClassName="mb-0" title="견학 기본설정">
-                    <TourSetEdit />
-                </MokaCard>
+                <TourSetEdit />
             </div>
         </>
     );

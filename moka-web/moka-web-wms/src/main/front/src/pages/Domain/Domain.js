@@ -7,7 +7,7 @@ import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { clearStore, deleteDomain, hasRelationList, GET_DOMAIN, SAVE_DOMAIN } from '@store/domain';
 import toast, { messageBox } from '@utils/toastUtil';
-import DomainEdit from './DomainEditTest';
+import DomainEdit from './DomainEdit';
 const DomainList = React.lazy(() => import('./DomainList'));
 
 /**
@@ -120,11 +120,7 @@ const Domain = ({ match }) => {
             <Route
                 path={[`${match.path}/add`, `${match.path}/:domainId`]}
                 exact
-                render={() => (
-                    <MokaCard title="도메인 등록" width={820} headerClassName="d-flex justify-content-between align-item-center" height={CARD_DEFAULT_HEIGHT} loading={loading}>
-                        <DomainEdit onDelete={handleClickDelete} baseUrl={match.path} />
-                    </MokaCard>
-                )}
+                render={() => <DomainEdit onDelete={handleClickDelete} baseUrl={match.path} loading={loading} />}
             />
         </div>
     );

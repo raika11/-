@@ -284,7 +284,29 @@ const ColumnistEdit = ({ history, match }) => {
     }, []);
 
     return (
-        <MokaCard width={635} title={`칼럼니스트 ${columnist ? '정보' : '등록'}`} titleClassName="mb-0" loading={loading}>
+        <MokaCard
+            width={635}
+            title={`칼럼니스트 ${columnist ? '정보' : '등록'}`}
+            titleClassName="mb-0"
+            loading={loading}
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={[
+                {
+                    text: '저장',
+                    onClick: handleClickSaveButton,
+                    variant: 'positive',
+                    disabled: editDisabled.editBoxButton,
+                    className: 'mr-2',
+                },
+                {
+                    text: '취소',
+                    onClick: handleClickCancleButton,
+                    variant: 'negative',
+                    disabled: editDisabled.editBoxButton,
+                },
+            ]}
+        >
             <Form className="mb-gutter">
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
@@ -441,17 +463,6 @@ const ColumnistEdit = ({ history, match }) => {
                     labelClassName="justify-content-end"
                 />
             </Form>
-
-            <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                <div className="d-flex justify-content-center">
-                    <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editDisabled.editBoxButton}>
-                        저장
-                    </Button>
-                    <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editDisabled.editBoxButton}>
-                        취소
-                    </Button>
-                </div>
-            </div>
             <ColumnistModal show={repoterlistModalShow} onHide={() => setRepoterlistModalShow(false)} onClickSave={null} onClick={handleRepoterRowClick} />
         </MokaCard>
     );

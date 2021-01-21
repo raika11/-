@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 import ComponentSelector from './ComponentSelector';
@@ -422,7 +420,27 @@ const AreaFormDepth2 = (props) => {
     }, [invalidList]);
 
     return (
-        <MokaCard title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
+        <MokaCard
+            title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`}
+            className="flex-fill"
+            loading={loading}
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={[
+                {
+                    text: '저장',
+                    variant: 'positive',
+                    className: 'mr-2',
+                    onClick: handleClickSave,
+                },
+                {
+                    text: '삭제',
+                    variant: 'negative',
+                    onClick: handleClickDelete,
+                    disabled: !temp.areaSeq,
+                },
+            ]}
+        >
             <div className="d-flex justify-content-center">
                 <Col xs={10} className="p-0">
                     {/* 사용여부 */}
@@ -610,16 +628,6 @@ const AreaFormDepth2 = (props) => {
                         value={temp.previewRsrc}
                         onChange={handleChangeValue}
                     />
-
-                    {/* 버튼 그룹 */}
-                    <Card.Footer className="d-flex justify-content-center">
-                        <Button variant="positive" onClick={handleClickSave}>
-                            저장
-                        </Button>
-                        <Button variant="negative" className="ml-10" onClick={handleClickDelete} disabled={!temp.areaSeq}>
-                            삭제
-                        </Button>
-                    </Card.Footer>
                 </Col>
             </div>
         </MokaCard>

@@ -305,9 +305,7 @@ const SpecialEdit = () => {
                     <p className="m-0 pl-2 text-positive">(등록 완료 후 스크립트 오류 체크 꼭 해주세요)</p>
                 </div>
             }
-            headerClassName="border-bottom"
-            titleClassName="mb-0"
-            footerClassName="justify-content-center border-top"
+            footerClassName="justify-content-center"
             footerButtons={footerBtns}
             footer
         >

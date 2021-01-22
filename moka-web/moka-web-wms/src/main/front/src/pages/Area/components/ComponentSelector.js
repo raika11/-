@@ -29,7 +29,7 @@ const ComponentSelector = ({ component, areaComp, setAreaComp, compOptions, onCh
     return (
         <React.Fragment>
             <Col xs={component.dataType === 'DESK' ? 6 : 8} className="p-0 pl-2 pr-2">
-                <MokaInput as="select" name="component" value={component.componentSeq} onChange={onChange} isInvalid={error.component}>
+                <MokaInput as="select" name="component" value={component.componentSeq} onChange={onChange} isInvalid={error.component} invalidMessage={error.componentMessage}>
                     <option hidden>컴포넌트를 선택하세요</option>
                     {compOptions.map((com) => (
                         <option value={com.componentSeq} key={com.componentSeq} data-datatype={com.dataType}>

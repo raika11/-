@@ -58,6 +58,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
             setComponent({ componentSeq: value, dataType: datatype });
             setAreaComps([]);
             setAreaComp({ ...areaComp, deskingPart: null });
+            setError({ ...error, component: false });
         } else if (name === 'container') {
             // ContainerSelector에서 option이 변경될 때
             setContainer({ containerSeq: value });
@@ -108,6 +109,22 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
             });
             isInvalid = isInvalid || true;
         }
+        // areaComp, areaComps 체크
+        if (saveObj.areaDiv === ITEM_CP) {
+            if (!saveObj.areaComp.component?.componentSeq) {
+                errList.push({
+                    field: 'component',
+                    reason: '선택된 컴포넌트가 없습니다',
+                });
+                isInvalid = isInvalid || true;
+            }
+        } else if (!saveObj.container?.containerSeq) {
+            errList.push({
+                field: 'container',
+                reason: '선택된 컨테이너가 없습니다',
+            });
+            isInvalid = isInvalid || true;
+        }
 
         dispatch(changeInvalidList(errList));
         return !isInvalid;
@@ -148,19 +165,17 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
         }
 
         let save = { ...temp, page: { pageSeq: page.pageSeq }, parent: { areaSeq: parent.areaSeq }, domain: { domainId: domain.domainId } };
-        if (validate(save)) {
-            if (temp.areaDiv === ITEM_CP) {
-                save.container = null;
-                save.areaComps = null;
-                if (component.componentSeq) {
-                    save.areaComp = { ...areaComp, component, ordNo: 1 };
-                }
-            } else {
-                save.container = container;
-                save.areaComp = null;
-                save.areaComps = areaComps;
-            }
+        if (temp.areaDiv === ITEM_CP) {
+            save.container = null;
+            save.areaComps = null;
+            save.areaComp = { ...areaComp, component, ordNo: 1 };
+        } else {
+            save.container = container;
+            save.areaComp = null;
+            save.areaComps = areaComps;
+        }
 
+        if (validate(save)) {
             if (child.length > 0 && save.usedYn === 'N') {
                 messageBox.confirm(
                     '하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.\n사용여부를 off 하시겠습니까?',
@@ -325,7 +340,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
     useEffect(() => {
         // 모달한테 전달받은 page,pageSeq 변경 시, areaDiv 변경 시, 선택한 폼 변경 시 CP, CT 리스트 조회
         if (page.pageSeq && temp.areaDiv) {
-            setError({ ...error, page: false });
+            setError({ ...error, page: false, component: false, container: false });
             temp.areaDiv === ITEM_CP ? getCompOptions(loadCnt !== 0) : getContOptions(loadCnt !== 0);
         } else {
             setCompOptions([]);
@@ -456,7 +471,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                             />
                         )}
 
-                        {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} />}
+                        {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} error={error} />}
 
                         {/* 세로형/가로형 선택 */}
                         <Col xs={2} className="p-0">

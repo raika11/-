@@ -31,6 +31,13 @@ export function* saveArea({ payload: { area, callback } }) {
         }
 
         callbackData = response.data;
+
+        if (!response.data.header.success) {
+            yield put({
+                type: act.CHANGE_INVALID_LIST,
+                payload: response.data.body.list,
+            });
+        }
     } catch (e) {
         callbackData = errorResponse(e);
     }

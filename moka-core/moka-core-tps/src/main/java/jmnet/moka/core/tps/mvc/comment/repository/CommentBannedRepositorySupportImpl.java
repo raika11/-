@@ -44,6 +44,9 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
         if (McpString.isNotEmpty(searchDTO.getTagDiv())) {
             query.where(qCommentBanned.tagDiv.eq(searchDTO.getTagDiv()));
         }
+        if (McpString.isNotEmpty(searchDTO.getTagType())) {
+            query.where(qCommentBanned.tagType.eq(searchDTO.getTagType()));
+        }
         if (McpString.isNotEmpty(searchDTO.getKeyword())) {
             if (qCommentBanned.tagValue
                     .getMetadata()

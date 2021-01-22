@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 댓글금지
@@ -42,7 +43,7 @@ public class CommentBannedDTO implements Serializable {
     /**
      * 설정/해제여부
      */
-    private String usedYn = "Y";
+    private String usedYn = MokaConstants.YES;
 
     /**
      * 금지IP/금지사용자/금지단어
@@ -62,8 +63,8 @@ public class CommentBannedDTO implements Serializable {
     /**
      * 등록일시
      */
-    @DateTimeFormat
-    private Date tagRegDt;
+    @DTODateTimeFormat
+    private Date regDt;
 
     /**
      * 태그설명

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { MokaTable } from '@components';
-import { columnDefs, rowData } from '@pages/Survey/Poll/PollAgGridColumns';
+import { columnDefs } from '@pages/Survey/Poll/PollAgGridColumns';
 import produce from 'immer';
 import { useHistory } from 'react-router-dom';
 
-const PollAgGrid = ({ searchOptions, total, rows, loading, onChangeSearchOption }) => {
+const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSearchOption }) => {
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
+    const [selected, setSelected] = useState(null);
 
     const handleChangeSearchOptions = (option) => {
         if (onChangeSearchOption instanceof Function) {
@@ -25,6 +26,13 @@ const PollAgGrid = ({ searchOptions, total, rows, loading, onChangeSearchOption 
     useEffect(() => {
         setRowData(rows);
     }, [rows]);
+
+    useEffect(() => {
+        if (rowData.length > 0) {
+            setSelected(pollSeq);
+        }
+    }, [pollSeq, rowData.length]);
+
     return (
         <>
             <MokaTable
@@ -39,6 +47,7 @@ const PollAgGrid = ({ searchOptions, total, rows, loading, onChangeSearchOption 
                 loading={loading}
                 onChangeSearchOption={handleChangeSearchOptions}
                 onRowClicked={handleClickRow}
+                selected={pollSeq}
                 className="ag-grid-align-center"
             />
         </>

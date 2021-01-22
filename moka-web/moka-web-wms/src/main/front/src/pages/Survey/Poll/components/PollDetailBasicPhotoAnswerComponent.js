@@ -19,9 +19,9 @@ const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) 
         }
     };
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log(editItem);
-    }, [editItem]);
+    }, [editItem]);*/
 
     useEffect(() => {
         setEditItem(item);

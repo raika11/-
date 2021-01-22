@@ -59,9 +59,9 @@ const PollEdit = () => {
         }
     }, [poll]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log(edit);
-    }, [edit]);
+    }, [edit]);*/
 
     return (
         <MokaCard

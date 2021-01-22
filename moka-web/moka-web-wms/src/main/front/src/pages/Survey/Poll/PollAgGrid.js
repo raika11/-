@@ -47,7 +47,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 loading={loading}
                 onChangeSearchOption={handleChangeSearchOptions}
                 onRowClicked={handleClickRow}
-                selected={pollSeq}
+                selected={selected}
                 className="ag-grid-align-center"
             />
         </>

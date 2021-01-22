@@ -1,88 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory, Route } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard, MokaTable } from '@components';
-import { initialState, clearList, clearArea, changeSelectedDepth, getAreaDepth2, getAreaListDepth3, changeSearchOptionDepth3, GET_AREA_LIST_DEPTH2 } from '@store/area';
-import Depth3 from './AreaAgGridDepth3';
+import { initialState, getAreaListModal, changeSelectedDepth, getAreaModal } from '@store/area';
+import { messageBox } from '@utils/toastUtil';
 import columnDefs from './AreaAgGridColumns';
 
 /**
  * 편집영역 > 두번째 리스트
  */
-const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
-    const history = useHistory();
+const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3, onDelete, flag, setFlag, listDepth2, setListDepth2 }) => {
     const dispatch = useDispatch();
-    const { areaSeq } = useParams();
-    const { list, areaDepth1, loading } = useSelector((store) => ({
-        list: store.area.depth2.list,
-        areaDepth1: store.area.depth1.area,
-        loading: store.loading[GET_AREA_LIST_DEPTH2],
-    }));
+    const [loading, setLoading] = useState(false);
+    const reset = useRef(null);
 
-    // state
-    const [rowData, setRowData] = useState([]);
+    /**
+     * 리스트 조회
+     */
+    const getList = useCallback(() => {
+        if (areaDepth1?.area?.areaSeq) {
+            setLoading(true);
+            dispatch(
+                getAreaListModal({
+                    search: {
+                        parentAreaSeq: areaDepth1?.area?.areaSeq,
+                        depth: 2,
+                    },
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            setListDepth2(
+                                body.list.map((d) => ({
+                                    ...d,
+                                    onDelete: (data) => onDelete(data, 2),
+                                })),
+                            );
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                        setLoading(false);
+                    },
+                }),
+            );
+        } else {
+            setListDepth2([]);
+        }
+    }, [areaDepth1.area, dispatch, onDelete, setListDepth2]);
 
     useEffect(() => {
-        setRowData(
-            list.map((l) => ({
-                ...l,
-                onDelete,
-            })),
-        );
-    }, [list, onDelete]);
+        if (reset.current !== flag.depth2) {
+            getList();
+            reset.current = flag.depth2;
+        }
+    }, [getList, flag.depth2]);
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
-        history.push(`${baseUrl}/${areaDepth1.areaSeq}/${data.areaSeq}`);
-        dispatch(changeSelectedDepth(2));
+        dispatch(
+            getAreaModal({
+                areaSeq: data.areaSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        setAreaDepth2(body);
+                        setAreaDepth3(initialState.initData);
+                        setFlag({ ...flag, depth3: new Date().getTime() });
+                        dispatch(changeSelectedDepth(2));
+                    } else {
+                        messageBox.alert(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
      * 추가 버튼 클릭
      */
     const handleClickAdd = () => {
+        setAreaDepth2(initialState.initData);
+        setAreaDepth3(initialState.initData);
         dispatch(changeSelectedDepth(2));
-        dispatch(clearArea(2));
-        if (parentSeq) {
-            history.push(`${baseUrl}/${parentSeq}`);
-        } else {
-            history.push('/area');
-        }
+        setFlag({ ...flag, depth3: new Date().getTime() });
     };
-
-    useEffect(() => {
-        // areaSeq가 있으면 3뎁스 리스트 조회
-        if (areaSeq && areaSeq !== 'undefined') {
-            dispatch(
-                getAreaListDepth3(
-                    changeSearchOptionDepth3({
-                        ...initialState.depth3.search,
-                        parentAreaSeq: areaSeq,
-                    }),
-                ),
-            );
-            dispatch(getAreaDepth2({ areaSeq }));
-            if (history.location.pathname === match.url) {
-                dispatch(changeSelectedDepth(2));
-            }
-        } else {
-            dispatch(clearList(3));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [areaSeq]);
 
     return (
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0 d-flex justify-content-end">
-                        <Button variant="positive" onClick={handleClickAdd}>
+                        <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth1?.area?.areaSeq}>
                             추가
                         </Button>
                     </Col>
@@ -90,9 +99,9 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
 
                 <MokaTable
                     className="overflow-hidden flex-fill"
-                    rowData={rowData}
+                    rowData={listDepth2}
                     columnDefs={columnDefs}
-                    selected={areaSeq}
+                    selected={areaDepth2?.area?.areaSeq}
                     header={false}
                     paging={false}
                     dragging={false}
@@ -103,8 +112,6 @@ const AreaAgGridDepth2 = ({ match, parentSeq, baseUrl, onDelete }) => {
                     suppressRefreshCellAfterUpdate
                 />
             </MokaCard>
-
-            <Route path={[`${match.url}/:areaSeq`, match.url]} strict render={(props) => <Depth3 {...props} parentSeq={areaSeq} baseUrl={baseUrl} onDelete={onDelete} />} />
         </React.Fragment>
     );
 };

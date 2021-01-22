@@ -316,9 +316,7 @@ const SpecialEdit = () => {
                 <Form.Row>
                     {/* 이미지등록 */}
                     <Col xs={4} className="p-0 pr-4 d-flex flex-column">
-                        <p className="mb-1 ft-12 ml-1">
-                            <span className="required-text">*</span>이미지 등록(290*180)
-                        </p>
+                        <MokaInputLabel as="none" label="이미지 등록(290*180)" labelWidth={120} required className="mb-1" />
                         <MokaInput
                             as="imageFile"
                             inputProps={{

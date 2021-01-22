@@ -19,7 +19,6 @@ import {
     clearGroupMenuAuth,
 } from '@store/group';
 import toast, { messageBox } from '@utils/toastUtil';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 /**
  * 그룹 상세/수정/등록
@@ -335,8 +334,7 @@ const GroupEdit = () => {
     return (
         <MokaCard
             title="그룹정보"
-            className="w-100"
-            height={CARD_DEFAULT_HEIGHT - 90}
+            className="w-100 shadow-none"
             footerClassName="justify-content-center"
             footerButtons={
                 groupCd

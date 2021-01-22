@@ -166,7 +166,9 @@ const TourListEdit = () => {
                     // handleChangeValue
                 }
             />
+
             <hr className="divider" />
+
             <MokaInputLabel label="신청자 정보" className="mb-2" as="none" />
             <Form.Row className="mb-2">
                 <MokaInputLabel label="성명" className="mb-0 mr-2" inputProps={{ readOnly: true, plaintext: true }} value={name} onChange={(e) => e.target.value} />
@@ -183,13 +185,15 @@ const TourListEdit = () => {
                     </Button>
                 </Col>
             </Form.Row>
+
             <hr className="divider" />
+
             <MokaInputLabel label="담당자 정보" className="mb-2" as="none" />
             <MokaInputLabel label="부서" className="mb-2" value={dept} onChange={(e) => setDept(e.target.value)} />
             <MokaInputLabel label="성명" className="mb-2" value={admin} onChange={(e) => setAdmin(e.target.value)} />
             <MokaInputLabel label="연락처" className="mb-2" value={adminPhone} onChange={(e) => setAdminPhone(e.target.value)} />
-            <hr className="divider" />
-            <div className="mb-2  color-secondary">
+
+            <div className="mt-3 color-secondary">
                 <p className="m-0">※ 최초 한번의 승인/반려 시에만 메일이 발송됩니다.</p>
                 <p className="m-0">※ 신청자의 이메일 정보는 아이디 개념이라 수정할 수 없습니다.</p>
             </div>

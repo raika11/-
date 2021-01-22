@@ -26,9 +26,9 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
     });
 
     useEffect(() => {
-        if (!commonUtil.isEmpty(src)) {
-            setFile({ ...file, preview: src });
-        }
+        //if (!commonUtil.isEmpty(src)) {
+        setFile({ ...file, preview: src });
+        //}
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [src]);
 

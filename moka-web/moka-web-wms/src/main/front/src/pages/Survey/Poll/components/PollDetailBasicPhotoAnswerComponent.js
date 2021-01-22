@@ -2,28 +2,41 @@ import React, { useEffect, useRef, useState } from 'react';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import produce from 'immer';
 
-const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl }) => {
-    const [edit, setEdit] = useState({ imgUrl: '', imgFile: null });
+const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) => {
+    const [editItem, setEditItem] = useState({ imgUrl: null, imgFile: null });
 
-    const handleChangeFile = (acceptedFiles) => {
-        setEdit(
-            produce(edit, (draft) => {
-                draft.imgUrl = null;
-                draft.imgFile = acceptedFiles;
-            }),
-        );
+    const handleChangeValue = (name, value, type) => {
+        const changeItem = produce(editItem, (draft) => {
+            if (type === 'file') {
+                draft['imgUrl'] = null;
+            }
+            draft[name] = value;
+        });
+
+        setEditItem(changeItem);
+        if (onChange instanceof Function) {
+            onChange(changeItem);
+        }
     };
 
     useEffect(() => {
-        console.log(edit);
-    }, [edit]);
+        console.log(editItem);
+    }, [editItem]);
 
     useEffect(() => {
-        setEdit(item);
+        setEditItem(item);
     }, [item]);
     return (
         <div className="d-inline-flex flex-column">
-            <PollPhotoComponent key={index} width="100px" height="100px" src={edit.imgUrl} onChange={handleChangeFile}>
+            <PollPhotoComponent
+                key={index}
+                width="100px"
+                height="100px"
+                src={editItem.imgUrl}
+                onChange={(file) => {
+                    handleChangeValue('imgFile', file, 'file');
+                }}
+            >
                 150x150
             </PollPhotoComponent>
             <div className="text-center">{`보기 ${index + 1}`}</div>

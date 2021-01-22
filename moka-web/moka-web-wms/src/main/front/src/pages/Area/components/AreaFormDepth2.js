@@ -36,7 +36,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
     const [loadCnt, setLoadCnt] = useState(0);
     const [contOptions, setContOptions] = useState([]); // 컨테이너 options
     const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
-    const [error, setError] = useState({ areaNm: false, page: false });
+    const [error, setError] = useState({}); // 에러
 
     /**
      * 입력값 변경
@@ -335,6 +335,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
         setContainer(ar.container || {});
         ar?.domain?.domainId ? setDomain(ar.domain) : setDomain(parent.domain);
         setLoadCnt(0);
+        setError({});
     }, [area, parent]);
 
     useEffect(() => {

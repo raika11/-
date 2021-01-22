@@ -11,7 +11,9 @@ import { getPoll, GET_POLL, clearPoll, savePoll } from '@store/survey/poll/pollA
 import commonUtil from '@utils/commonUtil';
 import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
 import produce from 'immer';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@hooks/useDebounce';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
 
 const PollEdit = () => {
     const { pollSeq } = useParams();
@@ -225,7 +227,8 @@ const PollEdit = () => {
                             labelClassName="text-right"
                             value={edit.startDt}
                             onChange={(data) => {
-                                handleChangeValue({ name: 'startDt', value: data._d });
+                                console.log(moment(data._d).format(DB_DATEFORMAT));
+                                handleChangeValue({ name: 'startDt', value: moment(data._d).format(DB_DATEFORMAT) });
                             }}
                         />
                     </Col>
@@ -236,7 +239,8 @@ const PollEdit = () => {
                             name="endDt"
                             value={edit.endDt}
                             onChange={(data) => {
-                                handleChangeValue({ name: 'endDt', value: data._d });
+                                console.log(moment(data._d).format(DB_DATEFORMAT));
+                                handleChangeValue({ name: 'endDt', value: moment(data._d).format(DB_DATEFORMAT) });
                             }}
                         />
                     </Col>

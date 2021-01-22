@@ -116,7 +116,6 @@ function pollObjectToFormData(poll) {
             if (Array.isArray(value)) {
                 value.forEach((data, index) => {
                     Object.keys(data).forEach((itemKey) => {
-                        console.log(`${key}[${index}].${itemKey}`);
                         pollForm.append(`${key}[${index}].${itemKey}`, data[itemKey]);
                     });
                 });

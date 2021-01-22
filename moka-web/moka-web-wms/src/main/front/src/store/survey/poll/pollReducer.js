@@ -44,6 +44,7 @@ export const initialState = {
         startDt: '',
         endDt: '',
         status: '',
+        sort: 'pollSeq,desc',
     },
     total: 0,
     list: [],

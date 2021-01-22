@@ -572,8 +572,8 @@ const routes = [
         strict: true,
     },
     {
-        path: '/article-cdn',
-        name: 'articleCdn',
+        path: '/cdn-article',
+        name: 'cdnArticle',
         displayName: '트래픽 분산(기사) 관리',
         component: SystemMonitor,
         layout: SidebarOpenLayout,

@@ -3,9 +3,8 @@ import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
-
-import ArticleCdnEdit from './ArticleCdnEdit';
-const ArticleCdnList = React.lazy(() => import('./ArticleCdnList'));
+import CdnArticleEdit from './CdnArticleEdit';
+const CdnArticleList = React.lazy(() => import('./CdnArticleList'));
 
 /**
  * 트래픽 분산(기사) 관리
@@ -24,12 +23,12 @@ const ArticleCdn = ({ match, displayName }) => {
             {/* 리스트 */}
             <MokaCard width={800} className="mr-gutter" title={displayName} bodyClassName="d-flex flex-column">
                 <Suspense>
-                    <ArticleCdnList match={match} />
+                    <CdnArticleList match={match} />
                 </Suspense>
             </MokaCard>
 
             {/* 등록/수정 */}
-            <Route path={[`${match.path}/add`, `${match.path}/:totalId`]} exact render={() => <ArticleCdnEdit match={match} />} />
+            <Route path={[`${match.path}/add`, `${match.path}/:totalId`]} exact render={() => <CdnArticleEdit match={match} />} />
         </div>
     );
 };

@@ -40,6 +40,7 @@ import board from '@store/board/boardsReducer';
 import seoMeta from '@store/seoMeta/seoMetaReducer';
 import jpod from '@store/jpod/jpodReducer';
 import poll from '@store/survey/poll/pollReducer';
+import cdnArticle from '@store/cdnArticle/cdnArticleReducer';
 
 export default combineReducers({
     toastr,
@@ -82,4 +83,5 @@ export default combineReducers({
     seoMeta,
     poll,
     jpod,
+    cdnArticle,
 });

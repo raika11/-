@@ -78,13 +78,13 @@ function* saveArticle({ payload: { article, callback } }) {
             });
             // 목록 조회 로직은 여기에 추가하지 않음 (수신/등록 분기해야하므로 개별 처리)
         } else {
-            const { body } = response.data.body;
+            const { body } = response.data;
 
             if (body && body.list && Array.isArray(body.list)) {
                 // invalidList 셋팅
                 yield put({
                     type: act.CHANGE_INVALID_LIST,
-                    payload: response.data.body.list,
+                    payload: body.list,
                 });
             }
         }

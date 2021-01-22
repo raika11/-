@@ -256,10 +256,10 @@ public class TourRestController extends AbstractCommonController {
     }
 
     @ApiOperation(value = "신청 수정")
-    @PutMapping("/applys/{tourSeq}")
+    @PutMapping(value = "/applys/{tourSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putTourApply(
             @ApiParam("신청순번(필수)") @PathVariable("tourSeq") @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq,
-            @ApiParam("신청정보") @Valid TourApplyVO tourApplyVO)
+            @ApiParam("신청정보") @RequestBody @Valid TourApplyVO tourApplyVO)
             throws Exception {
 
         try {

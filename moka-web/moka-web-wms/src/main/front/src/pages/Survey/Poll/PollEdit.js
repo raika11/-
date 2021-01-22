@@ -227,7 +227,6 @@ const PollEdit = () => {
                             labelClassName="text-right"
                             value={edit.startDt}
                             onChange={(data) => {
-                                console.log(moment(data._d).format(DB_DATEFORMAT));
                                 handleChangeValue({ name: 'startDt', value: moment(data._d).format(DB_DATEFORMAT) });
                             }}
                         />
@@ -239,7 +238,6 @@ const PollEdit = () => {
                             name="endDt"
                             value={edit.endDt}
                             onChange={(data) => {
-                                console.log(moment(data._d).format(DB_DATEFORMAT));
                                 handleChangeValue({ name: 'endDt', value: moment(data._d).format(DB_DATEFORMAT) });
                             }}
                         />

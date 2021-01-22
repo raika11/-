@@ -47,14 +47,16 @@ const SpecialAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        setRowData(
-            specialList.map((sp) => ({
-                ...sp,
-                pageSdate: sp.pageSdate && `${sp.pageSdate.substr(0, 4)}-${sp.pageSdate.substr(4, 2)}-${sp.pageSdate.substr(6, 2)}`,
-                pageCdName: ptRows.find((p) => p.dtlCd === String(sp.pageCd))?.cdNm,
-                regDtText: moment(sp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD'),
-            })),
-        );
+        if (ptRows) {
+            setRowData(
+                specialList.map((sp) => ({
+                    ...sp,
+                    pageSdate: sp.pageSdate && `${sp.pageSdate.substr(0, 4)}-${sp.pageSdate.substr(4, 2)}-${sp.pageSdate.substr(6, 2)}`,
+                    pageCdName: ptRows.find((p) => p.dtlCd === String(sp.pageCd))?.cdNm,
+                    regDtText: moment(sp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD'),
+                })),
+            );
+        }
     }, [ptRows, specialList]);
 
     return (

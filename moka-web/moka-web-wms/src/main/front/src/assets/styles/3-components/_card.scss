@@ -18,12 +18,13 @@
 }
 
 .card-body {
-  padding: $card-spacer-y $card-spacer-x 0;
+  padding: 0 $card-spacer-x ;
   margin-bottom: $card-spacer-y;
+  margin-top: $card-spacer-y;
 }
 
 .card-header + .card-body {
-  padding-top: 0;
+  margin-top: 0;
 }
 
 .card-footer {

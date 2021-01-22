@@ -601,7 +601,7 @@ const SpecialEdit = () => {
                             </Col>
                         </Form.Row>
                         {/* 수정 정보 */}
-                        <Form.Row className="mb-2">
+                        <Form.Row>
                             <Col xs={4} className="p-0">
                                 <MokaInputLabel label="수정자" labelWidth={110} name="modId" value={temp.modId} inputProps={{ plaintext: true, readOnly: true }} />
                             </Col>

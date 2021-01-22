@@ -53,14 +53,14 @@ export default handleActions(
         /**
          * 조회
          */
-        [act.GET_CDN_ARTICLE_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_CDN_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.total = body.totalCnt;
                 draft.list = body.list;
                 draft.error = initialState.error;
             });
         },
-        [act.GET_CDN_ARTICLE_FAILURE]: (state, { payload }) => {
+        [act.GET_CDN_ARTICLE_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.total = initialState.totalCnt;
                 draft.list = initialState.list;

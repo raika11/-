@@ -401,10 +401,9 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
 
                     {/* 부모 정보 노출 */}
                     <Form.Row className="mb-2">
-                        <Col xs={7} className="p-0">
+                        <Col xs={8} className="p-0 pr-2">
                             <MokaInputLabel
                                 name="parent"
-                                className="mb-0"
                                 labelWidth={81}
                                 label={depth === 2 ? '그룹 영역' : '중분류 영역'}
                                 value={parent.areaNm}
@@ -412,8 +411,8 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                                 disabled
                             />
                         </Col>
-                        <Col xs={5} className="p-0">
-                            <MokaInputLabel className="mb-0" labelWidth={81} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                        <Col xs={4} className="p-0">
+                            <MokaInputLabel labelWidth={81} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                         </Col>
                     </Form.Row>
 
@@ -453,34 +452,36 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                     <MokaInputLabel name="afterApi" label="API" className="mb-2" labelWidth={81} value={temp.afterApi} onChange={handleChangeValue} />
 
                     {/* 컴포넌트/컨테이너 선택 */}
-                    <Form.Row className="mb-2">
-                        <Col xs={2} className="p-0">
-                            <MokaInput as="select" name="areaDiv" value={temp.areaDiv} onChange={handleChangeValue}>
+                    <Form.Row className="mb-2 d-flex">
+                        <div className="flex-shrink-0 mr-2" style={{ width: 86 }}>
+                            <MokaInput as="select" name="areaDiv" className="ft-13" value={temp.areaDiv} onChange={handleChangeValue}>
                                 <option value={ITEM_CP}>컴포넌트</option>
                                 <option value={ITEM_CT}>컨테이너</option>
                             </MokaInput>
-                        </Col>
+                        </div>
 
-                        {temp.areaDiv === ITEM_CP && (
-                            <ComponentSelector
-                                component={component}
-                                areaComp={areaComp}
-                                setAreaComp={setAreaComp}
-                                onChange={handleChangeValue}
-                                compOptions={compOptions}
-                                error={error}
-                            />
-                        )}
+                        <Form.Row className="flex-fill">
+                            {temp.areaDiv === ITEM_CP && (
+                                <ComponentSelector
+                                    component={component}
+                                    areaComp={areaComp}
+                                    setAreaComp={setAreaComp}
+                                    onChange={handleChangeValue}
+                                    compOptions={compOptions}
+                                    error={error}
+                                />
+                            )}
 
-                        {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} error={error} />}
+                            {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} error={error} />}
+                        </Form.Row>
 
                         {/* 세로형/가로형 선택 */}
-                        <Col xs={2} className="p-0">
-                            <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
+                        <div className="ml-2 flex-shrink-0">
+                            <MokaInput as="select" name="areaAlign" className="ft-13" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
                                 <option value={AREA_ALIGN_V}>세로형</option>
                                 {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
                             </MokaInput>
-                        </Col>
+                        </div>
                     </Form.Row>
 
                     {/* 컨테이너 리로드 문구 */}

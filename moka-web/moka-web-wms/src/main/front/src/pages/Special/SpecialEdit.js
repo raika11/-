@@ -321,7 +321,7 @@ const SpecialEdit = () => {
                             as="imageFile"
                             inputProps={{
                                 width: '100%',
-                                height: 166,
+                                height: 174,
                                 img: temp.imgUrl ? `${temp.imgUrl}?${currentDate}` : null,
                                 setFileValue,
                             }}
@@ -330,14 +330,14 @@ const SpecialEdit = () => {
                             invalidMessage={error.imgUrlMessage}
                             onChange={() => setError({ ...error, imgUrl: false })}
                         />
-                        <Form.Row className="d-flex justify-content-between mt-2">
+                        <div className="d-flex justify-content-between mt-2">
                             <Button variant="negative" size="sm" onClick={deleteImage}>
                                 이미지 삭제
                             </Button>
                             <Button variant="outline-neutral" size="sm">
                                 이미지 편집
                             </Button>
-                        </Form.Row>
+                        </div>
                     </Col>
                     {/* 사용여부/검색여부/리스트노출 */}
                     <Col xs={8} className="p-0 d-flex flex-column">

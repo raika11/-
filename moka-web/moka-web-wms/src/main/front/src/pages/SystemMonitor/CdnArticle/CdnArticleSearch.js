@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { initialState, changeSearchOption, getCdnArticleList } from '@store/cdnArticle';
 import { MokaInput, MokaSearchInput } from '@components';
 
+/**
+ * cdn 기사 검색
+ */
 const ArticleCdnSearch = ({ match }) => {
     const history = useHistory();
-    const [search, setSearch] = useState({});
+    const dispatch = useDispatch();
+    const [search, setSearch] = useState(initialState.search);
+    const storeSearch = useSelector(({ cdnArticle }) => cdnArticle.search);
 
     /**
      * 입력 값 변경
@@ -18,54 +26,51 @@ const ArticleCdnSearch = ({ match }) => {
     };
 
     /**
-     * 검색 버튼
+     * 검색
      */
     const handleSearch = () => {
-        console.log('검색');
-    };
-
-    /**
-     * 키 입력
-     * @param {object} e 이벤트
-     */
-    const handleKeyPress = (e) => {
-        // 엔터 기본 동작 막음
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleSearch();
-        }
+        let ns = { ...search, page: 0 };
+        dispatch(changeSearchOption(ns));
+        dispatch(getCdnArticleList({ search: ns }));
     };
 
     /**
      * 초기화
      */
-    const handleReset = () => {
-        setSearch({});
-    };
+    const handleReset = () => setSearch(initialState.search);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getCdnArticleList({ search: initialState.search }));
+    }, [dispatch]);
 
     return (
         <Form className="mb-2">
             <Form.Row className="mb-2 d-flex">
-                <div className="flex-fill mr-2">
-                    <MokaInput placeholder="제목을 입력하세요" value={search.title} name="title" onChange={handleChangeValue} onKeyPress={handleKeyPress} />
-                </div>
-                <MokaSearchInput
-                    placeholder="기사 ID를 입력하세요"
-                    value={search.totalId}
-                    name="totalId"
-                    className="mr-2 flex-fill"
-                    onChange={handleChangeValue}
-                    onSearch={handleSearch}
-                />
-                <Button variant="negative" className="flex-shrink-0" onClick={handleReset}>
-                    초기화
-                </Button>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </Col>
+                <Col xs={10} className="p-0 d-flex">
+                    <MokaSearchInput value={search.keyword} name="keyword" className="mr-2 flex-fill" onChange={handleChangeValue} onSearch={handleSearch} />
+                    <Button variant="negative" className="flex-shrink-0" onClick={handleReset}>
+                        초기화
+                    </Button>
+                </Col>
             </Form.Row>
-            <Form.Row className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end">
                 <Button variant="positive" onClick={() => history.push(`${match.path}/add`)}>
                     등록
                 </Button>
-            </Form.Row>
+            </div>
         </Form>
     );
 };

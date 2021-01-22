@@ -214,7 +214,6 @@ const MicAgendaEdit = () => {
                     value={defaultValue}
                     inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
                     onChange={(ct) => {
-                        console.log(ct);
                         let result = [];
                         if (ct) {
                             result = ct.map((ct) => ct.value);

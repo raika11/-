@@ -68,6 +68,7 @@ const SystemLog = React.lazy(() => retry(() => import('@pages/SystemLog')));
 const SystemMonitor = React.lazy(() => retry(() => import('@pages/SystemMonitor')));
 const BulkMonitor = React.lazy(() => retry(() => import('@pages/BulkMonitor')));
 const Apis = React.lazy(() => retry(() => import('@pages/Apis')));
+const Package = React.lazy(() => retry(() => import('@pages/Package')));
 
 const routes = [
     {
@@ -627,7 +628,7 @@ const routes = [
         displayName: '벌크 모니터링',
         component: BulkMonitor,
         layout: SidebarOpenLayout,
-        nonResponsive: false,
+        nonResponsive: true,
         exact: false,
         strict: true,
     },
@@ -637,7 +638,7 @@ const routes = [
         displayName: 'API 관리',
         component: Apis,
         layout: SidebarOpenLayout,
-        nonResponsive: false,
+        nonResponsive: true,
         exact: false,
         strict: true,
     },
@@ -646,6 +647,16 @@ const routes = [
         name: 'schedule',
         displayName: '스케줄 서버 관리',
         component: SystemMonitor,
+        layout: SidebarOpenLayout,
+        nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/package',
+        name: 'package',
+        displayName: '패키지 관리',
+        component: Package,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

@@ -5,7 +5,7 @@ import { createRequestActionTypes } from '@store/commons/saga';
  * 검색조건 변경
  */
 export const CHANGE_SEARCH_OPTION = 'cdnArticle/CHANGE_SEARCH_OPTION';
-export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, ({ search }) => ({ search }));
+export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 export const CHANGE_INVALID_LIST = 'cdnArticle/CHANGE_INVALID_LIST';
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 

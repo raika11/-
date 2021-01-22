@@ -15,7 +15,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
-import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,6 +89,6 @@ public class CommentBanned extends BaseAudit {
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REG_ID", referencedColumnName = "MEM_ID", insertable = false, updatable = false)
-    private MemberInfo regMember;
+    private MemberSimpleInfo regMember;
 
 }

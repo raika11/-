@@ -415,7 +415,7 @@ const PageEdit = ({ onDelete }) => {
                             invalidMessage={error.pageDisplayNameMessage}
                         />
                     </Col>
-                    <Col xs={4} className="px-0 pl-2">
+                    <Col xs={4} className="px-0 pl-20">
                         <MokaInputLabel
                             label="순서"
                             labelWidth={27}
@@ -445,7 +445,7 @@ const PageEdit = ({ onDelete }) => {
                         <MokaSearchInput
                             className="pl-2"
                             value={temp.moveUrl}
-                            placeholder="이동할 페이지를 선택하세요"
+                            placeholder="이동 페이지 선택"
                             onSearch={() => setMoveModalShow(true)}
                             inputProps={{ readOnly: true }}
                             disabled={temp.moveYn === 'N'}

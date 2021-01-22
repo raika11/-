@@ -429,6 +429,7 @@ const DirectLinkEdit = ({ history, match }) => {
                             name="viewSdate"
                             value={temp.viewSdate}
                             onChange={handleSDate}
+                            className="mr-1"
                             inputProps={{ timeFormat: null }}
                             disabled={dateDisabled}
                         />
@@ -439,6 +440,7 @@ const DirectLinkEdit = ({ history, match }) => {
                             name="viewEdate"
                             value={temp.viewEdate}
                             onChange={handleEDate}
+                            className="ml-1"
                             inputProps={{ timeFormat: null }}
                             disabled={dateDisabled}
                         />

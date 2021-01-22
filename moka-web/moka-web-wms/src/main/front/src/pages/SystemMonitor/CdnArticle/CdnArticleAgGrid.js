@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
-import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
-import columnDefs, { test_data } from './CdnArticleAgGridColumns';
-
-moment.locale('ko');
+import { GET_CDN_ARTICLE_LIST, getCdnArticleList, changeSearchOption } from '@store/cdnArticle';
+import columnDefs from './CdnArticleAgGridColumns';
 
 const ArticleCdnAgGrid = ({ match }) => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
+    const loading = useSelector(({ loading }) => loading[GET_CDN_ARTICLE_LIST]);
+    const { search, total, list } = useSelector(({ cdnArticle }) => ({
+        search: cdnArticle.search,
+        total: cdnArticle.total,
+        list: cdnArticle.list,
+    }));
 
     /**
      * row clicked
@@ -19,24 +24,40 @@ const ArticleCdnAgGrid = ({ match }) => {
         history.push(`${match.path}/${data.totalId}`);
     };
 
+    /**
+     * 테이블 검색옵션 변경
+     */
+    const handleChangeSearchOption = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        dispatch(changeSearchOption(temp));
+        dispatch(getCdnArticleList({ search: temp }));
+    };
+
     useEffect(() => {
         setRowData(
-            test_data.map((data) => ({
+            list.map((data) => ({
                 ...data,
-                usedYn: data.totalId % 3 !== 0 ? 'Y' : 'N',
-                regDt: moment(data.serviceDaytime, DB_DATEFORMAT).format('YYYY-MM-DD'),
+                regDt: (data.regDt || '').slice(0, 10),
             })),
         );
-    }, []);
+    }, [list]);
 
     return (
         <MokaTable
+            loading={loading}
             columnDefs={columnDefs}
             rowData={rowData}
             rowHeight={50}
             className="overflow-hidden flex-fill"
             onRowNodeId={(data) => data.totalId}
             onRowClicked={handleRowClicked}
+            onChangeSearchOption={handleChangeSearchOption}
+            total={total}
+            page={search.page}
+            size={search.size}
         />
     );
 };

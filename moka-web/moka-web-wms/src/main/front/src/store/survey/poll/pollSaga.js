@@ -4,7 +4,7 @@ import * as pollApi from './pollApi';
 import * as codeMgtApi from '@store/codeMgt/codeMgtApi';
 import { finishLoading, startLoading } from '@store/loading';
 import produce from 'immer';
-import { unescapeHtml } from '@utils/convertUtil';
+import { objectToFormData, unescapeHtml } from '@utils/convertUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 
@@ -101,9 +101,38 @@ function* getPoll({ type, payload }) {
     yield put(finishLoading(type));
 }
 
+function* savePoll({ type, payload }) {
+    const formData = pollObjectToFormData(payload);
+    console.log(payload.pollItems);
+    const response = yield call(pollApi.postPoll, formData);
+    console.log(response);
+}
+
+function pollObjectToFormData(poll) {
+    const pollForm = new FormData();
+    Object.keys(poll).forEach((key) => {
+        let value = poll[key];
+        if (value !== undefined && value !== null) {
+            if (Array.isArray(value)) {
+                value.forEach((data, index) => {
+                    Object.keys(data).forEach((itemKey) => {
+                        console.log(`${key}[${index}].${itemKey}`);
+                        pollForm.append(`${key}[${index}].${itemKey}`, data[itemKey]);
+                    });
+                });
+            } else {
+                pollForm.append(key, value);
+            }
+        }
+    });
+
+    return pollForm;
+}
+
 export default function* pollSaga() {
     yield takeLatest(action.GET_POLL_CATEGORY_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_GROUP_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_LIST, getPollList);
     yield takeLatest(action.GET_POLL, getPoll);
+    yield takeLatest(action.SAVE_POLL, savePoll);
 }

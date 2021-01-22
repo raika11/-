@@ -90,11 +90,24 @@ export const columnDefs = [
         children: [
             {
                 headerName: '수정자',
-                field: 'modeMember',
+                field: 'modMember',
                 width: 100,
                 cellStyle: { fontSize: '12px', lineHeight: '16px' },
                 cellRendererFramework: (param) => {
-                    return <MultiRowColumnComponent values={[param.data.regMember, param.value]} />;
+                    const regMember = param.data.regMember;
+                    const modMember = param.data.modMember;
+
+                    let regMemberIdNm = '';
+                    if (regMember instanceof Object) {
+                        regMemberIdNm = `${regMember.memberId}(${regMember.memberNm})`;
+                    }
+
+                    let modMemberIdNm = '';
+                    if (modMember instanceof Object) {
+                        modMemberIdNm = `${modMember.memberId}(${modMember.memberNm})`;
+                    }
+
+                    return <MultiRowColumnComponent values={[regMemberIdNm, modMemberIdNm]} />;
                 },
             },
         ],

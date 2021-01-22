@@ -21,7 +21,7 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
         accept: ['image/jpeg', 'image/png'],
         onDrop: (acceptedFiles) => {
             acceptedFiles[0] && setFile(Object.assign(acceptedFiles[0], { preview: URL.createObjectURL(acceptedFiles[0]) }));
-            onChange instanceof Function && onChange(acceptedFiles);
+            onChange instanceof Function && onChange(acceptedFiles[0]);
         },
     });
 
@@ -45,6 +45,7 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
                 {...getInputProps({
                     onClick: () => {
                         setFile({});
+                        onChange instanceof Function && onChange(null);
                     },
                 })}
             />

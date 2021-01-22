@@ -7,7 +7,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
-import { MokaModal, MokaInput, MokaIcon, useBreakpoint } from '@components';
+import { MokaModal, MokaInput, MokaIcon } from '@components';
+import useBreakpoint from '@hooks/useBreakpoint';
 import { getMasterCodeList, GET_MASTER_CODE_LIST, clearMasterCodeList } from '@store/code';
 import toast from '@utils/toastUtil';
 

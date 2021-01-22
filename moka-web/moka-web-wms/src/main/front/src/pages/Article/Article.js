@@ -6,8 +6,9 @@ import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MokaCard, useBreakpoint } from '@components';
+import { MokaCard } from '@components';
 import { clearStore } from '@store/article';
+import useBreakpoint from '@hooks/useBreakpoint';
 
 import ArticleEdit from './ArticleEdit';
 const ArticleList = React.lazy(() => import('./ArticleList'));

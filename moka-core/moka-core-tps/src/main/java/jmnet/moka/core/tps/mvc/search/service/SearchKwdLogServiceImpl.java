@@ -34,7 +34,7 @@ public class SearchKwdLogServiceImpl implements SearchKwdLogService {
     @Override
     public Page<SearchKwdLogVO> findAllSearchKwdLogStat(SearchKwdLogSearchDTO searchDTO) {
         List<SearchKwdLogVO> list = searchKwdLogMapper.findAll(searchDTO);
-        return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal());
+        return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }
 
     @Override

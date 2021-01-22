@@ -9,6 +9,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDTO;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,5 +71,10 @@ public class CommentBannedDTO implements Serializable {
      * 태그설명
      */
     private String tagDesc;
+
+    /**
+     * 등록자 정보
+     */
+    private MemberSimpleDTO regMember;
 
 }

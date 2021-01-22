@@ -10,6 +10,7 @@ import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgt;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
 import jmnet.moka.core.tps.mvc.comment.entity.QCommentBanned;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,10 +35,11 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
         super(CommentBanned.class);
     }
 
-    @EntityGraph(attributePaths = {"codeMgt"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"codeMgt", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
     public Page<CommentBanned> findAllCommentBanned(CommentBannedSearchDTO searchDTO) {
         Pageable pageable = searchDTO.getPageable();
         QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
+        QMemberInfo qRegMember = new QMemberInfo("regMember");
         QCodeMgt qCodeMgt = QCodeMgt.codeMgt;
         JPQLQuery<CommentBanned> query = from(qCommentBanned);
 
@@ -70,7 +72,8 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
         query.where(qCommentBanned.tagDivCode.codeMgtGrp.grpCd.eq("CMT_TAG_DIV"));
 
         QueryResults<CommentBanned> list = query
-                .leftJoin(qCommentBanned.tagDivCode)
+                .leftJoin(qCommentBanned.regMember, qRegMember)
+                .leftJoin(qCommentBanned.tagDivCode, qCodeMgt)
                 .fetchJoin()
                 .fetchResults();
 

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import columnDefs, { test_data } from './ArticleCdnAgGridColumns';
+import columnDefs, { test_data } from './CdnArticleAgGridColumns';
 
 moment.locale('ko');
 

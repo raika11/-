@@ -1,6 +1,6 @@
 import React from 'react';
-import Search from './ArticleCdnSearch';
-import AgGrid from './ArticleCdnAgGrid';
+import Search from './CdnArticleSearch';
+import AgGrid from './CdnArticleAgGrid';
 
 const ArticleCdnList = (props) => {
     return (

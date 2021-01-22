@@ -102,4 +102,63 @@
     ) }
   </select>
 
+  <!-- 견학 신청 수정 -->
+  <select id="upuTbJoongangTourApplyUpd" parameterType="TourApplyVO"
+    resultType="TourApplyVO"
+    statementType="CALLABLE">
+    { call UPU_TB_JOONGANG_TOUR_APPLY_Upd(
+    #{tourSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{tourDate, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+    #{tourTime, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tourId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tourGroupNm, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tourPersons, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+    #{tourAge, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+    #{tourPurpose, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{writerNm, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{writerPhone, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{writerPwd, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{writerIp, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{returnReason, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{chargeDept, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{chargeStaffNm, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{chargePhone, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tourStatus, mode=IN, jdbcType=VARCHAR, javaType=string}
+    ) }
+  </select>
+
+  <!-- 견학 가능일 목록조회 -->
+  <select id="upuTbJoongangTourPossibleBysel" resultType="TourPossibleDenyVO"
+    statementType="CALLABLE">
+    { call UPU_TB_JOONGANG_TOUR_POSSIBLE_BYSEL() }
+  </select>
+
+  <!-- 견학 신청 삭제 -->
+  <update id="upuTbJoongangTourApplyDel" parameterType="java.lang.Long"
+    statementType="CALLABLE">
+    { call UPU_TB_JOONGANG_TOUR_APPLY_DEL(
+    #{tourSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </update>
+
+  <!-- 월별 견학 휴일 목록 조회 -->
+  <select id="upuTbJoongangTourDenyBymonthSel" parameterType="hashMap" resultType="TourDenyVO"
+    statementType="CALLABLE">
+    { call UPU_TB_JOONGANG_TOUR_DENY_BYMONTH_SEL(
+    #{startYear, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{startMonth, mode=IN, jdbcType=VARCHAR, javaType=string}
+    ) }
+  </select>
+
+  <!-- 월별 견학 신청 목록 조회 -->
+  <select id="upuTbJoongangTourApplyBymonthSel" parameterType="hashMap" resultType="TourApplyVO"
+    statementType="CALLABLE">
+    { call UPU_TB_JOONGANG_TOUR_APPLY_BYMONTH_SEL(
+    #{startYear, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{startMonth, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{adminYn, mode=IN, jdbcType=VARCHAR, javaType=string}
+    ) }
+  </select>
+
+
 </mapper>

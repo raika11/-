@@ -7,6 +7,7 @@ package jmnet.moka.core.tps.mvc.tour.service;
 import java.util.List;
 import jmnet.moka.core.tps.mvc.tour.dto.TourDenySearchDTO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourDenyVO;
+import jmnet.moka.core.tps.mvc.tour.vo.TourPossibleDenyVO;
 
 /**
  * Description: 견학 휴일 서비스
@@ -44,4 +45,20 @@ public interface TourDenyService {
      * @param denySeq 휴일순번
      */
     void deleteTourDeny(Long denySeq);
+
+    /**
+     * 견학 가능일 목록조회
+     *
+     * @return 견학 가능일 목록
+     */
+    List<TourPossibleDenyVO> findAllTourDenyByPossible();
+
+    /**
+     * 월별 견학 휴일 목록 조회
+     *
+     * @param startYear  년도
+     * @param startMonth 월
+     * @return 월별 견학 휴일 목록
+     */
+    List<TourDenyVO> findAllTourDenyMonth(String startYear, String startMonth);
 }

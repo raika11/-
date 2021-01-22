@@ -90,4 +90,10 @@ public class TourDenyVO implements Serializable {
     @Column(name = "DENY_TITLE")
     private String denyTitle;
 
+    /**
+     * 오늘기준일자(디비에 없는 필드)
+     */
+    @Column(name = "HOLIDAY")
+    private String holiday;
+
 }

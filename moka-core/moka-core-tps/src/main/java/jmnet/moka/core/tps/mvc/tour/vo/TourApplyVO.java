@@ -64,21 +64,21 @@ public class TourApplyVO implements Serializable {
     /**
      * 견학시간
      */
-    @Length(max = 2, message = "{tps.tour-deny.error.len.tourTime}")
+    @Length(max = 2, message = "{tps.tour-apply.error.len.tourTime}")
     @Column(name = "TOUR_TIME")
     private String tourTime;
 
     /**
      * UNIQUE ID
      */
-    @Length(max = 12, message = "{tps.tour-deny.error.len.tourId}")
+    @Length(max = 12, message = "{tps.tour-apply.error.len.tourId}")
     @Column(name = "TOUR_ID")
     private String tourId;
 
     /**
      * 단체명
      */
-    @Length(max = 100, message = "{tps.tour-deny.error.len.tourGroupNm}")
+    @Length(max = 100, message = "{tps.tour-apply.error.len.tourGroupNm}")
     @Column(name = "TOUR_GROUP_NM")
     private String tourGroupNm;
 
@@ -103,35 +103,35 @@ public class TourApplyVO implements Serializable {
     /**
      * 신청자 이름
      */
-    @Length(max = 100, message = "{tps.tour-deny.error.len.writerNm}")
+    @Length(max = 100, message = "{tps.tour-apply.error.len.writerNm}")
     @Column(name = "WRITER_NM")
     private String writerNm;
 
     /**
      * 신청자 핸드폰 번호
      */
-    @Length(max = 512, message = "{tps.tour-deny.error.len.writerPhone}")
+    @Length(max = 512, message = "{tps.tour-apply.error.len.writerPhone}")
     @Column(name = "WRITER_PHONE")
     private String writerPhone;
 
     /**
      * 신청자 EMAIL
      */
-    @Length(max = 512, message = "{tps.tour-deny.error.len.writerEmail}")
+    @Length(max = 512, message = "{tps.tour-apply.error.len.writerEmail}")
     @Column(name = "WRITER_EMAIL")
     private String writerEmail;
 
     /**
      * 비밀번호
      */
-    @Length(max = 512, message = "{tps.tour-deny.error.len.writerPwd}")
+    @Length(max = 512, message = "{tps.tour-apply.error.len.writerPwd}")
     @Column(name = "WRITER_PWD")
     private String writerPwd;
 
     /**
      * 신청자 IP
      */
-    @Length(max = 40, message = "{tps.tour-deny.error.len.writerIp}")
+    @Length(max = 40, message = "{tps.tour-apply.error.len.writerIp}")
     @Column(name = "WRITER_IP")
     private String writerIp;
 
@@ -165,21 +165,21 @@ public class TourApplyVO implements Serializable {
     /**
      * 담당자 부서
      */
-    @Length(max = 100, message = "{tps.tour-deny.error.len.chargeDept}")
+    @Length(max = 100, message = "{tps.tour-apply.error.len.chargeDept}")
     @Column(name = "CHARGE_DEPT")
     private String chargeDept;
 
     /**
      * 담당자 이름
      */
-    @Length(max = 100, message = "{tps.tour-deny.error.len.chargeStaffNm}")
+    @Length(max = 100, message = "{tps.tour-apply.error.len.chargeStaffNm}")
     @Column(name = "CHARGE_STAFF_NM")
     private String chargeStaffNm;
 
     /**
      * 담당자 연락처
      */
-    @Length(max = 512, message = "{tps.tour-deny.error.len.chargePhone}")
+    @Length(max = 512, message = "{tps.tour-apply.error.len.chargePhone}")
     @Column(name = "CHARGE_PHONE")
     private String chargePhone;
 

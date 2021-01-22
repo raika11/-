@@ -25,6 +25,7 @@ import jmnet.moka.core.tps.mvc.tour.service.TourSetupService;
 import jmnet.moka.core.tps.mvc.tour.vo.TourApplyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourDenyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourGuideVO;
+import jmnet.moka.core.tps.mvc.tour.vo.TourPossibleDenyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourSetupVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -114,7 +116,7 @@ public class TourRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "휴일 목록조회")
+    @ApiOperation(value = "휴일 목록조회(매년반복)")
     @GetMapping("/denys")
     public ResponseEntity<?> getTourDenyList(@ApiParam("휴일 검색조건") @Valid TourDenySearchDTO search) {
 
@@ -130,7 +132,7 @@ public class TourRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "반복 휴일 등록")
+    @ApiOperation(value = "휴일 등록")
     @PostMapping("/denys")
     public ResponseEntity<?> postTourDeny(@ApiParam("휴일정보") @Valid TourDenyVO tourDenyVo)
             throws Exception {
@@ -149,7 +151,7 @@ public class TourRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "반복 휴일 수정")
+    @ApiOperation(value = "휴일 수정")
     @PutMapping("/denys/{denySeq}")
     public ResponseEntity<?> putTourDeny(
             @ApiParam("휴일순번(필수)") @PathVariable("denySeq") @Min(value = 0, message = "{tps.tour-deny.error.min.denySeq}") Long denySeq,
@@ -171,7 +173,7 @@ public class TourRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "반복 휴일 삭제")
+    @ApiOperation(value = "휴일 삭제")
     @DeleteMapping("/denys/{denySeq}")
     public ResponseEntity<?> deleteTourDeny(
             @ApiParam("휴일순번(필수)") @PathVariable("denySeq") @Min(value = 0, message = "{tps.tour-deny.error.min.denySeq}") Long denySeq)
@@ -188,7 +190,7 @@ public class TourRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE TOUR DENY]", e);
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE TOUR DENY]", e, true);
-            throw new Exception(msg("tps.common.error.update"), e);
+            throw new Exception(msg("tps.common.error.delete"), e);
         }
     }
 
@@ -252,4 +254,112 @@ public class TourRestController extends AbstractCommonController {
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "신청 수정")
+    @PutMapping("/applys/{tourSeq}")
+    public ResponseEntity<?> putTourApply(
+            @ApiParam("신청순번(필수)") @PathVariable("tourSeq") @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq,
+            @ApiParam("신청정보") @Valid TourApplyVO tourApplyVO)
+            throws Exception {
+
+        try {
+            TourApplyVO returnValue = tourApplyService.updateTourApply(tourApplyVO);
+
+            ResultDTO<TourApplyVO> resultDTO = new ResultDTO<TourApplyVO>(returnValue, msg("tps.common.success.update"));
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE TOUR APPLY] seq: {} {}", tourSeq, e.getMessage());
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE TOUR APPLY]", e, true);
+            throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    @ApiOperation(value = "견학 가능일 목록조회")
+    @GetMapping("/denys/possible")
+    public ResponseEntity<?> getTourDenyPossibleList() {
+
+        // 조회(mybatis)
+        List<TourPossibleDenyVO> returnValue = tourDenyService.findAllTourDenyByPossible();
+
+        ResultListDTO<TourPossibleDenyVO> resultList = new ResultListDTO<TourPossibleDenyVO>();
+        resultList.setList(returnValue);
+        resultList.setTotalCnt(returnValue.size());
+
+        ResultDTO<ResultListDTO<TourPossibleDenyVO>> resultDTO = new ResultDTO<ResultListDTO<TourPossibleDenyVO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "신청 삭제")
+    @DeleteMapping("/applys/{tourSeq}")
+    public ResponseEntity<?> deleteTourApply(
+            @ApiParam("신청순번(필수)") @PathVariable("tourSeq") @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq)
+            throws Exception {
+
+        try {
+            tourApplyService.deleteTourApply(tourSeq);
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, msg("tps.common.success.delete"));
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE TOUR APPLY] seq: {} {}", tourSeq, e.getMessage());
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO DELETE TOUR APPLY]", e, true);
+            throw new Exception(msg("tps.common.error.delete"), e);
+        }
+    }
+
+    //    @ApiOperation(value = "비밀번호 초기화")
+    //    @PostMapping("/apply/resest-pwd")
+    //    public ResponseEntity<?> postResetPwd(
+    //            @ApiParam("전화번호 뒷 4자리") @Valid @Pattern(regexp = "//d{4}$", message = "{tps.tour-apply.error.pattern.writerPhone}") String phone)
+    //            throws Exception {
+    //        try {
+    //            String pwd = tourApplyService.DESEncrypt(phone);
+    //
+    //            ResultDTO<String> resultDTO = new ResultDTO<String>(pwd, msg("tps.tour-apply.success.reset-pwd"));
+    //            tpsLogger.success(ActionType.SELECT, true);
+    //            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    //        } catch (Exception e) {
+    //            log.error("[FAIL TO RESET PASSWORD TOUR APPLY] seq: {} {}", phone, e.getMessage());
+    //            tpsLogger.error(ActionType.UPDATE, "[FAIL TO RESET PASSWORD TOUR APPLY]", e, true);
+    //            throw new Exception(msg("tps.tour-apply.error.reset-pwd"), e);
+    //        }
+    //    }
+
+    @ApiOperation(value = "휴일 목록조회(월별)")
+    @GetMapping("/denys/month")
+    public ResponseEntity<?> getTourDenyMonthList(@ApiParam("년도(4자리)") @RequestParam("year") String year,
+            @ApiParam("월(2자리)") @RequestParam("month") String month) {
+
+        // 조회(mybatis)
+        List<TourDenyVO> returnValue = tourDenyService.findAllTourDenyMonth(year, month);
+
+        ResultListDTO<TourDenyVO> resultList = new ResultListDTO<TourDenyVO>();
+        resultList.setList(returnValue);
+        resultList.setTotalCnt(returnValue.size());
+
+        ResultDTO<ResultListDTO<TourDenyVO>> resultDTO = new ResultDTO<ResultListDTO<TourDenyVO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "견학 신청 목록조회(월별)")
+    @GetMapping("/applys/month")
+    public ResponseEntity<?> getTourApplyMonthList(@ApiParam("년도(4자리)") @RequestParam("year") String year,
+            @ApiParam("월(2자리)") @RequestParam("month") String month) {
+
+        // 조회(mybatis)
+        List<TourApplyVO> returnValue = tourApplyService.findAllTourApplyMonth(year, month);
+
+        ResultListDTO<TourApplyVO> resultList = new ResultListDTO<TourApplyVO>();
+        resultList.setList(returnValue);
+        resultList.setTotalCnt(returnValue.size());
+
+        ResultDTO<ResultListDTO<TourApplyVO>> resultDTO = new ResultDTO<ResultListDTO<TourApplyVO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
 }

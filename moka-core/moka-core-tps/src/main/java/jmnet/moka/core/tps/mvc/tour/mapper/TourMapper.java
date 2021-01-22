@@ -5,12 +5,14 @@
 package jmnet.moka.core.tps.mvc.tour.mapper;
 
 import java.util.List;
+import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.tour.dto.TourApplySearchDTO;
 import jmnet.moka.core.tps.mvc.tour.dto.TourDenySearchDTO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourApplyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourDenyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourGuideVO;
+import jmnet.moka.core.tps.mvc.tour.vo.TourPossibleDenyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourSetupVO;
 
 /**
@@ -98,4 +100,44 @@ public interface TourMapper extends BaseMapper<TourDenyVO, TourDenySearchDTO> {
      * @return 견학신청 상세
      */
     TourApplyVO upuTbJoongangTourApplyByseqSel(long tourSeq);
+
+    /**
+     * 견학신청 수정
+     *
+     * @param tourApplyVO 견학신청정보
+     * @return 성공여부
+     */
+    Integer upuTbJoongangTourApplyUpd(TourApplyVO tourApplyVO);
+
+    /**
+     * 견학 가능일 목록조회
+     *
+     * @return 견학 가능일 목록
+     */
+    List<TourPossibleDenyVO> upuTbJoongangTourPossibleBysel();
+
+    /**
+     * 견학신청 삭제
+     *
+     * @param tourSeq 견학신청Seq
+     * @return 성공여부
+     */
+    Integer upuTbJoongangTourApplyDel(Long tourSeq);
+
+    /**
+     * 월별 견학 휴일 목록 조회
+     *
+     * @param param startYear: 연도, startMonth: 월
+     * @return 견학 휴일 목록
+     */
+    List<TourDenyVO> upuTbJoongangTourDenyBymonthSel(Map<String, Object> param);
+
+    /**
+     * 월별 견학 신청 목록 조회
+     *
+     * @param param startYear: 연도, startMonth: 월, adminYn: 관리자여부
+     * @return 견학 신청 목록
+     */
+    List<TourApplyVO> upuTbJoongangTourApplyBymonthSel(Map<String, Object> param);
+
 }

@@ -224,4 +224,28 @@ public class CdnArticleRestController extends AbstractCommonController {
             throw new Exception(msg("tps.cdn-article.error.cache"));
         }
     }
+
+    /**
+     * CDN기사 존재여부
+     *
+     * @param totalId 기사키
+     * @return 존재여부
+     * @throws NoDataException 기사없음
+     */
+    @ApiOperation(value = "CDN기사 존재여부")
+    @GetMapping("/{totalId}/exists")
+    public ResponseEntity<?> getArticleExists(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
+            throws NoDataException {
+
+        Optional<CdnArticle> article = cdnArticleService.findCdnArticleById(totalId);
+        boolean exists = article.isPresent() ? true : false;
+
+        String message = "";
+        if (exists) {
+            message = msg("tps.cdn-article.error.duplicated.totalId");
+        }
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }

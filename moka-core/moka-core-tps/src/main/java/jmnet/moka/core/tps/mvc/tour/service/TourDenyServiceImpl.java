@@ -4,10 +4,13 @@
 
 package jmnet.moka.core.tps.mvc.tour.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import jmnet.moka.core.tps.mvc.tour.dto.TourDenySearchDTO;
 import jmnet.moka.core.tps.mvc.tour.mapper.TourMapper;
 import jmnet.moka.core.tps.mvc.tour.vo.TourDenyVO;
+import jmnet.moka.core.tps.mvc.tour.vo.TourPossibleDenyVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,5 +46,18 @@ public class TourDenyServiceImpl implements TourDenyService {
     @Override
     public void deleteTourDeny(Long denySeq) {
         tourMapper.upuTbJoongangTourDenyDel(denySeq);
+    }
+
+    @Override
+    public List<TourPossibleDenyVO> findAllTourDenyByPossible() {
+        return tourMapper.upuTbJoongangTourPossibleBysel();
+    }
+
+    @Override
+    public List<TourDenyVO> findAllTourDenyMonth(String startYear, String startMonth) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("startYear", startYear);
+        params.put("startMonth", startMonth);
+        return tourMapper.upuTbJoongangTourDenyBymonthSel(params);
     }
 }

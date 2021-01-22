@@ -65,9 +65,15 @@ function* saveCdnArticle({ payload: { cdnArticle, callback } }) {
  */
 const clearCache = createRequestSaga(act.CLEAR_CACHE, api.clearCache, true);
 
+/**
+ * 중복 cdn 체크
+ */
+const checkExists = createRequestSaga(act.CHECK_EXISTS, api.checkExists, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_CDN_ARTICLE_LIST, getCdnArticleList);
     yield takeLatest(act.GET_CDN_ARTICLE, getCdnArticle);
     yield takeLatest(act.CLEAR_CACHE, clearCache);
     yield takeLatest(act.SAVE_CDN_ARTICLE, saveCdnArticle);
+    yield takeLatest(act.CHECK_EXISTS, checkExists);
 }

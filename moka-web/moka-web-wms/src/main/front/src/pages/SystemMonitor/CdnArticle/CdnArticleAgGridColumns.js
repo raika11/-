@@ -6,7 +6,7 @@ export default [
         headerName: '기사ID',
         field: 'totalId',
         width: 80,
-        cellStyle: { fontSize: '12px' },
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '제목 / URL',
@@ -21,7 +21,7 @@ export default [
         headerName: '등록일',
         field: 'regDt',
         width: 80,
-        cellStyle: { fontSize: '12px' },
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '사용여부',

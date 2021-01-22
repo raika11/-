@@ -10,10 +10,11 @@ const ArticleCdnAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
     const loading = useSelector(({ loading }) => loading[GET_CDN_ARTICLE_LIST]);
-    const { search, total, list } = useSelector(({ cdnArticle }) => ({
+    const { search, total, list, cdnArticle } = useSelector(({ cdnArticle }) => ({
         search: cdnArticle.search,
         total: cdnArticle.total,
         list: cdnArticle.list,
+        cdnArticle: cdnArticle.cdnArticle,
     }));
 
     /**
@@ -58,6 +59,7 @@ const ArticleCdnAgGrid = ({ match }) => {
             total={total}
             page={search.page}
             size={search.size}
+            selected={cdnArticle.totalId}
         />
     );
 };

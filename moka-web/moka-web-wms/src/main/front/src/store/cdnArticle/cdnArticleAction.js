@@ -40,3 +40,9 @@ export const saveCdnArticle = createAction(SAVE_CDN_ARTICLE, ({ cdnArticle, call
  */
 export const CLEAR_CACHE = 'cdnArticle/CLEAR_CACHE';
 export const clearCache = createAction(CLEAR_CACHE, ({ totalId, callback }) => ({ totalId, callback }));
+
+/**
+ * 이미 cdn으로 이미 존재하는 기사인지 체크
+ */
+export const CHECK_EXISTS = 'cdnArticle/CHECK_EXISTS';
+export const checkExists = createAction(CHECK_EXISTS, ({ totalId, callback }) => ({ totalId, callback }));

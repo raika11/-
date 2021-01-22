@@ -6,13 +6,16 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { unescapeHtml } from '@utils/convertUtil';
-import { CodeAutocomplete, SourceSelector } from '@pages/commons';
-import { DB_DATEFORMAT } from '@/constants';
+import { messageBox } from '@utils/toastUtil';
+import { CodeAutocomplete } from '@pages/commons';
+import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
+import { DB_DATEFORMAT, ARTICLE_SOURCE_LIST_KEY } from '@/constants';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@/components';
 import GroupNumberRenderer from '@pages/Article/components/ArticleDeskList/GroupNumberRenderer';
 import columnDefs from '@pages/Article/components/ArticleDeskList/ArticleDeskAgGridColums';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { GET_SERVICE_ARTICLE_LIST, initialState, getServiceArticleList, changeServiceSearchOption, clearServiceList } from '@store/article';
+import { getLocalItem, setLocalItem } from '@utils/storageUtil';
+import { GET_ARTICLE_LIST_MODAL, initialState, getArticleListModal } from '@store/article';
 
 const propTypes = {
     show: PropTypes.bool,
@@ -30,24 +33,20 @@ const defaultProps = {};
 const ArticleListModal = (props) => {
     const { show, onHide, media, onRowClicked } = props;
     const dispatch = useDispatch();
-    const storeSearch = useSelector((store) => store.article.service.search);
-    const list = useSelector((store) => store.article.service.list);
-    const total = useSelector((store) => store.article.service.total);
-    const error = useSelector((store) => store.article.service.error);
-    const loading = useSelector((store) => store.loading[GET_SERVICE_ARTICLE_LIST]);
-    const { PDS_URL, IR_URL } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST_MODAL]);
+    const { PDS_URL } = useSelector((store) => ({
         PDS_URL: store.app.PDS_URL,
         IR_URL: store.app.IR_URL,
     }));
-    const initialSearch = initialState.service.search;
 
     // state
-    const [search, setSearch] = useState(initialSearch);
+    const [search, setSearch] = useState(initialState.search);
     const [searchDisabled, setSearchDisabled] = useState(false);
     const [valError, setValError] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
-    const [sourceList, setSourceList] = useState(null);
+    const [sourceList, setSourceList] = useState(getLocalItem(ARTICLE_SOURCE_LIST_KEY));
     const [rowData, setRowData] = useState([]);
+    const [total, setTotal] = useState(0);
 
     /**
      * 입력값 변경
@@ -72,22 +71,73 @@ const ArticleListModal = (props) => {
         return !isInvalid;
     };
 
+    const loadList = (searchObj) => {
+        dispatch(
+            getArticleListModal({
+                search: {
+                    ...searchObj,
+                    startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
+                    endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+                },
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        setTotal(body.totalCnt);
+                        setRowData(
+                            body.list.map((art) => {
+                                // 기자명 replace
+                                let reportersText = art.artReporter;
+                                const reporters = art.artReporter.split('.');
+                                if (reporters.length > 1) reportersText = `${reporters[0]} 외 ${reporters.length - 1}명`;
+
+                                // ID, 기사유형
+                                let artIdType = `${art.totalId}\n${art.artTypeName}`;
+
+                                // 제목 replace
+                                let escapeTitle = art.artTitle;
+                                if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
+
+                                // 면판 replace
+                                let myunPan = `${art.pressMyun || ''}/${art.pressPan || ''}`;
+
+                                // 출고시간/수정시간 replace
+                                let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');
+                                if (art.artModDt) {
+                                    articleDt = `${articleDt}\n${moment(art.artModDt, DB_DATEFORMAT).format('MM-DD HH:mm')}`;
+                                } else {
+                                    articleDt = `${articleDt}\n `;
+                                }
+
+                                // 이미지경로
+                                let artPdsThumb = `${PDS_URL}${art.artThumb}`;
+                                // let artThumb = `${IR_URL}?t=k&w=100&h=100u=//${PDS_URL}${art.artThumb}`;
+                                let artThumb = artPdsThumb;
+
+                                return {
+                                    ...art,
+                                    escapeTitle,
+                                    myunPan,
+                                    articleDt,
+                                    artIdType,
+                                    reportersText,
+                                    artThumb,
+                                    artPdsThumb,
+                                };
+                            }),
+                        );
+                    } else {
+                        messageBox.alert('기사리스트 조회에 실패했습니다.');
+                    }
+                },
+            }),
+        );
+    };
+
     /**
      * 검색
      */
     const handleSearch = () => {
-        let ns = {
-            ...search,
-            sourceList,
-            startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
-            endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
-            page: 0,
-        };
-
-        if (validate(ns)) {
-            dispatch(changeServiceSearchOption(ns));
-            dispatch(getServiceArticleList({ search: ns }));
-        }
+        let ns = { ...search, page: 0 };
+        if (validate(ns)) loadList(ns);
     };
 
     /**
@@ -131,16 +181,12 @@ const ArticleListModal = (props) => {
         e.stopPropagation();
 
         const date = new Date();
-
-        dispatch(
-            changeServiceSearchOption({
-                ...initialSearch,
-                masterCode: null,
-                startServiceDay: moment(date).add(-24, 'hours').format(DB_DATEFORMAT),
-                endServiceDay: moment(date).format(DB_DATEFORMAT),
-                page: 0,
-            }),
-        );
+        setSearch({
+            ...initialState.search,
+            masterCode: null,
+            startServiceDay: moment(date).add(-24, 'hours'),
+            endServiceDay: moment(date),
+        });
     };
 
     /**
@@ -157,30 +203,17 @@ const ArticleListModal = (props) => {
      * 테이블 검색옵션 변경
      */
     const handleChangeSearchOption = ({ key, value }) => {
-        let temp = { ...storeSearch, [key]: value };
+        let temp = { ...search, [key]: value };
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        dispatch(changeServiceSearchOption(temp));
-        dispatch(getServiceArticleList({ search: temp }));
+        setSearch(temp);
+        loadList(temp);
     };
 
     useEffect(() => {
         if (media) setSearchDisabled(true);
     }, [media]);
-
-    useEffect(() => {
-        let ssd = moment(storeSearch.startServiceDay, DB_DATEFORMAT);
-        if (!ssd.isValid()) ssd = null;
-        let esd = moment(storeSearch.endServiceDay, DB_DATEFORMAT);
-        if (!esd.isValid()) esd = null;
-
-        setSearch({
-            ...storeSearch,
-            startServiceDay: ssd,
-            endServiceDay: esd,
-        });
-    }, [storeSearch]);
 
     useEffect(() => {
         /**
@@ -191,70 +224,26 @@ const ArticleListModal = (props) => {
          */
         if (show) {
             const date = new Date();
-            const startServiceDay = moment(date).add(-24, 'hours').format(DB_DATEFORMAT);
-            const endServiceDay = moment(date).format(DB_DATEFORMAT);
             let ns = {
                 ...search,
                 masterCode: null,
                 sourceList,
-                startServiceDay,
-                endServiceDay,
+                startServiceDay: moment(date).add(-24, 'hours'),
+                endServiceDay: moment(date),
                 contentType: media ? 'M' : null,
                 page: 0,
             };
 
-            dispatch(changeServiceSearchOption(ns));
+            setSearch(ns);
             if (sourceOn) {
-                dispatch(getServiceArticleList({ search: ns }));
+                loadList(ns);
             }
         } else {
-            dispatch(clearServiceList());
+            setRowData([]);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sourceOn, show]);
-
-    useEffect(() => {
-        setRowData(
-            list.map((art) => {
-                // 기자명 replace
-                let reportersText = art.artReporter;
-                const reporters = art.artReporter.split('.');
-                if (reporters.length > 1) reportersText = `${reporters[0]} 외 ${reporters.length - 1}명`;
-
-                // 제목 replace
-                let escapeTitle = art.artTitle;
-                if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
-
-                // 면판 replace
-                let myunPan = `${art.pressMyun || ''}/${art.pressPan || ''}`;
-
-                // 출고시간/수정시간 replace
-                let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');
-                if (art.artModDt) {
-                    articleDt = `${articleDt}\n${moment(art.artModDt, DB_DATEFORMAT).format('MM-DD HH:mm')}`;
-                } else {
-                    articleDt = `${articleDt}\n `;
-                }
-
-                // 이미지경로
-                let artPdsThumb = `${PDS_URL}${art.artThumb}`;
-                // let artThumb = `${IR_URL}?t=k&w=100&h=100u=//${PDS_URL}${art.artThumb}`;
-                let artThumb = artPdsThumb;
-
-                return {
-                    ...art,
-                    escapeTitle,
-                    myunPan,
-                    articleDt,
-                    reportersText,
-                    gridType: 'ARTICLE',
-                    artThumb,
-                    artPdsThumb,
-                };
-            }),
-        );
-    }, [IR_URL, PDS_URL, list]);
 
     return (
         <MokaModal title="기사 검색" show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
@@ -286,19 +275,20 @@ const ArticleListModal = (props) => {
                         <CodeAutocomplete name="masterCode" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
                     </Col>
                     {/* 매체 전체 */}
-                    <Col xs={3} className="p-0 pr-2">
-                        <SourceSelector
+                    <Col xs={2} className="p-0 pr-2">
+                        <ArticleSourceSelector
                             value={sourceList}
+                            className="h-100 w-100"
                             onChange={(value) => {
                                 setSourceList(value);
                                 setValError({ ...valError, sourceList: false });
                                 if (value !== '') {
                                     setSourceOn(true);
+                                    // 로컬스토리지에 저장
+                                    setLocalItem({ key: ARTICLE_SOURCE_LIST_KEY, value });
                                 }
                             }}
                             width="100%"
-                            sourceType={'DESKING'}
-                            isInvalid={valError.sourceList}
                         />
                     </Col>
                     {/* 면 */}
@@ -310,7 +300,7 @@ const ArticleListModal = (props) => {
                         <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={searchDisabled} />
                     </Col>
                     {/* 초기화 */}
-                    <Col xs={3} className="p-0 d-flex justify-content-end">
+                    <Col xs={4} className="p-0 d-flex justify-content-end">
                         <Button variant="negative" onClick={handleClickReset}>
                             초기화
                         </Button>
@@ -328,9 +318,9 @@ const ArticleListModal = (props) => {
                 total={total}
                 page={search.page}
                 size={search.size}
-                error={error}
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 onChangeSearchOption={handleChangeSearchOption}
+                preventRowClickCell={['groupNumber']}
             />
         </MokaModal>
     );

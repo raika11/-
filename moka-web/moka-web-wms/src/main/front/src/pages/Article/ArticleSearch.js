@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, ARTICLE_SOURCE_LIST_KEY } from '@/constants';
 import { initialState, getArticleList, changeSearchOption } from '@store/article';
 import { getPressCate1 } from '@store/codeMgt';
 import { MokaInput, MokaIcon } from '@components';
@@ -15,7 +15,6 @@ import toast from '@utils/toastUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
 moment.locale('ko');
-const SOURCE_LIST_KEY = 'articleSourceList';
 
 /**
  * 등록기사 검색 컴포넌트
@@ -25,7 +24,7 @@ const ArticleSearch = ({ ja, sun }) => {
     const storeSearch = useSelector((store) => store.article.search);
     const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
     const [search, setSearch] = useState(initialState.search);
-    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '60,61' : getLocalItem(SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '60,61' : getLocalItem(ARTICLE_SOURCE_LIST_KEY));
     const [sourceOn, setSourceOn] = useState(false);
     const [error, setError] = useState({});
     const [period, setPeriod] = useState([3, 'months']);
@@ -296,7 +295,7 @@ const ArticleSearch = ({ ja, sun }) => {
                                 setError({ ...error, sourceList: false });
                                 if (value !== '') {
                                     // 로컬스토리지에 저장
-                                    setLocalItem({ key: SOURCE_LIST_KEY, value });
+                                    setLocalItem({ key: ARTICLE_SOURCE_LIST_KEY, value });
                                 }
                             }}
                         />

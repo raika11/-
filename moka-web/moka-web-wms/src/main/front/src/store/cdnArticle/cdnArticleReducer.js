@@ -69,7 +69,7 @@ export default handleActions(
         },
         [act.GET_CDN_ARTICLE_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.article = body;
+                draft.cdnArticle = body;
                 draft.invalidList = initialState.invalidList;
             });
         },

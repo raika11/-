@@ -48,3 +48,10 @@ export const clearCache = ({ cdnArticle }) => {
         throw err;
     });
 };
+
+// cdn 존재 여부 체크
+export const checkExists = ({ totalId }) => {
+    return instance.get(`/api/cdn-articles/${totalId}/exists`).catch((err) => {
+        throw err;
+    });
+};

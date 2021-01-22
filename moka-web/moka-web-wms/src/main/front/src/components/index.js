@@ -17,5 +17,4 @@ export * from './MokaButton';
 export { default as MokaMessageBox } from './MokaMessageBox';
 export * from './MokaImage';
 export { default as MokaWindow } from './MokaWindow';
-export * from './CustomHook';
 export { default as MokaImageEditor } from './MokaImageEditor';

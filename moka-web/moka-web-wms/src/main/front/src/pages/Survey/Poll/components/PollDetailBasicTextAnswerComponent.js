@@ -2,8 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import commonUtil from '@utils/commonUtil';
+import produce from 'immer';
 
-const PollDetailBasicTextAnswerComponent = ({ item, index, hasUrl }) => {
+const PollDetailBasicTextAnswerComponent = ({ item, index, hasUrl, onChange }) => {
+    const [editItem, setEditItem] = useState({ title: '', linkUrl: '' });
+
+    const handleChangeValue = (name, value) => {
+        const changeItem = produce(editItem, (draft) => {
+            draft[name] = value;
+        });
+
+        setEditItem(changeItem);
+        if (onChange instanceof Function) {
+            onChange(changeItem);
+        }
+    };
+
+    useEffect(() => {
+        setEditItem(item);
+    }, [item]);
+
     return (
         <>
             <Form.Row style={{ alignItems: 'center' }} className="mb-2" key={index}>
@@ -13,10 +31,12 @@ const PollDetailBasicTextAnswerComponent = ({ item, index, hasUrl }) => {
                             <MokaInputLabel
                                 label={`보기 ${index + 1}`}
                                 labelWidth={50}
+                                name="title"
                                 onChange={(e) => {
-                                    //setValue1(e.target.value);
+                                    const { name, value } = e.target;
+                                    handleChangeValue(name, value);
                                 }}
-                                value={item.title}
+                                value={editItem.title}
                                 placeholder="보기를 입력해주세요."
                             />
                         </Col>
@@ -26,11 +46,13 @@ const PollDetailBasicTextAnswerComponent = ({ item, index, hasUrl }) => {
                             <Col xs={12}>
                                 <MokaInputLabel
                                     label={`url ${index + 1}`}
-                                    labelWidth={35}
+                                    name="linkUrl"
+                                    labelWidth={50}
                                     onChange={(e) => {
-                                        //setValue2(e.target.value);
+                                        const { name, value } = e.target;
+                                        handleChangeValue(name, value);
                                     }}
-                                    value={item.linkUrl}
+                                    value={editItem.linkUrl}
                                     placeholder="url을 입력해주세요"
                                 />
                             </Col>

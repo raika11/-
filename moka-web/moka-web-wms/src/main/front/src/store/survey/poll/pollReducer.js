@@ -5,7 +5,7 @@ import produce from 'immer';
 export const initialState = {
     poll: {
         pollSeq: null,
-        pollGroup: '',
+        pollGroup: 'A',
         pollCategory: '0100',
         pollDiv: 'W',
         pollType: 'M',
@@ -44,6 +44,7 @@ export const initialState = {
         startDt: '',
         endDt: '',
         status: '',
+        sort: 'pollSeq,desc',
     },
     total: 0,
     list: [],

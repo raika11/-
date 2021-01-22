@@ -21,14 +21,14 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
         accept: ['image/jpeg', 'image/png'],
         onDrop: (acceptedFiles) => {
             acceptedFiles[0] && setFile(Object.assign(acceptedFiles[0], { preview: URL.createObjectURL(acceptedFiles[0]) }));
-            onChange instanceof Function && onChange(acceptedFiles);
+            onChange instanceof Function && onChange(acceptedFiles[0]);
         },
     });
 
     useEffect(() => {
-        if (!commonUtil.isEmpty(src)) {
-            setFile({ ...file, preview: src });
-        }
+        //if (!commonUtil.isEmpty(src)) {
+        setFile({ ...file, preview: src });
+        //}
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [src]);
 
@@ -45,6 +45,7 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
                 {...getInputProps({
                     onClick: () => {
                         setFile({});
+                        onChange instanceof Function && onChange(null);
                     },
                 })}
             />

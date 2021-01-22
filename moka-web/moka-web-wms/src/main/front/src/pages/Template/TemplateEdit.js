@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaCopyTextButton } from '@components';
-import { getTpZone } from '@store/codeMgt';
 import { changeTemplate, saveTemplate, changeInvalidList, hasRelationList, GET_TEMPLATE, DELETE_TEMPLATE, SAVE_TEMPLATE } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
@@ -201,10 +200,6 @@ const TemplateEdit = ({ onDelete, match }) => {
             setTemp({ ...temp, templateGroup: tpZoneRows[0].dtlCd });
         }
     }, [temp, tpZoneRows]);
-
-    useEffect(() => {
-        if (!tpZoneRows) dispatch(getTpZone());
-    }, [dispatch, tpZoneRows]);
 
     useEffect(() => {
         setError(invalidListToError(invalidList));

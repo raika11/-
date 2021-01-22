@@ -6,9 +6,11 @@ import PollDetailCompareCombineAnswerComponent from '@pages/Survey/Poll/componen
 
 const PollDetailCompareAnswerContainer = ({ items, type }) => {
     const [editItems, setEditItems] = useState([
-        { title: '', linkUrl: '', imgUrl: '' },
-        { title: '', linkUrl: '', imgUrl: '' },
+        { title: '', linkUrl: '', imgUrl: null, imgFile: null },
+        { title: '', linkUrl: '', imgUrl: null, imgFile: null },
     ]);
+
+    const handleChangeItems = () => {};
 
     let AnswerComponent = null;
     switch (type) {

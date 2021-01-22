@@ -141,6 +141,7 @@ const DirectLinkEdit = ({ history, match }) => {
 
     /**
      * 링크 유효성 검사
+     * @returns {boolean} true|false 검증된 링크면 true로 보냄
      */
     const validateLinkCheck = () => {
         if (temp.linkUrl === undefined || temp.linkUrl.length === 0) {
@@ -150,9 +151,16 @@ const DirectLinkEdit = ({ history, match }) => {
         return regex.test(temp.linkUrl);
     };
 
-    // URL 체크.
+    /**
+     * URL 체크
+     */
     const validateLink = () => {
-        setError({ ...error, linkUrl: !validateLinkCheck(), linkUrlMessage: URL_ERROR });
+        const result = validateLinkCheck();
+        if (result) {
+            toast.success('유효한 URL입니다');
+        } else {
+            setError({ ...error, linkUrl: !result, linkUrlMessage: URL_ERROR });
+        }
     };
 
     /**
@@ -277,11 +285,11 @@ const DirectLinkEdit = ({ history, match }) => {
             viewSdate,
             viewEdate,
         });
-
+        setError({});
         if (!directLink.viewEdate || !directLink.viewSdate) {
             setDateFixYn('Y');
         }
-    }, [directLink, dispatch]);
+    }, [directLink]);
 
     useEffect(() => {
         if (imgFileRef.current) {
@@ -300,7 +308,7 @@ const DirectLinkEdit = ({ history, match }) => {
         } else {
             setDateDisabled(false);
         }
-    }, [dateFixYn, temp]);
+    }, [dateFixYn]);
 
     useEffect(() => {
         return () => {
@@ -376,7 +384,7 @@ const DirectLinkEdit = ({ history, match }) => {
                         />
                     </Col>
                     <Col xs={3} className="p-0 pl-2">
-                        <Button variant="outline-neutral" onClick={validateLink} className="w-100">
+                        <Button variant="outline-neutral" onClick={validateLink} className="h-100 w-100">
                             유효성 검사
                         </Button>
                     </Col>
@@ -421,6 +429,7 @@ const DirectLinkEdit = ({ history, match }) => {
                             name="viewSdate"
                             value={temp.viewSdate}
                             onChange={handleSDate}
+                            className="mr-1"
                             inputProps={{ timeFormat: null }}
                             disabled={dateDisabled}
                         />
@@ -431,6 +440,7 @@ const DirectLinkEdit = ({ history, match }) => {
                             name="viewEdate"
                             value={temp.viewEdate}
                             onChange={handleEDate}
+                            className="ml-1"
                             inputProps={{ timeFormat: null }}
                             disabled={dateDisabled}
                         />

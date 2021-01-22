@@ -1,79 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { MokaCard, MokaTable } from '@components';
-import toast from '@utils/toastUtil';
-import { changeSelectedDepth, clearArea, getAreaDepth3, GET_AREA_LIST_DEPTH3 } from '@store/area';
+import { messageBox } from '@utils/toastUtil';
+import { initialState, changeSelectedDepth, getAreaListModal, getAreaModal } from '@store/area';
 import columnDefs from './AreaAgGridColumns';
 
 /**
  * 편집영역 > 세번째 리스트
  */
-const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
+const AreaAgGridDepth3 = ({ areaDepth2, areaDepth3, setAreaDepth3, onDelete, flag, listDepth3, setListDepth3 }) => {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const { areaSeq } = useParams();
-    const { list, loading, areaDepth1, areaDepth2 } = useSelector((store) => ({
-        list: store.area.depth3.list,
-        loading: store.loading[GET_AREA_LIST_DEPTH3],
-        areaDepth1: store.area.depth1.area,
-        areaDepth2: store.area.depth2.area,
-    }));
+    const [loading, setLoading] = useState(false);
+    const reset = useRef(null);
 
-    // state
-    const [rowData, setRowData] = useState([]);
+    /**
+     * 리스트 조회
+     */
+    const getList = useCallback(() => {
+        if (areaDepth2?.area?.areaSeq) {
+            setLoading(true);
+            dispatch(
+                getAreaListModal({
+                    search: {
+                        parentAreaSeq: areaDepth2?.area?.areaSeq,
+                        depth: 3,
+                    },
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            setListDepth3(
+                                body.list.map((d) => ({
+                                    ...d,
+                                    onDelete: (data) => onDelete(data, 3),
+                                })),
+                            );
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                        setLoading(false);
+                    },
+                }),
+            );
+        } else {
+            setListDepth3([]);
+        }
+    }, [areaDepth2.area, dispatch, onDelete, setListDepth3]);
 
     useEffect(() => {
-        setRowData(
-            list.map((l) => ({
-                ...l,
-                onDelete: onDelete,
-            })),
-        );
-    }, [list, onDelete]);
+        if (reset.current !== flag.depth3) {
+            getList();
+            reset.current = flag.depth3;
+        }
+    }, [getList, flag.depth3]);
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
-        history.push(`${baseUrl}/${areaDepth1.areaSeq}/${areaDepth2.areaSeq}/${data.areaSeq}`);
-        dispatch(changeSelectedDepth(3));
+        dispatch(
+            getAreaModal({
+                areaSeq: data.areaSeq,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        setAreaDepth3(body);
+                        dispatch(changeSelectedDepth(3));
+                    } else {
+                        messageBox.alert(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
      * 추가 버튼 클릭
      */
     const handleClickAdd = () => {
-        if (areaDepth1.areaSeq) {
-            dispatch(changeSelectedDepth(3));
-            dispatch(clearArea(3));
-            if (areaDepth2.areaSeq) {
-                history.push(`${baseUrl}/${areaDepth1.areaSeq}/${areaDepth2.areaSeq}`);
-            } else {
-                history.push(`${baseUrl}/${areaDepth1.areaSeq}`);
-            }
-        } else {
-            toast.warning('상위 편집영역을 선택해주세요');
-        }
+        setAreaDepth3(initialState.initData);
+        dispatch(changeSelectedDepth(3));
     };
-
-    useEffect(() => {
-        // areaSeq가 있으면 상세데이터 조회
-        if (areaSeq) {
-            dispatch(getAreaDepth3({ areaSeq }));
-            dispatch(changeSelectedDepth(3));
-        }
-    }, [areaSeq, dispatch]);
 
     return (
         <MokaCard header={false} width={280} className="mr-gutter" bodyClassName="d-flex flex-column">
             <Form.Row className="mb-2">
                 <Col xs={12} className="p-0 d-flex justify-content-end">
-                    <Button variant="positive" onClick={handleClickAdd}>
+                    <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth2?.area?.areaSeq}>
                         추가
                     </Button>
                 </Col>
@@ -81,8 +94,8 @@ const AreaAgGridDepth3 = ({ baseUrl, onDelete }) => {
 
             <MokaTable
                 className="overflow-hidden flex-fill"
-                selected={areaSeq}
-                rowData={rowData}
+                selected={areaDepth3?.area?.areaSeq}
+                rowData={listDepth3}
                 columnDefs={columnDefs}
                 header={false}
                 paging={false}

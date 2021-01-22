@@ -29,11 +29,6 @@ const TemplateSearch = () => {
     );
     const [search, setSearch] = React.useState(initialState.search);
 
-    useEffect(() => {
-        // 스토어의 search 객체 변경 시 로컬 state에 셋팅
-        setSearch(storeSearch);
-    }, [storeSearch]);
-
     /**
      * 검색
      */
@@ -100,6 +95,10 @@ const TemplateSearch = () => {
         if (!tpZoneRows) dispatch(getTpZone());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
 
     return (
         <Form className="mb-2">

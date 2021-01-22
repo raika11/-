@@ -3,6 +3,7 @@ import commonUtil from '@utils/commonUtil';
 import PollDetailBasicTextAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicTextAnswerComponent';
 import PollDetailBasicPhotoAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicPhotoAnswerComponent';
 import PollDetailBasicCombineAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicCombineAnswerComponent';
+import produce from 'immer';
 
 const PollDetailBasicAnswerContainer = ({ items, count, type, onChange }) => {
     const [editItems, setEditItems] = useState([]);
@@ -22,6 +23,16 @@ const PollDetailBasicAnswerContainer = ({ items, count, type, onChange }) => {
             break;
     }
 
+    const handleChangeValue = (index, item) => {
+        if (onChange instanceof Function) {
+            onChange(
+                produce(editItems, (draft) => {
+                    draft[index] = item;
+                }),
+            );
+        }
+    };
+
     useEffect(() => {
         if (count > 0) {
             if (items.length === 0) {
@@ -38,7 +49,18 @@ const PollDetailBasicAnswerContainer = ({ items, count, type, onChange }) => {
 
     return (
         <>
-            {!commonUtil.isEmpty(AnswerComponent) && editItems.map((editItem, index) => <AnswerComponent item={editItem} index={index} hasUrl={false} />)}
+            {!commonUtil.isEmpty(AnswerComponent) &&
+                editItems.map((editItem, index) => (
+                    <AnswerComponent
+                        key={index}
+                        item={editItem}
+                        index={index}
+                        hasUrl={false}
+                        onChange={(item) => {
+                            handleChangeValue(index, item);
+                        }}
+                    />
+                ))}
 
             {/*{type !== 'P' && (
                 <Col className="flex-fill">

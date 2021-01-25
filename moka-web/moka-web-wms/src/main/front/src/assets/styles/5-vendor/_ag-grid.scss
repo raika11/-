@@ -12,7 +12,7 @@
 .pre-wrap-cell {
     display: flex;
     align-items: center;
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
     font-size: 12px;
 }
 

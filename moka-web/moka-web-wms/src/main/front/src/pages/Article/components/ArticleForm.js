@@ -8,11 +8,11 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList, clearArticle } from '@store/article';
-import { saveCdnArticle } from '@store/cdnArticle';
+import { saveCdnArticle, checkExists } from '@store/cdnArticle';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard, MokaIcon, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import commonUtil from '@utils/commonUtil';
 import { unescapeHtml, invalidListToError } from '@utils/convertUtil';
@@ -142,16 +142,33 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
      */
     const handleClickCdn = () => {
         if (temp.totalId) {
+            // 1. 중복 체크
             dispatch(
-                saveCdnArticle({
-                    cdnArticle: {
-                        usedYn: 'Y',
-                        totalId: temp.totalId,
-                        title: temp.artTitle,
-                    },
-                    callback: ({ header }) => {
+                checkExists({
+                    totalId: temp.totalId,
+                    callback: ({ header, body }) => {
                         if (header.success) {
-                            toast.success(header.message);
+                            if (!body) {
+                                // 2. cdn 등록
+                                dispatch(
+                                    saveCdnArticle({
+                                        cdnArticle: {
+                                            usedYn: 'Y',
+                                            totalId: temp.totalId,
+                                            title: temp.artTitle,
+                                        },
+                                        callback: ({ header }) => {
+                                            if (header.success) {
+                                                toast.success(header.message);
+                                            } else {
+                                                toast.fail(header.message);
+                                            }
+                                        },
+                                    }),
+                                );
+                            } else {
+                                messageBox.alert('이미 등록된 기사입니다');
+                            }
                         } else {
                             toast.fail(header.message);
                         }
@@ -355,7 +372,14 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="부제목" className="mb-0" name="artSubTitle" value={temp.artSubTitle} inputClassName="bg-white" onChange={handleChangeValue} />
+                        <MokaInputLabel
+                            as="textarea"
+                            label="부제목"
+                            name="artSubTitle"
+                            value={temp.artSubTitle}
+                            inputClassName="bg-white resize-none"
+                            onChange={handleChangeValue}
+                        />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -395,44 +419,69 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 </Form.Row>
                 {!inRcv && (
                     <Form.Row className="mb-2">
-                        <Col xs={12} className="d-flex p-0">
+                        <Col xs={7} className="d-flex p-0">
                             <MokaInputLabel label="벌크" as="none" />
                             <div className="d-flex flex-column flex-fill">
-                                <Form.Row className="align-items-center">
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '기사', custom: true, checked: bulkSiteObj['기사']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '이미지', custom: true, checked: bulkSiteObj['이미지']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                </Form.Row>
-                                <Form.Row className="align-items-center">
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '네이버', custom: true, checked: bulkSiteObj['네이버']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '다음', custom: true, checked: bulkSiteObj['다음']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '네이트', custom: true, checked: bulkSiteObj['네이트']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '줌', custom: true, checked: bulkSiteObj['줌']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                    <Col xs={2} className="p-0">
-                                        <MokaInput as="checkbox" inputProps={{ label: '기타', custom: true, checked: bulkSiteObj['기타']?.bulkYn === 'Y', readOnly: true }} />
-                                    </Col>
-                                </Form.Row>
+                                <div>
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="mr-2 float-left ft-12"
+                                        inputProps={{ label: '기사', custom: true, checked: bulkSiteObj['기사']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="float-left ft-12"
+                                        inputProps={{ label: '이미지', custom: true, checked: bulkSiteObj['이미지']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                </div>
+                                <div>
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="mr-2 float-left ft-12"
+                                        inputProps={{ label: '네이버', custom: true, checked: bulkSiteObj['네이버']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="mr-2 float-left ft-12"
+                                        inputProps={{ label: '다음', custom: true, checked: bulkSiteObj['다음']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="mr-2 float-left ft-12"
+                                        inputProps={{ label: '네이트', custom: true, checked: bulkSiteObj['네이트']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="mr-2 float-left ft-12"
+                                        inputProps={{ label: '줌', custom: true, checked: bulkSiteObj['줌']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                    <MokaInput
+                                        as="checkbox"
+                                        className="float-left ft-12"
+                                        inputProps={{ label: '기타', custom: true, checked: bulkSiteObj['기타']?.bulkYn === 'Y', readOnly: true }}
+                                    />
+                                </div>
+                            </div>
+                        </Col>
+                        <Col xs={5} className="d-flex p-0 pl-2">
+                            <MokaInputLabel label="종류" as="none" />
+                            <div className="d-flex flex-column flex-fill">
+                                <div>
+                                    <MokaInput as="checkbox" className="mr-2 float-left ft-12" inputProps={{ label: '로그인', custom: true, readOnly: true }} />
+                                    <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: 'AB테스트용', custom: true, readOnly: true }} />
+                                </div>
+                                <div>
+                                    <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: '연재기사(번호: 000)', custom: true, readOnly: true }} />
+                                </div>
                             </div>
                         </Col>
                     </Form.Row>
                 )}
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <Col className="p-0" xs={12}>
                         <MokaInputGroup
                             label="LINK정보"
                             value={temp.serviceUrl}
-                            className="mb-2"
                             inputClassName="bg-white"
                             append={<MokaCopyTextButton copyText={temp.serviceUrl} successText="복사하였습니다" />}
                             disabled

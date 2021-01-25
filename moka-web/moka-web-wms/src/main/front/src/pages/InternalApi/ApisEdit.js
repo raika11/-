@@ -104,18 +104,6 @@ const ApisEdit = (props) => {
         }
     };
 
-    // /**
-    //  * 파라미터가 추가되면 0번째 paramList 초기화
-    //  */
-    // const resetParamData = () => {
-    //     produce(paramList, (draft) => {
-    //         draft[0].name = '';
-    //         draft[0].desc = '';
-    //         draft[0].paramYn = 'N';
-    //         draft[0].dataType = 'string';
-    //     });
-    // };
-
     const handleClickDeleteParam = (e, idx) => {
         setParamList(
             produce(paramList, (draft) => {
@@ -188,8 +176,6 @@ const ApisEdit = (props) => {
 
                 {paramList.map(({ name, desc, paramYn, dataType }, idx) => (
                     <div className={clsx(idx === 0 ? 'mb-4' : 'mb-2', 'd-flex align-items-center')} key={idx}>
-                        {/* <div className={clsx(idx === 0 ? 'mb-4' : 'mb-2', 'd-flex align-items-center')}> */}
-
                         <MokaInputLabel
                             label={idx === 0 ? '파라미터' : ' '}
                             className="mr-2"

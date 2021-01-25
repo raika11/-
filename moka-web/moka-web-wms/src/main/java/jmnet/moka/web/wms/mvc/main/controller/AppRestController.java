@@ -95,9 +95,6 @@ public class AppRestController {
     @Value("${photo.archive.url}")
     private String photoArchiveUrl;
 
-    @Value("${watermark.path}")
-    private String watermarkPath;
-
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -138,7 +135,6 @@ public class AppRestController {
                 .add("IR_URL", irUrl)                                                // ir Url
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
                 .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
-                .add("WATERMARK_PATH", watermarkPath)                                // 워터마크 이미지 경로
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());

@@ -39,15 +39,14 @@ const Domain = ({ match }) => {
                 dispatch(
                     deleteDomain({
                         domainId: domain.domainId,
-                        callback: ({ header }) => {
-                            // 삭제 성공
-                            if (header.success) {
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
+                                // 삭제 성공
                                 toast.success(header.message);
                                 history.push(match.path);
-                            }
-                            // 삭제 실패
-                            else {
-                                toast.fail(header.message);
+                            } else {
+                                // 삭제 실패
+                                messageBox.alert(header.mesage);
                             }
                         },
                     }),

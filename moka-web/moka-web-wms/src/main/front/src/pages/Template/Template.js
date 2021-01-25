@@ -92,16 +92,12 @@ const Template = ({ match }) => {
                     deleteTemplate({
                         templateSeq: template.templateSeq,
                         callback: ({ header, body }) => {
-                            if (header.success) {
-                                if (body) {
-                                    // 삭제 성공
-                                    toast.success(header.message);
-                                    history.push(match.path);
-                                } else {
-                                    // 삭제 실패
-                                    messageBox.alert(header.message);
-                                }
+                            if (header.success && body) {
+                                // 삭제 성공
+                                toast.success(header.message);
+                                history.push(match.path);
                             } else {
+                                // 삭제 실패
                                 messageBox.alert(header.message);
                             }
                         },

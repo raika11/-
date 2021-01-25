@@ -31,15 +31,16 @@ const Reserved = ({ match }) => {
                 () => {
                     dispatch(
                         deleteReserved({
-                            callback: (response) => {
-                                toast.result(response);
-                                if (response.header.success) {
-                                    history.push(match.path);
-                                }
-                            },
                             reservedSet: {
                                 domainId: reserved.domain?.domainId,
                                 reservedSeq: reserved.reservedSeq,
+                            },
+                            callback: ({ header, body }) => {
+                                if (header.success && body) {
+                                    history.push(match.path);
+                                } else {
+                                    messageBox.alert(header.mesasge);
+                                }
                             },
                         }),
                     );

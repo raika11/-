@@ -140,12 +140,12 @@ const Page = ({ match }) => {
                     () => {
                         const option = {
                             pageSeq: item.pageSeq,
-                            callback: (response) => {
-                                if (response.header.success) {
-                                    toast.success(response.header.message);
+                            callback: ({ header, body }) => {
+                                if (header.success && body) {
+                                    toast.success(header.message);
                                     history.push(match.path);
                                 } else {
-                                    toast.fail(response.header.message);
+                                    messageBox.alert(header.message);
                                 }
                             },
                         };

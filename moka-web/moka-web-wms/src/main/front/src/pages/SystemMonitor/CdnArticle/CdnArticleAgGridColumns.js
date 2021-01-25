@@ -20,8 +20,9 @@ export default [
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 80,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 76,
+        wrapText: true,
+        cellStyle: { fontSize: '12px', lineHeight: '21px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '사용여부',

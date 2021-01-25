@@ -121,7 +121,7 @@ const InternalApiEdit = ({ match }) => {
                             toast.success(header.message);
                             history.push(`${match.path}/${body.seqNo}`);
                         } else {
-                            toast.fail(header.message);
+                            messageBox.alert(header.message);
                         }
                     },
                 }),

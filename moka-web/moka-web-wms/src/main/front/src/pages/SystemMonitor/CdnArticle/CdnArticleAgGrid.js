@@ -41,7 +41,7 @@ const CdnArticleAgGrid = ({ match }) => {
         setRowData(
             list.map((data) => ({
                 ...data,
-                regDt: (data.regDt || '').slice(0, 10),
+                regDt: (data.regDt || '').slice(0, -3),
             })),
         );
     }, [list]);

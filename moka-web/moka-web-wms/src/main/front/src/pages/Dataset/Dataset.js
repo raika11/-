@@ -37,11 +37,13 @@ const Dataset = ({ match }) => {
                 dispatch(
                     deleteDataset({
                         datasetSeq: dataset.datasetSeq,
-                        callback: (response) => {
-                            if (response.header.success) {
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
+                                toast.success(header.message);
                                 history.push(match.path);
+                            } else {
+                                messageBox.alert(header.message);
                             }
-                            toast.result(response);
                         },
                     }),
                 );

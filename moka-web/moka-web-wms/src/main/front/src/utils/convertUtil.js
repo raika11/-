@@ -48,20 +48,22 @@ export const unescapeHtml = (str) => {
  * @param {string} str 문자열
  */
 export const escapeHtml = (str) => {
-    if (str && str !== '') {
-        return str
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll("'", '&#39;')
-            .replaceAll('"', '&quot;')
-            .replaceAll('[', '&#91;')
-            .replaceAll(']', '&#93;')
-            .replaceAll('‘', '&#8216;')
-            .replaceAll('’', '&#8217;')
-            .replaceAll('%', '&#037;')
-            .replaceAll('·', '&middot;');
-    } else return str;
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+        '[': '&#91;',
+        ']': '&#93;',
+        '‘': '&#8216;',
+        '’': '&#8217;',
+        '%': '&#037;',
+        '·': '&middot;',
+    };
+    return str.replace(/[&<>"'\[\]‘’%·]/g, function (m) {
+        return map[m];
+    });
 };
 
 /**

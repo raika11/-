@@ -10,7 +10,7 @@ import { MokaInput, MokaSearchInput } from '@components';
 /**
  * cdn 기사 검색
  */
-const ArticleCdnSearch = ({ match }) => {
+const CdnArticleSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [search, setSearch] = useState(initialState.search);
@@ -75,4 +75,4 @@ const ArticleCdnSearch = ({ match }) => {
     );
 };
 
-export default ArticleCdnSearch;
+export default CdnArticleSearch;

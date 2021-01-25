@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList, clearArticle } from '@store/article';
+import { saveCdnArticle } from '@store/cdnArticle';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard, MokaIcon, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
@@ -137,6 +138,30 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
     };
 
     /**
+     * Cdn 등록
+     */
+    const handleClickCdn = () => {
+        if (temp.totalId) {
+            dispatch(
+                saveCdnArticle({
+                    cdnArticle: {
+                        usedYn: 'Y',
+                        totalId: temp.totalId,
+                        title: temp.artTitle,
+                    },
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        }
+    };
+
+    /**
      * PC 미리보기
      */
     const handlePCPreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'P' });
@@ -148,7 +173,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
 
     /**
      * validate
-     * @params {object} articleData 검증할 데이터
+     * @param {object} articleData 검증할 데이터
      */
     const validate = (articleData) => {
         let isInvalid = false;
@@ -282,7 +307,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
                 { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
                 { variant: 'positive', text: '기사수정', className: 'mr-2', onClick: handleClickSave },
-                { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2' },
+                { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2', onClick: handleClickCdn },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
             loading={loading}

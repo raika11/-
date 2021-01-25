@@ -5,7 +5,7 @@ import { MokaTable } from '@components';
 import { GET_CDN_ARTICLE_LIST, getCdnArticleList, changeSearchOption } from '@store/cdnArticle';
 import columnDefs from './CdnArticleAgGridColumns';
 
-const ArticleCdnAgGrid = ({ match }) => {
+const CdnArticleAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
@@ -64,4 +64,4 @@ const ArticleCdnAgGrid = ({ match }) => {
     );
 };
 
-export default ArticleCdnAgGrid;
+export default CdnArticleAgGrid;

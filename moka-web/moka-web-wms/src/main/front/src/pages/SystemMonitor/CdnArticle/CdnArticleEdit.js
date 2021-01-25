@@ -4,13 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { ARTICLE_URL, MOBILE_ARTICLE_URL } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { initialState, getCdnArticle, clearCdnArticle, saveCdnArticle, checkExists } from '@store/cdnArticle';
+import { initialState, getCdnArticle, clearCdnArticle, saveCdnArticle, checkExists, clearCache } from '@store/cdnArticle';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
-const ArticleCdnEdit = ({ match }) => {
+const CdnArticleEdit = ({ match }) => {
     const { totalId } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -19,7 +18,7 @@ const ArticleCdnEdit = ({ match }) => {
     }));
     const [modalShow, setModalShow] = useState(false);
     const [temp, setTemp] = useState(initialState.cdnArticle);
-    const [error] = useState({});
+    const [error, setError] = useState({});
 
     /**
      * 입력 값 변경
@@ -40,6 +39,7 @@ const ArticleCdnEdit = ({ match }) => {
 
     /**
      * 기사 모달에서 기사 클릭
+     * @param {object} row row데이터
      */
     const handleRowClicked = (row) => {
         dispatch(
@@ -56,6 +56,7 @@ const ArticleCdnEdit = ({ match }) => {
                                 title: row.artTitle,
                             });
                             setModalShow(false);
+                            setError({ ...error, totalId: false });
                         }
                     } else {
                         messageBox.alert('통신에 실패하였습니다. 다시 시도해주세요.');
@@ -69,17 +70,47 @@ const ArticleCdnEdit = ({ match }) => {
      * 저장
      */
     const handleClickSave = () => {
-        dispatch(
-            saveCdnArticle({
-                cdnArticle: temp,
-                callback: ({ header }) => {
-                    if (header.success) {
-                        toast.success(header.message);
-                    } else {
-                        toast.fail(header.message);
-                    }
-                },
-            }),
+        if (temp.totalId) {
+            dispatch(
+                saveCdnArticle({
+                    cdnArticle: temp,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            setError({ ...error, totalId: true });
+        }
+    };
+
+    /**
+     * 캐시 삭제
+     */
+    const handleClear = () => {
+        messageBox.confirm(
+            'cdn 캐시를 삭제하시겠습니까?',
+            () => {
+                if (temp.totalId) {
+                    dispatch(
+                        clearCache({
+                            totalId: temp.totalId,
+                            callback: ({ header }) => {
+                                if (header.success) {
+                                    toast.success(header.message);
+                                } else {
+                                    toast.fail(header.message);
+                                }
+                            },
+                        }),
+                    );
+                }
+            },
+            () => {},
         );
     };
 
@@ -102,6 +133,7 @@ const ArticleCdnEdit = ({ match }) => {
 
     useEffect(() => {
         setTemp(cdnArticle);
+        setError({});
     }, [cdnArticle]);
 
     useEffect(() => {
@@ -119,7 +151,7 @@ const ArticleCdnEdit = ({ match }) => {
             footerButtons={[
                 { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancle },
-                { text: '캐시 삭제', variant: 'negative' },
+                { text: '캐시 삭제', variant: 'negative', disabled: !temp.totalId, onClick: handleClear },
             ]}
             footer
         >
@@ -171,26 +203,12 @@ const ArticleCdnEdit = ({ match }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            label="CDN NEWS"
-                            labelWidth={76}
-                            inputClassName="bg-white"
-                            value={temp.totalId ? `${ARTICLE_URL}${temp.totalId}` : ''}
-                            inputProps={{ plaintext: true }}
-                            disabled
-                        />
+                        <MokaInputLabel label="CDN NEWS" labelWidth={76} inputClassName="bg-white" value={temp.cdnUrlNews} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            label="CDN MNEWS"
-                            labelWidth={76}
-                            inputClassName="bg-white"
-                            value={temp.totalId ? `${MOBILE_ARTICLE_URL}${temp.totalId}` : ''}
-                            inputProps={{ plaintext: true }}
-                            disabled
-                        />
+                        <MokaInputLabel label="CDN MNEWS" labelWidth={76} inputClassName="bg-white" value={temp.cdnUrlMnews} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
@@ -208,4 +226,4 @@ const ArticleCdnEdit = ({ match }) => {
     );
 };
 
-export default ArticleCdnEdit;
+export default CdnArticleEdit;

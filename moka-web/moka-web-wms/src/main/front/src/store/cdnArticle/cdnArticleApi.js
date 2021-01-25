@@ -43,8 +43,8 @@ export const putCdnArticle = ({ cdnArticle }) => {
 };
 
 // cdn 기사 캐시 삭제
-export const clearCache = ({ cdnArticle }) => {
-    return instance.put(`/api/cdn-articles/${cdnArticle.totalId}`).catch((err) => {
+export const clearCache = ({ totalId }) => {
+    return instance.put(`/api/cdn-articles/${totalId}/clear-cache`).catch((err) => {
         throw err;
     });
 };

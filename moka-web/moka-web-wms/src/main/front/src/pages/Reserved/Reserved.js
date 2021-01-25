@@ -20,7 +20,7 @@ const Reserved = ({ match }) => {
 
     /**
      * 삭제 버튼
-     * @params {object} 예약어
+     * @param {object} 예약어
      */
     const handleClickDelete = (reserved) => {
         if (reserved.usedYn === 'Y') {

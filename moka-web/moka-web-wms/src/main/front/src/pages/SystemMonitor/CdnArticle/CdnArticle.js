@@ -1,16 +1,23 @@
 import React, { Suspense } from 'react';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
+import { clearStore } from '@store/cdnArticle';
 import CdnArticleEdit from './CdnArticleEdit';
 const CdnArticleList = React.lazy(() => import('./CdnArticleList'));
 
 /**
  * 트래픽 분산(기사) 관리
  */
-const ArticleCdn = ({ match, displayName }) => {
-    // const dispatch = useDispatch();
+const CdnArticle = ({ match, displayName }) => {
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -33,4 +40,4 @@ const ArticleCdn = ({ match, displayName }) => {
     );
 };
 
-export default ArticleCdn;
+export default CdnArticle;

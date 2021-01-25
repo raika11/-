@@ -2,7 +2,7 @@ import React from 'react';
 import Search from './CdnArticleSearch';
 import AgGrid from './CdnArticleAgGrid';
 
-const ArticleCdnList = (props) => {
+const CdnArticleList = (props) => {
     return (
         <React.Fragment>
             <Search {...props} />
@@ -11,4 +11,4 @@ const ArticleCdnList = (props) => {
     );
 };
 
-export default ArticleCdnList;
+export default CdnArticleList;

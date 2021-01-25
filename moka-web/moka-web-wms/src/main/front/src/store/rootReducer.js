@@ -41,6 +41,7 @@ import seoMeta from '@store/seoMeta/seoMetaReducer';
 import jpod from '@store/jpod/jpodReducer';
 import poll from '@store/survey/poll/pollReducer';
 import cdnArticle from '@store/cdnArticle/cdnArticleReducer';
+import internalApi from '@store/internalApi/internalApiReducer';
 
 export default combineReducers({
     toastr,
@@ -84,4 +85,5 @@ export default combineReducers({
     poll,
     jpod,
     cdnArticle,
+    internalApi,
 });

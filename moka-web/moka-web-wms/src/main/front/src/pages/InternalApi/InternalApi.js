@@ -2,14 +2,14 @@ import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch } from 'react-router-dom';
 import { MokaCard } from '@/components';
-import ApisEdit from './ApisEdit';
 
-const ApisList = React.lazy(() => import('./ApisList'));
+import ApisEdit from './ApisEdit';
+const InternalApiList = React.lazy(() => import('./InternalApiList'));
 
 /**
  * API 관리
  */
-const Apis = ({ match }) => {
+const InternalApi = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
@@ -21,7 +21,7 @@ const Apis = ({ match }) => {
             {/* API 목록 */}
             <MokaCard title="API 관리" width={812} className="mr-gutter" bodyClassName="d-flex flex-column">
                 <Suspense>
-                    <ApisList />
+                    <InternalApiList match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -35,4 +35,4 @@ const Apis = ({ match }) => {
     );
 };
 
-export default Apis;
+export default InternalApi;

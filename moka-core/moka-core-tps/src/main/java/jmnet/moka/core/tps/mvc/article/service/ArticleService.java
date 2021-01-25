@@ -2,18 +2,16 @@ package jmnet.moka.core.tps.mvc.article.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
-import jmnet.moka.core.tps.mvc.article.dto.CdnUploadResultDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
-import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
-import org.springframework.data.domain.Page;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleHistoryVO;
 
 /**
  * Article 서비스
@@ -107,19 +105,18 @@ public interface ArticleService {
     /**
      * 기사 히스토리 조회
      *
-     * @param totalId 기사키
-     * @param search  검색조건
+     * @param search 검색조건
      * @return 기사히스토리 목록
      */
-    Page<ArticleHistory> findAllArticleHistory(Long totalId, SearchDTO search);
+    List<ArticleHistoryVO> findAllArticleHistory(ArticleHistorySearchDTO search);
 
-    /**
-     * CDN등록
-     *
-     * @param totalId   기사키
-     * @param resultDto cdn업로드 결과정보
-     * @return 등록성공여부
-     */
-    boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto)
-            throws Exception;
+    //    /**
+    //     * CDN등록
+    //     *
+    //     * @param totalId   기사키
+    //     * @param resultDto cdn업로드 결과정보
+    //     * @return 등록성공여부
+    //     */
+    //    boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto)
+    //            throws Exception;
 }

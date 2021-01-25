@@ -3,10 +3,12 @@ package jmnet.moka.core.tps.mvc.article.mapper;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleHistoryVO;
 
 /**
  * Article Mapper
@@ -149,4 +151,12 @@ public interface ArticleMapper extends BaseMapper<ArticleBasicVO, ArticleSearchD
      * @return 성공여부
      */
     Integer callUpaArticleBasicUpdByTotalId(Map<String, Object> param);
+
+    /**
+     * 기사 히스토리 목록 조회
+     *
+     * @param search 검색조건
+     * @return 기사 히스토리 목록
+     */
+    List<ArticleHistoryVO> upaArticleHistoryListSel(ArticleHistorySearchDTO search);
 }

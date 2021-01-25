@@ -71,7 +71,7 @@ const ArticleHistoryModal = (props) => {
         <MokaModal size="xl" width={1200} height={650} show={show} onHide={handleHide} title="작업정보" bodyClassName="overflow-y-hidden h-100" centered>
             <MokaTable
                 headerHeight={50}
-                rowHeight={130}
+                rowHeight={127}
                 loading={loading}
                 rowData={rowData}
                 columnDefs={columnDefs}

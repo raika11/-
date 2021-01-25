@@ -24,7 +24,7 @@ export default [
         field: 'title',
         width: 560,
         cellRenderer: 'titleRenderer',
-        cellStyle: { padding: '3px 0px' },
+        cellStyle: { padding: '6px 0px' },
     },
     {
         headerName: '기자',

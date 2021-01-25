@@ -198,14 +198,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="제목" className="mb-0" value={article.title} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="제목" value={article.title} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col className="p-0" xs={12}>
-                        <MokaInputLabel label="부제목" className="mb-0" value={article.subTitle} inputProps={{ plaintext: true }} disabled />
-                    </Col>
-                </Form.Row>
+                <div className="mb-2 w-100">
+                    <MokaInputLabel as="textarea" label="부제목" inputClassName="resize-none" value={article.subTitle} inputProps={{ rows: 2 }} disabled />
+                </div>
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={6}>
                         <MokaInputLabel label="기자" name="repStr" value={repStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurRep }} />

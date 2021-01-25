@@ -69,7 +69,7 @@ const InternalApiSearch = ({ match }) => {
                             ))}
                         </MokaInput>
                     </div>
-                    <MokaInput name="keyword" value={search.keyword} onChange={handleChangeValue} />
+                    <MokaInput name="keyword" value={search.keyword} placeholder="검색어를 입력하세요" onChange={handleChangeValue} />
                 </Col>
                 <Col xs={4} className="d-flex p-0 pr-2">
                     <MokaInput as="select" name="apiMethod" value={search.apiMethod} onChange={handleChangeValue}>

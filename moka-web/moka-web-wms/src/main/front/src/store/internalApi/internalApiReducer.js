@@ -36,7 +36,18 @@ export const initialState = {
         { id: 'Y', name: '사용' },
         { id: 'N', name: '미사용' },
     ],
-    internalApi: {},
+    internalApi: {
+        paramDesc: null,
+        usedYn: 'Y',
+        apiName: '',
+        apiPath: '',
+    },
+    defaultParam: {
+        name: '',
+        desc: '',
+        required: 'N',
+        dataType: 'string',
+    },
     invalidList: [],
 };
 

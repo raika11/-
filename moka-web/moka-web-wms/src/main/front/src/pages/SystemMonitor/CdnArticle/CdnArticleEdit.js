@@ -7,13 +7,25 @@ import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtml, escapeHtml } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { initialState, getCdnArticle, clearCdnArticle, saveCdnArticle, checkExists, clearCache } from '@store/cdnArticle';
+import {
+    initialState,
+    getCdnArticle,
+    clearCdnArticle,
+    saveCdnArticle,
+    checkExists,
+    clearCache,
+    GET_CDN_ARTICLE,
+    SAVE_CDN_ARTICLE,
+    CHECK_EXISTS,
+    CLEAR_CACHE,
+} from '@store/cdnArticle';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 const CdnArticleEdit = ({ match }) => {
     const { totalId } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
+    const loading = useSelector(({ loading }) => loading[GET_CDN_ARTICLE] || loading[SAVE_CDN_ARTICLE] || loading[CHECK_EXISTS] || loading[CLEAR_CACHE]);
     const { cdnArticle } = useSelector(({ cdnArticle }) => ({
         cdnArticle: cdnArticle.cdnArticle,
     }));
@@ -152,6 +164,7 @@ const CdnArticleEdit = ({ match }) => {
             className="flex-fill"
             title={`트래픽 분산(기사) ${totalId ? '수정' : '등록'}`}
             footerClassName="d-flex justify-content-center"
+            loading={loading}
             footerButtons={[
                 { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancle },

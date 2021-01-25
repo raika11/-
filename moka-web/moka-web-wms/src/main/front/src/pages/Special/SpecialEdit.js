@@ -100,12 +100,12 @@ const SpecialEdit = () => {
                 dispatch(
                     deleteSpecial({
                         seqNo: special.seqNo,
-                        callback: ({ header }) => {
-                            if (header.success) {
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
                                 toast.success(header.message);
                                 history.push('/special');
                             } else {
-                                toast.fail(header.message);
+                                messageBox.alert(header.message);
                             }
                         },
                     }),

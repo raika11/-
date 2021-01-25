@@ -67,7 +67,7 @@ const JpodEpisode = React.lazy(() => retry(() => import('@pages/Jpod/JpodEpisode
 const SystemLog = React.lazy(() => retry(() => import('@pages/SystemLog')));
 const SystemMonitor = React.lazy(() => retry(() => import('@pages/SystemMonitor')));
 const BulkMonitor = React.lazy(() => retry(() => import('@pages/BulkMonitor')));
-const Apis = React.lazy(() => retry(() => import('@pages/Apis')));
+const InternalApi = React.lazy(() => retry(() => import('@pages/InternalApi')));
 const Package = React.lazy(() => retry(() => import('@pages/Package')));
 
 const routes = [
@@ -633,10 +633,10 @@ const routes = [
         strict: true,
     },
     {
-        path: '/apis',
-        name: 'apis',
+        path: '/internal-api',
+        name: 'internalApi',
         displayName: 'API 관리',
-        component: Apis,
+        component: InternalApi,
         layout: SidebarOpenLayout,
         nonResponsive: true,
         exact: false,

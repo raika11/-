@@ -1,15 +1,24 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { MokaCard } from '@/components';
-import ApisEdit from './ApisEdit';
-
-const ApisList = React.lazy(() => import('./ApisList'));
+import { clearStore } from '@store/internalApi';
+import InternalApiEdit from './InternalApiEdit';
+const InternalApiList = React.lazy(() => import('./InternalApiList'));
 
 /**
  * API 관리
  */
-const Apis = ({ match }) => {
+const InternalApi = ({ match }) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
+
     return (
         <div className="d-flex">
             <Helmet>
@@ -21,18 +30,18 @@ const Apis = ({ match }) => {
             {/* API 목록 */}
             <MokaCard title="API 관리" width={812} className="mr-gutter" bodyClassName="d-flex flex-column">
                 <Suspense>
-                    <ApisList />
+                    <InternalApiList match={match} />
                 </Suspense>
             </MokaCard>
 
             {/* API 정보 */}
             <Switch>
                 <Route path={[`${match.path}/add`, `${match.path}/:seqNo`]}>
-                    <ApisEdit match={match} />
+                    <InternalApiEdit match={match} />
                 </Route>
             </Switch>
         </div>
     );
 };
 
-export default Apis;
+export default InternalApi;

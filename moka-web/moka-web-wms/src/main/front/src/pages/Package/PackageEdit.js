@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
+import produce from 'immer';
 import { useHistory, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
+import { MokaCard, MokaInput, MokaInputLabel, MokaIcon } from '@/components';
 
 const options = [
-    { value: 'test1', label: '정치' },
-    { value: 'test2', label: '사회' },
-    { value: 'test3', label: '경제' },
+    { value: 'test1', label: '대통령 사면론' },
+    { value: 'test2', label: '이명박' },
+    { value: 'test3', label: '박근혜' },
+];
+
+const rnOptions = [
+    { value: 'test1', label: '김이나' },
+    { value: 'test2', label: '박수진' },
+    { value: 'test3', label: '최우영' },
 ];
 
 /**
@@ -45,9 +52,38 @@ const PackageEdit = () => {
         searchOptions: {},
         kwStartDt: moment(),
         kwEndDt: null,
+        kwSearch: 'Y',
+        reporterYn: 'N',
+        reporterOptions: [],
+        // reporterStartDt: [],
+        // reporterEndDt: [],
+        // reporterSearch: [],
+        sectionYn: 'N',
+        sectionOptions: {},
+        sectionStartDt: null,
+        sectionEndDt: null,
+        sectionSearch: null,
+        specialYn: 'N',
+        specialOptions: {},
+        specialStartDt: null,
+        specialEndDt: null,
+        specialSearch: null,
+        ovpYn: 'N',
+        ovpOptions: {},
+        ovpStartDt: null,
+        ovpEndDt: null,
+        ovpSearch: null,
     });
-    const [defaultValue, setDefaultValue] = useState(null);
+    const [keywordValue, setKeywordValue] = useState(null);
+    const [sectionValue, setSectionValue] = useState(null);
+    const [specialValue, setSpecialValue] = useState(null);
+    const [ovpValue, setOvpValue] = useState(null);
     const [keywordList, setKeywordList] = useState([]);
+    const [sectionKeywordList, setSectionkeywordList] = useState(keywordList);
+    const [specialKeywordList, setSpecialKeywordList] = useState(keywordList);
+    const [ovpKeywordList, setOvpKeywordList] = useState(keywordList);
+    const [reporterList, setReporterList] = useState([]);
+    const [reporterName, setReporterName] = useState(null);
 
     const handleClickCancel = () => {
         history.push('/package');
@@ -58,38 +94,105 @@ const PackageEdit = () => {
      */
     const handleChangeValue = useCallback(
         (e) => {
-            const { name, value, checked } = e.target;
-            if (name === 'expoYn') {
-                setPkg({ ...pkg, [name]: checked ? 'Y' : 'N' });
-            } else if (name === 'epiDiv') {
-                setPkg({ ...pkg, [name]: checked ? 'Y' : 'N' });
-            } else if (name === 'subsYn') {
-                setPkg({ ...pkg, [name]: checked ? 'Y' : 'N' });
-            } else if (name === 'recomPkgYn') {
-                setPkg({ ...pkg, [name]: checked ? 'Y' : 'N' });
-            } else if (name === 'keywordYn') {
-                setPkg({ ...pkg, [name]: checked ? 'Y' : 'N' });
-            } else {
-                setPkg({ ...pkg, [name]: value });
-            }
+            const { name, value } = e.target;
+            setPkg({ ...pkg, [name]: value });
         },
         [pkg],
     );
 
     /**
-     * date value
+     * switch value
      */
-    const handleChangeDate = useCallback(
+    const handleChangeSwitch = useCallback(
         (e) => {
-            const { name, date } = e.target;
-            if (typeof date === 'object') {
-                setPkg({ ...pkg, [name]: date });
-            } else if (date === '') {
-                setPkg({ ...pkg, [name]: null });
-            }
+            const { name, checked } = e.target;
+            setPkg({ ...pkg, [name]: checked ? 'Y' : 'N' });
         },
         [pkg],
     );
+
+    /**
+     * 기자 필드 셋팅
+     */
+    const resetReporterList = useCallback(() => {
+        setReporterList([
+            {
+                reporterSearch: pkg.kwSearch,
+                reporterStartDt: pkg.kwStartDt,
+                reporterOptions: [],
+                reporterEndDt: pkg.kwEndDt,
+            },
+        ]);
+    }, [pkg.kwEndDt, pkg.kwSearch, pkg.kwStartDt]);
+
+    /**
+     * 기자 필드 값 변경
+     * @param {object} e
+     * @param {number} idx object 순서
+     */
+    const handleReporterList = (e, idx) => {
+        // reporterSearch, reporterStartDt, reporterOptions, reporterEndDt
+        const { name, checked } = e.target;
+        setReporterList(
+            produce(reporterList, (draft) => {
+                if (name === 'reporterSearch') {
+                    draft[idx].reporterSearch = checked ? 'Y' : 'N';
+                }
+                // else if (name === 'paramDesc') {
+                //     draft[idx].desc = value;
+                // }
+            }),
+        );
+    };
+
+    /**
+     * 기자 검색 조건 추가
+     */
+    const handleClickAddReporter = () => {
+        setReporterList(
+            produce(reporterList, (draft) => {
+                draft.push({
+                    reporterSearch: reporterList[0].reporterSearch,
+                    reporterStartDt: reporterList[0].reporterStartDt,
+                    reporterOptions: reporterList[0].reporterOptions,
+                    reporterEndDt: reporterList[0].reporterEndDt,
+                });
+            }),
+        );
+    };
+
+    /**
+     * 기자 검색 조건 삭제
+     */
+    const handleClickDeleteReporter = (e, idx) => {
+        setReporterList(
+            produce(reporterList, (draft) => {
+                draft.splice(idx, 1);
+            }),
+        );
+    };
+
+    useEffect(() => {
+        resetReporterList();
+    }, [resetReporterList]);
+
+    /**
+     * 공통 검색 조건 셋팅
+     */
+    useEffect(() => {
+        let stDt = pkg.kwStartDt,
+            edDt = pkg.kwEndDt,
+            scYn = pkg.kwSearch;
+
+        if (stDt) {
+            setPkg({ ...pkg, sectionStartDt: stDt, specialStartDt: stDt, ovpStartDt: stDt });
+        } else if (scYn) {
+            setPkg({ ...pkg, sectionSearch: scYn, specialSearch: scYn, ovpSearch: scYn });
+        } else if (edDt) {
+            setPkg({ ...pkg, sectionEndDt: edDt, specialEndDt: edDt, ovpEndDt: edDt });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pkg.kwStartDt, pkg.kwEndDt, pkg.kwSearch]);
 
     useEffect(() => {
         let cts = [];
@@ -101,7 +204,10 @@ const PackageEdit = () => {
             const ct = options.find((ct) => ct.value === val);
             if (ct) cts.push(ct);
         });
-        setDefaultValue(cts);
+        setKeywordValue(cts);
+        // setSectionValue();
+        // setSpecialValue();
+        // setOvpValue();
     }, [keywordList]);
 
     return (
@@ -126,12 +232,12 @@ const PackageEdit = () => {
                             label="노출 여부"
                             name="expoYn"
                             inputProps={{ custom: true, checked: pkg.expoYn === 'Y' }}
-                            onChange={handleChangeValue}
+                            onChange={handleChangeSwitch}
                             required
                         />
                     </Col>
                     <Col xs={9} className="p-0 d-flex">
-                        <div style={{ width: 60 }} className="pr-2">
+                        <div style={{ width: 80 }} className="pr-3">
                             <MokaInput
                                 as="radio"
                                 id="package-imedi-radio"
@@ -140,7 +246,7 @@ const PackageEdit = () => {
                                 onChange={(e) => setPkg({ ...pkg, expoImd: e.target.value })}
                             />
                         </div>
-                        <div style={{ width: 60 }} className="pr-1">
+                        <div style={{ width: 80 }} className="pr-1">
                             <MokaInput
                                 as="radio"
                                 id="package-reserved-radio"
@@ -150,10 +256,34 @@ const PackageEdit = () => {
                             />
                         </div>
                         <div style={{ width: 150 }} className="pr-1">
-                            <MokaInput as="dateTimePicker" name="expoResrvDT" inputProps={{ timeFormat: null }} value={pkg.expoResrvDT} onChange={handleChangeDate} />
+                            <MokaInput
+                                as="dateTimePicker"
+                                name="expoResrvDT"
+                                inputProps={{ timeFormat: null }}
+                                value={pkg.expoResrvDT}
+                                onChange={(date) => {
+                                    if (typeof date === 'object') {
+                                        setPkg({ ...pkg, expoResrvDT: date });
+                                    } else if (date === '') {
+                                        setPkg({ ...pkg, expoResrvDT: null });
+                                    }
+                                }}
+                            />
                         </div>
                         <div style={{ width: 150 }}>
-                            <MokaInput as="dateTimePicker" name="expoResrvTm" inputProps={{ dateFormat: null }} value={pkg.expoResrvTm} onChange={handleChangeDate} />
+                            <MokaInput
+                                as="dateTimePicker"
+                                name="expoResrvTm"
+                                inputProps={{ dateFormat: null }}
+                                value={pkg.expoResrvTm}
+                                onChange={(time) => {
+                                    if (typeof time === 'object') {
+                                        setPkg({ ...pkg, expoResrvTm: time });
+                                    } else if (time === '') {
+                                        setPkg({ ...pkg, expoResrvTm: null });
+                                    }
+                                }}
+                            />
                         </div>
                     </Col>
                 </Form.Row>
@@ -162,7 +292,7 @@ const PackageEdit = () => {
                         <MokaInputLabel as="none" label="유형 선택" required />
                     </Col>
                     <Col xs={9} className="p-0 d-flex align-items-center">
-                        <div style={{ width: 60 }} className="pr-2">
+                        <div style={{ width: 80 }} className="pr-3">
                             <MokaInput
                                 as="radio"
                                 id="package-topic-radio"
@@ -171,7 +301,7 @@ const PackageEdit = () => {
                                 onChange={(e) => setPkg({ ...pkg, type: e.target.value })}
                             />
                         </div>
-                        <div style={{ width: 60 }} className="pr-2">
+                        <div style={{ width: 80 }} className="pr-3">
                             <MokaInput
                                 as="radio"
                                 id="package-issue-radio"
@@ -192,11 +322,20 @@ const PackageEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-3 align-items-center">
-                    <MokaInputLabel as="none" label="시즌/회차\n표시" />
-                    <Col xs={10} className="p-0">
-                        <div className="mb-2 d-flex align-items-center">
-                            <MokaInputLabel as="none" label="시즌" />
-                            <div className="pr-3 d-flex align-tiems-center">
+                    <Col xs={3} className="p-0 d-flex">
+                        <MokaInputLabel as="none" label="시즌/회차\n표시" />
+                        <div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="시즌" />
+                            </div>
+                            <div style={{ height: 31 }} className="d-flex align-items-center">
+                                <MokaInputLabel as="none" label="회차" />
+                            </div>
+                        </div>
+                    </Col>
+                    <Col xs={9} className="p-0">
+                        <div className="mb-3 d-flex align-items-center">
+                            <div className="pr-3 d-flex align-items-center">
                                 <MokaInput
                                     as="checkbox"
                                     className="pr-1"
@@ -211,7 +350,7 @@ const PackageEdit = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="pr-3 d-flex align-tiems-center">
+                            <div className="pr-3 d-flex align-items-center">
                                 <MokaInput
                                     as="checkbox"
                                     className="pr-1"
@@ -226,7 +365,7 @@ const PackageEdit = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="d-flex align-tiems-center">
+                            <div className="d-flex align-items-center">
                                 <MokaInput
                                     as="checkbox"
                                     className="pr-1"
@@ -242,15 +381,14 @@ const PackageEdit = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex">
-                            <MokaInputLabel as="none" label="회차" />
-                            <div style={{ width: 100 }} className="pr-2">
+                        <div className="d-flex align-items-center">
+                            <div style={{ width: 100 }} className="pr-3">
                                 <MokaInput
                                     as="checkbox"
                                     id="package-epiDiv-checkbox"
                                     name="epiDiv"
                                     inputProps={{ label: '회차 표시', custom: true, checked: pkg.epiDiv === 'Y' }}
-                                    onChange={handleChangeValue}
+                                    onChange={(e) => setPkg({ ...pkg, epiDiv: e.target.checked ? 'Y' : 'N' })}
                                 />
                             </div>
                             <div style={{ width: 150 }}>
@@ -278,7 +416,7 @@ const PackageEdit = () => {
                             name="subsYn"
                             label="구독 가능 여부"
                             inputProps={{ custom: true, checked: pkg.subsYn === 'Y' }}
-                            onChange={handleChangeValue}
+                            onChange={handleChangeSwitch}
                             required
                         />
                     </Col>
@@ -318,7 +456,7 @@ const PackageEdit = () => {
                         </div>
                     </Col>
                     <Col xs={9} className="p-0 d-flex">
-                        <div style={{ width: 150 }} className="pr-2">
+                        <div style={{ width: 180 }} className="pr-3">
                             <MokaInput as="select" className="ft-12" name="uploadType" value={pkg.uploadType} onChange={handleChangeValue}>
                                 <option value="local">직접 등록</option>
                             </MokaInput>
@@ -337,7 +475,7 @@ const PackageEdit = () => {
                             name="recomPkgYn"
                             label="추천 패키지(N개)"
                             inputProps={{ custom: true, checked: pkg.recomPkgYn === 'Y' }}
-                            onChange={handleChangeValue}
+                            onChange={handleChangeSwitch}
                         />
                     </Col>
                     <Col xs={9} className="p-0 d-flex">
@@ -345,6 +483,7 @@ const PackageEdit = () => {
                         <Button variant="outline-neutral">추천 이슈 선택</Button>
                     </Col>
                 </Form.Row>
+                {/* 공통 검색어 */}
                 <Form.Row className="mb-3">
                     <Col xs={3} className="p-0">
                         <MokaInputLabel
@@ -353,307 +492,582 @@ const PackageEdit = () => {
                             id="package-keywordYn-switch"
                             label="검색어"
                             inputProps={{ custom: true, checked: pkg.keywordYn === 'Y' }}
-                            onChange={handleChangeValue}
+                            onChange={handleChangeSwitch}
                         />
                     </Col>
                 </Form.Row>
                 {pkg.keywordYn === 'Y' && (
-                    <>
-                        <Form.Row className="mb-3">
-                            <Col xs={3} className="p-0">
+                    <Form.Row className="mb-3">
+                        <Col xs={3} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
                                 <MokaInputLabel as="none" label="검색 범위" />
-                            </Col>
-                            <Col xs={9} className="p-0 d-flex">
-                                <div style={{ width: 60 }} className="pr-2">
+                            </div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 기간" />
+                            </div>
+                            <MokaInputLabel
+                                as="switch"
+                                id="package-kwSearch-switch"
+                                label="검색어(N개)"
+                                name="kwSearch"
+                                inputProps={{ custom: true, checked: pkg.kwSearch === 'Y' }}
+                                onChange={handleChangeSwitch}
+                            />
+                        </Col>
+                        <Col xs={9} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 80 }} className="pr-3">
                                     <MokaInput
                                         as="checkbox"
                                         id="package-searchTitle-checkbox"
                                         inputProps={{ label: '제목', custom: true, checked: pkg.searchOptions['title'] || false }}
-                                        onChange={(e) => setPkg({ ...pkg, searchOptions: { ...pkg.seasonOptions, title: e.target.checked } })}
+                                        onChange={(e) => setPkg({ ...pkg, searchOptions: { ...pkg.searchOptions, title: e.target.checked } })}
                                     />
                                 </div>
-                                <div style={{ width: 60 }} className="pr-2">
+                                <div style={{ width: 80 }}>
                                     <MokaInput
                                         as="checkbox"
                                         id="package-searchTag-checkbox"
-                                        inputProps={{ label: '태그', custom: true, checked: pkg.seasonOptions['tag'] || false }}
-                                        onChange={(e) => setPkg({ ...pkg, seasonOptions: { ...pkg.seasonOptions, tag: e.target.checked } })}
+                                        inputProps={{ label: '태그', custom: true, checked: pkg.searchOptions['tag'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, searchOptions: { ...pkg.searchOptions, tag: e.target.checked } })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 228 }} className="pr-3">
+                                    <MokaInputLabel
+                                        as="dateTimePicker"
+                                        label="시작"
+                                        name="kwStartDt"
+                                        inputProps={{ timeFormat: null }}
+                                        value={pkg.kwStartDt}
+                                        onChange={(date) => {
+                                            let dt = date;
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, kwStartDt: dt, sectionStartDt: dt, specialStartDt: dt, ovpStartDt: dt });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, kwStartDt: null, sectionStartDt: null, specialStartDt: null, ovpStartDt: null });
+                                            }
+                                        }}
+                                        required
+                                    />
+                                </div>
+                                <div style={{ width: 80 }} className="pr-1">
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-kwEndYn-checkbox"
+                                        inputProps={{ label: '종료', custom: true, checked: pkg.searchOptions['kwEndYn'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, searchOptions: { ...pkg.searchOptions, kwEndYn: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 150 }}>
+                                    <MokaInput
+                                        as="dateTimePicker"
+                                        name="kwEndDt"
+                                        alue={pkg.kwEndDt}
+                                        inputProps={{ timeFormat: null }}
+                                        onChange={(date) => {
+                                            let dt = date;
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, kwEndDt: dt, sectionEndDt: dt, specialEndDt: dt, ovpEndDt: dt });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, kwEndDt: null, sectionEndDt: null, specialEndDt: null, ovpEndDt: null });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <MokaInput
+                                as="autocomplete"
+                                name="keywords"
+                                value={keywordValue}
+                                inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
+                                onChange={(ct) => {
+                                    let result = [];
+                                    if (ct) {
+                                        result = ct.map((ct) => ct.value);
+                                    }
+                                    setKeywordList(result);
+                                }}
+                            />
+                        </Col>
+                    </Form.Row>
+                )}
+                <Form.Row className="mb-3">
+                    <Col xs={12} className="p-0 d-flex justify-content-between">
+                        <MokaInputLabel
+                            as="switch"
+                            label="기자"
+                            id="package-reporterYn-switch"
+                            name="reporterYn"
+                            inputProps={{ custom: true, checked: pkg.reporterYn === 'Y' }}
+                            onChange={handleChangeSwitch}
+                        />
+                        <Button variant="positive" onClick={handleClickAddReporter}>
+                            추가
+                        </Button>
+                    </Col>
+                </Form.Row>
+                {pkg.reporterYn === 'Y' && (
+                    <>
+                        <Form.Row className="mb-3">
+                            <Col xs={3} className="p-0 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 범위" />
+                            </Col>
+                            <Col xs={9} className="p-0 d-flex align-items-center">
+                                <p style={{ width: 130 }} className="mb-0 pr-3">
+                                    기자명(default)
+                                </p>
+                                <div style={{ width: 80 }} className="pr-3">
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-reporterTitle-checkbox"
+                                        inputProps={{ label: '제목', custom: true, checked: pkg.reporterOptions['title'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, reporterOptions: { ...pkg.reporterOptions, title: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 80 }}>
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-reporterTag-checkbox"
+                                        inputProps={{ label: '태그', custom: true, checked: pkg.reporterOptions['tag'] }}
+                                        onChange={(e) => setPkg({ ...pkg, reporterOptions: { ...pkg.reporterOptions, tag: e.target.checked } })}
                                     />
                                 </div>
                             </Col>
                         </Form.Row>
-                        <Form.Row className="mb-3">
-                            <Col xs={3} className="p-0">
-                                <MokaInputLabel as="none" label="검색 기간" />
-                            </Col>
-                            <Col xs={9} className="p-0 d-flex align-items-center">
-                                <div style={{ width: 228 }} className="pr-2">
-                                    <MokaInputLabel as="dateTimePicker" label="시작" inputProps={{ timeFormat: null }} value={pkg.kwStartDt} onChange={handleChangeDate} required />
-                                </div>
-                                <div style={{ width: 60 }} className="pr-1">
-                                    <MokaInput as="checkbox" inputProps={{ label: '종료', custom: true, checked: true }} onChange={handleChangeValue} />
-                                </div>
-                                <div style={{ width: 150 }}>
-                                    <MokaInput as="dateTimePicker" value={pkg.kwEndDt} inputProps={{ timeFormat: null }} onChange={handleChangeDate} />
-                                </div>
-                            </Col>
-                        </Form.Row>
-                        <Form.Row className="mb-3">
-                            <Col xs={3} className="p-0">
-                                <MokaInputLabel as="switch" label="검색어(N개)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                            </Col>
-                            <Col xs={9} className="p-0">
-                                <MokaInput
-                                    as="autocomplete"
-                                    name="keywords"
-                                    value={defaultValue}
-                                    inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                                    onChange={(ct) => {
-                                        let result = [];
-                                        if (ct) {
-                                            result = ct.map((ct) => ct.value);
-                                        }
-                                        setKeywordList(result);
-                                    }}
-                                />
-                            </Col>
-                        </Form.Row>
+                        {reporterList.map(({ reporterSearch, reporterStartDt, reporterOptions, reporterEndDt }, idx) => (
+                            <Form.Row className="mb-3" key={idx}>
+                                <Col xs={3} className="p-0 d-flex">
+                                    <div style={{ width: 30 }} className="d-flex flex-column justify-content-center align-items-center">
+                                        <p className="mb-0">{idx + 1}</p>
+                                        <Button variant="white" className="px-05" onClick={handleClickDeleteReporter}>
+                                            <MokaIcon iconName="fal-trash-alt" />
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                            <MokaInputLabel as="none" label="검색 기간" />
+                                        </div>
+                                        <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                            <MokaInputLabel as="none" label="기자명" />
+                                        </div>
+                                        <MokaInputLabel
+                                            as="switch"
+                                            id={`package-reporterSearch-switch${idx + 1}`}
+                                            name="reporterSearch"
+                                            label="검색어(N개)"
+                                            inputProps={{ custom: true, checked: reporterSearch === 'Y' }}
+                                            onChange={(e) => handleReporterList(e, idx)}
+                                        />
+                                    </div>
+                                </Col>
+                                <Col xs={9} className="p-0">
+                                    <div className="mb-3 d-flex align-items-center">
+                                        <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
+                                            <MokaInputLabel
+                                                as="dateTimePicker"
+                                                label="시작"
+                                                name="reporterStartDt"
+                                                inputProps={{ timeFormat: null }}
+                                                value={reporterStartDt}
+                                                onChange={(date) => {
+                                                    if (typeof date === 'object') {
+                                                        produce(reporterList, (draft) => {
+                                                            draft[idx].reporterStartDt = date;
+                                                        });
+                                                    } else if (date === '') {
+                                                        produce(reporterList, (draft) => {
+                                                            draft[idx].reporterStartDt = null;
+                                                        });
+                                                    }
+                                                }}
+                                                required
+                                            />
+                                        </div>
+                                        <div style={{ width: 80 }} className="pr-1">
+                                            <MokaInput
+                                                as="checkbox"
+                                                inputProps={{ label: '종료', custom: true, checked: reporterOptions['reporterEndYn'] || false }}
+                                                onChange={(e) => {
+                                                    produce(reporterList, (draft) => {
+                                                        draft[idx].reporterOptions.reporterEndYn = e.target.checked;
+                                                    });
+                                                }}
+                                            />
+                                        </div>
+                                        <div style={{ width: 150 }}>
+                                            <MokaInput
+                                                as="dateTimePicker"
+                                                value={reporterEndDt}
+                                                inputProps={{ timeFormat: null }}
+                                                onChange={(date) => {
+                                                    if (typeof date === 'object') {
+                                                        produce(reporterList, (draft) => {
+                                                            draft[idx].reporterEndDt = date;
+                                                        });
+                                                    } else if (date === '') {
+                                                        produce(reporterList, (draft) => {
+                                                            draft[idx].reporterEndDt = null;
+                                                        });
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <MokaInput
+                                        as="autocomplete"
+                                        name="reporterName"
+                                        className="mb-3"
+                                        value={reporterName}
+                                        inputProps={{ options: rnOptions, isMulti: false, maxMenuHeight: 150 }}
+                                        onChange={(rn) => setReporterName(rn)}
+                                    />
+                                    <MokaInput
+                                        as="autocomplete"
+                                        name="keywords"
+                                        value={keywordValue}
+                                        inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
+                                        onChange={(ct) => {
+                                            let result = [];
+                                            if (ct) {
+                                                result = ct.map((ct) => ct.value);
+                                            }
+                                            setKeywordList(result);
+                                        }}
+                                    />
+                                </Col>
+                            </Form.Row>
+                        ))}
                     </>
                 )}
-
-                {/* <Form.Row>
-                    <Col xs={12} className="p-0 d-flex justify-content-between">
-                        <MokaInputLabel as="switch" label="기자" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                        <Button variant="outline-neutral">추가</Button>
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="none" label="검색 범위" />
-                    </Col>
-                    <Col xs={4} className="p-0">
-                        <p className="mb-0">기자명(default)</p>
-                        <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '제목', custom: true, checked: true }} onChange={handleChangeValue} />
-                        <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '태그', custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0 d-flex">
-                        <div>
-                            <p className="mb-0">1</p>
-                            <p className="mb-0">ic</p>
-                        </div>
-                        <div>
-                            <MokaInputLabel as="none" label="검색 기간" />
-                            <MokaInputLabel as="none" label="기자명" />
-                            <MokaInputLabel as="switch" label="검색어(N개)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                        </div>
-                    </Col>
-                    <Col xs={5} className="p-0">
-                        <div className="d-flex">
-                            <MokaInputLabel as="dateTimePicker" label="시작" className="mr-2" inputProps={{ timeFormat: null }} value={pkg.kwStartDt} onChange={handleChangeValue} required />
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '종료', custom: true, checked: true }} onChange={handleChangeValue} />
-                            <MokaInput as="dateTimePicker" value={pkg.kwEndDt} inputProps={{ timeFormat: null }} onChange={handleChangeValue} />
-                        </div>
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
-                        />
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
+                {/* 섹션 */}
+                <Form.Row className="mb-3">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            label="섹션"
+                            id="package-sectionYn-switch"
+                            name="sectionYn"
+                            inputProps={{ custom: true, checked: pkg.sectionYn === 'Y' }}
+                            onChange={handleChangeSwitch}
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0 d-flex">
-                        <div>
-                            <p className="mb-0">2</p>
-                            <p className="mb-0">ic</p>
-                        </div>
-                        <div>
-                            <MokaInputLabel as="none" label="검색 기간" />
-                            <MokaInputLabel as="none" label="기자명" />
-                            <MokaInputLabel as="switch" label="검색어(N개)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                        </div>
-                    </Col>
-                    <Col xs={10} className="p-0">
-                        <div className="d-flex">
-                            <MokaInputLabel as="dateTimePicker" label="시작" className="mr-2" inputProps={{ timeFormat: null }} value={pkg.kwStartDt} onChange={handleChangeValue} required />
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '종료', custom: true, checked: true }} onChange={handleChangeValue} />
-                            <MokaInput as="dateTimePicker" value={pkg.kwEndDt} inputProps={{ timeFormat: null }} onChange={handleChangeValue} />
-                        </div>
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
-                        />
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="switch" label="섹션" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="none" label="검색 범위" />
-                    </Col>
-                    <Col xs={4} className="p-0 d-flex">
-                        <p className="mb-0">섹션코드(default)</p>
-                        <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '제목', custom: true, checked: true }} onChange={handleChangeValue} />
-                        <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '태그', custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="none" label="검색 기간" />
-                    </Col>
-                    <Col xs={5} className="p-0 d-flex">
-                        <MokaInputLabel as="dateTimePicker" label="시작" className="mr-2" inputProps={{ timeFormat: null }} value={pkg.kwStartDt} onChange={handleChangeValue} required />
-                        <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '종료', custom: true, checked: true }} onChange={handleChangeValue} />
-                        <MokaInput as="dateTimePicker" value={pkg.kwEndDt} inputProps={{ timeFormat: null }} onChange={handleChangeValue} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="none" label="대상 섹션" />
-                    </Col>
-                    <Col xs={1} className="p-0">
-                        <Button variant="outline-neutral">섹션 선택</Button>
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0 d-flex">
-                        <MokaInputLabel as="switch" label="검색어(N개)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                    <Col xs={10} className="p-0">
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="switch" label="디지털 스페셜" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="none" label="검색 범위" />
-                        <MokaInputLabel as="none" label="검색 기간" />
-                        <MokaInputLabel as="switch" label="검색어(N개)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                    <Col xs={10} className="p-0 d-flex">
-                        <div className="d-flex">
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '제목', custom: true, checked: true }} onChange={handleChangeValue} />
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '태그', custom: true, checked: true }} onChange={handleChangeValue} />
-                        </div>
-                        <div className="d-flex">
-                            <MokaInputLabel as="dateTimePicker" label="시작" className="mr-2" inputProps={{ timeFormat: null }} value={pkg.kwStartDt} onChange={handleChangeValue} required />
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '종료', custom: true, checked: true }} onChange={handleChangeValue} />
-                            <MokaInput as="dateTimePicker" value={pkg.kwEndDt} inputProps={{ timeFormat: null }} onChange={handleChangeValue} />
-                        </div>
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
+                {pkg.sectionYn === 'Y' && (
+                    <Form.Row className="mb-3">
+                        <Col xs={3} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 범위" />
+                            </div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 기간" />
+                            </div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="대상 섹션" />
+                            </div>
+                            <MokaInputLabel
+                                as="switch"
+                                id="package-sectionSearch-switch"
+                                name="sectionSearch"
+                                label="검색어(N개)"
+                                inputProps={{ custom: true, checked: pkg.sectionSearch === 'Y' }}
+                                onChange={handleChangeSwitch}
+                            />
+                        </Col>
+                        <Col xs={9} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 80 }} className="pr-3">
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-sectionTitle-checkbox"
+                                        inputProps={{ label: '제목', custom: true, checked: pkg.sectionOptions['title'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, sectionOptions: { ...pkg.sectionOptions, title: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 80 }}>
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-sectionTag-checkbox"
+                                        inputProps={{ label: '태그', custom: true, checked: pkg.sectionOptions['tag'] }}
+                                        onChange={(e) => setPkg({ ...pkg, sectionOptions: { ...pkg.sectionOptions, tag: e.target.checked } })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
+                                    <MokaInputLabel
+                                        as="dateTimePicker"
+                                        label="시작"
+                                        name="sectionStartDt"
+                                        inputProps={{ timeFormat: null }}
+                                        value={pkg.sectionStartDt}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, sectionStartDt: date });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, sectionStartDt: null });
+                                            }
+                                        }}
+                                        required
+                                    />
+                                </div>
+                                <div style={{ width: 80 }} className="pr-1">
+                                    <MokaInput
+                                        as="checkbox"
+                                        inputProps={{ label: '종료', custom: true, checked: pkg.sectionOptions['sectionEndYn'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, sectionOptions: { ...pkg.sectionOptions, sectionEndYn: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 150 }}>
+                                    <MokaInput
+                                        as="dateTimePicker"
+                                        name="sectionEndDt"
+                                        value={pkg.sectionEndDt}
+                                        inputProps={{ timeFormat: null }}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, sectionEndDt: date });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, sectionEndDt: null });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <Button variant="outline-neutral">섹션 선택</Button>
+                            </div>
+                            <MokaInput
+                                as="autocomplete"
+                                name="keywords"
+                                value={sectionValue}
+                                inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
+                                onChange={(ct) => {
+                                    let result = [];
+                                    if (ct) {
+                                        result = ct.map((ct) => ct.value);
+                                    }
+                                    setSectionkeywordList(result);
+                                }}
+                            />
+                        </Col>
+                    </Form.Row>
+                )}
+                {/* 디지털 스페셜 */}
+                <Form.Row className="mb-3">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            label="디지털 스페셜"
+                            id="package-specialYn-switch"
+                            name="specialYn"
+                            inputProps={{ custom: true, checked: pkg.specialYn === 'Y' }}
+                            onChange={handleChangeSwitch}
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="switch" label="영상(OVP)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                </Form.Row>
-                <Form.Row>
-                    <Col xs={2} className="p-0">
-                        <MokaInputLabel as="none" label="검색 범위" />
-                        <MokaInputLabel as="none" label="검색 기간" />
-                        <MokaInputLabel as="switch" label="검색어(N개)" inputProps={{ custom: true, checked: true }} onChange={handleChangeValue} />
-                    </Col>
-                    <Col xs={10} className="p-0 d-flex">
-                        <div className="d-flex">
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '연관 이슈', custom: true, checked: true }} onChange={handleChangeValue} />
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '태그', custom: true, checked: true }} onChange={handleChangeValue} />
-                        </div>
-                        <div className="d-flex">
-                            <MokaInputLabel as="dateTimePicker" label="시작" className="mr-2" inputProps={{ timeFormat: null }} value={pkg.kwStartDt} onChange={handleChangeValue} required />
-                            <MokaInput as="checkbox" className="mr-2" inputProps={{ label: '종료', custom: true, checked: true }} onChange={handleChangeValue} />
-                            <MokaInput as="dateTimePicker" value={pkg.kwEndDt} inputProps={{ timeFormat: null }} onChange={handleChangeValue} />
-                        </div>
-                        <MokaInput
-                            as="autocomplete"
-                            name="keywords"
-                            value={defaultValue}
-                            inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
-                            onChange={(ct) => {
-                                let result = [];
-                                if (ct) {
-                                    result = ct.map((ct) => ct.value);
-                                }
-                                setKeywordList(result);
-                            }}
+                {pkg.specialYn === 'Y' && (
+                    <Form.Row className="mb-3">
+                        <Col xs={3} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 범위" />
+                            </div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 기간" />
+                            </div>
+                            <MokaInputLabel
+                                as="switch"
+                                id="package-specialSearch-switch"
+                                name="specialSearch"
+                                label="검색어(N개)"
+                                inputProps={{ custom: true, checked: pkg.specialSearch === 'Y' }}
+                                onChange={handleChangeSwitch}
+                            />
+                        </Col>
+                        <Col xs={9} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 80 }} className="pr-3">
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-specialTitle-checkbox"
+                                        inputProps={{ label: '제목', custom: true, checked: pkg.specialOptions['title'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, specialOptions: { ...pkg.specialOptions, title: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 80 }}>
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-specialTag-checkbox"
+                                        inputProps={{ label: '태그', custom: true, checked: pkg.specialOptions['tag'] }}
+                                        onChange={(e) => setPkg({ ...pkg, specialOptions: { ...pkg.specialOptions, tag: e.target.checked } })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
+                                    <MokaInputLabel
+                                        as="dateTimePicker"
+                                        label="시작"
+                                        name="specialStartDt"
+                                        inputProps={{ timeFormat: null }}
+                                        value={pkg.specialStartDt}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, specialStartDt: date });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, specialStartDt: null });
+                                            }
+                                        }}
+                                        required
+                                    />
+                                </div>
+                                <div style={{ width: 80 }} className="pr-1">
+                                    <MokaInput
+                                        as="checkbox"
+                                        inputProps={{ label: '종료', custom: true, checked: pkg.specialOptions['specialEndYn'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, specialOptions: { ...pkg.specialOptions, specialEndYn: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 150 }}>
+                                    <MokaInput
+                                        as="dateTimePicker"
+                                        name="specialEndDt"
+                                        value={pkg.specialEndDt}
+                                        inputProps={{ timeFormat: null }}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, specialEndDt: date });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, specialEndDt: null });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <MokaInput
+                                as="autocomplete"
+                                name="keywords"
+                                value={specialValue}
+                                inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
+                                onChange={(ct) => {
+                                    let result = [];
+                                    if (ct) {
+                                        result = ct.map((ct) => ct.value);
+                                    }
+                                    setSpecialKeywordList(result);
+                                }}
+                            />
+                        </Col>
+                    </Form.Row>
+                )}
+                {/* 영상 OVP */}
+                <Form.Row className="mb-3">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            as="switch"
+                            label="영상(OVP)"
+                            id="package-ovpYn-switch"
+                            name="ovpYn"
+                            inputProps={{ custom: true, checked: pkg.ovpYn === 'Y' }}
+                            onChange={handleChangeSwitch}
                         />
                     </Col>
-                </Form.Row> */}
+                </Form.Row>
+                {pkg.ovpYn === 'Y' && (
+                    <Form.Row>
+                        <Col xs={3} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 범위" />
+                            </div>
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <MokaInputLabel as="none" label="검색 기간" />
+                            </div>
+                            <MokaInputLabel
+                                as="switch"
+                                id="package-ovpSearch-switch"
+                                name="ovpSearch"
+                                label="검색어(N개)"
+                                inputProps={{ custom: true, checked: pkg.ovpSearch === 'Y' }}
+                                onChange={handleChangeSwitch}
+                            />
+                        </Col>
+                        <Col xs={9} className="p-0">
+                            <div style={{ height: 31 }} className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 120 }} className="pr-3">
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-ovpIssue-checkbox"
+                                        inputProps={{ label: '연관 이슈', custom: true, checked: pkg.ovpOptions['issue'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, ovpOptions: { ...pkg.ovpOptions, issue: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 80 }}>
+                                    <MokaInput
+                                        as="checkbox"
+                                        id="package-ovpTag-checkbox"
+                                        inputProps={{ label: '태그', custom: true, checked: pkg.ovpOptions['tag'] }}
+                                        onChange={(e) => setPkg({ ...pkg, ovpOptions: { ...pkg.ovpOptions, tag: e.target.checked } })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mb-3 d-flex align-items-center">
+                                <div style={{ width: 228 }} className="pr-3 d-flex align-items-center">
+                                    <MokaInputLabel
+                                        as="dateTimePicker"
+                                        label="시작"
+                                        name="ovpStartDt"
+                                        inputProps={{ timeFormat: null }}
+                                        value={pkg.ovpStartDt}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, ovpStartDt: date });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, ovpStartDt: null });
+                                            }
+                                        }}
+                                        required
+                                    />
+                                </div>
+                                <div style={{ width: 80 }} className="pr-1">
+                                    <MokaInput
+                                        as="checkbox"
+                                        inputProps={{ label: '종료', custom: true, checked: pkg.ovpOptions['ovpEndYn'] || false }}
+                                        onChange={(e) => setPkg({ ...pkg, ovpOptions: { ...pkg.ovpOptions, ovpEndYn: e.target.checked } })}
+                                    />
+                                </div>
+                                <div style={{ width: 150 }}>
+                                    <MokaInput
+                                        as="dateTimePicker"
+                                        name="ovpEndDt"
+                                        value={pkg.ovpEndDt}
+                                        inputProps={{ timeFormat: null }}
+                                        onChange={(date) => {
+                                            if (typeof date === 'object') {
+                                                setPkg({ ...pkg, ovpEndDt: date });
+                                            } else if (date === '') {
+                                                setPkg({ ...pkg, ovpEndDt: null });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <MokaInput
+                                as="autocomplete"
+                                name="keywords"
+                                value={ovpValue}
+                                inputProps={{ options: options, isMulti: true, maxMenuHeight: 150 }}
+                                onChange={(ct) => {
+                                    let result = [];
+                                    if (ct) {
+                                        result = ct.map((ct) => ct.value);
+                                    }
+                                    setOvpKeywordList(result);
+                                }}
+                            />
+                        </Col>
+                    </Form.Row>
+                )}
             </Form>
         </MokaCard>
     );

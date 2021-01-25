@@ -53,6 +53,7 @@ import {
     faLockAlt as falLockAlt,
     faCommentAltLines as falCommentAltLines,
     faCommentAlt as falCommentAlt,
+    faTrashAlt as falTrashAlt,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -126,6 +127,7 @@ library.add(falUser);
 library.add(falLockAlt);
 library.add(falCommentAltLines);
 library.add(falCommentAlt);
+library.add(falTrashAlt);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

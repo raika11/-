@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { initialState, getArticle, GET_ARTICLE, SAVE_ARTICLE, saveArticle, changeInvalidList, clearArticle } from '@store/article';
-import { saveCdnArticle, checkExists } from '@store/cdnArticle';
+import { saveCdnArticle, checkExists, CHECK_EXISTS, SAVE_CDN_ARTICLE } from '@store/cdnArticle';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaInput, MokaCard, MokaIcon, MokaInputGroup, MokaCopyTextButton } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
@@ -25,8 +25,8 @@ import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl = '/article' }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const article = useSelector((store) => store.article.article);
-    const loading = useSelector((store) => store.loading[GET_ARTICLE] || store.loading[SAVE_ARTICLE]);
+    const article = useSelector(({ article }) => article.article);
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE] || loading[SAVE_ARTICLE] || loading[CHECK_EXISTS] || loading[SAVE_CDN_ARTICLE]);
     const invalidList = useSelector((store) => store.article.invalidList);
     const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [repStr, setRepStr] = useState(''); // 기자리스트
@@ -231,7 +231,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             tagList: temp.tagList,
             artTitle: temp.artTitle,
             // \n => <br/> 로 변경
-            artSubTitle: temp.artSubTitle.replace(/\n/g, '<br/>'),
+            artSubTitle: (temp.artSubTitle || '').replace(/\n/g, '<br/>'),
             categoryList: temp.categoryList,
         };
 

@@ -4,13 +4,11 @@ import produce from 'immer';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
 import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_TP } from '@/constants';
 import { clearStore, deleteTemplate, hasRelationList, changeTemplateBody } from '@store/template';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import TemplateEditor from './TemplateEditor';
 import TemplateEdit from './TemplateEdit';
 const TemplateList = React.lazy(() => import('./TemplateList'));
@@ -93,22 +91,21 @@ const Template = ({ match }) => {
                 dispatch(
                     deleteTemplate({
                         templateSeq: template.templateSeq,
-                        callback: ({ header }) => {
-                            // 삭제 성공
-                            if (header.success) {
+                        callback: ({ header, body }) => {
+                            if (header.success && body) {
+                                // 삭제 성공
                                 toast.success(header.message);
-                                history.push('/template');
-                            }
-                            // 삭제 실패
-                            else {
-                                toast.error(header.message);
+                                history.push(match.path);
+                            } else {
+                                // 삭제 실패
+                                messageBox.alert(header.message);
                             }
                         },
                     }),
                 );
             });
         },
-        [dispatch, history],
+        [dispatch, history, match.path],
     );
 
     /**
@@ -130,7 +127,7 @@ const Template = ({ match }) => {
                                 messageBox.alert('사용 중인 템플릿입니다.\n삭제할 수 없습니다.');
                             }
                         } else {
-                            toast.error(header.message);
+                            messageBox.alert(header.message);
                         }
                     },
                 }),

@@ -439,7 +439,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<ArticleHistory> findAllArticleHistory(Long totalId, SearchDTO search) {
-        return articleHistoryRepository.findByTotalIdOrderBySeqNo(totalId, search.getPageable());
+        return articleHistoryRepository.findByTotalIdOrderBySeqNoDesc(totalId, search.getPageable());
     }
 
     @Override

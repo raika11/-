@@ -44,6 +44,27 @@ export const unescapeHtml = (str) => {
 };
 
 /**
+ * escape html special chars
+ * @param {string} str 문자열
+ */
+export const escapeHtml = (str) => {
+    if (str && str !== '') {
+        return str
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll("'", '&#39;')
+            .replaceAll('"', '&quot;')
+            .replaceAll('[', '&#91;')
+            .replaceAll(']', '&#93;')
+            .replaceAll('‘', '&#8216;')
+            .replaceAll('’', '&#8217;')
+            .replaceAll('%', '&#037;')
+            .replaceAll('·', '&middot;');
+    } else return str;
+};
+
+/**
  * invalidList to error object
  * @param {array} invalidList invalidList
  */

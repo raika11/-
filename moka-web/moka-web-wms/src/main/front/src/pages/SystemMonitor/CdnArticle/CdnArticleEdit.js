@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
+import { unescapeHtml, escapeHtml } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { initialState, getCdnArticle, clearCdnArticle, saveCdnArticle, checkExists, clearCache } from '@store/cdnArticle';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
@@ -53,7 +54,7 @@ const CdnArticleEdit = ({ match }) => {
                             setTemp({
                                 ...temp,
                                 totalId: row.totalId,
-                                title: row.artTitle,
+                                title: unescapeHtml(row.artTitle),
                             });
                             setModalShow(false);
                             setError({ ...error, totalId: false });
@@ -73,7 +74,10 @@ const CdnArticleEdit = ({ match }) => {
         if (temp.totalId) {
             dispatch(
                 saveCdnArticle({
-                    cdnArticle: temp,
+                    cdnArticle: {
+                        ...temp,
+                        title: escapeHtml(temp.title),
+                    },
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);
@@ -176,7 +180,7 @@ const CdnArticleEdit = ({ match }) => {
                     </Col>
                     {/* 기사 제목 (수정가능) */}
                     <Col xs={totalId ? 8 : 6} className="p-0 pl-2">
-                        <MokaInput className="bg-white" value={temp.title} isInvalid={error.totalId} disabled />
+                        <MokaInput className="bg-white" value={temp.title ? unescapeHtml(temp.title) : ''} isInvalid={error.totalId} disabled />
                     </Col>
                     {/* 기사 검색 */}
                     {!totalId && (

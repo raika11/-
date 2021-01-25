@@ -230,7 +230,8 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             reporterList: temp.reporterList,
             tagList: temp.tagList,
             artTitle: temp.artTitle,
-            artSubTitle: temp.artSubTitle,
+            // \n => <br/> 로 변경
+            artSubTitle: temp.artSubTitle.replace(/\n/g, '<br/>'),
             categoryList: temp.categoryList,
         };
 
@@ -463,8 +464,8 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                                 </div>
                             </div>
                         </Col>
-                        <Col xs={5} className="d-flex p-0 pl-2">
-                            <MokaInputLabel label="종류" as="none" />
+                        <Col xs={5} className="d-flex p-0 pl-3">
+                            <MokaInputLabel label="종류" labelWidth={50} as="none" />
                             <div className="d-flex flex-column flex-fill">
                                 <div>
                                     <MokaInput as="checkbox" className="mr-2 float-left ft-12" inputProps={{ label: '로그인', custom: true, readOnly: true }} />

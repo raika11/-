@@ -141,15 +141,6 @@ const PageEdit = ({ onDelete }) => {
                 isInvalid = isInvalid | true;
             }
 
-            // 표출명 불가 문자체크
-            if (!bRoot && !/^[a-zA-Z0-9_-]*$/.test(page.pageDisplayName)) {
-                errList.push({
-                    field: 'pageDisplayName',
-                    reason: '영문, 숫자, _, -만 입력할 수 있습니다',
-                });
-                isInvalid = isInvalid | true;
-            }
-
             // 페이지순서 체크
             if (!REQUIRED_REGEX.test(page.pageOrd)) {
                 errList.push({

@@ -115,8 +115,6 @@
     #{tourPersons, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
     #{tourAge, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
     #{tourPurpose, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{writerNm, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{writerPhone, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{writerPwd, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{writerIp, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{returnReason, mode=IN, jdbcType=VARCHAR, javaType=string},

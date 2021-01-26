@@ -375,6 +375,8 @@ export const getArticleType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'articleT
 export const getPt = createReadOnlySaga(act.GET_PT, 'ptRows', constants.CODETYPE_PT);
 export const getChannelTp = createReadOnlySaga(act.GET_CHANNEL_TP, 'channelTpRows', constants.CODETYPE_CHANNEL_TP);
 export const getPressCate1 = createReadOnlySaga(act.GET_PRESS_CATE1, 'pressCate1Rows', constants.CODETYPE_PRESS_CATE1);
+export const getHttpMethod = createReadOnlySaga(act.GET_HTTP_METHOD, 'httpMethodRows', constants.CODETYPE_HTTP_METHOD);
+export const getApiType = createReadOnlySaga(act.GET_API_TYPE, 'apiTypeRows', constants.CODETYPE_API_TYPE);
 
 /** saga */
 export default function* codeMgt() {
@@ -408,6 +410,8 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_PT, getPt);
     yield takeLatest(act.GET_CHANNEL_TP, getChannelTp);
     yield takeLatest(act.GET_PRESS_CATE1, getPressCate1);
+    yield takeLatest(act.GET_HTTP_METHOD, getHttpMethod);
+    yield takeLatest(act.GET_API_TYPE, getApiType);
 
     yield takeLatest(act.GET_SPECIAL_CHAR_CODE, getSpecialCharCode);
     yield takeLatest(act.SAVE_SPECIAL_CHAR_CODE, putSpecialCharCode);

@@ -24,13 +24,6 @@ export const initialState = {
         { id: 'apiPath', name: '경로' },
         { id: 'apiDesc', name: '설명' },
     ],
-    apiMethodList: [
-        { id: '', name: 'HTTP메소드 전체' },
-        { id: 'GET', name: 'GET' },
-        { id: 'POST', name: 'POST' },
-        { id: 'PUT', name: 'PUT' },
-        { id: 'DELETE', name: 'DELETE' },
-    ],
     usedYnList: [
         { id: '', name: '사용 전체' },
         { id: 'Y', name: '사용' },

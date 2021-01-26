@@ -4,8 +4,9 @@ import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { getHttpMethod } from '@store/codeMgt';
 import { initialState, getInternalApiList, changeSearchOption } from '@store/internalApi';
-import { MokaInput } from '@/components';
+import { MokaInput, MokaSearchInput } from '@/components';
 
 /**
  * API 검색
@@ -14,6 +15,7 @@ const InternalApiSearch = ({ match }) => {
     const history = useHistory();
     const [search, setSearch] = useState(initialState.search);
     const storeSearch = useSelector(({ internalApi }) => internalApi.search);
+    const httpMethodRows = useSelector(({ codeMgt }) => codeMgt.httpMethodRows);
     const dispatch = useDispatch();
 
     /**
@@ -45,6 +47,12 @@ const InternalApiSearch = ({ match }) => {
     const handleClickReset = () => setSearch(initialState.search);
 
     useEffect(() => {
+        if (!httpMethodRows) {
+            dispatch(getHttpMethod());
+        }
+    }, [httpMethodRows, dispatch]);
+
+    useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
@@ -59,25 +67,15 @@ const InternalApiSearch = ({ match }) => {
     return (
         <div className="mb-2">
             <Form.Row className="mb-2">
-                <Col xs={5} className="d-flex p-0 pr-2">
-                    <div className="flex-shrink-0 mr-2">
-                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            {initialState.searchTypeList.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    <MokaInput name="keyword" value={search.keyword} placeholder="검색어를 입력하세요" onChange={handleChangeValue} />
-                </Col>
                 <Col xs={4} className="d-flex p-0 pr-2">
                     <MokaInput as="select" name="apiMethod" value={search.apiMethod} onChange={handleChangeValue}>
-                        {initialState.apiMethodList.map((method) => (
-                            <option key={method.id} value={method.id}>
-                                {method.name}
-                            </option>
-                        ))}
+                        <option value="">HTTP메소드 전체</option>
+                        {httpMethodRows &&
+                            httpMethodRows.map((method) => (
+                                <option key={method.id} value={method.id}>
+                                    {method.name}
+                                </option>
+                            ))}
                     </MokaInput>
                     <div className="flex-shrink-0 ml-2">
                         <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue}>
@@ -89,11 +87,25 @@ const InternalApiSearch = ({ match }) => {
                         </MokaInput>
                     </div>
                 </Col>
-                <Col xs={3} className="p-0 d-flex justify-content-end">
-                    <Button variant="searching" className="mr-2" onClick={handleSearch}>
-                        검색
-                    </Button>
-                    <Button variant="outline-neutral" onClick={handleClickReset}>
+                <Col xs={8} className="d-flex p-0">
+                    <div className="flex-shrink-0 mr-2">
+                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                            {initialState.searchTypeList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </div>
+                    <MokaSearchInput
+                        className="flex-fill"
+                        name="keyword"
+                        value={search.keyword}
+                        placeholder="검색어를 입력하세요"
+                        onChange={handleChangeValue}
+                        onSearch={handleSearch}
+                    />
+                    <Button variant="outline-neutral" className="ml-2 flex-shrink-0" onClick={handleClickReset}>
                         초기화
                     </Button>
                 </Col>

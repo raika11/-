@@ -16,6 +16,7 @@ import {
     GET_INTERNAL_API,
     SAVE_INTERNAL_API,
 } from '@store/internalApi';
+import { getApiType } from '@store/codeMgt';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -32,6 +33,10 @@ const InternalApiEdit = ({ match }) => {
     const { internalApi, invalidList } = useSelector(({ internalApi }) => ({
         internalApi: internalApi.internalApi,
         invalidList: internalApi.invalidList,
+    }));
+    const { httpMethodRows, apiTypeRows } = useSelector(({ codeMgt }) => ({
+        httpMethodRows: codeMgt.httpMethodRows,
+        apiTypeRows: codeMgt.apiTypeRows,
     }));
     const [btns, setBtns] = useState([]);
     const [temp, setTemp] = useState(initialState.internalApi);
@@ -53,7 +58,7 @@ const InternalApiEdit = ({ match }) => {
         if (name === 'usedYn') {
             setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
         } else {
-            if (name === 'apiName' || name === 'apiPath') {
+            if (name === 'apiName' || name === 'apiPath' || name === 'apiMethod') {
                 setError({ ...error, [name]: false });
             }
             setTemp({ ...temp, [name]: value });
@@ -94,6 +99,15 @@ const InternalApiEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
 
+            // HTTP메소드 체크
+            if (!save.apiMethod || !REQUIRED_REGEX.test(save.apiMethod)) {
+                errList.push({
+                    field: 'apiMethod',
+                    reason: '',
+                });
+                isInvalid = isInvalid || true;
+            }
+
             dispatch(changeInvalidList(errList));
             return !isInvalid;
         },
@@ -115,8 +129,6 @@ const InternalApiEdit = ({ match }) => {
             );
         const save = {
             ...temp,
-            // 기본값 셋팅 (GET)
-            apiMethod: !temp.apiMethod ? initialState.apiMethodList[1].id : temp.apiMethod,
             paramDesc: Object.keys(paramDesc).length > 0 ? JSON.stringify(paramDesc) : null,
         };
 
@@ -226,6 +238,12 @@ const InternalApiEdit = ({ match }) => {
     };
 
     useEffect(() => {
+        if (!apiTypeRows) {
+            dispatch(getApiType());
+        }
+    }, [apiTypeRows, dispatch]);
+
+    useEffect(() => {
         if (seqNo) {
             dispatch(
                 getInternalApi({
@@ -313,10 +331,10 @@ const InternalApiEdit = ({ match }) => {
                 {/* API 메소드 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="HTTP메소드" as="select" name="apiMethod" value={temp.apiMethod} onChange={handleChangeValue}>
-                            {initialState.apiMethodList
-                                .filter((a) => a.id !== '')
-                                .map((method) => (
+                        <MokaInputLabel label="HTTP메소드" as="select" name="apiMethod" value={temp.apiMethod} onChange={handleChangeValue} isInvalid={error.apiMethod} required>
+                            <option hidden>HTTP메소드 선택</option>
+                            {httpMethodRows &&
+                                httpMethodRows.map((method) => (
                                     <option key={method.id} value={method.id}>
                                         {method.name}
                                     </option>
@@ -328,12 +346,14 @@ const InternalApiEdit = ({ match }) => {
                 {/* API 타입 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="API타입" as="select" name="apiType" value={temp.apiType || 'PC'} onChange={handleChangeValue}>
-                            {/* PC:PC,MO:MOBILE,PM:PC+MOBILE,BO:BACK OFFICE */}
-                            <option value="PC">PC</option>
-                            <option value="MO">MO</option>
-                            <option value="PM">PM</option>
-                            <option value="BO">BO</option>
+                        <MokaInputLabel label="API타입" as="select" name="apiType" value={temp.apiType} onChange={handleChangeValue}>
+                            <option hidden>API타입 선택</option>
+                            {apiTypeRows &&
+                                apiTypeRows.map((type) => (
+                                    <option key={type.id} value={type.id}>
+                                        {type.name}
+                                    </option>
+                                ))}
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>

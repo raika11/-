@@ -64,6 +64,10 @@ export const CODETYPE_PT = 'PT';
 export const CODETYPE_CHANNEL_TP = 'CHANNEL_TP';
 // 공통코드 : 등록기사 출판 카테고리
 export const CODETYPE_PRESS_CATE1 = 'PRESS_CATE1';
+// 공통코드 : HTTP 메소드
+export const CODETYPE_HTTP_METHOD = 'HTTP_METHOD';
+// 공통코드 : API 타입
+export const CODETYPE_API_TYPE = 'API_TYPE';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

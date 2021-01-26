@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @Slf4j
-@RequestMapping("/mokastore")
+@RequestMapping("/moka_storage")
 @Api(tags = {"파일서비스 API"})
 public class MokaStoreController {
 

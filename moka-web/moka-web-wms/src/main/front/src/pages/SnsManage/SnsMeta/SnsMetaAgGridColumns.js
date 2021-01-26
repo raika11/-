@@ -58,7 +58,7 @@ export const columnDefs = [
                 field: 'status',
                 width: 80,
                 /*cellRendererFramework: ({ value }) => {
-                    let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
+                    let clazz = value === 'Y' ? 'color-primary' : 'color-gray-200';
                     return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
                 },*/
                 cellStyle: { fontSize: '12px', lineHeight: '23px' },

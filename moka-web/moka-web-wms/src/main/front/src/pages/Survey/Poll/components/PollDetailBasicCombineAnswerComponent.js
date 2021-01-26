@@ -33,7 +33,9 @@ const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }
                 onChange={(file) => {
                     handleChangeValue('imgFile', file, 'file');
                 }}
-            />
+            >
+                150 x 150
+            </PollPhotoComponent>
             <div className="d-inline-flex flex-fill h-100 flex-column">
                 <div className="m-2">
                     <MokaInput

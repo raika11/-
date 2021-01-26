@@ -10,12 +10,16 @@ import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentUrl;
 import jmnet.moka.core.tps.mvc.comment.service.CommentService;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +53,29 @@ public class CommentRestController extends AbstractCommonController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CodeMgtService codeMgtService;
+
+    /**
+     * 댓글 URL 목록조회
+     *
+     * @return 댓글 URL 목록
+     */
+    @ApiOperation(value = "댓글 매체 목록 조회")
+    @GetMapping("/urls")
+    public ResponseEntity<?> getCommentUrlList() {
+
+        ResultMapDTO resultMapDTO = new ResultMapDTO();
+
+        List<CommentUrl> commentUrlList = commentService.findAllCommentUrl();
+
+        resultMapDTO.addBodyAttribute(TpsConstants.COMMENT_URL, commentUrlList);
+        resultMapDTO.addBodyAttribute(TpsConstants.COMMENT_SITE_CODE, codeMgtService.findUseSimpleList(TpsConstants.COMMENT_SITE_CODE));
+        resultMapDTO.addBodyAttribute(TpsConstants.COMMENT_TAG_DIV_CODE, codeMgtService.findUseSimpleList(TpsConstants.COMMENT_TAG_DIV_CODE));
+
+        return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
+    }
 
     /**
      * 댓글목록조회

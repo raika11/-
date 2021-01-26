@@ -207,9 +207,20 @@ public class TpsConstants {
     public static final String CMT_TAG_DIV = "CMT_TAG_DIV";
 
     // HTTP METHOD 기타코드 그룹 코드
-    public static final String HTTP_METHOD_GRP_CD = "HTTP_METHOD";
+    public static final String API_METHOD = "API_METHOD";
 
     // API 그룹 코드
-    public static final String API_TYPE_GRP_CD = "API_TYPE";
+    public static final String API_TYPE_CODE = "API_TYPE";
+
+    // 댓글 계정 사이트 그룹 코드
+    public static final String COMMENT_URL = "COMMENT_URL";
+
+    // 댓글 계정 사이트 그룹 코드
+    public static final String COMMENT_SITE_CODE = "COMMENT_SITE";
+
+    // 댓글 차단 유형 그룹 코드
+    public static final String COMMENT_TAG_DIV_CODE = "CMT_TAG_DIV";
+
+
 
 }

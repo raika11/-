@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaIcon } from '@/components';
-
 export default [
     {
         headerName: '매체코드',
@@ -26,13 +23,8 @@ export default [
     {
         headerName: '편집여부',
         field: 'artEditYn',
-        cellStyle: { fontSize: '12px', textAlign: 'center' },
         width: 65,
-        cellRendererFramework: (params) => {
-            const { artEditYn } = params.data;
-            let color = artEditYn === 'Y' ? 'color-primary' : 'color-gray150';
-            return <MokaIcon iconName="fas-circle" fixedWidth className={color} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: 'XML포맷 출처',
@@ -65,24 +57,14 @@ export default [
     {
         headerName: 'CP수신여부',
         field: 'rcvUsedYn',
-        cellStyle: { fontSize: '12px', textAlign: 'center' },
         width: 80,
-        cellRendererFramework: (params) => {
-            const { rcvUsedYn } = params.data;
-            let color = rcvUsedYn === 'Y' ? 'color-primary' : 'color-gray150';
-            return <MokaIcon iconName="fas-circle" fixedWidth className={color} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '벌크여부',
         field: 'bulkFlag',
-        cellStyle: { fontSize: '12px', textAlign: 'center' },
         width: 65,
-        cellRendererFramework: (params) => {
-            const { bulkFlag } = params.data;
-            let color = bulkFlag === 'Y' ? 'color-primary' : 'color-gray150';
-            return <MokaIcon iconName="fas-circle" fixedWidth className={color} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '등록일시',

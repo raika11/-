@@ -1,5 +1,4 @@
 import React from 'react';
-import { MokaIcon } from '@/components';
 import WorkDescRenderer from '../components/WorkDescRenderer';
 import WorkStateRenderer from '../components/WorkStateRenderer';
 
@@ -7,13 +6,8 @@ export default [
     {
         headerName: '',
         field: 'usedYn',
-        cellStyle: { fontSize: '12px', textAlign: 'center' },
         width: 36,
-        cellRendererFramework: (params) => {
-            const { usedYn } = params.data;
-            let color = usedYn === 'Y' ? 'color-primary' : 'color-gray150';
-            return <MokaIcon iconName="fas-circle" fixedWidth className={color} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '번호',

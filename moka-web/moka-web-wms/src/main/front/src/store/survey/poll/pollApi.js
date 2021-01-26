@@ -16,9 +16,15 @@ export const getPoll = (id) => {
 };
 
 export const pullPoll = (id, param) => {
-    return instance.put(`/api/polls/${id}?${qs.stringify(param)}`).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(`/api/polls/${id}`, param, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
 export const postPoll = (param) => {

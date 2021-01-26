@@ -136,17 +136,18 @@ $theme-colors: (
 
 // Social colors
 $social-colors: (
-	"facebook": #3b5998,
-	"twitter": #1da1f2,
-	"google": #dc4e41,
-	"youtube": #f00,
-	"vimeo": #1ab7ea,
-	"dribbble": #ea4c89,
-	"github": #181717,
-	"instagram": #e4405f,
-	"pinterest": #bd081c,
-	"flickr": #0063dc,
-	"bitbucket": #0052cc
+	"tw": (
+		"border-color": #02A0DD,
+		"font-color": #0086B9,
+		"hover-background-color": #02A0DD,
+		"hover-font-color": $white
+	),
+	"fb": (
+		"border-color": $info,
+		"font-color": #155CA6,
+		"hover-background-color": $info,
+		"hover-font-color": $white
+	)
 ) !default;
 
 
@@ -226,11 +227,12 @@ $alert-padding-x: .95rem !default;
 $alert-border-width: 0 !default;
 $alert-bg-level: 0 !default;
 
-// Buttons (box-shadow 제거 => 실제로 기능동작을 안함. 어쩔 수 없이 2-mixins/_button.scss에 important로 처리. 추후 올바른 방향으로 변경)
+// Buttons
 $btn-active-box-shadow: none !default;
 $btn-focus-box-shadow: none !default;
 $btn-font-size: $h5-font-size !default;
 $btn-font-weight: $font-weight-bold !default;
+$btn-focus-width: 0 !default; // focus, active box-shadow에 사용되는 width 값임
 
 // Forms
 $input-bg: $white !default;

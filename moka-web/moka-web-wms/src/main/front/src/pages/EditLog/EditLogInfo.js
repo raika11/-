@@ -1,6 +1,11 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
+import { getEditLog, clearEditLog, GET_EDIT_LOG } from '@store/editLog';
+import { messageBox } from '@utils/toastUtil';
 import { Table } from 'react-bootstrap';
 
 /**
@@ -8,6 +13,27 @@ import { Table } from 'react-bootstrap';
  */
 const EditLogInfo = ({ match }) => {
     const history = useHistory();
+    const dispatch = useDispatch();
+    const { seqNo } = useParams();
+    const loading = useSelector(({ loading }) => loading[GET_EDIT_LOG]);
+    const editLog = useSelector(({ editLog }) => editLog.editLog);
+
+    useEffect(() => {
+        if (seqNo) {
+            dispatch(
+                getEditLog({
+                    seqNo,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        } else {
+            dispatch(clearEditLog());
+        }
+    }, [dispatch, seqNo]);
 
     return (
         <MokaCard
@@ -16,57 +42,93 @@ const EditLogInfo = ({ match }) => {
             footer
             footerClassName="justify-content-center"
             footerButtons={[{ text: '취소', onClick: () => history.push(match.path), variant: 'negative' }]}
+            loading={loading}
+            bodyClassName="d-flex flex-column color-gray-900"
         >
-            <Table className="w-100 h-100 table-bordered">
-                <tbody>
-                    <tr>
-                        <th>작업로그 ID</th>
-                        <td>82037</td>
-                        <th>성공 여부</th>
-                        <td>성공</td>
-                    </tr>
-                    <tr>
-                        <th>작업자 ID</th>
-                        <td>ssc</td>
-                        <th>액션명</th>
-                        <td>SELECT</td>
-                    </tr>
-                    <tr>
-                        <th>작업자 IP</th>
-                        <td>203.249.148.200</td>
-                        <th>메뉴명</th>
-                        <td>페이지 관리</td>
-                    </tr>
-                    <tr>
-                        <th>실행시간 (ms)</th>
-                        <td>10</td>
-                        <th>작업일시</th>
-                        <td>2021-01-13 12:41:01</td>
-                    </tr>
-                    <tr>
-                        <th>작업자 IP</th>
-                        <td colSpan={3}>preview/page</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={4}>실행 파라미터</th>
-                    </tr>
-                    <tr>
-                        <td colSpan={4}>
-                            pageBody=sub&pageOrd=2&parent.pageSeq=13&description=설명&pageSeq=34&domain.domainName=중앙모바일&domain.domainUrl=stg-mnews.joongang.co.kr&pageName=정당&urlParam=reporter&pageType=text/html&pageDisplayName=표출&moveYn=N&parent.pageName=정치&usedYn=Y&domain.servicePlatform=P&parent.pageUrl=/politics&fileYn=Y&kwd=민주당,&pageServiceName=sub&pageUrl=/politics/sub&domain.domainId=1000
-                            pageBody=sub&pageOrd=2&parent.pageSeq=13&description=설명&pageSeq=34&domain.domainName=중앙모바일&domain.domainUrl=stg-mnews.joongang.co.kr&pageName=정당&urlParam=reporter&pageType=text/html&pageDisplayName=표출&moveYn=N&parent.pageName=정치&usedYn=Y&domain.servicePlatform=P&parent.pageUrl=/politics&fileYn=Y&kwd=민주당,&pageServiceName=sub&pageUrl=/politics/sub&domain.domainId=1000
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colSpan={4}>오류 메세지</th>
-                    </tr>
-                    <tr>
-                        <td colSpan={4}>
-                            pageBody=sub&pageOrd=2&parent.pageSeq=13&description=설명&pageSeq=34&domain.domainName=중앙모바일&domain.domainUrl=stg-mnews.joongang.co.kr&pageName=정당&urlParam=reporter&pageType=text/html&pageDisplayName=표출&moveYn=N&parent.pageName=정치&usedYn=Y&domain.servicePlatform=P&parent.pageUrl=/politics&fileYn=Y&kwd=민주당,&pageServiceName=sub&pageUrl=/politics/sub&domain.domainId=1000
-                            pageBody=sub&pageOrd=2&parent.pageSeq=13&description=설명&pageSeq=34&domain.domainName=중앙모바일&domain.domainUrl=stg-mnews.joongang.co.kr&pageName=정당&urlParam=reporter&pageType=text/html&pageDisplayName=표출&moveYn=N&parent.pageName=정치&usedYn=Y&domain.servicePlatform=P&parent.pageUrl=/politics&fileYn=Y&kwd=민주당,&pageServiceName=sub&pageUrl=/politics/sub&domain.domainId=1000
-                        </td>
-                    </tr>
-                </tbody>
-            </Table>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">작업로그 ID</div>
+                </Col>
+                <Col xs={4} className="p-0 border-right">
+                    <div className="p-3 user-select-text">{editLog.seqNo}</div>
+                </Col>
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">성공 여부</div>
+                </Col>
+                <Col xs={4} className="p-0">
+                    <div className="p-3 user-select-text">{editLog.successYn === 'Y' ? '성공' : '실패'}</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">작업자 ID</div>
+                </Col>
+                <Col xs={4} className="p-0 border-right">
+                    <div className="p-3 user-select-text">{editLog.memberId}</div>
+                </Col>
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">액션명</div>
+                </Col>
+                <Col xs={4} className="p-0">
+                    <div className="p-3 user-select-text">{editLog.action}</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">작업자 IP</div>
+                </Col>
+                <Col xs={4} className="p-0 border-right">
+                    <div className="p-3 user-select-text">{editLog.regIp}</div>
+                </Col>
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">메뉴명</div>
+                </Col>
+                <Col xs={4} className="p-0">
+                    <div className="p-3 user-select-text">{editLog.menuNm}</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">실행시간</div>
+                </Col>
+                <Col xs={4} className="p-0 border-right">
+                    <div className="p-3 user-select-text">{editLog.executedTime}</div>
+                </Col>
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">작업일시</div>
+                </Col>
+                <Col xs={4} className="p-0">
+                    <div className="p-3 user-select-text">{editLog.regDt}</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={2} className="p-0 border-right">
+                    <div className="p-3 font-weight-bold">API 경로</div>
+                </Col>
+                <Col xs={10} className="p-0">
+                    <div className="p-3 user-select-text">{editLog.apiPath}</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={12} className="p-0">
+                    <div className="p-3 font-weight-bold">실행 파라미터</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={12} className="p-0 custom-scroll" style={{ height: 140 }}>
+                    <div className="p-3 user-select-text">{editLog.param}</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border-top border-left border-right">
+                <Col xs={12} className="p-0">
+                    <div className="p-3 font-weight-bold">오류 메시지</div>
+                </Col>
+            </Row>
+            <Row className="mx-0 border flex-fill overflow-hidden">
+                <Col xs={12} className="p-0 custom-scroll h-100">
+                    <div className="p-3 user-select-text">{editLog.errMsg}</div>
+                </Col>
+            </Row>
         </MokaCard>
     );
 };

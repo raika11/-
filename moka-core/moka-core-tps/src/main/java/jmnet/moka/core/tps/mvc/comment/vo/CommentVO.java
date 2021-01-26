@@ -35,6 +35,8 @@ public class CommentVO implements Serializable {
 
     private Long urlSeq;
 
+    private String commentUrl;
+
     private String contentId;
 
     private Long cmtSeq;

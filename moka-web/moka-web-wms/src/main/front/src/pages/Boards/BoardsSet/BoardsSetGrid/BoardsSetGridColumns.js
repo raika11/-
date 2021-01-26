@@ -1,7 +1,3 @@
-import React from 'react';
-import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 export const ColumnDefs = [
     {
         headerName: '번호',
@@ -36,25 +32,15 @@ export const ColumnDefs = [
         headerName: '사용',
         field: 'usedYn',
         width: 120,
-        cellStyle: { fontSize: '12px' },
         cellClass: ['text-left'],
-        cellRendererFramework: ({ value }) => {
-            let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
-
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '답변',
         field: 'answYn',
         width: 120,
-        cellStyle: { fontSize: '12px' },
         cellClass: ['text-left'],
-        cellRendererFramework: ({ value }) => {
-            let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
-
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '생성일',

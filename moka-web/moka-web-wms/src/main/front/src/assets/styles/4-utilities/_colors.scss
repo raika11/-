@@ -4,6 +4,10 @@
   }
 }
 
-.color-gray200 {
-  color: $gray-200;
+/* $gray-100 => .color-gray-100 */
+$scale-colors: $gray-100, $gray-200, $gray-300, $gray-400, $gray-500, $gray-600, $gray-700, $gray-800, $gray-900;
+@for $i from 1 through 9 {
+  .color-gray-#{$i*100} {
+    color: nth($scale-colors, $i)
+  }
 }

@@ -379,13 +379,56 @@ const Dashboard = () => {
                             <hr className="divider" />
 
                             <Form.Row className="mb-1">
-                                <Form.Label className="h4">4) 테마 색상</Form.Label>
+                                <Form.Label className="h4">4) 소셜 Button</Form.Label>
+                            </Form.Row>
+
+                            <Form.Row className="mb-3 align-items-center">
+                                <Col className="p-0 pr-3" xs={4}>
+                                    <Button variant="outline-fb" size="lg" className="w-100">
+                                        Facebook
+                                    </Button>
+                                </Col>
+                                <Col className="p-0" xs={8}>
+                                    <div className="d-flex flex-column">
+                                        <p className="mb-0 mr-2 h5">variant="outline-fb"</p>
+                                        <p className="mb-0">페이스북 버튼</p>
+                                    </div>
+                                </Col>
+                            </Form.Row>
+
+                            <Form.Row className="mb-3 align-items-center">
+                                <Col className="p-0 pr-3" xs={4}>
+                                    <Button variant="outline-tw" size="lg" className="w-100">
+                                        Twitter
+                                    </Button>
+                                </Col>
+                                <Col className="p-0" xs={8}>
+                                    <div className="d-flex flex-column">
+                                        <p className="mb-0 mr-2 h5">variant="outline-tw"</p>
+                                        <p className="mb-0">트위터 버튼</p>
+                                    </div>
+                                </Col>
+                            </Form.Row>
+
+                            <hr className="divider" />
+
+                            <Form.Row className="mb-1">
+                                <Form.Label className="h4">5) 폰트 색상</Form.Label>
                             </Form.Row>
 
                             {['primary', 'secondary', 'success', 'info', 'searching', 'danger', 'warning'].map((color) => (
                                 <Form.Row key={color} className="mb-3 align-items-center">
                                     <p className={`mb-0 mr-2 h5`}>.color-{color}</p>
                                     <p className={`mb-0 color-${color}`}>텍스트에 테마 컬러 적용</p>
+                                </Form.Row>
+                            ))}
+
+                            <hr className="divider" />
+
+                            {['gray-100', 'gray-200', 'gray-300', 'gray-400', 'gray-500', 'gray-600', 'gray-700', 'gray-800', 'gray-900'].map((color) => (
+                                <Form.Row key={color} className="mb-3 align-items-center">
+                                    <p className={`mb-0 mr-2 h5`}>.color-{color}</p>
+                                    <p className={`mb-0 color-${color}`}>body 텍스트 컬러</p>
                                 </Form.Row>
                             ))}
                         </Form>,

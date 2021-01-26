@@ -42,6 +42,8 @@ import jpod from '@store/jpod/jpodReducer';
 import poll from '@store/survey/poll/pollReducer';
 import cdnArticle from '@store/cdnArticle/cdnArticleReducer';
 import internalApi from '@store/internalApi/internalApiReducer';
+import tour from '@store/tour/tourReducer';
+import editLog from '@store/editLog/editLogReducer';
 
 export default combineReducers({
     toastr,
@@ -86,4 +88,6 @@ export default combineReducers({
     cdnArticle,
     internalApi,
     comment,
+    tour,
+    editLog,
 });

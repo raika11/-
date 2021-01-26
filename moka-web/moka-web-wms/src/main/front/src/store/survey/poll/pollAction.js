@@ -25,7 +25,10 @@ export const [GET_POLL_LIST, GET_POLL_LIST_SUCCESS, GET_POLL_LIST_FAILURE] = cre
 export const getPollList = createAction(GET_POLL_LIST);
 
 export const SAVE_POLL = 'poll/SAVE_POLL';
-export const savePoll = createAction(SAVE_POLL);
+export const savePoll = createAction(SAVE_POLL, ({ data, callback }) => ({ data, callback }));
+
+export const UPDATE_POLL = 'poll/UPDATE_POLL';
+export const updatePoll = createAction(UPDATE_POLL, ({ data, callback }) => ({ data, callback }));
 
 export const DELETE_POLL = 'poll/DELETE_POLL';
 export const deletePoll = createAction(DELETE_POLL);

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changePollSearchOptions, getPollList, GET_POLL_LIST, SAVE_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
 import { initialState } from '@store/survey/poll/pollReducer';
 
-const PollList = () => {
+const PollList = ({ onDelete }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { search, pollSeq, list, codes, total, loading } = useSelector((store) => ({
@@ -40,7 +40,7 @@ const PollList = () => {
     return (
         <>
             <PollSearch searchOptions={search} codes={codes} onAdd={handleClickAdd} onSearch={handleChangeSearchOption} onReset={handleClickReset} />
-            <PollAgGrid searchOptions={search} rows={list} total={total} loading={loading} pollSeq={pollSeq} onChangeSearchOption={handleChangeSearchOption} />
+            <PollAgGrid searchOptions={search} rows={list} total={total} loading={loading} pollSeq={pollSeq} onChangeSearchOption={handleChangeSearchOption} onDelete={onDelete} />
         </>
     );
 };

@@ -1,6 +1,5 @@
 import instance from '@store/commons/axios';
 import qs from 'qs';
-import { objectToFormData } from '@utils/convertUtil';
 
 export const getPollList = ({ search }) => {
     const queryString = qs.stringify(search);
@@ -37,4 +36,10 @@ export const postPoll = (param) => {
         .catch((err) => {
             throw err;
         });
+};
+
+export const deletePoll = (pollSeq) => {
+    return instance.put(`/api/polls/${pollSeq}/used?status=D`).catch((err) => {
+        throw err;
+    });
 };

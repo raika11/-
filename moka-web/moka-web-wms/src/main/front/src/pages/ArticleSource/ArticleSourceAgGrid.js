@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import columnDefs from './ArticleSourceAgGridColumns';
@@ -11,12 +11,12 @@ import { GET_SOURCE_LIST, getSourceList, changeSearchOption } from '@store/artic
 const ArticleSourceAgGrid = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-
     const total = useSelector((store) => store.articleSource.total);
     const sourceList = useSelector((store) => store.articleSource.sourceList);
     const search = useSelector((store) => store.articleSource.search);
     const source = useSelector((store) => store.articleSource.source);
     const loading = useSelector((store) => store.loading[GET_SOURCE_LIST]);
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 목록에서 Row클릭
@@ -38,11 +38,20 @@ const ArticleSourceAgGrid = () => {
         [dispatch, search],
     );
 
+    useEffect(() => {
+        setRowData(
+            sourceList.map((l) => ({
+                ...l,
+                regDt: (l.regDt || '').slice(0, -3),
+            })),
+        );
+    }, [sourceList]);
+
     return (
         <MokaTable
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
-            rowData={sourceList}
+            rowData={rowData}
             onRowNodeId={(row) => row.sourceCode}
             onRowClicked={handleRowClicked}
             loading={loading}

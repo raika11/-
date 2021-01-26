@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import { initialState, changeBannedsSearchOption, getCommentsBlocks } from '@store/commentManage';
 import CommentBlockModal from '@pages/CommentManage/CommentModal/CommentBlockModal';
+import { messageBox } from '@utils/toastUtil';
 
 // 2021-01-25 09:41 추후에 구분값 정리 필요.
 export const blockIpReason = [
@@ -100,6 +101,10 @@ const BannedListSearch = ({ pathName }) => {
     const handleClickSearchButton = () => {
         dispatch(changeBannedsSearchOption(searchData));
         dispatch(getCommentsBlocks());
+    };
+
+    const handleOnClickMemoryButton = () => {
+        messageBox.alert('서비스 준비 중입니다.');
     };
 
     // 페이지 구분값이 변경 되었을때 모달에 전달할 구분값 업데이트.
@@ -246,7 +251,7 @@ const BannedListSearch = ({ pathName }) => {
                 <Button variant="negative" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
                     적용하기
                 </Button>
-                <Button variant="negative" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
+                <Button variant="negative" className="mr-2" onClick={() => handleOnClickMemoryButton()}>
                     메모리
                 </Button>
             </div>

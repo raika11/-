@@ -37,6 +37,8 @@ import boardSaga from '@store/board/boardsSaga';
 import seoMetaSaga from '@store/seoMeta/seoMetaSaga';
 import jpodSaga from '@store/jpod/jpodSaga';
 import pollSaga from '@store/survey/poll/pollSaga';
+import cdnArticleSaga from '@store/cdnArticle/cdnArticleSaga';
+import internalApiSaga from '@store/internalApi/internalApiSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -77,5 +79,7 @@ export default function* rootSaga() {
         seoMetaSaga(),
         jpodSaga(),
         pollSaga(),
+        cdnArticleSaga(),
+        internalApiSaga(),
     ]);
 }

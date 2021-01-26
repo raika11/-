@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-
 import { ITEM_AP } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import {
@@ -17,7 +16,7 @@ import {
 } from '@store/articlePage';
 import columnDefs from './LookupArticlePageListColumns';
 import { previewPage } from '@store/merge';
-import { API_BASE_URL } from '@/constants';
+import util from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -134,7 +133,7 @@ const LookupArticlePageList = (props) => {
                                                 totalId: response.body,
                                             };
                                             console.log(item);
-                                            popupPreview('/preview/article-page', item);
+                                            util.popupPreview('/preview/article-page', item);
                                         } else {
                                             toast.error(header.message || '미리보기에 실패하였습니다');
                                         }
@@ -151,45 +150,6 @@ const LookupArticlePageList = (props) => {
         },
         [dispatch],
     );
-    /**
-     * 미리보기 팝업띄움.
-     */
-    const popupPreview = (url, item) => {
-        const targetUrl = `${API_BASE_URL}${url}`;
-
-        // 폼 생성
-        const f = document.createElement('form');
-        f.setAttribute('method', 'post');
-        f.setAttribute('action', targetUrl);
-        f.setAttribute('target', '_blank');
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const propName in item) {
-            if (typeof item[propName] === 'object') {
-                const subObject = item[propName];
-                // eslint-disable-next-line no-restricted-syntax
-                for (const inPropName in subObject) {
-                    if (Object.prototype.hasOwnProperty.call(subObject, inPropName)) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = `${propName}.${inPropName}`;
-                        input.value = item[propName][inPropName];
-                        f.appendChild(input);
-                    }
-                }
-            } else if (Object.prototype.hasOwnProperty.call(item, propName)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = propName;
-                input.value = item[propName];
-                f.appendChild(input);
-            }
-        }
-
-        document.getElementsByTagName('body')[0].appendChild(f);
-        f.submit();
-        f.remove();
-    };
 
     useEffect(() => {
         return () => {

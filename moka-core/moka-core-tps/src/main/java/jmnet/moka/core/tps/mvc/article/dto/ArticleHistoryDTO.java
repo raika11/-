@@ -87,4 +87,9 @@ public class ArticleHistoryDTO implements Serializable {
      * 작업자ID
      */
     private String regId;
+
+    /**
+     * 작업자명(디비에 없음)
+     */
+    private String regName;
 }

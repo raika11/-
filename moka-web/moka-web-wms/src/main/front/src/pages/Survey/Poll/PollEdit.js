@@ -3,12 +3,17 @@ import { MokaCard, MokaIcon, MokaInput, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { initialState } from '@store/survey/poll/pollReducer';
-import PollDetailQuestionComponent from '@pages/Survey/Poll/components/PollDetailQuestionComponent';
+import PollDetailBasicAnswerContainer from '@pages/Survey/Poll/components/PollDetailBasicAnswerContainer';
 import { useHistory, useParams } from 'react-router-dom';
 import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPoll, GET_POLL } from '@store/survey/poll/pollAction';
+import { getPoll, GET_POLL, clearPoll, savePoll } from '@store/survey/poll/pollAction';
 import commonUtil from '@utils/commonUtil';
+import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
+import produce from 'immer';
+import useDebounce from '@hooks/useDebounce';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
 
 const PollEdit = () => {
     const { pollSeq } = useParams();
@@ -24,22 +29,39 @@ const PollEdit = () => {
         loading: store.loading[GET_POLL],
     }));
 
-    const handleChangeValue = (name, value, type) => {
+    const handleChangeValue = ({ name, value, type }) => {
         if (type === 'number') {
             value = parseInt(value);
         }
-        setEdit({ ...edit, [name]: value });
+        setEdit(
+            produce(edit, (draft) => {
+                draft[name] = value;
+            }),
+        );
     };
+
+    const handleDebounceChangeValue = useDebounce(handleChangeValue);
 
     useEffect(() => {
         if (!commonUtil.isEmpty(pollSeq)) {
             dispatch(getPoll(pollSeq));
+        } else {
+            dispatch(clearPoll());
         }
     }, [dispatch, pollSeq]);
 
     useEffect(() => {
         setEdit(poll);
+        if (!commonUtil.isEmpty(poll.pollSeq)) {
+            setIsSet(true);
+        } else {
+            setIsSet(false);
+        }
     }, [poll]);
+
+    /*useEffect(() => {
+        console.log(edit);
+    }, [edit]);*/
 
     return (
         <MokaCard
@@ -48,7 +70,14 @@ const PollEdit = () => {
             footer
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '저장', variant: 'positive', onClick: () => console.log('저장'), className: 'mr-05' },
+                {
+                    text: '저장',
+                    variant: 'positive',
+                    onClick: () => {
+                        dispatch(savePoll(edit));
+                    },
+                    className: 'mr-05',
+                },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
             ]}
             width={570}
@@ -65,10 +94,7 @@ const PollEdit = () => {
                             labelClassName="text-right"
                             value={edit.status}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
                         >
                             {codes.status.map((option) => (
@@ -87,15 +113,12 @@ const PollEdit = () => {
                         <MokaInputLabel
                             as="select"
                             label="그룹"
-                            name="group"
+                            name="pollGroup"
                             labelWidth={70}
                             labelClassName="text-right"
                             value={edit.pollGroup}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
                         >
                             {codes.pollGroup.map((option) => (
@@ -114,10 +137,7 @@ const PollEdit = () => {
                             labelClassName="text-right"
                             value={edit.pollCategory}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
                         >
                             {codes.pollCategory.map((option) => (
@@ -138,11 +158,9 @@ const PollEdit = () => {
                             labelClassName="text-right"
                             value={edit.pollDiv}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
+                            disabled={isSet}
                         >
                             {codes.pollDiv.map((option) => (
                                 <option key={option.key} value={option.key}>
@@ -153,51 +171,42 @@ const PollEdit = () => {
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type1"
                             as="radio"
-                            value="M"
+                            value="T"
                             labelWidth={30}
                             inputProps={{ custom: true, label: 'text형', checked: edit.pollType === 'T' }}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
                             disabled={isSet}
                         />
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type2"
                             as="radio"
                             value="P"
                             labelWidth={30}
                             inputProps={{ custom: true, label: '이미지형', checked: edit.pollType === 'P' }}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
                             disabled={isSet}
                         />
                     </Col>
                     <Col xs={3} className="d-flex pr-0">
                         <MokaInputLabel
-                            name="type"
+                            name="pollType"
                             id="type3"
                             as="radio"
-                            value="V"
+                            value="M"
                             labelWidth={85}
                             inputProps={{ custom: true, label: 'text형+이미지형', checked: edit.pollType === 'M' }}
                             onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
+                                handleChangeValue(e.target);
                             }}
                             disabled={isSet}
                         />
@@ -214,11 +223,11 @@ const PollEdit = () => {
                             as="dateTimePicker"
                             label="투표기간"
                             labelWidth={70}
-                            name="sdate"
+                            name="startDt"
                             labelClassName="text-right"
                             value={edit.startDt}
                             onChange={(data) => {
-                                handleChangeValue('sdate', data._d);
+                                handleChangeValue({ name: 'startDt', value: moment(data._d).format(DB_DATEFORMAT) });
                             }}
                         />
                     </Col>
@@ -226,38 +235,15 @@ const PollEdit = () => {
                     <Col xs={5}>
                         <MokaInput
                             as="dateTimePicker"
-                            name="edate"
+                            name="endDt"
                             value={edit.endDt}
                             onChange={(data) => {
-                                handleChangeValue('sdate', data._d);
+                                handleChangeValue({ name: 'endDt', value: moment(data._d).format(DB_DATEFORMAT) });
                             }}
                         />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
-                    <Col xs={6}>
-                        <MokaInputLabel
-                            as="select"
-                            label="서비스 상태"
-                            labelWidth={70}
-                            name="status"
-                            labelClassName="text-right"
-                            value={edit.status}
-                            onChange={(e) => {
-                                const {
-                                    target: { name, value },
-                                } = e;
-                                handleChangeValue(name, value);
-                            }}
-                        >
-                            {codes.status.map((option) => (
-                                <option key={option.key} value={option.key}>
-                                    {option.value}
-                                </option>
-                            ))}
-                        </MokaInputLabel>
-                    </Col>
-                </Form.Row>
+
                 <Form.Row className="mb-2">
                     <Col xs={3}>
                         <MokaInputLabel
@@ -268,15 +254,13 @@ const PollEdit = () => {
                             name="mainYn"
                             id="mainYn"
                             onChange={(e) => {
-                                const {
-                                    target: { name, checked },
-                                } = e;
+                                const { name, checked } = e.target;
                                 let value = 'N';
                                 if (checked) {
                                     value = 'Y';
                                 }
 
-                                handleChangeValue(name, value);
+                                handleChangeValue({ name, value });
                             }}
                             inputProps={{ checked: edit.mainYn === 'Y' }}
                         />
@@ -290,14 +274,12 @@ const PollEdit = () => {
                             id="loginYn"
                             labelClassName="text-right"
                             onChange={(e) => {
-                                const {
-                                    target: { name, checked },
-                                } = e;
+                                const { name, checked } = e.target;
                                 let value = 'N';
                                 if (checked) {
                                     value = 'Y';
                                 }
-                                handleChangeValue(name, value);
+                                handleChangeValue({ name, value });
                             }}
                             inputProps={{ checked: edit.loginYn === 'Y' }}
                         />
@@ -311,15 +293,13 @@ const PollEdit = () => {
                             name="replyYn"
                             id="replyYn"
                             onChange={(e) => {
-                                const {
-                                    target: { name, checked },
-                                } = e;
+                                const { name, checked } = e.target;
                                 let value = 'N';
                                 if (checked) {
                                     value = 'Y';
                                 }
 
-                                handleChangeValue(name, value);
+                                handleChangeValue({ name, value });
                             }}
                             inputProps={{ checked: edit.replyYn === 'Y' }}
                         />
@@ -333,14 +313,12 @@ const PollEdit = () => {
                             id="repetitionYn"
                             labelClassName="text-right mr-1"
                             onChange={(e) => {
-                                const {
-                                    target: { name, checked },
-                                } = e;
+                                const { name, checked } = e.target;
                                 let value = 'N';
                                 if (checked) {
                                     value = 'Y';
                                 }
-                                handleChangeValue(name, value);
+                                handleChangeValue({ name, value });
                             }}
                             inputProps={{ checked: edit.repetitionYn === 'Y' }}
                         />
@@ -356,14 +334,12 @@ const PollEdit = () => {
                             id="bbsYn"
                             labelClassName="text-right"
                             onChange={(e) => {
-                                const {
-                                    target: { name, checked },
-                                } = e;
+                                const { name, checked } = e.target;
                                 let value = 'N';
                                 if (checked) {
                                     value = 'Y';
                                 }
-                                handleChangeValue(name, value);
+                                handleChangeValue({ name, value });
                             }}
                             inputProps={{ checked: edit.bbsYn === 'Y' }}
                         />
@@ -376,10 +352,8 @@ const PollEdit = () => {
                                 name="bbsUrl"
                                 labelClassName="text-right"
                                 onChange={(e) => {
-                                    const {
-                                        target: { name, value },
-                                    } = e;
-                                    handleChangeValue(name, value);
+                                    const { name, value } = e.target;
+                                    handleChangeValue({ name, value });
                                 }}
                                 value={edit.bbsUrl}
                             />
@@ -402,14 +376,10 @@ const PollEdit = () => {
                                     className="pl-0"
                                     value={edit.itemCnt}
                                     onChange={(e) => {
-                                        const {
-                                            target: { name, value, type },
-                                        } = e;
-
-                                        handleChangeValue(name, value, type);
+                                        handleChangeValue(e.target);
                                     }}
                                     disabled={isSet}
-                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 2 }}
                                 />
                             </Col>
                             <Col xs={4}>
@@ -421,13 +391,10 @@ const PollEdit = () => {
                                     className="text-right"
                                     value={edit.allowAnswCnt}
                                     onChange={(e) => {
-                                        const {
-                                            target: { name, value, type },
-                                        } = e;
-                                        handleChangeValue(name, value, type);
+                                        handleChangeValue(e.target);
                                     }}
                                     disabled={isSet}
-                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' } }}
+                                    inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 1 }}
                                 />
                             </Col>
                             <Col xs={2} className="p-0  pr-2 text-right">
@@ -447,23 +414,35 @@ const PollEdit = () => {
                 {edit.itemCnt > 0 && isSet && (
                     <Form.Row className="mb-2">
                         <MokaCard
-                            className="flex-fill pl-0"
+                            className="flex-fill pl-0 h-100"
                             minHeight="300px"
                             titleAs={
                                 <MokaInputLabel
                                     as="textarea"
+                                    name="title"
                                     onChange={(e) => {
-                                        setEdit({ ...edit, question: { title: e.target.value } });
+                                        handleChangeValue(e.target);
                                     }}
-                                    value={edit.question.title}
+                                    value={edit.title}
                                     label="Q."
                                     labelWidth={20}
                                 />
                             }
                         >
-                            {[...Array(edit.itemCount)].map((n, index) => (
-                                <PollDetailQuestionComponent key={index} label1={`보기${index + 1}`} label2={`url`} type={edit.type} />
-                            ))}
+                            {edit.pollDiv === 'W' && (
+                                <PollDetailBasicAnswerContainer
+                                    count={edit.itemCnt}
+                                    type={edit.pollType}
+                                    items={edit.pollItems}
+                                    onChange={(items) => {
+                                        handleDebounceChangeValue({
+                                            name: 'pollItems',
+                                            value: items,
+                                        });
+                                    }}
+                                />
+                            )}
+                            {edit.pollDiv === 'V' && <PollDetailCompareAnswerContainer type={edit.pollType} items={edit.pollItems} />}
                         </MokaCard>
                     </Form.Row>
                 )}

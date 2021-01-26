@@ -561,4 +561,15 @@
     )}
   </update>
 
+  <select id="upaArticleHistoryListSel" parameterType="java.lang.Long"
+    resultType="ArticleHistoryVO" statementType="CALLABLE">
+    { call UPA_ARTICLE_HISTORY_LIST_SEL(
+    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    )}
+  </select>
+
 </mapper>

@@ -57,7 +57,7 @@ export default [
     {
         headerName: '기능',
         field: 'register',
-        width: 110,
+        width: 80,
         cellStyle: { display: 'flex', alignItems: 'center' },
         cellRendererFramework: (row) => <ArticleActionBtn {...row} />,
     },

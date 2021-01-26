@@ -5,13 +5,16 @@
 package jmnet.moka.core.tps.mvc.cdnarticle.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.mvc.cdnarticle.dto.CdnArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.cdnarticle.entity.CdnArticle;
 import jmnet.moka.core.tps.mvc.cdnarticle.repository.CdnArticleRepository;
@@ -20,7 +23,10 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 /**
  * Description: 설명
@@ -59,6 +65,9 @@ public class CdnArticleServiceImpl implements CdnArticleService {
     @Value("${cdn.purge.url}")
     private String cdnPurgeUrl;
 
+    @Value("${cdn.tms.url}")
+    private String cdnTmsUrl;
+
     @Override
     public Page<CdnArticle> findAllCdnArticle(CdnArticleSearchDTO search) {
         return cdnArticleRepository.findList(search, search.getPageable());
@@ -79,17 +88,69 @@ public class CdnArticleServiceImpl implements CdnArticleService {
                     .equals(MokaConstants.YES), cdnArticleDoaminList[i], cdnArticleSaveFilepathList[i], cdnArticleUrlList[i]);
             if (ok) {
                 inserted = true;
+
+                // cdn url세팅
+                if (i == 0) {
+                    article.setCdnUrlNews(cdnArticleUrlList[i] + "/" + article
+                            .getTotalId()
+                            .toString() + ".html");
+                } else {
+                    article.setCdnUrlMnews(cdnArticleUrlList[i] + "/" + article
+                            .getTotalId()
+                            .toString() + ".html");
+                }
             }
         }
-        // cdn upload가 하나라도 되면, 디비에 등록한다.
-        return inserted ? cdnArticleRepository.save(article) : null;
 
+        // cdn upload가 하나라도 되면, 디비에 등록한다.
+        CdnArticle saveArticle = null;
+        if (inserted) {
+            // 디비등록
+            saveArticle = cdnArticleRepository.save(article);
+
+            // tms에 cdn등록 호출
+            sendUseCdnArticle();
+
+        }
+
+        return saveArticle;
     }
 
-    private boolean uploadCdn(Long totalId, boolean usedYn, String cdnDoamin, String cdnSaveFilepath, String cdnArticleUrl)
+    private void sendUseCdnArticle() {
+        List<CdnArticle> useArticleList = findUseCdnArticle(MokaConstants.YES);
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
+
+        String params = "";
+        try {
+            params = ResourceMapper
+                    .getDefaultObjectMapper()
+                    .writeValueAsString(useArticleList);
+        } catch (IOException ex) {
+            log.error(ex.toString());
+        }
+
+        restTemplateHelper.post(cdnTmsUrl, params, headers);
+    }
+
+    @Override
+    public void clearCacheCdnArticle(Long totalId) {
+        for (int i = 0; i < cdnArticleDoaminList.length; i++) {
+            String url = cdnPurgeUrl + cdnArticleDoaminList[i] + "/" + totalId.toString() + ".html";
+            restTemplateHelper.get(url);
+        }
+    }
+
+    @Override
+    public List<CdnArticle> findUseCdnArticle(String usedYn) {
+        return cdnArticleRepository.findAllByUsedYn(usedYn);
+    }
+
+    private boolean uploadCdn(Long totalId, boolean usedYn, String articleDoamin, String cdnSaveFilepath, String cdnArticleUrl)
             throws Exception {
 
-        String articleUrl = cdnDoamin + "/article/" + totalId.toString();
+        String articleUrl = articleDoamin + "/article/" + totalId.toString();   // 중앙 기사 서비스 URL
         String articleHtml = "";
 
         if (usedYn) {
@@ -105,7 +166,7 @@ public class CdnArticleServiceImpl implements CdnArticleService {
             articleHtml = articleHtml.replaceAll(staticUrl + "/joongang_15re/scripts/lib/", cdnWebDomain + "/ui/script/lib/");
 
             //기자정보 링크 치환
-            articleHtml = articleHtml.replaceAll("href=\"reporter\"", "href=\"" + cdnDoamin + "/reporter/");
+            articleHtml = articleHtml.replaceAll("href=\"/reporter/", "href=\"" + articleDoamin + "/reporter/");
 
             //JA트래커가 CDN 아티클이라고 인식하도록 플래그 추가
             articleHtml = articleHtml.replaceAll("<!-- End JA Tracker Script -->",
@@ -133,4 +194,6 @@ public class CdnArticleServiceImpl implements CdnArticleService {
         }
         return true;
     }
+
+
 }

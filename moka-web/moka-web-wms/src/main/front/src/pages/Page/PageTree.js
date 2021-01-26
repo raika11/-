@@ -1,137 +1,74 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
-import { GET_PAGE_TREE, getPage, insertSubPage } from '@store/page/pageAction';
-import { MokaTreeView, MokaIcon } from '@components';
+import { MokaIcon } from '@components';
+import { GET_PAGE_TREE, insertSubPage } from '@store/page';
+import PageTreeView from './components/PageTreeView';
 
 /**
  * 페이지 Tree 컴포넌트
  */
-const PageTree = ({ onDelete, match }) => {
-    const { pageSeq: paramPageSeq } = useParams();
+const PageTree = ({ onDelete, match, findNode }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_PAGE_TREE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const { tree, page } = useSelector((store) => ({
-        tree: store.page.tree,
-        page: store.page.page,
+    const { tree, page } = useSelector(({ page }) => ({
+        tree: page.tree,
+        page: page.page,
     }));
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 
-    // 부모노드 찾기(재귀함수)
-    // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
-    const findNode = useCallback((findInfo, rootNode) => {
-        if (rootNode.pageSeq === findInfo.findSeq) {
-            return produce(findInfo, (draft) => draft);
-        }
+    /**
+     * 트리 클릭
+     * @param {object} item
+     */
+    const handleClick = (item) => history.push(`${match.path}/${item.pageSeq}`);
 
-        if (rootNode.nodes && rootNode.nodes.length > 0) {
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const newInfo = produce(findInfo, (draft) => {
-                    draft.node = rootNode.nodes[i];
-                    draft.path.push(String(rootNode.nodes[i].pageSeq));
-                });
-                const fnode = findNode(newInfo, rootNode.nodes[i]);
-                if (fnode !== null && fnode.node !== null) {
-                    return fnode;
-                }
-            }
-            return null;
-        }
-        return null;
-    }, []);
+    /**
+     * 트리 아이템의 추가 버튼(+)
+     * @param {object} item
+     */
+    const handleInsertSub = (item) => {
+        const parent = {
+            pageSeq: item.pageSeq,
+            pageName: item.pageName,
+            pageUrl: item.pageUrl,
+        };
+        dispatch(insertSubPage({ parent, latestDomainId }));
+        history.push(`${match.path}/add`);
+    };
 
     useEffect(() => {
-        if (tree) {
-            if (page.pageSeq) {
-                // 최초로딩일때만 트리노드 확장
-                // if (expanded.length <= 0) {
-                let findInfo = {
-                    findSeq: page.pageSeq,
-                    node: null,
-                    path: [String(tree.pageSeq)],
-                };
-                let fnode = findNode(findInfo, tree);
-                if (fnode) {
-                    setExpanded(fnode.path);
-                    setSelected(String(page.pageSeq));
-                    history.push(`${match.path}/${page.pageSeq}`);
-                }
-            } else {
-                // 추가상태여부
-                const bSubInsert = !!(page.parent && page.parent.pageSeq);
-
-                // direct loading여부
-                let bDirectLoading = false;
-                const pathname = window.location.pathname.match(/^(\/page\/)(\d+)/);
-                if (paramPageSeq || (pathname && pathname[2])) {
-                    bDirectLoading = true;
-                }
-
-                if (!bDirectLoading && !bSubInsert) {
-                    setExpanded([]);
-                    setSelected('');
-
-                    const option = {
-                        pageSeq: tree.pageSeq,
-                        // callback: (result) => {
-                        //     if (result) history.push(`/page/${pageTree.pageSeq}`);
-                        // }
-                    };
-                    dispatch(getPage(option));
-                }
+        if (tree && page.pageSeq) {
+            // pageSeq까지 트리 오픈
+            let findInfo = {
+                findSeq: page.pageSeq,
+                node: null,
+                path: [String(tree.pageSeq)],
+            };
+            let fnode = findNode(findInfo, tree);
+            if (fnode) {
+                setExpanded(fnode.path);
+                setSelected(String(page.pageSeq));
             }
-            // if (selected === '' && expanded.length === 0) {
-            //     setExpanded([String(tree.pageSeq)]);
-            //     setSelected(String(tree.pageSeq));
-            // }
+        }
+    }, [findNode, page.pageSeq, tree]);
+
+    useEffect(() => {
+        if (tree?.pageSeq) {
+            if (!page.pageSeq && history.location.pathname.indexOf('/add') < 0) {
+                // 첫번째 트리 데이터로 이동
+                history.push(`${match.path}/${tree.pageSeq}`);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tree, page, history, findNode, paramPageSeq, dispatch]);
-
-    /**
-     * 트리 클릭. 페이지 수정창 로드
-     * @param {object} item
-     */
-    const handleClick = useCallback(
-        (item) => {
-            const option = {
-                pageSeq: item.pageSeq,
-                callback: (result) => {
-                    if (result.header.success) {
-                        setSelected(String(item.pageSeq));
-                        history.push(`${match.path}/${item.pageSeq}`);
-                    }
-                },
-            };
-            dispatch(getPage(option));
-        },
-        [dispatch, history, match.path],
-    );
-
-    /**
-     * 트리에서 추가버튼 클릭.
-     * @param {object} item
-     */
-    const handleInsertSub = useCallback(
-        (item) => {
-            const parent = {
-                pageSeq: item.pageSeq,
-                pageName: item.pageName,
-                pageUrl: item.pageUrl,
-            };
-            setSelected(String(item.pageSeq));
-            dispatch(insertSubPage({ parent, latestDomainId }));
-            history.push(`${match.path}/add`);
-        },
-        [dispatch, history, latestDomainId, match.path],
-    );
+    }, [history, match.path, tree]);
 
     return (
-        <MokaTreeView
+        <PageTreeView
             className="h-100"
             data={tree}
             loading={loading}

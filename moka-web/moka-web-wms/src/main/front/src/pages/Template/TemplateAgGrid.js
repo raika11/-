@@ -15,21 +15,20 @@ import CopyModal from './modals/CopyModal';
 const TemplateAgGrid = ({ onDelete, match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
+    const loading = useSelector(({ loading }) => loading[GET_TEMPLATE_LIST]);
+    const { total, list, search, template } = useSelector((store) => ({
+        total: store.template.total,
+        list: store.template.list,
+        search: store.template.search,
+        template: store.template.template,
+    }));
 
     //state
     const [listType, setListType] = useState('list');
     const [rowData, setRowData] = useState([]);
     const [copyModalShow, setCopyModalShow] = useState(false);
     const [copyModalData, setCopyModalData] = useState({});
-
-    const { total, list, search, loading, template, UPLOAD_PATH_URL } = useSelector((store) => ({
-        total: store.template.total,
-        list: store.template.list,
-        search: store.template.search,
-        loading: store.loading[GET_TEMPLATE_LIST],
-        template: store.template.template,
-        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
-    }));
 
     /**
      * 테이블 검색옵션 변경
@@ -48,19 +47,12 @@ const TemplateAgGrid = ({ onDelete, match }) => {
     /**
      * 목록에서 Row클릭
      */
-    const handleRowClicked = useCallback(
-        (template) => {
-            history.push(`/template/${template.templateSeq}`);
-        },
-        [history],
-    );
+    const handleRowClicked = (template) => history.push(`${match.path}/${template.templateSeq}`);
 
     /**
      * 등록버튼
      */
-    const handleClickAdd = useCallback(() => {
-        history.push(`${match.path}/add`);
-    }, [history, match.path]);
+    const handleClickAdd = () => history.push(`${match.path}/add`);
 
     useEffect(() => {
         if (list.length > 0) {

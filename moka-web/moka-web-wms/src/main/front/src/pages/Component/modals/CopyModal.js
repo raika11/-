@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -10,18 +10,18 @@ import toast from '@utils/toastUtil';
  * 컴포넌트 복사 Modal
  */
 const CopyModal = (props) => {
-    const { show, onHide, componentSeq } = props;
+    const { show, onHide, componentSeq, componentName } = props;
     const dispatch = useDispatch();
     const history = useHistory();
-    const [componentName, setComponentName] = useState('');
-    const [componentNameInvalid, setComponentNameInvalid] = useState(false);
+    const [name, setName] = useState('');
+    const [error, setError] = useState(false);
 
     /**
      * 닫기
      */
     const handleHide = () => {
-        setComponentName('');
-        setComponentNameInvalid(false);
+        setName('');
+        setError(false);
         onHide();
     };
 
@@ -29,12 +29,12 @@ const CopyModal = (props) => {
      * 복사
      */
     const handleCopy = () => {
-        if (componentName.length > 0) {
-            setComponentNameInvalid(false);
+        if (name.length > 0) {
+            setError(false);
             dispatch(
                 copyComponent({
                     componentSeq: componentSeq,
-                    componentName,
+                    componentName: name,
                     callback: ({ header, body }) => {
                         if (header.success) {
                             handleHide();
@@ -47,9 +47,15 @@ const CopyModal = (props) => {
                 }),
             );
         } else {
-            setComponentNameInvalid(true);
+            setError(true);
         }
     };
+
+    useEffect(() => {
+        if (show) {
+            setName(`${componentName}_복사`);
+        }
+    }, [componentName, show]);
 
     return (
         <MokaModal
@@ -67,14 +73,7 @@ const CopyModal = (props) => {
             centered
         >
             <Form>
-                <MokaInputLabel
-                    label="컴포넌트명"
-                    labelWidth={90}
-                    className="mb-0"
-                    value={componentName}
-                    onChange={(e) => setComponentName(e.target.value)}
-                    isInvalid={componentNameInvalid}
-                />
+                <MokaInputLabel label="컴포넌트명" labelWidth={90} className="mb-0" value={name} onChange={(e) => setName(e.target.value)} isInvalid={error} />
             </Form>
         </MokaModal>
     );

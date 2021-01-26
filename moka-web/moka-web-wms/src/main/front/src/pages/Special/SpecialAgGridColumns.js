@@ -10,7 +10,7 @@ const columnDefs = [
     },
     {
         headerName: '페이지 코드',
-        field: 'pageCd',
+        field: 'pageCdName',
         width: 100,
         cellClassRules: {
             'ft-12': () => true,

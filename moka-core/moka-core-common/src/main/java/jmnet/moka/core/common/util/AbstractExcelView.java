@@ -8,8 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.util.HSSFColor.WHITE;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
 
@@ -50,10 +56,19 @@ public abstract class AbstractExcelView extends AbstractXlsView {
         List<String> columnList = (List<String>) (modelMap.get("columnList"));
         row = worksheet.createRow(0);
         int i = 0;
+        CellStyle headCellStyle = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setColor(WHITE.index);
+        headCellStyle.setFont(font);
+        headCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        headCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        headCellStyle.setFillForegroundColor(HSSFColor.DARK_BLUE.index);
+        headCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
         for (String column : columnList) {
-            row
-                    .createCell(i++)
-                    .setCellValue(column);
+            HSSFCell cell = row.createCell(i++);
+            cell.setCellStyle(headCellStyle);
+            cell.setCellValue(column);
         }
         makeColumnValue(worksheet, modelMap.get("resultList"));
 

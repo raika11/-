@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.poll.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 투표항목
@@ -57,16 +59,10 @@ public class TrendpollItemDTO implements Serializable {
     private Date regDt = new Date();
 
     /**
-     * 이미지경로
-     */
-    @ApiModelProperty(value = "이미지경로")
-    private String imgPath;
-
-    /**
      * 이미지명
      */
-    @ApiModelProperty(value = "이미지명")
-    private String imgName;
+    @ApiModelProperty(value = "이미지URL")
+    private String imgUrl;
 
     /**
      * 링크URL
@@ -79,4 +75,8 @@ public class TrendpollItemDTO implements Serializable {
      */
     @ApiModelProperty(value = "제목")
     private String title;
+
+    @ApiModelProperty("이미지파일")
+    @JsonIgnore
+    private MultipartFile imgFile;
 }

@@ -5,7 +5,7 @@ import produce from 'immer';
 export const initialState = {
     poll: {
         pollSeq: null,
-        pollGroup: '',
+        pollGroup: 'A',
         pollCategory: '0100',
         pollDiv: 'W',
         pollType: 'M',
@@ -44,6 +44,7 @@ export const initialState = {
         startDt: '',
         endDt: '',
         status: '',
+        sort: 'pollSeq,desc',
     },
     total: 0,
     list: [],
@@ -51,6 +52,11 @@ export const initialState = {
 
 export default handleActions(
     {
+        [action.CLEAR_POLL]: (state) => {
+            return produce(state, (draft) => {
+                draft.poll = initialState.poll;
+            });
+        },
         [action.CHANGE_POLL_SEARCH_OPTIONS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;

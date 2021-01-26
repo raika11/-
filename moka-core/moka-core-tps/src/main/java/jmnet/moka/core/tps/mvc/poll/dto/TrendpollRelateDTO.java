@@ -57,14 +57,9 @@ public class TrendpollRelateDTO implements Serializable {
     /**
      * 이미지경로
      */
-    @ApiModelProperty(value = "이미지경로")
-    private String imgPath;
+    @ApiModelProperty(value = "이미지URL")
+    private String imgUrl;
 
-    /**
-     * 이미지명
-     */
-    @ApiModelProperty(value = "이미지명")
-    private String imgName;
 
     /**
      * 링크URL

@@ -4,13 +4,13 @@ import { MokaIcon, MokaModal } from '@components';
 
 const GroupNumberRenderer = forwardRef((params, ref) => {
     const { data } = params;
-    // const { artGroupNum, ovpYn, youtubeYn } = data;
+    const { artGroupNum, ovpYn, youtubeYn } = data;
     const [previewOn, setPreviewOn] = useState(false);
 
     // 테스트용 데이터
-    const artGroupNum = (data.totalId % 8) + 1;
-    const youtubeYn = data.totalId % 2 === 0 ? 'Y' : 'N';
-    const ovpYn = data.totalId % 3 === 0 ? 'Y' : 'N';
+    // const artGroupNum = (data.totalId % 8) + 1;
+    // const youtubeYn = data.totalId % 2 === 0 ? 'Y' : 'N';
+    // const ovpYn = data.totalId % 3 === 0 ? 'Y' : 'N';
 
     // 리턴 ref 설정
     useImperativeHandle(ref, () => ({

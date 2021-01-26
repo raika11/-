@@ -5,7 +5,6 @@ import toastUtil from '@utils/toastUtil';
 import MenuAuthTree from '@pages/Menu/component/MenuAuthTree';
 import { Col, Row } from 'react-bootstrap';
 import { MokaCard } from '@components';
-import { CARD_DEFAULT_HEIGHT } from '@/constants';
 
 const GroupChildMenuAuth = () => {
     const { menuAuthInfo, groupCd, loading } = useSelector(
@@ -60,7 +59,7 @@ const GroupChildMenuAuth = () => {
         <MokaCard
             titleAs={
                 <>
-                    메뉴권한
+                    <h2 className="mb-0">메뉴권한</h2>
                     <Row className="rc-tree-header" style={{ marginTop: '20px' }}>
                         <Col xs={6} style={{ fontWeight: '700', paddingLeft: '40px' }}>
                             메뉴명
@@ -76,8 +75,7 @@ const GroupChildMenuAuth = () => {
             }
             headerClassName="rc-tree-card-header"
             bodyClassName="rc-tree-card-body group"
-            className="w-100"
-            height={CARD_DEFAULT_HEIGHT - 90}
+            className="w-100 shadow-none"
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={

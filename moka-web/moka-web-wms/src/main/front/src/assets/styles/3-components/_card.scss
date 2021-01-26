@@ -18,11 +18,19 @@
 }
 
 .card-body {
-  padding: $card-spacer-y $card-spacer-x;
+  padding: 0 $card-spacer-x ;
+  margin-bottom: $card-spacer-y;
+  margin-top: $card-spacer-y;
+}
+
+.card-header + .card-body {
+  margin-top: 0;
 }
 
 .card-footer {
-  padding: $card-spacer-y $card-spacer-x;
+  padding: 24px 0 32px 0;
+  margin: 0px $card-spacer-x;
+  border-top: 1px solid $gray-400;
 }
 
 .card-actions {

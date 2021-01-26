@@ -4,6 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.cdnarticle.service;
 
+import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.cdnarticle.dto.CdnArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.cdnarticle.entity.CdnArticle;
@@ -41,4 +42,18 @@ public interface CdnArticleService {
     CdnArticle saveCdnArticle(CdnArticle article)
             throws Exception;
 
+    /**
+     * CDN기사 캐시삭제
+     *
+     * @param totalId 기사키
+     */
+    void clearCacheCdnArticle(Long totalId);
+
+    /**
+     * 사용여부에 따른 CDN기사목록
+     *
+     * @param usedYn 사용여부
+     * @return CDN기사목록
+     */
+    List<CdnArticle> findUseCdnArticle(String usedYn);
 }

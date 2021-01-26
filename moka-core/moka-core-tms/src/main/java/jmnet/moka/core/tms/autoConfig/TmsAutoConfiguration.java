@@ -11,6 +11,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
+import jmnet.moka.core.tms.mvc.CdnRedirector;
 import jmnet.moka.core.tms.mvc.DefaultMergeHandlerMapping;
 import jmnet.moka.core.tms.mvc.DefaultMergeViewResolver;
 import jmnet.moka.core.tms.mvc.HandlerAndView;
@@ -146,6 +147,20 @@ public class TmsAutoConfiguration {
         HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
         domainResolver = new DpsDomainResolver(httpProxyDataLoader, reservedExpireTime);
         return domainResolver;
+    }
+
+    /**
+     * <pre>
+     * CDN으로 트래픽분산된 기사를 redirect하기 위한 Bean을 생성한다.
+     * </pre>
+     *
+     * @return CdnRedirector Bean
+     */
+    @Bean(name = "CdnRedirector")
+    public CdnRedirector cdnRedirector() {
+        HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
+        CdnRedirector cdnRedirector = new CdnRedirector( this.appContext, httpProxyDataLoader);
+        return cdnRedirector;
     }
 
     /**

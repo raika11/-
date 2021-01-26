@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 @RequestMapping("/api/cdn-articles")
-@Api(tags = {"CND기사 API"})
+@Api(tags = {"트래픽분산 API"})
 public class CdnArticleRestController extends AbstractCommonController {
 
     private final CdnArticleService cdnArticleService;
@@ -164,7 +164,7 @@ public class CdnArticleRestController extends AbstractCommonController {
             @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") @Min(value = 0, message = "{tps.cdn-article.error.min.totalId}") Long totalId,
             @ApiParam("CDN기사정보") @RequestBody @Valid CdnArticleDTO articleDto)
             throws Exception {
-        cdnArticleService
+        CdnArticle orgArticle = cdnArticleService
                 .findCdnArticleById(totalId)
                 .orElseThrow(() -> {
                     String message = msg("tps.common.error.no-data");
@@ -173,6 +173,9 @@ public class CdnArticleRestController extends AbstractCommonController {
                 });
         try {
             CdnArticle article = modelMapper.map(articleDto, CdnArticle.class);
+            article.setRegDt(orgArticle.getRegDt());
+            article.setRegId(orgArticle.getRegId());
+
             CdnArticle returnValue = cdnArticleService.saveCdnArticle(article);
 
             CdnArticleDTO dto = modelMapper.map(returnValue, CdnArticleDTO.class);
@@ -189,35 +192,60 @@ public class CdnArticleRestController extends AbstractCommonController {
     }
 
     /**
-     * 동일 기사아이디 존재 여부
+     * 캐쉬삭제
      *
      * @param totalId 기사키
-     * @return 중복여부
+     * @return 성공여부
      * @throws Exception 예외
      */
-    @ApiOperation(value = "동일 기사아이디 존재 여부")
-    @GetMapping("/{totalId}/exists")
-    public ResponseEntity<?> duplicateCheckId(
+    @ApiOperation(value = "캐쉬삭제")
+    @PutMapping("/{totalId}/clear-cache")
+    public ResponseEntity<?> putClearCacheCdnArticle(
             @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") @Min(value = 0, message = "{tps.cdn-article.error.min.totalId}") Long totalId)
             throws Exception {
 
+        cdnArticleService
+                .findCdnArticleById(totalId)
+                .orElseThrow(() -> {
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
         try {
+            cdnArticleService.clearCacheCdnArticle(totalId);
 
-            Optional<CdnArticle> existArticle = cdnArticleService.findCdnArticleById(totalId);
-            boolean duplicated = existArticle.isPresent() ? true : false;
-
-            String message = "";
-            if (duplicated) {
-                message = messageByLocale.get("tps.cdn-article.error.duplicate.totalId");
-            }
-
-            ResultDTO<Boolean> resultDTO = new ResultDTO<>(duplicated, message);
+            ResultDTO<Boolean> resultDTO = new ResultDTO<>(true, msg("tps.cdn-article.success.cache"));
             tpsLogger.success(ActionType.SELECT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
         } catch (Exception e) {
             log.error("[FAIL TO DUPLICATE CDN TOTALID] : reservedId {} {}", totalId, e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[FAIL TO DUPLICATE CDN TOTALID]", e, true);
-            throw new Exception(messageByLocale.get("tps.cdn-article.error.duplicate.totalId"));
+            throw new Exception(msg("tps.cdn-article.error.cache"));
         }
+    }
+
+    /**
+     * CDN기사 존재여부
+     *
+     * @param totalId 기사키
+     * @return 존재여부
+     * @throws NoDataException 기사없음
+     */
+    @ApiOperation(value = "CDN기사 존재여부")
+    @GetMapping("/{totalId}/exists")
+    public ResponseEntity<?> getArticleExists(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
+            throws NoDataException {
+
+        Optional<CdnArticle> article = cdnArticleService.findCdnArticleById(totalId);
+        boolean exists = article.isPresent() ? true : false;
+
+        String message = "";
+        if (exists) {
+            message = msg("tps.cdn-article.error.duplicated.totalId");
+        }
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
+        tpsLogger.success(ActionType.SELECT);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

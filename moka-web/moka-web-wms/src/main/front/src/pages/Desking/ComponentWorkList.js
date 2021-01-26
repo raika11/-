@@ -156,7 +156,7 @@ const ComponentWorkList = (props) => {
                 header={false}
                 width={363}
                 className={clsx('p-0 position-relative', { 'mr-gutter': area.areaAlign !== AREA_ALIGN_H, 'mr-1': area.areaAlign === AREA_ALIGN_H })}
-                bodyClassName="p-0 overflow-hidden"
+                bodyClassName="p-0 mt-0 overflow-hidden"
             >
                 <div className="d-flex justify-content-between p-2 border-bottom" style={{ height: 45 }}>
                     {isNaverChannel ? (

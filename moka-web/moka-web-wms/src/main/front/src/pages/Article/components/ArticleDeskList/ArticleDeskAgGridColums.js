@@ -58,6 +58,7 @@ export default [
     {
         headerName: '',
         width: 36,
+        field: 'groupNumber',
         // 편집 그룹 + 동영상(OVP/YOUTUBE/둘다)
         cellRenderer: 'GroupNumberRenderer',
         cellStyle: { width: '36px' },

@@ -1,13 +1,16 @@
 package jmnet.moka.core.tms.mvc.handler;
 
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.template.merge.MergeContext;
+import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
 import jmnet.moka.core.tms.merge.item.DomainItem;
+import jmnet.moka.core.tms.mvc.CdnRedirector;
 import jmnet.moka.core.tms.mvc.HttpParamFactory;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
@@ -36,6 +39,9 @@ public class ArticleHandler extends AbstractHandler {
 
     @Autowired
     private DomainResolver domainResolver;
+
+    @Autowired
+    private CdnRedirector cdnRedirector;
 
     @Autowired
     private MokaDomainTemplateMerger domainTemplateMerger;
@@ -71,17 +77,28 @@ public class ArticleHandler extends AbstractHandler {
         return null;
     }
 
-    public String merge(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String merge(HttpServletRequest request, HttpServletResponse response, Model model)
+            throws IOException {
         // 머지 옵션설정
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
-
-        // TODO 노출조건을 처리한다.
-        // DPS API에 노출조건 조회, 멤버십으로 로그인/성인여부 판단
+        String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
 
         // 도메인 정보를 설정한다.
         String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
         DomainItem domainItem = domainResolver.getDomainInfoById(domainId);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, domainItem);
+
+        // CDN Redirect조건 판단
+        String cdnRedirectUrl = this.cdnRedirector.getCdnUrl(domainItem.getString(ItemConstants.DOMAIN_SERVICE_PLATFORM),articleId);
+        if ( cdnRedirectUrl != null) {
+            response.sendRedirect(cdnRedirectUrl);
+            return null;
+        }
+
+        // TODO 노출조건을 처리한다.
+        // DPS API에 노출조건 조회, 멤버십으로 로그인/성인여부 판단
+
+
 
         // 예약어를 설정한다.
         ReservedMap reservedMap = domainResolver.getReservedMap(domainId);
@@ -93,7 +110,7 @@ public class ArticleHandler extends AbstractHandler {
         HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
 
-        String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
+
 
         // Http 헤더 설정
         mergeContext.set(MokaConstants.MERGE_CONTEXT_HEADER, HttpHelper.getHeaderMap(request));

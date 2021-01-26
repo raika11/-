@@ -18,10 +18,22 @@ export const initialState = {
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
+        { id: 'datasetSeq', name: '데이터셋ID' },
+        { id: 'datasetName', name: '데이터셋명' },
+    ],
+    autoCreateYnSearchTypeList: [
+        { id: 'all', name: '데이터 전체' },
+        { id: 'Y', name: '자동' },
+        { id: 'N', name: '수동' },
+    ],
+    apiSearchTypeList: [
+        { id: 'all', name: '전체' },
         { id: 'idLike', name: 'API명' },
         { id: 'description', name: 'API설명' },
     ],
-    dataset: {},
+    dataset: {
+        autoCreateYn: 'Y',
+    },
     datasetError: null,
     invalidList: [],
 };
@@ -71,7 +83,6 @@ export default handleActions(
                 draft.dataset = payload;
             });
         },
-
         /**
          * 스토어 데이터 초기화
          */
@@ -81,11 +92,6 @@ export default handleActions(
          */
         [act.GET_DATASET_SUCCESS]: (state, { payload: { body } }) => {
             return parseApiCoulnm(state, body);
-            /*return produce(state, (draft) => {
-                draft.dataset = body;
-                draft.datasetError = initialState.datasetError;
-                draft.invalidList = initialState.invalidList;
-            });*/
         },
         [act.GET_DATASET_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
@@ -94,7 +100,6 @@ export default handleActions(
                 draft.invalidList = payload.body;
             });
         },
-
         /**
          * 데이터셋 리스트 조회
          */

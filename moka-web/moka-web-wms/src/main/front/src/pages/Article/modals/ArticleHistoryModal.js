@@ -5,6 +5,7 @@ import { getArticleHistoryList, clearHistory, GET_ARTICLE_HISTORY_LIST } from '@
 import { getMasterCodeList } from '@store/code';
 import { unescapeHtml } from '@utils/convertUtil';
 import columnDefs from './ArticleHistoryModalColumns';
+import HistoryTitleRenderer from '@pages/Article/components/HistoryTitleRenderer';
 
 /**
  * 기사 작업정보 모달
@@ -50,7 +51,7 @@ const ArticleHistoryModal = (props) => {
                     .reduce((fullText, code) => {
                         if (masterCodeList) {
                             const result = masterCodeList.find((m) => m.masterCode === code);
-                            return fullText === '' ? `[${result.masterCode}]${result.contentKorname}` : `${fullText},[${result.masterCode}]${result.contentKorname}`;
+                            return fullText === '' ? `[${result.masterCode}]${result.contentKorname}` : `${fullText},\n[${result.masterCode}]${result.contentKorname}`;
                         } else {
                             return '';
                         }
@@ -58,7 +59,8 @@ const ArticleHistoryModal = (props) => {
 
                 return {
                     ...hist,
-                    title: `${unescapeHtml(hist.artTitle)}\n${unescapeHtml(hist.artSubTitle)}`,
+                    regData: `${hist.regDt}\n${hist.regId}`,
+                    title: `${unescapeHtml(hist.artTitle)}\n${hist.artSubTitle ? unescapeHtml(hist.artSubTitle) : ''}`,
                     masterCodeText,
                 };
             }),
@@ -66,8 +68,20 @@ const ArticleHistoryModal = (props) => {
     }, [historyList, masterCodeList]);
 
     return (
-        <MokaModal size="lg" width={900} height={650} show={show} onHide={handleHide} title="작업정보" bodyClassName="overflow-y-hidden h-100" centered>
-            <MokaTable headerHeight={50} loading={loading} rowData={rowData} columnDefs={columnDefs} onRowNodeId={(data) => data.seqNo} paging={false} className="h-100" />
+        <MokaModal size="xl" width={1200} height={650} show={show} onHide={handleHide} title="작업정보" bodyClassName="overflow-y-hidden h-100" centered>
+            <MokaTable
+                headerHeight={50}
+                rowHeight={127}
+                loading={loading}
+                rowData={rowData}
+                columnDefs={columnDefs}
+                onRowNodeId={(data) => data.seqNo}
+                paging={false}
+                className="h-100"
+                frameworkComponents={{
+                    titleRenderer: HistoryTitleRenderer,
+                }}
+            />
         </MokaModal>
     );
 };

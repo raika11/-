@@ -44,6 +44,29 @@ export const unescapeHtml = (str) => {
 };
 
 /**
+ * escape html special chars
+ * @param {string} str 문자열
+ */
+export const escapeHtml = (str) => {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+        '[': '&#91;',
+        ']': '&#93;',
+        '‘': '&#8216;',
+        '’': '&#8217;',
+        '%': '&#037;',
+        '·': '&middot;',
+    };
+    return str.replace(/[&<>"'\[\]‘’%·]/g, function (m) {
+        return map[m];
+    });
+};
+
+/**
  * invalidList to error object
  * @param {array} invalidList invalidList
  */

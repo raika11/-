@@ -4,7 +4,8 @@ import Button from 'react-bootstrap/Button';
 import utils from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import { API_BASE_URL } from '@/constants';
-import { useClickPreventionOnDoubleClick, MokaModal } from '@components';
+import { MokaModal } from '@components';
+import useClickPreventionOnDoubleClick from '@hooks/useClickPreventionOnDoubleClick';
 
 const ArticleViewBtn = forwardRef(({ data }, ref) => {
     const [previewOn, setPreviewOn] = useState(false);

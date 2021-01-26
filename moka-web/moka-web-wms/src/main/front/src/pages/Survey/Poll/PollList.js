@@ -9,9 +9,10 @@ import { initialState } from '@store/survey/poll/pollReducer';
 const PollList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { search, list, codes, total, loading } = useSelector((store) => ({
+    const { search, pollSeq, list, codes, total, loading } = useSelector((store) => ({
         search: store.poll.search,
         total: store.poll.total,
+        pollSeq: store.poll.poll.pollSeq,
         list: store.poll.list,
         codes: store.poll.codes,
         loading: store.loading[GET_POLL_LIST],
@@ -39,7 +40,7 @@ const PollList = () => {
     return (
         <>
             <PollSearch searchOptions={search} codes={codes} onAdd={handleClickAdd} onSearch={handleChangeSearchOption} onReset={handleClickReset} />
-            <PollAgGrid searchOptions={search} rows={list} total={total} loading={loading} onChangeSearchOption={handleChangeSearchOption} />
+            <PollAgGrid searchOptions={search} rows={list} total={total} loading={loading} pollSeq={pollSeq} onChangeSearchOption={handleChangeSearchOption} />
         </>
     );
 };

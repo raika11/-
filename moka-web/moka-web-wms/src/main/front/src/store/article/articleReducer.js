@@ -96,6 +96,7 @@ export const initialState = {
         list: [],
         search: {
             totalId: null,
+            sort: 'seqNo,desc',
         },
     },
     imageList: [],

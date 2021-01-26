@@ -23,7 +23,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ import org.springframework.core.io.Resource;
 public class FtpHelper {
 
     //private Map<String, FtpInfo> ftpInfoMap;
-    private SortedMap<String, GenericObjectPool<FTPClient>> ftpClientPoolMap;
+    private SortedMap<String, FtpClientPool> ftpClientPoolMap;
 
     @Autowired
     public StringEncryptor mokaEncryptor;
@@ -103,7 +102,7 @@ public class FtpHelper {
      * @param alias ftp 서버 별칭
      * @return GenericObjectPool
      */
-    public GenericObjectPool<FTPClient> getFtpSender(String alias) {
+    public FtpClientPool getFtpSender(String alias) {
         return ftpClientPoolMap.get(alias);
     }
 
@@ -126,7 +125,7 @@ public class FtpHelper {
         } catch (EncryptionOperationNotPossibleException ex) {
             log.error("FtpHelper error => exception : {}", ex.toString());
         }
-        ftpClientPoolMap.put(key, new GenericObjectPool<>(new FtpClientFactory(fi)));
+        ftpClientPoolMap.put(key, new FtpClientPool(new FtpClientFactory(fi)));
     }
 
     /**
@@ -300,7 +299,7 @@ public class FtpHelper {
      * @return 업로드 결과
      */
     public boolean upload(String key, String fileName, BufferedInputStream bufferedInputStream, String remotePath, boolean isTempSave) {
-        GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
+        FtpClientPool ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_PATH, "ftp setting information", key));
@@ -314,7 +313,6 @@ public class FtpHelper {
             int replyCode = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
                 log.warn("ftpServer refused connection, replyCode:{}", replyCode);
-                ftpClient.disconnect();
                 return false;
             }
             StringBuilder realSavePath = new StringBuilder(fi.getRemotePath());
@@ -384,7 +382,7 @@ public class FtpHelper {
      */
     public boolean download(String key, String remotePath, String fileName, String localPath) {
         FTPClient ftpClient = null;
-        GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
+        FtpClientPool ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_PATH, "ftp setting information", key));
@@ -451,7 +449,7 @@ public class FtpHelper {
      */
     public boolean delete(String key, String remotePath, String fileName) {
         FTPClient ftpClient = null;
-        GenericObjectPool<FTPClient> ftpClientPool = ftpClientPoolMap.get(key);
+        FtpClientPool ftpClientPool = ftpClientPoolMap.get(key);
         Optional
                 .ofNullable(ftpClientPool)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_PATH, "ftp setting information", key));

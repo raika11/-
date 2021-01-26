@@ -185,7 +185,7 @@ public class QuizRestController extends AbstractCommonController {
             QuizDetailDTO dto = modelMapper.map(returnValue, QuizDetailDTO.class);
             dto.setQuestions(modelMapper.map(newQuestions, QuestionDTO.TYPE));
 
-            StringBuilder resultMessage = new StringBuilder(msg("tps.quiz.success.save"));
+            StringBuilder resultMessage = new StringBuilder(msg("tps.common.success.insert"));
 
             if (fileUploadMessages.size() > 0) {
                 resultMessage.append(McpString.toCommaDelimitedString(fileUploadMessages.toArray(new String[0])));
@@ -275,6 +275,7 @@ public class QuizRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(infoMessage));
 
         try {
+            List<String> fileUploadMessages = saveUploadImage(quizDTO);
 
             QuizDetail newQuiz = modelMapper.map(quizDTO, QuizDetail.class);
             newQuiz.setQuizSeq(quizSeq);
@@ -288,10 +289,18 @@ public class QuizRestController extends AbstractCommonController {
 
             // 결과리턴
             QuizDetailDTO dto = modelMapper.map(returnValue, QuizDetailDTO.class);
-            ResultDTO<QuizDetailDTO> resultDto = new ResultDTO<>(dto, msg("tps.quiz.success.save"));
+
+            StringBuilder resultMessage = new StringBuilder(msg("tps.common.success.update"));
+
+            if (fileUploadMessages.size() > 0) {
+                resultMessage.append(McpString.toCommaDelimitedString(fileUploadMessages.toArray(new String[0])));
+            }
+
+            ResultDTO<QuizDetailDTO> resultDto = new ResultDTO<>(dto, resultMessage.toString());
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);
+
 
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
@@ -323,7 +332,7 @@ public class QuizRestController extends AbstractCommonController {
             quizService
                     .findQuizBySeq(quizSeq)
                     .orElseThrow(() -> new NoDataException(message));
-            
+
             // 문항부터 저장하고, 퀴즈 등록 트랜잭션 처리
             List<QuizRel> quizRels = modelMapper.map(quizRelDTOs, new TypeReference<List<QuizRel>>() {
             }.getType());

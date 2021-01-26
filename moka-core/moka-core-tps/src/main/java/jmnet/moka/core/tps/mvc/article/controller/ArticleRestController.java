@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -16,17 +15,15 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
-import jmnet.moka.core.tps.mvc.article.dto.ArticleHistoryDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
-import jmnet.moka.core.tps.mvc.article.dto.CdnUploadResultDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
-import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleHistoryVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -358,7 +355,8 @@ public class ArticleRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "히스토리 목록조회")
     @GetMapping("/{totalId}/histories")
-    ResponseEntity<?> getArticleHistoryList(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId, @Valid @SearchParam SearchDTO search)
+    ResponseEntity<?> getArticleHistoryList(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
+            @Valid @SearchParam ArticleHistorySearchDTO search)
             throws NoDataException {
 
         ArticleBasic articleBasic = articleService
@@ -370,56 +368,56 @@ public class ArticleRestController extends AbstractCommonController {
                 });
 
         // 조회
-        Page<ArticleHistory> returnValue = articleService.findAllArticleHistory(totalId, search);
-        List<ArticleHistoryDTO> dtoList = modelMapper.map(returnValue.getContent(), ArticleHistoryDTO.TYPE);
+        List<ArticleHistoryVO> returnValue = articleService.findAllArticleHistory(search);
+        //        List<ArticleHistoryDTO> dtoList = modelMapper.map(returnValue.getContent(), ArticleHistoryDTO.TYPE);
 
         // 리턴값 설정
-        ResultListDTO<ArticleHistoryDTO> resultListMessage = new ResultListDTO<>();
-        resultListMessage.setTotalCnt(returnValue.getTotalElements());
-        resultListMessage.setList(dtoList);
+        ResultListDTO<ArticleHistoryVO> resultListMessage = new ResultListDTO<>();
+        resultListMessage.setTotalCnt(search.getTotal());
+        resultListMessage.setList(returnValue);
 
-        ResultDTO<ResultListDTO<ArticleHistoryDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        ResultDTO<ResultListDTO<ArticleHistoryVO>> resultDto = new ResultDTO<>(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    /**
-     * CDN등록
-     *
-     * @param totalId 기사키
-     * @return 등록된 URL
-     * @throws NoDataException
-     */
-    @ApiOperation(value = "CDN 등록")
-    @GetMapping("/{totalId}/cdn")
-    ResponseEntity<?> postArticleCdn(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
-            throws Exception {
-
-        ArticleBasic articleBasic = articleService
-                .findArticleBasicById(totalId)
-                .orElseThrow(() -> {
-                    String message = msg("tps.common.error.no-data");
-                    tpsLogger.fail(message, true);
-                    return new NoDataException(message);
-                });
-
-        try {
-            CdnUploadResultDTO cdnResultDto = new CdnUploadResultDTO();
-
-            // cdn등록
-            boolean sendOk = articleService.insertCdn(totalId, cdnResultDto);
-            cdnResultDto.setSuccess(sendOk);
-            String message = sendOk ? msg("tps.articles.success.cdn") : msg("tps.articles.error.cdn");
-
-            ResultDTO<CdnUploadResultDTO> resultDto = new ResultDTO<>(cdnResultDto, message);
-            tpsLogger.success(ActionType.SELECT);
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("[FAIL CDN]", e);
-            tpsLogger.error(ActionType.SELECT, "[FAIL CDN]", e, true);
-            throw new Exception(msg("tps.articles.error.cdn"), e);
-        }
-    }
+    //    /**
+    //     * CDN등록
+    //     *
+    //     * @param totalId 기사키
+    //     * @return 등록된 URL
+    //     * @throws NoDataException
+    //     */
+    //    @ApiOperation(value = "CDN 등록")
+    //    @GetMapping("/{totalId}/cdn")
+    //    ResponseEntity<?> postArticleCdn(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
+    //            throws Exception {
+    //
+    //        ArticleBasic articleBasic = articleService
+    //                .findArticleBasicById(totalId)
+    //                .orElseThrow(() -> {
+    //                    String message = msg("tps.common.error.no-data");
+    //                    tpsLogger.fail(message, true);
+    //                    return new NoDataException(message);
+    //                });
+    //
+    //        try {
+    //            CdnUploadResultDTO cdnResultDto = new CdnUploadResultDTO();
+    //
+    //            // cdn등록
+    //            boolean sendOk = articleService.insertCdn(totalId, cdnResultDto);
+    //            cdnResultDto.setSuccess(sendOk);
+    //            String message = sendOk ? msg("tps.articles.success.cdn") : msg("tps.articles.error.cdn");
+    //
+    //            ResultDTO<CdnUploadResultDTO> resultDto = new ResultDTO<>(cdnResultDto, message);
+    //            tpsLogger.success(ActionType.SELECT);
+    //            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    //        } catch (Exception e) {
+    //            log.error("[FAIL CDN]", e);
+    //            tpsLogger.error(ActionType.SELECT, "[FAIL CDN]", e, true);
+    //            throw new Exception(msg("tps.articles.error.cdn"), e);
+    //        }
+    //    }
 
     @ApiOperation("기사수정")
     @PutMapping(value = "/{totalId}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)

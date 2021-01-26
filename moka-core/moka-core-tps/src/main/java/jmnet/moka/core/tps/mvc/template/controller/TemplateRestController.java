@@ -108,7 +108,7 @@ public class TemplateRestController extends AbstractCommonController {
         Template template = templateService
                 .findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(message, true);
                     return new NoDataException(message);
                 });
@@ -171,7 +171,7 @@ public class TemplateRestController extends AbstractCommonController {
             TemplateDTO returnValDTO = modelMapper.map(returnVal, TemplateDTO.class);
 
 
-            String message = messageByLocale.get("tps.common.success.insert");
+            String message = msg("tps.common.success.insert");
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO, message);
             tpsLogger.success(ActionType.INSERT, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -179,7 +179,7 @@ public class TemplateRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO INSERT TEMPLATE]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT TEMPLATE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.insert"), e);
+            throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
 
@@ -207,7 +207,7 @@ public class TemplateRestController extends AbstractCommonController {
         Template orgTemplate = templateService
                 .findTemplateBySeq(templateDTO.getTemplateSeq())
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.UPDATE, message, true);
                     return new NoDataException(message);
                 });
@@ -259,7 +259,7 @@ public class TemplateRestController extends AbstractCommonController {
             //                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
             //            }
 
-            String message = messageByLocale.get("tps.common.success.update");
+            String message = msg("tps.common.success.update");
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO, message);
 
             // purge 날림!!
@@ -282,7 +282,7 @@ public class TemplateRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE TEMPLATE] seq: {} {}", templateDTO.getTemplateSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE TEMPLATE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.update"), e);
+            throw new Exception(msg("tps.common.error.update"), e);
         }
     }
 
@@ -307,7 +307,7 @@ public class TemplateRestController extends AbstractCommonController {
         Template template = templateService
                 .findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.INSERT, message, true);
                     return new NoDataException(message);
                 });
@@ -338,7 +338,7 @@ public class TemplateRestController extends AbstractCommonController {
         Template template = templateService
                 .findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.DELETE, message, true);
                     return new NoDataException(message);
                 });
@@ -346,7 +346,7 @@ public class TemplateRestController extends AbstractCommonController {
         // 관련 데이터 확인
         Boolean hasRels = relationService.hasRelations(templateSeq, MokaConstants.ITEM_TEMPLATE);
         if (hasRels) {
-            String relMessage = messageByLocale.get("tps.common.error.delete.related");
+            String relMessage = msg("tps.common.error.delete.related");
             tpsLogger.fail(ActionType.DELETE, relMessage, true);
             throw new Exception(relMessage);
         }
@@ -361,7 +361,7 @@ public class TemplateRestController extends AbstractCommonController {
                 tpsLogger.success(ActionType.FILE_DELETE, true);
             }
 
-            String message = messageByLocale.get("tps.common.success.delete");
+            String message = msg("tps.common.success.delete");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
             tpsLogger.success(ActionType.DELETE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -369,7 +369,7 @@ public class TemplateRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO DELETE TEMPLATE] seq: {} {}", templateSeq, e.getMessage());
             tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE TEMPLATE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.delete"), e);
+            throw new Exception(msg("tps.common.error.delete"), e);
         }
     }
 
@@ -391,7 +391,7 @@ public class TemplateRestController extends AbstractCommonController {
         templateService
                 .findTemplateBySeq(templateSeq)
                 .orElseThrow(() -> {
-                    String message = messageByLocale.get("tps.common.error.no-data");
+                    String message = msg("tps.common.error.no-data");
                     tpsLogger.fail(ActionType.SELECT, message, true);
                     return new NoDataException(message);
                 });
@@ -401,7 +401,7 @@ public class TemplateRestController extends AbstractCommonController {
 
             String message = "";
             if (chkRels) {
-                message = messageByLocale.get("tps.common.success.has-relations");
+                message = msg("tps.common.success.has-relations");
             }
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(chkRels, message);
             tpsLogger.success(ActionType.SELECT, true);
@@ -410,7 +410,7 @@ public class TemplateRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[TEMPLATE RELATION EXISTENCE CHECK FAILED] seq: {} {}", templateSeq, e.getMessage());
             tpsLogger.error(ActionType.SELECT, "[TEMPLATE RELATION EXISTENCE CHECK FAILEDE]", e, true);
-            throw new Exception(messageByLocale.get("tps.common.error.has-relation"), e);
+            throw new Exception(msg("tps.common.error.has-relation"), e);
         }
     }
 
@@ -447,7 +447,7 @@ public class TemplateRestController extends AbstractCommonController {
             if (templateThumbnailFile != null && !templateThumbnailFile.isEmpty()) {
                 boolean isImage = ImageUtil.isImage(templateThumbnailFile);
                 if (!isImage) {
-                    String message = messageByLocale.get("tps.template.error.onlyimage.thumbnail");
+                    String message = msg("tps.template.error.onlyimage.thumbnail");
                     invalidList.add(new InvalidDataDTO("thumbnail", message));
                     tpsLogger.fail(actionType, message, true);
                 }
@@ -455,7 +455,7 @@ public class TemplateRestController extends AbstractCommonController {
         }
 
         if (invalidList.size() > 0) {
-            String validMessage = messageByLocale.get("tps.common.error.invalidContent");
+            String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
     }

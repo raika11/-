@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -9,9 +9,10 @@ import { changeSearchOption, getReservedList, GET_RESERVED_LIST } from '@store/r
 /**
  * 예약어 AgGrid 컴포넌트
  */
-const ReservedAgGrid = ({ match }) => {
+const ReservedAgGrid = ({ match, onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const [rowData, setRowData] = useState([]);
     const { total, list, search, reserved, loading } = useSelector((store) => ({
         total: store.reserved.total,
         list: store.reserved.list,
@@ -44,6 +45,15 @@ const ReservedAgGrid = ({ match }) => {
      */
     const handleAddClick = useCallback(() => history.push(`${match.path}/add`), [history, match.path]);
 
+    useEffect(() => {
+        setRowData(
+            list.map((data) => ({
+                ...data,
+                onDelete,
+            })),
+        );
+    }, [list, onDelete]);
+
     return (
         <>
             <div className="d-flex justify-content-end mb-2">
@@ -55,7 +65,7 @@ const ReservedAgGrid = ({ match }) => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
-                rowData={list}
+                rowData={rowData}
                 onRowNodeId={(reserved) => reserved.reservedSeq}
                 onRowClicked={handleRowClicked}
                 loading={loading}

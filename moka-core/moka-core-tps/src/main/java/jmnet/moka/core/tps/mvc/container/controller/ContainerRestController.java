@@ -323,7 +323,7 @@ public class ContainerRestController extends AbstractCommonController {
                 });
 
         try {
-            Boolean chkRels = relationService.hasRelations(containerSeq, MokaConstants.ITEM_TEMPLATE);
+            Boolean chkRels = relationService.hasRelations(containerSeq, MokaConstants.ITEM_CONTAINER);
             String message = "";
             if (chkRels) {
                 message = msg("tps.common.success.has-relations");
@@ -334,7 +334,7 @@ public class ContainerRestController extends AbstractCommonController {
 
         } catch (Exception e) {
             log.error("[CONTAINER RELATION EXISTENCE CHECK FAILED] seq: {} {}", containerSeq, e.getMessage());
-            tpsLogger.error(ActionType.DELETE, "[CONTAINER RELATION EXISTENCE CHECK FAILEDE]", e, true);
+            tpsLogger.error(ActionType.DELETE, "[CONTAINER RELATION EXISTENCE CHECK FAILED]", e, true);
             throw new Exception(msg("tps.common.error.has-relation"), e);
         }
     }

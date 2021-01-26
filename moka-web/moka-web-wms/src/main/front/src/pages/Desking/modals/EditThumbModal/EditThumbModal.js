@@ -63,9 +63,7 @@ const EditThumbModal = (props) => {
     /**
      * 카드의 대표사진 지정 버튼 클릭
      */
-    const handleRepClick = (data, e) => {
-        e.stopPropagation();
-
+    const handleRepClick = (data) => {
         if (repPhoto.id === data.id) {
             toast.warning('대표 이미지로 지정된 사진입니다.');
         }
@@ -180,7 +178,7 @@ const EditThumbModal = (props) => {
             height={820}
             size="xl"
             buttons={[
-                { text: '등록', variant: 'positive', onClick: handleClickSave },
+                { text: '적용', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             dialogClassName="fixed-modal"

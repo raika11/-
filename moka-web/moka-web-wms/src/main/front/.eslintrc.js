@@ -8,5 +8,6 @@ module.exports = {
         indent: 0,
         dangerouslySetInnerHTML: 0,
         'jsx-a11y/anchor-is-valid': 0,
+        'no-useless-escape': 0,
     },
 };

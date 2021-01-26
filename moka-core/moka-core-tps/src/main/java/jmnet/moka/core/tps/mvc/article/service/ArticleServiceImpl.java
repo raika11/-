@@ -8,16 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
+import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleTitleDTO;
-import jmnet.moka.core.tps.mvc.article.dto.CdnUploadResultDTO;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleHistory;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleTitle;
@@ -32,12 +31,12 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentRelVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleComponentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleContentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleHistoryVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -438,15 +437,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<ArticleHistory> findAllArticleHistory(Long totalId, SearchDTO search) {
-        return articleHistoryRepository.findByTotalIdOrderBySeqNo(totalId, search.getPageable());
+    public List<ArticleHistoryVO> findAllArticleHistory(ArticleHistorySearchDTO search) {
+        return articleMapper.upaArticleHistoryListSel(search);
+        //        return articleHistoryRepository.findByTotalIdOrderBySeqNoDesc(totalId, search.getPageable());
     }
 
-    @Override
-    public boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto) {
-
-        return false;
-    }
+    //    @Override
+    //    public boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto) {
+    //
+    //        return false;
+    //    }
 
     //    @Override
     //    public boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto)

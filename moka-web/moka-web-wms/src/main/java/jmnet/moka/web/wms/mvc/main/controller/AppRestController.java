@@ -11,7 +11,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.utils.MapBuilder;
@@ -24,8 +28,17 @@ import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
+import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
+import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
+import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkDTO;
+import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkGroupDTO;
+import jmnet.moka.core.tps.mvc.watermark.entity.Watermark;
+import jmnet.moka.core.tps.mvc.watermark.service.WatermarkService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -82,8 +95,8 @@ public class AppRestController {
     @Value("${photo.archive.url}")
     private String photoArchiveUrl;
 
-    @Value("${watermark.path}")
-    private String watermarkPath;
+    @Value("${tour.age}")
+    private String tourAge;
 
     @Autowired
     private TpsLogger tpsLogger;
@@ -93,6 +106,15 @@ public class AppRestController {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private ArticleSourceService articleSourceService;
+
+    @Autowired
+    private WatermarkService watermarkService;
 
     private final static String DEFAULT_SITE = "joongang";
 
@@ -116,7 +138,7 @@ public class AppRestController {
                 .add("IR_URL", irUrl)                                                // ir Url
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
                 .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
-                .add("WATERMARK_PATH", watermarkPath)                                // 워터마크 이미지 경로
+                .add("TOUR_AGE", tourAge)                                            // 견학인 나이대 설정
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
@@ -124,6 +146,15 @@ public class AppRestController {
         result.put("PHOTO_ARCHIVE_CODE", PhotoArchiveMenuCode.toList());
 
         result.put("TRENDPOLL_STAT_CODE", PollStatCode.toList());
+
+        // 워터마크 목록
+        result.put("WATERMARK_LIST", getWatermarkGroupList());
+
+        // 댓글 상태 구분
+        result.put("COMMENT_STATUS_CODE", CommentStatusType.toList());
+
+        // 댓글 정렬 구분
+        result.put("COMMENT_ORDER_CODE", CommentOrderType.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 
@@ -204,6 +235,39 @@ public class AppRestController {
 
             }
         }
+    }
+
+    private List<WatermarkGroupDTO> getWatermarkGroupList() {
+
+        List<WatermarkGroupDTO> watermarkGroups = new ArrayList<>();
+
+        List<Watermark> watermarks = watermarkService.findAllWatermark();
+
+        if (watermarks != null) {
+            Set<String> sourceSet = watermarks
+                    .stream()
+                    .map(watermark -> watermark.getSourceCode())
+                    .collect(Collectors.toSet());
+
+            List<ArticleSource> articleSources = articleSourceService.findAllArticleSourceByDesking(sourceSet.toArray(new String[0]));
+
+            articleSources.forEach(articleSource -> {
+
+                watermarkGroups.add(WatermarkGroupDTO
+                        .builder()
+                        .sourceName(articleSource.getSourceName())
+                        .images(modelMapper.map(watermarks
+                                .stream()
+                                .filter(watermark -> articleSource
+                                        .getSourceCode()
+                                        .equals(watermark.getSourceCode()))
+                                .collect(Collectors.toList()), WatermarkDTO.TYPE))
+                        .build());
+            });
+        }
+
+        return watermarkGroups;
+
     }
 
 }

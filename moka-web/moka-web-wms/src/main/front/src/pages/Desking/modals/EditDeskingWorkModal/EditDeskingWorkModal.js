@@ -126,9 +126,7 @@ const EditDeskingWorkModal = (props) => {
      * 대표 이미지 thumbName
      */
     const handleThumbFileName = (data) => {
-        if (data) {
-            setTemp({ ...temp, thumbFileName: data, irImg: data });
-        }
+        setTemp({ ...temp, thumbFileName: data, irImg: data });
     };
 
     useEffect(() => {

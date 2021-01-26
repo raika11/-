@@ -18,5 +18,5 @@ public interface ArticleHistoryRepository extends JpaRepository<ArticleHistory, 
      * @param pageable 페이징
      * @return 히스토리목록
      */
-    Page<ArticleHistory> findByTotalIdOrderBySeqNo(Long totalId, Pageable pageable);
+    Page<ArticleHistory> findByTotalIdOrderBySeqNoDesc(Long totalId, Pageable pageable);
 }

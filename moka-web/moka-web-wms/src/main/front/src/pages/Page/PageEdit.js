@@ -1,59 +1,43 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
-import { previewPage, w3cPage } from '@store/merge';
-import { initialState, getPage, changePage, savePage, changeInvalidList, clearPage } from '@store/page';
-import toast from '@utils/toastUtil';
+import { previewPage, w3cPage, PREVIEW_PAGE, W3C_PAGE } from '@store/merge';
+import { initialState, changePage, savePage, GET_PAGE, DELETE_PAGE, SAVE_PAGE, changeInvalidList } from '@store/page';
+import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 import { PageListModal } from '@pages/Page/modals';
 
+/**
+ * 페이지 정보
+ */
 const PageEdit = ({ onDelete }) => {
-    const { pageSeq: paramPageSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const loading = useSelector(
-        ({ loading }) =>
-            loading['page/GET_PAGE'] ||
-            loading['page/POST_PAGE'] ||
-            loading['page/PUT_PAGE'] ||
-            loading['page/DELETE_PAGE'] ||
-            loading['merge/PREVIEW_PAGE'] ||
-            loading['merge/W3C_PAGE'],
-    );
+    const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[PREVIEW_PAGE] || loading[W3C_PAGE]);
     const { PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(({ app }) => ({
         PAGE_TYPE_HTML: app.PAGE_TYPE_HTML,
         EXCLUDE_PAGE_SERVICE_NAME_LIST: app.EXCLUDE_PAGE_SERVICE_NAME_LIST,
     }));
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const { page, pageBody, pageTypeRows, invalidList } = useSelector(
-        (store) => ({
-            page: store.page.page,
-            pageBody: store.page.pageBody,
-            pageTypeRows: store.codeMgt.pageTypeRows,
-            invalidList: store.page.invalidList,
-        }),
-        [shallowEqual],
-    );
+    const pageTypeRows = useSelector(({ codeMgt }) => codeMgt.pageTypeRows);
+    const { page, pageBody, invalidList } = useSelector(({ page }) => ({
+        page: page.page,
+        pageBody: page.pageBody,
+        invalidList: page.invalidList,
+    }));
 
     // state
     const [temp, setTemp] = useState(initialState.page);
-    const [error, setError] = useState({
-        pageName: false,
-        pageServiceName: false,
-        pageDisplayName: false,
-        pageType: false,
-        pageOrd: false,
-        moveUrl: false,
-    });
+    const [error, setError] = useState({});
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [moveModalShow, setMoveModalShow] = useState(false);
 
@@ -79,7 +63,7 @@ const PageEdit = ({ onDelete }) => {
     );
 
     /**
-     * 각 항목별 값 변경
+     * 입력값 변경
      */
     const handleChangeValue = useCallback(
         ({ target }) => {
@@ -87,11 +71,6 @@ const PageEdit = ({ onDelete }) => {
 
             if (name === 'usedYn') {
                 setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
-            } else if (name === 'pageName') {
-                setTemp({ ...temp, pageName: value });
-                if (REQUIRED_REGEX.test(value)) {
-                    setError({ ...error, pageName: false });
-                }
             } else if (name === 'pageServiceName') {
                 const url = makePageUrl(name, value);
                 setTemp({
@@ -99,24 +78,11 @@ const PageEdit = ({ onDelete }) => {
                     pageUrl: url,
                     pageServiceName: value,
                 });
-            } else if (name === 'pageType') {
-                setTemp({ ...temp, pageType: value });
-            } else if (name === 'pageDisplayName') {
-                setTemp({ ...temp, pageDisplayName: value });
-            } else if (name === 'pageOrd') {
-                setTemp({ ...temp, pageOrd: value });
-
-                if (/^[\d]+$/.test(value)) {
-                    setError({ ...error, pageOrd: false });
-                }
+                setError({ ...error, pageServiceName: false });
             } else if (name === 'moveYn') {
                 setTemp({ ...temp, moveYn: checked ? 'Y' : 'N' });
             } else if (name === 'fileYn') {
                 setTemp({ ...temp, fileYn: checked ? 'Y' : 'N' });
-            } else if (name === 'kwd') {
-                setTemp({ ...temp, kwd: value });
-            } else if (name === 'description') {
-                setTemp({ ...temp, description: value });
             } else if (name === 'urlParam') {
                 const url = makePageUrl(name, value);
                 setTemp({
@@ -124,8 +90,10 @@ const PageEdit = ({ onDelete }) => {
                     pageUrl: url,
                     urlParam: value,
                 });
-            } else if (name === 'category') {
-                setTemp({ ...temp, category: value });
+                setError({ ...error, urlParam: false });
+            } else {
+                setTemp({ ...temp, [name]: value });
+                setError({ ...error, [name]: false });
             }
         },
         [error, makePageUrl, temp],
@@ -157,22 +125,18 @@ const PageEdit = ({ onDelete }) => {
                     reason: '서비스명을 입력하세요.',
                 });
                 isInvalid = isInvalid | true;
-            }
-
-            // 서비스명 문자체크
-            if (!bRoot && !/[a-zA-Z0-9_-]*$/.test(page.pageServiceName)) {
+            } else if (!bRoot && !/^[a-zA-Z0-9_-]+$/.test(page.pageServiceName)) {
+                // 서비스명 문자체크
                 errList.push({
                     field: 'pageServiceName',
-                    reason: '서비스명에 가능한 문자는 [영문,숫자,_,-]입니다',
+                    reason: '영문, 숫자, _, -만 입력할 수 있습니다',
                 });
                 isInvalid = isInvalid | true;
-            }
-
-            // 서비스명 불가 문자체크
-            if (!bRoot && EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
+            } else if (!bRoot && EXCLUDE_PAGE_SERVICE_NAME_LIST.includes(page.pageServiceName)) {
+                // 서비스명 불가 문자체크
                 errList.push({
                     field: 'pageServiceName',
-                    reason: '등록할 수 없는 서비스명입니다',
+                    reason: '서비스명으로 등록할 수 없는 문자열입니다',
                 });
                 isInvalid = isInvalid | true;
             }
@@ -184,10 +148,8 @@ const PageEdit = ({ onDelete }) => {
                     reason: '페이지순서를 입력하세요',
                 });
                 isInvalid = isInvalid | true;
-            }
-
-            // 페이지순서 체크
-            if (!/^[\d]+$/.test(page.pageOrd)) {
+            } else if (!/^[\d]+$/.test(page.pageOrd)) {
+                // 페이지순서 체크
                 errList.push({
                     field: 'pageOrd',
                     reason: '페이지순서를 숫자로 입력하세요',
@@ -195,7 +157,7 @@ const PageEdit = ({ onDelete }) => {
                 isInvalid = isInvalid | true;
             }
 
-            // 페이지순서 체크
+            // 이동URL 체크
             if (page.moveYn === 'Y' && !REQUIRED_REGEX.test(page.moveUrl)) {
                 errList.push({
                     field: 'moveUrl',
@@ -205,16 +167,12 @@ const PageEdit = ({ onDelete }) => {
             }
 
             // 경로파라미터 문자체크
-            if (!bRoot && !/[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
+            if (!bRoot && !/^[a-zA-Z0-9_-]*$/.test(page.urlParam)) {
                 errList.push({
                     field: 'urlParam',
-                    reason: '경로파라미터명에 가능한 문자는 [영문,숫자,_,-]입니다',
+                    reason: '영문, 숫자, _, -만 입력할 수 있습니다',
                 });
                 isInvalid = isInvalid | true;
-            }
-
-            if (isInvalid) {
-                console.error(errList);
             }
 
             dispatch(changeInvalidList(errList));
@@ -224,7 +182,7 @@ const PageEdit = ({ onDelete }) => {
     );
 
     /**
-     * 페이지 등록
+     * 페이지 저장
      * @param {object} tmp 페이지
      */
     const submitPage = useCallback(
@@ -237,7 +195,14 @@ const PageEdit = ({ onDelete }) => {
                             toast.success(header.message);
                             history.push(`/page/${body.pageSeq}`);
                         } else {
-                            toast.fail(header.message);
+                            if (body?.list) {
+                                const bodyChk = body.list.filter((e) => e.field === 'pageBody');
+                                if (bodyChk.length > 0) {
+                                    messageBox.alert('Tems 문법 사용이 비정상적으로 사용되었습니다\n수정 확인후 다시 저장해 주세요', () => {});
+                                    return;
+                                }
+                            }
+                            messageBox.alert(header.message);
                         }
                     },
                 }),
@@ -247,7 +212,7 @@ const PageEdit = ({ onDelete }) => {
     );
 
     /**
-     * 저장 이벤트
+     * 저장 클릭
      * @param {object} e 이벤트
      */
     const handleClickSave = (e) => {
@@ -330,29 +295,11 @@ const PageEdit = ({ onDelete }) => {
 
     useEffect(() => {
         if (!pageTypeRows) dispatch(getPageType());
-
-        // url로 다이렉트로 페이지 조회하는 경우
-        if (paramPageSeq && paramPageSeq !== page.pageSeq) {
-            const option = {
-                pageSeq: paramPageSeq,
-                callback: (result) => {
-                    if (!result.header.success) {
-                        history.push(`/page`);
-                    }
-                },
-            };
-            dispatch(getPage(option));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageTypeRows]);
+    }, [dispatch, pageTypeRows]);
 
     useEffect(() => {
-        if (paramPageSeq) {
-            setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-    }, [dispatch, paramPageSeq]);
+        page.pageSeq ? setBtnDisabled(false) : setBtnDisabled(true);
+    }, [page.pageSeq]);
 
     useEffect(() => {
         setTemp({
@@ -371,13 +318,6 @@ const PageEdit = ({ onDelete }) => {
     useEffect(() => {
         setError(invalidListToError(invalidList));
     }, [invalidList]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(clearPage());
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${page.pageSeq ? '정보' : '등록'}`} loading={loading}>
@@ -405,7 +345,7 @@ const PageEdit = ({ onDelete }) => {
                 <Form.Row className="mb-2">
                     {/* 페이지 ID */}
                     <Col xs={6} className="px-0">
-                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={paramPageSeq} inputProps={{ plaintext: true, readOnly: true }} />
+                        <MokaInputLabel label="페이지 ID" className="mb-0" placeholder="ID" value={page.pageSeq} inputProps={{ plaintext: true, readOnly: true }} />
                     </Col>
                     {/* 사용여부 */}
                     <Col xs={6} className="px-0">
@@ -449,6 +389,7 @@ const PageEdit = ({ onDelete }) => {
                         placeholder="서비스명을 입력하세요"
                         required
                         isInvalid={error.pageServiceName}
+                        invalidMessage={error.pageServiceNameMessage}
                         disabled={!btnDisabled || (temp.parent && temp.parent.pageSeq === null)}
                     />
                 </Form.Row>
@@ -462,10 +403,20 @@ const PageEdit = ({ onDelete }) => {
                             onChange={handleChangeValue}
                             placeholder="표출명을 입력하세요"
                             isInvalid={error.pageDisplayName}
+                            invalidMessage={error.pageDisplayNameMessage}
                         />
                     </Col>
-                    <Col xs={4} className="px-0 pl-2">
-                        <MokaInputLabel label="순서" labelWidth={27} value={temp.pageOrd} name="pageOrd" onChange={handleChangeValue} required isInvalid={error.pageOrd} />
+                    <Col xs={4} className="px-0 pl-20">
+                        <MokaInputLabel
+                            label="순서"
+                            labelWidth={27}
+                            value={temp.pageOrd}
+                            name="pageOrd"
+                            onChange={handleChangeValue}
+                            type="number"
+                            isInvalid={error.pageOrd}
+                            required
+                        />
                     </Col>
                 </Form.Row>
                 {/* 이동URL */}
@@ -485,7 +436,7 @@ const PageEdit = ({ onDelete }) => {
                         <MokaSearchInput
                             className="pl-2"
                             value={temp.moveUrl}
-                            placeholder="이동할 페이지를 선택하세요"
+                            placeholder="이동 페이지 선택"
                             onSearch={() => setMoveModalShow(true)}
                             inputProps={{ readOnly: true }}
                             disabled={temp.moveYn === 'N'}
@@ -530,6 +481,7 @@ const PageEdit = ({ onDelete }) => {
                     onChange={handleChangeValue}
                     placeholder="파라미터명을 입력하세요"
                     isInvalid={error.urlParam}
+                    invalidMessage={error.urlParamMessage}
                 />
                 {/* 카테고리 */}
                 <MokaInputLabel

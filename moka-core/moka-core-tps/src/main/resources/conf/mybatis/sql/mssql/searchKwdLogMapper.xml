@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2020. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.search.mapper.SearchKwdLogMapper">
+
+  <!-- FACEBOOK&TWITTER 리스트 -->
+  <select id="findAll" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdLogVO"
+    statementType="CALLABLE">
+    {call UPA_SEARCH_KWD_LOG_STAT_SEL(
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
+    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+  <!-- facebook instance article 등록 -->
+  <select id="findAllDetailStat" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdLogVO"
+    statementType="CALLABLE">
+    {call UPA_SEARCH_KWD_LOG_DETAIL_STAT_SEL(
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
+    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{statType, mode=IN, jdbcType=VARCHAR, javaType=string}
+    ) }
+  </select>
+
+
+</mapper>

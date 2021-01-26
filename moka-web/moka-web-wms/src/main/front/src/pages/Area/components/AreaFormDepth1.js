@@ -1,28 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-
 import toast, { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
-import { saveArea, GET_AREA_DEPTH1, DELETE_AREA, SAVE_AREA } from '@store/area';
+import { saveArea, DELETE_AREA, SAVE_AREA } from '@store/area';
 
-const AreaFormDepth1 = ({ onDelete, match }) => {
+/**
+ * 편집영역 1뎁스 등록/수정
+ */
+const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const { area, areaListDepth2 } = useSelector((store) => ({
-        area: store.area.depth1.area,
-        areaListDepth2: store.area.depth2.list,
-    }));
-    const domainList = useSelector((store) => store.auth.domainList);
-    const loading = useSelector((store) => store.loading[GET_AREA_DEPTH1] || store.loading[DELETE_AREA] || store.loading[SAVE_AREA]);
-
-    // state
+    const domainList = useSelector(({ auth }) => auth.domainList);
+    const loading = useSelector(({ loading }) => loading[DELETE_AREA] || loading[SAVE_AREA]);
     const [temp, setTemp] = useState({});
     const [domain, setDomain] = useState({});
+    const [error, setError] = useState({});
 
     /**
      * input 값 변경
@@ -30,18 +23,20 @@ const AreaFormDepth1 = ({ onDelete, match }) => {
      */
     const handleChangeValue = (e) => {
         const { name, value, checked } = e.target;
-
         if (name === 'usedYn') {
-            if (checked) setTemp({ ...temp, usedYn: 'Y' });
-            else setTemp({ ...temp, usedYn: 'N' });
+            setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
         } else if (name === 'areaNm') {
             setTemp({ ...temp, areaNm: value });
         } else if (name === 'domainId') {
-            setDomain({
-                domainId: e.target.value,
-            });
+            setDomain({ domainId: e.target.value });
+            setError({ domainId: false });
         }
     };
+
+    /**
+     * 리스트 재로드
+     */
+    const reloadList = () => setFlag({ ...flag, depth1: new Date().getTime() });
 
     /**
      * 저장
@@ -58,7 +53,7 @@ const AreaFormDepth1 = ({ onDelete, match }) => {
                 callback: ({ header, body }) => {
                     if (header.success) {
                         toast.success(header.message);
-                        history.push(`${match.path}/${body.areaSeq}`);
+                        reloadList();
                     } else {
                         toast.fail(header.message);
                     }
@@ -80,7 +75,12 @@ const AreaFormDepth1 = ({ onDelete, match }) => {
             domain,
         };
 
-        if (areaListDepth2.length > 0 && save.usedYn === 'N') {
+        if (!domain?.domainId) {
+            setError({ domainId: true });
+            return;
+        }
+
+        if (child.length > 0 && save.usedYn === 'N') {
             messageBox.confirm(
                 '하위 뎁스 메뉴도 편집 영역에 노출되지 않습니다.\n사용여부를 off 하시겠습니까?',
                 () => handleSave(save),
@@ -92,19 +92,38 @@ const AreaFormDepth1 = ({ onDelete, match }) => {
     };
 
     /**
-     * 삭제 버튼
+     * 삭제
      */
-    const handleClickDelete = () => {
-        onDelete(temp);
-    };
+    const handleClickDelete = () => onDelete(temp, 1);
 
     useEffect(() => {
-        setTemp(area);
-        setDomain(area.domain);
+        const target = area?.area || {};
+        setTemp(target);
+        setDomain(target.domain || {});
     }, [area]);
 
     return (
-        <MokaCard title={`편집영역 ${area.areaSeq ? '정보' : '등록'}`} className="flex-fill" loading={loading}>
+        <MokaCard
+            title={`편집영역 ${temp.areaSeq ? '정보' : '등록'}`}
+            className="flex-fill"
+            loading={loading}
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={[
+                {
+                    text: '저장',
+                    variant: 'positive',
+                    className: 'mr-2',
+                    onClick: handleClickSave,
+                },
+                {
+                    text: '삭제',
+                    variant: 'negative',
+                    onClick: handleClickDelete,
+                    disabled: !temp.areaSeq,
+                },
+            ]}
+        >
             <div className="d-flex justify-content-center">
                 <Col xs={10} className="p-0">
                     {/* 사용여부 */}
@@ -147,6 +166,8 @@ const AreaFormDepth1 = ({ onDelete, match }) => {
                         value={domain.domainId}
                         onChange={handleChangeValue}
                         disabled={temp.areaSeq ? true : false}
+                        isInvalid={error.domainId}
+                        required
                     >
                         <option hidden>도메인을 선택하세요</option>
                         {domainList.map((d) => (
@@ -155,16 +176,6 @@ const AreaFormDepth1 = ({ onDelete, match }) => {
                             </option>
                         ))}
                     </MokaInputLabel>
-
-                    {/* 버튼 그룹 */}
-                    <Card.Footer className="d-flex justify-content-center">
-                        <Button className="mr-10" variant="positive" onClick={handleClickSave}>
-                            저장
-                        </Button>
-                        <Button variant="negative" onClick={handleClickDelete} disabled={!temp.areaSeq}>
-                            삭제
-                        </Button>
-                    </Card.Footer>
                 </Col>
             </div>
         </MokaCard>

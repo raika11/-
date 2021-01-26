@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { MokaModal, MokaInputLabel } from '@components';
 import { clearCd } from '@store/codeMgt';
+import { messageBox } from '@utils/toastUtil';
 
 const propTypes = {
     show: PropTypes.bool.isRequired,
@@ -28,7 +29,7 @@ const defaultProps = {
 };
 
 /**
- * 기타코드 편집 모달 컴포넌트
+ * 기타코드 편집 모달
  */
 const CodeMgtEditModal = (props) => {
     const { show, onHide, type, onSave, onDelete, match } = props;
@@ -51,7 +52,6 @@ const CodeMgtEditModal = (props) => {
         cdNmEtc2: '',
         cdNmEtc3: '',
     });
-
     const [grpCdError, setGrpCdError] = useState(false);
     const [cdNmError, setCdNmError] = useState(false);
     const [cdOrdError, setCdOrdError] = useState(false);
@@ -64,30 +64,14 @@ const CodeMgtEditModal = (props) => {
     }, [cd]);
 
     /**
-     * modal의 항목 값 변경
+     * input value
      */
     const handleChangeValue = ({ target }) => {
         const { name, value, checked } = target;
-
-        if (name === 'dtlCd') {
-            setStateObj({ ...stateObj, dtlCd: value });
-        } else if (name === 'cdNm') {
-            setStateObj({ ...stateObj, cdNm: value });
-        } else if (name === 'cdEngNm') {
-            setStateObj({ ...stateObj, cdEngNm: value });
-        } else if (name === 'cdOrd') {
-            setStateObj({ ...stateObj, cdOrd: value });
-        } else if (name === 'usedYn') {
-            const usedVal = checked ? 'Y' : 'N';
-            setStateObj({ ...stateObj, usedYn: usedVal });
-        } else if (name === 'cdComment') {
-            setStateObj({ ...stateObj, cdComment: value });
-        } else if (name === 'cdNmEtc1') {
-            setStateObj({ ...stateObj, cdNmEtc1: value });
-        } else if (name === 'cdNmEtc2') {
-            setStateObj({ ...stateObj, cdNmEtc2: value });
-        } else if (name === 'cdNmEtc3') {
-            setStateObj({ ...stateObj, cdNmEtc3: value });
+        if (name === 'usedYn') {
+            setStateObj({ ...stateObj, usedYn: checked ? 'Y' : 'N' });
+        } else {
+            setStateObj({ ...stateObj, [name]: value });
         }
     };
 
@@ -98,7 +82,7 @@ const CodeMgtEditModal = (props) => {
     const validate = (obj) => {
         let totErr = [];
 
-        if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.grpCd)) {
+        if (!obj.grpCd || !/^[A-Za-z0-9_-`/]+$/g.test(obj.grpCd)) {
             let err = {
                 field: 'grpCd',
                 reason: '그룹 아이디를 확인해주세요',
@@ -106,10 +90,10 @@ const CodeMgtEditModal = (props) => {
             totErr.push(err);
             setGrpCdError(true);
         }
-        if (!/[^\s\t\n]+/g.test(obj.cdNm)) {
+        if (!obj.cdNm || !/[^\s\t\n]+/g.test(obj.cdNm)) {
             let err = {
                 field: 'cdNm',
-                reason: '그룹명을 확인해주세요',
+                reason: '코드명을 확인해주세요',
             };
             totErr.push(err);
             setCdNmError(true);
@@ -160,6 +144,13 @@ const CodeMgtEditModal = (props) => {
         }
     }, [grpCd, history, match.path, onDelete, onHide, stateObj]);
 
+    /**
+     * 취소
+     */
+    const handleClickCancel = () => {
+        onHide();
+    };
+
     return (
         <>
             {type === 'add' && (
@@ -175,9 +166,14 @@ const CodeMgtEditModal = (props) => {
                     title="코드 등록"
                     buttons={[
                         {
-                            text: '등록',
+                            text: '저장',
                             variant: 'positive',
                             onClick: handleClickSave,
+                        },
+                        {
+                            text: '취소',
+                            variant: 'negative',
+                            onClick: handleClickCancel,
                         },
                     ]}
                     footerClassName="justify-content-center"
@@ -226,6 +222,11 @@ const CodeMgtEditModal = (props) => {
                             text: '삭제',
                             variant: 'negative',
                             onClick: handleClickDelete,
+                        },
+                        {
+                            text: '취소',
+                            variant: 'negative',
+                            onClick: handleClickCancel,
                         },
                     ]}
                     footerClassName="justify-content-center"

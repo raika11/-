@@ -155,6 +155,7 @@ const DetailRelationForm = (props) => {
                                     icon={<MokaIcon iconName="fal-search" />}
                                     // 아이콘 클릭했을 때 데이터셋 팝업 열고, 데이터셋 선택하면 화면에 보여줌
                                     onIconClick={() => setDatasetModalShow(true)}
+                                    isInvalid={error.dataset}
                                 />
                             )}
                             {component.dataType === 'FORM' && (
@@ -225,7 +226,12 @@ const DetailRelationForm = (props) => {
             <DatasetListModal
                 show={datasetModalShow}
                 onHide={() => setDatasetModalShow(false)}
-                onClickSave={(dataset) => setComponent({ ...component, dataset })}
+                onClickSave={(dataset) => {
+                    setComponent({ ...component, dataset });
+                    if (dataset.datasetSeq) {
+                        setError({ ...error, dataset: false });
+                    }
+                }}
                 selected={dataset.datasetSeq}
                 exclude={component.prevDeskDataset ? component.prevDeskDataset.datasetSeq : undefined}
             />

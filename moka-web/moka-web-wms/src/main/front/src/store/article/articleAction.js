@@ -39,6 +39,8 @@ export const clearHistory = createAction(CLEAR_HISTORY);
  */
 export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST');
 export const getArticleList = createAction(GET_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
+export const [GET_ARTICLE_LIST_MODAL, GET_ARTICLE_LIST_MODAL_SUCCESS, GET_ARTICLE_LIST_MODAL_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST_MODAL');
+export const getArticleListModal = createAction(GET_ARTICLE_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 
 /**
  * 등록기사 단건 조회

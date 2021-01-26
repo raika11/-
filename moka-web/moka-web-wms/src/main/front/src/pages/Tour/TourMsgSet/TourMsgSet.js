@@ -6,15 +6,14 @@ const MessageSettings = () => {
     return (
         <>
             <Helmet>
-                <title>견학 메세지 설정</title>
-                <meta name="description" content="견학 메세지 설정 페이지입니다." />
+                <title>견학 메시지 설정</title>
+                <meta name="description" content="견학 메시지 설정 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             <MokaCard
                 width={772}
-                title="견학 메세지 설정"
-                titleClassName="mb-0"
+                title="견학 메시지 설정"
                 footer
                 footerButtons={[
                     { text: '저장', variant: 'positive', className: 'mr-2' },
@@ -24,6 +23,7 @@ const MessageSettings = () => {
             >
                 <MokaInputLabel
                     label="견학 신청/안내\n'신청 방법'"
+                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -35,6 +35,7 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\'견학 신청'"
+                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -46,6 +47,7 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\n'견학 시 유의사항'"
+                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -57,6 +59,7 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\n'관람 및 주차 안내'"
+                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -68,6 +71,7 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="질의응답\n'자주하는 질문'"
+                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"

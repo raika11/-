@@ -22,7 +22,6 @@ const ComponentEdit = ({ onDelete, match }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-
     const loading = useSelector((store) => store.loading[GET_COMPONENT] || store.loading[SAVE_COMPONENT] || store.loading[DELETE_COMPONENT]);
     const latestDomainId = useSelector((store) => store.auth.latestDomainId);
     const { MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector((store) => ({
@@ -69,6 +68,14 @@ const ComponentEdit = ({ onDelete, match }) => {
         if (!temp.template?.templateSeq) {
             errList.push({
                 field: 'template',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+        // 데이터셋 체크 (자동일 때)
+        if (temp.dataType === 'AUTO' && !temp.dataset?.datasetSeq) {
+            errList.push({
+                field: 'dataset',
                 reason: '',
             });
             isInvalid = isInvalid || true;
@@ -181,9 +188,7 @@ const ComponentEdit = ({ onDelete, match }) => {
     /**
      * 취소
      */
-    const handleClickCancle = () => {
-        history.push(match.path);
-    };
+    const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
         // 스토어에서 가져온 컴포넌트 데이터 셋팅
@@ -217,9 +222,7 @@ const ComponentEdit = ({ onDelete, match }) => {
     }, [dispatch, componentSeq]);
 
     useEffect(() => {
-        if (invalidList) {
-            setError(invalidListToError(invalidList));
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     useEffect(() => {

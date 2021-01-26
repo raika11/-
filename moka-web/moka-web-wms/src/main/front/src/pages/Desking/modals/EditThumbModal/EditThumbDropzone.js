@@ -55,13 +55,18 @@ const EditThumbDropzone = (props) => {
                         }),
                     );
                 }
+                onRepClick(item);
             } else {
                 let imageFiles = [];
                 item.files.forEach((f, idx) => {
                     if (ACCEPTED_IMAGE_TYPES.includes(f.type)) {
                         const id = moment().format('YYYYMMDDsss') + `_${idx}`;
                         const preview = URL.createObjectURL(f);
-                        imageFiles.push({ id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: preview });
+                        const imageData = { id: id, File: f, preview, dataType: 'local', thumbPath: preview, imageOnlnPath: preview };
+                        imageFiles.push(imageData);
+                        if (idx === item.files.length - 1) {
+                            onRepClick(imageData);
+                        }
                     } else {
                         // 이미지 파일이 아닌경우
                         toast.warning('이미지 파일만 등록할 수 있습니다.');

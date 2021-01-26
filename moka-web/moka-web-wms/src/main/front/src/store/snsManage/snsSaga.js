@@ -239,8 +239,9 @@ function* publishSnsMeta({ type, payload }) {
 
 function toMetaImage(metaImageUrl) {
     let toMetaImageUrl = metaImageUrl;
+
     if (toMetaImageUrl.indexOf(IR_URL) < 0) {
-        if (toMetaImageUrl.indexOf(PDS_URL) < 0) {
+        if (toMetaImageUrl.indexOf('https://') < 0 && toMetaImageUrl.indexOf('http://') < 0) {
             toMetaImageUrl = PDS_URL + toMetaImageUrl;
         }
 
@@ -249,6 +250,7 @@ function toMetaImage(metaImageUrl) {
         }
     }
 
+    console.log(toMetaImageUrl);
     return toMetaImageUrl;
 }
 

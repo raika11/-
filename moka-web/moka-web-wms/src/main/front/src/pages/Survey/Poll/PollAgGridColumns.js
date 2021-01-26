@@ -59,7 +59,7 @@ export const columnDefs = [
                 <div className="w-100 h-100 d-flex align-items-center justify-content-center">
                     <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
                         <Button variant="white" className="border-0 p-0 bg-transparent shadow-none" onClick={() => console.log('preview')}>
-                            <MokaIcon iconName="fal-file-search" style={{ fontSize: '24px' }} />
+                            <MokaIcon iconName="fal-file-search" style={{ fontSize: '20px' }} />
                         </Button>
                     </OverlayTrigger>
                 </div>
@@ -90,11 +90,24 @@ export const columnDefs = [
         children: [
             {
                 headerName: '수정자',
-                field: 'modeMember',
+                field: 'modMember',
                 width: 100,
                 cellStyle: { fontSize: '12px', lineHeight: '16px' },
                 cellRendererFramework: (param) => {
-                    return <MultiRowColumnComponent values={[param.data.regMember, param.value]} />;
+                    const regMember = param.data.regMember;
+                    const modMember = param.data.modMember;
+
+                    let regMemberIdNm = '';
+                    if (regMember instanceof Object) {
+                        regMemberIdNm = `${regMember.memberId}(${regMember.memberNm})`;
+                    }
+
+                    let modMemberIdNm = '';
+                    if (modMember instanceof Object) {
+                        modMemberIdNm = `${modMember.memberId}(${modMember.memberNm})`;
+                    }
+
+                    return <MultiRowColumnComponent values={[regMemberIdNm, modMemberIdNm]} />;
                 },
             },
         ],

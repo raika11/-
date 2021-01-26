@@ -94,12 +94,12 @@ const Container = ({ match }) => {
                     dispatch(
                         deleteContainer({
                             containerSeq: container.containerSeq,
-                            callback: ({ header }) => {
-                                if (header.success) {
+                            callback: ({ header, body }) => {
+                                if (header.success && body) {
                                     toast.success(header.message);
                                     history.push(match.path);
                                 } else {
-                                    toast.error(header.message);
+                                    messageBox.alert(header.message);
                                 }
                             },
                         }),

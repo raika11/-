@@ -178,6 +178,4 @@ public class ArticleBasicVO implements Serializable {
     @Column(name = "SERVICE_FLAG")
     private String serviceFlag;
 
-
-
 }

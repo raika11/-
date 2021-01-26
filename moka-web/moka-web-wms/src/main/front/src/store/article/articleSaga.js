@@ -11,6 +11,11 @@ import * as api from './articleApi';
 const getArticleList = createRequestSaga(act.GET_ARTICLE_LIST, api.getArticleList);
 
 /**
+ * 등록 기사 목록 조회(모달)
+ */
+const getArticleListModal = createRequestSaga(act.GET_ARTICLE_LIST_MODAL, api.getArticleList);
+
+/**
  * 등록 기사 단건 조회
  */
 const getArticle = createRequestSaga(act.GET_ARTICLE, api.getArticle);
@@ -78,13 +83,13 @@ function* saveArticle({ payload: { article, callback } }) {
             });
             // 목록 조회 로직은 여기에 추가하지 않음 (수신/등록 분기해야하므로 개별 처리)
         } else {
-            const { body } = response.data.body;
+            const { body } = response.data;
 
             if (body && body.list && Array.isArray(body.list)) {
                 // invalidList 셋팅
                 yield put({
                     type: act.CHANGE_INVALID_LIST,
-                    payload: response.data.body.list,
+                    payload: body.list,
                 });
             }
         }
@@ -168,4 +173,5 @@ export default function* saga() {
     yield takeLatest(act.DELETE_ARTICLE, deleteArticle);
     yield takeLatest(act.STOP_ARTICLE, stopArticle);
     yield takeLatest(act.GET_ARTICLE_HISTORY_LIST, getArticleHistoryList);
+    yield takeLatest(act.GET_ARTICLE_LIST_MODAL, getArticleListModal);
 }

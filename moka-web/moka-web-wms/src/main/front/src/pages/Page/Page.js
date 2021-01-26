@@ -84,11 +84,18 @@ const Page = ({ match }) => {
         );
     };
 
-    // 노드 찾기(재귀함수)
-    // 리턴: {findSeq: page.pageSeq,node: null,path: [String(pageTree.pageSeq)]};
+    /**
+     * 노드 찾기 (재귀)
+     * @returns {object} { findSeq: page.pageSeq, node: null, path: [String(pageTree.pageSeq)] };
+     */
     const findNode = useCallback((findInfo, rootNode) => {
         if (rootNode.pageSeq === findInfo.findSeq) {
-            return produce(findInfo, (draft) => draft);
+            const strSeq = String(rootNode.parentPageSeq);
+            return produce(findInfo, (draft) => {
+                if (draft.path.indexOf(strSeq) < 0) {
+                    draft.path.push(strSeq);
+                }
+            });
         }
 
         if (rootNode.nodes && rootNode.nodes.length > 0) {
@@ -117,6 +124,7 @@ const Page = ({ match }) => {
                 let findInfo = {
                     findSeq: item.pageSeq,
                     node: null,
+                    path: [],
                 };
                 let fnode = findNode(findInfo, tree);
 
@@ -132,12 +140,12 @@ const Page = ({ match }) => {
                     () => {
                         const option = {
                             pageSeq: item.pageSeq,
-                            callback: (response) => {
-                                if (response.header.success) {
-                                    toast.success(response.header.message);
+                            callback: ({ header, body }) => {
+                                if (header.success && body) {
+                                    toast.success(header.message);
                                     history.push(match.path);
                                 } else {
-                                    toast.fail(response.header.message);
+                                    messageBox.alert(header.message);
                                 }
                             },
                         };
@@ -151,7 +159,7 @@ const Page = ({ match }) => {
     );
 
     /**
-     * tems태그 삽입
+     * 본문에 TEMS 태그 삽입
      */
     const handleAppendTag = useCallback(
         (row, itemType) => {
@@ -162,9 +170,9 @@ const Page = ({ match }) => {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.componentSeq}" name="${row.componentName}"/>\n`;
             } else if (itemType === ITEM_TP) {
                 tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.templateSeq}" name="${row.templateName}"/>\n`;
-                // } else if (itemType === ITEM_AD) {
-                //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             }
+            // } else if (itemType === ITEM_AD) {
+            //     tag = `${new Date().getTime()}<${TEMS_PREFIX}:${itemType.toLowerCase()} id="${row.adSeq}" name="${row.adName}"/>\n`;
             dispatch(appendTag(tag));
         },
         [dispatch],
@@ -201,8 +209,7 @@ const Page = ({ match }) => {
             dispatch(clearStore());
             dispatch(clearHistoryStore());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="d-flex">
@@ -223,7 +230,7 @@ const Page = ({ match }) => {
                 bodyClassName="d-flex flex-column"
             >
                 <Suspense fallback={<MokaLoader />}>
-                    <PageList onDelete={handleClickDelete} match={match} />
+                    <PageList onDelete={handleClickDelete} match={match} findNode={findNode} />
                 </Suspense>
             </MokaCard>
 

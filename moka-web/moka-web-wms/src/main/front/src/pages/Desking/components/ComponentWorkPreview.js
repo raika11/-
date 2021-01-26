@@ -75,7 +75,7 @@ const ComponentWorkPreview = ({ show }) => {
             </div>
 
             {/* iframe 클릭 막기 */}
-            <div className="absolute-top" style={{ bottom: 0, top: 58 }} />
+            <div className="absolute-top" style={{ bottom: 0, top: 58, right: 41 }} />
 
             <iframe ref={iframeRef} title="컴포넌트미리보기" frameBorder="0" className="w-100" style={{ height: 733 }} />
         </div>

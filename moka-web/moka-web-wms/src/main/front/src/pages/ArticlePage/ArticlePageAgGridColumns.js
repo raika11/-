@@ -5,7 +5,7 @@ export default [
     {
         headerName: 'ID',
         field: 'artPageSeq',
-        width: 100,
+        width: 50,
     },
     {
         headerName: '기사페이지명',

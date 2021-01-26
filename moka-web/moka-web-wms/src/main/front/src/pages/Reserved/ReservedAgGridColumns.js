@@ -6,19 +6,19 @@ export const columnDefs = [
         headerName: '예약어',
         field: 'reservedId',
         width: 120,
-        cellStyle: { fontSize: '12px' },
+        tooltipField: 'reservedId',
     },
     {
         headerName: '값',
         field: 'reservedValue',
         flex: 1,
         width: 202,
-        cellStyle: { fontSize: '12px' },
+        tooltipField: 'reservedValue',
     },
     {
         headerName: '',
         field: 'delete',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

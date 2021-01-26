@@ -7,13 +7,12 @@ export default [
         field: 'cdNm',
         width: 168,
         flex: 1,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'cdNm',
     },
     {
         headerName: '',
         field: 'edit',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <CodeMgtEditButton {...row} onClick={data.edit} data={data} />;

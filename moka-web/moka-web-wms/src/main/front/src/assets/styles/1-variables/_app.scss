@@ -233,6 +233,8 @@ $btn-focus-box-shadow: none !default;
 $btn-font-size: $h5-font-size !default;
 $btn-font-weight: $font-weight-bold !default;
 $btn-focus-width: 0 !default; // focus, active box-shadow에 사용되는 width 값임
+$btn-padding-y: 3px !default;
+$btn-padding-x: 9px !default;
 
 // Forms
 $input-bg: $white !default;

@@ -183,7 +183,7 @@ const InternalApiEdit = ({ match }) => {
             const v = paramList.filter((a, index) => index !== idx).find((a) => a.name === value);
             setError({ ...error, [`param-${idx}`]: v ? true : false, [`param-${idx}Message`]: '동일한 파라미터가 존재합니다' });
         } else {
-            setError({ ...error, [`param-${idx}`]: true, [`param-${idx}Message`]: '파라미터를 입력하세요' });
+            setError({ ...error, [`param-${idx}`]: false, [`param-${idx}Message`]: undefined });
         }
     };
 
@@ -315,7 +315,7 @@ const InternalApiEdit = ({ match }) => {
                     <Col xs={5} className="p-0">
                         <MokaInputLabel label="HTTP메소드" as="select" name="apiMethod" value={temp.apiMethod} onChange={handleChangeValue}>
                             {initialState.apiMethodList
-                                .filter((a) => a.id !== 'all')
+                                .filter((a) => a.id !== '')
                                 .map((method) => (
                                     <option key={method.id} value={method.id}>
                                         {method.name}

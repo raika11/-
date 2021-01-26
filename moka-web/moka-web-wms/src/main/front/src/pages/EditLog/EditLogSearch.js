@@ -6,7 +6,7 @@ import produce from 'immer';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 
-const SystemLogSearch = ({ searchOptions }) => {
+const EditLogSearch = ({ searchOptions }) => {
     const [options, setOptions] = useState({});
 
     const handleChangeValue = (name, value) => {
@@ -24,9 +24,9 @@ const SystemLogSearch = ({ searchOptions }) => {
     }, [searchOptions]);
 
     return (
-        <Form className="pb-2">
+        <Form className="mb-2">
             <Form.Row className="mb-2">
-                <Col xs={4}>
+                <Col xs={4} className="p-0 pr-2">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -48,7 +48,7 @@ const SystemLogSearch = ({ searchOptions }) => {
                         }}
                     />
                 </Col>
-                <Col xs={4}>
+                <Col xs={4} className="p-0 pr-2">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -70,7 +70,7 @@ const SystemLogSearch = ({ searchOptions }) => {
                         }}
                     />
                 </Col>
-                <Col xs={4}>
+                <Col xs={4} className="p-0">
                     <MokaInput
                         as="select"
                         name="successYn"
@@ -86,8 +86,8 @@ const SystemLogSearch = ({ searchOptions }) => {
                     </MokaInput>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-2">
-                <Col xs={2}>
+            <Form.Row>
+                <Col xs={2} className="p-0">
                     <MokaInput
                         as="select"
                         name="searchType"
@@ -103,22 +103,23 @@ const SystemLogSearch = ({ searchOptions }) => {
                         <option value="menuName">메뉴명</option>
                     </MokaInput>
                 </Col>
-                <Col xs={8} className="ml-0">
+                <Col xs={10} className="d-flex p-0 pl-2">
                     <MokaSearchInput
                         name="keyword"
+                        className="flex-fill"
                         value={options.keyword}
                         onChange={(e) => {
                             const { name, value } = e.target;
                             handleChangeValue(name, value);
                         }}
                     />
-                </Col>
-                <Col xs={2}>
-                    <Button variant="negative">초기화</Button>
+                    <Button variant="negative" className="flex-shrink-0 ml-2">
+                        초기화
+                    </Button>
                 </Col>
             </Form.Row>
         </Form>
     );
 };
 
-export default SystemLogSearch;
+export default EditLogSearch;

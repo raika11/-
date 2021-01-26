@@ -57,7 +57,7 @@ const InternalApiSearch = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <Form className="mb-2">
+        <div className="mb-2">
             <Form.Row className="mb-2">
                 <Col xs={5} className="d-flex p-0 pr-2">
                     <div className="flex-shrink-0 mr-2">
@@ -103,7 +103,7 @@ const InternalApiSearch = ({ match }) => {
                     신규 등록
                 </Button>
             </div>
-        </Form>
+        </div>
     );
 };
 

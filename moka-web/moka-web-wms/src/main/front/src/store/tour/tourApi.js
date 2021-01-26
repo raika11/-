@@ -9,7 +9,7 @@ export const getTourGuideList = () => {
 };
 
 // 메세지 수정(application/json)
-export const putTourGuideList = ({ tourGuideList }) => {
+export const putTourGuideList = (tourGuideList) => {
     return instance
         .put('/api/tours/guides', tourGuideList, {
             headers: {

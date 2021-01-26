@@ -23,3 +23,8 @@ export const clearStore = createAction(CLEAR_STORE);
  */
 export const [GET_TOUR_GUIDE_LIST, GET_TOUR_GUIDE_LIST_SUCCESS, GET_TOUR_GUIDE_LIST_FAILURE] = createRequestActionTypes('tour/GET_TOUR_GUIDE_LIST');
 export const getTourGuideList = createAction(GET_TOUR_GUIDE_LIST, () => ({}));
+/**
+ * 저장, 수정
+ */
+export const PUT_TOUR_GUIDE_LIST = 'tour/PUT_TOUR_GUIDE_LIST';
+export const putTourGuideList = createAction(PUT_TOUR_GUIDE_LIST, ({ tourGuideList, callback }) => ({ tourGuideList, callback }));

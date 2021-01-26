@@ -11,24 +11,27 @@ import toast from '@/utils/toastUtil';
 const MessageSettings = () => {
     const dispatch = useDispatch();
     const tourGuideList = useSelector((store) => store.tour.tourGuideList);
-    const [mgList, setMgList] = useState({});
+    const [mgObj, setMgObj] = useState({});
 
     /**
      * 저장 버튼
      */
     const handleClickSave = () => {
-        // dispatch(
-        //     putTourGuideList({
-        //         tourGuideList: ,
-        //         callback: ({ header }) => {
-        //             if (header.success) {
-        //                 toast.success(header.message);
-        //             } else {
-        //                 toast.fail(header.message);
-        //             }
-        //         },
-        //     }),
-        // );
+        let mgArr = [];
+        Object.keys(mgObj).forEach((key) => mgArr.push({ guideType: key, guideMsg: mgObj[key] }));
+
+        dispatch(
+            putTourGuideList({
+                tourGuideList: mgArr,
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
@@ -37,9 +40,9 @@ const MessageSettings = () => {
     const handleChangeValue = useCallback(
         (e) => {
             const { name, value } = e.target;
-            setMgList({ ...mgList, [name]: value });
+            setMgObj({ ...mgObj, [name]: value });
         },
-        [mgList],
+        [mgObj],
     );
 
     useEffect(() => {
@@ -52,16 +55,10 @@ const MessageSettings = () => {
 
     useEffect(() => {
         if (tourGuideList.length > 0) {
-            tourGuideList.forEach((mg) => (mgList[mg.guideType] = mg.guideMsg));
+            tourGuideList.forEach((mg) => (mgObj[mg.guideType] = mg.guideMsg));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tourGuideList]);
-
-    useEffect(() => {
-        let mgArr = [];
-        Object.keys(mgList).forEach((key) => mgArr.push({ guideType: key, guideMsg: mgList[key] }));
-        console.log(mgArr);
-    }, [mgList]);
 
     return (
         <>
@@ -89,7 +86,7 @@ const MessageSettings = () => {
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
                     name="A"
-                    value={mgList.A}
+                    value={mgObj.A}
                     onChange={handleChangeValue}
                     // isInvalid={}
                 />
@@ -101,7 +98,7 @@ const MessageSettings = () => {
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
                     name="B"
-                    value={mgList.B}
+                    value={mgObj.B}
                     onChange={handleChangeValue}
                     // isInvalid={}
                 />
@@ -113,7 +110,7 @@ const MessageSettings = () => {
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
                     name="C"
-                    value={mgList.C}
+                    value={mgObj.C}
                     onChange={handleChangeValue}
                     // isInvalid={}
                 />
@@ -125,7 +122,7 @@ const MessageSettings = () => {
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
                     name="D"
-                    value={mgList.D}
+                    value={mgObj.D}
                     onChange={handleChangeValue}
                     // isInvalid={}
                 />
@@ -137,7 +134,7 @@ const MessageSettings = () => {
                     inputClassName="resize-none"
                     inputProps={{ rows: 9 }}
                     name="E"
-                    value={mgList.E}
+                    value={mgObj.E}
                     onChange={handleChangeValue}
                     // isInvalid={}
                 />

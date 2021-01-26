@@ -18,6 +18,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -115,7 +116,8 @@ public class ArticleView extends AbstractView {
             DataLoader loader = templateMerger.getDataLoader();
             Map<String,Object> paramMap = new HashMap<>();
             paramMap.put("totalId",articleId);
-            JSONResult jsonResult = loader.getJSONResult("article",paramMap,true);
+            // 기사정보 조회
+            JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE,paramMap,true);
             Map<String,Object> articleInfo = rebuildInfo(jsonResult, mergeContext);
             mergeContext.set("article",articleInfo);
             this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -171,6 +173,7 @@ public class ArticleView extends AbstractView {
 
     private void insertSubTitle(Map<String,Object> articleInfo) {
         List contentList = (List)articleInfo.get("content");
+        if ( contentList.size() == 0) return;
         Map contentMap = (Map)contentList.get(0);
         String content = (String)contentMap.get("ART_CONTENT");
         Map basicMap = (Map)articleInfo.get("basic");

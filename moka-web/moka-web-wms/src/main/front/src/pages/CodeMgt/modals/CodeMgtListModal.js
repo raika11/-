@@ -1,45 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { MokaModal, MokaInputLabel } from '@components';
-import { changeInvalidList } from '@store/codeMgt';
+import { changeGrpInvalidList } from '@store/codeMgt';
 import { invalidListToError } from '@utils/convertUtil';
-
-const propTypes = {
-    /**
-     * type 모달 type
-     */
-    type: PropTypes.string,
-};
-const defaultProps = {
-    type: '',
-};
+import { messageBox } from '@utils/toastUtil';
 
 /**
  * 기타코드 리스트 모달 컴포넌트
  */
 const CodeMgtListModal = (props) => {
-    const { show, onHide, type, onSave, onDelete, data } = props;
+    const { show, onHide, onSave, onDelete, data } = props;
     const dispatch = useDispatch();
-    const invalidList = useSelector((store) => store.codeMgt.invalidList);
+    const grpInvalidList = useSelector((store) => store.codeMgt.grpInvalidList);
 
     // modal 항목 state
     const [grpSeq, setGrpSeq] = useState('');
     const [grpCd, setGrpCd] = useState('');
     const [cdNm, setCdNm] = useState('');
     const [error, setError] = useState({});
-
-    /**
-     * 항목 값 셋팅
-     */
-    useEffect(() => {
-        if (show && data) {
-            setGrpSeq(data.grpSeq);
-            setGrpCd(data.grpCd);
-            setCdNm(data.cdNm);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, data]);
 
     /**
      * modal의 항목 값 변경
@@ -59,25 +37,42 @@ const CodeMgtListModal = (props) => {
      * @param {object} obj
      */
     const validate = (obj) => {
-        let isInvalid = false;
-        let errList = [];
+        let isInvalid = false,
+            errList = [];
 
-        if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.grpCd) || obj.grpCd.length > 12) {
+        if (!obj.grpCd) {
             errList.push({
                 field: 'grpCd',
-                reason: '코드 그룹 아이디를 확인해주세요',
+                reason: '그룹 코드는 필수 입력 항목입니다.',
+            });
+            isInvalid = isInvalid | true;
+        }
+
+        if (!/^[A-Za-z0-9_-`/]+$/g.test(obj.grpCd)) {
+            errList.push({
+                field: 'grpCd',
+                reason: '그룹 코드 형식이 올바르지 않습니다. 영문 대소문자, 숫자, _, -만 입력 가능합니다.',
             });
             isInvalid = isInvalid || true;
         }
-        if (!/[^\s\t\n]+/g.test(obj.cdNm)) {
+
+        if (!obj.cdNm) {
             errList.push({
                 field: 'cdNm',
-                reason: '코드 그룹명을 확인해주세요',
+                reason: '그룹명은 필수 입력 항목입니다.',
             });
-            isInvalid = isInvalid || true;
+            isInvalid = isInvalid | true;
         }
-        dispatch(changeInvalidList(errList));
 
+        // if (!/^[ㄱ-ㅎ가-힣]+$/g.test(obj.cdNm)) {
+        //     errList.push({
+        //         field: 'cdNm',
+        //         reason: '그룹 한글명 형식이 올바르지 않습니다.',
+        //     });
+        //     isInvalid = isInvalid || true;
+        // }
+
+        dispatch(changeGrpInvalidList(errList));
         return !isInvalid;
     };
 
@@ -87,7 +82,7 @@ const CodeMgtListModal = (props) => {
     const handleHide = () => {
         setGrpCd('');
         setCdNm('');
-        setError(false);
+        setError({});
         onHide();
     };
 
@@ -123,92 +118,90 @@ const CodeMgtListModal = (props) => {
         }
     };
 
+    /**
+     * 항목 값 셋팅
+     */
     useEffect(() => {
-        setError(invalidListToError(invalidList));
-    }, [invalidList]);
+        if (show && data) {
+            setGrpSeq(data.seqNo);
+            setGrpCd(data.grpCd);
+            setCdNm(data.cdNm);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, data]);
 
-    if (type === 'add') {
-        return (
+    useEffect(() => {
+        if (grpInvalidList !== null) {
+            setError(invalidListToError(grpInvalidList));
+
+            // alert message 동시에 여러개일 경우.
+            // messageBox.alert(invalidList.map((element) => element.reason).join('\n'), () => {});
+            if (grpInvalidList.length > 0) {
+                // alert message 처음 메시지 하나만.
+                messageBox.alert(grpInvalidList[0].reason, () => {});
+            }
+        }
+    }, [dispatch, grpInvalidList]);
+
+    return (
+        <>
             <MokaModal
                 width={600}
                 size="md"
                 draggable
                 show={show}
                 onHide={handleHide}
-                title="그룹 등록"
-                buttons={[
-                    {
-                        text: '등록',
-                        variant: 'positive',
-                        onClick: handleClickSave,
-                    },
-                ]}
+                title={data.seqNo ? '그룹 수정' : '그룹 등록'}
+                buttons={
+                    data.seqNo
+                        ? [
+                              {
+                                  text: '수정',
+                                  variant: 'positive',
+                                  onClick: handleClickSave,
+                              },
+                              {
+                                  text: '취소',
+                                  variant: 'negative',
+                                  onClick: handleHide,
+                              },
+                              {
+                                  text: '삭제',
+                                  variant: 'negative',
+                                  onClick: handleClickDelete,
+                              },
+                          ]
+                        : [
+                              {
+                                  text: '저장',
+                                  variant: 'positive',
+                                  onClick: handleClickSave,
+                              },
+                              {
+                                  text: '취소',
+                                  variant: 'negative',
+                                  onClick: handleHide,
+                              },
+                          ]
+                }
                 footerClassName="justify-content-center"
                 centered
             >
                 <MokaInputLabel
-                    label="코드그룹"
-                    placeholder="코드 그룹 아이디는 12자리 이하의 영문으로 작성하세요"
+                    label="그룹 코드"
+                    placeholder="그룹 코드(영문 대, 소문자, 숫자, _, -만 입력 가능)"
+                    className="mb-2"
                     value={grpCd}
                     name="grpCd"
                     onChange={handleChangeValue}
+                    disabled={data.seqNo ? true : false}
                     isInvalid={error.grpCd}
                     required
-                    className="mb-2"
                 />
-                <MokaInputLabel
-                    label="코드그룹명"
-                    className="mb-2"
-                    placeholder="코드그룹명"
-                    value={cdNm}
-                    name="cdNm"
-                    onChange={handleChangeValue}
-                    isInvalid={error.cdNm}
-                    required
-                />
+                <MokaInputLabel label="그룹명" className="mb-2" value={cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
             </MokaModal>
-        );
-    } else if (type === 'edit') {
-        return (
-            <MokaModal
-                width={600}
-                size="md"
-                draggable
-                show={show}
-                onHide={handleHide}
-                title="그룹 수정"
-                buttons={[
-                    {
-                        text: '저장',
-                        variant: 'positive',
-                        onClick: handleClickSave,
-                    },
-                    {
-                        text: '삭제',
-                        variant: 'negative',
-                        onClick: handleClickDelete,
-                    },
-                ]}
-                footerClassName="justify-content-center"
-                centered
-            >
-                <MokaInputLabel label="코드그룹" className="mb-2" value={grpCd} name="grpCd" onChange={handleChangeValue} disabled />
-                <MokaInputLabel
-                    label="코드그룹명"
-                    className="mb-2"
-                    placeholder="코드 그룹명"
-                    value={cdNm}
-                    name="cdNm"
-                    onChange={handleChangeValue}
-                    isInvalid={error.cdNm}
-                    required
-                />
-            </MokaModal>
-        );
-    }
+        </>
+    );
 };
-
-CodeMgtListModal.propTypes = propTypes;
-CodeMgtListModal.defaultProps = defaultProps;
 
 export default CodeMgtListModal;

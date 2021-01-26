@@ -12,8 +12,10 @@ export const changeCdSearchOption = createAction(CHANGE_CD_SEARCH_OPTION, (searc
 /**
  * 유효성 검사
  */
-export const CHANGE_INVALID_LIST = 'codeMgt/CHANGE_INVALID_LIST';
-export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+export const CHANGE_GRP_INVALID_LIST = 'codeMgt/CHANGE_GRP_INVALID_LIST';
+export const CHANGE_CD_INVALID_LIST = 'codeMgt/CHANGE_CD_INVALID_LIST';
+export const changeGrpInvalidList = createAction(CHANGE_GRP_INVALID_LIST, (invalidList) => invalidList);
+export const changeCdInvalidList = createAction(CHANGE_CD_INVALID_LIST, (invalidList) => invalidList);
 
 /**
  * 스토어 데이터 삭제 액션

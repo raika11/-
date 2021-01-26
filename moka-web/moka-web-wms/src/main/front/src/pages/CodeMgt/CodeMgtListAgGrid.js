@@ -39,7 +39,6 @@ const CodeMgtListAgGrid = ({ match }) => {
     );
     const [rowData, setRowData] = useState([]);
     const [search, setSearch] = useState(initialState.grpSearch);
-    const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedData, setSelectedData] = useState({});
 
@@ -97,7 +96,7 @@ const CodeMgtListAgGrid = ({ match }) => {
     const handleAddClick = () => {
         setSelectedData({});
         history.push(match.path);
-        setShowAddModal(true);
+        setShowEditModal(true);
     };
 
     /**
@@ -264,27 +263,8 @@ const CodeMgtListAgGrid = ({ match }) => {
                 preventRowClickCell={['edit']}
             />
 
-            {/* 그룹 등록 모달 */}
-            <CodeMgtListModal
-                type="add"
-                show={showAddModal}
-                onHide={() => setShowAddModal(false)}
-                onSave={onClickSave}
-                onDelete={onClickDelete}
-                data={selectedData}
-                match={match}
-            />
-
             {/* 그룹 수정 모달 */}
-            <CodeMgtListModal
-                type="edit"
-                show={showEditModal}
-                onHide={() => setShowEditModal(false)}
-                onSave={onClickSave}
-                onDelete={onClickDelete}
-                data={selectedData}
-                match={match}
-            />
+            <CodeMgtListModal show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onClickSave} onDelete={onClickDelete} data={selectedData} match={match} />
         </>
     );
 };

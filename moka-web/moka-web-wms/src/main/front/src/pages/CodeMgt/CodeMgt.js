@@ -41,7 +41,7 @@ const CodeMgt = ({ match }) => {
                         path={[`${match.path}/:grpCd`, `${match.path}/:grpCd/:cdSeq`]}
                         exact
                         render={() => (
-                            <MokaCard width={1300} bodyClassName="d-flex flex-column" header={false}>
+                            <MokaCard width={1316} bodyClassName="d-flex flex-column" header={false}>
                                 <CodeMgtEdit match={match} />
                             </MokaCard>
                         )}

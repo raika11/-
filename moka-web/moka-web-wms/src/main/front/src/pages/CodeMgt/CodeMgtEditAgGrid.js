@@ -88,7 +88,7 @@ const CodeMgtEditAgGrid = (props) => {
             />
 
             {/* 코드 수정 모달 */}
-            <CodeMgtEditModal type="edit" show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onSave} onDelete={onDelete} match={match} />
+            <CodeMgtEditModal show={showEditModal} onHide={() => setShowEditModal(false)} onSave={onSave} onDelete={onDelete} match={match} />
         </>
     );
 };

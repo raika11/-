@@ -37,7 +37,8 @@ export const initialState = {
     cd: {},
     cdTotal: 0,
     cdError: null,
-    invalidList: [],
+    grpInvalidList: [],
+    cdInvalidList: [],
 };
 
 export default handleActions(
@@ -49,12 +50,14 @@ export default handleActions(
         [act.CLEAR_GRP]: (state) => {
             return produce(state, (draft) => {
                 draft.grp = initialState.grp;
+                draft.grpInvalidList = initialState.grpInvalidList;
                 draft.grpError = initialState.grpError;
             });
         },
         [act.CLEAR_CD]: (state) => {
             return produce(state, (draft) => {
                 draft.cd = initialState.cd;
+                draft.cdInvalidList = initialState.cdInvalidList;
                 draft.cdError = initialState.cdError;
             });
         },
@@ -75,9 +78,14 @@ export default handleActions(
         /**
          * 유효성 검사
          */
-        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+        [act.CHANGE_GRP_INVALID_LIST]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.invalidList = payload;
+                draft.grpInvalidList = payload;
+            });
+        },
+        [act.CHANGE_CD_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.cdInvalidList = payload;
             });
         },
         /**

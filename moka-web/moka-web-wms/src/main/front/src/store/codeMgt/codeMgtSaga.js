@@ -66,7 +66,7 @@ function* saveCodeMgtGrpSaga({ payload: { type, actions, callback } }) {
             if (body && body.list && Array.isArray(body.list)) {
                 // invalidList 셋팅
                 yield put({
-                    type: act.CHANGE_INVALID_LIST,
+                    type: act.CHANGE_GRP_INVALID_LIST,
                     payload: response.data.body.list,
                 });
             }
@@ -166,7 +166,7 @@ function* saveCodeMgtSaga({ payload: { type, actions, callback } }) {
             if (body && body.list && Array.isArray(body.list)) {
                 // invalidList 셋팅
                 yield put({
-                    type: act.CHANGE_INVALID_LIST,
+                    type: act.CHANGE_CD_INVALID_LIST,
                     payload: response.data.body.list,
                 });
             }

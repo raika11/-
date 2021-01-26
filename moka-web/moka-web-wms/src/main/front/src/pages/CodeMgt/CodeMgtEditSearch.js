@@ -112,7 +112,7 @@ const CodeMgtEditSearch = (props) => {
             </Col>
 
             {/* 코드 수정 모달 */}
-            <CodeMgtEditModal type="add" show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} match={match} />
+            <CodeMgtEditModal show={showAddModal} onHide={() => setShowAddModal(false)} onSave={onSave} onDelete={onDelete} match={match} />
 
             <MokaModal
                 draggable

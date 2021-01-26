@@ -1,8 +1,10 @@
 package jmnet.moka.core.tps.mvc.poll.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollStatSearchDTO;
@@ -81,12 +83,23 @@ public class TrendpollServiceImpl implements TrendpollService {
         if (trendpoll.getPollItems() != null && trendpoll
                 .getPollItems()
                 .size() > 0) {
-            trendpollRepository.deleteItemByPollSeq(trendpoll.getPollSeq());
+            List<Long> exceptSeqs = trendpoll
+                    .getPollItems()
+                    .stream()
+                    .map(value -> value.getItemSeq())
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            trendpollRepository.deleteItemByPollSeq(trendpoll.getPollSeq(), exceptSeqs);
         }
         if (trendpoll.getPollRelateContents() != null && trendpoll
                 .getPollRelateContents()
                 .size() > 0) {
-            trendpollRepository.deleteContentsByPollSeq(trendpoll.getPollSeq());
+            List<Long> exceptSeqs = trendpoll
+                    .getPollRelateContents()
+                    .stream()
+                    .map(value -> value.getSeqNo())
+                    .collect(Collectors.toCollection(ArrayList::new));
+            trendpollRepository.deleteContentsByPollSeq(trendpoll.getPollSeq(), exceptSeqs);
         }
 
         return saveTrendpollDetail(trendpoll);

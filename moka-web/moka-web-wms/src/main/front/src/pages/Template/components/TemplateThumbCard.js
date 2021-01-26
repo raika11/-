@@ -135,7 +135,7 @@ const TemplateThumbCard = forwardRef((props, ref) => {
                             {img && <BSImage src={img} alt={alt} ref={imgRef} className="center-image" />}
                             {!img && (
                                 <div className="w-100 d-flex align-items-center justify-content-center bg-light">
-                                    <MokaIcon iconName="fad-image" size="2x" className="color-gray200" />
+                                    <MokaIcon iconName="fad-image" size="2x" className="color-gray-200" />
                                 </div>
                             )}
                         </div>

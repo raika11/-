@@ -1,7 +1,3 @@
-import React from 'react';
-import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 export default [
     {
         headerName: 'seqNo',
@@ -35,15 +31,7 @@ export default [
         headerName: '상태정보',
         field: 'status',
         width: 63,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        cellRendererFramework: ({ value }) => {
-            let clazz = value === 'Y' ? 'color-primary' : 'color-gray150';
-            return (
-                <div className="d-flex align-items-center h-100 justify-content-center">
-                    <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />
-                </div>
-            );
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '약력정보',

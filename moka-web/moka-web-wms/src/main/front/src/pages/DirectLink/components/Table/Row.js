@@ -44,7 +44,7 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                             iconName="fas-circle"
                             className={clsx('mr-1', {
                                 'color-primary': data.usedYn === 'Y',
-                                'color-gray150': data.usedYn === 'N',
+                                'color-gray-200': data.usedYn === 'N',
                             })}
                         />
                         {data.usedYn === 'Y' ? '사용 중' : '미사용'}&nbsp;/&nbsp;{data.fixYn === 'Y' ? '항상 노출' : '검색시만 노출'}

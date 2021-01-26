@@ -4,7 +4,7 @@ import { columnDefs } from '@pages/Survey/Poll/PollAgGridColumns';
 import produce from 'immer';
 import { useHistory } from 'react-router-dom';
 
-const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSearchOption }) => {
+const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSearchOption, onDelete }) => {
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
     const [selected, setSelected] = useState(null);
@@ -24,8 +24,8 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
     };
 
     useEffect(() => {
-        setRowData(rows);
-    }, [rows]);
+        setRowData(rows.map((row) => ({ ...row, onDelete })));
+    }, [onDelete, rows]);
 
     useEffect(() => {
         if (rowData.length > 0) {
@@ -49,6 +49,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 onRowClicked={handleClickRow}
                 selected={selected}
                 className="ag-grid-align-center"
+                preventRowClickCell={['delete']}
             />
         </>
     );

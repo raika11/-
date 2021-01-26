@@ -88,9 +88,9 @@ const CommentListBox = ({ setSelectBannedItem }) => {
         if (params.colDef.field === 'cont') {
             // 클릭한 cell이 내용이면 URL 이동처리.
             clickState = setTimeout(function () {
-                const { urlSeq } = params;
-                if (urlSeq) {
-                    window.open(`https://news.joins.com`);
+                const { commentUrl } = params.data;
+                if (commentUrl !== null) {
+                    window.open(commentUrl);
                 } else {
                     window.open(`https://news.joins.com`);
                 }
@@ -160,6 +160,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                         contentId: element.contentId,
                         cmtSeq: element.cmtSeq,
                         cmtParentSeq: element.cmtParentSeq,
+                        commentUrl: element.commentUrl,
                         cont: element.cont,
                         likeCnt: element.likeCnt,
                         hateCnt: element.hateCnt,

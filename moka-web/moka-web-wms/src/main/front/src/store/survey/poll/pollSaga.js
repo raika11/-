@@ -48,6 +48,7 @@ function toPollListData(list, codes) {
             endDt,
             regMember: data.regMember,
             modMember: data.modMember,
+            isDelete: data.voteCnt === 0,
         };
     });
 }
@@ -165,6 +166,17 @@ function pollObjectToFormData(poll) {
     return pollForm;
 }
 
+function* deletePoll({ type, payload }) {
+    try {
+        const response = yield call(pollApi.deletePoll, payload.pollSeq);
+        if (payload.callback instanceof Function) {
+            payload.callback(response.data);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* pollSaga() {
     yield takeLatest(action.GET_POLL_CATEGORY_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_GROUP_CODES, getPollCodes);
@@ -172,4 +184,5 @@ export default function* pollSaga() {
     yield takeLatest(action.GET_POLL, getPoll);
     yield takeLatest(action.SAVE_POLL, savePoll);
     yield takeLatest(action.UPDATE_POLL, updatePoll);
+    yield takeLatest(action.DELETE_POLL, deletePoll);
 }

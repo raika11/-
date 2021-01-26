@@ -5,6 +5,7 @@ import java.util.Optional;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentUrl;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 
 /**
@@ -45,4 +46,12 @@ public interface CommentService {
      * @return 변경 여부
      */
     long updateCommentStatus(Comment comment, CommentStatusType statusType);
+
+
+    /**
+     * 사용중인 댓글 URL 전체 목록 조회
+     *
+     * @return 댓글 목록
+     */
+    List<CommentUrl> findAllCommentUrl();
 }

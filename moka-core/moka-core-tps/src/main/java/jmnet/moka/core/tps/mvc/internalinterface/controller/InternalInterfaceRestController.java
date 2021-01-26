@@ -113,7 +113,7 @@ public class InternalInterfaceRestController extends AbstractCommonController {
 
         // apiType 코드명 얻기
         if (McpString.isNotEmpty(internalInterface.getApiType())) {
-            List<CodeMgt> codes = codeMgtService.findByDtlCd(TpsConstants.API_TYPE_GRP_CD, internalInterface.getApiType());
+            List<CodeMgt> codes = codeMgtService.findByDtlCd(TpsConstants.API_TYPE_CODE, internalInterface.getApiType());
 
             if (codes != null && codes.size() > 0) {
                 internalInterface.setApiTypeName(codes

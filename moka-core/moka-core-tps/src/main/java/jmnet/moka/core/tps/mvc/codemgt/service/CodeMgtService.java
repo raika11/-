@@ -6,6 +6,7 @@ import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,6 +30,14 @@ public interface CodeMgtService {
      * @return 코드목록
      */
     public List<CodeMgt> findUseList(String grpCd);
+
+    /**
+     * 그룹 코드에 해당되는 코드목록을 Simple 클래스 목록으로 조회한다.
+     *
+     * @param grpCd 그룹아이디
+     * @return 코드목록
+     */
+    public List<CodeSimple> findUseSimpleList(String grpCd);
 
     /**
      * <pre>

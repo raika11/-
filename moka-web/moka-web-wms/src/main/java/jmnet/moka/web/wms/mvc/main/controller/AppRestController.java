@@ -41,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -155,6 +156,35 @@ public class AppRestController {
 
         // 댓글 정렬 구분
         result.put("COMMENT_ORDER_CODE", CommentOrderType.toList());
+
+        // 댓글 정렬 구분
+        result.put("COMMENT_SITE_CODE", TpsConstants.COMMENT_SITE_CODE);
+
+        // 댓글 정렬 구분
+        result.put("COMMENT_TAG_DIV_CODE", TpsConstants.COMMENT_TAG_DIV_CODE);
+
+        // API 유형 코드 키
+        result.put("API_TYPE_CODE", TpsConstants.API_TYPE_CODE);
+
+        // API 유형 코드 키
+        List<Map<String, Object>> httpMethodCodes = new ArrayList<>();
+        httpMethodCodes.add(MapBuilder
+                .getInstance()
+                .add(HttpMethod.GET.name(), HttpMethod.GET.name())
+                .getMap());
+        httpMethodCodes.add(MapBuilder
+                .getInstance()
+                .add(HttpMethod.POST.name(), HttpMethod.POST.name())
+                .getMap());
+        httpMethodCodes.add(MapBuilder
+                .getInstance()
+                .add(HttpMethod.PUT.name(), HttpMethod.PUT.name())
+                .getMap());
+        httpMethodCodes.add(MapBuilder
+                .getInstance()
+                .add(HttpMethod.DELETE.name(), HttpMethod.DELETE.name())
+                .getMap());
+        result.put(TpsConstants.API_METHOD, httpMethodCodes);
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

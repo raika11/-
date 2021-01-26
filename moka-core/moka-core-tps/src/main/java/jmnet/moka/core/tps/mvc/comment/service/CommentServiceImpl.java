@@ -3,15 +3,17 @@ package jmnet.moka.core.tps.mvc.comment.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.article.repository.ArticleClickcntRepository;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentUrl;
 import jmnet.moka.core.tps.mvc.comment.mapper.CommentMapper;
 import jmnet.moka.core.tps.mvc.comment.repository.CommentRepository;
+import jmnet.moka.core.tps.mvc.comment.repository.CommentUrlRepository;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 import jmnet.moka.core.tps.mvc.reporter.repository.ReporterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,17 +32,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    private CommentMapper commentMapper;
+    private final CommentMapper commentMapper;
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-    @Autowired
-    private ReporterRepository reporterRepository;
+    private final ReporterRepository reporterRepository;
 
-    @Autowired
-    private ArticleClickcntRepository articleClickcntRepository;
+    private final ArticleClickcntRepository articleClickcntRepository;
+
+    private final CommentUrlRepository commentUrlRepository;
+
+    public CommentServiceImpl(CommentMapper commentMapper, CommentRepository commentRepository, ReporterRepository reporterRepository,
+            ArticleClickcntRepository articleClickcntRepository, CommentUrlRepository commentUrlRepository) {
+        this.commentMapper = commentMapper;
+        this.commentRepository = commentRepository;
+        this.reporterRepository = reporterRepository;
+        this.articleClickcntRepository = articleClickcntRepository;
+        this.commentUrlRepository = commentUrlRepository;
+    }
 
     @Override
     public List<CommentVO> findAllComment(CommentSearchDTO searchDTO) {
@@ -63,5 +72,10 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<CommentUrl> findAllCommentUrl() {
+        return commentUrlRepository.findAllByUsedYn(MokaConstants.YES);
     }
 }

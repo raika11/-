@@ -29,9 +29,12 @@ const PackageAgGrid = () => {
     /**
      * 목록 Row클릭
      */
-    const handleRowClicked = useCallback((row) => {
-        console.log(row);
-    }, []);
+    const handleRowClicked = useCallback(
+        (row) => {
+            history.push(`/package/${row.seqNo}`);
+        },
+        [history],
+    );
 
     return (
         <>

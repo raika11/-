@@ -186,9 +186,11 @@ const PackageEdit = () => {
 
         if (stDt) {
             setPkg({ ...pkg, sectionStartDt: stDt, specialStartDt: stDt, ovpStartDt: stDt });
-        } else if (scYn) {
+        }
+        if (scYn) {
             setPkg({ ...pkg, sectionSearch: scYn, specialSearch: scYn, ovpSearch: scYn });
-        } else if (edDt) {
+        }
+        if (edDt) {
             setPkg({ ...pkg, sectionEndDt: edDt, specialEndDt: edDt, ovpEndDt: edDt });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -71,7 +71,7 @@ const MokaSearchInput = (props) => {
             <MokaInput
                 as="input"
                 type="text"
-                className={clsx('mr-2 flex-fill', inputClassName)}
+                className={clsx('mr-2', inputClassName)}
                 inputProps={{
                     ...inputProps,
                     onKeyPress: handleKeyPress,

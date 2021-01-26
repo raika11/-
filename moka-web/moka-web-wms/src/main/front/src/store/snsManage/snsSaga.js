@@ -1,10 +1,10 @@
 import * as api from '@store/snsManage/snsApi';
 import * as action from '@store/snsManage/snsAction';
-import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
-import { API_BASE_URL, BLANK_IMAGE_PATH, DB_DATEFORMAT, IR_URL, PDS_URL, snsNames } from '@/constants';
+import { BLANK_IMAGE_PATH, DB_DATEFORMAT, IR_URL, PDS_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
 import { unescapeHtml } from '@utils/convertUtil';
@@ -16,11 +16,12 @@ function toSaveSnsMeta(data) {
             usedYn: data.usedYn === true ? 'Y' : 'N',
             reserveDt: data.reserveDt,
             snsPostMsg: data.postMessage,
-            imgUrl: data.metaImage,
+            imgUrl: data.imgUrl,
             artTitle: data.title,
             artSummary: data.summary,
             snsType: data.snsType.toUpperCase(),
             snsArtSts: 'I',
+            imgFile: data.imgFile,
         };
     });
 
@@ -134,7 +135,6 @@ function setHasSnsArticleSendButtons({ iud, insDt, sendDt, statusMsg, sourceCode
 
 function setHasSendSnsIcons({ sendSnsType, fbSendSnsArtId, fbSendSnsArtSts, twSendSnsArtId, twSendSnsArtSts }) {
     const hasIcons = { facebook: false, twitter: false, button: true };
-    //console.log(totalId, sendSnsType, fbSendSnsArtId, fbSendSnsArtSts, fbSendSnsArtSts, twSendSnsArtId, twSendSnsArtSts);
     if (!commonUtil.isEmpty(sendSnsType)) {
         if (sendSnsType.toUpperCase().indexOf('FB') >= 0) {
             hasIcons.button = false;
@@ -249,27 +249,12 @@ function toMetaImage(metaImageUrl) {
             toMetaImageUrl = toMetaImageUrl.split('.tn_120')[0];
         }
     }
-
-    console.log(toMetaImageUrl);
     return toMetaImageUrl;
 }
 
 function* saveSnsMeta({ type, payload: { totalId, data, callback } }) {
     yield put(startLoading(action.GET_SNS_META));
     const params = toSaveSnsMeta(data);
-    /*data.forEach((data) => {
-        params[data.snsType] = {
-            usedYn: data.usedYn === true ? 'Y' : 'N',
-            reserveDt: data.reserveDt,
-            snsPostMsg: data.postMessage,
-            imgUrl: data.metaImage,
-            artTitle: data.title,
-            artSummary: data.summary,
-            snsType: data.snsType.toUpperCase(),
-            snsArtSts: 'I',
-        };
-    });*/
-
     if (params['FB']) {
         const response = yield call(api.putSnsMeta, totalId, params['FB']);
         if (callback instanceof Function) {
@@ -319,7 +304,6 @@ function* getSnsMetaList({ type, payload }) {
         }
     } catch (e) {
         yield put({ type: `${type}_FAILURE`, payload: errorResponse(e) });
-        console.log(e);
     }
     yield put(finishLoading(type));
 }

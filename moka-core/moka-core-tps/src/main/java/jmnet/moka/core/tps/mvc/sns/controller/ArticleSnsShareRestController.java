@@ -288,7 +288,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             returnValue.setArtKeyword(newArticleSnsShare.getArtKeyword());
             returnValue.setArtTitle(newArticleSnsShare.getArtTitle());
             returnValue.setArtSummary(newArticleSnsShare.getArtSummary());
-            returnValue.setImgUrl(fileUpload(articleBasic, returnValue.getImgUrl(), articleSnsShareSaveDTO
+            returnValue.setImgUrl(fileUpload(articleBasic, newArticleSnsShare.getImgUrl(), articleSnsShareSaveDTO
                     .getSnsType()
                     .getCode(), imgFile));
             returnValue.setSnsPostMsg(newArticleSnsShare.getSnsPostMsg());
@@ -516,7 +516,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         return articleSnsShare;
     }
 
-    private String fileUpload(ArticleBasic articleBasic, String originalImgUrl, String snsType, MultipartFile imgFile)
+    private String fileUpload(ArticleBasic articleBasic, String imgUrl, String snsType, MultipartFile imgFile)
             throws FileFormatException, IOException {
         if (imgFile != null) {
             if (!ImageUtil.isAllowUploadImageFormat(imgFile)) {
@@ -531,10 +531,10 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             if (ftpHelper.upload(FtpHelper.PDS, filename, imgFile.getInputStream(), saveFilePath)) {
                 return pdsUrl + saveFilePath + "/" + filename;
             } else {
-                return McpString.isNotEmpty(originalImgUrl) ? originalImgUrl : pdsUrl + articleBasic.getArtThumb();
+                return McpString.isNotEmpty(imgUrl) ? imgUrl : pdsUrl + articleBasic.getArtThumb();
             }
         } else {
-            return McpString.isNotEmpty(originalImgUrl) ? originalImgUrl : pdsUrl + articleBasic.getArtThumb();
+            return McpString.isNotEmpty(imgUrl) ? imgUrl : pdsUrl + articleBasic.getArtThumb();
         }
     }
 }

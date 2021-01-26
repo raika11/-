@@ -6,7 +6,6 @@ export const columnDefs = [
     {
         headerName: 'ID',
         field: 'datasetSeq',
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'datasetSeq',
         width: 50,
     },
@@ -14,7 +13,6 @@ export const columnDefs = [
         headerName: '데이터셋명',
         field: 'datasetName',
         tooltipField: 'datasetName',
-        cellStyle: { fontSize: '12px' },
         width: 190,
         flex: 1,
     },
@@ -22,7 +20,6 @@ export const columnDefs = [
         headerName: '',
         field: 'autoCreateYn',
         width: 50,
-        cellStyle: { fontSize: '12px' },
         cellRendererFramework: (params) => {
             const { autoCreateYn } = params.data;
             let autoCreateText = '수동형';
@@ -35,8 +32,7 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 35,
-        cellStyle: { fontSize: '12px' },
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             if (data.autoCreateYn === 'Y') {

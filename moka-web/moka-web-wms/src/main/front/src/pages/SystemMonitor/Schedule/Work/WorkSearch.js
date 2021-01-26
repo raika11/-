@@ -113,7 +113,7 @@ const WorkSearch = () => {
                 <div className="pl-2 d-flex align-items-center">
                     <MokaIcon iconName="fas-circle" fixedWidth className="mr-2 color-primary" />
                     <p className="mb-0 mr-2">사용</p>
-                    <MokaIcon iconName="fas-circle" fixedWidth className="mr-2 color-gray150" />
+                    <MokaIcon iconName="fas-circle" fixedWidth className="mr-2 color-gray-200" />
                     <p className="mb-0">중지</p>
                 </div>
                 <Button variant="positive" onClick={handleClickAdd}>

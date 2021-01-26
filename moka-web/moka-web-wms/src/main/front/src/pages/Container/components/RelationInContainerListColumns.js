@@ -6,19 +6,17 @@ export default [
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컨테이너명',
         field: 'containerName',
         width: 276,
         flex: 1,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '',
         field: 'link',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;

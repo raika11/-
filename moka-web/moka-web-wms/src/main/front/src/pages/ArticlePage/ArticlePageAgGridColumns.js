@@ -5,21 +5,19 @@ export default [
     {
         headerName: 'ID',
         field: 'artPageSeq',
-        width: 100,
-        cellStyle: { fontSize: '12px' },
+        width: 50,
     },
     {
         headerName: '기사페이지명',
         field: 'artPageName',
         width: 160,
         flex: 1,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'artPageName',
     },
     {
         headerName: '',
         field: 'delete',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

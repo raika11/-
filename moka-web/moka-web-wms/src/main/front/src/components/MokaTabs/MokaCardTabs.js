@@ -80,22 +80,30 @@ const MokaCardTabs = (props) => {
             <Tab.Container id={id} defaultActiveKey={0}>
                 <div className="d-flex px-card">
                     <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
-                        {tabNavs.map((nav, idx) => (
-                            <Nav.Item key={idx} style={{ width: navWidth }}>
-                                <Nav.Link eventKey={idx} className="h4">
-                                    {nav}
-                                </Nav.Link>
-                            </Nav.Item>
-                        ))}
+                        {tabNavs.map((nav, idx) =>
+                            nav ? (
+                                <Nav.Item key={idx} style={{ width: navWidth }}>
+                                    <Nav.Link eventKey={idx} className="h4">
+                                        {nav}
+                                    </Nav.Link>
+                                </Nav.Item>
+                            ) : (
+                                ''
+                            ),
+                        )}
                     </Nav>
                 </div>
                 <div className={clsx('d-flex custom-scroll', tabContentWrapperClassName)}>
                     <Tab.Content className={clsx('p-0', tabContentClass)}>
-                        {tabs.map((tab, idx) => (
-                            <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">
-                                {tab}
-                            </Tab.Pane>
-                        ))}
+                        {tabs.map((tab, idx) =>
+                            tab ? (
+                                <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">
+                                    {tab}
+                                </Tab.Pane>
+                            ) : (
+                                ''
+                            ),
+                        )}
                     </Tab.Content>
                 </div>
             </Tab.Container>

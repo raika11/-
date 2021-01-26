@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -111,14 +112,16 @@ public class InternalInterfaceRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(message));
 
         // apiType 코드명 얻기
-        List<CodeMgt> codes = codeMgtService.findByDtlCd(TpsConstants.API_TYPE_GRP_CD, internalInterface.getApiType());
+        if (McpString.isNotEmpty(internalInterface.getApiType())) {
+            List<CodeMgt> codes = codeMgtService.findByDtlCd(TpsConstants.API_TYPE_CODE, internalInterface.getApiType());
 
-        if (codes != null && codes.size() > 0) {
-            internalInterface.setApiTypeName(codes
-                    .stream()
-                    .findFirst()
-                    .get()
-                    .getCdNm());
+            if (codes != null && codes.size() > 0) {
+                internalInterface.setApiTypeName(codes
+                        .stream()
+                        .findFirst()
+                        .get()
+                        .getCdNm());
+            }
         }
 
         InternalInterfaceDTO dto = modelMapper.map(internalInterface, InternalInterfaceDTO.class);

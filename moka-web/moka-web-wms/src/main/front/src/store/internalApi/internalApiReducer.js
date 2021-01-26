@@ -13,9 +13,9 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        usedYn: 'all',
-        apiMethod: 'GET',
-        searchType: 'all',
+        usedYn: '',
+        apiMethod: '',
+        searchType: '',
         keyword: '',
     },
     searchTypeList: [
@@ -24,15 +24,8 @@ export const initialState = {
         { id: 'apiPath', name: '경로' },
         { id: 'apiDesc', name: '설명' },
     ],
-    apiMethodList: [
-        { id: 'all', name: 'HTTP메소드 전체' },
-        { id: 'GET', name: 'GET' },
-        { id: 'POST', name: 'POST' },
-        { id: 'PUT', name: 'PUT' },
-        { id: 'DELETE', name: 'DELETE' },
-    ],
     usedYnList: [
-        { id: 'all', name: '사용 전체' },
+        { id: '', name: '사용 전체' },
         { id: 'Y', name: '사용' },
         { id: 'N', name: '미사용' },
     ],

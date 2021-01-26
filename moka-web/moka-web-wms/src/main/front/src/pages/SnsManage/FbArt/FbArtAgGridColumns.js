@@ -1,7 +1,5 @@
 import React from 'react';
 import { EtcButtonRenderer } from './GridRenderer';
-import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const tempColumnDefs = [
     {
@@ -46,13 +44,7 @@ export const tempColumnDefs = [
         headerName: '사용여부',
         field: 'usedYn',
         width: 64,
-        cellRendererFramework: ({ value }) => {
-            return (
-                <div className="d-flex align-items-center justify-content-center h-100">
-                    <FontAwesomeIcon icon={faCircle} fixedWidth className={value ? 'color-primary' : 'color-gray150'} />
-                </div>
-            );
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '기타',

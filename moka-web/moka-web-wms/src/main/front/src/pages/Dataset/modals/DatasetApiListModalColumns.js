@@ -4,7 +4,6 @@ export default [
         headerName: 'API명',
         field: 'id',
         width: 130,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'id',
     },
     {
@@ -12,6 +11,6 @@ export default [
         field: 'description',
         width: 370,
         flex: 1,
-        cellStyle: { fontSize: '12px' },
+        tooltipField: 'description',
     },
 ];

@@ -1,7 +1,13 @@
-export const columnDefs = [
+export default [
     {
-        headerName: '검색어 개수',
-        field: 'searchCount',
+        headerName: '순위',
+        field: 'rank',
+        width: 80,
+        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+    },
+    {
+        headerName: '검색어',
+        field: 'keyword',
         width: 212,
         flex: 1,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
@@ -9,19 +15,19 @@ export const columnDefs = [
     {
         headerName: '전체',
         field: 'allCount',
-        width: 212,
+        width: 150,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
         headerName: 'PC',
         field: 'pcCount',
-        width: 212,
+        width: 150,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
         headerName: 'Mobile',
         field: 'mobileCount',
-        width: 212,
+        width: 150,
         cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
 ];

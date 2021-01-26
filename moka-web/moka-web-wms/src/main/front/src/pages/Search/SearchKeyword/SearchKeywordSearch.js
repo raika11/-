@@ -1,50 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
-import { MokaInput, MokaSearchInput } from '@components';
-import commonUtil from '@utils/commonUtil';
-import produce from 'immer';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import { MokaInput, MokaSearchInput } from '@components';
+import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 
-const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
+moment.locale('ko');
+
+/**
+ * 검색 로그 검색
+ */
+const SearchKeywordSearch = ({ match }) => {
     const [dateType, setDateType] = useState('today');
     const [disabled, setDisabled] = useState({ date: true });
-    //TODO: options default 정의 필요
-    /**
-     * {
-     *     deviceType: '',
-     *     startDt: new Date(),
-     *     endDt: new Date(),
-     *     keyword: ''
-     * }
-     */
-    const [options, setOptions] = useState({});
+    const [search, setSearch] = useState({});
 
     const handleChangeValue = (name, value) => {
         if (name === 'dateType') {
             setDateType(value);
         } else {
-            setOptions(
-                produce(options, (draft) => {
-                    draft[name] = value;
-                }),
-            );
+            setSearch({ ...search, [name]: value });
         }
     };
 
     const handleClickSearch = () => {
-        toast.info(`검색 ${JSON.stringify(options)}`);
-        if (onSearch instanceof Function) {
-            onSearch(options);
-        }
+        // toast.info(`검색 ${JSON.stringify(options)}`);
+        // if (onSearch instanceof Function) {
+        //     onSearch(options);
+        // }
     };
 
     const handleClickReset = () => {
-        toast.info('초기화');
-        if (onReset instanceof Function) {
-            onReset();
-        }
+        // toast.info('초기화');
+        // if (onReset instanceof Function) {
+        //     onReset();
+        // }
     };
 
     useEffect(() => {
@@ -53,46 +44,22 @@ const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
         } else {
             const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
             commonUtil.validateForDateRange(startDt, endDt);
-            setOptions({ ...options, startDt, endDt });
+            // setOptions({ ...options, startDt, endDt });
             setDisabled({ ...disabled, date: true });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateType]);
 
-    useEffect(() => {
-        if (!commonUtil.isEmpty(searchOptions)) {
-            setOptions(searchOptions);
-        }
-    }, [searchOptions]);
-
     return (
-        <Form className="pb-2">
+        <Form className="mb-2">
             <Form.Row className="mb-2">
-                <Col xs={3}>
-                    <MokaInput
-                        as="select"
-                        name="deviceType"
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            handleChangeValue(name, value);
-                        }}
-                        value={options.deviceType}
-                    >
+                <Col xs={3} className="p-0">
+                    <MokaInput as="select" name="deviceType" className="mr-2" onChange={handleChangeValue} value={search.deviceType}>
                         <option value="">구분 전체</option>
                         <option value="pc">PC</option>
                         <option value="mobile">Mobile</option>
                     </MokaInput>
-                </Col>
-                <Col xs={3}>
-                    <MokaInput
-                        as="select"
-                        name="dateType"
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            handleChangeValue(name, value);
-                        }}
-                        value={dateType}
-                    >
+                    <MokaInput as="select" name="dateType" onChange={handleChangeValue} value={dateType}>
                         <option value="today">오늘</option>
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
@@ -103,11 +70,10 @@ const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
                 <Col xs={3}>
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
+                        className="mr-1"
                         name="startDt"
-                        placeholder="YYYY-MM-DD"
-                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
-                        value={options.startDt}
+                        inputProps={{ timeFormat: null }}
+                        value={search.startDt}
                         disabled={disabled.date}
                         onChange={(param) => {
                             const selectDate = param._d;
@@ -122,15 +88,12 @@ const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
                             handleChangeValue('startDt', date);
                         }}
                     />
-                </Col>
-                <Col xs={3}>
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
+                        className="ml-1"
                         name="endDt"
-                        placeholder="YYYY-MM-DD"
-                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
-                        value={options.endDt}
+                        inputProps={{ timeFormat: null }}
+                        value={search.endDt}
                         disabled={disabled.date}
                         onChange={(param) => {
                             const selectDate = param._d;
@@ -147,8 +110,8 @@ const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
                     />
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-2">
-                <Col xs={11}>
+            <Form.Row>
+                {/* <Col xs={11}>
                     <MokaSearchInput
                         buttonClassName="ft-12"
                         inputClassName="ft-12"
@@ -165,10 +128,10 @@ const SearchLogSearch = ({ searchOptions, onSearch, onReset }) => {
                     <Button variant="negative" onClick={handleClickReset}>
                         초기화
                     </Button>
-                </Col>
+                </Col> */}
             </Form.Row>
         </Form>
     );
 };
 
-export default SearchLogSearch;
+export default SearchKeywordSearch;

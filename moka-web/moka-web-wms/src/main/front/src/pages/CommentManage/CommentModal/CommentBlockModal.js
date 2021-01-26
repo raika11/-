@@ -11,7 +11,7 @@ import { BenneConfirmModal } from '@pages/CommentManage/CommentModal';
  */
 const CommentBlockModal = (props) => {
     const dispatch = useDispatch();
-    const { show, onHide, ModalUsage } = props;
+    const { show, onHide, ModalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
         BennedType: 'U',
         id: '',
@@ -43,12 +43,7 @@ const CommentBlockModal = (props) => {
      * @param {object} e 이벤트
      */
     const handleChangeValue = (e) => {
-        const { name, value, checked } = e.target;
-        console.log({
-            name: name,
-            value: value,
-            checked: checked,
-        });
+        const { name, value } = e.target;
         setEditData({
             ...editData,
             [name]: value,
@@ -87,6 +82,24 @@ const CommentBlockModal = (props) => {
         );
     };
 
+    const ConfirmModalResult = (e) => {
+        const { gubun, type } = e;
+
+        if (gubun === 'comment' && type === 'save') {
+            var formData = new FormData();
+            formData.append('usedYn', 'Y');
+            formData.append('tagType', editData.BennedType);
+            if (editData.BennedType === 'I') {
+                formData.append('tagValue', selectBannedItem[0].memIp);
+            } else {
+                formData.append('tagValue', selectBannedItem[0].memId);
+            }
+            formData.append('tagDiv', editData.tagDiv);
+            formData.append('tagDesc', editData.tagDesc);
+            handleSaveBlocks(formData);
+        }
+    };
+
     /**
      * 저장 버튼 클릭 이벤트
      */
@@ -104,13 +117,12 @@ const CommentBlockModal = (props) => {
                 return;
             }
 
-            console.log(editData);
-
             if (editData.BennedType === 'I') {
                 // 차단후 복원된 이력이 있는 ID 입니다. 재차단 하시겠습니까? 어떻게?
                 setConfirmModalUsage({
                     title: '차단 IP 등록',
                     content: '사용자 IP를 차단 하시겠습니까?',
+                    gubun: 'comment',
                 });
                 setConfirmModal(true);
             } else if (editData.BennedType === 'U') {
@@ -118,13 +130,11 @@ const CommentBlockModal = (props) => {
                 setConfirmModalUsage({
                     title: '차단 ID 등록',
                     content: '사용자 ID를 차단 하시겠습니까?',
+                    gubun: 'comment',
                 });
 
                 setConfirmModal(true);
             }
-
-            // // 저장처리.
-            // toast.success('저장 기능 개발 중입니다.');
         };
 
         // id 차단 처리.
@@ -301,7 +311,8 @@ const CommentBlockModal = (props) => {
                 <BenneConfirmModal
                     ModalUsage={confirmModalUsage}
                     show={confirmModal}
-                    onHide={() => {
+                    onHide={(e) => {
+                        ConfirmModalResult(e);
                         onHide();
                         setConfirmModal(false);
                     }}

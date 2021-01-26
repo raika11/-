@@ -26,18 +26,13 @@
         row-height: 34px,
         header-height: 36px,
         font-family: $font-family-sans-serif,
+        font-size: 14px,
         header-column-separator: false,
         range-selection-border-color: transparent,
+        row-hover-color: rgba(33, 150, 243, 0.1),
+        alpine-active-color: rgba(33, 150, 243, 0.3),
+        selected-row-background-color: rgba(33, 150, 243, 0.3),
     ));
-}
-
-.table-row {
-    &:hover {
-        background-color: var(--ag-row-hover-color, rgba(33, 150, 243, 0.1));
-    }
-    &.selected {
-        background-color: var(--ag-selected-row-background-color, rgba(33, 150, 243, 0.3));
-    }
 }
 
 .ag-theme-moka-grid {

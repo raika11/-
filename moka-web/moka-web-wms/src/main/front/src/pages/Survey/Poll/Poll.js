@@ -3,8 +3,10 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
 import PollChildRelation from '@pages/Survey/Poll/relations/PollChildRelationInfo';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getPollCategoryCodes, getPollGroupCodes } from '@store/survey/poll/pollAction';
+import { deletePoll, getPollList } from '@store/survey/poll/pollAction';
+import toast from '@utils/toastUtil';
 
 const PollList = React.lazy(() => import('@pages/Survey/Poll/PollList'));
 const PollEdit = React.lazy(() => import('@pages/Survey/Poll/PollEdit'));
@@ -12,6 +14,21 @@ const PollEdit = React.lazy(() => import('@pages/Survey/Poll/PollEdit'));
 const Poll = ({ match }) => {
     const dispatch = useDispatch();
     const [activeTabIdx, setActiveTabIdx] = useState(0);
+    const { search } = useSelector((store) => ({
+        search: store.poll.search,
+    }));
+
+    const handleClickDelete = (pollSeq) => {
+        dispatch(
+            deletePoll({
+                pollSeq,
+                callback: (response) => {
+                    dispatch(getPollList(search));
+                    toast.result(response);
+                },
+            }),
+        );
+    };
 
     useEffect(() => {
         dispatch(getPollCategoryCodes());
@@ -29,7 +46,7 @@ const Poll = ({ match }) => {
             {/* 리스트 */}
             <MokaCard width={950} className="mr-gutter" titleClassName="mb-0" title="투표 관리">
                 <Suspense fallback={<MokaLoader />}>
-                    <PollList />
+                    <PollList onDelete={handleClickDelete} />
                 </Suspense>
             </MokaCard>
 

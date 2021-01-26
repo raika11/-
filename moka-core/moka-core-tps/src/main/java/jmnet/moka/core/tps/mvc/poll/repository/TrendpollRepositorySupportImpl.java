@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.List;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
@@ -101,6 +102,9 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
             }
         }
 
+        // 삭제가 아닌 경우 노출
+        query.where(qTrendpoll.status.ne(PollStatusCode.D));
+
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = getQuerydsl().applyPagination(pageable, query);
         }
@@ -130,11 +134,12 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
 
     @Override
     @Transactional
-    public long deleteItemByPollSeq(Long pollSeq) {
+    public long deleteItemByPollSeq(Long pollSeq, List<Long> exceptSeqs) {
         QTrendpollItem trendpollItem = QTrendpollItem.trendpollItem;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(trendpollItem.pollSeq.eq(pollSeq));
+        builder.and(trendpollItem.itemSeq.notIn(exceptSeqs));
         return delete(trendpollItem)
                 .where(builder)
                 .execute();
@@ -142,11 +147,12 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
 
     @Override
     @Transactional
-    public long deleteContentsByPollSeq(Long pollSeq) {
+    public long deleteContentsByPollSeq(Long pollSeq, List<Long> exceptSeqs) {
         QTrendpollRelate trendpollRelate = QTrendpollRelate.trendpollRelate;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(trendpollRelate.pollSeq.eq(pollSeq));
+        builder.and(trendpollRelate.seqNo.notIn(exceptSeqs));
         return delete(trendpollRelate)
                 .where(builder)
                 .execute();

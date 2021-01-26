@@ -51,6 +51,11 @@ public class InternalInterfaceRepositorySupportImpl extends TpsQueryDslRepositor
             query.where(qInternalInterface.apiMethod.eq(searchDTO.getApiMethod()));
         }
 
+        // 사용여부 조회
+        if (McpString.isNotEmpty(searchDTO.getUsedYn())) {
+            query.where(qInternalInterface.usedYn.eq(searchDTO.getUsedYn()));
+        }
+
         // 검색어로 조회
         if (McpString.isNotEmpty(searchDTO.getKeyword())) {
             if (qInternalInterface.apiPath
@@ -71,8 +76,8 @@ public class InternalInterfaceRepositorySupportImpl extends TpsQueryDslRepositor
             } else {
                 query.where(qInternalInterface.apiPath
                         .contains(searchDTO.getKeyword())
-                        .and(qInternalInterface.apiName.contains(searchDTO.getKeyword()))
-                        .and(qInternalInterface.apiDesc.contains(searchDTO.getKeyword())));
+                        .or(qInternalInterface.apiName.contains(searchDTO.getKeyword()))
+                        .or(qInternalInterface.apiDesc.contains(searchDTO.getKeyword())));
             }
         }
         // 삭제 안된것만 조회
@@ -95,7 +100,7 @@ public class InternalInterfaceRepositorySupportImpl extends TpsQueryDslRepositor
                                 .select(qCodeMgt.cdNm)
                                 .from(qCodeMgt)
                                 .where(qCodeMgt.codeMgtGrp.grpCd
-                                        .eq(TpsConstants.API_TYPE_GRP_CD)
+                                        .eq(TpsConstants.API_TYPE_CODE)
                                         .and(qCodeMgt.dtlCd.eq(qInternalInterface.apiType))), "apiTypeName")))
                 .fetchResults();
 

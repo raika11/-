@@ -4,7 +4,7 @@ import * as pollApi from './pollApi';
 import * as codeMgtApi from '@store/codeMgt/codeMgtApi';
 import { finishLoading, startLoading } from '@store/loading';
 import produce from 'immer';
-import { objectToFormData, unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtml } from '@utils/convertUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 
@@ -48,6 +48,7 @@ function toPollListData(list, codes) {
             endDt,
             regMember: data.regMember,
             modMember: data.modMember,
+            isDelete: data.voteCnt === 0,
         };
     });
 }
@@ -79,6 +80,15 @@ function toPollData(poll) {
     return {
         ...poll,
         title: unescapeHtml(poll.title),
+        pollItems: poll.pollItems.sort(function (a, b) {
+            if (a.ordNo > b.ordNo) {
+                return 1;
+            }
+            if (a.ordNo < b.ordNo) {
+                return -1;
+            }
+            return 0;
+        }),
     };
 }
 
@@ -89,6 +99,7 @@ function* getPoll({ type, payload }) {
 
         if (response.data.header.success) {
             const poll = toPollData(response.data.body);
+
             yield put({
                 type: `${type}_SUCCESS`,
                 payload: poll,
@@ -102,10 +113,37 @@ function* getPoll({ type, payload }) {
 }
 
 function* savePoll({ type, payload }) {
-    const formData = pollObjectToFormData(payload);
-    console.log(payload.pollItems);
-    const response = yield call(pollApi.postPoll, formData);
-    console.log(response);
+    yield put(startLoading(type));
+    const formData = pollObjectToFormData(payload.data);
+
+    try {
+        const response = yield call(pollApi.postPoll, formData);
+
+        if (payload.callback instanceof Function) {
+            payload.callback(response.data);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(finishLoading(type));
+}
+
+function* updatePoll({ type, payload }) {
+    yield put(startLoading(type));
+    const pollSeq = payload.data.pollSeq;
+    const formData = pollObjectToFormData(payload.data);
+
+    try {
+        const response = yield call(pollApi.pullPoll, pollSeq, formData);
+        if (payload.callback instanceof Function) {
+            payload.callback(response.data);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(finishLoading(type));
 }
 
 function pollObjectToFormData(poll) {
@@ -128,10 +166,23 @@ function pollObjectToFormData(poll) {
     return pollForm;
 }
 
+function* deletePoll({ type, payload }) {
+    try {
+        const response = yield call(pollApi.deletePoll, payload.pollSeq);
+        if (payload.callback instanceof Function) {
+            payload.callback(response.data);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* pollSaga() {
     yield takeLatest(action.GET_POLL_CATEGORY_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_GROUP_CODES, getPollCodes);
     yield takeLatest(action.GET_POLL_LIST, getPollList);
     yield takeLatest(action.GET_POLL, getPoll);
     yield takeLatest(action.SAVE_POLL, savePoll);
+    yield takeLatest(action.UPDATE_POLL, updatePoll);
+    yield takeLatest(action.DELETE_POLL, deletePoll);
 }

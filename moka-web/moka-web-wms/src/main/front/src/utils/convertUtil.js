@@ -39,7 +39,8 @@ export const unescapeHtml = (str) => {
             .replace(/&#8216;/g, '‘')
             .replace(/&#8217;/g, '’')
             .replace(/&#037;/g, '%')
-            .replace(/&middot;/g, '·');
+            .replace(/&middot;/g, '·')
+            .replace(/&hellip;/g, '…');
     } else return str;
 };
 

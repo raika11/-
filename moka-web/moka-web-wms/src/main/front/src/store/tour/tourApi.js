@@ -9,9 +9,9 @@ export const getTourGuideList = () => {
 };
 
 // 메세지 수정(application/json)
-export const putTourGuideList = ({ tourGuideList }) => {
+export const putTourGuideList = (tourGuideList) => {
     return instance
-        .post('/api/tours/guides', tourGuideList, {
+        .put('/api/tours/guides', tourGuideList, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -84,7 +84,7 @@ export const getTourApply = ({ tourSeq }) => {
 // 신청 수정
 export const putTourApply = ({ tourApply }) => {
     return instance
-        .post(`/api/tours/applys/${tourApply.tourSeq}`, tourApply, {
+        .put(`/api/tours/applys/${tourApply.tourSeq}`, tourApply, {
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -32,7 +32,7 @@ export const createRequestActionTypes = (actionType) => {
  */
 export function createRequestSaga(actionType, api, simpleCall = false) {
     return function* (action) {
-        const payload = action.payload;
+        const payload = action.payload || {};
         const { callback } = payload;
         let callbackData;
 

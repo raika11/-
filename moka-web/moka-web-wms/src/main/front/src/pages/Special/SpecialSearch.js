@@ -64,27 +64,29 @@ const SpecialSearch = ({ match }) => {
     return (
         <Form>
             <Form.Row className="mb-3">
-                <Col xs={3} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>
-                        <option value="all">페이지 코드 전체</option>
-                        {ptRows &&
-                            ptRows.map((cd) => (
-                                <option key={cd.id} value={cd.id}>
-                                    {cd.name}
+                <Col xs={12} className="p-0 d-flex">
+                    <div className="flex-shrink-0 mr-2">
+                        <MokaInput as="select" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>
+                            <option value="all">페이지 코드 전체</option>
+                            {ptRows &&
+                                ptRows.map((cd) => (
+                                    <option key={cd.id} value={cd.id}>
+                                        {cd.name}
+                                    </option>
+                                ))}
+                        </MokaInput>
+                    </div>
+
+                    <div className="flex-shrink-0 mr-2">
+                        <MokaInput as="select" className="m-0" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                            {initialState.searchTypeList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
                                 </option>
                             ))}
-                    </MokaInput>
-                </Col>
-                <Col xs={2} className="p-0 pr-2">
-                    <MokaInput as="select" className="m-0" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                        {initialState.searchTypeList.map((type) => (
-                            <option key={type.id} value={type.id}>
-                                {type.name}
-                            </option>
-                        ))}
-                    </MokaInput>
-                </Col>
-                <Col xs={7} className="p-0 d-flex">
+                        </MokaInput>
+                    </div>
+
                     <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                     <Button variant="positive" className="flex-shrink-0" onClick={handleClickAdd}>

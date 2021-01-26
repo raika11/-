@@ -8,13 +8,14 @@ const BenneConfirmModal = (props) => {
     const [modalState, setModalState] = useState({
         title: '',
         content: '',
+        gubun: '',
     });
 
     const handleClickSave = () => {
-        onHide();
+        onHide({ gubun: modalState.gubun, type: 'save' });
     };
     const handleClickHide = () => {
-        onHide();
+        onHide({ gubun: modalState.gubun, type: 'cancle' });
     };
 
     useEffect(() => {
@@ -22,6 +23,7 @@ const BenneConfirmModal = (props) => {
             setModalState({
                 title: ModalUsage.title,
                 content: ModalUsage.content,
+                gubun: ModalUsage.gubun,
             });
         }
     }, [ModalUsage, show]);

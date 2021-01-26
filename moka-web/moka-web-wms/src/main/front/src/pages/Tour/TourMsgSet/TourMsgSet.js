@@ -1,8 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaInputLabel } from '@/components';
+import { clearStore, getTourGuideList, putTourGuideList } from '@/store/tour';
+import toast from '@/utils/toastUtil';
 
+/**
+ * 견학 메세지 설정
+ */
 const MessageSettings = () => {
+    const dispatch = useDispatch();
+    const tourGuideList = useSelector((store) => store.tour.tourGuideList);
+    const [mgObj, setMgObj] = useState({});
+
+    /**
+     * 저장 버튼
+     */
+    const handleClickSave = () => {
+        let mgArr = [];
+        Object.keys(mgObj).forEach((key) => mgArr.push({ guideType: key, guideMsg: mgObj[key] }));
+
+        dispatch(
+            putTourGuideList({
+                tourGuideList: mgArr,
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * input value
+     */
+    const handleChangeValue = useCallback(
+        (e) => {
+            const { name, value } = e.target;
+            setMgObj({ ...mgObj, [name]: value });
+        },
+        [mgObj],
+    );
+
+    useEffect(() => {
+        dispatch(getTourGuideList());
+        return () => {
+            dispatch(clearStore());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (tourGuideList.length > 0) {
+            tourGuideList.forEach((mg) => (mgObj[mg.guideType] = mg.guideMsg));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tourGuideList]);
+
     return (
         <>
             <Helmet>
@@ -16,7 +73,7 @@ const MessageSettings = () => {
                 title="견학 메시지 설정"
                 footer
                 footerButtons={[
-                    { text: '저장', variant: 'positive', className: 'mr-2' },
+                    { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
                     { text: '취소', variant: 'negative' },
                 ]}
                 footerClassName="justify-content-center"
@@ -28,9 +85,9 @@ const MessageSettings = () => {
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
-                    // name=""
-                    // value={}
-                    onChange={(e) => e.target.value}
+                    name="A"
+                    value={mgObj.A}
+                    onChange={handleChangeValue}
                     // isInvalid={}
                 />
                 <MokaInputLabel
@@ -40,9 +97,9 @@ const MessageSettings = () => {
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
-                    // name=""
-                    // value={}
-                    onChange={(e) => e.target.value}
+                    name="B"
+                    value={mgObj.B}
+                    onChange={handleChangeValue}
                     // isInvalid={}
                 />
                 <MokaInputLabel
@@ -52,9 +109,9 @@ const MessageSettings = () => {
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
-                    // name=""
-                    // value={}
-                    onChange={(e) => e.target.value}
+                    name="C"
+                    value={mgObj.C}
+                    onChange={handleChangeValue}
                     // isInvalid={}
                 />
                 <MokaInputLabel
@@ -64,9 +121,9 @@ const MessageSettings = () => {
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 4 }}
-                    // name=""
-                    // value={}
-                    onChange={(e) => e.target.value}
+                    name="D"
+                    value={mgObj.D}
+                    onChange={handleChangeValue}
                     // isInvalid={}
                 />
                 <MokaInputLabel
@@ -76,9 +133,9 @@ const MessageSettings = () => {
                     as="textarea"
                     inputClassName="resize-none"
                     inputProps={{ rows: 9 }}
-                    // name=""
-                    // value={}
-                    onChange={(e) => e.target.value}
+                    name="E"
+                    value={mgObj.E}
+                    onChange={handleChangeValue}
                     // isInvalid={}
                 />
             </MokaCard>

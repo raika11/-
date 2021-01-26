@@ -9,8 +9,10 @@ import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtGrpRepository;
 import jmnet.moka.core.tps.mvc.codemgt.repository.CodeMgtRepository;
+import jmnet.moka.core.tps.mvc.codemgt.repository.CodeSimpleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,6 +40,9 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     @Autowired
     private CodeMgtGrpRepository codeMgtGrpRepository;
 
+    @Autowired
+    private CodeSimpleRepository codeSimpleRepository;
+
     private final EntityManager entityManager;
 
     @Autowired
@@ -48,6 +53,11 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     @Override
     public List<CodeMgt> findUseList(String grpCd) {
         return codeMgtRepository.findUseList(grpCd);
+    }
+
+    @Override
+    public List<CodeSimple> findUseSimpleList(String grpCd) {
+        return codeSimpleRepository.findByGrpCdAndUsedYn(grpCd, MokaConstants.YES);
     }
 
     @Override

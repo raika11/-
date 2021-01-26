@@ -23,7 +23,7 @@ const MokaTableUsedYnRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="d-flex align-items-center justify-content-center h-100">
-            <MokaIcon iconName="fas-circle" fixedWidth className={data[field] === 'Y' ? 'color-primary' : 'color-gray150'} />
+            <MokaIcon iconName="fas-circle" fixedWidth className={data[field] === 'Y' ? 'color-primary' : 'color-gray-200'} />
         </div>
     );
 });

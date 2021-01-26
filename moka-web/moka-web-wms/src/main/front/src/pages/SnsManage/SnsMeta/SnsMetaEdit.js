@@ -12,6 +12,7 @@ import DefaultInputModal from '@pages/commons/DefaultInputModal';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 import moment from 'moment';
 import { EditThumbModal } from '@pages/Desking/modals';
+import imageEditer from '@utils/imageEditorUtil';
 
 const SnsMetaEdit = () => {
     const dispatch = useDispatch();
@@ -21,9 +22,9 @@ const SnsMetaEdit = () => {
     const [isFacebookTokenModalOpen, setIsFacebookTokenModalOpen] = useState(false);
     const [articlePreviewModalShow, setArticlePreviewModalShow] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
-
-    const [isTwitterImageModalOpen, setIsTwitterImageModalOpen] = useState(false);
-    const [isFacebookImageModalOpen, setIsFacebookImageModalOpen] = useState(false);
+    const [showEditThumbModal, setShowEditThumbModal] = useState(false);
+    const [thumbFileName, setThumbFileName] = useState(false);
+    const [editSnsType, setEditSnsType] = useState('');
 
     const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
         return {
@@ -128,6 +129,7 @@ const SnsMetaEdit = () => {
             { ...edit['tw'], snsType: 'TW' },
         ];
 
+        console.log(data);
         if (validSaveData(data)) {
             dispatch(clearSnsMetaList());
             dispatch(
@@ -217,6 +219,36 @@ const SnsMetaEdit = () => {
             dispatch(clearSnsMeta());
         }
     }, [dispatch, totalId]);
+
+    /**
+     * 카드의 이미지 편집 버튼 클릭
+     */
+    const handleEditClick = (snsType, imageSrc) => {
+        imageEditer.create(
+            imageSrc,
+            (editImageSrc) => {
+                (async () => {
+                    await fetch(editImageSrc)
+                        .then((r) => r.blob())
+                        .then((blobFile) => {
+                            const file = commonUtil.blobToFile(blobFile, moment().format('YYYYMMDDsss'));
+                            setEdit({ ...edit, [snsType]: { ...edit[snsType], imgUrl: editImageSrc, imgFile: file || null } });
+                        });
+                })();
+            },
+            { cropWidth: 300, cropHeight: 300 },
+        );
+    };
+
+    const handleEditThumbClick = (snsType, imageSrc) => {
+        setEditSnsType(snsType);
+        setThumbFileName(imageSrc);
+        setShowEditThumbModal(true);
+    };
+
+    const handleThumbFileApply = (imageSrc, file) => {
+        setEdit({ ...edit, [editSnsType]: { ...edit[editSnsType], imgUrl: imageSrc, imgFile: file || null } });
+    };
 
     return (
         <MokaCard
@@ -331,17 +363,24 @@ const SnsMetaEdit = () => {
                     <div className="d-flex w-100">
                         <MokaInputLabel as="none" label="SNS 이미지\n850*350px" />
                         <div className="d-flex flex-column mr-2 flex-fill">
-                            <Figure.Image className="mb-1" src={meta.fb.imgUrl} />
+                            <Figure.Image className="mb-1" src={edit.fb.imgUrl} />
                             <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
                         </div>
                         <div className="d-flex flex-column">
-                            <Button variant="outline-neutral" size="sm" className="mb-1">
+                            <Button
+                                variant="outline-neutral"
+                                size="sm"
+                                className="mb-1"
+                                onClick={() => {
+                                    handleEditClick('fb', edit.fb.imgUrl);
+                                }}
+                            >
                                 편집
                             </Button>
                             <Button
                                 variant="positive"
                                 onClick={() => {
-                                    setIsTwitterImageModalOpen(true);
+                                    handleEditThumbClick('fb', edit.fb.imgUrl);
                                 }}
                                 size="sm"
                             >
@@ -468,13 +507,20 @@ const SnsMetaEdit = () => {
                             <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
                         </div>
                         <div className="d-flex flex-column">
-                            <Button variant="outline-neutral" size="sm" className="mb-1">
+                            <Button
+                                variant="outline-neutral"
+                                size="sm"
+                                className="mb-1"
+                                onClick={() => {
+                                    handleEditClick('tw', edit.tw.imgUrl);
+                                }}
+                            >
                                 편집
                             </Button>
                             <Button
                                 variant="positive"
                                 onClick={() => {
-                                    setIsFacebookImageModalOpen(true);
+                                    handleEditThumbClick('tw', edit.tw.imgUrl);
                                 }}
                                 size="sm"
                             >
@@ -517,19 +563,16 @@ const SnsMetaEdit = () => {
                 onSave={handleClickFbTokenModalSave}
             />
             <SnsPreviewModal show={articlePreviewModalShow} onHide={handleClickArticlePreviewModalHide} totalId={totalId} />
+
             <EditThumbModal
-                show={isFacebookImageModalOpen}
-                onHide={() => setIsFacebookImageModalOpen(false)}
-                setFileValue={(data) => console.log('fb-setFileValue', data)}
-                thumbFileName={edit.fb.imgUrl}
-                setThumbFileName={(data) => console.log('fb-handleThumbFileName', data)}
-            />
-            <EditThumbModal
-                show={isTwitterImageModalOpen}
-                onHide={() => setIsTwitterImageModalOpen(false)}
-                setFileValue={(data) => console.log('tw-setFileValue', data)}
-                thumbFileName={edit.tw.imgUrl}
-                setThumbFileName={(data) => console.log('tw-handleThumbFileName', data)}
+                show={showEditThumbModal}
+                cropHeight={300}
+                cropWidth={300}
+                onHide={() => setShowEditThumbModal(false)}
+                //articleData = {articleData}
+                thumbFileName={thumbFileName}
+                saveFileName={moment().format('YYYYMMDDsss')}
+                apply={handleThumbFileApply}
             />
         </MokaCard>
     );

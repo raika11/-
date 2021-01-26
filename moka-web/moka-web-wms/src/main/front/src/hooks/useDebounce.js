@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useEffect } from 'react';
 
 function useDebounce(fn, time = 500) {

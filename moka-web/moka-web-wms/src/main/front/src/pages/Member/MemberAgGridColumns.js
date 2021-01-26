@@ -1,7 +1,3 @@
-import React from 'react';
-import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 
 export const columnDefs = [
@@ -66,15 +62,7 @@ export const historyColumnDefs = [
         headerName: '성공여부',
         field: 'successYn',
         width: 70,
-        cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => {
-            const successYn = params.data.successYn;
-            let clazz = 'color-gray150';
-            if (successYn === 'Y') {
-                clazz = 'color-primary';
-            }
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '로그인일시',

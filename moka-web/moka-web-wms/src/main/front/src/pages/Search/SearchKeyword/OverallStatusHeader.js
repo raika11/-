@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import toast from '@utils/toastUtil';
 
-const SearchLogOverallStatusHeader = () => {
+const OverallStatusHeader = () => {
     const handleClickOpenKeywordDictionary = () => {
         toast.info('검색어 사전');
     };
@@ -27,4 +27,4 @@ const SearchLogOverallStatusHeader = () => {
     );
 };
 
-export default SearchLogOverallStatusHeader;
+export default OverallStatusHeader;

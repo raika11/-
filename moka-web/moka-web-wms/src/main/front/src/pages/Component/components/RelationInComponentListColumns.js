@@ -6,19 +6,17 @@ export default [
         headerName: 'ID',
         field: 'componentSeq',
         width: 50,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컴포넌트명',
         field: 'componentName',
         flex: 1,
         width: 276,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '',
         field: 'link',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;

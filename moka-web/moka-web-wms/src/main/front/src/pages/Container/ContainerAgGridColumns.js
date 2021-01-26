@@ -6,20 +6,18 @@ export default [
         headerName: 'ID',
         field: 'containerSeq',
         width: 60,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컨테이너명',
         field: 'containerName',
         flex: 1,
         width: 268,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
     },
     {
         headerName: '',
         field: 'delete',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

@@ -1,6 +1,3 @@
-import React from 'react';
-import { MokaIcon } from '@/components';
-
 export default [
     {
         headerName: 'No',
@@ -61,46 +58,19 @@ export default [
         headerName: '종료',
         field: 'endYn',
         width: 40,
-        cellStyle: {},
-        cellRendererFramework: (params) => {
-            const { usedYn } = params.data;
-            let color = usedYn === 'Y' ? 'color-primary' : 'color-gray150';
-            return (
-                <div className="h-100 d-flex align-items-center">
-                    <MokaIcon iconName="fas-circle" fixedWidth className={color} />
-                </div>
-            );
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '구독',
         field: 'subsYn',
         width: 40,
-        cellStyle: {},
-        cellRendererFramework: (params) => {
-            const { usedYn } = params.data;
-            let color = usedYn === 'Y' ? 'color-primary' : 'color-gray150';
-            return (
-                <div className="h-100 d-flex align-items-center">
-                    <MokaIcon iconName="fas-circle" fixedWidth className={color} />
-                </div>
-            );
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '노출',
         field: 'expoYn',
         width: 40,
-        cellStyle: {},
-        cellRendererFramework: (params) => {
-            const { usedYn } = params.data;
-            let color = usedYn === 'Y' ? 'color-primary' : 'color-gray150';
-            return (
-                <div className="h-100 d-flex align-items-center">
-                    <MokaIcon iconName="fas-circle" fixedWidth className={color} />
-                </div>
-            );
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '바로가기',

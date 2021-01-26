@@ -1,8 +1,8 @@
 import React from 'react';
 import { MokaTable } from '@components';
-import { columnDefs } from '@pages/Search/SearchLog/SearchLogOverallStatusAgGridColumns';
+import columnDefs from './OverallStatusAgGridColumns';
 
-const SearchLogOverallStatusAgGrid = () => {
+const OverallStatusAgGrid = () => {
     return (
         <MokaTable
             paging={false}
@@ -22,4 +22,4 @@ const SearchLogOverallStatusAgGrid = () => {
     );
 };
 
-export default SearchLogOverallStatusAgGrid;
+export default OverallStatusAgGrid;

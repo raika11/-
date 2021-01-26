@@ -61,10 +61,10 @@ const Quiz = React.lazy(() => retry(() => import('@pages/Survey/Quiz')));
 const CommentBanned = React.lazy(() => retry(() => import('@pages/CommentManage/Banned')));
 const Mic = React.lazy(() => retry(() => import('@pages/Mic')));
 const SEOMeta = React.lazy(() => retry(() => import('@pages/SEOMeta')));
-const SearchLog = React.lazy(() => retry(() => import('@pages/Search/SearchLog')));
+const SearchKeyword = React.lazy(() => retry(() => import('@pages/Search/SearchKeyword')));
 const JpodChannel = React.lazy(() => retry(() => import('@pages/Jpod/JpodChannel')));
 const JpodEpisode = React.lazy(() => retry(() => import('@pages/Jpod/JpodEpisode')));
-const SystemLog = React.lazy(() => retry(() => import('@pages/SystemLog')));
+const EditLog = React.lazy(() => retry(() => import('@pages/EditLog')));
 const SystemMonitor = React.lazy(() => retry(() => import('@pages/SystemMonitor')));
 const BulkMonitor = React.lazy(() => retry(() => import('@pages/BulkMonitor')));
 const InternalApi = React.lazy(() => retry(() => import('@pages/InternalApi')));
@@ -583,10 +583,10 @@ const routes = [
         strict: true,
     },
     {
-        path: '/search-log',
-        name: 'search-log',
+        path: '/search-keyword',
+        name: 'searchKeyword',
         displayName: '검색 로그',
-        component: SearchLog,
+        component: SearchKeyword,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,
@@ -613,10 +613,10 @@ const routes = [
         strict: true,
     },
     {
-        path: '/bo-log',
-        name: 'system-log',
+        path: '/edit-log',
+        name: 'editLog',
         displayName: '로그 관리',
-        component: SystemLog,
+        component: EditLog,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

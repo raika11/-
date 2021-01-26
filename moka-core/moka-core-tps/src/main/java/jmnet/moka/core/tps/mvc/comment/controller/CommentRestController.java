@@ -16,10 +16,10 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
-import jmnet.moka.core.tps.mvc.comment.entity.CommentUrl;
 import jmnet.moka.core.tps.mvc.comment.service.CommentService;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
@@ -58,21 +58,31 @@ public class CommentRestController extends AbstractCommonController {
     private CodeMgtService codeMgtService;
 
     /**
-     * 댓글 URL 목록조회
+     * 댓글 화면 초기 설정 정보 조회
      *
      * @return 댓글 URL 목록
      */
-    @ApiOperation(value = "댓글 매체 목록 조회")
-    @GetMapping("/urls")
-    public ResponseEntity<?> getCommentUrlList() {
+    @ApiOperation(value = "댓글 화면 초기 설정 정보 조회")
+    @GetMapping("/init")
+    public ResponseEntity<?> getCommentInitInfo() {
 
         ResultMapDTO resultMapDTO = new ResultMapDTO();
 
-        List<CommentUrl> commentUrlList = commentService.findAllCommentUrl();
+        // 댓글 매체 코드 목록
+        resultMapDTO.addBodyAttribute("COMMENT_MEDIA_CODE", codeMgtService.findUseSimpleList(TpsConstants.COMMENT_MEDIA_CODE));
 
-        resultMapDTO.addBodyAttribute(TpsConstants.COMMENT_URL, commentUrlList);
-        resultMapDTO.addBodyAttribute(TpsConstants.COMMENT_SITE_CODE, codeMgtService.findUseSimpleList(TpsConstants.COMMENT_SITE_CODE));
-        resultMapDTO.addBodyAttribute(TpsConstants.COMMENT_TAG_DIV_CODE, codeMgtService.findUseSimpleList(TpsConstants.COMMENT_TAG_DIV_CODE));
+        // 댓글 회원 사이트 코드 목록
+        resultMapDTO.addBodyAttribute("COMMENT_SITE_CODE", codeMgtService.findUseSimpleList(TpsConstants.COMMENT_SITE_CODE));
+
+        // 차단 유형 코드 목록
+        resultMapDTO.addBodyAttribute("COMMENT_TAG_DIV_CODE", codeMgtService.findUseSimpleList(TpsConstants.COMMENT_TAG_DIV_CODE));
+
+        // 댓글 상태 구분
+        resultMapDTO.addBodyAttribute("COMMENT_STATUS_CODE", CommentStatusType.toList());
+
+        // 댓글 정렬 구분
+        resultMapDTO.addBodyAttribute("COMMENT_ORDER_CODE", CommentOrderType.toList());
+
 
         return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
     }

@@ -212,8 +212,8 @@ public class TpsConstants {
     // API 그룹 코드
     public static final String API_TYPE_CODE = "API_TYPE";
 
-    // 댓글 계정 사이트 그룹 코드
-    public static final String COMMENT_URL = "COMMENT_URL";
+    // 댓글 매체 그룹 코드
+    public static final String COMMENT_MEDIA_CODE = "CMT_MEDIA";
 
     // 댓글 계정 사이트 그룹 코드
     public static final String COMMENT_SITE_CODE = "COMMENT_SITE";

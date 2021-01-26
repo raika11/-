@@ -39,7 +39,7 @@
     #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{memType, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{searchType, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{groupId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{groupId, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     )}

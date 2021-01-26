@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.comment.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
@@ -74,7 +75,8 @@ public class CommentSearchDTO extends SearchDTO {
      * 매체 검색 그룹 ID
      */
     @ApiModelProperty("매체 검색 그룹 ID")
-    private String groupId;
+    @Min(value = 0, message = "{tps.comment.error.min.groupId}")
+    private Integer groupId;
 
     /**
      * 기사ID

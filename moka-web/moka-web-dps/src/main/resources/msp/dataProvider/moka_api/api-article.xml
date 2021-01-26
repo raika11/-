@@ -21,7 +21,7 @@
       totalId
     </keys>
   </api>
-  <api id="articleList">
+  <api id="article.section.list">
     <description>기사 목록을 반환한다.</description>
     <parameter>
       <pageIndex default="1" type="number" desc="페이지번호">[0-9]{1,9}</pageIndex>

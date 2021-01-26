@@ -6,6 +6,7 @@
   <resultMap type="CommentVO" id="CommentMap">
     <id property="urlSeq" column="URL_SEQ"/>
     <result property="contentId" column="CONTENT_ID"/>
+    <result property="commentUrl" column="CONTENT_URL"/>
     <result property="cmtSeq" column="CMT_SEQ"/>
     <result property="cmtParentSeq" column="CMT_PARENT_SEQ"/>
     <result property="cont" column="CMT_CONTENT"/>

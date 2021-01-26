@@ -9,6 +9,7 @@ import CommentBlockModal from '@pages/CommentManage/CommentModal/CommentBlockMod
 import { initialState, getCommentList, changeSearchOption } from '@store/commentManage';
 import toast from '@utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
+import { messageBox } from '@utils/toastUtil';
 moment.locale('ko');
 
 /**
@@ -83,7 +84,15 @@ const CommentSearch = ({ selectBannedItem }) => {
 
     // 차단 모달에서 완료시
     const BlockModalSave = (data) => {
-        console.log(data);
+        // console.log(data);
+    };
+
+    const handleClickBlockButton = () => {
+        if (selectBannedItem.length === 0) {
+            messageBox.alert('차단할 댓글을 선택해 주세요.');
+            return;
+        }
+        setDefaultInputModalState(true);
     };
 
     // 최초 로딩시 목록 가지고 옴.
@@ -185,7 +194,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                     <Button variant="outline-neutral" className="flex-shrink-0 mr-2" onClick={() => handleClickReloadButton()}>
                         새로고침
                     </Button>
-                    <Button variant="positive" className="mr-2 flex-shrink-0" onClick={() => setDefaultInputModalState(true)}>
+                    <Button variant="positive" className="mr-2 flex-shrink-0" onClick={() => handleClickBlockButton()}>
                         차단등록
                     </Button>
                     <Button variant="negative" className="flex-shrink-0" onClick={() => setDefaultInputModalState(true)}>

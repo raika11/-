@@ -6,10 +6,7 @@ import Search from './CommentSearch';
 
 // 차단 목록 텝.
 const CommentLIst = ({ matchPath }) => {
-    const [selectBannedItem, setSelectBannedItem] = useState({
-        id: [],
-        ip: [],
-    });
+    const [selectBannedItem, setSelectBannedItem] = useState([]);
 
     return (
         <>

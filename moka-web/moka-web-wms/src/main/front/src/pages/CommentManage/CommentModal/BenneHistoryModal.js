@@ -85,10 +85,6 @@ const BenneHistoryModal = (props) => {
         onHide();
     };
 
-    // useEffect(() => {
-    //     console.log(Element);
-    // }, [Element]);
-
     useEffect(() => {
         const setModalHeaderTitle = (type) => {
             if (type === 'I') {

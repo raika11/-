@@ -157,8 +157,7 @@ export const BanneButtonRenderer = (props) => {
 
     // 차단 버튼
     const handleClickBanneButton = () => {
-        console.log('handleClickBanneButton');
-        console.log(usedYn, seqNo, tagType, tagValue, tagDiv, tagDesc);
+        // console.log(usedYn, seqNo, tagType, tagValue, tagDiv, tagDesc);
     };
     const handleClickRestoreButton = () => {
         var formData = new FormData();

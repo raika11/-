@@ -1,5 +1,6 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
+import { objectToFormData } from '@utils/convertUtil';
 
 export const getSnsMetaList = ({ search }) => {
     const queryString = qs.stringify(search);
@@ -14,11 +15,11 @@ export const getSnsMeta = (totalId) => {
     });
 };
 
-export const putSnsMeta = (totalId, params) => {
+export const putSnsMeta = (totalId, data) => {
     return instance
-        .put(`/api/sns/${totalId}?${qs.stringify(params)}`, null, {
+        .put(`/api/sns/${totalId}`, objectToFormData(data), {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
             },
         })
         .catch((err) => {

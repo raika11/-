@@ -32,8 +32,8 @@ const defaultValue = {
  * 대표이미지 편집 모달
  */
 const EditThumbModal = (props) => {
-    const { show, onHide, deskingWorkData, cropHeight, cropWidth } = props; // modal props
-    const { setFileValue, thumbFileName, setThumbFileName } = props; // 대표 이미지 props
+    const { show, onHide, articleData, cropHeight, cropWidth, saveFileName } = props; // modal props
+    const { thumbFileName, apply } = props; // 대표 이미지 props
     const dispatch = useDispatch();
 
     const [collapse, setCollapse] = useState(true);
@@ -135,17 +135,17 @@ const EditThumbModal = (props) => {
     const handleClickSave = () => {
         if (repPhoto.dataType === 'local') {
             (async () => {
-                await fetch(repPhoto.thumbPath)
+                await fetch(repPhoto.imageOnlnPath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
-                        const file = commonUtil.blobToFile(blobFile, deskingWorkData.seq);
-                        setFileValue(file);
-                        setThumbFileName(repPhoto.thumbPath);
+                        const file = commonUtil.blobToFile(blobFile, saveFileName);
+                        apply(repPhoto.thumbPath, file);
                     });
             })();
         } else {
-            setThumbFileName(repPhoto.thumbPath);
+            apply(repPhoto.imageOnlnPath);
         }
+
         handleHide();
     };
 
@@ -198,11 +198,15 @@ const EditThumbModal = (props) => {
                         </div>,
 
                         // 본문 소재 리스트 탭
-                        <div className="px-card py-2 d-flex h-100 flex-column">
-                            <EditThumbArticleImageList deskingWorkData={deskingWorkData} onRepClick={handleRepClick} />
-                        </div>,
+                        articleData ? (
+                            <div className="px-card py-2 d-flex h-100 flex-column">
+                                {articleData ? <EditThumbArticleImageList articleData={articleData} onRepClick={handleRepClick} /> : ''}
+                            </div>
+                        ) : (
+                            ''
+                        ),
                     ]}
-                    tabNavs={['아카이브', '본문 소재 리스트']}
+                    tabNavs={['아카이브', articleData ? '본문 소재 리스트' : '']}
                     fill
                 />
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>

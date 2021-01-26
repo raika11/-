@@ -17,6 +17,7 @@ export const initialState = {
                 imgUrl: '',
                 isReserve: false,
                 reserveDt: null,
+                imgFile: null,
             },
             tw: {
                 usedYn: false,
@@ -26,6 +27,7 @@ export const initialState = {
                 imgUrl: '',
                 isReserve: false,
                 reserveDt: null,
+                imgFile: null,
             },
             article: {
                 serviceFlag: false,

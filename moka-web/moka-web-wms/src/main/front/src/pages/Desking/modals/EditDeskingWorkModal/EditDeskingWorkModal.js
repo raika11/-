@@ -125,8 +125,9 @@ const EditDeskingWorkModal = (props) => {
     /**
      * 대표 이미지 thumbName
      */
-    const handleThumbFileName = (data) => {
+    const handleThumbFileApply = (data, file) => {
         setTemp({ ...temp, thumbFileName: data, irImg: data });
+        setFileValue(file);
     };
 
     useEffect(() => {
@@ -272,10 +273,11 @@ const EditDeskingWorkModal = (props) => {
                 cropHeight={component?.cropHeight}
                 cropWidth={component?.cropWidth}
                 onHide={() => setShowModal(false)}
-                deskingWorkData={deskingWorkData}
-                setFileValue={setFileValue}
+                articleData={deskingWorkData}
+                //imageSrc={deskingWorkData}
+                saveFileName={deskingWorkData.seq}
                 thumbFileName={temp.thumbFileName}
-                setThumbFileName={handleThumbFileName}
+                apply={handleThumbFileApply}
             />
         </MokaModal>
     );

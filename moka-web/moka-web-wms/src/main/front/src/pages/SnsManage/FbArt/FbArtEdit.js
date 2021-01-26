@@ -8,13 +8,15 @@ import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialS
 import toast from '@utils/toastUtil';
 import { snsNames } from '@/constants';
 import { EditThumbModal } from '@pages/Desking/modals';
+import imageEditer from '@utils/imageEditorUtil';
+import moment from 'moment';
 
 const FbArtEdit = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { totalId } = useParams();
 
-    const [isFacebookImageModalOpen, setIsFacebookImageModalOpen] = useState(false);
+    const [showEditThumbModal, setShowEditThumbModal] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
 
     const { meta, loading, search } = useSelector((store) => {
@@ -87,6 +89,27 @@ const FbArtEdit = () => {
             dispatch(clearSnsMeta());
         }
     }, [dispatch, totalId]);
+
+    const handleThumbFileApply = (imageSrc, file) => {
+        setEdit({ ...edit, fb: { ...edit['fb'], imgUrl: imageSrc, imgFile: file || null } });
+    };
+
+    const handleEditClick = () => {
+        imageEditer.create(
+            edit.fb.imgUrl,
+            (imageSrc) => {
+                (async () => {
+                    await fetch(imageSrc)
+                        .then((r) => r.blob())
+                        .then((blobFile) => {
+                            const file = commonUtil.blobToFile(blobFile, moment().format('YYYYMMDDsss'));
+                            setEdit({ ...edit, fb: { ...edit['fb'], imgUrl: imageSrc, imgFile: file || null } });
+                        });
+                })();
+            },
+            { cropWidth: 300, cropHeight: 300 },
+        );
+    };
 
     return (
         <MokaCard
@@ -162,7 +185,7 @@ const FbArtEdit = () => {
                                 <Button
                                     variant="positive"
                                     onClick={() => {
-                                        setIsFacebookImageModalOpen(true);
+                                        setShowEditThumbModal(true);
                                     }}
                                     size="sm"
                                     className="mr-2"
@@ -170,7 +193,7 @@ const FbArtEdit = () => {
                                     신규 등록
                                 </Button>
 
-                                <Button variant="outline-neutral" size="sm">
+                                <Button variant="outline-neutral" size="sm" onClick={handleEditClick}>
                                     편집
                                 </Button>
                             </div>
@@ -198,11 +221,14 @@ const FbArtEdit = () => {
             </Container>
 
             <EditThumbModal
-                show={isFacebookImageModalOpen}
-                onHide={() => setIsFacebookImageModalOpen(false)}
-                setFileValue={(data) => console.log('fb-setFileValue', data)}
+                show={showEditThumbModal}
+                cropHeight={300}
+                cropWidth={300}
+                onHide={() => setShowEditThumbModal(false)}
+                //articleData = {articleData}
                 thumbFileName={edit.fb.imgUrl}
-                setThumbFileName={(data) => console.log('fb-handleThumbFileName', data)}
+                saveFileName={moment().format('YYYYMMDDsss')}
+                apply={handleThumbFileApply}
             />
         </MokaCard>
     );

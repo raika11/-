@@ -25,8 +25,11 @@ import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.Cacheable;
 import jmnet.moka.common.cache.exception.CacheException;
+import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.purge.model.PagePurgeTask;
 import jmnet.moka.core.common.purge.model.PurgeItem;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -193,17 +196,19 @@ public class CommandController {
                     purgeItemResult.put(Cacheable.PURGE_TYPE, String.join(" ", domainId, itemType, itemId));
                     purgeItemResult.put(Cacheable.PURGE_RESULT, Cacheable.PURGE_RESULT_SUCCESS);
                     purgeResult.add(purgeItemResult);
-                    String cacheType = KeyResolver.getCacheType(itemType);
-                    String cacheKey = KeyResolver.makeItemKey(domainId, itemType, itemId);
-                    try {
-                        List<Map<String, Object>> purgeCacheResult = this.cacheManager.purgeStartsWith(cacheType, cacheKey);
-                        purgeResult.addAll(purgeCacheResult);
-                    } catch (Exception e) {
-                        Map<String, Object> purgeCacheResult = new HashMap<String, Object>();
-                        purgeCacheResult.put(Cacheable.PURGE_TYPE, cacheType);
-                        purgeCacheResult.put(Cacheable.PURGE_RESULT, Cacheable.PURGE_RESULT_EXCEPTION);
-                        purgeCacheResult.put(Cacheable.PURGE_EXCEPTION_MESSGAE, e.getMessage());
-                        purgeResult.add(purgeCacheResult);
+                    if ( !itemType.equals(MokaConstants.ITEM_DATASET)) { // 데이터셋 아닐경우만 머징된 결과를 purge한다.
+                        String cacheType = KeyResolver.getCacheType(itemType);
+                        String cacheKey = KeyResolver.makeItemKey(domainId, itemType, itemId);
+                        try {
+                            List<Map<String, Object>> purgeCacheResult = this.cacheManager.purgeStartsWith(cacheType, cacheKey);
+                            purgeResult.addAll(purgeCacheResult);
+                        } catch (Exception e) {
+                            Map<String, Object> purgeCacheResult = new HashMap<String, Object>();
+                            purgeCacheResult.put(Cacheable.PURGE_TYPE, cacheType);
+                            purgeCacheResult.put(Cacheable.PURGE_RESULT, Cacheable.PURGE_RESULT_EXCEPTION);
+                            purgeCacheResult.put(Cacheable.PURGE_EXCEPTION_MESSGAE, e.getMessage());
+                            purgeResult.add(purgeCacheResult);
+                        }
                     }
                     ResultDTO<List<Map<String, Object>>> resultDTO = new ResultDTO<List<Map<String, Object>>>(purgeResult);
                     return new ResponseEntity<>(resultDTO, HttpStatus.OK);

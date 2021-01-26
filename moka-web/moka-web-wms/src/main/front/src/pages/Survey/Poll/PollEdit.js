@@ -37,14 +37,29 @@ const PollEdit = () => {
         if (type === 'number') {
             value = parseInt(value);
         }
-        setEdit(
-            produce(edit, (draft) => {
-                draft[name] = value;
-            }),
-        );
+        if (name === 'pollDiv') {
+            if (value === 'V') {
+                setIsSet(true);
+            } else {
+                setIsSet(false);
+            }
+            setEdit(
+                produce(edit, (draft) => {
+                    draft[name] = value;
+                    draft['itemCnt'] = 2;
+                    draft['allowAnswCnt'] = 1;
+                }),
+            );
+        } else {
+            setEdit(
+                produce(edit, (draft) => {
+                    draft[name] = value;
+                }),
+            );
+        }
     };
 
-    const handleDebounceChangeValue = useDebounce(handleChangeValue);
+    const handleDebounceChangeValue = useDebounce(handleChangeValue, 100);
 
     const handleClickAnswerSetting = () => {
         let pollItems = [...edit.pollItems];
@@ -205,7 +220,6 @@ const PollEdit = () => {
                             onChange={(e) => {
                                 handleChangeValue(e.target);
                             }}
-                            disabled={isSet}
                         >
                             {codes.pollDiv.map((option) => (
                                 <option key={option.key} value={option.key}>
@@ -225,7 +239,6 @@ const PollEdit = () => {
                             onChange={(e) => {
                                 handleChangeValue(e.target);
                             }}
-                            disabled={isSet}
                         />
                     </Col>
                     <Col xs={2} className="d-flex pr-0">
@@ -239,7 +252,6 @@ const PollEdit = () => {
                             onChange={(e) => {
                                 handleChangeValue(e.target);
                             }}
-                            disabled={isSet}
                         />
                     </Col>
                     <Col xs={3} className="d-flex pr-0">
@@ -253,7 +265,6 @@ const PollEdit = () => {
                             onChange={(e) => {
                                 handleChangeValue(e.target);
                             }}
-                            disabled={isSet}
                         />
                     </Col>
                     <Col xs={1}>
@@ -443,8 +454,8 @@ const PollEdit = () => {
                                 />
                             </Col>
                             <Col xs={2} className="p-0  pr-2 text-right">
-                                <Button variant="positive" onClick={handleClickAnswerSetting} disabled={isSet}>
-                                    생성
+                                <Button variant="positive" onClick={handleClickAnswerSetting}>
+                                    {commonUtil.isEmpty(edit.pollSeq) || edit.pollItems.length === 0 ? '생성' : '수정'}
                                 </Button>
                             </Col>
                         </Form.Row>

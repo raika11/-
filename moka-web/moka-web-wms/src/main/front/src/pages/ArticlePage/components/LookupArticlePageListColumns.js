@@ -6,19 +6,17 @@ export const columnDefs = [
         headerName: 'ID',
         field: 'artPageSeq',
         width: 50,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '기사페이지명',
         field: 'artPageName',
         flex: 1,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'artPageName',
     },
     {
         headerName: '',
         field: 'load',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
@@ -27,7 +25,7 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'preview',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTablePreviewButton {...row} onClick={data.handleClickPreview} />;

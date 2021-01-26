@@ -6,7 +6,6 @@ import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import { getEditLog, clearEditLog, GET_EDIT_LOG } from '@store/editLog';
 import { messageBox } from '@utils/toastUtil';
-import { Table } from 'react-bootstrap';
 
 /**
  * 로그 정보
@@ -34,6 +33,13 @@ const EditLogInfo = ({ match }) => {
             dispatch(clearEditLog());
         }
     }, [dispatch, seqNo]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearEditLog());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCard

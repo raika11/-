@@ -6,20 +6,18 @@ const columnDefs = [
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컨테이너명',
         field: 'containerName',
         width: 240,
         flex: 1,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
     },
     {
         headerName: '',
         field: 'append',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableAppendButton {...row} onClick={data.handleClickAppend} />;
@@ -28,7 +26,7 @@ const columnDefs = [
     {
         headerName: '',
         field: 'link',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;
@@ -41,19 +39,17 @@ export const ctColumnDefs = [
         headerName: 'ID',
         field: 'containerSeq',
         width: 50,
-        cellStyle: { fontSize: '12px' },
     },
     {
         headerName: '컨테이너명',
         field: 'containerName',
         width: 240,
-        cellStyle: { fontSize: '12px' },
         tooltipField: 'containerName',
     },
     {
         headerName: '',
         field: 'load',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;
@@ -62,7 +58,7 @@ export const ctColumnDefs = [
     {
         headerName: '',
         field: 'link',
-        width: 36,
+        width: 33,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLinkButton {...row} onClick={data.handleClickLink} />;

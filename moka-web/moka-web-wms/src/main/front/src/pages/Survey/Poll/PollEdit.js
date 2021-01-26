@@ -7,13 +7,16 @@ import PollDetailBasicAnswerContainer from '@pages/Survey/Poll/components/PollDe
 import { useHistory, useParams } from 'react-router-dom';
 import PollLayoutInfoModal from '@pages/Page/modals/PollLayoutInfoModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPoll, GET_POLL, clearPoll, savePoll } from '@store/survey/poll/pollAction';
+import { getPoll, clearPoll, savePoll, GET_POLL, SAVE_POLL, UPDATE_POLL, getPollList, updatePoll } from '@store/survey/poll/pollAction';
 import commonUtil from '@utils/commonUtil';
 import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
 import produce from 'immer';
 import useDebounce from '@hooks/useDebounce';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import toast from '@utils/toastUtil';
+
+const tempItem = { imgUrl: null, linkUrl: '', pollSeq: 1897, title: '' };
 
 const PollEdit = () => {
     const { pollSeq } = useParams();
@@ -23,10 +26,11 @@ const PollEdit = () => {
     const [isSet, setIsSet] = useState(false);
     const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
 
-    const { codes, poll, loading } = useSelector((store) => ({
+    const { codes, poll, loading, search } = useSelector((store) => ({
         codes: store.poll.codes,
         poll: store.poll.poll,
-        loading: store.loading[GET_POLL],
+        loading: store.loading[GET_POLL] || store.loading[SAVE_POLL] || store.loading[UPDATE_POLL],
+        search: store.poll.search,
     }));
 
     const handleChangeValue = ({ name, value, type }) => {
@@ -42,6 +46,53 @@ const PollEdit = () => {
 
     const handleDebounceChangeValue = useDebounce(handleChangeValue);
 
+    const handleClickAnswerSetting = () => {
+        let pollItems = [...edit.pollItems];
+        const itemCnt = edit.itemCnt;
+        const gap = itemCnt - pollItems.length;
+
+        if (gap > 0) {
+            for (let count = 0; count < gap; count++) {
+                const orderNo = pollItems.length + 1;
+                pollItems.push({ ...tempItem, orderNo });
+            }
+        } else if (gap < 0) {
+            pollItems = pollItems.slice(0, itemCnt);
+        }
+
+        setEdit(
+            produce(edit, (draft) => {
+                draft.pollItems = pollItems;
+            }),
+        );
+    };
+
+    const handleClickSave = () => {
+        if (commonUtil.isEmpty(edit.pollSeq)) {
+            dispatch(
+                savePoll({
+                    data: edit,
+                    callback: (response) => {
+                        history.push(`/poll/${response.body.pollSeq}`);
+                        dispatch(getPollList(search));
+                        toast.result(response);
+                    },
+                }),
+            );
+        } else {
+            dispatch(
+                updatePoll({
+                    data: edit,
+                    callback: (response) => {
+                        dispatch(getPoll(response.body.pollSeq));
+                        dispatch(getPollList(search));
+                        toast.result(response);
+                    },
+                }),
+            );
+        }
+    };
+
     useEffect(() => {
         if (!commonUtil.isEmpty(pollSeq)) {
             dispatch(getPoll(pollSeq));
@@ -53,15 +104,11 @@ const PollEdit = () => {
     useEffect(() => {
         setEdit(poll);
         if (!commonUtil.isEmpty(poll.pollSeq)) {
-            setIsSet(true);
+            //setIsSet(true);
         } else {
-            setIsSet(false);
+            //setIsSet(false);
         }
     }, [poll]);
-
-    /*useEffect(() => {
-        console.log(edit);
-    }, [edit]);*/
 
     return (
         <MokaCard
@@ -73,9 +120,7 @@ const PollEdit = () => {
                 {
                     text: '저장',
                     variant: 'positive',
-                    onClick: () => {
-                        dispatch(savePoll(edit));
-                    },
+                    onClick: handleClickSave,
                     className: 'mr-05',
                 },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
@@ -361,7 +406,7 @@ const PollEdit = () => {
                     )}
                 </Form.Row>
                 <Form.Row className="d-flex justify-content-center mb-2">
-                    <MokaCard height={65} className="w-100" header={false} bodyClassName="pt-3 pb-3">
+                    <MokaCard height={65} className="w-100" header={false} bodyClassName="pt-3 pb-3 mt-0 mb-0">
                         <Form.Row className="align-items-center h-100">
                             <Col xs={2} className="d-flex h-100 align-items-center" style={{ borderRight: '1px solid' }}>
                                 <h4 className="text-center pr-2 mb-0">투표 설정</h4>
@@ -398,20 +443,14 @@ const PollEdit = () => {
                                 />
                             </Col>
                             <Col xs={2} className="p-0  pr-2 text-right">
-                                <Button
-                                    variant="positive"
-                                    onClick={() => {
-                                        setIsSet(!isSet);
-                                    }}
-                                    disabled={isSet}
-                                >
+                                <Button variant="positive" onClick={handleClickAnswerSetting} disabled={isSet}>
                                     생성
                                 </Button>
                             </Col>
                         </Form.Row>
                     </MokaCard>
                 </Form.Row>
-                {edit.itemCnt > 0 && isSet && (
+                {edit.itemCnt > 0 && (
                     <Form.Row className="mb-2">
                         <MokaCard
                             className="flex-fill pl-0 h-100"
@@ -431,7 +470,6 @@ const PollEdit = () => {
                         >
                             {edit.pollDiv === 'W' && (
                                 <PollDetailBasicAnswerContainer
-                                    count={edit.itemCnt}
                                     type={edit.pollType}
                                     items={edit.pollItems}
                                     onChange={(items) => {

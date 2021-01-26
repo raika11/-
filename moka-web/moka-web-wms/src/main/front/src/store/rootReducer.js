@@ -44,7 +44,6 @@ import cdnArticle from '@store/cdnArticle/cdnArticleReducer';
 import internalApi from '@store/internalApi/internalApiReducer';
 
 export default combineReducers({
-    comment,
     toastr,
     app,
     loading,
@@ -86,4 +85,5 @@ export default combineReducers({
     jpod,
     cdnArticle,
     internalApi,
+    comment,
 });

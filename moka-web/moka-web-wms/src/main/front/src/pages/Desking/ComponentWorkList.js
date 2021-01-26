@@ -207,7 +207,7 @@ const ComponentWorkList = (props) => {
 
             {/* 오른쪽 카드 */}
             {rightList.length > 0 && (
-                <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter" bodyClassName="p-0 overflow-hidden">
+                <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter" bodyClassName="p-0 mt-0 overflow-hidden">
                     <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
                     <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>

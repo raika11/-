@@ -136,17 +136,18 @@ $theme-colors: (
 
 // Social colors
 $social-colors: (
-	"facebook": #3b5998,
-	"twitter": #1da1f2,
-	"google": #dc4e41,
-	"youtube": #f00,
-	"vimeo": #1ab7ea,
-	"dribbble": #ea4c89,
-	"github": #181717,
-	"instagram": #e4405f,
-	"pinterest": #bd081c,
-	"flickr": #0063dc,
-	"bitbucket": #0052cc
+	"tw": (
+		"border-color": #02A0DD,
+		"font-color": #0086B9,
+		"hover-background-color": #02A0DD,
+		"hover-font-color": $white
+	),
+	"fb": (
+		"border-color": $info,
+		"font-color": #155CA6,
+		"hover-background-color": $info,
+		"hover-font-color": $white
+	)
 ) !default;
 
 

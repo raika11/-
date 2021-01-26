@@ -53,7 +53,7 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
 
     public static final String[] GIF_EXTENSIONS = {"gif"};
 
-    public static final String[] IMG_MIMETYPES = {"image/gif", "image/jpeg", "image/jpg"};
+    public static final String[] IMG_MIMETYPES = {"image/gif", "image/jpeg", "image/jpg", "image/png"};
 
     public static final String[] MOV_EXTENSIONS = {"mp4"};
 
@@ -253,8 +253,8 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
     private static void mkDestdir(final String filePath) {
         File destDirectory = new File(filePath);
         if (!destDirectory.exists()) {
-            if ( !destDirectory.mkdirs() ) {
-                logger.error("Can't make directory:{}",destDirectory.getAbsolutePath());
+            if (!destDirectory.mkdirs()) {
+                logger.error("Can't make directory:{}", destDirectory.getAbsolutePath());
             }
         }
     }
@@ -498,8 +498,8 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         File file = new File(filePath);
         File dir = new File(file.getParent());
         if (!dir.exists()) {
-            if ( !dir.mkdirs() ) {
-                throw new FileNotFoundException("Can't make directory:"+dir.getAbsolutePath());
+            if (!dir.mkdirs()) {
+                throw new FileNotFoundException("Can't make directory:" + dir.getAbsolutePath());
             }
         }
         FileOutputStream fos = null;
@@ -534,8 +534,8 @@ public final class McpFile extends org.apache.commons.io.FileUtils {
         File file = new File(filePath);
         File dir = new File(file.getParent());
         if (!dir.exists()) {
-            if ( !dir.mkdirs()) {
-                throw new FileNotFoundException("Can't make directory:"+dir.getAbsolutePath());
+            if (!dir.mkdirs()) {
+                throw new FileNotFoundException("Can't make directory:" + dir.getAbsolutePath());
             }
         }
 

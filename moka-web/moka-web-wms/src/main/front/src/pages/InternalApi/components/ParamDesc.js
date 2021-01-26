@@ -38,12 +38,12 @@ const ParamDesc = ({ className, onChange, onDelete, onAdd, index, validateParamN
 
                 {/* 데이터타입 */}
                 <MokaInput as="select" className="mr-2" name="dataType" value={data.dataType || 'string'} onChange={(e) => onChange(e, index)}>
-                    <option value="string">String</option>
-                    <option value="integer">Integer</option>
-                    <option value="long">Long</option>
-                    <option value="arrayString">Array[string]</option>
-                    <option value="dateTime">Date-time</option>
-                    <option value="file">File</option>
+                    <option value="string">string</option>
+                    <option value="integer">integer</option>
+                    <option value="long">long</option>
+                    <option value="Arrag[string]">Array[string]</option>
+                    <option value="date-time">date-time</option>
+                    <option value="file">file</option>
                 </MokaInput>
 
                 {/* 추가/삭제 버튼 */}

@@ -1,20 +1,17 @@
 import React from 'react';
-import { MokaTable } from '@components';
-import { columnDefs } from '@pages/SystemLog/SystemLogAgGridColumn';
 import { useHistory } from 'react-router-dom';
+import { MokaTable } from '@components';
+import { columnDefs } from './EditLogAgGridColumn';
 
-const SystemLogAgGrid = () => {
+const EditLogAgGrid = ({ match }) => {
     const history = useHistory();
 
-    const handleClickRow = (logSeq) => {
-        console.log(logSeq);
-        history.push(`/bo-log/${logSeq}`);
-    };
+    const handleClickRow = (data) => history.push(`${match.path}/${data.seqNo}`);
 
     return (
         <>
             <MokaTable
-                agGridHeight={500}
+                className="overflow-hidden flex-fill ag-grid-align-center"
                 columnDefs={columnDefs}
                 rowData={[
                     {
@@ -38,15 +35,12 @@ const SystemLogAgGrid = () => {
                 ]}
                 size={20}
                 page={0}
-                totla={1}
-                className="ag-grid-align-center"
+                total={1}
                 onRowNodeId={(row) => row.seqNo}
-                onRowClicked={(data) => {
-                    handleClickRow(data.seqNo);
-                }}
+                onRowClicked={handleClickRow}
             />
         </>
     );
 };
 
-export default SystemLogAgGrid;
+export default EditLogAgGrid;

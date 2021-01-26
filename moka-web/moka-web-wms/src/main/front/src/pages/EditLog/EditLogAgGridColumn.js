@@ -1,21 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle } from '@moka/fontawesome-pro-solid-svg-icons';
-import React from 'react';
-
 export const columnDefs = [
     {
         headerName: '',
-        field: 'successYn',
+        field: 'usedYn',
         width: 50,
         cellStyle: { textAlign: 'center' },
-        cellRendererFramework: (params) => {
-            const usedYn = params.value;
-            let clazz = 'color-negative';
-            if (usedYn === 'Y') {
-                clazz = 'color-positive';
-            }
-            return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
-        },
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '로그ID',

@@ -39,6 +39,7 @@ import jpodSaga from '@store/jpod/jpodSaga';
 import pollSaga from '@store/survey/poll/pollSaga';
 import cdnArticleSaga from '@store/cdnArticle/cdnArticleSaga';
 import internalApiSaga from '@store/internalApi/internalApiSaga';
+import tourSaga from '@store/tour/tourSaga';
 import editLogSaga from '@store/editLog/editLogSaga';
 
 export default function* rootSaga() {
@@ -82,6 +83,7 @@ export default function* rootSaga() {
         pollSaga(),
         cdnArticleSaga(),
         internalApiSaga(),
+        tourSaga(),
         editLogSaga(),
     ]);
 }

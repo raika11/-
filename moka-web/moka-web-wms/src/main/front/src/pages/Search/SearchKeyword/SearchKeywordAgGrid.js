@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
-import { columnDefs } from '@pages/Search/SearchLog/SearchLogAgGridColumns';
+import columnDefs from './SearchKeywordAgGridColumns';
 
 const SearchLogAgGrid = () => {
     const history = useHistory();

@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
-import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
@@ -72,10 +72,10 @@ public class CommentBanned extends BaseAudit {
     @Builder.Default
     private String tagDiv = "";
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "TAG_DIV", referencedColumnName = "DTL_CD", insertable = false, updatable = false)
-    private CodeMgt tagDivCode;
+    private CodeSimple tagDivCode;
 
     /**
      * 태그설명
@@ -87,7 +87,7 @@ public class CommentBanned extends BaseAudit {
      * 등록자
      */
     @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REG_ID", referencedColumnName = "MEM_ID", insertable = false, updatable = false)
     private MemberSimpleInfo regMember;
 

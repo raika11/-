@@ -5,6 +5,7 @@ import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
@@ -61,7 +62,22 @@ public class CommentBannedServiceImpl implements CommentBannedService {
         if (McpString.isNotEmpty(currentCommentBanned.getTagDiv())) {
             List<CodeMgt> codes = codeMgtService.findByDtlCd(TpsConstants.CMT_TAG_DIV, currentCommentBanned.getTagDiv());
             if (codes != null && codes.size() > 0) {
-                currentCommentBanned.setTagDivCode(codes.get(0));
+                currentCommentBanned.setTagDivCode(CodeSimple
+                        .builder()
+                        .cdNm(codes
+                                .get(0)
+                                .getCdNm())
+                        .dtlCd(codes
+                                .get(0)
+                                .getDtlCd())
+                        .grpCd(codes
+                                .get(0)
+                                .getCodeMgtGrp()
+                                .getGrpCd())
+                        .usedYn(codes
+                                .get(0)
+                                .getUsedYn())
+                        .build());
             }
         }
         return currentCommentBanned;

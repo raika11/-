@@ -5,8 +5,9 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeSimple;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
 import jmnet.moka.core.tps.mvc.comment.entity.QCommentBanned;
@@ -35,12 +36,12 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
         super(CommentBanned.class);
     }
 
-    @EntityGraph(attributePaths = {"codeMgt", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"tagDivCode", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
     public Page<CommentBanned> findAllCommentBanned(CommentBannedSearchDTO searchDTO) {
         Pageable pageable = searchDTO.getPageable();
         QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
         QMemberSimpleInfo qRegMember = new QMemberSimpleInfo("regMember");
-        QCodeMgt qCodeMgt = QCodeMgt.codeMgt;
+        QCodeSimple qCodeSimple = QCodeSimple.codeSimple;
         JPQLQuery<CommentBanned> query = from(qCommentBanned);
 
         if (McpString.isNotEmpty(searchDTO.getTagDiv())) {
@@ -69,11 +70,14 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        query.where(qCommentBanned.tagDivCode.codeMgtGrp.grpCd.eq("CMT_TAG_DIV"));
+        query.where(qCommentBanned.tagDivCode.grpCd
+                .eq(TpsConstants.CMT_TAG_DIV)
+                .and(qCommentBanned.tagDivCode.usedYn.eq(MokaConstants.YES)));
 
         QueryResults<CommentBanned> list = query
                 .leftJoin(qCommentBanned.regMember, qRegMember)
-                .leftJoin(qCommentBanned.tagDivCode, qCodeMgt)
+                .fetchJoin()
+                .leftJoin(qCommentBanned.tagDivCode, qCodeSimple)
                 .fetchJoin()
                 .fetchResults();
 
@@ -81,19 +85,22 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
     }
 
 
-    @EntityGraph(attributePaths = {"codeMgt"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"tagDivCode", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
     public Optional<CommentBanned> findCommentBanned(Long seqNo) {
 
         QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
-        QCodeMgt qCodeMgt = QCodeMgt.codeMgt;
+        QCodeSimple qCodeSimple = QCodeSimple.codeSimple;
         QMemberSimpleInfo qRegMember = new QMemberSimpleInfo("regMember");
         JPQLQuery<CommentBanned> query = from(qCommentBanned);
 
         query.where(qCommentBanned.seqNo.eq(seqNo));
-        query.where(qCommentBanned.tagDivCode.codeMgtGrp.grpCd.eq(TpsConstants.CMT_TAG_DIV));
+        query.where(qCommentBanned.tagDivCode.grpCd
+                .eq(TpsConstants.CMT_TAG_DIV)
+                .and(qCommentBanned.tagDivCode.usedYn.eq(MokaConstants.YES)));
 
         CommentBanned commentBanned = query
-                .leftJoin(qCommentBanned.tagDivCode, qCodeMgt)
+                .leftJoin(qCommentBanned.tagDivCode, qCodeSimple)
+                .fetchJoin()
                 .leftJoin(qCommentBanned.regMember, qRegMember)
                 .fetchJoin()
                 .fetchFirst();

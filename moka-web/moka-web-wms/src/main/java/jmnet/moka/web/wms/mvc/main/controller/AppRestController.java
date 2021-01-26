@@ -99,6 +99,9 @@ public class AppRestController {
     @Value("${tour.age}")
     private String tourAge;
 
+    @Value("${agenda.article-progress}")
+    private String agendaArticleProgress;
+
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -140,6 +143,7 @@ public class AppRestController {
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
                 .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
                 .add("TOUR_AGE", tourAge)                                            // 견학인 나이대 설정
+                .add("AGENDA_ARTICLE_PROGRESS", agendaArticleProgress)               // 아젠다 기사화 단계
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());

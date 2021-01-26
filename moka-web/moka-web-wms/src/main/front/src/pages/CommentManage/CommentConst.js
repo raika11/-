@@ -1,30 +1,3 @@
-export const blockReason = [
-    {
-        name: `광고`,
-        value: `1`,
-    },
-    {
-        name: `욕설`,
-        value: `2`,
-    },
-    {
-        name: `비방`,
-        value: `3`,
-    },
-    {
-        name: `음란`,
-        value: `4`,
-    },
-    {
-        name: `도배`,
-        value: `5`,
-    },
-    {
-        name: `기타`,
-        value: `9`,
-    },
-];
-
 export const tempCommentList = {
     size: 20,
     total: 4,

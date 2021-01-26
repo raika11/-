@@ -1,7 +1,8 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
+import { MokaLoader } from '@components';
 import { Helmet } from 'react-helmet';
-import { MokaCard } from '@components';
 import { clearStore } from '@store/commentManage';
 
 const CommentList = React.lazy(() => import('./CommentLIst'));
@@ -9,14 +10,23 @@ const CommentList = React.lazy(() => import('./CommentLIst'));
 /**
  * 댓글 관리
  */
-const Comment = () => {
+const Comment = ({ match }) => {
     const dispatch = useDispatch();
+    const matchPath = useRef(null);
 
+    // 스토어 초기화.
     useEffect(() => {
         return () => {
             dispatch(clearStore());
         };
     }, [dispatch]);
+
+    useEffect(() => {
+        if (matchPath.current !== match.path) {
+            matchPath.current = match.path;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [match]);
 
     return (
         <div className="d-flex">
@@ -27,11 +37,17 @@ const Comment = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard className="w-100" bodyClassName="d-flex flex-column" title="댓글 관리">
-                <Suspense>
-                    <CommentList />
-                </Suspense>
-            </MokaCard>
+            <Switch>
+                <Route
+                    path={[`${match.path}`, `${match.path}/:commentSeq`]}
+                    exact
+                    render={() => (
+                        <Suspense fallback={<MokaLoader />}>
+                            <CommentList matchPath={matchPath.current} />
+                        </Suspense>
+                    )}
+                />
+            </Switch>
         </div>
     );
 };

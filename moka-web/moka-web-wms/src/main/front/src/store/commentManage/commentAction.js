@@ -38,13 +38,22 @@ export const changeComment = createAction(CHANGE_COMMENT, (comment) => comment);
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**
- * 차단 저장
- */
-export const SAVE_BLOCK = 'comment/SAVE_BLOCK';
-export const saveBlock = createAction(SAVE_BLOCK, ({ type, actions, callback }) => ({ type, actions, callback }));
-
-/**
- * 삭제
+ * 댓글 삭제
  */
 export const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] = createRequestActionTypes('comment/DELETE_COMMENT');
-export const deleteComment = createAction(DELETE_COMMENT, ({ commentSeq, callback }) => ({ commentSeq, callback }));
+export const deleteComment = createAction(DELETE_COMMENT, ({ cmtSeq, callback }) => ({ cmtSeq, callback }));
+
+//// 차단 관리.
+export const [GET_COMMENTS_BLOCKS, GET_COMMENTS_BLOCKS_SUCCESS, GET_COMMENTS_BLOCKS_FAILURE] = createRequestActionTypes('comment/GET_COMMENTS_BLOCKS');
+export const getCommentsBlocks = createAction(GET_COMMENTS_BLOCKS, (...actions) => actions);
+
+export const CHANGE_BANNEDS_SEARCH_OPTION = 'comment/CHANGE_BANNEDS_SEARCH_OPTION';
+export const changeBannedsSearchOption = createAction(CHANGE_BANNEDS_SEARCH_OPTION, (search) => search);
+
+// 차단 등록, 수정
+export const SAVE_BLOCKS = 'comment/SAVE_BLOCKS';
+export const saveBlocks = createAction(SAVE_BLOCKS, ({ type, seqNo, blockFormData, callback }) => ({ type, seqNo, blockFormData, callback }));
+
+// 차단 목록 차단//복원
+export const BLOCKS_USED = 'comment/BLOCKS_USED';
+export const blocksUsed = createAction(BLOCKS_USED, ({ seqNo, usedForm, callback }) => ({ seqNo, usedForm, callback }));

@@ -76,7 +76,7 @@
 
         .ag-cell {
             padding-left: 5px;
-            padding-right: 5px;  
+            padding-right: 5px;
         }
 
         .user-select-text {
@@ -269,7 +269,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         padding-left: 3px !important;
         padding-right: 3px !important;
         display: flex;
-        align-items: center;  
+        align-items: center;
     }
 
     svg {
@@ -345,7 +345,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             &.next::before {
                 top: 95px;
             }
-    
+
             &.hover::before {
                 top: 95px;
             }
@@ -398,5 +398,22 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     .ag-row .ag-cell.ag-grid-cell-left {
         display: block;
     }
+}
 
+.ag-grid-comment {
+    .actions-button-cell {
+        overflow:visible;
+    }
+
+    .ag-row {
+        z-index: 0;
+    }
+
+    .ag-row.ag-row-focus {
+        z-index: 1;
+    }
+
+    .ag-body-viewport-wrapper {
+        overflow: visible !important;
+    }
 }

@@ -8,36 +8,50 @@ import { PAGESIZE_OPTIONS } from '@/constants';
  */
 export const initialState = {
     common: {
-        searchMediaList: [
-            { id: 'all', name: '전체매체' },
-            { id: '', name: '포탈' },
-            { id: '', name: '일간' },
-            { id: '', name: '중앙' },
-            { id: '', name: '중앙데일리' },
-            { id: '', name: '썰전' },
+        searchGroupId: [
+            { id: 'A', name: '전체매체' },
+            { id: 'B', name: '포탈' },
+            { id: 'C', name: '일간' },
+            { id: 'D', name: '중앙' },
+            { id: 'E', name: '중앙데일리' },
+            { id: 'F', name: '썰전' },
         ],
         searchStatusList: [
-            { id: '', name: '정상' },
-            { id: '', name: '사용자 삭제' },
-            { id: '', name: '관리자 삭제' },
+            { id: 'A', name: '정상' },
+            { id: 'B', name: '사용자 삭제' },
+            { id: 'C', name: '관리자 삭제' },
         ],
-        searchOrderList: [
-            { id: 'desc', name: '최신순' },
-            { id: '', name: '신고순' },
+        searchOrderTypeList: [
+            { id: 'A', name: '최신순' },
+            { id: 'B', name: '신고순' },
         ],
         searchIdTypeList: [
-            { id: 'all', name: '전체계정' },
-            { id: '', name: '조인스' },
-            { id: '', name: '카카오' },
-            { id: '', name: '페이스북' },
-            { id: '', name: '트위터' },
-            { id: '', name: '미투데이' },
-            { id: '', name: '요즘' },
-            { id: '', name: '기타' },
+            { id: 'A', name: '조인스' },
+            { id: 'B', name: '카카오' },
+            { id: 'C', name: '페이스북' },
+            { id: 'D', name: '트위터' },
+            { id: 'E', name: '미투데이' },
+            { id: 'F', name: '요즘' },
+            { id: 'G', name: '기타' },
         ],
         searchTypeList: [
             { id: 'name', name: '이름' },
+            { id: 'id', name: 'ID' },
             { id: 'comment', name: '댓글 내용' },
+        ],
+        tagDiv: [
+            { name: `광고`, value: `A` },
+            { name: `비방`, value: `B` },
+            { name: `욕설`, value: `C` },
+            { name: `도배`, value: `B` },
+            { name: `음란`, value: `D` },
+            { name: `기타`, value: `E` },
+        ],
+        pageIsearchTypeGubun: [
+            { name: `차단IP`, value: `A` },
+            { name: `차단내용`, value: `B` },
+            { name: `등록자ID`, value: `C` },
+            { name: `등록자`, value: `B` },
         ],
     },
     comments: {
@@ -48,12 +62,36 @@ export const initialState = {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             sort: 'regDt,asc',
+            searchType: '',
+            keyword: '',
+            domain: '',
+            orderType: 'A',
+            status: 'A',
+            startDt: '',
+            endDt: '',
+            memType: '',
+            groupId: '',
+            contentId: '',
         },
     },
     banneds: {
         pagePathName: '',
         pageGubun: '',
         pageName: '',
+        commentsBlocks: {
+            search: {
+                page: 0,
+                size: PAGESIZE_OPTIONS[0],
+                sort: 'seqNo,desc',
+                searchType: '',
+                keyword: '',
+                tagType: '',
+                tagDiv: 'A',
+            },
+            total: 0,
+            list: [],
+            error: null,
+        },
     },
     block: {},
     blockError: {},
@@ -70,7 +108,13 @@ export default handleActions(
          */
         [act.CHANGE_SEARCH_OPTION]: (state, { payload: newSearch }) => {
             return produce(state, (draft) => {
-                draft.search = newSearch;
+                draft.comments.search = newSearch;
+            });
+        },
+        // 차단 관리 검색 옵션.
+        [act.CHANGE_BANNEDS_SEARCH_OPTION]: (state, { payload: newSearch }) => {
+            return produce(state, (draft) => {
+                draft.banneds.commentsBlocks.search = newSearch;
             });
         },
         /**
@@ -116,14 +160,14 @@ export default handleActions(
          */
         [act.GET_COMMENT_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.error = initialState.error;
-                draft.comments.list = body.comments.list;
-                draft.comments.total = body.comments.totalCnt;
+                // draft.error = initialState.error;
+                draft.comments.list = body.list;
+                draft.comments.total = body.totalCnt;
             });
         },
         [act.GET_COMMENT_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.error = payload;
+                // draft.error = payload;
                 draft.comments.list = initialState.comments.list;
                 draft.comments.total = initialState.comments.total;
             });
@@ -141,6 +185,13 @@ export default handleActions(
         [act.DELETE_COMMENT_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.commentError = payload;
+            });
+        },
+
+        [act.GET_COMMENTS_BLOCKS_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.banneds.commentsBlocks.list = body.list;
+                draft.banneds.commentsBlocks.total = body.totalCnt;
             });
         },
     },

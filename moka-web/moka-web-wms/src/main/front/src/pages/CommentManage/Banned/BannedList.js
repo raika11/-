@@ -1,14 +1,17 @@
 import React from 'react';
 import { MokaCard } from '@components';
-import BannedListGrid from './BannedListGrid';
-import BannedListSearch from './BannedListSearch';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { useSelector } from 'react-redux';
 
-const BannedList = () => {
+import BannedListBox from './BannedListBox';
+import BannedListSearch from './BannedListSearch';
+
+const BannedList = (props) => {
+    // 상단 페이지 제목.
     const { pageName } = useSelector((store) => ({
         pageName: store.comment.banneds.pageName,
     }));
+
     return (
         <>
             <MokaCard
@@ -20,8 +23,8 @@ const BannedList = () => {
                 titleClassName="mb-0"
                 minWidth={1360}
             >
-                <BannedListSearch />
-                <BannedListGrid />
+                <BannedListSearch pathName={props.location.pathname} />
+                <BannedListBox />
             </MokaCard>
         </>
     );

@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-import { initializeBannedParams } from '@store/commentManage';
+import { initializeBannedParams, clearStore } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
 
 const BannedList = React.lazy(() => import('./BannedList'));
@@ -9,7 +9,7 @@ const BannedList = React.lazy(() => import('./BannedList'));
 /**
  * 차단관리
  */
-const Banned = ({ match }) => {
+const Banned = ({ match, ...rest }) => {
     const dispatch = useDispatch();
     const pathName = useRef(null);
     const [pagesParams, setPagesParams] = useState(initpagesParams);
@@ -22,21 +22,21 @@ const Banned = ({ match }) => {
                 case 'banned-id':
                     setPagesParams({
                         pagePathName: pathName,
-                        pageGubun: 'id',
+                        pageGubun: 'U',
                         pageName: '차단ID 관리',
                     });
                     break;
                 case 'banned-ip':
                     setPagesParams({
                         pagePathName: pathName,
-                        pageGubun: 'ip',
+                        pageGubun: 'I',
                         pageName: '차단IP 관리',
                     });
                     break;
                 case 'banned-word':
                     setPagesParams({
                         pagePathName: pathName,
-                        pageGubun: 'word',
+                        pageGubun: 'W',
                         pageName: '금지어 관리',
                     });
                     break;
@@ -68,7 +68,7 @@ const Banned = ({ match }) => {
 
     useEffect(() => {
         return () => {
-            // dispatch(clearStore());
+            dispatch(clearStore());
         };
     }, [dispatch]);
 
@@ -87,7 +87,7 @@ const Banned = ({ match }) => {
                     exact
                     render={() => (
                         <Suspense>
-                            <BannedList />
+                            <BannedList {...rest} />
                         </Suspense>
                     )}
                 />

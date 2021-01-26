@@ -65,8 +65,16 @@ const InternalApiEdit = ({ match }) => {
      */
     const validate = useCallback(
         (save) => {
-            let isInvalid = false;
-            let errList = [];
+            // 기존의 에러와 합침
+            let errList =
+                Object.keys(error)
+                    .filter((e) => !/Message$/.test(e))
+                    .filter((e) => error[e] === true)
+                    .map((e) => ({
+                        field: e,
+                        reason: error[`${e}Message`],
+                    })) || [];
+            let isInvalid = errList.length > 0 ? true : false;
 
             // API명 체크
             if (!REQUIRED_REGEX.test(save.apiName)) {
@@ -89,7 +97,7 @@ const InternalApiEdit = ({ match }) => {
             dispatch(changeInvalidList(errList));
             return !isInvalid;
         },
-        [dispatch],
+        [dispatch, error],
     );
 
     /**
@@ -174,6 +182,8 @@ const InternalApiEdit = ({ match }) => {
         if (value !== '') {
             const v = paramList.filter((a, index) => index !== idx).find((a) => a.name === value);
             setError({ ...error, [`param-${idx}`]: v ? true : false, [`param-${idx}Message`]: '동일한 파라미터가 존재합니다' });
+        } else {
+            setError({ ...error, [`param-${idx}`]: true, [`param-${idx}Message`]: '파라미터를 입력하세요' });
         }
     };
 

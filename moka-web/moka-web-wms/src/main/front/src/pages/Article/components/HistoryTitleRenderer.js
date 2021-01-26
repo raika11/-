@@ -13,9 +13,9 @@ const HistoryTitleRenderer = forwardRef((props, ref) => {
 
     return (
         <React.Fragment>
-            <MokaInput value={data.artTitle} disabled />
+            <MokaInput value={data.artTitle} className="bg-white" disabled />
             <hr className="divider my-1" />
-            <MokaInput as="textarea" inputProps={{ rows: 3 }} value={(data.artSubTitle || '').replaceAll('<br/>', '\n')} className="resize-none custom-scroll" disabled />
+            <MokaInput as="textarea" inputProps={{ rows: 3 }} value={(data.artSubTitle || '').replaceAll('<br/>', '\n')} className="resize-none custom-scroll bg-white" disabled />
         </React.Fragment>
     );
 });

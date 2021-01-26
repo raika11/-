@@ -56,10 +56,11 @@ const ArticleHistoryModal = (props) => {
                             return '';
                         }
                     }, '');
+                const regData = hist.regName ? `${hist.regDt}\n${hist.regName}(${hist.regId})` : `${hist.regDt}\n${hist.regId}`;
 
                 return {
                     ...hist,
-                    regData: `${hist.regDt}\n${hist.regId}`,
+                    regData,
                     title: `${unescapeHtml(hist.artTitle)}\n${hist.artSubTitle ? unescapeHtml(hist.artSubTitle) : ''}`,
                     masterCodeText,
                 };

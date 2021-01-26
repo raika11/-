@@ -26,7 +26,7 @@
         row-height: 34px,
         header-height: 36px,
         font-family: $font-family-sans-serif,
-        font-size: 14px,
+        font-size: 13px,    // _ag-theme-alpine-mixin에서 +1하여 처리함
         header-column-separator: false,
         range-selection-border-color: transparent,
         row-hover-color: rgba(33, 150, 243, 0.1),
@@ -331,10 +331,6 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         min-height: 32px;
     }
 
-    .ag-icon-grip {
-        transform: rotate(90deg);
-    }
-
     .ag-center-cols-clipper {
         min-height: 32px;
 
@@ -419,5 +415,18 @@ $rel-row-hover-color: darken($rel-row-color, 5);
 
     .ag-body-viewport-wrapper {
         overflow: visible !important;
+    }
+}
+
+/* -------------------------------------------------------------------
+ * ag-grid icon
+ * ------------------------------------------------------------------ */
+.ag-icon {
+    font-family: "agGridAlpine"; font-size: 16px; line-height: 16px; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; /* Better Font Rendering =========== */ -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    &.ag-icon-grip {
+        transform: rotate(90deg);
+        &:before {
+            content: "\f114";
+        }
     }
 }

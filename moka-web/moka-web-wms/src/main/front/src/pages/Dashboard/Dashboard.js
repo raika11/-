@@ -27,6 +27,7 @@ import {
     MokaUncontrolledInput,
     MokaAlert,
     MokaIcon,
+    AgGripIcon,
     MokaImageInput,
     MokaModal,
     MokaCardTabs,
@@ -175,6 +176,7 @@ const Dashboard = () => {
                     <MokaIcon iconName="fab-twitter" size="lg" />
                     <MokaIcon iconName="fab-facebook" size="lg" />
                     <NewIcon width={20} height={20} className="ml-1" />
+                    <AgGripIcon />
                 </MokaCard>
 
                 <MokaCardTabs

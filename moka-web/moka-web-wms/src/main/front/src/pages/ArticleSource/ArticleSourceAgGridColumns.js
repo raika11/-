@@ -2,20 +2,17 @@ export default [
     {
         headerName: '매체코드',
         field: 'sourceCode',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '매체명',
         field: 'sourceName',
-        cellStyle: { fontSize: '12px' },
         width: 90,
         tooltipField: 'sourceName',
     },
     {
         headerName: 'XML경로',
         field: 'cpXmlPath',
-        cellStyle: { fontSize: '12px' },
         width: 125,
         flex: 1,
         tooltipField: 'cpXmlPath',
@@ -29,7 +26,6 @@ export default [
     {
         headerName: 'XML포맷 출처',
         field: 'joinsXmlFormat',
-        cellStyle: { fontSize: '12px' },
         width: 93,
         cellRendererFramework: (params) => {
             const { joinsXmlFormat } = params.data;
@@ -43,7 +39,6 @@ export default [
     {
         headerName: '이미지',
         field: 'receiveImgYn',
-        cellStyle: { fontSize: '12px' },
         width: 50,
         cellRendererFramework: (params) => {
             const { receiveImgYn } = params.data;
@@ -69,7 +64,6 @@ export default [
     {
         headerName: '등록일시',
         field: 'regDt',
-        cellStyle: { fontSize: '12px' },
-        width: 130,
+        width: 135,
     },
 ];

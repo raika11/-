@@ -6,12 +6,12 @@ export default [
         headerName: '기사ID',
         field: 'totalId',
         width: 80,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '제목 / URL',
         field: 'titleUrl',
-        width: 440,
+        width: 430,
         flex: 1,
         autoHeight: true,
         cellStyle: { lineHeight: '18px', height: '60px' },
@@ -20,9 +20,9 @@ export default [
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 76,
+        width: 89,
         wrapText: true,
-        cellStyle: { fontSize: '12px', lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '사용여부',

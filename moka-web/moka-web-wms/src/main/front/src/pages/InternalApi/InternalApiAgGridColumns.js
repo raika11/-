@@ -2,14 +2,13 @@ export default [
     {
         headerName: 'API명',
         field: 'apiName',
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         width: 120,
         tooltipField: 'apiName',
     },
     {
         headerName: 'API경로',
         field: 'apiPath',
-        cellStyle: { fontSize: '12px', display: 'flex', lineHeight: '21px', alignItems: 'center' },
+        cellStyle: { lineHeight: '21px' },
         wrapText: true,
         autoHeight: true,
         width: 250,
@@ -17,7 +16,7 @@ export default [
     {
         headerName: '설명',
         field: 'apiDesc',
-        cellStyle: { fontSize: '12px', lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle: { lineHeight: '21px' },
         flex: 1,
         autoHeight: true,
         wrapText: true,
@@ -26,13 +25,11 @@ export default [
         headerName: '사용',
         field: 'usedYn',
         width: 40,
-        cellStyle: { display: 'flex', alignItems: 'center' },
         cellRenderer: 'usedYnRenderer',
     },
     {
-        headerName: 'HTTP메소드',
+        headerName: 'API방식',
         field: 'apiMethod',
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         width: 80,
     },
 ];

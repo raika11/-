@@ -8,7 +8,7 @@ const TitleRenderer = forwardRef(({ data }, ref) => {
 
     return (
         <div className="d-flex flex-column justify-content-center h-100">
-            <p className="mb-0">{unescapeHtml(data.title)}</p>
+            <p className="mb-0 text-truncate">{unescapeHtml(data.title)}</p>
             <div>
                 <a target="_blank" className="mb-0 ft-12" rel="noopener noreferrer" href={data.cdnUrlNews}>
                     {data.cdnUrlNews}

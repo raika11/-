@@ -7,7 +7,7 @@ import moment from 'moment';
 import { messageBox } from '@utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaSearchInput } from '@components';
-import { initialState, changeStatSearchOption, getSearchKeywordStat } from '@store/searchKeyword';
+import { initialState, changeStatSearchOption, getSearchKeywordStat, getSearchKeywordStatTotal } from '@store/searchKeyword';
 
 moment.locale('ko');
 
@@ -47,7 +47,7 @@ const SearchKeywordSearch = () => {
         if (typeof date === 'object') {
             setSearch({ ...search, startDt: date });
         } else if (date === '') {
-            setSearch({ ...search, endDt: null });
+            setSearch({ ...search, startDt: null });
         }
     };
 
@@ -57,7 +57,7 @@ const SearchKeywordSearch = () => {
      */
     const handleChangeED = (date) => {
         if (typeof date === 'object') {
-            setSearch({ ...search, startDt: date });
+            setSearch({ ...search, endDt: date });
         } else if (date === '') {
             setSearch({ ...search, endDt: null });
         }
@@ -86,9 +86,24 @@ const SearchKeywordSearch = () => {
             page: 0,
         };
         dispatch(changeStatSearchOption(ns));
+        // 통계 조회
         dispatch(
             getSearchKeywordStat({
                 search: ns,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        messageBox.alert(header.mesage);
+                    }
+                },
+            }),
+        );
+        // 전체 건수 조회
+        dispatch(
+            getSearchKeywordStatTotal({
+                search: {
+                    startDt: ns.startDt,
+                    endDt: ns.endDt,
+                },
                 callback: ({ header }) => {
                     if (!header.success) {
                         messageBox.alert(header.mesage);
@@ -114,9 +129,24 @@ const SearchKeywordSearch = () => {
         const st = moment(nt).startOf(period).format(DB_DATEFORMAT);
         const ns = { ...initialState.stat.search, startDt: st, endDt: dt };
         dispatch(changeStatSearchOption(ns));
+        // 통계 조회
         dispatch(
             getSearchKeywordStat({
                 search: ns,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        messageBox.alert(header.mesage);
+                    }
+                },
+            }),
+        );
+        // 전체 건수 조회
+        dispatch(
+            getSearchKeywordStatTotal({
+                search: {
+                    startDt: ns.startDt,
+                    endDt: ns.endDt,
+                },
                 callback: ({ header }) => {
                     if (!header.success) {
                         messageBox.alert(header.mesage);

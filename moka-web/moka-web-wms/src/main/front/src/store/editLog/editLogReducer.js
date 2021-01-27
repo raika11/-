@@ -14,7 +14,7 @@ export const initialState = {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         sort: 'seqNo,desc',
-        searchType: '',
+        searchType: 'all',
         keyword: '',
         successYn: '',
         startDt: null,

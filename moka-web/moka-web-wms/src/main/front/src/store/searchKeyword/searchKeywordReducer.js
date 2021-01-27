@@ -27,6 +27,12 @@ export const initialState = {
         ],
         searchDate: null,
     },
+    statTotal: {
+        totalCnt: 0,
+        mobileCnt: 0,
+        pcCnt: 0,
+        tabletCnt: 0,
+    },
     statDetail: {
         total: 0,
         list: [],
@@ -86,6 +92,14 @@ export default handleActions(
                 draft.stat.list = initialState.stat.list;
                 draft.stat.error = payload;
                 draft.stat.searchDate = moment().format(DB_DATEFORMAT);
+            });
+        },
+        /**
+         * 통계 전체 건수
+         */
+        [act.GET_SEARCH_KEYWORD_STAT_TOTAL_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.statTotal = body;
             });
         },
     },

@@ -24,6 +24,12 @@ export const [GET_SEARCH_KEYWORD_STAT, GET_SEARCH_KEYWORD_STAT_SUCCESS, GET_SEAR
 export const getSearchKeywordStat = createAction(GET_SEARCH_KEYWORD_STAT, ({ search, callback }) => ({ search, callback }));
 
 /**
+ * 키워드 전체 건수
+ */
+export const [GET_SEARCH_KEYWORD_STAT_TOTAL, GET_SEARCH_KEYWORD_STAT_TOTAL_SUCCESS] = createRequestActionTypes('searchKeyword/GET_SEARCH_KEYWORD_STAT_TOTAL');
+export const getSearchKeywordStatTotal = createAction(GET_SEARCH_KEYWORD_STAT_TOTAL, ({ search, callback }) => ({ search, callback }));
+
+/**
  * 키워드 엑셀 다운
  */
 export const DOWNLOAD_EXCEL = 'searchKeyword/DOWNLOAD_EXCEL';

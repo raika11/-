@@ -86,7 +86,7 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
             />
 
             {isNaverChannel && (
-                <div className="float-left pt-card pl-gutter">
+                <div className="float-left pt-card pl-gutter" style={{ width: 'calc(100% - 530px)' }}>
                     <h2 className="color-positive">네이버 채널</h2>
                     <h4 className="color-positive">연예/스포츠 기사 편집시 오류!</h4>
                     <p className="mb-2 color-gray-900">top-single: 상단 이미지 기사 1꼭지 (이미지 없는 기사 편집 시 텍스트로 노출)</p>

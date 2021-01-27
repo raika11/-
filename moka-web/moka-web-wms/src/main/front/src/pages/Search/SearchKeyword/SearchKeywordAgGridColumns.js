@@ -32,4 +32,10 @@ export default [
         width: 130,
         cellClassRules,
     },
+    {
+        headerName: 'Tablet',
+        field: 'tabletCnt',
+        width: 130,
+        cellClassRules,
+    },
 ];

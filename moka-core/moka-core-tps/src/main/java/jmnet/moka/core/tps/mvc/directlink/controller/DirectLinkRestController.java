@@ -145,7 +145,7 @@ public class DirectLinkRestController extends AbstractCommonController {
         //}
 
         // 데이터 유효성 검사
-        validData(directLinkThumbnailFile);
+        //validData(directLinkThumbnailFile);
 
         // DirectLinkDTO -> direct link 변환
         DirectLink directLink = modelMapper.map(directLinkDTO, DirectLink.class);

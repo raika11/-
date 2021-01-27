@@ -12,6 +12,8 @@
     resultType="MicAgendaVO"
     statementType="CALLABLE">
     { call UPA_MIC_AGENDA_LIST_SEL(
+    #{startDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+    #{endDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
     <choose>
       <when test="agndTop != 'all' and agndTop != null and agndTop != ''">
@@ -26,6 +28,15 @@
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     ) }
+  </select>
+
+  <!--아젠다 레포트-->
+  <select id="findMicReport" parameterType="hashMap"
+    statementType="CALLABLE">
+   { call UPA_MIC_REPORT(
+   #{agndTotal, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
+   #{answTotal, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+   )}
   </select>
 
   <!--아젠다 상세조회-->
@@ -79,7 +90,7 @@
     )}
   </insert>
 
-  <!--아젠다 관련기사 모두삭제-->
+  <!--아젠다의 관련기사 모두삭제-->
   <delete id="deleteAllMicAgendaRelArticle" parameterType="java.lang.Long"
     statementType="CALLABLE">
    { call UPA_MIC_REL_ARTICLE_DEL(
@@ -87,7 +98,7 @@
     )}
   </delete>
 
-  <!--아젠다 관련기사 등록-->
+  <!--아젠다의 관련기사 등록-->
   <insert id="insertMicAgendaRelArticle" parameterType="MicRelArticleVO"
     statementType="CALLABLE">
    { call UPA_MIC_REL_ARTICLE_INS(
@@ -98,19 +109,13 @@
     )}
   </insert>
 
-  <!--아젠다 카테고리 등록(삭제포함됨)-->
+  <!--아젠다의 카테고리 등록(삭제포함됨)-->
   <update id="updateMicAgendaCategory" parameterType="hashMap" statementType="CALLABLE">
     { call UPA_MIC_AGENDA_DETAIL_CATEGORY_EDT(
     #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{xml, mode=IN, jdbcType=VARCHAR, javaType=string}
     )}
   </update>
-
-  <!--사용중인 카테고리 목록 조회-->
-  <select id="findAllUsedAgendaCategory" resultType="MicAgendaCategoryVO"
-    statementType="CALLABLE">
-   { call UPA_MIC_AGENDA_CATEGORY_USED_LIST()}
-  </select>
 
   <!--배너 목록 조회-->
   <select id="findAllMicBanner" parameterType="MicBannerSearchDTO" resultType="MicBannerVO"
@@ -123,7 +128,7 @@
    )}
   </select>
 
-  <!--배너 목록 조회-->
+  <!--배너 상세 조회-->
   <select id="findMicBannerById" parameterType="java.lang.Long" resultType="MicBannerVO"
     statementType="CALLABLE">
    { call UPA_MIC_AGENDA_BANNER_DETAIL(
@@ -131,5 +136,54 @@
    )}
   </select>
 
+  <!--배너 등록/수정 (사용여부 수정은 안함)-->
+  <update id="saveMicBanner" parameterType="MicBannerVO" statementType="CALLABLE">
+    { call UPA_MIC_AGENDA_BANNER_UPD(
+    #{bnnrSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{linkUrl, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{imgLink, mode=IN, jdbcType=VARCHAR, javaType=string}
+   )}
+  </update>
+
+  <!--배너 사용여부 수정-->
+  <update id="updateMicBannerToggle" parameterType="java.lang.Long" statementType="CALLABLE">
+    { call UPA_MIC_AGENDA_BANNER_TOGGLE_UPD(
+    #{bnnrSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+   )}
+  </update>
+
+  <!--카테고리 목록 조회-->
+  <select id="findAllUsedAgendaCategory" parameterType="MicAgendaCateSearchDTO"
+    resultType="MicAgendaCategoryVO"
+    statementType="CALLABLE">
+   { call UPA_MIC_AGENDA_CATEGORY_LIST(
+   #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+   #{includeDel, mode=IN, jdbcType=VARCHAR, javaType=string}
+   )}
+  </select>
+
+  <!--카테고리 등록-->
+  <insert id="insertMicAgendaCategory" parameterType="hashMap" statementType="CALLABLE">
+    { call UPA_MIC_AGENDA_CATEGORY_INS(
+    #{catNm, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{retCode, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+   )}
+  </insert>
+
+  <!--카테고리 일괄수정-->
+  <update id="updateAllMicAgendaCategory" parameterType="string" statementType="CALLABLE">
+    { call UPA_MIC_AGENDA_CATEGORY_EDT(
+    #{xml, mode=IN, jdbcType=VARCHAR, javaType=string}
+   )}
+  </update>
+
+  <!--아젠다의 순서 수정-->
+  <update id="updateMicAgendaOrder" parameterType="MicAgendaSimpleVO"
+    statementType="CALLABLE">
+   { call UPA_MIC_AGENDA_ORDER_NUM_UPD(
+    #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{ordNo, mode=IN, jdbcType=INTEGER, javaType=integer}
+    )}
+  </update>
 
 </mapper>

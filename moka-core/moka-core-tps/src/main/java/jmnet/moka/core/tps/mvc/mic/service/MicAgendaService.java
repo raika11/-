@@ -6,10 +6,11 @@ package jmnet.moka.core.tps.mvc.mic.service;
 
 import java.io.IOException;
 import java.util.List;
-import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaCateSearchDTO;
+import java.util.Map;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaSearchDTO;
-import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaCategoryVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaSimpleVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaVO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Description: 설명
@@ -25,6 +26,13 @@ public interface MicAgendaService {
      * @return 아젠다 목록
      */
     List<MicAgendaVO> findAllMicAgenda(MicAgendaSearchDTO search);
+
+    /**
+     * AGENDA, ANSWER 합계 조회
+     *
+     * @return AGENDA, ANSWER 합계
+     */
+    Map<String, Object> findMic();
 
     /**
      * 아젠다 저장
@@ -44,10 +52,19 @@ public interface MicAgendaService {
     MicAgendaVO findMicAgendaById(Long agndSeq);
 
     /**
-     * 카테고리 목록 조회
+     * 이미지저장
      *
-     * @param search 검색조건
-     * @return 카테고리 목록
+     * @param thumbnail 이미지
+     * @return 이미지경로
+     * @throws IOException 예외
      */
-    List<MicAgendaCategoryVO> findAllMicAgendaCategory(MicAgendaCateSearchDTO search);
+    String saveImage(MultipartFile thumbnail)
+            throws IOException;
+
+    /**
+     * 아젠다 순서 변경
+     *
+     * @param micAgendaCategoryVOList 변경할 아젠다 목록
+     */
+    void updateAllMicAgendaOrder(List<MicAgendaSimpleVO> micAgendaCategoryVOList);
 }

@@ -6,12 +6,10 @@ package jmnet.moka.core.tps.mvc.mic.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,11 +63,11 @@ public class MicAgendaCategoryVO implements Serializable {
     @Column(name = "USED_YN", nullable = false)
     private String usedYn;
 
-    /**
-     * 등록일시
-     */
-    @DTODateTimeFormat
-    @Column(name = "REG_DT", nullable = false)
-    private Date regDt;
+    //    /**
+    //     * 등록일시
+    //     */
+    //    @DTODateTimeFormat
+    //    @Column(name = "REG_DT", nullable = false)
+    //    private Date regDt;
 
 }

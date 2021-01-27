@@ -10,15 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
-import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaCateSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.mapper.MicMapper;
-import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaCategoryVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaSimpleVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicRelArticleVO;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +54,17 @@ public class MicAgendaServiceImpl implements MicAgendaService {
     }
 
     @Override
+    public Map<String, Object> findMic() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("agndTotal", 0);
+        param.put("answTotal", 0);
+        micMapper.findMicReport(param);
+
+        return param;
+    }
+
+    @Override
+    @Transactional
     public boolean saveMicAgenda(MicAgendaVO micAgendaVO)
             throws IOException {
         boolean uploaded = true;
@@ -106,7 +116,6 @@ public class MicAgendaServiceImpl implements MicAgendaService {
                     .getRelArticleList()
                     .size() > 0) {
                 for (MicRelArticleVO vo : micAgendaVO.getRelArticleList()) {
-                    // 썸네일 바뀌었는지 확인할것
                     vo.setAgndSeq(micAgendaVO.getAgndSeq());
                     micMapper.insertMicAgendaRelArticle(vo);
                 }
@@ -137,7 +146,8 @@ public class MicAgendaServiceImpl implements MicAgendaService {
         return uploaded;
     }
 
-    private String saveImage(MultipartFile thumbnail)
+    @Override
+    public String saveImage(MultipartFile thumbnail)
             throws IOException {
 
         // 파일명 생성
@@ -168,6 +178,14 @@ public class MicAgendaServiceImpl implements MicAgendaService {
     }
 
     @Override
+    @Transactional
+    public void updateAllMicAgendaOrder(List<MicAgendaSimpleVO> micAgendaCategoryVOList) {
+        for (MicAgendaSimpleVO vo : micAgendaCategoryVOList) {
+            micMapper.updateMicAgendaOrder(vo);
+        }
+    }
+
+    @Override
     public MicAgendaVO findMicAgendaById(Long agndSeq) {
         MicAgendaVO agenda = micMapper.findMicAgendaById(agndSeq);
         agenda.setCategoryList(micMapper.findMicAgendaCategoryById(agndSeq));
@@ -175,10 +193,5 @@ public class MicAgendaServiceImpl implements MicAgendaService {
         return agenda;
     }
 
-    @Override
-    public List<MicAgendaCategoryVO> findAllMicAgendaCategory(MicAgendaCateSearchDTO search) {
-        return search
-                .getUsedYn()
-                .equals(MokaConstants.YES) ? micMapper.findAllUsedAgendaCategory() : null;
-    }
+
 }

@@ -7,9 +7,11 @@ package jmnet.moka.core.tps.mvc.mic.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -40,6 +42,14 @@ public class MicAgendaSearchDTO extends SearchDTO {
      */
     @ApiModelProperty("메뉴노출조건")
     private String agndTop;
+
+    @ApiModelProperty("시작일자")
+    @DTODateTimeFormat
+    private Date startDt;
+
+    @ApiModelProperty("종료일자")
+    @DTODateTimeFormat
+    private Date endDt;
 
     /**
      * 생성자: 검색 조건의 기본값을 설정

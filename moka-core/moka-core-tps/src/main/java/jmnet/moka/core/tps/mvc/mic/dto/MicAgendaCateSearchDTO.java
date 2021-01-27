@@ -35,16 +35,16 @@ public class MicAgendaCateSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 사용여부
+     * 삭제된것까지 검색 포함 여부
      */
-    @ApiModelProperty("사용여부")
-    private String usedYn;
+    @ApiModelProperty("삭제된것까지 검색 포함 여부 (Y/N)")
+    private String includeDel;
 
     /**
      * 생성자: 검색 조건의 기본값을 설정
      */
     public MicAgendaCateSearchDTO() {
         this.setUseTotal(MokaConstants.YES);
-        this.usedYn = MokaConstants.YES;
+        this.includeDel = MokaConstants.NO;
     }
 }

@@ -22,7 +22,9 @@ const PollDetailCompareTextAnswerComponent = ({ items, hasUrl, onChange }) => {
     };
 
     useEffect(() => {
-        setEditItems(items);
+        if (items.length === 2) {
+            setEditItems(items);
+        }
     }, [items]);
 
     return (

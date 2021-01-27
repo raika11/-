@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import RelationPollInfoComponent from '@pages/Survey/Poll/components/RelationPollInfoComponent';
@@ -7,14 +7,25 @@ import toast from '@utils/toastUtil';
 import RelationArticleInfoComponent from '@pages/Survey/Poll/components/RelationArticleInfoComponent';
 import commonUtil from '@utils/commonUtil';
 import { useHistory } from 'react-router-dom';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
+import { unescapeHtml } from '@utils/convertUtil';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPoll, getPollList, updatePoll } from '@store/survey/poll/pollAction';
 
 const PollChildRelation = () => {
     const history = useHistory();
-    const [isRelationPollModalShow, setIsRelationPollModalShow] = useState(false);
-
+    const dispatch = useDispatch();
+    const [edit, setEdit] = useState({});
+    const [isPollModalShow, setIsPollModalShow] = useState(false);
+    const [isArticleModalShow, setIsArticleModalShow] = useState(false);
     const [relationPolls, setRelationPolls] = useState([]);
-
     const [relationArticles, setRelationArticles] = useState([]);
+    const [selectArticle, setSelectArticle] = useState(null);
+
+    const { poll, search } = useSelector((store) => ({
+        poll: store.poll.poll,
+        search: store.poll.search,
+    }));
 
     const handleClickRelationPollAdd = (data) => {
         if (relationPolls.filter((poll) => poll.id === data.id).length > 0) {
@@ -24,15 +35,27 @@ const PollChildRelation = () => {
         }
     };
 
+    const handleClickArticleAdd = (row) => {
+        setSelectArticle(row);
+    };
+
     const handleClickRelationPollDelete = (id) => {
         setRelationPolls(relationPolls.filter((polls) => polls.id !== id));
     };
 
-    const handleClickSearch = () => {
-        setIsRelationPollModalShow(true);
+    const handleClickArticleModalShow = () => {
+        if (commonUtil.isEmpty(edit.pollSeq)) {
+            toast.warning('투표 정보를 먼저 등록해 주세요');
+        } else {
+            setIsArticleModalShow(true);
+        }
     };
-    const handleClickClose = () => {
-        setIsRelationPollModalShow(false);
+
+    const handleClickSearch = () => {
+        setIsPollModalShow(true);
+    };
+    const handleClickPollModalClose = () => {
+        setIsPollModalShow(false);
     };
 
     const handleClickRelationArticleAdd = (data) => {
@@ -42,9 +65,52 @@ const PollChildRelation = () => {
     };
 
     const handleClickRelationArticleDelete = (id) => {
-        setRelationArticles(relationArticles.filter((data, index) => index !== id));
+        const article = relationArticles.filter((data, index) => index !== id);
+        setRelationArticles(article);
+        setEdit({ ...edit, pollRelateContents: [...relationPolls, ...article] });
     };
 
+    const handleChangeSave = () => {
+        if (commonUtil.isEmpty(edit.pollSeq)) {
+            toast.warning('투표 정보를 먼저 등록해 주세요');
+        } else {
+            dispatch(
+                updatePoll({
+                    data: edit,
+                    callback: (response) => {
+                        dispatch(getPoll(response.body.pollSeq));
+                        dispatch(getPollList(search));
+                        toast.result(response);
+                    },
+                }),
+            );
+        }
+    };
+
+    useEffect(() => {
+        if (selectArticle) {
+            const { artTitle: title, totalId } = selectArticle;
+            const article = [...relationArticles, { title, linkUrl: `https://news.joins.com/article/${totalId}`, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId }];
+            console.log(article);
+            setRelationArticles(article);
+            setEdit({ ...edit, pollRelateContents: [...relationPolls, ...article] });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectArticle]);
+
+    useEffect(() => {
+        if (edit.pollRelateContents) {
+            setRelationArticles(edit.pollRelateContents.filter((data) => data.relType === 'A'));
+        }
+    }, [edit.pollRelateContents]);
+
+    useEffect(() => {
+        setEdit(poll);
+    }, [poll]);
+
+    useEffect(() => {
+        console.log(edit);
+    }, [edit]);
     return (
         <div className="d-flex">
             <MokaCard
@@ -55,7 +121,7 @@ const PollChildRelation = () => {
                 footer
                 footerClassName="justify-content-center"
                 footerButtons={[
-                    { text: '저장', variant: 'positive', onClick: () => console.log('저장'), className: 'mr-05' },
+                    { text: '저장', variant: 'positive', onClick: handleChangeSave, className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
                 ]}
             >
@@ -82,8 +148,11 @@ const PollChildRelation = () => {
                         <Form.Row>
                             <Col xs={12}>
                                 <Form.Group>
-                                    <Form.Label className="pr-2">관련 정보</Form.Label>
-                                    <Button variant="positive" size="sm" onClick={() => handleClickRelationArticleAdd()}>
+                                    <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
+                                    <Button variant="positive" onClick={handleClickArticleModalShow} className="mr-2">
+                                        기사 검색
+                                    </Button>
+                                    <Button variant="positive" onClick={handleClickRelationArticleAdd}>
                                         추가
                                     </Button>
                                 </Form.Group>
@@ -94,15 +163,16 @@ const PollChildRelation = () => {
                                 <RelationArticleInfoComponent
                                     key={index}
                                     id={index}
-                                    title={relationArticle.title}
-                                    url={relationArticle.url}
+                                    title={unescapeHtml(relationArticle.title)}
+                                    url={relationArticle.linkUrl && relationArticle.linkUrl}
                                     onDelete={handleClickRelationArticleDelete}
                                 />
                             ))}
                     </Form.Group>
                 </Form>
             </MokaCard>
-            <RelationPollModal show={isRelationPollModalShow} onHide={handleClickClose} onAdd={handleClickRelationPollAdd}></RelationPollModal>
+            <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickArticleAdd} relationArticles={relationArticles} />
+            <RelationPollModal show={isPollModalShow} onHide={handleClickPollModalClose} onAdd={handleClickRelationPollAdd}></RelationPollModal>
         </div>
     );
 };

@@ -20,28 +20,23 @@ import {
 moment.locale('ko');
 const initialSearch = {
     ...initialState.history.componentWorkHistory.search,
-    regDt: moment(new Date()).set({ hour: 0, minute: 0, second: 0 }),
+    regDt: moment().startOf('day'),
 };
 
 const HistoryList = (props) => {
-    const { show } = props;
+    const { show, isNaverChannel, componentList } = props;
     const dispatch = useDispatch();
-
     const { componentWorkLoading, deskingWorkLoading } = useSelector((store) => ({
         componentWorkLoading: store.loading[GET_COMPONENT_WORK_HISTORY],
         deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
     }));
-    const { selectedComponent, isNaverChannel } = useSelector((store) => ({
-        selectedComponent: store.desking.selectedComponent,
-        isNaverChannel: store.desking.isNaverChannel,
-    }));
-    const { area, total, componentList, HistoryList, deskingWorkHistoryList } = useSelector(
-        (store) => ({
-            area: store.desking.area,
-            componentList: store.desking.list,
-            total: store.desking.history.componentWorkHistory.total,
-            HistoryList: store.desking.history.componentWorkHistory.list,
-            deskingWorkHistoryList: store.desking.history.deskingWorkHistory.list,
+    const selectedComponent = useSelector(({ desking }) => desking.selectedComponent);
+    const { area, total, HistoryList, deskingWorkHistoryList } = useSelector(
+        ({ desking }) => ({
+            area: desking.area,
+            total: desking.history.componentWorkHistory.total,
+            HistoryList: desking.history.componentWorkHistory.list,
+            deskingWorkHistoryList: desking.history.deskingWorkHistory.list,
         }),
         shallowEqual,
     );
@@ -177,6 +172,7 @@ const HistoryList = (props) => {
                     onChange={handleChangeSearchOption}
                     onRowClick={handleRowClicked}
                     onLoad={handleClickLoad}
+                    isNaverChannel={isNaverChannel}
                 />
             </div>
             <div className="flex-fill">

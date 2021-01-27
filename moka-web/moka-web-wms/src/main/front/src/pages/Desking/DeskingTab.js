@@ -4,8 +4,9 @@ import { MokaIconTabs, MokaIcon } from '@components';
 import { DeskingArticleTab, ComponentWorkPreview, HistoryList } from './components';
 
 const DeskingTabs = ({ componentAgGridInstances }) => {
-    const { componentList } = useSelector((store) => ({
-        componentList: store.desking.list,
+    const { componentList, isNaverChannel } = useSelector(({ desking }) => ({
+        componentList: desking.list,
+        isNaverChannel: desking.isNaverChannel,
     }));
 
     // state
@@ -23,7 +24,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 미리보기
                      */
-                    <ComponentWorkPreview show={activeTabIdx === 0} />,
+                    <ComponentWorkPreview show={activeTabIdx === 0} componentList={componentList} isNaverChannel={isNaverChannel} />,
                     /**
                      * 기사보기
                      */
@@ -31,7 +32,7 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
                     /**
                      * 히스토리
                      */
-                    <HistoryList show={activeTabIdx === 2} />,
+                    <HistoryList show={activeTabIdx === 2} componentList={componentList} isNaverChannel={isNaverChannel} />,
                 ]}
                 tabNavWidth={48}
                 tabNavPosition="right"

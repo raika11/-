@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import produce from 'immer';
+import clsx from 'clsx';
 import { useDispatch } from 'react-redux';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaTableImageRenderer } from '@components';
-import { columnDefs, rowClassRules } from './DeskingWorkAgGridColumns';
+import { columnDefs, rowClassRules, naverChannelColumnDefs } from './DeskingWorkAgGridColumns';
 import DeskingReadyGrid from '@pages/Desking/components/DeskingReadyGrid';
 import DeskingEditorRenderer from './DeskingEditorRenderer';
 import { unescapeHtml } from '@utils/convertUtil';
@@ -18,7 +19,7 @@ let hoverBox = makeHoverBox();
  * 데스킹 AgGrid
  */
 const DeskingWorkAgGrid = (props) => {
-    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete, deskingPart } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, onRowClicked, onSave, onDelete, deskingPart, isNaverChannel = false } = props;
     const { deskingWorks } = component;
     const dispatch = useDispatch();
     // const IR_URL = useSelector(({ app }) => app.IR_URL);
@@ -565,14 +566,14 @@ const DeskingWorkAgGrid = (props) => {
     );
 
     return (
-        <div className="ag-theme-moka-desking-grid position-relative px-1">
+        <div className={clsx('ag-theme-moka-desking-grid position-relative px-1', { 'naver-channel': isNaverChannel })}>
             {component.viewYn === 'N' && <div className="opacity-box"></div>}
             <AgGridReact
                 immutableData
                 onGridReady={handleGridReady}
                 rowData={rowData}
                 getRowNodeId={(params) => params.contentId}
-                columnDefs={columnDefs}
+                columnDefs={isNaverChannel ? naverChannelColumnDefs : columnDefs}
                 localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
                 onRowDragEnter={handleRowDragEnter}
                 onRowDragEnd={handleRowDragEnd}

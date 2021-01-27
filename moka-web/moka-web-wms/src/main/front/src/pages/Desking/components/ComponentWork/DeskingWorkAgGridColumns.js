@@ -7,8 +7,9 @@ export const rowClassRules = {
     'ag-rel-row': (params) => params.data.rel === true,
 };
 
-const suppressKeyboardEvent = (params) => true;
+const suppressKeyboardEvent = () => true;
 
+// 기본 데스킹워크 컬럼 정의
 export const columnDefs = [
     {
         rowDrag: true,
@@ -19,9 +20,6 @@ export const columnDefs = [
                 const message = params.rowNodes ? params.rowNodes[0].data.title : params.rowNode.data.title;
                 return `${message} 외 [${dragItemCount - 1}건]`;
             }
-            // if (params.rowNode.data.rel) {
-            //     return params.rowNode.data.relTitle;
-            // }
             return params.rowNode.data.title;
         },
         cellClassRules: cellClassRules,
@@ -78,21 +76,32 @@ export const columnDefs = [
     },
 ];
 
-// cellStyle: {
-//     boxSizing: 'border-box',
-//     whiteSpace: 'normal',
-//     lineHeight: '20px',
-//     fontSize: '12px',
-//     height: '50px',
-//     display: '-webkit-box',
-//     paddingTop: '4px',
-//     '-webkit-line-clamp': 2,
-//     '-webkit-box-orient': 'vertical',
-//     overflow: 'hidden',
-//     cursor: 'pointer',
-// },
-// editable: true,
-// cellEditor: 'agLargeTextCellEditor',
-// cellEditorParams: {
-//     rows: '2',
-// },
+// 네이버채널 컬럼 정의
+export const naverChannelColumnDefs = [
+    {
+        rowDrag: true,
+        width: 24,
+        suppressMenu: true,
+        rowDragText: (params) => params.rowNode.data.title,
+    },
+    {
+        field: 'contentOrdEx',
+        width: 24,
+        cellClassRules: cellClassRules,
+        cellStyle: { fontSize: '12px' },
+    },
+    {
+        width: 50,
+        field: 'irThumbFileName',
+        cellRenderer: 'imageRenderer',
+        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+    },
+    {
+        width: 200,
+        field: 'title',
+        flex: 1,
+        autoHeight: true,
+        cellRenderer: 'editor',
+        suppressKeyboardEvent: suppressKeyboardEvent,
+    },
+];

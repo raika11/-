@@ -26,8 +26,8 @@ const ComponentWorkList = (props) => {
 
     // state
     const [disabledList, setDisabledList] = useState([]);
-    const [leftList, setLeftList] = useState([]);
-    const [rightList, setRightList] = useState([]);
+    const [leftList, setLeftList] = useState([]); // 왼쪽 워크리스트
+    const [rightList, setRightList] = useState([]); // 오른쪽 워크리스트
 
     /**
      * 페이지 미리보기
@@ -119,11 +119,12 @@ const ComponentWorkList = (props) => {
     );
 
     useEffect(() => {
-        // 왼쪽, 오른쪽 리스트
         if (area.areaDiv === ITEM_CP) {
+            // CP => 왼쪽 리스트만 노출
             setRightList([]);
             area.areaComp ? setLeftList([area.areaComp]) : setLeftList(area.areaComps);
         } else if (area.areaDiv === ITEM_CT) {
+            // CT => 편집영역의 설정에 따라 왼쪽, 오른쪽 리스트 노출
             let left = [],
                 right = [];
 

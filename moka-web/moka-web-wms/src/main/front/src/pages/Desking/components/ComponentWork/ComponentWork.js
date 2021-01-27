@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DATA_TYPE_DESK } from '@/constants';
+import { MokaLoader } from '@components';
 import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ButtonGroup';
 import DeskingWorkAgGrid from './DeskingWorkAgGrid';
@@ -48,12 +49,10 @@ const ComponentWork = (props) => {
     const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
     // const { editFormPart } = props;
     const dispatch = useDispatch();
-
-    const { workStatus } = useSelector((store) => ({
-        workStatus: store.desking.workStatus,
-    }));
+    const workStatus = useSelector(({ desking }) => desking.workStatus);
 
     // state
+    const [loading, setLoading] = useState(false);
     const [deskingWorkData, setDeskingWorkData] = useState({});
     const [editModalShow, setEditModalShow] = useState(false);
     // const [formShow, setFormShow] = useState(false);
@@ -119,6 +118,8 @@ const ComponentWork = (props) => {
             })}
             id={`agGrid-${component.seq}`}
         >
+            {loading && <MokaLoader />}
+
             {/* 컴포넌트 워크의 버튼 그룹 */}
             <ButtonGroup
                 areaSeq={areaSeq}
@@ -126,6 +127,7 @@ const ComponentWork = (props) => {
                 agGridIndex={agGridIndex}
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
+                setLoading={setLoading}
                 // handleForm={() => setFormShow(true)}
             />
 

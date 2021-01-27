@@ -19,7 +19,7 @@ import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from
  * 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus } = props;
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, setLoading } = props;
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState('');
@@ -49,6 +49,7 @@ const ButtonGroup = (props) => {
      */
     const handleClickPublish = useCallback(() => {
         messageBox.confirm('전송하시겠습니까?', () => {
+            setLoading(true);
             dispatch(
                 postPublishComponentWork({
                     componentWorkSeq: component.seq,
@@ -59,16 +60,18 @@ const ButtonGroup = (props) => {
                         } else {
                             toast.fail(header.message);
                         }
+                        setLoading(false);
                     },
                 }),
             );
         });
-    }, [component.seq, areaSeq, dispatch]);
+    }, [setLoading, dispatch, component.seq, areaSeq]);
 
     /**
      * 임시저장
      */
     const handleClickSave = useCallback(() => {
+        setLoading(true);
         dispatch(
             postSaveComponentWork({
                 componentWorkSeq: component.seq,
@@ -78,27 +81,30 @@ const ButtonGroup = (props) => {
                     } else {
                         toast.fail(header.message);
                     }
+                    setLoading(false);
                 },
             }),
         );
-    }, [component.seq, dispatch]);
+    }, [component.seq, dispatch, setLoading]);
 
     /**
      * 임시저장 + 전송 (비활성 상태를 저장할 때)
      */
     const handleClickSavePublish = useCallback(() => {
         messageBox.confirm('컴포넌트 비활성 상태를 저장하시겠습니까?\n(즉시 전송되어 서비스 화면에 반영됩니다.)', () => {
+            setLoading(true);
             dispatch(
                 postSavePublishComponentWork({
                     componentWorkSeq: component.seq,
                     areaSeq,
                     callback: ({ header }) => {
                         if (!header.success) toast.fail(header.message);
+                        setLoading(false);
                     },
                 }),
             );
         });
-    }, [component.seq, areaSeq, dispatch]);
+    }, [setLoading, dispatch, component.seq, areaSeq]);
 
     /**
      * 공백추가
@@ -127,6 +133,7 @@ const ButtonGroup = (props) => {
             toast.warning('삭제할 기사가 없습니다');
             return;
         }
+        setLoading(true);
         dispatch(
             deleteDeskingWorkList({
                 componentWorkSeq: component.seq,
@@ -136,10 +143,11 @@ const ButtonGroup = (props) => {
                     if (!header.success) {
                         toast.error(header.message);
                     }
+                    setLoading(false);
                 },
             }),
         );
-    }, [component.datasetSeq, component.deskingWorks, component.seq, dispatch]);
+    }, [component.datasetSeq, component.deskingWorks, component.seq, dispatch, setLoading]);
 
     /**
      * 템플릿 변경

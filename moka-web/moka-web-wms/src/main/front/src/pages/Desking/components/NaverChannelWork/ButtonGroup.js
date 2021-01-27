@@ -10,44 +10,25 @@ import { DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 import DropdownToggle from '@pages/Desking/components/ComponentWork/DropdownToggle';
-// import ReserveComponentWork from '@pages/Desking/components/ComponentWork/ReserveComponentWork';
-import { EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
 
 /**
  * 네이버채널 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, workTemplateSeq } = props;
+    const { areaSeq, component, workTemplateSeq, setLoading } = props;
     // const { workStatus } = props;
     const dispatch = useDispatch();
-
     const [title, setTitle] = useState('');
     const [viewN, setViewN] = useState(false);
     const [tooltipText, setTooltipText] = useState('');
     const [iconButton, setIconButton] = useState([]);
-
-    // modal state
-    const [modalShow, setModalShow] = useState({
-        html: false,
-        template: false,
-        tems: false,
-        space: false,
-        register: false,
-        listNumber: false,
-    });
-
-    const handleModalShow = useCallback(
-        (key, showOrClose) => {
-            setModalShow({ ...modalShow, [key]: showOrClose });
-        },
-        [modalShow],
-    );
 
     /**
      * 전송
      */
     const handleClickPublish = useCallback(() => {
         messageBox.confirm('전송하시겠습니까?', () => {
+            setLoading(true);
             dispatch(
                 postPublishComponentWork({
                     componentWorkSeq: component.seq,
@@ -57,18 +38,20 @@ const ButtonGroup = (props) => {
                         if (header.success) {
                             toast.success(header.message);
                         } else {
-                            toast.fail(header.message);
+                            messageBox.alert(header.message);
                         }
+                        setLoading(false);
                     },
                 }),
             );
         });
-    }, [dispatch, component.seq, workTemplateSeq, areaSeq]);
+    }, [setLoading, dispatch, component.seq, workTemplateSeq, areaSeq]);
 
     /**
      * 임시저장
      */
     const handleClickSave = useCallback(() => {
+        setLoading(true);
         dispatch(
             postSaveComponentWork({
                 componentWorkSeq: component.seq,
@@ -77,17 +60,13 @@ const ButtonGroup = (props) => {
                     if (header.success) {
                         toast.success(header.message);
                     } else {
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
+                    setLoading(false);
                 },
             }),
         );
-    }, [component.seq, dispatch, workTemplateSeq]);
-
-    /**
-     * 리스트 건수
-     */
-    const handleOpenListNumber = useCallback(() => handleModalShow('listNumber', true), [handleModalShow]);
+    }, [component.seq, dispatch, setLoading, workTemplateSeq]);
 
     /**
      * 전체삭제
@@ -97,6 +76,7 @@ const ButtonGroup = (props) => {
             toast.warning('삭제할 기사가 없습니다');
             return;
         }
+        setLoading(true);
         dispatch(
             deleteDeskingWorkList({
                 componentWorkSeq: component.seq,
@@ -104,22 +84,19 @@ const ButtonGroup = (props) => {
                 list: component.deskingWorks,
                 callback: ({ header }) => {
                     if (!header.success) {
-                        toast.error(header.message);
+                        messageBox.alert(header.message);
                     }
+                    setLoading(false);
                 },
             }),
         );
-    }, [component.datasetSeq, component.deskingWorks, component.seq, dispatch]);
+    }, [component.datasetSeq, component.deskingWorks, component.seq, dispatch, setLoading]);
 
     /**
      * 드롭다운 아이템 생성
      */
     const createDropdownItem = useCallback(() => {
-        const items = [
-            { text: 'HTML 수동편집', viewN: false, onClick: () => handleModalShow('html', true) },
-            { text: '전체 삭제', viewN: false, onClick: handleClickDelete },
-            { text: '리스트 건수 변경', viewN: false, onClick: handleOpenListNumber },
-        ];
+        const items = [{ text: '전체 삭제', viewN: false, onClick: handleClickDelete }];
 
         return (
             <React.Fragment>
@@ -132,7 +109,7 @@ const ButtonGroup = (props) => {
                     ))}
             </React.Fragment>
         );
-    }, [handleClickDelete, handleModalShow, handleOpenListNumber, viewN]);
+    }, [handleClickDelete, viewN]);
 
     useEffect(() => {
         if (component.componentSeq) setTitle(component.componentName);
@@ -185,12 +162,6 @@ const ButtonGroup = (props) => {
                     </MokaOverlayTooltipButton>
                 </Col>
             </Row>
-
-            {/* HTML 수동 편집 */}
-            <EditHtmlModal show={modalShow.html} onHide={() => handleModalShow('html', false)} component={component} />
-
-            {/* 리스트 건수 */}
-            <EditListNumberModal show={modalShow.listNumber} onHide={() => handleModalShow('listNumber', false)} data={component} />
         </div>
     );
 };

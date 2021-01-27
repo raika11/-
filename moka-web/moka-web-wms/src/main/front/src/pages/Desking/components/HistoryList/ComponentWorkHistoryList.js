@@ -7,7 +7,7 @@ import { initialState } from '@store/history';
 import columnDefs from './ComponentWorkHistoryListColumns';
 
 const ComponentWorkHistoryList = (props) => {
-    const { search, setSearch, componentList, total, loading, rowData, onChange, onRowClick, onSearch } = props;
+    const { search, setSearch, componentList, total, loading, rowData, onChange, onRowClick, onSearch, isNaverChannel = false } = props;
 
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
@@ -26,69 +26,68 @@ const ComponentWorkHistoryList = (props) => {
     };
 
     return (
-        <div style={{ width: 400 }} className="pr-3">
-            <Form>
-                {/* 컴포넌트 명 */}
-                <MokaInput as="select" className="mb-2" onChange={handleChangeValue} name="componentSeq" value={search.componentSeq}>
-                    <option hidden>컴포넌트 명</option>
-                    {componentList.map((comp) => (
-                        <option key={comp.componentSeq} value={comp.componentSeq}>
-                            {comp.componentName}
-                        </option>
-                    ))}
-                </MokaInput>
-                {/* 날짜 검색 */}
+        <div style={{ width: 400 }} className="d-flex flex-column pr-3 h-100">
+            {/* 컴포넌트 명 */}
+            {!isNaverChannel && (
                 <Form.Row className="mb-2">
-                    <Col xs={4} className="p-0 pr-2">
-                        <MokaInput as="select" value={search.status} name="status" onChange={handleChangeValue}>
-                            <option value={DESK_HIST_PUBLISH}>전송 기록</option>
-                            <option value={DESK_HIST_SAVE}>임시저장 기록</option>
-                        </MokaInput>
-                    </Col>
-                    <Col xs={8} className="p-0">
-                        <MokaInputLabel
-                            label="날짜"
-                            as="dateTimePicker"
-                            labelWidth={28}
-                            className="mb-0 w-100"
-                            inputProps={{
-                                timeFormat: null,
-                            }}
-                            value={search.regDt}
-                            onChange={handleDate}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    {/* 검색조건 */}
-                    <Col xs={4} className="p-0 pr-2">
-                        <MokaInput as="select" value={search.searchType} name="keyword" onChange={handleChangeValue}>
-                            {initialState.searchTypeList.map((searchType) => (
-                                <option value={searchType.id} key={searchType.id}>
-                                    {searchType.name}
+                    <Col xs={12} className="p-0">
+                        <MokaInput as="select" onChange={handleChangeValue} name="componentSeq" value={search.componentSeq}>
+                            <option hidden>컴포넌트 명</option>
+                            {componentList.map((comp) => (
+                                <option key={comp.componentSeq} value={comp.componentSeq}>
+                                    {comp.componentName}
                                 </option>
                             ))}
                         </MokaInput>
                     </Col>
-                    {/* 키워드 */}
-                    <Col xs={8} className="p-0 mb-0">
-                        <MokaSearchInput
-                            value={search.keyword}
-                            name="keyword"
-                            onChange={handleChangeValue}
-                            onSearch={() => onSearch(search)}
-                            buttonDisabled={!search.componentSeq}
-                        />
-                    </Col>
                 </Form.Row>
-            </Form>
+            )}
+
+            {/* 날짜 검색 */}
+            <Form.Row className="mb-2">
+                <Col xs={4} className="p-0 pr-2">
+                    <MokaInput as="select" value={search.status} name="status" onChange={handleChangeValue}>
+                        <option value={DESK_HIST_PUBLISH}>전송 기록</option>
+                        <option value={DESK_HIST_SAVE}>임시저장 기록</option>
+                    </MokaInput>
+                </Col>
+                <Col xs={8} className="p-0">
+                    <MokaInputLabel
+                        label="날짜"
+                        as="dateTimePicker"
+                        labelWidth={28}
+                        className="mb-0 w-100"
+                        inputProps={{
+                            timeFormat: null,
+                        }}
+                        value={search.regDt}
+                        onChange={handleDate}
+                    />
+                </Col>
+            </Form.Row>
+
+            {/* 검색조건, 키워드 */}
+            <Form.Row className="mb-2">
+                <Col xs={4} className="p-0 pr-2">
+                    <MokaInput as="select" value={search.searchType} name="keyword" onChange={handleChangeValue}>
+                        {initialState.searchTypeList.map((searchType) => (
+                            <option value={searchType.id} key={searchType.id}>
+                                {searchType.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </Col>
+                <Col xs={8} className="p-0 mb-0">
+                    <MokaSearchInput value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={() => onSearch(search)} buttonDisabled={!search.componentSeq} />
+                </Col>
+            </Form.Row>
 
             {/* search의 테이블 */}
             <MokaTable
+                className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(history) => history.seq}
-                agGridHeight={558}
                 onRowClicked={onRowClick}
                 loading={loading}
                 total={total}

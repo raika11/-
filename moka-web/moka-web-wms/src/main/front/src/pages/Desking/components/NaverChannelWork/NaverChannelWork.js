@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { MokaLoader } from '@components';
 import { DATA_TYPE_DESK } from '@/constants';
 import { deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ButtonGroup';
@@ -45,12 +46,9 @@ const defaultProps = {
 const NaverChannelWork = (props) => {
     const { component, componentWorkList, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
     const dispatch = useDispatch();
-
-    const { workStatus } = useSelector((store) => ({
-        workStatus: store.desking.workStatus,
-    }));
-
+    const workStatus = useSelector(({ desking }) => desking.workStatus);
     const [workTemplateSeq, setWorkTemplateSeq] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     /**
      * 편집기사 삭제 (delete)
@@ -88,6 +86,8 @@ const NaverChannelWork = (props) => {
             })}
             id={`agGrid-${component.seq}`}
         >
+            {loading && <MokaLoader />}
+
             {/* 컴포넌트 워크의 버튼 그룹 */}
             <ButtonGroup
                 areaSeq={areaSeq}
@@ -96,6 +96,7 @@ const NaverChannelWork = (props) => {
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
                 workTemplateSeq={workTemplateSeq}
+                setLoading={setLoading}
             />
 
             {/* 편집기사 리스트 */}
@@ -108,6 +109,7 @@ const NaverChannelWork = (props) => {
                     deskingPart={deskingPart}
                     onRowClicked={() => {}}
                     onDelete={handleClickDelete}
+                    isNaverChannel
                 />
             )}
         </div>

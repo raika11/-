@@ -111,9 +111,7 @@ const SearchKeywordSearch = () => {
     useEffect(() => {
         const nt = new Date();
         const dt = moment(nt).format(DB_DATEFORMAT);
-        // 임시로 작년으로 연결
-        // const st = moment(nt).startOf(period).format(DB_DATEFORMAT);
-        const st = moment(nt).subtract(5, 'months').startOf('month').startOf('day').format(DB_DATEFORMAT);
+        const st = moment(nt).startOf(period).format(DB_DATEFORMAT);
         const ns = { ...initialState.stat.search, startDt: st, endDt: dt };
         dispatch(changeStatSearchOption(ns));
         dispatch(
@@ -130,40 +128,34 @@ const SearchKeywordSearch = () => {
     }, [dispatch]);
 
     return (
-        <Form className="mb-2">
-            <Form.Row className="mb-2">
-                <Col xs={2} className="p-0">
-                    <div className="flex-shrink-0">
-                        <MokaInput as="select" name="deviceType" onChange={handleChangeValue} value={search.deviceType}>
-                            <option value="">구분 전체</option>
-                            <option value="pc">PC</option>
-                            <option value="mobile">Mobile</option>
-                        </MokaInput>
-                    </div>
-                </Col>
-                <Col xs={4} className="p-0"></Col>
-                <Col xs={6} className="p-0 d-flex">
+        <div className="mb-2">
+            <Form.Row>
+                <Col xs={6} className="p-0 pr-2 d-flex">
                     <div className="flex-shrink-0 mr-2">
                         <MokaInput as="select" name="period" onChange={handleChangeValue} value={period}>
                             <option value="day">오늘</option>
-                            <option value="week">이번주</option>
+                            <option value="isoWeek">이번주</option>
                             <option value="month">이번달</option>
-                            <option value="year">올해</option>
                         </MokaInput>
                     </div>
                     <MokaInput as="dateTimePicker" className="mr-1" name="startDt" inputProps={{ timeFormat: null }} value={search.startDt} onChange={handleChangeSD} />
                     <MokaInput as="dateTimePicker" className="ml-1" name="endDt" inputProps={{ timeFormat: null }} value={search.endDt} onChange={handleChangeED} />
                 </Col>
-            </Form.Row>
-            <Form.Row>
-                <Col xs={12} className="p-0 d-flex">
-                    <MokaSearchInput name="keyword" className="mr-2 flex-fill" onChange={handleChangeValue} value={search.keyword} onSearch={handleSearch} />
+                <Col xs={6} className="p-0 d-flex">
+                    <MokaSearchInput
+                        name="keyword"
+                        className="mr-2 flex-fill"
+                        onChange={handleChangeValue}
+                        value={search.keyword}
+                        onSearch={handleSearch}
+                        placeholder="검색어를 입력하세요"
+                    />
                     <Button variant="negative" onClick={handleReset} className="flex-shrink-0">
                         초기화
                     </Button>
                 </Col>
             </Form.Row>
-        </Form>
+        </div>
     );
 };
 

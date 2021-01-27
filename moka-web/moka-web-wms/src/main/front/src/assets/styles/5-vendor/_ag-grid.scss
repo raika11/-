@@ -114,9 +114,6 @@
             // usedyn-n row
             &.usedyn-n {
                 @include disabled-font;
-                // button {
-                //     color: rgba($black, 0.6);
-                // }
             }
 
             // deskingyn-y row
@@ -349,6 +346,21 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             &.hover::before {
                 top: 95px;
             }
+        }
+    }
+
+    /* 네이버채널 예외처리 */
+    &.naver-channel {
+        /* 주기사(기본) left 조정 */
+        .ag-cell[col-id="contentOrdEx"] {
+            left: 24px !important;
+        }
+        .ag-cell[col-id="irThumbFileName"] {
+            left: 48px !important;
+        }
+        .ag-cell[col-id="title"] {
+            width: 255px !important;
+            left: 98px !important;
         }
     }
 }

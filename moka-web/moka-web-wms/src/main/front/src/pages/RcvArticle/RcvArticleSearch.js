@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, RCV_ARTICLE_SOURCE_LIST_KEY } from '@/constants';
 import { initialState, getRcvArticleList, changeSearchOption } from '@store/rcvArticle';
 import { MokaInput, MokaSearchInput } from '@components';
 import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
@@ -11,10 +11,9 @@ import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 
 moment.locale('ko');
-const SOURCE_LIST_KEY = 'rcvArticleSourceList';
 
 /**
- * 수신기사 검색 컴포넌트
+ * 수신기사 검색
  */
 const RcvArticleSearch = () => {
     const dispatch = useDispatch();
@@ -23,7 +22,7 @@ const RcvArticleSearch = () => {
     // state
     const [search, setSearch] = useState(initialState.search);
     const [sourceOn, setSourceOn] = useState(false);
-    const [sourceList, setSourceList] = useState(getLocalItem(SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(getLocalItem(RCV_ARTICLE_SOURCE_LIST_KEY));
     const [error, setError] = useState({});
     const [period, setPeriod] = useState([3, 'months']);
 
@@ -41,7 +40,7 @@ const RcvArticleSearch = () => {
 
             // startDay, endDay 변경
             const nd = new Date();
-            const startDay = moment(nd).subtract(Number(number), date);
+            const startDay = moment(nd).subtract(Number(number), date).startOf('day');
             const endDay = moment(nd);
             setSearch({ ...search, startDay, endDay });
         } else {
@@ -82,11 +81,11 @@ const RcvArticleSearch = () => {
         e.stopPropagation();
 
         const date = new Date();
-        setPeriod([1, 'days']);
+        setPeriod([0, 'days']);
         dispatch(
             changeSearchOption({
                 ...initialState.search,
-                startDay: moment(date).subtract(1, 'days').format(DB_DATEFORMAT),
+                startDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
                 endDay: moment(date).format(DB_DATEFORMAT),
                 sourceList,
                 page: 0,
@@ -126,18 +125,6 @@ const RcvArticleSearch = () => {
         }
     };
 
-    /**
-     * 키 입력
-     * @param {object} e 이벤트
-     */
-    const handleKeyPress = (e) => {
-        // 엔터 기본 동작 막음
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleSearch();
-        }
-    };
-
     useEffect(() => {
         let ssd = moment(storeSearch.startDay, DB_DATEFORMAT);
         if (!ssd.isValid()) ssd = null;
@@ -161,15 +148,12 @@ const RcvArticleSearch = () => {
         /**
          * 마운트 시 기사목록 최초 로딩
          *
-         * 시작일 : 현재 시간(시분초o)
-         * 종료일 : 현재 시간(시분초o) - period 설정 일수
+         * 시작일 : 현재 일자(자정) - period 설정 일수
+         * 종료일 : 현재 시간(시분초o)
          */
-        // 임시 데이터 연결함, 실제로는 주석 날짜 사용
-        // const date = new Date();
-        // const startDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
-        // const endDay = moment(date).format(DB_DATEFORMAT);
-        const startDay = moment('20200823', 'YYYYMMDD').format(DB_DATEFORMAT);
-        const endDay = moment('20200826', 'YYYYMMDD').format(DB_DATEFORMAT);
+        const date = new Date();
+        const startDay = moment(date).subtract(period[0], period[1]).startOf('day').format(DB_DATEFORMAT);
+        const endDay = moment(date).format(DB_DATEFORMAT);
         const ns = { ...search, sourceList, startDay, endDay, page: 0 };
 
         dispatch(changeSearchOption(ns));
@@ -244,13 +228,10 @@ const RcvArticleSearch = () => {
                         setError({ ...error, sourceList: false });
                         if (value !== '') {
                             // 로컬스토리지에 저장
-                            setLocalItem({ key: SOURCE_LIST_KEY, value });
+                            setLocalItem({ key: RCV_ARTICLE_SOURCE_LIST_KEY, value });
                         }
                     }}
                 />
-                {/* <div style={{ width: 195 }} className="d-flex ml-2 mr-2">
-                
-                </div> */}
             </Form.Row>
             <Form.Row className="d-flex mb-2 justify-content-between">
                 <MokaSearchInput

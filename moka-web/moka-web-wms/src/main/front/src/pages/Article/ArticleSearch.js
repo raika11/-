@@ -43,7 +43,7 @@ const ArticleSearch = ({ ja, sun }) => {
 
             // startServiceDay, endServiceDay 변경
             const nd = new Date();
-            const startServiceDay = moment(nd).subtract(Number(number), date);
+            const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
             const endServiceDay = moment(nd);
             setSearch({ ...search, startServiceDay, endServiceDay });
         } else {
@@ -92,11 +92,11 @@ const ArticleSearch = ({ ja, sun }) => {
         e.stopPropagation();
 
         const date = new Date();
-        setPeriod([1, 'days']);
+        setPeriod([0, 'days']);
         dispatch(
             changeSearchOption({
                 ...initialState.search,
-                startServiceDay: moment(date).subtract(1, 'days').format(DB_DATEFORMAT),
+                startServiceDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
                 sourceList,
                 page: 0,
@@ -178,12 +178,11 @@ const ArticleSearch = ({ ja, sun }) => {
         /**
          * 마운트 시 기사목록 최초 로딩
          *
-         * 시작일 : 현재 시간(시분초o)
-         * 종료일 : 현재 시간(시분초o) - period 설정 일수
+         * 시작일 : 현재일의 자정 - period 설정 일수
+         * 종료일 : 현재 시간(시분초o)
          */
         const date = new Date();
-        const startServiceDay = moment(date).subtract(period[0], period[1]).format(DB_DATEFORMAT);
-        // const startServiceDay = moment(date).subtract(1, 'years').format(DB_DATEFORMAT);
+        const startServiceDay = moment(date).subtract(period[0], period[1]).startOf('day').format(DB_DATEFORMAT);
         const endServiceDay = moment(date).format(DB_DATEFORMAT);
         const ns = { ...search, sourceList, startServiceDay, endServiceDay, page: 0 };
 
@@ -201,7 +200,7 @@ const ArticleSearch = ({ ja, sun }) => {
                 {/* 검색기간 */}
                 <Col xs={1} className="p-0">
                     <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
-                        <option value="1days" data-number="1" data-date="days">
+                        <option value="0days" data-number="0" data-date="days">
                             1일
                         </option>
                         <option value="3days" data-number="3" data-date="days">

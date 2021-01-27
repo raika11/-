@@ -52,7 +52,7 @@ const ArticleDeskSearch = (props) => {
 
             // startServiceDay, endServiceDay 변경
             const nd = new Date();
-            const startServiceDay = moment(nd).subtract(Number(number), date);
+            const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
             const endServiceDay = moment(nd);
             setSearch({ ...search, startServiceDay, endServiceDay });
         } else {
@@ -147,12 +147,12 @@ const ArticleDeskSearch = (props) => {
         e.stopPropagation();
 
         const date = new Date();
-        setPeriod([2, 'days']);
+        setPeriod([0, 'days']);
         dispatch(
             changeSearchOption({
                 ...initialSearch,
                 masterCode: selectedComponent.schCodeId || null,
-                startServiceDay: moment(date).subtract(2, 'days').format(DB_DATEFORMAT),
+                startServiceDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
                 page: 0,
             }),
@@ -190,7 +190,7 @@ const ArticleDeskSearch = (props) => {
          */
         if (show) {
             const date = new Date();
-            const startServiceDay = search.startServiceDay || moment(date).subtract(period[0], period[1]);
+            const startServiceDay = search.startServiceDay || moment(date).subtract(period[0], period[1]).startOf('day');
             const endServiceDay = search.endServiceDay || moment(date);
             let ns = {
                 ...search,

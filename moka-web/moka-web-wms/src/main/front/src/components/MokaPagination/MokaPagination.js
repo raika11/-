@@ -95,6 +95,11 @@ const MokaPagination = (props) => {
             pl.push(i);
         }
 
+        // 기본 1페이지 노출
+        if (pl.length === 0) {
+            pl.push(1);
+        }
+
         setViewPage(vp);
         setStartPage(sp);
         setEndPage(ep);

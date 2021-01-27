@@ -8,13 +8,11 @@ import Button from 'react-bootstrap/Button';
 import { unescapeHtml } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
 import { CodeAutocomplete } from '@pages/commons';
-import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelector';
-import { DB_DATEFORMAT, ARTICLE_SOURCE_LIST_KEY } from '@/constants';
-import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@/components';
-import GroupNumberRenderer from '@pages/Article/components/ArticleDeskList/GroupNumberRenderer';
-import columnDefs from '@pages/Article/modals/ArticleListModalAgGridCoulmns';
+import SourceSelector from '@pages/commons/SourceSelector';
+import { DB_DATEFORMAT } from '@/constants';
+import { MokaModal, MokaInput, MokaTable } from '@/components';
+import columnDefs from './ArticleListModalAgGridCoulmns';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 import { GET_ARTICLE_LIST_MODAL, initialState, getArticleListModal } from '@store/article';
 
 const propTypes = {
@@ -31,20 +29,14 @@ const defaultProps = {};
  * 기사 검색 모달
  */
 const ArticleListModal = (props) => {
-    const { show, onHide, media, onRowClicked } = props;
+    const { show, onHide, onRowClicked } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST_MODAL]);
-    const { PDS_URL } = useSelector((store) => ({
-        PDS_URL: store.app.PDS_URL,
-        IR_URL: store.app.IR_URL,
-    }));
-
-    // state
+    const [period, setPeriod] = useState([0, 'days']);
     const [search, setSearch] = useState(initialState.search);
-    const [searchDisabled, setSearchDisabled] = useState(false);
     const [valError, setValError] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
-    const [sourceList, setSourceList] = useState(getLocalItem(ARTICLE_SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(null);
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
 
@@ -54,7 +46,20 @@ const ArticleListModal = (props) => {
      */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
-        setSearch({ ...search, [name]: value });
+
+        if (name === 'period') {
+            // 기간 설정
+            const { number, date } = e.target.selectedOptions[0].dataset;
+            setPeriod([Number(number), date]);
+
+            // startServiceDay, endServiceDay 변경
+            const nd = new Date();
+            const startServiceDay = moment(nd).subtract(Number(number), date).startOf('day');
+            const endServiceDay = moment(nd);
+            setSearch({ ...search, startServiceDay, endServiceDay });
+        } else {
+            setSearch({ ...search, [name]: value });
+        }
     };
 
     /**
@@ -71,6 +76,10 @@ const ArticleListModal = (props) => {
         return !isInvalid;
     };
 
+    /**
+     * 리스트 조회
+     * @param {object} searchObj 검색객체
+     */
     const loadList = (searchObj) => {
         dispatch(
             getArticleListModal({
@@ -84,43 +93,14 @@ const ArticleListModal = (props) => {
                         setTotal(body.totalCnt);
                         setRowData(
                             body.list.map((art) => {
-                                // 기자명 replace
-                                let reportersText = art.artReporter;
-                                const reporters = art.artReporter.split('.');
-                                if (reporters.length > 1) reportersText = `${reporters[0]} 외 ${reporters.length - 1}명`;
-
-                                // ID, 기사유형
-                                let artIdType = `${art.totalId}\n${art.artTypeName}`;
-
                                 // 제목 replace
                                 let escapeTitle = art.artTitle;
                                 if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
 
-                                // 면판 replace
-                                let myunPan = `${art.pressMyun || ''}/${art.pressPan || ''}`;
-
-                                // 출고시간/수정시간 replace
-                                let articleDt = moment(art.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm');
-                                if (art.artModDt) {
-                                    articleDt = `${articleDt}\n${moment(art.artModDt, DB_DATEFORMAT).format('MM-DD HH:mm')}`;
-                                } else {
-                                    articleDt = `${articleDt}\n `;
-                                }
-
-                                // 이미지경로
-                                let artPdsThumb = `${PDS_URL}${art.artThumb}`;
-                                // let artThumb = `${IR_URL}?t=k&w=100&h=100u=//${PDS_URL}${art.artThumb}`;
-                                let artThumb = artPdsThumb;
-
                                 return {
                                     ...art,
                                     escapeTitle,
-                                    myunPan,
-                                    articleDt,
-                                    artIdType,
-                                    reportersText,
-                                    artThumb,
-                                    artPdsThumb,
+                                    serviceDaytime: (art.serviceDaytime || '').slice(0, -3),
                                     onClick: handleRowClicked,
                                 };
                             }),
@@ -177,16 +157,16 @@ const ArticleListModal = (props) => {
      * 초기화 버튼
      * @param {object} e event
      */
-    const handleClickReset = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const date = new Date();
+    const handleClickReset = () => {
+        const nt = new Date();
+        const startServiceDay = moment(nt).subtract(0, 'days').startOf('day');
+        const endServiceDay = moment(nt);
+        setPeriod([0, 'days']);
         setSearch({
             ...initialState.search,
             masterCode: null,
-            startServiceDay: moment(date).add(-24, 'hours'),
-            endServiceDay: moment(date),
+            startServiceDay: startServiceDay,
+            endServiceDay: endServiceDay,
         });
     };
 
@@ -213,28 +193,15 @@ const ArticleListModal = (props) => {
     };
 
     useEffect(() => {
-        if (media) setSearchDisabled(true);
-    }, [media]);
-
-    useEffect(() => {
         /**
-         * 마운트 시 기사목록 최초 로딩
-         *
-         * 시작일 : 현재 시간(시분초o)
+         * 시작일 : 현재일(자정) - period
          * 종료일 : 현재 시간(시분초o)
          */
         if (show) {
-            const date = new Date();
-            let ns = {
-                ...search,
-                masterCode: null,
-                sourceList,
-                startServiceDay: moment(date).add(-24, 'hours'),
-                endServiceDay: moment(date),
-                contentType: media ? 'M' : null,
-                page: 0,
-            };
-
+            const nt = new Date();
+            const startServiceDay = moment(nt).subtract(period[0], period[1]).startOf('day').format(DB_DATEFORMAT);
+            const endServiceDay = moment(nt).format(DB_DATEFORMAT);
+            const ns = { ...search, sourceList, startServiceDay, endServiceDay, page: 0 };
             setSearch(ns);
             if (sourceOn) {
                 loadList(ns);
@@ -250,11 +217,31 @@ const ArticleListModal = (props) => {
         <MokaModal title="기사 검색" show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
             <Form>
                 <Form.Row className="mb-2">
-                    {/* 시작일, 종료일 */}
-                    <Col xs={4} className="p-0 pr-2 d-flex">
+                    {/* 검색 기간, 시작일, 종료일 */}
+                    <Col xs={5} className="p-0 pr-2 d-flex">
+                        <div className="mr-2 flex-shrink-0">
+                            <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
+                                <option value="1days" data-number="1" data-date="days">
+                                    1일
+                                </option>
+                                <option value="3days" data-number="3" data-date="days">
+                                    3일
+                                </option>
+                                <option value="7days" data-number="7" data-date="days">
+                                    1주일
+                                </option>
+                                <option value="1months" data-number="1" data-date="months">
+                                    1개월
+                                </option>
+                                <option value="3months" data-number="3" data-date="months">
+                                    3개월
+                                </option>
+                            </MokaInput>
+                        </div>
                         <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-1" onChange={handleChangeSDate} value={search.startServiceDay} />
-                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="ml-2" onChange={handleChangeEDate} value={search.endServiceDay} />
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="ml-1" onChange={handleChangeEDate} value={search.endServiceDay} />
                     </Col>
+
                     {/* 검색 조건 */}
                     <Col xs={2} className="p-0 pr-2">
                         <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
@@ -265,19 +252,23 @@ const ArticleListModal = (props) => {
                             ))}
                         </MokaInput>
                     </Col>
-                    {/* 키워드 */}
-                    <Col xs={6} className="p-0">
-                        <MokaSearchInput className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
+
                     {/* 분류 전체 */}
                     <Col xs={4} className="p-0 pr-2">
                         <CodeAutocomplete name="masterCode" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
                     </Col>
-                    {/* 매체 전체 */}
-                    <Col xs={2} className="p-0 pr-2">
-                        <ArticleSourceSelector
+
+                    {/* 검색 버튼 */}
+                    <Col xs={1} className="p-0">
+                        <Button variant="searching" className="w-100 h-100" onClick={handleSearch}>
+                            검색
+                        </Button>
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    {/* 매체 */}
+                    <Col xs={3} className="p-0 pr-2">
+                        <SourceSelector
                             value={sourceList}
                             className="h-100 w-100"
                             onChange={(value) => {
@@ -285,24 +276,21 @@ const ArticleListModal = (props) => {
                                 setValError({ ...valError, sourceList: false });
                                 if (value !== '') {
                                     setSourceOn(true);
-                                    // 로컬스토리지에 저장
-                                    setLocalItem({ key: ARTICLE_SOURCE_LIST_KEY, value });
                                 }
                             }}
-                            width="100%"
+                            isInvalid={valError.sourceList}
+                            sourceType="JOONGANG"
                         />
                     </Col>
-                    {/* 면 */}
-                    <Col xs={1} className="p-0 pr-2">
-                        <MokaInput placeholder="면" name="pressMyun" onChange={handleChangeValue} value={search.pressMyun} disabled={searchDisabled} />
+
+                    {/* 키워드 */}
+                    <Col xs={8} className="p-0 pr-2">
+                        <MokaInput className="flex-fill" name="keyword" value={search.keyword} placeholder="검색어를 입력하세요" onChange={handleChangeValue} />
                     </Col>
-                    {/* 판 */}
-                    <Col xs={1} className="p-0 pr-2">
-                        <MokaInput placeholder="판" name="pressPan" onChange={handleChangeValue} value={search.pressPan} disabled={searchDisabled} />
-                    </Col>
+
                     {/* 초기화 */}
-                    <Col xs={4} className="p-0 d-flex justify-content-end">
-                        <Button variant="negative" onClick={handleClickReset}>
+                    <Col xs={1} className="p-0">
+                        <Button variant="negative" className="w-100 h-100" onClick={handleClickReset}>
                             초기화
                         </Button>
                     </Col>
@@ -314,14 +302,13 @@ const ArticleListModal = (props) => {
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}
-                /*onRowClicked={handleRowClicked}*/
+                onRowClicked={() => {}}
                 loading={loading}
                 total={total}
                 page={search.page}
                 size={search.size}
-                frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['groupNumber', 'addBtn']}
+                preventRowClickCell={['groupNumber', 'add']}
             />
         </MokaModal>
     );

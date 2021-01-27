@@ -140,9 +140,9 @@ public class DirectLinkRestController extends AbstractCommonController {
 
 
         // 널이면 강제로 셋팅
-        if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
-            directLinkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
-        }
+        //if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
+        //    directLinkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
+        //}
 
         // 데이터 유효성 검사
         validData(directLinkThumbnailFile);
@@ -213,9 +213,9 @@ public class DirectLinkRestController extends AbstractCommonController {
 
 
         // 널이면 강제로 셋팅
-        if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
-            directLinkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
-        }
+        //if (McpString.isEmpty(directLinkDTO.getImgUrl())) {
+        //    directLinkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
+        //}
 
         // DirectLinkDTO -> DirectLink 변환
         DirectLink newDirectLink = modelMapper.map(directLinkDTO, DirectLink.class);

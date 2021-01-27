@@ -11,19 +11,19 @@ export const columnDefs = [
         headerName: 'ID',
         field: 'id',
         width: 50,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellStyle: { lineHeight: '65px' },
     },
     {
         headerName: '분류',
         field: 'category',
         width: 80,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellStyle: { lineHeight: '65px' },
     },
     {
         headerName: '투표 제목',
         field: 'title',
         flex: 1,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellStyle: { lineHeight: '65px' },
         cellClass: 'ag-grid-cell-left',
         tooltipField: 'title',
     },
@@ -31,19 +31,19 @@ export const columnDefs = [
         headerName: '상태',
         field: 'status',
         width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellStyle: { lineHeight: '65px' },
     },
     {
         headerName: '시작일',
         field: 'startDt',
         width: 130,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
+        cellStyle: { lineHeight: '65px' },
         children: [
             {
                 headerName: '종료일',
                 field: 'modDt',
                 width: 130,
-                cellStyle: { fontSize: '12px', lineHeight: '16px' },
+                cellStyle: { lineHeight: '16px' },
                 cellRendererFramework: (param) => {
                     return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
                 },
@@ -54,7 +54,7 @@ export const columnDefs = [
         headerName: '보기',
         field: 'preview',
         width: 50,
-        cellStyle: { fontSize: '12px', lineHeight: '60px' },
+        cellStyle: { lineHeight: '60px' },
         cellRendererFramework: (param) => {
             return (
                 <div className="w-100 h-100 d-flex align-items-center justify-content-center">
@@ -76,7 +76,7 @@ export const columnDefs = [
                 headerName: '수정날짜',
                 field: 'modDt',
                 width: 130,
-                cellStyle: { fontSize: '12px', lineHeight: '16px' },
+                cellStyle: { lineHeight: '16px' },
                 cellRendererFramework: (param) => {
                     return <MultiRowColumnComponent values={[param.data.regDt, param.value]} />;
                 },
@@ -87,13 +87,12 @@ export const columnDefs = [
         headerName: '등록자',
         field: 'regMember',
         width: 70,
-        cellStyle: { fontSize: '12px' },
         children: [
             {
                 headerName: '수정자',
                 field: 'modMember',
                 width: 100,
-                cellStyle: { fontSize: '12px', lineHeight: '16px' },
+                cellStyle: { lineHeight: '16px' },
                 cellRendererFramework: (param) => {
                     const regMember = param.data.regMember;
                     const modMember = param.data.modMember;
@@ -117,7 +116,7 @@ export const columnDefs = [
         headerName: '',
         field: 'delete',
         width: 50,
-        cellStyle: { fontSize: '12px', lineHeight: '60px' },
+        cellStyle: { lineHeight: '60px' },
         cellRendererFramework: (param) => {
             return (
                 param.data.isDelete && (

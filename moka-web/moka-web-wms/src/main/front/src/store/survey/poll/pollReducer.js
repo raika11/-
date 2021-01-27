@@ -8,7 +8,7 @@ export const initialState = {
         pollGroup: 'A',
         pollCategory: '0100',
         pollDiv: 'W',
-        pollType: 'M',
+        pollType: 'T',
         startDt: null,
         endDt: null,
         status: 'T',

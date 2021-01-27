@@ -23,6 +23,7 @@ const PollEdit = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [edit, setEdit] = useState(initialState.poll);
+    const [isCompared, setIsCompared] = useState(false);
     const [isSet, setIsSet] = useState(false);
     const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
 
@@ -39,9 +40,9 @@ const PollEdit = () => {
         }
         if (name === 'pollDiv') {
             if (value === 'V') {
-                setIsSet(true);
+                setIsCompared(true);
             } else {
-                setIsSet(false);
+                setIsCompared(false);
             }
             setEdit(
                 produce(edit, (draft) => {
@@ -80,6 +81,8 @@ const PollEdit = () => {
                 draft.pollItems = pollItems;
             }),
         );
+
+        setIsSet(true);
     };
 
     const handleClickSave = () => {
@@ -119,9 +122,9 @@ const PollEdit = () => {
     useEffect(() => {
         setEdit(poll);
         if (!commonUtil.isEmpty(poll.pollSeq)) {
-            //setIsSet(true);
+            setIsSet(true);
         } else {
-            //setIsSet(false);
+            setIsSet(false);
         }
     }, [poll]);
 
@@ -434,7 +437,7 @@ const PollEdit = () => {
                                     onChange={(e) => {
                                         handleChangeValue(e.target);
                                     }}
-                                    disabled={isSet}
+                                    disabled={isCompared}
                                     inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 2 }}
                                 />
                             </Col>
@@ -449,7 +452,7 @@ const PollEdit = () => {
                                     onChange={(e) => {
                                         handleChangeValue(e.target);
                                     }}
-                                    disabled={isSet}
+                                    disabled={isCompared}
                                     inputProps={{ style: { flex: 'initial !important', width: '59.33px' }, min: 1 }}
                                 />
                             </Col>
@@ -461,7 +464,7 @@ const PollEdit = () => {
                         </Form.Row>
                     </MokaCard>
                 </Form.Row>
-                {edit.itemCnt > 0 && (
+                {edit.itemCnt > 0 && isSet && (
                     <Form.Row className="mb-2">
                         <MokaCard
                             className="flex-fill pl-0 h-100"
@@ -491,7 +494,18 @@ const PollEdit = () => {
                                     }}
                                 />
                             )}
-                            {edit.pollDiv === 'V' && <PollDetailCompareAnswerContainer type={edit.pollType} items={edit.pollItems} />}
+                            {edit.pollDiv === 'V' && (
+                                <PollDetailCompareAnswerContainer
+                                    type={edit.pollType}
+                                    items={edit.pollItems}
+                                    onChange={(items) => {
+                                        handleDebounceChangeValue({
+                                            name: 'pollItems',
+                                            value: items,
+                                        });
+                                    }}
+                                />
+                            )}
                         </MokaCard>
                     </Form.Row>
                 )}

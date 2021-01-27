@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList;
 
 @Getter
 @Slf4j
-public class FileTaskInput<P, C> extends TaskInput {
+public class FileXmlTaskInput<P, C> extends TaskInput {
     private File dirScan;
     private String dirSuccess;
     private String dirFailed;
@@ -47,11 +47,11 @@ public class FileTaskInput<P, C> extends TaskInput {
     private int retryCount;
     private final Class<P> parentObjectType;
     private final Class<C> objectType;
-    private FileTaskInputFilePreProcess filePreProcess;
+    private FileXmlTaskInputFilePreProcess filePreProcess;
     private String sourceBuffer;
     private final List<InputFilter> inputFilters = new ArrayList<>();
 
-    public FileTaskInput(Class<P> parentObjectType, Class<C> objectType) {
+    public FileXmlTaskInput(Class<P> parentObjectType, Class<C> objectType) {
         this.parentObjectType = parentObjectType;
         this.objectType = objectType;
     }
@@ -60,7 +60,7 @@ public class FileTaskInput<P, C> extends TaskInput {
         this.sourceBuffer = sourceBuffer;
     }
 
-    public void setFilePreProcess(FileTaskInputFilePreProcess filePreProcess) {
+    public void setFilePreProcess(FileXmlTaskInputFilePreProcess filePreProcess) {
         this.filePreProcess = filePreProcess;
     }
 
@@ -172,6 +172,6 @@ public class FileTaskInput<P, C> extends TaskInput {
             log.error("FIle [{}] is not normal XML File ", file);
         }
 
-        return new FileTaskInputData<>(file, (C) objectData, this, parentObjectType, objectType);
+        return new FileXmlTaskInputData<>(file, (C) objectData, this, parentObjectType, objectType);
     }
 }

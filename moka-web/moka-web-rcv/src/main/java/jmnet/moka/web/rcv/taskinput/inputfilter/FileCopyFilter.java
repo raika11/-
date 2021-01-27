@@ -63,7 +63,8 @@ public class FileCopyFilter extends InputFilter {
             log.info( "파일 이동 완료 {}-{}", file, this.dirSuccess);
             return true;
         } catch (RcvException e) {
-            log.error(e.getMessage());
+            log.error( "File Copy Filter Error {}", e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }

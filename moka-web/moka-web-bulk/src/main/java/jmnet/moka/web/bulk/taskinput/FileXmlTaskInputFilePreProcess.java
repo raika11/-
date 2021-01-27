@@ -1,4 +1,4 @@
-package jmnet.moka.web.rcv.taskinput;
+package jmnet.moka.web.bulk.taskinput;
 
 import java.io.File;
 
@@ -6,7 +6,7 @@ import java.io.File;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.web.rcv.taskinput
+ * Package : jmnet.moka.web.bulk.taskinput
  * ClassName : FileTaskInputFilePreProcess
  * Created : 2020-11-17 017 sapark
  * </pre>
@@ -15,7 +15,7 @@ import java.io.File;
  * @since 2020-11-17 017 오전 9:32
  */
 @SuppressWarnings("SameReturnValue")
-public interface FileTaskInputFilePreProcess {
+public interface FileXmlTaskInputFilePreProcess {
     default boolean preProcess(File file) {
         return true;
     }

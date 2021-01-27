@@ -1,21 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <BulkDumpEnv>
-  <Global>
-    <opEmail>frogie@joins.com</opEmail>
+  <Global
+    opEmail="frogie@joins.com"
+    DirDump="C:\box\bulk\dump">
     <Targets>
-      <Target>
-        <TargetName>JA</TargetName>
+      <Target TargetName="JA">
         <CrTxt><![CDATA[{_CRLF_}[☞ 중앙일보 구독신청 http://subscribe.joins.com/]  [☞ 중앙일보 기사 구매 http://conbox.joins.com/] {_CRLF_}[ⓒ 중앙일보 : JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrTxt>
         <CrHtml><![CDATA[▶ <a href="https://joongang.co.kr" target="_blank">중앙일보 '홈페이지'</a> / <a href="https://www.facebook.com/joongang" target="_joins_nw">'페이스북' 친구추가</a>{_CRLF_}▶<a href="https://ssully.joins.com/?ch=bulk" target="_blank"> 이슈를 쉽게 정리해주는 '썰리'</a><br/>{_CRLF_}ⓒ중앙일보(https://joongang.co.kr), 무단 전재 및 재배포 금지]]></CrHtml>
         <CrHtmlNaver><![CDATA[ⓒ중앙일보(https://joongang.co.kr), 무단 전재 및 재배포 금지]]></CrHtmlNaver>
       </Target>
-      <Target>
-        <TargetName>SD</TargetName>
+      <Target TargetName="SD">
         <CrTxt><![CDATA[[ⓒ중앙SUNDAY(http://sunday.joins.com) and JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrTxt>
         <CrHtml><![CDATA[ ▶ 중앙SUNDAY <a href='https://news.joins.com/sunday' target='_joins_nw'>[홈페이지]</a>{_CRLF_}▶ <a href='https://post.naver.com/my.nhn?memberNo=24386473' target='_joins_nw'>[네이버포스트]</a> <a href='http://me2.do/52Lt5TBq' target='_joins_nw'>[PDF열람]</a><br/>{_CRLF_}ⓒ중앙SUNDAY<a href='https://news.joins.com/sunday' target='_joins_nw'>(https://news.joins.com/sunday)</a> and 중앙일보<a href='https://joongang.co.kr' target='_blank'>(https://joongang.co.kr)</a> 무단 전재 및 재배포 금지]]></CrHtml>
         <CrHtmlNaver/>
       </Target>
     </Targets>
   </Global>
+  <CpList>
+    <Cp Name="ESTSOFT"
+      Comment="# ZUM 중앙일보"
+      Dir="C:\box\bulk\CpData\estsoft"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
+      FileExt="xml"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="4">
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[></title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[></subtitle>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[></author>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[></email>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_ZUM_}]]]]><![CDATA[></content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[></serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[></copyright>{_CRLF_}{_TAB_}{_XML_IMG_BLK_ZUM_}{_CRLF_}{_REL_NEWS_ZUM_}{_CRLF_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1></code1>{_CRLF_}{_TAB_}<code2></code2>{_CRLF_}{_TAB_}<code3></code3>{_CRLF_}{_TAB_}<title></title>{_CRLF_}{_TAB_}<subtitle></subtitle>{_CRLF_}{_TAB_}<author></author>{_CRLF_}{_TAB_}<email></email>{_CRLF_}{_TAB_}<content></content>{_CRLF_}{_TAB_}<serviceurl></serviceurl>{_CRLF_}{_TAB_}<copyright></copyright>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1"
+        user="ftp_tester"
+        password="ftp_test"
+        rootDir="/cp/estsoft"
+        passive="0"
+        port="21"/>
+    </Cp>
+    <Cp Name="ZUM_JTBC"
+      Comment="# ZUM JTBC"
+      Dir="C:\box\bulk\CpData\zum_jtbc"
+      Content=""
+      FileExt="xml"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="7">
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<news>{_CRLF_}{_TAB_}<newsId>{_AID_}</newsId>{_CRLF_}{_TAB_}<status>{_IUD_}</status>{_CRLF_}{_TAB_}{_TV_NODE_}{_CRLF_}{_TAB_}<report_date>{_INSERTDATE_}</report_date>{_CRLF_}{_TAB_}<modify_date>{_MODIFYDATE_}</modify_date>{_CRLF_}{_TAB_}<code>{_C1_}</code>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<sub_title><![CDATA[{_STTL_}]]]]><![CDATA[</sub_title>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_ZUM_} {_REPT_JTBC_ONE_} 기자 <br/>JTBC, JTBC Content Hub Co., Ltd.의 모든 콘텐트(기사)는 저작권법의 보호를 받은바, 무단 전재, 복사, 배포 등을 금합니다.<br/>Copyright by JTBC, JTBC Content Hub Co., Ltd. All Rights Reserved.]]]]><![CDATA[</content>{_CRLF_}{_TAB_}{_XML_IMG_BLK2_}<url><![CDATA[{_URL_}]]]]><![CDATA[</url>{_REL_NEWS_ZUM_}</news>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<news>{_CRLF_}{_TAB_}<newsId>{_AID_}</newsId>{_CRLF_}{_TAB_}<status>{_IUD_}</status>{_CRLF_}{_TAB_}{_TV_NODE_}{_CRLF_}{_TAB_}<report_date>{_INSERTDATE_}</report_date>{_CRLF_}{_TAB_}<modify_date>{_MODIFYDATE_}</modify_date>{_CRLF_}{_TAB_}<code>{_C1_}</code>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<sub_title><![CDATA[{_STTL_}]]]]><![CDATA[</sub_title>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}{_XML_IMG_BLK2_}<url><![CDATA[{_URL_}]]]]><![CDATA[</url></news>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1"
+        user="ftp_tester"
+        password="ftp_test"
+        rootDir="/cp/zum_jtbc"
+        passive="0"
+        port="21"/>
+    </Cp>
+    <Cp Name="EMPAS_JA"
+      Comment="# 엠파스(네이트) 중앙일보"
+      Dir="C:\box\bulk\CpData\empas_ja"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
+      FileExt="txt"
+      DnVideo="Y"
+      Type="HTML"
+      SendSiteCode="3">
+      <Format><![CDATA[ID:{_AID_}{_CRLF_}CD:{_M2_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_C1_};{_C2_};{_C3_}{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_TXT_IMG_BLK_NATE_}{_CRLF_}VD:{_VIDEO_TXT_BLK_}{_CRLF_}WR:{_REPT_} {_MAIL_}{_CRLF_}HT:1{_CRLF_}OL:{_URL_}{_CRLF_}TI:{_TTL_}{_CRLF_}SB:{_CRLF_}TX:{_CONTH_NATE_}{_JHOT_}{_CRLF_}{_CRH_}]]></Format>
+      <FormatDelete><![CDATA[ID:{_AID_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_CRLF_}VD:{_CRLF_}WR:{_CRLF_}HT:1{_CRLF_}OL:{_CRLF_}TI:{_CRLF_}SB:{_CRLF_}TX:{_CRLF_}]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1"
+        user="ftp_tester"
+        password="ftp_test"
+        rootDir="/cp/empas_ja"
+        passive="0"
+        port="21"/>
+    </Cp>
+    <Cp Name="EMPAS_ILGAN"
+      Comment="# 엠파스(네이트) 일간스포츠"
+      Dir="C:\box\bulk\CpData\empas_ilgan"
+      Content="IGP|IGQ|IGN|IGY"
+      FileExt="txt"
+      DnVideo=""
+      Type="HTML"
+      EncodeType=""
+      SendSiteCode="3">
+      <Format><![CDATA[ID:{_AID_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_C1_}{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_TXT_IMG_BLK2_}{_CRLF_}VD:{_CRLF_}WR:{_REPT_}{_CRLF_}HT:1{_CRLF_}OL:{_URL_}{_CRLF_}TI:{_TTL_}{_CRLF_}SB:{_STTL_}{_CRLF_}TX:{_CONT_}{_JHOT_}{_CRLF_}{_CRH_}{_CRLF_}#{_CRLF_}]]></Format>
+      <FormatDelete><![CDATA[ID:{_AID_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_CRLF_}VD:{_CRLF_}WR:{_CRLF_}HT:1{_CRLF_}OL:{_CRLF_}TI:{_CRLF_}SB:{_CRLF_}TX:{_CRLF_}#{_CRLF_}]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1"
+        user="ftp_tester"
+        password="ftp_test"
+        rootDir="/cp/empas_ilgan"
+        passive="0"
+        port="21"/>
+    </Cp>
+    <Cp Name="NAVER_JA_VOD"
+      Comment="# 네이버 뉴스 - 중앙일보 xml 포멧 Video"
+      Dir="C:\box\bulk\CpData\naver_ja_vod"
+      Content="SOY"
+      FileExt="xml"
+      DnVideo="Y"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_NAVER_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_BANNER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position>{_NAVER_POSITION_}</position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}{_XML_IMG_VIDEO_BLK2_}{_CRLF_}{_XML_IMG_BLK_NAVER_BANNER_}{_CRLF_}{_JHOT_NAVER_}{_CRLF_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1"
+        user="ftp_tester"
+        password="ftp_test"
+        rootDir="/cp/naver_ja_vod"
+        passive="0"
+        port="21"/>
+    </Cp>
+  </CpList>
 </BulkDumpEnv>

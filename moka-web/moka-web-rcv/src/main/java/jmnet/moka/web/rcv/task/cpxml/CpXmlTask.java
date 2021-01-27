@@ -18,8 +18,8 @@ import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleTotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.CpArticleVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
 import jmnet.moka.web.rcv.task.rcvartreg.RcvArtRegTask;
-import jmnet.moka.web.rcv.taskinput.FileTaskInput;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInput;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
 import jmnet.moka.web.rcv.util.FtpUtil;
 import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
@@ -41,7 +41,7 @@ import org.w3c.dom.Node;
  * @since 2020-11-10 010 오후 4:59
  */
 @Slf4j
-public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticleListVo>> {
+public class CpXmlTask extends Task<FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo>> {
     private String sourceCode;
     private String receiveImage;
     private String pdsUploadKeyTitle;
@@ -54,7 +54,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
 
     @Override
     protected TaskInput initTaskInput() {
-        return new FileTaskInput<>(CpArticleTotalVo.class, CpArticleListVo.class);
+        return new FileXmlTaskInput<>(CpArticleTotalVo.class, CpArticleListVo.class);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
     }
 
     @Override
-    protected boolean doVerifyData(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData) {
+    protected boolean doVerifyData(FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData) {
         final CpArticleTotalVo cpArticleTotalVo = taskInputData.getTotalData();
         if (cpArticleTotalVo == null) {
             log.error("{} {} : XML 파싱 에러, cp ArticleTotalVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
@@ -98,7 +98,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
     }
 
     @Override
-    protected void doProcess(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
+    protected void doProcess(FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
             throws RcvDataAccessException {
         final CpArticleTotalVo cpArticleTotalVo = taskInputData.getTotalData();
 
@@ -125,13 +125,14 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
             }catch ( Exception e ) {
                 cpArticleTotalVo.logError("예외 발생");
                 cpXmlService.insertReceiveJobStep( cpArticleTotalVo, cpArticleTotalVo.getErrorMessageList());
+                e.printStackTrace();
                 throw new RcvDataAccessException( e.getMessage() );
             }
         }
         taskInputData.setSuccess(true);
     }
 
-    private void doProcessChild(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData, CpArticleTotalVo cpArticleTotalVo)
+    private void doProcessChild(FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData, CpArticleTotalVo cpArticleTotalVo)
             throws RcvDataAccessException {
         final CpArticleVo article = cpArticleTotalVo.getCurArticle();
         final MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();
@@ -244,7 +245,7 @@ public class CpXmlTask extends Task<FileTaskInputData<CpArticleTotalVo, CpArticl
     }
 
     @Override
-    protected void doAfterProcess(FileTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
+    protected void doAfterProcess(FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
             throws RcvDataAccessException, InterruptedException {
         super.doAfterProcess(taskInputData);
 

@@ -109,6 +109,7 @@ public class FtpUtil {
             }
         } catch (IOException e) {
             log.error("ftp upload file 실패 {}", e.getMessage());
+            e.printStackTrace();
             return false;
         } finally {
             try {

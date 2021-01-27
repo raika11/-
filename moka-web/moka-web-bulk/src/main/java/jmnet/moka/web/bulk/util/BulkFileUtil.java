@@ -9,7 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -17,6 +19,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.exception.BulkException;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * <pre>
@@ -114,6 +117,7 @@ public class BulkFileUtil {
             Files.move(sourcePath, targetFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             file.delete();
+            e.printStackTrace();
             throw new BulkException(String.format("파일 이동 중에 에러가 발생하였습니다. [%s]->[%s] %s", sourcePath, targetFile, e.getMessage()));
         }
     }
@@ -144,20 +148,76 @@ public class BulkFileUtil {
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static String getTempFileName(String tempDir) {
+        return getTempFileName( tempDir, null);
+    }
+
+    public static String getTempFileName(String tempDir, String extension) {
         if (!createDirectories(tempDir)) {
             return null;
         }
 
+        if( extension != null ) {
+            if( !extension.contains(".") )
+                extension = ".".concat(extension);
+        }
+
         try {
-            File f = File.createTempFile("bulk",null, new File(tempDir));
+            File f = File.createTempFile("bulk", extension, new File(tempDir));
             String filename = f.getAbsolutePath();
+            //noinspection ResultOfMethodCallIgnored
             f.delete();
             return filename;
-        } catch (IOException e) {
+        } catch (IOException ignore) {
             return null;
         }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void deleteFolder(String sourceDir) {
+        File folder = new File(sourceDir);
+        try {
+            if(folder.exists()){
+                File[] folder_list = folder.listFiles();
+                if( folder_list != null ) {
+                    for (File file : folder_list) {
+                        if (file.isFile()) {
+                            file.delete();
+                        } else {
+                            deleteFolder(file.getPath());
+                        }
+                        file.delete();
+                    }
+                }
+                folder.delete();
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    public static List<File> getDirScanFiles(File dirScan, String fileFilter, int fileWaitTime) {
+        final File[] fileList = dirScan.listFiles();
+        if (fileList == null || fileList.length <= 0) {
+            return null;
+        }
+
+        List<File> files = new ArrayList<>();
+        for (File f : fileList) {
+            if (!f.isFile()) {
+                continue;
+            }
+            if (FilenameUtils.wildcardMatch(f.getName(), fileFilter)) {
+                if (System.currentTimeMillis() - f.lastModified() < fileWaitTime) {
+                    continue;
+                }
+                files.add(f);
+            }
+        }
+        if( files.size() <= 0 )
+            return null;
+
+        return files;
     }
 }
 

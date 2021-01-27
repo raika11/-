@@ -21,26 +21,6 @@
       "description": "Description for bulk.tempDir."
     },
     {
-      "name": "bulk.ooyala.account",
-      "type": "java.lang.String",
-      "description": "Description for bulk.ooyala.account."
-    },
-    {
-      "name": "bulk.ooyala.clientId",
-      "type": "java.lang.String",
-      "description": "Description for bulk.ooyala.clientId."
-    },
-    {
-      "name": "bulk.ooyala.clientSecret",
-      "type": "java.lang.String",
-      "description": "Description for bulk.ooyala.clientSecret."
-    },
-    {
-      "name": "bulk.ooyala.accessTokenUrl",
-      "type": "java.lang.String",
-      "description": "Description for bulk.ooyala.accessTokenUrl."
-    },
-    {
       "name": "moka.spring.datasource.validation-query",
       "type": "java.lang.String",
       "description": "Description for moka.spring.datasource.validation-query."
@@ -109,5 +89,35 @@
       "name": "idb.spring.datasource.auto-commit",
       "type": "java.lang.String",
       "description": "Description for idb.spring.datasource.auto-commit."
+    },
+    {
+      "name": "bulk.brightcove.account",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightCove.account."
+    },
+    {
+      "name": "bulk.brightcove.clientId",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightCove.clientId."
+    },
+    {
+      "name": "bulk.brightcove.clientSecret",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightCove.clientSecret."
+    },
+    {
+      "name": "bulk.brightcove.accessTokenUrl",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightCove.accessTokenUrl."
+    },
+    {
+      "name": "bulk.brightcove.videoSourceUrl",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightcove.videoSourceUrl."
+    },
+    {
+      "name": "bulk.brightcove.videoLimitSize",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightcove.videoLimitSize."
     }
   ] }

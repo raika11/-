@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.web.bulk.task.bulkdump.env.Sub.BulkDumpEnvTarget;
+import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
@@ -61,10 +63,10 @@ public abstract class BulkArticle implements Serializable {
     private final MapString hh = MapString.newMapString( dataMap, "{_HH_}");
     private final MapString nn = MapString.newMapString( dataMap, "{_NN_}");
     private final MapString ss = MapString.newMapString( dataMap, "{_SS_}");
+    private final MapString insertDate = MapString.newMapString( dataMap, "{_INSERTDATE_}");
 
-    private final MapString totalId = MapString.newMapString( dataMap, "{_TOTALID_}");
-    private final MapString totalId10 = MapString.newMapString( dataMap, "{_TOTALID10_}");
-    private final MapString totalId11 = MapString.newMapString( dataMap, "{_TOTALID11_}");
+    private final MapString totalId = MapString.newMapString( dataMap, "{_AID_}");
+    private final MapString totalId10 = MapString.newMapString( dataMap, "{_AID10_}");
 
     private final MapString media1 = MapString.newMapString( dataMap, "{_M1_}");
     private final MapString media2 = MapString.newMapString( dataMap, "{_M2_}");
@@ -85,6 +87,11 @@ public abstract class BulkArticle implements Serializable {
     private final MapString email = MapString.newMapString( dataMap, "{_MAIL_}");
     private final MapString artReporterWithEmail = MapString.newMapString( dataMap, "{_REPT_EMAIL_}");
 
+    private final MapString relatedArticles = MapString.newMapString(dataMap, "{_RELATED_ARTICLES_}");
+    private final MapString relatedNewsDaum = MapString.newMapString(dataMap, "{_REL_NEWS_DAUM_}");
+    private final MapString relatedNewsZum = MapString.newMapString(dataMap, "{_REL_NEWS_ZUM_}");
+
+    private final MapString contentText = MapString.newMapString( dataMap, "{_CONTTXT_}");
     private final MapString contentHtml = MapString.newMapString( dataMap, "{_CONTHTML_}");
     private final MapString contentHtmlMs = MapString.newMapString( dataMap, "{_CONTH_MS_}");
     private final MapString contentHtmlEx4 = MapString.newMapString( dataMap, "{_CONTH_EX4_}");
@@ -92,6 +99,22 @@ public abstract class BulkArticle implements Serializable {
     private final MapString contentHtmlNate = MapString.newMapString( dataMap, "{_CONTH_NATE_}");
     private final MapString contentHtmlDaum = MapString.newMapString( dataMap, "{_CONTH_DAUM_}");
     private final MapString contentHtmlZum = MapString.newMapString( dataMap, "{_CONTH_ZUM_}");
+    private final MapString contentHtmlNaver = MapString.newMapString( dataMap, "{_CONTH_NAVER_}");
+
+    private final MapString imageBlockTxt2 = MapString.newMapString( dataMap, "{_TXT_IMG_BLK2_}");
+    private final MapString imageBlockTxtNate = MapString.newMapString( dataMap, "{_TXT_IMG_BLK_NATE_}");
+    private final MapString imageBlockXml = MapString.newMapString( dataMap, "{_XML_IMG_BLK_}");
+    private final MapString imageBlockXmlEx = MapString.newMapString( dataMap, "{_XML_IMG_BLK_EX_}");
+    private final MapString imageBlockXml2 = MapString.newMapString( dataMap, "{_XML_IMG_BLK2_}");
+    private final MapString imageBlockXml3 = MapString.newMapString( dataMap, "{_XML_IMG_BLK3_}");
+    private final MapString imageBlockXml4 = MapString.newMapString( dataMap, "{_XML_IMG_BLK4_}");
+    private final MapString imageBlockXmlNaver = MapString.newMapString( dataMap, "{_XML_IMG_BLK_NAVER_}");
+    private final MapString imageBlockXmlZum = MapString.newMapString( dataMap, "{_XML_IMG_BLK_ZUM_}");
+
+    private final MapString imageCoverImage = MapString.newMapString( dataMap, "{_XML_IMG_COVER_}");
+
+    private final MapString imageVideoBlockTxt = MapString.newMapString( dataMap, "{_VIDEO_TXT_BLK_}");
+    private final MapString imageVideoBlockXml2 = MapString.newMapString( dataMap, "{_XML_IMG_VIDEO_BLK2_}");
 
     private final MapString serviceurl = MapString.newMapString( dataMap, "{_URL_}");
     private final MapString addr = MapString.newMapString( dataMap, "{_ADDR_}");
@@ -115,6 +138,21 @@ public abstract class BulkArticle implements Serializable {
     private final MapString naverBreakingNewsTime = MapString.newMapString( dataMap, "{_NAVER_PUSHTIME_}");
     private final MapString naverOnTheSceneReporting = MapString.newMapString( dataMap, "{_NAVER_SITE_}");
 
+    private List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList;
+    private List<BulkDumpNewsMMDataVo> bulkDumpNewsImageList;
+    private List<BulkDumpNewsMMDataVo> bulkDumpNewsVideoList;
+
+    public boolean hasImageList() {
+        if( this.bulkDumpNewsImageList == null )
+            return false;
+        return this.bulkDumpNewsImageList.size() > 0;
+    }
+
+    public boolean hasVideoList() {
+        if( this.bulkDumpNewsVideoList == null )
+            return false;
+        return this.bulkDumpNewsVideoList.size() > 0;
+    }
 
     public BulkArticle(BulkDumpTotalVo bulkDumpTotal) {
         this.bulkDumpTotal = bulkDumpTotal;
@@ -130,7 +168,6 @@ public abstract class BulkArticle implements Serializable {
         if( this.targetCode != null ) {
             if (!this.targetCode.startsWith("JT")) {
                 this.totalId10.setData(String.format("%010d", bulkDumpTotal.getTotalId()));
-                this.totalId11.setData(String.format("%011d", bulkDumpTotal.getTotalId()));
             }
         }
 
@@ -151,9 +188,17 @@ public abstract class BulkArticle implements Serializable {
         this.hh.setData(McpDate.dateStr(getInsDt(), "HH"));
         this.nn.setData(McpDate.dateStr(getInsDt(), "mm"));
         this.ss.setData(McpDate.dateStr(getInsDt(), "ss"));
+
+        this.insertDate.setData( McpDate.dateStr(getInsDt(), "yyyy-MM-dd HH:mm:ss"));
     }
 
-    public abstract void processBulkDumpNewsVo(BulkDumpNewsVo newsVo);
+    public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
+        this.bulkDumpNewsMMDataList = bulkDumpNewsMMDataList;
+        if( bulkDumpNewsMMDataList == null )
+            return;
+        this.bulkDumpNewsImageList = bulkDumpNewsMMDataList.stream().filter( data -> data.getMultiType().equals("HP") ).collect( Collectors.toList());
+        this.bulkDumpNewsVideoList = bulkDumpNewsMMDataList.stream().filter( data -> data.getMultiType().equals("MF") ).collect( Collectors.toList());
+    }
 
     private static final Pattern PATTERN_getContentImages = Pattern.compile("<(\\s*?)img(?<entry>.*?)>", Pattern.CASE_INSENSITIVE);
     public List<Map<String,String>> processContent_getImages() {

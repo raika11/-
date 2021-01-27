@@ -6,6 +6,7 @@ import java.util.Map;
 import jmnet.moka.web.bulk.mapper.idb.BulkDumpIdbMapper;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,11 @@ public class BulkDumpServiceImpl implements BulkDumpService {
     }
 
     @Override
+    public void delUspBulkDdref(BulkDumpTotalVo bulkDumpTotal) {
+        this.bulkDumpIdbMapper.callUspBulkDdrefDel(bulkDumpTotal);
+    }
+
+    @Override
     public boolean doGetBulkNewstableJoongang( BulkJoongangArticle article ) {
         List<BulkDumpNewsVo> dumpNewses;
         if (article.getTargetCode().startsWith("SS"))
@@ -54,7 +60,7 @@ public class BulkDumpServiceImpl implements BulkDumpService {
             return false;
 
         final BulkDumpNewsVo newsVo = dumpNewses.get( dumpNewsesLength - 1);
-        article.processBulkDumpNewsVo( newsVo );
+        article.processBulkDumpNewsVo( newsVo, this.bulkDumpIdbMapper.callUspBulkNewsMMDataSel(article) );
 
         article.setBulkYn("YYN");
 

@@ -1,12 +1,12 @@
-package jmnet.moka.web.rcv.taskinput;
+package jmnet.moka.web.bulk.taskinput;
 
 import java.io.File;
 import java.util.Date;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
-import jmnet.moka.web.rcv.common.vo.TotalVo;
-import jmnet.moka.web.rcv.exception.RcvException;
-import jmnet.moka.web.rcv.util.RcvFileUtil;
+import jmnet.moka.web.bulk.common.taskinput.TaskInputData;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
+import jmnet.moka.web.bulk.exception.BulkException;
+import jmnet.moka.web.bulk.util.BulkFileUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.web.rcv.task.input
+ * Package : jmnet.moka.web.bulk.task.input
  * ClassName : FileTaskInputData
  * Created : 2020-10-29 029 sapark
  * </pre>
@@ -26,12 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class FileTaskInputData<P, C> extends TaskInputData {
+public class FileXmlTaskInputData<P, C> extends TaskInputData {
     private final File file;
     private P totalData;
-    private final FileTaskInput<P, C> taskInput;
+    private final FileXmlTaskInput<P, C> taskInput;
 
-    public FileTaskInputData(File file, C data, FileTaskInput<P, C> taskInput, Class<P> parentObjectType, Class<C> objectType) {
+    public FileXmlTaskInputData(File file, C data, FileXmlTaskInput<P, C> taskInput, Class<P> parentObjectType, Class<C> objectType) {
         this.file = file;
         try {
             this.totalData = parentObjectType
@@ -58,9 +58,10 @@ public class FileTaskInputData<P, C> extends TaskInputData {
         String targetDir = isSuccess() ? getTaskInput().getDirSuccess() : getTaskInput().getDirFailed();
 
         try {
-            RcvFileUtil.moveFileToDateDir(getFile(), targetDir, McpDate.dateStr(new Date(), "yyyyMM/dd"));
-        } catch (RcvException e) {
+            BulkFileUtil.moveFileToDateDir(getFile(), targetDir, McpDate.dateStr(new Date(), "yyyyMM/dd"));
+        } catch (BulkException e) {
             log.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -1,9 +1,7 @@
 package jmnet.moka.web.bulk.config;
 
-import jmnet.moka.web.bulk.config.MokaMybatisConfiguration;
 import jmnet.moka.web.bulk.task.base.TaskManager;
 import lombok.Getter;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -38,8 +36,8 @@ public class MokaBulkConfiguration {
     private String smsListEnvFile;
 
     @Bean
-    @ConfigurationProperties(prefix = "bulk.ooyala")
-    public OoyalaConfig getOoyalaConfig() { return new OoyalaConfig(); }
+    @ConfigurationProperties(prefix = "bulk.brightcove")
+    public BrightCoveConfig getBrightCoveConfig() { return new BrightCoveConfig(); }
 
     @Bean
     TaskManager taskManager() {

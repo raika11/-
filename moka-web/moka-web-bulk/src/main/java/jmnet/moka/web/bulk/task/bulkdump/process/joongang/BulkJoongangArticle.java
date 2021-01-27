@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,14 +9,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
+import jmnet.moka.web.bulk.service.SmsUtilService;
+import jmnet.moka.web.bulk.task.base.TaskManager;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
+import jmnet.moka.web.bulk.util.BulkBrightCoveUtil;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
 import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -41,10 +48,11 @@ public class BulkJoongangArticle extends BulkArticle {
     }
 
     @Override
-    public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo) {
+    public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
+        super.processBulkDumpNewsVo(newsVo, bulkDumpNewsMMDataList);
+
         getTotalId().setData(newsVo.getTotalId());
         getTotalId10().setData(String.format("%010d", BulkUtil.parseInt(newsVo.getTotalId())));
-        getTotalId11().setData(String.format("%011d", BulkUtil.parseInt(newsVo.getTotalId())));
 
         getOrgSourceCode().setData(newsVo.getOrgSourceCode());
         getMedia1().setData(newsVo.getDep());
@@ -58,7 +66,7 @@ public class BulkJoongangArticle extends BulkArticle {
         getSubTitle().setData(newsVo.getSubTitle());
         getArtReporter().setData(newsVo.getArtReporter());
 
-        if (!McpString.isNullOrEmpty(newsVo.getEmail())) {
+        if (!newsVo.getEmail().isEmpty()) {
             getEmail().setData(newsVo.getEmail());
         }
 
@@ -81,28 +89,29 @@ public class BulkJoongangArticle extends BulkArticle {
         getNaverMyun().setData(newsVo.getMyun());
         getNaverPan().setData(newsVo.getPan());
 
-        if (!McpString.isNullOrEmpty(newsVo.getMyun())) {
-            if (!McpString.isNullOrEmpty(newsVo.getPressPosition())) {
+        if (!newsVo.getMyun().isEmpty()) {
+            if (!newsVo.getPressPosition().isEmpty()) {
                 getNaverPosition().setData(newsVo.getPressPosition());
             } else {
                 getNaverPosition().setData("9");
             }
         }
 
+        //2019-05 네이버 속보
         getNaverBreakingNewsGrade().setData(newsVo.getBreakingNews());
         getNaverBreakingNewsId().setData(newsVo.getBreakingNewsCnt());
-        if( !McpString.isNullOrEmpty(newsVo.getBreakingNewsCnt()) && newsVo.getBreakingNewsCnt().equals("0")) {
-            if( !McpString.isNullOrEmpty(newsVo.getBreakingNews())) {
+        if( !getNaverBreakingNewsId().isEmpty() ) {
+            if( getNaverBreakingNewsGrade().isEmpty() ) {
                 getNaverBreakingNewsGrade().setData("0");
             }
             getNaverBreakingNewsTitle().setData("<![CDATA[" + newsVo.getTitle().trim() + "]]>");
             getNaverBreakingNewsDate().setData(McpDate.dateStr(getInsDt(), "yyyy-MM-dd"));
             getNaverBreakingNewsTime().setData(McpDate.dateStr(getInsDt(), "HH:mm:ss"));
         }
-        else
-            getNaverBreakingNewsId().setData("");
 
-        getNaverOnTheSceneReporting().setData(newsVo.getOnTheSceneReporting());
+        //2019-05 네이버 현장값
+        if( !McpString.isNullOrEmpty(newsVo.getOnTheSceneReporting()))
+            getNaverOnTheSceneReporting().setData(newsVo.getOnTheSceneReporting().toUpperCase().trim());
     }
 
     public void processMediaFullName() {
@@ -183,7 +192,7 @@ public class BulkJoongangArticle extends BulkArticle {
         // 2019 동적차트 제거하고 이미지만 추출하여 삽입
         if( getContentHtml().toString().contains("ab_dynamic_chart")) {
             final String chartPattern = "(?i)<div\\s*?class\\s*?=\\s*?\"ab_dynamic_chart\"\\s*?data-chartImgUrl\\s*?=\\s*?['|\"](?<imgUrl>.*?)['|\"].*?</figure></div>";
-            getContentHtml().setData( getContentHtml().toString().replaceAll(chartPattern, "<img alt=\"\" src=\"$1\"/>") );
+            getContentHtml().replaceAll(chartPattern, "<img alt=\"\" src=\"$1\"/>");
         }
     }
 
@@ -213,13 +222,13 @@ public class BulkJoongangArticle extends BulkArticle {
         // 2020.03.20 포토 fix 개별 이미지로 추출
         if( getContentHtml().toString().contains("ab_photofix")) {
             final String photofixPattern = "(?i)<div(\\s*?)class=\"ab_photofix\">.*?background-image:url\\('(?<src>.*?)'.*?<p class=\"caption\">(?<alt>.*?)</p></div>";
-            getContentHtml().setData(getContentHtml().toString().replaceAll(photofixPattern, "<img alt=\"$3\" src=\"$2\"/>" ));
+            getContentHtml().replaceAll(photofixPattern, "<img alt=\"$3\" src=\"$2\"/>" );
         }
     }
 
     public void processContent_etcLevel1() {
         //2019-05-09 <hr><hr> 더보기 제거
-        getContentHtml().setData( getContentHtml().toString().replace("<hr><hr>", ""));
+        getContentHtml().replace("<hr><hr>", "");
 
         //2016.01.14 by song
         getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"tag_pictorial\" ", "</div>")); //화보 제외
@@ -229,19 +238,19 @@ public class BulkJoongangArticle extends BulkArticle {
         //2020.03.18
         getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule( getContentHtml().toString(), "<div class=\"htmlTag\" ", "</div>")); //htmltag 파티클 제외
 
-        getContentHtml().setData( getContentHtml().toString().replace("pds.joinsmsn.com", "pds.joins.com"));
+        getContentHtml().replace("pds.joinsmsn.com", "pds.joins.com");
     }
 
     public void processContentTag_ab_people() {
         if( getContentHtml().toString().contains("ab_people")) {
             final String peoplePattern = "(?i)<div(\\s *?)class.{1,5}(\\bab_people\\b)[^>]+>(\\s*?)(.*?)<div(\\s*?)class.{1,5}(\\bab_people_hd\\b)[^>]+>(\\s*?)(.*?)</div>(\\s*?)(.*?)<div(\\s*?)class.{1,5}(\\bab_people_bd\\b)[^>]+>(\\s*?)(.*?)</div>(\\s*?)(.*?)</div>";
-            getContentHtml().setData(getContentHtml().toString().replaceAll(peoplePattern, "" ));
+            getContentHtml().replaceAll(peoplePattern, "" );
         }
     }
 
     public void processContent_etcLevel2() {
         if (getContentHtml().toString().contains("<a style=\"display:none\"")) {
-            getContentHtml().setData(getContentHtml().toString().replace("<a style=\"display:none\"", "<a "));
+            getContentHtml().replace("<a style=\"display:none\"", "<a ");
         }
         if (getContentHtml().toString().contains("Copyright(C) JTBC Contents Hub. All rights reserved.")) {
             getContentHtml().setData(getContentHtml().toString().replace("Copyright(C) JTBC Contents Hub. All rights reserved.", "").trim() + "\r\n");
@@ -251,20 +260,20 @@ public class BulkJoongangArticle extends BulkArticle {
     public void processContent_contentHtmlMs() {
         // `12.10.13 이승인 : ms 용은 xxx 의 블로그가 없어야 하므로 추가
         getContentHtmlMs().setData(BulkTagUtil.standardBulkClearingTag(getContentHtml().toString()));
-        if (McpString.isNullOrEmpty(getContentHtmlMs().toString())) {
+        if (getContentHtmlMs().isEmpty()) {
             getContentHtmlMs().setData(".");
         }
     }
 
     public void processReporter() {
-        if( McpString.isNullOrEmpty(getEmail().toString())){
+        if( getEmail().isEmpty()){
             getArtReporterWithEmail().setData(getArtReporter().toString());
         }
         else{
             getArtReporterWithEmail().setData( getArtReporter().toString() + "(" + getEmail().toString() + ")");
         }
 
-        if( McpString.isNullOrEmpty(getArtReporter().toString())){
+        if( getArtReporter().isEmpty()){
             getArtReporter().setData("n/a");
         }
 
@@ -287,7 +296,7 @@ public class BulkJoongangArticle extends BulkArticle {
     public void processContentTag_quiz_question_screen_open() {
         // region 2018-11-01 quiz 변환 by ethan
 
-        if( getContentHtml().toString().contains("quiz_question_screen_open")) {
+        if( getContentHtml().contains("quiz_question_screen_open")) {
             Matcher matcher = PATTERN_ContentTag_quiz_question_screen_open.matcher(getContentHtml().toString());
             StringBuffer sb = new StringBuffer( getContentHtml().toString().length() * 2 );
 
@@ -320,17 +329,17 @@ public class BulkJoongangArticle extends BulkArticle {
     }
 
     public void processContentTag_tag_interview() {
-        if (getContentHtml().toString().contains("<div class=\"tag_interview\">")) {
-            getContentHtml().setData(getContentHtml().toString().replaceAll("(?i)<div class=\"tag_question\">(?<question>.*?)</div>", "\r\n<strong>Q : $1</strong>\r\n") );
-            getContentHtml().setData(getContentHtml().toString().replaceAll("(?i)<div class=\"tag_answer\">(?<answer>.*?)</div>", "<strong>A :</strong> $1") );
+        if (getContentHtml().contains("<div class=\"tag_interview\">")) {
+            getContentHtml().replaceAll("(?i)<div class=\"tag_question\">(?<question>.*?)</div>", "\r\n<strong>Q : $1</strong>\r\n");
+            getContentHtml().replaceAll("(?i)<div class=\"tag_answer\">(?<answer>.*?)</div>", "<strong>A :</strong> $1");
         }
     }
 
     public void processContentTag_ab_related_article() {
         //아티클개선 관련기사 태그제거(공통) by sean 2016-09-02 - http://pms.joins.com/task/view_task.asp?tid=13408  /////////////////////////////////////////////////
         //관련기사 <div class="ab_related_article">.....<div> 제거
-        if (getContentHtml().toString().contains("ab_related_article")) {
-            getContentHtml().setData(getContentHtml().toString().replaceAll("(?i)<(\\s)*div(\\s)*class(\\s)*=(\\s)*([\"'])ab_related_article([\"'])(\\s)*>.*?hd.*?bd.*?ul.*?/ul.(\\s)*<(\\s)*/(\\s)*div>(\\s)*<(\\s)*/(\\s)*div>", "") );
+        if (getContentHtml().contains("ab_related_article")) {
+            getContentHtml().replaceAll("(?i)<(\\s)*div(\\s)*class(\\s)*=(\\s)*([\"'])ab_related_article([\"'])(\\s)*>.*?hd.*?bd.*?ul.*?/ul.(\\s)*<(\\s)*/(\\s)*div>(\\s)*<(\\s)*/(\\s)*div>", "");
         }
     }
 
@@ -402,7 +411,6 @@ public class BulkJoongangArticle extends BulkArticle {
         contentHtmlNate = "<b>" + getSubTitle().toString() + "</b>\r\n\r\n" + contentHtmlNate.trim();
 
         for( String videoMapKey : videoMap.keySet() ) {
-//            log.info(videoMap.get(videoMapKey));
             contentHtmlNate = contentHtmlNate.replace( videoMapKey,
                     videoMap.get(videoMapKey).replaceAll(
                             "(?i)<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.+youtube.+))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>",
@@ -416,7 +424,7 @@ public class BulkJoongangArticle extends BulkArticle {
     private static final Pattern PATTERN_ContentTag_daumKakaoTv = Pattern.compile("<iframe.*?src=(.)http://videofarm.daum.net/controller/video/viewer/Video.html.*?</iframe>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumPhotoBundle = Pattern.compile("<div class=\"tag_photobundle\">(\\s)*<img.*?>(\\s)*</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumImg = Pattern.compile("<(\\s*?)img.[^>]+>", Pattern.CASE_INSENSITIVE);
-    public void processContentDaumBefore(Map<String, String> daumvideoMap, Map<String, String> daumVideoKakaoTvMap,
+    public void processContentDaumBefore(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap,
             Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
         //카카오다음 전용변수(m_content_html_ig_daum)
         String contentHtmlDaum = getContentHtml().toString()
@@ -425,7 +433,7 @@ public class BulkJoongangArticle extends BulkArticle {
 
         contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"" );
 
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumVod, contentHtmlDaum, "daumvod_", daumvideoMap);
+        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumVod, contentHtmlDaum, "daumvod_", daumVideoMap);
         contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<div class=\"tag_vod\".*?</div>", "" ); //동영상 제외
 
         //사운드Cloud 안내메시지 제거
@@ -454,7 +462,7 @@ public class BulkJoongangArticle extends BulkArticle {
     private static final Pattern PATTERN_ContentTag_daumVodNaverCast = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"navercast[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumVodKakaoTv = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"kakaotv[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumVodYouTube = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodOoyala = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
+    private static final Pattern PATTERN_ContentTag_daumVodOvp = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     public void processContentDaumAfter(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap, Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
         // 다음기사에 QA인 경우 줄바뀜 추가 2016-02-05 지창현
         String contentHtmlDaum = getContentHtmlDaum().toString();
@@ -505,7 +513,7 @@ public class BulkJoongangArticle extends BulkArticle {
             }
 
             // ovp
-            Matcher matcherOvp = PATTERN_ContentTag_daumVodOoyala.matcher(daumVideoStr);
+            Matcher matcherOvp = PATTERN_ContentTag_daumVodOvp.matcher(daumVideoStr);
             if( matcherOvp.find()){
                 if (!isOnceDaumTagReplace) {
                     contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, "");
@@ -521,8 +529,8 @@ public class BulkJoongangArticle extends BulkArticle {
                                          .replace("▷여기를 누르시면 크게 보실 수 있습니다", "");
 
         //다음 아티클 개선 style 적용 by sean 2016-08-31 - http://pms.joins.com/task/view_task.asp?tid=13408  ////////////////
-        //다음은 전체태그가 제거되므로 div,span class=dim에 태그를 제외한 CMS입력 템플릿을 <br /> 그대로 사용한다.
-        //CMS CK에디터 템플릿에서 <br><br> 두번을 지정해줘야 <br /> 이 입력되는 특이사항 발생. 2016-09-01 jerome speech.
+        //다음은 전체태그가 제거되므로 div,span class=dim 에 태그를 제외한 CMS 입력 템플릿을 <br /> 그대로 사용한다.
+        //CMS CK 에디터 템플릿에서 <br><br> 두번을 지정해줘야 <br /> 이 입력되는 특이사항 발생. 2016-09-01 jerome speech.
         contentHtmlDaum = contentHtmlDaum.replace("■", "\r\n\r\n■")
                                          .replace("「", "\r\n「")
                                          .replace("」", "」\r\n\r\n");
@@ -536,7 +544,7 @@ public class BulkJoongangArticle extends BulkArticle {
     private static final Pattern PATTERN_ContentTag_zumVodNaverCast = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"navercast[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_zumVodKakaoTv = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"kakaotv[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_zumVodYouTube = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_zumVodOoyala = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
+    private static final Pattern PATTERN_ContentTag_zumVodOvp = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     public void processContentZum() {
         // zum 전용변수(m_content_html_zum) - 정보구성
         String contentHtmlZum = getContentHtml().toString().replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"");
@@ -568,7 +576,7 @@ public class BulkJoongangArticle extends BulkArticle {
             }
 
             // ovp
-            Matcher matcherOvp = PATTERN_ContentTag_zumVodOoyala.matcher(videoStr);
+            Matcher matcherOvp = PATTERN_ContentTag_zumVodOvp.matcher(videoStr);
             if( matcherOvp.find()){
                 contentHtmlZum = contentHtmlZum.replace(videoKey, "");
             }
@@ -582,7 +590,6 @@ public class BulkJoongangArticle extends BulkArticle {
     }
 
     private static final Pattern PATTERN_ContentTag_naverVodOoyala = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_naverAdboxArticle = Pattern.compile("(?<abBoxArticleDA><div(\\s*)class.{1,5}(\\bab_box_article\\sab_division\\s(division_center|division_left|division_right)\\b)[^>])+>(\\s*)(.*?)(?<abBoxInner><div(\\s*)(.*?)(\\bab_box_inner\\b)[^>])+>(\\s*)(.*?)(?<abBoxTitle><div(\\s*)class.{1,5}(\\bab_box_title\\b)[^>])+>(\\s*)(.*?)(?<abBoxBullet><span(\\s*)class.{1,5}(\\bab_box_bullet\\b)[^>])+>", Pattern.CASE_INSENSITIVE );
     public void processContentNaverXml(String contentHtml) {
         //네이버 제공용 xml 2014.02.10
         //2019-07-23 SEO 관련 h2 태그 삭제
@@ -594,9 +601,9 @@ public class BulkJoongangArticle extends BulkArticle {
                 .replace("<h2>", "")
                 .replace("</h2>", "")
                 .replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"")
-                .replaceAll("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", "");
+                .replaceAll("(?i)<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", "");
 
-        //네이버TV
+        //네이버 TV
         contentNaver = contentNaver.replaceAll("(?i)<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(https://.+))\"(?:\\s*?)data-service=\"navercast[^>]+>(?:\\s*?)</div>",
                 "<iframe src=\"$1\" allowfullscreen=\"true\"></iframe>");
 
@@ -604,82 +611,312 @@ public class BulkJoongangArticle extends BulkArticle {
         Matcher matcherOvp = PATTERN_ContentTag_naverVodOoyala.matcher(contentNaver);
         int naverOvpCount = 1;
         while( matcherOvp.find() ) {
-//            log.info( "group {}", matcherOvp.group() );
             contentNaver = StringUtils.replaceOnce(contentNaver, matcherOvp.group(),  String.format("<!-- naver_news_vod_%d -->", naverOvpCount++));
         }
 
         contentNaver = BulkTagUtil.ripTagWithOrderRule(contentNaver, "<div class=\"tag_audio\"", "</div>"); //오디오 제외
 
         // e 글중심 (정규식 그룹캡처) 구현시작
-//        Matcher matcherAdBox = PATTERN_ContentTag_naverAdboxArticle.matcher(contentNaver);
-//        if (matcherAdBox.find()) {
-//
-//        }
+        contentNaver = processContentNaverXmlTag_ab_box_article_eGul( contentNaver );
+
+        // ab_box_article (정규식 그룹핑) 구현시작
+        contentNaver = processContentNaverXmlTag_ab_box_article( contentNaver );
+
+        // 스타기자(ab_emphasis) 구현시작
+        contentNaver = processContentNaverXmlTag_ab_emphasis( contentNaver );
+
+        //ab_sub_heading(Bold 처리) - 공통사용, 아티클 박스 내부에서 사용하는 ab_sub_heading, ab_sub_headingline 태그가 전부 변경된 뒤 처리
+        contentNaver = processContentNaverXmlTag_etc( contentNaver );
+
+        getContentHtmlNaver().setData(contentNaver);
+    }
+
+    public String processContentNaverXmlTag_etc(String contentNaver) {
+        //ab_sub_heading(Bold 처리) - 공통사용, 아티클 박스 내부에서 사용하는 ab_sub_heading, ab_sub_headingline 태그가 전부 변경된 뒤 처리
+        //ab_table class 적용
+        contentNaver = contentNaver.replaceAll("(?i)<div class(\\s)*=(\\s)*([\"'])ab_sub_heading([\"'])(\\s)*>","<div class=\"ab_sub_heading\" style=\"position:relative;margin-top:17px;margin-bottom:16px;padding-top:15px;padding-bottom:14px;border-top:1px solid #444446;border-bottom:1px solid #ebebeb;color:#3e3e40;font-size:20px;line-height:1.5;\">")
+                                   .replaceAll("(?i)<div class(\\s)*=(\\s)*([\"'])ab_sub_headingline([\"'])(\\s)*>","<div class=\"ab_sub_headingline\" style=\"font-weight:bold;\">")
+                                   .replaceAll("(?i)<table class(\\s)*=(\\s)*([\"'])ab_table([\"'])(\\s)*>", "<table style=\"width:100%;border-collapse:collapse;border-spacing:0;\">")
+                                   .replaceAll("(?i)<td class(\\s)*=(\\s)*(]\"'])ab_table_td([\"'])(\\s)*>", "<table style=\"padding: 6px; border: 1px solid #ebebeb;\">")
+                                   .replace("&middot;", "·");
 
 
         /*
-        #region
-        try
-        {
-            string ab_egul_pattern = @"(?<ab_box_article_d_a><div(\s*)class.{1,5}(\bab_box_article\sab_division\s(division_center|division_left|division_right)\b)[^>])+>(\s*)(.*?)(?<ab_box_inner><div(\s*)(.*?)(\bab_box_inner\b)[^>])+>(\s*)(.*?)(?<ab_box_title><div(\s*)class.{1,5}(\bab_box_title\b)[^>])+>(\s*)(.*?)(?<ab_box_bullet><span(\s*)class.{1,5}(\bab_box_bullet\b)[^>])+>";
-            var regex_ab_egul_heading = new Regex(ab_egul_pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
-            Match ab_egul_match = regex_ab_egul_heading.Match(strNaverContent);
-            if (ab_egul_match.Success)
-            {
-                //<span class="dim" style="display: none;">■</span> 유형 전부 지우기 - 아티클박스 관련 전부 지운다.
-                string spandim_pattern = @"(?<spandim><span(\s*?)class=""(\bdim\b)[^>] +>.</span>)";
-                var regex_spandim = new Regex(spandim_pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
-                strNaverContent = m_util.RegexReplaceGroup(regex_spandim, strNaverContent, "spandim", string.Empty);
+        m_article.m_content_html_naver = m_util.ImgReplaceExtract(strNaverContent, "<!--@img_tag_s@-->", "<!--@img_tag_e@-->");
+         */
 
-                string divdim_pattren = @"(?<divdim><div(\s *?)class=""(\bdim\b)[^>] +>(\s*?)(.*?)</div>)";
-                var regex_divdim = new Regex(divdim_pattren, RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
-                strNaverContent = m_util.RegexReplaceGroup(regex_divdim, strNaverContent, "divdim", string.Empty);
+        return contentNaver;
+    }
 
-                string ab_box_article_d_a = ab_egul_match.Groups["ab_box_article_d_a"].Value;
-                string ab_box_inner = ab_egul_match.Groups["ab_box_inner"].Value;
-                string ab_box_title = ab_egul_match.Groups["ab_box_title"].Value;
-                string ab_box_bullet = ab_egul_match.Groups["ab_box_bullet"].Value;
+    public String processContentNaverXmlTag_ab_emphasis(String contentNaver) {
+        // 스타기자(ab_emphasis) 구현시작
+        final Pattern PATTERN_ContentTag_naverEmphasisHeader = Pattern.compile("(?<abEmphasis><div(\\s*?)class.{1,5}(\\bab_emphasis\\b)[^>]+)>(\\s*?)(.*?)(?<emphasisDimLt><span(\\s*?)(.*?)(\\bab_emphasis_dim_lt\\b)[^>]+)>", Pattern.CASE_INSENSITIVE);
+        StringBuilder sb = new StringBuilder(contentNaver.length() * 3);
+        Matcher adBoxEmphasisHeader = PATTERN_ContentTag_naverEmphasisHeader.matcher(contentNaver);
+        if( !adBoxEmphasisHeader.find() )
+            return contentNaver;
+        do {
+            final String replace = adBoxEmphasisHeader
+                    .group("abEmphasis")
+                    .concat(" style=\"position:relative;margin:23px 0;padding:0 70px;font-size:20px; font-weight:bold; line-height:28px; text-align:center; \">")
+                    .concat(adBoxEmphasisHeader.group("emphasisDimLt"))
+                    .concat(" style=\"display:block;position:absolute;top:0;left:-45px;width:74px;height:74px;font-size:68px;font-weight:normal;line-height:76px;overflow:hidden;\">");
+            adBoxEmphasisHeader.appendReplacement(sb, replace);
+        } while( adBoxEmphasisHeader.find() );
+        adBoxEmphasisHeader.appendTail(sb);
+        contentNaver = sb.toString();
 
-                //match 텍스트만 변환하여 strNaverContent 변환 출력처리
-                strNaverContent = regex_ab_egul_heading.Replace(strNaverContent, m =>
-                {
-                    string[] parms = new string[4];
-                    parms[0] = string.Concat(ab_box_article_d_a, " style=\"padding-bottom:16px;line-height:26px;letter-spacing:0px;font-family:돋움,dotum,sans-serif;\">");
-                    parms[1] = string.Concat(ab_box_inner, " style=\"padding:24px 20px 0px;border:1px solid rgb(221,221,221);border-image:none;overflow:hidden;clear:both;\" >");
-                    parms[2] = string.Concat(ab_box_title, " style=\"color:rgb(166,152,134);line-height:1.5;font-size:14px;margin-bottom:1px;\">");
-                    parms[3] = string.Concat(ab_box_bullet, " style=\"display:none;\">");
-                    return string.Format("{0}{1}{2}{3}", parms);
-                });
+        final Pattern PATTERN_ContentTag_naverEmphasisTail = Pattern.compile("<div(\\s*?)class.{1,5}(\\bab_emphasis\\b)[^>]+>(\\s*?)(.*?)<span(\\s*?)(.*?)(\\bab_emphasis_dim_lt\\b)[^>]+>(\\s*?)(.*?)</span>(\\s*?)(.*?)<p(\\s*?)class.{1,5}(\\bab_emphasis_content\\b)[^>]+>(\\s*?)(.*?)</p>(\\s*?)(.*?)(?<emphasisDimRt><span(\\s*?)class.{1,5}(\\bab_emphasis_dim_rt\\b)[^>]+)>(\\s*?)(.*?)</span>", Pattern.CASE_INSENSITIVE);
+        contentNaver = BulkTagUtil.regexReplaceGroup( contentNaver, PATTERN_ContentTag_naverEmphasisTail,
+                "emphasisDimRt", "<span class=\"ab_emphasis_dim_rt\" style =\"display:block;position:absolute;bottom:-8px;right:-45px;width:74px;height:74px;font-size:68px;font-weight:normal;line-height:70px; overflow: hidden;\"");
 
-                //<div class="dim" 영역이 다시 생기는 케이스가 있어 예외처리.
-                strNaverContent = m_util.RegexReplaceGroup(regex_spandim, strNaverContent, "spandim", string.Empty);
-                strNaverContent = m_util.RegexReplaceGroup(regex_divdim, strNaverContent, "divdim", string.Empty);
+        return contentNaver;
+    }
 
-                string titleline_pattern = @"<div(\s*?)(.*?)(\bab_box_article\sab_division\s(division_center|division_left|division_right)\b)[^>]+>(.*?)(?<ab_box_titleline><div(\s *?)class=""(\bab_box_titleline\b)[^>] +>)(\s*?)(.*?)</div>";
-                var regex_titleline = new Regex(titleline_pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture);
-                strNaverContent = m_util.RegexReplaceGroup(regex_titleline, strNaverContent, "ab_box_titleline",
-                    "<div class=\"ab_box_titleline\" style=\"font-weight:bold;\">"); //div 앞의 < 부분은 캡처하지 않고 처리(앞단까지 정규식으로 잡으면 정규식이 너무 길어서 가독성 떨어짐.....)
+    public String processContentNaverXmlTag_ab_box_article_eGul(String contentNaver) {
+        // e 글중심 (정규식 그룹캡처) 구현시작
+        final Pattern PATTERN_ContentTag_naverAdboxArticleHeader = Pattern.compile("(?<abBoxArticleTotal><div(\\s*)class.{1,5}(\\bab_box_article\\sab_division\\s(division_center|division_left|division_right)\\b)[^>])+>(\\s*)(.*?)(?<abBoxInner><div(\\s*)(.*?)(\\bab_box_inner\\b)[^>])+>(\\s*)(.*?)(?<abBoxTitle><div(\\s*)class.{1,5}(\\bab_box_title\\b)[^>])+>(\\s*)(.*?)(?<abBoxBullet><span(\\s*)class.{1,5}(\\bab_box_bullet\\b)[^>])+>", Pattern.CASE_INSENSITIVE);
 
-                ////article_box 요소 중 나머지 태그(ab_box_content|ab_sub_heading|ab_sub_headingline|ab_quotation) 처리
-                string ab_box_pattern = @"<div(\s*)(.*?)(\bab_box_article\sab_division\s(division_center|division_left|division_right)\b)[^>]+>(\s*)(.*?)(\bab_box_inner\b)(\s*)(.*?)(\bab_box_title\b)(\s*)(.*?)(\bab_box_bullet\b)(\s*)(.*?)<div(\s*)(.*?)(\bab_box_titleline\b)(\s*)(.*?)(?<ab_box_content><div(\s*?)(.*?)(\bab_box_content\b)[^>]+>)(\s*?)(.*?)(?<ab_sub_heading><div(\s*?)(.*?)(\bab_sub_heading\b)[^>]+>)(\s*?)(.*?)(?<ab_sub_headingline><div(\s*?)(.*?)(\bab_sub_headingline\b)[^>]+>)(\s*?)(.*?)(?<tag_quotation><div(\s*)(.*?)(\btag_quotation\b)[^>]+>)";
-                var regex_abbox = new Regex(ab_box_pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
-                strNaverContent = m_util.RegexReplaceGroup(regex_abbox, strNaverContent, "ab_box_content",
-                    "<div class=\"ab_box_content\" style=\"color:rgb(60,62,64);line-height:20px;font-size:14px;\">");
-                strNaverContent = m_util.RegexReplaceGroup(regex_abbox, strNaverContent, "ab_sub_heading",
-                    "<div class=\"ab_sub_heading\" style=\"color:rgb(35,31,32);line-height:1.5;font-size:16px;margin-bottom:15px;position:relative;\">");
-                strNaverContent = m_util.RegexReplaceGroup(regex_abbox, strNaverContent, "ab_sub_headingline",
-                    "<div class=\"ab_sub_headingline\" style=\"color:rgb(60, 62, 64);font-weight:bold;\">");
-                strNaverContent = m_util.RegexReplaceGroup(regex_abbox, strNaverContent, "tag_quotation",
-                    "<div class=\"tag_quotation\" style=\"padding:22px 0px;color:rgb(115,116,117);line-height:28px;letter-spacing:-0.07em;font-size:13px;position:relative;\">");
+        StringBuilder sb = new StringBuilder(contentNaver.length() * 3);
+
+        Matcher adBoxArticleHeader = PATTERN_ContentTag_naverAdboxArticleHeader.matcher(contentNaver);
+        if( !adBoxArticleHeader.find() )
+            return contentNaver;
+        do {
+            final String replace = adBoxArticleHeader
+                    .group("abBoxArticleTotal")
+                    .concat(" style=\"padding-bottom:16px;line-height:26px;letter-spacing:0px;font-family:돋움,dotum,sans-serif;\">")
+                    .concat(adBoxArticleHeader.group("abBoxInner"))
+                    .concat(" style=\"padding:24px 20px 0px;border:1px solid rgb(221,221,221);border-image:none;overflow:hidden;clear:both;\" >")
+                    .concat(adBoxArticleHeader.group("abBoxTitle"))
+                    .concat(" style=\"color:rgb(166,152,134);line-height:1.5;font-size:14px;margin-bottom:1px;\">")
+                    .concat(adBoxArticleHeader.group("abBoxBullet"))
+                    .concat(" style=\"display:none;\">");
+            adBoxArticleHeader.appendReplacement(sb, replace);
+        } while( adBoxArticleHeader.find() );
+        adBoxArticleHeader.appendTail(sb);
+        contentNaver = sb.toString();
+
+        // <span class="dim" style="display: none;">■</span> 유형 전부 지우기 - 아티클박스 관련 전부 지운다.
+        contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)</div>", "");
+        contentNaver = contentNaver.replaceAll("(?i)<span(\\s*?)class=\"(\\bdim\\b)[^>]+>.</span>", "");
+
+
+        final Pattern PATTERN_ContentTag_naverAdboxArticleTitleLine = Pattern.compile("<div(\\s*?)(.*?)(\\bab_box_article\\sab_division\\s(division_center|division_left|division_right)\\b)[^>]+>(.*?)(?<AbBoxTitleline><div(\\s *?)class=\"(\\bab_box_titleline\\b)[^>]+>)(\\s*?)(.*?)</div>", Pattern.CASE_INSENSITIVE);
+        contentNaver = BulkTagUtil.regexReplaceGroup( contentNaver, PATTERN_ContentTag_naverAdboxArticleTitleLine, "AbBoxTitleline", "<div class=\"ab_box_titleline\" style=\"font-weight:bold;\">");
+
+        ////article_box 요소 중 나머지 태그(ab_box_content | ab_sub_heading | ab_sub_headingline | ab_quotation) 처리
+        final Pattern PATTERN_ContentTag_naverAdboxArticleEtc = Pattern.compile("<div(\\s*)(.*?)(\\bab_box_article\\sab_division\\s(division_center|division_left|division_right)\\b)[^>]+>(\\s*)(.*?)(\\bab_box_inner\\b)(\\s*)(.*?)(\\bab_box_title\\b)(\\s*)(.*?)(\\bab_box_bullet\\b)(\\s*)(.*?)<div(\\s*)(.*?)(\\bab_box_titleline\\b)(\\s*)(.*?)(?<abBoxContent><div(\\s*?)(.*?)(\\bab_box_content\\b)[^>]+>)(\\s*?)(.*?)(?<abSubHeading><div(\\s*?)(.*?)(\\bab_sub_heading\\b)[^>]+>)(\\s*?)(.*?)(?<abSubHeadingline><div(\\s*?)(.*?)(\\bab_sub_headingline\\b)[^>]+>)(\\s*?)(.*?)(?<tagQuotation><div(\\s*)(.*?)(\\btag_quotation\\b)[^>]+>)", Pattern.CASE_INSENSITIVE);
+        contentNaver = BulkTagUtil.regexReplaceGroup( contentNaver, PATTERN_ContentTag_naverAdboxArticleEtc
+                , Arrays.asList( "abBoxContent", "abSubHeading", "abSubHeadingline", "tagQuotation" )
+                , Arrays.asList(
+                        "<div class=\"ab_box_content\" style=\"color:rgb(60,62,64);line-height:20px;font-size:14px;\">",
+                        "<div class=\"ab_sub_heading\" style=\"color:rgb(35,31,32);line-height:1.5;font-size:16px;margin-bottom:15px;position:relative;\">",
+                        "<div class=\"ab_sub_headingline\" style=\"color:rgb(60, 62, 64);font-weight:bold;\">",
+                        "<div class=\"tag_quotation\" style=\"padding:22px 0px;color:rgb(115,116,117);line-height:28px;letter-spacing:-0.07em;font-size:13px;position:relative;\">" ) );
+
+        return contentNaver;
+    }
+
+    // ab_box_article (정규식 그룹핑) 구현시작
+    public String processContentNaverXmlTag_ab_box_article( String contentNaver ){
+        final Pattern PATTERN_ContentTag_naverAdboxArticleFootHeader = Pattern.compile("(?<abBoxArticle><div(\\s*?)class=\"(\\bab_box_article\\b)(\\s*?)[^>])+>(\\s*?)(?<abBoxInner><div(\\s*)class=\"(\\bab_box_inner\\b)[^>])+><div(\\s*?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)(?<abBoxTitle><div(\\s*)class=\"(\\bab_box_title\\b)[^>])+>(\\s*?)(.*?)(?<abBoxBullet><span(\\s*)class=\"(\\bab_box_bullet\\b)[^>])+>", Pattern.CASE_INSENSITIVE);
+
+        StringBuilder sb = new StringBuilder(contentNaver.length() * 3);
+        Matcher adBoxArticleFootHeader = PATTERN_ContentTag_naverAdboxArticleFootHeader.matcher(contentNaver);
+        if( !adBoxArticleFootHeader.find() )
+            return contentNaver;
+        do {
+            final String replace = adBoxArticleFootHeader
+                    .group("abBoxArticle")
+                    .concat(" style=\"padding-top:17px;padding-bottom:16px;position:relative;\">")
+                    .concat(adBoxArticleFootHeader.group("abBoxInner"))
+                    .concat(" style=\"padding:42px 20px 24px;border:1px solid rgb(221, 221, 221);border-image:none;overflow:hidden;\">")
+                    .concat(adBoxArticleFootHeader.group("abBoxTitle"))
+                    .concat(" style=\"color:rgb(93,129,195);line-height:1.5;font-size:20px;margin-bottom:17px;\">")
+                    .concat(adBoxArticleFootHeader.group("abBoxBullet"))
+                    .concat(" style=\"background:rgb(93,129,195);left:20px;top:12px;width:18px;height:28px;overflow:hidden;display:block;position:absolute;\">");
+            adBoxArticleFootHeader.appendReplacement(sb, replace);
+        } while( adBoxArticleFootHeader.find() );
+        adBoxArticleFootHeader.appendTail(sb);
+        contentNaver = sb.toString();
+
+        //<span class="dim" style="display: none;">■</span> 유형 전부 지우기 - 아티클박스 관련 전부 지운다.
+        contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)</div>", "");
+        contentNaver = contentNaver.replaceAll("(?i)<span(\\s*?)class=\"(\\bdim\\b)[^>]+>.</span>", "");
+
+        // ab_box_titleline, ab_box_content 에 대한 처리를 하는 루틴은 있었으나 정규식이 동작하지 않음
+        return contentNaver;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private void processContent_replaceAll( String regex, String replacement ) {
+        getContentHtmlNaver().replaceAll(regex, replacement);
+        getContentHtmlDaum().replaceAll(regex, replacement);
+        getContentHtml().replaceAll(regex, replacement);
+        getContentText().replaceAll(regex, replacement);
+        getContentHtmlEx4().replaceAll(regex, replacement);
+        getContentHtmlCyworld().replaceAll(regex, replacement);
+        getContentHtmlNate().replaceAll(regex, replacement);
+    }
+
+    public void processContent_ImageBulkYn(List<Map<String, String>> images) {
+        // 2019.01.04 이미지 벌크 정보 본문내에서 가져오는 방식으로 변경
+        String firstThumbImg = "";
+        boolean firstProcess = true;
+        //본문내용에서는 해당 이미지의 bulkYn 여부를 알수 없어 DB 조회 내용에서 확인
+        for( Map<String, String> map : images ) {
+            final String imgSrc = map.get("src");
+            String imgDesc = map.get("alt");
+            String noBulkImage = "";
+
+            boolean bulkFlag = true;
+            if( hasImageList() ) {
+                for( BulkDumpNewsMMDataVo mmData : getBulkDumpNewsImageList() ) {
+                    //본문내 첫번째 이미지와 DB에 저장되어 있는 이미지리스트 첫번째 건이 맞지 않을 경우(본문내 이미지중 대표이미지 지정한 경우)
+                    if( firstProcess ){
+                        firstProcess = false;
+                        if( !imgSrc.equals( mmData.getUrl()) && mmData.getImageBulkFlag().equals("Y") )
+                            firstThumbImg = mmData.getUrl();
+                    }
+
+                    if( imgSrc.equals(mmData.getUrl()) && mmData.getImageBulkFlag().equals("N")) {
+                        bulkFlag = false;
+                        noBulkImage = FilenameUtils.getName(mmData.getUrl());
+                    }
+                }
+            }
+
+            if (bulkFlag) {
+                //2018-08-28 네이버 영상별 cover_img 따로 기술
+                if (imgSrc.contains("ooyala")) continue; //우얄라 이미지는 이미지 벌크에서 제외(네이버, 네이트)
+
+                if( !McpString.isNullOrEmpty(getImageBlockTxt2().toString()))
+                    getImageBlockTxt2().concat( ";");
+                getImageBlockTxt2().concat( imgSrc );
+                getImageBlockTxtNate().setData( getImageBlockTxt2().toString());
+
+
+                getImageBlockXml().concat("<images>\r\n");
+                getImageBlockXml().concat("\t<imageurl><![CDATA[" + imgSrc + "]]></imageurl>\r\n");
+                getImageBlockXml().concat("\t<description><![CDATA[" + imgDesc + "]]></description>\r\n");
+                getImageBlockXml().concat("</images>\r\n");
+
+                getImageBlockXmlZum().setData( getImageBlockXml().toString().replace("&amp;", "&"));
+
+                getImageBlockXml4().concat("<component>\r\n");
+                getImageBlockXml4().concat("\t<type>I</type>\r\n");
+                getImageBlockXml4().concat( "\t<url><![CDATA[" + imgSrc + "]]></url>\r\n");
+                getImageBlockXml4().concat( "\t<desc><![CDATA[" + imgDesc + "]]></desc>\r\n");
+                getImageBlockXml4().concat( "\t<width />\r\n");
+                getImageBlockXml4().concat( "\t<height />\r\n");
+                getImageBlockXml4().concat( "\t<etc><![CDATA[]]></etc>\r\n");
+                getImageBlockXml4().concat( "</component>\r\n");
+
+                imgDesc = imgDesc.replace("<", "(")
+                                 .replace(">", ")")
+                                 .replace("&", "&amp;")
+                                 .replace("&amp;amp;", "&amp;");    //&amp; 를 변환하는 경우만 예외 처리
+
+                getImageBlockXmlNaver().concat(String.format("<image caption_content=\"%s\" href=\"%s\"/>\r\n", imgDesc, imgSrc));
+            }
+            else if( !McpString.isNullOrEmpty(noBulkImage)) {
+                //개별이미지, 아티클 박스유형 패턴 검색 및 본문삭제
+                final String findImagePattern = "(?i)(<div[^>]+>)(\\s)*(<div\\s+[^>]+>)(\\s)*(<img[^>]+" + noBulkImage + "[^>]+>)(\\s)*(<span[^>]+>(\\w)*(\\s)*</span>)(\\s)*(</div>)(\\s)*(<p[^>]+>(\\w)*(\\s)*</p>)?(\\s)*(</div>)";
+                processContent_replaceAll( findImagePattern, "" );
+
+                // 이미지번들(묶음) 전송 포함
+                //                <div class="tag_photobundle">
+                //                    <img alt="스토닉의 &amp;#39;통통한 엉덩이&amp;#39;. 윤정민 기자" caption="스토닉의 &amp;#39;통통한 엉덩이&amp;#39;. 윤정민 기자" index="0" iscoverimage="false" link="" linktarget="" src="http://pds.joins.com/news/component/htmlphoto_mmdata/201707/26/0782da2f-6233-45a8-a6a2-d5822041a48a.jpg" wrappercss="photo_center" wrapperwidth="580px"/>
+                //                    <img alt="스토닉의 &amp;#39;통통한 엉덩이&amp;#39;. 윤정민 기자" caption="스토닉의 &amp;#39;통통한 엉덩이&amp;#39;. 윤정민 기자" index="1" iscoverimage="false" link="" linktarget="" src="http://pds.joins.com/news/component/htmlphoto_mmdata/201707/26/6dab7e6a-35b0-4532-a06b-c5989851c9d6.jpg" wrappercss="photo_center" wrapperwidth="580px"/>
+                //                </div>
+                final String findImagePattern2 = "(?i)(<img[^>]+" + noBulkImage + "[^>]+(\\s)*>)";
+                processContent_replaceAll( findImagePattern2, "" );
             }
         }
-        catch (Exception r1)
-        {
-            m_log.Write(string.Format("{ab_box_artlce_division} occured error: {0}", r1.Message));
+
+        //<div class="ab_box_article">.....</div> 아티클 빈박스 지우기
+        final String emptyBoxDelPattern = "<div(\\s*)class.*\\bab_box_article\\b[^>]+>(\\s*)<div[^>]+>(\\s*)<div[^>]+>.*<span[^>]+>(\\s*)</span>(\\s*)<div(\\s*)class.*\\bab_box_titleline\\b[^>]+>[^>]+>[^>]+>(\\s*)<div(\\s*)class.*\\bab_box_content\\b[^>]+>(\\s*)(&nbsp;(\\s*)<br/>)?(\\s*)</div>[^/div>]+/div>(\\s*)[^/div]+/div>";
+        processContent_replaceAll( emptyBoxDelPattern, "" );
+
+        //네이버 대표이미지 처리
+        if (!McpString.isNullOrEmpty(firstThumbImg)){
+            final Pattern PATTERN_firstThumb = Pattern.compile(String.format("<image[^>]+%s[^>]+(\\s)*>", firstThumbImg), Pattern.CASE_INSENSITIVE );
+            Matcher matcher = PATTERN_firstThumb.matcher(getImageBlockXmlNaver().toString());
+            if( matcher.find() ) {
+                final String firstThumb = matcher.group();
+                getImageBlockXmlNaver().replace(firstThumb, "");
+                getImageBlockXmlNaver().setData( firstThumb + "\r\n" + getImageBlockXmlNaver().toString());
+            }
         }
-        #endregion
-         */
-        // log.info(contentNaver);
+    }
+
+    public void processContent_Ovp(TaskManager taskManager) {
+        final MokaBulkConfiguration bulkConfiguration = taskManager.getBulkConfiguration();
+        final SmsUtilService smsUtilService = taskManager.getSmsUtilService();
+
+        if( !hasVideoList() )
+            return;
+
+        final List<BulkDumpNewsMMDataVo> ovpList = getBulkDumpNewsVideoList();
+        final String accessToken = BulkBrightCoveUtil.getAccessToken(bulkConfiguration.getBrightCoveConfig());
+        if( McpString.isNullOrEmpty( accessToken )) {
+            smsUtilService.sendSms(String.format("브라이트코브 토큰 요청 에러 totalId=[%s] [%s]", getTotalId(), getTitle()));
+            return;
+        }
+
+        StringBuilder naverOvpImgList = new StringBuilder();
+        int ovpIndex = 0;
+        for( BulkDumpNewsMMDataVo ovp : ovpList ) {
+            //다운로드 완료 상관없이 동영상 커버 이미지 정보 생성(커버 이미지정보가 없는 경우, 기사 이미지 첫번째 거 지정)
+            //이미지 첫번째 것도 없는 경우 디폴트 커버 이미지 적용(http://pds.joins.com/news/component/vod_noimage/cover_img.png)
+            String thumbImg = ovp.getUrl();
+            if (McpString.isNullOrEmpty(thumbImg)) {
+                thumbImg = "http://pds.joins.com/news/component/vod_noimage/cover_img.png";
+                if( hasImageList() ) {
+                    thumbImg = getBulkDumpNewsImageList().get(0).getUrl();
+                }
+            }
+
+            if( ovpIndex == 0 ) {
+                getImageCoverImage().setData(thumbImg);
+                getImageBlockTxtNate().setData( thumbImg + ";" + getImageBlockTxtNate().toString() );
+            }
+
+            //2018 네이버 미디어 벌크
+            getImageVideoBlockXml2().concat(String.format("<media type=\"mp4\" href=\"%s_%d.mp4\" cover_img=\"%s\" position=\"%d\"/>\r\n",
+                    getTotalId(), ovpIndex + 1, thumbImg, ovpIndex + 1));
+
+            //2018 우얄라 영상 커버는 이미지벌크에 추가
+            naverOvpImgList.append(String.format("<image caption_content=\"\" href=\"%s\"/>\r\n", thumbImg));
+
+            final String videoUrl = BulkBrightCoveUtil.getVideoUrl(bulkConfiguration.getBrightCoveConfig(), accessToken, ovp.getAssetId());
+            if( McpString.isNullOrEmpty(videoUrl)) {
+                smsUtilService.sendSms(String.format("브라이트코브 API 요청 에러 totalId=[%s] [%s] AssetId=[%s]", getTotalId(), getTitle(), ovp.getAssetId()));
+                continue;
+            }
+            log.trace(" BrightCove getVideoUrl Success {}", videoUrl);
+
+            ovp.setVideoUrl(videoUrl);
+            ovp.setVideoId(getTotalId().toString());
+            getImageVideoBlockTxt().setData(getTotalId() + ".mp4");
+            setBulkYn("YYY");
+
+            ovpIndex++;
+        }
+
+        //2018-09-14 우얄라 영상만 존재하고 기사내 이미지가 없을 경우 <image> 태그 삽입 안하면 네이버에서 오류 발생
+        //영상만 존재할 경우엔 커버이미지를 <image> 태그로 넣어준다
+        if( getImageBlockXmlNaver().isEmpty()) {
+            getImageBlockXmlNaver().setData( naverOvpImgList.toString() );
+        }
+    }
+
+
+    public void processContent_JHotClick() {
+    }
+
+    public void processContent_CopyRight() {
     }
 }
 

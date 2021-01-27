@@ -3,6 +3,7 @@ package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
@@ -40,7 +41,7 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
     }
 
     @Override
-    protected boolean doProcess_InsertUpdate(BulkJoongangArticle article, BulkDumpService dumpService) {
+    protected boolean doProcess_InsertUpdate(BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         if( !dumpService.doGetBulkNewstableJoongang( article ) )
             return false;
 
@@ -74,7 +75,7 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
 
         article.processContent_etcLevel2();
 
-        // `12.10.13 이승인 : ms용은 xxx의 블로그가 없어야 하므로 추가
+        // `12.10.13 이승인 : ms 용은 xxx 의 블로그가 없어야 하므로 추가
         article.processContent_contentHtmlMs();
 
         article.processReporter();
@@ -128,12 +129,37 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
 
         article.getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule(article.getContentHtml().toString(), "<div class=\"tag_vod\"", "</div>"));  //동영상 제외
         article.getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule(article.getContentHtml().toString(), "<div class=\"tag_audio\"", "</div>")); //오디오 제외
+        article.getContentHtml().setData(BulkTagUtil.outLinkBulkClearingTagEx(article.getContentHtml().toString()));
+        article.getContentText().setData(BulkTagUtil.standardBulkClearingTag(article.getContentHtml().toString()));
+
+        // 본문에 사용된 이미지중 1개라도 벌크서비스 안함이 있으면 html 형 본문도 태그제거
+        if( article.getImageBulkFlag().equals("N") )
+            article.getContentHtml().setData(article.getContentText().toString());
+
+        if( article.getContentType().toString().equals("P"))
+            article.getContentType().setData("PHN0");
+        else
+            article.getContentType().setData("AKR0");
+
+        // 2019.01.04 이미지 벌크 정보 본문내에서 가져오는 방식으로 변경
+        // 본문내용에서는 해당 이미지의 bulkYn 여부를 알수 없어 DB 조회 내용에서 확인
+        if( images.size() > 0 )
+            article.processContent_ImageBulkYn(images);
+
+        // #region 우얄라 & 브라이트코브 동영상 처리
+        if( article.getTargetCode().equals("SOY") && article.isOvpArticle()) {
+            article.processContent_Ovp( bulkDumpTask.getTaskManager() );
+        }
+
+        article.processContent_JHotClick();
+
+        article.processContent_CopyRight();
 
         return true;
     }
 
     @Override
-    protected boolean doProcess_Delete(BulkJoongangArticle article, BulkDumpService dumpService) {
+    protected boolean doProcess_Delete(BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         article.getMedia1().setData( article.getTargetCode().substring(2, 3));
         article.getMedia3().setData( article.getMedia2().toString() + article.getMedia1().toString() );
 

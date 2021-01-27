@@ -1,5 +1,7 @@
 package jmnet.moka.web.bulk.util;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -152,5 +154,23 @@ public class BulkTagUtil {
                 .replaceAll("<a(\\s+)([^/a]+[^<]+)>", "<a$1$2 target=\"_joins_nw\">");
 
         return str;
+    }
+
+    public static String regexReplaceGroup(String content, Pattern pattern, String groupName, String replace) {
+        return regexReplaceGroup( content, pattern, Collections.singletonList(groupName), Collections.singletonList(replace));
+    }
+
+    public static String regexReplaceGroup(String content, Pattern pattern, List<String> groupName, List<String> replace) {
+        Matcher matcher = pattern.matcher(content);
+        StringBuffer sb = new StringBuffer( content.length() * 2 );
+        int arrayCount = Math.min( groupName.size(), replace.size());
+        while( matcher.find() ) {
+            String replaced = matcher.group(0);
+            for( int i=0 ; i<arrayCount ; i++ )
+                replaced = replaced.replaceFirst(matcher.group(groupName.get(i)), replace.get(i));
+            matcher.appendReplacement(sb, replaced);
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 }

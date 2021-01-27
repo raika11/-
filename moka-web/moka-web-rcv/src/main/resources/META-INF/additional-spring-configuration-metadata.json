@@ -164,25 +164,5 @@
       "name": "idb.spring.datasource.auto-commit",
       "type": "java.lang.String",
       "description": "Description for idb.spring.datasource.auto-commit."
-    },
-    {
-      "name": "rcv.ooyala.account",
-      "type": "java.lang.String",
-      "description": "Description for rcv.ooyala.account."
-    },
-    {
-      "name": "rcv.ooyala.clientId",
-      "type": "java.lang.String",
-      "description": "Description for rcv.ooyala.clientId."
-    },
-    {
-      "name": "rcv.ooyala.clientSecret",
-      "type": "java.lang.String",
-      "description": "Description for rcv.ooyala.clientSecret."
-    },
-    {
-      "name": "rcv.ooyala.accessTokenUrl",
-      "type": "java.lang.String",
-      "description": "Description for rcv.ooyala.accessTokenUrl."
     }
   ] }

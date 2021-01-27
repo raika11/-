@@ -83,7 +83,7 @@ public abstract class Task<T> extends TaskBase {
             throws BulkDataAccessException;
 
     protected void doAfterProcess(T taskInputData)
-            throws BulkDataAccessException, InterruptedException {
+            throws BulkDataAccessException {
         ((TaskInputData) taskInputData).deleteTempFiles();
     }
 

@@ -67,6 +67,7 @@ public class RcvArtRegTask extends Task<DBTaskInputData> {
             }
             catch (Exception e){
                 rcvArtRegService.insertReceiveJobStep( map, "예외 발생");
+                e.printStackTrace();
                 throw new RcvDataAccessException( e.getMessage());
             }
         }

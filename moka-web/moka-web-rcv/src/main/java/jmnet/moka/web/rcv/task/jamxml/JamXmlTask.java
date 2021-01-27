@@ -13,8 +13,8 @@ import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.CategoryVo;
-import jmnet.moka.web.rcv.taskinput.FileTaskInput;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInput;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Node;
@@ -32,7 +32,7 @@ import org.w3c.dom.Node;
  * @since 2020-10-27 027 오후 4:15
  */
 @Slf4j
-public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArticleVo>> {
+public class JamXmlTask extends Task<FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo>> {
     private String sourceCode;
     private boolean previousCanLoad = true;
 
@@ -43,7 +43,7 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
 
     @Override
     protected TaskInput initTaskInput() {
-        return new FileTaskInput<>(JamArticleTotalVo.class, JamArticleVo.class);
+        return new FileXmlTaskInput<>(JamArticleTotalVo.class, JamArticleVo.class);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
     }
 
     @Override
-    protected boolean doVerifyData(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData) {
+    protected boolean doVerifyData(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData) {
         final JamArticleTotalVo articleTotal = taskInputData.getTotalData();
         if (articleTotal == null) {
             log.error("{} {} : XML 파싱 에러, JamArticleTotalVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
@@ -108,7 +108,7 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
     }
 
     @Override
-    protected void doProcess(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
+    protected void doProcess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
             throws RcvDataAccessException {
 
         final JamXmlService jamXmlService = getTaskManager().getJamXmlService();
@@ -174,7 +174,7 @@ public class JamXmlTask extends Task<FileTaskInputData<JamArticleTotalVo, JamArt
     }
 
     @Override
-    protected void doAfterProcess(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
+    protected void doAfterProcess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
             throws RcvDataAccessException, InterruptedException {
         super.doAfterProcess(taskInputData);
 

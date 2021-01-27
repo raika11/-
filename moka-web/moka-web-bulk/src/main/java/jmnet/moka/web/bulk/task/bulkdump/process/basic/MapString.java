@@ -1,6 +1,7 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.basic;
 
 import java.util.Map;
+import jmnet.moka.common.utils.McpString;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,9 +35,29 @@ public class MapString {
         return data;
     }
 
+    public boolean isEmpty() {
+        return McpString.isNullOrEmpty(this.data);
+    }
+
     public static MapString newMapString( Map<String, MapString> dataMap, String key ) {
         MapString mapString = new MapString(key);
         dataMap.put(key, mapString);
         return mapString;
+    }
+
+    public boolean contains(CharSequence s) {
+        return toString().contains(s);
+    }
+
+    public void replaceAll( String regex, String replacement){
+        setData( toString().replaceAll(regex, replacement));
+    }
+
+    public void replace( CharSequence target, CharSequence replacement){
+        setData( toString().replace(target, replacement));
+    }
+
+    public void concat( String text ) {
+        setData( toString().concat(text));
     }
 }

@@ -29,7 +29,9 @@ public class JaxbObjectManager {
     static {
         try {
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(BulkDumpEnv.class));
-        } catch (JAXBException ignore) {
+        } catch (JAXBException e) {
+            log.error("JaxbObjectManager Exeption {}", e.getMessage());
+            e.printStackTrace();
         }
     }
 

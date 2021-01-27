@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.basic;
 
+import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
@@ -22,7 +23,7 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
     }
 
     @Override
-    public void doProcess( BulkDumpTotalVo bulkDumpTotal, BulkDumpService dumpService) {
+    public void doProcess(BulkDumpTotalVo bulkDumpTotal, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         T newArticle = newArticle( bulkDumpTotal );
         BulkArticle article = (BulkArticle) newArticle;
 
@@ -31,16 +32,20 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
         boolean isSuccess = false;
         switch (article.getIud().toString()) {
             case "D":
-                isSuccess = doProcess_Delete( newArticle, dumpService );
+                isSuccess = doProcess_Delete( newArticle, bulkDumpTask, dumpService );
                 break;
             case "I":
             case "U":
-                isSuccess = doProcess_InsertUpdate( newArticle, dumpService );
+                isSuccess = doProcess_InsertUpdate( newArticle, bulkDumpTask, dumpService );
         }
+        if(!isSuccess)
+            return;
+
+        BulkDumpProcess.doProcess( article, getBulkDumpEnv(), bulkDumpTask );
     }
 
     protected abstract T newArticle( BulkDumpTotalVo bulkDumpTotal );
     protected abstract void doProcess_Ready(T article, BulkDumpService dumpService);
-    protected abstract boolean doProcess_InsertUpdate(T article, BulkDumpService dumpService);
-    protected abstract boolean doProcess_Delete(T article, BulkDumpService dumpService);
+    protected abstract boolean doProcess_InsertUpdate(T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
+    protected abstract boolean doProcess_Delete(T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
 }

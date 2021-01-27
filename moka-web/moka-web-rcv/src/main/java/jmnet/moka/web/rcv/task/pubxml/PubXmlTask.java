@@ -12,9 +12,9 @@ import jmnet.moka.web.rcv.task.base.TaskGroup;
 import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
 import jmnet.moka.web.rcv.task.pubxml.vo.PubNewsMLTotalVo;
 import jmnet.moka.web.rcv.task.pubxml.vo.PubNewsMLVo;
-import jmnet.moka.web.rcv.taskinput.FileTaskInput;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputFilePreProcess;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInput;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputFilePreProcess;
 import jmnet.moka.web.rcv.util.RcvFileUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import org.w3c.dom.Node;
  * @since 2020-11-10 010 오후 4:59
  */
 @Slf4j
-public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNewsMLVo>> {
+public class PubXmlTask extends Task<FileXmlTaskInputData<PubNewsMLTotalVo, PubNewsMLVo>> {
     private String sourceCode;
 
     public PubXmlTask(TaskGroup parent, Node node, XMLUtil xu)
@@ -44,8 +44,8 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
 
     @Override
     protected TaskInput initTaskInput() {
-        FileTaskInput<PubNewsMLTotalVo, PubNewsMLVo> taskInput = new FileTaskInput<>(PubNewsMLTotalVo.class, PubNewsMLVo.class);
-        taskInput.setFilePreProcess(new FileTaskInputFilePreProcess() {
+        FileXmlTaskInput<PubNewsMLTotalVo, PubNewsMLVo> taskInput = new FileXmlTaskInput<>(PubNewsMLTotalVo.class, PubNewsMLVo.class);
+        taskInput.setFilePreProcess(new FileXmlTaskInputFilePreProcess() {
             @Override
             public boolean preProcess(File file) {
                 try {
@@ -74,7 +74,7 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
     }
 
     @Override
-    protected boolean doVerifyData(FileTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData) {
+    protected boolean doVerifyData(FileXmlTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData) {
         final PubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
         if (newsMLTotal == null) {
             log.error("{} {} : 정상적인 XML 파일이 아닙니다. : XML 파싱 에러", getTaskName(), taskInputData.getFile());
@@ -127,7 +127,7 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
     }
 
     @Override
-    protected void doProcess(FileTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData)
+    protected void doProcess(FileXmlTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData)
             throws RcvDataAccessException {
         final PubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
         if (newsMLTotal.getXmlFileName().isPassProcess()) {
@@ -157,7 +157,7 @@ public class PubXmlTask extends Task<FileTaskInputData<PubNewsMLTotalVo, PubNews
     }
 
     @Override
-    protected void doAfterProcess(FileTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData)
+    protected void doAfterProcess(FileXmlTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData)
             throws RcvDataAccessException, InterruptedException {
         super.doAfterProcess(taskInputData);
 

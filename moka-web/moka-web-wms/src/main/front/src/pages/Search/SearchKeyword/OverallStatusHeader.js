@@ -2,18 +2,28 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { downloadExcel } from '@store/searchKeyword';
 import toast from '@utils/toastUtil';
 
 const OverallStatusHeader = () => {
+    const dispatch = useDispatch();
     const searchDate = useSelector(({ searchKeyword }) => searchKeyword.stat.searchDate);
+    const search = useSelector(({ searchKeyword }) => searchKeyword.stat.search);
 
     const handleOpenKD = () => {
         toast.info('검색어 사전');
     };
 
+    /**
+     * 엑셀 다운로드
+     */
     const handleDownloadExcel = () => {
-        toast.info('엑셀 다운로드');
+        dispatch(
+            downloadExcel({
+                search,
+            }),
+        );
     };
 
     return (

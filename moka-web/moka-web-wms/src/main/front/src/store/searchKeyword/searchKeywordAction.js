@@ -22,3 +22,9 @@ export const clearStatDetail = createAction(CLEAR_STAT_DETAIL);
  */
 export const [GET_SEARCH_KEYWORD_STAT, GET_SEARCH_KEYWORD_STAT_SUCCESS, GET_SEARCH_KEYWORD_STAT_FAILURE] = createRequestActionTypes('searchKeyword/GET_SEARCH_KEYWORD_STAT');
 export const getSearchKeywordStat = createAction(GET_SEARCH_KEYWORD_STAT, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 키워드 엑셀 다운
+ */
+export const DOWNLOAD_EXCEL = 'searchKeyword/DOWNLOAD_EXCEL';
+export const downloadExcel = createAction(DOWNLOAD_EXCEL, ({ search }) => ({ search }));

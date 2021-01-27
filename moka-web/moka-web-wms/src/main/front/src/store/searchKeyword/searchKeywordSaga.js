@@ -1,6 +1,5 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { createRequestSaga, errorResponse } from '@store/commons/saga';
-import { startLoading, finishLoading } from '@store/loading/loadingAction';
+import { takeLatest } from 'redux-saga/effects';
+import { createRequestSaga } from '@store/commons/saga';
 import * as api from './searchKeywordApi';
 import * as act from './searchKeywordAction';
 
@@ -9,6 +8,12 @@ import * as act from './searchKeywordAction';
  */
 export const getSearchKeywordStat = createRequestSaga(act.GET_SEARCH_KEYWORD_STAT, api.getSearchKeywordStat);
 
+/**
+ * 엑셀 다운
+ */
+export const downloadExcel = createRequestSaga(act.DOWNLOAD_EXCEL, api.getSearchKeywordExcel, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_SEARCH_KEYWORD_STAT, getSearchKeywordStat);
+    yield takeLatest(act.DOWNLOAD_EXCEL, downloadExcel);
 }

@@ -1,12 +1,11 @@
-import { MokaTableDeleteButton } from '@components';
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 export default [
     {
-        colId: '',
-        field: '',
-        width: 75,
+        headerName: '',
+        field: 'add',
+        width: 60,
         cellRendererFramework: (row) => {
             const { data } = row;
             return (
@@ -20,6 +19,7 @@ export default [
                                 row.data.onClick(temp);
                             }
                         }}
+                        size="sm"
                     >
                         등록
                     </Button>

@@ -78,7 +78,7 @@ const MicAgendaSearch = () => {
                         </Button>
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2 float-right">
+                <div className="mb-2 float-right">
                     <Button className="mr-2" variant="outline-neutral" onClick={handleClickBanner}>
                         다른 주제 공통 배너
                     </Button>
@@ -91,7 +91,7 @@ const MicAgendaSearch = () => {
                     <Button variant="positive" onClick={handleClickAdd}>
                         등록
                     </Button>
-                </Form.Row>
+                </div>
             </Form>
             <BannerModal show={showBannerModal} onHide={() => setShowBannerModal(false)} />
             <CategoryModal show={showCtModal} onHide={() => setShowCtModal(false)} />

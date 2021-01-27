@@ -15,6 +15,7 @@ export default [
         flex: 1,
         autoHeight: true,
         cellStyle: { lineHeight: '18px', height: '60px' },
+        tooltipField: 'title',
         cellRendererFramework: (row) => <TitleRenderer {...row} />,
     },
     {

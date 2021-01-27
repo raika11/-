@@ -2,7 +2,7 @@ const columnDefs = [
     {
         headerName: 'No',
         field: 'seqNo',
-        width: 70,
+        width: 60,
         tooltipField: 'seqNo',
     },
     {
@@ -25,17 +25,19 @@ const columnDefs = [
     {
         headerName: '등록일',
         field: 'regDtText',
-        width: 93,
+        width: 125,
     },
     {
         headerName: '노출',
         field: 'listYn',
-        width: 50,
+        width: 40,
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '사용',
         field: 'usedYn',
-        width: 50,
+        width: 40,
+        cellRenderer: 'usedYnRenderer',
     },
 ];
 

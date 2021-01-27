@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import ColumnistModal from './modals/RepoterlistModal';
+import ReporterListModal from '@pages/Reporter/modals/ReporterListModal';
 import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
@@ -307,7 +307,7 @@ const ColumnistEdit = ({ history, match }) => {
                 },
             ]}
         >
-            <Form className="mb-gutter">
+            <Form>
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
@@ -321,11 +321,12 @@ const ColumnistEdit = ({ history, match }) => {
                         />
                     </Col>
                 </Form.Row>
+
                 <Form.Row className="mb-2">
-                    <Col xs={5} className="p-0">
+                    <Col xs={7} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자명"
-                            className="mb-0"
+                            className="mr-2"
                             name="columnistNm"
                             value={selectRepoterData.columnistNm}
                             onChange={(e) => tempOnchange(e)}
@@ -333,30 +334,29 @@ const ColumnistEdit = ({ history, match }) => {
                             disabled={editDisabled.columnistNm}
                             required
                         />
-                    </Col>
-                    <Col xs={1} className="justify-content-center">
-                        <Button className="mr-05 btn btn-searching" onClick={handleClickReportSearchbutton} disabled={editDisabled.editBoxButton}>
+                        <Button variant="searching" className="flex-shrink-0" onClick={handleClickReportSearchbutton} disabled={editDisabled.editBoxButton}>
                             검색
                         </Button>
                     </Col>
                 </Form.Row>
-                <Form.Row className="d-flex mb-10 text-align-center" style={{ marginLeft: '80px' }}>
-                    <Form.Label className="text-danger">* 외부 칼럼니스트 이름을 직접 입력해 주세요.</Form.Label>
-                </Form.Row>
+
+                <div className="mb-2 d-flex">
+                    <MokaInputLabel as="none" label=" " />
+                    <p className="mb-0 text-positive">* 외부 칼럼니스트 이름을 직접 입력해 주세요.</p>
+                </div>
+
                 <Form.Row className="mb-2">
-                    <Col xs={5} className="p-0">
+                    <Col xs={7} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자번호"
-                            className="mb-0"
+                            className="mr-2"
                             name="repSeq"
                             value={selectRepoterData.repSeq}
                             onChange={(e) => tempOnchange(e)}
                             isInvalid={error.repSeq}
                             disabled={editDisabled.repSeq}
                         />
-                    </Col>
-                    <Col xs={1} className="justify-content-center">
-                        <Button variant="negative" className="mr-05" onClick={handleClickDeleterepSeq} disabled={editDisabled.editBoxButton}>
+                        <Button variant="negative" className="flex-shrink-0" onClick={handleClickDeleterepSeq} disabled={editDisabled.editBoxButton}>
                             삭제
                         </Button>
                     </Col>
@@ -455,7 +455,7 @@ const ColumnistEdit = ({ history, match }) => {
                     }
                     ref={imgFileRef}
                     inputProps={{
-                        height: 80,
+                        height: 160,
                         img: selectRepoterData.profilePhoto,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,
@@ -463,7 +463,9 @@ const ColumnistEdit = ({ history, match }) => {
                     labelClassName="justify-content-end"
                 />
             </Form>
-            <ColumnistModal show={repoterlistModalShow} onHide={() => setRepoterlistModalShow(false)} onClickSave={null} onClick={handleRepoterRowClick} />
+
+            {/* 기자 검색 모달 */}
+            <ReporterListModal show={repoterlistModalShow} onHide={() => setRepoterlistModalShow(false)} onClickSave={null} onClick={handleRepoterRowClick} />
         </MokaCard>
     );
 };

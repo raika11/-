@@ -1,14 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment';
 import { MokaTable } from '@components';
-import { DB_DATEFORMAT } from '@/constants';
 import columnDefs from './SpecialAgGridColumns';
 import { getSpecialList, changeSearchOption, GET_SPECIAL_LIST } from '@store/special';
 
-moment.locale('ko');
-
+/**
+ * 디지털스페셜 테이블
+ */
 const SpecialAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -53,7 +52,7 @@ const SpecialAgGrid = ({ match }) => {
                     ...sp,
                     pageSdate: sp.pageSdate && `${sp.pageSdate.substr(0, 4)}-${sp.pageSdate.substr(4, 2)}-${sp.pageSdate.substr(6, 2)}`,
                     pageCdName: ptRows.find((p) => p.dtlCd === String(sp.pageCd))?.cdNm,
-                    regDtText: moment(sp.regDt, DB_DATEFORMAT).format('YYYY-MM-DD'),
+                    regDtText: (sp.regDt || '').slice(0, -3),
                 })),
             );
         }

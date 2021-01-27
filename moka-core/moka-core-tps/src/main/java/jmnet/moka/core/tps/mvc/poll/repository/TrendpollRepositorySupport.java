@@ -26,5 +26,5 @@ public interface TrendpollRepositorySupport {
 
     long deleteItemByPollSeq(Long pollSeq, List<Long> exceptSeqs);
 
-    long deleteContentsByPollSeq(Long pollSeq, List<Long> exceptSeqs);
+    long deleteContentsByPollSeq(Long pollSeq);
 }

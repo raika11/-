@@ -147,12 +147,11 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
 
     @Override
     @Transactional
-    public long deleteContentsByPollSeq(Long pollSeq, List<Long> exceptSeqs) {
+    public long deleteContentsByPollSeq(Long pollSeq) {
         QTrendpollRelate trendpollRelate = QTrendpollRelate.trendpollRelate;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(trendpollRelate.pollSeq.eq(pollSeq));
-        builder.and(trendpollRelate.seqNo.notIn(exceptSeqs));
         return delete(trendpollRelate)
                 .where(builder)
                 .execute();

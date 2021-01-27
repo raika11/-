@@ -46,6 +46,9 @@ public class SearchKwdLogExcelView extends AbstractExcelView {
             row
                     .createCell(cellNum.getAndAdd(1))
                     .setCellValue(log.getMobileCnt());
+            row
+                    .createCell(cellNum.getAndAdd(1))
+                    .setCellValue(log.getTabletCnt());
 
         }
     }

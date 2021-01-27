@@ -46,20 +46,24 @@ public class SearchKwdLogVO {
     /**
      * 전체 검색 건수
      */
-    private Long totalCnt;
+    @Builder.Default
+    private Long totalCnt = 0l;
 
     /**
      * 모바일 건수
      */
-    private Long mobileCnt;
+    @Builder.Default
+    private Long mobileCnt = 0l;
 
     /**
      * PC 건수
      */
-    private Long pcCnt;
+    @Builder.Default
+    private Long pcCnt = 0l;
 
     /**
      * 테블릿 건수
      */
-    private Long tabletCnt;
+    @Builder.Default
+    private Long tabletCnt = 0l;
 }

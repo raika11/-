@@ -154,7 +154,7 @@ public class SearchKwdLogRestController extends AbstractCommonController {
                 resultList.addAll(list.getContent());
             }
         }
-        String[] columns = new String[] {"순위", "검색어", "전체", "PC", "Mobile"};
+        String[] columns = new String[] {"순위", "검색어", "전체", "PC", "Mobile", "Tablet"};
 
         map.addAttribute("title", "검색어통계");
         map.addAttribute("columnList", CollectionUtils.arrayToList(columns));

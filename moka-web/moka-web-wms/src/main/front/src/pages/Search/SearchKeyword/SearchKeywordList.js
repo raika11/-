@@ -11,7 +11,7 @@ const SearchKeywordList = (props) => {
         <>
             <Search {...props} />
             <OverallStatus {...props} />
-            {/* <AgGrid {...props} /> */}
+            <AgGrid {...props} />
         </>
     );
 };

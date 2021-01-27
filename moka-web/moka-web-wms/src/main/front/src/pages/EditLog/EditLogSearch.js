@@ -34,7 +34,7 @@ const EditLogSearch = () => {
         if (typeof date === 'object') {
             setSearch({ ...search, startDt: date });
         } else if (date === '') {
-            setSearch({ ...search, endDt: null });
+            setSearch({ ...search, startDt: null });
         }
     };
 
@@ -44,7 +44,7 @@ const EditLogSearch = () => {
      */
     const handleChangeED = (date) => {
         if (typeof date === 'object') {
-            setSearch({ ...search, startDt: date });
+            setSearch({ ...search, endDt: date });
         } else if (date === '') {
             setSearch({ ...search, endDt: null });
         }
@@ -54,8 +54,10 @@ const EditLogSearch = () => {
      * 검색조건 초기화
      */
     const handleReset = () => {
-        const dt = moment().set('hour', 0).set('minute', 0).set('seconds', 0);
-        const ns = { ...initialState.search, startDt: dt, endDt: dt };
+        const nt = new Date();
+        const dt = moment(nt).format(DB_DATEFORMAT);
+        const st = moment(nt).startOf('day').format(DB_DATEFORMAT);
+        const ns = { ...initialState.search, startDt: st, endDt: dt };
         setSearch(ns);
     };
 
@@ -93,10 +95,9 @@ const EditLogSearch = () => {
     }, [storeSearch]);
 
     useEffect(() => {
-        // const dt = moment().set('hour', 0).set('minute', 0).set('seconds', 0).format(DB_DATEFORMAT);
         const nt = new Date();
-        const dt = moment(nt).set('hour', 0).set('minute', 0).set('seconds', 0).format(DB_DATEFORMAT);
-        const st = moment(nt).subtract(1, 'years').format(DB_DATEFORMAT);
+        const dt = moment(nt).format(DB_DATEFORMAT);
+        const st = moment(nt).startOf('day').format(DB_DATEFORMAT);
         const ns = { ...initialState.search, startDt: st, endDt: dt };
         dispatch(changeSearchOption(ns));
         dispatch(

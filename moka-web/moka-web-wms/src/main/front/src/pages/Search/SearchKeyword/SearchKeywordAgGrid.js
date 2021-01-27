@@ -1,50 +1,50 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
+import { GET_SEARCH_KEYWORD_STAT, changeStatSearchOption, getSearchKeywordStat } from '@store/searchKeyword';
 import columnDefs from './SearchKeywordAgGridColumns';
 
-const SearchLogAgGrid = () => {
+/**
+ * 검색로그 통계 테이블
+ */
+const SearchKeywordAgGrid = ({ match }) => {
     const history = useHistory();
+    const dispatch = useDispatch();
+    const loading = useSelector(({ loading }) => loading[GET_SEARCH_KEYWORD_STAT]);
+    const { search, list, total } = useSelector(({ searchKeyword }) => searchKeyword.stat);
 
-    const handleClickRow = (params) => {
-        history.push(`/search-log/${params.keyword}`);
+    /**
+     * 목록에서 Row클릭
+     */
+    const handleClickRow = (data) => history.push(`${match.path}/${data.schKwd}`);
+
+    /**
+     * 테이블 검색옵션 변경
+     */
+    const handleChangeSearchOption = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        dispatch(changeStatSearchOption(temp));
+        dispatch(getSearchKeywordStat({ search: temp }));
     };
 
     return (
         <MokaTable
             columnDefs={columnDefs}
-            rowData={[
-                {
-                    rank: '1',
-                    keyword: '운 세',
-                    allCount: 2331,
-                    pcCount: 1197,
-                    mobileCount: 1134,
-                },
-                {
-                    rank: '2',
-                    keyword: '오늘의운세',
-                    allCount: 2331,
-                    pcCount: 1197,
-                    mobileCount: 1134,
-                },
-                {
-                    rank: '3',
-                    keyword: '조현종',
-                    allCount: 2331,
-                    pcCount: 1197,
-                    mobileCount: 1134,
-                },
-            ]}
-            className="ag-grid-align-center"
-            agGridHeight={430}
-            size={20}
-            page={0}
-            total={3}
-            onRowNodeId={(row) => row.rank}
+            loading={loading}
+            rowData={list}
+            className="overflow-hidden flex-fill"
+            size={search.size}
+            page={search.page}
+            total={total}
+            onRowNodeId={(row) => row.schKwd}
             onRowClicked={handleClickRow}
+            onChangeSearchOption={handleChangeSearchOption}
         />
     );
 };
 
-export default SearchLogAgGrid;
+export default SearchKeywordAgGrid;

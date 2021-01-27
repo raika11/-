@@ -44,6 +44,7 @@ import cdnArticle from '@store/cdnArticle/cdnArticleReducer';
 import internalApi from '@store/internalApi/internalApiReducer';
 import tour from '@store/tour/tourReducer';
 import editLog from '@store/editLog/editLogReducer';
+import searchKeyword from '@store/searchKeyword/searchKeywordReducer';
 
 export default combineReducers({
     toastr,
@@ -90,4 +91,5 @@ export default combineReducers({
     comment,
     tour,
     editLog,
+    searchKeyword,
 });

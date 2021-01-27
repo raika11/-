@@ -1,29 +1,37 @@
 import React from 'react';
-import { Button, Col, Form } from 'react-bootstrap';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import { useSelector } from 'react-redux';
 import toast from '@utils/toastUtil';
 
 const OverallStatusHeader = () => {
-    const handleClickOpenKeywordDictionary = () => {
+    const searchDate = useSelector(({ searchKeyword }) => searchKeyword.stat.searchDate);
+
+    const handleOpenKD = () => {
         toast.info('검색어 사전');
     };
 
-    const handleClickExcelDownload = () => {
+    const handleDownloadExcel = () => {
         toast.info('엑셀 다운로드');
     };
+
     return (
-        <Form>
-            <Form.Row className="mb-2 justify-content-between align-items-center">
-                <Col xs={6}>최종 갱신시각 : 2020-11-04 16:41:40</Col>
-                <Col xs={6} className="text-right">
-                    <Button variant="outline-neutral" className="mr-2" onClick={handleClickOpenKeywordDictionary}>
+        <div className="mb-2">
+            <Row className="m-0 justify-content-between align-items-end">
+                <Col xs={6} className="p-0">
+                    최종 갱신시각 : {searchDate}
+                </Col>
+                <Col xs={6} className="p-0 text-right">
+                    <Button variant="outline-neutral" className="mr-2" onClick={handleOpenKD}>
                         검색어 사전
                     </Button>
-                    <Button variant="outline-neutral" onClick={handleClickExcelDownload}>
+                    <Button variant="outline-neutral" onClick={handleDownloadExcel}>
                         엑셀 다운로드
                     </Button>
                 </Col>
-            </Form.Row>
-        </Form>
+            </Row>
+        </div>
     );
 };
 

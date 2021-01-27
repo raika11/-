@@ -11,6 +11,12 @@ import { BenneConfirmModal } from '@pages/CommentManage/CommentModal';
  */
 const CommentBlockModal = (props) => {
     const dispatch = useDispatch();
+
+    // 검색용 select 값과 store 값을 연결.
+    const { COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
+        COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
+    }));
+
     const { show, onHide, ModalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
         BennedType: 'U',
@@ -26,10 +32,6 @@ const CommentBlockModal = (props) => {
         title: '',
         content: '',
     });
-
-    const { tagDiv } = useSelector((store) => ({
-        tagDiv: store.comment.common.tagDiv,
-    }));
 
     /**
      * 닫기
@@ -283,9 +285,9 @@ const CommentBlockModal = (props) => {
                     <Col xs={12} className="p-0">
                         <MokaInputLabel as="select" label="차단사유" name="tagDiv" id="tagDiv" value={editData.tagDiv} onChange={(e) => handleChangeValue(e)}>
                             <option value="">선택</option>
-                            {tagDiv.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
+                            {COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                <option key={index} value={item.dtlCd}>
+                                    {item.cdNm}
                                 </option>
                             ))}
                         </MokaInputLabel>

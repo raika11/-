@@ -1,4 +1,4 @@
-import React, { Suspense, forwardRef, useEffect } from 'react';
+import React, { Suspense, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import ReactSummernote from 'react-summernote';
 import 'react-summernote/lang/summernote-ko-KR';

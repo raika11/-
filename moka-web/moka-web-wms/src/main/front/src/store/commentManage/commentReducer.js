@@ -7,52 +7,59 @@ import { PAGESIZE_OPTIONS } from '@/constants';
  * initialState
  */
 export const initialState = {
+    // common: {
+    //     searchGroupId: [
+    //         { id: 'A', name: '전체매체' },
+    //         { id: 'B', name: '포탈' },
+    //         { id: 'C', name: '일간' },
+    //         { id: 'D', name: '중앙' },
+    //         { id: 'E', name: '중앙데일리' },
+    //         { id: 'F', name: '썰전' },
+    //     ],
+    //     searchStatusList: [
+    //         { id: 'A', name: '정상' },
+    //         { id: 'B', name: '사용자 삭제' },
+    //         { id: 'C', name: '관리자 삭제' },
+    //     ],
+    //     searchOrderTypeList: [
+    //         { id: 'A', name: '최신순' },
+    //         { id: 'B', name: '신고순' },
+    //     ],
+    //     searchIdTypeList: [
+    //         { id: 'A', name: '조인스' },
+    //         { id: 'B', name: '카카오' },
+    //         { id: 'C', name: '페이스북' },
+    //         { id: 'D', name: '트위터' },
+    //         { id: 'E', name: '미투데이' },
+    //         { id: 'F', name: '요즘' },
+    //         { id: 'G', name: '기타' },
+    //     ],
+    //     searchTypeList: [
+    //         { id: 'name', name: '이름' },
+    //         { id: 'id', name: 'ID' },
+    //         { id: 'comment', name: '댓글 내용' },
+    //     ],
+    //     tagDiv: [
+    //         { name: `광고`, value: `A` },
+    //         { name: `비방`, value: `B` },
+    //         { name: `욕설`, value: `C` },
+    //         { name: `도배`, value: `B` },
+    //         { name: `음란`, value: `D` },
+    //         { name: `기타`, value: `E` },
+    //     ],
+    //     pageIsearchTypeGubun: [
+    //         { name: `차단IP`, value: `A` },
+    //         { name: `차단내용`, value: `B` },
+    //         { name: `등록자ID`, value: `C` },
+    //         { name: `등록자`, value: `B` },
+    //     ],
+    // },
     common: {
-        searchGroupId: [
-            { id: 'A', name: '전체매체' },
-            { id: 'B', name: '포탈' },
-            { id: 'C', name: '일간' },
-            { id: 'D', name: '중앙' },
-            { id: 'E', name: '중앙데일리' },
-            { id: 'F', name: '썰전' },
-        ],
-        searchStatusList: [
-            { id: 'A', name: '정상' },
-            { id: 'B', name: '사용자 삭제' },
-            { id: 'C', name: '관리자 삭제' },
-        ],
-        searchOrderTypeList: [
-            { id: 'A', name: '최신순' },
-            { id: 'B', name: '신고순' },
-        ],
-        searchIdTypeList: [
-            { id: 'A', name: '조인스' },
-            { id: 'B', name: '카카오' },
-            { id: 'C', name: '페이스북' },
-            { id: 'D', name: '트위터' },
-            { id: 'E', name: '미투데이' },
-            { id: 'F', name: '요즘' },
-            { id: 'G', name: '기타' },
-        ],
-        searchTypeList: [
-            { id: 'name', name: '이름' },
-            { id: 'id', name: 'ID' },
-            { id: 'comment', name: '댓글 내용' },
-        ],
-        tagDiv: [
-            { name: `광고`, value: `A` },
-            { name: `비방`, value: `B` },
-            { name: `욕설`, value: `C` },
-            { name: `도배`, value: `B` },
-            { name: `음란`, value: `D` },
-            { name: `기타`, value: `E` },
-        ],
-        pageIsearchTypeGubun: [
-            { name: `차단IP`, value: `A` },
-            { name: `차단내용`, value: `B` },
-            { name: `등록자ID`, value: `C` },
-            { name: `등록자`, value: `B` },
-        ],
+        COMMENT_MEDIA_CODE: [],
+        COMMENT_ORDER_CODE: [],
+        COMMENT_SITE_CODE: [],
+        COMMENT_STATUS_CODE: [],
+        COMMENT_TAG_DIV_CODE: [],
     },
     comments: {
         total: 0,
@@ -86,7 +93,7 @@ export const initialState = {
                 searchType: '',
                 keyword: '',
                 tagType: '',
-                tagDiv: 'A',
+                tagDiv: '',
             },
             total: 0,
             list: [],
@@ -139,10 +146,16 @@ export default handleActions(
             });
         },
         /**
-         * 스토어 데이터 삭제
+         * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
-
+        // 공통 구분값 처리.
+        [act.GET_INIT_DATA_SUCCESS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.common = payload;
+            });
+        },
+        // 댓글 목록 초기화.
         [act.CLEAR_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.comments.total = initialState.comments.total;

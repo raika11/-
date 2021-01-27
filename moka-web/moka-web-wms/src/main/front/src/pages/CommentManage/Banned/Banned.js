@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-import { initializeBannedParams, clearStore } from '@store/commentManage';
+import { initializeBannedParams, clearStore, getInitData } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
 
 const BannedList = React.lazy(() => import('./BannedList'));
@@ -71,6 +71,11 @@ const Banned = ({ match, ...rest }) => {
             dispatch(clearStore());
         };
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getInitData());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="d-flex">

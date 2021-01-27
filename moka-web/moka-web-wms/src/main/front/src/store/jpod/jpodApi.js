@@ -1,7 +1,7 @@
 // import instance from '../commons/axios';
 import qs from 'qs';
 import instance from '@store/commons/axios';
-import { objectToFormData } from '@utils/convertUtil';
+// import { objectToFormData } from '@utils/convertUtil';
 
 // 기자관리 목록 조회
 export const getReporterList = ({ search }) => {

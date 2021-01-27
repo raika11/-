@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, forwardRef } from 'react';
+import React, { useCallback, useState, forwardRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
@@ -151,7 +151,7 @@ export const CommentItemRenderer = (props) => {
 // 차단 관리에서 차단 복원 버튼 처리.
 export const BanneButtonRenderer = (props) => {
     const {
-        value: { usedYn, seqNo, tagType, tagValue, tagDiv, tagDesc },
+        value: { usedYn, seqNo },
     } = props;
     const dispatch = useDispatch();
 

@@ -27,9 +27,14 @@ const CommentSearch = ({ selectBannedItem }) => {
     const [searchData, setSearchData] = useState(initialState.comments.search);
 
     // 검색용 select 값과 store 값을 연결.
-    const { COMMENT_STATUS_CODE, COMMENT_ORDER_CODE, searchGroupId, searchIdTypeList, searchTypeList } = useSelector((store) => ({
-        COMMENT_ORDER_CODE: store.app.COMMENT_ORDER_CODE,
-        COMMENT_STATUS_CODE: store.app.COMMENT_STATUS_CODE,
+    const { COMMENT_STATUS_CODE, COMMENT_ORDER_CODE, COMMENT_MEDIA_CODE, COMMENT_SITE_CODE } = useSelector((store) => ({
+        // COMMENT_ORDER_CODE: store.app.COMMENT_ORDER_CODE,
+        // COMMENT_STATUS_CODE: store.app.COMMENT_STATUS_CODE,
+        // COMMENT_MEDIA_CODE: store.app.COMMENT_MEDIA_CODE,
+        COMMENT_ORDER_CODE: store.comment.common.COMMENT_ORDER_CODE,
+        COMMENT_STATUS_CODE: store.comment.common.COMMENT_STATUS_CODE,
+        COMMENT_MEDIA_CODE: store.comment.common.COMMENT_MEDIA_CODE,
+        COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
         searchGroupId: store.comment.common.searchGroupId,
         searchStatusList: store.comment.common.searchStatusList,
         searchIdTypeList: store.comment.common.searchIdTypeList,
@@ -107,9 +112,9 @@ const CommentSearch = ({ selectBannedItem }) => {
                 <Col xs={1} className="p-0 pr-2">
                     <MokaInput as="select" value={searchData.groupId} onChange={(e) => handleChangeSearchInput(e)} name="groupId" id="groupId">
                         <option value="">전체매체</option>
-                        {searchGroupId.map((media, index) => (
-                            <option key={index} value={media.id}>
-                                {media.name}
+                        {COMMENT_MEDIA_CODE.map((item, index) => (
+                            <option key={index} value={item.dtlCd}>
+                                {item.cdNm}
                             </option>
                         ))}
                     </MokaInput>
@@ -167,20 +172,18 @@ const CommentSearch = ({ selectBannedItem }) => {
                 <Col xs={2} className="p-0 pr-2 d-flex">
                     <MokaInput as="select" className="mr-1" value={searchData.memType} onChange={(e) => handleChangeSearchInput(e)} name="memType" id="memType">
                         <option value="">전체계정</option>
-                        {searchIdTypeList.map((idType, index) => (
-                            <option key={index} value={idType.id}>
-                                {idType.name}
+                        {COMMENT_SITE_CODE.map((item, index) => (
+                            <option key={index} value={item.dtlCd}>
+                                {item.cdNm}
                             </option>
                         ))}
                     </MokaInput>
 
                     <MokaInput as="select" className="ml-1" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                         <option value="">전체</option>
-                        {searchTypeList.map((type) => (
-                            <option key={type.id} value={type.id}>
-                                {type.name}
-                            </option>
-                        ))}
+                        <option value="memNm">이름</option>
+                        <option value="memId">ID</option>
+                        <option value="cont">댓글 내용</option>
                     </MokaInput>
                 </Col>
                 <Col xs={5} className="p-0 d-flex">

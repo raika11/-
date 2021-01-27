@@ -11,57 +11,57 @@ import { messageBox } from '@utils/toastUtil';
 export const blockIpReason = [
     {
         name: `차단 IP`,
-        value: `A`,
+        value: `tagValue`,
     },
     {
         name: `차단 내용`,
-        value: `B`,
+        value: `tagDesc`,
     },
     {
         name: `등록자 ID`,
-        value: `C`,
+        value: `memberId`,
     },
     {
         name: `등록자`,
-        value: `D`,
+        value: `memberNm`,
     },
 ];
 
 export const blockUserReason = [
     {
         name: `차단 ID`,
-        value: `A`,
+        value: `tagValue`,
     },
     {
         name: `차단 내용`,
-        value: `B`,
+        value: `tagDesc`,
     },
     {
         name: `등록자 ID`,
-        value: `C`,
+        value: `memberId`,
     },
     {
         name: `등록자`,
-        value: `D`,
+        value: `memberNm`,
     },
 ];
 
 export const blockWordReason = [
     {
         name: `금지어`,
-        value: `A`,
+        value: `tagValue`,
     },
     {
         name: `차단 내용`,
-        value: `B`,
+        value: `tagDesc`,
     },
     {
         name: `등록자 ID`,
-        value: `C`,
+        value: `memberId`,
     },
     {
         name: `등록자`,
-        value: `D`,
+        value: `memberNm`,
     },
 ];
 
@@ -77,10 +77,10 @@ const BannedListSearch = ({ pathName }) => {
     });
 
     // 스토어 연결.
-    const { pageGubun, search, tagDiv, searchIdTypeList } = useSelector((store) => ({
-        tagDiv: store.comment.common.tagDiv,
+    const { pageGubun, search, COMMENT_SITE_CODE, COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
+        COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
+        COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
         pageGubun: store.comment.banneds.pageGubun,
-        searchIdTypeList: store.comment.common.searchIdTypeList,
         search: store.comment.banneds.commentsBlocks.search,
     }));
 
@@ -157,17 +157,18 @@ const BannedListSearch = ({ pathName }) => {
                     return (
                         <>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv">
+                                <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
                                     <option value="">전체</option>
-                                    {tagDiv.map((item, index) => (
-                                        <option key={index} value={item.value}>
-                                            {item.name}
+                                    {COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                        <option key={index} value={item.dtlCd}>
+                                            {item.cdNm}
                                         </option>
                                     ))}
                                 </MokaInput>
                             </div>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia">
+                                <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
+                                    <option value="">전체</option>
                                     {blockIpReason.map((media, index) => (
                                         <option key={index} value={media.id}>
                                             {media.name}
@@ -181,27 +182,27 @@ const BannedListSearch = ({ pathName }) => {
                     return (
                         <>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia">
+                                <MokaInput as="select" value={searchData.searchMedia} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia" id="searchMedia">
                                     <option value="">전체계정</option>
-                                    {searchIdTypeList.map((item, index) => (
-                                        <option key={index} value={item.value}>
-                                            {item.name}
+                                    {COMMENT_SITE_CODE.map((item, index) => (
+                                        <option key={index} value={item.dtlCd}>
+                                            {item.cdNm}
                                         </option>
                                     ))}
                                 </MokaInput>
                             </div>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia">
+                                <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
                                     <option value="">전체</option>
-                                    {tagDiv.map((item, index) => (
-                                        <option key={index} value={item.value}>
-                                            {item.name}
+                                    {COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                        <option key={index} value={item.dtlCd}>
+                                            {item.cdNm}
                                         </option>
                                     ))}
                                 </MokaInput>
                             </div>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia">
+                                <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockUserReason.map((media, index) => (
                                         <option key={index} value={media.id}>
@@ -216,17 +217,17 @@ const BannedListSearch = ({ pathName }) => {
                     return (
                         <>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia">
+                                <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
                                     <option value="">전체</option>
-                                    {tagDiv.map((item, index) => (
-                                        <option key={index} value={item.value}>
-                                            {item.name}
+                                    {COMMENT_TAG_DIV_CODE.map((item, index) => (
+                                        <option key={index} value={item.dtlCd}>
+                                            {item.cdNm}
                                         </option>
                                     ))}
                                 </MokaInput>
                             </div>
                             <div className="mr-10 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={null} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia">
+                                <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockWordReason.map((media, index) => (
                                         <option key={index} value={media.id}>

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { MokaLoader } from '@components';
 import { Helmet } from 'react-helmet';
-import { clearStore } from '@store/commentManage';
+import { clearStore, getInitData } from '@store/commentManage';
 
 const CommentList = React.lazy(() => import('./CommentLIst'));
 
@@ -27,6 +27,11 @@ const Comment = ({ match }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [match]);
+
+    useEffect(() => {
+        dispatch(getInitData());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="d-flex">

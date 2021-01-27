@@ -1,6 +1,13 @@
 import qs from 'qs';
 import instance from '../commons/axios';
 
+// 공통 구분값 조회.
+export const getInitData = () => {
+    return instance.get(`/api/comments/init`).catch((err) => {
+        throw err;
+    });
+};
+
 // 댓글목록 조회
 export const getCommentList = ({ search }) => {
     return instance.get(`/api/comments?${qs.stringify(search)}`).catch((err) => {

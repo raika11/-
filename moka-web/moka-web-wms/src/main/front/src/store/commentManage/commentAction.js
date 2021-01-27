@@ -11,6 +11,10 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
 export const INITIALIZE_BANNED_PARAMS = 'comment/INITIALIZE_BANNED_PARAMS';
 export const initializeBannedParams = createAction(INITIALIZE_BANNED_PARAMS);
 
+// 공통 구분값 처리.
+export const [GET_INIT_DATA, GET_INIT_DATA_SUCCESS, GET_INIT_DATA_FAILURE] = createRequestActionTypes('comment/GET_INIT_DATA');
+export const getInitData = createAction(GET_INIT_DATA, (...actions) => actions);
+
 /**
  * 스토어 데이터 삭제
  */

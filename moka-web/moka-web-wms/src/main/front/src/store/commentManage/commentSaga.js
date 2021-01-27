@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, errorResponse } from '@store/commons/saga';
 import toast from '@/utils/toastUtil';
@@ -11,6 +11,28 @@ import * as commentAPI from './commentApi';
  */
 const getCommentList = callApiAfterActions(act.GET_COMMENT_LIST, commentAPI.getCommentList, (state) => state.comment.comments);
 const getCommentsBlocksSaga = callApiAfterActions(act.GET_COMMENTS_BLOCKS, commentAPI.getCommentsBlocks, (state) => state.comment.banneds.commentsBlocks);
+// const getInitDataSaga = callApiAfterActions(act.GET_INIT_DATA, commentAPI.getInitData, (state) => state);
+
+// init data 임시.
+function* getInitDataSaga() {
+    yield put(startLoading(act.GET_INIT_DATA));
+
+    try {
+        let response = yield call(commentAPI.getInitData);
+
+        yield put({
+            type: act.GET_INIT_DATA_SUCCESS,
+            payload: response.data.body,
+        });
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(act.GET_INIT_DATA));
+}
 
 /**
  * 등록/수정
@@ -104,4 +126,5 @@ export default function* commentSaga() {
     yield takeLatest(act.DELETE_COMMENT, deleteComment);
     yield takeLatest(act.GET_COMMENTS_BLOCKS, getCommentsBlocksSaga);
     yield takeLatest(act.BLOCKS_USED, blocksUsedSaga);
+    yield takeLatest(act.GET_INIT_DATA, getInitDataSaga);
 }

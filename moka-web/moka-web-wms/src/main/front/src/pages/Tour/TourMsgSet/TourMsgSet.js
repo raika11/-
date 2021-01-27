@@ -35,6 +35,13 @@ const MessageSettings = () => {
     };
 
     /**
+     * 취소 버튼 (서버에서 정보 조회)
+     */
+    const handleClickCancel = () => {
+        dispatch(getTourGuideList());
+    };
+
+    /**
      * input value
      */
     const handleChangeValue = useCallback(
@@ -74,7 +81,7 @@ const MessageSettings = () => {
                 footer
                 footerButtons={[
                     { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                    { text: '취소', variant: 'negative' },
+                    { text: '취소', variant: 'negative', onClick: handleClickCancel },
                 ]}
                 footerClassName="justify-content-center"
             >

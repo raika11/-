@@ -21,7 +21,7 @@ const defaultProps = {};
  * 기사 내 이미지 목록
  */
 const EditThumbArticleImageList = (props) => {
-    const { articleData, onRepClick } = props;
+    const { contentId, onRepClick } = props;
     const dispatch = useDispatch();
     const imageList = useSelector((store) => store.article.imageList);
     const loading = useSelector((store) => store.loading[GET_ARTICLE_IMAGE_LIST]);
@@ -31,10 +31,10 @@ const EditThumbArticleImageList = (props) => {
     useEffect(() => {
         dispatch(
             getArticleImageList({
-                totalId: articleData?.contentId,
+                totalId: contentId,
             }),
         );
-    }, [articleData.contentId, dispatch]);
+    }, [contentId, dispatch]);
 
     useEffect(() => {
         setRenderList(

@@ -273,8 +273,7 @@ const EditDeskingWorkModal = (props) => {
                 cropHeight={component?.cropHeight}
                 cropWidth={component?.cropWidth}
                 onHide={() => setShowModal(false)}
-                articleData={deskingWorkData}
-                //imageSrc={deskingWorkData}
+                contentId={deskingWorkData.contentId}
                 saveFileName={deskingWorkData.seq}
                 thumbFileName={temp.thumbFileName}
                 apply={handleThumbFileApply}

@@ -32,7 +32,7 @@ const defaultValue = {
  * 대표이미지 편집 모달
  */
 const EditThumbModal = (props) => {
-    const { show, onHide, articleData, cropHeight, cropWidth, saveFileName } = props; // modal props
+    const { show, onHide, contentId, cropHeight, cropWidth, saveFileName } = props; // modal props
     const { thumbFileName, apply } = props; // 대표 이미지 props
     const dispatch = useDispatch();
 
@@ -198,15 +198,15 @@ const EditThumbModal = (props) => {
                         </div>,
 
                         // 본문 소재 리스트 탭
-                        articleData ? (
+                        contentId ? (
                             <div className="px-card py-2 d-flex h-100 flex-column">
-                                {articleData ? <EditThumbArticleImageList articleData={articleData} onRepClick={handleRepClick} /> : ''}
+                                {contentId ? <EditThumbArticleImageList contentId={contentId} onRepClick={handleRepClick} /> : ''}
                             </div>
                         ) : (
                             ''
                         ),
                     ]}
-                    tabNavs={['아카이브', articleData ? '본문 소재 리스트' : '']}
+                    tabNavs={['아카이브', contentId ? '본문 소재 리스트' : '']}
                     fill
                 />
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>

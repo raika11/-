@@ -129,7 +129,6 @@ const SnsMetaEdit = () => {
             { ...edit['tw'], snsType: 'TW' },
         ];
 
-        console.log(data);
         if (validSaveData(data)) {
             dispatch(clearSnsMetaList());
             dispatch(
@@ -569,7 +568,7 @@ const SnsMetaEdit = () => {
                 cropHeight={300}
                 cropWidth={300}
                 onHide={() => setShowEditThumbModal(false)}
-                //articleData = {articleData}
+                contentId={totalId}
                 thumbFileName={thumbFileName}
                 saveFileName={moment().format('YYYYMMDDsss')}
                 apply={handleThumbFileApply}

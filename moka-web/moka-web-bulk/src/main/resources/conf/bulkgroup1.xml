@@ -12,4 +12,12 @@
     bulkDumpEnvFile="classpath:conf/bulkdumpenv.xml"
     intervalTime="10s">
   </Task>
+
+  <Task class="jmnet.moka.web.bulk.task.bulksender.BulkSenderTask"
+    name="벌크 Sender"
+    bulkDumpEnvFile="classpath:conf/bulkdumpenv.xml"
+    fileFilter="*.json"
+    fileWaitTime="3s"
+    intervalTime="10s">
+  </Task>
 </TaskGroup>

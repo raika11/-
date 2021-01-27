@@ -114,6 +114,7 @@ public class RcvFileUtil {
             Files.move(sourcePath, targetFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             file.delete();
+            e.printStackTrace();
             throw new RcvException(String.format("파일 이동 중에 에러가 발생하였습니다. [%s]->[%s] %s", sourcePath, targetFile, e.getMessage()));
         }
     }

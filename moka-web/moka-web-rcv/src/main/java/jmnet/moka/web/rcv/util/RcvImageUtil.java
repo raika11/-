@@ -117,6 +117,7 @@ public class RcvImageUtil {
 
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

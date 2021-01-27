@@ -12,7 +12,7 @@ import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
 import jmnet.moka.web.rcv.util.FtpUtil;
 import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
@@ -31,7 +31,7 @@ import org.apache.commons.io.FilenameUtils;
  * @since 2020-12-04 004 오후 2:41
  */
 public class JamXmlProcessHelper {
-    static public boolean doProcess_StarImage(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo jamArticleTotalVo,
+    static public boolean doProcess_StarImage(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo jamArticleTotalVo,
             TaskManager taskManager, JamXmlService jamXmlService)
             throws RcvDataAccessException {
         final String tmpRepList = jamArticleTotalVo.getMainData().getReporterJcmsRepSeqList();
@@ -90,14 +90,14 @@ public class JamXmlProcessHelper {
         return true;
     }
 
-    public static void doProcess_ItemsPreprocess(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal,
+    public static void doProcess_ItemsPreprocess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal,
             TaskManager taskManager, String type, ItemVo item) {
         final MokaRcvConfiguration rcvConfiguration = taskManager.getRcvConfiguration();
 
         switch (type) {
             case "MF":
             case "MH": {
-                doProcess_ItemsPreprocess_OoyalaPreviewDownload(taskInputData, articleTotal, taskManager, item);
+                doProcess_ItemsPreprocess_OvpPreviewDownload(taskInputData, articleTotal, taskManager, item);
                 break;
             }
             case "NN": {
@@ -127,7 +127,7 @@ public class JamXmlProcessHelper {
         }
     }
 
-    private static void doProcess_ItemsPreprocess_OoyalaPreviewDownload(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData,
+    private static void doProcess_ItemsPreprocess_OvpPreviewDownload(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData,
             JamArticleTotalVo articleTotal, TaskManager taskManager, ItemVo item) {
         //우얄라 동영상 대표 이미지 다운로드/업로드(PDS)
         //http://cf.c.ooyala.com/dlYXQ0YzE6ta1Aczbf1hjCfi5zFe489v/3Gduepif0T1UGY8H4xMDoxOjA4MTsiGN

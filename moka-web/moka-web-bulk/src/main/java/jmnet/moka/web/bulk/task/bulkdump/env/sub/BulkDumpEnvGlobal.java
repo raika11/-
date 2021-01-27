@@ -1,4 +1,4 @@
-package jmnet.moka.web.bulk.task.bulkdump.env.Sub;
+package jmnet.moka.web.bulk.task.bulkdump.env.sub;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import jmnet.moka.web.bulk.task.bulkdump.env.Sub.BulkDumpEnvTarget;
+import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import lombok.Getter;
 import lombok.Setter;
 

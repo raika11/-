@@ -107,6 +107,7 @@ public class PubXmlCodeConverter {
                 log.debug("change hexa Code  {} ->  {}", s, replace);
                 text = text.replace(s, replace);
             }catch (Exception e){
+                e.printStackTrace();
                 log.debug("convText Exception error ->  {}", e.getMessage());
             }
         }

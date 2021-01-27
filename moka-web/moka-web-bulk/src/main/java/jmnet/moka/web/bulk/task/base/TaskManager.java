@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.task.base;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,6 +41,9 @@ public class TaskManager {
     private final MokaBulkConfiguration bulkConfiguration;
 
     private List<TaskGroup> taskGroups;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Autowired
     BulkLoaderService bulkLoaderService;

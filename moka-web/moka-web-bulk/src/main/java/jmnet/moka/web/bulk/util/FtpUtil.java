@@ -16,7 +16,7 @@ import org.apache.commons.net.ftp.FTPClient;
  * <pre>
  *
  * Project : moka-springboot-parent
- * Package : jmnet.moka.web.bulk.util
+ * Package : jmnet.moka.web.rcv.util
  * ClassName : FtpUtil
  * Created : 2020-11-04 004 sapark
  * </pre>
@@ -75,6 +75,8 @@ public class FtpUtil {
                     if (checkFileExists(ftp, uploadFileNameList.get(i))) {
                         ftp.deleteFile(uploadFileNameList.get(i));
                     }
+                    if( success )
+                        log.info("ftp upload file [{}] 성공 ", sourceFileList.get(i));
                 } catch (Exception e) {
                     log.error("ftp upload file [{}] 실패 {} ", uploadFileNameList.get(i), e);
                     return false;
@@ -109,6 +111,7 @@ public class FtpUtil {
             }
         } catch (IOException e) {
             log.error("ftp upload file 실패 {}", e.getMessage());
+            e.printStackTrace();
             return false;
         } finally {
             try {

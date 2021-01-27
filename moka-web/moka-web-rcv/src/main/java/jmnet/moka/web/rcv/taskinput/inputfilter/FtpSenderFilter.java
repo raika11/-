@@ -103,6 +103,7 @@ public class FtpSenderFilter extends InputFilter {
                 return true;
             } catch (RcvException e) {
                 log.error(e.getMessage());
+                e.printStackTrace();
                 return false;
             }
         } else {

@@ -2,9 +2,6 @@ package jmnet.moka.web.bulk.task.bulkdump.process;
 
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
-import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
-import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcess;
-import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangProcess;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
@@ -29,8 +26,6 @@ public class BulkDumpClientProcess {
         final BulkDumpService bulkDumpService = bulkDumpTask.getTaskManager().getBulkDumpService();
         final BulkDumpEnv bulkDumpEnv = bulkDumpTask.getBulkDumpEnv();
 
-        BulkProcess clientProcess = null;
-
         switch (bulkDumpTotal.getTargetCode()) {
             case "SOA":
             case "SOE":
@@ -40,15 +35,11 @@ public class BulkDumpClientProcess {
             case "SOC":
             case "SOT":
             case "SOY":
-                clientProcess = new BulkJoongangProcess(bulkDumpEnv);
+                (new BulkJoongangProcess(bulkDumpEnv)).doProcess( bulkDumpTotal, bulkDumpTask, bulkDumpService);
                 break;
             default:
                 log.error("Not Defined DumpClientProcess TargetCode {}", bulkDumpTotal.getTargetCode());
                 break;
-        }
-
-        if( clientProcess != null ) {
-            clientProcess.doProcess( bulkDumpTotal, bulkDumpService);
         }
     }
 }

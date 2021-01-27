@@ -173,4 +173,8 @@ public class BulkUtil {
     public static String SendUrlPostRequest( String urlAddress, String json ) {
         return sendUrlRequest( urlAddress, json, false);
     }
+
+    public static boolean downloadData(String sourceUrl, String targetFilename) {
+        return BulkImageUtil.downloadImage(sourceUrl, targetFilename);
+    }
 }

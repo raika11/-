@@ -18,7 +18,7 @@ import org.w3c.dom.Node;
  *
  * Project : moka-springboot-parent
  * Package : jmnet.moka.web.bulk.task.bulkdump
- * ClassName : BulkDumpClientChannnel
+ * ClassName : BulkDumpClientChannel
  * Created : 2020-12-18 018 sapark
  * </pre>
  *

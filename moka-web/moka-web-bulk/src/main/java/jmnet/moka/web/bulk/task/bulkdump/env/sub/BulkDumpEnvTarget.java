@@ -1,4 +1,4 @@
-package jmnet.moka.web.bulk.task.bulkdump.env.Sub;
+package jmnet.moka.web.bulk.task.bulkdump.env.sub;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;

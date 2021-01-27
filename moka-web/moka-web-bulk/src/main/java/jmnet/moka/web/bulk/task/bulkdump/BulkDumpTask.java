@@ -39,7 +39,6 @@ import org.w3c.dom.Node;
 @Slf4j
 @Getter
 public class BulkDumpTask extends Task<DBTaskInputData> {
-    private final ObjectMapper objectMapper;
     private final BulkDumpClientChannel bulkDumpClientChannel;
     private int currentSeqNo = 0;
     private BulkDumpEnv bulkDumpEnv;
@@ -47,8 +46,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
     public BulkDumpTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
         super(parent, node, xu);
-        objectMapper = new ObjectMapper();
-        bulkDumpClientChannel = new BulkDumpClientChannel(node, xu, this);
+        this.bulkDumpClientChannel = new BulkDumpClientChannel(node, xu, this);
     }
 
     @Override
@@ -60,21 +58,9 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
         if (McpString.isNullOrEmpty(bulkDumpEnvFile)) {
             throw new BulkException("bulkDumpEnvFile 환경 값 설정이 잘못되었습니다.");
         }
+        this.bulkDumpEnv = BulkDumpEnv.loadFromFile(bulkDumpEnvFile);
 
-        final File file;
-        try {
-            file = new File(ResourceMapper.getAbsolutePath(bulkDumpEnvFile));
-            if (!file.exists()) {
-                throw new BulkException("bulkDumpEnvFile 파일을 찾을 수 없습니다.");
-            }
-            bulkDumpEnv = (BulkDumpEnv) JaxbObjectManager.getBasicVoFromXml(file, BulkDumpEnv.class);
-            if( bulkDumpEnv == null )
-                throw new BulkException("bulkDumpEnvFile 파일을 로드하는 중에 에러가 발생하였습니다. null");
 
-            bulkDumpEnv.init();
-        } catch (Exception e) {
-            throw new BulkException("bulkDumpEnvFile 파일을 로드하는 중에 에러가 발생하였습니다.");
-        }
     }
 
     @Override
@@ -104,9 +90,11 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
     protected void doProcess(DBTaskInputData taskInputData)
             throws BulkDataAccessException {
 
+        final ObjectMapper objectMapper = getTaskManager().getObjectMapper();
+
         for( Map<String, Object> map : taskInputData.getInputData() ) {
             try {
-                BulkDumpTotalVo bulkDumpTotalVo = this.objectMapper.convertValue(map, BulkDumpTotalVo.class);
+                BulkDumpTotalVo bulkDumpTotalVo = objectMapper.convertValue(map, BulkDumpTotalVo.class);
                 if( !bulkDumpTotalVo.isDdrefValid() )
                     continue;
 

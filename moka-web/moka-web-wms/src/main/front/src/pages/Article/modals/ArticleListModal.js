@@ -12,7 +12,7 @@ import ArticleSourceSelector from '@pages/Article/components/ArticleSourceSelect
 import { DB_DATEFORMAT, ARTICLE_SOURCE_LIST_KEY } from '@/constants';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@/components';
 import GroupNumberRenderer from '@pages/Article/components/ArticleDeskList/GroupNumberRenderer';
-import columnDefs from '@pages/Article/components/ArticleDeskList/ArticleDeskAgGridColums';
+import columnDefs from '@pages/Article/modals/ArticleListModalAgGridCoulmns';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { getLocalItem, setLocalItem } from '@utils/storageUtil';
 import { GET_ARTICLE_LIST_MODAL, initialState, getArticleListModal } from '@store/article';
@@ -121,6 +121,7 @@ const ArticleListModal = (props) => {
                                     reportersText,
                                     artThumb,
                                     artPdsThumb,
+                                    onClick: handleRowClicked,
                                 };
                             }),
                         );
@@ -310,17 +311,17 @@ const ArticleListModal = (props) => {
             <MokaTable
                 className="article-list overflow-hidden flex-fill"
                 headerHeight={50}
-                columnDefs={columnDefs.filter((c, i) => i !== 0 && i !== 1)}
+                columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}
-                onRowClicked={handleRowClicked}
+                /*onRowClicked={handleRowClicked}*/
                 loading={loading}
                 total={total}
                 page={search.page}
                 size={search.size}
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 onChangeSearchOption={handleChangeSearchOption}
-                preventRowClickCell={['groupNumber']}
+                preventRowClickCell={['groupNumber', 'addBtn']}
             />
         </MokaModal>
     );

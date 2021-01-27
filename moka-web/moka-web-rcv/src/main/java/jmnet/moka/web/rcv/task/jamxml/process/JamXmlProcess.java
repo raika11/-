@@ -6,7 +6,7 @@ import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
 
 /**
  * <pre>
@@ -21,7 +21,7 @@ import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
  * @since 2020-12-04 004 오후 4:07
  */
 public class JamXmlProcess {
-    public static void doProcess(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal, TaskManager taskManager)
+    public static void doProcess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal, TaskManager taskManager)
             throws RcvDataAccessException {
 
         final JamArticleVo article = articleTotal.getMainData();
@@ -40,7 +40,7 @@ public class JamXmlProcess {
         }
     }
 
-    private static void doProcess_InsertUpdate(FileTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal,
+    private static void doProcess_InsertUpdate(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal,
             TaskManager taskManager) {
         final JamArticleVo article = articleTotal.getMainData();
         final JamXmlService jamXmlService = taskManager.getJamXmlService();

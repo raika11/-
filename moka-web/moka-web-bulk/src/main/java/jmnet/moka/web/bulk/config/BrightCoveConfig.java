@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * Project : moka-springboot-parent
  * Package : jmnet.moka.web.bulk.config
- * ClassName : OoyalaConfig
+ * ClassName : BrightCoveConfig
  * Created : 2021-01-07 007 sapark
  * </pre>
  *
@@ -20,10 +20,12 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "ooyala")
-public class OoyalaConfig {
+@ConfigurationProperties(prefix = "brightcove")
+public class BrightCoveConfig {
     private String account;
     private String clientId;
     private String clientSecret;
     private String accessTokenUrl;
+    private String videoSourceUrl;
+    private int videoLimitSize;
 }

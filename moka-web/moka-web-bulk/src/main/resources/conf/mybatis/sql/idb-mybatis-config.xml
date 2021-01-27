@@ -15,6 +15,7 @@
     </settings>
     <typeAliases>
         <package name="jmnet.moka.web.bulk.task.bulkdump.vo" />
+        <package name="jmnet.moka.web.bulk.task.bulkdump.process" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.process.joongang" />
     </typeAliases>
     <typeHandlers>

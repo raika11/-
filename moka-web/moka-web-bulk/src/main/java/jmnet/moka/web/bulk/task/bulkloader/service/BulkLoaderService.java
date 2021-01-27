@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * Project : moka-springboot-parent
  * Package : jmnet.moka.web.bulk.task.bulkloader.service
- * ClassName : BulkLoaderServie
+ * ClassName : BulkLoaderService
  * Created : 2020-12-11 011 sapark
  * </pre>
  *

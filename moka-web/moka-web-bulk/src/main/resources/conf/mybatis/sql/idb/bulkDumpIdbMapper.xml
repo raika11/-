@@ -14,6 +14,17 @@
     ]]>
   </select>
 
+  <delete id="callUspBulkDdrefDel" parameterType="BulkDumpTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_DDREF_DEL(
+      #{seqNo, mode=IN, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </delete>
+
   <select id="callUspBulkNewstableJoongangSel" parameterType="BulkJoongangArticle"
     resultType="BulkDumpNewsVo" statementType="CALLABLE">
     <![CDATA[
@@ -62,6 +73,18 @@
     {
       call USP_BULK_REPORTER_JOONGANG_SEL(
       #{totalId.data, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <select id="callUspBulkNewsMMDataSel" parameterType="BulkArticle"
+    resultType="BulkDumpNewsMMDataVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_NEWSMMDATA_SEL(
+      #{totalId.data, mode=IN, jdbcType=VARCHAR, javaType=string},
+      0
       )
       }
     ]]>

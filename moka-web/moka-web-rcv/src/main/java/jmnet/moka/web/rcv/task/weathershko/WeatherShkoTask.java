@@ -10,8 +10,8 @@ import jmnet.moka.web.rcv.task.weathershko.service.WeatherShkoService;
 import jmnet.moka.web.rcv.task.weathershko.vo.WeatherShkoTotalVo;
 import jmnet.moka.web.rcv.task.weathershko.vo.WeatherShkoVo;
 import jmnet.moka.web.rcv.task.weathershko.vo.sub.WeatherShkoAreaVo;
-import jmnet.moka.web.rcv.taskinput.FileTaskInput;
-import jmnet.moka.web.rcv.taskinput.FileTaskInputData;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInput;
+import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Node;
@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
  * @since 2020-12-14 014 오전 9:51
  */
 @Slf4j
-public class WeatherShkoTask extends Task<FileTaskInputData<WeatherShkoTotalVo, WeatherShkoVo>> {
+public class WeatherShkoTask extends Task<FileXmlTaskInputData<WeatherShkoTotalVo, WeatherShkoVo>> {
     public WeatherShkoTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
         super(parent, node, xu);
@@ -37,11 +37,11 @@ public class WeatherShkoTask extends Task<FileTaskInputData<WeatherShkoTotalVo, 
 
     @Override
     protected TaskInput initTaskInput() {
-        return new FileTaskInput<>( WeatherShkoTotalVo.class, WeatherShkoVo.class);
+        return new FileXmlTaskInput<>( WeatherShkoTotalVo.class, WeatherShkoVo.class);
     }
 
     @Override
-    protected boolean doVerifyData(FileTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData) {
+    protected boolean doVerifyData(FileXmlTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData) {
         final WeatherShkoTotalVo weatherShkoTotal = taskInputData.getTotalData();
         if (weatherShkoTotal == null) {
             log.error("{} 파일 [{}] XML 파싱 에러, WeatherShkoTotalVo를 생성할 수 없습니다.", getTaskName(), taskInputData.getFile());
@@ -60,7 +60,7 @@ public class WeatherShkoTask extends Task<FileTaskInputData<WeatherShkoTotalVo, 
     }
 
     @Override
-    protected void doProcess(FileTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData)
+    protected void doProcess(FileXmlTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData)
             throws RcvDataAccessException {
         final WeatherShkoTotalVo weatherShkoTotal = taskInputData.getTotalData();
         final WeatherShkoVo weatherShko = weatherShkoTotal.getMainData();
@@ -81,7 +81,7 @@ public class WeatherShkoTask extends Task<FileTaskInputData<WeatherShkoTotalVo, 
     }
 
     @Override
-    protected void doAfterProcess(FileTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData)
+    protected void doAfterProcess(FileXmlTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData)
             throws RcvDataAccessException, InterruptedException {
         super.doAfterProcess(taskInputData);
 

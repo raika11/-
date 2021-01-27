@@ -45,6 +45,15 @@
     )}
   </select>
 
+  <update id="updateReplyCnt" parameterType="CommentVO"
+    statementType="CALLABLE">
+   { call UPU_15RE_COMMENT_SUMCNT_ALL_UPD(
+    #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{memSite, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{memId, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </update>
+
   <!--<select id="deleteBySeq" parameterType="hashMap" resultType="java.lang.Long"
     statementType="CALLABLE">
 		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_15RE_COMMENT_DEL(

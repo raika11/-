@@ -87,6 +87,9 @@ public class TrendpollServiceImpl implements TrendpollService {
                     .getPollItems()
                     .stream()
                     .map(value -> value.getItemSeq())
+                    .filter(aLong -> {
+                        return aLong != null;
+                    })
                     .collect(Collectors.toCollection(ArrayList::new));
             if (exceptSeqs != null && exceptSeqs.size() > 0) {
                 trendpollRepository.deleteItemByPollSeq(trendpoll.getPollSeq(), exceptSeqs);
@@ -99,6 +102,9 @@ public class TrendpollServiceImpl implements TrendpollService {
                     .getPollRelateContents()
                     .stream()
                     .map(value -> value.getSeqNo())
+                    .filter(aLong -> {
+                        return aLong != null;
+                    })
                     .collect(Collectors.toCollection(ArrayList::new));
             if (exceptSeqs != null && exceptSeqs.size() > 0) {
                 trendpollRepository.deleteContentsByPollSeq(trendpoll.getPollSeq(), exceptSeqs);

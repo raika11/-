@@ -18,4 +18,6 @@ public interface CommentRepositorySupport {
 
     long updateStatus(Long cmtSeq, CommentStatusType statusType);
 
+    long updateStatusByMemberId(String memId, CommentStatusType statusType);
+
 }

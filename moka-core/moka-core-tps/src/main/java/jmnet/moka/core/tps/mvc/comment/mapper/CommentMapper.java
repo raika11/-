@@ -19,4 +19,12 @@ import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 public interface CommentMapper extends BaseMapper<CommentVO, CommentSearchDTO> {
 
     //long deleteBySeq(Long cmtSeq);
+
+    /**
+     * 댓글 삭제로 인해 카운트를 수정한다.
+     *
+     * @param vo
+     * @return
+     */
+    long updateReplyCnt(CommentVO vo);
 }

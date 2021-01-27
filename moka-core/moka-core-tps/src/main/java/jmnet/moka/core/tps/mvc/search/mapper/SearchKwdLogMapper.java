@@ -4,6 +4,7 @@ import java.util.List;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.search.dto.SearchKwdLogSearchDTO;
 import jmnet.moka.core.tps.mvc.search.vo.SearchKwdLogVO;
+import jmnet.moka.core.tps.mvc.search.vo.SearchKwdTotalLogVO;
 
 /**
  * <pre>
@@ -26,4 +27,6 @@ public interface SearchKwdLogMapper extends BaseMapper<SearchKwdLogVO, SearchKwd
      * @return 조회 결과
      */
     List<SearchKwdLogVO> findAllDetailStat(SearchKwdLogSearchDTO searchDTO);
+
+    SearchKwdTotalLogVO findTotalStat(SearchKwdLogSearchDTO searchDTO);
 }

@@ -16,6 +16,7 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.search.dto.SearchKwdLogSearchDTO;
 import jmnet.moka.core.tps.mvc.search.service.SearchKwdLogService;
 import jmnet.moka.core.tps.mvc.search.vo.SearchKwdLogVO;
+import jmnet.moka.core.tps.mvc.search.vo.SearchKwdTotalLogVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,27 @@ public class SearchKwdLogRestController extends AbstractCommonController {
      * @param search 검색조건
      * @return API목록
      */
+    @ApiOperation(value = "키워드 전체 건수")
+    @GetMapping("/stat-total")
+    public ResponseEntity<?> getSearchKwdLogStatTotal(@Valid @SearchParam SearchKwdLogSearchDTO search) {
+
+
+
+        SearchKwdTotalLogVO resultMessage = searchKwdLogService.findSearchKwdLogTotalStat(search);
+
+        ResultDTO<SearchKwdTotalLogVO> resultDto = new ResultDTO<>(resultMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 키워드 통계 조회
+     *
+     * @param search 검색조건
+     * @return API목록
+     */
     @ApiOperation(value = "키워드 통계 조회")
     @GetMapping("/stat")
     public ResponseEntity<?> getSearchKwdLogStatList(@Valid @SearchParam SearchKwdLogSearchDTO search) {
@@ -68,7 +90,7 @@ public class SearchKwdLogRestController extends AbstractCommonController {
         Page<SearchKwdLogVO> returnValue = searchKwdLogService.findAllSearchKwdLogStat(search);
 
         // 리턴값 설정
-        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setTotalCnt(returnValue.getTotalPages());
         resultListMessage.setList(returnValue.getContent());
 
 

@@ -1,5 +1,7 @@
 package jmnet.moka.core.tps.mvc.search.vo;
 
+import java.util.Date;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,28 +22,13 @@ import org.apache.ibatis.type.Alias;
  * @since 2021-01-22 13:19
  */
 
-@Alias("SearchKwdLogVO")
+@Alias("SearchKwdTotalLogVO")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @Builder
-public class SearchKwdLogVO {
-
-    /**
-     * 등수
-     */
-    private Integer rank;
-
-    /**
-     * 영역 구분(날짜별, 영역별)
-     */
-    private String statDiv;
-
-    /**
-     * 키워드
-     */
-    private String schKwd;
+public class SearchKwdTotalLogVO {
 
     /**
      * 전체 검색 건수
@@ -62,4 +49,10 @@ public class SearchKwdLogVO {
      * 테블릿 건수
      */
     private Long tabletCnt;
+
+    /**
+     * 최근 조회일
+     */
+    @DTODateTimeFormat
+    private Date lastRegDt;
 }

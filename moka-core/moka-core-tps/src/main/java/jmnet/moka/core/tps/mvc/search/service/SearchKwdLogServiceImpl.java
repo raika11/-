@@ -5,6 +5,7 @@ import jmnet.moka.core.tps.mvc.search.dto.SearchKwdLogSearchDTO;
 import jmnet.moka.core.tps.mvc.search.mapper.SearchKwdLogMapper;
 import jmnet.moka.core.tps.mvc.search.repository.SearchKwdLogRepository;
 import jmnet.moka.core.tps.mvc.search.vo.SearchKwdLogVO;
+import jmnet.moka.core.tps.mvc.search.vo.SearchKwdTotalLogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +31,11 @@ public class SearchKwdLogServiceImpl implements SearchKwdLogService {
 
     @Autowired
     private SearchKwdLogMapper searchKwdLogMapper;
+
+    @Override
+    public SearchKwdTotalLogVO findSearchKwdLogTotalStat(SearchKwdLogSearchDTO searchDTO) {
+        return searchKwdLogMapper.findTotalStat(searchDTO);
+    }
 
     @Override
     public Page<SearchKwdLogVO> findAllSearchKwdLogStat(SearchKwdLogSearchDTO searchDTO) {

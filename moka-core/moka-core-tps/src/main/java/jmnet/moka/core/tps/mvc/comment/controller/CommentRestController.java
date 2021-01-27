@@ -3,10 +3,8 @@ package jmnet.moka.core.tps.mvc.comment.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.security.Principal;
 import java.util.List;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -16,6 +14,7 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentDeleteType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -66,7 +66,7 @@ public class CommentRestController extends AbstractCommonController {
     @GetMapping("/init")
     public ResponseEntity<?> getCommentInitInfo() {
 
-        ResultMapDTO resultMapDTO = new ResultMapDTO();
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
 
         // 댓글 매체 코드 목록
         resultMapDTO.addBodyAttribute("COMMENT_MEDIA_CODE", codeMgtService.findUseSimpleList(TpsConstants.COMMENT_MEDIA_CODE));
@@ -82,6 +82,9 @@ public class CommentRestController extends AbstractCommonController {
 
         // 댓글 정렬 구분
         resultMapDTO.addBodyAttribute("COMMENT_ORDER_CODE", CommentOrderType.toList());
+
+        // 삭제 커맨드 유형 구분
+        resultMapDTO.addBodyAttribute("COMMENT_DELETE_CODE", CommentDeleteType.toList());
 
 
         return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
@@ -119,14 +122,14 @@ public class CommentRestController extends AbstractCommonController {
     @DeleteMapping("/{cmtSeq}")
     public ResponseEntity<?> deleteComment(
             @ApiParam("댓글 ID") @PathVariable("cmtSeq") @Min(value = 1, message = "{comment.error.pattern.cmtSeq}") Long cmtSeq,
-            @ApiParam(hidden = true) @NotNull Principal principal)
+            @ApiParam("삭제 유형") @RequestParam(value = "deleteType") CommentDeleteType deleteType)
             throws MokaException, NoDataException {
 
         Comment comment = commentService
                 .findCommentBySeq(cmtSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-        long result = commentService.updateCommentStatus(comment, CommentStatusType.N);
+        long result = commentService.updateCommentStatus(comment, CommentStatusType.N, deleteType);
 
         ResultDTO<Long> resultDto = new ResultDTO<>(result, msg("tps.common.success.delete"));
 

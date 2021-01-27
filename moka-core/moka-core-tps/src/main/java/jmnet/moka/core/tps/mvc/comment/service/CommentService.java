@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.comment.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentDeleteType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
@@ -46,6 +47,16 @@ public interface CommentService {
      * @return 변경 여부
      */
     long updateCommentStatus(Comment comment, CommentStatusType statusType);
+
+    /**
+     * 댓글 상태 변경
+     *
+     * @param comment    댓글 정보
+     * @param statusType 상태코드
+     * @param deleteType 삭제유형
+     * @return 변경 여부
+     */
+    long updateCommentStatus(Comment comment, CommentStatusType statusType, CommentDeleteType deleteType);
 
 
     /**

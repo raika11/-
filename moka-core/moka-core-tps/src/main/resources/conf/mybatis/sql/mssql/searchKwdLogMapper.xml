@@ -11,7 +11,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.core.tps.mvc.search.mapper.SearchKwdLogMapper">
 
-  <!-- FACEBOOK&TWITTER 리스트 -->
+  <!-- 검색어 통계 리스트 -->
   <select id="findAll" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdLogVO"
     statementType="CALLABLE">
     {call UPA_SEARCH_KWD_LOG_STAT_SEL(
@@ -26,7 +26,18 @@
     ) }
   </select>
 
-  <!-- facebook instance article 등록 -->
+  <!-- 검색어 전체 통계 -->
+  <select id="findTotalStat" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdTotalLogVO"
+    statementType="CALLABLE">
+    {call UPA_SEARCH_KWD_LOG_TOTAL_STAT_SEL(
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+    #{endDt, mode=IN, jdbcType=INTEGER, javaType=java.util.Date},
+    #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{tabDiv, mode=IN, jdbcType=VARCHAR, javaType=string}
+    ) }
+  </select>
+
+  <!-- 검색어 통계 상세 리스트 -->
   <select id="findAllDetailStat" parameterType="SearchKwdLogSearchDTO" resultType="SearchKwdLogVO"
     statementType="CALLABLE">
     {call UPA_SEARCH_KWD_LOG_DETAIL_STAT_SEL(

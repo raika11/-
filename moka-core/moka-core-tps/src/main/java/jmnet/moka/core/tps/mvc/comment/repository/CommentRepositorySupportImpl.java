@@ -39,4 +39,17 @@ public class CommentRepositorySupportImpl extends QuerydslRepositorySupport impl
                 .set(qComment.status, statusType)
                 .execute();
     }
+
+    @Transactional
+    @Override
+    public long updateStatusByMemberId(String memId, CommentStatusType statusType) {
+        QComment qComment = QComment.comment;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qComment.memId.eq(memId));
+        return update(qComment)
+                .where(builder)
+                .set(qComment.status, statusType)
+                .execute();
+    }
 }

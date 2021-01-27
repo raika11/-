@@ -112,5 +112,42 @@ public final class CommentCode {
                     .collect(Collectors.toList());
         }
     }
+
+
+    public enum CommentDeleteType implements EnumCode {
+        CMT("DTCO", "이 댓글만 삭제"),
+        ALL("UDC", "해당 사용자의 과거 댓글 전체 삭제"),
+        BNC("BNC", "해당 사용자 ID 차단 및 해당 댓글 삭제"),
+        BNA("BNA", "해당 사용자 ID 차단 및 과거 댓글 전체 삭제");
+
+        private String code;
+        private String name;
+
+
+        CommentDeleteType(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static List<Map<String, Object>> toList() {
+
+            return Arrays
+                    .stream(CommentOrderType.values())
+                    .map(code -> MapBuilder
+                            .getInstance()
+                            .add("code", code.code)
+                            .add("name", code.name)
+                            .getMap())
+                    .collect(Collectors.toList());
+        }
+    }
 }
 

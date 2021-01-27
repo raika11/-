@@ -12,7 +12,7 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.editlog.dto.EditLogSearchDTO;
 import jmnet.moka.core.tps.mvc.editlog.entity.EditLog;
 import jmnet.moka.core.tps.mvc.editlog.entity.QEditLog;
-import jmnet.moka.core.tps.mvc.menu.entity.QMenu;
+import jmnet.moka.core.tps.mvc.menu.entity.QMenuSimple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -38,8 +38,7 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
     public Page<EditLog> findAllEditLog(EditLogSearchDTO searchDTO) {
 
         QEditLog qEditLog = QEditLog.editLog;
-        QMenu qMenu = QMenu.menu;
-
+        QMenuSimple menuSimple = QMenuSimple.menuSimple;
         JPQLQuery<EditLog> query = from(qEditLog);
 
         if (McpString.isNotEmpty(searchDTO.getSuccessYn()) && !TpsConstants.SEARCH_TYPE_ALL.equals(searchDTO.getSuccessYn())) {
@@ -62,7 +61,11 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
                                 .contains(keyword))
                         .or(qEditLog.memberId
                                 .toUpperCase()
-                                .contains(keyword)));
+                                .contains(keyword))
+                        .or(qEditLog.menuId.in(JPAExpressions
+                                .selectFrom(menuSimple)
+                                .select(menuSimple.menuId)
+                                .where(menuSimple.menuNm.contains(searchDTO.getKeyword())))));
             } else {
                 if (qEditLog.memberId
                         .getMetadata()
@@ -74,6 +77,14 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
                         .getName()
                         .equals(searchDTO.getSearchType())) {
                     query.where(qEditLog.regIp.contains(searchDTO.getKeyword()));
+                } else if (menuSimple.menuNm
+                        .getMetadata()
+                        .getName()
+                        .equals(searchDTO.getSearchType())) {
+                    query.where(qEditLog.menuId.in(JPAExpressions
+                            .selectFrom(menuSimple)
+                            .select(menuSimple.menuId)
+                            .where(menuSimple.menuNm.contains(searchDTO.getKeyword()))));
                 }
             }
         }
@@ -94,9 +105,9 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
         QueryResults<EditLog> list = query
                 .select(Projections.fields(EditLog.class, qEditLog.seqNo, qEditLog.regDt, qEditLog.action, qEditLog.successYn, qEditLog.regIp,
                         qEditLog.memberId, qEditLog.menuId, ExpressionUtils.as(JPAExpressions
-                                .select(qMenu.menuDisplayNm)
-                                .from(qMenu)
-                                .where(qMenu.menuId.eq(qEditLog.menuId)), "menuNm")))
+                                .select(menuSimple.menuNm)
+                                .from(menuSimple)
+                                .where(menuSimple.menuId.eq(qEditLog.menuId)), "menuNm")))
                 .fetchResults();
 
         return new PageImpl<>(list.getResults(), searchDTO.getPageable(), list.getTotal());
@@ -106,19 +117,17 @@ public class EditLogRepositorySupportImpl extends TpsQueryDslRepositorySupport i
     public Optional<EditLog> findEditLog(Long seqNo) {
 
         QEditLog qEditLog = QEditLog.editLog;
-        QMenu qMenu = QMenu.menu;
+        QMenuSimple menuSimple = QMenuSimple.menuSimple;
 
         JPQLQuery<EditLog> query = from(qEditLog);
-
-
 
         EditLog result = query
                 .select(Projections.fields(EditLog.class, qEditLog.seqNo, qEditLog.menuId, qEditLog.memberId, qEditLog.regIp, qEditLog.successYn,
                         qEditLog.action, qEditLog.apiPath, qEditLog.errMsg, qEditLog.executedTime, qEditLog.param, qEditLog.regDt, ExpressionUtils.as(
                                 JPAExpressions
-                                        .select(qMenu.menuDisplayNm)
-                                        .from(qMenu)
-                                        .where(qMenu.menuId.eq(qEditLog.menuId)), "menuNm")))
+                                        .select(menuSimple.menuNm)
+                                        .from(menuSimple)
+                                        .where(menuSimple.menuId.eq(qEditLog.menuId)), "menuNm")))
                 .where(qEditLog.seqNo.eq(seqNo))
                 .fetchFirst();
 

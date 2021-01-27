@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.search.service;
 import java.util.List;
 import jmnet.moka.core.tps.mvc.search.dto.SearchKwdLogSearchDTO;
 import jmnet.moka.core.tps.mvc.search.vo.SearchKwdLogVO;
+import jmnet.moka.core.tps.mvc.search.vo.SearchKwdTotalLogVO;
 import org.springframework.data.domain.Page;
 
 /**
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Page;
  * @since 2021-01-22 14:02
  */
 public interface SearchKwdLogService {
+
+    SearchKwdTotalLogVO findSearchKwdLogTotalStat(SearchKwdLogSearchDTO searchDTO);
 
     Page<SearchKwdLogVO> findAllSearchKwdLogStat(SearchKwdLogSearchDTO searchDTO);
 

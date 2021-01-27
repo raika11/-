@@ -10,7 +10,7 @@ import toast from '@/utils/toastUtil';
  */
 const MessageSettings = () => {
     const dispatch = useDispatch();
-    const tourGuideList = useSelector((store) => store.tour.tourGuideList);
+    const tourGuideList = useSelector((store) => store.tour.list);
     const [mgObj, setMgObj] = useState({});
 
     /**

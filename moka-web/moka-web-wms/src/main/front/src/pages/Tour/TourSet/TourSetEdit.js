@@ -1,15 +1,114 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaInputLabel, MokaCard } from '@/components';
+import { getTourSetup, putTourSetup } from '@/store/tour';
+import toast from '@/utils/toastUtil';
 
 /**
  * 견학 기본 설정 편집
  */
 const TourSetEdit = () => {
-    const [minDay, setMinDay] = useState(1);
-    const [maxDay, setMaxDay] = useState(90);
-    const [minVisitor, setMinVisitor] = useState(5);
-    const [maxVisitor, setMaxVisitor] = useState(15);
+    const dispatch = useDispatch();
+    const tourSetup = useSelector((store) => store.tour.tourSetup);
+    const [temp, setTemp] = useState({
+        tourYn: 'Y',
+        minDay: null,
+        maxDay: null,
+        minVisitor: null,
+        maxVisitor: null,
+        sunday: 'N',
+        monday: 'Y',
+        tuesday: 'Y',
+        wednesday: 'Y',
+        thursday: 'Y',
+        friday: 'Y',
+        saturday: 'N',
+    });
+
+    /**
+     * 저장 버튼
+     */
+    const handleClickSave = () => {
+        let week = Object.keys(temp).filter((day) => {
+            return day.indexOf('day') > -1;
+        });
+
+        let weekYn = [];
+        week.forEach((day) => {
+            return weekYn.push(temp[day]);
+        });
+
+        let tourSetup = {
+            tourYn: temp.tourYn,
+            tourDayFrom: temp.minDay,
+            tourDayTo: temp.maxDay,
+            tourNumFrom: temp.minVisitor,
+            tourNumTo: temp.maxVisitor,
+            tourWeekYn: weekYn.join(''),
+        };
+
+        dispatch(
+            putTourSetup({
+                tourSetup: tourSetup,
+                callback: ({ header }) => {
+                    if (header.success) {
+                        toast.success(header.message);
+                    } else {
+                        toast.fail(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * input value
+     */
+    const handleChangeValue = useCallback(
+        (e) => {
+            const { name, value } = e.target;
+            setTemp({ ...temp, [name]: value });
+        },
+        [temp],
+    );
+
+    /**
+     * switch value
+     */
+    const handleChangeSwitch = (e) => {
+        const { name, checked } = e.target;
+        setTemp({ ...temp, [name]: checked ? 'Y' : 'N' });
+    };
+
+    useEffect(() => {
+        // 기본 설정 조회
+        dispatch(getTourSetup());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (Object.keys(tourSetup).length > 0) {
+            let weekArr = tourSetup.tourWeekYn.split('');
+
+            setTemp({
+                ...temp,
+                tourYn: tourSetup.tourYn,
+                minDay: tourSetup.tourDayFrom,
+                maxDay: tourSetup.tourDayTo,
+                minVisitor: tourSetup.tourNumFrom,
+                maxVisitor: tourSetup.tourNumTo,
+                sunday: weekArr[0],
+                monday: weekArr[1],
+                tuesday: weekArr[2],
+                wednesday: weekArr[3],
+                thursday: weekArr[4],
+                friday: weekArr[5],
+                saturday: weekArr[6],
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tourSetup]);
 
     return (
         <MokaCard
@@ -21,6 +120,7 @@ const TourSetEdit = () => {
                     text: '저장',
                     variant: 'positive',
                     className: 'mr-2',
+                    onClick: handleClickSave,
                 },
                 {
                     text: '취소',
@@ -34,32 +134,20 @@ const TourSetEdit = () => {
                     <MokaInputLabel
                         label="견학신청"
                         as="switch"
-                        name="tour"
-                        id="switch-tour"
+                        name="tourYn"
+                        id="tour-tourYn-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.ilganUse === 'Y'
-                            checked: true,
+                            checked: temp.tourYn === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                 </Form.Row>
                 <Form.Row className="mb-3 d-flex align-items-center">
                     <MokaInputLabel label="신청기간" as="none" />
                     <p className="mb-0 mr-2 ft-12">오늘자 기준</p>
                     <div style={{ width: 80 }}>
-                        <MokaInput
-                            as="select"
-                            name="minDay"
-                            value={minDay}
-                            onChange={
-                                (e) => setMinDay(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
+                        <MokaInput as="select" name="minDay" value={temp.minDay} onChange={handleChangeValue}>
                             {[...Array(90)].map((d, idx) => {
                                 return (
                                     <option key={idx} value={`${idx + 1}`}>
@@ -71,15 +159,7 @@ const TourSetEdit = () => {
                     </div>
                     <p className="mb-0 mx-2 ft-12">일 후부터</p>
                     <div style={{ width: 80 }}>
-                        <MokaInput
-                            as="select"
-                            name="maxDay"
-                            value={maxDay}
-                            onChange={
-                                (e) => setMaxDay(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
+                        <MokaInput as="select" name="maxDay" value={temp.maxDay} onChange={handleChangeValue}>
                             {[...Array(90)].map((d, idx) => {
                                 return (
                                     <option key={idx} value={`${idx + 1}`}>
@@ -94,15 +174,7 @@ const TourSetEdit = () => {
                 <Form.Row className="mb-3 d-flex align-items-center">
                     <MokaInputLabel label="신청인원" as="none" />
                     <div style={{ width: 80 }}>
-                        <MokaInput
-                            as="select"
-                            name="minVisitor"
-                            value={minVisitor}
-                            onChange={
-                                (e) => setMinVisitor(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
+                        <MokaInput as="select" name="minVisitor" value={temp.minVisitor} onChange={handleChangeValue}>
                             {[...Array(90)].map((d, idx) => {
                                 return (
                                     <option key={idx} value={`${idx + 1}`}>
@@ -114,15 +186,7 @@ const TourSetEdit = () => {
                     </div>
                     <p className="mb-0 mx-2 ft-12">명 이상 ~ </p>
                     <div style={{ width: 80 }}>
-                        <MokaInput
-                            as="select"
-                            name="maxVisitor"
-                            value={maxVisitor}
-                            onChange={
-                                (e) => setMaxVisitor(e.target.value)
-                                // handleChangeValue
-                            }
-                        >
+                        <MokaInput as="select" name="maxVisitor" value={temp.maxVisitor} onChange={handleChangeValue}>
                             {[...Array(90)].map((d, idx) => {
                                 return (
                                     <option key={idx} value={`${idx + 1}`}>
@@ -143,15 +207,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="sunday"
-                        id="switch-sunday"
+                        id="tour-sun-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.sunday === '1'
+                            checked: temp.sunday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                     <MokaInputLabel
                         label="월"
@@ -159,16 +220,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="monday"
-                        id="switch-monday"
+                        id="tour-mon-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.monday === '2'
-                            checked: true,
+                            checked: temp.monday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                     <MokaInputLabel
                         label="화"
@@ -176,16 +233,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="tuesday"
-                        id="switch-tuesday"
+                        id="tour-tue-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.tuesday === '3'
-                            checked: true,
+                            checked: temp.tuesday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                     <MokaInputLabel
                         label="수"
@@ -193,16 +246,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="wednesday"
-                        id="switch-wednesday"
+                        id="tour-wed-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.wednesday === '4'
-                            checked: true,
+                            checked: temp.wednesday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                     <MokaInputLabel
                         label="목"
@@ -210,16 +259,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="thursday"
-                        id="switch-thursday"
+                        id="tour-thu-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.thursday === '5'
-                            checked: true,
+                            checked: temp.thursday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                     <MokaInputLabel
                         label="금"
@@ -227,16 +272,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="friday"
-                        id="switch-friday"
+                        id="tour-fri-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.friday === '6'
-                            checked: true,
+                            checked: temp.friday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                     <MokaInputLabel
                         label="토"
@@ -244,15 +285,12 @@ const TourSetEdit = () => {
                         className="mb-0"
                         as="switch"
                         name="saturday"
-                        id="switch-saturday"
+                        id="tour-sat-switch"
                         inputProps={{
                             custom: true,
-                            // checked: temp.saturday === '7'
+                            checked: temp.saturday === 'Y',
                         }}
-                        onChange={
-                            (e) => e.target.checked
-                            // handleChangeValue
-                        }
+                        onChange={handleChangeSwitch}
                     />
                 </Form.Row>
             </Form>

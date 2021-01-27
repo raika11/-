@@ -59,7 +59,7 @@ export const getTourSetup = () => {
 };
 
 // 견학기본설정 수정
-export const putTourSetup = ({ tourSetup }) => {
+export const putTourSetup = (tourSetup) => {
     const queryString = qs.stringify(tourSetup);
     return instance.put(`/api/tours/setup?${queryString}`).catch((err) => {
         throw err;

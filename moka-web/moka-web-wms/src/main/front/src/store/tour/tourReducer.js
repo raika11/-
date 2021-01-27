@@ -10,7 +10,8 @@ export const initialState = {
     total: 0,
     error: null,
     list: [],
-    tourGuideList: [],
+    // tourGuideList: [],
+    tourSetup: {},
 };
 
 export default handleActions(
@@ -29,14 +30,28 @@ export default handleActions(
         [act.GET_TOUR_GUIDE_LIST_SUCCESS]: (state, { payload }) => {
             const { body } = payload;
             return produce(state, (draft) => {
-                draft.tourGuideList = body.list;
+                draft.list = body.list;
                 draft.total = body.totalCnt;
             });
         },
-        [act.GET_TOUR_GUIDE_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_TOUR_GUIDE_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
-                draft.tourGuideList = initialState.list;
+                draft.list = initialState.list;
                 draft.total = initialState.total;
+            });
+        },
+        /**
+         * 견학 기본 설정 조회
+         */
+        [act.GET_TOUR_SETUP_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.tourSetup = body;
+            });
+        },
+        [act.GET_TOUR_SETUP_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.tourSetup = initialState.tourSetup;
             });
         },
     },

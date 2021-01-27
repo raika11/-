@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@/components';
+import { clearStore } from '@/store/tour';
 import HolidayList from './HolidayList';
 import TourSetEdit from './TourSetEdit';
 
@@ -8,6 +10,15 @@ import TourSetEdit from './TourSetEdit';
  * 견학 기본설정
  */
 const TourSet = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             <div className="d-flex">

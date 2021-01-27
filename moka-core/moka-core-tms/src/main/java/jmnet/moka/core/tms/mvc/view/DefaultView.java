@@ -13,6 +13,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.ActionLogger;
@@ -80,8 +81,9 @@ public class DefaultView extends AbstractView {
         MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
 
         // debug 옵션
-        mergeContext.getMergeOptions()
-                    .setDebug(templateMergeDebug);
+        mergeContext
+                .getMergeOptions()
+                .setDebug(templateMergeDebug);
         long startTime = System.currentTimeMillis();
 
         String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
@@ -96,6 +98,9 @@ public class DefaultView extends AbstractView {
         switch (itemType) {
             case MokaConstants.ITEM_PAGE:
                 cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
+                break;
+            case MokaConstants.ITEM_CONTAINER:
+                cacheKey = KeyResolver.makeCtItemCacheKey(domainId, itemId, null, null, httpParamMap);
                 break;
             case MokaConstants.ITEM_COMPONENT:
                 cacheKey = KeyResolver.makeCpItemCacheKey(domainId, itemId, null, cid, httpParamMap);
@@ -161,13 +166,11 @@ public class DefaultView extends AbstractView {
                 writer.append(sb);
             }
             actionLogger.success(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
-                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
-                    path);
+                    System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), path);
         } catch (Exception e) {
             logger.error("Request:{}, Exception: {}", request.getRequestURI(), e.toString());
             actionLogger.fail(HttpHelper.getRemoteAddr(request), ActionType.PAGE,
-                    System.currentTimeMillis() - (long)mergeContext.get(MokaConstants.MERGE_START_TIME),
-                    path +" "+ e.getMessage());
+                    System.currentTimeMillis() - (long) mergeContext.get(MokaConstants.MERGE_START_TIME), path + " " + e.getMessage());
             throw e;
         } finally {
             if (writer != null) {
@@ -184,16 +187,20 @@ public class DefaultView extends AbstractView {
     private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
             throws TemplateMergeException, TemplateParseException, DataLoadException {
         String category = item.getString(ItemConstants.PAGE_CATEGORY);
-        if ( category == null) return;
-        DataLoader loader = this.templateMerger.getTemplateMerger(domainId).getDataLoader();
-        Map<String,Object> paramMap = new HashMap<>();
+        if (category == null) {
+            return;
+        }
+        DataLoader loader = this.templateMerger
+                .getTemplateMerger(domainId)
+                .getDataLoader();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(MokaConstants.PARAM_CATEGORY, category);
-        JSONResult jsonResult =  loader.getJSONResult("menu.category",paramMap,true);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.MENU_CATEGORY, paramMap, true);
         Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
-        Map codes = (Map)map.get(MokaConstants.MERGE_CONTEXT_CODES);
-        Map menus = (Map)map.get(MokaConstants.MERGE_CONTEXT_MENUS);
-        mergeContext.set(MokaConstants.PARAM_CATEGORY,MokaConstants.MERGE_CONTEXT_CATEGORY);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES,codes);
-        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS,menus);
+        Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
+        Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
+        mergeContext.set(MokaConstants.PARAM_CATEGORY, MokaConstants.MERGE_CONTEXT_CATEGORY);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES, codes);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS, menus);
     }
 }

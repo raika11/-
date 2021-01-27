@@ -23,7 +23,7 @@ public class DpsApiConstants {
     public static final String COMMAND_LOAD = COMMAND_PREFIX + "/load";           // API 재로딩
 
     /**
-     * 기사 관련
+     * 기사 관련 API
      **/
     public static final String ARTICLE = "article";
     public static final String ARTICLE_SECTION_LIST = "article.section.list";
@@ -34,5 +34,11 @@ public class DpsApiConstants {
     public static final String DESKING = "desking";
     public static final String DESKING_WORK = "desking.work";
 
+    /** 메뉴 관련 API **/
+    public static final String MENU_CATEGORY = "menu.category";
+    public static final String MENU_CODES = "menu.codes";
 
+
+    /** 디지털스페셜 관련 API **/
+    public static final String DIGITAL_SPECIAL_LIST = "digitalSpecial.list";
 }

@@ -26,7 +26,7 @@ public class TrendpollRelateDTO implements Serializable {
     /**
      * 일련번호
      */
-    @ApiModelProperty(value = "관련정보 일련번호", hidden = true)
+    @ApiModelProperty(value = "관련정보 일련번호")
     private Long seqNo;
 
     /**

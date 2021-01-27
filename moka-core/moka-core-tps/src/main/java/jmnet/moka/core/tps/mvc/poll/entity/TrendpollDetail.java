@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.poll.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -171,11 +170,11 @@ public class TrendpollDetail extends BaseAudit implements Serializable {
     private String title;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll")
     private List<TrendpollItem> pollItems = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll")
     private List<TrendpollRelate> pollRelateContents = new ArrayList<>();
 
 

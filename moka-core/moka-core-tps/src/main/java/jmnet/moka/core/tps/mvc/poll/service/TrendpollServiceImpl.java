@@ -98,7 +98,17 @@ public class TrendpollServiceImpl implements TrendpollService {
         if (trendpoll.getPollRelateContents() != null && trendpoll
                 .getPollRelateContents()
                 .size() > 0) {
-            trendpollRepository.deleteContentsByPollSeq(trendpoll.getPollSeq());
+            List<Long> exceptSeqs = trendpoll
+                    .getPollRelateContents()
+                    .stream()
+                    .map(value -> value.getSeqNo())
+                    .filter(aLong -> {
+                        return aLong != null;
+                    })
+                    .collect(Collectors.toCollection(ArrayList::new));
+            if (exceptSeqs != null && exceptSeqs.size() > 0) {
+                trendpollRepository.deleteContentsByPollSeq(trendpoll.getPollSeq(), exceptSeqs);
+            }
         }
 
         return saveTrendpollDetail(trendpoll);

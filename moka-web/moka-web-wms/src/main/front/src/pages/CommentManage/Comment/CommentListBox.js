@@ -19,11 +19,13 @@ const CommentListBox = ({ setSelectBannedItem }) => {
     const selectDoubleClickRow = useRef(null);
 
     // 스토어 연결.
-    const { search, loading, list, total } = useSelector(
+    const { search, loading, list, total, COMMENT_STATUS_CODE, COMMENT_MEDIA_CODE } = useSelector(
         (store) => ({
             list: store.comment.comments.list,
             total: store.comment.comments.total,
             search: store.comment.comments.search,
+            COMMENT_STATUS_CODE: store.comment.common.COMMENT_STATUS_CODE,
+            COMMENT_MEDIA_CODE: store.comment.common.COMMENT_MEDIA_CODE,
             loading: store.loading[GET_COMMENT_LIST],
         }),
         shallowEqual,
@@ -155,6 +157,20 @@ const CommentListBox = ({ setSelectBannedItem }) => {
         const inirGridRow = (data) => {
             setRowData(
                 data.map((element) => {
+                    // 상태 코드
+                    let statusText = element.status;
+                    let elementState = COMMENT_STATUS_CODE.filter((e) => e.code === element.status);
+                    if (elementState.length > 0) {
+                        statusText = elementState[0].name;
+                    }
+
+                    // 매체 코드
+                    let mediaText = '';
+                    let urlGrpInfo = COMMENT_MEDIA_CODE.filter((e) => Number(e.dtlCd) === element.urlGrp);
+                    if (urlGrpInfo.length > 0) {
+                        mediaText = urlGrpInfo[0].cdNm;
+                    }
+
                     return {
                         urlSeq: element.urlSeq,
                         contentId: element.contentId,
@@ -169,11 +185,13 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                         memImage: element.memImage,
                         regDt: element.regDt,
                         status: element.status,
+                        statusText: statusText,
                         memIp: element.memIp,
                         memSite: element.memSite,
                         declareCnt: element.declareCnt,
                         reCnt: element.reCnt,
                         urlGrp: element.urlGrp,
+                        mediaText: mediaText,
                         artTitle: element.artTitle,
                         userInfo: {
                             memNm: element.memNm,
@@ -192,7 +210,7 @@ const CommentListBox = ({ setSelectBannedItem }) => {
         if (list.length > 0) {
             inirGridRow(list);
         }
-    }, [list]);
+    }, [COMMENT_MEDIA_CODE, COMMENT_STATUS_CODE, list]);
 
     return (
         <CommentAgGrid

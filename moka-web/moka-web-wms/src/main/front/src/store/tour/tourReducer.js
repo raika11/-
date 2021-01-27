@@ -11,6 +11,7 @@ export const initialState = {
     error: null,
     list: [],
     // tourGuideList: [],
+    holidayList: [],
     tourSetup: {},
 };
 
@@ -27,6 +28,9 @@ export default handleActions(
             });
         },
         [act.CLEAR_STORE]: () => initialState,
+        /**
+         * 견학 메세지 설정 목록
+         */
         [act.GET_TOUR_GUIDE_LIST_SUCCESS]: (state, { payload }) => {
             const { body } = payload;
             return produce(state, (draft) => {
@@ -37,6 +41,22 @@ export default handleActions(
         [act.GET_TOUR_GUIDE_LIST_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.list = initialState.list;
+                draft.total = initialState.total;
+            });
+        },
+        /**
+         * 견학 휴일 목록조회(매년반복)
+         */
+        [act.GET_TOUR_DENY_LIST_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.holidayList = body.list;
+                draft.total = body.totalCnt;
+            });
+        },
+        [act.GET_TOUR_DENY_LIST_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.holidayList = initialState.holidayList;
                 draft.total = initialState.total;
             });
         },

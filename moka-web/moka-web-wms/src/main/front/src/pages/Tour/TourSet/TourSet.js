@@ -7,7 +7,7 @@ import HolidayList from './HolidayList';
 import TourSetEdit from './TourSetEdit';
 
 /**
- * 견학 기본설정
+ * 견학 기본 설정
  */
 const TourSet = () => {
     const dispatch = useDispatch();
@@ -23,17 +23,17 @@ const TourSet = () => {
         <>
             <div className="d-flex">
                 <Helmet>
-                    <title>기본설정</title>
-                    <meta name="description" content="견학 기본설정 페이지입니다." />
+                    <title>기본 설정</title>
+                    <meta name="description" content="견학 기본 설정 페이지입니다." />
                     <meta name="robots" content="noindex" />
                 </Helmet>
 
                 {/* 휴일 지정 목록 */}
-                <MokaCard width={790} titleClassName="mb-0" className="mr-gutter" title="휴일 지정(매년 반복)">
+                <MokaCard width={790} titleClassName="mb-0" className="mr-gutter" bodyClassName="d-flex flex-column" title="휴일 지정(매년 반복)">
                     <HolidayList />
                 </MokaCard>
 
-                {/* 견학 기본설정 */}
+                {/* 견학 기본 설정 */}
                 <TourSetEdit />
             </div>
         </>

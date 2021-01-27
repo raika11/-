@@ -29,7 +29,7 @@ export const getTourDenyList = () => {
 };
 
 // 휴일 등록
-export const postTourDeny = ({ tourDeny }) => {
+export const postTourDeny = (tourDeny) => {
     const queryString = qs.stringify(tourDeny);
     return instance.post(`/api/tours/denys?${queryString}`).catch((err) => {
         throw err;
@@ -37,7 +37,7 @@ export const postTourDeny = ({ tourDeny }) => {
 };
 
 // 휴일 수정
-export const putTourDeny = ({ tourDeny }) => {
+export const putTourDeny = (tourDeny) => {
     const queryString = qs.stringify(tourDeny);
     return instance.put(`/api/tours/denys/${tourDeny.denySeq}?${queryString}`).catch((err) => {
         throw err;

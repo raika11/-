@@ -102,7 +102,8 @@
     statementType="CALLABLE">
   { call UPA_RCV_ARTICLE_BASIC_SEL_BY_INFO(
     #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-    #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+    #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{iudYn, mode=OUT, jdbcType=VARCHAR, javaType=string}
     ) }
   </select>
 

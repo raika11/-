@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.transaction.Transactional;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
@@ -64,6 +66,7 @@ public class RcvArticleServiceImpl implements RcvArticleService {
         paramMap.put("sourceCode", rcvArticleDto
                 .getArticleSource()
                 .getSourceCode());
+        paramMap.put("iudYn", "");
         List<List<Object>> listMap = rcvArticleMapper.findInfo(paramMap);
         if (listMap.size() == 3) {
 
@@ -89,6 +92,15 @@ public class RcvArticleServiceImpl implements RcvArticleService {
                 }.getType());
                 rcvArticleDto.setTagList(tagList);
             }
+        }
+
+        String iudYn = paramMap
+                .get("iudYn")
+                .toString();
+        if (McpString.isNotEmpty(iudYn)) {
+            rcvArticleDto.setIudYn(iudYn);
+        } else {
+            rcvArticleDto.setIudYn(MokaConstants.NO);
         }
     }
 

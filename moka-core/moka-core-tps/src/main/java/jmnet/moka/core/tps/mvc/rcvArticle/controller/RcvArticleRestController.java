@@ -94,21 +94,27 @@ public class RcvArticleRestController extends AbstractCommonController {
     public ResponseEntity<?> getRcvArticle(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid)
             throws Exception {
 
-        // 수신기사 상세조회
-        RcvArticleBasic rcvArticleBasic = rcvArticleService
-                .findRcvArticleBasicById(rid)
-                .orElseThrow(() -> {
-                    String message = msg("tps.common.error.no-data");
-                    tpsLogger.fail(message, true);
-                    return new NoDataException(message);
-                });
-        RcvArticleBasicDTO dto = modelMapper.map(rcvArticleBasic, RcvArticleBasicDTO.class);
+        try {
+            // 수신기사 상세조회
+            RcvArticleBasic rcvArticleBasic = rcvArticleService
+                    .findRcvArticleBasicById(rid)
+                    .orElseThrow(() -> {
+                        String message = msg("tps.common.error.no-data");
+                        tpsLogger.fail(message, true);
+                        return new NoDataException(message);
+                    });
+            RcvArticleBasicDTO dto = modelMapper.map(rcvArticleBasic, RcvArticleBasicDTO.class);
 
-        rcvArticleService.findRcvArticleInfo(dto);
+            rcvArticleService.findRcvArticleInfo(dto);
 
-        ResultDTO<RcvArticleBasicDTO> resultDto = new ResultDTO<>(dto);
-        tpsLogger.success(ActionType.SELECT);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            ResultDTO<RcvArticleBasicDTO> resultDto = new ResultDTO<>(dto);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD RCV_ARTICE]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD RCV_ARTICE]", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
     }
 
     /**

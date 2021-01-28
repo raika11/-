@@ -6,7 +6,7 @@ export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 // image 확장자
 export const ACCEPTED_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png'];
-export const UPLOAD_PATH_URL = '/mokastore/';
+export const UPLOAD_PATH_URL = '/moka_storage/';
 
 // 카드 컴포넌트 기본 높이
 export const CARD_DEFAULT_HEIGHT = 817;

@@ -115,6 +115,9 @@ const PollChildRelation = () => {
         if (edit.pollRelateContents) {
             setRelationPolls(edit.pollRelateContents.filter((data) => data.relType === 'P'));
             setRelationArticles(edit.pollRelateContents.filter((data) => data.relType === 'A'));
+        } else {
+            setRelationPolls([]);
+            setRelationArticles([]);
         }
     }, [edit.pollRelateContents]);
 
@@ -122,9 +125,6 @@ const PollChildRelation = () => {
         setEdit(poll);
     }, [poll]);
 
-    useEffect(() => {
-        console.log(edit);
-    }, [edit]);
     return (
         <div className="d-flex">
             <MokaCard

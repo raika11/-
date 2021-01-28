@@ -126,6 +126,12 @@ const PollEdit = () => {
         } else {
             setIsSet(false);
         }
+
+        if (poll.pollDiv === 'V') {
+            setIsCompared(true);
+        } else {
+            setIsCompared(false);
+        }
     }, [poll]);
 
     return (

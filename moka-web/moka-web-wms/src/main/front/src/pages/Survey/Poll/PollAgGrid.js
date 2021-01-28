@@ -49,7 +49,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 onRowClicked={handleClickRow}
                 selected={selected}
                 className="ag-grid-align-center"
-                preventRowClickCell={['delete']}
+                preventRowClickCell={['delete', 'preview']}
             />
         </>
     );

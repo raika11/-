@@ -6114,6 +6114,11 @@ hosted-git-info@^2.1.4:
   resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/hosted-git-info/-/hosted-git-info-2.8.8.tgz#7539bd4bc1e0e0a895815a2e0262420b12858488"
   integrity sha512-f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==
 
+hotkeys-js@3.8.1:
+  version "3.8.1"
+  resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/hotkeys-js/-/hotkeys-js-3.8.1.tgz#fa7051f73bf1dc92a8b8d580a40b247f91966376"
+  integrity sha512-YlhVQtyG9f1b7GhtzdhR0Pl+cImD1ZrKI6zYUa7QLd0zuThiL7RzZ+ANJyy7z+kmcCpNYBf5PjBa3CjiQ5PFpw==
+
 hpack.js@^2.1.6:
   version "2.1.6"
   resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/hpack.js/-/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"
@@ -10527,6 +10532,13 @@ react-hook-form@^6.10.1:
   version "6.10.1"
   resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/react-hook-form/-/react-hook-form-6.10.1.tgz#71ff7eb07ec2588af3007a09adcdfa65d3451b33"
   integrity sha512-tPfNu2q8HUUKL4gOsJzzoBX8+3y2brJk+61TO+RO9GtpLnWPptLrAIupMtyPeENMpLmLfBKHhT9nfezHLTW2mA==
+
+react-hotkeys-hook@^3.0.3:
+  version "3.0.3"
+  resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/react-hotkeys-hook/-/react-hotkeys-hook-3.0.3.tgz#5967486a4f569eb7045d2384ed0c35687ac7bdfa"
+  integrity sha512-kbnb820AUITXxK3qRHq612ivoNvMidIEaVAG7rUDuJMBTlJdSniJjjFl0jddL4iSKJK1d0Vqgn80uPW+spq6yQ==
+  dependencies:
+    hotkeys-js "3.8.1"
 
 react-input-autosize@^2.2.2:
   version "2.2.2"

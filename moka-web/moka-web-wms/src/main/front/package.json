@@ -84,6 +84,7 @@
         "eslint-plugin-react-hooks": "^1.6.1",
         "file-loader": "4.3.0",
         "fs-extra": "^8.1.0",
+        "gifshot": "0.4.5",
         "history": "^5.0.0",
         "html-webpack-plugin": "4.0.0-beta.11",
         "identity-obj-proxy": "3.0.0",
@@ -128,6 +129,7 @@
         "react-feather": "^2.0.8",
         "react-helmet": "^6.1.0",
         "react-hook-form": "^6.10.1",
+        "react-hotkeys-hook": "^3.0.3",
         "react-input-mask": "^2.0.4",
         "react-perfect-scrollbar": "^1.5.8",
         "react-popper": "^2.2.3",
@@ -153,8 +155,7 @@
         "webpack": "4.42.0",
         "webpack-dev-server": "3.11.0",
         "webpack-manifest-plugin": "2.2.0",
-        "workbox-webpack-plugin": "4.3.1",
-        "gifshot":"0.4.5"
+        "workbox-webpack-plugin": "4.3.1"
     },
     "devDependencies": {
         "cross-env": "^7.0.2",

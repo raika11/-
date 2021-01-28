@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { MokaIconTabs, MokaIcon } from '@components';
 import { DeskingArticleTab, ComponentWorkPreview, HistoryList } from './components';
 
@@ -12,10 +13,16 @@ const DeskingTabs = ({ componentAgGridInstances }) => {
     // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
+    // 핫키로 탭 변경
+    useHotkeys('shift+Q', () => setActiveTabIdx(0));
+    useHotkeys('shift+W', () => setActiveTabIdx(1));
+    useHotkeys('shift+E', () => setActiveTabIdx(2));
+
     return (
         <React.Fragment>
             <MokaIconTabs
                 foldable={false}
+                activeKey={activeTabIdx}
                 onSelectNav={(idx) => setActiveTabIdx(idx)}
                 tabWidth={840}
                 className="flex-fill"

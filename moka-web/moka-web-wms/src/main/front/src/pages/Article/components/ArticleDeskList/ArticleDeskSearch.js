@@ -153,7 +153,7 @@ const ArticleDeskSearch = (props) => {
                 ...initialSearch,
                 masterCode: selectedComponent.schCodeId || null,
                 startServiceDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
-                endServiceDay: moment(date).format(DB_DATEFORMAT),
+                endServiceDay: moment(date).endOf('day').format(DB_DATEFORMAT),
                 page: 0,
             }),
         );
@@ -191,7 +191,7 @@ const ArticleDeskSearch = (props) => {
         if (show) {
             const date = new Date();
             const startServiceDay = search.startServiceDay || moment(date).subtract(period[0], period[1]).startOf('day');
-            const endServiceDay = search.endServiceDay || moment(date);
+            const endServiceDay = search.endServiceDay || moment(date).endOf('day');
             let ns = {
                 ...search,
                 masterCode: selectedComponent.schCodeId || null,

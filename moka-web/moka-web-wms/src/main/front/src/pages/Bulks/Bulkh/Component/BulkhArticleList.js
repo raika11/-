@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { ArticleDeskList } from '@/pages/Article/components';
+import React from 'react';
+import ArticleList from '@pages/Article/components/Desking/ArticleList';
 import { MokaCard } from '@components';
 import { getRowIndex } from '@utils/agGridUtil';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,8 +11,6 @@ const BulkhArticleList = ({ componentAgGridInstances }) => {
     const { hotClickList } = useSelector((store) => ({
         hotClickList: store.bulks.bulkh.hotclickList.list,
     }));
-
-    const articleRef = useRef(null); // grid ref
 
     // 임시 스테이트에 기사 추가및 순서 변경 처리.
     const addItems = (items, targetIndex) => {
@@ -75,14 +73,7 @@ const BulkhArticleList = ({ componentAgGridInstances }) => {
 
     return (
         <MokaCard titleClassName="mb-0" width={850} loading={null} header={false} className={'custom-scroll mr-gutter flex-fill'}>
-            <ArticleDeskList
-                className="flex-fill"
-                ref={articleRef}
-                selectedComponent={{}}
-                dropTargetAgGrid={componentAgGridInstances}
-                onDragStop={handleArticleDragStop}
-                show={true}
-            />
+            <ArticleList className="flex-fill" selectedComponent={{}} dropTargetAgGrid={componentAgGridInstances} onDragStop={handleArticleDragStop} />
         </MokaCard>
     );
 };

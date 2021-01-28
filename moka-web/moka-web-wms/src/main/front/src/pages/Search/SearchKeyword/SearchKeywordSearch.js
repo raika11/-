@@ -31,7 +31,7 @@ const SearchKeywordSearch = () => {
         if (name === 'period') {
             // 기간 설정
             const nt = new Date();
-            const endDt = moment(nt);
+            const endDt = moment(nt).endOf('day');
             const startDt = moment(nt).startOf(value).startOf('day');
             setPeriod(value);
             setSearch({ ...search, startDt, endDt });
@@ -71,7 +71,7 @@ const SearchKeywordSearch = () => {
      */
     const handleReset = () => {
         const nt = new Date();
-        const dt = moment(nt);
+        const dt = moment(nt).endOf('day');
         const st = moment(nt).startOf('day');
         const ns = { ...initialState.stat.search, startDt: st, endDt: dt };
         setSearch(ns);
@@ -149,8 +149,8 @@ const SearchKeywordSearch = () => {
 
     useEffect(() => {
         const nt = new Date();
-        const dt = moment(nt).format(DB_DATEFORMAT);
-        const st = moment(nt).startOf(period).format(DB_DATEFORMAT);
+        const dt = moment(nt).endOf('day').format(DB_DATEFORMAT);
+        const st = moment(nt).startOf('day').format(DB_DATEFORMAT);
         const ns = { ...initialState.stat.search, startDt: st, endDt: dt };
         dispatch(changeStatSearchOption(ns));
         // 통계 조회

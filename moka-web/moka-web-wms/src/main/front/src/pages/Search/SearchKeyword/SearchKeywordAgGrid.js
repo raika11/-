@@ -13,6 +13,7 @@ const SearchKeywordAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_SEARCH_KEYWORD_STAT]);
     const { search, list, total } = useSelector(({ searchKeyword }) => searchKeyword.stat);
+    const statKeyword = useSelector(({ searchKeyword }) => searchKeyword.statDetail.search.keyword);
 
     /**
      * 목록에서 Row클릭
@@ -52,6 +53,7 @@ const SearchKeywordAgGrid = ({ match }) => {
             size={search.size}
             page={search.page}
             total={total}
+            selected={statKeyword !== '' ? statKeyword : null}
             onRowNodeId={(row) => row.schKwd}
             onRowClicked={handleClickRow}
             onChangeSearchOption={handleChangeSearchOption}

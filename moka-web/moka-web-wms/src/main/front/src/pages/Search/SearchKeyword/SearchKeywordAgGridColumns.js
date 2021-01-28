@@ -7,16 +7,12 @@ export default [
         headerName: '순위',
         field: 'rank',
         width: 50,
-        sortable: true,
-        comparator: () => 0,
     },
     {
         headerName: '검색어',
         field: 'schKwd',
         width: 200,
         flex: 1,
-        sortable: true,
-        comparator: () => 0,
     },
     {
         headerName: '전체',

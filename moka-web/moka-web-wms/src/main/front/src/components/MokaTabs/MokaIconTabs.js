@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -18,6 +18,7 @@ const propTypes = {
     height: PropTypes.number,
     /**
      * 탭 컨텐츠 width
+     * @default
      */
     tabWidth: PropTypes.number,
     /**
@@ -30,10 +31,12 @@ const propTypes = {
     tabs: PropTypes.arrayOf(PropTypes.node),
     /**
      * 탭 Nav의 width
+     * @default
      */
     tabNavWidth: PropTypes.number,
     /**
      * tab 컨텐츠의 Nav(array), tab과 갯수가 동일해야한다
+     * @default
      */
     tabNavs: PropTypes.arrayOf(
         PropTypes.shape({
@@ -44,14 +47,17 @@ const propTypes = {
     ),
     /**
      * tab의 위치
+     * @default
      */
     tabNavPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
     /**
      * Tooltip 위치
+     * @default
      */
     placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
     /**
      * 탭 확장(오픈)
+     * @default
      */
     expansion: PropTypes.bool,
     /**
@@ -64,8 +70,13 @@ const propTypes = {
     onSelectNav: PropTypes.func,
     /**
      * 탭 확장 가능 여부
+     * @default
      */
     foldable: PropTypes.bool,
+    /**
+     * 탭의 activeKey를 직접 제어하고 싶을 때 전달
+     */
+    activeKey: PropTypes.any,
 };
 
 const defaultProps = {
@@ -86,39 +97,55 @@ const defaultProps = {
  * 아이콘 토글로 탭 변경
  */
 const MokaIconTabs = forwardRef((props, ref) => {
-    const { foldable, className, height, tabs, tabWidth, tabNavPosition, tabNavs, tabNavWidth, placement, expansion, onExpansion, onSelectNav, tabContentClass } = props;
+    const {
+        foldable,
+        className,
+        height,
+        tabs,
+        tabWidth,
+        tabNavPosition,
+        tabNavs,
+        tabNavWidth,
+        placement,
+        expansion,
+        onExpansion,
+        onSelectNav,
+        tabContentClass,
+        activeKey: parentKey,
+    } = props;
     const [activeKey, setActiveKey] = useState(0);
     const [isExpand, setIsExpand] = useState(true);
-
-    useEffect(() => {
-        setIsExpand(expansion);
-    }, [expansion]);
 
     /**
      * 버튼 선택 콜백
      * @param {any} eventKey 이벤트키
      */
-    const handleSelect = (eventKey, e) => {
-        setActiveKey(eventKey);
-        if (foldable) {
-            if (!isExpand) {
-                if (onExpansion) onExpansion(true);
-                else setIsExpand(true);
-            } else {
-                if (activeKey.toString() === eventKey) {
-                    if (onExpansion) onExpansion(false);
-                    else setIsExpand(false);
-                } else {
+    const handleSelect = useCallback(
+        (eventKey, e) => {
+            setActiveKey(eventKey);
+            if (foldable) {
+                if (!isExpand) {
                     if (onExpansion) onExpansion(true);
                     else setIsExpand(true);
+                } else {
+                    if (activeKey.toString() === eventKey) {
+                        if (onExpansion) onExpansion(false);
+                        else setIsExpand(false);
+                    } else {
+                        if (onExpansion) onExpansion(true);
+                        else setIsExpand(true);
+                    }
                 }
             }
-        }
-        if (onSelectNav) {
-            onSelectNav(Number(eventKey));
-        }
-        e.currentTarget.blur();
-    };
+            if (onSelectNav) {
+                onSelectNav(Number(eventKey));
+            }
+            if (e) {
+                e.currentTarget.blur();
+            }
+        },
+        [activeKey, foldable, isExpand, onExpansion, onSelectNav],
+    );
 
     const tabNavPlacement = clsx({
         'tab-vertical flex-row-reverse': tabNavPosition === 'left' ? true : false,
@@ -127,9 +154,21 @@ const MokaIconTabs = forwardRef((props, ref) => {
         'flex-column-reverse': tabNavPosition === 'bottom' ? true : false,
     });
 
+    useEffect(() => {
+        setIsExpand(expansion);
+    }, [expansion]);
+
+    useEffect(() => {
+        // 탭의 activeKey를 직접 제어
+        if (parentKey !== null && parentKey !== undefined) {
+            handleSelect(String(parentKey));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [parentKey]);
+
     return (
         <div ref={ref} className={clsx('tab', 'icon-toggle-tab', 'd-flex', tabNavPlacement, className)} style={{ height }}>
-            <Tab.Container defaultActiveKey={activeKey}>
+            <Tab.Container activeKey={activeKey}>
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
                     className={clsx(

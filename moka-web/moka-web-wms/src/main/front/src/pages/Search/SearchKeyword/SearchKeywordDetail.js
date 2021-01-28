@@ -36,7 +36,7 @@ const SearchKeywordDetail = ({ match }) => {
                 keyword,
                 page: 0,
             };
-            changeDetailSearchOption(ns);
+            dispatch(changeDetailSearchOption(ns));
             dispatch(
                 getSearchKeywordStatDetail({
                     search: ns,

@@ -8,13 +8,15 @@ export default [
         field: 'rank',
         width: 50,
         sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: '검색어',
         field: 'schKwd',
-        width: 400,
+        width: 200,
         flex: 1,
         sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: '전체',
@@ -22,6 +24,7 @@ export default [
         width: 130,
         cellClassRules,
         sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: 'PC',
@@ -29,6 +32,7 @@ export default [
         width: 130,
         cellClassRules,
         sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: 'Mobile',
@@ -36,6 +40,7 @@ export default [
         width: 130,
         cellClassRules,
         sortable: true,
+        comparator: () => 0,
     },
     {
         headerName: 'Tablet',
@@ -43,5 +48,6 @@ export default [
         width: 130,
         cellClassRules,
         sortable: true,
+        comparator: () => 0,
     },
 ];

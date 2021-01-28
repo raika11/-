@@ -15,6 +15,7 @@ export const initialState = {
         search: {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
+            sort: 'ranking,asc',
             searchType: 'schKwd',
             keyword: '',
             startDt: null,
@@ -37,6 +38,16 @@ export const initialState = {
         total: 0,
         list: [],
         error: null,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            sort: 'ranking,asc',
+            searchType: 'schKwd',
+            keyword: '',
+            startDt: null,
+            endDt: null,
+            statType: 'DATE',
+        },
     },
 };
 

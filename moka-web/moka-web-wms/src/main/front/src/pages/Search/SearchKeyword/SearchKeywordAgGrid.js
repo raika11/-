@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
-import { GET_SEARCH_KEYWORD_STAT, changeStatSearchOption, getSearchKeywordStat } from '@store/searchKeyword';
+import { initialState, GET_SEARCH_KEYWORD_STAT, changeStatSearchOption, getSearchKeywordStat } from '@store/searchKeyword';
 import columnDefs from './SearchKeywordAgGridColumns';
 
 /**
@@ -31,6 +31,18 @@ const SearchKeywordAgGrid = ({ match }) => {
         dispatch(getSearchKeywordStat({ search: temp }));
     };
 
+    /**
+     * 테이블 sort 변경
+     * @param {object} params instance
+     */
+    const handleSortChange = (params) => {
+        const sortModel = params.api.getSortModel();
+        const sort = sortModel[0] ? `${sortModel[0].colId},${sortModel[0].sort}` : initialState.stat.search.sort;
+        let temp = { ...search, sort, page: 0 };
+        dispatch(changeStatSearchOption(temp));
+        dispatch(getSearchKeywordStat({ search: temp }));
+    };
+
     return (
         <MokaTable
             columnDefs={columnDefs}
@@ -43,6 +55,7 @@ const SearchKeywordAgGrid = ({ match }) => {
             onRowNodeId={(row) => row.schKwd}
             onRowClicked={handleClickRow}
             onChangeSearchOption={handleChangeSearchOption}
+            onSortChanged={handleSortChange}
         />
     );
 };

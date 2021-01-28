@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { clearStatDetail, getSearchKeywordStatDetail } from '@store/searchKeyword';
+import { initialState, clearStatDetail, getSearchKeywordStatDetail, changeDetailSearchOption } from '@store/searchKeyword';
 import { messageBox } from '@utils/toastUtil';
 import { MokaCard, MokaInputLabel } from '@components';
 import SearchKeywordDetailAgGrid from './SearchKeywordDetailAgGrid';
@@ -18,7 +18,7 @@ const SearchKeywordDetail = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { keyword } = useParams();
-    const search = useSelector(({ searchKeyword }) => searchKeyword.stat.search);
+    const statSearch = useSelector(({ searchKeyword }) => searchKeyword.stat.search);
     const [type, setType] = useState('DATE');
 
     /**
@@ -28,10 +28,18 @@ const SearchKeywordDetail = ({ match }) => {
     const handleChangeValue = (e) => setType(e.target.value);
 
     useEffect(() => {
-        if (keyword && search.startDt && search.endDt) {
+        if (keyword && statSearch.startDt && statSearch.endDt) {
+            const ns = {
+                ...initialState.statDetail.search,
+                startDt: statSearch.startDt,
+                endDt: statSearch.endDt,
+                keyword,
+                page: 0,
+            };
+            changeDetailSearchOption(ns);
             dispatch(
                 getSearchKeywordStatDetail({
-                    search: { startDt: search.startDt, searchType: 'schKwd', keyword, endDt: search.endDt, statType: type },
+                    search: ns,
                     callback: ({ header }) => {
                         if (!header.success) {
                             messageBox(header.mesasge);
@@ -42,7 +50,7 @@ const SearchKeywordDetail = ({ match }) => {
         } else {
             dispatch(clearStatDetail());
         }
-    }, [keyword, search.startDt, search.endDt, dispatch, type]);
+    }, [keyword, statSearch.startDt, statSearch.endDt, dispatch, type]);
 
     useEffect(() => {
         return () => {

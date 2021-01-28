@@ -239,12 +239,12 @@ const ArticleDeskSearch = (props) => {
 
                 {/* 시작일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} onChange={handleChangeSDate} value={search.startServiceDay} />
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'start' }} onChange={handleChangeSDate} value={search.startServiceDay} />
                 </div>
 
                 {/* 종료일 */}
                 <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} onChange={handleChangeEDate} value={search.endServiceDay} />
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end' }} onChange={handleChangeEDate} value={search.endServiceDay} />
                 </div>
 
                 {/* 검색 조건 */}

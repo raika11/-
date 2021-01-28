@@ -247,7 +247,8 @@ $input-btn-border-width: $border-width !default;
 $input-btn-line-height: $line-height-base !default;
 $input-btn-line-height-sm:  $line-height-sm !default;
 $input-btn-line-height-lg: $line-height-lg !default;
-$input-btn-focus-width: .2rem !default;
+// $input-btn-focus-width: .2rem !default;
+$input-btn-focus-width: 0 !default;
 $input-btn-padding-y: .25rem !default;
 $input-btn-padding-y-sm: .15rem !default;
 $input-btn-padding-y-lg: .35rem !default;
@@ -261,6 +262,9 @@ $input-height-inner-sm: ($font-size-sm * $input-btn-line-height-sm) + ($input-bt
 $input-height-sm: calc(#{$input-height-inner-sm} + #{$input-height-border}) !default;
 $input-height-inner-lg: ($font-size-lg * $input-btn-line-height-lg) + ($input-btn-padding-y-lg * 2) !default;
 $input-height-lg: calc(#{$input-height-inner-lg} + #{$input-height-border}) !default;
+
+// card, modal에서 input.is-invalid:focus시 생성되는 box-shadow가 짤리므로 상하에 margin -3, padding +3 처리
+$input-escape-focus-width: 0px !default;
 
 // Custom Form
 $custom-select-focus-box-shadow: unset;

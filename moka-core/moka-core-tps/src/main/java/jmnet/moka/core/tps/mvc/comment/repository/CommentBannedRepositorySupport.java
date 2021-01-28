@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.comment.repository;
 
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
 import org.springframework.data.domain.Page;
@@ -34,4 +35,13 @@ public interface CommentBannedRepositorySupport {
      * @return 댓글 차단 정보
      */
     Optional<CommentBanned> findCommentBanned(Long seqNo);
+
+    /**
+     * 댓글 차단 상세 조회
+     *
+     * @param tagType  금지유형
+     * @param tagValue 태그
+     * @return 댓글 차단 정보
+     */
+    Optional<CommentBanned> findCommentBanned(CommentBannedType tagType, String tagValue);
 }

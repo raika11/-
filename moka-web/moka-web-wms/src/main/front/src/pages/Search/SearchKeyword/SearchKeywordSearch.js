@@ -19,6 +19,7 @@ const SearchKeywordSearch = () => {
     const storeSearch = useSelector(({ searchKeyword }) => searchKeyword.stat.search);
     const [search, setSearch] = useState(initialState.stat.search);
     const [period, setPeriod] = useState('day');
+    const [error, setError] = useState({});
 
     /**
      * 입력값 변경
@@ -30,7 +31,7 @@ const SearchKeywordSearch = () => {
         if (name === 'period') {
             // 기간 설정
             const nt = new Date();
-            const endDt = moment(nt);
+            const endDt = moment(nt).endOf('day');
             const startDt = moment(nt).startOf(value).startOf('day');
             setPeriod(value);
             setSearch({ ...search, startDt, endDt });
@@ -46,6 +47,7 @@ const SearchKeywordSearch = () => {
     const handleChangeSD = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, startDt: date });
+            setError({ ...error, startDt: false });
         } else if (date === '') {
             setSearch({ ...search, startDt: null });
         }
@@ -58,6 +60,7 @@ const SearchKeywordSearch = () => {
     const handleChangeED = (date) => {
         if (typeof date === 'object') {
             setSearch({ ...search, endDt: date });
+            setError({ ...error, endDt: false });
         } else if (date === '') {
             setSearch({ ...search, endDt: null });
         }
@@ -68,7 +71,7 @@ const SearchKeywordSearch = () => {
      */
     const handleReset = () => {
         const nt = new Date();
-        const dt = moment(nt);
+        const dt = moment(nt).endOf('day');
         const st = moment(nt).startOf('day');
         const ns = { ...initialState.stat.search, startDt: st, endDt: dt };
         setSearch(ns);
@@ -76,41 +79,62 @@ const SearchKeywordSearch = () => {
     };
 
     /**
+     * 검색조건 validate
+     */
+    const validate = () => {
+        let isInvalid = false;
+
+        if (!search.startDt) {
+            setError({ ...error, startDt: true });
+            isInvalid = isInvalid || true;
+        }
+        if (!search.endDt) {
+            setError({ ...error, endDt: true });
+            isInvalid = isInvalid || true;
+        }
+
+        return !isInvalid;
+    };
+
+    /**
      * 검색
      */
     const handleSearch = () => {
-        const ns = {
-            ...search,
-            startDt: moment(search.startDt).format(DB_DATEFORMAT),
-            endDt: moment(search.endDt).format(DB_DATEFORMAT),
-            page: 0,
-        };
-        dispatch(changeStatSearchOption(ns));
-        // 통계 조회
-        dispatch(
-            getSearchKeywordStat({
-                search: ns,
-                callback: ({ header }) => {
-                    if (!header.success) {
-                        messageBox.alert(header.mesage);
-                    }
-                },
-            }),
-        );
-        // 전체 건수 조회
-        dispatch(
-            getSearchKeywordStatTotal({
-                search: {
-                    startDt: ns.startDt,
-                    endDt: ns.endDt,
-                },
-                callback: ({ header }) => {
-                    if (!header.success) {
-                        messageBox.alert(header.mesage);
-                    }
-                },
-            }),
-        );
+        if (validate()) {
+            const ns = {
+                ...search,
+                startDt: moment(search.startDt).format(DB_DATEFORMAT),
+                endDt: moment(search.endDt).format(DB_DATEFORMAT),
+                page: 0,
+            };
+
+            dispatch(changeStatSearchOption(ns));
+            // 통계 조회
+            dispatch(
+                getSearchKeywordStat({
+                    search: ns,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.mesage);
+                        }
+                    },
+                }),
+            );
+            // 전체 건수 조회
+            dispatch(
+                getSearchKeywordStatTotal({
+                    search: {
+                        startDt: ns.startDt,
+                        endDt: ns.endDt,
+                    },
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.mesage);
+                        }
+                    },
+                }),
+            );
+        }
     };
 
     useEffect(() => {
@@ -125,8 +149,8 @@ const SearchKeywordSearch = () => {
 
     useEffect(() => {
         const nt = new Date();
-        const dt = moment(nt).format(DB_DATEFORMAT);
-        const st = moment(nt).startOf(period).format(DB_DATEFORMAT);
+        const dt = moment(nt).endOf('day').format(DB_DATEFORMAT);
+        const st = moment(nt).startOf('day').format(DB_DATEFORMAT);
         const ns = { ...initialState.stat.search, startDt: st, endDt: dt };
         dispatch(changeStatSearchOption(ns));
         // 통계 조회
@@ -166,10 +190,27 @@ const SearchKeywordSearch = () => {
                             <option value="day">오늘</option>
                             <option value="isoWeek">이번주</option>
                             <option value="month">이번달</option>
+                            <option value="year">올해</option>
                         </MokaInput>
                     </div>
-                    <MokaInput as="dateTimePicker" className="mr-1" name="startDt" inputProps={{ timeFormat: null }} value={search.startDt} onChange={handleChangeSD} />
-                    <MokaInput as="dateTimePicker" className="ml-1" name="endDt" inputProps={{ timeFormat: null }} value={search.endDt} onChange={handleChangeED} />
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="mr-1"
+                        name="startDt"
+                        inputProps={{ timeFormat: null, timeDefault: 'start' }}
+                        value={search.startDt}
+                        onChange={handleChangeSD}
+                        isInvalid={error.startDt}
+                    />
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="ml-1"
+                        name="endDt"
+                        inputProps={{ timeFormat: null, timeDefault: 'end' }}
+                        value={search.endDt}
+                        onChange={handleChangeED}
+                        isInvalid={error.endDt}
+                    />
                 </Col>
                 <Col xs={6} className="p-0 d-flex">
                     <MokaSearchInput

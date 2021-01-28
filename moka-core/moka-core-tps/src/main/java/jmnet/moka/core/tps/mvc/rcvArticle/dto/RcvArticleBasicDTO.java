@@ -183,4 +183,9 @@ public class RcvArticleBasicDTO implements Serializable {
      * 추천태그 목록
      */
     private List<String> tagList = new ArrayList<>();
+
+    /**
+     * 백오피스에서 등록전송 여부. 디비에 없는 필드
+     */
+    private String iudYn;
 }

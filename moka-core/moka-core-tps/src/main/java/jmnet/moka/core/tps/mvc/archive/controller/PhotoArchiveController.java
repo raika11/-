@@ -123,11 +123,13 @@ public class PhotoArchiveController extends AbstractCommonController {
     @ApiOperation(value = "포토 아카이브 출처 목록 조회")
     @GetMapping("/origins")
     public ResponseEntity<?> getPhotoOriginList(
-            @ApiParam("메뉴코드") @NotNull(message = "{tps.photo-archive.error.notnull.menuCode}") @RequestParam(value = "menuCode", required = true)
+            @ApiParam("메뉴코드") @NotNull(message = "{tps.photo-archive.error.notnull.menuCode}") @RequestParam(value = "menuCode", required = false)
                     PhotoArchiveMenuCode menuCode, @NotNull Principal principal) {
 
         ResultListDTO<OriginCodeVO> resultListMessage = new ResultListDTO<>();
-
+        if (menuCode == null) {
+            menuCode = PhotoArchiveMenuCode.PHOTO_DB;
+        }
         // 조회
         List<OriginCodeVO> returnValue = photoArchiveService.findAllPhotoOrigin(menuCode.getMenuNo(), principal.getName(), TpsConstants.SITE_CD);
         resultListMessage.setTotalCnt(returnValue.size());

@@ -5,6 +5,7 @@ package jmnet.moka.core.common.ftp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -27,6 +28,7 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 @Slf4j
 public class FtpClientFactory extends BasePooledObjectFactory<FTPClient> {
     public static final int UNASSIGNED = -1;
+    public static final int MAX_RECONNECT = 5;
     private ByteArrayOutputStream bao = null;
     private FtpInfo ftpInfo;
 
@@ -65,8 +67,10 @@ public class FtpClientFactory extends BasePooledObjectFactory<FTPClient> {
             int replyCode = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
                 ftpClient.disconnect();
-                log.warn("FTPServer refused connection,replyCode:{}", replyCode);
-                return null;
+                replyCode = tryReconnection(ftpClient);
+                if (!FTPReply.isPositiveCompletion(replyCode)) {
+                    log.warn("FTPServer refused connection,replyCode:{}", replyCode);
+                }
             }
 
             if (!ftpClient.login(ftpInfo.getUser(), ftpInfo.getPasswd())) {
@@ -80,9 +84,31 @@ public class FtpClientFactory extends BasePooledObjectFactory<FTPClient> {
             }
 
         } catch (IOException e) {
-            log.error("create ftpClient connection failed...", e);
+            log.error(e.toString());
         }
         return ftpClient;
+    }
+
+    private int tryReconnection(FTPClient ftpClient) {
+        int replyCode = 0;
+        try {
+            AtomicInteger reconnCnt = new AtomicInteger(MAX_RECONNECT);
+            while (reconnCnt.decrementAndGet() > 0) {
+                ftpClient.connect(ftpInfo.getHost(), Integer.parseInt(ftpInfo.getPort()));
+                replyCode = ftpClient.getReplyCode();
+                if (!FTPReply.isPositiveCompletion(replyCode)) {
+                    ftpClient.disconnect();
+                    log.warn("FTPServer refused connection,replyCode:{}", replyCode);
+                } else {
+                    reconnCnt.set(0);
+                }
+            }
+
+        } catch (IOException e) {
+            log.error(e.toString());
+        }
+
+        return replyCode;
     }
 
     @Override
@@ -125,7 +151,7 @@ public class FtpClientFactory extends BasePooledObjectFactory<FTPClient> {
             FTPClient ftpClient = ftpPooled.getObject();
             return ftpClient.sendNoOp();
         } catch (IOException e) {
-            log.error("Failed to validate client: {}", e);
+            log.error("Failed to validate client: {}", e.toString());
         }
         return false;
     }

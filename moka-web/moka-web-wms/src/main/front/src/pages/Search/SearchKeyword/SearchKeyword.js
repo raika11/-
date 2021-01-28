@@ -2,10 +2,12 @@ import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import { MokaCard } from '@components';
-
+import SearchKeywordDetail from './SearchKeywordDetail';
 const SearchKeywordList = React.lazy(() => import('./SearchKeywordList'));
-// import SearchKeywordDetailInfo from './SearchKeywordDetailInfo';
 
+/**
+ * 검색 로그
+ */
 const SearchKeyword = ({ match }) => {
     return (
         <div className="d-flex">
@@ -21,7 +23,7 @@ const SearchKeyword = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            {/* <Route path={[`${match.url}/:keyword`]} exact render={(props) => <SearchKeywordDetailInfo {...props} />} /> */}
+            <Route path={[`${match.url}/:keyword`]} exact render={() => <SearchKeywordDetail match={match} />} />
         </div>
     );
 };

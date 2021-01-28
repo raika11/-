@@ -4,25 +4,30 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
-import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentDeleteType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
+import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedDTO;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
+import jmnet.moka.core.tps.mvc.comment.service.CommentBannedService;
 import jmnet.moka.core.tps.mvc.comment.service.CommentService;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,11 +56,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentRestController extends AbstractCommonController {
 
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Autowired
-    private CodeMgtService codeMgtService;
+    private final CommentBannedService commentBannedService;
+
+    private final CodeMgtService codeMgtService;
+
+    public CommentRestController(CommentService commentService, CommentBannedService commentBannedService, CodeMgtService codeMgtService) {
+        this.commentService = commentService;
+        this.commentBannedService = commentBannedService;
+        this.codeMgtService = codeMgtService;
+    }
 
     /**
      * 댓글 화면 초기 설정 정보 조회
@@ -118,21 +129,43 @@ public class CommentRestController extends AbstractCommonController {
      * @param cmtSeq 등록할 댓글정보
      * @return 등록된 댓글정보
      */
-    @ApiOperation(value = "댓글 삭제")
-    @DeleteMapping("/{cmtSeq}")
-    public ResponseEntity<?> deleteComment(
+    @ApiOperation(value = "댓글 상태 변경")
+    @DeleteMapping("/{cmtSeq}/status")
+    public ResponseEntity<?> putComment(
             @ApiParam("댓글 ID") @PathVariable("cmtSeq") @Min(value = 1, message = "{comment.error.pattern.cmtSeq}") Long cmtSeq,
-            @ApiParam("삭제 유형") @RequestParam(value = "deleteType") CommentDeleteType deleteType)
-            throws MokaException, NoDataException {
+            @ApiParam("댓글 상태 유형") @RequestParam(value = "statusType") CommentStatusType statusType,
+            @ApiParam("삭제 유형") @RequestParam(value = "deleteType", required = false) CommentDeleteType deleteType)
+            throws InvalidDataException, NoDataException {
 
         Comment comment = commentService
                 .findCommentBySeq(cmtSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
-        long result = commentService.updateCommentStatus(comment, CommentStatusType.N, deleteType);
+        if (statusType.equals(CommentStatusType.N)) {
+            if (deleteType == null) {
+                throw new InvalidDataException("tps.comment-banned.error.notnull.deleteType");
+            } else {
+                // 기존 정보 있으면 저장하지 않고 메세지 처리
+                Optional<CommentBanned> oldCommentBanned =
+                        commentBannedService.findAllCommentBannedByTagValue(CommentBannedType.U, comment.getMemId());
 
-        ResultDTO<Long> resultDto = new ResultDTO<>(result, msg("tps.common.success.delete"));
+                String usedYn = oldCommentBanned
+                        .get()
+                        .getUsedYn();
 
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+                ResultDTO<CommentBannedDTO> resultDto =
+                        new ResultDTO<>(HttpStatus.BAD_REQUEST, modelMapper.map(oldCommentBanned.get(), CommentBannedDTO.class),
+                                msg(MokaConstants.NO.equals(usedYn) ? "tps.comment.error.size.exist-banned-id" : "tps.comment-banned.error.exist",
+                                        CommentBannedType.U.getName()));
+
+                return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            }
+        } else {
+            long result = commentService.updateCommentStatus(comment, statusType, deleteType);
+
+            ResultDTO<Long> resultDto = new ResultDTO<>(result, msg("tps.common.success.delete"));
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        }
     }
 }

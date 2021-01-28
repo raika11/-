@@ -38,10 +38,10 @@ const defaultProps = {
 const HistoryList = (props) => {
     const { show, seq, seqType, onLoad } = props;
     const dispatch = useDispatch();
-    const { search: storeSearch, loading, total, list } = useSelector(
+    const loading = useSelector(({ loading }) => loading[GET_HISTORY_LIST]);
+    const { search: storeSearch, total, list } = useSelector(
         (store) => ({
             search: store.history.search,
-            loading: store.loading[GET_HISTORY_LIST],
             total: store.history.total,
             list: store.history.list,
         }),
@@ -51,10 +51,6 @@ const HistoryList = (props) => {
     // state
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
 
     /**
      * 날짜 변경
@@ -166,6 +162,10 @@ const HistoryList = (props) => {
         );
     }, [handleClickLoad, list]);
 
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
     return (
         <MokaCard title="히스토리" bodyClassName="d-flex flex-column">
             <Form>
@@ -196,6 +196,7 @@ const HistoryList = (props) => {
                             className="mb-0 w-100"
                             inputProps={{
                                 timeFormat: null,
+                                timeDefault: 'start',
                             }}
                             value={moment(search.regDt, DB_DATEFORMAT)}
                             onChange={handleDate}

@@ -3,6 +3,8 @@ package jmnet.moka.web.bulk.task.bulkdump.process;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangProcess;
+import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangProcessEx;
+import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayProcess;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,8 @@ public class BulkDumpClientProcess {
         final BulkDumpService bulkDumpService = bulkDumpTask.getTaskManager().getBulkDumpService();
         final BulkDumpEnv bulkDumpEnv = bulkDumpTask.getBulkDumpEnv();
 
-        switch (bulkDumpTotal.getTargetCode()) {
+        final String targetCode = bulkDumpTotal.getTargetCode();
+        switch (targetCode) {
             case "SOA":
             case "SOE":
             case "SOF":
@@ -36,7 +39,17 @@ public class BulkDumpClientProcess {
             case "SOT":
             case "SOY":
                 (new BulkJoongangProcess(bulkDumpEnv)).doProcess( bulkDumpTotal, bulkDumpTask, bulkDumpService);
+
+                // 타겟코드 규칙 : SOM? (?=A,E,F,G,I,C)
+                bulkDumpTotal.setTargetCode(targetCode.substring(0, 2).concat("M").concat(targetCode.substring(2)));
+                (new BulkJoongangProcess(bulkDumpEnv)).doProcess( bulkDumpTotal, bulkDumpTask, bulkDumpService);
+
+                // 타겟코드 규칙 : SOX? (?=A,E,F,G,I,C)
+                bulkDumpTotal.setTargetCode(targetCode.substring(0, 2).concat("X").concat(targetCode.substring(2)));
+                (new BulkJoongangProcessEx(bulkDumpEnv)).doProcess( bulkDumpTotal, bulkDumpTask, bulkDumpService);
                 break;
+            case "VSD": //	중앙선데이
+                (new BulkSundayProcess(bulkDumpEnv)).doProcess( bulkDumpTotal, bulkDumpTask, bulkDumpService);
             default:
                 log.error("Not Defined DumpClientProcess TargetCode {}", bulkDumpTotal.getTargetCode());
                 break;

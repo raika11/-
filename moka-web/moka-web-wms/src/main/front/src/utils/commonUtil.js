@@ -401,6 +401,17 @@ export const validateForDateRange = (startDt, endDt) => {
     message = '종료일은 시작일 보다 작을 수 없습니다.';
 };
 
+/**
+ * 코드를 코드리스트에 포함된 한글명으로 치환한다.
+ * @param code 코드
+ * @param codes 코드리스트
+ * @returns {*|string}
+ */
+export const toKorFromCode = (code, codes) => {
+    const codeItem = codes.filter((data) => data.key === code)[0];
+    return codeItem ? codeItem.value : '';
+};
+
 export default {
     fileDownload,
     base64ToBlob,
@@ -418,4 +429,5 @@ export default {
     popupPreview,
     toRangeDateForDateType,
     validateForDateRange,
+    toKorFromCode,
 };

@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import clsx from 'clsx';
+import moment from 'moment';
 import DateTime from 'react-datetime';
 import InputMask from 'react-input-mask';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -7,7 +8,6 @@ import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import { MokaIcon } from '@components';
 
-import moment from 'moment';
 moment.locale('ko');
 
 const propTypes = {
@@ -32,7 +32,7 @@ const propTypes = {
      */
     defaultValue: PropTypes.string,
     /**
-     * value => Date 객체!!!
+     * value => Moment 객체!!!
      */
     value: PropTypes.any,
     /**
@@ -59,12 +59,21 @@ const propTypes = {
      * isInvalid 체크
      */
     isInvalid: PropTypes.bool,
+    /**
+     * DateTimePicker의 timeDefault 설정
+     * start이면 00:00:00 으로 셋팅
+     * end이면 23:59:59 으로 셋팅
+     * default이면 현재 시간(기본값)
+     * @default
+     */
+    timeDefault: PropTypes.oneOf(['start', 'end', 'default']),
 };
 
 const defaultProps = {
     dateFormat: 'YYYY-MM-DD',
     timeFormat: 'HH:mm',
     disabled: false,
+    timeDefault: 'default',
 };
 
 /**
@@ -88,6 +97,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
         isInvalid,
         onMouseEnter,
         onMouseLeave,
+        timeDefault,
         ...rest
     } = props;
     const dateTimeRef = useRef(null);
@@ -119,6 +129,21 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
             );
         }
         return <td {...props}>{currentDate.date()}</td>;
+    };
+
+    /**
+     * time 기본값 설정
+     * @param {*} date object | string
+     */
+    const handleChange = (date) => {
+        if (typeof date === 'object') {
+            if (timeDefault === 'start') {
+                date.startOf('day');
+            } else if (timeDefault === 'end') {
+                date.endOf('day');
+            }
+        }
+        onChange(date);
     };
 
     // input element 생성
@@ -153,7 +178,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
             dateFormat={dateFormat}
             timeFormat={timeFormat}
             value={value}
-            onChange={onChange}
+            onChange={handleChange}
             {...rest}
             renderDay={renderDay}
             renderInput={renderInput}

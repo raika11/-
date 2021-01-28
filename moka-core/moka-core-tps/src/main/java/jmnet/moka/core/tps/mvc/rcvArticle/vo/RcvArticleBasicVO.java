@@ -203,4 +203,11 @@ public class RcvArticleBasicVO implements Serializable {
     @Column(name = "SERVICE_DAYTIME")
     @DTODateTimeFormat
     private Date serviceDaytime;
+
+    /**
+     * 백오피스에서 등록전송 여부
+     */
+    @Column(name = "IUD_YN")
+    private String iudYn;
+
 }

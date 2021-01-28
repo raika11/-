@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import SortableItem from '@pages/Survey/component/sortable/SortableItem';
 import clsx from 'clsx';
 import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
 
 const SortableContainer = ({ items }) => {
-    const [sortableItems, setSortableItems] = useState(items);
+    const [sortableItems, setSortableItems] = useState([]);
 
     const moveItem = (id, atIndex) => {
         const { card, index } = findItem(id);
@@ -28,6 +28,10 @@ const SortableContainer = ({ items }) => {
     const [, drop] = useDrop({
         accept: ItemTypes.GIF,
     });
+
+    useEffect(() => {
+        setSortableItems(items);
+    }, [items]);
 
     return (
         <div ref={drop}>

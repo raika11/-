@@ -45,6 +45,7 @@ import internalApi from '@store/internalApi/internalApiReducer';
 import tour from '@store/tour/tourReducer';
 import editLog from '@store/editLog/editLogReducer';
 import searchKeyword from '@store/searchKeyword/searchKeywordReducer';
+import quiz from '@store/survey/quiz/quizReducer';
 
 export default combineReducers({
     toastr,
@@ -92,4 +93,5 @@ export default combineReducers({
     tour,
     editLog,
     searchKeyword,
+    quiz,
 });

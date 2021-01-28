@@ -13,13 +13,7 @@ export const getSearchKeywordStat = createRequestSaga(act.GET_SEARCH_KEYWORD_STA
  */
 export const getSearchKeywordStatTotal = createRequestSaga(act.GET_SEARCH_KEYWORD_STAT_TOTAL, api.getSearchKeywordStatTotal);
 
-/**
- * 엑셀 다운
- */
-export const downloadExcel = createRequestSaga(act.DOWNLOAD_EXCEL, api.getSearchKeywordExcel, true);
-
 export default function* saga() {
     yield takeLatest(act.GET_SEARCH_KEYWORD_STAT, getSearchKeywordStat);
-    yield takeLatest(act.DOWNLOAD_EXCEL, downloadExcel);
     yield takeLatest(act.GET_SEARCH_KEYWORD_STAT_TOTAL, getSearchKeywordStatTotal);
 }

@@ -92,7 +92,7 @@ public class MokaConstants {
     public static final String MERGE_CONTEXT_AD = "ad";
     public static final String MERGE_CONTEXT_ARTICLE = "article";
     public static final String MERGE_CONTEXT_ARTICLE_ID = "articleId";
-    public static final String MERGE_CONTEXT_DIGIAL_SPECIAL_ID = "digitalSpecialId";
+    public static final String MERGE_CONTEXT_DIGITAL_SPECIAL_ID = "digitalSpecialId";
     public static final String MERGE_CONTEXT_BODY = "body";
     public static final String MERGE_CONTEXT_REG_ID = "regId";
     public static final String MERGE_CONTEXT_EDITION_SEQ = "editionSeq";

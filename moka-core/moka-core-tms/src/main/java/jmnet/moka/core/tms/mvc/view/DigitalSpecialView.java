@@ -78,7 +78,7 @@ public class DigitalSpecialView extends AbstractView {
         // 머지 옵션설정
         // MergeContext mergeContext = (MergeContext) request.getAttribute(MokaConstants.MERGE_CONTEXT);
         MergeContext mergeContext = (MergeContext) model.get(MokaConstants.MERGE_CONTEXT);
-        String digitalSpecialId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_DIGIAL_SPECIAL_ID);
+        String digitalSpecialId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_DIGITAL_SPECIAL_ID);
         String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
 
         try {
@@ -90,7 +90,7 @@ public class DigitalSpecialView extends AbstractView {
                 loader = templateMerger.getDataLoader();
             }
             Map<String, Object> paramMap = new HashMap<>();
-            paramMap.put(MokaConstants.MERGE_CONTEXT_DIGIAL_SPECIAL_ID, digitalSpecialId);
+            paramMap.put(MokaConstants.MERGE_CONTEXT_DIGITAL_SPECIAL_ID, digitalSpecialId);
             JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.DIGITAL_SPECIAL_LIST, paramMap, true);
             Map map = jsonResult.getDataListFirst();
             if (map == null) {

@@ -112,9 +112,23 @@ public class FtpClientPool extends BaseObjectPool<FTPClient> {
         try {
             client.changeWorkingDirectory("/");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString());
         } finally {
             ftpBlockingQueue.remove(client);
+            invalidateFtpBlockingQueue();
+        }
+    }
+
+
+    public void invalidateFtpBlockingQueue() {
+        for (FTPClient ftpClient : ftpBlockingQueue) {
+            try {
+                ftpClient.changeWorkingDirectory("/");
+            } catch (IOException e) {
+                log.error(e.toString());
+            } finally {
+                ftpBlockingQueue.remove(ftpClient);
+            }
         }
     }
 

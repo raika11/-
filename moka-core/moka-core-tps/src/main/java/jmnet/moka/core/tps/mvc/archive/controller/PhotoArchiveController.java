@@ -12,6 +12,7 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.util.ImageUtil;
@@ -128,7 +129,7 @@ public class PhotoArchiveController extends AbstractCommonController {
         ResultListDTO<OriginCodeVO> resultListMessage = new ResultListDTO<>();
 
         // 조회
-        List<OriginCodeVO> returnValue = photoArchiveService.findAllPhotoOrigin(menuCode.getMenuNo(), principal.getName());
+        List<OriginCodeVO> returnValue = photoArchiveService.findAllPhotoOrigin(menuCode.getMenuNo(), principal.getName(), TpsConstants.SITE_CD);
         resultListMessage.setTotalCnt(returnValue.size());
         resultListMessage.setList(returnValue);
 

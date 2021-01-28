@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,7 @@ public class PhotoArchiveSearchDTO {
      */
     @ApiModelProperty("매체 코드")
     @Builder.Default
-    private String siteCd = "JAI";
+    private String siteCd = TpsConstants.SITE_CD;
 
     /**
      * 메뉴 코드

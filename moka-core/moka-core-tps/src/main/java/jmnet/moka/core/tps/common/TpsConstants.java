@@ -221,6 +221,7 @@ public class TpsConstants {
     // 댓글 차단 유형 그룹 코드
     public static final String COMMENT_TAG_DIV_CODE = "CMT_TAG_DIV";
 
-
+    // 사이트 코드 포토아카이브 연동시 사용
+    public static final String SITE_CD = "JAI";
 
 }

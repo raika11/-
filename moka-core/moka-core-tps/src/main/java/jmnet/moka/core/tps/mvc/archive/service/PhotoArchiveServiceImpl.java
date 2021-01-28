@@ -169,11 +169,12 @@ public class PhotoArchiveServiceImpl implements PhotoArchiveService {
      * @return 검색 결과
      */
     @Override
-    public List<OriginCodeVO> findAllPhotoOrigin(String menuNo, String memberId) {
+    public List<OriginCodeVO> findAllPhotoOrigin(String menuNo, String memberId, String siteCd) {
         CmsVO<CmsDataVO<List<OriginCodeVO>>> result = new CmsVO<>();
         try {
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
             params.set("menuNo", menuNo);
+            params.set("siteCd", siteCd);
             ResponseEntity<String> responseEntity = restTemplateHelper.post(archiveAddress + originCodeListApi, params, getHeader(memberId));
 
             result = ResourceMapper

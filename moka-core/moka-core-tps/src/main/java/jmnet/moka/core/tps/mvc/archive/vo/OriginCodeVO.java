@@ -33,6 +33,6 @@ public class OriginCodeVO {
     /**
      * 출처 명( 전체 목록, 등록사진목록, 등록이미지목록 … 등 / 전체 목록, 취재사진, 뉴시스 등)
      */
-    private String label;
+    private String name;
 
 }

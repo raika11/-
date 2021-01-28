@@ -45,7 +45,7 @@ public interface PhotoArchiveService {
      * @param menuNo 메뉴 코드
      * @return 검색 결과
      */
-    List<OriginCodeVO> findAllPhotoOrigin(String menuNo, String memberId);
+    List<OriginCodeVO> findAllPhotoOrigin(String menuNo, String memberId, String siteCd);
 
     /**
      * 사진 목록 조회

@@ -45,6 +45,8 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
         if( !dumpService.doGetBulkNewstableJoongang( article ) )
             return false;
 
+        article.processContentTag_ab_ds_timeline();
+
         // 네이버 면판정보 추가관련 변경건 - 지창현 (2016.04.27 ) <-- read while 문 안에 넣어져 있어서 밖으로 이동(Sean)
         article.processNaverMyunPan();
 

@@ -1,21 +1,18 @@
 package jmnet.moka.web.bulk.taskinput;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.taskinput.TaskInput;
 import jmnet.moka.web.bulk.common.taskinput.TaskInputData;
-import jmnet.moka.web.bulk.common.taskinput.inputfilter.InputFilter;
 import jmnet.moka.web.bulk.exception.BulkException;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Node;
 
 /**

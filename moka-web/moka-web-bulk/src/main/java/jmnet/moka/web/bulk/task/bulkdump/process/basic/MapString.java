@@ -60,4 +60,10 @@ public class MapString {
     public void concat( String text ) {
         setData( toString().concat(text));
     }
+
+    public void addDelimiterConcat(String str, String delimiter) {
+        if( McpString.isNullOrEmpty( toString() ) )
+            concat(delimiter);
+        concat( str );
+    }
 }

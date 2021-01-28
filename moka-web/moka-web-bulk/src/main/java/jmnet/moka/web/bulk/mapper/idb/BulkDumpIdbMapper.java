@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
+import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
+import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
@@ -31,8 +33,10 @@ public interface BulkDumpIdbMapper {
     List<BulkDumpNewsVo> callUspBulkNewstableJoongangSel( BulkJoongangArticle article );
     List<BulkDumpNewsVo> callUspBulkNewstableJoongangJopanSel( BulkJoongangArticle article );
     List<BulkDumpNewsVo> callUspBulkNewstableJoongangMobileSel( BulkJoongangArticle article );
+    List<BulkDumpNewsVo> callUspBulkNewstableJoongangExSel( BulkJoongangArticleEx article );
+    List<BulkDumpNewsVo> callUspBulkNewstableSundaySel( BulkSundayArticle article );
 
-    List<Map<String, String>> callUspBulkReporterJoongangSel( BulkJoongangArticle article );
+    List<Map<String, String>> callUspBulkReporterJoongangSel( BulkArticle article );
 
     List<BulkDumpNewsMMDataVo> callUspBulkNewsMMDataSel( BulkArticle article );
 }

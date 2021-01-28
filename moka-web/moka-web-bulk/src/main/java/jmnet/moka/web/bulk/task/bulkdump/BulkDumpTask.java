@@ -1,12 +1,9 @@
 package jmnet.moka.web.bulk.task.bulkdump;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.web.bulk.common.object.JaxbObjectManager;
 import jmnet.moka.web.bulk.common.task.Task;
 import jmnet.moka.web.bulk.common.taskinput.TaskInput;
 import jmnet.moka.web.bulk.common.taskinput.TaskInputData;

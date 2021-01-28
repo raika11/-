@@ -3,6 +3,8 @@ package jmnet.moka.web.bulk.task.bulkdump.service;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
+import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
+import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 
 /**
@@ -22,4 +24,6 @@ public interface BulkDumpService  {
     void delUspBulkDdref( BulkDumpTotalVo bulkDumpTotal );
 
     boolean doGetBulkNewstableJoongang( BulkJoongangArticle article );
+    boolean doGetBulkNewstableJoongangEx( BulkJoongangArticleEx article );
+    boolean doGetBulkNewstableSunday( BulkSundayArticle article );
 }

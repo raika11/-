@@ -67,7 +67,35 @@
     ]]>
   </select>
 
-  <select id="callUspBulkReporterJoongangSel" parameterType="BulkJoongangArticle"
+  <select id="callUspBulkNewstableJoongangExSel" parameterType="BulkJoongangArticleEx"
+    resultType="BulkDumpNewsVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_NEWSTABLE_JOONGANG_EX_SEL(
+      #{insDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{targetCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId.data, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <select id="callUspBulkNewstableSundaySel" parameterType="BulkSundayArticle"
+    resultType="BulkDumpNewsVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_NEWSTABLE_SUNDAY_SEL(
+      #{insDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{targetCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId.data, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+  <select id="callUspBulkReporterJoongangSel" parameterType="BulkArticle"
     resultType="HashMap" statementType="CALLABLE">
     <![CDATA[
     {

@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
-import { CLEAR_STORE, GET_QUIZZES_LIST_SUCCESS, CHANGE_SEARCH_OPTION, CLEAR_QUIZINFO, GET_QUIZZES_SUCCESS } from './quizAction';
+import { CLEAR_STORE, GET_QUIZZES_LIST_SUCCESS, CHANGE_SEARCH_OPTION, CLEAR_QUIZINFO, GET_QUIZZES_SUCCESS, QUIZ_QUESTION_ITEM } from './quizAction';
 
 /**
  * initialState
@@ -36,17 +36,17 @@ export const initialState = {
         quizDesc: '',
         quizRels: [],
         quizSeq: 0,
-        quizSts: '',
+        quizSts: 'Y',
         quizType: 'AA',
         quizUrl: null,
         regDt: '',
         regMember: { memberId: '', memberNm: '' },
-        replyYn: '',
+        replyYn: 'Y',
         title: '',
         voteCnt: 0,
         imgFile: null,
     },
-    banneds: {},
+    quizQuestions: [],
 };
 
 /**
@@ -81,6 +81,12 @@ export default handleActions(
         [GET_QUIZZES_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.quizInfo = body;
+            });
+        },
+        // 목록에서 퀴즈 선택했을때 취즈 정보 업데이트
+        [QUIZ_QUESTION_ITEM]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.quizQuestions = payload;
             });
         },
     },

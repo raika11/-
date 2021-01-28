@@ -127,10 +127,10 @@ const CodeMgtEditModal = (props) => {
 
         if (validate(code)) {
             onSave(code);
+            setStateObj({});
             onHide();
-            history.push(`${match.path}/${grpCd}`);
         }
-    }, [grpCd, history, match.path, onHide, onSave, stateObj, validate]);
+    }, [grpCd, onHide, onSave, stateObj, validate]);
 
     /**
      * 삭제
@@ -144,9 +144,8 @@ const CodeMgtEditModal = (props) => {
         if (code) {
             onDelete(code);
             onHide();
-            history.push(`${match.path}/${grpCd}`);
         }
-    }, [grpCd, history, match.path, onDelete, onHide, stateObj]);
+    }, [grpCd, onDelete, onHide, stateObj]);
 
     /**
      * 모달 닫기

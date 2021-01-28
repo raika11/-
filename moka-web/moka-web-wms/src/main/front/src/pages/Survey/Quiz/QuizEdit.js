@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import Sortable from '@pages/Survey/component/sortable';
 import { Form, Col, Button, Figure, Row } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,10 +11,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
-import { initialState, GET_QUIZZES, clearQuizinfo, getQuizzes, saveQuizzes } from '@store/survey/quiz';
-
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { initialState, SAVE_QUIZZES, GET_QUIZZES, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, quizQuestionItem } from '@store/survey/quiz';
 
 const initQuestionSetup = {
     questionType: 'third',
@@ -37,12 +34,14 @@ const QuizEdit = () => {
     const imgFileRef = useRef(null);
 
     // 공통 구분값 URL
-    const { quizInfo, loading } = useSelector((store) => ({
+    const { quizInfo, save_loading, get_loading } = useSelector((store) => ({
         quizInfo: store.quiz.quizInfo,
-        loading: store.loading[GET_QUIZZES],
+        save_loading: store.loading[SAVE_QUIZZES],
+        get_loading: store.loading[GET_QUIZZES],
     }));
 
     const handleChangeEditData = ({ target }) => {
+        // console.log(1);
         const { name, value, checked } = target;
 
         if (name === 'loginYn') {
@@ -65,6 +64,7 @@ const QuizEdit = () => {
 
     // 퀴즈 커버 이미지 등록 버튼.
     const handleChangeFileInput = (inputName, file) => {
+        // console.log(2);
         if (file) {
             setEditData({
                 ...editData,
@@ -75,11 +75,14 @@ const QuizEdit = () => {
 
     // 항목 데이터 초기화.
     const handleResetInfoData = () => {
+        // console.log(3);
         setEditData(initialState.quizInfo);
+        setQuestionItem([]);
     };
 
     // 항목 생성 값 변경 처리.
     const handleChangeQuestionsSetup = (e) => {
+        // console.log(4);
         const { name, value } = e.target;
         setQuestionSetup({
             ...questionSetup,
@@ -87,19 +90,13 @@ const QuizEdit = () => {
         });
     };
 
-    const handleClickQuestionsResult = (event) => {
-        let tempArray = editData.questions[event.questionIndex];
-        tempArray = event.editData;
-
-        setEditData(
-            produce(editData, (draft) => {
-                draft.questions[event.questionIndex] = tempArray;
-            }),
-        );
-    };
+    const handleQuestionsResult = useCallback((event) => {
+        setQuestionList([...questionList, event.editData]);
+    });
 
     // 항목 생성 버튼 클릭 처리.
-    const handleClickNewQuestionsButton = () => {
+    const handleClickNewQuestionsButton = useCallback(() => {
+        // console.log(6);
         const { questionType, questionCount } = questionSetup;
 
         let item = {};
@@ -110,7 +107,13 @@ const QuizEdit = () => {
                 id: nextIndex,
                 item: (
                     <>
-                        <QuizQuestionFirstTypeComponent questionIndex={nextIndex} questionCount={questionCount} dataReturnEvent={handleClickQuestionsResult} />
+                        <QuizQuestionFirstTypeComponent
+                            questionIndex={nextIndex}
+                            questionCount={questionCount}
+                            dataReturnEvent={handleQuestionsResult}
+                            selectEditData={null}
+                            getLoading={get_loading}
+                        />
                     </>
                 ),
             };
@@ -119,7 +122,13 @@ const QuizEdit = () => {
                 id: nextIndex,
                 item: (
                     <>
-                        <QuizQuestionThirdTypeComponent questionIndex={nextIndex} questionCount={questionCount} dataReturnEvent={handleClickQuestionsResult} />
+                        <QuizQuestionThirdTypeComponent
+                            questionIndex={nextIndex}
+                            questionCount={questionCount}
+                            dataReturnEvent={handleQuestionsResult}
+                            selectEditData={null}
+                            getLoading={get_loading}
+                        />
                     </>
                 ),
             };
@@ -131,11 +140,11 @@ const QuizEdit = () => {
             ...editData,
             questions: [...editData.questions, []],
         });
-    };
+    }, [editData, get_loading, handleQuestionsResult, questionItem, questionSetup]);
 
     // 문항 검색 버튼 클릭 처리.
     const handleClickSearchQuestionsButton = () => {
-        console.log('handleClickSearchQuestionsButton');
+        // console.log('handleClickSearchQuestionsButton');
     };
 
     const checkValidation = () => {
@@ -144,12 +153,29 @@ const QuizEdit = () => {
 
     // 저장 버튼 클릭 처리.
     const handleClickSaveButton = () => {
-        console.log(editData);
+        // console.log(editData);
+        // return;
+
+        let type;
+        let quizSeq;
+
+        if (selectQuizSeq.current === 'add') {
+            type = 'SAVE';
+            quizSeq = null;
+        } else {
+            type = 'UPDATE';
+            quizSeq = selectQuizSeq.current;
+        }
+
+        // selectQuizSeq.current;
+        // const mode = !isNaN(selectQuizSeq.current) && selectQuizSeq.current;
 
         // 벨리데이션 체크.
         if (checkValidation()) {
             return;
         }
+
+        // console.log(editData);
 
         var formData = new FormData();
 
@@ -157,35 +183,41 @@ const QuizEdit = () => {
         formData.append(`quizType`, editData.quizType); // 퀴즈유형
         formData.append(`loginYn`, editData.loginYn); // 로그인여부
         formData.append(`replyYn`, editData.replyYn); // 댓글 여부
-        formData.append(`quizUrl`, editData.quizUrl); // 쥐크 URL
+        // formData.append(`quizUrl`, editData.quizUrl); // 쥐크 URL
         formData.append(`imgUrl`, editData.imgUrl); // 이미지 URL
         formData.append(`title`, editData.title); // 제목
         formData.append(`quizDesc`, editData.quizDesc); // 퀴즈설명
-        formData.append(`imgFile`, editData.imgFile); // 이미지 파일.
+        if (editData.imgFile) {
+            formData.append(`imgFile`, editData.imgFile); // 이미지 파일.
+        }
 
         // questions[0].questionSeq
 
         // 문항
         let questionCount = 0;
-        let questions = editData.questions;
+        // let questions = editData.questions;
+        // let questions = questionList;
 
         // console.log(questions);
-
-        questions.map((element, i) => {
+        questionList.map((element, i) => {
             const { questionType } = element;
-            // console.log('questionType: ', questionType);
-            let choices;
-
             formData.append(`questions[${questionCount}].questionType`, questionType);
 
             if (questionType === 'S') {
                 let choices = element.choices;
 
                 formData.append(`questions[${questionCount}].choiceCnt`, choices.length);
-                formData.append(`questions[${questionCount}].imgUrl`, '');
+                formData.append(`questions[${questionCount}].imgUrl`, element.imgUrl);
                 formData.append(`questions[${questionCount}].title`, element.title);
                 formData.append(`questions[${questionCount}].questionDesc`, element.questionDesc);
-                formData.append(`questions[${questionCount}].imgFile`, element.imgFile);
+
+                if (element.questionSeq) {
+                    formData.append(`questions[${questionCount}].questionSeq`, element.questionSeq);
+                }
+
+                if (element.imgFile) {
+                    formData.append(`questions[${questionCount}].imgFile`, element.imgFile);
+                }
 
                 choices.map((e, ii) => {
                     formData.append(`questions[${questionCount}].choices[${ii}].title`, e.title);
@@ -194,13 +226,20 @@ const QuizEdit = () => {
             } else if (questionType === 'O') {
                 formData.append(`questions[${questionCount}].title`, element.title);
                 formData.append(`questions[${questionCount}].answer`, element.answer);
-                formData.append(`questions[${questionCount}].imgFile`, element.imgFile);
+
+                if (element.questionSeq) {
+                    formData.append(`questions[${questionCount}].questionSeq`, element.questionSeq);
+                }
+
+                if (element.imgFile) {
+                    formData.append(`questions[${questionCount}].imgFile`, element.imgFile);
+                }
             }
 
             questionCount++;
         });
 
-        // // formData 출력(테스트).
+        // formData 출력(테스트).
         // for (let [key, value] of formData) {
         //     console.log(`${key}: ${value}`);
         // }
@@ -208,15 +247,19 @@ const QuizEdit = () => {
 
         dispatch(
             saveQuizzes({
-                type: 'SAVE',
-                quizSeq: null,
+                type: type,
+                quizSeq: quizSeq,
                 formData: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
-                        const { chnlSeq, epsdSeq } = body;
-                        if ((chnlSeq, epsdSeq)) {
+                        const { quizSeq } = body;
+                        if (quizSeq) {
                             // 등록 및 수정 성공시 store 값 초기화 후 다시 데이터를 가지고 옴.
+                            dispatch(clearQuizinfo());
+                            dispatch(getQuizzesList());
+                            dispatch(getQuizzes({ quizSeq: quizSeq }));
+                            history.push(`/quiz/${quizSeq}`);
                         }
                     } else {
                         const { totalCnt, list } = body;
@@ -235,29 +278,84 @@ const QuizEdit = () => {
 
     // url 에서 현재 선택한 게시판 id 값 설정.
     useEffect(() => {
+        // console.log(7);
         const { quizSeq } = params;
         if (!isNaN(quizSeq) && selectQuizSeq.current !== quizSeq) {
+            selectQuizSeq.current = quizSeq;
+            handleResetInfoData();
             dispatch(getQuizzes({ quizSeq: quizSeq }));
-        } else if (history.location.pathname === '/quiz/add' && selectQuizSeq.current !== quizSeq) {
+        } else if (history.location.pathname === '/quiz/add' && selectQuizSeq.current !== 'add') {
+            selectQuizSeq.current = 'add';
             handleResetInfoData();
         }
-
-        selectQuizSeq.current = quizSeq;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
     // 스토어에서 quizInfo 가 업데이트 되었을때. ( 목록에서 클릭 하고 url 이 변경 되었을때.)
     useEffect(() => {
-        if (loading === false) {
-            setEditData(quizInfo);
+        // console.log(8);
+        const setInfoData = (data) => {
+            setEditData({
+                ...editData,
+                quizSts: data.quizSts,
+                loginYn: data.loginYn,
+                replyYn: data.replyYn,
+                title: data.title,
+                quizDesc: data.quizDesc,
+                quizType: data.quizType,
+                imgUrl: data.imgUrl,
+            });
+        };
+
+        const setQuestions = (data) => {
+            setQuestionItem(
+                data.map((element, index) => {
+                    // console.log();
+                    let questionType = element.questionType;
+                    if (questionType === 'S') {
+                        return {
+                            id: index,
+                            item: (
+                                <>
+                                    <QuizQuestionThirdTypeComponent
+                                        questionIndex={index}
+                                        questionCount={element.choiceCnt}
+                                        dataReturnEvent={handleQuestionsResult}
+                                        selectEditData={element}
+                                        getLoading={get_loading}
+                                    />
+                                </>
+                            ),
+                        };
+                    } else if (questionType === 'O') {
+                        return {
+                            id: index,
+                            item: (
+                                <>
+                                    <QuizQuestionFirstTypeComponent
+                                        questionIndex={index}
+                                        questionCount={element.choiceCnt}
+                                        dataReturnEvent={handleQuestionsResult}
+                                        selectEditData={element}
+                                        getLoading={get_loading}
+                                    />
+                                </>
+                            ),
+                        };
+                    }
+                }),
+            );
+        };
+
+        if (selectQuizSeq.current !== 'add') {
+            setInfoData(quizInfo);
+            setQuestions(quizInfo.questions);
         }
-    }, [loading, quizInfo]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quizInfo]);
 
     useEffect(() => {
-        // console.log(editData);
-    }, [editData]);
-
-    useEffect(() => {
+        // console.log(10);
         return () => {
             dispatch(clearQuizinfo());
         };
@@ -274,6 +372,7 @@ const QuizEdit = () => {
             }
             className="flex-fill"
             footer
+            loading={save_loading}
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: '미리보기', variant: 'positive', onClick: () => console.log('미리보기'), className: 'mr-05' },
@@ -461,7 +560,7 @@ const QuizEdit = () => {
                 </Form.Row>
 
                 {/* 문항 */}
-                <Sortable items={questionItem} />
+                {get_loading !== true && <Sortable items={questionItem} editData={editData} />}
             </Form>
         </MokaCard>
     );

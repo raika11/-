@@ -4,7 +4,7 @@ import { callApiAfterActions, errorResponse } from '@store/commons/saga';
 import toast from '@/utils/toastUtil';
 
 import { GET_QUIZZES_LIST, GET_QUIZZES, GET_QUIZZES_SUCCESS, SAVE_QUIZZES } from './quizAction';
-import { getQuizzes, getQuizzesInfo, saveQuizzes } from './quizApi';
+import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes } from './quizApi';
 
 // 퀴즈 목록 죄회.
 const getQuizzesListSaga = callApiAfterActions(GET_QUIZZES_LIST, getQuizzes, (state) => state.quiz.quizzes);
@@ -41,7 +41,7 @@ function* saveQuizzesSaga({ payload: { type, quizSeq, formData, callback } }) {
 
     try {
         if (type === 'UPDATE') {
-            // response = yield call(commentAPI.putCommentsBlocks, { seqNo: seqNo, blockFormData: blockFormData });
+            response = yield call(updateQuizzes, { quizSeq: quizSeq, formData: formData });
         } else {
             response = yield call(saveQuizzes, { formData: formData });
         }

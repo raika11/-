@@ -4,7 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
-import { MokaTable } from '@components';
+import { MokaTable, MokaLoader } from '@components';
+import { GET_SEARCH_KEYWORD_STAT_TOTAL } from '@store/searchKeyword';
 import columnDefs from './OverallStatusColumns';
 
 /**
@@ -18,6 +19,7 @@ const OverallStatus = () => {
         searchTotalCnt: searchKeyword.stat.total,
     }));
     const [rowData, setRowData] = useState([]);
+    const loading = useSelector(({ loading }) => loading[GET_SEARCH_KEYWORD_STAT_TOTAL]);
 
     /**
      * 검색어
@@ -60,7 +62,15 @@ const OverallStatus = () => {
                     </Col>
                 </Row>
             </div>
-            <MokaTable paging={false} columnDefs={columnDefs} rowData={rowData} className="ag-grid-align-center mb-card" agGridHeight={70} onRowNodeId={(row) => row.idx} />
+            <MokaTable
+                paging={false}
+                loading={loading}
+                columnDefs={columnDefs}
+                rowData={rowData}
+                className="ag-grid-align-center mb-card"
+                agGridHeight={70}
+                onRowNodeId={(row) => row.idx}
+            />
         </>
     );
 };

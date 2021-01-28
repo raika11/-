@@ -13,7 +13,13 @@ export const getSearchKeywordStat = createRequestSaga(act.GET_SEARCH_KEYWORD_STA
  */
 export const getSearchKeywordStatTotal = createRequestSaga(act.GET_SEARCH_KEYWORD_STAT_TOTAL, api.getSearchKeywordStatTotal);
 
+/**
+ * 키워드 통계 상세
+ */
+export const getSearchKeywordStatDetail = createRequestSaga(act.GET_SEARCH_KEYWORD_STAT_DETAIL, api.getSearchKeywordStatDetail);
+
 export default function* saga() {
     yield takeLatest(act.GET_SEARCH_KEYWORD_STAT, getSearchKeywordStat);
     yield takeLatest(act.GET_SEARCH_KEYWORD_STAT_TOTAL, getSearchKeywordStatTotal);
+    yield takeLatest(act.GET_SEARCH_KEYWORD_STAT_DETAIL, getSearchKeywordStatDetail);
 }

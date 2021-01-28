@@ -62,7 +62,7 @@ const propTypes = {
     /**
      * DateTimePicker의 timeDefault 설정
      * start이면 00:00:00 으로 셋팅
-     * end이면 59:59:99 으로 셋팅
+     * end이면 23:59:59 으로 셋팅
      * default이면 현재 시간(기본값)
      * @default
      */

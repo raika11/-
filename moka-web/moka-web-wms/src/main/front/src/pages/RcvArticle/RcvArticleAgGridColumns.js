@@ -67,6 +67,6 @@ export default [
         field: 'register',
         width: 55,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <RcvArticleRegisterBtn {...row} />,
+        cellRendererFramework: RcvArticleRegisterBtn,
     },
 ];

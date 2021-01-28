@@ -37,14 +37,6 @@ export const initialState = {
         total: 0,
         list: [],
         error: null,
-        search: {
-            page: 0,
-            size: PAGESIZE_OPTIONS[0],
-            searchType: 'schKwd',
-            keyword: '',
-            startDt: null,
-            endDt: null,
-        },
     },
 };
 
@@ -88,8 +80,6 @@ export default handleActions(
         },
         [act.GET_SEARCH_KEYWORD_STAT_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.stat.total = initialState.stat.totalCnt;
-                draft.stat.list = initialState.stat.list;
                 draft.stat.error = payload;
                 draft.stat.searchDate = moment().format(DB_DATEFORMAT);
             });
@@ -100,6 +90,21 @@ export default handleActions(
         [act.GET_SEARCH_KEYWORD_STAT_TOTAL_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.statTotal = body;
+            });
+        },
+        /**
+         * 통계 상세
+         */
+        [act.GET_SEARCH_KEYWORD_STAT_DETAIL_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.statDetail.list = body.list;
+                draft.statDetail.total = body.totalCnt;
+                draft.statDetail.error = initialState.statDetail.error;
+            });
+        },
+        [act.GET_SEARCH_KEYWORD_STAT_DETAIL_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.statDetail.error = payload;
             });
         },
     },

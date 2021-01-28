@@ -28,3 +28,11 @@ export const getSearchKeywordStat = createAction(GET_SEARCH_KEYWORD_STAT, ({ sea
  */
 export const [GET_SEARCH_KEYWORD_STAT_TOTAL, GET_SEARCH_KEYWORD_STAT_TOTAL_SUCCESS] = createRequestActionTypes('searchKeyword/GET_SEARCH_KEYWORD_STAT_TOTAL');
 export const getSearchKeywordStatTotal = createAction(GET_SEARCH_KEYWORD_STAT_TOTAL, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 키워드 통계 상세 조회
+ */
+export const [GET_SEARCH_KEYWORD_STAT_DETAIL, GET_SEARCH_KEYWORD_STAT_DETAIL_SUCCESS, GET_SEARCH_KEYWORD_STAT_DETAIL_FAILURE] = createRequestActionTypes(
+    'searchKeyword/GET_SEARCH_KEYWORD_STAT_DETAIL',
+);
+export const getSearchKeywordStatDetail = createAction(GET_SEARCH_KEYWORD_STAT_DETAIL, ({ search, callback }) => ({ search, callback }));

@@ -128,6 +128,7 @@ const RcvArticleAgGrid = () => {
             selected={rcvArticle.rid}
             refreshCellsParams={{
                 columns: ['register', 'serviceTime'],
+                force: true,
             }}
             onAnimationQueueEmpty={handleRowRendered}
         />

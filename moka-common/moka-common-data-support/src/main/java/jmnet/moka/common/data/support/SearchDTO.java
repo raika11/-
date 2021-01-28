@@ -62,7 +62,7 @@ public class SearchDTO implements Serializable {
      * 정렬 정보 key,order 형식
      */
     @ApiModelProperty("정렬 정보 key,order 형식")
-    private List<String> sort;
+    protected List<String> sort;
 
     @ApiModelProperty("추가 검색 조건")
     private MultiValueMap<String, String> extraParamMap;
@@ -384,7 +384,7 @@ public class SearchDTO implements Serializable {
         if (this.sort == null && McpString.isNotEmpty(defaultSort)) {
             this.setSort(Collections.singletonList(this.defaultSort));
         } else {
-            if ( this.sort != null) {
+            if (this.sort != null) {
                 sortList.addAll(this.sort);
             }
         }

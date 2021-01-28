@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,5 +44,23 @@ public class SearchKwdLogSearchDTO extends SearchDTO {
     @DTODateTimeFormat
     @NotNull(message = "{tps.search-keyword-log.error.notnull.endDt}")
     private Date endDt;
+
+    public String getOrder() {
+        if (sort != null) {
+            String sortInfo = McpString.collectionToDelimitedString(sort, "!");
+            String[] sortInfos = sortInfo.split("!")[0].split(",");
+            return sortInfos[0];
+        }
+        return "";
+    }
+
+    public String getDir() {
+        if (sort != null) {
+            String sortInfo = McpString.collectionToDelimitedString(sort, "!");
+            String[] sortInfos = sortInfo.split("!")[0].split(",");
+            return sortInfos.length > 1 ? sortInfos[1] : "asc";
+        }
+        return "";
+    }
 
 }

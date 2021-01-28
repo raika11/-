@@ -26,8 +26,8 @@
 }
 
 .modal-body {
-    padding: 3px $modal-inner-padding $modal-inner-padding $modal-inner-padding;
-    margin-top: -3px;
+    padding: $input-escape-focus-width $modal-inner-padding $modal-inner-padding $modal-inner-padding;
+    margin-top: -1 * $input-escape-focus-width;
 }
 
 .modal-footer {

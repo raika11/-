@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +31,9 @@ public class BulkDumpEnvGlobal implements Serializable {
 
     @XmlElement(name = "opEmail")
     private String opEmail;
+
+    @XmlElement(name = "DirDump")
+    private String dirDump;
 
     @XmlElementWrapper(name = "Targets")
     @XmlElement(name = "Target")

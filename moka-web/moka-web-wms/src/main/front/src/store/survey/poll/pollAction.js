@@ -38,3 +38,6 @@ export const getPollGroupCodes = createAction(GET_POLL_GROUP_CODES, () => 'POLL_
 
 export const [GET_POLL_CATEGORY_CODES, GET_POLL_CATEGORY_CODES_SUCCESS, GET_POLL_CATEGORY_FAILURE] = createRequestActionTypes('poll/GET_POLL_CATEGORY_CODES');
 export const getPollCategoryCodes = createAction(GET_POLL_CATEGORY_CODES, () => 'POLL_CATE');
+
+export const GET_RELATION_POLL_LIST = 'poll/GET_RELATION_POLL_LIST';
+export const getRelationPollList = createAction(GET_RELATION_POLL_LIST);

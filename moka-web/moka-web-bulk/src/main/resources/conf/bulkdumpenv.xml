@@ -18,92 +18,291 @@
     </Targets>
   </Global>
   <CpList>
-    <Cp Name="ESTSOFT"
-      Comment="# ZUM 중앙일보"
+    <Cp Name="ESTSOFT" Comment="# ZUM 중앙일보"
       Dir="C:\box\bulk\CpData\estsoft"
-      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
       FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
       Type="HTML"
       EncodeType="U8"
       SendSiteCode="4">
-      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[></title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[></subtitle>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[></author>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[></email>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_ZUM_}]]]]><![CDATA[></content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[></serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[></copyright>{_CRLF_}{_TAB_}{_XML_IMG_BLK_ZUM_}{_CRLF_}{_REL_NEWS_ZUM_}{_CRLF_}</article>]]></Format>
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_ZUM_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_TAB_}{_XML_IMG_BLK_ZUM_}{_CRLF_}{_REL_NEWS_ZUM_}{_CRLF_}</article>]]></Format>
       <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1></code1>{_CRLF_}{_TAB_}<code2></code2>{_CRLF_}{_TAB_}<code3></code3>{_CRLF_}{_TAB_}<title></title>{_CRLF_}{_TAB_}<subtitle></subtitle>{_CRLF_}{_TAB_}<author></author>{_CRLF_}{_TAB_}<email></email>{_CRLF_}{_TAB_}<content></content>{_CRLF_}{_TAB_}<serviceurl></serviceurl>{_CRLF_}{_TAB_}<copyright></copyright>{_CRLF_}</article>]]></FormatDelete>
-      <FtpConfig ip="127.0.0.1"
-        user="ftp_tester"
-        password="ftp_test"
-        rootDir="/cp/estsoft"
-        passive="0"
-        port="21"/>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/estsoft" passive="0" port="21"/>
     </Cp>
-    <Cp Name="ZUM_JTBC"
-      Comment="# ZUM JTBC"
-      Dir="C:\box\bulk\CpData\zum_jtbc"
-      Content=""
-      FileExt="xml"
-      Type="HTML"
-      EncodeType="U8"
-      SendSiteCode="7">
-      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<news>{_CRLF_}{_TAB_}<newsId>{_AID_}</newsId>{_CRLF_}{_TAB_}<status>{_IUD_}</status>{_CRLF_}{_TAB_}{_TV_NODE_}{_CRLF_}{_TAB_}<report_date>{_INSERTDATE_}</report_date>{_CRLF_}{_TAB_}<modify_date>{_MODIFYDATE_}</modify_date>{_CRLF_}{_TAB_}<code>{_C1_}</code>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<sub_title><![CDATA[{_STTL_}]]]]><![CDATA[</sub_title>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_ZUM_} {_REPT_JTBC_ONE_} 기자 <br/>JTBC, JTBC Content Hub Co., Ltd.의 모든 콘텐트(기사)는 저작권법의 보호를 받은바, 무단 전재, 복사, 배포 등을 금합니다.<br/>Copyright by JTBC, JTBC Content Hub Co., Ltd. All Rights Reserved.]]]]><![CDATA[</content>{_CRLF_}{_TAB_}{_XML_IMG_BLK2_}<url><![CDATA[{_URL_}]]]]><![CDATA[</url>{_REL_NEWS_ZUM_}</news>]]></Format>
-      <FormatDelete><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<news>{_CRLF_}{_TAB_}<newsId>{_AID_}</newsId>{_CRLF_}{_TAB_}<status>{_IUD_}</status>{_CRLF_}{_TAB_}{_TV_NODE_}{_CRLF_}{_TAB_}<report_date>{_INSERTDATE_}</report_date>{_CRLF_}{_TAB_}<modify_date>{_MODIFYDATE_}</modify_date>{_CRLF_}{_TAB_}<code>{_C1_}</code>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<sub_title><![CDATA[{_STTL_}]]]]><![CDATA[</sub_title>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}{_XML_IMG_BLK2_}<url><![CDATA[{_URL_}]]]]><![CDATA[</url></news>]]></FormatDelete>
-      <FtpConfig ip="127.0.0.1"
-        user="ftp_tester"
-        password="ftp_test"
-        rootDir="/cp/zum_jtbc"
-        passive="0"
-        port="21"/>
-    </Cp>
-    <Cp Name="EMPAS_JA"
-      Comment="# 엠파스(네이트) 중앙일보"
+
+    <Cp Name="EMPAS_JA" Comment="# 엠파스(네이트) 중앙일보"
       Dir="C:\box\bulk\CpData\empas_ja"
-      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
       FileExt="txt"
       DnVideo="Y"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
       Type="HTML"
       SendSiteCode="3">
       <Format><![CDATA[ID:{_AID_}{_CRLF_}CD:{_M2_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_C1_};{_C2_};{_C3_}{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_TXT_IMG_BLK_NATE_}{_CRLF_}VD:{_VIDEO_TXT_BLK_}{_CRLF_}WR:{_REPT_} {_MAIL_}{_CRLF_}HT:1{_CRLF_}OL:{_URL_}{_CRLF_}TI:{_TTL_}{_CRLF_}SB:{_CRLF_}TX:{_CONTH_NATE_}{_JHOT_}{_CRLF_}{_CRH_}]]></Format>
       <FormatDelete><![CDATA[ID:{_AID_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_CRLF_}VD:{_CRLF_}WR:{_CRLF_}HT:1{_CRLF_}OL:{_CRLF_}TI:{_CRLF_}SB:{_CRLF_}TX:{_CRLF_}]]></FormatDelete>
-      <FtpConfig ip="127.0.0.1"
-        user="ftp_tester"
-        password="ftp_test"
-        rootDir="/cp/empas_ja"
-        passive="0"
-        port="21"/>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/empas_ja" passive="0" port="21"/>
     </Cp>
-    <Cp Name="EMPAS_ILGAN"
-      Comment="# 엠파스(네이트) 일간스포츠"
+
+    <Cp Name="EMPAS_ILGAN" Comment="# 엠파스(네이트) 일간스포츠"
       Dir="C:\box\bulk\CpData\empas_ilgan"
-      Content="IGP|IGQ|IGN|IGY"
       FileExt="txt"
-      DnVideo=""
+      Content="IGP|IGQ|IGN|IGY"
       Type="HTML"
-      EncodeType=""
       SendSiteCode="3">
       <Format><![CDATA[ID:{_AID_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_C1_}{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_TXT_IMG_BLK2_}{_CRLF_}VD:{_CRLF_}WR:{_REPT_}{_CRLF_}HT:1{_CRLF_}OL:{_URL_}{_CRLF_}TI:{_TTL_}{_CRLF_}SB:{_STTL_}{_CRLF_}TX:{_CONT_}{_JHOT_}{_CRLF_}{_CRH_}{_CRLF_}#{_CRLF_}]]></Format>
       <FormatDelete><![CDATA[ID:{_AID_}{_CRLF_}ST:{_IUD2_}{_CRLF_}CA:{_CRLF_}DA:{_YY_}-{_MM_}-{_DD_} {_HH_}:{_NN_}:{_SS_}{_CRLF_}IM:{_CRLF_}VD:{_CRLF_}WR:{_CRLF_}HT:1{_CRLF_}OL:{_CRLF_}TI:{_CRLF_}SB:{_CRLF_}TX:{_CRLF_}#{_CRLF_}]]></FormatDelete>
-      <FtpConfig ip="127.0.0.1"
-        user="ftp_tester"
-        password="ftp_test"
-        rootDir="/cp/empas_ilgan"
-        passive="0"
-        port="21"/>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/empas_ilgan" passive="0" port="21"/>
     </Cp>
-    <Cp Name="NAVER_JA_VOD"
-      Comment="# 네이버 뉴스 - 중앙일보 xml 포멧 Video"
-      Dir="C:\box\bulk\CpData\naver_ja_vod"
-      Content="SOY"
-      FileExt="xml"
+
+    <Cp Name="DAUM_JA" Comment="# 미디어다음 - 중앙 (SOT 강남통신추가 20130723)"
+      Dir="C:\box\bulk\CpData\daum_ja"
       DnVideo="Y"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="2">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8"?>{_CRLF_}<NEWS VER="1.0" act="{_IUD_}" orgid="{_AID_}">{_CRLF_}{_TAB_}<DATETIME>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</DATETIME>{_CRLF_}{_TAB_}<WRITER_LIST>{_CRLF_}{_TAB_}<WRITER>{_CRLF_}{_TAB_}<NAME>{_REPT_DAUM_}</NAME>{_CRLF_}{_TAB_}<EMAIL>{_MAIL_}</EMAIL>{_CRLF_}{_TAB_}</WRITER>{_CRLF_}{_TAB_}</WRITER_LIST>{_CRLF_}{_TAB_}<CATEGORY_LIST>{_CRLF_}{_TAB_}<CODE>{_C1_}</CODE>{_CRLF_}{_TAB_}</CATEGORY_LIST>{_CRLF_}{_TAB_}<TITLE><![CDATA[{_TTL_}]]]]><![CDATA[</TITLE>{_CRLF_}{_TAB_}<SUB_TITLE><![CDATA[{_STTL_}]]]]><![CDATA[</SUB_TITLE>{_CRLF_}{_TAB_}<TEXT type="text"><![CDATA[{_CONTH_DAUM_}{_CRLF_}]]]]><![CDATA[</TEXT>{_CRLF_}{_TAB_}<IMG_LIST></IMG_LIST>{_CRLF_}{_TAB_}<THUMBNAIL_LIST />{_CRLF_}{_TAB_}<VOD_LIST><VOD>{_VIDEO_TXT_BLK_}</VOD><VOD_IMG_URL>{_XML_IMG_COVER_}</VOD_IMG_URL></VOD_LIST>{_CRLF_}{_TAB_}<EXT>{_CRLF_}{_TAB_}<OUTLINK><![CDATA[{_URL_}]]]]><![CDATA[</OUTLINK>{_CRLF_}{_TAB_}<ISSUE_ID>{_YY_}{_MM_}{_DD_}</ISSUE_ID>{_CRLF_}{_TAB_}{_REL_NEWS_DAUM_}{_CRLF_}{_TAB_}</EXT>{_CRLF_}</NEWS>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8"?>{_CRLF_}<NEWS VER="1.0" act="{_IUD_}" orgid="{_AID_}">{_CRLF_}{_TAB_}<DATETIME></DATETIME>{_CRLF_}{_TAB_}<WRITER_LIST>{_CRLF_}{_TAB_}<WRITER>{_CRLF_}{_TAB_}<NAME></NAME>{_CRLF_}{_TAB_}<EMAIL></EMAIL>{_CRLF_}{_TAB_}</WRITER>{_CRLF_}{_TAB_}</WRITER_LIST>{_CRLF_}{_TAB_}<CATEGORY_LIST>{_CRLF_}{_TAB_}<CODE></CODE>{_CRLF_}{_TAB_}</CATEGORY_LIST>{_CRLF_}{_TAB_}<TITLE><![CDATA[]]]]><![CDATA[</TITLE>{_CRLF_}{_TAB_}<SUB_TITLE><![CDATA[]]]]><![CDATA[</SUB_TITLE>{_CRLF_}{_TAB_}<TEXT type="text"><![CDATA[]]]]><![CDATA[</TEXT>{_CRLF_}{_TAB_}<IMG_LIST>{_CRLF_}{_TAB_}<IMG><URL /><TITLE /></IMG>{_CRLF_}{_TAB_}</IMG_LIST>{_CRLF_}{_TAB_}<THUMBNAIL_LIST />{_CRLF_}{_TAB_}<VOD_LIST />{_CRLF_}{_TAB_}<EXT>{_CRLF_}{_TAB_}<OUTLINK><![CDATA[]]]]><![CDATA[</OUTLINK>{_CRLF_}{_TAB_}<ISSUE_ID></ISSUE_ID>{_CRLF_}{_TAB_}{_TAB_}</EXT>{_CRLF_}</NEWS>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/daum_ja" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="DAUM_IG" Comment="# 미디어다음 - 일간"
+      Dir="C:\box\bulk\CpData\daum_ig"
+      FileExt="xml"
+      Content="IGP|IGQ|IGN|IGY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="2">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8"?>{_CRLF_}<NEWS VER="1.0" act="{_IUD_}" orgid="{_AID_}">{_CRLF_}{_TAB_}<DATETIME>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</DATETIME>{_CRLF_}{_TAB_}<WRITER_LIST>{_CRLF_}{_TAB_}<WRITER>{_CRLF_}{_TAB_}<NAME>{_REPT_}</NAME>{_CRLF_}{_TAB_}<EMAIL>{_MAIL_}</EMAIL>{_CRLF_}{_TAB_}</WRITER>{_CRLF_}{_TAB_}</WRITER_LIST>{_CRLF_}{_TAB_}<CATEGORY_LIST>{_CRLF_}{_TAB_}<CODE>{_C1_}</CODE>{_CRLF_}{_TAB_}</CATEGORY_LIST>{_CRLF_}{_TAB_}<TITLE><![CDATA[{_TTL_}]]]]><![CDATA[</TITLE>{_CRLF_}{_TAB_}<SUB_TITLE><![CDATA[{_STTL_}]]]]><![CDATA[</SUB_TITLE>{_CRLF_}{_TAB_}<TEXT type="text"><![CDATA[{_CONTH_DAUM_}{_CRLF_}{_JHOT_}]]]]><![CDATA[</TEXT>{_CRLF_}{_TAB_}<IMG_LIST>{_CRLF_}</IMG_LIST>{_CRLF_}{_TAB_}<THUMBNAIL_LIST />{_CRLF_}{_TAB_}<VOD_LIST />{_CRLF_}{_TAB_}<EXT>{_CRLF_}{_TAB_}<OUTLINK><![CDATA[{_URL_}]]]]><![CDATA[</OUTLINK>{_CRLF_}{_TAB_}<ISSUE_ID>{_YY_}{_MM_}{_DD_}</ISSUE_ID>{_CRLF_}{_TAB_}{_REL_NEWS_DAUM_}{_CRLF_}{_TAB_}</EXT>{_CRLF_}</NEWS>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8"?>{_CRLF_}<NEWS VER="1.0" act="{_IUD_}" orgid="{_AID_}">{_CRLF_}{_TAB_}<DATETIME></DATETIME>{_CRLF_}{_TAB_}<WRITER_LIST>{_CRLF_}{_TAB_}<WRITER>{_CRLF_}{_TAB_}<NAME></NAME>{_CRLF_}{_TAB_}<EMAIL></EMAIL>{_CRLF_}{_TAB_}</WRITER>{_CRLF_}{_TAB_}</WRITER_LIST>{_CRLF_}{_TAB_}<CATEGORY_LIST>{_CRLF_}{_TAB_}<CODE></CODE>{_CRLF_}{_TAB_}</CATEGORY_LIST>{_CRLF_}{_TAB_}<TITLE><![CDATA[]]]]><![CDATA[</TITLE>{_CRLF_}{_TAB_}<SUB_TITLE><![CDATA[]]]]><![CDATA[</SUB_TITLE>{_CRLF_}{_TAB_}<TEXT type="text"><![CDATA[]]]]><![CDATA[</TEXT>{_CRLF_}{_TAB_}<IMG_LIST>{_CRLF_}{_TAB_}<IMG><URL /><TITLE /></IMG>{_CRLF_}{_TAB_}</IMG_LIST>{_CRLF_}{_TAB_}<THUMBNAIL_LIST />{_CRLF_}{_TAB_}<VOD_LIST />{_CRLF_}{_TAB_}<EXT>{_CRLF_}{_TAB_}<OUTLINK><![CDATA[]]]]><![CDATA[</OUTLINK>{_CRLF_}{_TAB_}<ISSUE_ID></ISSUE_ID>{_CRLF_}{_TAB_}{_CRLF_}{_TAB_}</EXT>{_CRLF_}</NEWS>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/daum_ig" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="DOWNJONES" Comment="# 다우존스"
+      Dir="C:\box\bulk\CpData\downjones"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame>{_MFN_}</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}<content type="H"><![CDATA[{_CONT_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame>{_MFN_}</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/downjones" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="DOWNJONES_IG" Comment="# 다우존스(일간)"
+      Dir="C:\box\bulk\CpData\downjones"
+      FileExt="xml"
+      Content="IGP|IGQ|IGN|IGY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame>{_MFN_}</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}<content type="H"><![CDATA[{_CONT_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame>{_MFN_}</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/downjones" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="DOWNJONES_IHT" Comment="# 다우존스(데일리)"
+      Dir="C:\box\bulk\CpData\downjones"
+      FileExt="xml"
+      Content="IHT"
+      Type="HTML"
+      EncodeType="U8">
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>IHT</media>{_CRLF_}{_TAB_}<medianame>{_MFN_}</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TITLE_ENG_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STITLE_ENG_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}<content type="H"><![CDATA[{_CONT_ENG_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>IHT</media>{_CRLF_}{_TAB_}<medianame>{_MFN_}</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/downjones" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="FACTIVA_SUNDAY" Comment="# 팩티바(VSD) - 중앙선데이"
+      Dir="C:\box\bulk\CpData\factiva_sunday"
+      FileExt="xml"
+      Content="VSD"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>{_CRLF_}<article>{_CRLF_}<media>JSUNDAY</media>{_CRLF_}<medianame>{_MFN_}</medianame>{_CRLF_}<aid>{_AID_}</aid>{_CRLF_}<iud>{_IUD_}</iud>{_CRLF_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}<code1>{_C1_}</code1>{_CRLF_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}<content type="H"><![CDATA[{_CONTH_FACTIVA_SUNDAY_}]]]]><![CDATA[</content>{_CRLF_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}<media>JSUNDAY</media>{_CRLF_}<medianame>{_MFN_}</medianame>{_CRLF_}<aid>{_AID_}</aid>{_CRLF_}<iud>{_IUD_}</iud>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/factiva_sunday" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="NAVER_JA" Comment="# 네이버 뉴스 - 중앙일보 xml 포멧으로 변경 2013.10.18"
+      Dir="C:\box\bulk\CpData\naver_ja"
+      DnVideo="N"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT"
       Type="HTML"
       EncodeType="U8"
       SendSiteCode="1">
-      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_NAVER_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_BANNER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position>{_NAVER_POSITION_}</position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}{_XML_IMG_VIDEO_BLK2_}{_CRLF_}{_XML_IMG_BLK_NAVER_BANNER_}{_CRLF_}{_JHOT_NAVER_}{_CRLF_}</item>]]></Format>
-      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
-      <FtpConfig ip="127.0.0.1"
-        user="ftp_tester"
-        password="ftp_test"
-        rootDir="/cp/naver_ja_vod"
-        passive="0"
-        port="21"/>
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_NAVER_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<site>{_NAVER_SITE_}</site>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position>{_NAVER_POSITION_}</position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}<push>{_CRLF_}{_TAB_}<pushId>{_NAVER_PUSHID_}</pushId>{_CRLF_}{_TAB_}<grade>{_NAVER_PUSHGRADE_}</grade>{_CRLF_}{_TAB_}<title>{_NAVER_PUSHTITLE_}</title>{_CRLF_}{_TAB_}<date>{_NAVER_PUSHDATE_}</date>{_CRLF_}{_TAB_}<time>{_NAVER_PUSHTIME_}</time>{_CRLF_}</push>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle></subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_ja" passive="0" port="21"/>
     </Cp>
+
+    <Cp Name="NAVER_JA_VOD" Comment="# 네이버 뉴스 VOD"
+      Dir="C:\box\bulk\CpData\naver_ja_vod"
+      DnVideo="Y"
+      FileExt="xml"
+      Content="SOY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_NAVER_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position>{_NAVER_POSITION_}</position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}{_XML_IMG_VIDEO_BLK2_}{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}{_CRLF_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_ja_vod" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="NAVER_JLAND2" Comment="# 네이버 조인스랜드 - 네이버포맷(HTML),xml 포멧으로 변경 2013.10.18  #Copyright 정보는 FORMAT_IU에 하드코딩 : 중앙일보 Copyright 정보 바뀌면 같이 수정"
+      Dir="C:\box\bulk\CpData\naver_ja"
+      DnVideo="N"
+      FileExt="xml"
+      Content="JJL"
+      Type="HTML">
+      <Format><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="244"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_ja" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="NAVER_IG" Comment="# 네이버 뉴스 - 일간 xml 포멧으로 변경 2013.10.18"
+      Dir="C:\box\bulk\CpData\naver_ig"
+      DnVideo="N"
+      FileExt="xml"
+      Content="IGP|IGQ|IGN|IGY"
+      Type="HTML"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<site>{_NAVER_SITE_}</site>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_IHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_ig" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="NAVER_SEARCH_JDAILY" Comment="# 네이버 검색제휴 - 코리아중앙데일리(IHT)"
+      Dir="C:\box\bulk\CpData\naver_search_jdaily"
+      FileExt="xml"
+      Content="IHT|IHB"
+      Type="HTML">
+      <Format><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙데일리</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONT_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<mobileUrl href="http://mengnews.joins.com/view.aspx?aId={_AID_}"/>{_CRLF_}{_NAVER_SEARCH_IMG_}{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙데일리</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_search_jdaily" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="NAVER_SUNDAY" Comment="# 네이버 중앙선데이 - XML 2017.01.20"
+      Dir="C:\box\bulk\CpData\naver_sunday"
+      FileExt="xml"
+      Content="VSD"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}<press>중앙선데이</press>{_CRLF_}<nsid>{_AID_}</nsid>{_CRLF_}<action>{_IUD_}</action>{_CRLF_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}<category code="{_C1_}"/>{_CRLF_}<url href="{_URL_}"/>{_CRLF_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position>{_NAVER_POSITION_}</position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙선데이</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_sunday" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="INTERWORKS" Comment="# 인터웍스미디어 (애드네트웍 광고 상품용 데이터 전송)"
+      Dir="C:\box\bulk\CpData\interworks"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOC|IGP|IGQ|IGN|IGY|IHT|SOY"
+      Type="TXT"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame><![CDATA[{_MFN_}]]]]><![CDATA[</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<code1>{_C1_}</code1>{_CRLF_}{_TAB_}<code2>{_C2_}</code2>{_CRLF_}{_TAB_}<code3>{_C3_}</code3>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<reporter><![CDATA[{_REPT_}]]]]><![CDATA[</reporter>{_CRLF_}{_TAB_}<content><![CDATA[{_CONT_}{_CRLF_}{_CRT_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRT_}]]]]><![CDATA[</copyright>{_CRLF_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame><![CDATA[{_MFN_}]]]]><![CDATA[</medianame>{_CRLF_}{_TAB_}<aid>{_AID_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/interworks" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="BFLYSOFT" Comment="# 비플라이소프트"
+      Dir="C:\box\bulk\CpData\bfly"
+      FileExt="xml"
+      Content="SOXA|SOXE|SOXF|SOXG|SOXI"
+      Type="HTML"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media>{_M3_}</media>{_CRLF_}{_TAB_}<medianame><![CDATA[{_MFN_}]]]]><![CDATA[</medianame>{_CRLF_}{_TAB_}<aid>{_AID10_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday>{_YY_}{_MM_}{_DD_}</serviceday>{_CRLF_}{_TAB_}<servicetime>{_HH_}{_NN_}{_SS_}</servicetime>{_CRLF_}{_TAB_}<section>{_ISSUE_}</section>{_CRLF_}{_TAB_}<category>{_C1_}</category>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<reporter><![CDATA[{_REPT_}]]]]><![CDATA[</reporter>{_CRLF_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}<content><![CDATA[{_CONT_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_TAB_}<myun><![CDATA[{_MN_}]]]]><![CDATA[</myun>{_CRLF_}{_TAB_}<pan><![CDATA[{_PN_}]]]]><![CDATA[</pan>{_CRLF_}{_TAB_}{_XML_IMG_BLK_}{_CRLF_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<media />{_CRLF_}{_TAB_}<medianame />{_CRLF_}{_TAB_}<aid>{_AID10_}</aid>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<serviceday />{_CRLF_}{_TAB_}<servicetime />{_CRLF_}{_TAB_}<section />{_CRLF_}{_TAB_}<category />{_CRLF_}{_TAB_}<title />{_CRLF_}{_TAB_}<subtitle />{_CRLF_}{_TAB_}<reporter />{_CRLF_}{_TAB_}<email />{_CRLF_}{_TAB_}<content />{_CRLF_}{_TAB_}<serviceurl />{_CRLF_}{_TAB_}<copyright />{_CRLF_}{_TAB_}<images>{_CRLF_}{_TAB_}{_TAB_}<imageurl />{_CRLF_}{_TAB_}{_TAB_}<description />{_CRLF_}{_TAB_}</images>{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/bfly" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="JTBC_JA" Comment="# JTBC 중앙"
+      Dir="C:\box\bulk\CpData\jtbc_ja"
+      FileExt="xml"
+      Content="SOMA|SOME|SOMF|SOMG|SOMI"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<id>{_AID_}</id>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_EX4_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<reporters>{_CRLF_}{_TAB_}{_TAB_}<reporter>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<div>1</div>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<name><![CDATA[{_REPT_}]]]]><![CDATA[</name>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<etc><![CDATA[]]]]><![CDATA[</etc>{_CRLF_}{_TAB_}{_TAB_}</reporter>{_CRLF_}{_TAB_}</reporters>{_CRLF_}{_TAB_}<inputdate>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</inputdate>{_CRLF_}{_TAB_}<category>{_CRLF_}{_TAB_}{_TAB_}<code>{_C1_}</code>{_CRLF_}{_TAB_}{_TAB_}<name><![CDATA[]]]]><![CDATA[</name>{_CRLF_}{_TAB_}</category>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<components>{_CRLF_}{_XML_IMG_BLK4_}{_CRLF_}{_TAB_}</components>{_CRLF_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<id>{_AID_}</id>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<title />{_CRLF_}{_TAB_}<subtitle />{_CRLF_}{_TAB_}<content />{_CRLF_}{_TAB_}<reporters />{_CRLF_}{_TAB_}<inputdate>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</inputdate>{_CRLF_}{_TAB_}<category>{_CRLF_}{_TAB_}{_TAB_}<code>10</code>{_CRLF_}{_TAB_}{_TAB_}<name><![CDATA[]]]]><![CDATA[</name>{_CRLF_}{_TAB_}</category>{_CRLF_}{_TAB_}<serviceurl />{_CRLF_}{_TAB_}<components />{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/jtbc_ja" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="JTBC_IG" Comment="# JTBC 일간"
+      Dir="C:\box\bulk\CpData\jtbc_ig"
+      FileExt="xml"
+      Content="IGP|IGQ|IGN|IGY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="9">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<id>{_AID_}</id>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subtitle><![CDATA[{_STTL_}]]]]><![CDATA[</subtitle>{_CRLF_}{_TAB_}<content><![CDATA[{_CONT_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<reporters>{_CRLF_}{_TAB_}{_TAB_}<reporter>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<div>1</div>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<name><![CDATA[{_REPT_}]]]]><![CDATA[</name>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<email><![CDATA[{_MAIL_}]]]]><![CDATA[</email>{_CRLF_}{_TAB_}{_TAB_}{_TAB_}<etc><![CDATA[]]]]><![CDATA[</etc>{_CRLF_}{_TAB_}{_TAB_}</reporter>{_CRLF_}{_TAB_}</reporters>{_CRLF_}{_TAB_}<inputdate>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</inputdate>{_CRLF_}{_TAB_}<category>{_CRLF_}{_TAB_}{_TAB_}<code>{_C1_}</code>{_CRLF_}{_TAB_}{_TAB_}<name><![CDATA[]]]]><![CDATA[</name>{_CRLF_}{_TAB_}</category>{_CRLF_}{_TAB_}<serviceurl><![CDATA[{_URL_}]]]]><![CDATA[</serviceurl>{_CRLF_}{_TAB_}<components>{_CRLF_}{_XML_IMG_BLK4_}{_CRLF_}{_TAB_}</components>{_CRLF_}</article>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<article>{_CRLF_}{_TAB_}<id>{_AID_}</id>{_CRLF_}{_TAB_}<iud>{_IUD_}</iud>{_CRLF_}{_TAB_}<title />{_CRLF_}{_TAB_}<subtitle />{_CRLF_}{_TAB_}<content />{_CRLF_}{_TAB_}<reporters />{_CRLF_}{_TAB_}<inputdate>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</inputdate>{_CRLF_}{_TAB_}<category>{_CRLF_}{_TAB_}{_TAB_}<code>10</code>{_CRLF_}{_TAB_}{_TAB_}<name><![CDATA[]]]]><![CDATA[</name>{_CRLF_}{_TAB_}</category>{_CRLF_}{_TAB_}<serviceurl />{_CRLF_}{_TAB_}<components />{_CRLF_}</article>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/jtbc_ig" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="DAILY_JA" Comment="# 중앙일보 기사 미주 중앙으로 전송 추가 "
+      Dir="C:\box\bulk\CpData\daily_ja"
+      DnVideo="N"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_EMAIL_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position></position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle></subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/daily_ja" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="NIKKEI_DAILY" Comment="# 니케이(데일리)"
+      Dir="C:\box\bulk\CpData\nikkei_daily"
+      FileExt="xml"
+      Content="IHT"
+      Type="HTML"
+      EncodeType="U8">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙데일리</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_NOWHH:MM:SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NIKKEI_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<mobileUrl href="http://mengnews.joins.com/view.aspx?aId={_AID_}"/>{_CRLF_}{_NAVER_SEARCH_IMG_}{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙데일리</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_NOWHH:MM:SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/nikkei_daily" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="KPF_JA" Comment="# 중앙일보  한국언론재단"
+      Dir="C:\box\bulk\CpData\kpf_ja"
+      DnVideo="N"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOT|SOY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_EMAIL_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position></position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle></subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/kpf_ja" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="DAUM_SUNDAY" Comment="# 미디어다음 - 중앙 sunday"
+      Dir="C:\box\bulk\CpData\daum_sunday"
+      FileExt="xml"
+      Content="VSD"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="2">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8"?>{_CRLF_}<NEWS VER="1.0" act="{_IUD_}" orgid="{_AID_}">{_CRLF_}{_TAB_}<DATETIME>{_YY_}{_MM_}{_DD_}{_HH_}{_NN_}{_SS_}</DATETIME>{_CRLF_}{_TAB_}<WRITER_LIST>{_CRLF_}{_TAB_}<WRITER>{_CRLF_}{_TAB_}<NAME>{_REPT_}</NAME>{_CRLF_}{_TAB_}<EMAIL>{_MAIL_}</EMAIL>{_CRLF_}{_TAB_}</WRITER>{_CRLF_}{_TAB_}</WRITER_LIST>{_CRLF_}{_TAB_}<CATEGORY_LIST>{_CRLF_}{_TAB_}<CODE>{_C1_}</CODE>{_CRLF_}{_TAB_}</CATEGORY_LIST>{_CRLF_}{_TAB_}<TITLE><![CDATA[{_TTL_}]]]]><![CDATA[</TITLE>{_CRLF_}{_TAB_}<SUB_TITLE><![CDATA[{_STTL_}]]]]><![CDATA[</SUB_TITLE>{_CRLF_}{_TAB_}<TEXT type="text"><![CDATA[{_CONTH_DAUM_}{_CRLF_}]]]]><![CDATA[</TEXT>{_CRLF_}{_TAB_}<IMG_LIST></IMG_LIST>{_CRLF_}{_TAB_}<THUMBNAIL_LIST />{_CRLF_}{_TAB_}<VOD_LIST><VOD></VOD><VOD_IMG_URL></VOD_IMG_URL></VOD_LIST>{_CRLF_}{_TAB_}<EXT>{_CRLF_}{_TAB_}<OUTLINK><![CDATA[{_URL_}]]]]><![CDATA[</OUTLINK>{_CRLF_}{_TAB_}<ISSUE_ID>{_YY_}{_MM_}{_DD_}</ISSUE_ID>{_CRLF_}{_TAB_}{_REL_NEWS_DAUM_}{_CRLF_}{_TAB_}</EXT>{_CRLF_}</NEWS>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8"?>{_CRLF_}<NEWS VER="1.0" act="{_IUD_}" orgid="{_AID_}">{_CRLF_}{_TAB_}<DATETIME></DATETIME>{_CRLF_}{_TAB_}<WRITER_LIST>{_CRLF_}{_TAB_}<WRITER>{_CRLF_}{_TAB_}<NAME></NAME>{_CRLF_}{_TAB_}<EMAIL></EMAIL>{_CRLF_}{_TAB_}</WRITER>{_CRLF_}{_TAB_}</WRITER_LIST>{_CRLF_}{_TAB_}<CATEGORY_LIST>{_CRLF_}{_TAB_}<CODE></CODE>{_CRLF_}{_TAB_}</CATEGORY_LIST>{_CRLF_}{_TAB_}<TITLE><![CDATA[]]]]><![CDATA[</TITLE>{_CRLF_}{_TAB_}<SUB_TITLE><![CDATA[]]]]><![CDATA[</SUB_TITLE>{_CRLF_}{_TAB_}<TEXT type="text"><![CDATA[]]]]><![CDATA[</TEXT>{_CRLF_}{_TAB_}<IMG_LIST>{_CRLF_}{_TAB_}<IMG><URL /><TITLE /></IMG>{_CRLF_}{_TAB_}</IMG_LIST>{_CRLF_}{_TAB_}<THUMBNAIL_LIST />{_CRLF_}{_TAB_}<VOD_LIST />{_CRLF_}{_TAB_}<EXT>{_CRLF_}{_TAB_}<OUTLINK><![CDATA[]]]]><![CDATA[</OUTLINK>{_CRLF_}{_TAB_}<ISSUE_ID></ISSUE_ID>{_CRLF_}{_TAB_}{_TAB_}</EXT>{_CRLF_}</NEWS>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/daum_sunday" passive="0" port="21"/>
+    </Cp>
+
+    <Cp Name="CASTNET_JA" Comment="# 캐스트넷 뉴스 - 선택 카테고리만 전송"
+      Dir="C:\box\bulk\CpData\castnet_ja"
+      DnVideo="N"
+      FileExt="xml"
+      Content="SOA|SOE|SOF|SOG|SOI|SOY"
+      Type="HTML"
+      EncodeType="U8"
+      SendSiteCode="1">
+      <Format><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle><![CDATA[{_STTL_}]]]]><![CDATA[</subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_NAVER_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<site>{_NAVER_SITE_}</site>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="{_C1_}"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}<paper>{_CRLF_}{_TAB_}<publishInfo>{_CRLF_}{_TAB_}{_TAB_}<date>{_PRESS_DATE_}</date>{_CRLF_}{_TAB_}{_TAB_}<number></number>{_CRLF_}{_TAB_}{_TAB_}<printNumber>{_NAVER_PN_}</printNumber>{_CRLF_}{_TAB_}</publishInfo>{_CRLF_}{_TAB_}<editingInfo>{_CRLF_}{_TAB_}{_TAB_}<paperNumber>{_NAVER_MN_}</paperNumber>{_CRLF_}{_TAB_}{_TAB_}<paragraph></paragraph>{_CRLF_}{_TAB_}{_TAB_}<position>{_NAVER_POSITION_}</position>{_CRLF_}{_TAB_}{_TAB_}<detailPosition></detailPosition>{_CRLF_}{_TAB_}</editingInfo>{_CRLF_}</paper>{_CRLF_}<push>{_CRLF_}{_TAB_}<pushId>{_NAVER_PUSHID_}</pushId>{_CRLF_}{_TAB_}<grade>{_NAVER_PUSHGRADE_}</grade>{_CRLF_}{_TAB_}<title>{_NAVER_PUSHTITLE_}</title>{_CRLF_}{_TAB_}<date>{_NAVER_PUSHDATE_}</date>{_CRLF_}{_TAB_}<time>{_NAVER_PUSHTIME_}</time>{_CRLF_}</push>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
+      <FormatDelete><![CDATA[<?xml version="1.0" encoding="utf-8" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<subTitle></subTitle>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_NAVER_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/castnet_ja" passive="0" port="21"/>
+    </Cp>
+
   </CpList>
 </BulkDumpEnv>

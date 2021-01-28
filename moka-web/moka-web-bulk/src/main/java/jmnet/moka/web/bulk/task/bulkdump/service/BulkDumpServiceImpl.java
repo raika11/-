@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.bulk.mapper.idb.BulkDumpIdbMapper;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
+import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
+import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +69,38 @@ public class BulkDumpServiceImpl implements BulkDumpService {
 
         //////////////////////////////////////////////////기자 정보 별도 조회 http://pms.joins.com/task/view_task.asp?tid=19225
         article.processBulkReporters( this.bulkDumpIdbMapper.callUspBulkReporterJoongangSel(article) );
+
+        return true;
+    }
+
+    @Override
+    public boolean doGetBulkNewstableJoongangEx(BulkJoongangArticleEx article) {
+        List<BulkDumpNewsVo> dumpNewses = this.bulkDumpIdbMapper.callUspBulkNewstableJoongangExSel(article);
+
+        final int dumpNewsesLength = dumpNewses.size();
+        if( dumpNewsesLength == 0 )
+            return false;
+
+        List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList = null;
+        if( !article.getIud().toString().equals("D"))
+            bulkDumpNewsMMDataList = this.bulkDumpIdbMapper.callUspBulkNewsMMDataSel(article);
+
+        final BulkDumpNewsVo newsVo = dumpNewses.get( dumpNewsesLength - 1);
+        article.processBulkDumpNewsVo( newsVo, bulkDumpNewsMMDataList );
+
+        return true;
+    }
+
+    @Override
+    public boolean doGetBulkNewstableSunday(BulkSundayArticle article) {
+        List<BulkDumpNewsVo> dumpNewses = this.bulkDumpIdbMapper.callUspBulkNewstableSundaySel(article);
+
+        final int dumpNewsesLength = dumpNewses.size();
+        if( dumpNewsesLength == 0 )
+            return false;
+
+        final BulkDumpNewsVo newsVo = dumpNewses.get( dumpNewsesLength - 1);
+        article.processBulkDumpNewsVo( newsVo, this.bulkDumpIdbMapper.callUspBulkNewsMMDataSel(article) );
 
         return true;
     }

@@ -68,9 +68,9 @@ public class BulkTagUtil {
         } while (true);
     }
 
-    public static String restoreSpecialHtmlTag(String src)
-    {
-        return src.replace("&amp;", "&")
+    public static String restoreSpecialHtmlTag(String src) {
+        return src
+                .replace("&amp;", "&")
                 .replace("&amp", "&")
                 .replace("&lt;", "<")
                 .replace("&gt;", ">")
@@ -101,6 +101,32 @@ public class BulkTagUtil {
                 .replace("&#39", "'")
                 .replace("<br>", "\r\n")
                 .replace("<br/>", "\r\n");
+    }
+
+    public static String restoreSpecialHtmlTag2(String src) {
+        return src
+                .replace("&amp;", "&")
+                .replace("&amp", "&")
+                .replace("&nbsp;", " ")
+                .replace("&nbsp", " ")
+                .replace("&quot;", "\"")
+                .replace("&quot", "\"")
+                .replace("&#35;", "#")
+                .replace("&#44;", "`")
+                .replace("&#045;&#045;", "--")
+                .replace("&#40;", "(")
+                .replace("&#41;", ")")
+                .replace("&#92;", "\"")
+                .replace("&#59;", ";")
+                .replace("&#47;*", "/*")
+                .replace("*&#47;", "*/")
+                .replace("&#039;", "'")
+                .replace("&#39;", "'")
+                .replace("&#039", "'")
+                .replace("&#39", "'")
+                .replace("<br>", "\r\n")
+                .replace("<br/>", "\r\n")
+                .replace("<br/ >", "\r\n");
     }
 
     public static String standardBulkClearingTag( String str ) {
@@ -172,5 +198,13 @@ public class BulkTagUtil {
         }
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+
+    public static String fullOutlinkBulkTag(String str) {
+        str = restoreSpecialHtmlTag(str);
+        str = ripTag(str, "<!--", "-->")
+                .replaceAll("<a(\\s+)([^/a]+[^<]+)>", "<a$1$2 target=\"_joins_nw\">");
+        return str;
     }
 }

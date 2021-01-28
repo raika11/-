@@ -92,7 +92,7 @@ const PollEdit = () => {
                     data: edit,
                     callback: (response) => {
                         history.push(`/poll/${response.body.pollSeq}`);
-                        dispatch(getPollList(search));
+                        dispatch(getPollList({ search }));
                         toast.result(response);
                     },
                 }),
@@ -103,7 +103,7 @@ const PollEdit = () => {
                     data: edit,
                     callback: (response) => {
                         dispatch(getPoll(response.body.pollSeq));
-                        dispatch(getPollList(search));
+                        dispatch(getPollList({ search }));
                         toast.result(response);
                     },
                 }),

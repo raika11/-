@@ -44,9 +44,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Value("${corsAllowedOrigin}")
     private String corsAllowedOrigin;
 
-    @Value("${react.routes}")
-    private String reactRoutes;
-
     @Autowired
     private ApplicationContext appContext;
 

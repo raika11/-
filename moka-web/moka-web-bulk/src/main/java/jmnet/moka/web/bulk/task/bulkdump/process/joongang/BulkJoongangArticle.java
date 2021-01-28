@@ -13,6 +13,7 @@ import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
 import jmnet.moka.web.bulk.service.SmsUtilService;
 import jmnet.moka.web.bulk.task.base.TaskManager;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.MediaFullName;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
@@ -47,6 +48,7 @@ public class BulkJoongangArticle extends BulkArticle {
         super(bulkDumpTotal);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
         super.processBulkDumpNewsVo(newsVo, bulkDumpNewsMMDataList);
@@ -89,8 +91,8 @@ public class BulkJoongangArticle extends BulkArticle {
         getNaverMyun().setData(newsVo.getMyun());
         getNaverPan().setData(newsVo.getPan());
 
-        if (!newsVo.getMyun().isEmpty()) {
-            if (!newsVo.getPressPosition().isEmpty()) {
+        if (!McpString.isNullOrEmpty(newsVo.getMyun())) {
+            if (!McpString.isNullOrEmpty(newsVo.getPressPosition())) {
                 getNaverPosition().setData(newsVo.getPressPosition());
             } else {
                 getNaverPosition().setData("9");
@@ -115,29 +117,7 @@ public class BulkJoongangArticle extends BulkArticle {
     }
 
     public void processMediaFullName() {
-        switch(getTargetCode().substring(getTargetCode().length()-1)){
-            case "A":
-                getMediaFullName().setData("중앙일보::속보");
-                break;
-            case "E":
-                getMediaFullName().setData("중앙일보::문화/연예");
-                break;
-            case "F":
-                getMediaFullName().setData("중앙일보::정보과학");
-                break;
-            case "G":
-                getMediaFullName().setData("중앙일보::스포츠");
-                break;
-            case "I":
-                getMediaFullName().setData("중앙일보::경제");
-                break;
-            case "C":
-                getMediaFullName().setData("중앙일보::풍향계");
-                break;
-            default:
-                getMediaFullName().setData("중앙일보");
-                break;
-        }
+        getMediaFullName().setData(MediaFullName.getJoongangMediaFullName( getTargetCode().substring(getTargetCode().length() - 1)));
     }
 
     public void processBulkReporters(List<Map<String, String>> reporters) {
@@ -328,35 +308,6 @@ public class BulkJoongangArticle extends BulkArticle {
         }
     }
 
-    public void processContentTag_tag_interview() {
-        if (getContentHtml().contains("<div class=\"tag_interview\">")) {
-            getContentHtml().replaceAll("(?i)<div class=\"tag_question\">(?<question>.*?)</div>", "\r\n<strong>Q : $1</strong>\r\n");
-            getContentHtml().replaceAll("(?i)<div class=\"tag_answer\">(?<answer>.*?)</div>", "<strong>A :</strong> $1");
-        }
-    }
-
-    public void processContentTag_ab_related_article() {
-        //아티클개선 관련기사 태그제거(공통) by sean 2016-09-02 - http://pms.joins.com/task/view_task.asp?tid=13408  /////////////////////////////////////////////////
-        //관련기사 <div class="ab_related_article">.....<div> 제거
-        if (getContentHtml().contains("ab_related_article")) {
-            getContentHtml().replaceAll("(?i)<(\\s)*div(\\s)*class(\\s)*=(\\s)*([\"'])ab_related_article([\"'])(\\s)*>.*?hd.*?bd.*?ul.*?/ul.(\\s)*<(\\s)*/(\\s)*div>(\\s)*<(\\s)*/(\\s)*div>", "");
-        }
-    }
-
-    public void processImageBulkFlag() {
-        // 벌크이미지 사용 안할 경우 본문 이미지묶음 삭제
-        // 2016-07-07 본문 이미지 묶음 div 제거
-        if( getImageBulkFlag().equals("N") ) {
-            getContentHtml().setData(
-                getContentHtml().toString().replaceAll("(?i)<div class=\"image\">.*?</div>", "")
-                                .replaceAll("(?i)<div class=\"tag_photobundle\">.*?</div>", "")
-            );
-
-            while ( getContentHtml().toString().startsWith("\r\n") )
-                getContentHtml().setData( getContentHtml().toString().substring("\r\n".length()));
-        }
-    }
-
     private static final Pattern PATTERN_ContentTag_cyworld = Pattern.compile("<(\\s*?)img.[^>]+>", Pattern.CASE_INSENSITIVE);
     public void processContentCyworld() {
         // 싸이월드 전용변수(m_content_html_cyworld) - 정보구성
@@ -418,125 +369,6 @@ public class BulkJoongangArticle extends BulkArticle {
         }
 
         getContentHtmlNate().setData( contentHtmlNate);
-    }
-
-    private static final Pattern PATTERN_ContentTag_daumVod = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id[^>].*?>(\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumKakaoTv = Pattern.compile("<iframe.*?src=(.)http://videofarm.daum.net/controller/video/viewer/Video.html.*?</iframe>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumPhotoBundle = Pattern.compile("<div class=\"tag_photobundle\">(\\s)*<img.*?>(\\s)*</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumImg = Pattern.compile("<(\\s*?)img.[^>]+>", Pattern.CASE_INSENSITIVE);
-    public void processContentDaumBefore(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap,
-            Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
-        //카카오다음 전용변수(m_content_html_ig_daum)
-        String contentHtmlDaum = getContentHtml().toString()
-                                                 .replaceAll("(?i)<!--@img_tag_s@-->.*?<!--@img_tag_e@-->", "")
-                                                 .replaceAll("(?i)<p class=\"caption\">", "</p>");
-
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"" );
-
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumVod, contentHtmlDaum, "daumvod_", daumVideoMap);
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<div class=\"tag_vod\".*?</div>", "" ); //동영상 제외
-
-        //사운드Cloud 안내메시지 제거
-        contentHtmlDaum = contentHtmlDaum.replaceAll("위\\s*재생.+다.", "" ); //동영상 제외
-
-        //미리보는 오늘 증시/날씨 다음카카오 제거 by sean 2016-09-08 - http://pms.joins.com/task/view_task.asp?tid=13574  /////////////////////////////////////////////////
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s)*div(\\s)*class(\\s)*=(\\s)*([\"'])ab_life([\"'])(\\s)*>.*?<(\\s)*/table.*?/table.*?/table.*?./(\\s)*div(\\s)*>", "" );
-
-        //ab_table 컴포넌트 태그제거
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<table(\\s)*class(\\s)*=(\\s)*([\"'])ab_table([\"'])(\\s)*>.*?<(\\s)*/table(\\s)*>", "" );
-
-        //카카오TV팟 <iframe> 태그를 치환 정보구성 by sean - 2016-07-29
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumKakaoTv, contentHtmlDaum, "mark_kakao_tv_podcast_", daumVideoKakaoTvMap);
-
-        //다음카카오 이미지묶음 케이스(tag_photobundle)
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumPhotoBundle, contentHtmlDaum, "tag_photobundle", daumPhotoBundleMap);
-
-        //다음카카오 이미지정렬 태그 치환정보 구성 2016-08-02 by sean.
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumImg, contentHtmlDaum, "ab_photo", daumImageMap);
-
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<p class=\"caption\">.*?</p>","");
-
-        getContentHtmlDaum().setData(contentHtmlDaum);
-    }
-
-    private static final Pattern PATTERN_ContentTag_daumVodNaverCast = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"navercast[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodKakaoTv = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"kakaotv[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodYouTube = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodOvp = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    public void processContentDaumAfter(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap, Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
-        // 다음기사에 QA인 경우 줄바뀜 추가 2016-02-05 지창현
-        String contentHtmlDaum = getContentHtmlDaum().toString();
-        if( contentHtmlDaum.contains("\r\n<strong>Q :")) {
-            contentHtmlDaum = contentHtmlDaum.replace("\r\n<strong>Q :", "\r\n\r\n<strong>Q :");
-        }
-
-        contentHtmlDaum = contentHtmlDaum.replaceAll("[<][a-zA-Z/](.|\n)*?[>]", "");
-
-        // region 다음카카오 TV팟, tag_photobundle 처리
-        // 카카오 TV팟 <iframe> 태그구간 원본치환
-        for (String kakaoTvKey : daumVideoKakaoTvMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace(kakaoTvKey, daumVideoKakaoTvMap.get(kakaoTvKey));
-        }
-
-        //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumPhotoBundleMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
-        }
-
-        //다음카카오 이미지정렬 원래 태그로 치환 ///////////////////////////////////////////////////////////////////////////////////////
-        for (String daumImageKey : daumImageMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( daumImageKey, daumImageMap.get(daumImageKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
-        }
-
-        boolean isOnceDaumTagReplace = true;
-        for( String daumVideoKey : daumVideoMap.keySet() ){
-            final String daumVideoStr = daumVideoMap.get(daumVideoKey);
-
-            // 네이버 cast 삭제
-            if( PATTERN_ContentTag_daumVodNaverCast.matcher(daumVideoStr).find() ) {
-                contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, "");
-                continue;
-            }
-
-            // 카카오 TV
-            Matcher matcherKakaoTv = PATTERN_ContentTag_daumVodKakaoTv.matcher(daumVideoStr);
-            if( matcherKakaoTv.find()) {
-                contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, String.format("<iframe src=\"%s\"></iframe>", matcherKakaoTv.group("url")));
-                continue;
-            }
-
-            // YouTube
-            Matcher matcherYouTube = PATTERN_ContentTag_daumVodYouTube.matcher(daumVideoStr);
-            if( matcherYouTube.find()) {
-                contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, String.format("<iframe src=\"%s\" allowfullscreen=\"true\"></iframe>", matcherYouTube.group("url")));
-                continue;
-            }
-
-            // ovp
-            Matcher matcherOvp = PATTERN_ContentTag_daumVodOvp.matcher(daumVideoStr);
-            if( matcherOvp.find()){
-                if (!isOnceDaumTagReplace) {
-                    contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, "");
-                } else {
-                    isOnceDaumTagReplace = false;
-                    setOvpArticle( true );
-                    contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, String.format("<video controls><source src=\"%s.mp4\" type=\"video/mp4\"></video>", getTotalId().toString()));
-                }
-            }
-        }
-
-        contentHtmlDaum = contentHtmlDaum.replace("<여기를 누르시면 크게 보실 수 있습니다>", "")
-                                         .replace("▷여기를 누르시면 크게 보실 수 있습니다", "");
-
-        //다음 아티클 개선 style 적용 by sean 2016-08-31 - http://pms.joins.com/task/view_task.asp?tid=13408  ////////////////
-        //다음은 전체태그가 제거되므로 div,span class=dim 에 태그를 제외한 CMS 입력 템플릿을 <br /> 그대로 사용한다.
-        //CMS CK 에디터 템플릿에서 <br><br> 두번을 지정해줘야 <br /> 이 입력되는 특이사항 발생. 2016-09-01 jerome speech.
-        contentHtmlDaum = contentHtmlDaum.replace("■", "\r\n\r\n■")
-                                         .replace("「", "\r\n「")
-                                         .replace("」", "」\r\n\r\n");
-        //다음 아티클 개선 style 적용 by sean 2016-08-31 - http://pms.joins.com/task/view_task.asp?tid=13408  ////////////////
-
-        getContentHtmlDaum().setData(contentHtmlDaum);
     }
 
     // ssc Sapark 패턴 수정..
@@ -791,11 +623,8 @@ public class BulkJoongangArticle extends BulkArticle {
                 //2018-08-28 네이버 영상별 cover_img 따로 기술
                 if (imgSrc.contains("ooyala")) continue; //우얄라 이미지는 이미지 벌크에서 제외(네이버, 네이트)
 
-                if( !McpString.isNullOrEmpty(getImageBlockTxt2().toString()))
-                    getImageBlockTxt2().concat( ";");
-                getImageBlockTxt2().concat( imgSrc );
+                getImageBlockTxt2().addDelimiterConcat(imgSrc, ";");
                 getImageBlockTxtNate().setData( getImageBlockTxt2().toString());
-
 
                 getImageBlockXml().concat("<images>\r\n");
                 getImageBlockXml().concat("\t<imageurl><![CDATA[" + imgSrc + "]]></imageurl>\r\n");
@@ -917,6 +746,98 @@ public class BulkJoongangArticle extends BulkArticle {
     }
 
     public void processContent_CopyRight() {
+    }
+
+    public void processContentTag_ab_ds_timeline() {
+        /*
+        // timeline 아티클 처리 미리 처리
+        if ((m_article.m_content_html).IndexOf("ab_ds_timeline") >= 0)
+        {
+            //string timelinePattern = string.Empty;
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(m_article.m_content_html);
+            foreach (var nodeDep1 in htmlDoc.DocumentNode.ChildNodes)
+            {
+                if (nodeDep1.NodeType == HtmlNodeType.Element)
+                {
+                    if (nodeDep1.GetAttributeValue("class", "").Contains("ab_ds_timeline"))
+                    {
+                        nodeDep1.InnerHtml = nodeDep1.InnerHtml.Replace("<!-- 사진, 영상이 있을때 chat_box_photo 추가 -->", string.Empty);
+                        nodeDep1.InnerHtml = m_util.ReplaceTag(nodeDep1.InnerHtml, "h2", "b");
+                        nodeDep1.InnerHtml = m_util.ReplaceTag(nodeDep1.InnerHtml, "strong", "b");
+                        nodeDep1.InnerHtml = m_util.ReplaceHTMLSpecialChars(nodeDep1.InnerHtml, "div,img,b");
+                        //nodeDep1.SetAttributeValue("style", "padding-bottom:16px;line-height:26px;letter-spacing:0px;font-family:돋움,dotum,sans-serif;");
+                        foreach (var nodeDep2 in nodeDep1.ChildNodes)
+                        {
+                            if (nodeDep2.GetAttributeValue("class", "").Contains("ab_photo"))
+                            {
+                                foreach (var nodeDep3 in nodeDep2.ChildNodes)
+                                {
+                                    if (nodeDep3.NodeType != HtmlNodeType.Element)
+                                    {
+                                        nodeDep3.InnerHtml = string.Empty;
+                                    }
+                                }
+                            }
+
+                            if (nodeDep2.GetAttributeValue("class", "").Contains("timeline_box"))
+                            {
+                                //nodeDep2.SetAttributeValue("style", "padding:24px 20px 0px;border:1px solid rgb(221,221,221);border-image:none;overflow:hidden;clear:both;");
+                                //nodeDep2.InnerHtml = "「" + nodeDep2.InnerHtml + "」";
+                                nodeDep2.InnerHtml = "\r\n" + nodeDep2.InnerHtml + "\r\n";
+
+                                foreach (var nodeDep3 in nodeDep2.ChildNodes)
+                                {
+                                    if (nodeDep3.NodeType == HtmlNodeType.Element)
+                                    {
+                                        if (nodeDep3.GetAttributeValue("class", "").Contains("date"))
+                                        {
+                                            nodeDep3.InnerHtml = "■" + nodeDep3.InnerHtml;
+                                            nodeDep3.SetAttributeValue("style", "position:relative;margin-top:17px;margin-bottom:16px;padding-top:15px;padding-bottom:14px;border-top:1px solid #444446;border-bottom:1px solid #ebebeb;color:#3e3e40;font-size:20px;line-height:1.5;width:100%;");
+                                        }
+                                        if (nodeDep3.GetAttributeValue("class", "").Contains("ad_go_article"))
+                                        {
+                                            nodeDep3.InnerHtml = string.Empty;
+                                        }
+                                        if (nodeDep3.GetAttributeValue("class", "").Contains("timeline_box_content"))
+                                        {
+                                            foreach (var nodeDep4 in nodeDep3.ChildNodes)
+                                            {
+                                                if (nodeDep4.NodeType == HtmlNodeType.Element)
+                                                {
+                                                    if (nodeDep4.GetAttributeValue("class", "").Contains("chat_profile"))
+                                                    {
+                                                        //var removeNode = nodeDep4.SelectSingleNode("//div[@class='time_profile_img']");
+                                                        //if (removeNode != null || !string.IsNullOrEmpty(removeNode.InnerText))
+                                                        //{
+                                                        //    nodeDep4.RemoveChild(removeNode);
+                                                        //}
+                                                        foreach (var nodeDep5 in nodeDep4.ChildNodes)
+                                                        {
+                                                            if (nodeDep5.GetAttributeValue("class", "").Contains("time_profile_img"))
+                                                            {
+                                                                nodeDep5.RemoveAllChildren();
+                                                            }
+                                                            if (nodeDep5.GetAttributeValue("class", "").Contains("time_profile"))
+                                                            {
+                                                                nodeDep5.SetAttributeValue("style", "color:rgb(166,152,134);line-height:1.5;font-size:14px;margin-bottom:1px;");
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            m_article.m_content_html = htmlDoc.DocumentNode.OuterHtml;
+        }
+         */
     }
 }
 

@@ -18,7 +18,7 @@ const SignIn = () => {
     const [userId, setUserId] = useState(getLocalItem(SIGNIN_MEMBER_ID) || 'ssc01');
     const [showUnlockModal, setShowUnlockModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
-    const [password, setPassword] = useState('sscMoka#2020');
+    const [password, setPassword] = useState('');
     const [idSave, setIdSave] = useState(getLocalItem(SIGNIN_MEMBER_ID_SAVE));
     const [passwordErrorCount, setPasswordErrorCount] = useState(0);
     const handleSubmit = (e) => {

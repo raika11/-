@@ -21,16 +21,18 @@ import jmnet.moka.common.utils.MapBuilder;
  */
 public final class CommentCode {
     public enum CommentBannedType implements EnumCode {
-        I("I", "아이피"),
-        U("U", "사용자"),
-        W("W", "단어");
+        I("I", "IP", "사용자 IP"),
+        U("U", "사용자 ID", "사용자 ID"),
+        W("W", "단어", "단어");
 
         private String code;
         private String name;
+        private String fullname;
 
-        CommentBannedType(String code, String name) {
+        CommentBannedType(String code, String name, String fullname) {
             this.code = code;
             this.name = name;
+            this.fullname = fullname;
         }
 
         public String getCode() {
@@ -39,6 +41,10 @@ public final class CommentCode {
 
         public String getName() {
             return name;
+        }
+
+        public String getFullname() {
+            return fullname;
         }
     }
 

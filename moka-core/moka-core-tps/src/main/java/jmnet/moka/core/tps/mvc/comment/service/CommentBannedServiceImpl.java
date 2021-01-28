@@ -7,8 +7,11 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeSimple;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentBannedHist;
+import jmnet.moka.core.tps.mvc.comment.repository.CommentBannedHistRepository;
 import jmnet.moka.core.tps.mvc.comment.repository.CommentBannedRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -30,10 +33,14 @@ public class CommentBannedServiceImpl implements CommentBannedService {
 
     private final CommentBannedRepository commentBannedRepository;
 
+    private final CommentBannedHistRepository commentBannedHistRepository;
+
     private final CodeMgtService codeMgtService;
 
-    public CommentBannedServiceImpl(CommentBannedRepository commentBannedRepository, CodeMgtService codeMgtService) {
+    public CommentBannedServiceImpl(CommentBannedRepository commentBannedRepository, CommentBannedHistRepository commentBannedHistRepository,
+            CodeMgtService codeMgtService) {
         this.commentBannedRepository = commentBannedRepository;
+        this.commentBannedHistRepository = commentBannedHistRepository;
         this.codeMgtService = codeMgtService;
     }
 
@@ -43,8 +50,18 @@ public class CommentBannedServiceImpl implements CommentBannedService {
     }
 
     @Override
+    public List<CommentBannedHist> findAllCommentBannedHistoryBySeq(Long seqNo) {
+        return commentBannedHistRepository.findAllByBannedSeq(seqNo);
+    }
+
+    @Override
     public Optional<CommentBanned> findCommentBannedBySeq(Long seqNo) {
         return commentBannedRepository.findCommentBanned(seqNo);
+    }
+
+    @Override
+    public Optional<CommentBanned> findAllCommentBannedByTagValue(CommentBannedType tagType, String tagValue) {
+        return commentBannedRepository.findCommentBanned(tagType, tagValue);
     }
 
     @Override
@@ -59,6 +76,11 @@ public class CommentBannedServiceImpl implements CommentBannedService {
 
     private CommentBanned saveCommentBanned(CommentBanned commentBanned) {
         CommentBanned currentCommentBanned = commentBannedRepository.save(commentBanned);
+        commentBannedHistRepository.save(CommentBannedHist
+                .builder()
+                .bannedSeq(currentCommentBanned.getSeqNo())
+                .usedYn(currentCommentBanned.getUsedYn())
+                .build());
         if (McpString.isNotEmpty(currentCommentBanned.getTagDiv())) {
             List<CodeMgt> codes = codeMgtService.findByDtlCd(TpsConstants.CMT_TAG_DIV, currentCommentBanned.getTagDiv());
             if (codes != null && codes.size() > 0) {

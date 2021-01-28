@@ -1,8 +1,11 @@
 package jmnet.moka.core.tps.mvc.comment.service;
 
+import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
+import jmnet.moka.core.tps.mvc.comment.entity.CommentBannedHist;
 import org.springframework.data.domain.Page;
 
 /**
@@ -21,7 +24,11 @@ public interface CommentBannedService {
 
     Page<CommentBanned> findAllCommentBanned(CommentBannedSearchDTO searchDTO);
 
+    List<CommentBannedHist> findAllCommentBannedHistoryBySeq(Long seqNo);
+
     Optional<CommentBanned> findCommentBannedBySeq(Long seqNo);
+
+    Optional<CommentBanned> findAllCommentBannedByTagValue(CommentBannedType tagType, String tagValue);
 
     CommentBanned insertCommentBanned(CommentBanned commentBanned);
 

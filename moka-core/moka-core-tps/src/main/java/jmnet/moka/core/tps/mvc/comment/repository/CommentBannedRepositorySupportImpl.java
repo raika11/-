@@ -8,6 +8,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeSimple;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
 import jmnet.moka.core.tps.mvc.comment.entity.CommentBanned;
 import jmnet.moka.core.tps.mvc.comment.entity.QCommentBanned;
@@ -82,6 +83,31 @@ public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySuppor
                 .fetchResults();
 
         return new PageImpl<CommentBanned>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @EntityGraph(attributePaths = {"tagDivCode", "regMember"}, type = EntityGraph.EntityGraphType.LOAD)
+    public Optional<CommentBanned> findCommentBanned(CommentBannedType tagType, String tagValue) {
+
+        QCommentBanned qCommentBanned = QCommentBanned.commentBanned;
+        QCodeSimple qCodeSimple = QCodeSimple.codeSimple;
+        QMemberSimpleInfo qRegMember = new QMemberSimpleInfo("regMember");
+        JPQLQuery<CommentBanned> query = from(qCommentBanned);
+
+        query.where(qCommentBanned.tagType
+                .eq(tagType)
+                .and(qCommentBanned.tagValue.eq(tagValue)));
+        query.where(qCommentBanned.tagDivCode.grpCd
+                .eq(TpsConstants.CMT_TAG_DIV)
+                .and(qCommentBanned.tagDivCode.usedYn.eq(MokaConstants.YES)));
+
+        CommentBanned commentBanned = query
+                .leftJoin(qCommentBanned.tagDivCode, qCodeSimple)
+                .fetchJoin()
+                .leftJoin(qCommentBanned.regMember, qRegMember)
+                .fetchJoin()
+                .fetchFirst();
+
+        return Optional.ofNullable(commentBanned);
     }
 
 

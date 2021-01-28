@@ -3,7 +3,7 @@ import { Col, Form } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
-const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataReturnEvent }) => {
+const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataReturnEvent, selectEditData }) => {
     const [editData, setEditData] = useState({
         questionIndex: questionIndex,
         questionType: 'O',
@@ -41,8 +41,23 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataRetu
     }, [editData]);
 
     useEffect(() => {
-        console.log('First type');
-        console.log(questionCount);
+        // console.log('First type');
+        // console.log(questionCount);
+
+        const setselectEditData = (data) => {
+            setEditData({
+                ...editData,
+                title: data.title,
+                answer: data.answer,
+                imgUrl: data.imgUrl,
+                questionDesc: data.questionDesc,
+            });
+        };
+
+        if (selectEditData !== null) {
+            setselectEditData(selectEditData);
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

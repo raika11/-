@@ -20,3 +20,7 @@ export const getQuizzes = createAction(GET_QUIZZES, ({ quizSeq }) => ({ quizSeq 
 // 취즈 등록, 수정
 export const SAVE_QUIZZES = 'quiz/SAVE_QUIZZES';
 export const saveQuizzes = createAction(SAVE_QUIZZES, ({ type, quizSeq, formData, callback }) => ({ type, quizSeq, formData, callback }));
+
+// 문항
+export const QUIZ_QUESTION_ITEM = 'quiz/QUIZ_QUESTION_ITEM';
+export const quizQuestionItem = createAction(QUIZ_QUESTION_ITEM, (...actions) => actions);

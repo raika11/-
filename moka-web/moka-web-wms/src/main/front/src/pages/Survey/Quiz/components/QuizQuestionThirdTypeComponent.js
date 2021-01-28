@@ -3,13 +3,15 @@ import { Col, Form } from 'react-bootstrap';
 import { MokaCard, MokaInput, MokaInputLabel, MokaTableDeleteButton } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
-const QuizQuestionThirdTypeComponent = ({ questionIndex, questionCount, dataReturnEvent }) => {
+const QuizQuestionThirdTypeComponent = ({ questionIndex, questionCount, dataReturnEvent, selectEditData, getLoading }) => {
     const [editData, setEditData] = useState({
         questionIndex: questionIndex,
         questionType: 'S',
-        imgFile: {},
+        imgUrl: '',
+        imgFile: null,
         title: '',
         questionDesc: '',
+        questionSeq: '',
         choices: [],
     });
 
@@ -75,6 +77,9 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, questionCount, dataRetu
     useEffect(() => {
         // console.log(editData);
     }, [editData]);
+    useEffect(() => {
+        // console.log(getLoading);
+    }, [getLoading]);
 
     useEffect(() => {
         dataReturnEvent({
@@ -97,7 +102,27 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, questionCount, dataRetu
             });
         };
 
-        setQuestionList();
+        const setselectEditData = (data) => {
+            let choices = data.choices.map((element, i) => {
+                return {
+                    title: element.title,
+                    answYn: element.answYn,
+                };
+            });
+            setEditData({
+                ...editData,
+                title: data.title,
+                choices: choices,
+                imgUrl: data.imgUrl,
+                questionDesc: data.questionDesc,
+                questionSeq: data.questionSeq,
+            });
+        };
+        if (selectEditData !== null) {
+            setselectEditData(selectEditData);
+        } else {
+            setQuestionList();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

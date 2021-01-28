@@ -14,9 +14,27 @@ export const getQuizzesInfo = ({ quizSeq }) => {
 };
 
 // 퀴즈 등록.
-
 export const saveQuizzes = ({ formData }) => {
-    return instance.post(`/api/quizzes`, formData).catch((err) => {
-        throw err;
-    });
+    return instance
+        .post(`/api/quizzes`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 퀴즈 수정.
+export const updateQuizzes = ({ quizSeq, formData }) => {
+    return instance
+        .put(`/api/quizzes/${quizSeq}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };

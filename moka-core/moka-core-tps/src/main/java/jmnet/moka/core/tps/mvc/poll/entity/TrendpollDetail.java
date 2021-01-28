@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
@@ -171,10 +172,12 @@ public class TrendpollDetail extends BaseAudit implements Serializable {
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll")
+    @OrderBy("ordNo")
     private List<TrendpollItem> pollItems = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll")
+    @OrderBy("ordNo")
     private List<TrendpollRelate> pollRelateContents = new ArrayList<>();
 
 

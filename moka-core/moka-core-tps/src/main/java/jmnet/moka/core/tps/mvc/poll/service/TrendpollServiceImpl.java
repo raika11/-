@@ -120,11 +120,11 @@ public class TrendpollServiceImpl implements TrendpollService {
         if (trendpoll.getPollItems() != null && trendpoll
                 .getPollItems()
                 .size() > 0) {
-            AtomicInteger order = new AtomicInteger(1);
+            AtomicInteger itemOrder = new AtomicInteger(1);
             trendpoll
                     .getPollItems()
                     .forEach(trendpollItem -> {
-                        trendpollItem.setOrdNo(order.getAndAdd(1));
+                        trendpollItem.setOrdNo(itemOrder.getAndAdd(1));
                         trendpollItem.setPollSeq(newTrendpoll.getPollSeq());
                     });
             newTrendpoll.setPollItems(trendpollItemRepository.saveAll(trendpoll.getPollItems()));
@@ -133,11 +133,11 @@ public class TrendpollServiceImpl implements TrendpollService {
         if (trendpoll.getPollRelateContents() != null && trendpoll
                 .getPollRelateContents()
                 .size() > 0) {
-            AtomicInteger order = new AtomicInteger(1);
+            AtomicInteger relOrder = new AtomicInteger(1);
             trendpoll
                     .getPollRelateContents()
                     .forEach(trendpollRelate -> {
-                        trendpollRelate.setOrdNo(order.getAndAdd(1));
+                        trendpollRelate.setOrdNo(relOrder.getAndAdd(1));
                         trendpollRelate.setPollSeq(newTrendpoll.getPollSeq());
                     });
             newTrendpoll.setPollRelateContents(trendpollRelateRepository.saveAll(trendpoll.getPollRelateContents()));

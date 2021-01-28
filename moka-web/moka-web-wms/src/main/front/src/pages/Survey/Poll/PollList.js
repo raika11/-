@@ -34,13 +34,22 @@ const PollList = ({ onDelete }) => {
     };
 
     useEffect(() => {
-        dispatch(getPollList(search));
+        dispatch(getPollList({ search }));
     }, [dispatch, search]);
 
     return (
         <>
-            <PollSearch searchOptions={search} codes={codes} onAdd={handleClickAdd} onSearch={handleChangeSearchOption} onReset={handleClickReset} />
-            <PollAgGrid searchOptions={search} rows={list} total={total} loading={loading} pollSeq={pollSeq} onChangeSearchOption={handleChangeSearchOption} onDelete={onDelete} />
+            <PollSearch searchOptions={search} codes={codes} onSearch={handleChangeSearchOption} onReset={handleClickReset} />
+            <PollAgGrid
+                searchOptions={search}
+                rows={list}
+                total={total}
+                loading={loading}
+                pollSeq={pollSeq}
+                onChangeSearchOption={handleChangeSearchOption}
+                onDelete={onDelete}
+                onAdd={handleClickAdd}
+            />
         </>
     );
 };

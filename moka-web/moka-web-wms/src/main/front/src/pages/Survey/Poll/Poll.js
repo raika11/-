@@ -23,7 +23,7 @@ const Poll = ({ match }) => {
             deletePoll({
                 pollSeq,
                 callback: (response) => {
-                    dispatch(getPollList(search));
+                    dispatch(getPollList({ search }));
                     toast.result(response);
                 },
             }),

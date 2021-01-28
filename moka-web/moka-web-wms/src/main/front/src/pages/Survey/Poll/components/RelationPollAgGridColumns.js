@@ -5,26 +5,26 @@ import commonUtil from '@utils/commonUtil';
 export const columnDefs = [
     {
         headerName: '',
-        field: 'insert',
-        width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '65px' },
-        cellRendererFramework: (param) => {
+        field: 'add',
+        width: 60,
+        cellRendererFramework: (row) => {
+            const { data } = row;
             return (
-                <Row className="d-flex w-100 align-items-center justify-content-center mr-0">
-                    <Col className="w-100">
-                        <Button
-                            size="sm"
-                            variant="outline-table-btn"
-                            onClick={() => {
-                                if (!commonUtil.isEmpty(param.data.onAdd) && param.data.onAdd instanceof Function) {
-                                    param.data.onAdd(param.data);
-                                }
-                            }}
-                        >
-                            등록
-                        </Button>
-                    </Col>
-                </Row>
+                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                    <Button
+                        variant="outline-table-btn"
+                        onClick={() => {
+                            if (data.onClick instanceof Function) {
+                                const temp = { ...data };
+                                delete temp.onClick;
+                                row.data.onClick(temp);
+                            }
+                        }}
+                        size="sm"
+                    >
+                        등록
+                    </Button>
+                </div>
             );
         },
     },
@@ -36,7 +36,7 @@ export const columnDefs = [
     },
     {
         headerName: '분류',
-        field: 'section',
+        field: 'category',
         width: 70,
         cellStyle: { fontSize: '12px', lineHeight: '65px' },
     },

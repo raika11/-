@@ -7,6 +7,7 @@ import produce from 'immer';
 import { unescapeHtml } from '@utils/convertUtil';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import commonUtil from '@utils/commonUtil';
 
 function toOptionCodes(list) {
     return list.map((data) => ({
@@ -25,11 +26,6 @@ function* getPollCodes({ type, payload }) {
     } catch (e) {}
 }
 
-function toKorFromCode(code, codes) {
-    const codeItem = codes.filter((data) => data.key === code)[0];
-    return codeItem ? codeItem.value : '';
-}
-
 function toPollListData(list, codes) {
     return list.map((data) => {
         const startDt = data.startDt && moment(data.startDt).format(DB_DATEFORMAT);
@@ -38,9 +34,9 @@ function toPollListData(list, codes) {
         const modDt = data.modDt && moment(data.modDt).format(DB_DATEFORMAT);
         return {
             id: data.pollSeq,
-            category: toKorFromCode(data.pollCategory, codes.pollCategory),
-            group: toKorFromCode(data.pollGroup, codes.pollGroup),
-            status: toKorFromCode(data.status, codes.status),
+            category: commonUtil.toKorFromCode(data.pollCategory, codes.pollCategory),
+            group: commonUtil.toKorFromCode(data.pollGroup, codes.pollGroup),
+            status: commonUtil.toKorFromCode(data.status, codes.status),
             title: unescapeHtml(data.title),
             regDt,
             modDt,
@@ -56,7 +52,7 @@ function toPollListData(list, codes) {
 function* getPollList({ type, payload }) {
     yield put(startLoading(type));
     try {
-        const response = yield call(pollApi.getPollList, { search: payload });
+        const response = yield call(pollApi.getPollList, { search: payload.search });
 
         if (response.data.header.success) {
             const codes = yield select((store) => store.poll.codes);
@@ -68,6 +64,10 @@ function* getPollList({ type, payload }) {
                 }),
             });
         } else {
+        }
+
+        if (payload.callback instanceof Function) {
+            payload.callback(response.data);
         }
     } catch (e) {
         console.log(e);
@@ -185,4 +185,5 @@ export default function* pollSaga() {
     yield takeLatest(action.SAVE_POLL, savePoll);
     yield takeLatest(action.UPDATE_POLL, updatePoll);
     yield takeLatest(action.DELETE_POLL, deletePoll);
+    yield takeLatest(action.GET_RELATION_POLL_LIST, getPollList);
 }

@@ -126,7 +126,9 @@ const RcvArticleAgGrid = () => {
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['sourceName', 'preview', 'register']}
             selected={rcvArticle.rid}
-            suppressRefreshCellAfterUpdate
+            refreshCellsParams={{
+                columns: ['register', 'serviceTime'],
+            }}
             onAnimationQueueEmpty={handleRowRendered}
         />
     );

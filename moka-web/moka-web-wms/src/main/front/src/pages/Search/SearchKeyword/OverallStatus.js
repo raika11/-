@@ -17,7 +17,6 @@ const OverallStatus = () => {
         statTotal: searchKeyword.statTotal,
         searchTotalCnt: searchKeyword.stat.total,
     }));
-
     const [rowData, setRowData] = useState([]);
 
     /**

@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
@@ -21,24 +22,30 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaCateSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaSearchDTO;
+import jmnet.moka.core.tps.mvc.mic.dto.MicAnswerSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicBannerSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.service.MicAgendaCategoryService;
 import jmnet.moka.core.tps.mvc.mic.service.MicAgendaService;
+import jmnet.moka.core.tps.mvc.mic.service.MicAnswerService;
 import jmnet.moka.core.tps.mvc.mic.service.MicBannerService;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaCategoryVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaSimpleVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicAnswerRelVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicAnswerVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicBannerVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -59,11 +66,14 @@ public class MicAgendaRestController extends AbstractCommonController {
 
     private final MicAgendaCategoryService micAgendaCategoryService;
 
+    private final MicAnswerService micAnswerService;
+
     public MicAgendaRestController(MicAgendaService micAgendaService, MicBannerService micBannerService,
-            MicAgendaCategoryService micAgendaCategoryService) {
+            MicAgendaCategoryService micAgendaCategoryService, MicAnswerService micAnswerService) {
         this.micAgendaService = micAgendaService;
         this.micBannerService = micBannerService;
         this.micAgendaCategoryService = micAgendaCategoryService;
+        this.micAnswerService = micAnswerService;
     }
 
     @ApiOperation(value = "아젠다 목록조회")
@@ -96,7 +106,7 @@ public class MicAgendaRestController extends AbstractCommonController {
 
     @ApiOperation(value = "아젠다 상세조회")
     @GetMapping("/agendas/{agndSeq}")
-    public ResponseEntity<?> getMicAgendaList(@ApiParam("아젠다순번(필수)") @PathVariable("agndSeq") Long agndSeq) {
+    public ResponseEntity<?> getMicAgenda(@ApiParam(value = "아젠다순번", required = true) @PathVariable("agndSeq") Long agndSeq) {
 
         // 조회(mybatis)
         MicAgendaVO returnValue = micAgendaService.findMicAgendaById(agndSeq);
@@ -129,8 +139,8 @@ public class MicAgendaRestController extends AbstractCommonController {
 
     @ApiOperation(value = "아젠다 수정")
     @PutMapping(value = "/agendas/{agndSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> putMicAgenda(@ApiParam("아젠다순번(필수)") @PathVariable("agndSeq") Long agndSeq,
-            @ApiParam("아젠다 정보") @RequestBody @Valid MicAgendaVO micAgendaVO, @ApiParam(hidden = true) @NotNull Principal principal)
+    public ResponseEntity<?> putMicAgenda(@ApiParam(value = "아젠다순번", required = true) @PathVariable("agndSeq") Long agndSeq,
+            @ApiParam("아젠다 정보") @Valid MicAgendaVO micAgendaVO, @ApiParam(hidden = true) @NotNull Principal principal)
             throws Exception {
 
         try {
@@ -167,7 +177,7 @@ public class MicAgendaRestController extends AbstractCommonController {
 
     @ApiOperation(value = "배너 상세조회")
     @GetMapping("/banners/{bnnrSeq}")
-    public ResponseEntity<?> getMicBanner(@ApiParam("배너순번(필수)") @PathVariable("bnnrSeq") Long bnnrSeq) {
+    public ResponseEntity<?> getMicBanner(@ApiParam(value = "배너순번", required = true) @PathVariable("bnnrSeq") Long bnnrSeq) {
 
         // 조회(mybatis)
         MicBannerVO returnValue = micBannerService.findMicBannerById(bnnrSeq);
@@ -198,7 +208,7 @@ public class MicAgendaRestController extends AbstractCommonController {
 
     @ApiOperation(value = "배너 수정")
     @PutMapping(value = "/banners/{bnnrSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> putMicBanner(@ApiParam("배너순번(필수") @PathVariable("bnnrSeq") Long bnnrSeq,
+    public ResponseEntity<?> putMicBanner(@ApiParam(value = "배너순번", required = true) @PathVariable("bnnrSeq") Long bnnrSeq,
             @ApiParam("배너 정보") @Valid MicBannerVO micBannerVO)
             throws Exception {
 
@@ -218,7 +228,7 @@ public class MicAgendaRestController extends AbstractCommonController {
 
     @ApiOperation(value = "배너 수정(사용여부)")
     @PutMapping(value = "/banners/{bnnrSeq}")
-    public ResponseEntity<?> putMicBannerToggle(@ApiParam("배너순번(필수") @PathVariable("bnnrSeq") Long bnnrSeq)
+    public ResponseEntity<?> putMicBannerToggle(@ApiParam(value = "배너순번", required = true) @PathVariable("bnnrSeq") Long bnnrSeq)
             throws Exception {
 
         try {
@@ -309,4 +319,90 @@ public class MicAgendaRestController extends AbstractCommonController {
             throw new Exception(msg("tps.common.error.update"), e);
         }
     }
+
+    @ApiOperation(value = "답변 목록조회")
+    @GetMapping("/answers")
+    public ResponseEntity<?> getMicAnswerList(@ApiParam("검색조건") @Valid @SearchParam MicAnswerSearchDTO search) {
+
+        // 조회(mybatis)
+        List<MicAnswerVO> returnValue = micAnswerService.findAllMicAnswer(search);
+
+        ResultListDTO<MicAnswerVO> resultList = new ResultListDTO<MicAnswerVO>();
+        resultList.setList(returnValue);
+        resultList.setTotalCnt(search.getTotal());
+
+        ResultDTO<ResultListDTO<MicAnswerVO>> resultDTO = new ResultDTO<ResultListDTO<MicAnswerVO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "답변 상세조회")
+    @GetMapping("/answers/{answSeq}")
+    public ResponseEntity<?> getMicAnswer(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq) {
+
+        // 조회(mybatis)
+        MicAnswerVO returnValue = micAnswerService.findMicAnswerById(answSeq);
+
+        ResultDTO<MicAnswerVO> resultDTO = new ResultDTO<MicAnswerVO>(returnValue);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "답변 부가정보 수정")
+    @PostMapping(value = "/answers/{answSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> postMicAnswerRel(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq,
+            @ApiParam("답변 부가정보") @Valid MicAnswerRelVO micAnswerRelVO)
+            throws Exception {
+
+        try {
+            boolean uploaded = micAnswerService.saveMicAnswerRel(micAnswerRelVO);
+            String msg = uploaded ? msg("tps.common.success.update") : msg("tps.answer.error.image-upload");
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, msg);
+            tpsLogger.success(ActionType.INSERT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT ANSWER REL]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT ANSWER REL]", e, true);
+            throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    @ApiOperation(value = "답변 삭제")
+    @DeleteMapping("/answers/{answSeq}")
+    public ResponseEntity<?> deleteMicAnswer(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq)
+            throws Exception {
+
+        try {
+            micAnswerService.deleteMicAnswer(answSeq);
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, msg("tps.common.success.delete"));
+            tpsLogger.success(ActionType.DELETE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO DELETE ANSWER]", e);
+            tpsLogger.error(ActionType.DELETE, "[FAIL TO DELETE ANSWER]", e, true);
+            throw new Exception(msg("tps.common.error.delete"), e);
+        }
+    }
+
+    @ApiOperation(value = "답변 상태 수정")
+    @PutMapping("/answers/{answSeq}")
+    public ResponseEntity<?> updateMicAnswerDiv(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq,
+            @ApiParam(value = "상태", required = true) @RequestParam("answDiv") String answDiv, @ApiParam(hidden = true) HttpServletRequest request)
+            throws Exception {
+
+        try {
+            micAnswerService.updateAnswerDiv(answSeq, answDiv, request);
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, msg("tps.common.success.update"));
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE ANSWER]", e);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE ANSWER]", e, true);
+            throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
 }

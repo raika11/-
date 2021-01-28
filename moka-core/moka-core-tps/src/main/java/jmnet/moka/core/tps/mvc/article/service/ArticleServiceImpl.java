@@ -12,6 +12,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.BulkSiteCode;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
@@ -36,7 +37,6 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -59,12 +59,6 @@ public class ArticleServiceImpl implements ArticleService {
     private final ModelMapper modelMapper;
 
     private final FtpHelper ftpHelper;
-
-    @Value("${bulk.site.id}")
-    private String[] bulkSiteId;
-
-    @Value("${bulk.site.name}")
-    private String[] bulkSiteName;
 
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
             ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper) {
@@ -237,23 +231,23 @@ public class ArticleServiceImpl implements ArticleService {
                             .get(0)
                             .split(",");
                     List<ArticleBulkSimpleVO> list = new ArrayList<>();
-
-                    for (int i = 0; i < bulkSiteId.length; i++) {
-                        String id = bulkSiteId[i];
+                    
+                    for (BulkSiteCode bulk : BulkSiteCode.values()) {
                         boolean bFind = Arrays
                                 .asList(bulkSiteList)
                                 .stream()
-                                .filter(m -> m.equals(id))
+                                .filter(m -> m.equals(bulk.getCode()))
                                 .findFirst()
                                 .isPresent();
                         ArticleBulkSimpleVO vo = ArticleBulkSimpleVO
                                 .builder()
-                                .siteId(bulkSiteId[i])
-                                .siteName(bulkSiteName[i])
+                                .siteId(bulk.getCode())
+                                .siteName(bulk.getName())
                                 .bulkYn(bFind ? "Y" : "N")
                                 .build();
                         list.add(vo);
                     }
+
                     articleDto.setBulkSiteList(list);
                 }
             }

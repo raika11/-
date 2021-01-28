@@ -186,4 +186,74 @@
     )}
   </update>
 
+  <!-- 답변 목록 조회 -->
+  <select id="findAllMicAnswer" parameterType="MicAnswerSearchDTO"
+    resultType="MicAnswerVO"
+    statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_LIST_SEL(
+    #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginSns, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+  <!-- 답변 상세조회 -->
+  <resultMap id="AnswerMap" type="MicAnswerVO"/>
+  <resultMap id="AnswerRelMap" type="MicAnswerRelVO"/>
+  <select id="findMicAnswerById" parameterType="java.lang.Long" resultMap="AnswerMap, AnswerRelMap"
+    statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_DETAILS_SEL(
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    ) }
+  </select>
+
+  <!-- 답변 부가정보 삭제-->
+  <delete id="deleteAllMicAnswerRel" parameterType="java.lang.Long" statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_REL_DEL(
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    )}
+  </delete>
+
+  <!--답변 부가정보 등록-->
+  <insert id="insertMicAnswerRel" parameterType="MicAnswerRelVO"
+    statementType="CALLABLE">
+   { call UPA_MIC_ANSWER_REL_INS(
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{relDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{relUrl, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{artTitle, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{artSummary, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{artThumbnail, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </insert>
+
+  <!--답변 사용여부 수정(답변삭제시 사용)-->
+  <update id="updateMicAnswerUsed" parameterType="hashMap" statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_USED_UPD(
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </update>
+
+  <!--답변 상태 수정-->
+  <update id="updateMicAnswerDiv" parameterType="hashMap" statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_DIV_UPD(
+    #{answDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    )}
+  </update>
+
+  <!--사용자 알림 등록-->
+  <insert id="insertMicNotify" parameterType="MicNotifyVO" statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_DIV_UPD(
+    #{msgDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{notiMemo, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </insert>
+
 </mapper>

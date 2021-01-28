@@ -9,11 +9,15 @@ import java.util.Map;
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaCateSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaSearchDTO;
+import jmnet.moka.core.tps.mvc.mic.dto.MicAnswerSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicBannerSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaCategoryVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaSimpleVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAgendaVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicAnswerRelVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicAnswerVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicBannerVO;
+import jmnet.moka.core.tps.mvc.mic.vo.MicNotifyVO;
 import jmnet.moka.core.tps.mvc.mic.vo.MicRelArticleVO;
 
 /**
@@ -154,9 +158,65 @@ public interface MicMapper extends BaseMapper<MicAgendaVO, MicAgendaSearchDTO> {
     /**
      * 아젠다 순서 변경
      *
-     * @param micAgendaVO 아젠다정보
+     * @param micAgendaSimpleVO 아젠다정보
      * @return 성공여부
      */
     Integer updateMicAgendaOrder(MicAgendaSimpleVO micAgendaSimpleVO);
+
+    /**
+     * 답변목록조회
+     *
+     * @param search 검색조건
+     * @return 답변목록
+     */
+    List<MicAnswerVO> findAllMicAnswer(MicAnswerSearchDTO search);
+
+    /**
+     * 답변상세
+     *
+     * @param answSeq 답변순번
+     * @return 답변정보, 관련답변정보
+     */
+    List<List<Object>> findMicAnswerById(Long answSeq);
+
+    /**
+     * 답변 부가정보 삭제(답변에 해당하는 모든 부가정보 삭제)
+     *
+     * @param answSeq 답변순번
+     * @return 성공여부
+     */
+    Integer deleteAllMicAnswerRel(Long answSeq);
+
+    /**
+     * 답변 부가정보 등록
+     *
+     * @param micAnswerRelVO 답변 부가정보
+     * @return 성공여부
+     */
+    Integer insertMicAnswerRel(MicAnswerRelVO micAnswerRelVO);
+
+    /**
+     * 답변 사용여부 수정(답변 삭제기능을 처리함)
+     *
+     * @param param answSeq:답변순번,usedYn:사용여부
+     * @return 성공여부
+     */
+    Integer updateMicAnswerUsed(Map<String, Object> param);
+
+    /**
+     * 답변 상태 수정
+     *
+     * @param param answSeq:답변순번,answDiv:상태
+     * @return 성공여부
+     */
+    Integer updateMicAnswerDiv(Map<String, Object> param);
+
+    /**
+     * 사용자 알림 메세지 등록
+     *
+     * @param micNotifyVO 알림메세지정보
+     * @return 성공여부
+     */
+    Integer insertMicNotify(MicNotifyVO micNotifyVO);
 
 }

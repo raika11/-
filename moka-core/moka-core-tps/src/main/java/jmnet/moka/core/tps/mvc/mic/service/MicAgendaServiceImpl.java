@@ -39,7 +39,7 @@ public class MicAgendaServiceImpl implements MicAgendaService {
     @Autowired
     private MicMapper micMapper;
 
-    @Value("${agenda.image.save.filepath}")
+    @Value("${mic.agenda.image.save.filepath}")
     private String saveFilepath;
 
     @Autowired

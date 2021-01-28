@@ -7,12 +7,12 @@ package jmnet.moka.core.tps.mvc.mic.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,38 +22,34 @@ import org.apache.ibatis.type.Alias;
  * Description: 설명
  *
  * @author ssc
- * @since 2021-01-25
+ * @since 2021-01-26
  */
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
-@Alias("MicAgendaSearchDTO")
-@ApiModel("아젠다 검색 DTO")
-public class MicAgendaSearchDTO extends SearchDTO {
-
+@Alias("MicAnswerSearchDTO")
+@ApiModel("답변(포스트,피드) 검색 DTO")
+public class MicAnswerSearchDTO extends SearchDTO {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 메뉴노출조건: 최상단(Y),비노출(N),전체(all)
-     */
-    @ApiModelProperty("메뉴노출조건")
-    private String agndTop;
+    @ApiModelProperty(value = "아젠다 순번", required = true)
+    @Min(value = 0, message = "{tps.agenda.error.min.agndSeq}")
+    @NotNull(message = "{tps.agenda.error.notnull.agndSeq}")
+    private Long agndSeq;
 
-    @ApiModelProperty("시작일자")
-    @DTODateTimeFormat
-    private Date startDt;
+    @ApiModelProperty("사용여부")
+    private String usedYn;
 
-    @ApiModelProperty("종료일자")
-    @DTODateTimeFormat
-    private Date endDt;
+    @ApiModelProperty("SNS로그인")
+    private String loginSns;
 
     /**
      * 생성자: 검색 조건의 기본값을 설정
      */
-    public MicAgendaSearchDTO() {
+    public MicAnswerSearchDTO() {
         this.setUseTotal(MokaConstants.YES);
-        this.agndTop = TpsConstants.SEARCH_TYPE_ALL;
     }
 }

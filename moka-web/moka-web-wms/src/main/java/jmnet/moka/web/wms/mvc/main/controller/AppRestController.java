@@ -23,8 +23,11 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.common.code.AgendaArticleProgressCode;
+import jmnet.moka.core.tps.common.code.AnswerDivCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
+import jmnet.moka.core.tps.common.code.TourStatusCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
@@ -96,12 +99,6 @@ public class AppRestController {
     @Value("${photo.archive.url}")
     private String photoArchiveUrl;
 
-    @Value("${tour.age}")
-    private String tourAge;
-
-    @Value("${agenda.article-progress}")
-    private String agendaArticleProgress;
-
     @Autowired
     private TpsLogger tpsLogger;
 
@@ -142,8 +139,6 @@ public class AppRestController {
                 .add("IR_URL", irUrl)                                                // ir Url
                 .add("OVP_PREVIEW_URL", ovpPreviewUrl)                               // ovp 미리보기 url
                 .add("PHOTO_ARCHIVE_URL", photoArchiveUrl)                           // 포토아카이브 url
-                .add("TOUR_AGE", tourAge)                                            // 견학인 나이대 설정
-                .add("AGENDA_ARTICLE_PROGRESS", agendaArticleProgress)               // 아젠다 기사화 단계
                 .getMap();
 
         result.put("MEMBER_STATUS_CODE", MemberStatusCode.toList());
@@ -189,6 +184,15 @@ public class AppRestController {
                 .add(HttpMethod.DELETE.name(), HttpMethod.DELETE.name())
                 .getMap());
         result.put(TpsConstants.API_METHOD, httpMethodCodes);
+
+        // 견학상태
+        result.put("TOUR_STATUS", TourStatusCode.toList());
+
+        // 시민마이크 기사화 단계
+        result.put("AGENDA_ARTICLE_PROGRESS", AgendaArticleProgressCode.toList());
+
+        // 답변 상태
+        result.put("ANSWER_DIV", AnswerDivCode.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

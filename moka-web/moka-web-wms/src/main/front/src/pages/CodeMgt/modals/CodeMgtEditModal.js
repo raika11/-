@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { MokaModal, MokaInputLabel } from '@components';
 import { clearCd, changeCdInvalidList } from '@store/codeMgt';
 import { messageBox } from '@utils/toastUtil';
@@ -10,10 +10,9 @@ import { invalidListToError } from '@utils/convertUtil';
  * 기타코드 편집 모달
  */
 const CodeMgtEditModal = (props) => {
-    const { show, onHide, onSave, onDelete, match } = props;
+    const { show, onHide, onSave, onDelete } = props;
     const { grpCd } = useParams();
     const dispatch = useDispatch();
-    const history = useHistory();
     const cd = useSelector((store) => store.codeMgt.cd);
     const cdInvalidList = useSelector((store) => store.codeMgt.cdInvalidList);
 

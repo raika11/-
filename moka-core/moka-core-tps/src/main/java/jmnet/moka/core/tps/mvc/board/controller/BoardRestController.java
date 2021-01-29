@@ -653,8 +653,11 @@ public class BoardRestController extends AbstractCommonController {
                                         .getAllowFileSize()));
                             } else {
                                 String yearMonth = McpDate.dateStr(McpDate.now(), "yyyyMM");
-                                String saveFilePath = "/board/" + board.getBoardId() + "/" + yearMonth;
+                                //String saveFilePath = "/board/" + board.getBoardId() + "/" + yearMonth;
                                 String filename = UUIDGenerator.uuid() + "." + ext;
+                                String saveFilePath = "/bbs_attach/board/" + board.getBoardId() + "/" + filename;
+                                        // root 디렉토리(/bbs_attach)/board/게시판설정정보번호(BOARDINFO_SEQ)/파일명
+
                                 ftpHelper.upload(FtpHelper.PDS, filename, boardAttachSaveDTO
                                         .getAttachFile()
                                         .getInputStream(), saveFilePath);

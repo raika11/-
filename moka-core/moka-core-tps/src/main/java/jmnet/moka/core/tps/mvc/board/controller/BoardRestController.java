@@ -340,6 +340,7 @@ public class BoardRestController extends AbstractCommonController {
         newBoard.setBoardId(boardId);
         newBoard.setBoardSeq(boardSeq);
         newBoard.setParentBoardSeq(parentBoardSeq);
+        newBoard.setDepth(1);
         //newBoard.setContent(HtmlUtils.htmlEscape(newBoard.getContent()));
 
         // 오리진 데이터 조회

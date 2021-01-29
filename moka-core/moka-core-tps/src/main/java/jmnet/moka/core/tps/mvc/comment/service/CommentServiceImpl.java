@@ -84,38 +84,44 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public long updateCommentStatus(Comment comment, CommentStatusType statusType, CommentDeleteType deleteType) {
-        if (deleteType.equals(CommentDeleteType.BNA) || deleteType.equals(CommentDeleteType.BNC)) { // 사용자 ID 차단 처리
-            commentBannedService.insertCommentBanned(CommentBanned
-                    .builder()
-                    .tagType(CommentBannedType.U)
-                    .tagValue(comment.getMemId())
-                    .build());
-        }
         long result = 0l;
-        switch (deleteType) {
-            case CMT:
-            case BNC:
-                result = commentRepository.updateStatus(comment.getCmtSeq(), statusType);
-                if (result > 0 && McpString.isNotEmpty(comment.getContentId()) && statusType.equals(CommentStatusType.N)) {
-                    articleClickcntRepository.updateReplyCnt(Long.parseLong(comment.getContentId()), -1);
-                    reporterRepository.updateReplyCnt(comment.getContentId(), comment.getMemId(), -1);
-                }
-                break;
-            case BNA:
-            case ALL:
-                // 해당 사용자 ID 차단 처리
-                result = commentRepository.updateStatusByMemberId(comment.getMemId(), statusType);
-                if (result > 0 && McpString.isNotEmpty(comment.getContentId()) && statusType.equals(CommentStatusType.N)) {
-                    commentMapper.updateReplyCnt(CommentVO
-                            .builder()
-                            .status(statusType.getCode())
-                            .memId(comment.getMemId())
-                            .memSite(comment.getMemSite())
-                            .build());
-                }
-                break;
-            default:
-                // 처리 할 프로세스 없음
+        if (deleteType != null) {
+            if (deleteType.equals(CommentDeleteType.BNA) || deleteType.equals(CommentDeleteType.BNC)) { // 사용자 ID 차단 처리
+                commentBannedService.insertCommentBanned(CommentBanned
+                        .builder()
+                        .tagType(CommentBannedType.U)
+                        .tagValue(comment.getMemId())
+                        .build());
+            }
+
+            switch (deleteType) {
+                case CMT:
+                case BNC:
+                    result = commentRepository.updateStatus(comment.getCmtSeq(), statusType);
+                    if (result > 0 && McpString.isNotEmpty(comment.getContentId()) && statusType.equals(CommentStatusType.N)) {
+                        articleClickcntRepository.updateReplyCnt(Long.parseLong(comment.getContentId()), -1);
+                        reporterRepository.updateReplyCnt(comment.getContentId(), comment.getMemId(), -1);
+                    }
+                    break;
+                case BNA:
+                case ALL:
+                    // 해당 사용자 ID 차단 처리
+                    result = commentRepository.updateStatusByMemberId(comment.getMemId(), statusType);
+                    if (result > 0 && McpString.isNotEmpty(comment.getContentId()) && statusType.equals(CommentStatusType.N)) {
+                        commentMapper.updateReplyCnt(CommentVO
+                                .builder()
+                                .status(statusType.getCode())
+                                .memId(comment.getMemId())
+                                .memSite(comment.getMemSite())
+                                .build());
+                    }
+                    break;
+                default:
+                    result = commentRepository.updateStatusByMemberId(comment.getMemId(), statusType);
+                    // 처리 할 프로세스 없음
+            }
+        } else {
+            result = commentRepository.updateStatusByMemberId(comment.getMemId(), statusType);
         }
 
         return result;

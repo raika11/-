@@ -43,7 +43,7 @@ public class FtpClientPool extends BaseObjectPool<FTPClient> {
     public FtpClientPool(int poolSize, FtpClientFactory factory) {
         this.ftpClientFactory = factory;
         ftpBlockingQueue = new ArrayBlockingQueue<>(poolSize);
-        initPool(poolSize);
+        //initPool(poolSize);
     }
 
     public FtpClientFactory getFactory() {
@@ -57,7 +57,7 @@ public class FtpClientPool extends BaseObjectPool<FTPClient> {
      * @throws Exception 에러 처리
      */
     private void initPool(int maxPoolSize) {
-        for (int i = 0; i < maxPoolSize; i++) {
+        for (int i = ftpBlockingQueue.size(); i < maxPoolSize; i++) {
             // Add objects to the pool
             try {
                 addObject();
@@ -73,6 +73,11 @@ public class FtpClientPool extends BaseObjectPool<FTPClient> {
     @Override
     public FTPClient borrowObject()
             throws Exception {
+        if (ftpBlockingQueue.size() == 0) {
+            synchronized (FTPClient.class) {
+                initPool(DEFAULT_POOL_SIZE);
+            }
+        }
         FTPClient client = ftpBlockingQueue.take();
         if (ObjectUtils.isEmpty(client)) {
             client = ftpClientFactory.create();

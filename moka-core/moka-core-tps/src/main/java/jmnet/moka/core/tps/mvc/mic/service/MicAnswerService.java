@@ -44,18 +44,39 @@ public interface MicAnswerService {
             throws IOException;
 
     /**
-     * 답변삭제(답변사용여부 수정처리함)
+     * 답변수정(사용여부)
      *
      * @param answSeq 답변순번
+     * @param usedYn  사용여부
      */
-    void deleteMicAnswer(Long answSeq);
+    void updateMicAnswerUsed(Long answSeq, String usedYn);
 
     /**
-     * 답변상태수정
+     * 답변수정(최상위)
+     *
+     * @param answSeq 답변순번
+     * @param answTop 최상위여부
+     */
+    void updateMicAnswerTop(Long answSeq, String answTop);
+
+    /**
+     * 답변수정(상태)
      *
      * @param answSeq 답변순번
      * @param answDiv 상태
      * @param request 요청
      */
-    void updateAnswerDiv(Long answSeq, String answDiv, HttpServletRequest request);
+    void updateMicAnswerDiv(Long answSeq, String answDiv, HttpServletRequest request);
+
+    /**
+     * 답변 수정
+     *
+     * @param micAnswerVO 답변정보
+     * @return 업로드 성공여부(업로드할게 없을경우는 true)
+     */
+    boolean updateMicAnswer(MicAnswerVO micAnswerVO)
+            throws IOException;
+
+    boolean insertMicAnswer(MicAnswerVO micAnswerVO)
+            throws IOException;
 }

@@ -204,6 +204,14 @@ public interface MicMapper extends BaseMapper<MicAgendaVO, MicAgendaSearchDTO> {
     Integer updateMicAnswerUsed(Map<String, Object> param);
 
     /**
+     * 답변 최상위 수정
+     *
+     * @param param answSeq:답변순번,answTop:사용여부
+     * @return 성공여부
+     */
+    Integer updateMicAnswerTop(Map<String, Object> param);
+
+    /**
      * 답변 상태 수정
      *
      * @param param answSeq:답변순번,answDiv:상태
@@ -219,4 +227,19 @@ public interface MicMapper extends BaseMapper<MicAgendaVO, MicAgendaSearchDTO> {
      */
     Integer insertMicNotify(MicNotifyVO micNotifyVO);
 
+    /**
+     * 답변 수정
+     *
+     * @param micAnswerVO 답변정보
+     * @return 성공여부
+     */
+    Integer updateMicAnswer(MicAnswerVO micAnswerVO);
+
+    /**
+     * 답변 등록
+     *
+     * @param micAnswerVO 답변정보
+     * @return 성공여부
+     */
+    Integer insertMicAnswer(MicAnswerVO micAnswerVO);
 }

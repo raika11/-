@@ -178,6 +178,7 @@
   </update>
 
   <!--아젠다의 순서 수정-->
+  <!--
   <update id="updateMicAgendaOrder" parameterType="MicAgendaSimpleVO"
     statementType="CALLABLE">
    { call UPA_MIC_AGENDA_ORDER_NUM_UPD(
@@ -185,6 +186,7 @@
     #{ordNo, mode=IN, jdbcType=INTEGER, javaType=integer}
     )}
   </update>
+  -->
 
   <!-- 답변 목록 조회 -->
   <select id="findAllMicAnswer" parameterType="MicAnswerSearchDTO"
@@ -239,6 +241,14 @@
     )}
   </update>
 
+  <!--답변 최상위 수정-->
+  <update id="updateMicAnswerTop" parameterType="hashMap" statementType="CALLABLE">
+    { call UPA_MIC_ANSWER_TOP_UPD(
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{answTop, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </update>
+
   <!--답변 상태 수정-->
   <update id="updateMicAnswerDiv" parameterType="hashMap" statementType="CALLABLE">
     { call UPA_MIC_ANSWER_DIV_UPD(
@@ -253,6 +263,50 @@
     #{msgDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{notiMemo, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </insert>
+
+  <!--답변 수정-->
+  <update id="updateMicAnswer" parameterType="MicAnswerVO"
+    statementType="CALLABLE">
+   { call UPA_MIC_ANSWER_UPD(
+    #{answSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answMemo, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answMemoLong, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{goodCnt, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{loginSns, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginName, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginImg, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{memId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{regDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+    #{regIp, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answTitle, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </update>
+
+  <!--답변 등록-->
+  <insert id="insertMicAnswer" parameterType="MicAnswerVO"
+    statementType="CALLABLE">
+   { call UPA_MIC_ANSWER_UPD(
+    #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answMemo, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answMemoLong, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{goodCnt, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{loginSns, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginName, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{loginImg, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{memId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{regDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+    #{regIp, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answTitle, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{answSeq, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
     )}
   </insert>
 

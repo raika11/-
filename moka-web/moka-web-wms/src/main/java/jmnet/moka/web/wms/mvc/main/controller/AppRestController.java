@@ -25,6 +25,8 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.AgendaArticleProgressCode;
 import jmnet.moka.core.tps.common.code.AnswerDivCode;
+import jmnet.moka.core.tps.common.code.AnswerLoginSnsCode;
+import jmnet.moka.core.tps.common.code.AnswerRelDivCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.code.TourStatusCode;
@@ -193,6 +195,12 @@ public class AppRestController {
 
         // 답변 상태
         result.put("ANSWER_DIV", AnswerDivCode.toList());
+
+        // 답변 부가정보 상태
+        result.put("ANSWER_REL_DIV", AnswerRelDivCode.toList());
+
+        // 답변 LOGIN_SNS
+        result.put("ANSWER_LOGIN_SNS", AnswerLoginSnsCode.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

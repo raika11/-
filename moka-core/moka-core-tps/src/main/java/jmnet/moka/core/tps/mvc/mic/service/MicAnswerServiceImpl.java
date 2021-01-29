@@ -9,10 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.code.AnswerDivCode;
+import jmnet.moka.core.tps.common.code.AnswerLoginSnsCode;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAnswerSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.mapper.MicMapper;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAnswerRelVO;
@@ -48,6 +49,13 @@ public class MicAnswerServiceImpl implements MicAnswerService {
 
     @Autowired
     protected MessageByLocale messageByLocale;
+
+    @Value("${mic.answer.admin.loginid}")
+    private String answerAdminLoginid;
+
+    @Value("${mic.answer.admin.img-url}")
+    private String answerAdminImgUrl;
+
 
     @Override
     public List<MicAnswerVO> findAllMicAnswer(MicAnswerSearchDTO search) {
@@ -100,15 +108,23 @@ public class MicAnswerServiceImpl implements MicAnswerService {
     }
 
     @Override
-    public void deleteMicAnswer(Long answSeq) {
+    public void updateMicAnswerUsed(Long answSeq, String usedYn) {
         Map<String, Object> param = new HashMap<>();
         param.put("answSeq", answSeq);
-        param.put("usedYn", MokaConstants.NO);
+        param.put("usedYn", usedYn);
         micMapper.updateMicAnswerUsed(param);
     }
 
     @Override
-    public void updateAnswerDiv(Long answSeq, String answDiv, HttpServletRequest request) {
+    public void updateMicAnswerTop(Long answSeq, String answTop) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("answSeq", answSeq);
+        param.put("answTop", answTop);
+        micMapper.updateMicAnswerTop(param);
+    }
+
+    @Override
+    public void updateMicAnswerDiv(Long answSeq, String answDiv, HttpServletRequest request) {
         Map<String, Object> param = new HashMap<>();
         param.put("answDiv", answDiv);
         param.put("answSeq", answSeq);
@@ -133,5 +149,51 @@ public class MicAnswerServiceImpl implements MicAnswerService {
                     .build();
         }
 
+    }
+
+    @Override
+    public boolean updateMicAnswer(MicAnswerVO micAnswerVO)
+            throws IOException {
+        // 1. 답변등록
+        micAnswerVO.setAnswDiv(AnswerDivCode.INSERT.getCode());
+        micAnswerVO.setGoodCnt(0);
+        micAnswerVO.setLoginId(answerAdminLoginid);
+        micAnswerVO.setLoginSns(AnswerLoginSnsCode.ADMIN.getCode());
+        micAnswerVO.setLoginName(AnswerLoginSnsCode.ADMIN.getName());
+        micAnswerVO.setRegDt(McpDate.now());
+        micAnswerVO.setRegIp("0.0.0.0");
+        micAnswerVO.setLoginImg(answerAdminImgUrl);
+        micMapper.updateMicAnswer(micAnswerVO);
+
+        // 2. 답변 부가정보 등록
+        MicAnswerRelVO rel = micAnswerVO.getAnswerRel();
+        rel.setAnswSeq(micAnswerVO.getAnswSeq());
+
+        boolean uploaded = this.saveMicAnswerRel(rel);
+
+        return uploaded;
+    }
+
+    @Override
+    public boolean insertMicAnswer(MicAnswerVO micAnswerVO)
+            throws IOException {
+        // 1. 답변등록
+        micAnswerVO.setAnswDiv(AnswerDivCode.INSERT.getCode());
+        micAnswerVO.setGoodCnt(0);
+        micAnswerVO.setLoginId(answerAdminLoginid);
+        micAnswerVO.setLoginSns(AnswerLoginSnsCode.ADMIN.getCode());
+        micAnswerVO.setLoginName(AnswerLoginSnsCode.ADMIN.getName());
+        micAnswerVO.setRegDt(McpDate.now());
+        micAnswerVO.setRegIp("0.0.0.0");
+        micAnswerVO.setLoginImg(answerAdminImgUrl);
+        micMapper.insertMicAnswer(micAnswerVO);
+
+        // 2. 답변 부가정보 등록
+        MicAnswerRelVO rel = micAnswerVO.getAnswerRel();
+        rel.setAnswSeq(micAnswerVO.getAnswSeq());
+
+        boolean uploaded = this.saveMicAnswerRel(rel);
+
+        return uploaded;
     }
 }

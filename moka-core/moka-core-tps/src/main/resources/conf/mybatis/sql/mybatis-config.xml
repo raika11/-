@@ -13,7 +13,7 @@
     <setting name="autoMappingBehavior" value="FULL"/>
     <setting name="callSettersOnNulls" value="true"/>
     <setting name="mapUnderscoreToCamelCase" value="true"/>
-    <!-- <setting name="defaultStatementTimeout" value="60000" /> -->
+    <setting name="defaultStatementTimeout" value="60000"/>
   </settings>
   <typeAliases>
     <package name="jmnet.moka.core.tps.mvc"/>

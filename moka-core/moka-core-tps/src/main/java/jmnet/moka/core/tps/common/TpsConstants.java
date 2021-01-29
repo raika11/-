@@ -150,7 +150,7 @@ public class TpsConstants {
     public static final String SEARCH_TYPE_ALL = "all";
 
     /**
-     * 파일관리 업무별 구분
+     * 파일관리 업무별 구분(템플릿)
      */
     public static final String TEMPLATE_BUSINESS = "template";
 
@@ -158,6 +158,11 @@ public class TpsConstants {
      * 파일관리 업무별 구분
      */
     public static final String DIRECT_LINK_BUSINESS = "directlink";
+
+    /**
+     * 파일관리 업무별 구분(워터마크)
+     */
+    public static final String WATERMARK_BUSINESS = "watermark";
 
 
 

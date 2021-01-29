@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel("배포서버 DTO(조회조건 코드)")
+@ApiModel("배포서버 DTO(검색조건 코드)")
 public class DistributeServerCodeDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;

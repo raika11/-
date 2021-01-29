@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.schedule.server.repository;
 
+import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,11 @@ import java.util.List;
  */
 public interface DistributeServerRepositorySupport {
 
-    //배포서버목록 조회(조회조건 코드)
+    /**
+     * 배포서버목록 조회(조회조건 코드)
+     *
+     * @return 배포서버목록(조회조건 코드)
+     */
     List<DistributeServer> findDistibuteServerList();
 
     /**
@@ -25,4 +30,8 @@ public interface DistributeServerRepositorySupport {
      * @return 배포서버목록
      */
     Page<DistributeServer> findList(DistributeServerSearchDTO search, Pageable pageable);
+
+
+
+    Page<DistributeServerDTO> findList2(DistributeServerSearchDTO search, Pageable pageable);
 }

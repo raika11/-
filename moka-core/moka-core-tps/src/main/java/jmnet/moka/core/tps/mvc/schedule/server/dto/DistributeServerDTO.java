@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.Member;
 import lombok.*;
 
 import java.io.Serializable;
@@ -47,4 +48,10 @@ public class DistributeServerDTO implements Serializable {
 
     @ApiModelProperty("수정자")
     private String modId;
+
+    @ApiModelProperty("등록자정보")
+    private Member regMember;
+
+    @ApiModelProperty("수정자정보")
+    private Member modMember;
 }

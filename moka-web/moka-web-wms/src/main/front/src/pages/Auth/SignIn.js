@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { loginJwt } from '@store/auth';
 import { call, delay } from 'redux-saga/effects';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Main from '@/layout/components/Main';
 import { getLocalItem } from '@/utils/storageUtil';
 import { SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';
@@ -28,6 +28,14 @@ const SignIn = () => {
     };
 
     const login = () => {
+        if (userId === '') {
+            messageBox.alert('ID를 입력하세요');
+            return;
+        }
+        if (password === '') {
+            messageBox.alert('비밀번호를 입력하세요');
+            return;
+        }
         dispatch(
             loginJwt({
                 userId: userId,
@@ -74,6 +82,14 @@ const SignIn = () => {
         }
     };
 
+    const handleKeyPress = (e) => {
+        // 엔터 기본 동작 막음
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            login();
+        }
+    };
+
     const handleClickRegister = (event) => {
         setShowRegisterModal(true);
     };
@@ -109,6 +125,7 @@ const SignIn = () => {
                                                             size="lg"
                                                             name="userid"
                                                             onChange={handleChangeValue}
+                                                            onKeyPress={(e) => handleKeyPress(e)}
                                                             value={userId}
                                                             placeholder="ID"
                                                             autoComplete="off"
@@ -123,6 +140,7 @@ const SignIn = () => {
                                                             type="password"
                                                             name="password"
                                                             onChange={handleChangeValue}
+                                                            onKeyPress={(e) => handleKeyPress(e)}
                                                             value={password}
                                                             placeholder="Password"
                                                             autoComplete="off"

@@ -3,13 +3,12 @@ import { MokaTable } from '@components';
 import { columnDefs } from '@pages/Survey/Quiz/QuizAgGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
 import { DISPLAY_PAGE_NUM } from '@/constants';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import { initialState, GET_QUIZZES_LIST, getQuizzesList, changeSearchOption } from '@store/survey/quiz';
+import { GET_QUIZZES_LIST, getQuizzesList, changeSearchOption } from '@store/survey/quiz';
 
 const QuizAgGrid = () => {
     const history = useHistory();
-    const params = useParams();
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
     // 공통 구분값 URL

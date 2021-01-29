@@ -1,65 +1,44 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
+import { useSelector, useDispatch } from 'react-redux';
+import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
 
-const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataReturnEvent, selectEditData }) => {
-    const [editData, setEditData] = useState({
-        questionIndex: questionIndex,
-        questionType: 'O',
-        imgFile: {},
-        title: '',
-        questionDesc: '',
-        answer: '',
-    });
+const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
+    const dispatch = useDispatch();
+    const { questionsList } = useSelector((store) => ({
+        questionsList: store.quiz.quizQuestions.questionsList,
+    }));
+
+    const handleClickQuestionDeleteButton = () => {
+        dispatch(deleteQuestion({ questionIndex: questionIndex }));
+    };
 
     const handleChangeEditData = (e) => {
+        let tempData = questionsList[questionIndex];
         const { name, value } = e.target;
 
-        setEditData({
-            ...editData,
-            [name]: value,
-        });
+        dispatch(
+            questionInfoChange({
+                ...tempData,
+                questionIndex: questionIndex,
+                [name]: value,
+            }),
+        );
     };
 
     const handleChangeFileInput = (inputName, file) => {
-        setEditData({
-            ...editData,
-            imgFile: file,
-        });
+        dispatch(
+            questionInfoChange({
+                ...questionsList[questionIndex],
+                questionIndex: questionIndex,
+                imgFile: file,
+            }),
+        );
 
         return inputName;
     };
-
-    useEffect(() => {
-        dataReturnEvent({
-            questionIndex: questionIndex,
-            questionCount: questionCount,
-            editData: editData,
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editData]);
-
-    useEffect(() => {
-        // console.log('First type');
-        // console.log(questionCount);
-
-        const setselectEditData = (data) => {
-            setEditData({
-                ...editData,
-                title: data.title,
-                answer: data.answer,
-                imgUrl: data.imgUrl,
-                questionDesc: data.questionDesc,
-            });
-        };
-
-        if (selectEditData !== null) {
-            setselectEditData(selectEditData);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <>
@@ -77,12 +56,12 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataRetu
                             placeholder="질문을 입력하세요.(100자 이내로 입력하세요)"
                             labelClassName="mr-1"
                             inputClassName="quiz-input"
-                            value={editData.title}
+                            value={questionsList[questionIndex].title}
                             onChange={(e) => handleChangeEditData(e)}
                         />
                     </Col>
                     <Col xs={1}>
-                        <div>|</div>
+                        <div onClick={() => handleClickQuestionDeleteButton()}>|</div>
                     </Col>
                 </Form.Row>
                 <Form.Row className="pt-3">
@@ -98,7 +77,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataRetu
                                     inputClassName="quiz-input"
                                     id={`answer_${questionIndex}`}
                                     name="answer"
-                                    value={editData.answer}
+                                    value={questionsList[questionIndex].answer}
                                     onChange={(e) => handleChangeEditData(e)}
                                 />
                             </Col>
@@ -117,7 +96,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataRetu
                                     inputProps={{ rows: 2 }}
                                     id={`questionDesc_${questionIndex}`}
                                     name="questionDesc"
-                                    value={editData.questionDesc}
+                                    value={questionsList[questionIndex].questionDesc}
                                     placeholder="정답 설명을 입력(90자 이내로 입력하세요)"
                                     onChange={(e) => handleChangeEditData(e)}
                                 />
@@ -128,7 +107,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, questionCount, dataRetu
                         <PollPhotoComponent
                             width={110}
                             height={110}
-                            src={editData.imgUrl}
+                            src={questionsList[questionIndex].imgUrl}
                             onChange={(file) => {
                                 handleChangeFileInput('imgFile', file, 'file');
                             }}

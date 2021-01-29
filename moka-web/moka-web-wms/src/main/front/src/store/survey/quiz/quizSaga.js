@@ -3,7 +3,7 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, errorResponse } from '@store/commons/saga';
 import toast from '@/utils/toastUtil';
 
-import { GET_QUIZZES_LIST, GET_QUIZZES, GET_QUIZZES_SUCCESS, SAVE_QUIZZES } from './quizAction';
+import { GET_QUIZZES_LIST, GET_QUIZZES, GET_QUIZZES_SUCCESS, SAVE_QUIZZES, QUESTION_CHANGE, QUESTION_CHANGE_RESULT, DELETE_QUESTION, DELETE_QUESTION_RESULT } from './quizAction';
 import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes } from './quizApi';
 
 // 퀴즈 목록 죄회.
@@ -60,8 +60,45 @@ function* saveQuizzesSaga({ payload: { type, quizSeq, formData, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* questionInfoChangeSaga({ payload }) {
+    const tempPayload = payload;
+    delete tempPayload.tempPayload;
+
+    const questionsList = yield select((store) => store.quiz.quizQuestions.questionsList);
+
+    const { questionIndex } = payload;
+
+    // const resultState = (questionsList[questionIndex] = payload);
+
+    const resultState = questionsList.map((e, index) => {
+        if (questionIndex === index) {
+            delete payload.questionIndex;
+            return tempPayload;
+        } else {
+            return e;
+        }
+    });
+
+    yield put({ type: QUESTION_CHANGE_RESULT, payload: resultState });
+}
+
+function* deleteQuestionSaga({ payload: { questionIndex } }) {
+    const questionsItem = yield select((store) => store.quiz.quizQuestions.questionsItem);
+    const questionsList = yield select((store) => store.quiz.quizQuestions.questionsList);
+
+    yield put({
+        type: DELETE_QUESTION_RESULT,
+        payload: {
+            item: questionsItem.filter((e, index) => index !== Number(questionIndex)),
+            list: questionsList.filter((e, index) => index !== Number(questionIndex)),
+        },
+    });
+}
+
 export default function* quizSaga() {
     yield takeLatest(GET_QUIZZES_LIST, getQuizzesListSaga);
     yield takeLatest(GET_QUIZZES, getQuizzesSaga);
     yield takeLatest(SAVE_QUIZZES, saveQuizzesSaga); // 퀴즈 저장 처리.
+    yield takeLatest(QUESTION_CHANGE, questionInfoChangeSaga); // 퀴즈 저장 처리.
+    yield takeLatest(DELETE_QUESTION, deleteQuestionSaga); // 퀴즈 저장 처리.
 }

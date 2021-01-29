@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
@@ -8,7 +8,7 @@ import QuizList from '@pages/Survey/Quiz/QuizList';
 import QuizEdit from '@pages/Survey/Quiz/QuizEdit';
 
 const Quiz = ({ match }) => {
-    const [activeTabIdx, setActiveTabIdx] = useState(0);
+    const [, setActiveTabIdx] = useState(0);
 
     return (
         <div className="d-flex">

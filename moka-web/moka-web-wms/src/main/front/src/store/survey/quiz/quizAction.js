@@ -22,5 +22,18 @@ export const SAVE_QUIZZES = 'quiz/SAVE_QUIZZES';
 export const saveQuizzes = createAction(SAVE_QUIZZES, ({ type, quizSeq, formData, callback }) => ({ type, quizSeq, formData, callback }));
 
 // 문항
-export const QUIZ_QUESTION_ITEM = 'quiz/QUIZ_QUESTION_ITEM';
-export const quizQuestionItem = createAction(QUIZ_QUESTION_ITEM, (...actions) => actions);
+export const ADD_QUESTION = 'quiz/ADD_QUESTION';
+export const addQuestion = createAction(ADD_QUESTION, (actions) => actions);
+
+export const SET_QUESTION = 'quiz/SET_QUESTION';
+export const setQuestion = createAction(SET_QUESTION, (actions) => actions);
+
+export const DELETE_QUESTION = 'quiz/DELETE_QUESTION';
+export const DELETE_QUESTION_RESULT = 'quiz/DELETE_QUESTION_RESULT';
+export const deleteQuestion = createAction(DELETE_QUESTION, (actions) => actions);
+
+export const QUESTION_CHANGE = 'quiz/QUESTION_CHANGE';
+export const QUESTION_CHANGE_RESULT = 'quiz/QUESTION_CHANGE_RESULT';
+export const questionInfoChange = createAction(QUESTION_CHANGE, (actions) => actions);
+
+// 문항 관리.

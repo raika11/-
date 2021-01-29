@@ -1,21 +1,45 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import Sortable from '@pages/Survey/component/sortable';
-import { Form, Col, Button, Figure, Row } from 'react-bootstrap';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+// import Sortable from '@pages/Survey/component/sortable';
+import { Form, Col, Button } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { MokaCard, MokaInput, MokaInputLabel, MokaTableDeleteButton } from '@components';
-import { BLANK_IMAGE_PATH, IR_URL } from '@/constants';
-import produce from 'immer';
+import { MokaCard, MokaInputLabel } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+
+// import { useDrop } from 'react-dnd';
+// import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
+import SortableItem from '@pages/Survey/component/sortable/SortableItem';
 
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
-import { initialState, SAVE_QUIZZES, GET_QUIZZES, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, quizQuestionItem } from '@store/survey/quiz';
+import { initialState, SAVE_QUIZZES, GET_QUIZZES, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, addQuestion, setQuestion } from '@store/survey/quiz';
+
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+// import SortableContainer from '@pages/Survey/component/sortable/SortableContainer';
 
 const initQuestionSetup = {
     questionType: 'third',
     questionCount: 1,
+};
+
+export const initialThirdTypeQuestionsInput = {
+    questionType: 'S',
+    imgUrl: '',
+    imgFile: null,
+    title: '',
+    questionDesc: '',
+    questionSeq: '',
+    choices: [{}],
+};
+
+export const initialFirstTypeQuestionsInput = {
+    questionType: 'O',
+    imgFile: {},
+    title: '',
+    questionDesc: '',
+    answer: '',
 };
 
 const QuizEdit = () => {
@@ -24,24 +48,42 @@ const QuizEdit = () => {
     const params = useParams();
     const selectQuizSeq = useRef(null);
     const [editData, setEditData] = useState(initialState.quizInfo);
-    const [selectImageFile, setSelectImageFile] = useState(null);
 
     // 항목 생성 설정을 담아둘 스테이트.
     const [questionSetup, setQuestionSetup] = useState(initQuestionSetup);
-    const [questionItem, setQuestionItem] = useState([]);
-    const [questionList, setQuestionList] = useState([]);
-
-    const imgFileRef = useRef(null);
 
     // 공통 구분값 URL
-    const { quizInfo, save_loading, get_loading } = useSelector((store) => ({
+    const { quizInfo, save_loading, get_loading, questionsItem, questionsList } = useSelector((store) => ({
         quizInfo: store.quiz.quizInfo,
+        questionsItem: store.quiz.quizQuestions.questionsItem,
+        questionsList: store.quiz.quizQuestions.questionsList,
         save_loading: store.loading[SAVE_QUIZZES],
         get_loading: store.loading[GET_QUIZZES],
     }));
 
+    /** sortable */
+    const [sortableItems, setSortableItems] = useState([]);
+
+    const findItem = (id) => {
+        const card = sortableItems.filter((c) => `${c.id}` === id)[0];
+        return {
+            card,
+            index: sortableItems.indexOf(card),
+        };
+    };
+
+    const moveItem = (id, atIndex) => {
+        const { card, index } = findItem(id);
+
+        const copyItems = [...sortableItems];
+        copyItems.splice(index, 1);
+        copyItems.splice(atIndex, 0, card);
+
+        setSortableItems(copyItems);
+    };
+    /** sortable */
+
     const handleChangeEditData = ({ target }) => {
-        // console.log(1);
         const { name, value, checked } = target;
 
         if (name === 'loginYn') {
@@ -64,7 +106,6 @@ const QuizEdit = () => {
 
     // 퀴즈 커버 이미지 등록 버튼.
     const handleChangeFileInput = (inputName, file) => {
-        // console.log(2);
         if (file) {
             setEditData({
                 ...editData,
@@ -75,14 +116,12 @@ const QuizEdit = () => {
 
     // 항목 데이터 초기화.
     const handleResetInfoData = () => {
-        // console.log(3);
         setEditData(initialState.quizInfo);
-        setQuestionItem([]);
+        // setQuestionItem([]);
     };
 
     // 항목 생성 값 변경 처리.
     const handleChangeQuestionsSetup = (e) => {
-        // console.log(4);
         const { name, value } = e.target;
         setQuestionSetup({
             ...questionSetup,
@@ -90,62 +129,40 @@ const QuizEdit = () => {
         });
     };
 
-    const handleQuestionsResult = useCallback((event) => {
-        setQuestionList([...questionList, event.editData]);
-    });
-
     // 항목 생성 버튼 클릭 처리.
     const handleClickNewQuestionsButton = useCallback(() => {
-        // console.log(6);
         const { questionType, questionCount } = questionSetup;
+        const nextIndex = questionsItem.length + 1;
 
-        let item = {};
-
-        const nextIndex = questionItem.length + 1;
-        if (questionType === 'first') {
-            item = {
-                id: nextIndex,
-                item: (
-                    <>
-                        <QuizQuestionFirstTypeComponent
-                            questionIndex={nextIndex}
-                            questionCount={questionCount}
-                            dataReturnEvent={handleQuestionsResult}
-                            selectEditData={null}
-                            getLoading={get_loading}
-                        />
-                    </>
-                ),
-            };
-        } else if (questionType === 'third') {
-            item = {
-                id: nextIndex,
-                item: (
-                    <>
-                        <QuizQuestionThirdTypeComponent
-                            questionIndex={nextIndex}
-                            questionCount={questionCount}
-                            dataReturnEvent={handleQuestionsResult}
-                            selectEditData={null}
-                            getLoading={get_loading}
-                        />
-                    </>
-                ),
-            };
+        if (questionType === 'third') {
+            dispatch(
+                addQuestion({
+                    questionIndex: Number(nextIndex),
+                    questionType: 'S',
+                    questionCount: Number(questionCount),
+                    questionInitialState: {
+                        ...initialThirdTypeQuestionsInput,
+                        choices: new Array(Number(questionCount)).fill({
+                            answYn: 'N',
+                            title: '',
+                        }),
+                    },
+                }),
+            );
+        } else if (questionType === 'first') {
+            dispatch(
+                addQuestion({
+                    questionIndex: Number(nextIndex),
+                    questionType: 'O',
+                    questionCount: Number(questionCount),
+                    questionInitialState: initialFirstTypeQuestionsInput,
+                }),
+            );
         }
-
-        const newList = [...questionItem, item];
-        setQuestionItem(newList);
-        setEditData({
-            ...editData,
-            questions: [...editData.questions, []],
-        });
-    }, [editData, get_loading, handleQuestionsResult, questionItem, questionSetup]);
+    }, [dispatch, questionSetup, questionsItem]);
 
     // 문항 검색 버튼 클릭 처리.
-    const handleClickSearchQuestionsButton = () => {
-        // console.log('handleClickSearchQuestionsButton');
-    };
+    const handleClickSearchQuestionsButton = () => {};
 
     const checkValidation = () => {
         return false;
@@ -153,9 +170,6 @@ const QuizEdit = () => {
 
     // 저장 버튼 클릭 처리.
     const handleClickSaveButton = () => {
-        // console.log(editData);
-        // return;
-
         let type;
         let quizSeq;
 
@@ -174,8 +188,6 @@ const QuizEdit = () => {
         if (checkValidation()) {
             return;
         }
-
-        // console.log(editData);
 
         var formData = new FormData();
 
@@ -199,7 +211,7 @@ const QuizEdit = () => {
         // let questions = questionList;
 
         // console.log(questions);
-        questionList.map((element, i) => {
+        questionsList.map((element, i) => {
             const { questionType } = element;
             formData.append(`questions[${questionCount}].questionType`, questionType);
 
@@ -222,8 +234,10 @@ const QuizEdit = () => {
                 choices.map((e, ii) => {
                     formData.append(`questions[${questionCount}].choices[${ii}].title`, e.title);
                     formData.append(`questions[${questionCount}].choices[${ii}].answYn`, e.answYn);
+                    return e;
                 });
             } else if (questionType === 'O') {
+                formData.append(`questions[${questionCount}].imgUrl`, element.imgUrl);
                 formData.append(`questions[${questionCount}].title`, element.title);
                 formData.append(`questions[${questionCount}].answer`, element.answer);
 
@@ -234,9 +248,11 @@ const QuizEdit = () => {
                 if (element.imgFile) {
                     formData.append(`questions[${questionCount}].imgFile`, element.imgFile);
                 }
+                formData.append(`questions[${questionCount}].questionDesc`, element.questionDesc);
             }
 
             questionCount++;
+            return element;
         });
 
         // formData 출력(테스트).
@@ -278,7 +294,6 @@ const QuizEdit = () => {
 
     // url 에서 현재 선택한 게시판 id 값 설정.
     useEffect(() => {
-        // console.log(7);
         const { quizSeq } = params;
         if (!isNaN(quizSeq) && selectQuizSeq.current !== quizSeq) {
             selectQuizSeq.current = quizSeq;
@@ -293,7 +308,6 @@ const QuizEdit = () => {
 
     // 스토어에서 quizInfo 가 업데이트 되었을때. ( 목록에서 클릭 하고 url 이 변경 되었을때.)
     useEffect(() => {
-        // console.log(8);
         const setInfoData = (data) => {
             setEditData({
                 ...editData,
@@ -308,43 +322,22 @@ const QuizEdit = () => {
         };
 
         const setQuestions = (data) => {
-            setQuestionItem(
-                data.map((element, index) => {
-                    // console.log();
-                    let questionType = element.questionType;
-                    if (questionType === 'S') {
-                        return {
-                            id: index,
-                            item: (
-                                <>
-                                    <QuizQuestionThirdTypeComponent
-                                        questionIndex={index}
-                                        questionCount={element.choiceCnt}
-                                        dataReturnEvent={handleQuestionsResult}
-                                        selectEditData={element}
-                                        getLoading={get_loading}
-                                    />
-                                </>
-                            ),
-                        };
-                    } else if (questionType === 'O') {
-                        return {
-                            id: index,
-                            item: (
-                                <>
-                                    <QuizQuestionFirstTypeComponent
-                                        questionIndex={index}
-                                        questionCount={element.choiceCnt}
-                                        dataReturnEvent={handleQuestionsResult}
-                                        selectEditData={element}
-                                        getLoading={get_loading}
-                                    />
-                                </>
-                            ),
-                        };
-                    }
-                }),
-            );
+            console.log(data);
+            let qitem = [];
+            let qQuestions = [];
+            data.map((e, index) => {
+                qitem.push({
+                    questionIndex: Number(index),
+                    questionType: e.questionType,
+                    questionCount: Number(e.choiceCnt),
+                });
+
+                qQuestions.push(e);
+
+                return e;
+            });
+
+            dispatch(setQuestion({ item: qitem, questions: qQuestions }));
         };
 
         if (selectQuizSeq.current !== 'add') {
@@ -355,7 +348,10 @@ const QuizEdit = () => {
     }, [quizInfo]);
 
     useEffect(() => {
-        // console.log(10);
+        // console.log({ questionItem: questionItem });
+    }, []);
+
+    useEffect(() => {
         return () => {
             dispatch(clearQuizinfo());
         };
@@ -560,7 +556,54 @@ const QuizEdit = () => {
                 </Form.Row>
 
                 {/* 문항 */}
-                {get_loading !== true && <Sortable items={questionItem} editData={editData} />}
+                <DndProvider backend={HTML5Backend}>
+                    {questionsItem.map((item, index) => {
+                        const { questionCount, questionType } = item;
+                        if (questionType === 'S') {
+                            return (
+                                <SortableItem
+                                    key={index}
+                                    id={`${index}`}
+                                    item={
+                                        <>
+                                            <QuizQuestionThirdTypeComponent
+                                                key={index}
+                                                questionIndex={index}
+                                                questionCount={questionCount}
+                                                selectEditData={null}
+                                                getLoading={get_loading}
+                                            />
+                                        </>
+                                    }
+                                    moveItem={moveItem}
+                                    findItem={findItem}
+                                />
+                            );
+                        } else if (questionType === 'O') {
+                            return (
+                                <SortableItem
+                                    key={index}
+                                    id={`${index}`}
+                                    item={
+                                        <>
+                                            <QuizQuestionFirstTypeComponent
+                                                key={index}
+                                                questionIndex={index}
+                                                questionCount={questionCount}
+                                                selectEditData={null}
+                                                getLoading={get_loading}
+                                            />
+                                        </>
+                                    }
+                                    moveItem={moveItem}
+                                    findItem={findItem}
+                                />
+                            );
+                        }
+
+                        return item;
+                    })}
+                </DndProvider>
             </Form>
         </MokaCard>
     );

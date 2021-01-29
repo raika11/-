@@ -65,7 +65,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="pt-3">
-                    <Col xs={10}>
+                    <Col xs={9}>
                         <Form.Row className="pt-1">
                             <Col xs={12}>
                                 <MokaInputLabel
@@ -103,7 +103,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
                             </Col>
                         </Form.Row>
                     </Col>
-                    <Col xs={2}>
+                    <Col xs={3}>
                         <PollPhotoComponent
                             width={110}
                             height={110}

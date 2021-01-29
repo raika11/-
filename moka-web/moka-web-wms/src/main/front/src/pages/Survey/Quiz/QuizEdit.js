@@ -322,7 +322,6 @@ const QuizEdit = () => {
         };
 
         const setQuestions = (data) => {
-            console.log(data);
             let qitem = [];
             let qQuestions = [];
             data.map((e, index) => {

@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePollSearchOptions, getPollList, GET_POLL_LIST, SAVE_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
 import { initialState } from '@store/survey/poll/pollReducer';
+import PollPreviewModal from '@pages/Survey/Poll/modals/PollPreviewModal';
 
 const PollList = ({ onDelete }) => {
     const history = useHistory();
@@ -39,17 +40,8 @@ const PollList = ({ onDelete }) => {
 
     return (
         <>
-            <PollSearch searchOptions={search} codes={codes} onSearch={handleChangeSearchOption} onReset={handleClickReset} />
-            <PollAgGrid
-                searchOptions={search}
-                rows={list}
-                total={total}
-                loading={loading}
-                pollSeq={pollSeq}
-                onChangeSearchOption={handleChangeSearchOption}
-                onDelete={onDelete}
-                onAdd={handleClickAdd}
-            />
+            <PollSearch searchOptions={search} codes={codes} onSearch={handleChangeSearchOption} onReset={handleClickReset} onAdd={handleClickAdd} />
+            <PollAgGrid searchOptions={search} rows={list} total={total} loading={loading} pollSeq={pollSeq} onChangeSearchOption={handleChangeSearchOption} onDelete={onDelete} />
         </>
     );
 };

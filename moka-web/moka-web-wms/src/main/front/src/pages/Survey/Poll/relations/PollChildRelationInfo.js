@@ -93,8 +93,7 @@ const PollChildRelation = () => {
     useEffect(() => {
         if (selectArticle) {
             const { artTitle: title, totalId } = selectArticle;
-            const ordNo = relationArticles.length + 1;
-            const articles = [...relationArticles, { title, linkUrl: `https://news.joins.com/article/${totalId}`, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId, ordNo }];
+            const articles = [...relationArticles, { title, linkUrl: `https://news.joins.com/article/${totalId}`, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId }];
             setRelationArticles(articles);
             setEdit({ ...edit, pollRelateContents: [...relationPolls, ...articles] });
         }
@@ -103,8 +102,7 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         if (selectPoll) {
-            const ordNo = relationPolls.length + 1;
-            const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id, ordNo }];
+            const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id }];
             setRelationPolls(polls);
             setEdit({ ...edit, pollRelateContents: [...relationArticles, ...polls] });
         }

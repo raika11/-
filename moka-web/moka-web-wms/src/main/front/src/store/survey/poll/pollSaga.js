@@ -95,7 +95,7 @@ function toPollData(poll) {
 function* getPoll({ type, payload }) {
     yield put(startLoading(type));
     try {
-        const response = yield call(pollApi.getPoll, payload);
+        const response = yield call(pollApi.getPoll, payload.pollSeq);
 
         if (response.data.header.success) {
             const poll = toPollData(response.data.body);
@@ -105,6 +105,9 @@ function* getPoll({ type, payload }) {
                 payload: poll,
             });
         } else {
+        }
+        if (payload.callback instanceof Function) {
+            payload.callback({ ...response.data, body: toPollData(response.data.body) });
         }
     } catch (e) {
         console.log(e);
@@ -186,4 +189,5 @@ export default function* pollSaga() {
     yield takeLatest(action.UPDATE_POLL, updatePoll);
     yield takeLatest(action.DELETE_POLL, deletePoll);
     yield takeLatest(action.GET_RELATION_POLL_LIST, getPollList);
+    yield takeLatest(action.GET_PREVIEW_POLL, getPoll);
 }

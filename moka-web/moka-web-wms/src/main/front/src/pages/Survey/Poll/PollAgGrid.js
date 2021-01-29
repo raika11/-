@@ -3,11 +3,14 @@ import { MokaTable } from '@components';
 import { columnDefs } from '@pages/Survey/Poll/PollAgGridColumns';
 import produce from 'immer';
 import { useHistory } from 'react-router-dom';
+import PollPreviewModal from '@pages/Survey/Poll/modals/PollPreviewModal';
 
 const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSearchOption, onDelete }) => {
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
     const [selected, setSelected] = useState(null);
+    const [previewModalShow, setPreviewModalShow] = useState(false);
+    const [previewId, setPreviewId] = useState(null);
 
     const handleChangeSearchOptions = (option) => {
         if (onChangeSearchOption instanceof Function) {
@@ -23,8 +26,13 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
         history.push(`/poll/${id}`);
     };
 
+    const handleClickPreview = (id) => {
+        setPreviewModalShow(true);
+        setPreviewId(id);
+    };
+
     useEffect(() => {
-        setRowData(rows.map((row) => ({ ...row, onDelete })));
+        setRowData(rows.map((row) => ({ ...row, onDelete, onPreview: handleClickPreview })));
     }, [onDelete, rows]);
 
     useEffect(() => {
@@ -51,6 +59,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
                 className="ag-grid-align-center"
                 preventRowClickCell={['delete', 'preview']}
             />
+            <PollPreviewModal pollSeq={previewId} show={previewModalShow} onHide={() => setPreviewModalShow(false)} />
         </>
     );
 };

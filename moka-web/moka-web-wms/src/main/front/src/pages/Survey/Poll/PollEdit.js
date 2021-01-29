@@ -102,7 +102,7 @@ const PollEdit = () => {
                 updatePoll({
                     data: edit,
                     callback: (response) => {
-                        dispatch(getPoll(response.body.pollSeq));
+                        dispatch(getPoll({ pollSeq: response.body.pollSeq }));
                         dispatch(getPollList({ search }));
                         toast.result(response);
                     },
@@ -113,7 +113,11 @@ const PollEdit = () => {
 
     useEffect(() => {
         if (!commonUtil.isEmpty(pollSeq)) {
-            dispatch(getPoll(pollSeq));
+            dispatch(
+                getPoll({
+                    pollSeq,
+                }),
+            );
         } else {
             dispatch(clearPoll());
         }

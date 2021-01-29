@@ -59,7 +59,15 @@ export const columnDefs = [
             return (
                 <div className="w-100 h-100 d-flex align-items-center justify-content-center">
                     <OverlayTrigger overlay={<Tooltip id="tooltip-table-preview-button">미리보기</Tooltip>}>
-                        <Button variant="white" className="border-0 p-0 bg-transparent shadow-none" onClick={() => console.log('preview')}>
+                        <Button
+                            variant="white"
+                            className="border-0 p-0 bg-transparent shadow-none"
+                            onClick={() => {
+                                if (param.data.onPreview instanceof Function) {
+                                    param.data.onPreview(param.data.id);
+                                }
+                            }}
+                        >
                             <MokaIcon iconName="fal-file-search" style={{ fontSize: '18px' }} />
                         </Button>
                     </OverlayTrigger>

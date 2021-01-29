@@ -41,3 +41,6 @@ export const getPollCategoryCodes = createAction(GET_POLL_CATEGORY_CODES, () => 
 
 export const GET_RELATION_POLL_LIST = 'poll/GET_RELATION_POLL_LIST';
 export const getRelationPollList = createAction(GET_RELATION_POLL_LIST);
+
+export const GET_PREVIEW_POLL = 'poll/GET_PREVIEW_POLL';
+export const getPreviewPoll = createAction(GET_PREVIEW_POLL);

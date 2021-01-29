@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { loginJwt } from '@store/auth';
 import { call, delay } from 'redux-saga/effects';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Main from '@/layout/components/Main';
 import { getLocalItem } from '@/utils/storageUtil';
 import { SIGNIN_MEMBER_ID, SIGNIN_MEMBER_ID_SAVE } from '@/constants';

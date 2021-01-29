@@ -6,7 +6,7 @@
         "sass:compile": "node-sass-chokidar --include-path ./node_modules/ --output-style compact ./src/assets/styles/classic.scss -o ./public/css",
         "sass:autoprefixer": "postcss public/css/*.css --use autoprefixer -d public/css",
         "build:css": "npm-run-all sass:*",
-        "build:js": "node scripts/build.js",
+        "build:js": "node --max-old-space-size=3072 scripts/build.js",
         "watch:css": "chokidar \"src/assets/styles/**/*\" -c \"yarn build:css\"",
         "watch:js": "node scripts/start.js",
         "start": "cross-env NODE_ENV=development API_SERVER=http://localhost:8100 npm-run-all -p build:css watch:*",

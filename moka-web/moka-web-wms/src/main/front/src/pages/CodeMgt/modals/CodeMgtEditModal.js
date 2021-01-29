@@ -80,20 +80,6 @@ const CodeMgtEditModal = (props) => {
                 });
                 isInvalid = isInvalid | true;
             }
-            if (!/^[ㄱ-ㅎ가-힣]+$/g.test(obj.cdNm)) {
-                errList.push({
-                    field: 'cdNm',
-                    reason: '코드 한글명 형식이 올바르지 않습니다.',
-                });
-                isInvalid = isInvalid | true;
-            }
-            if (!/^[A-Za-z]+$/g.test(obj.cdEngNm)) {
-                errList.push({
-                    field: 'cdEngNm',
-                    reason: '코드 영문명 형식이 올바르지 않습니다.',
-                });
-                isInvalid = isInvalid | true;
-            }
             if (!obj.cdOrd) {
                 errList.push({
                     field: 'cdOrd',
@@ -190,7 +176,7 @@ const CodeMgtEditModal = (props) => {
                 cd.seqNo
                     ? [
                           {
-                              text: '저장',
+                              text: '수정',
                               variant: 'positive',
                               onClick: handleClickSave,
                           },
@@ -242,7 +228,7 @@ const CodeMgtEditModal = (props) => {
                 disabled={cd.seqNo ? true : false}
             />
             <MokaInputLabel label="코드 한글명" className="mb-2" value={stateObj.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} />
-            <MokaInputLabel label="코드 영문명" className="mb-2" value={stateObj.cdEngNm} name="cdEngNm" onChange={handleChangeValue} isInvalid={error.cdEngNm} />
+            <MokaInputLabel label="코드 영문명" className="mb-2" value={stateObj.cdEngNm} name="cdEngNm" onChange={handleChangeValue} />
             <MokaInputLabel label="순서" className="mb-2" value={stateObj.cdOrd} name="cdOrd" onChange={handleChangeValue} isInvalid={error.cdOrd} />
             <MokaInputLabel label="코드 설명" className="mb-2" value={stateObj.cdComment} name="cdComment" onChange={handleChangeValue} />
             <MokaInputLabel label="기타1" className="mb-2" value={stateObj.cdNmEtc1} name="cdNmEtc1" onChange={handleChangeValue} />

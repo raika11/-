@@ -64,14 +64,6 @@ const CodeMgtListModal = (props) => {
             isInvalid = isInvalid | true;
         }
 
-        // if (!/^[ㄱ-ㅎ가-힣]+$/g.test(obj.cdNm)) {
-        //     errList.push({
-        //         field: 'cdNm',
-        //         reason: '그룹 한글명 형식이 올바르지 않습니다.',
-        //     });
-        //     isInvalid = isInvalid || true;
-        // }
-
         dispatch(changeGrpInvalidList(errList));
         return !isInvalid;
     };

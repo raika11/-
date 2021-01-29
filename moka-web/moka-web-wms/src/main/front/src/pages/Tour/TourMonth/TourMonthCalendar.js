@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, forwardRef, useEffect } from 'react';
 import moment from 'moment';
+// import { useDispatch, useSelector } from 'react-redux';
 import FullCalendar from '@fullcalendar/react';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -35,14 +36,20 @@ const demoEvents = {
     // display: block, list-item, background (event obj)
 };
 
-const TourMonthCalendar = () => {
+const TourMonthCalendar = forwardRef((props, ref) => {
+    // const dispatch = useDispatch();
     const [holidayModal, setHolidayModal] = useState(false);
     const [summaryModal, setSummaryModal] = useState(false);
     const [cancelModal, setCancelModal] = useState(false);
+    const calendarRef = useRef();
 
+    useEffect(() => {
+        console.log(calendarRef.current.props);
+    }, []);
     return (
         <>
             <FullCalendar
+                ref={calendarRef}
                 height="100%"
                 plugins={[bootstrapPlugin, interactionPlugin, dayGridPlugin, timeGridPlugin]}
                 themeSystem="bootstrap"
@@ -120,6 +127,6 @@ const TourMonthCalendar = () => {
             <CancelHolidayModal show={cancelModal} onHide={() => setCancelModal(false)} />
         </>
     );
-};
+});
 
 export default TourMonthCalendar;

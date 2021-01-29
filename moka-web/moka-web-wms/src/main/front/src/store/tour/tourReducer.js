@@ -117,6 +117,20 @@ export default handleActions(
                 draft.invalidList = initialState.invalidList;
             });
         },
+        /**
+         * 견학 휴일 목록 조회(월별)
+         */
+        [act.GET_TOUR_DENY_MONTH_LIST_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.holidayList = body.list;
+            });
+        },
+        [act.GET_TOUR_DENY_MONTH_LIST_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.holidayList = initialState.holidayList;
+            });
+        },
     },
     initialState,
 );

@@ -216,6 +216,11 @@ function* deleteTourApply({ payload }) {
  */
 const postResetPwd = createRequestSaga(act.POST_RESET_PWD, api.postResetPwd, true);
 
+/**
+ * 견학 휴일 목록 조회
+ */
+const getTourDenyMonthList = createRequestSaga(act.GET_TOUR_DENY_MONTH_LIST, api.getTourDenyMonthList);
+
 export default function* saga() {
     yield takeLatest(act.GET_TOUR_GUIDE_LIST, getTourGuideList);
     yield takeLatest(act.PUT_TOUR_GUIDE_LIST, putTourGuideList);
@@ -229,4 +234,5 @@ export default function* saga() {
     yield takeLatest(act.PUT_TOUR_APPLY, putTourApply);
     yield takeLatest(act.DELETE_TOUR_APPLY, deleteTourApply);
     yield takeLatest(act.POST_RESET_PWD, postResetPwd);
+    yield takeLatest(act.GET_TOUR_DENY_MONTH_LIST, getTourDenyMonthList);
 }

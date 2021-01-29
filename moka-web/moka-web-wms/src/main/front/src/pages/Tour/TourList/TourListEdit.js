@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel } from '@/components';
 import { getTourAge } from '@store/codeMgt';
-import { getTourSetup, putTourApply, getTourApply, deleteTourApply } from '@/store/tour';
+import { getTourSetup, putTourApply, getTourApply, deleteTourApply, postResetPwd } from '@/store/tour';
 import toast from '@/utils/toastUtil';
 
 const TourListEdit = forwardRef(({ match }, ref) => {
@@ -40,7 +40,19 @@ const TourListEdit = forwardRef(({ match }, ref) => {
         let resetPwd;
         if (temp.writerPhone) {
             resetPwd = temp.writerPhone.slice(-4);
-            setTemp({ ...temp, writerPwd: resetPwd });
+            dispatch(
+                postResetPwd({
+                    phone: resetPwd,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            setTemp({ ...temp, writerPwd: body });
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
         }
     };
 

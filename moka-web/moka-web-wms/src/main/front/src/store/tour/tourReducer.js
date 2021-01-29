@@ -21,6 +21,7 @@ export const initialState = {
         keyword: '',
     },
     tourApply: {},
+    invalidList: [],
 };
 
 export default handleActions(

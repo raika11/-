@@ -211,6 +211,11 @@ function* deleteTourApply({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 견학 비밀번호 초기화
+ */
+const postResetPwd = createRequestSaga(act.POST_RESET_PWD, api.postResetPwd, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_TOUR_GUIDE_LIST, getTourGuideList);
     yield takeLatest(act.PUT_TOUR_GUIDE_LIST, putTourGuideList);
@@ -223,4 +228,5 @@ export default function* saga() {
     yield takeLatest(act.GET_TOUR_APPLY, getTourApply);
     yield takeLatest(act.PUT_TOUR_APPLY, putTourApply);
     yield takeLatest(act.DELETE_TOUR_APPLY, deleteTourApply);
+    yield takeLatest(act.POST_RESET_PWD, postResetPwd);
 }

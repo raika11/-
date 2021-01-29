@@ -53,3 +53,9 @@ export const DELETE_TOUR_DENY = 'tour/DELETE_TOUR_DENY';
 export const deleteTourDeny = createAction(DELETE_TOUR_DENY, ({ denySeq, callback }) => ({ denySeq, callback }));
 export const DELETE_TOUR_APPLY = 'tour/DELETE_TOUR_APPLY';
 export const deleteTourApply = createAction(DELETE_TOUR_APPLY, ({ tourSeq, callback }) => ({ tourSeq, callback }));
+
+/**
+ * 비밀번호 초기화
+ */
+export const POST_RESET_PWD = 'tour/POST_RESET_PWD';
+export const postResetPwd = createAction(POST_RESET_PWD, ({ phone, callback }) => ({ phone, callback }));

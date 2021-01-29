@@ -8,24 +8,21 @@ const SetHolidayModal = (props) => {
 
     return (
         <MokaModal
-            width={400}
             size="md"
+            // width={600}
             title="휴일 지정"
             show={show}
             onHide={onHide}
             buttons={[
-                { text: '저장', variant: 'positive' },
+                { text: '확인', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: () => onHide() },
             ]}
             centered
+            draggable
         >
             <Form>
                 <MokaInputLabel label="휴일명" className="mb-2" value={holidayName} onChange={(e) => setHolidayName(e.target.value)} />
-                <p className="color-secondary mb-0">
-                    ※ 휴일명을 입력하시면 사용자 화면에서 입력하신 휴일명이 표기됩니다.
-                    <br />
-                    (기본: 신청 마감)
-                </p>
+                <p className="color-secondary mb-0">※ 휴일명을 입력하시면 사용자 화면에서 입력하신 휴일명이 표기됩니다. (기본: 신청 마감)</p>
             </Form>
         </MokaModal>
     );

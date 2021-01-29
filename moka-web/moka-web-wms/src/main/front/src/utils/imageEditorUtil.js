@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import toast from '@utils/toastUtil';
 import { MokaImageEditor } from '@components';
 import { IMAGE_PROXY_API } from '@/constants';
+import store from '@store';
 
 export const imageEditor = {
     create: (imageSrc, onApply, options) => {
@@ -11,6 +12,9 @@ export const imageEditor = {
             if (!imageSrc.startsWith('blob')) {
                 imageSrc = IMAGE_PROXY_API + imageSrc;
             }
+
+            const waterMarkList = store.getState().app.WATERMARK_LIST;
+
             ReactDOM.render(<MokaImageEditor />, document.getElementById('mokaImageEditor'));
             new ImageEditor('.image-editor', {
                 includeUI: {
@@ -32,6 +36,7 @@ export const imageEditor = {
                             width: options.cropWidth,
                             height: options.cropHeight,
                         },
+                        watermark: waterMarkList,
                     },
                 },
 

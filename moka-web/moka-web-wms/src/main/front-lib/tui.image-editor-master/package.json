@@ -1,7 +1,7 @@
 {
     "name": "@moka/tui-image-editor",
     "author": "NHN FE Development Lab <dl_javascript@nhn.com>",
-    "version": "3.9.7",
+    "version": "3.9.8",
     "license": "UNLICENSED",
     "repository": {
         "type": "git",

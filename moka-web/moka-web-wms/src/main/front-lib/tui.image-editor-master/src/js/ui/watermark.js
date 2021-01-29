@@ -123,7 +123,7 @@ class Watermark extends Submenu {
     }
 
     _addWatermarks(value) {
-        const watermarks = this._watermarkList[value].image;
+        const watermarks = this._watermarkList[value].images;
         let watermarkHtml = '';
         watermarks.forEach((item, index) => {
             if (

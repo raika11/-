@@ -20,15 +20,7 @@ export const initialState = {
         searchKey: 'all',
         searchValue: '',
     },
-    dataTypeList: [
-        { id: 'all', name: '전체' },
-        { id: 'addPhoto', name: '등록 사진' },
-        { id: 'addImg', name: '등록 이미지' },
-        { id: 'editImg', name: '지면 편집 이미지' },
-        { id: 'pool', name: '사진 POOL' },
-        { id: 'domestic', name: '제휴 내신' },
-        { id: 'foreign', name: '제휴 외신' },
-    ],
+    originList: [],
     imageTypeList: [],
     searchKeyList: [
         { id: 'all', name: '전체' },
@@ -86,6 +78,19 @@ export default handleActions(
             });
         },
         /**
+         * 출처 목록 조회
+         */
+        [act.GET_PHOTO_ORIGINS_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.originList = body.list;
+            });
+        },
+        [act.GET_PHOTO_ORIGINS_FAILURE]: (state) => {
+            return produce(state, (draft) => {
+                draft.originList = initialState.originList;
+            });
+        },
+        /**
          * 사진 유형 목록 조회
          */
         [act.GET_PHOTO_TYPES_SUCCESS]: (state, { payload: { body } }) => {
@@ -96,7 +101,7 @@ export default handleActions(
                 draft.imageTypeList = sortArr;
             });
         },
-        [act.GET_PHOTO_TYPES_FAILURE]: (state, { payload }) => {
+        [act.GET_PHOTO_TYPES_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.imageTypeList = initialState.imageTypeList;
             });

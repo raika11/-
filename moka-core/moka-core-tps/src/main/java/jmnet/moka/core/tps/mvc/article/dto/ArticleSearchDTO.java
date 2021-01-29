@@ -61,6 +61,7 @@ public class ArticleSearchDTO extends SearchDTO {
 
     @ApiModelProperty("매체목록 (필수/구분자,)")
     @JsonIgnore
+    @Length(min = 1, message = "{tps.article.error.length.sourceList}")
     @NotNull(message = "{tps.article.error.notnull.sourceList}")
     private String sourceList;
 

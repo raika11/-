@@ -18,6 +18,9 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
  */
 export const CLEAR_STORE = 'tour/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
+export const CLEAR_SEARCH = 'tour/CLEAR_SEARCH';
+export const clearSearch = createAction(CLEAR_SEARCH);
+
 /**
  * 데이터 조회
  */
@@ -27,6 +30,10 @@ export const [GET_TOUR_DENY_LIST, GET_TOUR_DENY_LIST_SUCCESS, GET_TOUR_DENY_LIST
 export const getTourDenyList = createAction(GET_TOUR_DENY_LIST, () => ({}));
 export const [GET_TOUR_SETUP, GET_TOUR_SETUP_SUCCESS, GET_TOUR_SETUP_FAILURE] = createRequestActionTypes('tour/GET_TOUR_SETUP');
 export const getTourSetup = createAction(GET_TOUR_SETUP, () => ({}));
+export const [GET_TOUR_APPLY_LIST, GET_TOUR_APPLY_LIST_SUCCESS, GET_TOUR_APPLY_LIST_FAILURE] = createRequestActionTypes('tour/GET_TOUR_APPLY_LIST');
+export const getTourApplyList = createAction(GET_TOUR_APPLY_LIST, (...actions) => actions);
+export const [GET_TOUR_APPLY, GET_TOUR_APPLY_SUCCESS] = createRequestActionTypes('special/GET_TOUR_APPLY');
+export const getTourApply = createAction(GET_TOUR_APPLY, ({ tourSeq, callback }) => ({ tourSeq, callback }));
 /**
  * 저장, 수정
  */
@@ -36,9 +43,13 @@ export const SAVE_TOUR_DENY = 'tour/SAVE_TOUR_DENY';
 export const saveTourDeny = createAction(SAVE_TOUR_DENY, ({ tourDeny, callback }) => ({ tourDeny, callback }));
 export const PUT_TOUR_SETUP = 'tour/PUT_TOUR_SETUP';
 export const putTourSetup = createAction(PUT_TOUR_SETUP, ({ tourSetup, callback }) => ({ tourSetup, callback }));
+export const PUT_TOUR_APPLY = 'tour/PUT_TOUR_APPLY';
+export const putTourApply = createAction(PUT_TOUR_APPLY, ({ tourApply, callback }) => ({ tourApply, callback }));
 
 /**
  * 삭제
  */
 export const DELETE_TOUR_DENY = 'tour/DELETE_TOUR_DENY';
 export const deleteTourDeny = createAction(DELETE_TOUR_DENY, ({ denySeq, callback }) => ({ denySeq, callback }));
+export const DELETE_TOUR_APPLY = 'tour/DELETE_TOUR_APPLY';
+export const deleteTourApply = createAction(DELETE_TOUR_APPLY, ({ tourSeq, callback }) => ({ tourSeq, callback }));

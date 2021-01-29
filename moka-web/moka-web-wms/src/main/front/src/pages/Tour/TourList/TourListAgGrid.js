@@ -1,45 +1,80 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
-import columnDefs, { rowData } from './TourListAgGridColumns';
+import columnDefs from './TourListAgGridColumns';
+import { GET_TOUR_APPLY_LIST, getTourApplyList, changeSearchOption, getTourApply } from '@/store/tour';
 
 /**
- * 신청목록 AgGrid
+ * 신청 목록 AgGrid
  */
-const TourListAgGrid = () => {
+const TourListAgGrid = ({ match }) => {
+    const dispatch = useDispatch();
     const history = useHistory();
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
+    const list = useSelector((store) => store.tour.list);
+    const total = useSelector((store) => store.tour.total);
+    const search = useSelector((store) => store.tour.search);
+    const tourApply = useSelector((store) => store.tour.tourApply);
+    const loading = useSelector((store) => store.loading[GET_TOUR_APPLY_LIST]);
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블에서 검색옵션 변경하는 경우
      * @param {object} payload 변경된 값
      */
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+    const handleChangeSearchOption = useCallback(
+        ({ key, value }) => {
+            let temp = { ...search, [key]: value };
+            if (key !== 'page') {
+                temp['page'] = 0;
+            }
+            dispatch(getTourApplyList(changeSearchOption(temp)));
+        },
+        [dispatch, search],
+    );
 
     /**
      * 목록에서 Row클릭
      */
     const handleRowClicked = useCallback(
         (row) => {
-            history.push(`/tour-list/${row.seqNo}`);
+            dispatch(
+                getTourApply({
+                    tourSeq: row.tourSeq,
+                    callback: ({ header, body }) => {
+                        if (header.success && body) {
+                            history.push(`${match.path}/${row.tourSeq}`);
+                        }
+                    },
+                }),
+            );
         },
-        [history],
+        [dispatch, history, match.path],
     );
+
+    useEffect(() => {
+        if (list.length > 0) {
+            setRowData(
+                list.map((data) => ({
+                    ...data,
+                    tourDate: (data.tourDate || '').substr(0, 10),
+                    regDt: (data.regDt || '').substr(0, 10),
+                })),
+            );
+        }
+    }, [list]);
 
     return (
         <MokaTable
-            agGridHeight={632}
+            className="flex-fill overflow-hidden"
             columnDefs={columnDefs}
             rowData={rowData}
-            onRowNodeId={(params) => params.seqNo}
+            onRowNodeId={(row) => row.tourSeq}
             onRowClicked={handleRowClicked}
             loading={loading}
             total={total}
             page={search.page}
-            size={search.size}
-            // selected={rowData[0].seqNo}
+            selected={tourApply.tourSeq}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

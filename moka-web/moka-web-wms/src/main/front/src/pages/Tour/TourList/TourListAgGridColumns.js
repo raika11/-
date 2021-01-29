@@ -1,65 +1,67 @@
 export default [
     {
         headerName: '번호',
-        field: 'seqNo',
+        field: 'tourSeq',
         cellStyle: { fontSize: '12px' },
-        width: 80,
+        width: 50,
     },
     {
         headerName: '견학일',
-        field: 'date',
+        field: 'tourDate',
         cellStyle: { fontSize: '12px' },
         width: 80,
     },
     {
         headerName: '단체명',
-        field: 'groupName',
+        field: 'tourGroupNm',
         cellStyle: { fontSize: '12px' },
         width: 300,
-        tooltipField: 'groupName',
+        tooltipField: 'tourGroupNm',
         flex: 1,
     },
     {
         headerName: '인원',
-        field: 'people',
+        field: 'tourPersons',
         cellStyle: { fontSize: '12px' },
         width: 40,
     },
     {
         headerName: '신청자',
-        field: 'applicant',
+        field: 'writerNm',
         cellStyle: { fontSize: '12px' },
         width: 60,
+        tooltipField: 'writerNm',
     },
     {
         headerName: '연락처',
-        field: 'phone',
+        field: 'writerPhone',
         cellStyle: { fontSize: '12px' },
         width: 100,
     },
     {
         headerName: '상태',
-        field: 'state',
+        field: 'tourStatus',
         cellStyle: { fontSize: '12px' },
         width: 50,
+        cellRendererFramework: ({ data }) => {
+            let status;
+            if (data.tourStatus === 'S') {
+                status = '신청';
+            } else if (data.tourStatus === 'A') {
+                status = '승인';
+            } else if (data.tourStatus === 'R') {
+                status = '반려';
+            } else if (data.tourStatus === 'C') {
+                status = '취소';
+            }
+
+            return status;
+        },
     },
     {
         headerName: '등록일',
         field: 'regDt',
         cellStyle: { fontSize: '12px' },
         width: 80,
-    },
-];
-
-export const rowData = [
-    {
-        seqNo: '158',
-        date: '2020-12-01',
-        groupName: '중앙대학교사범대학부속고등학교 시사언론',
-        people: '12',
-        applicant: '테스트',
-        phone: '010-0358-1254',
-        state: '승인',
-        regDt: '2020-11-21',
     },
 ];

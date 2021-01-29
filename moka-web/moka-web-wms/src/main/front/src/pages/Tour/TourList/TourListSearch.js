@@ -1,23 +1,47 @@
-import React, { useState } from 'react';
-import moment from 'moment';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { DB_DATEFORMAT } from '@/constants';
 import { MokaInput, MokaSearchInput } from '@/components';
+import { initialState, clearSearch, getTourApplyList, changeSearchOption } from '@/store/tour';
 
 /**
- * 신청목록 검색
+ * 신청 목록 검색
  */
 const TourListSearch = () => {
-    const [startDate, setStartDate] = useState(moment().format(DB_DATEFORMAT));
-    const [endDate, setEndDate] = useState(moment().format(DB_DATEFORMAT));
-    const [keyword, setKeyword] = useState('');
+    const dispatch = useDispatch();
+    const storeSearch = useSelector((store) => store.tour.search);
+    const [search, setSearch] = useState(initialState.search);
 
-    const handleClickReset = () => {
-        setStartDate(moment().format(DB_DATEFORMAT));
-        setEndDate(moment().format(DB_DATEFORMAT));
-        setKeyword('');
+    /**
+     * 검색 버튼
+     */
+    const handleClickSearch = () => {
+        dispatch(
+            getTourApplyList(
+                changeSearchOption({
+                    ...search,
+                    page: 0,
+                }),
+            ),
+        );
     };
+
+    /**
+     * 검색 조건 초기화
+     */
+    const handleClickReset = () => {
+        setSearch({ ...initialState.search, startTourDay: null, endTourDay: null, keyword: '' });
+        dispatch(clearSearch());
+    };
+
+    useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
+        dispatch(getTourApplyList());
+    }, [dispatch]);
 
     return (
         <Form>
@@ -26,16 +50,14 @@ const TourListSearch = () => {
                     <MokaInput
                         className="mb-0 mr-2"
                         as="dateTimePicker"
-                        value={startDate}
+                        value={search.startTourDay}
                         inputProps={{ timeFormat: null }}
-                        name="holiday"
                         onChange={(date) => {
                             if (typeof date === 'object') {
-                                setStartDate(date);
+                                setSearch({ ...search, startTourDay: date });
                             } else {
-                                setStartDate(null);
+                                setSearch({ ...search, startTourDay: null });
                             }
-                            // handleChangeValue
                         }}
                     />
                 </div>
@@ -43,21 +65,25 @@ const TourListSearch = () => {
                     <MokaInput
                         className="mb-0 mr-2"
                         as="dateTimePicker"
-                        value={endDate}
+                        value={search.endTourDay}
                         inputProps={{ timeFormat: null }}
-                        name="holiday"
                         onChange={(date) => {
                             if (typeof date === 'object') {
-                                setEndDate(date);
+                                setSearch({ ...search, endTourDay: date });
                             } else {
-                                setEndDate(null);
+                                setSearch({ ...search, endTourDay: null });
                             }
-                            // handleChangeValue
                         }}
                     />
                 </div>
                 <div className="flex-fill">
-                    <MokaSearchInput className="mr-2" placeholder="단체명을 입력해주세요" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+                    <MokaSearchInput
+                        className="mr-2"
+                        placeholder="신청자 또는 단체명을 입력해주세요"
+                        onSearch={handleClickSearch}
+                        value={search.keyword}
+                        onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
+                    />
                 </div>
                 <Button variant="negative" onClick={handleClickReset}>
                     초기화

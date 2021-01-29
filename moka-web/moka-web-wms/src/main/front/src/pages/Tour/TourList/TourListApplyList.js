@@ -3,13 +3,13 @@ import Search from './TourListSearch';
 import AgGrid from './TourListAgGrid';
 
 /**
- * 신청목록
+ * 신청 목록
  */
-const TourListApplyList = () => {
+const TourListApplyList = ({ match }) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search match={match} />
+            <AgGrid match={match} />
         </>
     );
 };

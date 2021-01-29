@@ -68,6 +68,8 @@ export const CODETYPE_PRESS_CATE1 = 'PRESS_CATE1';
 export const CODETYPE_HTTP_METHOD = 'HTTP_METHOD';
 // 공통코드 : API 타입
 export const CODETYPE_API_TYPE = 'API_TYPE';
+// 공통코드 : 투어 연령대
+export const CODETYPE_TOUR_AGE = 'TOUR_AGE';
 
 // 통신 실패 message
 export const NETWORK_ERROR_MESSAGE = '네트워크 오류가 발생하였습니다. 관리자에게 문의하세요.';

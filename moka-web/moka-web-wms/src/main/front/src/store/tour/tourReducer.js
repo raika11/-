@@ -10,9 +10,17 @@ export const initialState = {
     total: 0,
     error: null,
     list: [],
-    // tourGuideList: [],
     holidayList: [],
     tourSetup: {},
+    search: {
+        page: 0,
+        size: PAGESIZE_OPTIONS[0],
+        sort: 'tourSeq,desc',
+        startTourDay: null,
+        endTourDay: null,
+        keyword: '',
+    },
+    tourApply: {},
 };
 
 export default handleActions(
@@ -28,6 +36,11 @@ export default handleActions(
             });
         },
         [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_SEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.search = initialState.search;
+            });
+        },
         /**
          * 견학 메세지 설정 목록
          */
@@ -72,6 +85,35 @@ export default handleActions(
         [act.GET_TOUR_SETUP_FAILURE]: (state) => {
             return produce(state, (draft) => {
                 draft.tourSetup = initialState.tourSetup;
+            });
+        },
+        /**
+         * 견학 신청 목록 조회
+         */
+        [act.GET_TOUR_APPLY_LIST_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.list = body.list;
+                draft.total = body.totalCnt;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_TOUR_APPLY_LIST_FAILURE]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.list = body.list;
+                draft.total = body.totalCnt;
+                draft.error = payload;
+            });
+        },
+        /**
+         * 견학 신청 상세 조회
+         */
+        [act.GET_TOUR_APPLY_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.tourApply = body;
+                draft.invalidList = initialState.invalidList;
             });
         },
     },

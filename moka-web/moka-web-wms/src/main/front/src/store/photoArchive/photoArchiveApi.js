@@ -10,8 +10,8 @@ export const getPhotoList = ({ search }) => {
 };
 
 // 포토 아카이브 출처 목록 조회
-export const getPhotoOrigins = ({ menuNo }) => {
-    return instance.get(`/api/achive/photos/orgins?${qs.stringify({ menuNo })}`).catch((err) => {
+export const getPhotoOrigins = () => {
+    return instance.get(`/api/achive/photos/origins`).catch((err) => {
         throw err;
     });
 };

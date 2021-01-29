@@ -26,8 +26,8 @@ export const getPhotoList = createAction(GET_PHOTO_LIST, (...actions) => actions
 /**
  * 포토 아카이브 출처 목록 조회
  */
-export const GET_PHOTO_ORIGINS = 'photoArchive/GET_PHOTO_ORIGINS';
-export const getPhotoOrigins = createAction(GET_PHOTO_ORIGINS, (payload) => payload);
+export const [GET_PHOTO_ORIGINS, GET_PHOTO_ORIGINS_SUCCESS, GET_PHOTO_ORIGINS_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO_ORIGINS');
+export const getPhotoOrigins = createAction(GET_PHOTO_ORIGINS, () => ({}));
 
 /**
  * 포토 아카이브 사진 유형 목록 조회

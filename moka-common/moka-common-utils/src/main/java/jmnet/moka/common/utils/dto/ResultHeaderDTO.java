@@ -1,5 +1,7 @@
 package jmnet.moka.common.utils.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import java.io.Serializable;
 import jmnet.moka.common.utils.McpString;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("serial")
 @JsonRootName("header")
+@JsonInclude(Include.NON_NULL)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

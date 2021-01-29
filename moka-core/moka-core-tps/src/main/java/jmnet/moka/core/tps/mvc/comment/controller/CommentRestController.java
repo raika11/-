@@ -3,11 +3,9 @@ package jmnet.moka.core.tps.mvc.comment.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
@@ -16,7 +14,6 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
-import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentDeleteType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
@@ -26,7 +23,6 @@ import jmnet.moka.core.tps.mvc.comment.service.CommentBannedService;
 import jmnet.moka.core.tps.mvc.comment.service.CommentService;
 import jmnet.moka.core.tps.mvc.comment.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -133,7 +129,8 @@ public class CommentRestController extends AbstractCommonController {
     public ResponseEntity<?> putComment(
             @ApiParam("댓글 ID") @PathVariable("cmtSeq") @Min(value = 1, message = "{comment.error.pattern.cmtSeq}") Long cmtSeq,
             @ApiParam("댓글 상태 유형") @RequestParam(value = "statusType") CommentStatusType statusType,
-            @ApiParam("삭제 유형") @RequestParam(value = "deleteType", required = false) CommentDeleteType deleteType)
+            @ApiParam("삭제 유형, 댓글하나 : CMT,사용자 댓글 모두 : ALL, 사용자 차단과 해당 댓글 삭제 : BNC, 사용자 차단과 해당 댓글 삭제 : BNA")
+            @RequestParam(value = "deleteType", required = false) CommentDeleteType deleteType)
             throws InvalidDataException, NoDataException {
 
         Comment comment = commentService
@@ -146,56 +143,32 @@ public class CommentRestController extends AbstractCommonController {
             }
         }
         long result = commentService.updateCommentStatus(comment, statusType, deleteType);
+        String msg = "";
+        if (result > 0) {
 
-        ResultDTO<Long> resultDto = new ResultDTO<>(result, msg("tps.common.success.delete"));
+            if (statusType.equals(CommentStatusType.N)) {
+                switch (deleteType) {
+                    case BNA:
+                    case BNC:
+                        msg = msg("tps.comment-banned.success.id");
+                        break;
+                    case ALL:
+                        msg = msg("tps.comment.success.delete-all");
+                        break;
+                    default:
+                        msg = msg("tps.comment-banned.success.id");
+                }
+
+            } else {
+                msg = msg("tps.comment.success.status-" + statusType.getCode());
+            }
+        } else {
+            msg = msg("tps.comment.error.status-" + statusType.getCode());
+        }
+
+
+        ResultDTO<Long> resultDto = new ResultDTO<>(result, msg);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
-
-    /**
-     * 삭제
-     *
-     * @param cmtSeq 등록할 댓글정보
-     * @return 등록된 댓글정보
-     */
-    @ApiOperation(value = "댓글 상태 변경")
-    @DeleteMapping("/status")
-    public ResponseEntity<?> putComment(
-            @ApiParam("댓글 ID") @PathVariable("cmtSeq") @Length(min = 1, message = "{comment.error.pattern.cmtSeq}") Long[] cmtSeq,
-            @ApiParam("댓글 상태 유형") @RequestParam(value = "statusType") CommentStatusType statusType,
-            @ApiParam("삭제 유형") @RequestParam(value = "deleteType", required = false) CommentDeleteType deleteType)
-            throws InvalidDataException, NoDataException {
-
-        ResultDTO<Boolean> resultDto;
-
-        if (statusType.equals(CommentStatusType.N)) {
-            if (deleteType == null) {
-                throw new InvalidDataException("tps.comment-banned.error.notnull.deleteType");
-            }
-        }
-
-        long result = 0;
-        List<String> tagValues = new ArrayList<>();
-        for (Long seq : cmtSeq) {
-            Comment comment = commentService
-                    .findCommentBySeq(seq)
-                    .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
-            long success = commentService.updateCommentStatus(comment, statusType, deleteType);
-            if (success <= 0) {
-                tagValues.add(comment.getMemId());
-            }
-            result += commentService.updateCommentStatus(comment, statusType, deleteType);
-        }
-        String msg = msg("tps.common.success.delete");
-        boolean success = true;
-        if (tagValues.size() > 0) {
-            msg = msg("tps.comment.error.banned", CommentBannedType.U.getFullname(), CommentBannedType.U.getName(), CommentBannedType.U.getName(),
-                    McpString.collectionToDelimitedString(tagValues, ", "));
-            success = false;
-        }
-        resultDto = new ResultDTO<>(success, msg("tps.common.success.delete"));
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-
     }
 }

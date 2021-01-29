@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.comment.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -45,8 +46,7 @@ public class CommentBannedSaveDTO implements Serializable {
      */
     @ApiModelProperty("금지IP/금지사용자/금지단어")
     @NotNull(message = "{tps.comment-banned.error.notnull.tagValue}")
-    @Size(max = 200, message = "{tps.comment-banned.error.size.tagValue}")
-    private String tagValue;
+    private List<@Size(max = 200, message = "{tps.comment-banned.error.size.tagValue}") String> tagValues;
 
     /**
      * 금지IP/금지사용자/금지단어

@@ -3,12 +3,14 @@ package jmnet.moka.core.tps.mvc.comment.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
@@ -16,6 +18,7 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedDTO;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSaveDTO;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
@@ -142,10 +145,74 @@ public class CommentBannedRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "차단 등록")
     @PostMapping
-    public ResponseEntity<?> postCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO)
+    public ResponseEntity<?> processCommentBlock(@Valid CommentBannedSaveDTO commentBannedSaveDTO)
             throws MokaException {
+        if (commentBannedSaveDTO
+                .getTagValues()
+                .size() == 1) {
+            CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
+            commentBanned.setTagValue(commentBannedSaveDTO
+                    .getTagValues()
+                    .get(0));
+            return processCommentBlock(commentBanned);
+        } else {
+            List<String> tagValues = new ArrayList<>();
+            for (String tagValue : commentBannedSaveDTO.getTagValues()) {
 
-        CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
+                Optional<CommentBanned> oldCommentBanned =
+                        commentBannedService.findAllCommentBannedByTagValue(commentBannedSaveDTO.getTagType(), tagValue);
+                if (oldCommentBanned.isPresent()) {
+                    CommentBanned commentBanned = oldCommentBanned.get();
+                    commentBanned.setUsedYn(commentBannedSaveDTO.getUsedYn());
+                    commentBanned.setTagDesc(commentBannedSaveDTO.getTagDesc());
+                    commentBanned.setTagDiv(commentBannedSaveDTO.getTagDiv());
+                    try {
+                        commentBanned = commentBannedService.updateCommentBanned(commentBanned);
+                        if (commentBanned == null || (commentBanned.getSeqNo() == null || commentBanned.getSeqNo() <= 0)) {
+                            tagValues.add(tagValue);
+                        }
+                    } catch (Exception ex) {
+                        tagValues.add(tagValue);
+                    }
+                } else {
+                    CommentBanned commentBanned = modelMapper.map(commentBannedSaveDTO, CommentBanned.class);
+                    commentBanned.setTagValue(commentBannedSaveDTO
+                            .getTagValues()
+                            .get(0));
+                    try {
+                        commentBanned = commentBannedService.insertCommentBanned(commentBanned);
+                        if (commentBanned == null || (commentBanned.getSeqNo() == null || commentBanned.getSeqNo() <= 0)) {
+                            tagValues.add(tagValue);
+                        }
+                    } catch (Exception ex) {
+                        tagValues.add(tagValue);
+                    }
+                }
+            }
+
+            boolean success = true;
+            String msg = msg("tps.comment-banned.success.save", commentBannedSaveDTO
+                    .getTagType()
+                    .getFullname());
+            if (tagValues.size() > 0) {
+                msg = msg("tps.comment-banned.error.part", CommentBannedType.U.getFullname(), CommentBannedType.U.getName(),
+                        CommentBannedType.U.getName(), McpString.collectionToDelimitedString(tagValues, ", "));
+                success = false;
+            }
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, msg);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        }
+    }
+
+    /**
+     * 등록
+     *
+     * @param commentBanned 등록할 댓글정보
+     * @return 등록된 댓글정보
+     */
+    private ResponseEntity<?> processCommentBlock(CommentBanned commentBanned)
+            throws MokaException {
 
         Optional<CommentBanned> oldCommentBanned =
                 commentBannedService.findAllCommentBannedByTagValue(commentBanned.getTagType(), commentBanned.getTagValue());
@@ -153,8 +220,10 @@ public class CommentBannedRestController extends AbstractCommonController {
         if (!oldCommentBanned.isPresent()) {
             commentBanned = commentBannedService.insertCommentBanned(commentBanned);
 
-            ResultDTO<CommentBannedDTO> resultDto =
-                    new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class), msg("tps.common.success.insert"));
+            ResultDTO<CommentBannedDTO> resultDto = new ResultDTO<>(modelMapper.map(commentBanned, CommentBannedDTO.class),
+                    msg("tps.comment-banned.success.save", commentBanned
+                            .getTagType()
+                            .getFullname()));
 
             tpsLogger.success(ActionType.INSERT);
 

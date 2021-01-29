@@ -35,8 +35,8 @@ public class QuestionServiceImpl implements QuestionService {
     private QuizChoiceRepository quizChoiceRepository;
 
     @Override
-    public Page<Question> findAllQuestion(SearchDTO question) {
-        return questionRepository.findAll(question.getPageable());
+    public Page<Question> findAllQuestion(SearchDTO search) {
+        return questionRepository.findAllQuestion(search);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package jmnet.moka.core.tps.mvc.quiz.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import javax.validation.constraints.NotEmpty;
@@ -20,6 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@JsonInclude(Include.NON_NULL)
 public class QuizChoiceDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;

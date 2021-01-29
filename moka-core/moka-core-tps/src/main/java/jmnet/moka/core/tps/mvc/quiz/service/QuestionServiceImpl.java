@@ -100,6 +100,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> updateAllQuestion(List<Question> questions) {
+        questions = questionRepository.saveAll(questions);
 
         if (questions != null && questions.size() > 0) {
             questions.forEach(question -> {
@@ -115,10 +116,11 @@ public class QuestionServiceImpl implements QuestionService {
                                     .questionSeq(question.getQuestionSeq())
                                     .build()));
                 }
+                quizChoiceRepository.saveAll(question.getChoices());
             });
         }
 
-        return questionRepository.saveAll(questions);
+        return questions;
     }
 
     @Override

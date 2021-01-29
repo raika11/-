@@ -83,7 +83,7 @@ public class Question implements Serializable {
     private String answer;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = {CascadeType.REMOVE})
     private List<QuizChoice> choices = new ArrayList<>();
 
 

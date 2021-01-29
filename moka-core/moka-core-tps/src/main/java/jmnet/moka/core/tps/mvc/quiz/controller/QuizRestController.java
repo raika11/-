@@ -289,7 +289,8 @@ public class QuizRestController extends AbstractCommonController {
 
             // 결과리턴
             QuizDetailDTO dto = modelMapper.map(returnValue, QuizDetailDTO.class);
-
+            dto.setQuestions(modelMapper.map(newQuestions, QuestionDTO.TYPE));
+            
             StringBuilder resultMessage = new StringBuilder(msg("tps.common.success.update"));
 
             if (fileUploadMessages.size() > 0) {

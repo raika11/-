@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler;
+package jmnet.moka.core.dps.mvc.handler;
 
 
 import java.net.MalformedURLException;
@@ -21,8 +21,12 @@ import jmnet.moka.core.dps.api.ApiResolver;
 import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTask;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTaskManager;
-import jmnet.moka.core.dps.api.forward.Forward;
-import jmnet.moka.core.dps.api.forward.ForwardHandler;
+import jmnet.moka.core.dps.mvc.forward.Forward;
+import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
+import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
+import jmnet.moka.core.dps.api.handler.RequestHandler;
+import jmnet.moka.core.dps.api.handler.SampleRequestHandler;
+import jmnet.moka.core.dps.api.handler.UrlRequestHandler;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.api.model.DefaultApiConfig;
 import jmnet.moka.core.dps.api.model.Request;
@@ -118,7 +122,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     }
 
     /**
-     * @see jmnet.moka.core.dps.api.handler.ApiRequestHandler#processApi(jmnet.moka.core.dps.api.ApiContext)
+     * @see ApiRequestHandler#processApi(jmnet.moka.core.dps.api.ApiContext)
      */
     public ApiResult processApi(ApiContext apiContext)
             throws ParameterException, ClassNotFoundException {
@@ -127,7 +131,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
 
 
     /**
-     * @see jmnet.moka.core.dps.api.handler.ApiRequestHandler#processApi(jmnet.moka.core.dps.api.ApiContext,
+     * @see ApiRequestHandler#processApi(jmnet.moka.core.dps.api.ApiContext,
      *      boolean)
      */
     public ApiResult processApi(ApiContext apiContext, boolean asyncOnly)
@@ -200,7 +204,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     }
 
     /**
-     * @see jmnet.moka.core.dps.api.handler.ApiRequestHandler#apiRequest(java.lang.String,
+     * @see ApiRequestHandler#apiRequest(java.lang.String,
      *      java.lang.String, java.util.Map)
      */
     public ApiResult apiRequest(String apiPath, String apiId, Map<String, String> parameterMap) {
@@ -217,7 +221,7 @@ public class DefaultApiRequestHandler implements ApiRequestHandler {
     }
 
     /**
-     * @see jmnet.moka.core.dps.api.handler.ApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest,
+     * @see ApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest,
      *      javax.servlet.http.HttpServletResponse)
      */
     public ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response) {

@@ -1,4 +1,4 @@
-package jmnet.moka.web.dps.api.handler;
+package jmnet.moka.web.dps.mvc.handler;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
-import jmnet.moka.core.dps.api.forward.Forward;
-import jmnet.moka.core.dps.api.forward.ForwardHandler;
+import jmnet.moka.core.dps.mvc.forward.Forward;
+import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import jmnet.moka.core.dps.excepton.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import jmnet.moka.core.common.util.HttpHelper;
 import jmnet.moka.core.dps.api.ApiCacheHelper;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiResolver;
-import jmnet.moka.core.dps.api.handler.DefaultApiRequestHandler;
+import jmnet.moka.core.dps.mvc.handler.DefaultApiRequestHandler;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.excepton.ParameterException;
 
@@ -42,7 +42,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 	}
 
 	/**
-	 * @see jmnet.moka.core.dps.api.handler.DefaultApiRequestHandler#apiRequest(java.lang.String, java.lang.String, java.util.Map)
+	 * @see DefaultApiRequestHandler#apiRequest(java.lang.String, java.lang.String, java.util.Map)
 	 */
     public ApiResult apiRequest(String apiPath, String apiId, Map<String, String> parameterMap) {
 		try {
@@ -65,7 +65,7 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 	
 
 	/**
-	 * @see jmnet.moka.core.dps.api.handler.DefaultApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * @see DefaultApiRequestHandler#apiRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	public ResponseEntity<?> apiRequest(HttpServletRequest request, HttpServletResponse response)  {
 		String remoteIp = HttpHelper.getRemoteAddr(request);

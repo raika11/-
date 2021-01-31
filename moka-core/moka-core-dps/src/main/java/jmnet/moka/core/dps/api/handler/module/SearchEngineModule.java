@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.Collection;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.SearchQueryResult;

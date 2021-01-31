@@ -6,6 +6,7 @@ import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.model.ScriptRequest;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import org.apache.commons.jexl3.JexlScript;
 import org.apache.commons.jexl3.MapContext;
 import org.slf4j.Logger;

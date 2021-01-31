@@ -11,6 +11,7 @@ import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.ext.AsyncRequestContext;
 import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
 import jmnet.moka.core.dps.api.model.ModuleRequest;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

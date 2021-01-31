@@ -3,7 +3,7 @@ package jmnet.moka.core.dps.api.handler.module;
 import java.util.HashMap;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 
 public class ExampleModule implements ModuleInterface {

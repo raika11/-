@@ -18,7 +18,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.ext.ApiPeriodicTaskManager;
-import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.excepton.ParameterException;
 import org.slf4j.Logger;

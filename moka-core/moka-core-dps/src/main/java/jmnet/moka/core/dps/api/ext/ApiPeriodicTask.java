@@ -6,7 +6,7 @@ import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiParameterChecker;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.ApiResolver;
-import jmnet.moka.core.dps.api.handler.ApiRequestHandler;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.excepton.ParameterException;
 import org.springframework.context.support.GenericApplicationContext;

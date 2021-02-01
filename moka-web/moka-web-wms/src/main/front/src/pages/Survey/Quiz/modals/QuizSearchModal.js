@@ -93,7 +93,7 @@ const QuizSearchModal = (props) => {
             width={900}
             show={show}
             onHide={handleClickHide}
-            title={`퀴드 목록`}
+            title={`퀴즈 목록`}
             size="md"
             bodyClassName="overflow-x-hidden custom-scroll"
             footerClassName="d-flex justify-content-center"

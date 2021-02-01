@@ -173,7 +173,7 @@ const SortAgGrid = ({ rows, onChange, onDelete }) => {
 
     return (
         <>
-            <div className="ag-theme-moka-dnd-grid bulk-hot-click w-100">
+            <div className="ag-theme-moka-dnd-grid w-100">
                 <AgGridReact
                     immutableData
                     onGridReady={onGridReady}

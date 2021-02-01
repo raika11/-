@@ -3,20 +3,18 @@ package jmnet.moka.core.tps.mvc.schedule.server.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.*;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -50,9 +48,10 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
     @Override
     public Page<DistributeServer> findList(DistributeServerSearchDTO search, Pageable pageable){
         QDistributeServer distributeServer = QDistributeServer.distributeServer;
-        QMember member = QMember.member;
+        QMemberSimpleInfo memberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
 
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(distributeServer.delYn.eq(MokaConstants.NO));
         
         String serverNm = search.getServerNm();
         String serverIp = search.getServerIp();
@@ -67,10 +66,10 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
         JPQLQuery<DistributeServer> query = queryFactory.selectFrom(distributeServer);
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<DistributeServer> list = query
-                .leftJoin(distributeServer.regMember, member)
-                .leftJoin(distributeServer.modMember, member)
+                .leftJoin(distributeServer.regMember, memberSimpleInfo)
+                .leftJoin(distributeServer.modMember, memberSimpleInfo)
                 .where(builder)
-                .orderBy(distributeServer.serverSeq.desc())
+                //.orderBy(distributeServer.serverSeq.desc())
                 .fetchResults();
 
         return new PageImpl<DistributeServer>(list.getResults(), pageable, list.getTotal());
@@ -81,11 +80,11 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
 
 
 
-
+    //not formal
     @Override
     public Page<DistributeServerDTO> findList2(DistributeServerSearchDTO search, Pageable pageable) {
         QDistributeServer distributeServer = QDistributeServer.distributeServer;
-        QMember member = QMember.member;
+        QMemberSimpleInfo memberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
 
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -98,7 +97,7 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
         if(!McpString.isEmpty(serverIp)){
             builder.and(distributeServer.serverIp.contains(serverIp));
         }
-        builder.and(distributeServer.regId.eq(member.memberId));
+        builder.and(distributeServer.regId.eq(memberSimpleInfo.memberId));
 
         JPQLQuery query = queryFactory
                 .select(
@@ -111,9 +110,9 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
                         distributeServer.regDt,
                         distributeServer.modId,
                         distributeServer.modDt,
-                        member.memberNm
+                        memberSimpleInfo.memberNm
                 )
-                .from(distributeServer, member)
+                .from(distributeServer, memberSimpleInfo)
                 //.leftJoin(distributeServer.member, member)
                 .where(builder);
         query = getQuerydsl().applyPagination(pageable, query);

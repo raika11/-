@@ -4,24 +4,30 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.logger.LoggerCodes;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.*;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import jmnet.moka.core.tps.mvc.schedule.server.service.DistributeServerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -33,8 +39,12 @@ public class ScheduleServerController extends AbstractCommonController {
     //배포서버
     private final DistributeServerService distServerService;
 
-    public ScheduleServerController(DistributeServerService distServerService) {
+    //암호화 모듈
+    private final MokaCrypt mokaCrypt;
+
+    public ScheduleServerController(DistributeServerService distServerService, MokaCrypt mokaCrypt) {
         this.distServerService = distServerService;
+        this.mokaCrypt = mokaCrypt;
     }
 
     @ApiOperation(value = "배포서버 목록조회(검색조건 코드)")
@@ -90,9 +100,14 @@ public class ScheduleServerController extends AbstractCommonController {
 
     @ApiOperation(value = "배포서버 등록")
     @PostMapping("/distribute-server")
-    public ResponseEntity<?> postDistributeServer(HttpServletRequest request, @Valid DistributeServerSaveDTO distServerSaveDTO) throws Exception {
+    public ResponseEntity<?> postDistributeServer(HttpServletRequest request,
+                                                  @Valid DistributeServerSaveDTO distServerSaveDTO,
+                                                  @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
         try{
             DistributeServer distServer = modelMapper.map(distServerSaveDTO, DistributeServer.class);
+            setPassword(distServer);
+            setRegisterInfo(distServer, principal);
+
             DistributeServer returnValue = distServerService.saveDistributeServer(distServer);
             DistributeServerDTO dto = modelMapper.map(returnValue, DistributeServerDTO.class);
 
@@ -112,7 +127,8 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "배포서버 수정")
     @PutMapping("/distribute-server/{serverSeq}")
     public ResponseEntity<?> putDistributeServer(@ApiParam("서버번호") @PathVariable("serverSeq") @Min(value = 0, message = "") Long serverSeq,
-                                                 @Valid DistributeServerUpdateDTO distServerUpdateDTO) throws Exception {
+                                                 @Valid DistributeServerUpdateDTO distServerUpdateDTO,
+                                                 @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");
         distServerService
@@ -121,6 +137,9 @@ public class ScheduleServerController extends AbstractCommonController {
 
         try{
             DistributeServer distServer = modelMapper.map(distServerUpdateDTO, DistributeServer.class);
+            setPassword(distServer);
+            setModifierInfo(distServer, principal);
+
             distServer.setServerSeq(serverSeq);
             DistributeServer returnValue = distServerService.updateDistributeServer(distServer);
             DistributeServerDTO dto = modelMapper.map(returnValue, DistributeServerDTO.class);
@@ -139,8 +158,57 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
+    @ApiOperation(value = "배포서버 삭제")
+    @PutMapping("/distribute-server/{serverSeq}/delete")
+    public ResponseEntity<?> deleteDistributeServer(@ApiParam("서버번호") @PathVariable("serverSeq") @Min(value = 0, message = "") Long serverSeq,
+                                                 @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+
+        String infoMessage = msg("tps.common.error.no-data");
+        DistributeServer distServer = distServerService
+                .findDistributeServerById(serverSeq)
+                .orElseThrow(() -> new NoDataException((infoMessage)));
+
+        try{
+            distServer.setDelYn(MokaConstants.YES);
+            setModifierInfo(distServer, principal);
+
+            distServer.setServerSeq(serverSeq);
+            DistributeServer returnValue = distServerService.updateDistributeServer(distServer);
+            DistributeServerDTO dto = modelMapper.map(returnValue, DistributeServerDTO.class);
+
+            String message = msg("tps.common.success.update");
+            ResultDTO<DistributeServerDTO> resultDTO = new ResultDTO<DistributeServerDTO>(dto, message);
+            tpsLogger.success(LoggerCodes.ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
+        } catch(Exception e){
+            log.error("[FAIL TO DELETE(UPDATE DELYN) DISTRIBUTE SERVER]", e);
+            tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
+            throw new Exception(msg("tps.common.error.update"), e);
+
+        }
+    }
+
+    private void setPassword(DistributeServer distServer){
+        if(McpString.isNotEmpty(distServer.getAccessPwd())) {
+            try{
+                distServer.setAccessPwd(mokaCrypt.encrypt(distServer.getAccessPwd()));
+            } catch(Exception e){
+                log.error("[FAIL TO DISTRIBUTESERVER PASSWORD] password: {} {}", distServer.getAccessPwd(), e.getMessage());
+            }
+        }
+    }
+
+    private void setRegisterInfo(DistributeServer distServer, Principal principal){
+        UserDTO userDTO = (UserDTO) ((UsernamePasswordAuthenticationToken) principal).getDetails();
+        distServer.setRegId(userDTO.getUserId());
+    }
+
+    private void setModifierInfo(DistributeServer distServer, Principal principal){
+        UserDTO userDTO = (UserDTO) ((UsernamePasswordAuthenticationToken) principal).getDetails();
+        distServer.setModId(userDTO.getUserId());
+    }
 
 
 

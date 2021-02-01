@@ -19,6 +19,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 // import SortableContainer from '@pages/Survey/component/sortable/SortableContainer';
 
+import { QuestionSearchModal } from './modals';
+
 const initQuestionSetup = {
     questionType: 'third',
     questionCount: 1,
@@ -49,14 +51,17 @@ const QuizEdit = () => {
     const selectQuizSeq = useRef(null);
     const [editData, setEditData] = useState(initialState.quizInfo);
 
+    const [questionSearchModalState, setQuestionSearchModalState] = useState(false);
+
     // 항목 생성 설정을 담아둘 스테이트.
     const [questionSetup, setQuestionSetup] = useState(initQuestionSetup);
 
     // 공통 구분값 URL
-    const { quizInfo, save_loading, get_loading, questionsItem, questionsList } = useSelector((store) => ({
+    const { quizInfo, save_loading, get_loading, questionsItem, questionsList, selectQuizQuestion } = useSelector((store) => ({
         quizInfo: store.quiz.quizInfo,
         questionsItem: store.quiz.quizQuestions.questionsItem,
         questionsList: store.quiz.quizQuestions.questionsList,
+        selectQuizQuestion: store.quiz.selectQuizQuestion,
         save_loading: store.loading[SAVE_QUIZZES],
         get_loading: store.loading[GET_QUIZZES],
     }));
@@ -64,23 +69,29 @@ const QuizEdit = () => {
     /** sortable */
     const [sortableItems, setSortableItems] = useState([]);
 
-    const findItem = (id) => {
+    // 수정 필요.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const findItem = useCallback((id) => {
+        // console.log('findItem');
         const card = sortableItems.filter((c) => `${c.id}` === id)[0];
         return {
             card,
             index: sortableItems.indexOf(card),
         };
-    };
+    });
 
-    const moveItem = (id, atIndex) => {
+    // 수정 필요.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const moveItem = useCallback((id, atIndex) => {
+        // console.log('moveItem', id, atIndex);
         const { card, index } = findItem(id);
 
         const copyItems = [...sortableItems];
         copyItems.splice(index, 1);
         copyItems.splice(atIndex, 0, card);
-
-        setSortableItems(copyItems);
-    };
+        // 이동 할떄 이벤트 처리 해야함.
+        // setSortableItems(copyItems);
+    });
     /** sortable */
 
     const handleChangeEditData = ({ target }) => {
@@ -112,6 +123,7 @@ const QuizEdit = () => {
                 imgFile: file,
             });
         }
+        return inputName;
     };
 
     // 항목 데이터 초기화.
@@ -162,7 +174,9 @@ const QuizEdit = () => {
     }, [dispatch, questionSetup, questionsItem]);
 
     // 문항 검색 버튼 클릭 처리.
-    const handleClickSearchQuestionsButton = () => {};
+    const handleClickSearchQuestionsButton = () => {
+        setQuestionSearchModalState(true);
+    };
 
     const checkValidation = () => {
         return false;
@@ -211,7 +225,7 @@ const QuizEdit = () => {
         // let questions = questionList;
 
         // console.log(questions);
-        questionsList.map((element, i) => {
+        questionsList.map((element) => {
             const { questionType } = element;
             formData.append(`questions[${questionCount}].questionType`, questionType);
 
@@ -302,6 +316,7 @@ const QuizEdit = () => {
         } else if (history.location.pathname === '/quiz/add' && selectQuizSeq.current !== 'add') {
             selectQuizSeq.current = 'add';
             handleResetInfoData();
+            dispatch(clearQuizinfo());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
@@ -347,7 +362,68 @@ const QuizEdit = () => {
     }, [quizInfo]);
 
     useEffect(() => {
+        const setAddQuestion = (data) => {
+            const nextIndex = questionsItem.length + 1;
+            let qitem = [
+                ...questionsItem,
+                {
+                    questionIndex: Number(nextIndex),
+                    questionType: data.questionType,
+                    questionCount: Number(data.choiceCnt),
+                },
+            ];
+            let qQuestions = [...questionsList, data];
+
+            dispatch(
+                setQuestion({
+                    item: qitem,
+                    questions: qQuestions,
+                }),
+            );
+        };
+
+        if (selectQuizQuestion !== initialState.selectQuizQuestion) {
+            console.log('모달에서 추가.');
+            console.log('다름');
+            setAddQuestion(selectQuizQuestion);
+        }
+
+        // setAddQuestion(selectQuizQuestion);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectQuizQuestion]);
+
+    useEffect(() => {
+        setSortableItems(
+            questionsItem.map((item, index) => {
+                const { questionCount, questionType } = item;
+                if (questionType === 'S') {
+                    return {
+                        id: index,
+                        item: (
+                            <>
+                                <QuizQuestionThirdTypeComponent key={index} questionIndex={index} questionCount={questionCount} selectEditData={null} getLoading={get_loading} />
+                            </>
+                        ),
+                    };
+                } else if (questionType === 'O') {
+                    return {
+                        id: index,
+                        item: (
+                            <>
+                                <QuizQuestionFirstTypeComponent key={index} questionIndex={index} questionCount={questionCount} selectEditData={null} getLoading={get_loading} />
+                            </>
+                        ),
+                    };
+                }
+                return {};
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [questionsItem]);
+
+    useEffect(() => {
         // console.log({ questionItem: questionItem });
+        // setQuestionSearchModalState(true);
     }, []);
 
     useEffect(() => {
@@ -604,6 +680,12 @@ const QuizEdit = () => {
                     })}
                 </DndProvider>
             </Form>
+            <QuestionSearchModal
+                show={questionSearchModalState}
+                onHide={() => {
+                    setQuestionSearchModalState(false);
+                }}
+            />
         </MokaCard>
     );
 };

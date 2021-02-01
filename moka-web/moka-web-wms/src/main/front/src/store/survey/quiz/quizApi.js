@@ -38,3 +38,9 @@ export const updateQuizzes = ({ quizSeq, formData }) => {
             throw err;
         });
 };
+
+export const getQuestions = ({ search }) => {
+    return instance.get(`/api/quizzes/questions?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};

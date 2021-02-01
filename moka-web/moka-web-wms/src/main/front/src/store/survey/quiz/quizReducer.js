@@ -12,6 +12,9 @@ import {
     QUESTION_CHANGE_RESULT,
     DELETE_QUESTION_RESULT,
     SET_QUESTION,
+    CHANGE_QUESTIONS_LIST_SEARCH_OPTION,
+    SELECT_QUESTIONS,
+    GET_QUESTIONS_LIST_SUCCESS,
 } from './quizAction';
 
 /**
@@ -60,6 +63,18 @@ export const initialState = {
         questionsItem: [],
         questionsList: [],
     },
+    quizQuestionList: {
+        total: 0,
+        list: [],
+        error: null,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            searchType: '',
+            keyword: '',
+        },
+    },
+    selectQuizQuestion: {},
 };
 
 /**
@@ -88,6 +103,7 @@ export default handleActions(
         [CLEAR_QUIZINFO]: (state) => {
             return produce(state, (draft) => {
                 draft.quizInfo = initialState.quizInfo;
+                draft.quizQuestions = initialState.quizQuestions;
             });
         },
         // 목록에서 퀴즈 선택했을때 취즈 정보 업데이트
@@ -104,6 +120,10 @@ export default handleActions(
             });
         },
         [SET_QUESTION]: (state, { payload: { item, questions } }) => {
+            console.log({
+                item: item,
+                questions: questions,
+            });
             return produce(state, (draft) => {
                 draft.quizQuestions.questionsItem = item;
                 draft.quizQuestions.questionsList = questions;
@@ -118,6 +138,25 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.quizQuestions.questionsItem = item;
                 draft.quizQuestions.questionsList = list;
+            });
+        },
+
+        [CHANGE_QUESTIONS_LIST_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.quizQuestionList.search = payload;
+            });
+        },
+
+        [GET_QUESTIONS_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.quizQuestionList.list = body.list;
+                draft.quizQuestionList.total = body.totalCnt;
+            });
+        },
+
+        [SELECT_QUESTIONS]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.selectQuizQuestion = payload;
             });
         },
     },

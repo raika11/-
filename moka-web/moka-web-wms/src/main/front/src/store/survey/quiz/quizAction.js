@@ -36,4 +36,13 @@ export const QUESTION_CHANGE = 'quiz/QUESTION_CHANGE';
 export const QUESTION_CHANGE_RESULT = 'quiz/QUESTION_CHANGE_RESULT';
 export const questionInfoChange = createAction(QUESTION_CHANGE, (actions) => actions);
 
-// 문항 관리.
+// 문항 검색 모달.
+
+export const CHANGE_QUESTIONS_LIST_SEARCH_OPTION = 'quiz/CHANGE_QUESTIONS_LIST_SEARCH_OPTION';
+export const changeQuestionsListSearchOption = createAction(CHANGE_QUESTIONS_LIST_SEARCH_OPTION, (actions) => actions);
+
+export const [GET_QUESTIONS_LIST, GET_QUESTIONS_LIST_SUCCESS] = createRequestActionTypes('quiz/GET_QUESTIONS_LIST');
+export const getQuestionsList = createAction(GET_QUESTIONS_LIST, (...actions) => actions);
+
+export const SELECT_QUESTIONS = 'jpod/SELECT_QUESTIONS';
+export const selectQuestions = createAction(SELECT_QUESTIONS, (actions) => actions);

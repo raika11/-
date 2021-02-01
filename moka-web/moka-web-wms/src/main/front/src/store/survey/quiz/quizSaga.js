@@ -3,11 +3,22 @@ import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, errorResponse } from '@store/commons/saga';
 import toast from '@/utils/toastUtil';
 
-import { GET_QUIZZES_LIST, GET_QUIZZES, GET_QUIZZES_SUCCESS, SAVE_QUIZZES, QUESTION_CHANGE, QUESTION_CHANGE_RESULT, DELETE_QUESTION, DELETE_QUESTION_RESULT } from './quizAction';
-import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes } from './quizApi';
+import {
+    GET_QUIZZES_LIST,
+    GET_QUIZZES,
+    GET_QUIZZES_SUCCESS,
+    SAVE_QUIZZES,
+    QUESTION_CHANGE,
+    QUESTION_CHANGE_RESULT,
+    DELETE_QUESTION,
+    DELETE_QUESTION_RESULT,
+    GET_QUESTIONS_LIST,
+} from './quizAction';
+import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes, getQuestions } from './quizApi';
 
 // 퀴즈 목록 죄회.
 const getQuizzesListSaga = callApiAfterActions(GET_QUIZZES_LIST, getQuizzes, (state) => state.quiz.quizzes);
+const getQuestionsListSaga = callApiAfterActions(GET_QUESTIONS_LIST, getQuestions, (state) => state.quiz.quizQuestionList);
 
 function* getQuizzesSaga({ payload: { quizSeq } }) {
     yield put(startLoading(GET_QUIZZES));
@@ -98,7 +109,8 @@ function* deleteQuestionSaga({ payload: { questionIndex } }) {
 export default function* quizSaga() {
     yield takeLatest(GET_QUIZZES_LIST, getQuizzesListSaga);
     yield takeLatest(GET_QUIZZES, getQuizzesSaga);
-    yield takeLatest(SAVE_QUIZZES, saveQuizzesSaga); // 퀴즈 저장 처리.
-    yield takeLatest(QUESTION_CHANGE, questionInfoChangeSaga); // 퀴즈 저장 처리.
-    yield takeLatest(DELETE_QUESTION, deleteQuestionSaga); // 퀴즈 저장 처리.
+    yield takeLatest(SAVE_QUIZZES, saveQuizzesSaga);
+    yield takeLatest(QUESTION_CHANGE, questionInfoChangeSaga);
+    yield takeLatest(DELETE_QUESTION, deleteQuestionSaga);
+    yield takeLatest(GET_QUESTIONS_LIST, getQuestionsListSaga);
 }

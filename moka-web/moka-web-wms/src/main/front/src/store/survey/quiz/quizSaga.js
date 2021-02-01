@@ -13,12 +13,14 @@ import {
     DELETE_QUESTION,
     DELETE_QUESTION_RESULT,
     GET_QUESTIONS_LIST,
+    GET_QUIZ_SEARCH_MODAL_LIST,
 } from './quizAction';
 import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes, getQuestions } from './quizApi';
 
 // 퀴즈 목록 죄회.
 const getQuizzesListSaga = callApiAfterActions(GET_QUIZZES_LIST, getQuizzes, (state) => state.quiz.quizzes);
 const getQuestionsListSaga = callApiAfterActions(GET_QUESTIONS_LIST, getQuestions, (state) => state.quiz.quizQuestionList);
+const getQuizSearchListSaga = callApiAfterActions(GET_QUIZ_SEARCH_MODAL_LIST, getQuestions, (state) => state.quiz.quizSearchList);
 
 function* getQuizzesSaga({ payload: { quizSeq } }) {
     yield put(startLoading(GET_QUIZZES));
@@ -113,4 +115,5 @@ export default function* quizSaga() {
     yield takeLatest(QUESTION_CHANGE, questionInfoChangeSaga);
     yield takeLatest(DELETE_QUESTION, deleteQuestionSaga);
     yield takeLatest(GET_QUESTIONS_LIST, getQuestionsListSaga);
+    yield takeLatest(GET_QUIZ_SEARCH_MODAL_LIST, getQuizSearchListSaga);
 }

@@ -5,6 +5,8 @@ export const CLEAR_STORE = 'quiz/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 export const CLEAR_QUIZINFO = 'quiz/CLEAR_QUIZINFO';
 export const clearQuizinfo = createAction(CLEAR_QUIZINFO);
+export const CLEAR_QUIZMODALSEARCH = 'quiz/CLEAR_QUIZMODALSEARCH';
+export const clearQuizmodalsearch = createAction(CLEAR_QUIZMODALSEARCH);
 
 // 목록 검색 옵션 처리.
 export const CHANGE_SEARCH_OPTION = 'quiz/CHANGE_SEARCH_OPTION';
@@ -37,7 +39,6 @@ export const QUESTION_CHANGE_RESULT = 'quiz/QUESTION_CHANGE_RESULT';
 export const questionInfoChange = createAction(QUESTION_CHANGE, (actions) => actions);
 
 // 문항 검색 모달.
-
 export const CHANGE_QUESTIONS_LIST_SEARCH_OPTION = 'quiz/CHANGE_QUESTIONS_LIST_SEARCH_OPTION';
 export const changeQuestionsListSearchOption = createAction(CHANGE_QUESTIONS_LIST_SEARCH_OPTION, (actions) => actions);
 
@@ -46,3 +47,10 @@ export const getQuestionsList = createAction(GET_QUESTIONS_LIST, (...actions) =>
 
 export const SELECT_QUESTIONS = 'jpod/SELECT_QUESTIONS';
 export const selectQuestions = createAction(SELECT_QUESTIONS, (actions) => actions);
+
+// 퀴즈 검색 모달.
+export const CHANGE_QUIZ_LIST_SEARCH_OPTION = 'quiz/CHANGE_QUIZ_LIST_SEARCH_OPTION';
+export const changeQuizListSearchOption = createAction(CHANGE_QUIZ_LIST_SEARCH_OPTION, (actions) => actions);
+
+export const [GET_QUIZ_SEARCH_MODAL_LIST, GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS] = createRequestActionTypes('quiz/GET_QUIZ_SEARCH_MODAL_LIST');
+export const getQuizSearchModalList = createAction(GET_QUIZ_SEARCH_MODAL_LIST, (...actions) => actions);

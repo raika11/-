@@ -15,6 +15,9 @@ import {
     CHANGE_QUESTIONS_LIST_SEARCH_OPTION,
     SELECT_QUESTIONS,
     GET_QUESTIONS_LIST_SUCCESS,
+    CHANGE_QUIZ_LIST_SEARCH_OPTION,
+    GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS,
+    CLEAR_QUIZMODALSEARCH,
 } from './quizAction';
 
 /**
@@ -74,6 +77,17 @@ export const initialState = {
             keyword: '',
         },
     },
+    quizSearchList: {
+        total: 0,
+        list: [],
+        error: null,
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            searchType: '',
+            keyword: '',
+        },
+    },
     selectQuizQuestion: {},
 };
 
@@ -120,10 +134,6 @@ export default handleActions(
             });
         },
         [SET_QUESTION]: (state, { payload: { item, questions } }) => {
-            console.log({
-                item: item,
-                questions: questions,
-            });
             return produce(state, (draft) => {
                 draft.quizQuestions.questionsItem = item;
                 draft.quizQuestions.questionsList = questions;
@@ -157,6 +167,24 @@ export default handleActions(
         [SELECT_QUESTIONS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.selectQuizQuestion = payload;
+            });
+        },
+
+        [CHANGE_QUIZ_LIST_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.quizSearchList.search = payload;
+            });
+        },
+
+        [GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.quizSearchList.list = body.list;
+                draft.quizSearchList.total = body.totalCnt;
+            });
+        },
+        [CLEAR_QUIZMODALSEARCH]: (state) => {
+            return produce(state, (draft) => {
+                draft.quizSearchList = initialState.quizSearchList;
             });
         },
     },

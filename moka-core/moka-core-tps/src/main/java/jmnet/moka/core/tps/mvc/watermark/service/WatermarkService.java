@@ -6,6 +6,7 @@ import java.util.Optional;
 import jmnet.moka.core.tps.mvc.watermark.entity.Watermark;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkSearchDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -44,5 +45,56 @@ public interface WatermarkService {
      */
     Optional<Watermark> findById(Long seqNo);
 
+    /**
+     * 아이디 존재 여부
+     *
+     * @param seqNo 일련번호
+     * @return 존재 여부
+     */
+    boolean isDuplicatedId(Long seqNo);
+
+    /**
+     * 워터마크 등록
+     *
+     * @param watermark 워터마크정보
+     * @return 등록된 워터마크정보
+     */
+    Watermark insertWatermark(Watermark watermark);
+
+    /**
+     * 워터마크 수정
+     *
+     * @param watermark 워터마크정보
+     * @return 수정된 워터마크정보
+     */
+    Watermark updateWatermark(Watermark watermark);
+
+    /**
+     * 썸네일 이미지 저장
+     *
+     * @param watermark 템플릿
+     * @param thumbnail  썸네일 이미지(Multipart)
+     * @return 이미지 uri
+     * @throws Exception 예외처리
+     */
+    String saveImage(Watermark watermark, MultipartFile thumbnail)
+            throws Exception;
+
+    /**
+     * 그룹 삭제
+     *
+     * @param watermark 그룹 정보
+     */
+    void deleteWatermark(Watermark watermark);
+
+    /**
+     * 썸네일 이미지 삭제
+     *
+     * @param watermark 템플릿
+     * @return 삭제 결과
+     * @throws Exception 예외처리
+     */
+    boolean deleteImage(Watermark watermark)
+            throws Exception;
 
 }

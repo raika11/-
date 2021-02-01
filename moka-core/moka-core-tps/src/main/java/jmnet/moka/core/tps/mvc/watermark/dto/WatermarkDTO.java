@@ -116,12 +116,12 @@ public class WatermarkDTO implements Serializable {
 
     /**
      * 노출고정(y:항상노출n:검색시만노출)
-     */
     @ApiModelProperty("노출고정(y:항상노출, n:검색시만노출)")
     @NotNull(message = "{tps.watermark.error.notnull.fixYn}")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.watermark.notnull.fixYn}")
     @Builder.Default
     private String fixYn = MokaConstants.YES;
+     */
 
     /**
      * 등록일자

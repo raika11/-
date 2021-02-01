@@ -28,6 +28,12 @@ export const GET_MIC_AGENDA_LIST_MODAL = 'mic/GET_MIC_AGENDA_LIST_MODAL';
 export const getMicAgendaListModal = createAction(GET_MIC_AGENDA_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 
 /**
+ * 아젠다 순서 변경
+ */
+export const PUT_MIC_AGENDA_SORT = 'mic/PUT_MIC_AGENDA_SORT';
+export const putMicAgendaSort = createAction(PUT_MIC_AGENDA_SORT, ({ sortedList, callback }) => ({ sortedList, callback }));
+
+/**
  * 아젠다, 전체 포스트 수 조회
  */
 export const [GET_MIC_REPORT, GET_MIC_REPORT_SUCCESS] = createRequestActionTypes('mic/GET_MIC_REPORT');

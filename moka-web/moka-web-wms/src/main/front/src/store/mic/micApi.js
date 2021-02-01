@@ -14,3 +14,16 @@ export const getMicReport = () => {
         throw err;
     });
 };
+
+// 아젠다 순서 변경
+export const putMicAgendaSort = ({ sortedList }) => {
+    return instance
+        .put('/api/mics/agendas/sort', sortedList, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};

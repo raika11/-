@@ -15,6 +15,11 @@ const getMicAgendaList = createRequestSaga(act.GET_MIC_AGENDA_LIST, api.getMicAg
 const getMicAgendaListModal = createRequestSaga(act.GET_MIC_AGENDA_LIST_MODAL, api.getMicAgendaList, true);
 
 /**
+ * 아젠다 순서 변경
+ */
+const putMicAgendaSort = createRequestSaga(act.PUT_MIC_AGENDA_SORT, api.putMicAgendaSort, true);
+
+/**
  * 아젠다, 전체 포스트 수
  */
 const getMicReport = createRequestSaga(act.GET_MIC_REPORT, api.getMicReport);
@@ -23,4 +28,5 @@ export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA_LIST, getMicAgendaList);
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
     yield takeLatest(act.GET_MIC_AGENDA_LIST_MODAL, getMicAgendaListModal);
+    yield takeLatest(act.PUT_MIC_AGENDA_SORT, putMicAgendaSort);
 }

@@ -16,6 +16,10 @@
     font-size: 12px;
 }
 
+.ag-dnd-ghost {
+    z-index: 1051 !important; // bootstrap Modal 보다 높게 설정
+}
+
 /* -------------------------------------------------------------------
  * ag-theme-moka-grid (include ag-theme-aplpine)
  * 기본 테이블 + appStack 테이블 스타일
@@ -170,8 +174,8 @@ $row-hover-color: darken($desking-row-color, 5);
         (
             odd-row-background-color: $desking-row-color,
             font-family: $font-family-sans-serif,
+            font-size: 13px,    // _ag-theme-alpine-mixin에서 +1하여 처리함
             header-column-separator: false,
-            header-background-color: #f5f5f5,
             row-hover-color: $row-hover-color,
             selected-row-background-color: #efefef,
             range-selection-border-color: transparent,
@@ -179,37 +183,27 @@ $row-hover-color: darken($desking-row-color, 5);
         )
     );
 
-    .ag-root-wrapper {
-        .ag-header {
-            border-top: solid $table-border-width;
-            border-bottom: solid (2 * $table-border-width);
-            border-color: $table-border-color;
-            background-color: $white;
-
-            .ag-header-cell {
-                padding-left: 6px;
-                padding-right: 6px;
-            }
-        }
-    }
-
     .ag-root-wrapper-body {
         overflow: hidden;
         height: unset !important;
         min-height: unset !important;
     }
 
-    .ag-react-container > button {
-        padding: 0;
+    .ag-header {
+        border-top: solid $table-border-width;
+        border-bottom: solid (2 * $table-border-width);
+        border-color: $table-border-color;
+        background-color: $white;
+
+        .ag-header-cell {
+            padding-left: 6px;
+            padding-right: 6px;
+        }
     }
 
-    .ag-header-group-cell-label,
-    .ag-header-cell-label {
-        justify-content: center;
-    }
-
-    .ag-header-icon {
-        cursor: pointer;
+    .ag-cell {
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     .ag-row {
@@ -256,14 +250,6 @@ $row-hover-color: darken($desking-row-color, 5);
             right: 0px;
             font-size: 20px;
         }
-    }
-
-    .ag-cell,
-    .ag-header-cell {
-        padding-left: 3px !important;
-        padding-right: 3px !important;
-        display: flex;
-        align-items: center;
     }
 
     svg {
@@ -334,6 +320,18 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 
+    .ag-header {
+        display: none;
+    }
+
+    .ag-cell,
+    .ag-header-cell {
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+        display: flex;
+        align-items: center;
+    }
+
     .ag-edit-cell {
         padding-left: 0px;
         padding-right: 0px;
@@ -346,6 +344,15 @@ $rel-row-hover-color: darken($rel-row-color, 5);
 
     &.ag-center-cols-clipper {
         min-height: 32px;
+    }
+
+    .ag-react-container > button {
+        padding: 0;
+    }
+
+    .ag-header-group-cell-label,
+    .ag-header-cell-label {
+        justify-content: center;
     }
 
     .ag-center-cols-clipper {
@@ -385,6 +392,9 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     }
 }
 
+/* -------------------------------------------------------------------
+ * 페이지편집 셀 에디터
+ * ------------------------------------------------------------------ */
 .ag-grid-desking-editor {
     .title {
         display: -webkit-box;
@@ -416,7 +426,6 @@ $rel-row-hover-color: darken($rel-row-color, 5);
 /* -------------------------------------------------------------------
  * 그 외 ag-grid
  * ------------------------------------------------------------------ */
-
 .ag-grid-align-center {
     .ag-header-group-cell-label,
     .ag-header-cell-label {

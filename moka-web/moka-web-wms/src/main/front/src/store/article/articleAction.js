@@ -57,7 +57,12 @@ export const getArticle = createAction(GET_ARTICLE, ({ totalId, callback }) => (
  * 기사 편집제목 수정
  */
 export const PUT_ARTICLE_EDIT_TITLE = 'article/PUT_ARTICLE_EDIT_TITLE';
-export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ totalId, title, mobTitle, callback }) => ({ totalId, title, mobTitle, callback }));
+export const putArticleEditTitle = createAction(PUT_ARTICLE_EDIT_TITLE, ({ totalId, artEditTitle, artEditMobTitle, callback }) => ({
+    totalId,
+    artEditTitle,
+    artEditMobTitle,
+    callback,
+}));
 
 /**
  * 기사 내 이미지 목록 조회

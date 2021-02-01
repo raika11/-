@@ -147,8 +147,6 @@ const ArticleList = (props) => {
     const handleSearch = () => {
         let ns = {
             ...search,
-            startServiceDay: moment(search.startServiceDay),
-            endServiceDay: moment(search.endServiceDay),
             page: 0,
         };
 
@@ -218,6 +216,7 @@ const ArticleList = (props) => {
                 loading={loading}
                 dropTargetAgGrid={dropTargetAgGrid}
                 onDragStop={onDragStop}
+                onSearch={handleSearch}
                 onChangeSearchOption={changeTableSearchOption}
             />
         </div>

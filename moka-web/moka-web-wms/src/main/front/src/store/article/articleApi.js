@@ -19,8 +19,8 @@ export const getServiceArticleList = ({ search }) => {
 };
 
 // 기사 편집제목 수정
-export const putArticleEditTitle = ({ totalId, title, mobTitle }) => {
-    return instance.put(`/api/articles/${totalId}/edit-title?${qs.stringify({ title, mobTitle })}`).catch((err) => {
+export const putArticleEditTitle = ({ totalId, artEditTitle, artEditMobTitle }) => {
+    return instance.put(`/api/articles/${totalId}/edit-title?${qs.stringify({ artEditTitle, artEditMobTitle })}`).catch((err) => {
         throw err;
     });
 };

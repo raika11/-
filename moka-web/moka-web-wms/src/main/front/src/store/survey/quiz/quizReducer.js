@@ -18,8 +18,9 @@ import {
     CHANGE_QUIZ_LIST_SEARCH_OPTION,
     GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS,
     CLEAR_QUIZMODALSEARCH,
-    SELECT_QUIZ,
+    SELECT_QUIZ_CHANGE,
     CLEAR_SELECT_QUIZ,
+    CHANGE_QUIZ_INFO,
 } from './quizAction';
 
 /**
@@ -91,7 +92,7 @@ export const initialState = {
         },
     },
     selectQuizQuestion: {},
-    selectQuiz: {},
+    selectQuiz: [],
 };
 
 /**
@@ -121,6 +122,11 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.quizInfo = initialState.quizInfo;
                 draft.quizQuestions = initialState.quizQuestions;
+            });
+        },
+        [CHANGE_QUIZ_INFO]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.quizInfo = payload;
             });
         },
         // 목록에서 퀴즈 선택했을때 취즈 정보 업데이트
@@ -190,7 +196,7 @@ export default handleActions(
                 draft.quizSearchList = initialState.quizSearchList;
             });
         },
-        [SELECT_QUIZ]: (state, { payload }) => {
+        [SELECT_QUIZ_CHANGE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.selectQuiz = payload;
             });

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
-import { selectQuestions, selectQuiz } from '@store/survey/quiz';
-import { useDispatch } from 'react-redux';
+import { selectQuestions, selectQuizChange } from '@store/survey/quiz';
+import { useDispatch, useSelector } from 'react-redux';
 import QuestionsPreviewModal from './QuestionsPreviewModal';
 
 export const QuestionsInfoAddButtonRenderer = ({ questionsInfo }) => {
@@ -50,9 +50,12 @@ export const QuestionsPreviewRenderer = ({ questionsPriviewInfo }) => {
 
 export const QuizSearchAddButtonRenderer = ({ quizInfo }) => {
     const dispatch = useDispatch();
+    const { selectQuiz } = useSelector((store) => ({
+        selectQuiz: store.quiz.selectQuiz,
+    }));
 
     const handleClickButton = () => {
-        dispatch(selectQuiz(quizInfo));
+        dispatch(selectQuizChange([...selectQuiz, quizInfo]));
     };
 
     return (

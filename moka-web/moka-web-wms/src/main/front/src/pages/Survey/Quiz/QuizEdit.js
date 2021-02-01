@@ -13,7 +13,7 @@ import SortableItem from '@pages/Survey/component/sortable/SortableItem';
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
-import { initialState, SAVE_QUIZZES, GET_QUIZZES, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, addQuestion, setQuestion } from '@store/survey/quiz';
+import { initialState, SAVE_QUIZZES, GET_QUIZZES, clearQuizinfo, changeQuizInfo, getQuizzes, saveQuizzes, getQuizzesList, addQuestion, setQuestion } from '@store/survey/quiz';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -49,7 +49,6 @@ const QuizEdit = () => {
     const history = useHistory();
     const params = useParams();
     const selectQuizSeq = useRef(null);
-    const [editData, setEditData] = useState(initialState.quizInfo);
 
     const [questionSearchModalState, setQuestionSearchModalState] = useState(false);
 
@@ -57,10 +56,11 @@ const QuizEdit = () => {
     const [questionSetup, setQuestionSetup] = useState(initQuestionSetup);
 
     // 공통 구분값 URL
-    const { quizInfo, save_loading, get_loading, questionsItem, questionsList, selectQuizQuestion } = useSelector((store) => ({
+    const { quizInfo, save_loading, get_loading, questionsItem, questionsList, selectQuizQuestion, selectQuiz } = useSelector((store) => ({
         quizInfo: store.quiz.quizInfo,
         questionsItem: store.quiz.quizQuestions.questionsItem,
         questionsList: store.quiz.quizQuestions.questionsList,
+        selectQuiz: store.quiz.selectQuiz,
         selectQuizQuestion: store.quiz.selectQuizQuestion,
         save_loading: store.loading[SAVE_QUIZZES],
         get_loading: store.loading[GET_QUIZZES],
@@ -98,38 +98,45 @@ const QuizEdit = () => {
         const { name, value, checked } = target;
 
         if (name === 'loginYn') {
-            setEditData({
-                ...editData,
-                loginYn: checked === true ? 'Y' : 'N',
-            });
+            dispatch(
+                changeQuizInfo({
+                    ...quizInfo,
+                    loginYn: checked === true ? 'Y' : 'N',
+                }),
+            );
         } else if (name === 'replyYn') {
-            setEditData({
-                ...editData,
-                replyYn: checked === true ? 'Y' : 'N',
-            });
+            dispatch(
+                changeQuizInfo({
+                    ...quizInfo,
+                    replyYn: checked === true ? 'Y' : 'N',
+                }),
+            );
         } else {
-            setEditData({
-                ...editData,
-                [name]: value,
-            });
+            dispatch(
+                changeQuizInfo({
+                    ...quizInfo,
+                    [name]: value,
+                }),
+            );
         }
     };
 
     // 퀴즈 커버 이미지 등록 버튼.
     const handleChangeFileInput = (inputName, file) => {
         if (file) {
-            setEditData({
-                ...editData,
-                imgFile: file,
-            });
+            dispatch(
+                changeQuizInfo({
+                    ...quizInfo,
+                    imgFile: file,
+                }),
+            );
         }
         return inputName;
     };
 
     // 항목 데이터 초기화.
     const handleResetInfoData = () => {
-        setEditData(initialState.quizInfo);
-        // setQuestionItem([]);
+        dispatch(clearQuizinfo());
     };
 
     // 항목 생성 값 변경 처리.
@@ -205,26 +212,20 @@ const QuizEdit = () => {
 
         var formData = new FormData();
 
-        formData.append(`quizSts`, editData.quizSts); // 퀴즈상태.
-        formData.append(`quizType`, editData.quizType); // 퀴즈유형
-        formData.append(`loginYn`, editData.loginYn); // 로그인여부
-        formData.append(`replyYn`, editData.replyYn); // 댓글 여부
-        // formData.append(`quizUrl`, editData.quizUrl); // 쥐크 URL
-        formData.append(`imgUrl`, editData.imgUrl); // 이미지 URL
-        formData.append(`title`, editData.title); // 제목
-        formData.append(`quizDesc`, editData.quizDesc); // 퀴즈설명
-        if (editData.imgFile) {
-            formData.append(`imgFile`, editData.imgFile); // 이미지 파일.
+        formData.append(`quizSts`, quizInfo.quizSts); // 퀴즈상태.
+        formData.append(`quizType`, quizInfo.quizType); // 퀴즈유형
+        formData.append(`loginYn`, quizInfo.loginYn); // 로그인여부
+        formData.append(`replyYn`, quizInfo.replyYn); // 댓글 여부
+        // formData.append(`quizUrl`, quizInfo.quizUrl); // 쥐크 URL
+        formData.append(`imgUrl`, quizInfo.imgUrl); // 이미지 URL
+        formData.append(`title`, quizInfo.title); // 제목
+        formData.append(`quizDesc`, quizInfo.quizDesc); // 퀴즈설명
+        if (quizInfo.imgFile) {
+            formData.append(`imgFile`, quizInfo.imgFile); // 이미지 파일.
         }
-
-        // questions[0].questionSeq
 
         // 문항
         let questionCount = 0;
-        // let questions = editData.questions;
-        // let questions = questionList;
-
-        // console.log(questions);
         questionsList.map((element) => {
             const { questionType } = element;
             formData.append(`questions[${questionCount}].questionType`, questionType);
@@ -265,15 +266,24 @@ const QuizEdit = () => {
                 formData.append(`questions[${questionCount}].questionDesc`, element.questionDesc);
             }
 
+            selectQuiz.map((item, index) => {
+                formData.append(`quizRels[${questionCount}].relType`, element.questionDesc);
+            });
+
+            // quizRels[0].relType 관련타입(A:기사, Q:퀴즈)
+            // quizRels[0].contentId 관련콘텐트ID
+            // quizRels[0].linkUrl 링크URL
+            // quizRels[0].title
+
             questionCount++;
             return element;
         });
 
         // formData 출력(테스트).
-        // for (let [key, value] of formData) {
-        //     console.log(`${key}: ${value}`);
-        // }
-        // return;
+        for (let [key, value] of formData) {
+            console.log(`${key}: ${value}`);
+        }
+        return;
 
         dispatch(
             saveQuizzes({
@@ -324,16 +334,16 @@ const QuizEdit = () => {
     // 스토어에서 quizInfo 가 업데이트 되었을때. ( 목록에서 클릭 하고 url 이 변경 되었을때.)
     useEffect(() => {
         const setInfoData = (data) => {
-            setEditData({
-                ...editData,
-                quizSts: data.quizSts,
-                loginYn: data.loginYn,
-                replyYn: data.replyYn,
-                title: data.title,
-                quizDesc: data.quizDesc,
-                quizType: data.quizType,
-                imgUrl: data.imgUrl,
-            });
+            // setEditData({
+            //     ...editData,
+            //     quizSts: data.quizSts,
+            //     loginYn: data.loginYn,
+            //     replyYn: data.replyYn,
+            //     title: data.title,
+            //     quizDesc: data.quizDesc,
+            //     quizType: data.quizType,
+            //     imgUrl: data.imgUrl,
+            // });
         };
 
         const setQuestions = (data) => {
@@ -464,7 +474,7 @@ const QuizEdit = () => {
                                     onChange={(e) => handleChangeEditData(e)}
                                     id="quizSts"
                                     name="quizSts"
-                                    value={editData.quizSts}
+                                    value={quizInfo.quizSts}
                                 >
                                     <option value="P">일시중지</option>
                                     <option value="Y">서비스중</option>
@@ -478,7 +488,7 @@ const QuizEdit = () => {
                                     labelClassName="text-right ml-0"
                                     id="loginYn"
                                     name="loginYn"
-                                    inputProps={{ checked: editData.loginYn === 'Y' ? true : false }}
+                                    inputProps={{ checked: quizInfo.loginYn === 'Y' ? true : false }}
                                     onChange={(e) => handleChangeEditData(e)}
                                 />
                             </Col>
@@ -489,7 +499,7 @@ const QuizEdit = () => {
                                     labelClassName="text-right"
                                     id="replyYn"
                                     name="replyYn"
-                                    inputProps={{ checked: editData.replyYn === 'Y' ? true : false }}
+                                    inputProps={{ checked: quizInfo.replyYn === 'Y' ? true : false }}
                                     onChange={(e) => handleChangeEditData(e)}
                                 />
                             </Col>
@@ -500,7 +510,7 @@ const QuizEdit = () => {
                                     label="퀴즈 제목"
                                     labelWidth={66}
                                     required={true}
-                                    value={editData.title}
+                                    value={quizInfo.title}
                                     onChange={(e) => handleChangeEditData(e)}
                                     id="title"
                                     name="title"
@@ -518,7 +528,7 @@ const QuizEdit = () => {
                                     inputProps={{ rows: 3 }}
                                     id="quizDesc"
                                     name="quizDesc"
-                                    value={editData.quizDesc}
+                                    value={quizInfo.quizDesc}
                                     onChange={(e) => handleChangeEditData(e)}
                                 />
                             </Col>
@@ -546,7 +556,7 @@ const QuizEdit = () => {
                                     onChange={(e) => handleChangeEditData(e)}
                                     id="quizType"
                                     name="quizType"
-                                    value={editData.quizType}
+                                    value={quizInfo.quizType}
                                 >
                                     <option value="AA">전체노출전체정답</option>
                                     <option value="AS">전체노출퀴즈별정답</option>
@@ -569,7 +579,7 @@ const QuizEdit = () => {
                                 <PollPhotoComponent
                                     width={110}
                                     height={110}
-                                    src={editData.imgUrl}
+                                    src={quizInfo.imgUrl}
                                     onChange={(file) => {
                                         handleChangeFileInput('imgFile', file, 'file');
                                     }}

@@ -21,6 +21,10 @@ export const getQuizzesList = createAction(GET_QUIZZES_LIST, (...actions) => act
 export const [GET_QUIZZES, GET_QUIZZES_SUCCESS, GET_QUIZZES_FAILURE] = createRequestActionTypes('quiz/GET_QUIZZES');
 export const getQuizzes = createAction(GET_QUIZZES, ({ quizSeq }) => ({ quizSeq }));
 
+// 퀴즈 공동 스테이트 처리( 정보 값.)
+export const CHANGE_QUIZ_INFO = 'quiz/CHANGE_QUIZ_INFO';
+export const changeQuizInfo = createAction(CHANGE_QUIZ_INFO, (actions) => actions);
+
 // 취즈 등록, 수정
 export const SAVE_QUIZZES = 'quiz/SAVE_QUIZZES';
 export const saveQuizzes = createAction(SAVE_QUIZZES, ({ type, quizSeq, formData, callback }) => ({ type, quizSeq, formData, callback }));
@@ -57,5 +61,5 @@ export const changeQuizListSearchOption = createAction(CHANGE_QUIZ_LIST_SEARCH_O
 export const [GET_QUIZ_SEARCH_MODAL_LIST, GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS] = createRequestActionTypes('quiz/GET_QUIZ_SEARCH_MODAL_LIST');
 export const getQuizSearchModalList = createAction(GET_QUIZ_SEARCH_MODAL_LIST, (...actions) => actions);
 
-export const SELECT_QUIZ = 'jpod/SELECT_QUIZ';
-export const selectQuiz = createAction(SELECT_QUIZ, (actions) => actions);
+export const SELECT_QUIZ_CHANGE = 'jpod/SELECT_QUIZ_CHANGE';
+export const selectQuizChange = createAction(SELECT_QUIZ_CHANGE, (actions) => actions);

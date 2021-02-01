@@ -48,6 +48,7 @@ import searchKeyword from '@store/searchKeyword/searchKeywordReducer';
 import quiz from '@store/survey/quiz/quizReducer';
 
 export default combineReducers({
+    quiz,
     toastr,
     app,
     loading,
@@ -93,5 +94,4 @@ export default combineReducers({
     tour,
     editLog,
     searchKeyword,
-    quiz,
 });

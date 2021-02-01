@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.watermark.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.watermark.entity.Watermark;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkSearchDTO;
@@ -38,4 +40,8 @@ public class WatermarkServiceImpl implements WatermarkService {
         return watermarkRepository.findAllWatermark(search);
     }
 
+    @Override
+    public Optional<Watermark> findById(Long seqNo) {
+        return watermarkRepository.findById(seqNo);
+    }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaTable, MokaInput, MokaSearchInput } from '@components';
-import { columnDefs, tempRows } from './QuizSearchModalGridColumns';
+import { columnDefs } from './QuizSearchModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
@@ -58,16 +58,22 @@ const QuizSearchModal = (props) => {
     useEffect(() => {
         const setListToRowData = (data) => {
             setRowData(
-                data.map(function (e, index) {
+                data.map(function (element, index) {
+                    let quzStsText = '';
+                    if (element.quizSts === 'Y') {
+                        quzStsText = '서비스';
+                    } else if (element.quizSts === 'N') {
+                        quzStsText = '종료';
+                    } else if (element.quizSts === 'P') {
+                        quzStsText = '일시중지';
+                    }
+
                     return {
-                        // dataIndex: index,
-                        // totalId: e.totalId,
-                        // title: e.title,
-                        // item: {
-                        //     itemIndex: index,
-                        //     title: e.title,
-                        //     url: e.url,
-                        // },
+                        quizSeq: element.quizSeq,
+                        title: element.title,
+                        regMemberInfo: `${element.regMember.memberNm}(${element.regMember.memberId})`,
+                        quzStsText: quzStsText,
+                        quizInfo: element,
                     };
                 }),
             );
@@ -94,7 +100,7 @@ const QuizSearchModal = (props) => {
             show={show}
             onHide={handleClickHide}
             title={`퀴즈 목록`}
-            size="md"
+            size="xl"
             bodyClassName="overflow-x-hidden custom-scroll"
             footerClassName="d-flex justify-content-center"
             // buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}

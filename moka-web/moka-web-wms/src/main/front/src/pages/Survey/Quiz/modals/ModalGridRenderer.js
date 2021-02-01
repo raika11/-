@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
-import { selectQuestions } from '@store/survey/quiz';
+import { selectQuestions, selectQuiz } from '@store/survey/quiz';
 import { useDispatch } from 'react-redux';
 import QuestionsPreviewModal from './QuestionsPreviewModal';
 
@@ -44,6 +44,24 @@ export const QuestionsPreviewRenderer = ({ questionsPriviewInfo }) => {
                 {title}
             </Col>
             <QuestionsPreviewModal privewShow={previewModalState} priviewInfo={questionsPriviewInfo} onPriviewHide={() => hancldClickOnPriviewHide()} />
+        </>
+    );
+};
+
+export const QuizSearchAddButtonRenderer = ({ quizInfo }) => {
+    const dispatch = useDispatch();
+
+    const handleClickButton = () => {
+        dispatch(selectQuiz(quizInfo));
+    };
+
+    return (
+        <>
+            <Col>
+                <Button variant="negative" onClick={() => handleClickButton()}>
+                    등록
+                </Button>
+            </Col>
         </>
     );
 };

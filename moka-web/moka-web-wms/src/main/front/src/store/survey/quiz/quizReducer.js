@@ -18,6 +18,8 @@ import {
     CHANGE_QUIZ_LIST_SEARCH_OPTION,
     GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS,
     CLEAR_QUIZMODALSEARCH,
+    SELECT_QUIZ,
+    CLEAR_SELECT_QUIZ,
 } from './quizAction';
 
 /**
@@ -89,6 +91,7 @@ export const initialState = {
         },
     },
     selectQuizQuestion: {},
+    selectQuiz: {},
 };
 
 /**
@@ -185,6 +188,16 @@ export default handleActions(
         [CLEAR_QUIZMODALSEARCH]: (state) => {
             return produce(state, (draft) => {
                 draft.quizSearchList = initialState.quizSearchList;
+            });
+        },
+        [SELECT_QUIZ]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.selectQuiz = payload;
+            });
+        },
+        [CLEAR_SELECT_QUIZ]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.selectQuiz = initialState.selectQuiz;
             });
         },
     },

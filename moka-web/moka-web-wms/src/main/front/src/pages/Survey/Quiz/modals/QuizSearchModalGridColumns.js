@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuestionsInfoAddButtonRenderer, QuestionsPreviewRenderer } from './ModalGridRenderer';
+import { QuizSearchAddButtonRenderer } from './ModalGridRenderer';
 
 export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
@@ -7,36 +7,37 @@ export const columnDefs = [
         headerName: '',
         colId: 'button',
         width: 100,
-        field: 'questionsInfo',
-        cellRendererFramework: ({ value }) => <QuestionsInfoAddButtonRenderer questionsInfo={value} />,
+        field: 'quizInfo',
+        cellRendererFramework: ({ value }) => <QuizSearchAddButtonRenderer quizInfo={value} />,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: 'ID',
-        field: 'repoterSeq',
+        field: 'quizSeq',
         width: 10,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '퀴즈제명',
-        field: 'repoterSeq',
+        headerName: '퀴즈제목',
+        field: 'title',
         width: 250,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-    },
-    {
-        headerName: '작업자',
-        field: 'Type',
-        width: 100,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        tooltipField: 'Type',
-    },
-    {
-        headerName: '상태',
-        field: 'questionsPriviewInfo',
-        width: 100,
         flex: 1,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'title',
+    },
+    {
+        headerName: '작업자',
+        field: 'regMemberInfo',
+        width: 100,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        tooltipField: 'regMemberInfo',
+    },
+    {
+        headerName: '상태',
+        field: 'quzStsText',
+        width: 100,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        tooltipField: 'quzStsText',
     },
 ];
 

@@ -20,7 +20,7 @@ import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes, getQuestions } 
 // 퀴즈 목록 죄회.
 const getQuizzesListSaga = callApiAfterActions(GET_QUIZZES_LIST, getQuizzes, (state) => state.quiz.quizzes);
 const getQuestionsListSaga = callApiAfterActions(GET_QUESTIONS_LIST, getQuestions, (state) => state.quiz.quizQuestionList);
-const getQuizSearchListSaga = callApiAfterActions(GET_QUIZ_SEARCH_MODAL_LIST, getQuestions, (state) => state.quiz.quizSearchList);
+const getQuizSearchListSaga = callApiAfterActions(GET_QUIZ_SEARCH_MODAL_LIST, getQuizzes, (state) => state.quiz.quizSearchList);
 
 function* getQuizzesSaga({ payload: { quizSeq } }) {
     yield put(startLoading(GET_QUIZZES));

@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import ArticleList from '@pages/Article/components/Desking/ArticleList';
+import ArticleMediaList from '@pages/Article/components/Desking/ArticleMediaList';
 import { ReporterDeskList } from '@/pages/Reporter/components';
 import { ColumnistDeskList } from '@/pages/Columnist/components';
 import { deskingDragStop } from '@store/desking';
@@ -70,21 +71,20 @@ const DeskingArticleTab = (props) => {
                         isNaverChannel={isNaverChannel}
                     />
                 );
-                // return null;
             }
             // 영상기사 조회 컴포넌트
             else if (nav === '영상') {
-                // return (
-                //     <ArticleMediaList
-                //         className="pb-3"
-                //         selectedComponent={selectedComponent}
-                //         dropTargetAgGrid={componentAgGridInstances}
-                //         dropTargetComponent={componentList}
-                //         onDragStop={handleArticleDragStop}
-                //         isNaverChannel={isNaverChannel}
-                //     />
-                // );
-                return null;
+                return (
+                    <ArticleMediaList
+                        className="pb-3"
+                        selectedComponent={selectedComponent}
+                        dropTargetAgGrid={componentAgGridInstances}
+                        dropTargetComponent={componentList}
+                        onDragStop={handleArticleDragStop}
+                        isNaverChannel={isNaverChannel}
+                        show
+                    />
+                );
             }
             // 기자 조회 컴포넌트
             else if (nav === '기자') {

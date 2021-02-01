@@ -39,26 +39,19 @@ export const clearHistory = createAction(CLEAR_HISTORY);
  */
 export const [GET_ARTICLE_LIST, GET_ARTICLE_LIST_SUCCESS, GET_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST');
 export const getArticleList = createAction(GET_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 기사 조회 (Modal)
+ * 등록기사, 서비스 기사, 벌크 기사 3가지 다 처리함(type으로 구분)
+ */
 export const [GET_ARTICLE_LIST_MODAL, GET_ARTICLE_LIST_MODAL_SUCCESS, GET_ARTICLE_LIST_MODAL_FAILURE] = createRequestActionTypes('article/GET_ARTICLE_LIST_MODAL');
-export const getArticleListModal = createAction(GET_ARTICLE_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+export const getArticleListModal = createAction(GET_ARTICLE_LIST_MODAL, ({ type, search, callback }) => ({ type, search, callback }));
 
 /**
  * 등록기사 단건 조회
  */
 export const [GET_ARTICLE, GET_ARTICLE_SUCCESS, GET_ARTICLE_FAILURE] = createRequestActionTypes('article/GET_ARTICLE');
 export const getArticle = createAction(GET_ARTICLE, ({ totalId, callback }) => ({ totalId, callback }));
-
-/**
- * 서비스 기사 리스트 조회
- */
-export const [GET_SERVICE_ARTICLE_LIST, GET_SERVICE_ARTICLE_LIST_SUCCESS, GET_SERVICE_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_SERVICE_ARTICLE_LIST');
-export const getServiceArticleList = createAction(GET_SERVICE_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
-
-/**
- * 벌크 기사 리스트 조회
- */
-export const [GET_BULK_ARTICLE_LIST, GET_BULK_ARTICLE_LIST_SUCCESS, GET_BULK_ARTICLE_LIST_FAILURE] = createRequestActionTypes('article/GET_BULK_ARTICLE_LIST');
-export const getBulkArticleList = createAction(GET_BULK_ARTICLE_LIST, ({ search, callback }) => ({ search, callback }));
 
 /**
  * 기사 편집제목 수정

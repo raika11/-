@@ -34,6 +34,7 @@ const SearchKeywordDetail = ({ match }) => {
                 startDt: statSearch.startDt,
                 endDt: statSearch.endDt,
                 keyword,
+                statType: type,
                 page: 0,
             };
             dispatch(changeDetailSearchOption(ns));

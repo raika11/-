@@ -51,11 +51,8 @@ export const initialState = {
         { id: 'totalId', name: '기사ID' },
         { id: 'reporterName', name: '기자명' },
     ],
-    // 서비스 기사 리스트
+    // 서비스 기사
     service: {
-        total: 0,
-        error: null,
-        list: [],
         search: {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
@@ -70,11 +67,8 @@ export const initialState = {
             contentType: null, // 기사타입
         },
     },
-    // 벌크 기사 리스트
+    // 벌크 기사
     bulk: {
-        total: 0,
-        error: null,
-        list: [],
         search: {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
@@ -187,40 +181,6 @@ export default handleActions(
         [act.GET_ARTICLE_FAILURE]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.invalidList = body.list;
-            });
-        },
-        /**
-         * 서비스 기사 조회
-         */
-        [act.GET_SERVICE_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.service.total = body.totalCnt;
-                draft.service.list = body.list;
-                draft.service.error = initialState.service.error;
-            });
-        },
-        [act.GET_SERVICE_ARTICLE_LIST_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.service.total = initialState.service.total;
-                draft.service.list = initialState.service.list;
-                draft.service.error = payload;
-            });
-        },
-        /**
-         * 벌크 기사 조회
-         */
-        [act.GET_BULK_ARTICLE_LIST_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.bulk.total = body.totalCnt;
-                draft.bulk.list = body.list;
-                draft.bulk.error = initialState.bulk.error;
-            });
-        },
-        [act.GET_BULK_ARTICLE_LIST_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.bulk.total = initialState.bulk.total;
-                draft.bulk.list = initialState.bulk.list;
-                draft.bulk.error = payload;
             });
         },
         /**

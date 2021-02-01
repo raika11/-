@@ -34,6 +34,8 @@ export const [GET_TOUR_APPLY_LIST, GET_TOUR_APPLY_LIST_SUCCESS, GET_TOUR_APPLY_L
 export const getTourApplyList = createAction(GET_TOUR_APPLY_LIST, (...actions) => actions);
 export const [GET_TOUR_APPLY, GET_TOUR_APPLY_SUCCESS] = createRequestActionTypes('special/GET_TOUR_APPLY');
 export const getTourApply = createAction(GET_TOUR_APPLY, ({ tourSeq, callback }) => ({ tourSeq, callback }));
+export const [GET_TOUR_DENY_POSSIBLE_LIST, GET_TOUR_DENY_POSSIBLE_LIST_SUCCESS] = createRequestActionTypes('tour/GET_TOUR_DENY_POSSIBLE_LIST');
+export const getTourDenyPossibleList = createAction(GET_TOUR_DENY_POSSIBLE_LIST, () => ({}));
 export const [GET_TOUR_DENY_MONTH_LIST, GET_TOUR_DENY_MONTH_LIST_SUCCESS, GET_TOUR_DENY_MONTH_LIST_FAILURE] = createRequestActionTypes('tour/GET_TOUR_DENY_MONTH_LIST');
 export const getTourDenyMonthList = createAction(GET_TOUR_DENY_MONTH_LIST, ({ year, month, callback }) => ({ year, month, callback }));
 

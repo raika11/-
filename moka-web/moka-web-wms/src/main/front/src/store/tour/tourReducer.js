@@ -12,6 +12,7 @@ export const initialState = {
     list: [],
     holidayList: [],
     tourSetup: {},
+    tourPossibleList: [],
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
@@ -115,6 +116,15 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.tourApply = body;
                 draft.invalidList = initialState.invalidList;
+            });
+        },
+        /**
+         * 견학 가능일 목록 조회
+         */
+        [act.GET_TOUR_DENY_POSSIBLE_LIST_SUCCESS]: (state, { payload }) => {
+            const { body } = payload;
+            return produce(state, (draft) => {
+                draft.tourPossibleList = body.list;
             });
         },
         /**

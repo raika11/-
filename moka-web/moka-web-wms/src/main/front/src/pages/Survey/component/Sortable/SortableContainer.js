@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import SortableItem from '@pages/Survey/component/sortable/SortableItem';
+import SortableItem from '@pages/Survey/component/Sortable/SortableItem';
 import clsx from 'clsx';
 import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
 

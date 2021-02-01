@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Col, Button } from 'react-bootstrap';
 import toast, { messageBox } from '@utils/toastUtil';
-import ArticleAgGrid from '@pages/Survey/component/articleGrid/ArticleAgGrid';
+import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 import { QuizSearchModal } from '@pages/Survey/Quiz/modals';
 import {
     initialState,
@@ -242,7 +242,7 @@ const QuizChildRelationInfo = () => {
                     <Form.Group>
                         <Form.Row>
                             <Col xs={12}>
-                                <ArticleAgGrid />
+                                <SortAgGrid />
                             </Col>
                         </Form.Row>
                     </Form.Group>

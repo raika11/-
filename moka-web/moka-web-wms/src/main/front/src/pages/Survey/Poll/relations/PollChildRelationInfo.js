@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import RelationPollInfoComponent from '@pages/Survey/Poll/components/RelationPollInfoComponent';
 import toast from '@utils/toastUtil';
-import RelationArticleInfoComponent from '@pages/Survey/Poll/components/RelationArticleInfoComponent';
 import commonUtil from '@utils/commonUtil';
 import { useHistory } from 'react-router-dom';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
-import { unescapeHtml } from '@utils/convertUtil';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { getPoll, getPollList, updatePoll } from '@store/survey/poll/pollAction';
+import { getPoll, getPollList, updatePoll, GET_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
+import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 const RelationPollModal = React.lazy(() => import('@pages/Survey/Poll/modals/RelationPollModal'));
 
 const PollChildRelation = () => {
@@ -23,10 +23,11 @@ const PollChildRelation = () => {
     const [relationArticles, setRelationArticles] = useState([]);
     const [selectArticle, setSelectArticle] = useState(null);
 
-    const { poll, search, codes } = useSelector((store) => ({
+    const { poll, search, codes, loading } = useSelector((store) => ({
         poll: store.poll.poll,
         search: store.poll.search,
         codes: store.poll.codes,
+        loading: store.loading[GET_POLL] || store.loading[UPDATE_POLL],
     }));
 
     const handleClickRelationPollAdd = (row) => {
@@ -38,12 +39,20 @@ const PollChildRelation = () => {
         }*/
     };
 
+    const handleChangeRelationArticles = useCallback((row) => {
+        setRelationArticles(row);
+    }, []);
+
     const handleClickArticleAdd = (row) => {
         setSelectArticle(row);
     };
 
     const handleClickRelationPollDelete = (id) => {
-        setRelationPolls(relationPolls.filter((poll) => poll.contentId !== id));
+        setRelationPolls(
+            relationPolls.filter((poll) => {
+                return poll.contentId !== id;
+            }),
+        );
     };
 
     const handleClickArticleModalShow = () => {
@@ -67,21 +76,15 @@ const PollChildRelation = () => {
         }
     };
 
-    const handleClickRelationArticleDelete = (id) => {
-        const article = relationArticles.filter((data, index) => index !== id);
-        setRelationArticles(article);
-        setEdit({ ...edit, pollRelateContents: [...relationPolls, ...article] });
-    };
-
     const handleChangeSave = () => {
         if (commonUtil.isEmpty(edit.pollSeq)) {
             toast.warning('투표 정보를 먼저 등록해 주세요');
         } else {
             dispatch(
                 updatePoll({
-                    data: edit,
+                    data: { ...edit, pollRelateContents: [...relationPolls, ...relationArticles] },
                     callback: (response) => {
-                        dispatch(getPoll(response.body.pollSeq));
+                        dispatch(getPoll({ pollSeq: response.body.pollSeq }));
                         dispatch(getPollList({ search }));
                         toast.result(response);
                     },
@@ -103,6 +106,7 @@ const PollChildRelation = () => {
     useEffect(() => {
         if (selectPoll) {
             const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id }];
+            console.log(polls);
             setRelationPolls(polls);
             setEdit({ ...edit, pollRelateContents: [...relationArticles, ...polls] });
         }
@@ -136,6 +140,7 @@ const PollChildRelation = () => {
                     { text: '저장', variant: 'positive', onClick: handleChangeSave, className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
                 ]}
+                loading={loading}
             >
                 <Form>
                     <hr />
@@ -170,16 +175,7 @@ const PollChildRelation = () => {
                                 </Form.Group>
                             </Col>
                         </Form.Row>
-                        {relationArticles.length > 0 &&
-                            relationArticles.map((relationArticle, index) => (
-                                <RelationArticleInfoComponent
-                                    key={index}
-                                    id={index}
-                                    title={unescapeHtml(relationArticle.title)}
-                                    url={relationArticle.linkUrl && relationArticle.linkUrl}
-                                    onDelete={handleClickRelationArticleDelete}
-                                />
-                            ))}
+                        <SortAgGrid rows={relationArticles} onChange={handleChangeRelationArticles} />
                     </Form.Group>
                 </Form>
             </MokaCard>

@@ -2,7 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { getRow } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, findNextMainRow } from '@utils/deskingUtil';
-import { columnDefs, rowClassRules, tempRows } from './ArticleAgGridColumns';
+import { columnDefs, rowClassRules, tempRows } from './SortAgGridColumns';
+import commonUtil from '@utils/commonUtil';
 
 const hoverCssName = 'hover';
 const nextCssName = 'next';
@@ -38,14 +39,15 @@ const addNextRowStyle = (nextRow) => {
     }
 };
 
-const QuizAgGrid = () => {
+const SortAgGrid = ({ rows, onChange }) => {
     const [rowData, setRowData] = useState([]);
     const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
     const [nextNode, setNextNode] = useState(null);
+    const [isUpdate, setIsUpdate] = useState(false);
 
     // 그리드 옵션, 드래그핼때 필요함.
-    const OnGridReady = (params) => {
+    const onGridReady = (params) => {
         setGridInstance(params);
     };
 
@@ -74,6 +76,7 @@ const QuizAgGrid = () => {
             tempRowData[paramsOverNode.data.dataIndex] = tempRowData[paramsNode.data.dataIndex];
             tempRowData[paramsNode.data.dataIndex] = tmp;
 
+            setIsUpdate(true);
             setRowData(tempRowData);
         },
         [hoverNode, nextNode, rowData],
@@ -112,42 +115,59 @@ const QuizAgGrid = () => {
             // 스토어 temp리스트(hotClickTempList) 와 현재 리스트 스테이트(rowData) 리스트가
             // 다를 경우만 store temp 리스트를 업데이트 하기.
 
-            console.log(
-                rowData.map((e) => {
-                    return { totalId: e.totalId, title: e.item.title, url: e.item.url };
-                }),
-            );
+            /*console.log(rowData);*/
+            /*rowData.map((e) => {
+                /!*return { totalId: e.totalId, title: e.item.title, url: e.item.url };*!/
+                console.log(e);
+            });*/
 
-            params.api.refreshCells({ force: true });
+            /*if (onChange instanceof Function) {
+                onChange(
+                    rowData.map((row) => ({
+                        ...row.item,
+                    })),
+                );
+            }*/
+
+            if (isUpdate) {
+                setTimeout(() => {
+                    params.api.refreshCells({ force: true });
+                    if (onChange instanceof Function) {
+                        onChange(
+                            rowData.map((row) => ({
+                                ...row.item,
+                            })),
+                        );
+                    }
+                    setIsUpdate(false);
+                }, 100);
+            }
         },
-        [rowData],
+        [isUpdate, onChange, rowData],
     );
 
     // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
-        setRowData([]);
-        setRowData(
-            tempRows.map(function (e, index) {
-                return {
+        if (!commonUtil.isEmpty(rows) && rows instanceof Array) {
+            setRowData(
+                rows.map((row, index) => ({
                     dataIndex: index,
-                    totalId: e.totalId,
-                    title: e.title,
+                    totalId: row.seqNo,
+                    title: row.title,
                     item: {
-                        itemIndex: index,
-                        title: e.title,
-                        url: e.url,
+                        ...row,
                     },
-                };
-            }),
-        );
-    }, []);
+                })),
+            );
+        }
+    }, [rows]);
 
     return (
         <>
             <div className="ag-theme-moka-desking-grid bulk-hot-click w-100">
                 <AgGridReact
                     immutableData
-                    onGridReady={OnGridReady}
+                    onGridReady={onGridReady}
                     rowData={rowData}
                     getRowNodeId={(params) => params.dataIndex}
                     columnDefs={columnDefs}
@@ -172,4 +192,4 @@ const QuizAgGrid = () => {
     );
 };
 
-export default QuizAgGrid;
+export default SortAgGrid;

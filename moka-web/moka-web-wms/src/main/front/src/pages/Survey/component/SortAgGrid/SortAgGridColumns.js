@@ -40,7 +40,9 @@ export const columnDefs = [
         flex: 1,
         cellClassRules: cellClassRules,
         suppressKeyboardEvent: suppressKeyboardEvent,
-        cellRendererFramework: ({ value }) => <ItemRenderer {...value} />,
+        cellRendererFramework: ({ data }) => {
+            return <ItemRenderer {...data} />;
+        },
         cellStyle: { fontSize: '12px', lineHeight: '40px', paddingTop: '7px', alignItems: 'center' },
     },
 ];

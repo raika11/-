@@ -8,7 +8,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 
 // import { useDrop } from 'react-dnd';
 // import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
-import SortableItem from '@pages/Survey/component/sortable/SortableItem';
+import SortableItem from '@pages/Survey/component/Sortable/SortableItem';
 
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';

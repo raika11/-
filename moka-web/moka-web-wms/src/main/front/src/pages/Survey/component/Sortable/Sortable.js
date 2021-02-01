@@ -1,7 +1,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import SortableContainer from '@pages/Survey/component/sortable/SortableContainer';
+import SortableContainer from '@pages/Survey/component/Sortable/SortableContainer';
 
 const Sortable = ({ items }) => {
     return (

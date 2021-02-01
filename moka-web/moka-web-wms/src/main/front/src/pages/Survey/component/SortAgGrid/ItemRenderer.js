@@ -3,9 +3,13 @@ import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
 import { MokaTableEditCancleButton } from '@components';
 
-const ItemRenderer = ({ dataIndex, item: { title, linkUrl } }) => {
+const ItemRenderer = ({ dataIndex, item: { seqNo, title, linkUrl }, onDelete }) => {
     const handleChangeBulkinputBox = () => {};
-    const handleClickCancleButton = () => {};
+    const handleClickDelete = () => {
+        if (onDelete instanceof Function) {
+            onDelete(seqNo);
+        }
+    };
     const handleChangeValue = () => {};
 
     return (
@@ -45,7 +49,7 @@ const ItemRenderer = ({ dataIndex, item: { title, linkUrl } }) => {
                     </Row>
                 </Col>
                 <Col className="d-felx align-self-center text-left mb-0 pl-0">
-                    <MokaTableEditCancleButton onClick={handleClickCancleButton} />
+                    <MokaTableEditCancleButton onClick={handleClickDelete} />
                 </Col>
             </Row>
         </>

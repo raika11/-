@@ -39,20 +39,12 @@ const PollChildRelation = () => {
         }*/
     };
 
-    const handleChangeRelationArticles = useCallback((row) => {
-        setRelationArticles(row);
-    }, []);
-
     const handleClickArticleAdd = (row) => {
         setSelectArticle(row);
     };
 
     const handleClickRelationPollDelete = (id) => {
-        setRelationPolls(
-            relationPolls.filter((poll) => {
-                return poll.contentId !== id;
-            }),
-        );
+        setRelationPolls(relationPolls.filter((poll) => poll.contentId !== id));
     };
 
     const handleClickArticleModalShow = () => {
@@ -74,6 +66,13 @@ const PollChildRelation = () => {
         if (commonUtil.isEmpty(data)) {
             setRelationArticles([...relationArticles, { url: '', title: '' }]);
         }
+    };
+
+    const handleClickRelationArticleDelete = (id) => {
+        console.log(id);
+        const article = relationArticles.filter((data, index) => data.seqNo !== id);
+        setRelationArticles(article);
+        setEdit({ ...edit, pollRelateContents: [...relationPolls, ...article] });
     };
 
     const handleChangeSave = () => {
@@ -106,7 +105,6 @@ const PollChildRelation = () => {
     useEffect(() => {
         if (selectPoll) {
             const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id }];
-            console.log(polls);
             setRelationPolls(polls);
             setEdit({ ...edit, pollRelateContents: [...relationArticles, ...polls] });
         }
@@ -175,7 +173,7 @@ const PollChildRelation = () => {
                                 </Form.Group>
                             </Col>
                         </Form.Row>
-                        <SortAgGrid rows={relationArticles} onChange={handleChangeRelationArticles} />
+                        <SortAgGrid rows={relationArticles} onChange={setRelationArticles} onDelete={handleClickRelationArticleDelete} />
                     </Form.Group>
                 </Form>
             </MokaCard>

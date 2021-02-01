@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { getRow } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, findNextMainRow } from '@utils/deskingUtil';
-import { columnDefs, rowClassRules, tempRows } from './SortAgGridColumns';
+import { columnDefs, rowClassRules } from './SortAgGridColumns';
 import commonUtil from '@utils/commonUtil';
 
 const hoverCssName = 'hover';
@@ -39,7 +39,7 @@ const addNextRowStyle = (nextRow) => {
     }
 };
 
-const SortAgGrid = ({ rows, onChange }) => {
+const SortAgGrid = ({ rows, onChange, onDelete }) => {
     const [rowData, setRowData] = useState([]);
     const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
@@ -157,10 +157,11 @@ const SortAgGrid = ({ rows, onChange }) => {
                     item: {
                         ...row,
                     },
+                    onDelete,
                 })),
             );
         }
-    }, [rows]);
+    }, [onDelete, rows]);
 
     return (
         <>

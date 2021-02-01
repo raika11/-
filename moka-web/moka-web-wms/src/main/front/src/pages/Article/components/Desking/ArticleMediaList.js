@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import articleStore from '@store/article';
+import { messageBox } from '@utils/toastUtil';
 import Search from './Search';
 import AgGrid from './AgGrid';
 
@@ -52,20 +53,41 @@ const ArticleMediaList = (props) => {
 
     // initial setting
     const initialSearch = isNaverChannel ? articleStore.initialState.bulk.search : articleStore.initialState.service.search;
-    const clearList = isNaverChannel ? articleStore.clearBulkList : articleStore.clearServiceList;
-    const changeSearchOption = isNaverChannel ? articleStore.changeBulkSearchOption : articleStore.changeServiceSearchOption;
-    const getArticleList = isNaverChannel ? articleStore.getBulkArticleList : articleStore.getServiceArticleList;
-    const { storeSearch, list, total } = useSelector(({ article }) => ({
-        storeSearch: isNaverChannel ? article.bulk.search : article.service.search,
-        list: isNaverChannel ? article.bulk.list : article.service.list,
-        total: isNaverChannel ? article.bulk.total : article.service.total,
-    }));
 
+    const [type, setType] = useState('service');
     const [sourceOn, setSourceOn] = useState(false);
     const [period, setPeriod] = useState([2, 'days']);
-    const loading = useSelector(({ loading }) => loading[articleStore.GET_BULK_ARTICLE_LIST] || loading[articleStore.GET_SERVICE_ARTICLE_LIST]);
+    const loading = useSelector(({ loading }) => loading[articleStore.GET_ARTICLE_LIST_MODAL]);
     const [search, setSearch] = useState(initialSearch);
     const [error, setError] = useState({});
+    const [rowData, setRowData] = useState([]);
+    const [total, setTotal] = useState(0);
+
+    /**
+     * 기사조회하는 함수
+     */
+    const getArticleList = ({ type, search }) => {
+        setSearch(search);
+        dispatch(
+            articleStore.getArticleListModal({
+                type,
+                search: {
+                    ...search,
+                    startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
+                    endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+                },
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        setRowData(body.list);
+                        setTotal(body.totalCnt);
+                        setError({});
+                    } else {
+                        messageBox.alert(header.message);
+                    }
+                },
+            }),
+        );
+    };
 
     /**
      * 검색조건 변경
@@ -81,7 +103,7 @@ const ArticleMediaList = (props) => {
         } else {
             if (key === 'sourceList') {
                 setError({ ...error, sourceList: false });
-                setSourceOn(true);
+                !!value ? setSourceOn(true) : setSourceOn(false);
             }
             setSearch({ ...search, [key]: value });
         }
@@ -93,16 +115,14 @@ const ArticleMediaList = (props) => {
     const handleReset = () => {
         const nd = new Date();
         setPeriod([2, 'days']);
-        dispatch(
-            changeSearchOption({
-                ...initialSearch,
-                masterCode: selectedComponent.schCodeId || null,
-                startServiceDay: moment(nd).subtract(2, 'days').startOf('day').format(DB_DATEFORMAT),
-                endServiceDay: moment(nd).endOf('day').format(DB_DATEFORMAT),
-                page: 0,
-                contentType: 'M',
-            }),
-        );
+        setSearch({
+            ...initialSearch,
+            masterCode: selectedComponent.schCodeId || null,
+            startServiceDay: moment(nd).subtract(2, 'days').startOf('day'),
+            endServiceDay: moment(nd).endOf('day'),
+            page: 0,
+            contentType: 'M',
+        });
     };
 
     /**
@@ -125,14 +145,13 @@ const ArticleMediaList = (props) => {
     const handleSearch = () => {
         let ns = {
             ...search,
-            startServiceDay: moment(search.startServiceDay).format(DB_DATEFORMAT),
-            endServiceDay: moment(search.endServiceDay).format(DB_DATEFORMAT),
+            startServiceDay: moment(search.startServiceDay),
+            endServiceDay: moment(search.endServiceDay),
             page: 0,
         };
 
         if (validate(ns)) {
-            dispatch(changeSearchOption(ns));
-            dispatch(getArticleList({ search: ns }));
+            getArticleList({ type, search: ns });
         }
     };
 
@@ -144,52 +163,37 @@ const ArticleMediaList = (props) => {
         if (key !== 'page') {
             ns['page'] = 0;
         }
-        dispatch(changeSearchOption(ns));
-        dispatch(getArticleList({ search: ns }));
+        getArticleList({ type, search: ns });
     };
 
     useEffect(() => {
-        let ssd = moment(storeSearch.startServiceDay, DB_DATEFORMAT);
-        if (!ssd.isValid()) ssd = null;
-        let esd = moment(storeSearch.endServiceDay, DB_DATEFORMAT);
-        if (!esd.isValid()) esd = null;
-
-        setSearch({
-            ...storeSearch,
-            startServiceDay: ssd,
-            endServiceDay: esd,
-        });
-    }, [storeSearch]);
-
-    useEffect(() => {
-        return () => {
-            // unmount
-            dispatch(clearList());
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        // 기사 목록 최초 로딩
+        const tp = !!isNaverChannel ? 'bulk' : 'service';
         const nt = new Date();
         const startServiceDay = search.startServiceDay || moment(nt).subtract(period[0], period[1]).startOf('day');
         const endServiceDay = search.endServiceDay || moment(nt).endOf('day');
         let ns = {
             ...search,
             masterCode: selectedComponent.schCodeId || null,
-            startServiceDay: moment(startServiceDay).format(DB_DATEFORMAT),
-            endServiceDay: moment(endServiceDay).format(DB_DATEFORMAT),
+            startServiceDay: moment(startServiceDay),
+            endServiceDay: moment(endServiceDay),
             page: 0,
             contentType: 'M',
         };
-
-        dispatch(changeSearchOption(ns));
+        setSearch(ns);
+        setType(tp);
         if (sourceOn) {
-            dispatch(getArticleList({ search: ns }));
+            getArticleList({ type: tp, search: ns });
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedComponent.schCodeId, sourceOn]);
+    }, [selectedComponent.schCodeId, isNaverChannel]);
+
+    useEffect(() => {
+        // 기사 목록 최초 로딩
+        if (sourceOn) {
+            getArticleList({ type, search });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sourceOn]);
 
     return (
         <div className={clsx('d-flex flex-column h-100 py-3 px-card', className)}>
@@ -207,8 +211,8 @@ const ArticleMediaList = (props) => {
             />
 
             <AgGrid
-                search={storeSearch}
-                list={list}
+                search={search}
+                list={rowData}
                 total={total}
                 loading={loading}
                 dropTargetAgGrid={dropTargetAgGrid}

@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, call, select } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { createRequestSaga, errorResponse } from '../commons/saga';
 
@@ -13,22 +13,35 @@ const getArticleList = createRequestSaga(act.GET_ARTICLE_LIST, api.getArticleLis
 /**
  * 등록 기사 목록 조회(모달)
  */
-const getArticleListModal = createRequestSaga(act.GET_ARTICLE_LIST_MODAL, api.getArticleList);
+function* getArticleListModal({ payload }) {
+    const { search, type = 'article', callback } = payload;
+    const ACTION = act.GET_ARTICLE_LIST_MODAL;
+    let callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        const response =
+            type === 'bulk'
+                ? yield call(api.getBulkArticleList, { search })
+                : type === 'service'
+                ? yield call(api.getServiceArticleList, { search })
+                : yield call(api.getArticleList, { search });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(ACTION));
+}
 
 /**
  * 등록 기사 단건 조회
  */
 const getArticle = createRequestSaga(act.GET_ARTICLE, api.getArticle);
-
-/**
- * 서비스기사 목록 조회 (페이지편집)
- */
-const getServiceArticleList = createRequestSaga(act.GET_SERVICE_ARTICLE_LIST, api.getServiceArticleList);
-
-/**
- * 벌크 기사 목록 조회
- */
-const getBulkArticleList = createRequestSaga(act.GET_BULK_ARTICLE_LIST, api.getBulkArticleList);
 
 /**
  * 기사 편집제목 수정
@@ -42,11 +55,6 @@ function* putArticleEditTitle({ payload }) {
     try {
         const response = yield call(api.putArticleEditTitle, { totalId, title, mobTitle });
         callbackData = response.data;
-
-        if (response.data.header.success) {
-            // 기사리스트 다시 조회
-            yield put({ type: act.GET_SERVICE_ARTICLE_LIST });
-        }
     } catch (e) {
         callbackData = errorResponse(e);
     }
@@ -164,8 +172,6 @@ const getArticleHistoryList = createRequestSaga(act.GET_ARTICLE_HISTORY_LIST, ap
 
 export default function* saga() {
     yield takeLatest(act.GET_ARTICLE_LIST, getArticleList);
-    yield takeLatest(act.GET_SERVICE_ARTICLE_LIST, getServiceArticleList);
-    yield takeLatest(act.GET_BULK_ARTICLE_LIST, getBulkArticleList);
     yield takeLatest(act.PUT_ARTICLE_EDIT_TITLE, putArticleEditTitle);
     yield takeLatest(act.GET_ARTICLE_IMAGE_LIST, getArticleImageList);
     yield takeLatest(act.GET_ARTICLE, getArticle);
@@ -173,5 +179,5 @@ export default function* saga() {
     yield takeLatest(act.DELETE_ARTICLE, deleteArticle);
     yield takeLatest(act.STOP_ARTICLE, stopArticle);
     yield takeLatest(act.GET_ARTICLE_HISTORY_LIST, getArticleHistoryList);
-    yield takeLatest(act.GET_ARTICLE_LIST_MODAL, getArticleListModal);
+    yield takeEvery(act.GET_ARTICLE_LIST_MODAL, getArticleListModal);
 }

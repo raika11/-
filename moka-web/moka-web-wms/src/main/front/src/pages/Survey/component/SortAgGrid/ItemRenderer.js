@@ -3,28 +3,29 @@ import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
 import { MokaTableEditCancleButton } from '@components';
 
-const ItemRenderer = ({ dataIndex, item: { seqNo, title, linkUrl }, onDelete }) => {
+const ItemRenderer = ({ item, onDelete }) => {
     const handleChangeBulkinputBox = () => {};
     const handleClickDelete = () => {
         if (onDelete instanceof Function) {
-            onDelete(seqNo);
+            onDelete(item.seqNo);
         }
     };
+
     const handleChangeValue = () => {};
 
     return (
         <>
             <Row>
-                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{dataIndex + 1}</Col>
+                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{item.ordNo}</Col>
                 <Col className="d-felx" xs={10}>
                     <Row className="d-felx">
                         <MokaInputLabel
                             name="title"
-                            id={`title-${dataIndex}`}
+                            id={`title-${item.ordNo}`}
                             label="타이틀"
                             onChange={(e) => handleChangeBulkinputBox(e)}
                             labelWidth={30}
-                            value={title}
+                            value={item.title}
                             className="col mb-0 pl-0 pr-0"
                         />
                     </Row>
@@ -32,11 +33,11 @@ const ItemRenderer = ({ dataIndex, item: { seqNo, title, linkUrl }, onDelete }) 
                         {/* <Col className="d-felx" xs={10}> */}
                         <MokaInputLabel
                             name="linkUrl"
-                            id={`linkUrl-${dataIndex}`}
+                            id={`linkUrl-${item.ordNo}`}
                             label="url"
                             onChange={(e) => handleChangeBulkinputBox(e)}
                             labelWidth={30}
-                            value={linkUrl}
+                            value={item.linkUrl}
                             className="col mb-0 pl-0 pr-0"
                         />
                         {/* </Col> */}

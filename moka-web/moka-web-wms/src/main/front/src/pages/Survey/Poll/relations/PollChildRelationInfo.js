@@ -9,6 +9,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getPoll, getPollList, updatePoll, GET_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
+import produce from 'immer';
 const SortAgGrid = React.lazy(() => import('@pages/Survey/component/SortAgGrid'));
 const RelationPollModal = React.lazy(() => import('@pages/Survey/Poll/modals/RelationPollModal'));
 
@@ -64,7 +65,7 @@ const PollChildRelation = () => {
 
     const handleClickRelationArticleAdd = (data) => {
         if (commonUtil.isEmpty(data)) {
-            setRelationArticles([...relationArticles, { url: '', title: '' }]);
+            setRelationArticles([...relationArticles, { linkUrl: '', title: '' }]);
         }
     };
 
@@ -94,9 +95,10 @@ const PollChildRelation = () => {
     useEffect(() => {
         if (selectArticle) {
             const { artTitle: title, totalId } = selectArticle;
-            const articles = [...relationArticles, { title, linkUrl: `https://news.joins.com/article/${totalId}`, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId }];
+            const articles = produce(relationArticles, (draft) => {
+                draft.push({ title, linkUrl: `https://news.joins.com/article/${totalId}`, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId });
+            });
             setRelationArticles(articles);
-            setEdit({ ...edit, pollRelateContents: [...relationPolls, ...articles] });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectArticle]);
@@ -176,7 +178,7 @@ const PollChildRelation = () => {
                     </Form.Group>
                 </Form>
             </MokaCard>
-            <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickArticleAdd} relationArticles={relationArticles} />
+            <ArticleListModal show={isArticleModalShow} onHide={() => setIsArticleModalShow(false)} onRowClicked={handleClickArticleAdd} />
             <RelationPollModal show={isPollModalShow} onHide={handleClickPollModalClose} onAdd={handleClickRelationPollAdd} codes={codes} />
         </div>
     );

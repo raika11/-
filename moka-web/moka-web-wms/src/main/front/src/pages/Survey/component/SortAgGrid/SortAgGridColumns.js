@@ -41,7 +41,6 @@ export const columnDefs = [
         cellClassRules: cellClassRules,
         suppressKeyboardEvent: suppressKeyboardEvent,
         cellRendererFramework: ({ data }) => {
-            console.log(data);
             return <ItemRenderer {...data} />;
         },
         cellStyle: { fontSize: '12px', lineHeight: '40px', paddingTop: '7px', alignItems: 'center' },

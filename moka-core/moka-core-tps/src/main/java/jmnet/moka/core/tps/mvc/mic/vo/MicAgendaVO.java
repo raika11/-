@@ -215,6 +215,12 @@ public class MicAgendaVO implements Serializable {
     private String artLink;
 
     /**
+     * 포스트 갯수
+     */
+    @Column(name = "ANSW_CNT")
+    private Integer answCnt = 0;
+
+    /**
      * 카테고리 목록
      */
     List<MicAgendaCategoryVO> categoryList = new ArrayList<>();

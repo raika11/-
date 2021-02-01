@@ -2,14 +2,10 @@ package jmnet.moka.core.tps.mvc.schedule.server.entity;
 
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * 배포서버 조회용 엔티티
@@ -22,7 +18,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "TB_GEN_TARGET")
-public class DistributeServer {
+public class DistributeServer extends BaseAudit{
 
     private static final long serialVersionUID = 1L;
 
@@ -54,34 +50,6 @@ public class DistributeServer {
     private String serverIp;
 
     /**
-     * 등록자
-     */
-    @CreatedBy
-    @Column(name = "REG_ID")
-    protected String regId;
-
-    /**
-     * 등록일시
-     */
-    @CreatedDate
-    @Column(name = "REG_DT")
-    protected Date regDt;
-
-    /**
-     * 수정자
-     */
-    @LastModifiedBy
-    @Column(name = "MOD_ID")
-    protected String modId;
-
-    /**
-     * 수정일시
-     */
-    @LastModifiedDate
-    @Column(name = "MOD_DT")
-    protected Date modDt;
-
-    /**
      * 계정정보
      */
     @Column(name = "ACCESS_ID")
@@ -97,10 +65,10 @@ public class DistributeServer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="REG_ID", insertable = false, updatable = false)
-    private Member regMember;
+    private MemberSimpleInfo regMember;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MOD_ID", insertable = false, updatable = false)
-    private Member modMember;
+    private MemberSimpleInfo modMember;
 
 }

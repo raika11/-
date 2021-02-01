@@ -38,10 +38,4 @@ public class DistributeServerUpdateDTO {
 
     @ApiModelProperty("계정비밀번호")
     private String accessPwd;
-
-    @ApiModelProperty("수정일시")
-    private Date modDt;
-
-    @ApiModelProperty("수정자")
-    private String modId;
 }

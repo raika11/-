@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -153,9 +154,8 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "휴일 수정")
     @PutMapping("/denys/{denySeq}")
-    public ResponseEntity<?> putTourDeny(
-            @ApiParam("휴일순번(필수)") @PathVariable("denySeq") @Min(value = 0, message = "{tps.tour-deny.error.min.denySeq}") Long denySeq,
-            @ApiParam("휴일정보") @Valid TourDenyVO tourDenyVo)
+    public ResponseEntity<?> putTourDeny(@ApiParam(value = "휴일순번", required = true) @PathVariable("denySeq")
+    @Min(value = 0, message = "{tps.tour-deny.error.min.denySeq}") Long denySeq, @ApiParam("휴일정보") @Valid TourDenyVO tourDenyVo)
             throws Exception {
 
         try {
@@ -175,8 +175,8 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "휴일 삭제")
     @DeleteMapping("/denys/{denySeq}")
-    public ResponseEntity<?> deleteTourDeny(
-            @ApiParam("휴일순번(필수)") @PathVariable("denySeq") @Min(value = 0, message = "{tps.tour-deny.error.min.denySeq}") Long denySeq)
+    public ResponseEntity<?> deleteTourDeny(@ApiParam(value = "휴일순번", required = true) @PathVariable("denySeq")
+    @Min(value = 0, message = "{tps.tour-deny.error.min.denySeq}") Long denySeq)
             throws Exception {
 
         try {
@@ -244,8 +244,8 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "신청 상세조회")
     @GetMapping("/applys/{tourSeq}")
-    public ResponseEntity<?> getTourApply(
-            @ApiParam("신청순번(필수)") @PathVariable("tourSeq") @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq) {
+    public ResponseEntity<?> getTourApply(@ApiParam(value = "신청순번", required = true) @PathVariable("tourSeq")
+    @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq) {
 
         // 조회(mybatis)
         TourApplyVO returnValue = tourApplyService.findTourApply(tourSeq);
@@ -257,9 +257,8 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "신청 수정")
     @PutMapping(value = "/applys/{tourSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putTourApply(
-            @ApiParam("신청순번(필수)") @PathVariable("tourSeq") @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq,
-            @ApiParam("신청정보") @RequestBody @Valid TourApplyVO tourApplyVO)
+    public ResponseEntity<?> putTourApply(@ApiParam(value = "신청순번", required = true) @PathVariable("tourSeq")
+    @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq, @ApiParam("신청정보") @RequestBody @Valid TourApplyVO tourApplyVO)
             throws Exception {
 
         try {
@@ -293,8 +292,8 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "신청 삭제")
     @DeleteMapping("/applys/{tourSeq}")
-    public ResponseEntity<?> deleteTourApply(
-            @ApiParam("신청순번(필수)") @PathVariable("tourSeq") @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq)
+    public ResponseEntity<?> deleteTourApply(@ApiParam(value = "신청순번", required = true) @PathVariable("tourSeq")
+    @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq)
             throws Exception {
 
         try {
@@ -330,8 +329,10 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "휴일 목록조회(월별)")
     @GetMapping("/denys/month")
-    public ResponseEntity<?> getTourDenyMonthList(@ApiParam("년도(4자리)") @RequestParam("year") String year,
-            @ApiParam("월(2자리)") @RequestParam("month") String month) {
+    public ResponseEntity<?> getTourDenyMonthList(@ApiParam(value = "년도(4자리)", required = true) @RequestParam("year")
+    @Pattern(regexp = "\\d{4}$", message = "{tps.tour-apply.error.pattern.year}") String year,
+            @ApiParam(value = "월(2자리)", required = true) @RequestParam("month")
+            @Pattern(regexp = "\\d{2}$", message = "{tps.tour-apply.error.pattern.month}") String month) {
 
         // 조회(mybatis)
         List<TourDenyVO> returnValue = tourDenyService.findAllTourDenyMonth(year, month);
@@ -347,8 +348,10 @@ public class TourRestController extends AbstractCommonController {
 
     @ApiOperation(value = "견학 신청 목록조회(월별)")
     @GetMapping("/applys/month")
-    public ResponseEntity<?> getTourApplyMonthList(@ApiParam("년도(4자리)") @RequestParam("year") String year,
-            @ApiParam("월(2자리)") @RequestParam("month") String month) {
+    public ResponseEntity<?> getTourApplyMonthList(@ApiParam(value = "년도(4자리)", required = true) @RequestParam("year")
+    @Pattern(regexp = "\\d{4}$", message = "{tps.tour-apply.error.pattern.year}") String year,
+            @ApiParam(value = "월(2자리)", required = true) @RequestParam("month")
+            @Pattern(regexp = "\\d{2}$", message = "{tps.tour-apply.error.pattern.month}") String month) {
 
         // 조회(mybatis)
         List<TourApplyVO> returnValue = tourApplyService.findAllTourApplyMonth(year, month);

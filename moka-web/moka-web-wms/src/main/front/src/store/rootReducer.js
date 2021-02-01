@@ -46,6 +46,7 @@ import tour from '@store/tour/tourReducer';
 import editLog from '@store/editLog/editLogReducer';
 import searchKeyword from '@store/searchKeyword/searchKeywordReducer';
 import quiz from '@store/survey/quiz/quizReducer';
+import mic from '@store/mic/micReducer';
 
 export default combineReducers({
     quiz,
@@ -94,4 +95,6 @@ export default combineReducers({
     tour,
     editLog,
     searchKeyword,
+    quiz,
+    mic,
 });

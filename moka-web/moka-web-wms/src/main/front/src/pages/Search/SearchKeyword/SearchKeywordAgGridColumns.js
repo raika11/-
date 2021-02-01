@@ -13,6 +13,7 @@ export default [
         field: 'schKwd',
         width: 200,
         flex: 1,
+        tooltipField: 'schKwd',
     },
     {
         headerName: '전체',

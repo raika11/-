@@ -21,21 +21,21 @@
  * 기본 테이블 + appStack 테이블 스타일
  * ------------------------------------------------------------------ */
 .ag-theme-moka-grid {
-    @include ag-theme-alpine((
-        odd-row-background-color: #fff,
-        row-height: 34px,
-        header-height: 36px,
-        font-family: $font-family-sans-serif,
-        font-size: 13px,    // _ag-theme-alpine-mixin에서 +1하여 처리함
-        header-column-separator: false,
-        range-selection-border-color: transparent,
-        row-hover-color: rgba(33, 150, 243, 0.1),
-        alpine-active-color: rgba(33, 150, 243, 0.3),
-        selected-row-background-color: rgba(33, 150, 243, 0.3),
-    ));
-}
+    @include ag-theme-alpine(
+        (
+            odd-row-background-color: #fff,
+            row-height: 34px,
+            header-height: 36px,
+            font-family: $font-family-sans-serif,
+            font-size: 13px,    // _ag-theme-alpine-mixin에서 +1하여 처리함
+            header-column-separator: false,
+            range-selection-border-color: transparent,
+            row-hover-color: rgba(33, 150, 243, 0.1),
+            alpine-active-color: rgba(33, 150, 243, 0.3),
+            selected-row-background-color: rgba(33, 150, 243, 0.3),
+        )
+    );
 
-.ag-theme-moka-grid {
     &.ag-header-no {
         .ag-header {
             display: none;
@@ -159,19 +159,16 @@
 }
 
 /* -------------------------------------------------------------------
- * ag-theme-moka-desking-grid (include ag-theme-aplpine)
- * only 페이지편집
+ * ag-theme-moka-dnd-grid (include ag-theme-aplpine)
+ * drag drop style
  * ------------------------------------------------------------------ */
-$padding-height: 10px;
 $desking-row-color: #f4f7f9;
-$rel-row-color:  #ededed;
 $row-hover-color: darken($desking-row-color, 5);
-$rel-row-hover-color: darken($rel-row-color, 5);
 
-.ag-theme-moka-desking-grid {
+.ag-theme-moka-dnd-grid {
     @include ag-theme-alpine(
         (
-            odd-row-background-color: $white,
+            odd-row-background-color: $desking-row-color,
             font-family: $font-family-sans-serif,
             header-column-separator: false,
             header-background-color: #f5f5f5,
@@ -181,9 +178,21 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             border-color: $white
         )
     );
-}
 
-.ag-theme-moka-desking-grid {
+    .ag-root-wrapper {
+        .ag-header {
+            border-top: solid $table-border-width;
+            border-bottom: solid (2 * $table-border-width);
+            border-color: $table-border-color;
+            background-color: $white;
+
+            .ag-header-cell {
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+        }
+    }
+
     .ag-root-wrapper-body {
         overflow: hidden;
         height: unset !important;
@@ -249,6 +258,29 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 
+    .ag-cell,
+    .ag-header-cell {
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+        display: flex;
+        align-items: center;
+    }
+
+    svg {
+        color: $gray-600;
+    }
+}
+
+
+/* -------------------------------------------------------------------
+ * desking-grid
+ * only 페이지편집
+ * .ag-theme-moka-dnd-grid와 함께 사용
+ * ------------------------------------------------------------------ */
+$rel-row-color:  #ededed;
+$rel-row-hover-color: darken($rel-row-color, 5);
+
+.desking-grid {
     .ag-rel-row {
         background-color: $rel-row-color;
 
@@ -263,18 +295,6 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         &.hover::before {
             top: 37px;
         }
-    }
-
-    .ag-cell,
-    .ag-header-cell {
-        padding-left: 3px !important;
-        padding-right: 3px !important;
-        display: flex;
-        align-items: center;
-    }
-
-    svg {
-        color: $gray-600;
     }
 
     /* 주기사(기본) left 조정 */
@@ -365,7 +385,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
     }
 }
 
-.desking-ag-grid-editor {
+.ag-grid-desking-editor {
     .title {
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -392,6 +412,10 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 }
+
+/* -------------------------------------------------------------------
+ * 그 외 ag-grid
+ * ------------------------------------------------------------------ */
 
 .ag-grid-align-center {
     .ag-header-group-cell-label,

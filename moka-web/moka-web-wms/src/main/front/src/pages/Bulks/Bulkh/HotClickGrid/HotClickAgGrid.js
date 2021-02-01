@@ -172,7 +172,7 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
     }, [hotClickList]);
 
     return (
-        <div className="ag-theme-moka-desking-grid bulk-hot-click w-100">
+        <div className="ag-theme-moka-dnd-grid desking-grid bulk-hot-click w-100">
             <AgGridReact
                 immutableData
                 onGridReady={OnGridReady}

@@ -105,7 +105,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
     }, [initialData]);
 
     return (
-        <div className="d-flex h-100 align-items-center desking-ag-grid-editor justify-content-between overflow-hidden">
+        <div className="d-flex h-100 align-items-center ag-grid-desking-editor justify-content-between overflow-hidden">
             <OverlayTrigger overlay={<Tooltip id={data.contentId}>{editValue}</Tooltip>}>
                 <div className={clsx('title', 'cursor-pointer', { rel: data.rel })} onClick={handleClickRow} style={{ minWidth: data.rel ? 243 : 171 }}>
                     {editValue}

@@ -5,11 +5,11 @@ import AgGrid from './MicAgendaAgGrid';
 /**
  * 시민 마이크 아젠다 목록
  */
-const MicAgendaList = () => {
+const MicAgendaList = (props) => {
     return (
         <>
-            <Search />
-            <AgGrid />
+            <Search {...props} />
+            <AgGrid {...props} />
         </>
     );
 };

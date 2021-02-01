@@ -76,7 +76,7 @@ const SearchKeywordDetail = ({ match }) => {
             ]}
         >
             <Form.Row className="mb-2">
-                <Col xs={6} className="p-0">
+                <Col xs={8} className="p-0 pr-2">
                     <MokaInputLabel label="검색어" inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
                 </Col>
                 <Col xs={2} className="p-0">

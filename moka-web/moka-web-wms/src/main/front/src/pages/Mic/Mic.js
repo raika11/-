@@ -5,7 +5,6 @@ import { MokaCard, MokaIcon, MokaIconTabs } from '@/components';
 import AgendaEdit from './MicAgendaEdit';
 import MicFeedList from './MicFeedList';
 import MicPostList from './MicPostList';
-
 const AgendaList = React.lazy(() => import('./MicAgendaList'));
 
 /**
@@ -23,15 +22,15 @@ const Mic = ({ match }) => {
             </Helmet>
 
             {/* 아젠다 목록 */}
-            <MokaCard title="아젠다 목록" width={670} titleClassName="mb-0" bodyClassName="d-flex flex-column" className="mr-gutter">
+            <MokaCard title="아젠다 목록" width={670} bodyClassName="d-flex flex-column" className="mr-gutter">
                 <Suspense>
-                    <AgendaList />
+                    <AgendaList match={match} />
                 </Suspense>
             </MokaCard>
 
-            {/* 아젠다 수정 */}
+            {/* 아젠다 상세 */}
             <Route
-                path={[`${match.url}/add`, `${match.url}/:seqNo`]}
+                path={[`${match.url}/add`, `${match.url}/:agndSeq`]}
                 exact
                 render={() => (
                     <MokaIconTabs

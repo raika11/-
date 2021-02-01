@@ -43,6 +43,7 @@ import tourSaga from '@store/tour/tourSaga';
 import editLogSaga from '@store/editLog/editLogSaga';
 import searchKeywordSaga from '@store/searchKeyword/searchKeywordSaga';
 import quizSaga from '@store/survey/quiz/quizSaga';
+import micSaga from '@store/mic/micSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -89,5 +90,6 @@ export default function* rootSaga() {
         editLogSaga(),
         searchKeywordSaga(),
         quizSaga(),
+        micSaga(),
     ]);
 }

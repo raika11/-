@@ -566,7 +566,7 @@ const DeskingWorkAgGrid = (props) => {
     );
 
     return (
-        <div className={clsx('ag-theme-moka-desking-grid position-relative px-1', { 'naver-channel': isNaverChannel })}>
+        <div className={clsx('ag-theme-moka-dnd-grid desking-grid position-relative px-1', { 'naver-channel': isNaverChannel })}>
             {component.viewYn === 'N' && <div className="opacity-box"></div>}
             <AgGridReact
                 immutableData

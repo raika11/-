@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -48,7 +48,7 @@ const defaultProps = {
 };
 
 const ArticleList = (props) => {
-    const { className, selectedComponent, dropTargetAgGrid, onDragStop, isNaverChannel } = props;
+    const { className, selectedComponent, dropTargetAgGrid, onDragStop, isNaverChannel, show } = props;
     const dispatch = useDispatch();
 
     // initial setting
@@ -187,7 +187,7 @@ const ArticleList = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedComponent.schCodeId, isNaverChannel]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         // 기사 목록 최초 로딩
         if (sourceOn) {
             getArticleList({ type, search });
@@ -218,6 +218,7 @@ const ArticleList = (props) => {
                 onDragStop={onDragStop}
                 onSearch={handleSearch}
                 onChangeSearchOption={changeTableSearchOption}
+                show={show}
             />
         </div>
     );

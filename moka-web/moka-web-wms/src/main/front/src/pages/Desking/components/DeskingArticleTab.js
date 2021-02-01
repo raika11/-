@@ -66,8 +66,7 @@ const DeskingArticleTab = (props) => {
                         selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         onDragStop={handleArticleDragStop}
-                        // show={navIdx === idx && show}
-                        show
+                        show={navIdx === idx && show}
                         isNaverChannel={isNaverChannel}
                     />
                 );
@@ -82,7 +81,7 @@ const DeskingArticleTab = (props) => {
                         dropTargetComponent={componentList}
                         onDragStop={handleArticleDragStop}
                         isNaverChannel={isNaverChannel}
-                        show
+                        show={navIdx === idx && show}
                     />
                 );
             }

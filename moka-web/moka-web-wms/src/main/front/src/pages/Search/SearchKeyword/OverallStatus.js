@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { API_BASE_URL } from '@/constants';
-import { MokaTable, MokaLoader } from '@components';
+import { MokaTable } from '@components';
 import { GET_SEARCH_KEYWORD_STAT_TOTAL } from '@store/searchKeyword';
 import columnDefs from './OverallStatusColumns';
 

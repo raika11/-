@@ -212,6 +212,11 @@ function* deleteTourApply({ payload }) {
 }
 
 /**
+ * 견학 가능일 목록 조회
+ */
+const getTourDenyPossibleList = createRequestSaga(act.GET_TOUR_DENY_POSSIBLE_LIST, api.getTourDenyPossibleList);
+
+/**
  * 견학 비밀번호 초기화
  */
 const postResetPwd = createRequestSaga(act.POST_RESET_PWD, api.postResetPwd, true);

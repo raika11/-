@@ -7,13 +7,14 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel } from '@/components';
 import { getTourAge } from '@store/codeMgt';
-import { getTourSetup, putTourApply, getTourApply, deleteTourApply, postResetPwd } from '@/store/tour';
+import { getTourSetup, putTourApply, getTourApply, deleteTourApply, getTourDenyPossibleList, postResetPwd } from '@/store/tour';
 import toast from '@/utils/toastUtil';
 
 const TourListEdit = forwardRef(({ match }, ref) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const tourApply = useSelector((store) => store.tour.tourApply);
+    const tourPossibleList = useSelector((store) => store.tour.tourPossibleList);
     const tourStatus = useSelector((store) => store.app.tourStatus);
     const tourAgeRows = useSelector((store) => store.codeMgt.tourAgeRows);
     const tourSetup = useSelector((store) => store.tour.tourSetup);
@@ -117,10 +118,16 @@ const TourListEdit = forwardRef(({ match }, ref) => {
     }, []);
 
     useEffect(() => {
+        if (tourPossibleList.length < 1) {
+            dispatch(getTourDenyPossibleList());
+        }
+    }, [dispatch, tourPossibleList.length]);
+
+    useEffect(() => {
         if (tourSeq && tourApply.tourSeq) {
             setTemp({
                 ...tourApply,
-                tourDate: moment(tourApply.tourDate, 'YYYY-MM-DD'),
+                tourDate: tourApply.tourDate.substr(0, 10),
                 regDt: moment(tourApply.regDt, 'YYYY-MM-DD HH:mm:ss'),
             });
         }
@@ -146,20 +153,13 @@ const TourListEdit = forwardRef(({ match }, ref) => {
         <Form>
             <Form.Row className="mb-2">
                 <div style={{ width: 280 }}>
-                    <MokaInputLabel
-                        as="dateTimePicker"
-                        label="신청 일시"
-                        className="mb-0 mr-2"
-                        value={temp.tourDate}
-                        inputProps={{ timeFormat: null }}
-                        onChange={(date) => {
-                            if (typeof date === 'object') {
-                                setTemp({ ...temp, tourDate: date });
-                            } else {
-                                setTemp({ ...temp, tourDate: null });
-                            }
-                        }}
-                    />
+                    <MokaInputLabel as="select" label="신청 일시" className="mb-0 mr-2" value={temp.tourDate} onChange={handleChangeValue}>
+                        {tourPossibleList.map((date, idx) => (
+                            <option key={idx} value={idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}>
+                                {idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}
+                            </option>
+                        ))}
+                    </MokaInputLabel>
                 </div>
                 <div style={{ width: 120 }}>
                     <MokaInput as="select" name="tourTime" value={temp.tourTime} onChange={handleChangeValue}>

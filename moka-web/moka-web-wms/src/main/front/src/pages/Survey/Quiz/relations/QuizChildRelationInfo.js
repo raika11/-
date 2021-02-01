@@ -6,29 +6,16 @@ import { Form, Col, Button } from 'react-bootstrap';
 import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 import { QuizSearchModal } from '@pages/Survey/Quiz/modals';
-import {
-    initialState,
-    selectQuizChange,
-    SAVE_QUIZZES,
-    GET_QUIZZES,
-    clearQuizinfo,
-    changeQuizInfo,
-    getQuizzes,
-    saveQuizzes,
-    getQuizzesList,
-    addQuestion,
-    setQuestion,
-} from '@store/survey/quiz';
+import { selectQuizChange, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList } from '@store/survey/quiz';
 
 const QuizChildRelationInfo = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const params = useParams();
     const selectQuizSeq = useRef(null);
-    const { selectQuiz, quizInfo, questionsList, questionsItem } = useSelector((store) => ({
+    const { selectQuiz, quizInfo, questionsList } = useSelector((store) => ({
         selectQuiz: store.quiz.selectQuiz,
         quizInfo: store.quiz.quizInfo,
-        questionsItem: store.quiz.quizQuestions.questionsItem,
         questionsList: store.quiz.quizQuestions.questionsList,
     }));
 
@@ -128,6 +115,14 @@ const QuizChildRelationInfo = () => {
             return element;
         });
 
+        selectQuiz.map((item, index) => {
+            formData.append(`quizRels[${index}].relType`, 'Q');
+            formData.append(`quizRels[${index}].contentId`, item.contentId);
+            // formData.append(`quizRels[${questionCount}].linkUrl`, ''); // URL 이 없어서..
+            formData.append(`quizRels[${index}].title`, item.title);
+            return item;
+        });
+
         // formData 출력(테스트).
         // for (let [key, value] of formData) {
         //     console.log(`${key}: ${value}`);
@@ -209,7 +204,7 @@ const QuizChildRelationInfo = () => {
                         return (
                             <Form.Row className="pb-2" key={index}>
                                 <Col xs={3} className="pr-0 pl-5 d-flex align-content-center">
-                                    <MokaInput value={item.quizSeq} disabled={true} />
+                                    <MokaInput value={item.contentId} disabled={true} />
                                 </Col>
                                 <Col xs={8} className="pl-0 d-flex align-items-center">
                                     <MokaInput value={item.title} disabled={true} />

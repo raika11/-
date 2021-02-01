@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { selectQuestions, selectQuizChange } from '@store/survey/quiz';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,10 +34,6 @@ export const QuestionsPreviewRenderer = ({ questionsPriviewInfo }) => {
         setPreviewModalState(false);
     };
 
-    useEffect(() => {
-        console.log(previewModalState);
-    }, [previewModalState]);
-
     return (
         <>
             <Col className="pt-2" onClick={() => handleClickTitle()}>
@@ -55,7 +51,15 @@ export const QuizSearchAddButtonRenderer = ({ quizInfo }) => {
     }));
 
     const handleClickButton = () => {
-        dispatch(selectQuizChange([...selectQuiz, quizInfo]));
+        dispatch(
+            selectQuizChange([
+                ...selectQuiz,
+                {
+                    contentId: quizInfo.quizSeq,
+                    title: quizInfo.title,
+                },
+            ]),
+        );
     };
 
     return (

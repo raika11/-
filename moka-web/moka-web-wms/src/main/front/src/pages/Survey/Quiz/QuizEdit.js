@@ -13,7 +13,19 @@ import SortableItem from '@pages/Survey/component/Sortable/SortableItem';
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
-import { initialState, SAVE_QUIZZES, GET_QUIZZES, clearQuizinfo, changeQuizInfo, getQuizzes, saveQuizzes, getQuizzesList, addQuestion, setQuestion } from '@store/survey/quiz';
+import {
+    initialState,
+    SAVE_QUIZZES,
+    GET_QUIZZES,
+    clearQuizinfo,
+    changeQuizInfo,
+    getQuizzes,
+    saveQuizzes,
+    getQuizzesList,
+    addQuestion,
+    setQuestion,
+    selectQuizChange,
+} from '@store/survey/quiz';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -266,10 +278,6 @@ const QuizEdit = () => {
                 formData.append(`questions[${questionCount}].questionDesc`, element.questionDesc);
             }
 
-            selectQuiz.map((item, index) => {
-                formData.append(`quizRels[${questionCount}].relType`, element.questionDesc);
-            });
-
             // quizRels[0].relType 관련타입(A:기사, Q:퀴즈)
             // quizRels[0].contentId 관련콘텐트ID
             // quizRels[0].linkUrl 링크URL
@@ -279,11 +287,20 @@ const QuizEdit = () => {
             return element;
         });
 
+        selectQuiz.map((item, index) => {
+            formData.append(`quizRels[${index}].relType`, 'Q');
+            formData.append(`quizRels[${index}].contentId`, item.contentId);
+            // formData.append(`quizRels[${questionCount}].linkUrl`, ''); // URL 이 없어서..
+            formData.append(`quizRels[${index}].title`, item.title);
+
+            return item;
+        });
+
         // formData 출력(테스트).
-        for (let [key, value] of formData) {
-            console.log(`${key}: ${value}`);
-        }
-        return;
+        // for (let [key, value] of formData) {
+        //     console.log(`${key}: ${value}`);
+        // }
+        // return;
 
         dispatch(
             saveQuizzes({
@@ -364,9 +381,15 @@ const QuizEdit = () => {
             dispatch(setQuestion({ item: qitem, questions: qQuestions }));
         };
 
+        const setQuizRels = (data) => {
+            // console.log(data);
+            dispatch(selectQuizChange(data));
+        };
+
         if (selectQuizSeq.current !== 'add') {
             setInfoData(quizInfo);
             setQuestions(quizInfo.questions);
+            setQuizRels(quizInfo.quizRels);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quizInfo]);

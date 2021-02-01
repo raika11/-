@@ -52,6 +52,7 @@ export const initialState = {
 
 export default handleActions(
     {
+        [action.CLEAR_STORE]: () => initialState,
         [action.CLEAR_POLL]: (state) => {
             return produce(state, (draft) => {
                 draft.poll = initialState.poll;

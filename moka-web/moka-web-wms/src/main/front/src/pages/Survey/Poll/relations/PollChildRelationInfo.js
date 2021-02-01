@@ -9,7 +9,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getPoll, getPollList, updatePoll, GET_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
-import SortAgGrid from '@pages/Survey/component/SortAgGrid';
+const SortAgGrid = React.lazy(() => import('@pages/Survey/component/SortAgGrid'));
 const RelationPollModal = React.lazy(() => import('@pages/Survey/Poll/modals/RelationPollModal'));
 
 const PollChildRelation = () => {
@@ -69,7 +69,6 @@ const PollChildRelation = () => {
     };
 
     const handleClickRelationArticleDelete = (id) => {
-        console.log(id);
         const article = relationArticles.filter((data, index) => data.seqNo !== id);
         setRelationArticles(article);
         setEdit({ ...edit, pollRelateContents: [...relationPolls, ...article] });

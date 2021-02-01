@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPollCategoryCodes, getPollGroupCodes } from '@store/survey/poll/pollAction';
 import { deletePoll, getPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
+import { clearStore } from '@store/survey/poll/pollAction';
 
 const PollList = React.lazy(() => import('@pages/Survey/Poll/PollList'));
 const PollEdit = React.lazy(() => import('@pages/Survey/Poll/PollEdit'));
@@ -34,6 +35,12 @@ const Poll = ({ match }) => {
         dispatch(getPollCategoryCodes());
         dispatch(getPollGroupCodes());
     }, [dispatch]);
+
+    /*useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);*/
 
     return (
         <div className="d-flex">

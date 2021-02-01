@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import RelationPollInfoComponent from '@pages/Survey/Poll/components/RelationPollInfoComponent';

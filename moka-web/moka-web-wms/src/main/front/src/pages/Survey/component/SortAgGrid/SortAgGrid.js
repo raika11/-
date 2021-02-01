@@ -141,8 +141,6 @@ const SortAgGrid = ({ rows, onChange, onDelete }) => {
                     }
                     setIsUpdate(false);
                 }, 100);
-            } else {
-                params.api.refreshCells({ force: true });
             }
         },
         [isUpdate, onChange, rowData],
@@ -151,7 +149,6 @@ const SortAgGrid = ({ rows, onChange, onDelete }) => {
     // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
         if (!commonUtil.isEmpty(rows) && rows instanceof Array) {
-            console.log(rows);
             setRowData(
                 rows.map((row, index) => ({
                     dataIndex: index,
@@ -164,16 +161,11 @@ const SortAgGrid = ({ rows, onChange, onDelete }) => {
                 })),
             );
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rows]);
-
-    useEffect(() => {
-        console.log(rowData);
-    }, [rowData]);
+    }, [onDelete, rows]);
 
     return (
         <>
-            <div className="ag-theme-moka-dnd-grid w-100">
+            <div className="ag-theme-moka-desking-grid bulk-hot-click w-100">
                 <AgGridReact
                     immutableData
                     onGridReady={onGridReady}

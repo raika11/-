@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MokaCard, MokaInput, MokaIcon } from '@components';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,20 +6,25 @@ import { Form, Col, Button } from 'react-bootstrap';
 import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 import { QuizSearchModal } from '@pages/Survey/Quiz/modals';
-import { selectQuizChange, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList } from '@store/survey/quiz';
+import { selectQuizChange, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, selectArticleChange } from '@store/survey/quiz';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 const QuizChildRelationInfo = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const params = useParams();
     const selectQuizSeq = useRef(null);
-    const { selectQuiz, quizInfo, questionsList } = useSelector((store) => ({
+    const { selectQuiz, selectArticle, quizInfo, questionsList } = useSelector((store) => ({
         selectQuiz: store.quiz.selectQuiz,
+        selectArticle: store.quiz.selectArticle,
         quizInfo: store.quiz.quizInfo,
         questionsList: store.quiz.quizQuestions.questionsList,
     }));
 
     const [quizSearchModalState, setQuizSearchModalState] = useState(false);
+    const [articleListModalState, setArticleListModalState] = useState(false);
+    const [relationArticles, setRelationArticles] = useState([]);
+    const [modalArticle, setModalArticle] = useState(null);
 
     const handleClickArticleModalShow = () => {};
     const handleClickRelationArticleAdd = () => {};
@@ -34,6 +39,42 @@ const QuizChildRelationInfo = () => {
     const checkValidation = () => {
         return false;
     };
+
+    const handleClickArticleAdd = (e) => {
+        setModalArticle(e);
+    };
+
+    useEffect(() => {
+        if (modalArticle) {
+            let newItem = {
+                contentId: modalArticle.totalId,
+                title: modalArticle.artTitle,
+                linkUrl: `https://news.joins.com/article/${modalArticle.totalId}`,
+            };
+
+            dispatch(selectArticleChange([...selectArticle, newItem]));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalArticle]);
+
+    useEffect(() => {
+        // console.log(selectArticles);
+        if (selectArticle) {
+            setRelationArticles(
+                selectArticle.map((e) => {
+                    return {
+                        title: e.title,
+                        linkUrl: e.linkUrl,
+                        relType: 'A',
+                        pollSeq: 0,
+                        totalId: e.contentId,
+                        seqNo: e.contentId,
+                    };
+                }),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectArticle]);
 
     const handleClickSaveButton = () => {
         let type;
@@ -224,7 +265,7 @@ const QuizChildRelationInfo = () => {
                             <Col xs={12}>
                                 <Form.Group>
                                     <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
-                                    <Button variant="positive" onClick={handleClickArticleModalShow} className="mr-2">
+                                    <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
                                         기사 검색
                                     </Button>
                                     <Button variant="positive" onClick={handleClickRelationArticleAdd}>
@@ -237,7 +278,7 @@ const QuizChildRelationInfo = () => {
                     <Form.Group>
                         <Form.Row>
                             <Col xs={12}>
-                                <SortAgGrid />
+                                <SortAgGrid rows={relationArticles} onChange={(e) => console.log(e)} onDelete={(e) => console.log(e)} />
                             </Col>
                         </Form.Row>
                     </Form.Group>
@@ -249,6 +290,7 @@ const QuizChildRelationInfo = () => {
                     setQuizSearchModalState(false);
                 }}
             />
+            <ArticleListModal show={articleListModalState} onHide={() => setArticleListModalState(false)} onRowClicked={handleClickArticleAdd} />
         </div>
     );
 };

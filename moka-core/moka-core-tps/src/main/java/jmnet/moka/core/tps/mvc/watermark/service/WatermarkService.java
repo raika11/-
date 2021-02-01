@@ -1,6 +1,8 @@
 package jmnet.moka.core.tps.mvc.watermark.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import jmnet.moka.core.tps.mvc.watermark.entity.Watermark;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkSearchDTO;
 import org.springframework.data.domain.Page;
@@ -28,9 +30,19 @@ public interface WatermarkService {
 
 
     /**
-     * 사용중인 워터마크 목록 조회
+     * 워터마크 목록 조회
      *
      * @return 워터마크
      */
     Page<Watermark> findAllWatermark(WatermarkSearchDTO search);
+
+    /**
+     * 워터마크 조회
+     *
+     * @param seqNo 일련번호
+     * @return 사이트정보조회
+     */
+    Optional<Watermark> findById(Long seqNo);
+
+
 }

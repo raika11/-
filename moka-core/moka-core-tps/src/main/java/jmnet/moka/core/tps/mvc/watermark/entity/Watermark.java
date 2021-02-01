@@ -27,7 +27,7 @@ public class Watermark extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SEQ_NO", nullable = false)
-    private Integer seqNo;
+    private Long seqNo;
 
     /**
      * 출처

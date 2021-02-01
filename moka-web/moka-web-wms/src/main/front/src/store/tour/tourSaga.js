@@ -222,9 +222,14 @@ const getTourDenyPossibleList = createRequestSaga(act.GET_TOUR_DENY_POSSIBLE_LIS
 const postResetPwd = createRequestSaga(act.POST_RESET_PWD, api.postResetPwd, true);
 
 /**
- * 견학 휴일 목록 조회
+ * 견학 휴일 목록 조회 (월별)
  */
 const getTourDenyMonthList = createRequestSaga(act.GET_TOUR_DENY_MONTH_LIST, api.getTourDenyMonthList);
+
+/**
+ * 견학 신청 목록 조회 (월별)
+ */
+const getTourApplyMonthList = createRequestSaga(act.GET_TOUR_APPLY_MONTH_LIST, api.getTourApplyMonthList);
 
 export default function* saga() {
     yield takeLatest(act.GET_TOUR_GUIDE_LIST, getTourGuideList);
@@ -238,6 +243,8 @@ export default function* saga() {
     yield takeLatest(act.GET_TOUR_APPLY, getTourApply);
     yield takeLatest(act.PUT_TOUR_APPLY, putTourApply);
     yield takeLatest(act.DELETE_TOUR_APPLY, deleteTourApply);
+    yield takeLatest(act.GET_TOUR_DENY_POSSIBLE_LIST, getTourDenyPossibleList);
     yield takeLatest(act.POST_RESET_PWD, postResetPwd);
     yield takeLatest(act.GET_TOUR_DENY_MONTH_LIST, getTourDenyMonthList);
+    yield takeLatest(act.GET_TOUR_APPLY_MONTH_LIST, getTourApplyMonthList);
 }

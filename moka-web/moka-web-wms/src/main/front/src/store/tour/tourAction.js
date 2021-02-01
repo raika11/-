@@ -38,6 +38,8 @@ export const [GET_TOUR_DENY_POSSIBLE_LIST, GET_TOUR_DENY_POSSIBLE_LIST_SUCCESS] 
 export const getTourDenyPossibleList = createAction(GET_TOUR_DENY_POSSIBLE_LIST, () => ({}));
 export const [GET_TOUR_DENY_MONTH_LIST, GET_TOUR_DENY_MONTH_LIST_SUCCESS, GET_TOUR_DENY_MONTH_LIST_FAILURE] = createRequestActionTypes('tour/GET_TOUR_DENY_MONTH_LIST');
 export const getTourDenyMonthList = createAction(GET_TOUR_DENY_MONTH_LIST, ({ year, month, callback }) => ({ year, month, callback }));
+export const [GET_TOUR_APPLY_MONTH_LIST, GET_TOUR_APPLY_MONTH_LIST_SUCCESS, GET_TOUR_APPLY_MONTH_LIST_FAILURE] = createRequestActionTypes('tour/GET_TOUR_APPLY_MONTH_LIST');
+export const getTourApplyMonthList = createAction(GET_TOUR_APPLY_MONTH_LIST, ({ year, month, callback }) => ({ year, month, callback }));
 
 /**
  * 저장, 수정

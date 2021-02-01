@@ -47,13 +47,13 @@ const getArticle = createRequestSaga(act.GET_ARTICLE, api.getArticle);
  * 기사 편집제목 수정
  */
 function* putArticleEditTitle({ payload }) {
-    const { totalId, title, mobTitle, callback } = payload;
+    const { totalId, artEditTitle, artEditMobTitle, callback } = payload;
     const ACTION = act.PUT_ARTICLE_EDIT_TITLE;
     let callbackData;
 
     yield put(startLoading(ACTION));
     try {
-        const response = yield call(api.putArticleEditTitle, { totalId, title, mobTitle });
+        const response = yield call(api.putArticleEditTitle, { totalId, artEditTitle, artEditMobTitle });
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);

@@ -145,8 +145,6 @@ const ArticleMediaList = (props) => {
     const handleSearch = () => {
         let ns = {
             ...search,
-            startServiceDay: moment(search.startServiceDay),
-            endServiceDay: moment(search.endServiceDay),
             page: 0,
         };
 

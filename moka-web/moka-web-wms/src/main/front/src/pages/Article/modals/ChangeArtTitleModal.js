@@ -11,7 +11,7 @@ import { putArticleEditTitle, PUT_ARTICLE_EDIT_TITLE } from '@store/article';
  * 기사별 웹제목 / 모바일제목 수정하는 모달
  */
 const ChangeArtGroupModal = (props) => {
-    const { show, onHide, artData } = props;
+    const { show, onHide, artData, onSave } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[PUT_ARTICLE_EDIT_TITLE]);
     const { mobWidth, titleWidth } = useSelector((store) => ({
@@ -20,8 +20,8 @@ const ChangeArtGroupModal = (props) => {
     }));
 
     // state
-    const [webTitle, setWebTitle] = useState('');
-    const [mobTitle, setMobTitle] = useState('');
+    const [artEditTitle, setArtEditTitle] = useState('');
+    const [artEditMobTitle, setArtEditMobTitle] = useState('');
     const [error, setError] = useState({});
 
     const validate = () => {
@@ -29,18 +29,18 @@ const ChangeArtGroupModal = (props) => {
         let invalid = false,
             ne = {};
 
-        if (!regex.test(webTitle)) {
-            ne.webTitle = true;
+        if (!regex.test(artEditTitle)) {
+            ne.artEditTitle = true;
             invalid = invalid || true;
         } else {
-            ne.webTitle = false;
+            ne.artEditTitle = false;
         }
 
-        if (!regex.test(mobTitle)) {
-            ne.mobTitle = true;
+        if (!regex.test(artEditMobTitle)) {
+            ne.artEditMobTitle = true;
             invalid = invalid || true;
         } else {
-            ne.mobTitle = false;
+            ne.artEditMobTitle = false;
         }
 
         setError({ ...error, ...ne });
@@ -55,11 +55,14 @@ const ChangeArtGroupModal = (props) => {
             dispatch(
                 putArticleEditTitle({
                     totalId: artData.totalId,
-                    title: webTitle.length > 0 ? webTitle : null,
-                    mobTitle: mobTitle.length > 0 ? mobTitle : null,
+                    artEditTitle: artEditTitle.length > 0 ? artEditTitle : null,
+                    artEditMobTitle: artEditMobTitle.length > 0 ? artEditMobTitle : null,
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);
+                            if (onSave) {
+                                onSave();
+                            }
                         } else {
                             toast.fail(header.message);
                         }
@@ -74,23 +77,23 @@ const ChangeArtGroupModal = (props) => {
      */
     const handleHide = () => {
         if (onHide) onHide();
-        setWebTitle('');
-        setMobTitle('');
+        setArtEditTitle('');
+        setArtEditMobTitle('');
         setError({});
     };
 
     useEffect(() => {
         if (show) {
             if (artData.artEditTitle && artData.artEditTitle !== '') {
-                setWebTitle(unescapeHtml(artData.artEditTitle));
+                setArtEditTitle(unescapeHtml(artData.artEditTitle));
             } else if (artData.artJamTitle && artData.artJamTitle !== '') {
-                setWebTitle(unescapeHtml(artData.artJamTitle));
+                setArtEditTitle(unescapeHtml(artData.artJamTitle));
             }
 
             if (artData.artEditMobTitle && artData.artEditMobTitle !== '') {
-                setMobTitle(unescapeHtml(artData.artEditMobTitle));
+                setArtEditMobTitle(unescapeHtml(artData.artEditMobTitle));
             } else if (artData.artJamMobTitle && artData.artJamMobTitle !== '') {
-                setMobTitle(unescapeHtml(artData.artJamMobTitle));
+                setArtEditMobTitle(unescapeHtml(artData.artJamMobTitle));
             }
         }
     }, [show, artData]);
@@ -129,7 +132,7 @@ const ChangeArtGroupModal = (props) => {
             >
                 웹제목
             </p>
-            <MokaInput className="mb-20" value={webTitle} onChange={(e) => setWebTitle(e.target.value)} isInvalid={error.webTitle} />
+            <MokaInput className="mb-20" value={artEditTitle} onChange={(e) => setArtEditTitle(e.target.value)} isInvalid={error.artEditTitle} />
 
             <div className="mob-title-line position-absolute" style={{ height: 19, top: 115, left: 8 + mobWidth }}></div>
             <p
@@ -139,7 +142,7 @@ const ChangeArtGroupModal = (props) => {
             >
                 모바일제목
             </p>
-            <MokaInput className="mb-0" value={mobTitle} onChange={(e) => setMobTitle(e.target.value)} isInvalid={error.mobTitle} />
+            <MokaInput className="mb-0" value={artEditMobTitle} onChange={(e) => setArtEditMobTitle(e.target.value)} isInvalid={error.artEditMobTitle} />
         </MokaModal>
     );
 };

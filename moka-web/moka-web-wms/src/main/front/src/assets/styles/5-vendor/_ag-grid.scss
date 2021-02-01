@@ -189,6 +189,24 @@ $row-hover-color: darken($desking-row-color, 5);
         min-height: unset !important;
     }
 
+    .ag-root-wrapper {
+        .ag-body-viewport {
+            @include custom-scroll;
+            overflow-y: auto;
+        }
+
+        .ag-row {
+            border-top: 3px solid $white;
+            border-bottom: 3px solid $white;
+            border-radius: 8px;
+            background-color: $desking-row-color;
+    
+            &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
+                background-color: $row-hover-color;
+            }
+        }
+    }
+
     .ag-header {
         border-top: solid $table-border-width;
         border-bottom: solid (2 * $table-border-width);
@@ -206,16 +224,38 @@ $row-hover-color: darken($desking-row-color, 5);
         padding-right: 5px;
     }
 
-    .ag-row {
-        border-top: 3px solid $white;
-        border-bottom: 3px solid $white;
-        border-radius: 8px;
-        background-color: $desking-row-color;
+    svg {
+        color: $gray-600;
+    }
+}
+
+
+/* -------------------------------------------------------------------
+ * desking-grid
+ * only 페이지편집
+ * .ag-theme-moka-dnd-grid와 함께 사용
+ * ------------------------------------------------------------------ */
+$rel-row-color:  #ededed;
+$rel-row-hover-color: darken($rel-row-color, 5);
+
+.desking-grid {
+    .ag-rel-row {
+        background-color: $rel-row-color;
 
         &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
-            background-color: $row-hover-color;
+            background-color: $rel-row-hover-color;
         }
 
+        &.next::before {
+            bottom: 37px;
+        }
+
+        &.hover::before {
+            top: 37px;
+        }
+    }
+
+    .ag-row {
         &.next::before {
             content: "";
             z-index: 50;
@@ -252,37 +292,6 @@ $row-hover-color: darken($desking-row-color, 5);
         }
     }
 
-    svg {
-        color: $gray-600;
-    }
-}
-
-
-/* -------------------------------------------------------------------
- * desking-grid
- * only 페이지편집
- * .ag-theme-moka-dnd-grid와 함께 사용
- * ------------------------------------------------------------------ */
-$rel-row-color:  #ededed;
-$rel-row-hover-color: darken($rel-row-color, 5);
-
-.desking-grid {
-    .ag-rel-row {
-        background-color: $rel-row-color;
-
-        &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
-            background-color: $rel-row-hover-color;
-        }
-
-        &.next::before {
-            bottom: 37px;
-        }
-
-        &.hover::before {
-            top: 37px;
-        }
-    }
-
     /* 주기사(기본) left 조정 */
     .ag-cell[col-id="relOrdEx"] {
         display: none !important;
@@ -312,6 +321,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         &[col-id="relOrdEx"] {
             display: flex !important;
             width: 24px !important;
+            left: 24px !important;
         }
         &[col-id="relTitle"] {
             display: flex !important;

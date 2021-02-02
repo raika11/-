@@ -140,7 +140,7 @@ public class WatermarkRestController extends AbstractCommonController {
 
         // 널이면 강제로 셋팅
         if (McpString.isEmpty(watermarkDTO.getImgUrl())) {
-            watermarkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
+            watermarkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + watermarkDTO.getSourceCode() + "/" + saveDefaultFileName);
         }
 
         // 데이터 유효성 검사
@@ -159,7 +159,9 @@ public class WatermarkRestController extends AbstractCommonController {
 
             if (watermarkThumbnailFile != null && !watermarkThumbnailFile.isEmpty()) {
                 // 이미지파일 저장(multipartFile)
+
                 String imgUrl = watermarkService.saveImage(returnValue, watermarkThumbnailFile);
+
                 if (McpString.isNotEmpty(imgUrl)) {
                     tpsLogger.success(ActionType.UPLOAD, true);
                     watermark.setSeqNo(returnValue.getSeqNo());
@@ -208,7 +210,7 @@ public class WatermarkRestController extends AbstractCommonController {
 
         // 널이면 강제로 셋팅
         if (McpString.isEmpty(watermarkDTO.getImgUrl())) {
-            watermarkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + saveDefaultFileName);
+            watermarkDTO.setImgUrl(pdsUrl + saveFilePath + "/" + watermarkDTO.getSourceCode() + "/" + saveDefaultFileName);
         }
 
         // WatermarkDTO -> Watermark 변환

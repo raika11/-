@@ -16,6 +16,7 @@ public interface WatermarkRepository extends JpaRepository<Watermark, Long>, Jpa
      * @param search 검색 조건
      * @return 워터마크 목록
      */
+    @Override
     Page<Watermark> findAllWatermark(WatermarkSearchDTO search);
 
     /**

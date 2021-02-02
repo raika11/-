@@ -91,8 +91,12 @@ public class WatermarkServiceImpl implements WatermarkService {
                 .toLowerCase();
         String fileName = String.valueOf(watermark.getSeqNo()) + "." + extension;
 
+        saveFilePath = saveFilePath.replace("/" + watermark.getSourceCode(),"");
+        saveFilePath = "/moka_storage/watermark" + "/" + watermark.getSourceCode();
+
         // 파일 저장
         boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), saveFilePath);
+
         if (upload) {
             log.debug("SAVE Watermark IMAGE");
             String path = pdsUrl + saveFilePath + "/" + fileName;

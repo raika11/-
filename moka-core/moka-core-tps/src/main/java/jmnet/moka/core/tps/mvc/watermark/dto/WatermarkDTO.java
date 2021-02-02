@@ -92,7 +92,7 @@ public class WatermarkDTO implements Serializable {
      */
     @ApiModelProperty("이미지세로")
     @NotNull(message = "{tps.watermark.error.notnull.imgHeight}")
-    @Length(min = 1, max = 2, message = "{tps.watermark.error.length.imgHeight}")
+    @Length(min = 1, max = 10, message = "{tps.watermark.error.length.imgHeight}")
     @JsonProperty("height")
     private String imgHeight;
 
@@ -101,7 +101,7 @@ public class WatermarkDTO implements Serializable {
      */
     @ApiModelProperty("이미지가로")
     @NotNull(message = "{tps.watermark.error.notnull.imgWidth}")
-    @Length(min = 1, max = 2, message = "{tps.watermark.error.length.imgWidth}")
+    @Length(min = 1, max = 10, message = "{tps.watermark.error.length.imgWidth}")
     @JsonProperty("width")
     private String imgWidth;
 

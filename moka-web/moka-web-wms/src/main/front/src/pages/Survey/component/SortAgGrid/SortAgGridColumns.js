@@ -20,11 +20,7 @@ export const columnDefs = [
         width: 24,
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
-            if (dragItemCount > 1) {
-                const message = params.rowNodes ? params.rowNodes[0].data.title : '';
-                return `${message} 외 [${dragItemCount - 1}건]`;
-            }
-            return params.rowNode.data.title;
+            return params.rowNode.data.item.title;
         },
         cellClassRules: cellClassRules,
     },

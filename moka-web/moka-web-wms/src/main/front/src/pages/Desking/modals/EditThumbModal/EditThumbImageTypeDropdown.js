@@ -1,18 +1,17 @@
 import React, { useState, useEffect, forwardRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import produce from 'immer';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaInput, MokaInputGroup } from '@components';
-import { getPhotoTypes } from '@store/photoArchive';
 
 /**
  * 커스텀 메뉴
  */
 const CustomMenu = forwardRef(({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
     return (
-        <div ref={ref} style={{ ...style, width: 140, minWidth: 140 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
+        <div ref={ref} style={{ ...style, width: 160, minWidth: 160 }} className={clsx('px-2', className)} aria-labelledby={labeledBy}>
             {children}
         </div>
     );
@@ -70,21 +69,17 @@ export const propTypes = {
 
 const defaultProps = {};
 
-const EditThumbSelectDropdown = (props) => {
+const EditThumbImageTypeDropdown = (props) => {
     const { className, isInvalid, imageValue, onChange } = props;
-    const dispatch = useDispatch();
-    // const [dataSelectedList, setDataSelectedList] = useState([]);
     const [imageSelectedList, setImageSelectedList] = useState([]);
     const [imageObj, setImageObj] = useState({});
     const [toggleText, setToggleText] = useState('전체');
 
-    // const dataTypeList = useSelector((store) => store.photoArchive.dataTypeList);
     const imageTypeList = useSelector((store) => store.photoArchive.imageTypeList);
 
     /**
      * id로 리스트의 index 조회
      */
-    // const dataTypeIndex = useCallback((id) => dataTypeList.findIndex((type) => type.name === id), [dataTypeList]);
     const imageTypeIndex = useCallback((id) => imageTypeList.findIndex((type) => type.name === id.name), [imageTypeList]);
 
     /**
@@ -119,28 +114,7 @@ const EditThumbSelectDropdown = (props) => {
                 onChange(resultList.map((r) => r.name).join(','));
             }
         }
-        // if (name === 'dataTypeList') {
-        //     const targetIdx = dataTypeIndex(id);
-        //     if (checked) {
-        //         resultList = [...dataSelectedList, dataObj[targetIdx]].sort((a, b) => {
-        //             return a.index - b.index;
-        //         });
-        //     } else {
-        //         const isSelected = dataSelectedList.findIndex((type) => type.cd === id);
-        //         if (isSelected > -1) {
-        //             resultList = produce(dataSelectedList, (draft) => {
-        //                 draft.splice(isSelected, 1);
-        //             });
-        //         }
-        //     }
-        // }
     };
-
-    useEffect(() => {
-        // 이미지 타입 조회
-        dispatch(getPhotoTypes());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         // 이미지 타입 배열 객체로 변환
@@ -160,19 +134,6 @@ const EditThumbSelectDropdown = (props) => {
     };
 
     useEffect(() => {
-        // if (dataSelectedList.length > 0) {
-        //     const targetIdx = dataTypeIndex(dataSelectedList[0].cd);
-        //     const target = dataObj[targetIdx];
-
-        //     if (dataSelectedList.length === Object.keys(dataObj).length) {
-        //         setToggleText('전체');
-        //     } else if (dataSelectedList.length === 1) {
-        //         setToggleText(target.label);
-        //     } else {
-        //         setToggleText(`${target.label} 외 ${dataSelectedList.length - 1}개`);
-        //     }
-        // }
-
         if (imageSelectedList.length > 0) {
             const targetIdx = imageTypeIndex(imageSelectedList[0]);
             const target = imageObj[targetIdx];
@@ -231,20 +192,8 @@ const EditThumbSelectDropdown = (props) => {
                     onChange={handleChangeValue}
                     className="mb-2 ft-12"
                     as="checkbox"
-                    inputProps={{ label: '전체', custom: true, checked: imageValue === 'All' }}
+                    inputProps={{ label: '전체', custom: true, checked: imageValue === 'All' || toggleText === '전체' }}
                 />
-                {/* {dataTypeList &&
-                    dataTypeList.map((data) => (
-                        <MokaInput
-                            key={data.id}
-                            id={data.id}
-                            name="dataTypeList"
-                            onChange={handleChangeValue}
-                            className="mb-2 ft-12"
-                            as="checkbox"
-                            inputProps={{ label: data.name, custom: true, checked: chkTrue(data.id) }}
-                        />
-                    ))} */}
 
                 {/* 필터 */}
                 {imageTypeList &&
@@ -266,7 +215,7 @@ const EditThumbSelectDropdown = (props) => {
     );
 };
 
-EditThumbSelectDropdown.propTypes = propTypes;
-EditThumbSelectDropdown.defaultProps = defaultProps;
+EditThumbImageTypeDropdown.propTypes = propTypes;
+EditThumbImageTypeDropdown.defaultProps = defaultProps;
 
-export default EditThumbSelectDropdown;
+export default EditThumbImageTypeDropdown;

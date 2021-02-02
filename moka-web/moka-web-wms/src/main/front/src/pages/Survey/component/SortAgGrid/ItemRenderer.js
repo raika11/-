@@ -11,7 +11,7 @@ const ItemRenderer = ({ item, onDelete, onSetData }) => {
     });
     const handleClickDelete = () => {
         if (onDelete instanceof Function) {
-            onDelete(item.seqNo);
+            onDelete(item.ordNo);
         }
     };
 

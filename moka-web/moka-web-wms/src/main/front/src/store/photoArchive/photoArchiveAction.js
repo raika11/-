@@ -40,3 +40,9 @@ export const getPhotoTypes = createAction(GET_PHOTO_TYPES, () => ({}));
  */
 export const [GET_PHOTO, GET_PHOTO_SUCCESS, GET_PHOTO_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO');
 export const getPhoto = createAction(GET_PHOTO, (photoId) => photoId);
+
+/**
+ * 포토 아카이브 사진 목록 출처, 유형 목록 조회한 후 실행
+ */
+export const GET_ARCHIVE_DATA = 'photoArchive/GET_ARCHIVE_DATA';
+export const getArchiveData = createAction(GET_ARCHIVE_DATA);

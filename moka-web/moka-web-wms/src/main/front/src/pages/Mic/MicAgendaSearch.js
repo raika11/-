@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@components';
-import { initialState, getMicReport, getMicAgendaList, changeSearchOption } from '@store/mic';
+import { initialState, getMicReport, getMicAgendaList, getMicCategoryList, changeSearchOption } from '@store/mic';
 import { messageBox } from '@utils/toastUtil';
 import BannerModal from './modals/BannerModal';
 import CategoryModal from './modals/CategoryModal';
@@ -79,6 +79,15 @@ const MicAgendaSearch = ({ match }) => {
     useEffect(() => {
         setSearch(storeSearch);
     }, [storeSearch]);
+
+    useEffect(() => {
+        // 카테고리 목록 조회
+        dispatch(
+            getMicCategoryList({
+                search: initialState.category.search,
+            }),
+        );
+    }, [dispatch]);
 
     return (
         <div className="mb-2">

@@ -1,3 +1,5 @@
+const replaceNo = (t) => ('00' + t).slice(-2);
+
 export default [
     {
         headerName: '',
@@ -12,6 +14,7 @@ export default [
         field: 'ordNo',
         width: 30,
         maxWidth: 30,
+        valueGetter: (params) => replaceNo(params.data.ordNo),
         cellStyle: { lineHeight: '34px' },
     },
     {

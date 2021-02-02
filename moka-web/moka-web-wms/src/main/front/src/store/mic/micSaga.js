@@ -20,6 +20,47 @@ const getMicAgendaListModal = createRequestSaga(act.GET_MIC_AGENDA_LIST_MODAL, a
 const putMicAgendaSort = createRequestSaga(act.PUT_MIC_AGENDA_SORT, api.putMicAgendaSort, true);
 
 /**
+ * 카테고리 목록 조회
+ */
+const getMicCategoryList = createRequestSaga(act.GET_MIC_CATEGORY_LIST, api.getMicCategoryList);
+
+/**
+ * 카테고리 등록/수정
+ */
+function* saveMicCategory({ payload }) {
+    const { category, categoryList, callback } = payload;
+    const ACTION = act.SAVE_MIC_CATEGORY;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        if (category) {
+            // 등록
+            response = yield call(api.postMicCategory, { category });
+        } else {
+            // 수정
+            response = yield call(api.putMicCategory, { categoryList });
+        }
+        callbackData = response.data;
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ mic }) => mic.category.search);
+            yield put({
+                type: act.GET_MIC_CATEGORY_LIST,
+                payload: { search },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * 아젠다, 전체 포스트 수
  */
 const getMicReport = createRequestSaga(act.GET_MIC_REPORT, api.getMicReport);
@@ -29,4 +70,6 @@ export default function* saga() {
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
     yield takeLatest(act.GET_MIC_AGENDA_LIST_MODAL, getMicAgendaListModal);
     yield takeLatest(act.PUT_MIC_AGENDA_SORT, putMicAgendaSort);
+    yield takeLatest(act.GET_MIC_CATEGORY_LIST, getMicCategoryList);
+    yield takeLatest(act.SAVE_MIC_CATEGORY, saveMicCategory);
 }

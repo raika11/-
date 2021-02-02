@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useState, useImperativeHandle } from 'react';
 import { MokaInput } from '@/components';
 
 /**
@@ -6,38 +6,35 @@ import { MokaInput } from '@/components';
  */
 const CategorySelectRenderer = forwardRef((params, ref) => {
     const field = params.colDef.field;
-    const data = params.data;
-    const [used, setUsed] = useState('');
+    const data = params.node.data;
+    const [usedYn, setUsedYn] = useState(data[field]);
 
     useImperativeHandle(
         ref,
         () => ({
-            refresh: () => {
-                return false;
-            },
+            refresh: () => true,
+            setValue: (usedYn) => setUsedYn(usedYn),
+            getValue: () => usedYn,
         }),
-        [],
+        [usedYn],
     );
 
-    useEffect(() => {
-        if (data && field) {
-            setUsed(data[field]);
-        }
-    }, [data, field]);
+    /**
+     * 입력값 변경
+     */
+    const handleChangeValue = (e) => {
+        params.setValue(e.target.value);
+        setUsedYn(e.target.value);
+        params.api.applyTransaction({ update: [{ ...data, [field]: e.target.value }] });
+    };
 
     return (
-        <MokaInput
-            as="select"
-            className="ft-12"
-            value={used}
-            onChange={(e) => {
-                setUsed(e.target.value);
-                params.setValue(e.target.value);
-            }}
-        >
-            <option value="Y">사용</option>
-            <option value="N">사용안함</option>
-        </MokaInput>
+        <div className="h-100 d-flex align-items-center justify-content-center">
+            <MokaInput as="select" value={usedYn} onChange={handleChangeValue}>
+                <option value="Y">사용</option>
+                <option value="N">사용안함</option>
+            </MokaInput>
+        </div>
     );
 });
 

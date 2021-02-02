@@ -17,9 +17,15 @@ export const initialState = {
         agndTop: 'Y',
     },
     agndTopList: [
-        { id: 'Y', name: '전체 메뉴' },
-        { id: 'N', name: '최상단' },
+        { id: 'all', name: '전체 메뉴' },
+        { id: 'Y', name: '최상단' },
     ],
+    category: {
+        list: [],
+        search: {
+            includeDel: 'Y', // 삭제된 것까지 검색 포함 여부 (Y/N)
+        },
+    },
     invalidList: [],
     answTotal: 0,
     agndTotal: 0,
@@ -56,6 +62,14 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.answTotal = body.answTotal;
                 draft.agndTotal = body.agndTotal;
+            });
+        },
+        /**
+         * 카테고리
+         */
+        [act.GET_MIC_CATEGORY_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.category.list = body.list;
             });
         },
     },

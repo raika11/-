@@ -3,7 +3,7 @@ import moment from 'moment';
 import { AgGridReact } from 'ag-grid-react';
 import { useDispatch } from 'react-redux';
 import { MokaModal } from '@components';
-import { messageBox } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
 import { getMicAgendaListModal, putMicAgendaSort } from '@store/mic';
 import columnDefs from './OrderModalAgGridColumns';
@@ -45,7 +45,9 @@ const AgendaOrderModal = (props) => {
             putMicAgendaSort({
                 sortedList: displayedRows,
                 callback: ({ header, body }) => {
-                    if (!header.success) {
+                    if (header.success && body) {
+                        toast.success(header.message);
+                    } else {
                         messageBox.alert(header.message);
                     }
                     setLoading(false);

@@ -28,6 +28,18 @@ export const GET_MIC_AGENDA_LIST_MODAL = 'mic/GET_MIC_AGENDA_LIST_MODAL';
 export const getMicAgendaListModal = createAction(GET_MIC_AGENDA_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
 
 /**
+ * 아젠다 카테고리 목록 조회
+ */
+export const [GET_MIC_CATEGORY_LIST, GET_MIC_CATEGORY_LIST_SUCCESS, GET_MIC_CATEGORY_LIST_FAILURE] = createRequestActionTypes('mic/GET_MIC_CATEGORY_LIST');
+export const getMicCategoryList = createAction(GET_MIC_CATEGORY_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 아젠다 카테고리 수정
+ */
+export const SAVE_MIC_CATEGORY = 'mic/SAVE_MIC_CATEGORY';
+export const saveMicCategory = createAction(SAVE_MIC_CATEGORY, ({ category, categoryList, callback }) => ({ category, categoryList, callback }));
+
+/**
  * 아젠다 순서 변경
  */
 export const PUT_MIC_AGENDA_SORT = 'mic/PUT_MIC_AGENDA_SORT';

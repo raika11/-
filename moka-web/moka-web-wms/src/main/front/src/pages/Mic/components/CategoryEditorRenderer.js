@@ -1,53 +1,44 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { MokaInput } from '@components';
 
 /**
  * 카테고리 제목 수정
  */
 const CategoryEditorRenderer = forwardRef((params, ref) => {
-    // state
     const field = params.colDef.field;
-    const data = params.data;
-    const [error, setError] = useState(false);
-    const [name, setName] = useState('');
+    const data = params.node.data;
+    const [name, setName] = useState(data[field]);
 
     useImperativeHandle(
         ref,
         () => ({
-            refresh: () => {
-                return false;
-            },
+            refresh: () => true,
+            setValue: (catNm) => setName(catNm),
+            getValue: () => name,
         }),
-        [],
+        [name],
     );
 
-    // const validate = () => {
-    //     const regex = /[^\s\t\n]+/;
-
-    //     if (!regex.test(editValue)) {
-    //         setError(true);
-    //         return false;
-    //     }
-
-    //     setError(false);
-    //     return true;
-    // };
-
+    /**
+     * 입력값 변경
+     */
     const handleChangeValue = (e) => {
         setName(e.target.value);
     };
 
+    /**
+     * onBlur
+     */
     const handleBlur = (e) => {
         params.setValue(e.target.value);
+        params.api.applyTransaction({ update: [{ ...data, [field]: e.target.value }] });
     };
 
-    useEffect(() => {
-        if (data && field) {
-            setName(data[field]);
-        }
-    }, [data, field]);
-
-    return <MokaInput className="ft-12" value={name} onChange={handleChangeValue} onBlur={handleBlur} isInvalid={error} />;
+    return (
+        <div className="h-100 d-flex align-items-center justify-content-center">
+            <MokaInput value={name} onChange={handleChangeValue} onBlur={handleBlur} />
+        </div>
+    );
 });
 
 export default CategoryEditorRenderer;

@@ -1,11 +1,10 @@
 import React, { useState, useEffect, forwardRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import produce from 'immer';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaInput, MokaInputGroup } from '@components';
-import { getPhotoOrigins } from '@store/photoArchive';
 
 /**
  * 커스텀 메뉴
@@ -72,7 +71,6 @@ const defaultProps = {};
 
 const EditThumbOriginDropdown = (props) => {
     const { className, isInvalid, originValue, onChange } = props;
-    const dispatch = useDispatch();
     const [originSelectedList, setOriginSelectedList] = useState([]);
     const [originObj, setOriginObj] = useState({});
     const [toggleText, setToggleText] = useState('전체');
@@ -117,12 +115,6 @@ const EditThumbOriginDropdown = (props) => {
             }
         }
     };
-
-    useEffect(() => {
-        // 출처 목록 조회
-        dispatch(getPhotoOrigins());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         // 출처 목록 객체로 변환

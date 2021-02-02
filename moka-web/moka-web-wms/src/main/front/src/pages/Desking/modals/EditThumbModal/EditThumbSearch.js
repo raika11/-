@@ -22,7 +22,6 @@ const EditThumbSearch = () => {
     const [period, setPeriod] = useState('all');
     const [startDate, setStartDate] = useState(null);
     const [finishDate, setFinishDate] = useState(null);
-    // const [timeReady, setTimeReady] = useState(false);
     const [error, setError] = useState({});
 
     /**
@@ -43,14 +42,6 @@ const EditThumbSearch = () => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
-    // useEffect(() => {
-    //     if (timeReady) {
-    //         dispatch(getPhotoList(changeSearchOption(search)));
-    //     } else {
-    //         dispatch(clearList());
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [timeReady]);
     useEffect(() => {
         dispatch(getArchiveData());
     }, [dispatch]);
@@ -137,9 +128,6 @@ const EditThumbSearch = () => {
                             setSearch({ ...search, originCode: value });
                         }
                         setError({ ...error, originCode: false });
-                        // if (value !== '') {
-                        //     setTimeReady(true);
-                        // }
                     }}
                     isInvalid={error.originCode}
                 />
@@ -155,9 +143,6 @@ const EditThumbSearch = () => {
                             setSearch({ ...search, imageType: value });
                         }
                         setError({ ...error, imageType: false });
-                        // if (value !== '') {
-                        //     setTimeReady(true);
-                        // }
                     }}
                     isInvalid={error.imageType}
                 />

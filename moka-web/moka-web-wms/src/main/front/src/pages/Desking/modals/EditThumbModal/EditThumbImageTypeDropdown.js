@@ -1,11 +1,10 @@
 import React, { useState, useEffect, forwardRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import produce from 'immer';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaInput, MokaInputGroup } from '@components';
-import { getPhotoTypes } from '@store/photoArchive';
 
 /**
  * 커스텀 메뉴
@@ -72,7 +71,6 @@ const defaultProps = {};
 
 const EditThumbImageTypeDropdown = (props) => {
     const { className, isInvalid, imageValue, onChange } = props;
-    const dispatch = useDispatch();
     const [imageSelectedList, setImageSelectedList] = useState([]);
     const [imageObj, setImageObj] = useState({});
     const [toggleText, setToggleText] = useState('전체');
@@ -117,12 +115,6 @@ const EditThumbImageTypeDropdown = (props) => {
             }
         }
     };
-
-    useEffect(() => {
-        // 이미지 타입 조회
-        dispatch(getPhotoTypes());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         // 이미지 타입 배열 객체로 변환

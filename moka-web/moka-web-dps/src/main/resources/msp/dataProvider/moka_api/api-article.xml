@@ -56,7 +56,7 @@
   </api>
 
   <!--편집기사목록 조회. id 수정하지 말것-->
-  <api id="desking" expire="1m">
+  <api id="desking" expire="1s">
     <description>편집기사 목록을 반환한다.</description>
     <parameter>
       <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>

@@ -3,6 +3,7 @@ package jmnet.moka.web.wms.mvc.jpod;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.JpodMemberTypeCode;
 import jmnet.moka.core.tps.common.code.JpodTypeCode;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisodeRelArt;
@@ -208,7 +209,7 @@ public class JpodTest {
                         .build())
                 .ordNo(++ordNo)
                 .relLink("http://news.joins.com/article/22342112")
-                .relLinkTarget(MokaConstants.NO)
+                .relLinkTarget(LinkTargetCode.N)
                 .relTitle("[윤석만의 인간혁명]인공지능도 사랑할 수 있을까")
                 .build();
 
@@ -224,7 +225,7 @@ public class JpodTest {
                         .build())
                 .ordNo(++ordNo)
                 .relLink("http://news.joins.com/article/22105061")
-                .relLinkTarget("S")
+                .relLinkTarget(LinkTargetCode.S)
                 .relTitle("[윤석만의 인간혁명]4차 혁명시대, 인성이 최고 실력이다")
                 .build();
         jpodEpisodeRelArtRepository.save(relArt);

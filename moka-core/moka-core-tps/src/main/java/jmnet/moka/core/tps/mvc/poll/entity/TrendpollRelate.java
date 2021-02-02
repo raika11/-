@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollRelateTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -84,6 +85,13 @@ public class TrendpollRelate implements Serializable {
      */
     @Column(name = "TITLE")
     private String title;
+
+    /**
+     * 링크URL Target
+     */
+    @Column(name = "LINK_TARGET")
+    @Enumerated(EnumType.STRING)
+    private LinkTargetCode linkTarget;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "POLL_SEQ", referencedColumnName = "POLL_SEQ", nullable = false, insertable = false, updatable = false)

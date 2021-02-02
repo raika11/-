@@ -1571,10 +1571,10 @@
   resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/@moka/monaco-editor/-/monaco-editor-0.1.0.tgz#0b46d52d4bd5d20da187df744c1f849df83dc9ca"
   integrity sha512-VMRre3mpzy5ifvBnx9GNHYC677l1ksVLP/7+Uy4kxdyWN2q1HuXWI10yXTsdVEGvy31WDhZdzTD6FA/DLexkLg==
 
-"@moka/tui-image-editor@^3.9.7":
-  version "3.9.7"
-  resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/@moka/tui-image-editor/-/tui-image-editor-3.9.7.tgz#0b1515b55e104ce000327f7cf779595d35f869cf"
-  integrity sha512-hMxBaYF7ejTCAc0yFUw2HErTAsNIxPzjnf0vwfpHySyD7onxQohv37KoTJz0G6yyGL/egFnx42ZOF+Bmwa2cIg==
+"@moka/tui-image-editor@^3.9.8":
+  version "3.9.8"
+  resolved "https://pri-nexus.joongang.co.kr/repository/npm-group/@moka/tui-image-editor/-/tui-image-editor-3.9.8.tgz#e9c4f1d766e05140fac35f962dbf27d8fa2f31e5"
+  integrity sha512-iKsIVI8V0c5R+TRJ56hqF1YpMAccCZDO/Z2IUqSa9QBl2i2aoay1vbhzdS3BuOk9s2ggMjPhOKwbomW6u27b8w==
   dependencies:
     core-js-pure "^3.6.4"
     diff "^4.0.1"

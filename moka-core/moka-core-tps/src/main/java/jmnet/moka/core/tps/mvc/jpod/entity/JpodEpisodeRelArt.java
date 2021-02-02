@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,6 +63,7 @@ public class JpodEpisodeRelArt implements Serializable {
      * 링크타겟
      */
     @Column(name = "REL_LINK_TARGET")
-    private String relLinkTarget;
+    @Builder.Default
+    private LinkTargetCode relLinkTarget = LinkTargetCode.S;
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.mvc.quiz.code.QuizCode.QuizRelationTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,6 +71,14 @@ public class QuizRelDTO implements Serializable {
     @ApiModelProperty(value = "링크URL")
     @Size(max = 200, message = "{tps.quiz-relation.error.size.linkUrl}")
     private String linkUrl;
+
+    /**
+     * 링크URL Target
+     */
+    @ApiModelProperty(value = "관련정보 링크URL Target")
+    @Size(max = 1, message = "{tps.common.error.size.linkTarget}")
+    @Builder.Default
+    private LinkTargetCode linkTarget = LinkTargetCode.S;
 
     /**
      * 제목

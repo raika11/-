@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.jpod.dto;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +36,8 @@ public class JpodEpisodeRelArtDTO implements Serializable {
     private String relLink;
 
     @ApiModelProperty(value = "링크 타겟")
-    @Size(max = 24, message = "{tps.jpod-episode.error.size.relLinkTarget}")
-    private String relLinkTarget;
+    @Size(max = 1, message = "{tps.common.error.size.linkTarget}")
+    @Builder.Default
+    private LinkTargetCode relLinkTarget = LinkTargetCode.S;
 
 }

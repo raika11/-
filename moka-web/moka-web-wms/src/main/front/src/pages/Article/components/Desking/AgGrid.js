@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import { MokaTable } from '@components';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import columnDefs from './AgGridColumns';
 import GroupNumberRenderer from './GroupNumberRenderer';
@@ -48,10 +48,6 @@ const AgGrid = forwardRef((props, ref) => {
                 // ID, 기사유형
                 let artIdType = `${art.totalId}\n${art.artTypeName}`;
 
-                // 제목 replace
-                let escapeTitle = art.artTitle;
-                if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
-
                 // 면판 replace
                 let myunPan = '';
                 myunPan = `${art.pressMyun || ''}/${art.pressPan || ''}`;
@@ -71,7 +67,7 @@ const AgGrid = forwardRef((props, ref) => {
 
                 return {
                     ...art,
-                    escapeTitle,
+                    artTitle: unescapeHtmlArticle(art.artTitle),
                     artIdType,
                     myunPan,
                     articleDt,

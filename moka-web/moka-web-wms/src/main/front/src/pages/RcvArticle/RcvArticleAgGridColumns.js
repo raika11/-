@@ -40,7 +40,7 @@ export default [
         field: 'preview',
         width: 55,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <RcvArticlePreviewBtn {...row} />,
+        cellRendererFramework: RcvArticlePreviewBtn,
     },
     {
         headerName: '제목',
@@ -51,7 +51,7 @@ export default [
         wrapText: true,
         autoHeight: true,
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <TitleRenderer {...row} inRcv />,
+        cellRendererFramework: TitleRenderer,
     },
     {
         headerName: '입력',

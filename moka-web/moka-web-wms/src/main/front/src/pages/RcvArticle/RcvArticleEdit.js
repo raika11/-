@@ -9,7 +9,7 @@ import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
 const RcvArticleEdit = ({ match }) => {
@@ -131,7 +131,7 @@ const RcvArticleEdit = ({ match }) => {
     useEffect(() => {
         setTemp({
             ...rcvArticle,
-            title: unescapeHtml(rcvArticle.title),
+            title: unescapeHtmlArticle(rcvArticle.title),
             // categoryList 중복인 마스터코드 제거
             categoryList: [...new Set(rcvArticle.categoryList)],
         });

@@ -7,7 +7,7 @@ import { MokaTableImageRenderer } from '@components';
 import { columnDefs, rowClassRules, naverChannelColumnDefs } from './DeskingWorkAgGridColumns';
 import DeskingReadyGrid from '@pages/Desking/components/DeskingReadyGrid';
 import DeskingEditorRenderer from './DeskingEditorRenderer';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { putDeskingWorkListSort } from '@store/desking';
 import { getRow, getRowIndex } from '@utils/agGridUtil';
@@ -38,10 +38,6 @@ const DeskingWorkAgGrid = (props) => {
 
         setRowData(
             deskingWorks.map((desking) => {
-                // 제목 replace
-                let escapeTitle = desking.title;
-                if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
-
                 // 이미지 IR_URL
                 let irThumbFileName = '';
                 if (desking.thumbFileName) {
@@ -55,7 +51,7 @@ const DeskingWorkAgGrid = (props) => {
                     ...desking,
                     gridType: 'DESKING',
                     componentWorkSeq: component.seq,
-                    title: escapeTitle,
+                    title: unescapeHtmlArticle(desking.title),
                     contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
                     relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
                     irThumbFileName,

@@ -121,12 +121,12 @@ public class PreviewController extends AbstractCommonController {
      */
     @GetMapping("/desking/page")
     public void perviewDeskingPage(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
-            @ApiParam("페이지SEQ(필수)") Long pageSeq, @ApiParam(hidden = true) Principal principal)
+            @ApiParam("페이지SEQ(필수)") Long pageSeq, @ApiParam("편집영역 일련번호(필수)") Long areaSeq, @ApiParam(hidden = true) Principal principal)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
         try {
             String pageType = TpsConstants.PAGE_TYPE_HTML;
-            String html = mergeService.getMergePageWork(pageSeq, principal.getName(), pageType);
+            String html = mergeService.getMergePageWork(pageSeq, areaSeq, principal.getName(), pageType);
             tpsLogger.success(ActionType.SELECT, true);
             writeResonse(response, html, pageType);
         } catch (Exception e) {

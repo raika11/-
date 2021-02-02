@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
 import { MokaTableEditCancleButton } from '@components';
@@ -7,7 +7,7 @@ const ItemRenderer = ({ item, onDelete }) => {
     const handleChangeBulkinputBox = () => {};
     const handleClickDelete = () => {
         if (onDelete instanceof Function) {
-            onDelete(item.seqNo);
+            onDelete(item.ordNo);
         }
     };
 

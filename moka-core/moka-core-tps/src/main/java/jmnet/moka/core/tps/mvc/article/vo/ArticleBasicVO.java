@@ -178,4 +178,15 @@ public class ArticleBasicVO implements Serializable {
     @Column(name = "SERVICE_FLAG")
     private String serviceFlag;
 
+    /**
+     * 기사요약
+     */
+    @Column(name = "ART_SUMMARY")
+    private String artSummary;
+
+    /**
+     * 콘텐트타입
+     */
+    @Column(name = "CONTENT_TYPE")
+    private String contentType;
 }

@@ -166,7 +166,7 @@
   <insert id="insertMicAgendaCategory" parameterType="hashMap" statementType="CALLABLE">
     { call UPA_MIC_AGENDA_CATEGORY_INS(
     #{catNm, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{retCode, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+    #{retCode, mode=OUT, jdbcType=INTEGER, javaType=Integer}
    )}
   </insert>
 

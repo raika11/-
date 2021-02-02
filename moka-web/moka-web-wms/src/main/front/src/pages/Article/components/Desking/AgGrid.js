@@ -31,7 +31,7 @@ const AgGrid = forwardRef((props, ref) => {
      * @param {object} params 클릭시 aggrid에서 넘겨주는 데이터
      */
     const handleRowClicked = (data, params) => {
-        if (params.column.colId === 'escapeTitle') {
+        if (params.column.colId === 'artTitle') {
             setSelected(data);
             setModalShow(true);
         }

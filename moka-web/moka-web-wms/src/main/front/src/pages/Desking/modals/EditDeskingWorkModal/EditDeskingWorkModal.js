@@ -48,7 +48,7 @@ const EditDeskingWorkModal = (props) => {
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
     const [fileValue, setFileValue] = useState(null); // 파일
-    const [titleListType, setTitleListType] = useState(''); // 제목의 폰트 타입
+    const [fontListType, setFontListType] = useState(''); // 제목의 폰트 타입
     const [error, setError] = useState({});
     const [showModal, setShowModal] = useState(false); // 새이미지 등록 팝업 모달
     const [specialChar, setSpecialChar] = useState(''); // 약물
@@ -140,7 +140,7 @@ const EditDeskingWorkModal = (props) => {
 
         if (list.length !== filtered.length) {
             const fontPart = list.find((part) => fontSizeObj[part]);
-            setTitleListType(fontPart);
+            setFontListType(fontPart);
         }
     }, [deskingPartStr]);
 
@@ -225,9 +225,7 @@ const EditDeskingWorkModal = (props) => {
 
                     // 제목(기타코드), 대표이미지, 약물(기타코드), 아이콘(기타코드), 말머리(기타코드), 제목/부제위치(기타코드), 영상은 예외처리
                     if (partKey === 'TITLE') {
-                        return (
-                            <TitleForm key={partKey} show={show} mappingData={mappingData} onChange={handleChangeValue} temp={temp} titleListType={titleListType} error={error} />
-                        );
+                        return <TitleForm key={partKey} show={show} mappingData={mappingData} onChange={handleChangeValue} temp={temp} fontListType={fontListType} error={error} />;
                     } else if (partKey === 'THUMB_FILE_NAME') {
                         return (
                             <Form.Row key={partKey} className="mb-2">

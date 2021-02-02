@@ -4,6 +4,7 @@ import { columnDefs } from '@pages/Survey/Poll/PollAgGridColumns';
 import produce from 'immer';
 import { useHistory } from 'react-router-dom';
 import PollPreviewModal from '@pages/Survey/Poll/modals/PollPreviewModal';
+import toast from '@utils/toastUtil';
 
 const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSearchOption, onDelete }) => {
     const history = useHistory();
@@ -27,8 +28,9 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
     };
 
     const handleClickPreview = (id) => {
-        setPreviewModalShow(true);
-        setPreviewId(id);
+        toast.warning('미리보기 기능은 준비중입니다.');
+        /*setPreviewModalShow(true);
+        setPreviewId(id);*/
     };
 
     useEffect(() => {

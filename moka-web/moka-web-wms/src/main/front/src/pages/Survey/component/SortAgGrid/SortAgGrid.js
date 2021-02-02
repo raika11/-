@@ -3,9 +3,11 @@ import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from './SortAgGridColumns';
 import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
+import useDebounce from '@hooks/useDebounce';
 
 const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
     const [rowData, setRowData] = useState([]);
+    const [changeArticle, setChangeArticle] = useState(null);
     const [instance, setInstance] = useState(null);
 
     // 그리드 옵션, 드래그핼때 필요함.
@@ -30,6 +32,11 @@ const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
         }
     };
 
+    const handleChangeValue = (row) => {
+        setChangeArticle(row);
+    };
+    const handleDebounceChangeValue = useDebounce(handleChangeValue);
+
     // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
         if (!commonUtil.isEmpty(rows) && rows instanceof Array) {
@@ -40,12 +47,29 @@ const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
                         ordNo: index + 1,
                     },
                     onDelete,
-                    onSetData,
+                    onChange: handleDebounceChangeValue,
                 })),
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rows]);
+
+    useEffect(() => {
+        if (!commonUtil.isEmpty(changeArticle)) {
+            console.log(changeArticle);
+            const index = changeArticle.ordNo - 1;
+            setRowData(
+                produce(rowData, (draft) => {
+                    draft[index].item = { ...changeArticle, update: true };
+                }),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [changeArticle]);
+
+    useEffect(() => {
+        console.log(rowData);
+    }, [rowData]);
 
     return (
         <>

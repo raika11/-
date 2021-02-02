@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
 import { MokaTableEditCancleButton } from '@components';
+import produce from 'immer';
 
-const ItemRenderer = ({ item, onDelete, onSetData }) => {
+const ItemRenderer = ({ item, onDelete, onChange }) => {
     const [editData, setEditData] = useState({
-        title: '',
+        contentId: '',
+        imgUrl: null,
         linkUrl: '',
-        targetType: '',
+        ordNo: 1,
+        pollSeq: '',
+        relType: 'A',
+        seqNo: null,
+        title: '',
     });
     const handleClickDelete = () => {
         if (onDelete instanceof Function) {
@@ -15,19 +21,20 @@ const ItemRenderer = ({ item, onDelete, onSetData }) => {
         }
     };
 
-    const handleChangeValue = (e) => {
-        onSetData({
-            item: item,
-            event: e.target,
+    const handleChangeValue = ({ name, value }) => {
+        const edit = produce(editData, (draft) => {
+            draft[name] = value;
         });
+        setEditData(edit);
+        if (onChange instanceof Function) {
+            onChange(edit);
+        }
     };
 
     useEffect(() => {
-        setEditData({
-            title: item.title,
-            linkUrl: item.linkUrl,
-            targetType: item.targetType,
-        });
+        if (item instanceof Object) {
+            setEditData(item);
+        }
     }, [item]);
 
     return (
@@ -40,7 +47,9 @@ const ItemRenderer = ({ item, onDelete, onSetData }) => {
                             name="title"
                             id={`title-${item.ordNo}`}
                             label="타이틀"
-                            onChange={(e) => handleChangeValue(e)}
+                            onChange={(e) => {
+                                handleChangeValue(e.target);
+                            }}
                             labelWidth={30}
                             value={editData.title}
                             className="col mb-0 pl-0 pr-0"
@@ -52,14 +61,23 @@ const ItemRenderer = ({ item, onDelete, onSetData }) => {
                             name="linkUrl"
                             id={`linkUrl-${item.ordNo}`}
                             label="url"
-                            onChange={(e) => handleChangeValue(e)}
+                            onChange={(e) => {
+                                handleChangeValue(e.target);
+                            }}
                             labelWidth={30}
                             value={editData.linkUrl}
                             className="col mb-0 pl-0 pr-0"
                         />
                         {/* </Col> */}
                         <Col className="d-felx mb-0 pl-1 pr-0" xs={3}>
-                            <MokaInput as="select" name="targetType" value={editData.targetType} onChange={(e) => handleChangeValue(e)}>
+                            <MokaInput
+                                as="select"
+                                name="targetType"
+                                value={editData.targetType}
+                                onChange={(e) => {
+                                    handleChangeValue(e.target);
+                                }}
+                            >
                                 <option value="one">본창</option>
                                 <option value="two">새창</option>
                             </MokaInput>

@@ -97,6 +97,7 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         if (selectArticle) {
+            console.log(selectArticle);
             const { artTitle: title, totalId, ordNo } = selectArticle;
             const linkUrl = totalId ? `https://news.joins.com/article/${totalId}` : '';
             const articles = produce(relationArticles, (draft) => {
@@ -133,6 +134,7 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         setEdit(poll);
+        console.log(poll);
     }, [poll]);
 
     return (

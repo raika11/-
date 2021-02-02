@@ -2,25 +2,13 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import { MokaTableEditCancleButton } from '@components';
+import produce from 'immer';
 
-const RelationPollSortItemRenderer = ({ data: items, data: { item, onChange }, api }) => {
+const RelationPollSortItemRenderer = ({ item, onDelete }) => {
     const handleClickDelete = () => {
-        let displayedRows = [];
-        for (let i = 0; i < api.getDisplayedRowCount(); i++) {
-            /*const data = api.getDisplayedRowAtIndex(i).data;
-            const update = produce(data, (draft) => {
-                draft.item.ordNo = i + 1;
-            });*/
-            displayedRows.push(api.getDisplayedRowAtIndex(i).data);
+        if (onDelete instanceof Function) {
+            onDelete(item.ordNo);
         }
-        displayedRows = displayedRows.filter((displayedRow) => displayedRow.item.ordNo !== item.ordNo);
-
-        api.applyTransaction({ update: displayedRows });
-        console.log(displayedRows);
-        /*if (onChange instanceof Function) {
-            console.log(displayedRows.map((displayedRow) => displayedRow.item));
-            onChange(displayedRows.map((displayedRow) => displayedRow.item));
-        }*/
     };
 
     return (

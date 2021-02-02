@@ -42,9 +42,8 @@ const PollChildRelation = () => {
     };
 
     const handleClickRelationPollDelete = (id) => {
-        /*setRelationPolls(relationPolls.filter((poll) => poll.contentId !== id));*/
         const polls = relationPolls
-            .filter((data) => data.ordNo === id)
+            .filter((data) => data.ordNo !== id)
             .map((poll, index) => ({
                 ...poll,
                 ordNo: index + 1,
@@ -110,11 +109,10 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         if (selectArticle) {
-            console.log(selectArticle);
             const { artTitle: title, totalId, ordNo } = selectArticle;
             const linkUrl = totalId ? `https://news.joins.com/article/${totalId}` : '';
             const articles = produce(relationArticles, (draft) => {
-                draft.push({ title, linkUrl, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId, ordNo });
+                draft.push({ title, linkUrl, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId });
             });
             setRelationArticles(articles);
         }
@@ -137,8 +135,22 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         if (edit.pollRelateContents) {
-            setRelationPolls(edit.pollRelateContents.filter((data) => data.relType === 'P'));
-            setRelationArticles(edit.pollRelateContents.filter((data) => data.relType === 'A'));
+            setRelationPolls(
+                edit.pollRelateContents
+                    .filter((data) => data.relType === 'P')
+                    .map((article, index) => ({
+                        ...article,
+                        ordNo: index + 1,
+                    })),
+            );
+            setRelationArticles(
+                edit.pollRelateContents
+                    .filter((data) => data.relType === 'A')
+                    .map((poll, index) => ({
+                        ...poll,
+                        ordNo: index + 1,
+                    })),
+            );
         } else {
             setRelationPolls([]);
             setRelationArticles([]);
@@ -147,7 +159,6 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         setEdit(poll);
-        console.log(poll);
     }, [poll]);
 
     return (
@@ -200,7 +211,7 @@ const PollChildRelation = () => {
                                 </Form.Group>
                             </Col>
                         </Form.Row>
-                        {/*<SortAgGrid rows={relationArticles} onChange={setRelationArticles} onDelete={handleClickRelationArticleDelete} />*/}
+                        <SortAgGrid rows={relationArticles} onChange={setRelationArticles} onDelete={handleClickRelationArticleDelete} />
                     </Form.Group>
                 </Form>
             </MokaCard>

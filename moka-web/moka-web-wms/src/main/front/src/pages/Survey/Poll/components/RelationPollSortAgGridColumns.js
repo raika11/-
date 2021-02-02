@@ -37,8 +37,8 @@ export const columnDefs = [
         flex: 1,
         cellClassRules: cellClassRules,
         suppressKeyboardEvent: suppressKeyboardEvent,
-        cellRendererFramework: (params) => {
-            return <RelationPollSortItemRenderer {...params} />;
+        cellRendererFramework: ({ data }) => {
+            return <RelationPollSortItemRenderer {...data} />;
         },
     },
 ];

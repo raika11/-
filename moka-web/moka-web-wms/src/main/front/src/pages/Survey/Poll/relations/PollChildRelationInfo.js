@@ -10,6 +10,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPoll, getPollList, updatePoll, GET_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
 import produce from 'immer';
+import RelationPollSortAgGridComponent from '@pages/Survey/Poll/components/RelationPollSortAgGridComponent';
 const SortAgGrid = React.lazy(() => import('@pages/Survey/component/SortAgGrid'));
 const RelationPollModal = React.lazy(() => import('@pages/Survey/Poll/modals/RelationPollModal'));
 
@@ -32,6 +33,7 @@ const PollChildRelation = () => {
     }));
 
     const handleClickRelationPollAdd = (row) => {
+        setSelectPoll(row);
         /*if (relationPolls.filter((poll) => poll.id === data.id).length > 0) {
             toast.warning(`중복된 투표정보(id=${data.id})가 존재합니다.`);
         } else {
@@ -40,7 +42,19 @@ const PollChildRelation = () => {
     };
 
     const handleClickRelationPollDelete = (id) => {
-        setRelationPolls(relationPolls.filter((poll) => poll.contentId !== id));
+        /*setRelationPolls(relationPolls.filter((poll) => poll.contentId !== id));*/
+        const polls = relationPolls
+            .filter((data) => data.ordNo === id)
+            .map((poll, index) => ({
+                ...poll,
+                ordNo: index + 1,
+            }));
+        setRelationPolls(polls);
+        setEdit(
+            produce(edit, (draft) => {
+                draft.pollRelateContents = [...polls, ...relationArticles];
+            }),
+        );
     };
 
     const handleClickArticleModalShow = () => {
@@ -64,13 +78,12 @@ const PollChildRelation = () => {
 
     const handleClickRelationArticleDelete = (id) => {
         const articles = relationArticles
-            .filter((data, index) => data.ordNo !== id)
+            .filter((data) => data.ordNo !== id)
             .map((article, index) => ({
                 ...article,
                 ordNo: index + 1,
             }));
         setRelationArticles(articles);
-        /*setEdit({ ...edit, pollRelateContents: [...relationPolls, ...articles] });*/
         setEdit(
             produce(edit, (draft) => {
                 draft.pollRelateContents = [...relationPolls, ...articles];
@@ -165,10 +178,7 @@ const PollChildRelation = () => {
                                 </Form.Group>
                             </Col>
                         </Form.Row>
-                        {relationPolls.length > 0 &&
-                            relationPolls.map((relationPoll, index) => (
-                                <RelationPollInfoComponent key={index} id={relationPoll.contentId} title={relationPoll.title} onDelete={handleClickRelationPollDelete} />
-                            ))}
+                        <RelationPollSortAgGridComponent rows={relationPolls} onChange={setRelationPolls} onDelete={handleClickRelationPollDelete} />
                     </Form.Group>
                     <hr />
                     <Form.Group>
@@ -190,7 +200,7 @@ const PollChildRelation = () => {
                                 </Form.Group>
                             </Col>
                         </Form.Row>
-                        <SortAgGrid rows={relationArticles} onChange={setRelationArticles} onDelete={handleClickRelationArticleDelete} />
+                        {/*<SortAgGrid rows={relationArticles} onChange={setRelationArticles} onDelete={handleClickRelationArticleDelete} />*/}
                     </Form.Group>
                 </Form>
             </MokaCard>

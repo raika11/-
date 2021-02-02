@@ -137,9 +137,18 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergePageWork(Long pageSeq, String regId, String pageType)
+    public String getMergePageWork(Long pageSeq, Long areaSeq, String regId, String pageType)
             throws TemplateParseException, DataLoadException, TemplateMergeException, NoDataException {
         DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+
+        // 1. 편집영역조회
+        Area area = areaService
+                .findAreaBySeq(areaSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         // 페이지
         Page pageInfo = pageService
@@ -168,15 +177,52 @@ public class MergeServiceImpl implements MergeService {
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
-        // merger
-        MokaPreviewTemplateMerger dtm =
-                (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, new ArrayList<String>());
+        String content = "";
+        // 편집영역이 컨테이너인 경우 머지
+        if (area
+                .getAreaDiv()
+                .equals(MokaConstants.ITEM_CONTAINER)) {
 
-        // 랜더링
-        StringBuilder sb = dtm.merge(pageItem, null, true);
+            // 컨테이너 조회
+            ContainerItem containerItem = getContainerItem(area);
 
-        String content = sb.toString();
-        pageType = pageDto.getPageType();
+            // 컨테이너안의 작업컴포넌트 목록 조회
+            List<String> componentIdList = new ArrayList<String>();
+            getComponentItem(areaSeq, regId, componentIdList);
+
+            // merger
+            MokaPreviewTemplateMerger dtm =
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+
+            // 랜더링
+            StringBuilder sb = dtm.merge(pageItem, containerItem, true, false, false, true);
+
+            content = sb.toString();
+
+            // 미리보기 리소스 추가
+            if (content.length() > 0) {
+                content = area.getPreviewRsrc() + content;
+            }
+
+        } else {
+            // 작업컴포넌트 목록 조회
+            List<String> componentIdList = new ArrayList<String>();
+            ComponentItem componentItem = getComponentItem(areaSeq, regId, componentIdList);
+
+            // merger
+            MokaPreviewTemplateMerger dtm =
+                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+
+            // 랜더링
+            StringBuilder sb = dtm.merge(pageItem, componentItem, true, false, false, true);
+
+            content = sb.toString();
+
+            // 미리보기 리소스 추가
+            if (content.length() > 0) {
+                content = area.getPreviewRsrc() + content;
+            }
+        }
 
         return content;
     }
@@ -316,35 +362,13 @@ public class MergeServiceImpl implements MergeService {
             if (area
                     .getAreaDiv()
                     .equals(MokaConstants.ITEM_CONTAINER)) {
+
                 // 컨테이너 조회
-                Long containerSeq = area
-                        .getContainer()
-                        .getContainerSeq();
-                Container container = containerService
-                        .findContainerBySeq(containerSeq)
-                        .orElseThrow(() -> {
-                            String message = messageByLocale.get("tps.common.error.no-data");
-                            tpsLogger.fail(ActionType.SELECT, message, true);
-                            return new NoDataException(message);
-                        });
-                ContainerDTO dto = modelMapper.map(container, ContainerDTO.class);
-                ContainerItem containerItem = dto.toContainerItem();
-                containerItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
-                        .now()
-                        .format(df));
+                ContainerItem containerItem = getContainerItem(area);
 
                 // 컨테이너안의 작업컴포넌트 목록 조회
-                Map paramMap = new HashMap();
-                paramMap.put("areaSeq", areaSeq);
-                paramMap.put("regId", regId);
-                List<ComponentWorkVO> componentWorkVOList = componentWorkMapper.findComponentWorkByArea(paramMap);
                 List<String> componentIdList = new ArrayList<String>();
-
-                for (ComponentWorkVO workVo : componentWorkVOList) {
-                    componentIdList.add(workVo
-                            .getComponentSeq()
-                            .toString());
-                }
+                getComponentItem(areaSeq, regId, componentIdList);
 
                 // merger
                 MokaPreviewTemplateMerger dtm =
@@ -362,38 +386,21 @@ public class MergeServiceImpl implements MergeService {
 
             } else {
                 // 작업컴포넌트 목록 조회
-                Map paramMap = new HashMap();
-                paramMap.put("areaSeq", areaSeq);
-                paramMap.put("regId", regId);
-                List<ComponentWorkVO> componentWorkVOList = componentWorkMapper.findComponentWorkByArea(paramMap);
                 List<String> componentIdList = new ArrayList<String>();
-                ComponentItem componentItem = null;
+                ComponentItem componentItem = getComponentItem(areaSeq, regId, componentIdList);
 
-                if (componentWorkVOList.size() > 0) {
-                    for (ComponentWorkVO workVo : componentWorkVOList) {
-                        componentIdList.add(workVo
-                                .getComponentSeq()
-                                .toString());
-                        componentItem = workVo.toComponentItem();
-                    }
+                // merger
+                MokaPreviewTemplateMerger dtm =
+                        (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
 
-                    componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
-                            .now()
-                            .format(df));
+                // 랜더링
+                StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
 
-                    // merger
-                    MokaPreviewTemplateMerger dtm =
-                            (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+                content = sb.toString();
 
-                    // 랜더링
-                    StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
-
-                    content = sb.toString();
-
-                    // 미리보기 리소스 추가
-                    if (content.length() > 0) {
-                        content = area.getPreviewRsrc() + content;
-                    }
+                // 미리보기 리소스 추가
+                if (content.length() > 0) {
+                    content = area.getPreviewRsrc() + content;
                 }
             }
 
@@ -404,6 +411,50 @@ public class MergeServiceImpl implements MergeService {
             tpsLogger.error(ActionType.SELECT, "[FAIL TO MERGE]", e, true);
             throw new Exception(messageByLocale.get("tps.merge.error.area"), e);
         }
+    }
+
+    // 컨테이너 정보 조회
+    private ContainerItem getContainerItem(Area area)
+            throws NoDataException {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        Long containerSeq = area
+                .getContainer()
+                .getContainerSeq();
+        Container container = containerService
+                .findContainerBySeq(containerSeq)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
+        ContainerDTO dto = modelMapper.map(container, ContainerDTO.class);
+        ContainerItem containerItem = dto.toContainerItem();
+        containerItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+        return containerItem;
+    }
+
+    // 편집영역안의 작업컴포넌트 목록 조회
+    private ComponentItem getComponentItem(Long areaSeq, String regId, List<String> componentIdList) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        Map paramMap = new HashMap();
+        paramMap.put("areaSeq", areaSeq);
+        paramMap.put("regId", regId);
+        List<ComponentWorkVO> componentWorkVOList = componentWorkMapper.findComponentWorkByArea(paramMap);
+        ComponentItem componentItem = null;
+
+        for (ComponentWorkVO workVo : componentWorkVOList) {
+            componentIdList.add(workVo
+                    .getComponentSeq()
+                    .toString());
+            componentItem = workVo.toComponentItem();
+            componentItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                    .now()
+                    .format(df));
+        }
+
+        return componentItem;
     }
 
     @Override

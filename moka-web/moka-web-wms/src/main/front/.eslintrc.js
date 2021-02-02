@@ -9,5 +9,6 @@ module.exports = {
         dangerouslySetInnerHTML: 0,
         'jsx-a11y/anchor-is-valid': 0,
         'no-useless-escape': 0,
+        'import/no-anonymous-default-export': 0,
     },
 };

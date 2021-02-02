@@ -3,6 +3,8 @@ package jmnet.moka.core.tps.mvc.quiz.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.mvc.quiz.code.QuizCode.QuizRelationTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,6 +73,13 @@ public class QuizRel implements Serializable {
      */
     @Column(name = "LINK_URL")
     private String linkUrl;
+
+    /**
+     * 링크URL Target
+     */
+    @Column(name = "LINK_TARGET")
+    @Enumerated(EnumType.STRING)
+    private LinkTargetCode linkTarget;
 
     /**
      * 제목

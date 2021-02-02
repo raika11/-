@@ -56,11 +56,11 @@ export default [
     },
     {
         headerName: '제목',
-        field: 'escapeTitle',
+        field: 'unescapeTitle',
         width: 186,
         flex: 1,
         autoHeight: true,
-        tooltipField: 'escapeTitle',
+        tooltipField: 'unescapeTitle',
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',

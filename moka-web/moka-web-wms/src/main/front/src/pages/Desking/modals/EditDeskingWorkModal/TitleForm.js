@@ -10,10 +10,10 @@ import util from '@utils/commonUtil';
 /**
  * 타이틀 + 폰트사이즈 폼
  */
-const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) => {
+const TitleForm = ({ show, mappingData, temp, onChange, fontListType, error }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const dispatch = useDispatch();
-    const [titleList, setTitleList] = useState([]);
+    const [fontList, setFontList] = useState([]);
 
     const { dsFontImgDRows, dsFontImgWRows, dsFontVodDRows } = useSelector((store) => ({
         dsFontImgDRows: store.codeMgt.dsFontImgDRows,
@@ -23,21 +23,21 @@ const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) 
 
     useEffect(() => {
         if (!show) return;
-        if (titleListType !== CODETYPE_DS_FONT_IMGD) return;
-        !dsFontImgDRows ? dispatch(getDsFontImgD()) : setTitleList(dsFontImgDRows);
-    }, [dispatch, titleListType, show, dsFontImgDRows]);
+        if (fontListType !== CODETYPE_DS_FONT_IMGD) return;
+        !dsFontImgDRows ? dispatch(getDsFontImgD()) : setFontList(dsFontImgDRows);
+    }, [dispatch, fontListType, show, dsFontImgDRows]);
 
     useEffect(() => {
         if (!show) return;
-        if (titleListType !== CODETYPE_DS_FONT_IMGW) return;
-        !dsFontImgWRows ? dispatch(getDsFontImgW()) : setTitleList(dsFontImgWRows);
-    }, [dispatch, titleListType, show, dsFontImgWRows]);
+        if (fontListType !== CODETYPE_DS_FONT_IMGW) return;
+        !dsFontImgWRows ? dispatch(getDsFontImgW()) : setFontList(dsFontImgWRows);
+    }, [dispatch, fontListType, show, dsFontImgWRows]);
 
     useEffect(() => {
         if (!show) return;
-        if (titleListType !== CODETYPE_DS_FONT_VODD) return;
-        !dsFontVodDRows ? dispatch(getDsFontVodD()) : setTitleList(dsFontVodDRows);
-    }, [dispatch, titleListType, show, dsFontVodDRows]);
+        if (fontListType !== CODETYPE_DS_FONT_VODD) return;
+        !dsFontVodDRows ? dispatch(getDsFontVodD()) : setFontList(dsFontVodDRows);
+    }, [dispatch, fontListType, show, dsFontVodDRows]);
 
     return (
         <Form.Row className="mb-2">
@@ -47,10 +47,10 @@ const TitleForm = ({ show, mappingData, temp, onChange, titleListType, error }) 
                     label={
                         <React.Fragment>
                             {label}
-                            {titleListType && (
+                            {fontListType && (
                                 <MokaInput as="select" size="sm" name="titleSize" value={temp.titleSize} onChange={onChange}>
-                                    <option hidden>선택</option>
-                                    {titleList.map((font, idx) => (
+                                    <option value="">선택</option>
+                                    {fontList.map((font, idx) => (
                                         <option key={idx} value={font.id}>
                                             {font.name}
                                         </option>

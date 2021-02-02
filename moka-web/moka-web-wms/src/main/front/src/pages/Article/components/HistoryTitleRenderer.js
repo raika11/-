@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import { MokaInput } from '@components';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 
 /**
  * 히스토리 모달의 타이틀
@@ -13,9 +14,9 @@ const HistoryTitleRenderer = forwardRef((props, ref) => {
 
     return (
         <React.Fragment>
-            <MokaInput value={data.artTitle} className="bg-white" disabled />
+            <MokaInput value={unescapeHtmlArticle(data.artTitle)} className="bg-white" disabled />
             <hr className="divider my-1" />
-            <MokaInput as="textarea" inputProps={{ rows: 3 }} value={(data.artSubTitle || '').replaceAll('<br/>', '\n')} className="resize-none custom-scroll bg-white" disabled />
+            <MokaInput as="textarea" inputProps={{ rows: 3 }} value={unescapeHtmlArticle(data.artSubTitle)} className="resize-none custom-scroll bg-white" disabled />
         </React.Fragment>
     );
 });

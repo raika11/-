@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaSearchInput } from '@/components';
@@ -19,9 +19,9 @@ const CategoryModal = (props) => {
     const list = useSelector(({ mic }) => mic.category.list);
     const loading = useSelector(({ loading }) => loading[SAVE_MIC_CATEGORY]);
     const [keyword, setKeyword] = useState('');
-    const [rowData, setRowData] = useState([]);
     const [error, setError] = useState(false);
     const [instance, setInstance] = useState(null);
+    const [draggable, setDraggable] = useState(true);
 
     /**
      * ag grid rows 조회
@@ -30,7 +30,7 @@ const CategoryModal = (props) => {
         let displayedRows = [];
         for (let i = 0; i < api.getDisplayedRowCount(); i++) {
             const data = api.getDisplayedRowAtIndex(i).data;
-            displayedRows.push({ ...data, ordNo: i + 1 });
+            displayedRows.push(data);
         }
         return displayedRows;
     };
@@ -42,6 +42,19 @@ const CategoryModal = (props) => {
     const handleGridReady = (params) => {
         setInstance(params);
     };
+
+    /**
+     * 초기화
+     */
+    const handleReset = useCallback(() => {
+        setKeyword('');
+        setError(false);
+        setDraggable(true);
+        if (instance?.api) {
+            instance.api.setRowData(list);
+            instance.api.redrawRows();
+        }
+    }, [instance, list]);
 
     /**
      * 등록
@@ -81,6 +94,16 @@ const CategoryModal = (props) => {
     };
 
     /**
+     * 검색
+     */
+    const handleSearch = () => {
+        const filtered = keyword !== '' ? list.filter((row) => row.catNm.indexOf(keyword) > -1) : list;
+        instance.api.setRowData(filtered);
+        instance.api.redrawRows();
+        keyword !== '' ? setDraggable(false) : setDraggable(true);
+    };
+
+    /**
      * 수정
      */
     const handleEdit = () => {
@@ -94,7 +117,7 @@ const CategoryModal = (props) => {
 
         // 카테고리명 중복 체크
         const duplicated = new Set(displayedRows.map((row) => row.catNm));
-        if (duplicated.length !== displayedRows.length) {
+        if (duplicated.size !== displayedRows.length) {
             messageBox.alert('중복된 이름이 있습니다');
             return;
         }
@@ -125,20 +148,28 @@ const CategoryModal = (props) => {
      */
     const handleDragEnd = (params) => {
         const displayedRows = getRows(params.api);
-        params.api.applyTransaction({ update: displayedRows });
+        const ordered = displayedRows.map((data, idx) => ({
+            ...data,
+            ordNo: idx + 1,
+        }));
+        params.api.applyTransaction({ update: ordered });
     };
 
     useEffect(() => {
-        setRowData(list);
-        setKeyword('');
-    }, [list]);
+        handleReset();
+    }, [handleReset]);
 
     useEffect(() => {
         if (!show) {
-            setRowData(list);
-            setKeyword('');
+            handleReset();
         }
-    }, [list, show]);
+    }, [handleReset, show]);
+
+    useEffect(() => {
+        if (instance) {
+            instance.api.setSuppressRowDrag(!draggable);
+        }
+    }, [draggable, instance]);
 
     return (
         <MokaModal
@@ -166,8 +197,12 @@ const CategoryModal = (props) => {
                         setError(false);
                     }}
                     isInvalid={error}
+                    onSearch={handleSearch}
                 />
-                <Button variant="positive" onClick={handleAdd}>
+                <Button variant="negative" className="mr-2" onClick={handleReset}>
+                    초기화
+                </Button>
+                <Button variant="positive" onClick={handleAdd} disabled={!draggable}>
                     등록
                 </Button>
             </div>
@@ -176,7 +211,7 @@ const CategoryModal = (props) => {
                     rowHeight={45}
                     onGridReady={handleGridReady}
                     immutableData
-                    rowData={rowData}
+                    rowData={list}
                     getRowNodeId={(data) => data.catSeq}
                     columnDefs={columnDefs}
                     frameworkComponents={{ editor: CategoryEditorRenderer, selector: CategorySelectRenderer }}

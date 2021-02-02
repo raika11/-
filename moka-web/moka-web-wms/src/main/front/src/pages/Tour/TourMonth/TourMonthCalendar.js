@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import FullCalendar from '@fullcalendar/react';
@@ -10,7 +10,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import SetHolidayModal from './modals/SetHolidayModal';
 import SummaryApplyModal from './modals/SummaryApplyModal';
 import CancelHolidayModal from './modals/CancelHolidayModal';
-import { clearStore, getTourDenyMonthList, getTourApplyMonthList } from '@/store/tour';
+import { getTourSetup, clearStore, getTourDenyMonthList, getTourApplyMonthList } from '@/store/tour';
 // import toast from '@/utils/toastUtil';
 
 const holidayEl = document.createElement('div');
@@ -39,12 +39,14 @@ holidayEl.className = 'fc-set-holiday';
 //     // display: block, list-item, background (event obj)
 // };
 
-const TourMonthCalendar = forwardRef((props, ref) => {
+const TourMonthCalendar = (props) => {
     const dispatch = useDispatch();
     const holidayList = useSelector((store) => store.tour.holidayList);
     const tourApplyList = useSelector((store) => store.tour.tourApplyList);
+    const tourSetup = useSelector((store) => store.tour.tourSetup);
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
+    // const [day, setDay] = useState([]);
     const [holidayEvents, setHolidayEvents] = useState([]);
     const [applyEvents, setApplyEvents] = useState([]);
     const [clickDate, setClickDate] = useState('');
@@ -53,6 +55,21 @@ const TourMonthCalendar = forwardRef((props, ref) => {
     const [summaryModal, setSummaryModal] = useState(false);
     const [cancelModal, setCancelModal] = useState(false);
     const calendarRef = useRef(null);
+
+    useEffect(() => {
+        if (Object.keys(tourSetup).length < 1) {
+            dispatch(getTourSetup());
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // useEffect(() => {
+    //     if (Object.keys(tourSetup).length > 0) {
+    //         // let weekArr = tourSetup.tourWeekYn.split('');
+    //         // setDay(weekArr);
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [tourSetup]);
 
     useEffect(() => {
         // console.log(calendarRef.current);
@@ -131,55 +148,77 @@ const TourMonthCalendar = forwardRef((props, ref) => {
                 themeSystem="bootstrap"
                 initialView="dayGridMonth"
                 initialDate={moment().format(DB_DATEFORMAT)}
+                // 달력 상단의 버튼, 제목을 정의
                 headerToolbar={{
                     left: 'prev next today',
                     center: 'title',
                     right: false,
                 }}
                 locale="ko"
-                fixedWeekCount={false}
-                showNonCurrentDates={false}
-                bootstrapFontAwesome={false}
-                events={{ events: [...holidayEvents, ...applyEvents], color: '#FF3907' }}
+                // 제목에 표시 될 텍스트
                 titleFormat={(title) => {
                     setYear(title.date.year);
                     setMonth(`0${title.date.month + 1}`.substr(-2));
                     return `${title.date.year}년 ${title.date.month + 1}월`;
                 }}
-                eventTimeFormat={(time) => {
-                    return `${time.date.hour}시`;
+                // true이면 6주로 fix된 월별 보기
+                fixedWeekCount={false}
+                // true이면 이전 또는 다음 달의 날짜를 렌더링
+                showNonCurrentDates={false}
+                bootstrapFontAwesome={false}
+                dayCellContent={(cell) => {
+                    console.log(cell);
+                    // if (day.length > 0) {
+                    //     if (day[cell.dow] === 'Y') {
+
+                    //     }
+                    // }
+                    cell.dayNumberText = cell.dayNumberText.replace('일', '');
                 }}
-                // eventContent={(content) => {
-                //     이벤트 컨텐츠 제어
-                //     console.log(content);
-                //     if (content.event.extendedProps.holiday) {
-                //         content.backgroundColor = 'blue';
-                //     }
-                // }}
-                dayCellDidMount={(cellData) => {
-                    // console.log(cellData);
+                dayCellDidMount={(cell) => {
+                    // console.log(cell);
+                    // select.view.calendar.getEvents()
                     // console.log(cellData.view.calendar.getEvents());
-                    let frame = cellData.el;
-                    frame.style.cursor = 'pointer';
+                    let frame = cell.el;
+                    // console.log(day);
+                    // let weekArr = tourSetup.tourWeekYn.split('');
 
-                    frame.firstChild.addEventListener('mouseenter', function () {
-                        const events = this.querySelector('.fc-daygrid-day-events');
+                    // 오늘 날짜에 클래스 추가
+                    if (frame.className.indexOf('fc-day-today') > -1) {
+                        let circle = document.createElement('div');
+                        let top = frame.querySelector('.fc-daygrid-day-top');
+                        circle.className = 'fc-set-today-number';
+                        top.appendChild(circle);
+                    }
 
-                        if (events.style['padding-bottom'] === '') {
-                            if (!events.querySelector('.fc-daygrid-event-harness')) {
-                                this.appendChild(holidayEl);
-                            }
-                        }
-                    });
-                    frame.firstChild.addEventListener('mouseleave', function () {
-                        if (this.querySelector('.fc-set-holiday')) {
-                            this.removeChild(holidayEl);
-                        }
-                    });
-
-                    // if (!frame.querySelector('.fc-daygrid-event')) {
+                    // if (day[cell.dow] === 'Y') {
 
                     // }
+                    // console.log(cell.dow);
+                    // console.log(day);
+
+                    // diabled 셀, 이벤트 셀, 기본 설정의 쉬는 날 막음
+                    if (!cell.isDisabled) {
+                        frame.style.cursor = 'pointer';
+
+                        // mouseenter 휴일 지정 el 추가
+                        frame.firstChild.addEventListener('mouseenter', function () {
+                            const events = this.querySelector('.fc-daygrid-day-events');
+
+                            if (events.style['padding-bottom'] === '') {
+                                if (!events.querySelector('.fc-daygrid-event-harness')) {
+                                    this.appendChild(holidayEl);
+                                }
+                            }
+                        });
+
+                        // mouseleave 휴일 지정 el 제거
+                        frame.firstChild.addEventListener('mouseleave', function () {
+                            if (this.querySelector('.fc-set-holiday')) {
+                                this.removeChild(holidayEl);
+                            }
+                        });
+                    }
                 }}
                 dateClick={(date) => {
                     // console.log(date);
@@ -193,6 +232,38 @@ const TourMonthCalendar = forwardRef((props, ref) => {
                     setClickDate(date.dateStr);
                     // date.dayEl.style.backgroundColor = 'red';
                 }}
+                events={{ events: [...holidayEvents, ...applyEvents], color: '#FF3907' }}
+                eventTimeFormat={(time) => {
+                    return `${time.date.hour}시`;
+                }}
+                eventContent={(content) => {
+                    // 이벤트 컨텐츠 제어
+                    // console.log(content);
+                    // 관리자 지정 휴일의 스타일 변경
+                    if (content.event.extendedProps.denyRepeatYn === 'N') {
+                        content.backgroundColor = '#00A99D';
+                        content.borderColor = '#00A99D';
+                    }
+                }}
+                eventDidMount={(e) => {
+                    // console.log(e);
+
+                    let button = document.createElement('button');
+                    let top = e.el;
+                    if (e.event.extendedProps.tourStatus === 'A') {
+                        button.className = 'btn btn-positive fc-set-event-button';
+                        button.innerText = '확정';
+                        top.appendChild(button);
+                    } else if (e.event.extendedProps.tourStatus === 'S') {
+                        button.className = 'btn btn-negative fc-set-event-button';
+                        button.innerText = '대기';
+                        top.appendChild(button);
+                    } else if (e.event.extendedProps.denyRepeatYn === 'N') {
+                        button.className = 'btn btn-negative fc-set-event-button';
+                        button.innerText = '휴일 해제';
+                        top.appendChild(button);
+                    }
+                }}
                 eventClick={(eventData) => {
                     // console.log(eventData.event._def.extendedProps);
                     if (eventData.event.allDay) {
@@ -201,14 +272,16 @@ const TourMonthCalendar = forwardRef((props, ref) => {
                         setSummaryModal(true);
                     }
                     setSelectedData(eventData.event._def.extendedProps);
-                    // date.el.style.borderColor = 'red';
                 }}
+                // select={(select) => {
+                //     console.log(select.view.calendar.getEvents());
+                // }}
             />
             <SetHolidayModal show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} />
             <SummaryApplyModal show={summaryModal} onHide={() => setSummaryModal(false)} data={selectedData} />
             <CancelHolidayModal show={cancelModal} onHide={() => setCancelModal(false)} data={selectedData} />
         </>
     );
-});
+};
 
 export default TourMonthCalendar;

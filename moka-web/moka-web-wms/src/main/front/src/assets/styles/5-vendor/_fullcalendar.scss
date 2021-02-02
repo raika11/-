@@ -1,10 +1,13 @@
 /**
 * 견학 월별 현황의 스타일을 조정
 */
+
+// 이전 다음 버튼
 .fc-prev-button, .fc-next-button {
     @include button-variant($searching, $searching);
 }
 
+// 일요일 헤더
 .fc-col-header-cell.fc-day.fc-day-sun {
     color: $secondary;
 }
@@ -13,10 +16,17 @@
     background-color: $primary;
 }
 
+// 오늘 날짜 셀
+.fc-day.fc-day-today.fc-day-tue.fc-daygrid-day {
+    background-color: $white
+}
+
+// 이벤트 시간
 .fc-event-time {
     font-weight: bold;
 }
 
+// 휴일 지정 텍스트
 .fc-set-holiday {
     position: absolute;
     top: 50%;
@@ -24,4 +34,26 @@
     transform:translate(-50%, -50%);
     color: $secondary;
 }
+
+.fc-daygrid-day-number {
+    padding-right: 9px !important;
+}
+
+.fc-set-today-number {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    right: 0;
+    border: 1px solid $secondary;    
+    border-radius: 50%;
+}
+
+.fc-set-event-button {
+    position: absolute;
+    top: 350%;
+    left: 50%;
+    transform:translate(-50%, -50%);
+}
+
 

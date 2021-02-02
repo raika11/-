@@ -3,6 +3,8 @@ package jmnet.moka.core.tps.mvc.poll.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import javax.validation.constraints.Size;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollRelateTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,6 +68,14 @@ public class TrendpollRelateDTO implements Serializable {
      */
     @ApiModelProperty(value = "관련정보 링크URL")
     private String linkUrl;
+
+    /**
+     * 링크URL Target
+     */
+    @ApiModelProperty(value = "관련정보 링크URL Target")
+    @Size(max = 1, message = "{tps.common.error.size.linkTarget}")
+    @Builder.Default
+    private LinkTargetCode linkTarget = LinkTargetCode.S;
 
     /**
      * 제목

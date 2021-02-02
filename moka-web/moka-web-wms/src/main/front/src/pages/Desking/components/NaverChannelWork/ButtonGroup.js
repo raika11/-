@@ -15,7 +15,7 @@ import DropdownToggle from '@pages/Desking/components/ComponentWork/DropdownTogg
  * 네이버채널 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, workTemplateSeq, setLoading } = props;
+    const { areaSeq, component, workTemplateSeq, workStatus, setLoading } = props;
     // const { workStatus } = props;
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
@@ -27,6 +27,10 @@ const ButtonGroup = (props) => {
      * 전송
      */
     const handleClickPublish = useCallback(() => {
+        if (workStatus === 'work' || workStatus === 'publish') {
+            messageBox.alert('임시저장되지 않았습니다.');
+            return;
+        }
         messageBox.confirm('전송하시겠습니까?', () => {
             setLoading(true);
             dispatch(
@@ -45,7 +49,7 @@ const ButtonGroup = (props) => {
                 }),
             );
         });
-    }, [setLoading, dispatch, component.seq, workTemplateSeq, areaSeq]);
+    }, [workStatus, setLoading, dispatch, component.seq, workTemplateSeq, areaSeq]);
 
     /**
      * 임시저장

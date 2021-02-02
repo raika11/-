@@ -264,13 +264,15 @@ const ArticleSearch = ({ ja, sun }) => {
                     </MokaInput>
 
                     {/* 벌크 */}
-                    <MokaInput as="select" name="bulkYn" onChange={handleChangeValue} value={search.bulkYn}>
-                        {initialState.bulkYnList.map((type) => (
-                            <option key={type.id} value={type.id}>
-                                {type.name}
-                            </option>
-                        ))}
-                    </MokaInput>
+                    <div className="flex-shrink-0">
+                        <MokaInput as="select" name="bulkYn" onChange={handleChangeValue} value={search.bulkYn}>
+                            {initialState.bulkYnList.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </div>
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">

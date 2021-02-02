@@ -33,6 +33,7 @@ import org.springframework.context.support.GenericApplicationContext;
 public class DpsWorkTemplateLoader extends DpsTemplateLoader {
     public static final String ITEM_API_COMPONENT_WORK = "component.work";
     private final String regId;
+    /** Work Component List */
     private final List<String> componentIdList;
     private static final Logger logger = LoggerFactory.getLogger(DpsWorkTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
@@ -45,6 +46,10 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         this.componentIdList = componentIdList;
     }
 
+
+    public boolean hasComponentId(String componentId) {
+        return this.componentIdList.contains(componentId);
+    }
 
     /**
      * <pre>

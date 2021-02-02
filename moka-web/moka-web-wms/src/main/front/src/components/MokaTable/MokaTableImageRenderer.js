@@ -1,5 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
-import util from '@utils/commonUtil';
+import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.

@@ -75,7 +75,7 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
             </div>
 
             {/* iframe 클릭 막기 */}
-            <div className="absolute-top" style={{ bottom: 0, top: 58, right: 41 }} />
+            {/* <div className="absolute-top" style={{ bottom: 0, top: 58, right: 41 }} /> */}
 
             <iframe
                 ref={iframeRef}

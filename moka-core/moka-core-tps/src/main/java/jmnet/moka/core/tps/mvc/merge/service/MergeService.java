@@ -26,7 +26,7 @@ public interface MergeService {
     String getMergePage(PageDTO pageDto, boolean baseTag)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 
-    String getMergePageWork(Long pageSeq, String regId, String pageType)
+    String getMergePageWork(Long pageSeq, Long areaSeq, String regId, String pageType)
             throws TemplateParseException, DataLoadException, TemplateMergeException, NoDataException;
 
     String getMergeComponentWork(Long areaSeq, Long componentWorkSeq, String resourceYn, String regId)

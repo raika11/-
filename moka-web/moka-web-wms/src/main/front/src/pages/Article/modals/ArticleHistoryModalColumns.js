@@ -21,7 +21,7 @@ export default [
     },
     {
         headerName: '제목\n부제목',
-        field: 'title',
+        field: 'artTitle',
         width: 560,
         cellRenderer: 'titleRenderer',
         cellStyle: { padding: '6px 0px' },

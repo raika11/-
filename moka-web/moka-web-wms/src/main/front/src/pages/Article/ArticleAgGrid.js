@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './ArticleAgGridColumns';
 import { MokaTable } from '@components';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { GET_ARTICLE_LIST, changeSearchOption, getArticleList, stopArticle, deleteArticle, clearArticle } from '@store/article';
 import { DB_DATEFORMAT, ARTICLE_URL } from '@/constants';
@@ -139,7 +139,7 @@ const ArticleAgGrid = ({ match, ja }) => {
 
                 return {
                     ...data,
-                    artTitle: unescapeHtml(data.artTitle),
+                    artTitle: unescapeHtmlArticle(data.artTitle),
                     artUrl: `${ARTICLE_URL}${data.totalId}`,
                     regDt: moment(data.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm'),
                     myunPan,

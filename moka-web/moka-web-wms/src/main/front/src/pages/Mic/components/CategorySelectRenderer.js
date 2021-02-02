@@ -2,7 +2,7 @@ import React, { forwardRef, useState, useImperativeHandle } from 'react';
 import { MokaInput } from '@/components';
 
 /**
- * 시민 마이크 카테고리 모달 AgGrid 셀렉트
+ * 카테고리 사용유무 수정
  */
 const CategorySelectRenderer = forwardRef((params, ref) => {
     const field = params.colDef.field;
@@ -13,6 +13,7 @@ const CategorySelectRenderer = forwardRef((params, ref) => {
         ref,
         () => ({
             refresh: () => true,
+            init: () => true,
             setValue: (usedYn) => setUsedYn(usedYn),
             getValue: () => usedYn,
         }),

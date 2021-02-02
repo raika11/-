@@ -27,6 +27,7 @@ import jmnet.moka.core.tps.common.code.AgendaArticleProgressCode;
 import jmnet.moka.core.tps.common.code.AnswerDivCode;
 import jmnet.moka.core.tps.common.code.AnswerLoginSnsCode;
 import jmnet.moka.core.tps.common.code.AnswerRelDivCode;
+import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.code.TourStatusCode;
@@ -201,6 +202,9 @@ public class AppRestController {
 
         // 답변 LOGIN_SNS
         result.put("ANSWER_LOGIN_SNS", AnswerLoginSnsCode.toList());
+        
+        // 링크 타켓 유형
+        result.put("LINK_TARGET", LinkTargetCode.toList());
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

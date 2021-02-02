@@ -158,7 +158,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
                 { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사등록', className: 'mr-2', onClick: onRegister },
+                { variant: 'positive', text: '기사등록', className: 'mr-2', onClick: onRegister, disabled: article.iudYn === 'Y' },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
             loading={loading}

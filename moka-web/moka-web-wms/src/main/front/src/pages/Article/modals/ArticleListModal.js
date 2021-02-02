@@ -5,7 +5,7 @@ import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
 import { CodeAutocomplete } from '@pages/commons';
 import SourceSelector from '@pages/commons/SourceSelector';
@@ -92,18 +92,12 @@ const ArticleListModal = (props) => {
                     if (header.success) {
                         setTotal(body.totalCnt);
                         setRowData(
-                            body.list.map((art) => {
-                                // 제목 replace
-                                let escapeTitle = art.artTitle;
-                                if (escapeTitle && escapeTitle !== '') escapeTitle = unescapeHtml(escapeTitle);
-
-                                return {
-                                    ...art,
-                                    escapeTitle,
-                                    serviceDaytime: (art.serviceDaytime || '').slice(0, -3),
-                                    onClick: handleRowClicked,
-                                };
-                            }),
+                            body.list.map((art) => ({
+                                ...art,
+                                unescapeTitle: unescapeHtmlArticle(art.artTitle),
+                                serviceDaytime: (art.serviceDaytime || '').slice(0, -3),
+                                onClick: handleRowClicked,
+                            })),
                         );
                     } else {
                         messageBox.alert('기사리스트 조회에 실패했습니다.');

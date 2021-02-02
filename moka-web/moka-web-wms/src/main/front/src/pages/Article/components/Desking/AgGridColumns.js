@@ -5,10 +5,10 @@ export default [
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             if (dragItemCount > 1) {
-                const message = params.rowNodes ? params.rowNodes.reduce((prev, next) => `${prev.data.escapeTitle},${next.data.escapeTitle}`) : params.rowNode.data.escapeTitle;
+                const message = params.rowNodes ? params.rowNodes[0].data.artTitle : params.rowNode.data.artTitle;
                 return `${message}외 [${dragItemCount - 1}건]`;
             }
-            return params.rowNode.data.escapeTitle;
+            return params.rowNode.data.artTitle;
         },
         cellStyle: { width: '28px' },
     },
@@ -65,11 +65,11 @@ export default [
     },
     {
         headerName: '제목',
-        field: 'escapeTitle',
+        field: 'artTitle',
         width: 186,
         flex: 1,
         autoHeight: true,
-        tooltipField: 'escapeTitle',
+        tooltipField: 'artTitle',
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',

@@ -36,7 +36,7 @@ public class MicAgendaCategoryServiceImpl implements MicAgendaCategoryService {
     @Override
     public boolean insertMicAgendaCategory(MicAgendaCategoryVO micAgendaCategoryVO) {
         Map<String, Object> param = new HashMap();
-        Long retCode = (long) 0;
+        Integer retCode = 0;
         param.put("catNm", micAgendaCategoryVO.getCatNm());
         param.put("retCode", retCode);
         micMapper.insertMicAgendaCategory(param);

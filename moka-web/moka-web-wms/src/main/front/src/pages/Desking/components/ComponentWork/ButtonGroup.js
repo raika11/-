@@ -48,6 +48,10 @@ const ButtonGroup = (props) => {
      * 전송
      */
     const handleClickPublish = useCallback(() => {
+        if (workStatus === 'work' || workStatus === 'publish') {
+            messageBox.alert('임시저장되지 않았습니다.');
+            return;
+        }
         messageBox.confirm('전송하시겠습니까?', () => {
             setLoading(true);
             dispatch(
@@ -65,7 +69,7 @@ const ButtonGroup = (props) => {
                 }),
             );
         });
-    }, [setLoading, dispatch, component.seq, areaSeq]);
+    }, [workStatus, component.seq, setLoading, dispatch, areaSeq]);
 
     /**
      * 임시저장

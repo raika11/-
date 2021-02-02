@@ -1,17 +1,34 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput } from '@components';
 import { MokaTableEditCancleButton } from '@components';
 
-const ItemRenderer = ({ item, onDelete }) => {
-    const handleChangeBulkinputBox = () => {};
+const ItemRenderer = ({ item, onDelete, onSetData }) => {
+    const [editData, setEditData] = useState({
+        title: '',
+        linkUrl: '',
+        targetType: '',
+    });
     const handleClickDelete = () => {
         if (onDelete instanceof Function) {
             onDelete(item.seqNo);
         }
     };
 
-    const handleChangeValue = () => {};
+    const handleChangeValue = (e) => {
+        onSetData({
+            item: item,
+            event: e.target,
+        });
+    };
+
+    useEffect(() => {
+        setEditData({
+            title: item.title,
+            linkUrl: item.linkUrl,
+            targetType: item.targetType,
+        });
+    }, [item]);
 
     return (
         <>
@@ -23,9 +40,9 @@ const ItemRenderer = ({ item, onDelete }) => {
                             name="title"
                             id={`title-${item.ordNo}`}
                             label="타이틀"
-                            onChange={(e) => handleChangeBulkinputBox(e)}
+                            onChange={(e) => handleChangeValue(e)}
                             labelWidth={30}
-                            value={item.title}
+                            value={editData.title}
                             className="col mb-0 pl-0 pr-0"
                         />
                     </Row>
@@ -35,14 +52,14 @@ const ItemRenderer = ({ item, onDelete }) => {
                             name="linkUrl"
                             id={`linkUrl-${item.ordNo}`}
                             label="url"
-                            onChange={(e) => handleChangeBulkinputBox(e)}
+                            onChange={(e) => handleChangeValue(e)}
                             labelWidth={30}
-                            value={item.linkUrl}
+                            value={editData.linkUrl}
                             className="col mb-0 pl-0 pr-0"
                         />
                         {/* </Col> */}
                         <Col className="d-felx mb-0 pl-1 pr-0" xs={3}>
-                            <MokaInput as="select" name="targetType" value={'title'} onChange={(e) => handleChangeValue(e)}>
+                            <MokaInput as="select" name="targetType" value={editData.targetType} onChange={(e) => handleChangeValue(e)}>
                                 <option value="one">본창</option>
                                 <option value="two">새창</option>
                             </MokaInput>

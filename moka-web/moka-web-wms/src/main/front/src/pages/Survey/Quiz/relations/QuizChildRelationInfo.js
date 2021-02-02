@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MokaCard, MokaInput, MokaIcon } from '@components';
+import { MokaCard } from '@components';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Col, Button } from 'react-bootstrap';
 import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 import { QuizSearchModal } from '@pages/Survey/Quiz/modals';
-import { selectQuizChange, clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, selectArticleChange } from '@store/survey/quiz';
+import { clearQuizinfo, getQuizzes, saveQuizzes, getQuizzesList, selectArticleChange } from '@store/survey/quiz';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
-
+import QuizSortAgGrid from './QuizSortAgGrid';
+import produce from 'immer';
+import useDebounce from '@/hooks/useDebounce';
 const QuizChildRelationInfo = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -25,12 +27,20 @@ const QuizChildRelationInfo = () => {
     const [articleListModalState, setArticleListModalState] = useState(false);
     const [relationArticles, setRelationArticles] = useState([]);
     const [modalArticle, setModalArticle] = useState(null);
+    const [updateModalArticle, setUpdateModalArticle] = useState(null);
 
-    const handleClickArticleModalShow = () => {};
-    const handleClickRelationArticleAdd = () => {};
-    const handleClickSelectQuizListDeleteButton = (itemIndex) => {
-        dispatch(selectQuizChange(selectQuiz.filter((e, i) => i !== itemIndex)));
+    const handleClickRelationArticleAdd = () => {
+        let newItem = {
+            contentId: '',
+            title: '',
+            linkUrl: ``,
+        };
+
+        dispatch(selectArticleChange([...selectArticle, newItem]));
     };
+    // const handleClickSelectQuizListDeleteButton = (itemIndex) => {
+    //     dispatch(selectQuizChange(selectQuiz.filter((e, i) => i !== itemIndex)));
+    // };
 
     const handleClickQuizSearchButton = () => {
         setQuizSearchModalState(true);
@@ -42,6 +52,23 @@ const QuizChildRelationInfo = () => {
 
     const handleClickArticleAdd = (e) => {
         setModalArticle(e);
+    };
+
+    const handleSetContentData = (data) => {
+        const { item, event } = data;
+        const { name, value } = event;
+
+        const orderNumner = Number(item.ordNo - 1);
+
+        let tempItem = selectArticle[orderNumner];
+        tempItem = {
+            ...tempItem,
+            [name]: value,
+        };
+        const nextState = produce(selectArticle, (draftState) => {
+            draftState[orderNumner] = tempItem;
+        });
+        dispatch(selectArticleChange(nextState));
     };
 
     useEffect(() => {
@@ -58,7 +85,13 @@ const QuizChildRelationInfo = () => {
     }, [modalArticle]);
 
     useEffect(() => {
-        // console.log(selectArticles);
+        if (updateModalArticle) {
+            dispatch(selectArticleChange(updateModalArticle));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updateModalArticle]);
+
+    useEffect(() => {
         if (selectArticle) {
             setRelationArticles(
                 selectArticle.map((e) => {
@@ -75,6 +108,24 @@ const QuizChildRelationInfo = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectArticle]);
+
+    const handleChangeRelationArticles = (articleList) => {
+        setUpdateModalArticle(
+            articleList.map((item) => {
+                return {
+                    contentId: item.totalId,
+                    title: item.title,
+                    linkUrl: item.linkUrl,
+                };
+            }),
+        );
+    };
+
+    const handleDeleteRelationArticles = (contentId) => {
+        // console.log(selectArticle);
+        setRelationArticles([]);
+        setUpdateModalArticle(selectArticle.filter((e) => e.contentId !== contentId));
+    };
 
     const handleClickSaveButton = () => {
         let type;
@@ -156,11 +207,22 @@ const QuizChildRelationInfo = () => {
             return element;
         });
 
-        selectQuiz.map((item, index) => {
-            formData.append(`quizRels[${index}].relType`, 'Q');
-            formData.append(`quizRels[${index}].contentId`, item.contentId);
+        let RelsCount = 0;
+        selectQuiz.map((item) => {
+            formData.append(`quizRels[${RelsCount}].relType`, 'Q');
+            formData.append(`quizRels[${RelsCount}].contentId`, item.contentId);
             // formData.append(`quizRels[${questionCount}].linkUrl`, ''); // URL 이 없어서..
-            formData.append(`quizRels[${index}].title`, item.title);
+            formData.append(`quizRels[${RelsCount}].title`, item.title);
+            RelsCount++;
+            return item;
+        });
+
+        selectArticle.map((item) => {
+            formData.append(`quizRels[${RelsCount}].relType`, 'A');
+            formData.append(`quizRels[${RelsCount}].contentId`, item.contentId);
+            formData.append(`quizRels[${RelsCount}].linkUrl`, item.linkUrl);
+            formData.append(`quizRels[${RelsCount}].title`, item.title);
+            RelsCount++;
             return item;
         });
 
@@ -241,7 +303,7 @@ const QuizChildRelationInfo = () => {
                             </Col>
                         </Form.Row>
                     </Form.Group>
-                    {selectQuiz.map((item, index) => {
+                    {/* {selectQuiz.map((item, index) => {
                         return (
                             <Form.Row className="pb-2" key={index}>
                                 <Col xs={3} className="pr-0 pl-5 d-flex align-content-center">
@@ -257,7 +319,8 @@ const QuizChildRelationInfo = () => {
                                 </Col>
                             </Form.Row>
                         );
-                    })}
+                    })} */}
+                    <QuizSortAgGrid />
 
                     <hr />
                     <Form.Group>
@@ -268,7 +331,7 @@ const QuizChildRelationInfo = () => {
                                     <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
                                         기사 검색
                                     </Button>
-                                    <Button variant="positive" onClick={handleClickRelationArticleAdd}>
+                                    <Button variant="positive" onClick={() => handleClickRelationArticleAdd()}>
                                         추가
                                     </Button>
                                 </Form.Group>
@@ -278,7 +341,12 @@ const QuizChildRelationInfo = () => {
                     <Form.Group>
                         <Form.Row>
                             <Col xs={12}>
-                                <SortAgGrid rows={relationArticles} onChange={(e) => console.log(e)} onDelete={(e) => console.log(e)} />
+                                <SortAgGrid
+                                    rows={relationArticles}
+                                    onChange={(e) => handleChangeRelationArticles(e)}
+                                    onDelete={(e) => handleDeleteRelationArticles(e)}
+                                    onSetData={handleSetContentData}
+                                />
                             </Col>
                         </Form.Row>
                     </Form.Group>

@@ -25,6 +25,7 @@ import {
     addQuestion,
     setQuestion,
     selectQuizChange,
+    selectArticleChange,
 } from '@store/survey/quiz';
 
 import { DndProvider } from 'react-dnd';
@@ -382,8 +383,8 @@ const QuizEdit = () => {
         };
 
         const setQuizRels = (data) => {
-            // console.log(data);
-            dispatch(selectQuizChange(data));
+            dispatch(selectQuizChange(data.filter((e) => e.relType === 'Q')));
+            dispatch(selectArticleChange(data.filter((e) => e.relType === 'A')));
         };
 
         if (selectQuizSeq.current !== 'add') {

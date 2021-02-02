@@ -1,16 +1,23 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { columnDefs } from './SortAgGridColumns';
-import commonUtil from '@utils/commonUtil';
+import { columnDefs } from './QuizSortAgGridColumns';
 import produce from 'immer';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectQuizChange } from '@store/survey/quiz';
 
-const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
+const QuizSortAgGrid = () => {
     const [rowData, setRowData] = useState([]);
-    const [instance, setInstance] = useState(null);
+    const [contentData, setContentData] = useState([]);
+    // const [instance, setInstance] = useState(null);
+    const dispatch = useDispatch();
+
+    const { selectQuiz } = useSelector((store) => ({
+        selectQuiz: store.quiz.selectQuiz,
+    }));
 
     // 그리드 옵션, 드래그핼때 필요함.
     const onGridReady = (params) => {
-        setInstance(params);
+        // setInstance(params);
     };
 
     // 드래그 가 끝났을떄.
@@ -25,27 +32,37 @@ const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
             displayedRows.push(update);
         }
         api.applyTransaction({ update: displayedRows });
-        if (onChange instanceof Function) {
-            onChange(displayedRows.map((displayedRow) => displayedRow.item));
-        }
+        dispatch(
+            selectQuizChange(
+                displayedRows.map((e) => {
+                    return {
+                        contentId: e.quizSeq,
+                        title: e.item.title,
+                    };
+                }),
+            ),
+        );
     };
 
     // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
-        if (!commonUtil.isEmpty(rows) && rows instanceof Array) {
+        if (selectQuiz) {
             setRowData(
-                rows.map((row, index) => ({
-                    item: {
-                        ...row,
-                        ordNo: index + 1,
-                    },
-                    onDelete,
-                    onSetData,
-                })),
+                selectQuiz.map((item, index) => {
+                    return {
+                        quizSeq: item.quizSeq,
+                        ordNo: index,
+                        contentId: item.contentId,
+                        item: {
+                            ...item,
+                            ordNo: index,
+                        },
+                    };
+                }),
             );
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rows]);
+    }, [selectQuiz]);
 
     return (
         <>
@@ -54,7 +71,7 @@ const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
                     immutableData
                     onGridReady={onGridReady}
                     rowData={rowData}
-                    getRowNodeId={(params) => params.item.ordNo}
+                    getRowNodeId={(params) => params.ordNo}
                     columnDefs={columnDefs}
                     localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
                     onRowDragEnd={handleDragEnd}
@@ -63,11 +80,11 @@ const SortAgGrid = ({ rows, onChange, onDelete, onSetData }) => {
                     suppressRowClickSelection
                     suppressMoveWhenRowDragging
                     headerHeight={0}
-                    rowHeight={100}
+                    rowHeight={50}
                 />
             </div>
         </>
     );
 };
 
-export default SortAgGrid;
+export default QuizSortAgGrid;

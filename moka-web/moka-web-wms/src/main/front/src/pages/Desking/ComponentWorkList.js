@@ -34,7 +34,7 @@ const ComponentWorkList = (props) => {
      */
     const handleClickPreview = () => {
         if (area.page.pageSeq) {
-            window.open(`${API_BASE_URL}/preview/desking/page?pageSeq=${area.page.pageSeq}`, '페이지미리보기');
+            window.open(`${API_BASE_URL}/preview/desking/page?pageSeq=${area.page.pageSeq}&areaSeq=${area.areaSeq}`, '페이지미리보기');
         }
     };
 

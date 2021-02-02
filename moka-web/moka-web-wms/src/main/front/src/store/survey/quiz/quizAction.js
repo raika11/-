@@ -9,8 +9,8 @@ export const CLEAR_QUIZMODALSEARCH = 'quiz/CLEAR_QUIZMODALSEARCH';
 export const clearQuizmodalsearch = createAction(CLEAR_QUIZMODALSEARCH);
 export const CLEAR_SELECT_QUIZ = 'quiz/CLEAR_SELECT_QUIZ';
 export const clear_select_quiz = createAction(CLEAR_SELECT_QUIZ);
-export const CLEAR_SELECT_ARTICLE = 'quiz/CLEAR_SELECT_ARTICLE';
-export const clearSelectArticle = createAction(CLEAR_SELECT_ARTICLE);
+export const CLEAR_SELECT_ARTICLE_LIST = 'quiz/CLEAR_SELECT_ARTICLE_LIST';
+export const clearSelectArticleList = createAction(CLEAR_SELECT_ARTICLE_LIST);
 
 // 목록 검색 옵션 처리.
 export const CHANGE_SEARCH_OPTION = 'quiz/CHANGE_SEARCH_OPTION';
@@ -66,5 +66,8 @@ export const getQuizSearchModalList = createAction(GET_QUIZ_SEARCH_MODAL_LIST, (
 export const SELECT_QUIZ_CHANGE = 'quiz/SELECT_QUIZ_CHANGE';
 export const selectQuizChange = createAction(SELECT_QUIZ_CHANGE, (actions) => actions);
 
-export const SELECT_ARTICLE_CHANGE = 'quiz/SELECT_ARTICLE_CHANGE';
-export const selectArticleChange = createAction(SELECT_ARTICLE_CHANGE, (actions) => actions);
+export const SELECT_ARTICLE_LIST_CHANGE = 'quiz/SELECT_ARTICLE_LIST_CHANGE';
+export const selectArticleListChange = createAction(SELECT_ARTICLE_LIST_CHANGE, (actions) => actions);
+
+export const SELECT_ARTICLE_ITEM_CHANGE = 'quiz/SELECT_ARTICLE_ITEM_CHANGE';
+export const selectArticleItemChange = createAction(SELECT_ARTICLE_ITEM_CHANGE, (actions) => actions);

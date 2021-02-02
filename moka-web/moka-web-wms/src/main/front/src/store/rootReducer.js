@@ -49,6 +49,7 @@ import quiz from '@store/survey/quiz/quizReducer';
 import mic from '@store/mic/micReducer';
 
 export default combineReducers({
+    quiz,
     toastr,
     app,
     loading,
@@ -95,5 +96,4 @@ export default combineReducers({
     editLog,
     searchKeyword,
     mic,
-    quiz,
 });

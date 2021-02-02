@@ -20,6 +20,7 @@ export default [
         headerName: '카테고리명',
         field: 'catNm',
         flex: 1,
+        width: 350,
         cellRenderer: 'editor',
         valueSetter: () => true,
     },

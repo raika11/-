@@ -412,6 +412,30 @@ export const toKorFromCode = (code, codes) => {
     return codeItem ? codeItem.value : '';
 };
 
+/**
+ * merge array
+ * @param {object} param key등
+ * @param {...any} arrays merge할 array리스트
+ */
+const mergeArray = ({ key }, ...arrays) => {
+    const merged_obj = arrays.reduce((all, cv) => {
+        const nob = cv.reduce((a, cu) => {
+            const name = cu[key];
+            return {
+                ...a,
+                [name]: cu,
+            };
+        }, {});
+        return {
+            ...all,
+            ...nob,
+        };
+    }, {});
+
+    const val = Object.values(merged_obj);
+    return val;
+};
+
 export default {
     fileDownload,
     base64ToBlob,
@@ -430,4 +454,5 @@ export default {
     toRangeDateForDateType,
     validateForDateRange,
     toKorFromCode,
+    mergeArray,
 };

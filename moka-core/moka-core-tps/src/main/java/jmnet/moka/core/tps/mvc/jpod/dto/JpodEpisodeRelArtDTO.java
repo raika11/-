@@ -36,7 +36,6 @@ public class JpodEpisodeRelArtDTO implements Serializable {
     private String relLink;
 
     @ApiModelProperty(value = "링크 타겟")
-    @Size(max = 1, message = "{tps.common.error.size.linkTarget}")
     @Builder.Default
     private LinkTargetCode relLinkTarget = LinkTargetCode.S;
 

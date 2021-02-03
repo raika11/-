@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import produce from 'immer';
 import commonUtil from '@utils/commonUtil';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from '@pages/Survey/Poll/components/RelationPollSortAgGridColumns';

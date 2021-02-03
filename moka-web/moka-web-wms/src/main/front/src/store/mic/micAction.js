@@ -62,3 +62,9 @@ export const getMicBannerListModal = createAction(GET_MIC_BANNER_LIST_MODAL, ({ 
  */
 export const SAVE_MIC_BANNER = 'mic/SAVE_MIC_BANNER';
 export const saveMicBanner = createAction(SAVE_MIC_BANNER, ({ banner, callback }) => ({ banner, callback }));
+
+/**
+ * 배너 사용여부 변경
+ */
+export const PUT_MIC_BANNER_TOGGLE = 'mic/PUT_MIC_BANNER_TOGGLE';
+export const putMicBannerToggle = createAction(PUT_MIC_BANNER_TOGGLE, ({ bnnrSeq, callback }) => ({ bnnrSeq, callback }));

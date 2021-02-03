@@ -184,7 +184,7 @@ function setStatus({ iud, insDt, sendDt, statusMsg, fbStatusId, fbArticleId }) {
         }
         if (commonUtil.isEmpty(sendDt)) {
             sendStatus = ' / 대기';
-        } else if (!commonUtil.isEmpty(sendDt) && nFbArticleId == 0) {
+        } else if (!commonUtil.isEmpty(sendDt) && nFbArticleId === 0) {
             if (statusMsg.toUpperCase().startsWith('FAILED')) {
                 sendStatus = ' / 오류';
             } else {

@@ -1,7 +1,6 @@
 import produce from 'immer';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
-import toast from '@utils/toastUtil';
 
 /**
  * 파일 다운로드
@@ -398,7 +397,11 @@ export const validateForDateRange = (startDt, endDt) => {
     const diff = moment(endDt).diff(moment(startDt));
 
     let message = '시작일은 종료일 보다 클 수 없습니다.';
-    message = '종료일은 시작일 보다 작을 수 없습니다.';
+    if (diff < 0) {
+        message = '종료일은 시작일 보다 작을 수 없습니다.';
+    }
+
+    console.log(diff, message);
 };
 
 /**

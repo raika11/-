@@ -36,11 +36,11 @@ const Poll = ({ match }) => {
         dispatch(getPollGroupCodes());
     }, [dispatch]);
 
-    /*useEffect(() => {
+    useEffect(() => {
         return () => {
             dispatch(clearStore());
         };
-    }, [dispatch]);*/
+    }, [dispatch]);
 
     return (
         <div className="d-flex">

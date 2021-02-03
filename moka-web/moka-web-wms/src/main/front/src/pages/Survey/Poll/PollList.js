@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PollSearch from '@pages/Survey/Poll/PollSearch';
 import PollAgGrid from '@pages/Survey/Poll/PollAgGrid';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePollSearchOptions, getPollList, GET_POLL_LIST, SAVE_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
 import { initialState } from '@store/survey/poll/pollReducer';
-import PollPreviewModal from '@pages/Survey/Poll/modals/PollPreviewModal';
 
 const PollList = ({ onDelete }) => {
     const history = useHistory();

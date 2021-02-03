@@ -262,15 +262,60 @@ public class TourRestController extends AbstractCommonController {
             throws Exception {
 
         try {
-            TourApplyVO returnValue = tourApplyService.updateTourApply(tourApplyVO);
+            // 수정가능여부 체크
+            Integer retCode = tourApplyService.checkTourApply(tourApplyVO);
 
-            ResultDTO<TourApplyVO> resultDTO = new ResultDTO<TourApplyVO>(returnValue, msg("tps.common.success.update"));
-            tpsLogger.success(ActionType.UPDATE, true);
-            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            if (retCode > 0) {
+                log.error("[FAIL TO UPDATE TOUR APPLY] seq: {}", tourSeq);
+                tpsLogger.success(ActionType.UPDATE, false);
+                throw new Exception(msg("tps.tour-apply.error.dup.tourDate"));
+            } else if (retCode == 2) {
+                log.error("[FAIL TO UPDATE TOUR APPLY] seq: {}", tourSeq);
+                tpsLogger.success(ActionType.UPDATE, false);
+                throw new Exception(msg("tps.tour-apply.error.dup.writerEmail"));
+            } else {
+                // 수정
+                TourApplyVO returnValue = tourApplyService.updateTourApply(tourApplyVO);
+
+                ResultDTO<TourApplyVO> resultDTO = new ResultDTO<TourApplyVO>(returnValue, msg("tps.common.success.update"));
+                tpsLogger.success(ActionType.UPDATE, true);
+                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            }
+
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE TOUR APPLY] seq: {} {}", tourSeq, e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE TOUR APPLY]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    @ApiOperation(value = "신청 수정 가능여부")
+    @GetMapping("/apply/{tourSeq}/check")
+    public ResponseEntity<?> checkTourApply(@ApiParam(value = "신청순번", required = true) @PathVariable("tourSeq")
+    @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq, @ApiParam("신청정보") @Valid TourApplyVO tourApplyVO)
+            throws Exception {
+
+        try {
+            boolean checked = true;
+            String msg = "";
+
+            Integer retCode = tourApplyService.checkTourApply(tourApplyVO);
+            if (retCode == 1) {
+                msg = msg("tps.tour-apply.error.dup.tourDate");
+                checked = false;
+            } else if (retCode == 2) {
+                msg = msg("tps.tour-apply.error.dup.writerEmail");
+                checked = false;
+            }
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(checked, msg);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO SELECT TOUR APPLY] seq: {} {}", tourSeq, e.getMessage());
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO SELECT TOUR APPLY]", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
         }
     }
 

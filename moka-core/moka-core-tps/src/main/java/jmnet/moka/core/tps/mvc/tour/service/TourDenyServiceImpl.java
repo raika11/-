@@ -30,27 +30,27 @@ public class TourDenyServiceImpl implements TourDenyService {
 
     @Override
     public List<TourDenyVO> findAllTourDeny(TourDenySearchDTO search) {
-        return tourMapper.upuTbJoongangTourDenyListSel(search);
+        return tourMapper.findAllTourDeny(search);
     }
 
     @Override
     public void insertTourDeny(TourDenyVO tourDenyVo) {
-        tourMapper.upuTbJoongangTourDenyIns(tourDenyVo);
+        tourMapper.insertTourDeny(tourDenyVo);
     }
 
     @Override
     public void updateTourDeny(TourDenyVO tourDenyVo) {
-        tourMapper.upuTbJoongangTourDenyUpd(tourDenyVo);
+        tourMapper.updateTourDeny(tourDenyVo);
     }
 
     @Override
     public void deleteTourDeny(Long denySeq) {
-        tourMapper.upuTbJoongangTourDenyDel(denySeq);
+        tourMapper.deleteTourDeny(denySeq);
     }
 
     @Override
     public List<TourPossibleDenyVO> findAllTourDenyByPossible() {
-        return tourMapper.upuTbJoongangTourPossibleBysel();
+        return tourMapper.findAllTourPossibleDeny();
     }
 
     @Override
@@ -58,6 +58,6 @@ public class TourDenyServiceImpl implements TourDenyService {
         Map<String, Object> params = new HashMap<>();
         params.put("startYear", startYear);
         params.put("startMonth", startMonth);
-        return tourMapper.upuTbJoongangTourDenyBymonthSel(params);
+        return tourMapper.findAllTourDenyByMonth(params);
     }
 }

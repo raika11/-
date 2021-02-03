@@ -24,19 +24,23 @@ const RelationPollSortAgGridComponent = ({ rows, onChange, onDelete }) => {
 
     const handleDragEnd = (params) => {
         const api = params.api;
-        let displayedRows = [];
 
+        let displayedRows = [];
         for (let i = 0; i < api.getDisplayedRowCount(); i++) {
             const data = api.getDisplayedRowAtIndex(i).data;
             const update = { ...data, item: { ...data.item, ordNo: i + 1 } };
             displayedRows.push(update);
             /*displayedRows.push(data);*/
         }
-        console.log(displayedRows);
-        api.applyTransaction({ update: displayedRows });
-        /*if (onChange instanceof Function) {
+        //console.log(displayedRows);
+        //api.applyTransaction({ update: displayedRows });
+        setTimeout(() => {
+            api.setRowData(displayedRows);
+        }, 100);
+
+        if (onChange instanceof Function) {
             onChange(displayedRows.map((displayedRow) => displayedRow.item));
-        }*/
+        }
     };
 
     // 스토어가 변경 되면 grid 리스트를 업데이트.
@@ -49,10 +53,9 @@ const RelationPollSortAgGridComponent = ({ rows, onChange, onDelete }) => {
                 rows.map((row, index) => ({
                     item: {
                         ...row,
+                        ordNo: index + 1,
                     },
-                    ordNo: index + 1,
                     onDelete,
-                    onChange,
                 })),
             );
         }

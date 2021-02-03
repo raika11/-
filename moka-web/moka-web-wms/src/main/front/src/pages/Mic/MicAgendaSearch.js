@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@components';
 import { initialState, getMicReport, getMicAgendaList, getMicCategoryList, changeSearchOption } from '@store/mic';
 import { messageBox } from '@utils/toastUtil';
-import BannerModal from './modals/BannerModal';
+import BannerModal from './modals/BannerModal/index';
 import CategoryModal from './modals/CategoryModal';
 import OrderModal from './modals/OrderModal';
 

@@ -92,6 +92,11 @@ function* saveBanner({ payload }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 배너 사용여부 변경
+ */
+const putMicBannerToggle = createRequestSaga(act.PUT_MIC_BANNER_TOGGLE, api.putMicBannerToggle, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA_LIST, getMicAgendaList);
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
@@ -101,4 +106,5 @@ export default function* saga() {
     yield takeLatest(act.SAVE_MIC_CATEGORY, saveMicCategory);
     yield takeLatest(act.GET_MIC_BANNER_LIST_MODAL, getMicBannerListModal);
     yield takeLatest(act.SAVE_MIC_BANNER, saveBanner);
+    yield takeLatest(act.PUT_MIC_BANNER_TOGGLE, putMicBannerToggle);
 }

@@ -11,6 +11,12 @@
         right: 0;
         bottom: 0;
     }
+    &:focus {
+        outline: none;
+        .dropzone-dragover-mask {
+            border-color: $input-focus-border-color;
+        }
+    }
 }
 
 .dropzone-dragover {

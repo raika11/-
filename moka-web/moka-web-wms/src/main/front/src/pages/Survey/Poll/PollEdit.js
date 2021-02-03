@@ -15,6 +15,7 @@ import useDebounce from '@hooks/useDebounce';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
 import toast from '@utils/toastUtil';
+import { selectArticleItemChange, selectArticleListChange } from '@store/survey/quiz';
 
 const tempItem = { imgUrl: null, linkUrl: '', pollSeq: 1897, title: '' };
 
@@ -127,6 +128,8 @@ const PollEdit = () => {
         setEdit(poll);
         if (!commonUtil.isEmpty(poll.pollSeq)) {
             setIsSet(true);
+            dispatch(selectArticleListChange(poll.pollRelateContents.filter((content) => content.relType === 'A')));
+            dispatch(selectArticleItemChange(poll.pollRelateContents.filter((content) => content.relType === 'A')));
         } else {
             setIsSet(false);
         }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'react-bootstrap';
-import { MokaInputLabel, MokaTableDeleteButton } from '@components';
+import { MokaInputLabel, MokaTableDeleteButton, AgGripIcon } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -95,7 +95,9 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
         <>
             <div className="mb-2 p-2 bg-gray150">
                 <Form.Row>
-                    <Col xs={1}>||</Col>
+                    <Col xs={1}>
+                        <AgGripIcon />
+                    </Col>
                     <Col xs={10}>
                         <MokaInputLabel
                             label={`Q${questionIndex}.`}
@@ -110,7 +112,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
                         />
                     </Col>
                     <Col xs={1} onClick={(e) => handleClickQuestionDeleteButton(e)}>
-                        |
+                        <AgGripIcon />
                     </Col>
                 </Form.Row>
                 <Form.Row className="pt-3">

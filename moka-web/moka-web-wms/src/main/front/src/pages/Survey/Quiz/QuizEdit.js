@@ -498,7 +498,7 @@ const QuizEdit = () => {
             loading={save_loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '미리보기', variant: 'positive', onClick: () => console.log('미리보기'), className: 'mr-05' },
+                { text: '미리보기', variant: 'positive', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-05' },
                 { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
             ]}

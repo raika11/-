@@ -29,8 +29,9 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
 
     const handleClickPreview = (id) => {
         toast.warning('미리보기 기능은 준비중입니다.');
-        /*setPreviewModalShow(true);
-        setPreviewId(id);*/
+        //TODO: 추후 미리보기 기획 및 디자인 확정시 처리
+        setPreviewModalShow(false);
+        setPreviewId(id);
     };
 
     useEffect(() => {

@@ -139,7 +139,7 @@ const PollEdit = () => {
         } else {
             setIsCompared(false);
         }
-    }, [poll]);
+    }, [dispatch, poll]);
 
     return (
         <MokaCard

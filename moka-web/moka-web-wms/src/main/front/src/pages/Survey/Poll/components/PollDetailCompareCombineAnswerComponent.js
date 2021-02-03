@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { MokaInput } from '@components';
-import produce from 'immer';
 
 const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) => {
     const handleChangeValue = (index, name, value, type) => {

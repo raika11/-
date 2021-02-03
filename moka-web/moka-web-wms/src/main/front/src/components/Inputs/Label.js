@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
-import { Col } from 'react-bootstrap';
 
 export const Label = (props) => {
     // label props

@@ -1,6 +1,5 @@
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import React from 'react';
-import commonUtil from '@utils/commonUtil';
 
 export const columnDefs = [
     {

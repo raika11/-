@@ -46,6 +46,10 @@ function* getGroupMenuAuthList({ type, payload }) {
         }
     } catch (e) {
         callbackData = errorResponse(e);
+        yield put({
+            type: `${ACTION}_FAILURE`,
+            payload: callbackData,
+        });
     }
 
     yield put(finishLoading(ACTION));
@@ -278,9 +282,9 @@ function* updateGroupInMember({ type, payload: { groupCd, memberIds, useYn, call
     yield put(finishLoading(type));
 }
 
-function toSearchUserList(allMembers, groupUsers) {
+/*function toSearchUserList(allMembers, groupUsers) {
     return allMembers.filter((searchUser) => groupUsers.filter((groupUser) => groupUser.memberId === searchUser.memberId).length === 0);
-}
+}*/
 
 export default function* groupSaga() {
     yield takeLatest(groupAction.GET_GROUP_LIST, getGroupList);

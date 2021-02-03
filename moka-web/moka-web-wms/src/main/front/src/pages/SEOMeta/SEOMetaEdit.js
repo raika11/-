@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { clearSeoMeta, getSeoMeta, getSeoMetaList, initialState, saveSeoMeta, GET_SEO_META } from '@store/seoMeta';

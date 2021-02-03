@@ -7,10 +7,9 @@ import { selectQuizChange } from '@store/survey/quiz';
 
 const QuizSortAgGrid = () => {
     const [rowData, setRowData] = useState([]);
-    const [contentData, setContentData] = useState([]);
-    // const [instance, setInstance] = useState(null);
     const dispatch = useDispatch();
 
+    // 스토어 연결.
     const { selectQuiz } = useSelector((store) => ({
         selectQuiz: store.quiz.selectQuiz,
     }));
@@ -32,6 +31,8 @@ const QuizSortAgGrid = () => {
             displayedRows.push(update);
         }
         api.applyTransaction({ update: displayedRows });
+
+        // 드래그가 끝나면 변경된 순서롤 store 에 업데이트 처리.
         dispatch(
             selectQuizChange(
                 displayedRows.map((e) => {

@@ -23,12 +23,15 @@ const QuizSearchModal = (props) => {
         loading: store.loading[GET_QUIZ_SEARCH_MODAL_LIST],
     }));
 
+    // 닫기
     const handleClickHide = () => {
         onHide();
     };
 
+    // row 클릭시 처리.
     const handleOnRowClicked = () => {};
 
+    // 검색 정보 변경 처리.
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         setSearchData({
@@ -36,6 +39,8 @@ const QuizSearchModal = (props) => {
             [name]: value,
         });
     };
+
+    // 검색 버튼
     const handleClickSearchButton = () => {
         dispatch(changeQuizListSearchOption(searchData));
         dispatch(getQuizSearchModalList());
@@ -55,6 +60,7 @@ const QuizSearchModal = (props) => {
         [dispatch, search],
     );
 
+    // store list 가 변경 되면 그리드에 념겨줄 데이터 설정.
     useEffect(() => {
         const setListToRowData = (data) => {
             setRowData(

@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaCard, MokaInputLabel } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
+import useDebounce from '@hooks/useDebounce';
 
 // import { useDrop } from 'react-dnd';
 // import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
@@ -58,7 +59,7 @@ export const initialFirstTypeQuestionsInput = {
     answer: '',
 };
 
-const QuizEdit = () => {
+const QuizEdit = ({ handleSave, setHandleSave }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
@@ -83,11 +84,11 @@ const QuizEdit = () => {
 
     /** sortable */
     const [sortableItems, setSortableItems] = useState([]);
+    const [sortEnd, setSortEnd] = useState(true);
 
     // 수정 필요.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const findItem = useCallback((id) => {
-        // console.log('findItem');
         const card = sortableItems.filter((c) => `${c.id}` === id)[0];
         return {
             card,
@@ -95,17 +96,36 @@ const QuizEdit = () => {
         };
     });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const setMoveItemSort = useCallback((copyItems) => {
+        if (sortEnd === true) {
+            setSortEnd(false);
+            setSortableItems(copyItems);
+        }
+    });
+
+    const handleDebounceChangeValue = useDebounce(setMoveItemSort, 100);
+
     // 수정 필요.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const moveItem = useCallback((id, atIndex) => {
-        // console.log('moveItem', id, atIndex);
+        // console.log({
+        //     action: action,
+        //     id: id,
+        //     atIndex: atIndex,
+        // });
         const { card, index } = findItem(id);
 
         const copyItems = [...sortableItems];
         copyItems.splice(index, 1);
         copyItems.splice(atIndex, 0, card);
+        // console.log(copyItems);
         // 이동 할떄 이벤트 처리 해야함.
-        // setSortableItems(copyItems);
+        // if (sortEnd === true) {
+        //     setSortEnd(false);
+        //     setSortableItems(copyItems);
+        // }
+        handleDebounceChangeValue(copyItems);
     });
     /** sortable */
 
@@ -205,7 +225,8 @@ const QuizEdit = () => {
     };
 
     // 저장 버튼 클릭 처리.
-    const handleClickSaveButton = () => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const handleClickSaveButton = useCallback(() => {
         let type;
         let quizSeq;
 
@@ -231,8 +252,11 @@ const QuizEdit = () => {
         formData.append(`quizType`, quizInfo.quizType); // 퀴즈유형
         formData.append(`loginYn`, quizInfo.loginYn); // 로그인여부
         formData.append(`replyYn`, quizInfo.replyYn); // 댓글 여부
-        // formData.append(`quizUrl`, quizInfo.quizUrl); // 쥐크 URL
-        formData.append(`imgUrl`, quizInfo.imgUrl); // 이미지 URL
+        // formData.append(`quizUrl`, quizInfo.quizUrl); // 퀴즈 URL
+        if (quizInfo.imgUrl) {
+            formData.append(`imgUrl`, quizInfo.imgUrl); // 이미지 URL
+        }
+
         formData.append(`title`, quizInfo.title); // 제목
         formData.append(`quizDesc`, quizInfo.quizDesc); // 퀴즈설명
         if (quizInfo.imgFile) {
@@ -281,11 +305,6 @@ const QuizEdit = () => {
                 formData.append(`questions[${questionCount}].questionDesc`, element.questionDesc);
             }
 
-            // quizRels[0].relType 관련타입(A:기사, Q:퀴즈)
-            // quizRels[0].contentId 관련콘텐트ID
-            // quizRels[0].linkUrl 링크URL
-            // quizRels[0].title
-
             questionCount++;
             return element;
         });
@@ -296,7 +315,6 @@ const QuizEdit = () => {
             if (item.contentId) {
                 formData.append(`quizRels[${RelsCount}].contentId`, item.contentId);
             }
-            // formData.append(`quizRels[${questionCount}].linkUrl`, ''); // URL 이 없어서..
             formData.append(`quizRels[${RelsCount}].title`, item.title);
             RelsCount++;
             return item;
@@ -349,7 +367,7 @@ const QuizEdit = () => {
                 },
             }),
         );
-    };
+    });
 
     // url 에서 현재 선택한 게시판 id 값 설정.
     useEffect(() => {
@@ -368,19 +386,6 @@ const QuizEdit = () => {
 
     // 스토어에서 quizInfo 가 업데이트 되었을때. ( 목록에서 클릭 하고 url 이 변경 되었을때.)
     useEffect(() => {
-        const setInfoData = (data) => {
-            // setEditData({
-            //     ...editData,
-            //     quizSts: data.quizSts,
-            //     loginYn: data.loginYn,
-            //     replyYn: data.replyYn,
-            //     title: data.title,
-            //     quizDesc: data.quizDesc,
-            //     quizType: data.quizType,
-            //     imgUrl: data.imgUrl,
-            // });
-        };
-
         const setQuestions = (data) => {
             let qitem = [];
             let qQuestions = [];
@@ -406,7 +411,6 @@ const QuizEdit = () => {
         };
 
         if (selectQuizSeq.current !== 'add') {
-            setInfoData(quizInfo);
             setQuestions(quizInfo.questions);
             setQuizRels(quizInfo.quizRels);
         }
@@ -435,36 +439,34 @@ const QuizEdit = () => {
         };
 
         if (selectQuizQuestion !== initialState.selectQuizQuestion) {
-            console.log('모달에서 추가.');
-            console.log('다름');
             setAddQuestion(selectQuizQuestion);
         }
-
-        // setAddQuestion(selectQuizQuestion);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectQuizQuestion]);
 
     useEffect(() => {
         setSortableItems(
             questionsItem.map((item, index) => {
+                // eslint-disable-next-line no-unused-vars
                 const { questionCount, questionType } = item;
+                // 사용장에 문제가 없는것 같아서 우선 주석처리..
                 if (questionType === 'S') {
                     return {
                         id: index,
-                        item: (
-                            <>
-                                <QuizQuestionThirdTypeComponent key={index} questionIndex={index} questionCount={questionCount} selectEditData={null} getLoading={get_loading} />
-                            </>
-                        ),
+                        // item: (
+                        //     <>
+                        //         <QuizQuestionThirdTypeComponent key={index} questionIndex={index} questionCount={questionCount} selectEditData={null} getLoading={get_loading} />
+                        //     </>
+                        // ),
                     };
                 } else if (questionType === 'O') {
                     return {
                         id: index,
-                        item: (
-                            <>
-                                <QuizQuestionFirstTypeComponent key={index} questionIndex={index} questionCount={questionCount} selectEditData={null} getLoading={get_loading} />
-                            </>
-                        ),
+                        // item: (
+                        //     <>
+                        //         <QuizQuestionFirstTypeComponent key={index} questionIndex={index} questionCount={questionCount} selectEditData={null} getLoading={get_loading} />
+                        //     </>
+                        // ),
                     };
                 }
                 return {};
@@ -474,16 +476,38 @@ const QuizEdit = () => {
     }, [questionsItem]);
 
     useEffect(() => {
-        // console.log({ questionItem: questionItem });
-        // setQuestionSearchModalState(true);
-    }, []);
-
-    useEffect(() => {
         return () => {
             dispatch(clearQuizinfo());
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (handleSave === true) {
+            handleClickSaveButton();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [handleSave]);
+
+    useEffect(() => {
+        const setMoveItem = () => {
+            let list = [];
+            let item = [];
+            sortableItems.map((e) => {
+                list.push(questionsList[Number(e.id)]);
+                item.push(questionsItem[Number(e.id)]);
+                return e;
+            });
+
+            if (sortEnd === false) {
+                dispatch(setQuestion({ item: item, questions: list }));
+                setSortEnd(true);
+            }
+        };
+        setMoveItem(sortableItems);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sortableItems]);
 
     return (
         <MokaCard
@@ -575,19 +599,6 @@ const QuizEdit = () => {
                                 />
                             </Col>
                         </Form.Row>
-                        {/* <Form.Row className="mb-2">
-                            <Col xs={12}>
-                                <MokaInputLabel
-                                    label="url"
-                                    labelWidth={66}
-                                    required={true}
-                                    value={editData.quizUrl}
-                                    onChange={(e) => handleChangeEditData(e)}
-                                    id="quizUrl"
-                                    name="quizUrl"
-                                />
-                            </Col>
-                        </Form.Row> */}
                         <Form.Row className="mb-2">
                             <Col xs={12}>
                                 <MokaInputLabel
@@ -616,8 +627,6 @@ const QuizEdit = () => {
                         </Form.Row>
                         <Form.Row style={{ height: '55%' }} className="mb-2">
                             <Col xs={12}>
-                                {/* <Figure.Image src={IR_URL + BLANK_IMAGE_PATH} className="mb-0 w-100 h-100" /> */}
-                                {/* <QuizPhotoBoxComponent /> */}
                                 <PollPhotoComponent
                                     width={110}
                                     height={110}
@@ -659,7 +668,7 @@ const QuizEdit = () => {
                                         onChange={(e) => handleChangeQuestionsSetup(e)}
                                         id="questionCount"
                                         name="questionCount"
-                                        value={questionSetup.questionCount}
+                                        value={questionSetup.questionType === 'first' ? '0' : questionSetup.questionCount}
                                         disabled={questionSetup.questionType === 'first' ? true : false}
                                     />
                                 </Col>

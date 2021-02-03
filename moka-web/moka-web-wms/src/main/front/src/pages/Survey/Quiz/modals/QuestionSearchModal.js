@@ -28,10 +28,13 @@ const QuestionSearchModal = (props) => {
             [name]: value,
         });
     };
+    //검색 버튼 처리.
     const handleClickSearchButton = () => {
         dispatch(changeQuestionsListSearchOption(searchData));
         dispatch(getQuestionsList());
     };
+
+    // 리셋버튼 처리.
     const handleClickSearchResetButton = () => {
         dispatch(changeQuestionsListSearchOption(initialState.quizQuestionList.search));
         setSearchData(initialState.quizQuestionList.search);
@@ -43,11 +46,12 @@ const QuestionSearchModal = (props) => {
         onHide();
     };
 
-    // 목록 클릭 store 를 업데이트후 모달창 닫기.
+    // row 클릭처리가 없어서 함수만 만들어 놈
     const handleClickListRow = () => {
         // onHide();
     };
 
+    // grid 옵션 변경 처리.
     const handleChangeSearchOption = useCallback(
         ({ key, value }) => {
             let temp = { ...search, [key]: value };
@@ -91,7 +95,6 @@ const QuestionSearchModal = (props) => {
         if (show === true) {
             dispatch(getQuestionsList());
         } else {
-            // dispatch(clearChannelPodty());
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]);

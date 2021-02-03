@@ -14,7 +14,10 @@ const ItemRenderer = ({ item }) => {
         questionsList: store.quiz.quizQuestions.questionsList,
     }));
 
-    const handleChangeBulkinputBox = () => {};
+    // 정보 변경 처리. ( 기능 없음. )
+    const handleChangeinputBox = () => {};
+
+    // 삭제 버튼 처리.
     const handleClickDelete = () => {
         const ordNo = item.ordNo;
         dispatch(selectQuizChange(selectQuiz.filter((e) => e.ordNo !== ordNo)));
@@ -29,7 +32,7 @@ const ItemRenderer = ({ item }) => {
                         <MokaInputLabel
                             name="title"
                             id={`title-${item.ordNo}`}
-                            onChange={(e) => handleChangeBulkinputBox(e)}
+                            onChange={(e) => handleChangeinputBox(e)}
                             labelWidth={30}
                             value={item.title}
                             className="col mb-0 pl-0 pr-0 pt-1"

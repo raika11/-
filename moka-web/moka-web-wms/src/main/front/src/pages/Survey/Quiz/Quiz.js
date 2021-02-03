@@ -9,6 +9,13 @@ import QuizEdit from '@pages/Survey/Quiz/QuizEdit';
 
 const Quiz = ({ match }) => {
     const [, setActiveTabIdx] = useState(0);
+    const [handleSave, setHandleSave] = useState(false);
+
+    // 저정 버튼 처리..
+    // 정보창 오른쪽 텝에서( 관련 템)에서 저장을 눌렀을경우 props로 업데이트 버튼 이벤트를 전달해서 edit 창에서 저장..
+    const handleSaveButtonClick = () => {
+        setHandleSave(true);
+    };
 
     return (
         <div className="d-flex">
@@ -36,10 +43,10 @@ const Quiz = ({ match }) => {
                         onSelectNave={(idx) => setActiveTabIdx(idx)}
                         tabs={[
                             <Suspense fallback={<MokaLoader />}>
-                                <QuizEdit />
+                                <QuizEdit handleSave={handleSave} setHandleSave={() => handleSaveButtonClick()} />
                             </Suspense>,
                             <Suspense fallback={<MokaLoader />}>
-                                <QuizChildRelationInfo />
+                                <QuizChildRelationInfo HandleSave={() => handleSaveButtonClick()} />
                             </Suspense>,
                         ]}
                         tabNavWidth={48}

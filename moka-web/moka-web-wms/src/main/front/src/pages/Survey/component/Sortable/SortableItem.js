@@ -11,12 +11,12 @@ const SortableItem = ({ id, item, moveItem, findItem }) => {
             isDragging: monitor.isDragging(),
         }),
         end: (dropResult, monitor) => {
-            /*const { id: droppedId, originalIndex } = monitor.getItem();
+            const { id: droppedId, originalIndex } = monitor.getItem();
             const didDrop = monitor.didDrop();
 
             if (!didDrop) {
                 moveItem(droppedId, originalIndex);
-            }*/
+            }
         },
     });
 

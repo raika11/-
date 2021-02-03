@@ -6,15 +6,20 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
 
+// 객관식 컴포넌트
 const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
     const dispatch = useDispatch();
+    // 스토어 연결.
     const { questionsList } = useSelector((store) => ({
         questionsList: store.quiz.quizQuestions.questionsList,
     }));
 
+    // 퀴즈 삭제 버튼 처리.
     const handleClickQuestionDeleteButton = () => {
         dispatch(deleteQuestion({ questionIndex: questionIndex }));
     };
+
+    // 문항 삭제 버튼 처리.
     const handleClickDeleteButton = (choices_index) => {
         let tempData = questionsList[questionIndex];
         dispatch(
@@ -26,6 +31,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
         );
     };
 
+    // 퀴즈 정보 업데이트 처리.
     const handleChangeEditData = (e, index = 'exits') => {
         let tempData = questionsList[questionIndex];
         let tempChoices = [];
@@ -80,6 +86,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
         }
     };
 
+    // 이미지 처리.
     const handleChangeFileInput = (inputName, file) => {
         dispatch(
             questionInfoChange({
@@ -94,6 +101,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
     return (
         <>
             <div className="mb-2 p-2 bg-gray150">
+                {/* 질문. */}
                 <Form.Row>
                     <Col xs={1}>
                         <AgGripIcon />
@@ -115,6 +123,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
                         <AgGripIcon />
                     </Col>
                 </Form.Row>
+                {/* 보기. */}
                 <Form.Row className="pt-3">
                     <Col xs={9}>
                         {questionsList[questionIndex].choices.map((element, index) => {
@@ -150,7 +159,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
                             );
                         })}
                     </Col>
-
+                    {/* 이미지 */}
                     <Col xs={3}>
                         <PollPhotoComponent
                             width={110}
@@ -164,11 +173,13 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
                         </PollPhotoComponent>
                     </Col>
                 </Form.Row>
+                {/* 정답. */}
                 <Form.Row className="pl-3 pt-2">
                     <Col xs={12}>
                         <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelWidth={100} labelClassName="text-right ml-0" />
                     </Col>
                 </Form.Row>
+                {/* 설명 */}
                 <Form.Row className="pt-2">
                     <Col xs={12}>
                         <MokaInputLabel

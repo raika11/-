@@ -58,7 +58,7 @@ export const initialState = {
         quizDesc: '',
         quizRels: [],
         quizSeq: 0,
-        quizSts: 'Y',
+        quizSts: 'P',
         quizType: 'AA',
         quizUrl: null,
         regDt: '',

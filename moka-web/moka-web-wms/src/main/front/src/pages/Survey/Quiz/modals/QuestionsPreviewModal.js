@@ -55,18 +55,23 @@ const QuestionsPreviewModal = (props) => {
                 if (priviewInfoState.questionType === 'S') {
                     return (
                         <>
-                            <div className="mb-2 p-2">
+                            <div className="mb-0 p-2">
                                 <Form.Row>
-                                    <Col xs={10}>Q1. {priviewInfoState.title}</Col>
+                                    <Col xs={10} className="d-flex mb-0 pb-0">
+                                        Q1. {priviewInfoState.title}
+                                    </Col>
                                 </Form.Row>
-                                <hr />
+                                <hr style={{ position: 'relative', height: '1px', margin: '0px 0 0 0' }} />
                                 <Form.Row className="pt-3">
                                     <Col xs={9}>
                                         {priviewInfoState.choices.map((element, index) => {
                                             return (
-                                                <Form.Row className="pt-1" key={index}>
-                                                    <Col xs={10}>{` 보기 ${index + 1} ${element.title}`}</Col>
-                                                </Form.Row>
+                                                <div key={index}>
+                                                    <Form.Row className="pt-0">
+                                                        <Col xs={10}>{` 보기 ${index + 1}  ${element.title}`}</Col>
+                                                    </Form.Row>
+                                                    <hr style={{ position: 'relative', height: '1px', margin: '0px 0 0 0' }} />
+                                                </div>
                                             );
                                         })}
                                     </Col>
@@ -97,20 +102,22 @@ const QuestionsPreviewModal = (props) => {
                 } else if (priviewInfoState.questionType === 'O') {
                     return (
                         <>
-                            <div className="mb-2 p-2">
-                                <Form.Row>
-                                    <Col xs={10}>Q1. {priviewInfoState.title}</Col>
+                            <div className="mb-2 p-2 flex-fill">
+                                <Form.Row className="d-flex bt-0 pt-0">
+                                    <Col xs={12}>Q1. {priviewInfoState.title}</Col>
                                 </Form.Row>
+                                <hr style={{ position: 'relative', height: '1px', margin: '0px 0 0 0' }} />
                                 <Form.Row className="pt-3">
-                                    <Col xs={9}>
+                                    <Col xs={12}>
                                         <Form.Row className="pt-1">
                                             <Col xs={12}>{`${priviewInfoState.answer}`}</Col>
                                         </Form.Row>
+                                        <hr style={{ position: 'relative', height: '1px', margin: '0px 0 0 0' }} />
                                         <Form.Row className="pt-2">
                                             <Col xs={12}>
                                                 <MokaInputLabel
                                                     as="textarea"
-                                                    className="mb-2"
+                                                    className="mb-2 w-100"
                                                     inputClassName="resize-none"
                                                     inputProps={{ rows: 2 }}
                                                     name="questionDesc"

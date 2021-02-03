@@ -8,7 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 
 /**
- * 배포서버 조회용 엔티티
+ * 배포서버 엔티티
  * 2021. 1. 26. 김정민
  */
 @AllArgsConstructor

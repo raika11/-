@@ -1,5 +1,3 @@
-import React from 'react';
-
 // 드래그 시 필요한 css 처리.
 // 데스킹 메뉴 참고.
 const cellClassRules = {
@@ -8,17 +6,17 @@ const cellClassRules = {
 };
 
 export const rowClassRules = {
-    'ag-rel-row': (params) => false,
+    'ag-rel-row': () => false,
 };
 
-const suppressKeyboardEvent = (params) => true;
+const suppressKeyboardEvent = () => true;
 
 export const columnDefs = [
     {
         rowDrag: true,
         width: 24,
         suppressMenu: true,
-        rowDragText: (params, dragItemCount) => {
+        rowDragText: (params) => {
             return params.rowNode.data.title;
         },
         cellClassRules: cellClassRules,

@@ -1,18 +1,18 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
-import { selectArticleListChange, clearSelectArticleList, selectArticleItemChange } from '@store/survey/quiz';
+import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 
 const SortAgGrid = () => {
     const dispatch = useDispatch();
     const [articleListModalState, setArticleListModalState] = useState(false);
     const [rowData, setRowData] = useState([]);
     const [modalArticle, setModalArticle] = useState(null);
-    const [instance, setInstance] = useState(null);
+    const [, setInstance] = useState(null);
 
     const { selectArticleList, selectArticleItem } = useSelector((store) => ({
         selectArticleList: store.quiz.selectArticle.list,
@@ -61,6 +61,7 @@ const SortAgGrid = () => {
         displayedRows.map((e) => {
             list.push(selectArticleList[Number(e.id)]);
             item.push(selectArticleItem[Number(e.id)]);
+            return {};
         });
 
         setTimeout(function () {
@@ -75,9 +76,8 @@ const SortAgGrid = () => {
         // params.api.applyTransaction({ update: displayedRows });
     };
 
-    const handleDelete = useCallback((itemIdex) => {
-        let newList2 = selectArticleList.filter((e, index) => index !== Number(itemIdex));
-
+    const handleDelete = (itemIdex) => {
+        // let newList2 = selectArticleList.filter((e, index) => index !== Number(itemIdex));
         // if (newList2.length === 0) {
         //     dispatch(clearSelectArticleList());
         // } else {
@@ -85,7 +85,7 @@ const SortAgGrid = () => {
         // }
         // let newList = selectArticleItem.filter((e, index) => index !== Number(itemIdex));
         // dispatch(selectArticleItemChange(newList));
-    });
+    };
 
     useEffect(() => {
         if (modalArticle) {

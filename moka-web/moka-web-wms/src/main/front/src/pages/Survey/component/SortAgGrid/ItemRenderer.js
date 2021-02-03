@@ -46,13 +46,15 @@ const ItemRenderer = ({ value }) => {
 
     useEffect(() => {
         const setEditDataRow = (data) => {
-            setEditData({
-                ...editData,
-                id: selectId.current,
-                title: data.title,
-                linkUrl: data.linkUrl,
-                targetType: data.targetType,
-            });
+            if (data) {
+                setEditData({
+                    ...editData,
+                    id: selectId.current,
+                    title: data.title,
+                    linkUrl: data.linkUrl,
+                    targetType: data.targetType,
+                });
+            }
         };
 
         if (!isNaN(Number(value.id))) {
@@ -100,9 +102,9 @@ const ItemRenderer = ({ value }) => {
                                 className="col mb-0 pl-0 pr-0"
                             />
                             <Col className="d-felx mb-0 pl-1 pr-0" xs={3}>
-                                <MokaInput as="select" name="targetType" id="targetType" value={editData.targetType} onChange={(e) => handleChangeValue(e)}>
-                                    <option value="one">본창</option>
-                                    <option value="two">새창</option>
+                                <MokaInput as="select" name="linkTarget" id="linkTarget" value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
+                                    <option value="S">본창</option>
+                                    <option value="N">새창</option>
                                 </MokaInput>
                             </Col>
                         </Row>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import { MokaTableEditCancleButton } from '@components';
-import { selectQuizChange } from '@store/survey/quiz';
+import { selectQuizChange, clearSelectQuiz } from '@store/survey/quiz';
 import { useSelector, useDispatch } from 'react-redux';
 
 const ItemRenderer = ({ item }) => {
@@ -19,9 +19,17 @@ const ItemRenderer = ({ item }) => {
 
     // 삭제 버튼 처리.
     const handleClickDelete = () => {
-        const ordNo = item.ordNo;
-        dispatch(selectQuizChange(selectQuiz.filter((e) => e.ordNo !== ordNo)));
+        const itemIndex = item.index;
+        const newList = selectQuiz.filter((e, index) => index !== itemIndex);
+        dispatch(clearSelectQuiz());
+        setTimeout(function () {
+            dispatch(selectQuizChange(newList));
+        }, 10);
     };
+
+    // useEffect(() => {
+    //     console.log(item);
+    // }, [item]);
 
     return (
         <>

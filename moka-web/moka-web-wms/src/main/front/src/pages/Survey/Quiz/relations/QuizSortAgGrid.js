@@ -56,7 +56,8 @@ const QuizSortAgGrid = () => {
                         contentId: item.contentId,
                         item: {
                             ...item,
-                            ordNo: index,
+                            ordNo: item.ordNo,
+                            index: index,
                         },
                     };
                 }),

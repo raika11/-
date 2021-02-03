@@ -8,7 +8,7 @@ export const clearQuizinfo = createAction(CLEAR_QUIZINFO);
 export const CLEAR_QUIZMODALSEARCH = 'quiz/CLEAR_QUIZMODALSEARCH';
 export const clearQuizmodalsearch = createAction(CLEAR_QUIZMODALSEARCH);
 export const CLEAR_SELECT_QUIZ = 'quiz/CLEAR_SELECT_QUIZ';
-export const clear_select_quiz = createAction(CLEAR_SELECT_QUIZ);
+export const clearSelectQuiz = createAction(CLEAR_SELECT_QUIZ);
 export const CLEAR_SELECT_ARTICLE_LIST = 'quiz/CLEAR_SELECT_ARTICLE_LIST';
 export const clearSelectArticleList = createAction(CLEAR_SELECT_ARTICLE_LIST);
 

@@ -9,7 +9,7 @@ import DeskingTreeView from './DeskingTreeView';
 /**
  * Desking Tree
  */
-const DeskingTree = ({ match, setComponentAgGridInstances }) => {
+const DeskingTree = ({ setComponentAgGridInstances }) => {
     // const { areaSeq: paramAreaSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -72,14 +72,14 @@ const DeskingTree = ({ match, setComponentAgGridInstances }) => {
                         setComponentAgGridInstances([]);
                         if (header.success) {
                             setSelected(String(item.areaSeq));
-                            history.push(`${match.patch}/${item.areaSeq}`);
+                            history.push(`/desking/${item.areaSeq}`);
                             dispatch(changeArea(body.area));
                         }
                     },
                 }),
             );
         },
-        [dispatch, history, setComponentAgGridInstances, match],
+        [dispatch, history, setComponentAgGridInstances],
     );
 
     return (

@@ -239,22 +239,6 @@ $rel-row-color:  #ededed;
 $rel-row-hover-color: darken($rel-row-color, 5);
 
 .desking-grid {
-    .ag-rel-row {
-        background-color: $rel-row-color;
-
-        &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
-            background-color: $rel-row-hover-color;
-        }
-
-        &.next::before {
-            bottom: 37px;
-        }
-
-        &.hover::before {
-            top: 37px;
-        }
-    }
-
     .ag-row {
         &.next::before {
             content: "";
@@ -289,6 +273,22 @@ $rel-row-hover-color: darken($rel-row-color, 5);
             left: 0px;
             right: 0px;
             font-size: 20px;
+        }
+    }
+
+    .ag-rel-row {
+        background-color: $rel-row-color;
+
+        &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
+            background-color: $rel-row-hover-color;
+        }
+
+        &.next::before {
+            bottom: 37px;
+        }
+
+        &.hover::before {
+            top: 37px;
         }
     }
 

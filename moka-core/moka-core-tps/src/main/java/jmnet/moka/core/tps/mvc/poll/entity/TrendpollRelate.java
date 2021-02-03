@@ -91,7 +91,8 @@ public class TrendpollRelate implements Serializable {
      */
     @Column(name = "LINK_TARGET")
     @Enumerated(EnumType.STRING)
-    private LinkTargetCode linkTarget;
+    @Builder.Default
+    private LinkTargetCode linkTarget = LinkTargetCode.S;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "POLL_SEQ", referencedColumnName = "POLL_SEQ", nullable = false, insertable = false, updatable = false)

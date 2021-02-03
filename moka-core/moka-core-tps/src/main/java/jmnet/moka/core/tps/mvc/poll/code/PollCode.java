@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import jmnet.moka.common.data.mybatis.support.EnumCode;
+import jmnet.moka.common.utils.EnumCode;
 import jmnet.moka.common.utils.MapBuilder;
 
 /**

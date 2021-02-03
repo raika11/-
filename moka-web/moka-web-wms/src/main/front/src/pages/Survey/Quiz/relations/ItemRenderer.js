@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import { MokaTableEditCancleButton } from '@components';
@@ -27,14 +27,10 @@ const ItemRenderer = ({ item }) => {
         }, 10);
     };
 
-    // useEffect(() => {
-    //     console.log(item);
-    // }, [item]);
-
     return (
         <>
             <Row>
-                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{Number(item.ordNo) + 1}</Col>
+                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{Number(item.index) + 1}</Col>
                 <Col className="d-felx" xs={10}>
                     <Row className="d-felx">
                         <MokaInputLabel

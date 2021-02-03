@@ -52,7 +52,7 @@ const ItemRenderer = ({ value }) => {
                     id: selectId.current,
                     title: data.title,
                     linkUrl: data.linkUrl,
-                    targetType: data.targetType,
+                    linkTarget: data.linkTarget,
                 });
             }
         };

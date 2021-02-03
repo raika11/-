@@ -43,7 +43,7 @@ const Quiz = ({ match }) => {
                         onSelectNave={(idx) => setActiveTabIdx(idx)}
                         tabs={[
                             <Suspense fallback={<MokaLoader />}>
-                                <QuizEdit handleSave={handleSave} setHandleSave={() => handleSaveButtonClick()} />
+                                <QuizEdit handleSave={handleSave} setHandleSave={() => setHandleSave(false)} />
                             </Suspense>,
                             <Suspense fallback={<MokaLoader />}>
                                 <QuizChildRelationInfo HandleSave={() => handleSaveButtonClick()} />

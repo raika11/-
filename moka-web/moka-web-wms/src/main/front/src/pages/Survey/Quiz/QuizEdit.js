@@ -53,7 +53,8 @@ export const initialThirdTypeQuestionsInput = {
 
 export const initialFirstTypeQuestionsInput = {
     questionType: 'O',
-    imgFile: {},
+    imgUrl: '',
+    imgFile: null,
     title: '',
     questionDesc: '',
     answer: '',
@@ -109,22 +110,11 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
     // 수정 필요.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const moveItem = useCallback((id, atIndex) => {
-        // console.log({
-        //     action: action,
-        //     id: id,
-        //     atIndex: atIndex,
-        // });
         const { card, index } = findItem(id);
 
         const copyItems = [...sortableItems];
         copyItems.splice(index, 1);
         copyItems.splice(atIndex, 0, card);
-        // console.log(copyItems);
-        // 이동 할떄 이벤트 처리 해야함.
-        // if (sortEnd === true) {
-        //     setSortEnd(false);
-        //     setSortableItems(copyItems);
-        // }
         handleDebounceChangeValue(copyItems);
     });
     /** sortable */
@@ -221,12 +211,48 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
     };
 
     const checkValidation = () => {
+        if (!quizInfo.title) {
+            messageBox.alert('퀴즈 제목을 입력해 주세요.', () => {});
+            return true;
+        }
+        for (let i = 0; i < questionsList.length; i++) {
+            let element = questionsList[i];
+            let questionType = element.questionType;
+
+            if (!element.title) {
+                messageBox.alert('문항 제목을 입력해 주세요.', () => {});
+                return true;
+            }
+
+            if (questionType === 'S') {
+                let choices = element.choices;
+                let answYnCh = [];
+                for (let y = 0; y < choices.length; y++) {
+                    let chElement = choices[y];
+
+                    if (chElement.answYn === 'Y') {
+                        answYnCh.push(y);
+                    }
+                }
+                if (answYnCh.length === 0) {
+                    messageBox.alert('정답이 입력되지 않았습니다.', () => {});
+                    return true;
+                }
+            } else if (questionType === 'O') {
+                if (element.answer === '') {
+                    messageBox.alert('정답이 입력되지 않았습니다.', () => {});
+                    return true;
+                }
+            }
+        }
+
         return false;
     };
 
     // 저장 버튼 클릭 처리.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleClickSaveButton = useCallback(() => {
+        setHandleSave();
         let type;
         let quizSeq;
 
@@ -330,7 +356,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             }
             formData.append(`quizRels[${RelsCount}].linkUrl`, item.linkUrl);
             formData.append(`quizRels[${RelsCount}].title`, item.title);
-            formData.append(`quizRels[${RelsCount}].linkTarget`, 'S');
+            formData.append(`quizRels[${RelsCount}].linkTarget`, item.linkTarget ? item.linkTarget : 'S');
             RelsCount++;
             return item;
         });

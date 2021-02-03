@@ -265,7 +265,7 @@ public class MicAgendaRestController extends AbstractCommonController {
     }
 
     @ApiOperation(value = "배너 사용여부 수정(토글)")
-    @PutMapping(value = "/banners/{bnnrSeq}")
+    @PutMapping(value = "/banners/{bnnrSeq}/toggle")
     public ResponseEntity<?> putMicBannerToggle(@ApiParam(value = "배너순번", required = true) @PathVariable("bnnrSeq")
     @Min(value = 0, message = "tps.banner.error.min.bnnrSeq") Long bnnrSeq)
             throws Exception {

@@ -15,7 +15,7 @@ import { MokaEditorCore } from '@components/MokaEditor';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import commonUtil from '@utils/commonUtil';
-import { unescapeHtml, invalidListToError } from '@utils/convertUtil';
+import { unescapeHtmlArticle, escapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
@@ -229,9 +229,8 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             },
             reporterList: temp.reporterList,
             tagList: temp.tagList,
-            artTitle: temp.artTitle,
-            // \n => <br/> 로 변경
-            artSubTitle: (temp.artSubTitle || '').replace(/\n/g, '<br/>'),
+            artTitle: escapeHtmlArticle(temp.artTitle),
+            artSubTitle: escapeHtmlArticle(temp.artSubTitle),
             categoryList: temp.categoryList,
         };
 
@@ -272,7 +271,8 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
     useEffect(() => {
         setTemp({
             ...article,
-            artTitle: unescapeHtml(article.artTitle),
+            artTitle: unescapeHtmlArticle(article.artTitle),
+            artSubTitle: unescapeHtmlArticle(article.artSubTitle),
             // 분류코드 (중복인 마스터코드 제거)
             categoryList: [...new Set(article.categoryList)],
             // 발행일
@@ -378,7 +378,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                             label="부제목"
                             name="artSubTitle"
                             value={temp.artSubTitle}
-                            inputClassName="bg-white resize-none"
+                            inputClassName="bg-white resize-none custom-scroll"
                             onChange={handleChangeValue}
                         />
                     </Col>

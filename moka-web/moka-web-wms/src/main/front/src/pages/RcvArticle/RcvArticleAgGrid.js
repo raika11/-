@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import columnDefs from './RcvArticleAgGridColumns';
 import { MokaTable } from '@components';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { GET_RCV_ARTICLE_LIST, changeSearchOption, getRcvArticleList, postRcvArticleWithRid, POST_RCV_ARTICLE_WITH_RID } from '@store/rcvArticle';
 import { DB_DATEFORMAT } from '@/constants';
 import toast from '@utils/toastUtil';
@@ -98,7 +98,7 @@ const RcvArticleAgGrid = () => {
             setRowData(
                 list.map((data) => ({
                     ...data,
-                    title: unescapeHtml(data.title),
+                    title: unescapeHtmlArticle(data.title),
                     rcvDt: moment(data.regDt, DB_DATEFORMAT).format('MM-DD'),
                     rcvTime: moment(data.regDt, DB_DATEFORMAT).format('HH:mm'),
                     sourceName: `[${data.sourceName}]`,

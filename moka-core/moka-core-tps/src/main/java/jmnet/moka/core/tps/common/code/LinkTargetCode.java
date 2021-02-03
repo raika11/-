@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import jmnet.moka.common.data.mybatis.support.EnumCode;
 import jmnet.moka.common.utils.MapBuilder;
 
 /**
@@ -18,7 +19,7 @@ import jmnet.moka.common.utils.MapBuilder;
  * @author ince
  * @since 2021-02-02 16:24
  */
-public enum LinkTargetCode {
+public enum LinkTargetCode implements EnumCode {
     S("S", "본창"),
     N("N", "새창");
 

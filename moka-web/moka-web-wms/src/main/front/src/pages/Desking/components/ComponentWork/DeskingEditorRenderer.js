@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { MokaTableEditButton, MokaInput, MokaTableEditCancleButton } from '@components';
+import { escapeHtmlArticle } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 
 /**
@@ -48,7 +49,7 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
             onSave(
                 {
                     ...data,
-                    title: editValue,
+                    title: escapeHtmlArticle(editValue),
                     onRowClicked: undefined,
                     onSave: undefined,
                     onDelete: undefined,

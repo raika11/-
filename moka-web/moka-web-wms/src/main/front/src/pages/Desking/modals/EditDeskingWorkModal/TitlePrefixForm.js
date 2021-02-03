@@ -36,7 +36,7 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
         <Form.Row className="mb-2">
             <Col xs={4} className="p-0">
                 <MokaInputLabel as="select" label="말머리" labelClassName="pr-3" className="mb-0 w-100" value={temp.titlePrefix} name="titlePrefix" onChange={onChange}>
-                    <option hidden>선택</option>
+                    <option value="">선택</option>
                     {dsPreRows &&
                         dsPreRows.map((code) => (
                             <option key={code.id} value={code.id}>
@@ -47,7 +47,7 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
             </Col>
             <Col xs={3} className="p-0 pl-2">
                 <MokaInput as="select" name="titlePrefixLoc" value={temp.titlePrefixLoc} onChange={onChange}>
-                    <option hidden>선택</option>
+                    <option value="">선택</option>
                     {filteredLocRows &&
                         filteredLocRows.map((code) => (
                             <option key={code.id} value={code.id}>

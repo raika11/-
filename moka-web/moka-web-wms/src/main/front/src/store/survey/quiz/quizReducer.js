@@ -21,8 +21,9 @@ import {
     SELECT_QUIZ_CHANGE,
     CLEAR_SELECT_QUIZ,
     CHANGE_QUIZ_INFO,
-    CLEAR_SELECT_ARTICLE,
-    SELECT_ARTICLE_CHANGE,
+    CLEAR_SELECT_ARTICLE_LIST,
+    SELECT_ARTICLE_LIST_CHANGE,
+    SELECT_ARTICLE_ITEM_CHANGE,
 } from './quizAction';
 
 /**
@@ -95,7 +96,10 @@ export const initialState = {
     },
     selectQuizQuestion: {},
     selectQuiz: [],
-    selectArticle: [],
+    selectArticle: {
+        list: [],
+        item: [],
+    },
 };
 
 /**
@@ -209,16 +213,21 @@ export default handleActions(
                 draft.selectQuiz = initialState.selectQuiz;
             });
         },
-        [SELECT_ARTICLE_CHANGE]: (state, { payload }) => {
+        [SELECT_ARTICLE_LIST_CHANGE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.selectArticle = payload;
+                draft.selectArticle.list = payload;
             });
         },
-        // [CLEAR_SELECT_ARTICLE]: (state) => {
-        //     return produce(state, (draft) => {
-        //         draft.selectArticle = initialState.selectArticle;
-        //     });
-        // },
+        [SELECT_ARTICLE_ITEM_CHANGE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.selectArticle.item = payload;
+            });
+        },
+        [CLEAR_SELECT_ARTICLE_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.selectArticle.list = initialState.selectArticle.list;
+            });
+        },
     },
     initialState,
 );

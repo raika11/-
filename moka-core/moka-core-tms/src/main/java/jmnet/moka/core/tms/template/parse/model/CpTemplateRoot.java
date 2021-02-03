@@ -14,6 +14,7 @@ import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.merge.TemplateMerger;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.KeyResolver;
@@ -22,6 +23,7 @@ import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.DatasetItem;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 import jmnet.moka.core.tms.template.loader.AbstractTemplateLoader;
+import jmnet.moka.core.tms.template.loader.DpsWorkTemplateLoader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -141,7 +143,11 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 boolean isDeskingWork = context
                         .getMergeOptions()
                         .isPreview() && context.has(MokaConstants.MERGE_CONTEXT_REG_ID);
-                String apiName = isDeskingWork ? ItemConstants.CP_DATA_TYPE_DESK_WORK_API : ItemConstants.CP_DATA_TYPE_DESK_API;
+                if (isDeskingWork && this.templateLoader instanceof DpsWorkTemplateLoader) {
+                    // Preview 모드의 경우에 작업중인 컴포넌트만 desking.work api를 호출한다.
+                    isDeskingWork &= ((DpsWorkTemplateLoader) this.templateLoader).isWorkComponent(this.getId());
+                }
+                String apiName = isDeskingWork ? DpsApiConstants.DESKING_WORK : DpsApiConstants.DESKING;
                 if (isDeskingWork) {
                     datasetParam.put(MokaConstants.PARAM_REG_ID, context.get(MokaConstants.MERGE_CONTEXT_REG_ID));
                 }

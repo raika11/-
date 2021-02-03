@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'react-bootstrap';
-import { MokaInputLabel } from '@components';
+import { MokaInputLabel, AgGripIcon } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
@@ -45,7 +45,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
             <div className="mb-2 p-2 bg-gray150">
                 <Form.Row>
                     <Col xs={1}>
-                        <div>||</div>
+                        <AgGripIcon />
                     </Col>
                     <Col xs={10}>
                         <MokaInputLabel

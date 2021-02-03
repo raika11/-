@@ -34,29 +34,25 @@ import org.springframework.core.annotation.Order;
 @Configuration
 public class PreviewConfiguration {
 
+    public static final String PREVIEW_WORK_TEMPLATE_MERGER = "previewWorkTemplateMerger";
+    public static final String PREVIEW_TEMPLATE_MERGER = "previewTemplateMerger";
+    public static final String TEMPLATE_LOADER = "templateLoader";
+    public static final String WORK_TEMPLATE_LOADER = "workTemplateLoader";
     public final transient Logger logger = LoggerFactory.getLogger(getClass());
-
     @Value("${tms.item.api.host}")
     private String itemApiHost;
-
     @Value("${tms.item.api.path}")
     private String itemApiPath;
-
     @Value("${tms.default.api.host}")
     private String defaultApiHost;
-
     @Value("${tms.default.api.path}")
     private String defaultApiPath;
-
     @Value("${tms.default.api.hostPath.use}")
     private boolean defaultApiHostUse;
-
     @Value("${tms.template.loader.cache}")
     private boolean templateLoaderCache;
-
     @Autowired
     private GenericApplicationContext appContext;
-
     private DataLoader defaultDataLoader;
 
     @Bean
@@ -92,14 +88,15 @@ public class PreviewConfiguration {
         return domainResolver;
     }
 
-    @Bean
+    @Bean(name = TEMPLATE_LOADER)
     @Scope("prototype")
     public AbstractTemplateLoader templateLoader(String domainId)
             throws TemplateParseException, TmsException {
         long expire = 10000L;
         try {
-            String expireSeconds = appContext.getBeanFactory()
-                                             .resolveEmbeddedValue("${tms.item.preview.expire.seconds}");
+            String expireSeconds = appContext
+                    .getBeanFactory()
+                    .resolveEmbeddedValue("${tms.item.preview.expire.seconds}");
             if (McpString.isNotEmpty(expireSeconds)) {
                 expire = Long.parseLong(expireSeconds);
             }
@@ -109,14 +106,14 @@ public class PreviewConfiguration {
         return new DpsTemplateLoader(appContext, domainId, itemDataLoader(), templateLoaderCache, expire);
     }
 
-    @Bean
+    @Bean(name = WORK_TEMPLATE_LOADER)
     @Scope("prototype")
-    public AbstractTemplateLoader workTemplateLoader(String domainId, String workerId, List<String> componentIdList)
+    public AbstractTemplateLoader workTemplateLoader(String domainId, String workerId, List<String> workComponentIdList)
             throws TemplateParseException, TmsException {
-        return new DpsWorkTemplateLoader(appContext, domainId, itemDataLoader(), workerId, componentIdList);
+        return new DpsWorkTemplateLoader(appContext, domainId, itemDataLoader(), workerId, workComponentIdList);
     }
 
-    @Bean
+    @Bean(name = PREVIEW_TEMPLATE_MERGER)
     @Scope("prototype")
     public MokaPreviewTemplateMerger previewTemplateMerger(DomainItem domainItem)
             throws IOException {
@@ -125,17 +122,17 @@ public class PreviewConfiguration {
         String apiPath = domainItem.getString(ItemConstants.DOMAIN_API_PATH);
         //        HttpProxyDataLoader domainDataLoader = appContext.getBean(HttpProxyDataLoader.class, apiHost, apiPath);
         HttpProxyDataLoader domainDataLoader = domainDataLoader(apiHost, apiPath);
-        AbstractTemplateLoader templateLoader = (AbstractTemplateLoader) this.appContext.getBean("templateLoader", domainId);
+        AbstractTemplateLoader templateLoader = (AbstractTemplateLoader) this.appContext.getBean(TEMPLATE_LOADER, domainId);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm =
                 new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, domainDataLoader, defaultDataLoader(),
-                                              this.defaultApiHostUse);
+                        this.defaultApiHostUse);
         return ptm;
     }
 
-    @Bean
+    @Bean(name = PREVIEW_WORK_TEMPLATE_MERGER)
     @Scope("prototype")
-    public MokaPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem, String regId, List<String> componentIdList)
+    public MokaPreviewTemplateMerger previewWorkTemplateMerger(DomainItem domainItem, String regId, List<String> workComponentIdList)
             throws IOException {
 
         String domainId = domainItem.getString(ItemConstants.DOMAIN_ID);
@@ -144,11 +141,11 @@ public class PreviewConfiguration {
         //        HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, apiHost, apiPath);
         HttpProxyDataLoader domainDataLoader = domainDataLoader(apiHost, apiPath);
         AbstractTemplateLoader templateLoader =
-                (AbstractTemplateLoader) this.appContext.getBean("workTemplateLoader", domainId, regId, componentIdList);
+                (AbstractTemplateLoader) this.appContext.getBean(WORK_TEMPLATE_LOADER, domainId, regId, workComponentIdList);
         DomainResolver domainResolver = this.appContext.getBean(DomainResolver.class);
         MokaPreviewTemplateMerger ptm =
                 new MokaPreviewTemplateMerger(this.appContext, domainItem, domainResolver, templateLoader, domainDataLoader, defaultDataLoader(),
-                                              this.defaultApiHostUse, regId);
+                        this.defaultApiHostUse, regId);
         return ptm;
     }
 

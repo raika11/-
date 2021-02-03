@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
-import { unescapeHtml, escapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle, escapeHtmlArticle } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import {
     initialState,
@@ -66,7 +66,7 @@ const CdnArticleEdit = ({ match }) => {
                             setTemp({
                                 ...temp,
                                 totalId: row.totalId,
-                                title: unescapeHtml(row.artTitle),
+                                title: unescapeHtmlArticle(row.artTitle),
                             });
                             setModalShow(false);
                             setError({ ...error, totalId: false });
@@ -88,7 +88,7 @@ const CdnArticleEdit = ({ match }) => {
                 saveCdnArticle({
                     cdnArticle: {
                         ...temp,
-                        title: escapeHtml(temp.title),
+                        title: escapeHtmlArticle(temp.title),
                     },
                     callback: ({ header }) => {
                         if (header.success) {
@@ -148,7 +148,10 @@ const CdnArticleEdit = ({ match }) => {
     }, [dispatch, totalId]);
 
     useEffect(() => {
-        setTemp(cdnArticle);
+        setTemp({
+            ...cdnArticle,
+            title: unescapeHtmlArticle(cdnArticle.title),
+        });
         setError({});
     }, [cdnArticle]);
 
@@ -191,9 +194,9 @@ const CdnArticleEdit = ({ match }) => {
                     <Col xs={4} className="p-0">
                         <MokaInputLabel label="기사" labelWidth={76} value={temp.totalId} inputClassName="bg-white" isInvalid={error.totalId} disabled required />
                     </Col>
-                    {/* 기사 제목 (수정가능) */}
+                    {/* 기사 제목 (수정불가) */}
                     <Col xs={totalId ? 8 : 6} className="p-0 pl-2">
-                        <MokaInput className="bg-white" value={temp.title ? unescapeHtml(temp.title) : ''} isInvalid={error.totalId} disabled />
+                        <MokaInput className="bg-white" value={temp.title} isInvalid={error.totalId} disabled />
                     </Col>
                     {/* 기사 검색 */}
                     {!totalId && (

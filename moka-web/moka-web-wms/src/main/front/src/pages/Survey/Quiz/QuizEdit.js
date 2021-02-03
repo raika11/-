@@ -25,7 +25,8 @@ import {
     addQuestion,
     setQuestion,
     selectQuizChange,
-    selectArticleChange,
+    selectArticleListChange,
+    selectArticleItemChange,
 } from '@store/survey/quiz';
 
 import { DndProvider } from 'react-dnd';
@@ -69,12 +70,13 @@ const QuizEdit = () => {
     const [questionSetup, setQuestionSetup] = useState(initQuestionSetup);
 
     // 공통 구분값 URL
-    const { quizInfo, save_loading, get_loading, questionsItem, questionsList, selectQuizQuestion, selectQuiz } = useSelector((store) => ({
+    const { quizInfo, save_loading, get_loading, questionsItem, questionsList, selectQuizQuestion, selectQuiz, selectArticleItem } = useSelector((store) => ({
         quizInfo: store.quiz.quizInfo,
         questionsItem: store.quiz.quizQuestions.questionsItem,
         questionsList: store.quiz.quizQuestions.questionsList,
         selectQuiz: store.quiz.selectQuiz,
         selectQuizQuestion: store.quiz.selectQuizQuestion,
+        selectArticleItem: store.quiz.selectArticle.item,
         save_loading: store.loading[SAVE_QUIZZES],
         get_loading: store.loading[GET_QUIZZES],
     }));
@@ -288,12 +290,27 @@ const QuizEdit = () => {
             return element;
         });
 
+        let RelsCount = 0;
         selectQuiz.map((item, index) => {
-            formData.append(`quizRels[${index}].relType`, 'Q');
-            formData.append(`quizRels[${index}].contentId`, item.contentId);
+            formData.append(`quizRels[${RelsCount}].relType`, 'Q');
+            if (item.contentId) {
+                formData.append(`quizRels[${RelsCount}].contentId`, item.contentId);
+            }
             // formData.append(`quizRels[${questionCount}].linkUrl`, ''); // URL 이 없어서..
-            formData.append(`quizRels[${index}].title`, item.title);
+            formData.append(`quizRels[${RelsCount}].title`, item.title);
+            RelsCount++;
+            return item;
+        });
 
+        selectArticleItem.map((item) => {
+            formData.append(`quizRels[${RelsCount}].relType`, 'A');
+            if (item.contentId) {
+                formData.append(`quizRels[${RelsCount}].contentId`, item.contentId);
+            }
+            formData.append(`quizRels[${RelsCount}].linkUrl`, item.linkUrl);
+            formData.append(`quizRels[${RelsCount}].title`, item.title);
+            formData.append(`quizRels[${RelsCount}].linkTarget`, 'S');
+            RelsCount++;
             return item;
         });
 
@@ -384,7 +401,8 @@ const QuizEdit = () => {
 
         const setQuizRels = (data) => {
             dispatch(selectQuizChange(data.filter((e) => e.relType === 'Q')));
-            dispatch(selectArticleChange(data.filter((e) => e.relType === 'A')));
+            dispatch(selectArticleListChange(data.filter((e) => e.relType === 'A')));
+            dispatch(selectArticleItemChange(data.filter((e) => e.relType === 'A')));
         };
 
         if (selectQuizSeq.current !== 'add') {
@@ -480,7 +498,7 @@ const QuizEdit = () => {
             loading={save_loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '미리보기', variant: 'positive', onClick: () => console.log('미리보기'), className: 'mr-05' },
+                { text: '미리보기', variant: 'positive', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-05' },
                 { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
             ]}

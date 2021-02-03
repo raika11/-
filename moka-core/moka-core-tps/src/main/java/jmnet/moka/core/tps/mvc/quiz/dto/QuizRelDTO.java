@@ -76,7 +76,6 @@ public class QuizRelDTO implements Serializable {
      * 링크URL Target
      */
     @ApiModelProperty(value = "관련정보 링크URL Target")
-    @Size(max = 1, message = "{tps.common.error.size.linkTarget}")
     @Builder.Default
     private LinkTargetCode linkTarget = LinkTargetCode.S;
 

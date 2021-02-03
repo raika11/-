@@ -33,18 +33,23 @@ import org.springframework.context.support.GenericApplicationContext;
 public class DpsWorkTemplateLoader extends DpsTemplateLoader {
     public static final String ITEM_API_COMPONENT_WORK = "component.work";
     private final String regId;
-    private final List<String> componentIdList;
+    /** Work Component List */
+    private final List<String> workComponentIdList;
     private static final Logger logger = LoggerFactory.getLogger(DpsWorkTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
 
     public DpsWorkTemplateLoader(GenericApplicationContext appContext, String domainId, HttpProxyDataLoader httpProxyDataLoader, String regId,
-            List<String> componentIdList)
+            List<String> workComponentIdList)
             throws TmsException {
         super(appContext, domainId, httpProxyDataLoader, false, 0L);
         this.regId = regId;
-        this.componentIdList = componentIdList;
+        this.workComponentIdList = workComponentIdList;
     }
 
+
+    public boolean isWorkComponent(String componentId) {
+        return this.workComponentIdList.contains(componentId);
+    }
 
     /**
      * <pre>
@@ -64,7 +69,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
         // && itemType.equals(MspConstants.ITEM_COMPONENT) && itemId.equals(this.componentId);
         boolean isWorkComponent = false;
         if (this.regId != null && itemType.equals(MokaConstants.ITEM_COMPONENT)) {
-            if (this.componentIdList.size() == 0 || this.componentIdList.contains(itemId)) {
+            if (this.workComponentIdList.size() == 0 || this.workComponentIdList.contains(itemId)) {
                 isWorkComponent = true;
             }
         }

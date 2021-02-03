@@ -90,8 +90,6 @@ public class ItemConstants {
     public static String CP_DATA_TYPE_NONE = "NONE";
     public static String CP_DATA_TYPE_AUTO = "AUTO";
     public static String CP_DATA_TYPE_DESK = "DESK";
-    public static String CP_DATA_TYPE_DESK_API = "desking";
-    public static String CP_DATA_TYPE_DESK_WORK_API = "desking.work";
     public static String CP_DATA_TYPE_DESK_PARAM = "ids";
 
     /* Component Item DEL_WORDS default */

@@ -25,6 +25,7 @@ import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
+import jmnet.moka.core.tps.config.PreviewConfiguration;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
@@ -126,7 +127,7 @@ public class MergeServiceImpl implements MergeService {
                 .now()
                 .format(df));
 
-        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
 
         // 랜더링
         StringBuilder sb = dtm.merge(pageItem, null, true, false, true, baseTag);
@@ -192,7 +193,8 @@ public class MergeServiceImpl implements MergeService {
 
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+                    (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_WORK_TEMPLATE_MERGER, domainItem, regId,
+                            componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, containerItem, true, false, false, true);
@@ -211,7 +213,8 @@ public class MergeServiceImpl implements MergeService {
 
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+                    (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_WORK_TEMPLATE_MERGER, domainItem, regId,
+                            componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, true, false, false, true);
@@ -291,7 +294,8 @@ public class MergeServiceImpl implements MergeService {
 
             // merger
             MokaPreviewTemplateMerger dtm =
-                    (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+                    (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_WORK_TEMPLATE_MERGER, domainItem, regId,
+                            componentIdList);
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
@@ -372,7 +376,8 @@ public class MergeServiceImpl implements MergeService {
 
                 // merger
                 MokaPreviewTemplateMerger dtm =
-                        (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+                        (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_WORK_TEMPLATE_MERGER, domainItem, regId,
+                                componentIdList);
 
                 // 랜더링
                 StringBuilder sb = dtm.merge(pageItem, containerItem, false, false, false, true);
@@ -391,7 +396,8 @@ public class MergeServiceImpl implements MergeService {
 
                 // merger
                 MokaPreviewTemplateMerger dtm =
-                        (MokaPreviewTemplateMerger) appContext.getBean("previewWorkTemplateMerger", domainItem, regId, componentIdList);
+                        (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_WORK_TEMPLATE_MERGER, domainItem, regId,
+                                componentIdList);
 
                 // 랜더링
                 StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
@@ -480,7 +486,7 @@ public class MergeServiceImpl implements MergeService {
                 .now()
                 .format(df));
 
-        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
 
         // 랜더링
         StringBuilder sb = dtm.merge(articlePageItem, totalId);
@@ -565,7 +571,7 @@ public class MergeServiceImpl implements MergeService {
             reporterList.add(map);
         }
 
-        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
 
         // 랜더링
         StringBuilder sb = dtm.mergeRcv(articlePageItem, rid, categoryList, reporterList, tagList);
@@ -650,7 +656,7 @@ public class MergeServiceImpl implements MergeService {
             reporterList.add(map);
         }
 
-        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
 
         // 랜더링
         StringBuilder sb =
@@ -693,7 +699,7 @@ public class MergeServiceImpl implements MergeService {
                 .now()
                 .format(df));
 
-        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean("previewTemplateMerger", domainItem);
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
 
         // 랜더링
         StringBuilder sb = dtm.merge(articlePageItem, totalId);

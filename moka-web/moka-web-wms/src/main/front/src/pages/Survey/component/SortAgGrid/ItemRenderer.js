@@ -41,6 +41,7 @@ const ItemRenderer = ({ value }) => {
         dispatch(clearSelectArticleList());
         setTimeout(function () {
             dispatch(selectArticleListChange(selectArticleList.filter((e, index) => index !== Number(selectId.current))));
+            dispatch(selectArticleItemChange(selectArticleItem.filter((e, index) => index !== Number(selectId.current))));
         }, 10);
     };
 

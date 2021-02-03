@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { MokaInputLabel, AgGripIcon } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
+import { DeleteConfirmModal } from '@pages/Survey/Quiz/modals';
 
 // 주관식 컴포넌트
-const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
+const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
     const dispatch = useDispatch();
+    const [deleteConfirmModalState, setDeleteConfirmModalState] = useState(false);
     const { questionsList } = useSelector((store) => ({
         questionsList: store.quiz.quizQuestions.questionsList,
     }));
 
     // 삭제 버튼
     const handleClickQuestionDeleteButton = () => {
+        if (quizSts === 'Y') {
+            setDeleteConfirmModalState(true);
+        } else {
+            dispatch(deleteQuestion({ questionIndex: questionIndex }));
+        }
+    };
+
+    // alert 창에서 확인 눌렀을 경우.
+    const handleAlertDelete = () => {
         dispatch(deleteQuestion({ questionIndex: questionIndex }));
+        setDeleteConfirmModalState(false);
     };
 
     // 퀴즈 정보 업데이트 처리.
@@ -127,6 +139,15 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
                         </PollPhotoComponent>
                     </Col>
                 </Form.Row>
+                <DeleteConfirmModal
+                    show={deleteConfirmModalState}
+                    onHide={(e) => {
+                        if (e.type === 'save') {
+                            handleAlertDelete();
+                        }
+                        setDeleteConfirmModalState(false);
+                    }}
+                />
             </div>
         </>
     );

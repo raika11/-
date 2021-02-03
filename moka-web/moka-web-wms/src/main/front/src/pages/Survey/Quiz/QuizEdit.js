@@ -736,6 +736,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                                 questionIndex={index}
                                                 questionCount={questionCount}
                                                 selectEditData={null}
+                                                quizSts={quizInfo.quizSts}
                                                 getLoading={get_loading}
                                             />
                                         </>
@@ -756,6 +757,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                                 questionIndex={index}
                                                 questionCount={questionCount}
                                                 selectEditData={null}
+                                                quizSts={quizInfo.quizSts}
                                                 getLoading={get_loading}
                                             />
                                         </>

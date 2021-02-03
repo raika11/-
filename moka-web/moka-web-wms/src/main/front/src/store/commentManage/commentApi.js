@@ -10,7 +10,14 @@ export const getInitData = () => {
 
 // 댓글목록 조회
 export const getCommentList = ({ search }) => {
-    return instance.get(`/api/comments?${qs.stringify(search)}`).catch((err) => {
+    let newSearch = {};
+    Object.keys(search).forEach(function (key) {
+        if (search[key] && search[key] !== '') {
+            newSearch[key] = search[key];
+        }
+    });
+
+    return instance.get(`/api/comments?${qs.stringify(newSearch)}`).catch((err) => {
         throw err;
     });
 };

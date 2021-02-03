@@ -291,7 +291,10 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                     return e;
                 });
             } else if (questionType === 'O') {
-                formData.append(`questions[${questionCount}].imgUrl`, element.imgUrl);
+                if (element.imgUrl) {
+                    formData.append(`questions[${questionCount}].imgUrl`, element.imgUrl);
+                }
+
                 formData.append(`questions[${questionCount}].title`, element.title);
                 formData.append(`questions[${questionCount}].answer`, element.answer);
 

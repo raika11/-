@@ -66,7 +66,9 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex }) => {
                         />
                     </Col>
                     <Col xs={1}>
-                        <div onClick={() => handleClickQuestionDeleteButton()}>|</div>
+                        <div onClick={() => handleClickQuestionDeleteButton()}>
+                            <AgGripIcon />
+                        </div>
                     </Col>
                 </Form.Row>
                 <Form.Row className="pt-3">

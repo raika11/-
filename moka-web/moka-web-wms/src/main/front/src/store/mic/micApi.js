@@ -1,5 +1,6 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
+import { objectToFormData } from '@utils/convertUtil';
 
 // 아젠다 목록 조회
 export const getMicAgendaList = ({ search }) => {
@@ -69,16 +70,28 @@ export const getMicBanner = ({ bnnrSeq }) => {
     });
 };
 
-// 배너 목록 등록
+// 배너 목록 등록(폼데이터)
 export const postMicBanner = ({ banner }) => {
-    return instance.post(`/api/mics/banners`, qs.stringify(banner)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .post(`/api/mics/banners`, objectToFormData(banner), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
-// 배너 목록 수정
+// 배너 목록 수정(폼데이터)
 export const putMicBanner = ({ banner }) => {
-    return instance.put(`/api/mics/banners/${banner.bnnrSeq}`, qs.stringify(banner)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(`/api/mics/banners/${banner.bnnrSeq}`, objectToFormData(banner), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };

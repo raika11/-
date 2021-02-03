@@ -5,7 +5,7 @@ import { MokaCard, MokaInputLabel } from '@components';
 /**
  * 배너 수정/등록
  */
-const BannerForm = ({ banner, onCancle, onSave, loading }) => {
+const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
     const [temp, setTemp] = useState({});
     const fileRef = useRef(null);
 
@@ -16,12 +16,16 @@ const BannerForm = ({ banner, onCancle, onSave, loading }) => {
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         setTemp({ ...temp, [name]: value });
+        if (error[name]) {
+            setError({ ...error, [name]: false });
+        }
     };
 
     /**
      * 이미지 파일 변경
      */
     const setFileValue = (data) => {
+        setError({ ...error, imgLink: false });
         setTemp({
             ...temp,
             imgFile: data,
@@ -66,9 +70,11 @@ const BannerForm = ({ banner, onCancle, onSave, loading }) => {
                 }
                 ref={fileRef}
                 inputProps={{ img: temp.imgLink, width: 280, deleteButton: true, setFileValue }}
+                required
                 className="mb-2"
+                isInvalid={error.imgLink}
             />
-            <MokaInputLabel label="링크 주소" name="linkUrl" value={temp.linkUrl} onChange={handleChangeValue} />
+            <MokaInputLabel label="링크 주소" name="linkUrl" value={temp.linkUrl} onChange={handleChangeValue} isInvalid={error.linkUrl} required />
         </MokaCard>
     );
 };

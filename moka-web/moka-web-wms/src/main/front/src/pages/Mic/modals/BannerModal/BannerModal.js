@@ -5,8 +5,10 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { initialState, getMicBannerListModal, saveMicBanner, GET_MIC_BANNER_LIST_MODAL, SAVE_MIC_BANNER } from '@store/mic';
-import { MokaModal, MokaTable } from '@/components';
+import { MokaModal, MokaTable } from '@components';
 import BannerForm from './BannerForm';
 import columnDefs from './BannerModalColumns';
 
@@ -24,6 +26,7 @@ const BannerModal = (props) => {
     const [rowData, setRowData] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [selected, setSelected] = useState({});
+    const [error, setError] = useState({});
 
     /**
      * 사용여부 변경
@@ -125,11 +128,40 @@ const BannerModal = (props) => {
     };
 
     /**
+     * validate
+     * @param {object} banner banner 데이터
+     */
+    const validate = (banner) => {
+        let isInvalid = false;
+        let errList = [];
+
+        // 이미지 필수
+        if ((!banner.imgLink || !REQUIRED_REGEX.test(banner.imgLink)) && !banner.imgFile) {
+            errList.push({
+                field: 'imgLink',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+        // 링크 필수
+        if (!banner.linkUrl || !REQUIRED_REGEX.test(banner.linkUrl)) {
+            errList.push({
+                field: 'linkUrl',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        setError(invalidListToError(errList));
+        return !isInvalid;
+    };
+
+    /**
      * 저장
      * @param {object} banner banner 데이터
      */
     const handleSave = (banner) => {
-        if (banner) {
+        if (validate(banner)) {
             dispatch(
                 saveMicBanner({
                     banner: {
@@ -192,7 +224,7 @@ const BannerModal = (props) => {
                     </Col>
                     {!!editMode && (
                         <Col className="p-0">
-                            <BannerForm banner={selected} onCancle={handleClickCancel} loading={formLoading} onSave={handleSave} />
+                            <BannerForm banner={selected} onCancle={handleClickCancel} loading={formLoading} onSave={handleSave} error={error} setError={setError} />
                         </Col>
                     )}
                 </Row>

@@ -13,10 +13,11 @@ const MicAgendaAgGrid = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_MIC_AGENDA_LIST]);
-    const { search, total, list } = useSelector(({ mic }) => ({
+    const { search, total, list, agenda } = useSelector(({ mic }) => ({
         search: mic.search,
         total: mic.total,
         list: mic.list,
+        agenda: mic.agenda,
     }));
     const [rowData, setRowData] = useState([]);
 
@@ -67,7 +68,7 @@ const MicAgendaAgGrid = ({ match }) => {
             total={total}
             page={search.page}
             size={search.size}
-            // selected={rowData.agndSeq}
+            selected={agenda.agndSeq}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

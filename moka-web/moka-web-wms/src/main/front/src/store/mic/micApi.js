@@ -9,6 +9,13 @@ export const getMicAgendaList = ({ search }) => {
     });
 };
 
+// 아젠다 상세 조회
+export const getMicAgenda = ({ agndSeq }) => {
+    return instance.get(`/api/mics/agendas/${agndSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
 // 레포트 (아젠다, 전체 포스트 수)
 export const getMicReport = () => {
     return instance.get('/api/mics/report').catch((err) => {

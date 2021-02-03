@@ -12,8 +12,8 @@ export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) =>
  */
 export const CLEAR_STORE = 'mic/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
-// export const CLEAR_RCV_ARTICLE = 'mic/CLEAR_RCV_ARTICLE';
-// export const clearRcvArticle = createAction(CLEAR_RCV_ARTICLE);
+export const CLEAR_MIC_AGENDA = 'mic/CLEAR_MIC_AGENDA';
+export const clearMicAgenda = createAction(CLEAR_MIC_AGENDA);
 
 /**
  * 아젠다 목록 조회
@@ -26,6 +26,12 @@ export const getMicAgendaList = createAction(GET_MIC_AGENDA_LIST, ({ search, cal
  */
 export const GET_MIC_AGENDA_LIST_MODAL = 'mic/GET_MIC_AGENDA_LIST_MODAL';
 export const getMicAgendaListModal = createAction(GET_MIC_AGENDA_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 아젠다 상세 조회
+ */
+export const [GET_MIC_AGENDA, GET_MIC_AGENDA_SUCCESS, GET_MIC_AGENDA_FAILURE] = createRequestActionTypes('mic/GET_MIC_AGENDA');
+export const getMicAgenda = createAction(GET_MIC_AGENDA, ({ agndSeq, callback }) => ({ agndSeq, callback }));
 
 /**
  * 아젠다 카테고리 목록 조회

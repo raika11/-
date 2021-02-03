@@ -40,7 +40,6 @@ const BannerModal = (props) => {
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success(header.message);
-                                setEditMode(false);
                             } else {
                                 messageBox.alert(header.message);
                             }

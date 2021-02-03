@@ -12,7 +12,7 @@ export default [
     },
     {
         headerName: '포스트',
-        width: 80,
+        width: 60,
         field: 'answCnt',
         cellClassRules: {
             'color-info': () => true,

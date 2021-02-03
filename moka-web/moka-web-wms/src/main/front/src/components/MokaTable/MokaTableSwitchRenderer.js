@@ -6,7 +6,7 @@ import { MokaInput } from '@components';
  */
 const MokaTableSwitchRenderer = forwardRef((params, ref) => {
     const field = params.colDef.field;
-    const data = params.node.data;
+    const [data, setData] = useState(params.node.data);
     const [value, setValue] = useState(data[field]);
 
     /**
@@ -16,7 +16,7 @@ const MokaTableSwitchRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         const val = e.target.checked ? 'Y' : 'N';
         setValue(val);
-        params.api.applyTransaction({ update: [{ ...data, [field]: val }] });
+        params.api.applyTransaction({ update: [{ ...params.node.data, [field]: val }] });
 
         // 체인지 함수 있으면 실행
         // 체인지 함수명 규칙)
@@ -31,6 +31,7 @@ const MokaTableSwitchRenderer = forwardRef((params, ref) => {
         ref,
         () => ({
             refresh: (params) => {
+                setData(params.node.data);
                 setValue(params.value);
                 return true;
             },

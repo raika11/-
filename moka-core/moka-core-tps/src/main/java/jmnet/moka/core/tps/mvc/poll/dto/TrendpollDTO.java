@@ -88,6 +88,7 @@ public class TrendpollDTO implements Serializable {
      * 투표 총 응모수
      */
     @ApiModelProperty(value = "투표 총 응모수")
+    @Builder.Default
     private Integer voteCnt = 0;
 
     /**
@@ -106,24 +107,28 @@ public class TrendpollDTO implements Serializable {
      * 로그인여부
      */
     @ApiModelProperty(value = "로그인여부")
+    @Builder.Default
     private String loginYn = MokaConstants.NO;
 
     /**
      * 중복투표여부
      */
     @ApiModelProperty(value = "중복투표여부")
+    @Builder.Default
     private String repetitionYn = MokaConstants.NO;
 
     /**
      * 메인노출여부
      */
     @ApiModelProperty(value = "메인노출여부")
+    @Builder.Default
     private String mainYn = MokaConstants.NO;
 
     /**
      * 게시판여부
      */
     @ApiModelProperty(value = "게시판여부")
+    @Builder.Default
     private String bbsYn = MokaConstants.NO;
 
     /**
@@ -136,18 +141,21 @@ public class TrendpollDTO implements Serializable {
      * 댓글여부
      */
     @ApiModelProperty(value = "댓글여부")
+    @Builder.Default
     private String replyYn = MokaConstants.NO;
 
     /**
      * 댓글개수
      */
     @ApiModelProperty(value = "댓글개수")
+    @Builder.Default
     private Integer replyCnt = 0;
 
     /**
      * 상태 S:서비스, D:삭제, T:일시중지
      */
     @ApiModelProperty(value = "상태 S:서비스, D:삭제, T:일시중지")
+    @Builder.Default
     private PollStatusCode status = PollStatusCode.T;
 
     /**

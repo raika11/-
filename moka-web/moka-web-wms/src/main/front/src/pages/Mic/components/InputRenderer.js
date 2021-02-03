@@ -2,43 +2,46 @@ import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { MokaInput } from '@components';
 
 /**
- * 카테고리 제목 수정
+ * input 1개짜리
  */
-const CategoryEditorRenderer = forwardRef((params, ref) => {
+const InputRenderer = forwardRef((params, ref) => {
     const field = params.colDef.field;
     const data = params.node.data;
-    const [name, setName] = useState(data[field]);
+    const [value, setValue] = useState(data[field]);
 
     useImperativeHandle(
         ref,
         () => ({
-            refresh: () => true,
-            setValue: (catNm) => setName(catNm),
-            getValue: () => name,
+            refresh: (params) => {
+                setValue(params.value);
+                return true;
+            },
+            setValue: (value) => setValue(value),
+            getValue: () => value,
         }),
-        [name],
+        [value],
     );
 
     /**
      * 입력값 변경
      */
     const handleChangeValue = (e) => {
-        setName(e.target.value);
+        setValue(e.target.value);
     };
 
     /**
      * onBlur
      */
     const handleBlur = (e) => {
-        params.setValue(e.target.value);
+        // params.setValue(e.target.value);
         params.api.applyTransaction({ update: [{ ...data, [field]: e.target.value }] });
     };
 
     return (
         <div className="h-100 d-flex align-items-center justify-content-center">
-            <MokaInput value={name} onChange={handleChangeValue} onBlur={handleBlur} />
+            <MokaInput value={value} onChange={handleChangeValue} onBlur={handleBlur} />
         </div>
     );
 });
 
-export default CategoryEditorRenderer;
+export default InputRenderer;

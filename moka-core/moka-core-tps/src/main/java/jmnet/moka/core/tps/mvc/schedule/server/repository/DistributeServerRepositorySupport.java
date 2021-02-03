@@ -20,7 +20,7 @@ public interface DistributeServerRepositorySupport {
      *
      * @return 배포서버목록(조회조건 코드)
      */
-    List<DistributeServer> findDistibuteServerList();
+    List<DistributeServer> findDistibuteServerCodeList();
 
     /**
      * 배포서버목록 조회
@@ -29,7 +29,7 @@ public interface DistributeServerRepositorySupport {
      * @param pageable 페이징
      * @return 배포서버목록
      */
-    Page<DistributeServer> findList(DistributeServerSearchDTO search, Pageable pageable);
+    Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search, Pageable pageable);
 
 
 

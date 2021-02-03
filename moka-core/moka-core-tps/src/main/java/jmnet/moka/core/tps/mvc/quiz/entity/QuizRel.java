@@ -79,7 +79,8 @@ public class QuizRel implements Serializable {
      */
     @Column(name = "LINK_TARGET")
     @Enumerated(EnumType.STRING)
-    private LinkTargetCode linkTarget;
+    @Builder.Default
+    private LinkTargetCode linkTarget = LinkTargetCode.S;
 
     /**
      * 제목

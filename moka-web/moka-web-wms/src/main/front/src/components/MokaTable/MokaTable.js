@@ -9,6 +9,7 @@ import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 // cell renderer
 import ImageRenderer from './MokaTableImageRenderer';
 import UsedYnRenderer from './MokaTableUsedYnRenderer';
+import SwitchRenderer from './MokaTableSwitchRenderer';
 
 const propTypes = {
     ...paginationPropTypes,
@@ -130,7 +131,7 @@ const defaultProps = {
  * ag-grid의 rowClassRules
  */
 const rowClassRules = {
-    'usedyn-n': (params) => params.data.usedYn === 'N',
+    // 'usedyn-n': (params) => params.data.usedYn === 'N',
     'deskingyn-y': (params) => params.data.deskingYn === 'Y',
 };
 
@@ -312,7 +313,7 @@ const MokaTable = forwardRef((props, ref) => {
                     suppressMovableColumns
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
-                    frameworkComponents={{ imageRenderer: ImageRenderer, usedYnRenderer: UsedYnRenderer, ...frameworkComponents }}
+                    frameworkComponents={{ imageRenderer: ImageRenderer, usedYnRenderer: UsedYnRenderer, switchRenderer: SwitchRenderer, ...frameworkComponents }}
                     suppressRowClickSelection
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}

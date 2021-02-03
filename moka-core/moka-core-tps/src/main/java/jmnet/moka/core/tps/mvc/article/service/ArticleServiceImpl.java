@@ -231,7 +231,7 @@ public class ArticleServiceImpl implements ArticleService {
                             .get(0)
                             .split(",");
                     List<ArticleBulkSimpleVO> list = new ArrayList<>();
-                    
+
                     for (BulkSiteCode bulk : BulkSiteCode.values()) {
                         boolean bFind = Arrays
                                 .asList(bulkSiteList)
@@ -421,7 +421,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .masterCodeList(masterCodeList)
                 .artTitle(updateDto.getArtTitle())
                 .artReporter(reporters)
-                .artSubTitle(articleBasic.getArtSubTitle())
+                .artSubTitle(updateDto.getArtSubTitle())
                 .keywordList(tagList)
                 .iudDiv(TpsConstants.WORKTYPE_UPDATE)
                 .build();

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import jmnet.moka.common.data.support.EnumValid;
 import jmnet.moka.core.tps.common.code.LinkTargetCode;
 import jmnet.moka.core.tps.mvc.quiz.code.QuizCode.QuizRelationTypeCode;
 import lombok.AllArgsConstructor;
@@ -77,6 +78,7 @@ public class QuizRelDTO implements Serializable {
      */
     @ApiModelProperty(value = "관련정보 링크URL Target")
     @Builder.Default
+    @EnumValid(message = "{tps.common.error.size.linkTarget}", enumClass = LinkTargetCode.class)
     private LinkTargetCode linkTarget = LinkTargetCode.S;
 
     /**

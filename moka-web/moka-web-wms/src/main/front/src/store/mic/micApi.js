@@ -54,3 +54,31 @@ export const postMicCategory = ({ category }) => {
         throw err;
     });
 };
+
+// 배너 목록 조회
+export const getMicBannerList = ({ search }) => {
+    return instance.get(`/api/mics/banners?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 배너 목록 상세 조회
+export const getMicBanner = ({ bnnrSeq }) => {
+    return instance.get(`/api/mics/banners/${bnnrSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 배너 목록 등록
+export const postMicBanner = ({ banner }) => {
+    return instance.post(`/api/mics/banners`, qs.stringify(banner)).catch((err) => {
+        throw err;
+    });
+};
+
+// 배너 목록 수정
+export const putMicBanner = ({ banner }) => {
+    return instance.put(`/api/mics/banners/${banner.bnnrSeq}`, qs.stringify(banner)).catch((err) => {
+        throw err;
+    });
+};

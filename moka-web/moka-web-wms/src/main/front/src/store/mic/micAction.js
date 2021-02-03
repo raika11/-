@@ -50,3 +50,15 @@ export const putMicAgendaSort = createAction(PUT_MIC_AGENDA_SORT, ({ sortedList,
  */
 export const [GET_MIC_REPORT, GET_MIC_REPORT_SUCCESS] = createRequestActionTypes('mic/GET_MIC_REPORT');
 export const getMicReport = createAction(GET_MIC_REPORT);
+
+/**
+ * 배너 목록 조회(모달)
+ */
+export const GET_MIC_BANNER_LIST_MODAL = 'mic/GET_MIC_BANNER_LIST_MODAL';
+export const getMicBannerListModal = createAction(GET_MIC_BANNER_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 배너 저장
+ */
+export const SAVE_MIC_BANNER = 'mic/SAVE_MIC_BANNER';
+export const saveMicBanner = createAction(SAVE_MIC_BANNER, ({ banner, callback }) => ({ banner, callback }));

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -64,6 +66,7 @@ public class JpodEpisodeRelArt implements Serializable {
      */
     @Column(name = "REL_LINK_TARGET")
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private LinkTargetCode relLinkTarget = LinkTargetCode.S;
 
 }

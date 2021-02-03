@@ -1,56 +1,143 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import toast, { messageBox } from '@utils/toastUtil';
+import { initialState, getMicBannerListModal, saveMicBanner, GET_MIC_BANNER_LIST_MODAL, SAVE_MIC_BANNER } from '@store/mic';
 import { MokaCard, MokaImageInput, MokaInputLabel, MokaModal, MokaTable } from '@/components';
-import columnDefs, { rowData } from './BannerModalAgGridColumns';
+import columnDefs from './BannerModalAgGridColumns';
 
 /**
- * 시민 마이크 다른 주제 공통 배너 모달
+ * 다른 주제 공통 배너 모달
  */
 const BannerModal = (props) => {
     const { show, onHide } = props;
+    const dispatch = useDispatch();
+    const loading = useSelector(({ loading }) => loading[GET_MIC_BANNER_LIST_MODAL]);
+    const [total, setTotal] = useState(0);
+    const [search, setSearch] = useState(initialState.banner.search);
+    const [rowData, setRowData] = useState([]);
+    const [editMode, setEditMode] = useState(false);
+    const [selected, setSelected] = useState(null);
 
-    const [gridApi, setGridApi] = useState(null);
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 1, size: 10 });
-    const [showEdit, setShowEdit] = useState(false);
-    const [seqNo, setSeqNo] = useState(null);
-    const [link, setLink] = useState('');
+    /**
+     * 사용여부 변경
+     */
+    const handleChangeUsedYn = useCallback(
+        (banner) => {
+            if (banner) {
+                dispatch(
+                    saveMicBanner({
+                        banner,
+                        callback: ({ header }) => {
+                            if (header.success) {
+                                toast.success(header.message);
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
+                    }),
+                );
+            }
+        },
+        [dispatch],
+    );
 
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
+    /**
+     * 배너 리스트 조회
+     */
+    const getList = useCallback(
+        (search) => {
+            dispatch(
+                getMicBannerListModal({
+                    search,
+                    callback: ({ header, body }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        } else {
+                            setRowData(
+                                body.list.map((data) => ({
+                                    ...data,
+                                    regDt: (data.regDt || '').slice(0, -3),
+                                    onChangeUsedYn: handleChangeUsedYn,
+                                })),
+                            );
+                            setTotal(body.totalCnt);
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch, handleChangeUsedYn],
+    );
 
-    const handleRowClicked = useCallback((row) => {
-        setShowEdit(true);
-        setSeqNo(row.seqNo);
-    }, []);
+    /**
+     * 테이블 검색옵션 변경
+     */
+    const handleChangeSearchOption = useCallback(
+        ({ key, value }) => {
+            let ns = { ...search, [key]: value };
+            if (key !== 'page') {
+                ns['page'] = 0;
+            }
+            setSearch(ns);
+            getList(ns);
+        },
+        [search, getList],
+    );
 
-    const handleClickCancel = () => {
-        setShowEdit(false);
-    };
-
-    const handleHide = () => {
-        setSeqNo(null);
-        setShowEdit(false);
+    /**
+     * 모달 닫기
+     */
+    const handleHide = useCallback(() => {
+        setEditMode(false);
+        setSelected(null);
+        setTotal(0);
+        setRowData([]);
+        setSearch(initialState.banner.search);
         onHide();
+    }, [onHide]);
+
+    /**
+     * 테이블 row 클릭
+     * @param {object} row rowData
+     */
+    const handleRowClicked = (row) => {
+        setSelected(row);
+        setEditMode(true);
     };
+
+    /**
+     * 수정/등록 취소
+     */
+    const handleClickCancel = () => {
+        setEditMode(false);
+        setSelected(null);
+    };
+
+    /**
+     * 등록
+     */
+    const handleAdd = () => {
+        setEditMode(true);
+        setSelected(null);
+    };
+
+    useEffect(() => {
+        if (show) {
+            getList(initialState.banner.search);
+        }
+    }, [show, getList]);
 
     return (
-        <MokaModal title="다른 주제 공통 배너 관리" height={800} show={show} onHide={handleHide} size="xl" draggable>
-            <Container className="p-0" fluid>
-                <Row>
-                    <Col className="p-0 custom-scroll d-flex flex-column" style={{ width: 500, height: 695 }}>
+        <MokaModal title="다른 주제 공통 배너 관리" height={685} show={show} onHide={handleHide} size="xl" centered>
+            <Container className="p-0 h-100" fluid>
+                <Row className="m-0 h-100">
+                    <Col className="p-0 d-flex flex-column h-100 overflow-hidden flex-shrink-0" style={{ minWidth: 500 }}>
                         <div className="mb-2 d-flex justify-content-end">
-                            <Button
-                                variant="positive"
-                                className="ft-12"
-                                onClick={() => {
-                                    setShowEdit(true);
-                                    setSeqNo(null);
-                                }}
-                            >
+                            <Button variant="positive" onClick={handleAdd}>
                                 등록
                             </Button>
                         </div>
@@ -59,27 +146,26 @@ const BannerModal = (props) => {
                             columnDefs={columnDefs}
                             rowData={rowData}
                             rowHeight={100}
-                            onRowNodeId={(params) => params.seqNo}
+                            onRowNodeId={(data) => data.bnnrSeq}
                             onRowClicked={handleRowClicked}
-                            // loading={loading}
+                            loading={loading}
                             total={total}
                             page={search.page}
                             size={search.size}
-                            // selected={rowData.seqNo}
+                            selected={selected?.bnnrSeq}
                             onChangeSearchOption={handleChangeSearchOption}
                             preventRowClickCell={['usedYn']}
                         />
                     </Col>
-                    {showEdit === true && (
-                        <Col className="p-0 ml-2">
+                    {!!editMode && (
+                        <Col className="p-0">
                             <MokaCard
-                                title={seqNo ? '공통 배너 수정' : '공통 배너 등록'}
-                                titleClassName="mb-0"
-                                className="w-100 h-100"
+                                title={selected?.bnnrSeq ? '공통 배너 수정' : '공통 배너 등록'}
+                                className="shadow-none w-100 h-100"
                                 footerClassName="justify-content-center"
                                 footer
                                 footerButtons={[
-                                    { text: seqNo ? '수정' : '저장', variant: 'positive', className: 'mr-2' },
+                                    { text: selected ? '수정' : '저장', variant: 'positive', className: 'mr-2' },
                                     { text: '취소', variant: 'negative', onClick: handleClickCancel },
                                 ]}
                             >
@@ -89,7 +175,7 @@ const BannerModal = (props) => {
                                         <Button variant="outline-neutral">내 PC</Button>
                                     </div>
                                 </div>
-                                <MokaInputLabel label="링크 주소" value={link} onChange={(e) => setLink(e.target.value)} />
+                                <MokaInputLabel label="링크 주소" value={''} onChange={(e) => {}} />
                             </MokaCard>
                         </Col>
                     )}

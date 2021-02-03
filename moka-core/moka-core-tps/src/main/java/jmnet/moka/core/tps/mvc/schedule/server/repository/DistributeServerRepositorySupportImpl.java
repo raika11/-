@@ -32,7 +32,7 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
     }
 
     @Override
-    public List<DistributeServer> findDistibuteServerList() {
+    public List<DistributeServer> findDistibuteServerCodeList() {
         QDistributeServer distributeServer = QDistributeServer.distributeServer;
 
         BooleanBuilder builder = new BooleanBuilder();
@@ -46,7 +46,7 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
     }
 
     @Override
-    public Page<DistributeServer> findList(DistributeServerSearchDTO search, Pageable pageable){
+    public Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search, Pageable pageable){
         QDistributeServer distributeServer = QDistributeServer.distributeServer;
         QMemberSimpleInfo memberSimpleInfo = QMemberSimpleInfo.memberSimpleInfo;
 
@@ -57,10 +57,10 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
         String serverIp = search.getServerIp();
 
         if(!McpString.isEmpty(serverNm)){
-            builder.and(distributeServer.serverNm.contains(serverNm));
+            builder.or(distributeServer.serverNm.contains(serverNm));
         }
         if(!McpString.isEmpty(serverIp)){
-            builder.and(distributeServer.serverIp.contains(serverIp));
+            builder.or(distributeServer.serverIp.contains(serverIp));
         }
 
         JPQLQuery<DistributeServer> query = queryFactory.selectFrom(distributeServer);

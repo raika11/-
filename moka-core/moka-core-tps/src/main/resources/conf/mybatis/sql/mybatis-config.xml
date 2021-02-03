@@ -22,7 +22,7 @@
   <typeHandlers>
     <typeHandler javaType="java.lang.Character" jdbcType="VARCHAR"
       handler="jmnet.moka.common.data.mybatis.support.CharacterTypeHandler"/>
-    <typeHandler javaType="jmnet.moka.common.data.mybatis.support.EnumCode" jdbcType="VARCHAR"
+    <typeHandler javaType="jmnet.moka.common.utils.EnumCode" jdbcType="VARCHAR"
       handler="jmnet.moka.common.data.mybatis.support.EnumTypeHandler"/>
   </typeHandlers>
   <plugins>

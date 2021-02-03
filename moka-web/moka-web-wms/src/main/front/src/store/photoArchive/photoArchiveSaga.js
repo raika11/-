@@ -43,7 +43,13 @@ export function* getArchiveData() {
             });
 
             const search = yield select((store) => store.photoArchive.search);
-            const getList = yield call(api.getPhotoList, { search: { ...search, originCode: 'all', imageType: 'All' } });
+            const option = { ...search, imageType: 'All', originCode: 'all' };
+            yield put({
+                type: act.CHANGE_SEARCH_OPTION,
+                payload: option,
+            });
+
+            const getList = yield call(api.getPhotoList, { search: option });
 
             if (getList.data.header.success) {
                 yield put({

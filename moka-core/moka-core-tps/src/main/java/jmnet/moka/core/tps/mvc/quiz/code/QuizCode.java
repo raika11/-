@@ -1,6 +1,6 @@
 package jmnet.moka.core.tps.mvc.quiz.code;
 
-import jmnet.moka.common.data.mybatis.support.EnumCode;
+import jmnet.moka.common.utils.EnumCode;
 
 /**
  * <pre>

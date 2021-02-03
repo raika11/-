@@ -65,6 +65,33 @@ function* saveMicCategory({ payload }) {
  */
 const getMicReport = createRequestSaga(act.GET_MIC_REPORT, api.getMicReport);
 
+/**
+ * 배너 목록 (모달)
+ */
+const getMicBannerListModal = createRequestSaga(act.GET_MIC_BANNER_LIST_MODAL, api.getMicBannerList, true);
+
+/**
+ * 배너 등록/수정
+ */
+function* saveBanner({ payload }) {
+    const { banner, callback } = payload;
+    const ACTION = act.SAVE_MIC_BANNER;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(banner.bnnrSeq ? api.putMicBanner : api.postMicBanner, { banner });
+        callbackData = response.data;
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA_LIST, getMicAgendaList);
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
@@ -72,4 +99,6 @@ export default function* saga() {
     yield takeLatest(act.PUT_MIC_AGENDA_SORT, putMicAgendaSort);
     yield takeLatest(act.GET_MIC_CATEGORY_LIST, getMicCategoryList);
     yield takeLatest(act.SAVE_MIC_CATEGORY, saveMicCategory);
+    yield takeLatest(act.GET_MIC_BANNER_LIST_MODAL, getMicBannerListModal);
+    yield takeLatest(act.SAVE_MIC_BANNER, saveBanner);
 }

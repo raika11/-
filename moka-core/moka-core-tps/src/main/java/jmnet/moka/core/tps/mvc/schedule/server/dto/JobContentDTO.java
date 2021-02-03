@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatus;
 import lombok.*;
 
 import java.io.Serializable;
@@ -18,24 +19,47 @@ import java.util.List;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ApiModel("배포서버 DTO")
-public class DistributeServerDTO implements Serializable {
+@ApiModel("작업 DTO")
+public class JobContentDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final Type TYPE = new TypeReference<List<DistributeServerDTO>>() {
+    public static final Type TYPE = new TypeReference<List<JobContentDTO>>() {
     }.getType();
 
-    @ApiModelProperty("서버 일련번호")
+
+
+    @ApiModelProperty("사용 여부")
+    private String usedYn;
+
+    @ApiModelProperty("작업 번호")
+    private Long jobSeq;
+
+    @ApiModelProperty("배포서버 일련번호")
     private Long serverSeq;
 
-    @ApiModelProperty("별칭")
-    private String serverNm;
+    @ApiModelProperty("분류")
+    private String category;
 
-    @ApiModelProperty("IP/HOST")
-    private String serverIp;
+    @ApiModelProperty("주기")
+    private Long period;
 
-    @ApiModelProperty("계정정보")
-    private String accessId;
+    @ApiModelProperty("전송타입")
+    private String sendType;
+
+    @ApiModelProperty("FTP포트")
+    private Long ftpPort;
+
+    @ApiModelProperty("FTP PASSIVE 여부")
+    private String ftpPassive;
+
+    @ApiModelProperty("URL")
+    private String callUrl;
+
+    @ApiModelProperty("배포경로")
+    private String targetPath;
+
+    @ApiModelProperty("설명")
+    private String jobDesc;
 
     @ApiModelProperty("등록일시")
     private Date regDt;
@@ -48,6 +72,9 @@ public class DistributeServerDTO implements Serializable {
 
     @ApiModelProperty("수정자")
     private String modId;
+
+    @ApiModelProperty("작업정보")
+    private JobStatus jobStatus;
 
     @ApiModelProperty("등록자정보")
     private MemberSimpleInfo regMember;

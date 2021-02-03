@@ -2,7 +2,6 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import { MokaTableEditCancleButton } from '@components';
-import produce from 'immer';
 
 const RelationPollSortItemRenderer = ({ item, onDelete }) => {
     const handleClickDelete = () => {

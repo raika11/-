@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { tempColumnDefs } from './FbArtAgGridColumns';
 import { MokaTable } from '@components';
 import { changeSnsSendArticleSearchOptions } from '@store/snsManage';
@@ -8,11 +8,6 @@ import { useHistory } from 'react-router-dom';
 const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const [rowData, setRowData] = useState([]);
-
-    // 임시
-    const handleOnRowNodeId = () => {};
 
     const handleClickListRow = ({ id }) => {
         history.push(`/fb-art/${id}`);

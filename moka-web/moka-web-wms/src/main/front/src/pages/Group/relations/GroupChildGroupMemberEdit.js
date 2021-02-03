@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, Suspense } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import GroupChildGroupMemberList from '@pages/Group/relations/GroupChildGroupMemberList';
 import GroupChildSearchMemberList from '@pages/Group/relations/GroupChildSearchMemberList';
 import { MokaCard } from '@components';

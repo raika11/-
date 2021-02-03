@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MokaInput, MokaInputLabel } from '@components';
+import { MokaInput } from '@components';
 import { Col, Form } from 'react-bootstrap';
 import produce from 'immer';
 

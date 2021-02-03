@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import toast from '@utils/toastUtil';
@@ -35,12 +35,6 @@ const PollChildRelation = () => {
 
     const handleClickRelationPollAdd = (row) => {
         setSelectPoll(row);
-        /*console.log(relationPolls);
-        if (relationPolls.filter((pollItem) => pollItem.id === row.contentId).length > 0) {
-            toast.warning(`중복된 투표정보(id=${row.contentId})가 존재합니다.`);
-        } else {
-            setSelectPoll(row);
-        }*/
     };
 
     const handleClickRelationPollDelete = (id) => {
@@ -62,13 +56,13 @@ const PollChildRelation = () => {
         );
     };
 
-    const handleClickArticleModalShow = () => {
+    /*const handleClickArticleModalShow = () => {
         if (commonUtil.isEmpty(edit.pollSeq)) {
             toast.warning('투표 정보를 먼저 등록해 주세요');
         } else {
             setIsArticleModalShow(true);
         }
-    };
+    };*/
 
     const handleClickSearch = () => {
         setIsPollModalShow(true);
@@ -81,7 +75,7 @@ const PollChildRelation = () => {
         setSelectArticle(row);
     };
 
-    const handleClickRelationArticleDelete = (id) => {
+    /*const handleClickRelationArticleDelete = (id) => {
         const articles = relationArticles
             .filter((data) => data.ordNo !== id)
             .map((article, index) => ({
@@ -94,7 +88,7 @@ const PollChildRelation = () => {
                 draft.pollRelateContents = [...relationPolls, ...articles];
             }),
         );
-    };
+    };*/
 
     const handleChangeSave = () => {
         if (commonUtil.isEmpty(edit.pollSeq)) {
@@ -129,7 +123,7 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         if (selectPoll) {
-            if (relationPolls.filter((pollItem) => pollItem.contentId == selectPoll.id).length > 0) {
+            if (relationPolls.filter((pollItem) => pollItem.contentId === String(selectPoll.id)).length > 0) {
                 toast.warning(`중복된 투표정보(id=${selectPoll.id})가 존재합니다.`);
             } else {
                 const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id, ordNo: relationPolls.length + 1 }];

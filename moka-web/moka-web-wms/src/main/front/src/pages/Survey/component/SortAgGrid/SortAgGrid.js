@@ -5,7 +5,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
-import toast, { messageBox } from '@utils/toastUtil';
+import { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 
 const SortAgGrid = () => {

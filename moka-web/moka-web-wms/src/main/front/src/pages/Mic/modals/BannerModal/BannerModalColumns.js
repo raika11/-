@@ -15,7 +15,7 @@ export default [
     {
         headerName: '이미지',
         field: 'imgLink',
-        width: 290,
+        width: 260,
         cellRenderer: 'imageRenderer',
         flex: 1,
     },

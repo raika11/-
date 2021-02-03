@@ -30,18 +30,22 @@ const propTypes = {
     titleClassName: PropTypes.string,
     /**
      * width
+     * @default
      */
     width: PropTypes.number,
     /**
      * height
+     * @default
      */
     height: PropTypes.number,
     /**
      * 헤더 여부 (false 이면 헤더가 나오지 않음)
+     * @default
      */
     header: PropTypes.bool,
     /**
      * 푸터 여부 (false 이면 푸터가 나오지 않음)
+     * @default
      */
     footer: PropTypes.bool,
     /**
@@ -82,6 +86,7 @@ const propTypes = {
     /**
      * 컴포넌트를 접을 수 있는지 없는지 설정한다.
      * (true | false)
+     * @default
      */
     foldable: PropTypes.bool,
     /**
@@ -91,6 +96,7 @@ const propTypes = {
     onExpansion: PropTypes.func,
     /**
      * 로딩 여부
+     * @default
      */
     loading: PropTypes.bool,
 };

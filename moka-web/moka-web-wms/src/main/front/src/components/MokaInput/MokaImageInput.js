@@ -2,6 +2,7 @@ import React, { useState, useCallback, forwardRef, useRef, useEffect, useImperat
 import clsx from 'clsx';
 import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
 import Figure from 'react-bootstrap/Figure';
 import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 import { MokaAlert, MokaIcon } from '@components';
@@ -59,6 +60,11 @@ const propTypes = {
      * 타당한 데이터 체크
      */
     isInvalid: PropTypes.bool,
+    /**
+     * 이미지 삭제 버튼 추가
+     * @default
+     */
+    deleteButton: PropTypes.bool,
 };
 const defaultProps = {
     width: 171,
@@ -71,6 +77,7 @@ const defaultProps = {
     },
     alt: '이미지',
     selectAccept: [],
+    deleteButton: false,
 };
 
 /**
@@ -78,13 +85,14 @@ const defaultProps = {
  * react-dropzone 사용
  */
 const MokaImageInput = forwardRef((props, ref) => {
-    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave } = props;
+    const { width, height, alertProps, img, setFileValue, alt, className, selectAccept, isInvalid, onChange, onMouseEnter, onMouseLeave, deleteButton } = props;
 
     // state
     const [imgSrc, setImgSrc] = useState(null);
     const [alert, setAlert] = useState(false);
 
     // ref
+    const rootRef = useRef(null);
     const inputRef = useRef(null);
     const imgRef = useRef(null);
     const wrapRef = useRef(null);
@@ -141,22 +149,17 @@ const MokaImageInput = forwardRef((props, ref) => {
                 handleEtcAlert(`확장자 (${selectAccept.map((n) => n.split('/')[1]).join(', ')})만 가능합니다.`);
                 return;
             }
+
             setAlert(false);
             setImgSrc(URL.createObjectURL(acceptedFiles[0]));
             imageShow();
-            if (setFileValue) {
-                setFileValue(acceptedFiles[0]);
-            }
-            if (onChange) {
-                onChange(acceptedFiles);
-            }
+            if (setFileValue) setFileValue(acceptedFiles[0]);
+            if (onChange) onChange(acceptedFiles);
         } else {
             // 이미지가 아닐 경우 alert 처리
             setAlert(true);
             imageHide();
-            if (onChange) {
-                onChange();
-            }
+            if (onChange) onChange();
         }
     };
 
@@ -181,9 +184,10 @@ const MokaImageInput = forwardRef((props, ref) => {
     useImperativeHandle(
         ref,
         () => ({
+            rootRef: rootRef.current,
+            wrapRef: wrapRef.current,
             inputRef: inputRef.current,
             imgRef: imgRef.current,
-            wrapRef: wrapRef.current,
             defaultTextRef: defaultRef.current,
             deleteFile: deleteFile,
         }),
@@ -193,14 +197,21 @@ const MokaImageInput = forwardRef((props, ref) => {
     return (
         <Dropzone onDrop={onDrop} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} preventDropOnDocument>
             {({ getRootProps, getInputProps }) => {
+                const rootProps = getRootProps();
                 const inputProps = getInputProps();
-                inputRef.current = inputProps.ref.current;
+                rootRef.current = rootProps;
+                inputRef.current = inputProps;
 
                 return (
                     <Figure
-                        {...getRootProps()}
+                        {...rootProps}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
+                        onClick={(e) => {
+                            if (alert === false && imgSrc === null) {
+                                rootProps.onClick(e);
+                            }
+                        }}
                         className={clsx(
                             'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
                             className,
@@ -213,8 +224,24 @@ const MokaImageInput = forwardRef((props, ref) => {
                         {/* 이미지 미리보기 */}
                         <Figure.Image className="center-image" alt={alt} src={imgSrc} ref={imgRef} />
 
+                        {/* 파일 삭제 버튼 */}
+                        {deleteButton && imgSrc && (
+                            <Button
+                                variant="searching"
+                                className="border-0 p-0 moka-table-button"
+                                style={{ position: 'absolute', top: '5px', right: '5px', opacity: '0.8' }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    deleteFile();
+                                }}
+                            >
+                                <MokaIcon iconName="fas-times" />
+                            </Button>
+                        )}
+
                         {/* input file */}
-                        {alert === false && imgSrc === null && <input {...inputProps} />}
+                        <input {...inputProps} />
 
                         {/* alert */}
                         <div className="absolute-top">

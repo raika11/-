@@ -109,6 +109,9 @@ const MokaInput = forwardRef((props, ref) => {
     const [invalidShow, setInvalidShow] = React.useState(false);
     useImperativeHandle(ref, () => inputRef?.current);
 
+    /**
+     * onMouseEnter event
+     */
     const onMouseEnter = useCallback(
         (e) => {
             e.preventDefault();
@@ -124,6 +127,9 @@ const MokaInput = forwardRef((props, ref) => {
         [inputProps, isInvalid],
     );
 
+    /**
+     * onMouseLeave event
+     */
     const onMouseLeave = useCallback(
         (e) => {
             e.preventDefault();

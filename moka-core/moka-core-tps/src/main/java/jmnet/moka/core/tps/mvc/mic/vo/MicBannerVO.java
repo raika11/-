@@ -56,7 +56,6 @@ public class MicBannerVO implements Serializable {
     /**
      * 이미지 경로
      */
-    @NotNull(message = "{tps.banner.error.notnull.imgLink}")
     @Length(max = 200, message = "{tps.banner.error.len.imgLink}")
     @Column(name = "IMG_LINK", nullable = false)
     private String imgLink;

@@ -4,7 +4,6 @@ import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +16,15 @@ import java.util.Optional;
  */
 public interface DistributeServerService {
 
-    public List<DistributeServer> findDistibuteServerList();
+    List<DistributeServer> findDistibuteServerCodeList();
 
-    public Page<DistributeServer> findList(DistributeServerSearchDTO search);
+    Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search);
 
-    public Optional<DistributeServer> findDistributeServerById(Long serverSeq);
+    Optional<DistributeServer> findDistributeServerById(Long serverSeq);
 
-    public DistributeServer saveDistributeServer(DistributeServer distServer);
+    DistributeServer saveDistributeServer(DistributeServer distServer);
 
-    public DistributeServer updateDistributeServer(DistributeServer distServer);
+    DistributeServer updateDistributeServer(DistributeServer distServer);
 
 
 

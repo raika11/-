@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -30,13 +29,13 @@ public class DistributeServerServiceImpl implements DistributeServerService{
     }
 
     @Override
-    public List<DistributeServer> findDistibuteServerList() {
-        return distServerRepository.findDistibuteServerList();
+    public List<DistributeServer> findDistibuteServerCodeList() {
+        return distServerRepository.findDistibuteServerCodeList();
     }
 
     @Override
-    public Page<DistributeServer> findList(DistributeServerSearchDTO search){
-        return distServerRepository.findList(search, search.getPageable());
+    public Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search){
+        return distServerRepository.findDistibuteServerList(search, search.getPageable());
     }
 
     @Override

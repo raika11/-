@@ -64,4 +64,12 @@ public interface TourApplyService {
      * @return 견학 신청 목록
      */
     List<TourApplyVO> findAllTourApplyMonth(String startYear, String startMonth);
+
+    /**
+     * 견학신청 가능여부 조사
+     *
+     * @param tourApplyVO 견학정보
+     * @return 0: 신청가능. 1: 해당일에 이미 견학있음, 2: 해당 이메일로 2일내에 견학있음,
+     */
+    Integer checkTourApply(TourApplyVO tourApplyVO);
 }

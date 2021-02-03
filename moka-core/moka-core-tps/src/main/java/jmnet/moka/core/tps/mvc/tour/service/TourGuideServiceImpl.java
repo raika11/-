@@ -27,7 +27,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 
     @Override
     public List<TourGuideVO> findAllTourGuide() {
-        return tourMapper.upuTbJoongangTourGuideListSel();
+        return tourMapper.findAllTourGuide();
     }
 
     /**
@@ -47,7 +47,7 @@ public class TourGuideServiceImpl implements TourGuideService {
     @Transactional
     public boolean saveTourGuide(List<TourGuideVO> guideVOList) {
         for (TourGuideVO vo : guideVOList) {
-            if (isReturnErr(tourMapper.upuTbJoongangTourGuideUpd(vo))) {
+            if (isReturnErr(tourMapper.updateTourGuide(vo))) {
                 return false;
             }
         }

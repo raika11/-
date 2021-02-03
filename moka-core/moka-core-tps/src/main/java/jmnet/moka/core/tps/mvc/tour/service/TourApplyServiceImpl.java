@@ -31,23 +31,23 @@ public class TourApplyServiceImpl implements TourApplyService {
 
     @Override
     public List<TourApplyVO> findAllTourApply(TourApplySearchDTO search) {
-        return tourMapper.upuTbJoongangTourApplyListSel(search);
+        return tourMapper.findAllTourApply(search);
     }
 
     @Override
     public TourApplyVO findTourApply(Long tourSeq) {
-        return tourMapper.upuTbJoongangTourApplyByseqSel(tourSeq);
+        return tourMapper.findTourApplyBySeq(tourSeq);
     }
 
     @Override
     public TourApplyVO updateTourApply(TourApplyVO tourApplyVO) {
-        tourMapper.upuTbJoongangTourApplyUpd(tourApplyVO);
+        tourMapper.updateTourApply(tourApplyVO);
         return findTourApply(tourApplyVO.getTourSeq());
     }
 
     @Override
     public void deleteTourApply(Long tourSeq) {
-        tourMapper.upuTbJoongangTourApplyDel(tourSeq);
+        tourMapper.deleteTourApply(tourSeq);
     }
 
     //    @Override
@@ -63,6 +63,22 @@ public class TourApplyServiceImpl implements TourApplyService {
         params.put("startYear", startYear);
         params.put("startMonth", startMonth);
         params.put("adminYn", "N");
-        return tourMapper.upuTbJoongangTourApplyBymonthSel(params);
+        return tourMapper.findAllTourApplyByMonth(params);
+    }
+
+    @Override
+    // return 0: 신청가능. 1: 해당일에 이미 견학있음, 2: 해당 이메일로 2일내에 견학있음,
+    public Integer checkTourApply(TourApplyVO tourApplyVO) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("tourSeq", tourApplyVO.getTourSeq());
+        params.put("tourDate", tourApplyVO.getTourDate());
+        params.put("tourStatus", tourApplyVO.getTourStatus());
+        params.put("writerEmail", tourApplyVO.getWriterEmail());
+        params.put("retCode", 0);
+        tourMapper.checkTourApply(params);
+
+        Integer retCode = (int) params.get("retCode");
+
+        return retCode;
     }
 }

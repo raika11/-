@@ -25,11 +25,11 @@ public class TourSetupServiceImpl implements TourSetupService {
 
     @Override
     public TourSetupVO findTourSetup() {
-        return tourMapper.upuTbJoongangTourSetupSel();
+        return tourMapper.findTourSetup();
     }
 
     @Override
     public void updateTourSetup(TourSetupVO tourSetupVo) {
-        tourMapper.upuTbJoongangTourSetupUpd(tourSetupVo);
+        tourMapper.updateTourSetup(tourSetupVo);
     }
 }

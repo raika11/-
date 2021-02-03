@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
-import RelationPollInfoComponent from '@pages/Survey/Poll/components/RelationPollInfoComponent';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { useHistory } from 'react-router-dom';
@@ -11,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPoll, getPollList, updatePoll, GET_POLL, UPDATE_POLL } from '@store/survey/poll/pollAction';
 import produce from 'immer';
 import RelationPollSortAgGridComponent from '@pages/Survey/Poll/components/RelationPollSortAgGridComponent';
+import { selectArticleItemChange, selectArticleListChange } from '@store/survey/quiz';
 const SortAgGrid = React.lazy(() => import('@pages/Survey/component/SortAgGrid'));
 const RelationPollModal = React.lazy(() => import('@pages/Survey/Poll/modals/RelationPollModal'));
 
@@ -25,17 +25,19 @@ const PollChildRelation = () => {
     const [relationArticles, setRelationArticles] = useState([]);
     const [selectArticle, setSelectArticle] = useState(null);
 
-    const { poll, search, codes, loading } = useSelector((store) => ({
+    const { poll, search, codes, loading, item } = useSelector((store) => ({
         poll: store.poll.poll,
         search: store.poll.search,
         codes: store.poll.codes,
         loading: store.loading[GET_POLL] || store.loading[UPDATE_POLL],
+        item: store.quiz.selectArticle.item,
     }));
 
     const handleClickRelationPollAdd = (row) => {
         setSelectPoll(row);
-        /*if (relationPolls.filter((poll) => poll.id === data.id).length > 0) {
-            toast.warning(`중복된 투표정보(id=${data.id})가 존재합니다.`);
+        /*console.log(relationPolls);
+        if (relationPolls.filter((pollItem) => pollItem.id === row.contentId).length > 0) {
+            toast.warning(`중복된 투표정보(id=${row.contentId})가 존재합니다.`);
         } else {
             setSelectPoll(row);
         }*/
@@ -43,9 +45,13 @@ const PollChildRelation = () => {
 
     const handleClickRelationPollDelete = (id) => {
         const polls = relationPolls
-            .filter((data) => data.ordNo !== id)
-            .map((poll, index) => ({
-                ...poll,
+            .filter((data) => {
+                console.log('data', data);
+                console.log('data.ordNo', data.ordNo);
+                return data.ordNo !== id;
+            })
+            .map((pollItems, index) => ({
+                ...pollItems,
                 ordNo: index + 1,
             }));
         setRelationPolls(polls);
@@ -109,26 +115,31 @@ const PollChildRelation = () => {
 
     useEffect(() => {
         if (selectArticle) {
-            const { artTitle: title, totalId, ordNo } = selectArticle;
+            const { artTitle: title, totalId } = selectArticle;
             const linkUrl = totalId ? `https://news.joins.com/article/${totalId}` : '';
             const articles = produce(relationArticles, (draft) => {
                 draft.push({ title, linkUrl, relType: 'A', pollSeq: poll.pollSeq, contentId: totalId });
             });
             setRelationArticles(articles);
+            dispatch(selectArticleListChange(articles));
+            dispatch(selectArticleItemChange(articles));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectArticle]);
 
     useEffect(() => {
         if (selectPoll) {
-            const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id }];
-            setRelationPolls(polls);
-            /*setEdit({ ...edit, pollRelateContents: [...relationArticles, ...polls] });*/
-            setEdit(
-                produce(edit, (draft) => {
-                    draft.pollRelateContents = [...relationArticles, ...polls];
-                }),
-            );
+            if (relationPolls.filter((pollItem) => pollItem.contentId == selectPoll.id).length > 0) {
+                toast.warning(`중복된 투표정보(id=${selectPoll.id})가 존재합니다.`);
+            } else {
+                const polls = [...relationPolls, { title: selectPoll.title, pollSeq: poll.pollSeq, relType: 'P', contentId: selectPoll.id, ordNo: relationPolls.length + 1 }];
+                setRelationPolls(polls);
+                setEdit(
+                    produce(edit, (draft) => {
+                        draft.pollRelateContents = [...relationArticles, ...polls];
+                    }),
+                );
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectPoll]);
@@ -143,14 +154,13 @@ const PollChildRelation = () => {
                         ordNo: index + 1,
                     })),
             );
-            setRelationArticles(
-                edit.pollRelateContents
-                    .filter((data) => data.relType === 'A')
-                    .map((poll, index) => ({
-                        ...poll,
-                        ordNo: index + 1,
-                    })),
-            );
+            /*const articles = edit.pollRelateContents
+                .filter((data) => data.relType === 'A')
+                .map((poll, index) => ({
+                    ...poll,
+                    ordNo: index + 1,
+                }));
+            setRelationArticles(articles);*/
         } else {
             setRelationPolls([]);
             setRelationArticles([]);
@@ -160,6 +170,10 @@ const PollChildRelation = () => {
     useEffect(() => {
         setEdit(poll);
     }, [poll]);
+
+    useEffect(() => {
+        setRelationArticles(item);
+    }, [item]);
 
     return (
         <div className="d-flex">
@@ -193,7 +207,7 @@ const PollChildRelation = () => {
                     </Form.Group>
                     <hr />
                     <Form.Group>
-                        <Form.Row>
+                        {/*<Form.Row>
                             <Col xs={12}>
                                 <Form.Group>
                                     <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
@@ -210,8 +224,8 @@ const PollChildRelation = () => {
                                     </Button>
                                 </Form.Group>
                             </Col>
-                        </Form.Row>
-                        <SortAgGrid rows={relationArticles} onChange={setRelationArticles} onDelete={handleClickRelationArticleDelete} />
+                        </Form.Row>*/}
+                        <SortAgGrid />
                     </Form.Group>
                 </Form>
             </MokaCard>

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MokaModal } from '@components';
 import RelationPollModalSearchComponent from '@pages/Survey/Poll/components/RelationPollModalSearchComponent';
 import RelationPollModalAgGridComponent from '@pages/Survey/Poll/components/RelationPollModalAgGridComponent';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getRelationPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';

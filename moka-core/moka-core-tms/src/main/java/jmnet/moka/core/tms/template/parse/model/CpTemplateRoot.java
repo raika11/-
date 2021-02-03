@@ -143,9 +143,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 boolean isDeskingWork = context
                         .getMergeOptions()
                         .isPreview() && context.has(MokaConstants.MERGE_CONTEXT_REG_ID);
-                if ( isDeskingWork) {
+                if (isDeskingWork && this.templateLoader instanceof DpsWorkTemplateLoader) {
                     // Preview 모드의 경우에 작업중인 컴포넌트만 desking.work api를 호출한다.
-                    isDeskingWork &= ((DpsWorkTemplateLoader)this.templateLoader).hasComponentId(this.getId());
+                    isDeskingWork &= ((DpsWorkTemplateLoader) this.templateLoader).isWorkComponent(this.getId());
                 }
                 String apiName = isDeskingWork ? DpsApiConstants.DESKING_WORK : DpsApiConstants.DESKING;
                 if (isDeskingWork) {

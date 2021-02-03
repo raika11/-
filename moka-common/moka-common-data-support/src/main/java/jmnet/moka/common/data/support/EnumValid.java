@@ -1,5 +1,6 @@
 package jmnet.moka.common.data.support;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -21,6 +22,7 @@ import javax.validation.Payload;
  */
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
 @Constraint(validatedBy = {EnumValidator.class})
 public @interface EnumValid {
     String message() default "{javax.validation.constraints.pattern.message}";
@@ -32,6 +34,8 @@ public @interface EnumValid {
     Class<? extends java.lang.Enum<?>> enumClass();
 
     boolean ignoreCase() default false;
+
+    boolean required() default false;
 
 
 }

@@ -2,6 +2,7 @@ package jmnet.moka.common.data.support;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import jmnet.moka.common.utils.EnumCode;
 
 /**
  * <pre>
@@ -15,7 +16,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author ince
  * @since 2020-11-19 09:25
  */
-public class EnumValidator implements ConstraintValidator<EnumValid, String> {
+public class EnumValidator implements ConstraintValidator<EnumValid, EnumCode> {
     private EnumValid annotation;
 
     @Override
@@ -24,14 +25,28 @@ public class EnumValidator implements ConstraintValidator<EnumValid, String> {
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(EnumCode value, ConstraintValidatorContext context) {
+
+        if (value == null) {
+            if (this.annotation.required()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         boolean result = false;
+
         Object[] enumValues = this.annotation
-                .getClass()
+                .enumClass()
                 .getEnumConstants();
         if (enumValues != null) {
             for (Object enumValue : enumValues) {
-                if (value.equals(enumValue.toString()) || (this.annotation.ignoreCase() && value.equalsIgnoreCase(enumValue.toString()))) {
+                if (value
+                        .getCode()
+                        .equals(enumValue.toString()) || (this.annotation.ignoreCase() && value
+                        .getCode()
+                        .equalsIgnoreCase(enumValue.toString()))) {
                     result = true;
                     break;
                 }

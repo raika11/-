@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { MokaModal } from '@components';
 import { useDispatch } from 'react-redux';
@@ -10,7 +10,7 @@ import { BenneConfirmModal } from '@pages/CommentManage/CommentModal';
 
 const CommentActionModal = (props) => {
     const { show, onHide, ModalUsage } = props;
-    const { gubun } = ModalUsage;
+    const { gubun, status } = ModalUsage;
 
     const [confirmModalState, setConfirmModalState] = useState(false);
     const dispatch = useDispatch();
@@ -32,6 +32,10 @@ const CommentActionModal = (props) => {
         dispatch(
             deleteComment({
                 cmtSeq: ModalUsage.cmtSeq,
+                params: {
+                    statusType: status,
+                    deleteType: 'CMT',
+                },
                 callback: ({ header: { success, message }, body }) => {
                     // 임시로 모두 다시 가지고 옴.
                     dispatch(getCommentList());

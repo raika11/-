@@ -45,7 +45,7 @@ export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList)
  * 댓글 삭제
  */
 export const [DELETE_COMMENT, DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAILURE] = createRequestActionTypes('comment/DELETE_COMMENT');
-export const deleteComment = createAction(DELETE_COMMENT, ({ cmtSeq, callback }) => ({ cmtSeq, callback }));
+export const deleteComment = createAction(DELETE_COMMENT, ({ cmtSeq, params, callback }) => ({ cmtSeq, params, callback }));
 
 //// 차단 관리.
 export const [GET_COMMENTS_BLOCKS, GET_COMMENTS_BLOCKS_SUCCESS, GET_COMMENTS_BLOCKS_FAILURE] = createRequestActionTypes('comment/GET_COMMENTS_BLOCKS');

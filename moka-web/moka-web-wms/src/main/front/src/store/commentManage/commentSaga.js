@@ -73,14 +73,14 @@ function* saveBlock({ payload: { type, seqNo, blockFormData, callback } }) {
  * @param {string} param0.payload.commentSeq 댓글아이디
  * @param {func} param0.payload.callback 콜백
  */
-function* deleteComment({ payload: { cmtSeq, callback } }) {
+function* deleteComment({ payload: { cmtSeq, params, callback } }) {
     yield put(startLoading(act.DELETE_COMMENT));
 
     let callbackData = {};
     let response;
 
     try {
-        response = yield call(commentAPI.deleteComment, { cmtSeq: cmtSeq });
+        response = yield call(commentAPI.deleteComment, { cmtSeq: cmtSeq, params: params });
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, forwardRef } from 'react';
+import React, { useCallback, useState, forwardRef, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
@@ -34,6 +34,10 @@ export const UserInfoRenderer = ({ value }) => {
 // 삭제 버튼
 export const DeleteButtonRenderer = (props) => {
     const { cmtSeq, status, memNm, memId } = props.value;
+
+    // useEffect(() => {
+    //     console.log(props.value);
+    // }, [props.value]);
 
     const [modalUsage, setModalUsage] = useState({
         gubun: '',

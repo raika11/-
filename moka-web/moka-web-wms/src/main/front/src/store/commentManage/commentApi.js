@@ -23,8 +23,8 @@ export const postBlock = ({ comment }) => {
 };
 
 // 댓글 삭제
-export const deleteComment = ({ cmtSeq }) => {
-    return instance.delete(`/api/comments/${cmtSeq}`).catch((err) => {
+export const deleteComment = ({ cmtSeq, params }) => {
+    return instance.delete(`/api/comments/${cmtSeq}/status?${qs.stringify(params)}`).catch((err) => {
         throw err;
     });
 };

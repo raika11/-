@@ -92,7 +92,7 @@ export const columnDefs = [
     {
         headerName: '기능',
         field: 'action',
-        tooltipField: 'action',
+        // tooltipField: 'action',
         width: 80,
         suppressDoubleClickExpand: true,
         cellRenderer: 'deleteButtonRenderer',

@@ -26,6 +26,12 @@ export const initialState = {
             includeDel: 'Y', // 삭제된 것까지 검색 포함 여부 (Y/N)
         },
     },
+    banner: {
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+        },
+    },
     invalidList: [],
     answTotal: 0,
     agndTotal: 0,

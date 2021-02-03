@@ -7,7 +7,7 @@ import { SAVE_MIC_CATEGORY, saveMicCategory } from '@store/mic';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import columnDefs from './CategoryModalAgGridColumns';
-import CategoryEditorRenderer from '../components/CategoryEditorRenderer';
+import InputRenderer from '../components/InputRenderer';
 import CategorySelectRenderer from '../components/CategorySelectRenderer';
 
 /**
@@ -41,6 +41,14 @@ const CategoryModal = (props) => {
      */
     const handleGridReady = (params) => {
         setInstance(params);
+    };
+
+    /**
+     * 모달 닫기
+     */
+    const handleHide = () => {
+        setInstance(null);
+        onHide();
     };
 
     /**
@@ -98,8 +106,10 @@ const CategoryModal = (props) => {
      */
     const handleSearch = () => {
         const filtered = keyword !== '' ? list.filter((row) => row.catNm.indexOf(keyword) > -1) : list;
-        instance.api.setRowData(filtered);
-        instance.api.redrawRows();
+        if (instance?.api) {
+            instance.api.setRowData(filtered);
+            instance.api.redrawRows();
+        }
         keyword !== '' ? setDraggable(false) : setDraggable(true);
     };
 
@@ -166,7 +176,7 @@ const CategoryModal = (props) => {
     }, [handleReset, show]);
 
     useEffect(() => {
-        if (instance) {
+        if (instance?.api) {
             instance.api.setSuppressRowDrag(!draggable);
         }
     }, [draggable, instance]);
@@ -177,13 +187,13 @@ const CategoryModal = (props) => {
             height={685}
             title="카테고리 관리"
             show={show}
-            onHide={onHide}
+            onHide={handleHide}
             loading={loading}
             size="md"
             bodyClassName="d-flex flex-column"
             buttons={[
                 { text: '수정', variant: 'positive', onClick: handleEdit },
-                { text: '취소', variant: 'negative', onClick: onHide },
+                { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             centered
         >
@@ -214,7 +224,7 @@ const CategoryModal = (props) => {
                     rowData={list}
                     getRowNodeId={(data) => data.catSeq}
                     columnDefs={columnDefs}
-                    frameworkComponents={{ editor: CategoryEditorRenderer, selector: CategorySelectRenderer }}
+                    frameworkComponents={{ inputRenderer: InputRenderer, selector: CategorySelectRenderer }}
                     animateRows
                     rowDragManaged
                     onRowDragEnd={handleDragEnd}

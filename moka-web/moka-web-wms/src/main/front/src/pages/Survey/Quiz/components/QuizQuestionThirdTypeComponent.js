@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { MokaInputLabel, MokaTableDeleteButton, AgGripIcon } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
-
+import { DeleteConfirmModal } from '@pages/Survey/Quiz/modals';
 // 객관식 컴포넌트
-const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
+const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
     const dispatch = useDispatch();
+    const [deleteConfirmModalState, setDeleteConfirmModalState] = useState(false);
     // 스토어 연결.
     const { questionsList } = useSelector((store) => ({
         questionsList: store.quiz.quizQuestions.questionsList,
@@ -16,7 +16,17 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
 
     // 퀴즈 삭제 버튼 처리.
     const handleClickQuestionDeleteButton = () => {
+        if (quizSts === 'Y') {
+            setDeleteConfirmModalState(true);
+        } else {
+            dispatch(deleteQuestion({ questionIndex: questionIndex }));
+        }
+    };
+
+    // alert 창에서 확인 눌렀을 경우.
+    const handleAlertDelete = () => {
         dispatch(deleteQuestion({ questionIndex: questionIndex }));
+        setDeleteConfirmModalState(false);
     };
 
     // 문항 삭제 버튼 처리.
@@ -119,8 +129,8 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
                             onChange={(e) => handleChangeEditData(e)}
                         />
                     </Col>
-                    <Col xs={1} onClick={(e) => handleClickQuestionDeleteButton(e)}>
-                        <AgGripIcon />
+                    <Col xs={1}>
+                        <AgGripIcon onClick={(e) => handleClickQuestionDeleteButton(e)} />
                     </Col>
                 </Form.Row>
                 {/* 보기. */}
@@ -195,6 +205,15 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex }) => {
                         />
                     </Col>
                 </Form.Row>
+                <DeleteConfirmModal
+                    show={deleteConfirmModalState}
+                    onHide={(e) => {
+                        if (e.type === 'save') {
+                            handleAlertDelete();
+                        }
+                        setDeleteConfirmModalState(false);
+                    }}
+                />
             </div>
         </>
     );

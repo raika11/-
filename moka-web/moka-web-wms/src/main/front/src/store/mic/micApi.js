@@ -83,6 +83,13 @@ export const postMicBanner = ({ banner }) => {
         });
 };
 
+// 배너 사용여부 변경
+export const putMicBannerToggle = ({ bnnrSeq }) => {
+    return instance.put(`/api/mics/banners/${bnnrSeq}/toggle`).catch((err) => {
+        throw err;
+    });
+};
+
 // 배너 목록 수정(폼데이터)
 export const putMicBanner = ({ banner }) => {
     return instance

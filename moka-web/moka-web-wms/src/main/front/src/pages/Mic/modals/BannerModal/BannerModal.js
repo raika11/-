@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
-import { initialState, getMicBannerListModal, saveMicBanner, GET_MIC_BANNER_LIST_MODAL, SAVE_MIC_BANNER } from '@store/mic';
+import { initialState, getMicBannerListModal, putMicBannerToggle, saveMicBanner, GET_MIC_BANNER_LIST_MODAL, SAVE_MIC_BANNER } from '@store/mic';
 import { MokaModal, MokaTable } from '@components';
 import BannerForm from './BannerForm';
 import columnDefs from './BannerModalColumns';
@@ -35,14 +35,12 @@ const BannerModal = (props) => {
         (banner) => {
             if (banner) {
                 dispatch(
-                    saveMicBanner({
-                        banner: {
-                            ...banner,
-                            handleChangeUsedYn: undefined,
-                        },
+                    putMicBannerToggle({
+                        bnnrSeq: banner.bnnrSeq,
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success(header.message);
+                                setEditMode(false);
                             } else {
                                 messageBox.alert(header.message);
                             }
@@ -166,7 +164,7 @@ const BannerModal = (props) => {
                 saveMicBanner({
                     banner: {
                         ...banner,
-                        handleChangeUsedYn: undefined,
+                        onChangeUsedYn: undefined,
                     },
                     callback: ({ header }) => {
                         if (header.success) {

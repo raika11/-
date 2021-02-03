@@ -137,6 +137,13 @@ public class CommentRestController extends AbstractCommonController {
                 .findCommentBySeq(cmtSeq)
                 .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
 
+        if (comment
+                .getStatus()
+                .equals(CommentStatusType.D) && statusType.equals(CommentStatusType.A)) { // 사용자가 삭제한 댓글은 복구 불가
+            throw new InvalidDataException("tps.comment-error.user-delete");
+        }
+
+        // 삭제 처리인 경우에는 삭제 유형 파라미터 체크
         if (statusType.equals(CommentStatusType.N)) {
             if (deleteType == null) {
                 throw new InvalidDataException("tps.comment-banned.error.notnull.deleteType");

@@ -5,6 +5,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
+import toast, { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 
 const SortAgGrid = () => {
@@ -30,8 +31,8 @@ const SortAgGrid = () => {
         dispatch(selectArticleItemChange([...selectArticleItem, newItem]));
     };
 
-    const handleClickArticleAdd = (e) => {
-        setModalArticle(e);
+    const handleClickArticleAdd = (article) => {
+        setModalArticle(article);
     };
 
     /**
@@ -89,6 +90,14 @@ const SortAgGrid = () => {
 
     useEffect(() => {
         if (modalArticle) {
+            const totalId = modalArticle.totalId;
+
+            let checkItem = selectArticleItem.filter((e) => Number(e.contentId) === Number(totalId));
+            if (checkItem.length > 0) {
+                messageBox.alert('중복된 기사가 존재 합니다.');
+                return;
+            }
+
             let newItem = {
                 contentId: modalArticle.totalId,
                 title: modalArticle.artTitle,

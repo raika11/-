@@ -35,6 +35,6 @@ public class JobStatisticSearchDTO extends SearchDTO {
     @ApiModelProperty("배포서버(배포서버 코드 API를 통해 조회한 serverSeq)")
     private Long serverSeq;
 
-    @ApiModelProperty("상태(성공:200/기타:500)")
+    @ApiModelProperty("상태(성공:200/실패:500)")
     private Long genResult ;
 }

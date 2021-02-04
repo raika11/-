@@ -2,6 +2,7 @@ export default [
     {
         rowDrag: true,
         width: 28,
+        maxWidth: 28,
         suppressMenu: true,
         rowDragText: (params, dragItemCount) => {
             if (dragItemCount > 1) {
@@ -10,15 +11,14 @@ export default [
             }
             return params.rowNode.data.artTitle;
         },
-        cellStyle: { width: '28px' },
     },
     {
         colId: 'checkbox',
         width: 28,
+        maxWidth: 28,
         checkboxSelection: true,
         suppressMenu: true,
         headerCheckboxSelection: true,
-        cellStyle: { width: '28px' },
     },
     {
         headerName: '매체',
@@ -51,8 +51,12 @@ export default [
     },
     {
         headerName: '사진',
-        width: 60,
+        width: 73,
         field: 'artThumb',
+        cellStyle: {
+            paddingTop: '3px',
+            paddingBottom: '3px',
+        },
         cellRenderer: 'imageRenderer',
     },
     {

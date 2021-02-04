@@ -9,6 +9,39 @@ export const getMicAgendaList = ({ search }) => {
     });
 };
 
+// 아젠다 상세 조회
+export const getMicAgenda = ({ agndSeq }) => {
+    return instance.get(`/api/mics/agendas/${agndSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 아젠다 등록(폼데이터)
+export const postMicAgenda = ({ agenda }) => {
+    return instance
+        .post(`/api/mics/agendas`, objectToFormData(agenda), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 아젠다 수정(폼데이터)
+export const putMicAgenda = ({ agenda }) => {
+    return instance
+        .put(`/api/mics/agendas/${agenda.agndSeq}`, objectToFormData(agenda), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 레포트 (아젠다, 전체 포스트 수)
 export const getMicReport = () => {
     return instance.get('/api/mics/report').catch((err) => {

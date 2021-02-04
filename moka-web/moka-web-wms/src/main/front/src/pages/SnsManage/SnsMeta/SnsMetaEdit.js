@@ -545,7 +545,7 @@ const SnsMetaEdit = () => {
                             name="tw-reserveDt"
                             value={edit.tw.reserveDt}
                             onChange={(e) => {
-                                handleChangeTextValue({ target: { name: 'tw-reserveDt', value: moment(e._d).format(DB_DATEFORMAT) } });
+                                handleChangeTextValue({ target: { name: 'tw-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
                             }}
                             inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm', inputClassName: 'ft-12' }}
                             disabled={!edit.tw.isReserve}

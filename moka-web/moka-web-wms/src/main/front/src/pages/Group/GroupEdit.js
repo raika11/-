@@ -412,7 +412,7 @@ const GroupEdit = () => {
                         저장
                     </Button>
                     {groupCd && (
-                        <Button variant="gray150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickDelete}>
+                        <Button variant="gray-150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickDelete}>
                             삭제
                         </Button>
                     )}

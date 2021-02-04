@@ -4,37 +4,47 @@ import { MokaModal } from '@components';
 import { useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 
-import { deleteComment, getCommentList } from '@store/commentManage';
+import { deleteComment, getCommentList, clearComment } from '@store/commentManage';
 
 import { BenneConfirmModal } from '@pages/CommentManage/CommentModal';
 
 const CommentActionModal = (props) => {
     const { show, onHide, ModalUsage } = props;
-    const { gubun, status } = ModalUsage;
+    const { deleteType, status } = ModalUsage;
 
     const [confirmModalState, setConfirmModalState] = useState(false);
     const dispatch = useDispatch();
 
     const alertMessage = {
-        type_one: '댓글을 삭제 하시겠습니까',
-        type_two: '사용자의 과거 댓글 전체를 삭제하시겠습니까',
-        type_three: '사용자 ID 차단 및 댓글을 삭제하시겠습니까',
-        type_four: '사용자 ID 차단 및 과거 댓글 전체를 삭제 하시겠습니까',
-        type_restore: '댓글을 복구하시겠습니까',
+        CMT: '댓글을 삭제 하시겠습니까',
+        ALL: '사용자의 과거 댓글 전체를 삭제하시겠습니까',
+        BNC: '사용자 ID 차단 및 댓글을 삭제하시겠습니까',
+        BNA: '사용자 ID 차단 및 과거 댓글 전체를 삭제 하시겠습니까',
+        restore: '댓글을 복구하시겠습니까',
     };
 
     const handleClickHide = () => {
         onHide();
     };
 
-    // 댓글 삭제 처리. (댓글만.)
-    const handleDeleteComment = () => {
+    /*
+        - 삭제 유형 -
+        댓글하나 : CMT
+        사용자 댓글 모두 : ALL
+        사용자 차단과 해당 댓글 삭제 : BNC
+        사용자 차단과 해당 댓글 삭제 : BNA
+    */
+    // 댓글 삭제 처리.
+    const handleDeleteComment = (type) => {
+        const paramsStatusType = type === 'restore' ? 'A' : 'N';
+        const paramsDeleteType = type === 'restore' ? '' : type;
+        dispatch(clearComment());
         dispatch(
             deleteComment({
                 cmtSeq: ModalUsage.cmtSeq,
                 params: {
-                    statusType: status,
-                    deleteType: 'CMT',
+                    statusType: paramsStatusType,
+                    deleteType: paramsDeleteType,
                 },
                 callback: ({ header: { success, message }, body }) => {
                     // 임시로 모두 다시 가지고 옴.
@@ -56,33 +66,8 @@ const CommentActionModal = (props) => {
         );
     };
 
-    /*
-     * 2021-01-22 10:53  댓글만 삭제 기능 외에는 API 가 없기 떄문에
-     * 추후에 API 및 처리 논의.
-     */
-    // 사용자 과거 댓글 전체 삭제.
-    const handleDeleteAllUserComment = () => {
-        messageBox.alert('개발 중입니다.');
-    };
-    // 사용자 ID 차단 및 댓글 삭제.
-    const handleUserBenneCommentDelete = () => {
-        messageBox.alert('개발 중입니다.');
-    };
-    // 사용자 ID 차단 및 과거 댓글 전체를 삭제 하시겠습니까
-    const handleUserBenneCommentAllDelete = () => {
-        messageBox.alert('개발 중입니다.');
-    };
-
     const handleClickSave = () => {
-        if (gubun === 'type_one') {
-            handleDeleteComment();
-        } else if (gubun === 'type_two') {
-            handleDeleteAllUserComment();
-        } else if (gubun === 'type_three') {
-            handleUserBenneCommentDelete();
-        } else if (gubun === 'type_four') {
-            handleUserBenneCommentAllDelete();
-        }
+        handleDeleteComment(deleteType);
 
         onHide();
     };
@@ -92,7 +77,7 @@ const CommentActionModal = (props) => {
             width={600}
             show={show}
             onHide={handleClickHide}
-            title={`댓글 삭제`}
+            title={deleteType === 'restore' ? `댓글 복구` : `댓글 삭제`}
             size="md"
             buttons={[
                 { text: '확인', variant: 'positive', onClick: () => handleClickSave() },
@@ -102,7 +87,7 @@ const CommentActionModal = (props) => {
             draggable
         >
             <Form>
-                <Form.Row className="mb-2">{alertMessage[gubun]}</Form.Row>
+                <Form.Row className="mb-2">{alertMessage[deleteType]}</Form.Row>
             </Form>
             <BenneConfirmModal
                 ModalUsage={ModalUsage}

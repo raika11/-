@@ -58,7 +58,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
 
     return (
         <>
-            <div className="mb-2 p-2 bg-gray150">
+            <div className="mb-2 p-2 bg-gray-150">
                 <Form.Row>
                     <Col xs={1}>
                         <AgGripIcon />

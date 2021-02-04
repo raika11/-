@@ -322,7 +322,7 @@ const ColumnistEdit = ({ history, match }) => {
                     </Col>
                 </Form.Row>
 
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-1">
                     <Col xs={7} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자명"
@@ -411,13 +411,14 @@ const ColumnistEdit = ({ history, match }) => {
                             as="textarea"
                             label="약력정보"
                             className="mb-0"
-                            inputClassName="resize-none"
+                            inputClassName="resize-none custom-scroll"
                             name="profile"
                             id="profile"
                             value={selectRepoterData.profile && selectRepoterData.profile}
                             onChange={tempOnchange}
                             isInvalid={error.profile}
                             disabled={editDisabled.profile}
+                            inputProps={{ rows: 5 }}
                         />
                     </Col>
                 </Form.Row>
@@ -455,7 +456,8 @@ const ColumnistEdit = ({ history, match }) => {
                     }
                     ref={imgFileRef}
                     inputProps={{
-                        height: 160,
+                        height: 150,
+                        width: 267,
                         img: selectRepoterData.profilePhoto,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,

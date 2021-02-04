@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -7,7 +7,7 @@ import { saveTourDeny } from '@/store/tour';
 import { DB_DATEFORMAT } from '@/constants';
 import toast from '@/utils/toastUtil';
 
-const SetHolidayModal = (props) => {
+const SetHolidayModal = forwardRef((props, ref) => {
     const { show, onHide, date } = props;
     const dispatch = useDispatch();
     const [holidayName, setHolidayName] = useState('');
@@ -40,6 +40,14 @@ const SetHolidayModal = (props) => {
         );
     }, [date, dispatch, handleHide, holidayName]);
 
+    useImperativeHandle(
+        ref,
+        () => ({
+            setHoliday: handleClickConfirm,
+        }),
+        [handleClickConfirm],
+    );
+
     return (
         <MokaModal
             size="md"
@@ -60,6 +68,6 @@ const SetHolidayModal = (props) => {
             </Form>
         </MokaModal>
     );
-};
+});
 
 export default SetHolidayModal;

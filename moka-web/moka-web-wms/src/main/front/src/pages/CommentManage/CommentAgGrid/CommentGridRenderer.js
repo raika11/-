@@ -50,10 +50,10 @@ export const DeleteButtonRenderer = (props) => {
     const [defaultInputModalState, setDefaultInputModalState] = useState(false);
 
     const handleClickBannedButton = useCallback(
-        (gubun) => {
+        (deleteType) => {
             setModalUsage({
                 ...modalUsage,
-                gubun: gubun,
+                deleteType: deleteType,
             });
             setDefaultInputModalState(true);
         },
@@ -63,17 +63,17 @@ export const DeleteButtonRenderer = (props) => {
     const handleClickRestore = () => {
         setModalUsage({
             ...modalUsage,
-            gubun: 'type_restore',
+            deleteType: 'restore',
         });
         setDefaultInputModalState(true);
     };
 
     const createDropdownItem = useCallback(() => {
         const items = [
-            { text: '이 댓글만 삭제', viewN: false, onClick: () => handleClickBannedButton('type_one') },
-            { text: '해당 사용자의 과거 댓글 전체 삭제', viewN: false, onClick: () => handleClickBannedButton('type_two') },
-            { text: '해당 사용자 ID 차단 및 과거 댓글 전체 삭제', viewN: false, onClick: () => handleClickBannedButton('type_three') },
-            { text: '해당 사용자 ID 차단 및 과거 댓글 전체 삭제', viewN: false, onClick: () => handleClickBannedButton('type_four') },
+            { text: '이 댓글만 삭제', viewN: false, onClick: () => handleClickBannedButton('CMT') },
+            { text: '해당 사용자의 과거 댓글 전체 삭제', viewN: false, onClick: () => handleClickBannedButton('ALL') },
+            { text: '해당 사용자 ID 차단 및 해당 댓글 삭제', viewN: false, onClick: () => handleClickBannedButton('BNC') },
+            { text: '해당 사용자 ID 차단 및 과거 댓글 전체 삭제', viewN: false, onClick: () => handleClickBannedButton('BNA') },
         ];
 
         return (

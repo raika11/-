@@ -152,7 +152,7 @@ const EditThumbCard = forwardRef((props, ref) => {
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div
                         ref={wrapperRef}
-                        className={clsx('w-100 h-100 d-inline-flex align-items-center justify-content-center position-relative bg-gray600 overflow-hidden', {
+                        className={clsx('w-100 h-100 d-inline-flex align-items-center justify-content-center position-relative bg-gray-600 overflow-hidden', {
                             'rounded-top': dataType === 'archive',
                             rounded: dataType !== 'archive',
                         })}

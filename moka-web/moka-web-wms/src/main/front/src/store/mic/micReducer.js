@@ -20,6 +20,13 @@ export const initialState = {
         { id: 'all', name: '전체 메뉴' },
         { id: 'Y', name: '최상단' },
     ],
+    agenda: {
+        usedYn: 'N',
+        agndTop: 'N',
+        agndType: '0',
+        categoryList: [],
+        relArticleList: [],
+    },
     category: {
         list: [],
         search: {
@@ -47,10 +54,20 @@ export default handleActions(
                 draft.search = payload;
             });
         },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
+            });
+        },
         /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
+        [act.CLEAR_MIC_AGENDA]: (state) => {
+            return produce(state, (draft) => {
+                draft.agenda = initialState.agenda;
+            });
+        },
         /**
          * 데이터 조회
          */
@@ -59,6 +76,15 @@ export default handleActions(
                 draft.list = body.list;
                 draft.total = body.totalCnt;
                 draft.error = initialState.error;
+            });
+        },
+        /**
+         * 아젠다 상세 조회
+         */
+        [act.GET_MIC_AGENDA_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.agenda = body;
+                draft.invalidList = initialState.invalidList;
             });
         },
         /**

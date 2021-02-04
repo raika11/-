@@ -547,7 +547,7 @@ const routes = [
         displayName: '시민 마이크',
         component: Mic,
         layout: SidebarOpenLayout,
-        nonResponsive: false,
+        nonResponsive: true,
         exact: false,
         strict: true,
     },

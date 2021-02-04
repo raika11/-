@@ -40,7 +40,6 @@ const BannerModal = (props) => {
                         callback: ({ header }) => {
                             if (header.success) {
                                 toast.success(header.message);
-                                setEditMode(false);
                             } else {
                                 messageBox.alert(header.message);
                             }
@@ -101,6 +100,7 @@ const BannerModal = (props) => {
     const handleHide = useCallback(() => {
         setEditMode(false);
         setSelected({});
+        setError({});
         setTotal(0);
         setRowData([]);
         setSearch(initialState.banner.search);
@@ -197,7 +197,7 @@ const BannerModal = (props) => {
         <MokaModal title="다른 주제 공통 배너 관리" height={685} show={show} onHide={handleHide} size="lg" centered>
             <Container className="p-0 h-100" fluid>
                 <Row className="m-0 h-100">
-                    <Col className="p-0 d-flex flex-column h-100 overflow-hidden flex-shrink-0" style={{ minWidth: 450 }}>
+                    <Col className="p-0 d-flex flex-column h-100 overflow-hidden flex-shrink-0" style={{ minWidth: 430 }}>
                         <div className="mb-2 d-flex justify-content-end">
                             <Button variant="positive" onClick={handleAdd}>
                                 등록
@@ -207,7 +207,7 @@ const BannerModal = (props) => {
                             className="overflow-hidden flex-fill"
                             columnDefs={columnDefs}
                             rowData={rowData}
-                            rowHeight={100}
+                            rowHeight={135}
                             onRowNodeId={(data) => data.bnnrSeq}
                             onRowClicked={handleRowClicked}
                             loading={loading}

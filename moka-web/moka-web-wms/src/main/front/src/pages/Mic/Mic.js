@@ -2,7 +2,7 @@ import React, { useState, Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
 import { MokaCard, MokaIcon, MokaIconTabs } from '@/components';
-import AgendaEdit from './MicAgendaEdit';
+import MicAgendaEdit from './MicAgendaEdit';
 import MicFeedList from './MicFeedList';
 import MicPostList from './MicPostList';
 const AgendaList = React.lazy(() => import('./MicAgendaList'));
@@ -30,15 +30,15 @@ const Mic = ({ match }) => {
 
             {/* 아젠다 상세 */}
             <Route
-                path={[`${match.url}/add`, `${match.url}/:agndSeq`]}
+                path={[`${match.path}/add`, `${match.path}/:agndSeq`]}
                 exact
                 render={() => (
                     <MokaIconTabs
-                        tabWidth={860}
+                        className="flex-fill"
                         onSelectNav={(idx) => setActiveTabIdx(idx)}
-                        tabs={[<AgendaEdit show={activeTabIdx === 0} />, <MicFeedList show={activeTabIdx === 1} />, <MicPostList show={activeTabIdx === 2} />]}
+                        tabs={[<MicAgendaEdit show={activeTabIdx === 0} match={match} />, <MicFeedList show={activeTabIdx === 1} />, <MicPostList show={activeTabIdx === 2} />]}
                         tabNavs={[
-                            { title: '아젠다 수정', text: 'Info' },
+                            { title: '아젠다', text: 'Info' },
                             { title: '피드 목록', icon: <MokaIcon iconName="fal-comment-alt-lines" /> },
                             { title: '포스트 목록', icon: <MokaIcon iconName="fal-comment-alt" /> },
                         ]}

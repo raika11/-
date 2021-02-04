@@ -15,7 +15,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     };
 
     const handleChangeSearchOption = (option) => {
-        dispatch(changeSnsMetaSearchOptions({ ...searchOptions, [option.key]: option.value }));
+        dispatch(changeSnsMetaSearchOptions({ ...searchOptions, [option.key]: option.value, page: 0 }));
     };
 
     useEffect(() => {

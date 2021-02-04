@@ -671,7 +671,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                     </Col>
                 </Form.Row>
 
-                <Form.Row className="mb-2 p-2 bg-gray150">
+                <Form.Row className="mb-2 p-2 bg-gray-150">
                     <Form.Row className="w-100 justify-content-between">
                         <Col xs={7}>
                             <Form.Row>

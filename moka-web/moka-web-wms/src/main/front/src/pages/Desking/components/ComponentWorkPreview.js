@@ -50,9 +50,21 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
 
     useEffect(() => {
         if (!iframeRef.current) return;
-        const doc = iframeRef.current.contentDocument;
-        doc.open();
-        doc.write(previewContent || '');
+        let doc = iframeRef.current.contentDocument;
+        if (!doc) {
+            iframeRef.current.src = 'about:blank';
+            iframeRef.current.onload = function () {
+                doc = iframeRef.current.contentDocument;
+                doc.open();
+                doc.write(previewContent || '');
+                doc.close();
+                iframeRef.current.onload = null;
+            };
+        } else {
+            doc.open();
+            doc.write(previewContent || '');
+            doc.close();
+        }
 
         // if (previewContent) {
         //     let style = document.createElement('style');
@@ -61,7 +73,6 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
         //         doc.head && doc.head.appendChild(style);
         //     }, 300);
         // }
-        doc.close();
     }, [previewContent]);
 
     return (

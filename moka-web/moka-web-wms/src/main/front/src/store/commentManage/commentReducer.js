@@ -66,9 +66,9 @@ export const initialState = {
         list: [],
         error: null,
         search: {
+            sort: 'regDt,asc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            sort: 'regDt,asc',
             searchType: '',
             keyword: '',
             domain: '',
@@ -130,6 +130,11 @@ export default handleActions(
         [act.CHANGE_COMMENT]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.comments = payload;
+            });
+        },
+        [act.CLEAR_COMMENT]: (state) => {
+            return produce(state, (draft) => {
+                draft.comments = initialState.comments;
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {

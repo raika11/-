@@ -207,7 +207,8 @@ const CommentListBox = ({ setSelectBannedItem }) => {
                 }),
             );
         };
-        if (list.length > 0) {
+        // console.log(list);
+        if (list) {
             inirGridRow(list);
         }
     }, [COMMENT_MEDIA_CODE, COMMENT_STATUS_CODE, list]);

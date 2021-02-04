@@ -3,6 +3,7 @@ export default [
         headerName: '번호',
         field: 'bnnrSeq',
         width: 40,
+        flex: 1,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
@@ -15,9 +16,8 @@ export default [
     {
         headerName: '이미지',
         field: 'imgLink',
-        width: 260,
+        width: 240,
         cellRenderer: 'imageRenderer',
-        flex: 1,
     },
     {
         headerName: '사용',

@@ -94,7 +94,7 @@ const GroupChildMenuAuth = () => {
                     <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
                         저장
                     </Button>
-                    <Button variant="gray150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickCancel}>
+                    <Button variant="gray-150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickCancel}>
                         취소
                     </Button>
                 </Row>

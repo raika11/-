@@ -54,7 +54,7 @@ button {
   @include button-color-active($gray-800);
 }
 
-.btn-gray150 {
+.btn-gray-150 {
   @include button-color($gray-550);
   @include button-color-hover($gray-550);
   @include button-active($white, $gray-650);

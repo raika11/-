@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
+import ImageFileForm from './ImageFileForm';
 
 /**
  * 시민마이크 아젠다 폼
  */
-const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
+const MicAgendaForm = ({ agenda, onChange, categoryAllList, onChangeModal }) => {
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [cts, setCts] = useState([]);
 
@@ -62,7 +62,7 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
                 <MokaInputLabel
                     label="사용 여부"
                     labelWidth={90}
-                    className="mb-0 mr-2"
+                    className="mr-3"
                     as="switch"
                     name="usedYn"
                     id="usedYn"
@@ -75,7 +75,6 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
                 <MokaInputLabel
                     label="최상단 여부"
                     labelWidth={90}
-                    className="mb-0"
                     as="switch"
                     name="agndTop"
                     id="agndTop"
@@ -91,7 +90,7 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
             <Form.Row className="mb-2">
                 <MokaInputLabel
                     label="공개일"
-                    className="mr-2"
+                    className="mr-3"
                     labelWidth={90}
                     as="dateTimePicker"
                     value={agenda.regDt}
@@ -99,7 +98,7 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
                     name="startDate"
                     onChange={() => {}}
                 />
-                <MokaInputLabel label="타입" className="mr-2" as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
+                <MokaInputLabel label="타입" labelWidth={27} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
                     <option value="0">일반</option>
                     <option value="">그외</option>
                 </MokaInputLabel>
@@ -107,7 +106,7 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
 
             {/* 기사화 단계, 관련기사 URL */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-2" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
+                <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-3" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
                     <option value="0">미노출</option>
                     <option value="1">의견수렴</option>
                     <option value="2">검토중</option>
@@ -198,50 +197,13 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList }) => {
             {/* 찬반 투표 */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="찬반 투표" labelWidth={90} className="flex-fill mr-2" value={agenda.pollSeq} disabled />
-                <Button variant="searching" className="flex-shrink-0" onClick={() => {}}>
+                <Button variant="searching" className="flex-shrink-0" onClick={() => onChangeModal({ key: 'poll', value: true })}>
                     투표 찾기
                 </Button>
             </Form.Row>
 
-            {/* 배경이미지(PC) */}
-            <Form.Row className="mb-3">
-                <Col className="p-0 mr-2">
-                    <MokaInputLabel
-                        as="imageFile"
-                        labelWidth={90}
-                        label={
-                            <React.Fragment>
-                                배경이미지
-                                <br />
-                                <span className="color-danger">PC (800*600px)</span>
-                                <Button variant="positive" size="sm" className="mt-1">
-                                    신규등록
-                                </Button>
-                            </React.Fragment>
-                        }
-                        className="mb-2"
-                        inputProps={{ img: agenda.agndImg, width: 280, height: 170 }}
-                    />
-                </Col>
-                <Col className="p-0">
-                    <MokaInputLabel
-                        as="imageFile"
-                        labelWidth={90}
-                        label={
-                            <React.Fragment>
-                                배경이미지
-                                <br />
-                                <span className="color-danger">M (600*500px)</span>
-                                <Button variant="positive" size="sm" className="mt-1">
-                                    신규등록
-                                </Button>
-                            </React.Fragment>
-                        }
-                        className="mb-2"
-                        inputProps={{ img: agenda.agndImgMob, width: 280, height: 170 }}
-                    />
-                </Col>
-            </Form.Row>
+            {/* 배경이미지 */}
+            <ImageFileForm className="mb-2 justify-content-between" onChange={onChange} agenda={agenda} />
 
             {/* <Form.Row className="mb-3 align-items-center">
                     <MokaInputLabel

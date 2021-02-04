@@ -197,7 +197,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
                                     onSelect={handleSelect}
                                     className="text-center flex-fill h-100 border-0 pl-0 pr-0 d-flex justify-content-center align-items-center"
                                     active={activeKey.toString() === idx.toString() && isExpand}
-                                    variant="gray150"
+                                    variant="gray-150"
                                 >
                                     {nav.icon || <span className="h6 mb-0">{nav.text}</span>}
                                 </Nav.Link>

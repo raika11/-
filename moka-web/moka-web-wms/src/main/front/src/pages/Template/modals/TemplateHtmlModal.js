@@ -124,14 +124,7 @@ const TemplateHtmlModal = (props) => {
             onBlur={handleBlur}
             defaultValue={defaultValue}
             value={templateBody}
-            buttons={
-                editable
-                    ? [
-                          { text: '저장', variant: 'primary', onClick: handleClickSave },
-                          { text: '닫기', variant: 'gray150', onClick: handleHide },
-                      ]
-                    : [{ text: '닫기', variant: 'gray150', onClick: handleHide }]
-            }
+            buttons={[editable && { text: '저장', variant: 'primary', onClick: handleClickSave }, { text: '닫기', variant: 'negative', onClick: handleHide }]}
             error={error}
             loading={loading}
         />

@@ -34,7 +34,8 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
 
     useEffect(() => {
         setTemp(banner);
-    }, [banner]);
+        setError({});
+    }, [banner, setError]);
 
     return (
         <MokaCard
@@ -69,7 +70,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
                     </React.Fragment>
                 }
                 ref={fileRef}
-                inputProps={{ img: temp.imgLink, width: 280, deleteButton: true, setFileValue }}
+                inputProps={{ img: temp.imgLink, width: 280, height: 157.5, deleteButton: true, setFileValue }}
                 required
                 className="mb-2"
                 isInvalid={error.imgLink}

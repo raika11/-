@@ -34,7 +34,7 @@ const InputRenderer = forwardRef((params, ref) => {
      */
     const handleBlur = (e) => {
         // params.setValue(e.target.value);
-        params.api.applyTransaction({ update: [{ ...data, [field]: e.target.value }] });
+        params.api.applyTransaction({ update: [{ ...params.node.data, [field]: e.target.value }] });
     };
 
     return (

@@ -26,7 +26,7 @@ const CategorySelectRenderer = forwardRef((params, ref) => {
     const handleChangeValue = (e) => {
         params.setValue(e.target.value);
         setUsedYn(e.target.value);
-        params.api.applyTransaction({ update: [{ ...data, [field]: e.target.value }] });
+        params.api.applyTransaction({ update: [{ ...params.node.data, [field]: e.target.value }] });
     };
 
     return (

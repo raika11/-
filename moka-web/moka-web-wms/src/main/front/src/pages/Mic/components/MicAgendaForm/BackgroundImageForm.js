@@ -13,12 +13,22 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
     /**
      * 이미지 파일 변경 (PC)
      */
-    const setPcFileValue = (data) => onChange({ key: 'agndImgFile', value: data });
+    const setPcFileValue = (data) => {
+        onChange({ key: 'agndImgFile', value: data });
+        if (!data) {
+            onChange({ key: 'agndImg', value: '' });
+        }
+    };
 
     /**
      * 이미지 파일 변경 (M)
      */
-    const setMFileValue = (data) => onChange({ key: 'agndImgMobFile', value: data });
+    const setMFileValue = (data) => {
+        onChange({ key: 'agndImgMobFile', value: data });
+        if (!data) {
+            onChange({ key: 'agndImgMob', value: '' });
+        }
+    };
 
     return (
         <Form.Row className={className}>

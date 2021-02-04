@@ -1,4 +1,5 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
+import img_logo from '@assets/images/img_logo.png';
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.
@@ -25,7 +26,7 @@ const MokaTableImageRenderer = forwardRef((params, ref) => {
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center bg-white border overflow-hidden position-relative" ref={boxRef}>
-            <img src={data?.[field]} className="center-image" ref={imgRef} alt={data?.imgAlt || ''} />
+            <img src={data?.[field] || img_logo} className="center-image" ref={imgRef} alt={data?.imgAlt || ''} />
         </div>
     );
 });

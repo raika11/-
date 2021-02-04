@@ -210,7 +210,7 @@ const TemplateEdit = ({ onDelete, match }) => {
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
-                    <div className="d-flex">
+                    <div>
                         <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
                             컴포넌트 생성
                         </Button>
@@ -218,7 +218,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                             복사
                         </Button>
                     </div>
-                    <div className="d-flex">
+                    <div>
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             저장
                         </Button>

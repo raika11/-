@@ -7,6 +7,9 @@ import { createRequestActionTypes } from '@store/commons/saga';
 export const CHANGE_SEARCH_OPTION = 'mic/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 
+export const CHANGE_INVALID_LIST = 'mic/CHANGE_INVALID_LIST';
+export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
+
 /**
  * 스토어 데이터 삭제
  */
@@ -26,6 +29,12 @@ export const getMicAgendaList = createAction(GET_MIC_AGENDA_LIST, ({ search, cal
  */
 export const GET_MIC_AGENDA_LIST_MODAL = 'mic/GET_MIC_AGENDA_LIST_MODAL';
 export const getMicAgendaListModal = createAction(GET_MIC_AGENDA_LIST_MODAL, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 아젠다 저장
+ */
+export const SAVE_MIC_AGENDA = 'mic/SAVE_MIC_AGENDA';
+export const saveMicAgenda = createAction(SAVE_MIC_AGENDA, ({ agenda, callback }) => ({ agenda, callback }));
 
 /**
  * 아젠다 상세 조회

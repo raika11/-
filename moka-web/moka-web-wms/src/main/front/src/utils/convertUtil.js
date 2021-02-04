@@ -1,22 +1,31 @@
 /**
  * js object를 폼데이터로 변환한다
- * @param {object} obj 오브젝트
+ * @param {object} data 오브젝트
  */
-export const objectToFormData = (obj) => {
+export const objectToFormData = (data) => {
     const form_data = new FormData();
 
-    Object.keys(obj).forEach((key) => {
-        let value = obj[key];
-
-        if (value !== undefined && value !== null) {
-            if (Array.isArray(value)) {
-                form_data.append(key, JSON.stringify(value));
-            } else {
-                form_data.append(key, value);
+    for (let key in data) {
+        if (Array.isArray(data[key])) {
+            data[key].forEach((obj, index) => {
+                let keyList = Object.keys(obj);
+                keyList.forEach((keyItem) => {
+                    let keyName = [key, '[', index, ']', '.', keyItem].join('');
+                    if (obj[keyItem] !== undefined) {
+                        form_data.append(keyName, obj[keyItem]);
+                    }
+                });
+            });
+        } else if (typeof data[key] === 'object' && !(data[key] instanceof File)) {
+            for (let innerKey in data[key]) {
+                if (data[key][innerKey] !== undefined) {
+                    form_data.append(`${key}.${innerKey}`, data[key][innerKey]);
+                }
             }
+        } else {
+            form_data.append(key, data[key]);
         }
-    });
-
+    }
     return form_data;
 };
 

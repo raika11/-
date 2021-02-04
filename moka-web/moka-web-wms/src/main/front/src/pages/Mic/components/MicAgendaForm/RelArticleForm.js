@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import produce from 'immer';
 import Button from 'react-bootstrap/Button';
@@ -14,6 +14,26 @@ const RelArticleForm = ({ agenda, onChange }) => {
     const { relArticleList = [] } = agenda;
     const [show, setShow] = useState(false);
     const PDS_URL = useSelector(({ app }) => app.PDS_URL);
+
+    /**
+     * 제목 변경
+     * @param {object} e 이벤트
+     * @param {number} idx 기사 index
+     */
+    const handleChangeTitle = (e, idx) => {
+        const { value } = e.target;
+        const nlist = produce(relArticleList, (draft) => {
+            const no = {
+                ...relArticleList[idx],
+                artTitle: value,
+            };
+            draft.splice(idx, 1, no);
+        });
+        onChange({
+            key: 'relArticleList',
+            value: nlist,
+        });
+    };
 
     /**
      * 관련기사 삭제
@@ -41,10 +61,10 @@ const RelArticleForm = ({ agenda, onChange }) => {
         }
 
         // 2. 동일한 기사 체크
-        if (relArticleList.filter((a) => a.totalId === articleData.totalId).length > 0) {
-            messageBox.alert('이미 등록된 기사입니다.');
-            return;
-        }
+        // if (relArticleList.filter((a) => a.totalId === articleData.totalId).length > 0) {
+        //     messageBox.alert('이미 등록된 기사입니다.');
+        //     return;
+        // }
 
         // 3. 기사 추가
         const nlist = produce(relArticleList, (draft) => {
@@ -74,6 +94,12 @@ const RelArticleForm = ({ agenda, onChange }) => {
                 </Button>
             </div>
 
+            {relArticleList.length < 1 && (
+                <div className="mb-2 p-3 bg-light d-flex align-items-center justify-content-center">
+                    <p className="font-weight-bold">관련 기사가 없습니다</p>
+                </div>
+            )}
+
             {relArticleList.map((article, idx) => (
                 <div key={article.totalId} className="mb-2 p-3 bg-light">
                     <p className="mb-0 font-weight-bold">관련기사 {idx + 1}</p>
@@ -95,8 +121,14 @@ const RelArticleForm = ({ agenda, onChange }) => {
                         <MokaImage img={article.artThumb} width={178} height={100} />
                         {/* 기사 ID, 제목 노출 */}
                         <div className="flex-fill pl-3">
-                            <MokaInputLabel label="기사ID" labelWidth={40} className="mb-2" value={article.totalId} disabled />
-                            <MokaInputLabel label="제목" labelWidth={40} value={article.artTitle} onChange={() => {}} />
+                            <MokaInputLabel label="기사ID" labelWidth={40} className="mb-2" name="totalId" value={article.totalId} disabled />
+                            <MokaInputLabel
+                                label="제목"
+                                labelWidth={40}
+                                name="artTitle"
+                                value={unescapeHtmlArticle(article.artTitle)}
+                                onChange={(e) => handleChangeTitle(e, idx)}
+                            />
                         </div>
                         {/* 기사 삭제버튼 */}
                         <div className="pl-3 flex-shrink-0">

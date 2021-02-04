@@ -23,6 +23,7 @@ export const initialState = {
     agenda: {
         usedYn: 'N',
         agndTop: 'N',
+        agndType: '0',
         categoryList: [],
         relArticleList: [],
     },
@@ -51,6 +52,11 @@ export default handleActions(
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
+            });
+        },
+        [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.invalidList = payload;
             });
         },
         /**

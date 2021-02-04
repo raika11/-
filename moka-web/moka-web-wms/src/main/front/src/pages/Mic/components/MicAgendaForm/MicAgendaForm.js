@@ -4,13 +4,15 @@ import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
 import BackgroundImageForm from './BackgroundImageForm';
 import RelArticleForm from './RelArticleForm';
+import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
 
 /**
  * 시민마이크 아젠다 폼
  */
-const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, onChangeModal }) => {
+const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, error }) => {
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [cts, setCts] = useState([]);
+    const [show, setShow] = useState(false);
 
     /**
      * 입력값 변경
@@ -23,6 +25,18 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             onChange({ key: name, value: checked ? 'Y' : 'N' });
         } else {
             onChange({ key: name, value });
+        }
+    };
+
+    /**
+     * 공개일 변경
+     * @param {object} date 날짜데이터
+     */
+    const handleDate = (date) => {
+        if (typeof date === 'object') {
+            onChange({ key: 'agndServiceDt', value: date });
+        } else if (date === '') {
+            onChange({ key: 'agndServiceDt', value: null });
         }
     };
 
@@ -94,10 +108,10 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                     className="mr-3"
                     labelWidth={90}
                     as="dateTimePicker"
-                    value={agenda.regDt}
-                    inputProps={{ timeFormat: null }}
-                    name="startDate"
-                    onChange={() => {}}
+                    value={agenda.agndServiceDt}
+                    inputProps={{ timeFormat: null, width: 136 }}
+                    name="agndServiceDt"
+                    onChange={handleDate}
                 />
                 <MokaInputLabel label="타입" labelWidth={27} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
                     <option value="0">일반</option>
@@ -108,6 +122,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             {/* 기사화 단계, 관련기사 URL */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-3" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
+                    <option hidden>선택</option>
                     {AGENDA_ARTICLE_PROGRESS.map((progress) => (
                         <option key={progress.code} value={progress.code}>
                             {progress.name}
@@ -137,7 +152,16 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             </div>
 
             {/* 아젠다 제목 */}
-            <MokaInputLabel label="아젠다 제목" labelWidth={90} className="mb-1" name="agndTitle" value={agenda.agndTitle} onChange={handleChangeValue} />
+            <MokaInputLabel
+                label="아젠다 제목"
+                labelWidth={90}
+                className="mb-1"
+                name="agndTitle"
+                value={agenda.agndTitle}
+                onChange={handleChangeValue}
+                isInvalid={error.agndTitle}
+                required
+            />
             <div className="d-flex mb-2">
                 <MokaInputLabel label=" " labelWidth={90} as="none" />
                 <p className="mb-0 color-secondary">※ 예) # 가계부채에 대한 # 당신의 생각은 어떠신가요?</p>
@@ -153,7 +177,9 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 inputProps={{ rows: 3 }}
                 name="agndMemo"
                 value={agenda.agndMemo}
+                isInvalid={error.agndMemo}
                 onChange={handleChangeValue}
+                required
             />
 
             {/* 아젠다 코멘트 */}
@@ -198,9 +224,12 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             {/* 찬반 투표 */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="찬반 투표" labelWidth={90} className="flex-fill mr-2" value={agenda.pollSeq} disabled />
-                <Button variant="searching" className="flex-shrink-0" onClick={() => onChangeModal({ key: 'poll', value: true })}>
+                <Button variant="searching" className="flex-shrink-0" onClick={() => setShow(true)}>
                     투표 찾기
                 </Button>
+
+                {/* 투표 모달 */}
+                <RelationPollModal show={show} onHide={() => setShow(false)} />
             </Form.Row>
 
             {/* 배경이미지 */}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInputLabel } from '@/components';
@@ -7,28 +7,20 @@ import { MokaModal, MokaInputLabel } from '@/components';
  * 시민 마이크 피드 편집 모달
  */
 const FeedEditModal = (props) => {
-    const { show, onHide, data } = props;
-
-    const [usedYn, setUsedYn] = useState('');
-    const [feedType, setFeedType] = useState('');
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const { show, onHide, agenda, feed, onChange } = props;
 
     const handleHide = () => {
-        setUsedYn('N');
-        setFeedType('');
-        setTitle('');
-        setContent('');
         onHide();
     };
 
-    useEffect(() => {
-        if (show && data) {
-            setUsedYn(data.usedYn);
-            setTitle(data.title);
-            setContent(data.content);
+    const handleChangeValue = (e) => {
+        const { name, value, checked } = e.target;
+        if (name === 'usedYn') {
+            onChange({ key: name, value: checked ? 'Y' : 'N' });
+        } else {
+            onChange({ key: name, value });
         }
-    }, [show, data]);
+    };
 
     return (
         <MokaModal
@@ -36,12 +28,12 @@ const FeedEditModal = (props) => {
             size="md"
             show={show}
             onHide={handleHide}
-            title={data ? '관리자 피딩 수정' : '관리자 피딩 등록'}
+            title={`❛${agenda.agndKwd}❜ 관리자 피드 ${feed.answSeq ? '수정' : '등록'}`}
             buttons={[
-                { text: data ? '수정' : '저장', variant: 'positive' },
+                { text: '저장', variant: 'positive' },
                 { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
-            draggable
+            centered
         >
             <h3 className="mb-3 color-primary">'Row Title'</h3>
             <Form>
@@ -51,18 +43,12 @@ const FeedEditModal = (props) => {
                     id="mic-feed-usedYn"
                     as="switch"
                     name="usedYn"
-                    inputProps={{ custom: true, checked: usedYn === 'Y' }}
-                    onChange={(e) => {
-                        if (e.target.checked) {
-                            setUsedYn('Y');
-                        } else {
-                            setUsedYn('N');
-                        }
-                    }}
+                    inputProps={{ custom: true, checked: feed.usedYn === 'Y' }}
+                    onChange={handleChangeValue}
                 />
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="피드타입" as="select" name="feedType" value={feedType} onChange={(e) => setFeedType(e.target.value)}>
+                        <MokaInputLabel label="피드타입" as="select" name="feedType" value={feed.feedType} onChange={handleChangeValue}>
                             <option value="">단문</option>
                             <option value="I">이미지</option>
                             <option value="M">동영상</option>
@@ -70,16 +56,8 @@ const FeedEditModal = (props) => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
-                <MokaInputLabel label="제목" className="mb-2" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-                <MokaInputLabel
-                    label="내용"
-                    as="textarea"
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 3 }}
-                    name="content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
+                <MokaInputLabel label="제목" className="mb-2" name="title" value={feed.title} onChange={handleChangeValue} />
+                <MokaInputLabel label="내용" as="textarea" inputClassName="resize-none" inputProps={{ rows: 3 }} name="content" value={feed.content} onChange={handleChangeValue} />
             </Form>
         </MokaModal>
     );

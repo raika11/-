@@ -135,6 +135,7 @@ const MicAgendaEdit = ({ match }) => {
             ...agenda,
             agndServiceDt: agndServiceDt.isValid() ? agndServiceDt : null,
         });
+        setError({});
     }, [agenda]);
 
     useEffect(() => {

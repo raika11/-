@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader, MokaPagination } from '@/components';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import columnDefs, { rowData, localeText } from './MicFeedListAgGridColumns';
+import columnDefs, { rowData, localeText } from './MicFeedListColumns';
 import FeedEditModal from './modals/FeedEditModal';
 
 /**

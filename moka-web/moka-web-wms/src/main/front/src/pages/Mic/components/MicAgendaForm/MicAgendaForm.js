@@ -113,7 +113,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                     name="agndServiceDt"
                     onChange={handleDate}
                 />
-                <MokaInputLabel label="타입" labelWidth={27} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
+                <MokaInputLabel label="타입" labelWidth={46} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
                     <option value="0">일반</option>
                     <option value="">그외</option>
                 </MokaInputLabel>

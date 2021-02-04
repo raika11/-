@@ -39,6 +39,16 @@ export const initialState = {
             size: PAGESIZE_OPTIONS[0],
         },
     },
+    feed: {
+        total: 0,
+        list: [],
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            loginSns: 'P',
+            agndSeq: null,
+        },
+    },
     invalidList: [],
     answTotal: 0,
     agndTotal: 0,
@@ -52,6 +62,11 @@ export default handleActions(
         [act.CHANGE_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.search = payload;
+            });
+        },
+        [act.CHANGE_FEED_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.feed.search = payload;
             });
         },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
@@ -69,7 +84,7 @@ export default handleActions(
             });
         },
         /**
-         * 데이터 조회
+         * 아젠다 목록 조회
          */
         [act.GET_MIC_AGENDA_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
@@ -102,6 +117,15 @@ export default handleActions(
         [act.GET_MIC_CATEGORY_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.category.list = body.list;
+            });
+        },
+        /**
+         * 피드
+         */
+        [act.GET_MIC_FEED_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.feed.list = body.list;
+                draft.feed.total = body.totalCnt;
             });
         },
     },

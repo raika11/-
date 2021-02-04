@@ -6,6 +6,8 @@ import { createRequestActionTypes } from '@store/commons/saga';
  */
 export const CHANGE_SEARCH_OPTION = 'mic/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
+export const CHANGE_FEED_SEARCH_OPTION = 'mic/CHANGE_FEED_SEARCH_OPTION';
+export const changeFeedSearchOption = createAction(CHANGE_FEED_SEARCH_OPTION, (search) => search);
 
 export const CHANGE_INVALID_LIST = 'mic/CHANGE_INVALID_LIST';
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
@@ -83,3 +85,9 @@ export const saveMicBanner = createAction(SAVE_MIC_BANNER, ({ banner, callback }
  */
 export const PUT_MIC_BANNER_TOGGLE = 'mic/PUT_MIC_BANNER_TOGGLE';
 export const putMicBannerToggle = createAction(PUT_MIC_BANNER_TOGGLE, ({ bnnrSeq, callback }) => ({ bnnrSeq, callback }));
+
+/**
+ * 피드 목록 조회
+ */
+export const [GET_MIC_FEED_LIST, GET_MIC_FEED_LIST_SUCCESS, GET_MIC_FEED_LIST_FAILURE] = createRequestActionTypes('mic/GET_MIC_FEED_LIST');
+export const getMicFeedList = createAction(GET_MIC_FEED_LIST, ({ search, callback }) => ({ search, callback }));

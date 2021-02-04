@@ -135,3 +135,10 @@ export const putMicBanner = ({ banner }) => {
             throw err;
         });
 };
+
+// 답변 목록 조회 (피드, 포스트)
+export const getMicAnswerList = ({ search }) => {
+    return instance.get(`/api/mics/answers?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};

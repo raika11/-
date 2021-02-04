@@ -75,7 +75,7 @@ public class ScheduleServerController extends AbstractCommonController {
 
         Page<JobStatisticVO> returnValue = jobStatisticService.findAllJobStat(search);
 
-        resultListMessage.setTotalCnt(returnValue.getTotalPages());
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(returnValue.getContent());
 
         ResultDTO<ResultListDTO<JobStatisticVO>> resultDTO = new ResultDTO<>(resultListMessage);

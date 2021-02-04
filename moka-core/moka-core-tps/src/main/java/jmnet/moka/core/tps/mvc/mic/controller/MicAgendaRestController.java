@@ -171,8 +171,6 @@ public class MicAgendaRestController extends AbstractCommonController {
             throws Exception {
 
         try {
-            micAgendaVO.setRegId(principal.getName());
-            micAgendaVO.setRegDt(McpDate.now());
             boolean uploaded = micAgendaService.saveMicAgenda(micAgendaVO);
             String msg = uploaded ? msg("tps.common.success.update") : msg("tps.agenda.error.image-upload");
 
@@ -277,7 +275,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
 
         if (micBannerVO != null) {
-            if (micBannerVO.getBnnrSeq() > 0) {
+            if (micBannerVO.getBnnrSeq() != null && micBannerVO.getBnnrSeq() > 0) {
                 if (McpString.isEmpty(micBannerVO.getImgLink()) || micBannerVO.getImgFile() == null) {
                     String message = msg("tps.banner.error.notnull.imgLink");
                     invalidList.add(new InvalidDataDTO("imgLink", message));

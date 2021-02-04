@@ -90,6 +90,29 @@
     )}
   </insert>
 
+  <!--아젠다 수정-->
+  <update id="updateMicAgenda" parameterType="MicAgendaVO"
+    statementType="CALLABLE">
+   { call UPA_MIC_AGENDA_UPD(
+    #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndTitle, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndKwd, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndMemo, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndType, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndImg, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndImgMob, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndThumb, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndComment, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndServiceDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+    #{pollSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{agndLead, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{agndMov, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{artProgress, mode=IN, jdbcType=INTEGER, javaType=integer},
+    #{artLink, mode=IN, jdbcType=VARCHAR, javaType=string}
+    )}
+  </update>
+
   <!--아젠다의 관련기사 모두삭제-->
   <delete id="deleteAllMicAgendaRelArticle" parameterType="java.lang.Long"
     statementType="CALLABLE">

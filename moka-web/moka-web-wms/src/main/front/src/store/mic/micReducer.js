@@ -21,7 +21,10 @@ export const initialState = {
         { id: 'Y', name: '최상단' },
     ],
     agenda: {
+        usedYn: 'N',
+        agndTop: 'N',
         categoryList: [],
+        relArticleList: [],
     },
     category: {
         list: [],

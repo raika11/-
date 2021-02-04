@@ -31,6 +31,7 @@ button {
   }
 
   .btn-outline-#{$color} {
+    background-color: $white;
     @include button-color-hover($white);
     @include button-color-active($white);
   }

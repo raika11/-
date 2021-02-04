@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
-import ImageFileForm from './ImageFileForm';
+import BackgroundImageForm from './BackgroundImageForm';
+import RelArticleForm from './RelArticleForm';
 
 /**
  * 시민마이크 아젠다 폼
  */
-const MicAgendaForm = ({ agenda, onChange, categoryAllList, onChangeModal }) => {
+const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, onChangeModal }) => {
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [cts, setCts] = useState([]);
 
@@ -107,11 +108,11 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList, onChangeModal }) => 
             {/* 기사화 단계, 관련기사 URL */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-3" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
-                    <option value="0">미노출</option>
-                    <option value="1">의견수렴</option>
-                    <option value="2">검토중</option>
-                    <option value="3">취재중</option>
-                    <option value="4">기사화</option>
+                    {AGENDA_ARTICLE_PROGRESS.map((progress) => (
+                        <option key={progress.code} value={progress.code}>
+                            {progress.name}
+                        </option>
+                    ))}
                 </MokaInputLabel>
                 <MokaInputLabel label="관련기사 URL" labelWidth={90} className="flex-fill" name="artLink" value={agenda.artLink} onChange={handleChangeValue} />
             </Form.Row>
@@ -203,168 +204,12 @@ const MicAgendaForm = ({ agenda, onChange, categoryAllList, onChangeModal }) => 
             </Form.Row>
 
             {/* 배경이미지 */}
-            <ImageFileForm className="mb-2 justify-content-between" onChange={onChange} agenda={agenda} />
+            <BackgroundImageForm className="mb-2 flex-wrap justify-content-between" onChange={onChange} agenda={agenda} />
 
-            {/* <Form.Row className="mb-3 align-items-center">
-                    <MokaInputLabel
-                        as="none"
-                        label={
-                            <>
-                                관련 기사 1<br />
-                                <Button variant="negative" size="sm" className="mb-1">
-                                    삭제
-                                </Button>
-                            </>
-                        }
-                    />
-                    <div>
-                        <MokaImage img={temp.articleImg1} width={180} height={170} className="mb-1" />
-                        <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
-                                신규 등록
-                            </Button>
-                            <Button variant="negative" size="sm">
-                                편집
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="flex-fill">
-                        <Form.Row>
-                            <MokaInputLabel label="기사 아이디" className="mb-2" value={temp.articleId1} onChange={(e) => setTemp({ ...temp, articleId1: e.target.value })} />
-                        </Form.Row>
-                        <Form.Row>
-                            <MokaInputLabel
-                                label="제목"
-                                className="mb-0 mr-2 flex-fill"
-                                value={temp.articleTitle1}
-                                onChange={(e) => setTemp({ ...temp, articleTitle1: e.target.value })}
-                            />
-                            <Button variant="searching" onClick={handleClickArticleSearch}>
-                                기사 찾기
-                            </Button>
-                        </Form.Row>
-                    </div>
-                </Form.Row>
-                <Form.Row className="mb-3 align-items-center">
-                    <MokaInputLabel
-                        as="none"
-                        label={
-                            <>
-                                관련 기사 2<br />
-                                <Button variant="negative" size="sm" className="mb-1">
-                                    삭제
-                                </Button>
-                            </>
-                        }
-                    />
-                    <div>
-                        <MokaImage img={temp.articleImg2} width={180} height={170} className="mb-1" />
-                        <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
-                                신규 등록
-                            </Button>
-                            <Button variant="negative" size="sm">
-                                편집
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="flex-fill">
-                        <Form.Row>
-                            <MokaInputLabel label="기사 아이디" className="mb-2" value={temp.articleId2} onChange={(e) => setTemp({ ...temp, articleId2: e.target.value })} />
-                        </Form.Row>
-                        <Form.Row>
-                            <MokaInputLabel
-                                label="제목"
-                                className="mb-0 mr-2 flex-fill"
-                                value={temp.articleTitle2}
-                                onChange={(e) => setTemp({ ...temp, articleTitle2: e.target.value })}
-                            />
-                            <Button variant="searching" onClick={handleClickArticleSearch}>
-                                기사 찾기
-                            </Button>
-                        </Form.Row>
-                    </div>
-                </Form.Row>
-                <Form.Row className="mb-3 align-items-center">
-                    <MokaInputLabel
-                        as="none"
-                        label={
-                            <>
-                                관련 기사 3<br />
-                                <Button variant="negative" size="sm" className="mb-1">
-                                    삭제
-                                </Button>
-                            </>
-                        }
-                    />
-                    <div>
-                        <MokaImage img={temp.articleImg3} width={180} height={170} className="mb-1" />
-                        <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
-                                신규 등록
-                            </Button>
-                            <Button variant="negative" size="sm">
-                                편집
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="flex-fill">
-                        <Form.Row>
-                            <MokaInputLabel label="기사 아이디" className="mb-2" value={temp.articleId3} onChange={(e) => setTemp({ ...temp, articleId3: e.target.value })} />
-                        </Form.Row>
-                        <Form.Row>
-                            <MokaInputLabel
-                                label="제목"
-                                className="mb-0 mr-2 flex-fill"
-                                value={temp.articleTitle3}
-                                onChange={(e) => setTemp({ ...temp, articleTitle3: e.target.value })}
-                            />
-                            <Button variant="searching" onClick={handleClickArticleSearch}>
-                                기사 찾기
-                            </Button>
-                        </Form.Row>
-                    </div>
-                </Form.Row>
-                <Form.Row className="mb-3 align-items-center">
-                    <MokaInputLabel
-                        as="none"
-                        label={
-                            <>
-                                관련 기사 4<br />
-                                <Button variant="negative" size="sm" className="mb-1">
-                                    삭제
-                                </Button>
-                            </>
-                        }
-                    />
-                    <div>
-                        <MokaImage img={temp.articleImg4} width={180} height={170} className="mb-1" />
-                        <div className="d-flex justify-content-between">
-                            <Button variant="positive" size="sm" onClick={handleClickThumbAdd}>
-                                신규 등록
-                            </Button>
-                            <Button variant="negative" size="sm">
-                                편집
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="flex-fill">
-                        <Form.Row>
-                            <MokaInputLabel label="기사 아이디" className="mb-2" value={temp.articleId4} onChange={(e) => setTemp({ ...temp, articleId4: e.target.value })} />
-                        </Form.Row>
-                        <Form.Row>
-                            <MokaInputLabel
-                                label="제목"
-                                className="mb-0 mr-2 flex-fill"
-                                value={temp.articleTitle4}
-                                onChange={(e) => setTemp({ ...temp, articleTitle4: e.target.value })}
-                            />
-                            <Button variant="searching" onClick={handleClickArticleSearch}>
-                                기사 찾기
-                            </Button>
-                        </Form.Row>
-                    </div>
-                </Form.Row> */}
+            <hr className="divider" />
+
+            {/* 관련기사 1,2,3,4 */}
+            <RelArticleForm agenda={agenda} onChange={onChange} />
         </Form>
     );
 };

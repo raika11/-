@@ -6,7 +6,7 @@ import { MokaInputLabel } from '@components';
 /**
  * 배경이미지(PC, M)
  */
-const ImageFileForm = ({ className, agenda, onChange }) => {
+const BackgroundImageForm = ({ className, agenda, onChange }) => {
     const pcImgRef = useRef(null);
     const mImgRef = useRef(null);
 
@@ -72,4 +72,4 @@ const ImageFileForm = ({ className, agenda, onChange }) => {
     );
 };
 
-export default ImageFileForm;
+export default BackgroundImageForm;

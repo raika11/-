@@ -5,7 +5,6 @@ import { clearMicAgenda, getMicAgenda } from '@store/mic';
 import { MokaCard } from '@components';
 import { messageBox } from '@utils/toastUtil';
 import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
-import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import MicAgendaForm from './components/MicAgendaForm/index';
 
 /**
@@ -19,9 +18,9 @@ const MicAgendaEdit = ({ match }) => {
         agenda: mic.agenda,
         categoryAllList: mic.category.list,
     }));
+    const AGENDA_ARTICLE_PROGRESS = useSelector(({ app }) => app.AGENDA_ARTICLE_PROGRESS); //  기사화 단계
     const [temp, setTemp] = useState({});
     const [showPollModal, setShowPollModal] = useState(false);
-    const [showArtModal, setShowArtModal] = useState(false);
 
     const handleClickSave = () => {};
 
@@ -38,8 +37,6 @@ const MicAgendaEdit = ({ match }) => {
     const handleChangeModal = ({ key, value }) => {
         if (key === 'poll') {
             setShowPollModal(value);
-        } else if (key === 'article') {
-            setShowArtModal(value);
         } else if (key === 'thumb') {
             // 썸네일 변경 모달
         }
@@ -92,9 +89,14 @@ const MicAgendaEdit = ({ match }) => {
                 agndSeq && { text: '삭제', variant: 'negative', onClick: handleClickDelete },
             ]}
         >
-            <MicAgendaForm agenda={temp} categoryAllList={categoryAllList.filter((cate) => cate.usedYn === 'Y')} onChange={handleChangeValue} onChangeModal={handleChangeModal} />
+            <MicAgendaForm
+                AGENDA_ARTICLE_PROGRESS={AGENDA_ARTICLE_PROGRESS}
+                agenda={temp}
+                categoryAllList={categoryAllList.filter((cate) => cate.usedYn === 'Y')}
+                onChange={handleChangeValue}
+                onChangeModal={handleChangeModal}
+            />
             <RelationPollModal show={showPollModal} onHide={() => setShowPollModal(false)} />
-            <ArticleListModal show={showArtModal} onHide={() => setShowArtModal(false)} />
         </MokaCard>
     );
 };

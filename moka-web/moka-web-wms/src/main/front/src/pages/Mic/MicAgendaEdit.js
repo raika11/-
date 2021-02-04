@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
-import { initialState, clearMicAgenda, getMicAgenda, saveMicAgenda, GET_MIC_AGENDA, SAVE_MIC_AGENDA } from '@store/mic';
+import { initialState, clearMicAgenda, getMicAgenda, saveMicAgenda, GET_MIC_AGENDA, SAVE_MIC_AGENDA, changeInvalidList } from '@store/mic';
 import { MokaCard } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { escapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
 import MicAgendaForm from './components/MicAgendaForm/index';
 
@@ -29,11 +30,31 @@ const MicAgendaEdit = ({ match }) => {
     const [error, setError] = useState({});
 
     /**
-     * validate
+     * 유효성 검사
+     * @param {object} save 데이터
      */
     const validate = (save) => {
         let isInvalid = false;
+        let errList = [];
 
+        // 제목 체크
+        if (!save.agndTitle || !REQUIRED_REGEX.test(save.agndTitle)) {
+            errList.push({
+                field: 'agndTitle',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+        // 본문 체크
+        if (!save.agndMemo || !REQUIRED_REGEX.test(save.agndMemo)) {
+            errList.push({
+                field: 'agndMemo',
+                reason: '',
+            });
+            isInvalid = isInvalid || true;
+        }
+
+        dispatch(changeInvalidList(errList));
         return !isInvalid;
     };
 

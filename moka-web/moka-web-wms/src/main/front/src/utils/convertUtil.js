@@ -1,32 +1,29 @@
 /**
  * js object를 폼데이터로 변환한다
+ * https://stackoverflow.com/a/63840358
  * @param {object} data 오브젝트
  */
-export const objectToFormData = (data) => {
-    const form_data = new FormData();
-
-    for (let key in data) {
-        if (Array.isArray(data[key])) {
-            data[key].forEach((obj, index) => {
-                let keyList = Object.keys(obj);
-                keyList.forEach((keyItem) => {
-                    let keyName = [key, '[', index, ']', '.', keyItem].join('');
-                    if (obj[keyItem] !== undefined) {
-                        form_data.append(keyName, obj[keyItem]);
-                    }
-                });
-            });
-        } else if (typeof data[key] === 'object' && !(data[key] instanceof File)) {
-            for (let innerKey in data[key]) {
-                if (data[key][innerKey] !== undefined) {
-                    form_data.append(`${key}.${innerKey}`, data[key][innerKey]);
+export const objectToFormData = (val, formData = new FormData(), namespace = '') => {
+    if (typeof val !== 'undefined' && val !== null) {
+        if (val instanceof Date) {
+            formData.append(namespace, val.toISOString());
+        } else if (val instanceof Array) {
+            for (let i = 0; i < val.length; i++) {
+                objectToFormData(val[i], formData, namespace + '[' + i + ']');
+            }
+        } else if (typeof val === 'object' && !(val instanceof File)) {
+            for (let propertyName in val) {
+                if (val.hasOwnProperty(propertyName)) {
+                    objectToFormData(val[propertyName], formData, namespace ? `${namespace}.${propertyName}` : propertyName);
                 }
             }
+        } else if (val instanceof File) {
+            formData.append(namespace, val);
         } else {
-            form_data.append(key, data[key]);
+            formData.append(namespace, val.toString());
         }
     }
-    return form_data;
+    return formData;
 };
 
 /**

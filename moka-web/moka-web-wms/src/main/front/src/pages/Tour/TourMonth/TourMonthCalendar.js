@@ -180,15 +180,15 @@ const TourMonthCalendar = (props) => {
                 // true이면 6주로 fix된 월별 보기
                 fixedWeekCount={false}
                 // true이면 이전 또는 다음 달의 날짜를 렌더링
-                showNonCurrentDates={false}
+                showNonCurrentDates={true}
                 bootstrapFontAwesome={false}
                 events={
                     { events: [...holidayEvents, ...applyEvents], color: '#FF3907' }
                     // demoEvents
                 }
-                datesSet={(e) => {
-                    console.log(e);
-                }}
+                // datesSet={(e) => {
+                //     console.log(e);
+                // }}
                 // selectable={true}
                 // selectOverlap={false}
                 // select={(s) => {
@@ -225,13 +225,31 @@ const TourMonthCalendar = (props) => {
                     // date.dayEl.style.backgroundColor = 'red';
                 }}
                 eventsSet={handleEventSet}
+                viewDidMount={(view) => {
+                    console.log(view.el.querySelectorAll('.fc-daygrid-day').forEach((day) => day.dataset));
+                }}
                 // Dom에 td가 추가된 직후 호출
                 // 최초 한번 그려진 후 날짜가 바뀌거나 표시하는 월이 다를때 다시 그리지 않음
                 dayCellDidMount={(cell) => {
+                    // console.log(cell);
                     let frame = cell.el;
+                    let calendarMonth = `0${cell.view.calendar.getDate().getMonth() + 1}`.substr(-2);
+                    let currentDate = cell.el.dataset;
+                    let currentMonth = currentDate['date'].split('-')[1];
 
-                    // console.log(frame);
                     // let weekArr = tourSetup.tourWeekYn.split('');
+                    // console.log(calendarMonth, currentMonth);
+                    if (calendarMonth === currentMonth) {
+                        frame.firstChild.addEventListener('mouseenter', function () {
+                            const events = this.querySelector('.fc-daygrid-day-events');
+
+                            // if (events.style['padding-bottom'] === '') {
+                            if (!events.querySelector('.fc-daygrid-event-harness')) {
+                                this.appendChild(holidayEl);
+                            }
+                            // }
+                        });
+                    }
 
                     // 오늘 날짜 스타일 변경
                     if (frame.className.indexOf('fc-day-today') > -1) {

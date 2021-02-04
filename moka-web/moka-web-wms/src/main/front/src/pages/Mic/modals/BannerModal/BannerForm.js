@@ -58,7 +58,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
                         배너이미지
                         <br />
                         <Button
-                            variant="positive"
+                            variant="gray-700"
                             className="mt-1"
                             size="sm"
                             onClick={(e) => {

@@ -32,9 +32,9 @@ const ImageFileForm = ({ className, agenda, onChange }) => {
                         <br />
                         <span className="color-danger">PC (800*600px)</span>
                         <Button
-                            variant="positive"
+                            variant="gray-700"
                             size="sm"
-                            className="mt-1"
+                            className="mt-2"
                             onClick={(e) => {
                                 pcImgRef.current.rootRef.onClick(e);
                             }}
@@ -55,9 +55,9 @@ const ImageFileForm = ({ className, agenda, onChange }) => {
                         <br />
                         <span className="color-danger">M (600*500px)</span>
                         <Button
-                            variant="positive"
+                            variant="gray-700"
                             size="sm"
-                            className="mt-1"
+                            className="mt-2"
                             onClick={(e) => {
                                 mImgRef.current.rootRef.onClick(e);
                             }}

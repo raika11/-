@@ -47,7 +47,7 @@ public class TrendpollSearchDTO extends SearchDTO {
     private PollTypeCode pollType;
 
     @ApiModelProperty("상태 S:서비스,D:삭제,T:일시중지")
-    private PollStatusCode status;
+    private PollStatusCode[] status;
 
     @DTODateTimeFormat
     private Date startDt;

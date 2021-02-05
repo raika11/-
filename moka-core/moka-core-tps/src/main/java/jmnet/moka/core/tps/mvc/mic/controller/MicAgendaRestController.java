@@ -442,7 +442,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "답변 부가정보 수정")
+    @ApiOperation(value = "포스트 답변 부가정보 수정")
     @PostMapping(value = "/answers/{answSeq}/rel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postMicAnswerRel(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq")
     @Min(value = 0, message = "tps.answer.error.min.answSeq") Long answSeq, @ApiParam("답변 부가정보") @Valid MicAnswerRelVO micAnswerRelVO)
@@ -462,7 +462,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "답변 사용여부 수정")
+    @ApiOperation(value = "피드 답변 사용여부 수정")
     @PutMapping("/answers/{answSeq}/used")
     public ResponseEntity<?> putMicAnswerUsed(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq")
     @Min(value = 0, message = "tps.answer.error.min.answSeq") Long answSeq,
@@ -488,7 +488,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "답변 최상위 수정")
+    @ApiOperation(value = "피드 답변 최상위 수정")
     @PutMapping("/answers/{answSeq}/top")
     public ResponseEntity<?> putMicAnswerTop(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq,
             @ApiParam(value = "최상위여부", required = true) @NotNull(message = "{tps.answer.error.notnull.answTop}") @RequestParam("answTop")
@@ -508,7 +508,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "답변 상태 수정")
+    @ApiOperation(value = "포스트 답변 상태 수정")
     @PutMapping("/answers/{answSeq}/div")
     public ResponseEntity<?> putMicAnswerDiv(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq,
             @ApiParam(value = "상태", required = true) @RequestParam("answDiv") @NotNull(message = "{tps.answer.error.notnull.answDiv}") String answDiv,
@@ -528,7 +528,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "답변 수정")
+    @ApiOperation(value = "피드 답변 수정")
     @PutMapping(value = "/answers/{answSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> putMicAnswer(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq")
     @Min(value = 0, message = "tps.answer.error.min.answSeq") Long answSeq, @ApiParam("답변정보") @Valid MicAnswerVO micAnswerVO)
@@ -548,7 +548,7 @@ public class MicAgendaRestController extends AbstractCommonController {
         }
     }
 
-    @ApiOperation(value = "답변 등록")
+    @ApiOperation(value = "피드 답변 등록")
     @PostMapping(value = "/answers", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> postMicAnswer(@ApiParam("답변정보") @Valid MicAnswerVO micAnswerVO)
             throws Exception {

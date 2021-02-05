@@ -312,7 +312,7 @@
   <!--답변 등록-->
   <insert id="insertMicAnswer" parameterType="MicAnswerVO"
     statementType="CALLABLE">
-   { call UPA_MIC_ANSWER_UPD(
+   { call UPA_MIC_ANSWER_INS(
     #{agndSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{usedYn, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{answDiv, mode=IN, jdbcType=VARCHAR, javaType=string},

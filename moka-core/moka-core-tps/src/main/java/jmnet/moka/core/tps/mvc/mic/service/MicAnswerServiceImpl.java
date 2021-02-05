@@ -161,7 +161,7 @@ public class MicAnswerServiceImpl implements MicAnswerService {
     @Override
     public boolean updateMicAnswer(MicAnswerVO micAnswerVO)
             throws IOException {
-        // 1. 답변등록
+        // 1. 답변수정
         micAnswerVO.setAnswDiv(AnswerDivCode.INSERT.getCode());
         micAnswerVO.setGoodCnt(0);
         micAnswerVO.setLoginId(answerAdminLoginid);

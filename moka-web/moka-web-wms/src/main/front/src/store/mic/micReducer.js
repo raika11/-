@@ -60,6 +60,7 @@ export const initialState = {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             agndSeq: null,
+            usedYn: 'Y',
         },
         post: {
             answerRel: null,

@@ -1,15 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { GET_MIC_POST, SAVE_MIC_POST } from '@store/mic';
 import { MokaModal, MokaInputLabel } from '@components';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 /**
  * 포스트 관리 모달
  */
 const PostEditModal = (props) => {
-    const { show, onHide, agenda, post, onChange, onSave } = props;
+    const { show, onHide, agenda, post, onChange, onSave, onDelete } = props;
     const loading = useSelector(({ loading }) => loading[GET_MIC_POST] || loading[SAVE_MIC_POST]);
+    const PDS_URL = useSelector(({ app }) => app.PDS_URL);
+    const [error, setError] = useState({});
+    const [mshow, setMshow] = useState(false);
     const imgRef = useRef(null);
 
     /**
@@ -55,6 +61,10 @@ const PostEditModal = (props) => {
         } else {
             onChange({ key: name, value });
         }
+
+        if (error[name]) {
+            setError({ ...error, [name]: false });
+        }
     };
 
     /**
@@ -73,11 +83,63 @@ const PostEditModal = (props) => {
     };
 
     /**
+     * 기사 변경
+     * @param {object} articleData 기사데이터
+     */
+    const handleChangeArticle = (articleData) => {
+        onChange({
+            key: 'answerRel',
+            value: {
+                ...post.answerRel,
+                artTitle: unescapeHtmlArticle(articleData.artTitle),
+                relUrl: '',
+                artThumbnail: articleData.artThumb ? `${PDS_URL}${articleData.artThumb}` : null,
+                artThumbnailFile: null,
+            },
+        });
+        setError({ ...error, artTitle: false });
+        setMshow(false);
+    };
+
+    /**
+     * 유효성 검사
+     * @param {object} feed 데이터
+     */
+    const validate = (feed) => {
+        let isInvalid = false;
+        let ne = {};
+
+        // 페이지URL(relUrl) 필수
+        if (!feed.answerRel?.relUrl || !REQUIRED_REGEX.test(feed.answerRel?.relUrl)) {
+            ne = { relUrl: true };
+        }
+
+        // 페이지제목 필수
+        if (!feed.answerRel?.artTitle || !REQUIRED_REGEX.test(feed.answerRel?.artTitle)) {
+            ne = { ...ne, artTitle: true };
+        }
+
+        if (Object.keys(ne).length > 0) {
+            setError({ ...error, ...ne });
+            isInvalid = isInvalid || true;
+        }
+
+        return !isInvalid;
+    };
+
+    /**
      * 저장
      */
     const handleSave = () => {
-        onSave(post);
+        if (validate(post)) {
+            onSave(post);
+        }
     };
+
+    useEffect(() => {
+        setError({});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [post.answSeq]);
 
     return (
         <MokaModal
@@ -89,7 +151,7 @@ const PostEditModal = (props) => {
             buttons={[
                 { text: '저장', variant: 'positive', onClick: handleSave },
                 { text: '취소', variant: 'negative', onClick: onHide },
-                { text: '삭제', variant: 'negative' },
+                { text: '삭제', variant: 'negative', onClick: () => onDelete(post) },
             ]}
             centered
             loading={loading}
@@ -112,10 +174,34 @@ const PostEditModal = (props) => {
             />
 
             {/* 페이지 URL */}
-            <MokaInputLabel label="페이지 URL" labelWidth={72} className="mb-2" name="relUrl" value={post.answerRel?.relUrl} onChange={handleChangeValue} required />
+            <div className="d-flex mb-2">
+                <MokaInputLabel
+                    label="페이지 URL"
+                    labelWidth={72}
+                    className="flex-fill"
+                    name="relUrl"
+                    value={post.answerRel?.relUrl}
+                    onChange={handleChangeValue}
+                    isInvalid={error.relUrl}
+                    required
+                />
+                <Button variant="searching" className="flex-shrink-0 ml-2" onClick={() => setMshow(true)}>
+                    기사 검색
+                </Button>
+                <ArticleListModal show={mshow} onHide={() => setMshow(false)} onRowClicked={handleChangeArticle} />
+            </div>
 
             {/* 페이지 제목 */}
-            <MokaInputLabel label="페이지 제목" labelWidth={72} className="mb-2" name="artTitle" value={post.answerRel?.artTitle} onChange={handleChangeValue} required />
+            <MokaInputLabel
+                label="페이지 제목"
+                labelWidth={72}
+                className="mb-2"
+                name="artTitle"
+                value={post.answerRel?.artTitle}
+                onChange={handleChangeValue}
+                isInvalid={error.artTitle}
+                required
+            />
 
             {/* 페이지 요약 */}
             <MokaInputLabel
@@ -146,7 +232,7 @@ const PostEditModal = (props) => {
                         </Button>
                     </React.Fragment>
                 }
-                inputProps={{ img: post.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'artThumbnail'), deleteButton: true }}
+                inputProps={{ img: post.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: handleImgFile, deleteButton: true }}
             />
         </MokaModal>
     );

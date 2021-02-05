@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { MokaCard, MokaTable } from '@components';
-import { initialState, changePostSearchOption, getMicPostList, getMicPost, putMicAnswerDiv, saveMicPost, GET_MIC_POST_LIST } from '@store/mic';
+import { initialState, changePostSearchOption, getMicPostList, getMicPost, putMicAnswerDiv, saveMicPost, putMicAnswerUsed, GET_MIC_POST_LIST } from '@store/mic';
 import toast, { messageBox } from '@utils/toastUtil';
 import PostEditMadal from './modals/PostEditModal';
 import columnDefs from './MicPostListColumns';
@@ -96,6 +96,36 @@ const MicPostList = () => {
     };
 
     /**
+     * 포스트 삭제
+     * @param {object} post 포스트 데이터
+     */
+    const handleDelete = (post) => {
+        messageBox.confirm(
+            '해당 포스트를 삭제 시, 복구 할 수 없습니다.\n삭제하시겠습니까?',
+            () => {
+                dispatch(
+                    putMicAnswerUsed({
+                        answSeq: post.answSeq,
+                        usedYn: 'N',
+                        callback: ({ header, body }) => {
+                            if (!header.success && !body) {
+                                messageBox.alert(header.message);
+                            } else {
+                                // 삭제 성공
+                                toast.success(header.message);
+                                setShow(false);
+                                setTemp(initialState.post.post);
+                                handleSearch(search);
+                            }
+                        },
+                    }),
+                );
+            },
+            () => {},
+        );
+    };
+
+    /**
      * 상태 수정
      */
     const handleChangeAnswDiv = useCallback(
@@ -126,6 +156,7 @@ const MicPostList = () => {
         setRowData(
             list.map((data) => ({
                 ...data,
+                regDt: `${data.regDt.slice(0, 10)}\n${data.regDt.slice(11, 16)}`,
                 onChangeAnswDiv: handleChangeAnswDiv,
             })),
         );
@@ -163,6 +194,7 @@ const MicPostList = () => {
                 }}
                 onChange={handleChangeValue}
                 onSave={handleSave}
+                onDelete={handleDelete}
                 agenda={agenda}
                 post={temp}
             />

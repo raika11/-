@@ -158,6 +158,7 @@ const MicFeedList = () => {
         setRowData(
             list.map((data) => ({
                 ...data,
+                regDt: `${data.regDt.slice(0, 10)}\n${data.regDt.slice(11, 16)}`,
                 onChangeAnswTop: handleChangeAnswTop,
                 onChangeUsedYn: handleChangeUsedYn,
             })),

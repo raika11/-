@@ -85,7 +85,7 @@ const MicFeedList = () => {
             saveMicFeed({
                 feed: {
                     ...feed,
-                    answerRel: feed.answerRel ? feed.answerRel : undefined,
+                    answerRel: feed.answerRel ? (feed.answerRel?.relDiv ? feed.answerRel : undefined) : undefined,
                 },
                 callback: ({ header, body }) => {
                     if (header.success && body) {

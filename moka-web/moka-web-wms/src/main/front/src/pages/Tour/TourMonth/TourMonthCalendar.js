@@ -44,6 +44,7 @@ const TourMonthCalendar = (props) => {
     const holidayList = useSelector((store) => store.tour.holidayList);
     const tourApplyList = useSelector((store) => store.tour.tourApplyList);
     const tourSetup = useSelector((store) => store.tour.tourSetup);
+    const [calendar, setCalendar] = useState(null);
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
     const [day, setDay] = useState([]);
@@ -55,18 +56,21 @@ const TourMonthCalendar = (props) => {
     const [summaryModal, setSummaryModal] = useState(false);
     const [cancelModal, setCancelModal] = useState(false);
 
-    // const [mountCell, setMountCell] = useState([]);
     const calendarRef = useRef(null);
     const setHolidayRef = useRef(null);
+    const cancelHolidayRef = useRef(null);
 
-    // const formatEvents = {
-    //     // { events: [...holidayEvents, ...applyEvents], color: '#FF3907' }
-    // };
-
-    // 이벤트 데이터 변경 후 호출
-    const handleEventSet = (events) => {
-        // console.log(events);
+    const handleEventRemove = () => {
+        // console.log(cancelHolidayRef.current);
+        if (cancelHolidayRef.current) {
+            cancelHolidayRef.current.cancelHoliday();
+        }
     };
+
+    useEffect(() => {
+        setCalendar(calendarRef.current);
+        console.log(calendarRef.current.calendarApi);
+    }, []);
 
     useEffect(() => {
         if (Object.keys(tourSetup).length < 1) {
@@ -179,8 +183,6 @@ const TourMonthCalendar = (props) => {
                 }}
                 // true이면 6주로 fix된 월별 보기
                 fixedWeekCount={false}
-                // true이면 이전 또는 다음 달의 날짜를 렌더링
-                showNonCurrentDates={true}
                 bootstrapFontAwesome={false}
                 events={
                     { events: [...holidayEvents, ...applyEvents], color: '#FF3907' }
@@ -221,69 +223,141 @@ const TourMonthCalendar = (props) => {
                     //         setHolidayModal(true);
                     //     }
                     // }
-                    // setClickDate(date.dateStr);
+                    setClickDate(d.dateStr);
                     // date.dayEl.style.backgroundColor = 'red';
                 }}
-                eventsSet={handleEventSet}
                 viewDidMount={(view) => {
-                    console.log(view.el.querySelectorAll('.fc-daygrid-day').forEach((day) => day.dataset));
+                    let today = document.querySelector('.fc-day-today');
+                    today.style.backgroundColor = '#fff';
+
+                    // if (today.dataset['date'].split('-')[0] === calendarDate[0] && `0${calendarDate[1]}`.substr(-2) === today.dataset['date'].split('-')[1]) {
+                    //     let circle = document.createElement('div');
+                    //     let top = today.querySelector('.fc-daygrid-day-top');
+                    //     circle.className = 'fc-set-today-number';
+                    //     top.appendChild(circle);
+                    // }
+
+                    document.addEventListener('mouseover', function (e) {
+                        if (e.target.tagName !== 'DIV' && e.target.tagName !== 'A') {
+                            return;
+                        }
+                        if (e.target.classList[0] === 'fc-set-holiday') {
+                            return;
+                        }
+                        let frame;
+                        let calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
+                        let currentDate;
+                        let targetEl;
+                        if (e.target.classList[0] === 'fc-daygrid-day-number') {
+                            frame = e.target.parentElement.parentElement.parentElement;
+                            targetEl = e.target.parentElement.parentElement;
+                        } else if (e.target.classList[0] === 'fc-daygrid-day-events' || e.target.classList[0] === 'fc-daygrid-day-top') {
+                            frame = e.target.parentElement.parentElement;
+                            targetEl = e.target.parentElement;
+                        } else if (e.target.classList[0] === 'fc-daygrid-day-frame') {
+                            frame = e.target.parentElement;
+                            targetEl = e.target;
+                        } else {
+                            return;
+                        }
+                        if (frame.querySelector('.fc-daygrid-event-harness')) {
+                            return;
+                        }
+                        currentDate = frame.dataset['date'].split('-');
+                        if (calendarDate[0] === currentDate[0] && `0${calendarDate[1]}`.substr(-2) === currentDate[1]) {
+                            if (!frame.querySelector('.fc-set-holiday')) {
+                                targetEl.appendChild(holidayEl);
+                            }
+                        }
+                    });
+
+                    document.addEventListener('mouseout', function (e) {
+                        if (e.target.tagName !== 'DIV' && e.target.tagName !== 'A') {
+                            return;
+                        }
+                        if (e.target.classList[0] === 'fc-set-holiday') {
+                            return;
+                        }
+                        let frame;
+                        let calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
+                        let currentDate;
+                        if (e.target.classList[0] === 'fc-daygrid-day-number') {
+                            frame = e.target.parentElement.parentElement.parentElement;
+                        } else if (e.target.classList[0] === 'fc-daygrid-day-events' || e.target.classList[0] === 'fc-daygrid-day-top') {
+                            frame = e.target.parentElement.parentElement;
+                        } else if (e.target.classList[0] === 'fc-daygrid-day-frame') {
+                            frame = e.target.parentElement;
+                        } else {
+                            return;
+                        }
+                        currentDate = frame.dataset['date'].split('-');
+                        if (calendarDate[0] === currentDate[0] && `0${calendarDate[1]}`.substr(-2) === currentDate[1]) {
+                            if (frame.querySelector('.fc-set-holiday') !== null) {
+                                frame.querySelector('.fc-set-holiday').remove();
+                            }
+                        }
+                    });
                 }}
                 // Dom에 td가 추가된 직후 호출
                 // 최초 한번 그려진 후 날짜가 바뀌거나 표시하는 월이 다를때 다시 그리지 않음
                 dayCellDidMount={(cell) => {
                     // console.log(cell);
                     let frame = cell.el;
-                    let calendarMonth = `0${cell.view.calendar.getDate().getMonth() + 1}`.substr(-2);
-                    let currentDate = cell.el.dataset;
-                    let currentMonth = currentDate['date'].split('-')[1];
+                    // console.log(frame);
 
+                    // let calendarMonth = `0${cell.view.calendar.getDate().getMonth() + 1}`.substr(-2);
+                    // let currentDate = cell.el.dataset;
+                    // let currentMonth = currentDate['date'].split('-')[1];
                     // let weekArr = tourSetup.tourWeekYn.split('');
                     // console.log(calendarMonth, currentMonth);
-                    if (calendarMonth === currentMonth) {
-                        frame.firstChild.addEventListener('mouseenter', function () {
-                            const events = this.querySelector('.fc-daygrid-day-events');
-
-                            // if (events.style['padding-bottom'] === '') {
-                            if (!events.querySelector('.fc-daygrid-event-harness')) {
-                                this.appendChild(holidayEl);
-                            }
-                            // }
-                        });
-                    }
-
+                    // if (calendarMonth === currentMonth) {
+                    //     frame.firstChild.addEventListener('mouseenter', function (e) {
+                    //         const events = e.target.querySelector('.fc-daygrid-day-events');
+                    //         if (!events.querySelector('.fc-daygrid-event-harness')) {
+                    //             e.target.appendChild(holidayEl);
+                    //         }
+                    //     });
+                    // }
                     // 오늘 날짜 스타일 변경
+                    // if (calendarMonth === currentMonth) {
                     if (frame.className.indexOf('fc-day-today') > -1) {
-                        frame.style.backgroundColor = '#fff';
                         let circle = document.createElement('div');
                         let top = frame.querySelector('.fc-daygrid-day-top');
                         circle.className = 'fc-set-today-number';
                         top.appendChild(circle);
                     }
-
+                    // }
                     // diabled 셀, 이벤트 셀, 기본 설정의 쉬는 날 휴일 지정 막음
-                    if (frame.className.indexOf('fc-day-disabled') === -1) {
-                        // mouseenter 휴일 지정 el 추가
-                        frame.firstChild.addEventListener('mouseenter', function () {
-                            const events = this.querySelector('.fc-daygrid-day-events');
-
-                            // if (events.style['padding-bottom'] === '') {
-                            if (!events.querySelector('.fc-daygrid-event-harness')) {
-                                this.appendChild(holidayEl);
-                            }
-                            // }
-                        });
-
-                        // mouseleave 휴일 지정 el 제거
-                        frame.firstChild.addEventListener('mouseleave', function () {
-                            if (this.querySelector('.fc-set-holiday')) {
-                                this.removeChild(holidayEl);
-                            }
-                        });
-                    }
+                    // if (frame.className.indexOf('fc-day-disabled') === -1) {
+                    //     // mouseenter 휴일 지정 el 추가
+                    //     frame.firstChild.addEventListener('mouseenter', function () {
+                    //         const events = this.querySelector('.fc-daygrid-day-events');
+                    //         // if (events.style['padding-bottom'] === '') {
+                    //         if (!events.querySelector('.fc-daygrid-event-harness')) {
+                    //             this.appendChild(holidayEl);
+                    //         }
+                    //         // }
+                    //     });
+                    //     // mouseleave 휴일 지정 el 제거
+                    //     frame.firstChild.addEventListener('mouseleave', function () {
+                    //         if (this.querySelector('.fc-set-holiday')) {
+                    //             this.removeChild(holidayEl);
+                    //         }
+                    //     });
+                    // }
                 }}
                 dayCellContent={(cell) => {
                     // let innerText;
                     // console.log(cell);
+                    // let button = document.createElement('button');
+                    // let eventEl = document.querySelector('.fc-daygrid-event-harness')
+
+                    // if (eventEl) {
+                    //     let targetEl = eventEl.parentElement.parentElement;
+                    //     document.addEventListener('mouseover', function (e) {
+
+                    //     });
+                    // }
 
                     // let year = cell.date.getFullYear();
                     // let month = `0${cell.date.getMonth() + 1}`.substr(-2);
@@ -322,18 +396,14 @@ const TourMonthCalendar = (props) => {
                 eventContent={(content) => {
                     // 이벤트 컨텐츠 제어
                     // console.log(content);
-                    // let applyFrame = document.createElement('div');
-
-                    // if (setHolidayRef.current) {
-                    //     setHolidayRef.current.setHoliday();
-                    // }
 
                     // 관리자 지정 휴일의 스타일 변경
                     if (content.event.extendedProps.denyRepeatYn === 'N') {
                         content.backgroundColor = '#00A99D';
                         content.borderColor = '#00A99D';
-                    } else if (content.event.extendedProps.tourTime !== '') {
                     }
+                    // else if (content.event.extendedProps.tourTime !== '') {
+                    // }
                 }}
                 eventDidMount={(e) => {
                     // console.log(e);
@@ -362,19 +432,20 @@ const TourMonthCalendar = (props) => {
                         top.appendChild(button);
                     }
                 }}
-                eventClick={(eventData) => {
-                    // console.log(eventData.event._def.extendedProps);
-                    if (eventData.event.allDay) {
+                eventClick={(e) => {
+                    // console.log(e.event.);
+                    if (e.event.allDay) {
                         setCancelModal(true);
                     } else {
                         setSummaryModal(true);
                     }
-                    setSelectedData(eventData.event._def.extendedProps);
+                    setSelectedData(e.event._def.extendedProps);
                 }}
+                eventRemove={handleEventRemove}
             />
-            <SetHolidayModal ref={setHolidayRef} show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} />
+            <SetHolidayModal ref={setHolidayRef} show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} calendar={calendar} />
             <SummaryApplyModal show={summaryModal} onHide={() => setSummaryModal(false)} data={selectedData} />
-            <CancelHolidayModal show={cancelModal} onHide={() => setCancelModal(false)} data={selectedData} />
+            <CancelHolidayModal ref={cancelHolidayRef} show={cancelModal} onHide={() => setCancelModal(false)} data={selectedData} calendar={calendar} />
             {/* </> */}
             {/* )} */}
         </>

@@ -268,26 +268,6 @@ const SnsMetaEdit = () => {
             <div className="d-flex mb-2 w-100">
                 <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
                 <div className="d-flex">
-                    <Button
-                        variant="outline-neutral"
-                        className="mr-2"
-                        onClick={() => {
-                            handleClickPublish('fb');
-                        }}
-                        size="sm"
-                    >
-                        FB 전송
-                    </Button>
-                    <Button
-                        variant="outline-neutral"
-                        className="mr-2"
-                        onClick={() => {
-                            window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`);
-                        }}
-                        size="sm"
-                    >
-                        FB 캐시삭제
-                    </Button>
                     <Button size="sm" variant="outline-neutral" className="mr-2" onClick={handleClickFbTokenModalShow}>
                         토큰 관리
                     </Button>
@@ -302,7 +282,27 @@ const SnsMetaEdit = () => {
                         공유
                     </Button>
                     <Button
-                        variant="outline-neutral"
+                        variant="outline-fb"
+                        className="mr-2"
+                        onClick={() => {
+                            handleClickPublish('fb');
+                        }}
+                        size="sm"
+                    >
+                        FB 전송
+                    </Button>
+                    <Button
+                        variant="outline-fb"
+                        className="mr-2"
+                        onClick={() => {
+                            window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`);
+                        }}
+                        size="sm"
+                    >
+                        FB 캐시삭제
+                    </Button>
+                    <Button
+                        variant="outline-tw"
                         className="mr-2"
                         onClick={() => {
                             handleClickCopyContent('fb');
@@ -421,7 +421,7 @@ const SnsMetaEdit = () => {
                 <MokaInputLabel label="Twitter" className="m-0 h5" as="none" />
                 <div className="d-flex">
                     <Button
-                        variant="outline-neutral"
+                        variant="outline-tw"
                         className="mr-2"
                         size="sm"
                         onClick={() => {
@@ -431,7 +431,7 @@ const SnsMetaEdit = () => {
                         TW 전송
                     </Button>
                     <Button
-                        variant="outline-neutral"
+                        variant="outline-tw"
                         className="mr-2"
                         size="sm"
                         onClick={() => {
@@ -441,7 +441,7 @@ const SnsMetaEdit = () => {
                         TW 캐시삭제
                     </Button>
                     <Button
-                        variant="outline-neutral"
+                        variant="outline-fb"
                         className="mr-2"
                         size="sm"
                         onClick={() => {

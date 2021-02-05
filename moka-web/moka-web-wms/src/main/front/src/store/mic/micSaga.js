@@ -144,6 +144,56 @@ const putMicBannerToggle = createRequestSaga(act.PUT_MIC_BANNER_TOGGLE, api.putM
  */
 const getMicFeedList = createRequestSaga(act.GET_MIC_FEED_LIST, api.getMicAnswerList);
 
+/**
+ * 피드 상세 조회
+ */
+const getMicFeed = createRequestSaga(act.GET_MIC_FEED, api.getMicAnswer);
+
+/**
+ * 피드 저장
+ */
+function* saveMicFeed({ payload }) {
+    const { feed, callback } = payload;
+    const ACTION = act.SAVE_MIC_FEED;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(feed.answSeq ? api.putMicAnswer : api.postMicAnswer, { answer: feed });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_MIC_FEED_SUCCESS,
+                payload: { body: feed },
+            });
+            // 목록 다시 조회
+            const search = yield select(({ mic }) => mic.feed.search);
+            yield put({
+                type: act.GET_MIC_FEED_LIST,
+                payload: { search },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
+ * 답변(피드, 포스트) 최상위 수정
+ */
+const putMicAnswerTop = createRequestSaga(act.PUT_MIC_ANSWER_TOP, api.putMicAnswerTop, true);
+
+/**
+ * 답변(피드, 포스트) 사용여부 수정
+ */
+const putMicAnswerUsed = createRequestSaga(act.PUT_MIC_ANSWER_USED, api.putMicAnswerUsed, true);
+
 export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA_LIST, getMicAgendaList);
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
@@ -157,4 +207,8 @@ export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA, getMicAgenda);
     yield takeLatest(act.SAVE_MIC_AGENDA, saveMicAgenda);
     yield takeLatest(act.GET_MIC_FEED_LIST, getMicFeedList);
+    yield takeLatest(act.PUT_MIC_ANSWER_TOP, putMicAnswerTop);
+    yield takeLatest(act.PUT_MIC_ANSWER_USED, putMicAnswerUsed);
+    yield takeLatest(act.GET_MIC_FEED, getMicFeed);
+    yield takeLatest(act.SAVE_MIC_FEED, saveMicFeed);
 }

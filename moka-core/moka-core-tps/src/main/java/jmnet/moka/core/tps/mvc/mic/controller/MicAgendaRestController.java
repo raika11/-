@@ -509,7 +509,7 @@ public class MicAgendaRestController extends AbstractCommonController {
     }
 
     @ApiOperation(value = "답변 상태 수정")
-    @PutMapping("/answers/{answSeq}")
+    @PutMapping("/answers/{answSeq}/div")
     public ResponseEntity<?> putMicAnswerDiv(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq") Long answSeq,
             @ApiParam(value = "상태", required = true) @RequestParam("answDiv") @NotNull(message = "{tps.answer.error.notnull.answDiv}") String answDiv,
             @ApiParam(hidden = true) HttpServletRequest request)

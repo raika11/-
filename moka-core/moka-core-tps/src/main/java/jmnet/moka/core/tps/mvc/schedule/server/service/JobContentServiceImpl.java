@@ -51,4 +51,9 @@ public class JobContentServiceImpl implements JobContentService{
     public void deleteJobContent(JobContent jobContent) {
         jobContentRepository.delete(jobContent);
     }
+
+    @Override
+    public boolean isValidData(JobContentSearchDTO search) {
+        return jobContentRepository.findJobContent(search).isPresent();
+    }
 }

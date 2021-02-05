@@ -48,6 +48,9 @@ export const initialState = {
             loginSns: 'P',
             agndSeq: null,
         },
+        feed: {
+            usedYn: 'N',
+        },
     },
     invalidList: [],
     answTotal: 0,
@@ -81,6 +84,11 @@ export default handleActions(
         [act.CLEAR_MIC_AGENDA]: (state) => {
             return produce(state, (draft) => {
                 draft.agenda = initialState.agenda;
+            });
+        },
+        [act.CLEAR_MIC_FEED]: (state) => {
+            return produce(state, (draft) => {
+                draft.feed.feed = initialState.feed.feed;
             });
         },
         /**
@@ -126,6 +134,14 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.feed.list = body.list;
                 draft.feed.total = body.totalCnt;
+            });
+        },
+        /**
+         * 피드 상세 조회
+         */
+        [act.GET_MIC_FEED_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.feed.feed = body;
             });
         },
     },

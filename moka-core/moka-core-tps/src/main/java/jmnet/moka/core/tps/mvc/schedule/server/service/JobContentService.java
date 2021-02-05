@@ -22,4 +22,12 @@ public interface JobContentService {
 
     void deleteJobContent(JobContent jobContent);
 
+    /**
+     * 등록가능한 데이터인지 체크한다.
+     *
+     * @param search 작업 정보
+     * @return 중복여부
+     */
+    boolean isValidData(JobContentSearchDTO search);
+
 }

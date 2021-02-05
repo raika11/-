@@ -4,6 +4,7 @@ import java.util.List;
 
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatistic;
 import jmnet.moka.core.tps.mvc.schedule.server.mapper.JobStatisticMapper;
 import jmnet.moka.core.tps.mvc.schedule.server.repository.JobStatisticRepository;
@@ -33,7 +34,7 @@ public class JobStatisticServiceImpl implements JobStatisticService{
     }
 
     @Override
-    public Page<JobStatisticVO> findAllJobStat(JobContentSearchDTO searchDTO) {
+    public Page<JobStatisticVO> findAllJobStat(JobStatisticSearchDTO searchDTO) {
         List<JobStatisticVO> list = jobStatisticMapper.findAll(searchDTO);
         return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }

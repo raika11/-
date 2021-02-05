@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 /**
  * 작업 Repository
  * 2021. 2. 1. 김정민
@@ -49,16 +51,16 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
             builder.or(jobContent.category.eq(category));
         }
         if(!McpString.isEmpty(period)){
-            builder.or(jobContent.period.eq(period));
+            builder.and(jobContent.period.eq(period));
         }
         if(!McpString.isEmpty(sendType)){
-            builder.or(jobContent.sendType.eq(sendType));
+            builder.and(jobContent.sendType.eq(sendType));
         }
         if(!McpString.isEmpty(serverSeq)){
-            builder.or(jobContent.serverSeq.eq(serverSeq));
+            builder.and(jobContent.serverSeq.eq(serverSeq));
         }
         if(!McpString.isEmpty(usedYn)){
-            builder.or(jobContent.usedYn.eq(usedYn));
+            builder.and(jobContent.usedYn.eq(usedYn));
         }
 
         JPQLQuery<JobContent> query = queryFactory.selectFrom(jobContent);
@@ -71,6 +73,27 @@ public class JobContentRepositorySupportImpl extends TpsQueryDslRepositorySuppor
                 .fetchResults();
 
         return new PageImpl<JobContent>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @Override
+    public Optional<JobContent> findJobContent(JobContentSearchDTO search) {
+        QJobContent jobContent = QJobContent.jobContent;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(!McpString.isEmpty(search.getPeriod())) {
+            builder.and(jobContent.period.eq(search.getPeriod()));
+        }
+        if(!McpString.isEmpty(search.getServerSeq())) {
+            builder.and(jobContent.serverSeq.eq(search.getServerSeq()));
+        }
+        if(!McpString.isEmpty(search.getCallUrl())) {
+            builder.and(jobContent.callUrl.eq(search.getCallUrl()));
+        }
+
+        JPQLQuery<JobContent> query = queryFactory.selectFrom(jobContent)
+                .where(builder);
+
+        return Optional.ofNullable(query.fetchFirst());
     }
 
 }

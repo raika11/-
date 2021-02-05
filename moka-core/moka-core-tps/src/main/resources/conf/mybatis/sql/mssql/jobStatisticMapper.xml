@@ -4,7 +4,7 @@
 <mapper namespace="jmnet.moka.core.tps.mvc.schedule.server.mapper.JobStatisticMapper">
 
     <!-- 배포서버 별 작업 실행상태 통계 리스트 -->
-    <select id="findAll" parameterType="JobContentSearchDTO" resultType="JobStatisticVO" statementType="CALLABLE">
+    <select id="findAll" parameterType="JobStatisticSearchDTO" resultType="JobStatisticVO" statementType="CALLABLE">
         {call UPA_GEN_TARGET_STAT_SEL(
                 #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
                 #{size, mode=IN, jdbcType=INTEGER, javaType=integer},

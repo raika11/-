@@ -61,8 +61,8 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
             query.where(qTrendpoll.pollType.eq(searchDTO.getPollType()));
         }
 
-        if (McpString.isNotEmpty(searchDTO.getStatus())) {
-            query.where(qTrendpoll.status.eq(searchDTO.getStatus()));
+        if (searchDTO.getStatus() != null && searchDTO.getStatus().length > 0) {
+            query.where(qTrendpoll.status.in(searchDTO.getStatus()));
         }
 
         if (McpString.isNotEmpty(searchDTO.getPollCategory())) {

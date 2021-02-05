@@ -35,6 +35,9 @@ public class JobContentSearchDTO extends SearchDTO {
     @ApiModelProperty("배포서버(배포서버 코드 API를 통해 조회한 serverSeq)")
     private Long serverSeq;
 
-    @ApiModelProperty("사용여부(사용:Y/미사용:N")
+    @ApiModelProperty("사용여부(사용:Y/미사용:N)")
     private String usedYn;
+
+    @ApiModelProperty("URL")
+    private String callUrl;
 }

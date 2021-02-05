@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
-import { initialState, getMicFeedList, getMicFeed, putMicAnswerTop, putMicAnswerUsed, changeFeedSearchOption, GET_MIC_FEED_LIST } from '@store/mic';
-import { messageBox } from '@utils/toastUtil';
+import { initialState, getMicFeedList, getMicFeed, putMicAnswerTop, putMicAnswerUsed, saveMicFeed, changeFeedSearchOption, GET_MIC_FEED_LIST } from '@store/mic';
+import toast, { messageBox } from '@utils/toastUtil';
 import columnDefs from './MicFeedListColumns';
 import FeedEditModal from './modals/FeedEditModal';
 
@@ -74,8 +74,26 @@ const MicFeedList = () => {
     /**
      * 피드 상세 데이터 변경
      */
-    const handleChangeValue = ({ key, value }) => {
-        setTemp({ ...temp, [key]: value });
+    const handleChangeValue = ({ key, value }) => setTemp({ ...temp, [key]: value });
+
+    /**
+     * 피드 상세 수정/등록
+     * @param {object} feed 피드 데이터
+     */
+    const handleSave = (feed) => {
+        dispatch(
+            saveMicFeed({
+                feed,
+                callback: ({ header, body }) => {
+                    if (header.success && body) {
+                        toast.success(header.message);
+                        setShow(false);
+                    } else {
+                        messageBox.alert(header.message);
+                    }
+                },
+            }),
+        );
     };
 
     /**
@@ -173,6 +191,7 @@ const MicFeedList = () => {
                 feed={temp}
                 agenda={agenda}
                 onChange={handleChangeValue}
+                onSave={handleSave}
             />
         </MokaCard>
     );

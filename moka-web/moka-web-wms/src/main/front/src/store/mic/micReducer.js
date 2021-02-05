@@ -48,7 +48,9 @@ export const initialState = {
             loginSns: 'P',
             agndSeq: null,
         },
-        feed: {},
+        feed: {
+            usedYn: 'N',
+        },
     },
     invalidList: [],
     answTotal: 0,

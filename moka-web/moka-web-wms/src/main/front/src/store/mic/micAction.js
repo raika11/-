@@ -101,6 +101,12 @@ export const [GET_MIC_FEED, GET_MIC_FEED_SUCCESS, GET_MIC_FEED_FAILURE] = create
 export const getMicFeed = createAction(GET_MIC_FEED, ({ answSeq, callback }) => ({ answSeq, callback }));
 
 /**
+ * 피드 저장
+ */
+export const SAVE_MIC_FEED = 'mic/SAVE_MIC_FEED';
+export const saveMicFeed = createAction(SAVE_MIC_FEED, ({ feed, callback }) => ({ feed, callback }));
+
+/**
  * 답변 최상위 수정
  */
 export const PUT_MIC_ANSWER_TOP = 'mic/PUT_MIC_ANSWER_TOP';

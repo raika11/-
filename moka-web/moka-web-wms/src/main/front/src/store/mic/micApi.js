@@ -150,6 +150,32 @@ export const getMicAnswer = ({ answSeq }) => {
     });
 };
 
+// 답변 등록 (폼데이터)
+export const postMicAnswer = ({ answer }) => {
+    return instance
+        .post(`/api/mics/answers`, objectToFormData(answer), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 답변 수정 (폼데이터)
+export const putMicAnswer = ({ answer }) => {
+    return instance
+        .put(`/api/mics/answers/${answer.answSeq}`, objectToFormData(answer), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 답변 최상위 수정
 export const putMicAnswerTop = ({ answSeq, answTop }) => {
     return instance.put(`/api/mics/answers/${answSeq}/top?${qs.stringify({ answTop })}`).catch((err) => {

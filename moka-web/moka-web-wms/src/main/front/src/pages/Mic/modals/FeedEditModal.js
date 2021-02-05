@@ -1,23 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { GET_MIC_FEED } from '@store/mic';
+import { GET_MIC_FEED, SAVE_MIC_FEED } from '@store/mic';
 import { MokaModal, MokaInputLabel } from '@components';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
+import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 /**
  * 시민 마이크 피드 편집 모달
  */
 const FeedEditModal = (props) => {
-    const { show, onHide, agenda, feed, onChange } = props;
-    const loading = useSelector(({ loading }) => loading[GET_MIC_FEED]);
+    const { show, onHide, agenda, feed, onChange, onSave } = props;
+    const loading = useSelector(({ loading }) => loading[GET_MIC_FEED] || loading[SAVE_MIC_FEED]);
     const ANSWER_REL_DIV = useSelector(({ app }) => app.ANSWER_REL_DIV || []);
+    const PDS_URL = useSelector(({ app }) => app.PDS_URL);
+    const [error, setError] = useState({});
+    const [mshow, setMshow] = useState(false);
     const imgRef = useRef(null);
-
-    const handleHide = () => {
-        onHide();
-    };
 
     /**
      * 입력값 변경
@@ -25,6 +26,7 @@ const FeedEditModal = (props) => {
      */
     const handleChangeValue = (e) => {
         const { name, value, checked } = e.target;
+
         if (name === 'usedYn') {
             onChange({ key: name, value: checked ? 'Y' : 'N' });
         } else if (name === 'relDiv') {
@@ -45,33 +47,71 @@ const FeedEditModal = (props) => {
         } else {
             onChange({ key: name, value });
         }
+
+        if (error[name]) {
+            setError({ ...error, [name]: true });
+        }
     };
 
     /**
      * 이미지파일 변경
      * @param {*} data 파일데이터
+     * @param {string} imgLinkField 데이터가 없을 때 데이터 날릴 이미지링크 필드
      */
-    const handleImgFile = (data) => {
+    const handleImgFile = (data, imgLinkField) => {
         onChange({
             key: 'answerRel',
             value: {
                 ...feed.answerRel,
                 artThumbnailFile: data,
-                relUrl: !data ? '' : feed.answerRel.relUrl,
+                [imgLinkField]: !data ? null : feed.answerRel[imgLinkField],
             },
         });
     };
+
+    /**
+     * 기사 변경
+     * @param {object} articleData 기사데이터
+     */
+    const handleChangeArticle = (articleData) => {
+        onChange({
+            key: 'answerRel',
+            value: {
+                ...feed.answerRel,
+                artTitle: unescapeHtmlArticle(articleData.artTitle),
+                relUrl: '',
+                artThumbnail: articleData.artThumb ? `${PDS_URL}${articleData.artThumb}` : null,
+                artThumbnailFile: null,
+            },
+        });
+        setMshow(false);
+    };
+
+    /**
+     * 저장
+     */
+    const handleSave = () => {
+        // validate
+        if (true) {
+            onSave(feed);
+        }
+    };
+
+    useEffect(() => {
+        setError({});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [feed.answSeq]);
 
     return (
         <MokaModal
             width={500}
             size="md"
             show={show}
-            onHide={handleHide}
+            onHide={onHide}
             title={`❛ ${agenda.agndKwd} ❜ 관리자 피드 ${feed.answSeq ? '수정' : '등록'}`}
             buttons={[
-                { text: '저장', variant: 'positive' },
-                { text: '취소', variant: 'negative', onClick: handleHide },
+                { text: '저장', variant: 'positive', onClick: handleSave },
+                { text: '취소', variant: 'negative', onClick: onHide },
             ]}
             centered
             loading={loading}
@@ -134,7 +174,7 @@ const FeedEditModal = (props) => {
                             </React.Fragment>
                         }
                         as="imageFile"
-                        inputProps={{ img: feed.answerRel?.relUrl, width: 178, height: 100, setFileValue: handleImgFile, deleteButton: true }}
+                        inputProps={{ img: feed.answerRel?.relUrl, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'relUrl'), deleteButton: true }}
                     />
                 )}
 
@@ -164,11 +204,13 @@ const FeedEditModal = (props) => {
                                 value={feed.answerRel?.relUrl}
                                 className="flex-fill"
                                 onChange={handleChangeValue}
+                                isInvalid={error.relUrl}
                                 required
                             />
-                            <Button variant="searching" className="flex-shrink-0 ml-2">
+                            <Button variant="searching" className="flex-shrink-0 ml-2" onClick={() => setMshow(true)}>
                                 기사 검색
                             </Button>
+                            <ArticleListModal show={mshow} onHide={() => setMshow(false)} onRowClicked={handleChangeArticle} />
                         </div>
                         <MokaInputLabel
                             className="mb-2"
@@ -177,6 +219,7 @@ const FeedEditModal = (props) => {
                             name="artTitle"
                             value={feed.answerRel?.artTitle}
                             onChange={handleChangeValue}
+                            isInvalid={error.artTitle}
                             required
                         />
                         <MokaInputLabel
@@ -205,7 +248,7 @@ const FeedEditModal = (props) => {
                                     </Button>
                                 </React.Fragment>
                             }
-                            inputProps={{ img: feed.answerRel?.relUrl, width: 178, height: 100, setFileValue: handleImgFile, deleteButton: true }}
+                            inputProps={{ img: feed.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'artThumbnail'), deleteButton: true }}
                         />
                     </React.Fragment>
                 )}

@@ -12,11 +12,18 @@ const RelationPollSortItemRenderer = ({ item, onDelete }) => {
 
     return (
         <>
-            <Row>
-                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-3 w-100">{item.ordNo}</Col>
+            <Row className="d-flex flex-fill align-items-center mb-1">
+                <Col className="justify-content-start mb-0 pr-0 w-100" xs={1}>
+                    {item.ordNo}
+                </Col>
                 <Col xs={10}>
                     <Row>
-                        <MokaInputLabel name="title" id={`poll-title-${item.ordNo}`} labelWidth={30} value={item.title} className="col mb-0 pl-0 pr-0 pt-1" disabled />
+                        <Col xs={2} className="mb-0 pl-0 pr-0">
+                            <MokaInputLabel name="id" id={`poll-id-${item.ordNo}`} labelWidth={30} value={`ID: ${item.seqNo}`} disabled />
+                        </Col>
+                        <Col xs={10} className="mb-0 pl-0 pr-0">
+                            <MokaInputLabel name="title" id={`poll-title-${item.ordNo}`} labelWidth={30} value={item.title} disabled />
+                        </Col>
                     </Row>
                 </Col>
                 <Col className="d-felx align-self-center text-left mb-0 pl-0">

@@ -11,7 +11,7 @@ import produce from 'immer';
 
 const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     const [total, setTotal] = useState(0);
-    const [search, setSearch] = useState({ searchType: 'title', keyword: '', page: 0, size: 20 });
+    const [search, setSearch] = useState({ searchType: 'title', keyword: '', page: 0, size: 20, sort: 'pollSeq,desc', status: ['S', 'D'] });
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -54,6 +54,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
                                     id: row.pollSeq,
                                     title: unescapeHtml(row.title),
                                     category: commonUtil.toKorFromCode(row.pollCategory, codes.pollCategory),
+                                    status: row.status === 'S' ? '진행' : '종료',
                                     onClick: handleClickAdd,
                                 })),
                             );

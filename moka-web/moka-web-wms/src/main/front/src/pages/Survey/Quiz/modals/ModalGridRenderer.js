@@ -13,11 +13,16 @@ export const QuestionsInfoAddButtonRenderer = ({ questionsInfo }) => {
 
     return (
         <>
-            <Col className="pt-2">
+            {/* <Col className="pt-2">
                 <Button variant="negative" onClick={() => handleClickButton()}>
                     등록
                 </Button>
-            </Col>
+            </Col> */}
+            <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                <Button variant="outline-table-btn" onClick={() => handleClickButton()} size="sm">
+                    등록
+                </Button>
+            </div>
         </>
     );
 };
@@ -64,11 +69,16 @@ export const QuizSearchAddButtonRenderer = ({ quizInfo }) => {
 
     return (
         <>
-            <Col>
+            {/* <Col>
                 <Button variant="negative" onClick={() => handleClickButton()}>
                     등록
                 </Button>
-            </Col>
+            </Col> */}
+            <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                <Button variant="outline-table-btn" onClick={() => handleClickButton()} size="sm">
+                    등록
+                </Button>
+            </div>
         </>
     );
 };

@@ -102,7 +102,7 @@ const ItemRenderer = ({ value }) => {
                                 value={editData.linkUrl}
                                 className="col mb-0 pl-0 pr-0"
                             />
-                            <Col className="d-felx mb-0 pl-1 pr-0" xs={3}>
+                            <Col className="d-felx mb-0 pl-1 pr-0" xs={2}>
                                 <MokaInput as="select" name="linkTarget" id="linkTarget" value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
                                     <option value="S">본창</option>
                                     <option value="N">새창</option>

@@ -116,9 +116,9 @@ const SortAgGrid = () => {
                 data.map((e, index) => {
                     return {
                         id: index,
+                        title: e.title,
                         info: {
                             id: index,
-                            delete: handleDelete,
                         },
                     };
                 }),
@@ -138,7 +138,7 @@ const SortAgGrid = () => {
                 <Form.Row>
                     <Col xs={12}>
                         <Form.Group>
-                            <Form.Label className="pr-2 mb-0">관련 정보</Form.Label>
+                            <Form.Label className="pr-2 mb-0">관련 기사</Form.Label>
                             <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
                                 기사 검색
                             </Button>

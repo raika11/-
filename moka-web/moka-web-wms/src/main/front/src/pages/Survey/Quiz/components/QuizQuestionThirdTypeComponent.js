@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, forwardRef } from 'react';
 import { Col, Form } from 'react-bootstrap';
-import { MokaInputLabel, MokaTableDeleteButton, AgGripIcon } from '@components';
+import { MokaInputLabel, MokaTableDeleteButton, AgGripIcon, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { useSelector, useDispatch } from 'react-redux';
-import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
+import { questionInfoChange, deleteQuestion, deleteAllQuestion, addQuestionChoices } from '@store/survey/quiz';
 import { DeleteConfirmModal } from '@pages/Survey/Quiz/modals';
+import { messageBox } from '@utils/toastUtil';
+import Dropdown from 'react-bootstrap/Dropdown';
+import produce from 'immer';
+
 // 객관식 컴포넌트
 const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
     const dispatch = useDispatch();
@@ -15,23 +19,50 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
     }));
 
     // 퀴즈 삭제 버튼 처리.
-    const handleClickQuestionDeleteButton = () => {
+    // const handleClickQuestionDeleteButton = () => {
+    //     if (quizSts === 'Y') {
+    //         setDeleteConfirmModalState(true);
+    //     } else {
+    //         dispatch(deleteQuestion({ questionIndex: questionIndex }));
+    //     }
+    // };
+
+    // 전체 삭제.
+    const handleClickAllDeleteButton = useCallback(() => {
         if (quizSts === 'Y') {
             setDeleteConfirmModalState(true);
         } else {
-            dispatch(deleteQuestion({ questionIndex: questionIndex }));
+            dispatch(deleteAllQuestion());
         }
-    };
+    }, [dispatch, quizSts]);
+
+    // 보기 추가 버튼.
+    const handleClickQuestionAddButton = useCallback(() => {
+        dispatch(
+            addQuestionChoices({
+                index: questionIndex,
+                choice: {
+                    answYn: 'N',
+                    title: '',
+                },
+            }),
+        );
+    }, [dispatch, questionIndex]);
 
     // alert 창에서 확인 눌렀을 경우.
     const handleAlertDelete = () => {
-        dispatch(deleteQuestion({ questionIndex: questionIndex }));
+        // dispatch(deleteQuestion({ questionIndex: questionIndex }));
+        dispatch(deleteAllQuestion());
         setDeleteConfirmModalState(false);
     };
 
-    // 문항 삭제 버튼 처리.
+    // 보기 삭제 버튼 처리.
     const handleClickDeleteButton = (choices_index) => {
         let tempData = questionsList[questionIndex];
+        if (tempData.choices.length === 1) {
+            messageBox.alert('보기는 1개 이상이어야 합니다.', () => {});
+            return;
+        }
         dispatch(
             questionInfoChange({
                 ...tempData,
@@ -108,6 +139,31 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
         return inputName;
     };
 
+    const createDropdownItem = useCallback(() => {
+        const items = [
+            { text: '전체삭제', onClick: () => handleClickAllDeleteButton() },
+            { text: '보기 추가', onClick: () => handleClickQuestionAddButton() },
+        ];
+
+        return (
+            <>
+                {items.map((i, idx) => (
+                    <Dropdown.Item key={idx} eventKey={idx} onClick={i.onClick}>
+                        {i.text}
+                    </Dropdown.Item>
+                ))}
+            </>
+        );
+    }, [handleClickAllDeleteButton, handleClickQuestionAddButton]);
+
+    const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
+        return (
+            <div ref={ref} className="px-2" onClick={onClick} id={id}>
+                <MokaIcon iconName="fal-ellipsis-v-alt" />
+            </div>
+        );
+    });
+
     return (
         <>
             <div className="mb-2 p-2 bg-gray-150">
@@ -118,7 +174,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                     </Col>
                     <Col xs={10}>
                         <MokaInputLabel
-                            label={`Q${questionIndex}.`}
+                            label={`Q${Number(questionIndex) + 1}.`}
                             labelWidth={20}
                             placeholder="질문을 입력하세요.(100자 이내로 입력하세요)"
                             labelClassName="mr-1"
@@ -130,7 +186,12 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                         />
                     </Col>
                     <Col xs={1}>
-                        <AgGripIcon onClick={(e) => handleClickQuestionDeleteButton(e)} />
+                        <MokaOverlayTooltipButton tooltipText="더보기" variant="white" className="p-0">
+                            <Dropdown style={{ position: 'unset' }}>
+                                <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
+                                <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
+                            </Dropdown>
+                        </MokaOverlayTooltipButton>
                     </Col>
                 </Form.Row>
                 {/* 보기. */}

@@ -11,6 +11,8 @@ import {
     ADD_QUESTION,
     QUESTION_CHANGE_RESULT,
     DELETE_QUESTION_RESULT,
+    DELETE_ALL_QUESTION,
+    ADD_QUESTION_CHOICES,
     SET_QUESTION,
     CHANGE_QUESTIONS_LIST_SEARCH_OPTION,
     SELECT_QUESTIONS,
@@ -24,6 +26,7 @@ import {
     CLEAR_SELECT_ARTICLE_LIST,
     SELECT_ARTICLE_LIST_CHANGE,
     SELECT_ARTICLE_ITEM_CHANGE,
+    CLEAR_QUIZ_QUESTIONS,
 } from './quizAction';
 
 /**
@@ -53,12 +56,12 @@ export const initialState = {
     quizInfo: {
         delYn: 'N',
         imgUrl: null,
-        loginYn: 'Y',
+        loginYn: 'N',
         questions: [],
         quizDesc: '',
         quizRels: [],
         quizSeq: 0,
-        quizSts: 'P',
+        quizSts: 'Y',
         quizType: 'AA',
         quizUrl: null,
         regDt: '',
@@ -149,6 +152,12 @@ export default handleActions(
                 draft.quizQuestions.questionsList = [...draft.quizQuestions.questionsList, payload.questionInitialState];
             });
         },
+        // 보기 추가.
+        [ADD_QUESTION_CHOICES]: (state, { payload: { index, choice } }) => {
+            return produce(state, (draft) => {
+                draft.quizQuestions.questionsList[index].choices = [...draft.quizQuestions.questionsList[index].choices, choice];
+            });
+        },
         [SET_QUESTION]: (state, { payload: { item, questions } }) => {
             return produce(state, (draft) => {
                 draft.quizQuestions.questionsItem = item;
@@ -160,10 +169,17 @@ export default handleActions(
                 draft.quizQuestions.questionsList = payload;
             });
         },
+        // saga 에서 삭제 처리 해서 넘어온 리스트 변경.
         [DELETE_QUESTION_RESULT]: (state, { payload: { item, list } }) => {
             return produce(state, (draft) => {
                 draft.quizQuestions.questionsItem = item;
                 draft.quizQuestions.questionsList = list;
+            });
+        },
+        // 문항 전체 삭제.
+        [DELETE_ALL_QUESTION]: (state) => {
+            return produce(state, (draft) => {
+                draft.quizQuestions = initialState.quizQuestions;
             });
         },
 
@@ -226,6 +242,11 @@ export default handleActions(
         [CLEAR_SELECT_ARTICLE_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.selectArticle.list = initialState.selectArticle.list;
+            });
+        },
+        [CLEAR_QUIZ_QUESTIONS]: (state) => {
+            return produce(state, (draft) => {
+                draft.quizQuestions = initialState.quizQuestions;
             });
         },
     },

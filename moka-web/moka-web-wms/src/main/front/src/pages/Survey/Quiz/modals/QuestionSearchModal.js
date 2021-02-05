@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { MokaModal, MokaTable, MokaInput, MokaSearchInput } from '@components';
+import { MokaModal, MokaTable, MokaInput, MokaSearchInput, MokaCard } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import { columnDefs } from './QuestionSearchModalGridColumns';
 import { useSelector, useDispatch } from 'react-redux';
@@ -111,39 +111,47 @@ const QuestionSearchModal = (props) => {
             // buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}
             draggable
         >
-            <Form className="pb-2">
-                <Form.Row className="mb-2">
-                    <Col xs={2} className="p-0">
-                        <MokaInput as="select" name="searchType" value={searchData.searchType} onChange={(e) => handleChangeValue(e)}>
-                            <option value="">전체</option>
-                            <option value="title">퀴즈제목</option>
-                            <option value="question_title">문항제목</option>
-                        </MokaInput>
-                    </Col>
-                    <Col xs={8} className="p-0">
-                        <MokaSearchInput value={searchData.keyword} id="keyword" name="keyword" onChange={(e) => handleChangeValue(e)} onSearch={() => handleClickSearchButton()} />
-                    </Col>
-                    <Col xs={2} className="d-flex p-0 justify-content-end">
-                        <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
-                            초기화
-                        </Button>
-                    </Col>
-                </Form.Row>
-            </Form>
-            <MokaTable
-                className="overflow-hidden flex-fill"
-                columnDefs={columnDefs}
-                rowData={rowData}
-                rowHeight={50}
-                onRowNodeId={(data) => data.castSrl}
-                onRowClicked={(e) => handleClickListRow(e)}
-                loading={loading}
-                page={search.page}
-                size={search.size}
-                total={total}
-                preventRowClickCell={['questionsInfo', 'questionsPriviewInfo']}
-                onChangeSearchOption={handleChangeSearchOption}
-            />
+            <MokaCard width={798} className="mr-gutter" titleClassName="mb-0" title="퀴즈 관리">
+                <Form className="pb-2">
+                    <Form.Row className="mb-2">
+                        <Col xs={2} className="p-0">
+                            <MokaInput as="select" name="searchType" value={searchData.searchType} onChange={(e) => handleChangeValue(e)}>
+                                <option value="">전체</option>
+                                <option value="title">퀴즈제목</option>
+                                <option value="question_title">문항제목</option>
+                            </MokaInput>
+                        </Col>
+                        <Col xs={8} className="p-0">
+                            <MokaSearchInput
+                                value={searchData.keyword}
+                                id="keyword"
+                                name="keyword"
+                                onChange={(e) => handleChangeValue(e)}
+                                onSearch={() => handleClickSearchButton()}
+                            />
+                        </Col>
+                        <Col xs={2} className="d-flex p-0 justify-content-end">
+                            <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
+                                초기화
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                </Form>
+                <MokaTable
+                    className="overflow-hidden flex-fill"
+                    columnDefs={columnDefs}
+                    rowData={rowData}
+                    rowHeight={50}
+                    onRowNodeId={(data) => data.castSrl}
+                    onRowClicked={(e) => handleClickListRow(e)}
+                    loading={loading}
+                    page={search.page}
+                    size={search.size}
+                    total={total}
+                    preventRowClickCell={['questionsInfo', 'questionsPriviewInfo']}
+                    onChangeSearchOption={handleChangeSearchOption}
+                />
+            </MokaCard>
         </MokaModal>
     );
 };

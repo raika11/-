@@ -5,6 +5,8 @@ export const CLEAR_STORE = 'quiz/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 export const CLEAR_QUIZINFO = 'quiz/CLEAR_QUIZINFO';
 export const clearQuizinfo = createAction(CLEAR_QUIZINFO);
+export const CLEAR_QUIZ_QUESTIONS = 'quiz/CLEAR_QUIZ_QUESTIONS';
+export const clearQuizQuestions = createAction(CLEAR_QUIZ_QUESTIONS);
 export const CLEAR_QUIZMODALSEARCH = 'quiz/CLEAR_QUIZMODALSEARCH';
 export const clearQuizmodalsearch = createAction(CLEAR_QUIZMODALSEARCH);
 export const CLEAR_SELECT_QUIZ = 'quiz/CLEAR_SELECT_QUIZ';
@@ -35,12 +37,20 @@ export const saveQuizzes = createAction(SAVE_QUIZZES, ({ type, quizSeq, formData
 export const ADD_QUESTION = 'quiz/ADD_QUESTION';
 export const addQuestion = createAction(ADD_QUESTION, (actions) => actions);
 
+export const ADD_QUESTION_CHOICES = 'quiz/ADD_QUESTION_CHOICES';
+export const addQuestionChoices = createAction(ADD_QUESTION_CHOICES, (actions) => actions);
+
 export const SET_QUESTION = 'quiz/SET_QUESTION';
 export const setQuestion = createAction(SET_QUESTION, (actions) => actions);
 
+// 문항 삭제 ( 1개만. )
 export const DELETE_QUESTION = 'quiz/DELETE_QUESTION';
 export const DELETE_QUESTION_RESULT = 'quiz/DELETE_QUESTION_RESULT';
 export const deleteQuestion = createAction(DELETE_QUESTION, (actions) => actions);
+
+// 문항 전체 삭제.
+export const DELETE_ALL_QUESTION = 'quiz/DELETE_ALL_QUESTION';
+export const deleteAllQuestion = createAction(DELETE_ALL_QUESTION, (actions) => actions);
 
 export const QUESTION_CHANGE = 'quiz/QUESTION_CHANGE';
 export const QUESTION_CHANGE_RESULT = 'quiz/QUESTION_CHANGE_RESULT';

@@ -40,8 +40,8 @@ const QuizChildRelationInfo = ({ HandleSave }) => {
                         <Form.Row>
                             <Col xs={12}>
                                 <Form.Group>
-                                    <Form.Label className="pr-2">관련 투표</Form.Label>
-                                    <Button variant="searching" size="sm" onClick={() => handleClickQuizSearchButton()}>
+                                    <Form.Label className="pr-2">관련 퀴즈</Form.Label>
+                                    <Button variant="searching" size="s" onClick={() => handleClickQuizSearchButton()}>
                                         퀴즈 검색
                                     </Button>
                                 </Form.Group>

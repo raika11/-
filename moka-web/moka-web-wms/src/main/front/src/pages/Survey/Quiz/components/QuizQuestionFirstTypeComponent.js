@@ -66,7 +66,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                     {/* 질문 */}
                     <Col xs={10}>
                         <MokaInputLabel
-                            label={`Q${questionIndex}.`}
+                            label={`Q${Number(questionIndex) + 1}.`}
                             id={`title_${questionIndex}`}
                             name="title"
                             labelWidth={20}

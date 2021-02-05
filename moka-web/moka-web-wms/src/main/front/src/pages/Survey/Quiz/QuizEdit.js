@@ -28,6 +28,7 @@ import {
     selectQuizChange,
     selectArticleListChange,
     selectArticleItemChange,
+    clearQuizQuestions,
 } from '@store/survey/quiz';
 
 import { DndProvider } from 'react-dnd';
@@ -65,6 +66,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
     const history = useHistory();
     const params = useParams();
     const selectQuizSeq = useRef(null);
+    const selectSaveButtonNane = useRef('저장');
 
     const [questionSearchModalState, setQuestionSearchModalState] = useState(false);
 
@@ -176,6 +178,12 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
     // 항목 생성 버튼 클릭 처리.
     const handleClickNewQuestionsButton = useCallback(() => {
         const { questionType, questionCount } = questionSetup;
+
+        if (questionType === 'third' && Number(questionCount) < 1) {
+            messageBox.alert('보기 입력 개수를 입력해 주세요.', () => {});
+            return;
+        }
+
         const nextIndex = questionsItem.length + 1;
 
         if (questionType === 'third') {
@@ -403,10 +411,12 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         const { quizSeq } = params;
         if (!isNaN(quizSeq) && selectQuizSeq.current !== quizSeq) {
             selectQuizSeq.current = quizSeq;
+            selectSaveButtonNane.current = '수정';
             handleResetInfoData();
             dispatch(getQuizzes({ quizSeq: quizSeq }));
         } else if (history.location.pathname === '/quiz/add' && selectQuizSeq.current !== 'add') {
             selectQuizSeq.current = 'add';
+            selectSaveButtonNane.current = '저장';
             handleResetInfoData();
             dispatch(clearQuizinfo());
         }
@@ -446,6 +456,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quizInfo]);
 
+    // 문항 검색에서 등록 버튼 클릭후 추가되면 리스트 업데이트.
     useEffect(() => {
         const setAddQuestion = (data) => {
             const nextIndex = questionsItem.length + 1;
@@ -473,6 +484,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectQuizQuestion]);
 
+    // 문항 리스트 업데이트시 문항 리스트 업데이트.
     useEffect(() => {
         setSortableItems(
             questionsItem.map((item, index) => {
@@ -504,13 +516,16 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [questionsItem]);
 
+    // 클리어용.
     useEffect(() => {
         return () => {
             dispatch(clearQuizinfo());
+            dispatch(clearQuizQuestions());
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // 저장 버튼 클릭.
     useEffect(() => {
         if (handleSave === true) {
             handleClickSaveButton();
@@ -519,6 +534,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [handleSave]);
 
+    // drag 용으로 리스트 스테이트를 만든 내용이 업데이트 되면 퀴즈 리스트 업데이트.
     useEffect(() => {
         const setMoveItem = () => {
             let list = [];
@@ -542,7 +558,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         <MokaCard
             titleAs={
                 <div className="w-100 d-flex">
-                    <p className="m-0 h5 font-weight-bold">투표 등록</p>
+                    <p className="m-0 h5 font-weight-bold">{`투표 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}</p>
                     <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p>
                 </div>
             }
@@ -552,7 +568,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: '미리보기', variant: 'positive', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-05' },
-                { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' },
+                { text: selectSaveButtonNane.current, variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
             ]}
             width={750}

@@ -14,6 +14,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.code.AnswerDivCode;
 import jmnet.moka.core.tps.common.code.AnswerLoginSnsCode;
+import jmnet.moka.core.tps.common.code.AnswerRelDivCode;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAnswerSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.mapper.MicMapper;
 import jmnet.moka.core.tps.mvc.mic.vo.MicAnswerRelVO;
@@ -97,7 +98,13 @@ public class MicAnswerServiceImpl implements MicAnswerService {
         if (micAnswerRelVO.getArtThumbnailFile() != null) {
             String img = micAgendaService.saveImage(micAnswerRelVO.getArtThumbnailFile());
             if (McpString.isNotEmpty(img)) {
-                micAnswerRelVO.setArtThumbnail(img);
+                if (micAnswerRelVO
+                        .getRelDiv()
+                        .equals(AnswerRelDivCode.IMAGE.getCode())) {
+                    micAnswerRelVO.setRelUrl(img);  // 이미지타입일 경우, relUrl에 이미지 경로 저장
+                } else {
+                    micAnswerRelVO.setArtThumbnail(img);
+                }
             } else {
                 uploaded = false;
             }

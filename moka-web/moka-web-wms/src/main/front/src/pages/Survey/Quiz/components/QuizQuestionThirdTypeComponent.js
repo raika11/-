@@ -110,7 +110,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
 
     return (
         <>
-            <div className="mb-2 p-2 bg-gray150">
+            <div className="mb-2 p-2 bg-gray-150">
                 {/* 질문. */}
                 <Form.Row>
                     <Col xs={1}>

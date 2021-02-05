@@ -27,10 +27,10 @@ const MokaTableTypeButton = (props) => {
 
     return (
         <Nav as={ButtonGroup} size="sm" className="mr-auto" defaultActiveKey={defaultActiveKey} onSelect={onSelect}>
-            <Nav.Link eventKey="list" as={Button} variant="gray150">
+            <Nav.Link eventKey="list" as={Button} variant="gray-150">
                 <MokaIcon iconName="fas-th-list" />
             </Nav.Link>
-            <Nav.Link eventKey="thumbnail" as={Button} variant="gray150">
+            <Nav.Link eventKey="thumbnail" as={Button} variant="gray-150">
                 <MokaIcon iconName="fas-th-large" />
             </Nav.Link>
         </Nav>

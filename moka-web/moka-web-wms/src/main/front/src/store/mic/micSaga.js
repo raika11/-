@@ -15,6 +15,48 @@ const getMicAgendaList = createRequestSaga(act.GET_MIC_AGENDA_LIST, api.getMicAg
 const getMicAgendaListModal = createRequestSaga(act.GET_MIC_AGENDA_LIST_MODAL, api.getMicAgendaList, true);
 
 /**
+ * 아젠다 상세 조회
+ */
+const getMicAgenda = createRequestSaga(act.GET_MIC_AGENDA, api.getMicAgenda);
+
+/**
+ * 아젠다 등록/수정
+ */
+function* saveMicAgenda({ payload }) {
+    const { agenda, callback } = payload;
+    const ACTION = act.SAVE_MIC_AGENDA;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        // 등록/수정 분기
+        response = yield call(agenda.agndSeq ? api.putMicAgenda : api.postMicAgenda, { agenda });
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            // 목록 조회
+            const search = yield select(({ mic }) => mic.category.search);
+            yield put({
+                type: act.GET_MIC_CATEGORY_LIST,
+                payload: { search },
+            });
+        } else {
+            yield put({
+                type: act.CHANGE_INVALID_LIST,
+                payload: callbackData.body?.list,
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
+/**
  * 아젠다 순서 변경
  */
 const putMicAgendaSort = createRequestSaga(act.PUT_MIC_AGENDA_SORT, api.putMicAgendaSort, true);
@@ -97,6 +139,11 @@ function* saveBanner({ payload }) {
  */
 const putMicBannerToggle = createRequestSaga(act.PUT_MIC_BANNER_TOGGLE, api.putMicBannerToggle, true);
 
+/**
+ * 피드 목록 조회
+ */
+const getMicFeedList = createRequestSaga(act.GET_MIC_FEED_LIST, api.getMicAnswerList);
+
 export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA_LIST, getMicAgendaList);
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
@@ -107,4 +154,7 @@ export default function* saga() {
     yield takeLatest(act.GET_MIC_BANNER_LIST_MODAL, getMicBannerListModal);
     yield takeLatest(act.SAVE_MIC_BANNER, saveBanner);
     yield takeLatest(act.PUT_MIC_BANNER_TOGGLE, putMicBannerToggle);
+    yield takeLatest(act.GET_MIC_AGENDA, getMicAgenda);
+    yield takeLatest(act.SAVE_MIC_AGENDA, saveMicAgenda);
+    yield takeLatest(act.GET_MIC_FEED_LIST, getMicFeedList);
 }

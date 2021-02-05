@@ -104,8 +104,12 @@ public class MicAgendaServiceImpl implements MicAgendaService {
             }
         }
 
-        // 아젠다 등록
-        Integer ok = micMapper.insertMicAgenda(micAgendaVO);
+        // 아젠다 저장
+        if (micAgendaVO.getAgndSeq() != null && micAgendaVO.getAgndSeq() > 0) {
+            micMapper.updateMicAgenda(micAgendaVO);
+        } else {
+            micMapper.insertMicAgenda(micAgendaVO);
+        }
 
         if (micAgendaVO.getAgndSeq() != null && micAgendaVO.getAgndSeq() > 0) {
 

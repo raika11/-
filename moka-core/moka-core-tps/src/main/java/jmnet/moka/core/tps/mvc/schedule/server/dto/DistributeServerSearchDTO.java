@@ -23,9 +23,9 @@ public class DistributeServerSearchDTO extends SearchDTO {
     public static final Type TYPE = new TypeReference<List<DistributeServerSearchDTO>>() {
     }.getType();
 
-    @ApiModelProperty("별칭")
+    @ApiModelProperty("별칭(서버명)")
     private String serverNm;
 
-    @ApiModelProperty("서버IP")
+    @ApiModelProperty("서버IP(IP/URL)")
     private String serverIp;
 }

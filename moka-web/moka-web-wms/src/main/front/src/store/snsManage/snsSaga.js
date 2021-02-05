@@ -315,7 +315,7 @@ function toSnsSendArticleListData(response) {
         id: data.id.totalId,
         title: unescapeHtml(data.artTitle),
         imgUrl: data.imgUrl,
-        usedYn: data.usedYn === 'Y',
+        usedYn: data.usedYn,
         sendDt: data.snsInsDt,
     }));
 }

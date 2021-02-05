@@ -1,23 +1,29 @@
 /**
  * js object를 폼데이터로 변환한다
- * @param {object} obj 오브젝트
+ * https://stackoverflow.com/a/63840358
+ * @param {object} data 오브젝트
  */
-export const objectToFormData = (obj) => {
-    const form_data = new FormData();
-
-    Object.keys(obj).forEach((key) => {
-        let value = obj[key];
-
-        if (value !== undefined && value !== null) {
-            if (Array.isArray(value)) {
-                form_data.append(key, JSON.stringify(value));
-            } else {
-                form_data.append(key, value);
+export const objectToFormData = (val, formData = new FormData(), namespace = '') => {
+    if (typeof val !== 'undefined' && val !== null) {
+        if (val instanceof Date) {
+            formData.append(namespace, val.toISOString());
+        } else if (val instanceof Array) {
+            for (let i = 0; i < val.length; i++) {
+                objectToFormData(val[i], formData, namespace + '[' + i + ']');
             }
+        } else if (typeof val === 'object' && !(val instanceof File)) {
+            for (let propertyName in val) {
+                if (val.hasOwnProperty(propertyName)) {
+                    objectToFormData(val[propertyName], formData, namespace ? `${namespace}.${propertyName}` : propertyName);
+                }
+            }
+        } else if (val instanceof File) {
+            formData.append(namespace, val);
+        } else {
+            formData.append(namespace, val.toString());
         }
-    });
-
-    return form_data;
+    }
+    return formData;
 };
 
 /**

@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +17,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.dto.ValidList;
+import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaCateSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAgendaSearchDTO;
 import jmnet.moka.core.tps.mvc.mic.dto.MicAnswerSearchDTO;
@@ -167,8 +171,6 @@ public class MicAgendaRestController extends AbstractCommonController {
             throws Exception {
 
         try {
-            micAgendaVO.setRegId(principal.getName());
-            micAgendaVO.setRegDt(McpDate.now());
             boolean uploaded = micAgendaService.saveMicAgenda(micAgendaVO);
             String msg = uploaded ? msg("tps.common.success.update") : msg("tps.agenda.error.image-upload");
 
@@ -231,6 +233,8 @@ public class MicAgendaRestController extends AbstractCommonController {
             throws Exception {
 
         try {
+            validBanner(micBannerVO, ActionType.INSERT);
+
             boolean uploaded = micBannerService.saveMicBanner(micBannerVO);
             String msg = uploaded ? msg("tps.common.success.insert") : msg("tps.banner.error.image-upload");
 
@@ -251,6 +255,8 @@ public class MicAgendaRestController extends AbstractCommonController {
             throws Exception {
 
         try {
+            validBanner(micBannerVO, ActionType.INSERT);
+
             boolean uploaded = micBannerService.saveMicBanner(micBannerVO);
             String msg = uploaded ? msg("tps.common.success.update") : msg("tps.banner.error.image-upload");
 
@@ -261,6 +267,32 @@ public class MicAgendaRestController extends AbstractCommonController {
             log.error("[FAIL TO UPDATE BANNER]", e);
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BANNER]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    private void validBanner(MicBannerVO micBannerVO, ActionType actionType)
+            throws InvalidDataException {
+        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+
+        if (micBannerVO != null) {
+            if (micBannerVO.getBnnrSeq() != null && micBannerVO.getBnnrSeq() > 0) {
+                if (McpString.isEmpty(micBannerVO.getImgLink()) || micBannerVO.getImgFile() == null) {
+                    String message = msg("tps.banner.error.notnull.imgLink");
+                    invalidList.add(new InvalidDataDTO("imgLink", message));
+                    tpsLogger.fail(actionType, message, true);
+                }
+            } else {
+                if (micBannerVO.getImgFile() == null) {
+                    String message = msg("tps.banner.error.notnull.imgLink");
+                    invalidList.add(new InvalidDataDTO("imgLink", message));
+                    tpsLogger.fail(actionType, message, true);
+                }
+            }
+
+            if (invalidList.size() > 0) {
+                String validMessage = msg("tps.common.error.invalidContent");
+                throw new InvalidDataException(invalidList, validMessage);
+            }
         }
     }
 

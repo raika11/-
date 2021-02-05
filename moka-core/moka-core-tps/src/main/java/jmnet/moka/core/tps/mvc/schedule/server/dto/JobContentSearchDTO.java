@@ -23,18 +23,18 @@ public class JobContentSearchDTO extends SearchDTO {
     public static final Type TYPE = new TypeReference<List<JobContentSearchDTO>>() {
     }.getType();
 
-    @ApiModelProperty("분류")
+    @ApiModelProperty("분류(기타코드 > GEN_CATE)")
     private String category;
 
-    @ApiModelProperty("주기")
+    @ApiModelProperty("주기(30/60/120/300/600/1200/1800/3600/43200/86400)")
     private Long period;
 
-    @ApiModelProperty("타입")
+    @ApiModelProperty("타입(FTP/ND)")
     private String sendType;
 
-    @ApiModelProperty("배포서버")
+    @ApiModelProperty("배포서버(배포서버 코드 API를 통해 조회한 serverSeq)")
     private Long serverSeq;
 
-    @ApiModelProperty("사용")
+    @ApiModelProperty("사용여부(사용:Y/미사용:N")
     private String usedYn;
 }

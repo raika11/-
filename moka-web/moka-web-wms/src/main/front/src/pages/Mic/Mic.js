@@ -1,18 +1,16 @@
-import React, { useState, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
-import { MokaCard, MokaIcon, MokaIconTabs } from '@/components';
-import AgendaEdit from './MicAgendaEdit';
-import MicFeedList from './MicFeedList';
-import MicPostList from './MicPostList';
+import { MokaCard, MokaIcon, MokaIconTabs, MokaLoader } from '@/components';
+import MicAgendaEdit from './MicAgendaEdit';
 const AgendaList = React.lazy(() => import('./MicAgendaList'));
+const MicFeedList = React.lazy(() => import('./MicFeedList'));
+const MicPostList = React.lazy(() => import('./MicPostList'));
 
 /**
  * 시민 마이크
  */
 const Mic = ({ match }) => {
-    const [activeTabIdx, setActiveTabIdx] = useState(0);
-
     return (
         <div className="d-flex">
             <Helmet>
@@ -30,15 +28,22 @@ const Mic = ({ match }) => {
 
             {/* 아젠다 상세 */}
             <Route
-                path={[`${match.url}/add`, `${match.url}/:agndSeq`]}
+                path={[`${match.path}/add`, `${match.path}/:agndSeq`]}
                 exact
                 render={() => (
                     <MokaIconTabs
-                        tabWidth={860}
-                        onSelectNav={(idx) => setActiveTabIdx(idx)}
-                        tabs={[<AgendaEdit show={activeTabIdx === 0} />, <MicFeedList show={activeTabIdx === 1} />, <MicPostList show={activeTabIdx === 2} />]}
+                        className="flex-fill"
+                        tabs={[
+                            <MicAgendaEdit match={match} />,
+                            <Suspense fallback={<MokaLoader />}>
+                                <MicFeedList />
+                            </Suspense>,
+                            <Suspense fallback={<MokaLoader />}>
+                                <MicPostList />
+                            </Suspense>,
+                        ]}
                         tabNavs={[
-                            { title: '아젠다 수정', text: 'Info' },
+                            { title: '아젠다', text: 'Info' },
                             { title: '피드 목록', icon: <MokaIcon iconName="fal-comment-alt-lines" /> },
                             { title: '포스트 목록', icon: <MokaIcon iconName="fal-comment-alt" /> },
                         ]}

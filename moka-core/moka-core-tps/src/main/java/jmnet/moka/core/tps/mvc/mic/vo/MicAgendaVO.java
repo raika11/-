@@ -181,6 +181,12 @@ public class MicAgendaVO implements Serializable {
     private Long pollSeq = (long) 0;
 
     /**
+     * 중앙일보 투표명
+     */
+    @Column(name = "POLL_TITLE")
+    private String pollTitle;
+
+    /**
      * 아젠다 설명(요약)
      */
     @Length(max = 1000, message = "{tps.agenda.error.len.agndLead}")

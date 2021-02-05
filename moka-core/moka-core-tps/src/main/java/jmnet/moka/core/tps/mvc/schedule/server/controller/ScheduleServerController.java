@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.schedule.server.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -17,9 +18,12 @@ import jmnet.moka.core.tps.mvc.schedule.server.dto.*;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobDeletedContent;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobStatistic;
 import jmnet.moka.core.tps.mvc.schedule.server.service.DistributeServerService;
 import jmnet.moka.core.tps.mvc.schedule.server.service.JobContentService;
 import jmnet.moka.core.tps.mvc.schedule.server.service.JobDeletedContentService;
+import jmnet.moka.core.tps.mvc.schedule.server.service.JobStatisticService;
+import jmnet.moka.core.tps.mvc.schedule.server.vo.JobStatisticVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -40,6 +44,8 @@ import java.util.List;
 @Api(tags = {"스케쥴서버관리 API"})
 public class ScheduleServerController extends AbstractCommonController {
 
+    //작업통계
+    private final JobStatisticService jobStatisticService;
     //배포서버
     private final DistributeServerService distServerService;
     //작업
@@ -51,12 +57,47 @@ public class ScheduleServerController extends AbstractCommonController {
     private final MokaCrypt mokaCrypt;
 
     public ScheduleServerController(
+            JobStatisticService jobStatisticService,
             DistributeServerService distServerService, JobContentService jobContentService,
             JobDeletedContentService jobDeletedContentService, MokaCrypt mokaCrypt) {
+
+        this.jobStatisticService = jobStatisticService;
         this.distServerService = distServerService;
         this.jobContentService = jobContentService;
         this.jobDeletedContentService = jobDeletedContentService;
         this.mokaCrypt = mokaCrypt;
+    }
+
+    @ApiOperation(value = "작업 실행통계 목록조회")
+    @GetMapping("/job-statistic")
+    public ResponseEntity<?> getJobStatisticList(@Valid @SearchParam JobContentSearchDTO search){
+        ResultListDTO<JobStatisticVO> resultListMessage = new ResultListDTO<>();
+
+        Page<JobStatisticVO> returnValue = jobStatisticService.findAllJobStat(search);
+
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(returnValue.getContent());
+
+        ResultDTO<ResultListDTO<JobStatisticVO>> resultDTO = new ResultDTO<>(resultListMessage);
+        tpsLogger.success(LoggerCodes.ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "작업 실행현황 목록조회")
+    @GetMapping("/job-statistic/search")
+    public ResponseEntity<?> getJobContentList(@Valid @SearchParam JobStatisticSearchDTO search) {
+        Page<JobStatistic> returnValue = jobStatisticService.findJobStatisticList(search);
+
+        List<JobStatisticDTO> dtoList = modelMapper.map(returnValue.getContent(), JobStatisticDTO.TYPE);
+
+        ResultListDTO<JobStatisticDTO> resultList = new ResultListDTO<JobStatisticDTO>();
+        resultList.setList(dtoList);
+        resultList.setTotalCnt(returnValue.getTotalElements());
+
+        ResultDTO<ResultListDTO<JobStatisticDTO>> resultDTO = new ResultDTO<ResultListDTO<JobStatisticDTO>>(resultList);
+        tpsLogger.success(true);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
     @ApiOperation(value = "작업 목록조회")
@@ -246,7 +287,7 @@ public class ScheduleServerController extends AbstractCommonController {
             //삭제된 작업 복원
             JobContent jobContent = modelMapper.map(jobDeletedContent, JobContent.class);
             jobContent.setUsedYn("Y");
-            jobContent.setModId(getUserId(principal));  //복원자 ID 추가
+            jobContent.setRegId(getUserId(principal));  //복원자 ID 추가
             jobContentService.saveJobContent(jobContent);
 
             //복원된 작업 삭제

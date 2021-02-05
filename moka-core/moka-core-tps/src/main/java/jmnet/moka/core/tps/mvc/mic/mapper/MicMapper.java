@@ -77,6 +77,14 @@ public interface MicMapper extends BaseMapper<MicAgendaVO, MicAgendaSearchDTO> {
     Integer insertMicAgenda(MicAgendaVO micAgendaVO);
 
     /**
+     * 아젠다 수정
+     *
+     * @param micAgendaVO 아젠다 정보
+     * @return 성공여부
+     */
+    Integer updateMicAgenda(MicAgendaVO micAgendaVO);
+
+    /**
      * 아젠다 관련기사 모두삭제
      *
      * @param agndSeq 아젠다 순번

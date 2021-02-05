@@ -172,7 +172,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
                 {/* 탭 컨텐츠 */}
                 <Tab.Content
                     className={clsx(
-                        'p-0',
+                        'flex-fill p-0',
                         {
                             'd-none': !isExpand,
                         },
@@ -188,7 +188,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
                 </Tab.Content>
 
                 {/* 탭 Nav */}
-                <Nav variant="tabs" className="d-flex" style={{ width: tabNavWidth }}>
+                <Nav variant="tabs" className="d-flex flex-shrink-0" style={{ width: tabNavWidth }}>
                     {tabNavs.map((nav, idx) => (
                         <Nav.Item key={idx}>
                             <OverlayTrigger key={idx} placement={placement} overlay={<Tooltip id={`tooltip-${idx}-${nav.title}`}>{nav.title}</Tooltip>}>
@@ -197,7 +197,7 @@ const MokaIconTabs = forwardRef((props, ref) => {
                                     onSelect={handleSelect}
                                     className="text-center flex-fill h-100 border-0 pl-0 pr-0 d-flex justify-content-center align-items-center"
                                     active={activeKey.toString() === idx.toString() && isExpand}
-                                    variant="gray150"
+                                    variant="gray-150"
                                 >
                                     {nav.icon || <span className="h6 mb-0">{nav.text}</span>}
                                 </Nav.Link>

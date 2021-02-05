@@ -6,13 +6,14 @@ export default [
     },
     {
         headerName: '아젠다',
-        field: 'agndTitle',
+        field: 'agndKwd',
         flex: 1,
-        tooltipField: 'agndTitle',
+        width: 190,
+        tooltipField: 'agndKwd',
     },
     {
         headerName: '포스트',
-        width: 80,
+        width: 60,
         field: 'answCnt',
         cellClassRules: {
             'color-info': () => true,

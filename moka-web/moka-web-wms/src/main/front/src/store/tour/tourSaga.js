@@ -46,7 +46,7 @@ const getTourDenyList = createRequestSaga(act.GET_TOUR_DENY_LIST, api.getTourDen
  * 견학 휴일 등록, 수정
  */
 function* saveTourDeny({ payload }) {
-    const { tourDeny, callback } = payload;
+    const { tourDeny, callback, search } = payload;
     const ACTION = act.SAVE_TOUR_DENY;
     let response, callbackData;
 
@@ -62,9 +62,16 @@ function* saveTourDeny({ payload }) {
 
         if (response.data.header.success) {
             // 목록 다시 검색
-            yield put({
-                type: act.GET_TOUR_DENY_LIST,
-            });
+            if (search) {
+                yield put({
+                    type: act.GET_TOUR_DENY_MONTH_LIST,
+                    payload: search,
+                });
+            } else {
+                yield put({
+                    type: act.GET_TOUR_DENY_LIST,
+                });
+            }
         } else {
             const { body } = response.data.body;
 
@@ -90,7 +97,7 @@ function* saveTourDeny({ payload }) {
  * 견학 휴일 삭제
  */
 function* deleteTourDeny({ payload }) {
-    const { denySeq, callback } = payload;
+    const { denySeq, callback, search } = payload;
     const ACTION = act.DELETE_TOUR_DENY;
     let response, callbackData;
 
@@ -99,9 +106,16 @@ function* deleteTourDeny({ payload }) {
         response = yield call(api.deleteTourDeny, { denySeq });
         callbackData = response.data;
 
-        if (response.data.header.success && response.data.body) {
+        if (response.data.header.success) {
             // 휴일 목록 검색
-            yield put({ type: act.GET_TOUR_DENY_LIST });
+            if (search) {
+                yield put({
+                    type: act.GET_TOUR_DENY_MONTH_LIST,
+                    payload: search,
+                });
+            } else {
+                yield put({ type: act.GET_TOUR_DENY_LIST });
+            }
         }
     } catch (e) {
         callbackData = errorResponse(e);

@@ -44,10 +44,9 @@ const TourMonthCalendar = (props) => {
     const holidayList = useSelector((store) => store.tour.holidayList);
     const tourApplyList = useSelector((store) => store.tour.tourApplyList);
     const tourSetup = useSelector((store) => store.tour.tourSetup);
-    const [calendar, setCalendar] = useState(null);
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
-    const [day, setDay] = useState([]);
+    const [day, setDay] = useState('');
     const [holidayEvents, setHolidayEvents] = useState([]);
     const [applyEvents, setApplyEvents] = useState([]);
     const [clickDate, setClickDate] = useState('');
@@ -57,35 +56,22 @@ const TourMonthCalendar = (props) => {
     const [cancelModal, setCancelModal] = useState(false);
 
     const calendarRef = useRef(null);
-    const setHolidayRef = useRef(null);
-    const cancelHolidayRef = useRef(null);
-
-    const handleEventRemove = () => {
-        // console.log(cancelHolidayRef.current);
-        if (cancelHolidayRef.current) {
-            cancelHolidayRef.current.cancelHoliday();
-        }
-    };
+    const inputRef = useRef(null);
 
     useEffect(() => {
-        setCalendar(calendarRef.current);
-        console.log(calendarRef.current.calendarApi);
-    }, []);
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
 
     useEffect(() => {
         if (Object.keys(tourSetup).length < 1) {
             dispatch(getTourSetup());
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (Object.keys(tourSetup).length > 0) {
-            let weekArr = tourSetup.tourWeekYn.split('');
+        } else {
+            let weekArr = tourSetup.tourWeekYn;
             setDay(weekArr);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tourSetup]);
+    }, [dispatch, tourSetup]);
 
     useEffect(() => {
         // console.log(calendarRef.current);
@@ -104,10 +90,6 @@ const TourMonthCalendar = (props) => {
                 }),
             );
         }
-
-        return () => {
-            clearStore();
-        };
     }, [dispatch, month, year]);
 
     useEffect(() => {
@@ -159,8 +141,7 @@ const TourMonthCalendar = (props) => {
 
     return (
         <>
-            {/* {day.length > 0 && ( */}
-            {/* <> */}
+            {/* <input type="hidden" ref={inputRef} value="" /> */}
             <FullCalendar
                 ref={calendarRef}
                 height="100%"
@@ -177,40 +158,21 @@ const TourMonthCalendar = (props) => {
                 locale="ko"
                 // 제목에 표시 될 텍스트
                 titleFormat={(t) => {
-                    setYear(t.date.year);
+                    setYear(`${t.date.year}`);
                     setMonth(`0${t.date.month + 1}`.substr(-2));
-                    return `${t.date.year}년 ${t.date.month + 1}월`;
+                    let title = `${t.date.year}년 ${t.date.month + 1}월`;
+
+                    return title;
                 }}
                 // true이면 6주로 fix된 월별 보기
                 fixedWeekCount={false}
                 bootstrapFontAwesome={false}
-                events={
-                    { events: [...holidayEvents, ...applyEvents], color: '#FF3907' }
-                    // demoEvents
-                }
-                // datesSet={(e) => {
-                //     console.log(e);
-                // }}
-                // selectable={true}
-                // selectOverlap={false}
-                // select={(s) => {
-                //     s.view.calendar.unselect();
-
-                //     let year = s.start.getFullYear();
-                //     let month = `0${s.start.getMonth() + 1}`.substr(-2);
-                //     let date = `0${s.start.getDate()}`.substr(-2);
-                //     let targetDate = `${year}-${month}-${date}`;
-                //     let eventDate = s.view.calendar.getEvents().filter((e) => e.startStr === targetDate);
-                //     if (eventDate.length < 1) {
-                //         setHolidayModal(true);
-                //     }
-                // }}
+                events={{ events: [...holidayEvents, ...applyEvents], color: '#FF3907' }}
                 dateClick={(d) => {
                     // console.log(d);
-
                     let eventDate = d.view.calendar.getEvents().filter((e) => e.startStr === d.dateStr);
                     // let applyDate = d.view.calendar.getEvents().filter((e) => e.extendedProps)
-                    console.log(d.extendedProps);
+                    // console.log(d.extendedProps);
                     if (eventDate.length < 1) {
                         setHolidayModal(true);
                     } else {
@@ -226,16 +188,25 @@ const TourMonthCalendar = (props) => {
                     setClickDate(d.dateStr);
                     // date.dayEl.style.backgroundColor = 'red';
                 }}
+                datesSet={(d) => {
+                    if (day !== '') {
+                        let a = document.querySelectorAll('.fc-daygrid-day');
+                        // let myday = inputRef.current.value;
+                        a.forEach((e) => {
+                            if (day[e.dataset['dow']] === 'N') {
+                                e.firstChild.style.visibility = 'hidden';
+                            }
+                        });
+                    }
+                }}
                 viewDidMount={(view) => {
-                    let today = document.querySelector('.fc-day-today');
-                    today.style.backgroundColor = '#fff';
-
                     // if (today.dataset['date'].split('-')[0] === calendarDate[0] && `0${calendarDate[1]}`.substr(-2) === today.dataset['date'].split('-')[1]) {
                     //     let circle = document.createElement('div');
                     //     let top = today.querySelector('.fc-daygrid-day-top');
                     //     circle.className = 'fc-set-today-number';
                     //     top.appendChild(circle);
                     // }
+                    // console.log(day);
 
                     document.addEventListener('mouseover', function (e) {
                         if (e.target.tagName !== 'DIV' && e.target.tagName !== 'A') {
@@ -245,7 +216,7 @@ const TourMonthCalendar = (props) => {
                             return;
                         }
                         let frame;
-                        let calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
+                        let calendarDate;
                         let currentDate;
                         let targetEl;
                         if (e.target.classList[0] === 'fc-daygrid-day-number') {
@@ -263,6 +234,7 @@ const TourMonthCalendar = (props) => {
                         if (frame.querySelector('.fc-daygrid-event-harness')) {
                             return;
                         }
+                        calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
                         currentDate = frame.dataset['date'].split('-');
                         if (calendarDate[0] === currentDate[0] && `0${calendarDate[1]}`.substr(-2) === currentDate[1]) {
                             if (!frame.querySelector('.fc-set-holiday')) {
@@ -279,7 +251,7 @@ const TourMonthCalendar = (props) => {
                             return;
                         }
                         let frame;
-                        let calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
+                        let calendarDate;
                         let currentDate;
                         if (e.target.classList[0] === 'fc-daygrid-day-number') {
                             frame = e.target.parentElement.parentElement.parentElement;
@@ -290,6 +262,7 @@ const TourMonthCalendar = (props) => {
                         } else {
                             return;
                         }
+                        calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
                         currentDate = frame.dataset['date'].split('-');
                         if (calendarDate[0] === currentDate[0] && `0${calendarDate[1]}`.substr(-2) === currentDate[1]) {
                             if (frame.querySelector('.fc-set-holiday') !== null) {
@@ -301,9 +274,9 @@ const TourMonthCalendar = (props) => {
                 // Dom에 td가 추가된 직후 호출
                 // 최초 한번 그려진 후 날짜가 바뀌거나 표시하는 월이 다를때 다시 그리지 않음
                 dayCellDidMount={(cell) => {
-                    // console.log(cell);
                     let frame = cell.el;
-                    // console.log(frame);
+                    frame.dataset['dow'] = cell.dow;
+                    console.log(day);
 
                     // let calendarMonth = `0${cell.view.calendar.getDate().getMonth() + 1}`.substr(-2);
                     // let currentDate = cell.el.dataset;
@@ -406,34 +379,40 @@ const TourMonthCalendar = (props) => {
                     // }
                 }}
                 eventDidMount={(e) => {
-                    // console.log(e);
-
+                    // if (day !== '') {
+                    //     inputRef.current.value = day;
+                    // }
                     let button = document.createElement('button');
                     let top = e.el;
-                    let title = top.querySelector('.fc-event-title');
-
+                    let title = top.querySelector('.fc-daygrid-day');
+                    let a = {};
+                    a.el = top;
                     if (e.event.extendedProps.tourStatus === 'A' && e.event.extendedProps.tourTime !== '') {
-                        button.className = 'btn btn-positive fc-set-event-button';
-                        button.innerText = '확정';
-                        title.style.position = 'absolute';
-                        title.style.top = '20px';
-                        title.style.left = '15px';
-                        top.appendChild(button);
+                        a.type = '1번';
+                        a.title = title;
+                        // button.className = 'btn btn-positive fc-set-event-button';
+                        // button.innerText = '확정';
+                        // title.style.position = 'absolute';
+                        // title.style.top = '20px';
+                        // title.style.left = '15px';
+                        // top.appendChild(button);
                     } else if (e.event.extendedProps.tourStatus === 'S' && e.event.extendedProps.tourTime !== '') {
-                        button.className = 'btn btn-negative fc-set-event-button';
-                        button.innerText = '대기';
-                        title.style.position = 'absolute';
-                        title.style.top = '20px';
-                        title.style.left = '15px';
-                        top.appendChild(button);
+                        a.type = '2번';
+                        a.title = title;
+                        // button.className = 'btn btn-negative fc-set-event-button';
+                        // button.innerText = '대기';
+                        // title.style.position = 'absolute';
+                        // title.style.top = '20px';
+                        // title.style.left = '15px';
+                        // top.appendChild(button);
                     } else if (e.event.extendedProps.denyRepeatYn === 'N') {
                         button.className = 'btn btn-negative fc-set-event-button';
                         button.innerText = '휴일 해제';
                         top.appendChild(button);
                     }
+                    a.m = document.querySelector('.fc-toolbar-title').textContent;
                 }}
                 eventClick={(e) => {
-                    // console.log(e.event.);
                     if (e.event.allDay) {
                         setCancelModal(true);
                     } else {
@@ -441,13 +420,10 @@ const TourMonthCalendar = (props) => {
                     }
                     setSelectedData(e.event._def.extendedProps);
                 }}
-                eventRemove={handleEventRemove}
             />
-            <SetHolidayModal ref={setHolidayRef} show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} calendar={calendar} />
+            <SetHolidayModal show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} year={year} month={month} />
             <SummaryApplyModal show={summaryModal} onHide={() => setSummaryModal(false)} data={selectedData} />
-            <CancelHolidayModal ref={cancelHolidayRef} show={cancelModal} onHide={() => setCancelModal(false)} data={selectedData} calendar={calendar} />
-            {/* </> */}
-            {/* )} */}
+            <CancelHolidayModal show={cancelModal} onHide={() => setCancelModal(false)} data={selectedData} year={year} month={month} />
         </>
     );
 };

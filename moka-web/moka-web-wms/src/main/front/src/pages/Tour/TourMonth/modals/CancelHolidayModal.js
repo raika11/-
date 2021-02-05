@@ -1,19 +1,19 @@
-import React, { useCallback, forwardRef, useImperativeHandle } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { MokaModal } from '@/components';
 import { deleteTourDeny } from '@/store/tour';
 import toast, { messageBox } from '@/utils/toastUtil';
 
-const CancelHolidayModal = forwardRef((props, ref) => {
-    const { show, onHide, data, calendar } = props;
+const CancelHolidayModal = (props) => {
+    const { show, onHide, data, year, month } = props;
     const dispatch = useDispatch();
 
-    // console.log(calendar);
     const handleClickConfirm = useCallback(() => {
         if (data.denySeq && data.denyRepeatYn === 'N') {
             dispatch(
                 deleteTourDeny({
                     denySeq: data.denySeq,
+                    search: { year, month },
                     callback: ({ header, body }) => {
                         if (header.success && body) {
                             toast.success('휴일 지정이 해제되었습니다.');
@@ -25,15 +25,7 @@ const CancelHolidayModal = forwardRef((props, ref) => {
                 }),
             );
         }
-    }, [data.denyRepeatYn, data.denySeq, dispatch, onHide]);
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            cancelHoliday: handleClickConfirm,
-        }),
-        [handleClickConfirm],
-    );
+    }, [data.denySeq, data.denyRepeatYn, dispatch, year, month, onHide]);
 
     return (
         <MokaModal
@@ -51,6 +43,6 @@ const CancelHolidayModal = forwardRef((props, ref) => {
             <p className="mb-0">확인을 클릭하시면 휴일 지정이 해제됩니다.</p>
         </MokaModal>
     );
-});
+};
 
 export default CancelHolidayModal;

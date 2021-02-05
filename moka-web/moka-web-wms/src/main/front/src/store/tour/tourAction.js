@@ -47,7 +47,7 @@ export const getTourApplyMonthList = createAction(GET_TOUR_APPLY_MONTH_LIST, ({ 
 export const PUT_TOUR_GUIDE_LIST = 'tour/PUT_TOUR_GUIDE_LIST';
 export const putTourGuideList = createAction(PUT_TOUR_GUIDE_LIST, ({ tourGuideList, callback }) => ({ tourGuideList, callback }));
 export const SAVE_TOUR_DENY = 'tour/SAVE_TOUR_DENY';
-export const saveTourDeny = createAction(SAVE_TOUR_DENY, ({ tourDeny, callback }) => ({ tourDeny, callback }));
+export const saveTourDeny = createAction(SAVE_TOUR_DENY, ({ tourDeny, search, callback }) => ({ tourDeny, search, callback }));
 export const PUT_TOUR_SETUP = 'tour/PUT_TOUR_SETUP';
 export const putTourSetup = createAction(PUT_TOUR_SETUP, ({ tourSetup, callback }) => ({ tourSetup, callback }));
 export const PUT_TOUR_APPLY = 'tour/PUT_TOUR_APPLY';
@@ -57,7 +57,7 @@ export const putTourApply = createAction(PUT_TOUR_APPLY, ({ tourApply, callback 
  * 삭제
  */
 export const DELETE_TOUR_DENY = 'tour/DELETE_TOUR_DENY';
-export const deleteTourDeny = createAction(DELETE_TOUR_DENY, ({ denySeq, callback }) => ({ denySeq, callback }));
+export const deleteTourDeny = createAction(DELETE_TOUR_DENY, ({ denySeq, search, callback }) => ({ denySeq, search, callback }));
 export const DELETE_TOUR_APPLY = 'tour/DELETE_TOUR_APPLY';
 export const deleteTourApply = createAction(DELETE_TOUR_APPLY, ({ tourSeq, callback }) => ({ tourSeq, callback }));
 

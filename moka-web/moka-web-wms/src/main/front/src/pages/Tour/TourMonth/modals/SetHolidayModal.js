@@ -1,4 +1,4 @@
-import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useCallback } from 'react';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -7,8 +7,8 @@ import { saveTourDeny } from '@/store/tour';
 import { DB_DATEFORMAT } from '@/constants';
 import toast from '@/utils/toastUtil';
 
-const SetHolidayModal = forwardRef((props, ref) => {
-    const { show, onHide, date } = props;
+const SetHolidayModal = (props) => {
+    const { show, onHide, date, year, month } = props;
     const dispatch = useDispatch();
     const [holidayName, setHolidayName] = useState('');
 
@@ -28,6 +28,7 @@ const SetHolidayModal = forwardRef((props, ref) => {
         dispatch(
             saveTourDeny({
                 tourDeny: saveObj,
+                search: { year, month },
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success('휴일이 지정되었습니다.');
@@ -38,15 +39,7 @@ const SetHolidayModal = forwardRef((props, ref) => {
                 },
             }),
         );
-    }, [date, dispatch, handleHide, holidayName]);
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            setHoliday: handleClickConfirm,
-        }),
-        [handleClickConfirm],
-    );
+    }, [date, dispatch, handleHide, holidayName, month, year]);
 
     return (
         <MokaModal
@@ -68,6 +61,6 @@ const SetHolidayModal = forwardRef((props, ref) => {
             </Form>
         </MokaModal>
     );
-});
+};
 
 export default SetHolidayModal;

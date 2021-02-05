@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaModal, MokaInput } from '@components';
-import { unescapeHtmlArticle, escapeHtmlArticle } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { putArticleEditTitle, PUT_ARTICLE_EDIT_TITLE } from '@store/article';
@@ -56,8 +56,6 @@ const ChangeArtGroupModal = (props) => {
             dispatch(
                 putArticleEditTitle({
                     totalId: artData.totalId,
-                    artEditTitle: artEditTitle.length > 0 ? escapeHtmlArticle(artEditTitle) : null,
-                    artEditMobTitle: artEditMobTitle.length > 0 ? escapeHtmlArticle(artEditMobTitle) : null,
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);

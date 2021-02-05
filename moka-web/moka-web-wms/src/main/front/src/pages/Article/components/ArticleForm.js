@@ -15,7 +15,7 @@ import { MokaEditorCore } from '@components/MokaEditor';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import commonUtil from '@utils/commonUtil';
-import { unescapeHtmlArticle, escapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
+import { unescapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 
@@ -229,8 +229,6 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             },
             reporterList: temp.reporterList,
             tagList: temp.tagList,
-            artTitle: escapeHtmlArticle(temp.artTitle),
-            artSubTitle: escapeHtmlArticle(temp.artSubTitle),
             categoryList: temp.categoryList,
         };
 

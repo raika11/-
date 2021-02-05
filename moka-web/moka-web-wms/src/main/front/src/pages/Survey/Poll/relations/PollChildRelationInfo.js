@@ -191,8 +191,8 @@ const PollChildRelation = () => {
                             <Col xs={12}>
                                 <Form.Group>
                                     <Form.Label className="pr-2">관련 투표</Form.Label>
-                                    <Button variant="searching" size="sm" onClick={handleClickSearch}>
-                                        검색
+                                    <Button variant="searching" onClick={handleClickSearch}>
+                                        투표 검색
                                     </Button>
                                 </Form.Group>
                             </Col>

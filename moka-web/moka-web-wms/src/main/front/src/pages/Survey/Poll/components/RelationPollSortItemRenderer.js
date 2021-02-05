@@ -19,7 +19,7 @@ const RelationPollSortItemRenderer = ({ item, onDelete }) => {
                 <Col xs={10}>
                     <Row>
                         <Col xs={2} className="mb-0 pl-0 pr-0">
-                            <MokaInputLabel name="id" id={`poll-id-${item.ordNo}`} labelWidth={30} value={`ID: ${item.seqNo}`} disabled />
+                            <MokaInputLabel name="id" id={`poll-id-${item.ordNo}`} labelWidth={30} value={`ID: ${item.contentId}`} disabled />
                         </Col>
                         <Col xs={10} className="mb-0 pl-0 pr-0">
                             <MokaInputLabel name="title" id={`poll-title-${item.ordNo}`} labelWidth={30} value={item.title} disabled />

@@ -62,13 +62,11 @@ const MicAgendaEdit = ({ match }) => {
      * 저장
      */
     const handleClickSave = () => {
-        // 관련기사 타이틀 escapeHtml 변환
-        const relArticleList = temp.relArticleList;
         // 공개일 포맷 변환
         let agndServiceDt = moment(temp.agndServiceDt);
         agndServiceDt = agndServiceDt.isValid() ? agndServiceDt.format(DB_DATEFORMAT) : null;
 
-        const saveObj = { ...temp, agndServiceDt, relArticleList };
+        const saveObj = { ...temp, agndServiceDt };
 
         if (validate(saveObj)) {
             dispatch(

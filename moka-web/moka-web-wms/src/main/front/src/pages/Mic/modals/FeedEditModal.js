@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { GET_MIC_FEED, SAVE_MIC_FEED } from '@store/mic';
 import { MokaModal, MokaInputLabel } from '@components';
+import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
@@ -36,6 +37,7 @@ const FeedEditModal = (props) => {
                     relDiv: value,
                 },
             });
+            setError({});
         } else if (name === 'relUrl') {
             onChange({
                 key: 'answerRel',
@@ -49,7 +51,7 @@ const FeedEditModal = (props) => {
         }
 
         if (error[name]) {
-            setError({ ...error, [name]: true });
+            setError({ ...error, [name]: false });
         }
     };
 
@@ -67,6 +69,9 @@ const FeedEditModal = (props) => {
                 [imgLinkField]: !data ? null : feed.answerRel[imgLinkField],
             },
         });
+        if (error[imgLinkField]) {
+            setError({ ...error, [imgLinkField]: false });
+        }
     };
 
     /**
@@ -84,7 +89,47 @@ const FeedEditModal = (props) => {
                 artThumbnailFile: null,
             },
         });
+        setError({ ...error, artTitle: false });
         setMshow(false);
+    };
+
+    /**
+     * 유효성 검사
+     * @param {object} feed 데이터
+     */
+    const validate = (feed) => {
+        let isInvalid = false;
+
+        // 피드타입별 데이터 체크
+        if (feed.answerRel?.relDiv === 'I') {
+            // 이미지일 때, 이미지 파일이나 이미지링크(relUrl)이 필수
+            if (!feed.answerRel?.artThumbnailFile && !feed.answerRel?.relUrl) {
+                setError({ ...error, relUrl: true });
+                isInvalid = isInvalid || true;
+            }
+        } else if (feed.answerRel?.relDiv === 'M') {
+            // 동영상일 때, 소스코드(relUrl) 필수
+            if (!feed.answerRel?.relUrl || !REQUIRED_REGEX.test(feed.answerRel?.relUrl)) {
+                setError({ ...error, relUrl: true });
+                isInvalid = isInvalid || true;
+            }
+        } else if (feed.answerRel?.relDiv === 'A') {
+            // 기사일 때, 페이지URL(relUrl), 페이지제목 필수
+            let ne = {};
+            if (!feed.answerRel?.relUrl || !REQUIRED_REGEX.test(feed.answerRel?.relUrl)) {
+                ne = { relUrl: true };
+            }
+            if (!feed.answerRel?.artTitle || !REQUIRED_REGEX.test(feed.answerRel?.artTitle)) {
+                ne = { ...ne, artTitle: true };
+            }
+
+            if (Object.keys(ne).length > 0) {
+                setError({ ...error, ...ne });
+                isInvalid = isInvalid || true;
+            }
+        }
+
+        return !isInvalid;
     };
 
     /**
@@ -92,7 +137,7 @@ const FeedEditModal = (props) => {
      */
     const handleSave = () => {
         // validate
-        if (true) {
+        if (validate(feed)) {
             onSave(feed);
         }
     };
@@ -175,6 +220,8 @@ const FeedEditModal = (props) => {
                         }
                         as="imageFile"
                         inputProps={{ img: feed.answerRel?.relUrl, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'relUrl'), deleteButton: true }}
+                        isInvalid={error.relUrl}
+                        required
                     />
                 )}
 
@@ -190,6 +237,8 @@ const FeedEditModal = (props) => {
                         name="relUrl"
                         value={feed.answerRel?.relUrl}
                         onChange={handleChangeValue}
+                        isInvalid={error.relUrl}
+                        required
                     />
                 )}
 

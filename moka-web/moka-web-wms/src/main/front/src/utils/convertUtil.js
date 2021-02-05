@@ -27,36 +27,12 @@ export const objectToFormData = (val, formData = new FormData(), namespace = '')
 };
 
 /**
- * escape html special chars
- * @param {string} str 문자열
- */
-export const escapeHtml = (str) => {
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '[': '&#91;',
-        ']': '&#93;',
-        '‘': '&#8216;',
-        '’': '&#8217;',
-        '%': '&#37;',
-        '·': '&middot;',
-    };
-    return str.replace(/[&<>"'\[\]‘’%·]/g, function (m) {
-        return map[m];
-    });
-};
-
-/**
  * unescape html special chars
  * @param {string} str 문자열
  */
 export const unescapeHtml = (str) => {
     if (str && str !== '') {
         return str
-            .replace(/&amp;/g, '&')
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
             .replace(/&#0*39;/g, "'")
@@ -68,42 +44,19 @@ export const unescapeHtml = (str) => {
             .replace(/&#8217;/g, '’')
             .replace(/&#037;/g, '%')
             .replace(/&middot;/g, '·')
-            .replace(/&hellip;/g, '…');
+            .replace(/&hellip;/g, '…')
+            .replace(/&amp;/g, '&');
     } else return str;
 };
 
 /**
- * 등록기사/수신기사 문자열 escape html
- * @param {string} str 문자열
- */
-export const escapeHtmlArticle = (str) => {
-    const map = {
-        "'": '&#39;',
-        '"': '&#34;',
-        '[': '&#91;',
-        ']': '&#93;',
-        '...': '…',
-        '\r\n': '<br/>',
-    };
-    return str
-        .replace(/["'\[\]]/g, function (m) {
-            return map[m];
-        })
-        .replace(/\.{3}/g, function (m) {
-            return map[m];
-        })
-        .replace(/\r\n/g, function (m) {
-            return map[m];
-        });
-};
-
-/**
  * 등록기사/수신기사 문자열 unescape html
+ * 기사에만 타는 특문 + 기본 특문
  * @param {string} str 문자열
  */
 export const unescapeHtmlArticle = (str) => {
     if (str && str !== '') {
-        return str
+        const ns = str
             .replace(/&#0*39;/g, "'")
             .replace(/&quot;/g, '"')
             .replace(/&#34;/g, '"')
@@ -111,6 +64,7 @@ export const unescapeHtmlArticle = (str) => {
             .replace(/&#93;/g, ']')
             .replace(/…/g, '...')
             .replace(/\<br\/\>/g, '\r\n');
+        return unescapeHtml(ns);
     } else return str;
 };
 
@@ -130,3 +84,53 @@ export const invalidListToError = (invalidList) => {
           )
         : {};
 };
+
+/**
+ * 사용 X
+ * escape html special chars
+ * @param {string} str 문자열
+ */
+// const escapeHtml = (str) => {
+//     const map = {
+//         '&': '&amp;',
+//         '<': '&lt;',
+//         '>': '&gt;',
+//         '"': '&quot;',
+//         "'": '&#39;',
+//         '[': '&#91;',
+//         ']': '&#93;',
+//         '‘': '&#8216;',
+//         '’': '&#8217;',
+//         '%': '&#37;',
+//         '·': '&middot;',
+//     };
+//     return str.replace(/[&<>"'\[\]‘’%·]/g, function (m) {
+//         return map[m];
+//     });
+// };
+
+/**
+ * 사용 X
+ * 등록기사/수신기사 문자열 escape html
+ * @param {string} str 문자열
+ */
+// const escapeHtmlArticle = (str) => {
+//     const map = {
+//         "'": '&#39;',
+//         '"': '&#34;',
+//         '[': '&#91;',
+//         ']': '&#93;',
+//         '...': '…',
+//         '\r\n': '<br/>',
+//     };
+//     return str
+//         .replace(/["'\[\]]/g, function (m) {
+//             return map[m];
+//         })
+//         .replace(/\.{3}/g, function (m) {
+//             return map[m];
+//         })
+//         .replace(/\r\n/g, function (m) {
+//             return map[m];
+//         });
+// };

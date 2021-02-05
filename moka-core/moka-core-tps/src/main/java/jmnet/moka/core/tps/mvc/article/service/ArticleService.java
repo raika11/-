@@ -110,6 +110,13 @@ public interface ArticleService {
      */
     List<ArticleHistoryVO> findAllArticleHistory(ArticleHistorySearchDTO search);
 
+    /**
+     * 특수문자 escape
+     *
+     * @param updateDto 수정정보
+     */
+    void escapeHtml(ArticleBasicUpdateDTO updateDto);
+
     //    /**
     //     * CDN등록
     //     *

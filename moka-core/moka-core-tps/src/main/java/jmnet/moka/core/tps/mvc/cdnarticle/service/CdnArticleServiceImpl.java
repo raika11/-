@@ -11,10 +11,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
+import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.cdnarticle.dto.CdnArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.cdnarticle.entity.CdnArticle;
 import jmnet.moka.core.tps.mvc.cdnarticle.repository.CdnArticleRepository;
@@ -27,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Description: 설명
@@ -46,6 +50,9 @@ public class CdnArticleServiceImpl implements CdnArticleService {
 
     @Autowired
     private RestTemplateHelper restTemplateHelper;
+
+    @Autowired
+    private ArticleService articleService;
 
     @Value("${static.url}")
     private String staticUrl;
@@ -105,6 +112,13 @@ public class CdnArticleServiceImpl implements CdnArticleService {
         // cdn upload가 하나라도 되면, 디비에 등록한다.
         CdnArticle saveArticle = null;
         if (inserted) {
+
+            // escape
+            if (McpString.isNotEmpty(article.getTitle())) {
+                article.setTitle(HtmlUtils.htmlEscape(article.getTitle()));
+                article.setTitle(ArticleEscapeUtil.htmlEscape(article.getTitle()));
+            }
+
             // 디비등록
             saveArticle = cdnArticleRepository.save(article);
 

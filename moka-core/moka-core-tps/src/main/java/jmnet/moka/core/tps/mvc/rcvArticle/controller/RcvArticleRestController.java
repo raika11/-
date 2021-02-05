@@ -127,7 +127,7 @@ public class RcvArticleRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "등록기사로 등록")
     @PostMapping(value = "/articles/{rid}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postArticle(@ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid,
+    public ResponseEntity<?> postArticle(@ApiParam(value = "수신기사아이디(필수)", required = true) @PathVariable("rid") Long rid,
             @ApiParam("수정할 정보(기자목록,분류코드목록,태그목록)") @RequestBody @Valid RcvArticleBasicUpdateDTO updateDto)
             throws Exception {
 

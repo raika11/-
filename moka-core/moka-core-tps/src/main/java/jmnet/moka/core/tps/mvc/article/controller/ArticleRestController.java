@@ -421,8 +421,8 @@ public class ArticleRestController extends AbstractCommonController {
 
     @ApiOperation("기사수정")
     @PutMapping(value = "/{totalId}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> putArticle(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
-            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @RequestBody @Valid ArticleBasicUpdateDTO updateDto)
+    ResponseEntity<?> putArticle(@ApiParam(value = "서비스기사아이디(필수)", required = true) @PathVariable("totalId") Long totalId,
+            @ApiParam("수정할 정보(제목,부제목,본문,기자목록,분류코드목록,태그목록)") @RequestBody @Valid ArticleBasicUpdateDTO updateDto)
             throws Exception {
 
         // 기사 상세조회

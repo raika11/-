@@ -13,6 +13,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.BulkSiteCode;
+import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
@@ -38,6 +39,7 @@ import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Article 서비스 구현체
@@ -89,6 +91,11 @@ public class ArticleServiceImpl implements ArticleService {
     public void saveArticleTitle(ArticleBasic articleBasic, ArticleTitleDTO articleTitleDTO) {
         // 웹제목
         if (McpString.isNotEmpty(articleTitleDTO.getArtEditTitle())) {
+
+            // escape
+            articleTitleDTO.setArtEditTitle(HtmlUtils.htmlEscape(articleTitleDTO.getArtEditTitle()));
+            articleTitleDTO.setArtEditTitle(ArticleEscapeUtil.htmlEscape(articleTitleDTO.getArtEditTitle()));
+
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DP");
             if (articleTitle.isPresent()) {
                 // 수정
@@ -110,6 +117,11 @@ public class ArticleServiceImpl implements ArticleService {
 
         // 모바일제목
         if (McpString.isNotEmpty(articleTitleDTO.getArtEditMobTitle())) {
+
+            // escape
+            articleTitleDTO.setArtEditMobTitle(HtmlUtils.htmlEscape(articleTitleDTO.getArtEditMobTitle()));
+            articleTitleDTO.setArtEditMobTitle(ArticleEscapeUtil.htmlEscape(articleTitleDTO.getArtEditMobTitle()));
+
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DM");
             if (articleTitle.isPresent()) {
                 // 수정
@@ -290,6 +302,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public boolean insertArticleIud(ArticleBasic articleBasic, ArticleBasicUpdateDTO updateDto) {
 
+        // html escape
+        this.escapeHtml(updateDto);
+
         Map paramMap = new HashMap();
         paramMap.put("totalId", articleBasic.getTotalId());
         paramMap.put("sourceCode", articleBasic.getSourceCode());
@@ -434,6 +449,19 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleHistoryVO> findAllArticleHistory(ArticleHistorySearchDTO search) {
         return articleMapper.upaArticleHistoryListSel(search);
         //        return articleHistoryRepository.findByTotalIdOrderBySeqNoDesc(totalId, search.getPageable());
+    }
+
+    @Override
+    public void escapeHtml(ArticleBasicUpdateDTO updateDto) {
+        if (McpString.isNotEmpty(updateDto.getArtTitle())) {
+            updateDto.setArtTitle(HtmlUtils.htmlEscape(updateDto.getArtTitle()));
+            updateDto.setArtTitle(ArticleEscapeUtil.htmlEscape(updateDto.getArtTitle()));
+        }
+
+        if (McpString.isNotEmpty(updateDto.getArtSubTitle())) {
+            updateDto.setArtSubTitle(HtmlUtils.htmlEscape(updateDto.getArtSubTitle()));
+            updateDto.setArtSubTitle(ArticleEscapeUtil.htmlEscape(updateDto.getArtSubTitle()));
+        }
     }
 
     //    @Override

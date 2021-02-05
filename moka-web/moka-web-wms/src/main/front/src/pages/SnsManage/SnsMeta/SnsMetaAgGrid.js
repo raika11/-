@@ -4,6 +4,7 @@ import { MokaTable } from '@components';
 import { useDispatch } from 'react-redux';
 import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import { useHistory } from 'react-router-dom';
+import produce from 'immer';
 
 const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
@@ -15,7 +16,20 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     };
 
     const handleChangeSearchOption = (option) => {
-        dispatch(changeSnsMetaSearchOptions({ ...searchOptions, [option.key]: option.value, page: 0 }));
+        const name = option.key;
+        const value = option.value;
+        const options = { ...searchOptions };
+        dispatch(
+            changeSnsMetaSearchOptions(
+                //{ ...searchOptions, [option.key]: option.value, page: 0 })
+                produce(options, (draft) => {
+                    draft[name] = value;
+                    if (name === 'size') {
+                        draft['page'] = 0;
+                    }
+                }),
+            ),
+        );
     };
 
     useEffect(() => {

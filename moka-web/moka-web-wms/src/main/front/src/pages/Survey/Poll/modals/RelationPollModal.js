@@ -7,6 +7,7 @@ import { getRelationPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { unescapeHtml } from '@utils/convertUtil';
+import produce from 'immer';
 
 const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     const [total, setTotal] = useState(0);
@@ -27,6 +28,18 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
         }
     };
 
+    const handleChangeSearchOptions = (option) => {
+        const { key, value } = option;
+        setSearch(
+            produce(search, (draft) => {
+                draft[key] = value;
+                if (key === 'size') {
+                    draft['page'] = 0;
+                }
+            }),
+        );
+    };
+
     const loadList = useCallback(
         (searchObj) => {
             dispatch(
@@ -42,7 +55,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
                                     onClick: handleClickAdd,
                                 })),
                             );
-                            setTotal(response.body.total);
+                            setTotal(response.body.totalCnt);
                         } else {
                             toast.warning('관련투표 리스트를 조회하는데 실패하였습니다.');
                         }
@@ -63,7 +76,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
     return (
         <MokaModal title="관련 투표 팝업" show={show} onHide={onHide} size="md" width={600} draggable>
             <RelationPollModalSearchComponent onSearch={setSearch} searchOptions={search} />
-            <RelationPollModalAgGridComponent rowData={rows} searchOptions={search} total={total} onRowClicked={handleClickRow} />
+            <RelationPollModalAgGridComponent rowData={rows} searchOptions={search} total={total} onRowClicked={handleClickRow} onChangeSearch={handleChangeSearchOptions} />
         </MokaModal>
     );
 };

@@ -28,9 +28,6 @@ const CommentSearch = ({ selectBannedItem }) => {
 
     // 검색용 select 값과 store 값을 연결.
     const { COMMENT_STATUS_CODE, COMMENT_ORDER_CODE, COMMENT_MEDIA_CODE, COMMENT_SITE_CODE } = useSelector((store) => ({
-        // COMMENT_ORDER_CODE: store.app.COMMENT_ORDER_CODE,
-        // COMMENT_STATUS_CODE: store.app.COMMENT_STATUS_CODE,
-        // COMMENT_MEDIA_CODE: store.app.COMMENT_MEDIA_CODE,
         COMMENT_ORDER_CODE: store.comment.common.COMMENT_ORDER_CODE,
         COMMENT_STATUS_CODE: store.comment.common.COMMENT_STATUS_CODE,
         COMMENT_MEDIA_CODE: store.comment.common.COMMENT_MEDIA_CODE,
@@ -212,6 +209,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                     selectBannedItem={selectBannedItem}
                     show={defaultInputModalState}
                     onHide={() => {
+                        dispatch(getCommentList());
                         setDefaultInputModalState(false);
                     }}
                     onSave={(e, i) => {

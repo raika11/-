@@ -101,6 +101,14 @@ export const initialState = {
         },
     },
     block: {},
+    blockUsed: {
+        state: false,
+        seqNo: null,
+    },
+    blockHistory: {
+        total: 0,
+        list: [],
+    },
     blockError: {},
     invalidList: {},
 };
@@ -210,6 +218,23 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.banneds.commentsBlocks.list = body.list;
                 draft.banneds.commentsBlocks.total = body.totalCnt;
+            });
+        },
+
+        [act.CLEAR_BLOCK_HISTORY]: (state) => {
+            return produce(state, (draft) => {
+                draft.blockHistory = initialState.blockHistory;
+            });
+        },
+        [act.GET_BLOCK_HISTORY_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.blockHistory.list = body.list;
+                draft.blockHistory.total = body.totalCnt;
+            });
+        },
+        [act.CLEAR_BLOCKS_LIST]: (state) => {
+            return produce(state, (draft) => {
+                draft.banneds.commentsBlocks.list = initialState.banneds.commentsBlocks.list;
             });
         },
     },

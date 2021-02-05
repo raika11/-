@@ -1,4 +1,4 @@
-import React, { useCallback, useState, forwardRef, useEffect } from 'react';
+import React, { useCallback, useState, forwardRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import toast, { messageBox } from '@utils/toastUtil';
 
 import { CommentActionModal, BenneHistoryModal } from '@pages/CommentManage/CommentModal';
-import { getCommentsBlocks, blocksUsed } from '@store/commentManage';
+import { getCommentsBlocks, blocksUsed, clearBlocksList } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
 
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
@@ -159,26 +159,15 @@ export const BanneButtonRenderer = (props) => {
     } = props;
     const dispatch = useDispatch();
 
-    // 차단 버튼
-    const handleClickBanneButton = () => {
-        // console.log(usedYn, seqNo, tagType, tagValue, tagDiv, tagDesc);
-    };
-    const handleClickRestoreButton = () => {
-        var formData = new FormData();
-
-        if (usedYn === 'Y') {
-            formData.append('usedYn', 'N');
-        } else {
-            formData.append('usedYn', 'Y');
-        }
-
+    const handleBlocksUsed = () => {
         dispatch(
             blocksUsed({
                 seqNo: seqNo,
-                usedForm: formData,
+                usedYn: usedYn === 'Y' ? 'N' : 'Y',
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         toast.success(message);
+                        dispatch(clearBlocksList());
                         dispatch(getCommentsBlocks());
                     } else {
                         const { totalCnt, list } = body;
@@ -193,6 +182,14 @@ export const BanneButtonRenderer = (props) => {
                 },
             }),
         );
+    };
+
+    // 차단 버튼
+    const handleClickBanneButton = () => {
+        handleBlocksUsed();
+    };
+    const handleClickRestoreButton = () => {
+        handleBlocksUsed();
     };
 
     // 차단 복원 버튼

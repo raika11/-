@@ -107,6 +107,10 @@ const BannedListSearch = ({ pathName }) => {
         messageBox.alert('서비스 준비 중입니다.');
     };
 
+    const handleOnClickApplyButton = () => {
+        messageBox.alert('서비스 준비 중입니다.');
+    };
+
     // 페이지 구분값이 변경 되었을때 모달에 전달할 구분값 업데이트.
     useEffect(() => {
         setModalUsage({
@@ -249,7 +253,7 @@ const BannedListSearch = ({ pathName }) => {
                 <Button variant="positive" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
                     차단등록
                 </Button>
-                <Button variant="negative" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
+                <Button variant="negative" className="mr-2" onClick={() => handleOnClickApplyButton()}>
                     적용하기
                 </Button>
                 <Button variant="negative" className="mr-2" onClick={() => handleOnClickMemoryButton()}>

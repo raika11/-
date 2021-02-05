@@ -20,9 +20,7 @@ const CommentBlockModal = (props) => {
     const { show, onHide, ModalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
         BennedType: 'U',
-        id: '',
-        ip: '',
-        word: '',
+        tagValues: '',
         tagDiv: '',
         tagDesc: '',
     });
@@ -54,23 +52,17 @@ const CommentBlockModal = (props) => {
 
     // 차단 등록 처리
     const handleSaveBlocks = (formData) => {
-        // formdata 출력( 테스트 )
-        // for (let [key, value] of formData) {
-        //     console.log(`${key}: ${value}`);
-        // }
-        // return;
         dispatch(
             saveBlocks({
                 type: 'SAVE',
                 seqNo: '',
                 blockFormData: formData,
-                callback: ({ header: { success, message }, body }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        dispatch(getCommentsBlocks());
-                        onHide(); // 모달창 닫기.
-                    } else {
-                        const { totalCnt, list } = body;
+                callback: ({ header, body }) => {
+                    const { success, message, resultType } = header;
+                    const { totalCnt, list } = body;
+                    const { seqNo, tagValue } = body;
+
+                    if (success === false && resultType === 0) {
                         if (totalCnt > 0 && Array.isArray(list)) {
                             // 에러 메시지 확인.
                             messageBox.alert(list[0].reason, () => {});
@@ -78,7 +70,19 @@ const CommentBlockModal = (props) => {
                             // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
                             messageBox.alert(message, () => {});
                         }
+                        return;
                     }
+
+                    if (success === false && seqNo && tagValue === editData.tagValues) {
+                        toast.success(message);
+                    }
+
+                    if (success === true) {
+                        toast.success(message);
+                        dispatch(getCommentsBlocks());
+                    }
+
+                    onHide(); // 모달창 닫기.
                 },
             }),
         );
@@ -86,15 +90,27 @@ const CommentBlockModal = (props) => {
 
     const ConfirmModalResult = (e) => {
         const { gubun, type } = e;
+        let formData = new FormData();
 
         if (gubun === 'comment' && type === 'save') {
-            var formData = new FormData();
             formData.append('usedYn', 'Y');
             formData.append('tagType', editData.BennedType);
-            if (editData.BennedType === 'I') {
-                formData.append('tagValue', selectBannedItem[0].memIp);
+            if (editData.BennedType === 'U') {
+                formData.append(
+                    'tagValues',
+                    selectBannedItem
+                        .map((e) => e.memId)
+                        .reduce((acc, curr) => (acc.includes(curr) ? acc : [...acc, curr]), [])
+                        .join(','),
+                );
             } else {
-                formData.append('tagValue', selectBannedItem[0].memId);
+                formData.append(
+                    'tagValues',
+                    selectBannedItem
+                        .map((e) => e.memIp)
+                        .reduce((acc, curr) => (acc.includes(curr) ? acc : [...acc, curr]), [])
+                        .join(','),
+                );
             }
             formData.append('tagDiv', editData.tagDiv);
             formData.append('tagDesc', editData.tagDesc);
@@ -141,7 +157,7 @@ const CommentBlockModal = (props) => {
 
         // id 차단 처리.
         const doUMenu = () => {
-            if (editData.id === '') {
+            if (editData.tagValues === '') {
                 messageBox.alert('차단 아이디를 입력해 주세요.');
                 return;
             }
@@ -150,17 +166,15 @@ const CommentBlockModal = (props) => {
                 messageBox.alert('차단 사유를 선택해 주세요.');
                 return;
             }
-
-            formData.append('tagValue', editData.id);
+            formData.append('tagValues', editData.tagValues);
             formData.append('tagDiv', editData.tagDiv);
             formData.append('tagDesc', editData.tagDesc);
-
             handleSaveBlocks(formData);
         };
 
         // ip 차단 처리.
         const doIMenu = () => {
-            if (editData.ip === '') {
+            if (editData.tagValues === '') {
                 messageBox.alert('차단 IP를 입력해 주세요.');
                 return;
             }
@@ -170,16 +184,21 @@ const CommentBlockModal = (props) => {
                 return;
             }
 
-            formData.append('tagValue', editData.ip);
+            setConfirmModalUsage({
+                title: '차단 IP 등록',
+                content: '사용자 IP를 차단 하시겠습니까?',
+                gubun: 'U',
+            });
+
+            formData.append('tagValues', editData.tagValues);
             formData.append('tagDiv', editData.tagDiv);
             formData.append('tagDesc', editData.tagDesc);
-
             handleSaveBlocks(formData);
         };
 
         // 금지어 처리.
         const doWMenu = () => {
-            if (editData.word === '') {
+            if (editData.tagValues === '') {
                 messageBox.alert('금지어를 입력해 주세요.');
                 return;
             }
@@ -188,11 +207,9 @@ const CommentBlockModal = (props) => {
                 messageBox.alert('차단 사유를 선택해 주세요.');
                 return;
             }
-
-            formData.append('tagValue', editData.word);
+            formData.append('tagValues', editData.tagValues);
             formData.append('tagDiv', editData.tagDiv);
             formData.append('tagDesc', editData.tagDesc);
-
             handleSaveBlocks(formData);
         };
 
@@ -257,7 +274,14 @@ const CommentBlockModal = (props) => {
                             return (
                                 <>
                                     <Col className="p-0">
-                                        <MokaInputLabel label="차단 ID" className="mb-0 h-100" id="id" name="id" value={editData.id} onChange={(e) => handleChangeValue(e)} />
+                                        <MokaInputLabel
+                                            label="차단 ID"
+                                            className="mb-0 h-100"
+                                            id="tagValues"
+                                            name="tagValues"
+                                            value={editData.tagValues}
+                                            onChange={(e) => handleChangeValue(e)}
+                                        />
                                     </Col>
                                 </>
                             );
@@ -265,7 +289,14 @@ const CommentBlockModal = (props) => {
                             return (
                                 <>
                                     <Col className="p-0">
-                                        <MokaInputLabel label="차단 IP" className="mb-0 h-100" id="ip" name="ip" value={editData.ip} onChange={(e) => handleChangeValue(e)} />
+                                        <MokaInputLabel
+                                            label="차단 IP"
+                                            className="mb-0 h-100"
+                                            id="tagValues"
+                                            name="tagValues"
+                                            value={editData.tagValues}
+                                            onChange={(e) => handleChangeValue(e)}
+                                        />
                                     </Col>
                                 </>
                             );
@@ -273,7 +304,14 @@ const CommentBlockModal = (props) => {
                             return (
                                 <>
                                     <Col className="p-0">
-                                        <MokaInputLabel label="금지어" className="mb-0 h-100" id="word" name="word" value={editData.word} onChange={(e) => handleChangeValue(e)} />
+                                        <MokaInputLabel
+                                            label="금지어"
+                                            className="mb-0 h-100"
+                                            id="tagValues"
+                                            name="tagValues"
+                                            value={editData.tagValues}
+                                            onChange={(e) => handleChangeValue(e)}
+                                        />
                                     </Col>
                                 </>
                             );
@@ -315,7 +353,7 @@ const CommentBlockModal = (props) => {
                     show={confirmModal}
                     onHide={(e) => {
                         ConfirmModalResult(e);
-                        onHide();
+                        // onHide();
                         setConfirmModal(false);
                     }}
                 />

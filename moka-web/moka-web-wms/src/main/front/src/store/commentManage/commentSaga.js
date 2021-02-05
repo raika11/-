@@ -97,7 +97,7 @@ function* deleteComment({ payload: { cmtSeq, params, callback } }) {
 }
 
 // 차단 목록 차단// 복원
-function* blocksUsedSaga({ payload: { seqNo, usedForm, callback } }) {
+function* blocksUsedSaga({ payload: { seqNo, usedYn, callback } }) {
     const ACTION = act.BLOCKS_USED;
     let callbackData = {};
 
@@ -105,7 +105,7 @@ function* blocksUsedSaga({ payload: { seqNo, usedForm, callback } }) {
     let response;
 
     try {
-        response = yield call(commentAPI.putCommentsBlocksUsed, { seqNo: seqNo, usedForm: usedForm, callback });
+        response = yield call(commentAPI.putCommentsBlocksUsed, { seqNo: seqNo, usedYn: usedYn, callback });
         callbackData = response.data;
     } catch (e) {
         callbackData = errorResponse(e);
@@ -120,6 +120,30 @@ function* blocksUsedSaga({ payload: { seqNo, usedForm, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+// 차단 히스토리 목록 사가.
+// const getBlockHistorySaga = callApiAfterActions(act.GET_BLOCK_HISTORY, commentAPI.getBlockHistory, (e) => {
+//     console.log(e);
+// });
+
+function* getBlockHistorySaga({ payload: { seqNo } }) {
+    yield put(startLoading(act.GET_BLOCK_HISTORY));
+
+    try {
+        let response = yield call(commentAPI.getBlockHistory, { seqNo: seqNo });
+        yield put({
+            type: act.GET_BLOCK_HISTORY_SUCCESS,
+            payload: response.data,
+        });
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(act.GET_BLOCK_HISTORY));
+}
+
 export default function* commentSaga() {
     yield takeLatest(act.GET_COMMENT_LIST, getCommentList);
     yield takeLatest(act.SAVE_BLOCKS, saveBlock);
@@ -127,4 +151,5 @@ export default function* commentSaga() {
     yield takeLatest(act.GET_COMMENTS_BLOCKS, getCommentsBlocksSaga);
     yield takeLatest(act.BLOCKS_USED, blocksUsedSaga);
     yield takeLatest(act.GET_INIT_DATA, getInitDataSaga);
+    yield takeLatest(act.GET_BLOCK_HISTORY, getBlockHistorySaga);
 }

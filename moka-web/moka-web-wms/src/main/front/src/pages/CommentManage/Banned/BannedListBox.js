@@ -17,6 +17,7 @@ const BannedListBox = () => {
         list: store.comment.banneds.commentsBlocks.list,
         total: store.comment.banneds.commentsBlocks.total,
         search: store.comment.banneds.commentsBlocks.search,
+        blockUsed: store.comment.blockUsed,
         loading: store.loading[GET_COMMENTS_BLOCKS],
     }));
 
@@ -129,7 +130,6 @@ const BannedListBox = () => {
     };
 
     useEffect(() => {
-        setRowData([]);
         const inirGridRow = (data) => {
             setRowData(
                 data.map((element) => {
@@ -181,6 +181,7 @@ const BannedListBox = () => {
                         historyInfo: {
                             tagType: element.tagType,
                             tagValue: element.tagValue,
+                            seqNo: element.seqNo,
                         },
                     };
                 }),
@@ -188,30 +189,33 @@ const BannedListBox = () => {
         };
 
         // list 가 업데이트 되고 로딩이 끝나면 그리드 목록 업데이트.
-        if (list.length > 0 && loading === false) {
+        if (list) {
+            setRowData([]);
             inirGridRow(list);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [list, loading]);
+    }, [list]);
 
     return (
         <>
-            <CommentAgGrid
-                loading={loading}
-                columnDefs={BannedColumnDefs[pageGubunMemo]}
-                total={total}
-                page={search.page}
-                size={search.size}
-                rowData={rowData}
-                getRowNodeId={(params) => params.seqNo}
-                onRowSelected={(e) => handleGridRowSelected(e)}
-                onColumnResized={(e) => onColumnResized(e)}
-                onColumnVisible={(e) => onColumnVisible(e)}
-                onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
-                onGridReady={(e) => onGridReady(e)}
-                changeSearchOption={(e) => handleChangeSearchOption(e)}
-                preventRowClickCell={['bannedElement', 'historyInfo']}
-            />
+            {rowData.length > 0 && (
+                <CommentAgGrid
+                    loading={loading}
+                    columnDefs={BannedColumnDefs[pageGubunMemo]}
+                    total={total}
+                    page={search.page}
+                    size={search.size}
+                    rowData={rowData}
+                    getRowNodeId={(params) => params.seqNo}
+                    onRowSelected={(e) => handleGridRowSelected(e)}
+                    onColumnResized={(e) => onColumnResized(e)}
+                    onColumnVisible={(e) => onColumnVisible(e)}
+                    onRowDoubleClicked={(e) => handleDoubleClickListRow(e)}
+                    onGridReady={(e) => onGridReady(e)}
+                    changeSearchOption={(e) => handleChangeSearchOption(e)}
+                    preventRowClickCell={['bannedElement', 'historyInfo']}
+                />
+            )}
         </>
     );
 };

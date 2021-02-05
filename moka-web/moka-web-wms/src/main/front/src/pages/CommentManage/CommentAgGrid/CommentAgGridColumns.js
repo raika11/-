@@ -30,7 +30,7 @@ export const columnDefs = [
         flex: 1,
         autoHeight: true,
         resizable: true,
-        suppressDoubleClickExpand: true,
+        // suppressDoubleClickExpand: true,
         cellStyle: {
             boxSizing: 'border-box',
             whiteSpace: 'normal',
@@ -94,7 +94,7 @@ export const columnDefs = [
         field: 'action',
         // tooltipField: 'action',
         width: 80,
-        suppressDoubleClickExpand: true,
+        // suppressDoubleClickExpand: true,
         cellRenderer: 'deleteButtonRenderer',
         cellStyle: { display: 'flex', alignItems: 'center', overflow: 'visible' },
     },

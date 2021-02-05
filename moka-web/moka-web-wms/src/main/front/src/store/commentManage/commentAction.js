@@ -22,10 +22,14 @@ export const CLEAR_STORE = 'comment/CLEAR_COMMENT_ALL';
 export const CLEAR_COMMENT = 'comment/CLEAR_COMMENT';
 export const CLEAR_LIST = 'comment/CLEAR_LIST';
 export const CLEAR_SEARCH = 'comment/CLEAR_SEARCH';
+export const CLEAR_BLOCKS_LIST = 'comment/CLEAR_BLOCKS_LIST';
+export const CLEAR_BLOCK_HISTORY = 'comment/CLEAR_BLOCK_HISTORY';
 export const clearStore = createAction(CLEAR_STORE);
 export const clearComment = createAction(CLEAR_COMMENT);
 export const clearList = createAction(CLEAR_LIST);
 export const clearSearch = createAction(CLEAR_SEARCH);
+export const clearBlocksList = createAction(CLEAR_BLOCKS_LIST);
+export const clearBlockHistory = createAction(CLEAR_BLOCK_HISTORY);
 
 /**
  * 데이터 조회
@@ -60,4 +64,8 @@ export const saveBlocks = createAction(SAVE_BLOCKS, ({ type, seqNo, blockFormDat
 
 // 차단 목록 차단//복원
 export const BLOCKS_USED = 'comment/BLOCKS_USED';
-export const blocksUsed = createAction(BLOCKS_USED, ({ seqNo, usedForm, callback }) => ({ seqNo, usedForm, callback }));
+export const blocksUsed = createAction(BLOCKS_USED, ({ seqNo, usedYn, callback }) => ({ seqNo, usedYn, callback }));
+
+// 차단 히스토리 목록.
+export const [GET_BLOCK_HISTORY, GET_BLOCK_HISTORY_SUCCESS, GET_BLOCK_HISTORY_FAILURE] = createRequestActionTypes('comment/GET_BLOCK_HISTORY');
+export const getBlockHistory = createAction(GET_BLOCK_HISTORY, ({ seqNo }) => ({ seqNo: seqNo }));

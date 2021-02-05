@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MokaModal, MokaTable } from '@components';
+import { useSelector, useDispatch } from 'react-redux';
+import { getBlockHistory, clearBlockHistory, GET_BLOCK_HISTORY } from '@store/commentManage';
 
 export const columnDefs = [
     {
@@ -14,6 +16,7 @@ export const columnDefs = [
         field: 'regInfo',
         tooltipField: 'regInfo',
         width: 110,
+        flex: 1,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
@@ -25,66 +28,28 @@ export const columnDefs = [
     },
 ];
 
-const tempHistoryList = {
-    size: 20,
-    total: 4,
-    page: 1,
-    list: [
-        {
-            id: 5,
-            state: 'A',
-            userId: 'ssc0001',
-            userName: '홍길동',
-            regDt: '2020.12.23 18:04:39',
-        },
-        {
-            id: 4,
-            state: 'B',
-            userId: 'ssc0001',
-            userName: '홍길동',
-            regDt: '2020.12.23 18:04:39',
-        },
-        {
-            id: 3,
-            state: 'A',
-            userId: 'ssc0001',
-            userName: '홍길동',
-            regDt: '2020.12.23 18:04:39',
-        },
-        {
-            id: 2,
-            state: 'B',
-            userId: 'ssc0001',
-            userName: '홍길동',
-            regDt: '2020.12.23 18:04:39',
-        },
-        {
-            id: 1,
-            state: 'A',
-            userId: 'ssc0001',
-            userName: '홍길동',
-            regDt: '2020.12.23 18:04:39',
-        },
-    ],
-};
-
-/**
- * ModalBody로 Input 한개 있는 Modal
- */
 const BenneHistoryModal = (props) => {
     const { show, onHide, Element } = props;
+    const { seqNo } = Element;
+    const dispatch = useDispatch();
+
+    const { list, loading } = useSelector((store) => ({
+        list: store.comment.blockHistory.list,
+        loading: store.loading[GET_BLOCK_HISTORY],
+    }));
 
     const [rowData, setRowData] = useState([]);
     const [banneTitle, setBanneTitle] = useState(``);
 
-    const loading = false;
     /**
      * 닫기
      */
     const handleClickHide = () => {
+        dispatch(clearBlockHistory());
         onHide();
     };
 
+    // 팝업이 뜨면 목록 가지고 오기.
     useEffect(() => {
         const setModalHeaderTitle = (type) => {
             if (type === 'I') {
@@ -94,23 +59,37 @@ const BenneHistoryModal = (props) => {
             }
         };
 
-        // 임시 리스트.
-        setRowData(
-            tempHistoryList.list.map((e) => {
-                return {
-                    bannedYn: e.state === 'A' ? '차단' : '복원',
-                    regInfo: `${e.userId}/${e.userName}`,
-                    regDt: e.regDt,
-                };
-            }),
-        );
+        const getHistoryList = () => {
+            dispatch(getBlockHistory({ seqNo: seqNo }));
+        };
 
-        setModalHeaderTitle(Element.tagType);
+        if (show === true) {
+            setModalHeaderTitle(Element.tagType);
+            getHistoryList();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [show]);
+
+    // store 목록이 업데이트 되면 그리드 데이터 설정.
+    useEffect(() => {
+        const setGridRowData = (data) => {
+            setRowData(
+                data.map((e) => {
+                    return {
+                        // bannedYn: e.state === 'A' ? '차단' : '복원',
+                        bannedYn: '차단',
+                        regInfo: `${e.regMember.memberId}/${e.regMember.memberNm}`,
+                        regDt: e.regDt,
+                    };
+                }),
+            );
+        };
+
+        setGridRowData(list);
+    }, [list]);
 
     return (
-        <MokaModal width={600} show={show} onHide={handleClickHide} title={banneTitle} size="sm" footerClassName="justify-content-center" draggable>
+        <MokaModal width={600} show={show} onHide={handleClickHide} title={banneTitle} size="xl" footerClassName="justify-content-center" draggable>
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}

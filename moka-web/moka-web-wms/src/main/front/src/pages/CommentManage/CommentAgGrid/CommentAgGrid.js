@@ -35,7 +35,7 @@ const CommentAgGrid = (props) => {
     // https://www.ag-grid.com/javascript-grid-row-height/
     // 높이를 가변으로 할떄 ag-grid 가이드.
     return (
-        <React.Fragment>
+        <>
             <div className={clsx('ag-theme-moka-grid position-relative overflow-hidden flex-fill ag-grid-comment', { 'ag-header-no': false })}>
                 {/* <div className="ag-theme-moka-desking-grid position-relative px-1"> */}
                 {loading && <MokaLoader />}
@@ -55,7 +55,7 @@ const CommentAgGrid = (props) => {
                         // resizable: true,
                     }}
                     onGridReady={onGridReady}
-                    rowData={rowData}
+                    rowData={rowData ? rowData : []}
                     getRowNodeId={getRowNodeId}
                     columnDefs={columnDefs}
                     localeText={localeText}
@@ -83,7 +83,7 @@ const CommentAgGrid = (props) => {
             <div className="mt-3">
                 <MokaPagination total={total} page={page} size={size} displayPageNum={DISPLAY_PAGE_NUM} onChangeSearchOption={changeSearchOption} pageSizes={PAGESIZE_OPTIONS} />
             </div>
-        </React.Fragment>
+        </>
     );
 };
 

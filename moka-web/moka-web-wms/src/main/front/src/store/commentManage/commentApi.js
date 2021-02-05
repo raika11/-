@@ -59,8 +59,15 @@ export const putCommentsBlocks = ({ seqNo, blockFormData }) => {
 };
 
 // 차단 리스트 차단/복원
-export const putCommentsBlocksUsed = ({ seqNo, useFormData }) => {
-    return instance.put(`/api/comments-blocks/${seqNo}/used`, useFormData).catch((err) => {
+export const putCommentsBlocksUsed = ({ seqNo, usedYn }) => {
+    return instance.put(`/api/comments-blocks/${seqNo}/used?usedYn=${usedYn}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 차단 히스토리.
+export const getBlockHistory = ({ seqNo }) => {
+    return instance.get(`/api/comments-blocks/${seqNo}/historys`).catch((err) => {
         throw err;
     });
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { MokaModal } from '@components';
 import { useDispatch } from 'react-redux';
@@ -10,7 +10,7 @@ import { BenneConfirmModal } from '@pages/CommentManage/CommentModal';
 
 const CommentActionModal = (props) => {
     const { show, onHide, ModalUsage } = props;
-    const { deleteType, status } = ModalUsage;
+    const { deleteType } = ModalUsage;
 
     const [confirmModalState, setConfirmModalState] = useState(false);
     const dispatch = useDispatch();

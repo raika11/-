@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import toast, { messageBox } from '@utils/toastUtil';
-import { unescapeHtmlArticle, escapeHtmlArticle } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import {
     initialState,
@@ -86,10 +86,7 @@ const CdnArticleEdit = ({ match }) => {
         if (temp.totalId) {
             dispatch(
                 saveCdnArticle({
-                    cdnArticle: {
-                        ...temp,
-                        title: escapeHtmlArticle(temp.title),
-                    },
+                    cdnArticle: temp,
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);

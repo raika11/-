@@ -7,7 +7,7 @@ import { MokaCard } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { escapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import MicAgendaForm from './components/MicAgendaForm/index';
 
 moment.locale('ko');
@@ -63,10 +63,7 @@ const MicAgendaEdit = ({ match }) => {
      */
     const handleClickSave = () => {
         // 관련기사 타이틀 escapeHtml 변환
-        const relArticleList = temp.relArticleList.map((article) => ({
-            ...article,
-            artTitle: escapeHtmlArticle(article.artTitle),
-        }));
+        const relArticleList = temp.relArticleList;
         // 공개일 포맷 변환
         let agndServiceDt = moment(temp.agndServiceDt);
         agndServiceDt = agndServiceDt.isValid() ? agndServiceDt.format(DB_DATEFORMAT) : null;

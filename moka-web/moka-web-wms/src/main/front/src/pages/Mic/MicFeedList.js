@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
-import { initialState, getMicFeedList, getMicFeed, putMicAnswerTop, putMicAnswerUsed, saveMicFeed, changeFeedSearchOption, GET_MIC_FEED_LIST } from '@store/mic';
+import { initialState, getMicFeedList, getMicFeed, putMicAnswerTop, putMicAnswerUsed, saveMicFeed, changeFeedSearchOption, clearMicFeed, GET_MIC_FEED_LIST } from '@store/mic';
 import toast, { messageBox } from '@utils/toastUtil';
 import columnDefs from './MicFeedListColumns';
 import FeedEditModal from './modals/FeedEditModal';
@@ -151,8 +151,6 @@ const MicFeedList = () => {
         if (agndSeq) {
             const ns = { ...initialState.feed.search, agndSeq };
             handleSearch(ns);
-        } else {
-            // dispatch(clearMicAgenda());
         }
     }, [agndSeq, dispatch, handleSearch]);
 
@@ -169,6 +167,13 @@ const MicFeedList = () => {
     useEffect(() => {
         setTemp(feed);
     }, [feed]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearMicFeed());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCard title={` ❛ ${agenda.agndKwd} ❜ 관리자 피드 목록`} className="w-100" bodyClassName="d-flex flex-column">
@@ -190,6 +195,7 @@ const MicFeedList = () => {
                 onChangeSearchOption={handleChangeSearchOption}
                 onRowClicked={handleRowClicked}
                 preventRowClickCell={['usedYn', 'answTop']}
+                selected={temp.answSeq}
             />
 
             {/* 피드 등록/수정 모달 */}
@@ -197,7 +203,7 @@ const MicFeedList = () => {
                 show={show}
                 onHide={() => {
                     setShow(false);
-                    // setTemp({});
+                    setTemp(initialState.feed.feed);
                 }}
                 feed={temp}
                 agenda={agenda}

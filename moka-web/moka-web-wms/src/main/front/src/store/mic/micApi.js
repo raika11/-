@@ -176,6 +176,20 @@ export const putMicAnswer = ({ answer }) => {
         });
 };
 
+// 답변 부가정보 수정 (폼데이터)
+export const putMicAnswerRel = ({ answSeq, answerRel }) => {
+    // 실제로는 post api라서 post...
+    return instance
+        .post(`/api/mics/answers/${answSeq}/rel`, objectToFormData(answerRel), {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 답변 최상위 수정
 export const putMicAnswerTop = ({ answSeq, answTop }) => {
     return instance.put(`/api/mics/answers/${answSeq}/top?${qs.stringify({ answTop })}`).catch((err) => {
@@ -186,6 +200,13 @@ export const putMicAnswerTop = ({ answSeq, answTop }) => {
 // 답변 사용여부 수정
 export const putMicAnswerUsed = ({ answSeq, usedYn }) => {
     return instance.put(`/api/mics/answers/${answSeq}/used?${qs.stringify({ usedYn })}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 답변 상태 수정
+export const putMicAnswerDiv = ({ answSeq, answDiv }) => {
+    return instance.put(`/api/mics/answers/${answSeq}/div?${qs.stringify({ answDiv })}`).catch((err) => {
         throw err;
     });
 };

@@ -4,8 +4,10 @@
  * @param {object} data 오브젝트
  */
 export const objectToFormData = (val, formData = new FormData(), namespace = '') => {
-    if (typeof val !== 'undefined' && val !== null) {
-        if (val instanceof Date) {
+    if (typeof val !== 'undefined') {
+        if (val === null) {
+            formData.append(namespace, val);
+        } else if (val instanceof Date) {
             formData.append(namespace, val.toISOString());
         } else if (val instanceof Array) {
             for (let i = 0; i < val.length; i++) {
@@ -20,7 +22,7 @@ export const objectToFormData = (val, formData = new FormData(), namespace = '')
         } else if (val instanceof File) {
             formData.append(namespace, val);
         } else {
-            formData.append(namespace, val.toString());
+            formData.append(namespace, val);
         }
     }
     return formData;

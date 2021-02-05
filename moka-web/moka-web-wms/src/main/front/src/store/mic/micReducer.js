@@ -50,6 +50,7 @@ export const initialState = {
         },
         feed: {
             usedYn: 'N',
+            answerRel: null,
         },
     },
     invalidList: [],

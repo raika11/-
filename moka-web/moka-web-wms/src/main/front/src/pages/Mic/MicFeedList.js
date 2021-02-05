@@ -136,6 +136,17 @@ const MicFeedList = () => {
         [dispatch],
     );
 
+    /**
+     * 등록
+     */
+    const handleAddFeed = () => {
+        setTemp({
+            ...initialState.feed.feed,
+            agndSeq,
+        });
+        setShow(true);
+    };
+
     useEffect(() => {
         if (agndSeq) {
             const ns = { ...initialState.feed.search, agndSeq };
@@ -163,7 +174,7 @@ const MicFeedList = () => {
         <MokaCard title={` ❛ ${agenda.agndKwd} ❜ 관리자 피드 목록`} className="w-100" bodyClassName="d-flex flex-column">
             <h1 className="color-primary mb-0">❛ {agenda.agndTitle} ❜</h1>
             <div className="mb-2 d-flex justify-content-end">
-                <Button variant="positive" onClick={() => {}}>
+                <Button variant="positive" onClick={handleAddFeed}>
                     등록
                 </Button>
             </div>

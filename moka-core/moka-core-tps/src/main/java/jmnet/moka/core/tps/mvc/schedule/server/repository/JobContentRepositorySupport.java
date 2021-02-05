@@ -5,6 +5,8 @@ import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 
 /**
  * 작업 Repository
@@ -21,4 +23,6 @@ public interface JobContentRepositorySupport {
      * @return 작업 목록
      */
     Page<JobContent> findJobContentList(JobContentSearchDTO search, Pageable pageable);
+
+    Optional<JobContent> findJobContent(JobContentSearchDTO search);
 }

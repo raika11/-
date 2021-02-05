@@ -3,7 +3,6 @@ package jmnet.moka.core.tps.mvc.schedule.server.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -12,6 +11,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.logger.LoggerCodes;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.*;
@@ -70,7 +70,7 @@ public class ScheduleServerController extends AbstractCommonController {
 
     @ApiOperation(value = "작업 실행통계 목록조회")
     @GetMapping("/job-statistic")
-    public ResponseEntity<?> getJobStatisticList(@Valid @SearchParam JobContentSearchDTO search){
+    public ResponseEntity<?> getJobStatisticList(@Valid @SearchParam JobStatisticSearchDTO search){
         ResultListDTO<JobStatisticVO> resultListMessage = new ResultListDTO<>();
 
         Page<JobStatisticVO> returnValue = jobStatisticService.findAllJobStat(search);
@@ -141,7 +141,18 @@ public class ScheduleServerController extends AbstractCommonController {
     public ResponseEntity<?> postJobContent(HttpServletRequest request,
                                                   @Valid JobContentSaveDTO jobContentSaveDTO,
                                                   @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+
+        JobContentSearchDTO checkItem = new JobContentSearchDTO();
+        checkItem.setServerSeq(jobContentSaveDTO.getServerSeq());
+        checkItem.setCallUrl(jobContentSaveDTO.getCallUrl());
+        checkItem.setPeriod(jobContentSaveDTO.getPeriod());
+        //등록불가 작업인지 확인(기존데이터와 serverSeq, callUrl, period 가 동일하면 등록불가)
+        if(jobContentService.isValidData(checkItem)){
+            throw new InvalidDataException(msg("tps.common.error.duplicated.data"));
+        }
+
         try{
+
             JobContent jobContent = modelMapper.map(jobContentSaveDTO, JobContent.class);
             jobContent.setRegId(getUserId(principal));  //등록자ID 추가
 
@@ -166,11 +177,20 @@ public class ScheduleServerController extends AbstractCommonController {
     public ResponseEntity<?> putJobContent(@ApiParam("작업번호") @PathVariable("jobSeq") @Min(value = 0, message = "") Long jobSeq,
                                                  @Valid JobContentUpdateDTO jobContentUpdateDTO,
                                                  @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
-
+        //수정할 데이터가 없는 경우 FAIL
         String infoMessage = msg("tps.common.error.no-data");
         jobContentService
                 .findJobContentById(jobSeq)
                 .orElseThrow(() -> new NoDataException((infoMessage)));
+
+        JobContentSearchDTO checkItem = new JobContentSearchDTO();
+        checkItem.setServerSeq(jobContentUpdateDTO.getServerSeq());
+        checkItem.setCallUrl(jobContentUpdateDTO.getCallUrl());
+        checkItem.setPeriod(jobContentUpdateDTO.getPeriod());
+        //등록불가 작업인지 확인(기존데이터와 serverSeq, callUrl, period 가 동일하면 등록불가)
+        if(jobContentService.isValidData(checkItem)){
+            throw new InvalidDataException(msg("tps.common.error.duplicated.data"));
+        }
 
         try{
             JobContent jobContent = modelMapper.map(jobContentUpdateDTO, JobContent.class);
@@ -434,6 +454,13 @@ public class ScheduleServerController extends AbstractCommonController {
         DistributeServer distServer = distServerService
                 .findDistributeServerById(serverSeq)
                 .orElseThrow(() -> new NoDataException((infoMessage)));
+
+        JobContentSearchDTO checkItem = new JobContentSearchDTO();
+        checkItem.setServerSeq(distServer.getServerSeq());
+        //삭제가능 서버인지 확인(작업이 등록되어 있으면 삭제불가)
+        if(jobContentService.isValidData(checkItem)){
+            throw new InvalidDataException(msg("tps.common.error.delete.related"));
+        }
 
         try{
             distServer.setDelYn(MokaConstants.YES);

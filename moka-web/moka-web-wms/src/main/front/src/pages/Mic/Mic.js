@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
@@ -14,6 +14,7 @@ const MicPostList = React.lazy(() => import('./MicPostList'));
  */
 const Mic = ({ match }) => {
     const dispatch = useDispatch();
+    const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     useEffect(() => {
         return () => {
@@ -46,8 +47,10 @@ const Mic = ({ match }) => {
                     return (
                         <MokaIconTabs
                             className="flex-fill"
+                            activeKey={activeTabIdx}
+                            onSelectNav={(idx) => setActiveTabIdx(idx)}
                             tabs={[
-                                <MicAgendaEdit match={match} />,
+                                <MicAgendaEdit match={match} setActiveTabIdx={setActiveTabIdx} />,
                                 <Suspense fallback={<MokaLoader />}>
                                     <MicFeedList />
                                 </Suspense>,

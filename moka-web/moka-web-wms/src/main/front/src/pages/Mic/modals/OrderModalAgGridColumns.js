@@ -19,8 +19,8 @@ export default [
     },
     {
         headerName: '아젠다명',
-        field: 'agndTitle',
-        tooltipField: 'agndTitle',
+        field: 'agndKwd',
+        tooltipField: 'agndKwd',
         flex: 1,
         cellStyle: { lineHeight: '34px' },
     },

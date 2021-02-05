@@ -15,7 +15,7 @@ moment.locale('ko');
 /**
  * 시민 마이크 아젠다 등록, 수정
  */
-const MicAgendaEdit = ({ match }) => {
+const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { agndSeq } = useParams();
@@ -121,8 +121,9 @@ const MicAgendaEdit = ({ match }) => {
             );
         } else {
             dispatch(clearMicAgenda());
+            setActiveTabIdx(0);
         }
-    }, [agndSeq, dispatch]);
+    }, [agndSeq, setActiveTabIdx, dispatch]);
 
     useEffect(() => {
         const agndServiceDt = moment(agenda.agndServiceDt, DB_DATEFORMAT);

@@ -83,7 +83,10 @@ const MicFeedList = () => {
     const handleSave = (feed) => {
         dispatch(
             saveMicFeed({
-                feed,
+                feed: {
+                    ...feed,
+                    answerRel: feed.answerRel ? feed.answerRel : undefined,
+                },
                 callback: ({ header, body }) => {
                     if (header.success && body) {
                         toast.success(header.message);

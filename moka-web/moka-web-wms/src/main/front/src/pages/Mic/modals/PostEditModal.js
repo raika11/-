@@ -165,7 +165,7 @@ const PostEditModal = (props) => {
             <MokaInputLabel
                 label="단문"
                 labelWidth={72}
-                inputClassName="resize-none custom-scroll"
+                inputClassName="resize-none custom-scroll pr-2"
                 className="mb-2"
                 as="textarea"
                 inputProps={{ plaintext: true, readOnly: true, rows: 4 }}

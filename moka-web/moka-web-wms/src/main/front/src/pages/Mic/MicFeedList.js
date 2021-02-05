@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
-import { initialState, getMicFeedList, changeFeedSearchOption, GET_MIC_FEED_LIST } from '@store/mic';
+import { initialState, getMicFeedList, getMicFeed, putMicAnswerTop, putMicAnswerUsed, changeFeedSearchOption, GET_MIC_FEED_LIST } from '@store/mic';
 import { messageBox } from '@utils/toastUtil';
 import columnDefs from './MicFeedListColumns';
 import FeedEditModal from './modals/FeedEditModal';
@@ -14,11 +14,12 @@ import FeedEditModal from './modals/FeedEditModal';
 const MicFeedList = () => {
     const dispatch = useDispatch();
     const { agndSeq } = useParams();
-    const { total, search, list } = useSelector(({ mic }) => mic.feed);
+    const { total, search, list, feed } = useSelector(({ mic }) => mic.feed);
     const loading = useSelector(({ loading }) => loading[GET_MIC_FEED_LIST]);
     const agenda = useSelector(({ mic }) => mic.agenda);
     const [show, setShow] = useState(false);
     const [temp, setTemp] = useState({});
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 검색
@@ -57,6 +58,16 @@ const MicFeedList = () => {
      */
     const handleRowClicked = (row) => {
         // 상세 데이터 조회
+        dispatch(
+            getMicFeed({
+                answSeq: row.answSeq,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        messageBox.alert(header.message);
+                    }
+                },
+            }),
+        );
         setShow(true);
     };
 
@@ -67,6 +78,46 @@ const MicFeedList = () => {
         setTemp({ ...temp, [key]: value });
     };
 
+    /**
+     * 최상위 수정
+     */
+    const handleChangeAnswTop = useCallback(
+        (data) => {
+            dispatch(
+                putMicAnswerTop({
+                    answSeq: data.answSeq,
+                    answTop: data.answTop,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch],
+    );
+
+    /**
+     * 사용여부 수정
+     */
+    const handleChangeUsedYn = useCallback(
+        (data) => {
+            dispatch(
+                putMicAnswerUsed({
+                    answSeq: data.answSeq,
+                    usedYn: data.usedYn,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch],
+    );
+
     useEffect(() => {
         if (agndSeq) {
             const ns = { ...initialState.feed.search, agndSeq };
@@ -76,9 +127,23 @@ const MicFeedList = () => {
         }
     }, [agndSeq, dispatch, handleSearch]);
 
+    useEffect(() => {
+        setRowData(
+            list.map((data) => ({
+                ...data,
+                onChangeAnswTop: handleChangeAnswTop,
+                onChangeUsedYn: handleChangeUsedYn,
+            })),
+        );
+    }, [handleChangeAnswTop, handleChangeUsedYn, list]);
+
+    useEffect(() => {
+        setTemp(feed);
+    }, [feed]);
+
     return (
-        <MokaCard title={` ❛${agenda.agndKwd}❜ 관리자 피드 목록`} className="w-100" bodyClassName="d-flex flex-column">
-            <h1 className="color-primary mb-0">❛{agenda.agndTitle}❜</h1>
+        <MokaCard title={` ❛ ${agenda.agndKwd} ❜ 관리자 피드 목록`} className="w-100" bodyClassName="d-flex flex-column">
+            <h1 className="color-primary mb-0">❛ {agenda.agndTitle} ❜</h1>
             <div className="mb-2 d-flex justify-content-end">
                 <Button variant="positive" onClick={() => {}}>
                     등록
@@ -87,7 +152,7 @@ const MicFeedList = () => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
-                rowData={list}
+                rowData={rowData}
                 total={total}
                 page={search.page}
                 size={search.size}
@@ -99,7 +164,16 @@ const MicFeedList = () => {
             />
 
             {/* 피드 등록/수정 모달 */}
-            <FeedEditModal show={show} onHide={() => setShow(false)} feed={temp} agenda={agenda} onChange={handleChangeValue} />
+            <FeedEditModal
+                show={show}
+                onHide={() => {
+                    setShow(false);
+                    // setTemp({});
+                }}
+                feed={temp}
+                agenda={agenda}
+                onChange={handleChangeValue}
+            />
         </MokaCard>
     );
 };

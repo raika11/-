@@ -29,6 +29,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
         setTemp({
             ...temp,
             imgFile: data,
+            imgLink: !data ? '' : temp.imgLink,
         });
     };
 

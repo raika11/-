@@ -1,7 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Route } from 'react-router-dom';
-import { MokaCard, MokaIcon, MokaIconTabs, MokaLoader } from '@/components';
+import { clearStore } from '@store/mic';
+import { MokaCard, MokaIcon, MokaIconTabs, MokaLoader } from '@components';
 import MicAgendaEdit from './MicAgendaEdit';
 const AgendaList = React.lazy(() => import('./MicAgendaList'));
 const MicFeedList = React.lazy(() => import('./MicFeedList'));
@@ -11,6 +13,14 @@ const MicPostList = React.lazy(() => import('./MicPostList'));
  * 시민 마이크
  */
 const Mic = ({ match }) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
+
     return (
         <div className="d-flex">
             <Helmet>
@@ -30,26 +40,30 @@ const Mic = ({ match }) => {
             <Route
                 path={[`${match.path}/add`, `${match.path}/:agndSeq`]}
                 exact
-                render={() => (
-                    <MokaIconTabs
-                        className="flex-fill"
-                        tabs={[
-                            <MicAgendaEdit match={match} />,
-                            <Suspense fallback={<MokaLoader />}>
-                                <MicFeedList />
-                            </Suspense>,
-                            <Suspense fallback={<MokaLoader />}>
-                                <MicPostList />
-                            </Suspense>,
-                        ]}
-                        tabNavs={[
-                            { title: '아젠다', text: 'Info' },
-                            { title: '피드 목록', icon: <MokaIcon iconName="fal-comment-alt-lines" /> },
-                            { title: '포스트 목록', icon: <MokaIcon iconName="fal-comment-alt" /> },
-                        ]}
-                        foldable={false}
-                    />
-                )}
+                render={({ match: subMatch }) => {
+                    const isAddPage = subMatch.url === `${match.path}/add`;
+
+                    return (
+                        <MokaIconTabs
+                            className="flex-fill"
+                            tabs={[
+                                <MicAgendaEdit match={match} />,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <MicFeedList />
+                                </Suspense>,
+                                <Suspense fallback={<MokaLoader />}>
+                                    <MicPostList />
+                                </Suspense>,
+                            ]}
+                            tabNavs={[
+                                { title: '아젠다', text: 'Info' },
+                                !isAddPage && { title: '피드 목록', icon: <MokaIcon iconName="fal-comment-alt-lines" /> },
+                                !isAddPage && { title: '포스트 목록', icon: <MokaIcon iconName="fal-comment-alt" /> },
+                            ].filter((a) => a)}
+                            foldable={false}
+                        />
+                    );
+                }}
             />
         </div>
     );

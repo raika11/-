@@ -142,3 +142,24 @@ export const getMicAnswerList = ({ search }) => {
         throw err;
     });
 };
+
+// 답변 상세 조회 (피드, 포스트)
+export const getMicAnswer = ({ answSeq }) => {
+    return instance.get(`/api/mics/answers/${answSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 답변 최상위 수정
+export const putMicAnswerTop = ({ answSeq, answTop }) => {
+    return instance.put(`/api/mics/answers/${answSeq}/top?${qs.stringify({ answTop })}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 답변 사용여부 수정
+export const putMicAnswerUsed = ({ answSeq, usedYn }) => {
+    return instance.put(`/api/mics/answers/${answSeq}/used?${qs.stringify({ usedYn })}`).catch((err) => {
+        throw err;
+    });
+};

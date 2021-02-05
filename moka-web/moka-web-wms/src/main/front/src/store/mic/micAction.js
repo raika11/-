@@ -19,6 +19,8 @@ export const CLEAR_STORE = 'mic/CLEAR_STORE';
 export const clearStore = createAction(CLEAR_STORE);
 export const CLEAR_MIC_AGENDA = 'mic/CLEAR_MIC_AGENDA';
 export const clearMicAgenda = createAction(CLEAR_MIC_AGENDA);
+export const CLEAR_MIC_FEED = 'mic/CLEAR_MIC_FEED';
+export const clearMicFeed = createAction(CLEAR_MIC_FEED);
 
 /**
  * 아젠다 목록 조회
@@ -91,3 +93,21 @@ export const putMicBannerToggle = createAction(PUT_MIC_BANNER_TOGGLE, ({ bnnrSeq
  */
 export const [GET_MIC_FEED_LIST, GET_MIC_FEED_LIST_SUCCESS, GET_MIC_FEED_LIST_FAILURE] = createRequestActionTypes('mic/GET_MIC_FEED_LIST');
 export const getMicFeedList = createAction(GET_MIC_FEED_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 피드 상세 조회
+ */
+export const [GET_MIC_FEED, GET_MIC_FEED_SUCCESS, GET_MIC_FEED_FAILURE] = createRequestActionTypes('mic/GET_MIC_FEED');
+export const getMicFeed = createAction(GET_MIC_FEED, ({ answSeq, callback }) => ({ answSeq, callback }));
+
+/**
+ * 답변 최상위 수정
+ */
+export const PUT_MIC_ANSWER_TOP = 'mic/PUT_MIC_ANSWER_TOP';
+export const putMicAnswerTop = createAction(PUT_MIC_ANSWER_TOP, ({ answSeq, answTop, callback }) => ({ answSeq, answTop, callback }));
+
+/**
+ * 답변 사용여부 수정
+ */
+export const PUT_MIC_ANSWER_USED = 'mic/PUT_MIC_ANSWER_USED';
+export const putMicAnswerUsed = createAction(PUT_MIC_ANSWER_USED, ({ answSeq, usedYn, callback }) => ({ answSeq, usedYn, callback }));

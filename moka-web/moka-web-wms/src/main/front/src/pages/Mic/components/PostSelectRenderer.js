@@ -1,33 +1,48 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { useSelector } from 'react-redux';
 import { MokaInput } from '@/components';
 
 /**
- * 시민 마이크 포스트 AgGrid 셀렉트
+ * 포스트 상태 변경
  */
 const PostSelectRenderer = forwardRef((params, ref) => {
-    const { colDef } = params;
-    const [state, setState] = useState('0');
+    const field = params.colDef.field;
+    const data = params.node.data;
+    const [answDiv, setAnswDiv] = useState(data[field]);
+    const ANSWER_DIV = useSelector(({ app }) => app.ANSWER_DIV || []);
 
     useImperativeHandle(
         ref,
         () => ({
-            refresh: (newParam) => {
-                if (newParam.data[colDef.field] !== params.data[colDef.field]) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
+            refresh: () => true,
+            init: () => true,
+            setValue: (answDiv) => setAnswDiv(answDiv),
+            getValue: () => answDiv,
         }),
-        [colDef.field, params.data],
+        [answDiv],
     );
 
+    /**
+     * 입력값 변경
+     */
+    const handleChangeValue = (e) => {
+        setAnswDiv(e.target.value);
+        params.api.applyTransaction({ update: [{ ...params.node.data, [field]: e.target.value }] });
+        if (params.data.onChangeAnswDiv) {
+            params.data.onChangeAnswDiv.call(null, params.node.data);
+        }
+    };
+
     return (
-        <MokaInput as="select" className="ft-12" value={state} onChange={(e) => setState(e.target.value)}>
-            <option value="0">등록</option>
-            <option value="1">귀 쫑긋</option>
-            <option value="2">PICK</option>
-        </MokaInput>
+        <div className="h-100 d-flex align-items-center justify-content-center">
+            <MokaInput as="select" value={answDiv} onChange={handleChangeValue}>
+                {ANSWER_DIV.map((div) => (
+                    <option key={div.code} value={div.code}>
+                        {div.name}
+                    </option>
+                ))}
+            </MokaInput>
+        </div>
     );
 });
 

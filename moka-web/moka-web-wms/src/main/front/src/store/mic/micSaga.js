@@ -194,6 +194,56 @@ const putMicAnswerTop = createRequestSaga(act.PUT_MIC_ANSWER_TOP, api.putMicAnsw
  */
 const putMicAnswerUsed = createRequestSaga(act.PUT_MIC_ANSWER_USED, api.putMicAnswerUsed, true);
 
+/**
+ * 답변(피드, 포스트) 상태 수정
+ */
+const putMicAnswerDiv = createRequestSaga(act.PUT_MIC_ANSWER_DIV, api.putMicAnswerDiv, true);
+
+/**
+ * 포스트 목록 조회
+ */
+const getMicPostList = createRequestSaga(act.GET_MIC_POST_LIST, api.getMicAnswerList);
+
+/**
+ * 포스트 상세 조회
+ */
+const getMicPost = createRequestSaga(act.GET_MIC_POST, api.getMicAnswer);
+
+/**
+ * 포스트 저장
+ */
+function* saveMicPost({ payload }) {
+    const { post, callback } = payload;
+    const ACTION = act.SAVE_MIC_POST;
+    let response, callbackData;
+
+    yield put(startLoading(ACTION));
+    try {
+        response = yield call(api.putMicAnswerRel, post);
+        callbackData = response.data;
+
+        if (response.data.header.success) {
+            yield put({
+                type: act.GET_MIC_POST_SUCCESS,
+                payload: { body: post },
+            });
+            // 목록 다시 조회
+            const search = yield select(({ mic }) => mic.post.search);
+            yield put({
+                type: act.GET_MIC_POST_LIST,
+                payload: { search },
+            });
+        }
+    } catch (e) {
+        callbackData = errorResponse(e);
+    }
+
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+    yield put(finishLoading(ACTION));
+}
+
 export default function* saga() {
     yield takeLatest(act.GET_MIC_AGENDA_LIST, getMicAgendaList);
     yield takeLatest(act.GET_MIC_REPORT, getMicReport);
@@ -211,4 +261,8 @@ export default function* saga() {
     yield takeLatest(act.PUT_MIC_ANSWER_USED, putMicAnswerUsed);
     yield takeLatest(act.GET_MIC_FEED, getMicFeed);
     yield takeLatest(act.SAVE_MIC_FEED, saveMicFeed);
+    yield takeLatest(act.GET_MIC_POST_LIST, getMicPostList);
+    yield takeLatest(act.GET_MIC_POST, getMicPost);
+    yield takeLatest(act.PUT_MIC_ANSWER_DIV, putMicAnswerDiv);
+    yield takeLatest(act.SAVE_MIC_POST, saveMicPost);
 }

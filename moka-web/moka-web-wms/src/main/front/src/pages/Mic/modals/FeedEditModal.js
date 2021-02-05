@@ -46,6 +46,22 @@ const FeedEditModal = (props) => {
                     relUrl: value,
                 },
             });
+        } else if (name === 'artTitle') {
+            onChange({
+                key: 'answerRel',
+                value: {
+                    ...feed.answerRel,
+                    artTitle: value,
+                },
+            });
+        } else if (name === 'artSummary') {
+            onChange({
+                key: 'answerRel',
+                value: {
+                    ...feed.answerRel,
+                    artSummary: value,
+                },
+            });
         } else {
             onChange({ key: name, value });
         }

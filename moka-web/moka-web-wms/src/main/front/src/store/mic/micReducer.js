@@ -53,6 +53,18 @@ export const initialState = {
             answerRel: null,
         },
     },
+    post: {
+        total: 0,
+        list: [],
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            agndSeq: null,
+        },
+        post: {
+            answerRel: null,
+        },
+    },
     invalidList: [],
     answTotal: 0,
     agndTotal: 0,
@@ -73,6 +85,11 @@ export default handleActions(
                 draft.feed.search = payload;
             });
         },
+        [act.CHANGE_POST_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.post.search = payload;
+            });
+        },
         [act.CHANGE_INVALID_LIST]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.invalidList = payload;
@@ -89,7 +106,12 @@ export default handleActions(
         },
         [act.CLEAR_MIC_FEED]: (state) => {
             return produce(state, (draft) => {
-                draft.feed.feed = initialState.feed.feed;
+                draft.feed = initialState.feed;
+            });
+        },
+        [act.CLEAR_MIC_POST]: (state) => {
+            return produce(state, (draft) => {
+                draft.post = initialState.post;
             });
         },
         /**
@@ -143,6 +165,23 @@ export default handleActions(
         [act.GET_MIC_FEED_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.feed.feed = body;
+            });
+        },
+        /**
+         * 포스트
+         */
+        [act.GET_MIC_POST_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.post.list = body.list;
+                draft.post.total = body.totalCnt;
+            });
+        },
+        /**
+         * 포스트 상세 조회
+         */
+        [act.GET_MIC_POST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.post.post = body;
             });
         },
     },

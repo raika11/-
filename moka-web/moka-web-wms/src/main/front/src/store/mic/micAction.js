@@ -8,6 +8,8 @@ export const CHANGE_SEARCH_OPTION = 'mic/CHANGE_SEARCH_OPTION';
 export const changeSearchOption = createAction(CHANGE_SEARCH_OPTION, (search) => search);
 export const CHANGE_FEED_SEARCH_OPTION = 'mic/CHANGE_FEED_SEARCH_OPTION';
 export const changeFeedSearchOption = createAction(CHANGE_FEED_SEARCH_OPTION, (search) => search);
+export const CHANGE_POST_SEARCH_OPTION = 'mic/CHANGE_POST_SEARCH_OPTION';
+export const changePostSearchOption = createAction(CHANGE_POST_SEARCH_OPTION, (search) => search);
 
 export const CHANGE_INVALID_LIST = 'mic/CHANGE_INVALID_LIST';
 export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
@@ -21,6 +23,8 @@ export const CLEAR_MIC_AGENDA = 'mic/CLEAR_MIC_AGENDA';
 export const clearMicAgenda = createAction(CLEAR_MIC_AGENDA);
 export const CLEAR_MIC_FEED = 'mic/CLEAR_MIC_FEED';
 export const clearMicFeed = createAction(CLEAR_MIC_FEED);
+export const CLEAR_MIC_POST = 'mic/CLEAR_MIC_POST';
+export const clearMicPost = createAction(CLEAR_MIC_POST);
 
 /**
  * 아젠다 목록 조회
@@ -107,6 +111,24 @@ export const SAVE_MIC_FEED = 'mic/SAVE_MIC_FEED';
 export const saveMicFeed = createAction(SAVE_MIC_FEED, ({ feed, callback }) => ({ feed, callback }));
 
 /**
+ * 포스트 목록 조회
+ */
+export const [GET_MIC_POST_LIST, GET_MIC_POST_LIST_SUCCESS, GET_MIC_POST_LIST_FAILURE] = createRequestActionTypes('mic/GET_MIC_POST_LIST');
+export const getMicPostList = createAction(GET_MIC_POST_LIST, ({ search, callback }) => ({ search, callback }));
+
+/**
+ * 포스트 상세 조회
+ */
+export const [GET_MIC_POST, GET_MIC_POST_SUCCESS, GET_MIC_POST_FAILURE] = createRequestActionTypes('mic/GET_MIC_POST');
+export const getMicPost = createAction(GET_MIC_POST, ({ answSeq, callback }) => ({ answSeq, callback }));
+
+/**
+ * 포스트 저장
+ */
+export const SAVE_MIC_POST = 'mic/SAVE_MIC_POST';
+export const saveMicPost = createAction(SAVE_MIC_POST, ({ post, callback }) => ({ post, callback }));
+
+/**
  * 답변 최상위 수정
  */
 export const PUT_MIC_ANSWER_TOP = 'mic/PUT_MIC_ANSWER_TOP';
@@ -117,3 +139,9 @@ export const putMicAnswerTop = createAction(PUT_MIC_ANSWER_TOP, ({ answSeq, answ
  */
 export const PUT_MIC_ANSWER_USED = 'mic/PUT_MIC_ANSWER_USED';
 export const putMicAnswerUsed = createAction(PUT_MIC_ANSWER_USED, ({ answSeq, usedYn, callback }) => ({ answSeq, usedYn, callback }));
+
+/**
+ * 답변 상태 수정
+ */
+export const PUT_MIC_ANSWER_DIV = 'mic/PUT_MIC_ANSWER_DIV';
+export const putMicAnswerDiv = createAction(PUT_MIC_ANSWER_DIV, ({ answSeq, answDiv, callback }) => ({ answSeq, answDiv, callback }));

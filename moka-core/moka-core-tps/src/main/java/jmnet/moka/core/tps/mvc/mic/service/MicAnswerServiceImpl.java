@@ -173,10 +173,13 @@ public class MicAnswerServiceImpl implements MicAnswerService {
         micMapper.updateMicAnswer(micAnswerVO);
 
         // 2. 답변 부가정보 등록
-        MicAnswerRelVO rel = micAnswerVO.getAnswerRel();
-        rel.setAnswSeq(micAnswerVO.getAnswSeq());
+        boolean uploaded = true;
+        if (micAnswerVO.getAnswerRel() != null) {
+            MicAnswerRelVO rel = micAnswerVO.getAnswerRel();
+            rel.setAnswSeq(micAnswerVO.getAnswSeq());
 
-        boolean uploaded = this.saveMicAnswerRel(rel);
+            uploaded = this.saveMicAnswerRel(rel);
+        }
 
         return uploaded;
     }
@@ -196,10 +199,13 @@ public class MicAnswerServiceImpl implements MicAnswerService {
         micMapper.insertMicAnswer(micAnswerVO);
 
         // 2. 답변 부가정보 등록
-        MicAnswerRelVO rel = micAnswerVO.getAnswerRel();
-        rel.setAnswSeq(micAnswerVO.getAnswSeq());
+        boolean uploaded = true;
+        if (micAnswerVO.getAnswerRel() != null) {
+            MicAnswerRelVO rel = micAnswerVO.getAnswerRel();
+            rel.setAnswSeq(micAnswerVO.getAnswSeq());
 
-        boolean uploaded = this.saveMicAnswerRel(rel);
+            uploaded = this.saveMicAnswerRel(rel);
+        }
 
         return uploaded;
     }

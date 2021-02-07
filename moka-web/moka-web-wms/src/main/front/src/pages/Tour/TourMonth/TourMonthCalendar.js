@@ -11,11 +11,8 @@ import SetHolidayModal from './modals/SetHolidayModal';
 import SummaryApplyModal from './modals/SummaryApplyModal';
 import CancelHolidayModal from './modals/CancelHolidayModal';
 import { getTourSetup, clearStore, getTourDenyMonthList, getTourApplyMonthList } from '@/store/tour';
-// import toast from '@/utils/toastUtil';
 
 const holidayEl = document.createElement('div');
-holidayEl.innerHTML = '휴일 지정';
-holidayEl.className = 'fc-set-holiday';
 
 // const demoEvents = {
 //     events: [
@@ -44,6 +41,7 @@ const TourMonthCalendar = (props) => {
     const holidayList = useSelector((store) => store.tour.holidayList);
     const tourApplyList = useSelector((store) => store.tour.tourApplyList);
     const tourSetup = useSelector((store) => store.tour.tourSetup);
+    // const [calendarApi, setCalendarApi] = useState(null);
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
     const [day, setDay] = useState('');
@@ -56,7 +54,6 @@ const TourMonthCalendar = (props) => {
     const [cancelModal, setCancelModal] = useState(false);
 
     const calendarRef = useRef(null);
-    const inputRef = useRef(null);
 
     useEffect(() => {
         return () => {
@@ -141,7 +138,6 @@ const TourMonthCalendar = (props) => {
 
     return (
         <>
-            {/* <input type="hidden" ref={inputRef} value="" /> */}
             <FullCalendar
                 ref={calendarRef}
                 height="100%"
@@ -167,16 +163,206 @@ const TourMonthCalendar = (props) => {
                 // true이면 6주로 fix된 월별 보기
                 fixedWeekCount={false}
                 bootstrapFontAwesome={false}
+                // 이벤트 목록
                 events={{ events: [...holidayEvents, ...applyEvents], color: '#FF3907' }}
+                // view가 Dom에 추가된 직후 호출
+                viewDidMount={(v) => {}}
+                datesSet={(d) => {
+                    if (day !== '') {
+                        let frame = document.querySelectorAll('.fc-daygrid-day');
+                        frame.forEach((e) => {
+                            if (day[e.dataset['dow']] === 'N') {
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['denyRepeatYn'] === 'N') {
+                                    e.querySelector('.fc-daygrid-event-harness').style.visibility = 'hidden';
+                                }
+                            } else {
+                                // 휴일 지정 el 추가
+                                e.firstChild.addEventListener('mouseenter', () => {
+                                    if (!e.firstChild.querySelector('.fc-daygrid-event-harness')) {
+                                        e.firstChild.style.cursor = 'pointer';
+                                        holidayEl.className = 'fc-set-holiday';
+                                        holidayEl.innerHTML = '휴일 지정';
+                                        e.firstChild.appendChild(holidayEl);
+                                    }
+                                });
+
+                                // mouseleave 휴일 지정 el 제거
+                                e.firstChild.addEventListener('mouseleave', function () {
+                                    if (e.firstChild.querySelector('.fc-set-holiday')) {
+                                        e.firstChild.removeChild(holidayEl);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }}
+                // Dom에 td가 추가된 직후 호출
+                // 최초 한번 그려진 후 날짜가 바뀌거나 표시하는 월이 다를때 다시 그리지 않음
+                dayCellDidMount={(c) => {
+                    let frame = c.el;
+                    frame.dataset['dow'] = c.dow;
+
+                    // 오늘 날짜 스타일 변경
+                    // if (calendarMonth === currentMonth) {
+                    if (frame.className.indexOf('fc-day-today') > -1) {
+                        frame.style.backgroundColor = '#fff';
+                        let circle = document.createElement('div');
+                        let top = frame.querySelector('.fc-daygrid-day-top');
+                        circle.className = 'fc-set-today-number';
+                        top.appendChild(circle);
+                    }
+
+                    // mouseenter 휴일 지정 el 추가
+                    // frame.firstChild.addEventListener('mouseenter', function () {
+                    //     const events = this.querySelector('.fc-daygrid-day-events');
+                    //     // if (events.style['padding-bottom'] === '') {
+                    //     if (!events.querySelector('.fc-daygrid-event-harness')) {
+                    //         holidayEl.className = 'fc-set-holiday';
+                    //         holidayEl.innerHTML = '휴일 지정';
+                    //         this.appendChild(holidayEl);
+                    //     }
+                    //     // }
+                    // });
+                    // // mouseleave 휴일 지정 el 제거
+                    // frame.firstChild.addEventListener('mouseleave', function () {
+                    //     if (this.querySelector('.fc-set-holiday')) {
+                    //         this.removeChild(holidayEl);
+                    //     }
+                    // });
+                }}
+                dayCellContent={(c) => {
+                    c.dayNumberText = c.dayNumberText.replace('일', '');
+                }}
+                eventTimeFormat={(t) => {
+                    return `${t.date.hour}시`;
+                }}
+                // 이벤트 요소가 DOM에 추가 된 직후 호출
+                eventDidMount={(e) => {
+                    let eventEl = e.el;
+                    let button = document.createElement('button');
+
+                    // 이벤트 id 값으로 object 조회
+                    let getEvent = (id) => {
+                        return e.view.calendar.getEventById(id).extendedProps;
+                    };
+
+                    // 이벤트 상위 el에 커스텀 데이터 추가
+                    eventEl.parentElement.dataset['denyRepeatYn'] = e.event.extendedProps.denyRepeatYn;
+                    eventEl.parentElement.dataset['denySeq'] = e.event.extendedProps.denySeq;
+                    eventEl.parentElement.dataset['tourStatus'] = e.event.extendedProps.tourStatus;
+                    eventEl.parentElement.dataset['tourTime'] = e.event.extendedProps.tourTime;
+
+                    // 이벤트가 있고 매년 반복 이벤트가 아닐시 hidden
+                    if (day !== '') {
+                        let frameAll = document.querySelectorAll('.fc-daygrid-day');
+                        frameAll.forEach((e) => {
+                            if (day[e.dataset['dow']] === 'N') {
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['denyRepeatYn'] === 'N') {
+                                    e.querySelector('.fc-daygrid-event-harness').style.visibility = 'hidden';
+                                }
+                            } else {
+                                // 관리자 지정 이벤트 셀 mouseenter, mouseleave
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['denyRepeatYn'] === 'N') {
+                                    e.style.cursor = 'pointer';
+                                    e.firstChild.addEventListener('mouseenter', () => {
+                                        if (e.firstChild.querySelectorAll('button').length > 0) {
+                                            return;
+                                        } else {
+                                            button.className = 'btn btn-negative fc-set-event-button';
+                                            button.innerText = '휴일 해제';
+                                            e.firstChild.appendChild(button);
+                                        }
+
+                                        if (e.firstChild.querySelector('button')) {
+                                            button.addEventListener(
+                                                'click',
+                                                () => {
+                                                    let data = getEvent(e.querySelector('.fc-daygrid-event-harness').dataset['denySeq']);
+                                                    setSelectedData(data);
+                                                    setCancelModal(true);
+                                                },
+                                                { once: true },
+                                            );
+                                        }
+                                    });
+
+                                    e.firstChild.addEventListener('mouseleave', () => {
+                                        if (e.firstChild.querySelector('button')) {
+                                            e.firstChild.removeChild(button);
+                                        }
+                                    });
+                                }
+
+                                // 견학 신청 목록 버튼 추가
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['tourStatus'] === 'A') {
+                                    e.style.cursor = 'pointer';
+                                    button.className = 'btn btn-positive fc-set-event-button';
+                                    button.innerText = '확정';
+                                    e.firstChild.appendChild(button);
+                                } else if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['tourStatus'] === 'S') {
+                                    e.style.cursor = 'pointer';
+                                    button.className = 'btn btn-negative fc-set-event-button';
+                                    button.innerText = '대기';
+                                    e.firstChild.appendChild(button);
+                                }
+
+                                // 휴일 지정 el 추가
+                                e.firstChild.addEventListener('mouseenter', () => {
+                                    if (!e.firstChild.querySelector('.fc-daygrid-event-harness')) {
+                                        e.firstChild.style.cursor = 'pointer';
+                                        holidayEl.className = 'fc-set-holiday';
+                                        holidayEl.innerHTML = '휴일 지정';
+                                        e.firstChild.appendChild(holidayEl);
+                                    }
+                                });
+
+                                // mouseleave 휴일 지정 el 제거
+                                e.firstChild.addEventListener('mouseleave', function () {
+                                    if (e.firstChild.querySelector('.fc-set-holiday')) {
+                                        e.firstChild.removeChild(holidayEl);
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    // 견학 타이틀 스타일 변경
+                    let title = document.querySelectorAll('.fc-event-title');
+                    if (title.length > 0) {
+                        title.forEach((t) => {
+                            if (t.classList.length > 1) {
+                                return;
+                            } else {
+                                t.style.position = 'absolute';
+                                t.style.top = '20px';
+                                t.style.left = '15px';
+                            }
+                        });
+                    }
+                }}
+                // 이벤트 컨텐츠 삽입, 이벤트 데이터가 변경 될 때마다 호출
+                eventContent={(c) => {
+                    // 관리자 지정 휴일의 스타일 변경
+                    if (c.event.extendedProps.denyRepeatYn === 'N') {
+                        c.backgroundColor = '#00A99D';
+                        c.borderColor = '#00A99D';
+                    }
+                }}
                 dateClick={(d) => {
-                    // console.log(d);
-                    let eventDate = d.view.calendar.getEvents().filter((e) => e.startStr === d.dateStr);
-                    // let applyDate = d.view.calendar.getEvents().filter((e) => e.extendedProps)
-                    // console.log(d.extendedProps);
-                    if (eventDate.length < 1) {
+                    // 클릭한 날짜와 이벤트 목록의 일치하는 이벤트 선택
+                    let holiday = d.view.calendar.getEvents().filter((e) => e.extendedProps?.holiday === d.dateStr);
+                    let eventDate = d.view.calendar.getEvents().filter((e) => e.extendedProps.denyDate?.substr(0, 10) === d.dateStr);
+                    let applyDate = d.view.calendar.getEvents().filter((e) => e.extendedProps.tourDate?.substr(0, 10) === d.dateStr);
+
+                    // 기본 설정 목록의 N과 일치하는 요일이면 클릭 막음
+                    if (day[d.dayEl.dataset['dow']] === 'N') {
+                        return;
+                    } else if (holiday.length < 1 && eventDate.length < 1 && applyDate.length < 1) {
+                        setClickDate(d.dateStr);
                         setHolidayModal(true);
-                    } else {
-                        setCancelModal(true);
+                    } else if (applyDate.length > 0) {
+                        setSelectedData(applyDate[0].extendedProps);
+                        setSummaryModal(true);
                     }
                     // let frame = d.dayEl,
                     //     events = frame.querySelector('.fc-daygrid-day-events');
@@ -185,240 +371,6 @@ const TourMonthCalendar = (props) => {
                     //         setHolidayModal(true);
                     //     }
                     // }
-                    setClickDate(d.dateStr);
-                    // date.dayEl.style.backgroundColor = 'red';
-                }}
-                datesSet={(d) => {
-                    if (day !== '') {
-                        let a = document.querySelectorAll('.fc-daygrid-day');
-                        // let myday = inputRef.current.value;
-                        a.forEach((e) => {
-                            if (day[e.dataset['dow']] === 'N') {
-                                e.firstChild.style.visibility = 'hidden';
-                            }
-                        });
-                    }
-                }}
-                viewDidMount={(view) => {
-                    // if (today.dataset['date'].split('-')[0] === calendarDate[0] && `0${calendarDate[1]}`.substr(-2) === today.dataset['date'].split('-')[1]) {
-                    //     let circle = document.createElement('div');
-                    //     let top = today.querySelector('.fc-daygrid-day-top');
-                    //     circle.className = 'fc-set-today-number';
-                    //     top.appendChild(circle);
-                    // }
-                    // console.log(day);
-
-                    document.addEventListener('mouseover', function (e) {
-                        if (e.target.tagName !== 'DIV' && e.target.tagName !== 'A') {
-                            return;
-                        }
-                        if (e.target.classList[0] === 'fc-set-holiday') {
-                            return;
-                        }
-                        let frame;
-                        let calendarDate;
-                        let currentDate;
-                        let targetEl;
-                        if (e.target.classList[0] === 'fc-daygrid-day-number') {
-                            frame = e.target.parentElement.parentElement.parentElement;
-                            targetEl = e.target.parentElement.parentElement;
-                        } else if (e.target.classList[0] === 'fc-daygrid-day-events' || e.target.classList[0] === 'fc-daygrid-day-top') {
-                            frame = e.target.parentElement.parentElement;
-                            targetEl = e.target.parentElement;
-                        } else if (e.target.classList[0] === 'fc-daygrid-day-frame') {
-                            frame = e.target.parentElement;
-                            targetEl = e.target;
-                        } else {
-                            return;
-                        }
-                        if (frame.querySelector('.fc-daygrid-event-harness')) {
-                            return;
-                        }
-                        calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
-                        currentDate = frame.dataset['date'].split('-');
-                        if (calendarDate[0] === currentDate[0] && `0${calendarDate[1]}`.substr(-2) === currentDate[1]) {
-                            if (!frame.querySelector('.fc-set-holiday')) {
-                                targetEl.appendChild(holidayEl);
-                            }
-                        }
-                    });
-
-                    document.addEventListener('mouseout', function (e) {
-                        if (e.target.tagName !== 'DIV' && e.target.tagName !== 'A') {
-                            return;
-                        }
-                        if (e.target.classList[0] === 'fc-set-holiday') {
-                            return;
-                        }
-                        let frame;
-                        let calendarDate;
-                        let currentDate;
-                        if (e.target.classList[0] === 'fc-daygrid-day-number') {
-                            frame = e.target.parentElement.parentElement.parentElement;
-                        } else if (e.target.classList[0] === 'fc-daygrid-day-events' || e.target.classList[0] === 'fc-daygrid-day-top') {
-                            frame = e.target.parentElement.parentElement;
-                        } else if (e.target.classList[0] === 'fc-daygrid-day-frame') {
-                            frame = e.target.parentElement;
-                        } else {
-                            return;
-                        }
-                        calendarDate = document.querySelector('.fc-toolbar-title').textContent.replace('년', '').replace('월', '').split(' ');
-                        currentDate = frame.dataset['date'].split('-');
-                        if (calendarDate[0] === currentDate[0] && `0${calendarDate[1]}`.substr(-2) === currentDate[1]) {
-                            if (frame.querySelector('.fc-set-holiday') !== null) {
-                                frame.querySelector('.fc-set-holiday').remove();
-                            }
-                        }
-                    });
-                }}
-                // Dom에 td가 추가된 직후 호출
-                // 최초 한번 그려진 후 날짜가 바뀌거나 표시하는 월이 다를때 다시 그리지 않음
-                dayCellDidMount={(cell) => {
-                    let frame = cell.el;
-                    frame.dataset['dow'] = cell.dow;
-                    console.log(day);
-
-                    // let calendarMonth = `0${cell.view.calendar.getDate().getMonth() + 1}`.substr(-2);
-                    // let currentDate = cell.el.dataset;
-                    // let currentMonth = currentDate['date'].split('-')[1];
-                    // let weekArr = tourSetup.tourWeekYn.split('');
-                    // console.log(calendarMonth, currentMonth);
-                    // if (calendarMonth === currentMonth) {
-                    //     frame.firstChild.addEventListener('mouseenter', function (e) {
-                    //         const events = e.target.querySelector('.fc-daygrid-day-events');
-                    //         if (!events.querySelector('.fc-daygrid-event-harness')) {
-                    //             e.target.appendChild(holidayEl);
-                    //         }
-                    //     });
-                    // }
-                    // 오늘 날짜 스타일 변경
-                    // if (calendarMonth === currentMonth) {
-                    if (frame.className.indexOf('fc-day-today') > -1) {
-                        let circle = document.createElement('div');
-                        let top = frame.querySelector('.fc-daygrid-day-top');
-                        circle.className = 'fc-set-today-number';
-                        top.appendChild(circle);
-                    }
-                    // }
-                    // diabled 셀, 이벤트 셀, 기본 설정의 쉬는 날 휴일 지정 막음
-                    // if (frame.className.indexOf('fc-day-disabled') === -1) {
-                    //     // mouseenter 휴일 지정 el 추가
-                    //     frame.firstChild.addEventListener('mouseenter', function () {
-                    //         const events = this.querySelector('.fc-daygrid-day-events');
-                    //         // if (events.style['padding-bottom'] === '') {
-                    //         if (!events.querySelector('.fc-daygrid-event-harness')) {
-                    //             this.appendChild(holidayEl);
-                    //         }
-                    //         // }
-                    //     });
-                    //     // mouseleave 휴일 지정 el 제거
-                    //     frame.firstChild.addEventListener('mouseleave', function () {
-                    //         if (this.querySelector('.fc-set-holiday')) {
-                    //             this.removeChild(holidayEl);
-                    //         }
-                    //     });
-                    // }
-                }}
-                dayCellContent={(cell) => {
-                    // let innerText;
-                    // console.log(cell);
-                    // let button = document.createElement('button');
-                    // let eventEl = document.querySelector('.fc-daygrid-event-harness')
-
-                    // if (eventEl) {
-                    //     let targetEl = eventEl.parentElement.parentElement;
-                    //     document.addEventListener('mouseover', function (e) {
-
-                    //     });
-                    // }
-
-                    // let year = cell.date.getFullYear();
-                    // let month = `0${cell.date.getMonth() + 1}`.substr(-2);
-                    // let date = `0${cell.date.getDate()}`.substr(-2);
-                    // let targetDate = `${year}-${month}-${date}`;
-                    // let eventDate = cell.view.calendar.getEvents().filter((e) => e.startStr === targetDate);
-                    // if (eventDate.length < 1) {
-                    // innerText = '휴일 지정';
-                    // setHolidayModal(true);
-                    // let el = createElement('div', {}, innerText);
-                    // el.style.position = 'absolute';
-                    // el.style.left = '15px';
-                    // el.style.top = '50px';
-
-                    // return el;
-                    // }
-                    // console.log(cell.view.calendar.getEvents());
-                    // if (day.length > 0) {
-                    //     if (day[cell.dow] === 'Y') {
-                    //     cell.isDisabled = true;
-                    //     }
-                    // }
-                    // console.log(cell.view.calendar);
-                    // if (setHolidayRef.current) {
-                    //     setHolidayRef.current.setHoliday();
-                    // }
-                    // if (cell.isToday) {
-                    //     let frame = document.querySelector('.fc-day-today');
-
-                    // }
-                    cell.dayNumberText = cell.dayNumberText.replace('일', '');
-                }}
-                eventTimeFormat={(time) => {
-                    return `${time.date.hour}시`;
-                }}
-                eventContent={(content) => {
-                    // 이벤트 컨텐츠 제어
-                    // console.log(content);
-
-                    // 관리자 지정 휴일의 스타일 변경
-                    if (content.event.extendedProps.denyRepeatYn === 'N') {
-                        content.backgroundColor = '#00A99D';
-                        content.borderColor = '#00A99D';
-                    }
-                    // else if (content.event.extendedProps.tourTime !== '') {
-                    // }
-                }}
-                eventDidMount={(e) => {
-                    // if (day !== '') {
-                    //     inputRef.current.value = day;
-                    // }
-                    let button = document.createElement('button');
-                    let top = e.el;
-                    let title = top.querySelector('.fc-daygrid-day');
-                    let a = {};
-                    a.el = top;
-                    if (e.event.extendedProps.tourStatus === 'A' && e.event.extendedProps.tourTime !== '') {
-                        a.type = '1번';
-                        a.title = title;
-                        // button.className = 'btn btn-positive fc-set-event-button';
-                        // button.innerText = '확정';
-                        // title.style.position = 'absolute';
-                        // title.style.top = '20px';
-                        // title.style.left = '15px';
-                        // top.appendChild(button);
-                    } else if (e.event.extendedProps.tourStatus === 'S' && e.event.extendedProps.tourTime !== '') {
-                        a.type = '2번';
-                        a.title = title;
-                        // button.className = 'btn btn-negative fc-set-event-button';
-                        // button.innerText = '대기';
-                        // title.style.position = 'absolute';
-                        // title.style.top = '20px';
-                        // title.style.left = '15px';
-                        // top.appendChild(button);
-                    } else if (e.event.extendedProps.denyRepeatYn === 'N') {
-                        button.className = 'btn btn-negative fc-set-event-button';
-                        button.innerText = '휴일 해제';
-                        top.appendChild(button);
-                    }
-                    a.m = document.querySelector('.fc-toolbar-title').textContent;
-                }}
-                eventClick={(e) => {
-                    if (e.event.allDay) {
-                        setCancelModal(true);
-                    } else {
-                        setSummaryModal(true);
-                    }
-                    setSelectedData(e.event._def.extendedProps);
                 }}
             />
             <SetHolidayModal show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} year={year} month={month} />

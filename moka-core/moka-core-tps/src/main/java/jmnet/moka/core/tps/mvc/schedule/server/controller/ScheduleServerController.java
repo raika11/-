@@ -227,13 +227,11 @@ public class ScheduleServerController extends AbstractCommonController {
 
 
         try{
-            //삭제될 작업 저장
             JobDeletedContent jobDeletedContent = modelMapper.map(jobContent, JobDeletedContent.class);
             jobDeletedContent.setRegId(getUserId(principal));  //삭제자 ID 추가
-            jobDeletedContentService.saveJobDeletedContent(jobDeletedContent);
 
-            //작업 삭제
-            jobContentService.deleteJobContent(jobContent);
+            //삭제될 작업 저장 + 작업 삭제(트랜잭션)
+            jobContentService.deleteJobContent(jobDeletedContent, jobContent);
 
             tpsLogger.success(LoggerCodes.ActionType.DELETE, true);
 
@@ -304,14 +302,13 @@ public class ScheduleServerController extends AbstractCommonController {
 
 
         try{
-            //삭제된 작업 복원
             JobContent jobContent = modelMapper.map(jobDeletedContent, JobContent.class);
             jobContent.setUsedYn("Y");
             jobContent.setRegId(getUserId(principal));  //복원자 ID 추가
-            jobContentService.saveJobContent(jobContent);
+            //jobContentService.saveJobContent(jobContent);
 
-            //복원된 작업 삭제
-            jobDeletedContentService.deletedJobDeletedContent(jobDeletedContent);
+            //삭제된 작업 복원 + 복원된 작업 삭제(트랜잭션)
+            jobDeletedContentService.deletedJobDeletedContent(jobContent, jobDeletedContent);
 
             tpsLogger.success(LoggerCodes.ActionType.DELETE, true);
 
@@ -321,7 +318,7 @@ public class ScheduleServerController extends AbstractCommonController {
 
 
         } catch(Exception e){
-            log.error("[FAIL TO DELETE JOB CONTENT]", e);
+            log.error("[FAIL TO RECOVER JOB CONTENT]", e);
             tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
             throw new Exception(msg("tps.common.error.delete"), e);
 

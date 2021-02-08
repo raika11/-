@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.schedule.server.service;
 
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobDeletedContent;
 import org.springframework.data.domain.Page;
 
@@ -19,6 +20,6 @@ public interface JobDeletedContentService {
 
     Optional<JobDeletedContent> findJobDeletedContentById(Long jobSeq);
 
-    void deletedJobDeletedContent(JobDeletedContent jobDeletedContent);
+    void deletedJobDeletedContent(JobContent jobContent, JobDeletedContent jobDeletedContent);
 
 }

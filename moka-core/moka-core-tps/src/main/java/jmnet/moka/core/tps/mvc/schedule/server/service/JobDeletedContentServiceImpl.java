@@ -1,13 +1,16 @@
 package jmnet.moka.core.tps.mvc.schedule.server.service;
 
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobDeletedContent;
+import jmnet.moka.core.tps.mvc.schedule.server.repository.JobContentRepository;
 import jmnet.moka.core.tps.mvc.schedule.server.repository.JobDeletedContentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
@@ -18,6 +21,9 @@ public class JobDeletedContentServiceImpl implements JobDeletedContentService{
 
     @Autowired
     private JobDeletedContentRepository jobDeletedContentRepository;
+
+    @Autowired
+    private JobContentRepository jobContentRepository;
 
     private final EntityManager entityManager;
 
@@ -41,7 +47,9 @@ public class JobDeletedContentServiceImpl implements JobDeletedContentService{
     }
 
     @Override
-    public void deletedJobDeletedContent(JobDeletedContent jobDeletedContent) {
+    @Transactional
+    public void deletedJobDeletedContent(JobContent jobContent, JobDeletedContent jobDeletedContent) {
+        jobContentRepository.save(jobContent);
         jobDeletedContentRepository.delete(jobDeletedContent);
     }
 

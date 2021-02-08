@@ -123,7 +123,7 @@ public class QuizRestController extends AbstractCommonController {
      * @return 퀴즈목록
      */
     @ApiOperation(value = "퀴즈 질문 목록 조회")
-    @GetMapping("/quiz-questions")
+    @GetMapping("/questions")
     public ResponseEntity<?> getQuizQuestionList(@SearchParam SearchDTO search) {
 
         ResultListDTO<QuizQuestionSimpleDTO> resultListMessage = new ResultListDTO<>();
@@ -138,6 +138,35 @@ public class QuizRestController extends AbstractCommonController {
 
 
         ResultDTO<ResultListDTO<QuizQuestionSimpleDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 질문 상세 조회
+     *
+     * @param questionSeq 질문 일련번호
+     * @return 질문 상세
+     */
+    @ApiOperation(value = "질문 상세 조회")
+    @GetMapping("/questions/questionSeq}")
+    public ResponseEntity<?> getQuestion(
+            @ApiParam("질문일련번호") @PathVariable("questionSeq") @Min(value = 1, message = "{tps.quiz-question.error.questionSeq}") Long questionSeq)
+            throws Exception {
+
+        ResultListDTO<QuestionDTO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Question returnValue = questionService
+                .findQuestionBySeq(questionSeq)
+                .orElseThrow(() -> new NoDataException(msg("tps.common.error.no-data")));
+
+        // 리턴값 설정
+        QuestionDTO question = modelMapper.map(returnValue, QuestionDTO.class);
+
+        ResultDTO<QuestionDTO> resultDto = new ResultDTO<>(question);
 
         tpsLogger.success(ActionType.SELECT);
 

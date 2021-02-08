@@ -151,7 +151,7 @@ public class QuizRestController extends AbstractCommonController {
      * @return 질문 상세
      */
     @ApiOperation(value = "질문 상세 조회")
-    @GetMapping("/questions/questionSeq}")
+    @GetMapping("/questions/{questionSeq}")
     public ResponseEntity<?> getQuestion(
             @ApiParam("질문일련번호") @PathVariable("questionSeq") @Min(value = 1, message = "{tps.quiz-question.error.questionSeq}") Long questionSeq)
             throws Exception {

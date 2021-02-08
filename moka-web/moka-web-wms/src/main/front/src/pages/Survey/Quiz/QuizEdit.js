@@ -563,12 +563,13 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
 
     return (
         <MokaCard
-            titleAs={
-                <div className="w-100 d-flex">
-                    <p className="m-0 h5 font-weight-bold">{`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}</p>
-                    {/* <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p> */}
-                </div>
-            }
+            // titleAs={
+            //     <div className="w-100 d-flex">
+            //         <p className="m-0 h5 font-weight-bold">{`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}</p>
+            //         {/* <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p> */}
+            //     </div>
+            // }
+            title={`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
             className="flex-fill"
             footer
             loading={save_loading}

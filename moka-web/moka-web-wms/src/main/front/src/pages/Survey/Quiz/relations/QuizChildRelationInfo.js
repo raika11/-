@@ -35,7 +35,7 @@ const QuizChildRelationInfo = ({ HandleSave }) => {
                 width={750}
             >
                 <Form>
-                    <hr />
+                    {/* <hr /> */}
                     <Form.Group>
                         <Form.Row>
                             <Col xs={12}>

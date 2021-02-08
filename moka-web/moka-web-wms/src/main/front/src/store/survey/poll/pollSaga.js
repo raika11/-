@@ -6,7 +6,7 @@ import { finishLoading, startLoading } from '@store/loading';
 import produce from 'immer';
 import { unescapeHtml } from '@utils/convertUtil';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { BASIC_DATEFORMAT, DB_DATEFORMAT } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 
 function toOptionCodes(list) {
@@ -28,10 +28,10 @@ function* getPollCodes({ type, payload }) {
 
 function toPollListData(list, codes) {
     return list.map((data) => {
-        const startDt = data.startDt && moment(data.startDt).format(DB_DATEFORMAT);
-        const endDt = data.endDt && moment(data.endDt).format(DB_DATEFORMAT);
-        const regDt = data.regDt && moment(data.regDt).format(DB_DATEFORMAT);
-        const modDt = data.modDt && moment(data.modDt).format(DB_DATEFORMAT);
+        const startDt = data.startDt && moment(data.startDt).format(BASIC_DATEFORMAT);
+        const endDt = data.endDt && moment(data.endDt).format(BASIC_DATEFORMAT);
+        const regDt = data.regDt && moment(data.regDt).format(BASIC_DATEFORMAT);
+        const modDt = data.modDt && moment(data.modDt).format(BASIC_DATEFORMAT);
         return {
             id: data.pollSeq,
             category: commonUtil.toKorFromCode(data.pollCategory, codes.pollCategory),

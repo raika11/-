@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
-import { Col, Form } from 'react-bootstrap';
-import { MokaInputLabel, AgGripIcon } from '@components';
-import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
+import React, { useState, useRef, useCallback, forwardRef } from 'react';
+import { Col, Form, Button } from 'react-bootstrap';
+import { MokaInputLabel, AgGripIcon, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
-import { questionInfoChange, deleteQuestion } from '@store/survey/quiz';
+import { questionInfoChange, deleteQuestion, addQuestionChoices, deleteAllQuestion } from '@store/survey/quiz';
 import { DeleteConfirmModal } from '@pages/Survey/Quiz/modals';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 // 주관식 컴포넌트
 const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
     const dispatch = useDispatch();
     const [deleteConfirmModalState, setDeleteConfirmModalState] = useState(false);
+    const imgFileRef = useRef(null);
     const { questionsList } = useSelector((store) => ({
         questionsList: store.quiz.quizQuestions.questionsList,
     }));
-
-    // 삭제 버튼
-    const handleClickQuestionDeleteButton = () => {
-        if (quizSts === 'Y') {
-            setDeleteConfirmModalState(true);
-        } else {
-            dispatch(deleteQuestion({ questionIndex: questionIndex }));
-        }
-    };
 
     // alert 창에서 확인 눌렀을 경우.
     const handleAlertDelete = () => {
@@ -43,57 +35,100 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
         );
     };
 
-    // 이미지 처리.
-    const handleChangeFileInput = (inputName, file) => {
+    // 전체 삭제.
+    const handleClickAllDeleteButton = useCallback(() => {
+        if (quizSts === 'Y') {
+            setDeleteConfirmModalState(true);
+        } else {
+            dispatch(deleteAllQuestion());
+        }
+    }, [dispatch, quizSts]);
+
+    // 보기 추가 버튼.
+    const handleClickQuestionAddButton = useCallback(() => {
         dispatch(
-            questionInfoChange({
-                ...questionsList[questionIndex],
-                questionIndex: questionIndex,
-                imgFile: file,
+            addQuestionChoices({
+                index: questionIndex,
+                choice: {
+                    answYn: 'N',
+                    title: '',
+                },
             }),
         );
+    }, [dispatch, questionIndex]);
 
-        return inputName;
-    };
+    const createDropdownItem = useCallback(() => {
+        const items = [
+            { text: '전체삭제', onClick: () => handleClickAllDeleteButton() },
+            { text: '보기 추가', onClick: () => handleClickQuestionAddButton() },
+        ];
+
+        return (
+            <>
+                {items.map((i, idx) => (
+                    <Dropdown.Item key={idx} eventKey={idx} onClick={i.onClick}>
+                        {i.text}
+                    </Dropdown.Item>
+                ))}
+            </>
+        );
+    }, [handleClickAllDeleteButton, handleClickQuestionAddButton]);
+
+    const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
+        return (
+            <div ref={ref} className="px-2" onClick={onClick} id={id}>
+                <MokaIcon iconName="fal-ellipsis-v-alt" />
+            </div>
+        );
+    });
 
     return (
         <>
             <div className="mb-2 p-2 bg-gray-150">
                 <Form.Row>
-                    <Col xs={1}>
-                        <AgGripIcon />
-                    </Col>
-                    {/* 질문 */}
-                    <Col xs={10}>
+                    <div className="d-felx m-0 pr-2">
+                        <AgGripIcon className="pt-2" />
+                    </div>
+                    <Col xs={11}>
                         <MokaInputLabel
-                            label={`Q${Number(questionIndex) + 1}.`}
-                            id={`title_${questionIndex}`}
-                            name="title"
-                            labelWidth={20}
-                            placeholder="질문을 입력하세요.(100자 이내로 입력하세요)"
+                            label={
+                                <>
+                                    <div>
+                                        <div style={{ float: 'left', marginRight: '4px' }}>Q</div>
+                                        <div>{`${Number(questionIndex) + 1}`}</div>
+                                    </div>
+                                </>
+                            }
+                            labelWidth={40}
                             labelClassName="mr-1"
                             inputClassName="quiz-input"
+                            id={`title_${questionIndex}`}
+                            name="title"
+                            placeholder="질문을 입력하세요.(100자 이내로 입력하세요)"
                             value={questionsList[questionIndex].title}
                             onChange={(e) => handleChangeEditData(e)}
                         />
                     </Col>
-                    <Col xs={1}>
-                        <div onClick={() => handleClickQuestionDeleteButton()}>
-                            <AgGripIcon />
-                        </div>
-                    </Col>
+                    <div className="d-felx pt-1">
+                        <MokaOverlayTooltipButton tooltipText="더보기" variant="bg-gray-150" className="p-0 bg-gray-150">
+                            <Dropdown style={{ position: 'unset' }}>
+                                <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
+                                <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
+                            </Dropdown>
+                        </MokaOverlayTooltipButton>
+                    </div>
                 </Form.Row>
                 <Form.Row className="pt-3">
                     <Col xs={9}>
                         <Form.Row className="pt-1">
-                            <Col xs={12}>
+                            <Col xs={1} className="d-flex align-items-center justify-content-center"></Col>
+                            <Col xs={11} className="d-felx pt-2">
                                 {/* 정답 */}
                                 <MokaInputLabel
                                     label={`정답`}
-                                    labelWidth={60}
-                                    // className="text-right"
+                                    labelWidth={35}
                                     placeholder="(단어로 띄어쓰기 1개 까지 가능)"
-                                    labelClassName="mr-0"
+                                    labelClassName="mr-2 pr-1 mb-0"
                                     inputClassName="quiz-input"
                                     id={`answer_${questionIndex}`}
                                     name="answer"
@@ -102,8 +137,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                                 />
                             </Col>
                         </Form.Row>
-                        <Form.Row className="pl-3 pt-2">
-                            {/* 정답 */}
+                        <Form.Row className="pl-4 pt-5 mb-0">
                             <Col xs={12}>
                                 <MokaInputLabel as="none" label="정답으로 처리할 수 있는 단어는 (,)로 구분하여 다수 등록 가능 " required labelClassName="w-100 ml-0" />
                             </Col>
@@ -113,9 +147,9 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                             <Col xs={12}>
                                 <MokaInputLabel
                                     as="textarea"
-                                    className="mb-2"
+                                    className="mb-1"
                                     inputClassName="resize-none"
-                                    inputProps={{ rows: 2 }}
+                                    inputProps={{ rows: 3 }}
                                     id={`questionDesc_${questionIndex}`}
                                     name="questionDesc"
                                     value={questionsList[questionIndex].questionDesc}
@@ -125,18 +159,48 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                             </Col>
                         </Form.Row>
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="pt-1">
                         {/* 이미지 */}
-                        <PollPhotoComponent
-                            width={110}
-                            height={110}
-                            src={questionsList[questionIndex].imgUrl}
-                            onChange={(file) => {
-                                handleChangeFileInput('imgFile', file, 'file');
+                        <MokaInputLabel
+                            as="imageFile"
+                            className="mb-2"
+                            name="selectImg"
+                            ref={imgFileRef}
+                            inputProps={{
+                                width: 150,
+                                height: 150,
+                                img: questionsList[questionIndex].imgUrl,
                             }}
-                        >
-                            150 x 150
-                        </PollPhotoComponent>
+                            labelClassName="justify-content-end"
+                            onChange={(file) => {
+                                dispatch(
+                                    questionInfoChange({
+                                        ...questionsList[questionIndex],
+                                        questionIndex: questionIndex,
+                                        imgFile: file[0],
+                                    }),
+                                );
+                            }}
+                        />
+                        <Col className="d-flex justify-content-start pl-0">
+                            <Button
+                                className="mt-0"
+                                size="sm"
+                                variant="positive"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    imgFileRef.current.deleteFile();
+                                    questionInfoChange({
+                                        ...questionsList[questionIndex],
+                                        questionIndex: questionIndex,
+                                        imgFile: null,
+                                    });
+                                }}
+                            >
+                                신규등록
+                            </Button>
+                        </Col>
                     </Col>
                 </Form.Row>
                 <DeleteConfirmModal

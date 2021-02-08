@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.common.util;
 
 import com.sun.xml.fastinfoset.util.StringArray;
 import org.springframework.util.Assert;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Description: 기사 text 변환
@@ -22,6 +23,11 @@ public class ArticleEscapeUtil {
 
     public static String htmlEscape(String input) {
         Assert.notNull(input, "Input is required");
+
+        // 1.html entity 변환
+        input = HtmlUtils.htmlEscape(input);
+
+        // 2. 기사변환
         StringBuilder escaped = new StringBuilder(input.length() * 2);
 
         for (int i = 0; i < input.length(); ++i) {

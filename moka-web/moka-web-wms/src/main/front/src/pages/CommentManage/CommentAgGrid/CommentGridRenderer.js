@@ -8,7 +8,6 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { CommentActionModal, BenneHistoryModal } from '@pages/CommentManage/CommentModal';
 import { getCommentsBlocks, blocksUsed, clearBlocksList } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
-import AuthButton from '@pages/Auth/AuthButton';
 
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     return (

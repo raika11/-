@@ -209,7 +209,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                                     <Col xs={10}>
                                         <MokaInputLabel
                                             label={`보기 ${index + 1}`}
-                                            labelWidth={35}
+                                            labelWidth={40}
                                             placeholder="(20자 이내로 입력하세요)"
                                             labelClassName="mr-2 pr-1"
                                             inputClassName="quiz-input"
@@ -273,7 +273,8 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                 {/* 정답. */}
                 <Form.Row className="pl-4 pt-0">
                     <Col xs={12}>
-                        <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelClassName="w-100 ml-0" />
+                        <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelClassName="text-left ml-0 w-100" />
+                        {/* <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelClassName="w-100 ml-0" /> */}
                     </Col>
                 </Form.Row>
                 {/* 설명 */}

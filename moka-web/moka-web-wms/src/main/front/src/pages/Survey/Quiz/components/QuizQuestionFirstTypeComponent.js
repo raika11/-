@@ -121,14 +121,14 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                 <Form.Row className="pt-3">
                     <Col xs={9}>
                         <Form.Row className="pt-1">
-                            <Col xs={1} className="d-flex align-items-center justify-content-center"></Col>
-                            <Col xs={11} className="d-felx pt-2">
+                            {/* <div class="d-felx mr-0 pr-4"></div> */}
+                            <Col xs={12} className="d-felx m-0 pr-2 pl-4">
                                 {/* 정답 */}
                                 <MokaInputLabel
                                     label={`정답`}
-                                    labelWidth={35}
+                                    labelWidth={43}
                                     placeholder="(단어로 띄어쓰기 1개 까지 가능)"
-                                    labelClassName="mr-2 pr-1 mb-0"
+                                    labelClassName="mr-0 pr-0 mb-0"
                                     inputClassName="quiz-input"
                                     id={`answer_${questionIndex}`}
                                     name="answer"
@@ -143,8 +143,8 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                                     as="none"
                                     label="정답으로 처리할 수 있는 단어는 (,)로 구분하여 다수 등록 가능 "
                                     required
-                                    labelWidth={100}
-                                    labelClassName="text-right ml-0"
+                                    // labelWidth={100}
+                                    labelClassName="text-left ml-0 w-100"
                                 />
                             </Col>
                         </Form.Row>

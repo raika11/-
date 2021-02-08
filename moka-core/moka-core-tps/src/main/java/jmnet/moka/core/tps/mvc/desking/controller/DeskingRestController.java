@@ -487,6 +487,11 @@ public class DeskingRestController extends AbstractCommonController {
             List<DeskingWorkDTO> deskingWorkDTOList = validList.getList();
 
             if (deskingWorkDTOList.size() > 0) {
+                // escape
+                deskingWorkDTOList
+                        .stream()
+                        .forEach((dto -> deskingService.escapeHtml(dto)));
+
                 // 스냅샷 수정
                 deskingService.updateComponentWorkSnapshot(componentWorkSeq, MokaConstants.NO, null, principal.getName());
 
@@ -578,6 +583,9 @@ public class DeskingRestController extends AbstractCommonController {
             String message = msg("tps.desking.error.invalidContent");
             throw new InvalidDataException(invalidList, message);
         }
+
+        // escape
+        deskingService.escapeHtml(deskingWorkDTO);
 
         // 오리진 데스킹워크 조회
         DeskingWork orgDW = deskingService
@@ -753,6 +761,9 @@ public class DeskingRestController extends AbstractCommonController {
                 // 컨텐츠아이디 생성
                 deskingWorkDTO.setContentId("D" + McpDate.dateStr(new Date(), "yyyyMMddHHmmss"));
             }
+
+            // escape
+            deskingService.escapeHtml(deskingWorkDTO);
 
             // 썸네일 파일 저장
             if (deskingWorkDTO.getThumbnailFile() != null) {

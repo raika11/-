@@ -23,6 +23,7 @@ import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
+import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
@@ -312,6 +313,9 @@ public class DeskingServiceImpl implements DeskingService {
 
         // 편집기사 등록
         updateDesking(component, componentWorkVO.getDeskingWorks(), regId, histPublishDTO);
+
+        // purge
+
 
     }
 
@@ -1085,6 +1089,29 @@ public class DeskingServiceImpl implements DeskingService {
     public ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String regId)
             throws Exception {
         return componentWorkService.updateComponentWorkTemplate(componentWorkSeq, templateSeq, regId);
+    }
+
+    @Override
+    public void escapeHtml(DeskingWorkDTO deskingWorkDTO) {
+        if (McpString.isNotEmpty(deskingWorkDTO.getTitle())) {
+            deskingWorkDTO.setTitle(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getTitle()));
+        }
+
+        if (McpString.isNotEmpty(deskingWorkDTO.getSubTitle())) {
+            deskingWorkDTO.setSubTitle(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getSubTitle()));
+        }
+
+        if (McpString.isNotEmpty(deskingWorkDTO.getNameplate())) {
+            deskingWorkDTO.setNameplate(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getNameplate()));
+        }
+
+        if (McpString.isNotEmpty(deskingWorkDTO.getTitlePrefix())) {
+            deskingWorkDTO.setTitlePrefix(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getTitlePrefix()));
+        }
+
+        if (McpString.isNotEmpty(deskingWorkDTO.getBodyHead())) {
+            deskingWorkDTO.setBodyHead(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getBodyHead()));
+        }
     }
 }
 

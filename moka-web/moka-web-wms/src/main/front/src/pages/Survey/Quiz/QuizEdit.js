@@ -542,6 +542,25 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sortableItems]);
 
+    const setImageFileValue = (file) => {
+        if (!file) {
+            dispatch(
+                changeQuizInfo({
+                    ...quizInfo,
+                    imgFile: null,
+                }),
+            );
+            return;
+        }
+
+        dispatch(
+            changeQuizInfo({
+                ...quizInfo,
+                imgFile: file,
+            }),
+        );
+    };
+
     return (
         <MokaCard
             titleAs={
@@ -660,53 +679,19 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                         </Form.Row>
                         <Form.Row style={{ height: '55%' }} className="mb-2">
                             <Col xs={12}>
-                                {/* <PollPhotoComponent
-                                    width={110}
-                                    height={110}
-                                    src={quizInfo.imgUrl}
-                                    onChange={(file) => {
-                                        handleChangeFileInput('imgFile', file, 'file');
-                                    }}
-                                >
-                                    150 x 150
-                                </PollPhotoComponent> */}
                                 <MokaInputLabel
                                     as="imageFile"
-                                    className="mb-2"
-                                    name="selectImg"
-                                    isInvalid={null}
                                     ref={imgFileRef}
-                                    inputProps={{
-                                        width: 150,
-                                        height: 84,
-                                        img: quizInfo.imgUrl,
-                                    }}
-                                    labelClassName="justify-content-end"
-                                    onChange={(file) => {
-                                        // console.log(e);
-                                        dispatch(
-                                            changeQuizInfo({
-                                                ...quizInfo,
-                                                imgFile: file[0],
-                                            }),
-                                        );
-                                    }}
+                                    labelWidth={90}
+                                    inputProps={{ img: quizInfo.imgUrl, width: 150, height: 84, setFileValue: setImageFileValue, deleteButton: true }}
                                 />
-                                <Col className="d-flex justify-content-start pl-0">
+                                <Col className="d-flex justify-content-start pl-0 pt-2">
                                     <Button
                                         className="mt-0"
                                         size="sm"
                                         variant="positive"
                                         onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            imgFileRef.current.deleteFile();
-                                            dispatch(
-                                                changeQuizInfo({
-                                                    ...quizInfo,
-                                                    imgFile: null,
-                                                }),
-                                            );
+                                            imgFileRef.current.rootRef.onClick(e);
                                         }}
                                     >
                                         신규등록
@@ -715,55 +700,6 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Col>
                         </Form.Row>
                     </Col>
-                </Form.Row>
-
-                <Form.Row className="mb-2 p-2 bg-gray-150">
-                    <Form.Row className="w-100 justify-content-between">
-                        <Col xs={7}>
-                            <Form.Row>
-                                <Col xs={6}>
-                                    <MokaInputLabel
-                                        as="select"
-                                        labelWidth={66}
-                                        label="문항 유형"
-                                        onChange={(e) => handleChangeQuestionsSetup(e)}
-                                        id="questionType"
-                                        name="questionType"
-                                        value={questionSetup.questionType}
-                                    >
-                                        <option value="third">객관식</option>
-                                        <option value="first">주관식</option>
-                                    </MokaInputLabel>
-                                </Col>
-                                <Col xs={6}>
-                                    <MokaInputLabel
-                                        type="number"
-                                        label="보기 입력 개수"
-                                        labelWidth={85}
-                                        onChange={(e) => handleChangeQuestionsSetup(e)}
-                                        id="questionCount"
-                                        name="questionCount"
-                                        value={questionSetup.questionType === 'first' ? '0' : questionSetup.questionCount}
-                                        disabled={questionSetup.questionType === 'first' ? true : false}
-                                    />
-                                </Col>
-                            </Form.Row>
-                        </Col>
-                        <Col xs={3}>
-                            <Form.Row>
-                                <Col xs={4}>
-                                    <Button variant="positive" onClick={() => handleClickNewQuestionsButton()}>
-                                        생성
-                                    </Button>
-                                </Col>
-                                <Col xs={8} className="ml-2">
-                                    <Button variant="searching" onClick={() => handleClickSearchQuestionsButton()}>
-                                        문항 검색
-                                    </Button>
-                                </Col>
-                            </Form.Row>
-                        </Col>
-                    </Form.Row>
                 </Form.Row>
 
                 {/* 문항 */}
@@ -817,6 +753,55 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                         return item;
                     })}
                 </DndProvider>
+
+                <Form.Row className="mb-2 p-2 bg-gray-150">
+                    <Form.Row className="w-100 justify-content-between">
+                        <Col xs={7}>
+                            <Form.Row>
+                                <Col xs={6}>
+                                    <MokaInputLabel
+                                        as="select"
+                                        labelWidth={50}
+                                        label="문항 유형"
+                                        onChange={(e) => handleChangeQuestionsSetup(e)}
+                                        id="questionType"
+                                        name="questionType"
+                                        value={questionSetup.questionType}
+                                    >
+                                        <option value="third">객관식</option>
+                                        <option value="first">주관식</option>
+                                    </MokaInputLabel>
+                                </Col>
+                                <Col xs={6}>
+                                    <MokaInputLabel
+                                        type="number"
+                                        label="보기 입력 개수"
+                                        labelWidth={70}
+                                        onChange={(e) => handleChangeQuestionsSetup(e)}
+                                        id="questionCount"
+                                        name="questionCount"
+                                        value={questionSetup.questionType === 'first' ? '0' : questionSetup.questionCount}
+                                        disabled={questionSetup.questionType === 'first' ? true : false}
+                                    />
+                                </Col>
+                            </Form.Row>
+                        </Col>
+                        <Col xs={3}>
+                            <Form.Row>
+                                <Col xs={4}>
+                                    <Button variant="positive" onClick={() => handleClickNewQuestionsButton()}>
+                                        생성
+                                    </Button>
+                                </Col>
+                                <Col xs={8} className="ml-2">
+                                    <Button variant="searching" onClick={() => handleClickSearchQuestionsButton()}>
+                                        문항 검색
+                                    </Button>
+                                </Col>
+                            </Form.Row>
+                        </Col>
+                    </Form.Row>
+                </Form.Row>
             </Form>
             <QuestionSearchModal
                 show={questionSearchModalState}

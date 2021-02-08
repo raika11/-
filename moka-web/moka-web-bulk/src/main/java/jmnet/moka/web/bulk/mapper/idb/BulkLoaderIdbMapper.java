@@ -1,6 +1,7 @@
 package jmnet.moka.web.bulk.mapper.idb;
 
 import java.util.Map;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +20,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface BulkLoaderIdbMapper {
-    void callUspBulkNewsTableIns( Map<String, Object>map);
+    void callUspBulkNewsTableIns( TotalVo<Map<String, Object>> totalVo);
+    void callUspBulkLogInsByLoader( TotalVo<Map<String, Object>> totalVo );
 }

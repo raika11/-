@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
@@ -24,8 +25,8 @@ public class BulkJoongangProcessEx extends BulkProcessCommon<BulkJoongangArticle
     }
 
     @Override
-    protected BulkJoongangArticleEx newArticle(BulkDumpTotalVo bulkDumpTotal) {
-        return new BulkJoongangArticleEx(bulkDumpTotal);
+    protected BulkJoongangArticleEx newArticle(TotalVo<BulkDumpTotalVo> totalVo) {
+        return new BulkJoongangArticleEx(totalVo);
     }
 
     @Override

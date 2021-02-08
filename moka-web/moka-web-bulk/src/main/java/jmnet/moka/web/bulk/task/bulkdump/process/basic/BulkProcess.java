@@ -1,8 +1,10 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.basic;
 
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import lombok.Getter;
 
@@ -25,5 +27,6 @@ public abstract class BulkProcess {
         this.bulkDumpEnv = bulkDumpEnv;
     }
 
-    public abstract void doProcess(BulkDumpTotalVo bulkDumpTotal, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
+    public abstract void doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpTask bulkDumpTask, BulkDumpService dumpService,
+            BulkDumpJobTotalVo dumpJobTotal);
 }

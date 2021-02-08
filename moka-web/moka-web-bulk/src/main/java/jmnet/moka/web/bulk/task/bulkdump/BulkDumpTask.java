@@ -56,8 +56,6 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
             throw new BulkException("bulkDumpEnvFile 환경 값 설정이 잘못되었습니다.");
         }
         this.bulkDumpEnv = BulkDumpEnv.loadFromFile(bulkDumpEnvFile);
-
-
     }
 
     @Override
@@ -98,7 +96,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
                 bulkDumpTotalVo.setTaskInputData(taskInputData);
                 this.currentSeqNo = Math.max( currentSeqNo, bulkDumpTotalVo.getSeqNo());
 
-                log.info( "BulkDump Start no.={} iud={} totalId={}", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getTotalId());
+                log.info( "BulkDump Start no.={} iud={} contentId={}", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId());
                 this.bulkDumpClientChannel.enqueue(bulkDumpTotalVo);
             } catch (Exception ignore) {
             }

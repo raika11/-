@@ -1,8 +1,10 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.basic;
 
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 
 /**
@@ -23,8 +25,8 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
     }
 
     @Override
-    public void doProcess(BulkDumpTotalVo bulkDumpTotal, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
-        T newArticle = newArticle( bulkDumpTotal );
+    public void doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpTask bulkDumpTask, BulkDumpService dumpService, BulkDumpJobTotalVo dumpJobTotal) {
+        T newArticle = newArticle( totalVo );
         BulkArticle article = (BulkArticle) newArticle;
 
         doProcess_Ready(newArticle, dumpService);
@@ -41,10 +43,10 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
         if(!isSuccess)
             return;
 
-        BulkDumpProcess.doProcess( article, getBulkDumpEnv(), bulkDumpTask );
+        BulkDumpProcess.doProcess(totalVo, article, getBulkDumpEnv(), bulkDumpTask, dumpJobTotal);
     }
 
-    protected abstract T newArticle( BulkDumpTotalVo bulkDumpTotal );
+    protected abstract T newArticle( TotalVo<BulkDumpTotalVo> totalVo );
     protected abstract void doProcess_Ready(T article, BulkDumpService dumpService);
     protected abstract boolean doProcess_InsertUpdate(T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
     protected abstract boolean doProcess_Delete(T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);

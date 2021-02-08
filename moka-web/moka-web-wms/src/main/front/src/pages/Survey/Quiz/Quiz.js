@@ -4,8 +4,8 @@ import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
 import { Route } from 'react-router-dom';
 import QuizChildRelationInfo from '@pages/Survey/Quiz/relations/QuizChildRelationInfo';
 
-import QuizList from '@pages/Survey/Quiz/QuizList';
-import QuizEdit from '@pages/Survey/Quiz/QuizEdit';
+const QuizList = React.lazy(() => import('@pages/Survey/Quiz/QuizList'));
+const QuizEdit = React.lazy(() => import('@pages/Survey/Quiz/QuizEdit'));
 
 const Quiz = ({ match }) => {
     const [, setActiveTabIdx] = useState(0);

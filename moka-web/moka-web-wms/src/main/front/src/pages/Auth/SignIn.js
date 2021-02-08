@@ -100,8 +100,7 @@ const SignIn = () => {
     return (
         <React.Fragment>
             <Main className="h-100 w-100 signin-main" style={{ background: '#080808 url(' + loginBg + ') no-repeat center / cover' }}>
-                {/*<div className="d-flex h-100 w-100 justify-content-center" style={{ background: 'rgb(60, 65, 93, 0.69)' }}>*/}
-                <div className="d-flex h-100 w-100 justify-content-center">
+                <div className="d-flex h-100 w-100 justify-content-center" style={{ background: 'rgb(111, 120, 155, 0.69)' }}>
                     <div className="d-flex flex-column">
                         <Row className="h-100">
                             <Col className="mx-auto d-table h-100">

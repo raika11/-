@@ -149,6 +149,11 @@ public class BulkTagUtil {
         return str;
     }
 
+    private static final Pattern PATTERN_ContentTag_daumKakaoTv = Pattern.compile("<iframe.*?src=(.)http://videofarm.daum.net/controller/video/viewer/Video.html.*?</iframe>", Pattern.CASE_INSENSITIVE );
+    public static String markingKakaoTVPodcast( String contentHtmlDaum, Map<String, String> daumVideoKakaoTvMap ) {
+        return BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumKakaoTv, contentHtmlDaum, "mark_kakao_tv_podcast_", daumVideoKakaoTvMap);
+    }
+
     public static String getMatchesMarkTagList(Pattern pattern, String str, String tag, Map<String, String> map) {
         StringBuffer sb = new StringBuffer( str.length() * 2 );
 
@@ -206,5 +211,35 @@ public class BulkTagUtil {
         str = ripTag(str, "<!--", "-->")
                 .replaceAll("<a(\\s+)([^/a]+[^<]+)>", "<a$1$2 target=\"_joins_nw\">");
         return str;
+    }
+
+    public static String specialHtmlTag(String src) {
+        return src
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&#34;")
+                .replace("`", "&#44;")
+                .replace("--", "&#045;&#045;")
+                .replace("(", "&#40;")
+                .replace(")", "&#41;")
+                .replace("/*", "&#47;*")
+                .replace("*/", "*&#47;")
+                .replace("[", "&#091;")
+                .replace("[", "&#91;")
+                .replace("[", "&#091")
+                .replace("[", "&#91;")
+                .replace("]", "&#093;")
+                .replace("]", "&#93;")
+                .replace("]", "&#093")
+                .replace("]", "&#93")
+                .replace("&#039;", "'")
+                .replace("&#39;", "'")
+                .replace("&#039", "'")
+                .replace("&#39", "'")
+                .replace("‘", "'")
+                .replace("’", "'")
+                .replace("“", "&#34;")
+                .replace("”", "&#34;");
     }
 }

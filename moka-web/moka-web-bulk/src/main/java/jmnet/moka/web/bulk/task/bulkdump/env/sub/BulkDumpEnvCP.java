@@ -83,5 +83,8 @@ public class BulkDumpEnvCP implements Serializable {
 
         if (!McpString.isNullOrEmpty(formatDelete))
             formatDelete = formatDelete.replace("{_TAB_}", "\t").replace("{_CRLF_}", "\r\n");
+
+        if( this.sendSiteCode == null)
+            this.sendSiteCode = "";
     }
 }

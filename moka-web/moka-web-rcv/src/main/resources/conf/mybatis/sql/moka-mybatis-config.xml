@@ -18,6 +18,8 @@
         <package name="jmnet.moka.web.rcv.task.jamxml.vo" />
         <package name="jmnet.moka.web.rcv.task.cpxml.vo" />
         <package name="jmnet.moka.web.rcv.task.pubxml.vo" />
+        <package name="jmnet.moka.web.rcv.task.joinsland.vo" />
+        <package name="jmnet.moka.web.rcv.task.joinsland.vo.sub" />
         <package name="jmnet.moka.web.rcv.task.weathershko.vo" />
     </typeAliases>
     <typeHandlers>

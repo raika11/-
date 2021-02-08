@@ -22,8 +22,8 @@ import lombok.Setter;
 public class BulkDumpNewsVo implements Serializable {
     private static final long serialVersionUID = -3438013357692053677L;
 
-    @JsonProperty(value = "TOTAL_ID")
-    private String totalId;
+    @JsonProperty(value = "CONTENT_ID")
+    private String contentId;
 
     @JsonProperty(value = "DEP")
     private String dep;

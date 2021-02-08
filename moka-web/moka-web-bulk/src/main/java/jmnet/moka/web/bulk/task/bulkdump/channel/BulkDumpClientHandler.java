@@ -1,9 +1,13 @@
 package jmnet.moka.web.bulk.task.bulkdump.channel;
 
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.code.DumpStatus;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.process.BulkDumpClientProcess;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
+import jmnet.moka.web.bulk.util.BulkStringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,15 +38,27 @@ public class BulkDumpClientHandler implements Runnable {
         final BulkDumpService bulkDumpService = bulkDumpTask.getTaskManager().getBulkDumpService();
 
         while( !Thread.interrupted()) {
+            TotalVo<BulkDumpTotalVo> totalVo = null;
+
             try {
-                bulkDumpTotalVo = this.bulkDumpClientChannel.takeQueue();
                 this.bulkDumpClientChannel.incrementWaitExecutorCount();
+                bulkDumpTotalVo = this.bulkDumpClientChannel.takeQueue();
+                totalVo = new TotalVo<>(bulkDumpTotalVo);
 
-                log.info( "BulkDump takeQueue no.={} iud={} totalId={}", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getTotalId());
-                BulkDumpClientProcess.doProcess( bulkDumpTotalVo, this.bulkDumpTask );
+                bulkDumpService.insertBulkLog( totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.ProcessingJhot : DumpStatus.Processing,
+                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} Start", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId()));
 
+                BulkDumpClientProcess.doProcess( totalVo, this.bulkDumpTask );
                 bulkDumpService.delUspBulkDdref(bulkDumpTotalVo);
+
+                bulkDumpService.insertBulkLog( totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.CompleteJhot : DumpStatus.Complete,
+                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} End", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId()));
+
             } catch (Exception e) {
+                if( totalVo != null ) {
+                    bulkDumpService.insertBulkLog(totalVo, DumpStatus.Error,
+                            BulkStringUtil.format("BulkDumpClientHandler Exception {}", e.getMessage()), true );
+                }
                 log.error("BulkDumpClientHandler Exception {}", e.getMessage());
                 e.printStackTrace();
             } finally {

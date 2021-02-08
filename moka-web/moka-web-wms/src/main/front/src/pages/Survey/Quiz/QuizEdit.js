@@ -12,7 +12,6 @@ import useDebounce from '@hooks/useDebounce';
 import SortableItem from '@pages/Survey/component/Sortable/SortableItem';
 
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';
-import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
 import {
     initialState,
@@ -68,6 +67,8 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
     const selectQuizSeq = useRef(null);
     const selectSaveButtonNane = useRef('저장');
 
+    const imgFileRef = useRef(null);
+
     const [questionSearchModalState, setQuestionSearchModalState] = useState(false);
 
     // 항목 생성 설정을 담아둘 스테이트.
@@ -107,7 +108,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         }
     });
 
-    const handleDebounceChangeValue = useDebounce(setMoveItemSort, 100);
+    const handleDebounceChangeValue = useDebounce(setMoveItemSort, 50);
 
     // 수정 필요.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,19 +147,6 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                 }),
             );
         }
-    };
-
-    // 퀴즈 커버 이미지 등록 버튼.
-    const handleChangeFileInput = (inputName, file) => {
-        if (file) {
-            dispatch(
-                changeQuizInfo({
-                    ...quizInfo,
-                    imgFile: file,
-                }),
-            );
-        }
-        return inputName;
     };
 
     // 항목 데이터 초기화.
@@ -260,7 +248,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
     // 저장 버튼 클릭 처리.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleClickSaveButton = useCallback(() => {
-        setHandleSave();
+        // setHandleSave();
         let type;
         let quizSeq;
 
@@ -558,8 +546,8 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         <MokaCard
             titleAs={
                 <div className="w-100 d-flex">
-                    <p className="m-0 h5 font-weight-bold">{`투표 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}</p>
-                    <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p>
+                    <p className="m-0 h5 font-weight-bold">{`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}</p>
+                    {/* <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p> */}
                 </div>
             }
             className="flex-fill"
@@ -568,7 +556,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: '미리보기', variant: 'positive', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-05' },
-                { text: selectSaveButtonNane.current, variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' },
+                { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
             ]}
             width={750}
@@ -645,7 +633,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={12}>
+                            <Col xs={6}>
                                 <MokaInputLabel
                                     as="select"
                                     label="결과 유형"
@@ -672,7 +660,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                         </Form.Row>
                         <Form.Row style={{ height: '55%' }} className="mb-2">
                             <Col xs={12}>
-                                <PollPhotoComponent
+                                {/* <PollPhotoComponent
                                     width={110}
                                     height={110}
                                     src={quizInfo.imgUrl}
@@ -681,7 +669,49 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                     }}
                                 >
                                     150 x 150
-                                </PollPhotoComponent>
+                                </PollPhotoComponent> */}
+                                <MokaInputLabel
+                                    as="imageFile"
+                                    className="mb-2"
+                                    name="selectImg"
+                                    isInvalid={null}
+                                    ref={imgFileRef}
+                                    inputProps={{
+                                        width: 150,
+                                        height: 84,
+                                        img: quizInfo.imgUrl,
+                                    }}
+                                    labelClassName="justify-content-end"
+                                    onChange={(file) => {
+                                        // console.log(e);
+                                        dispatch(
+                                            changeQuizInfo({
+                                                ...quizInfo,
+                                                imgFile: file[0],
+                                            }),
+                                        );
+                                    }}
+                                />
+                                <Col className="d-flex justify-content-start pl-0">
+                                    <Button
+                                        className="mt-0"
+                                        size="sm"
+                                        variant="positive"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            imgFileRef.current.deleteFile();
+                                            dispatch(
+                                                changeQuizInfo({
+                                                    ...quizInfo,
+                                                    imgFile: null,
+                                                }),
+                                            );
+                                        }}
+                                    >
+                                        신규등록
+                                    </Button>
+                                </Col>
                             </Col>
                         </Form.Row>
                     </Col>

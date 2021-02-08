@@ -325,7 +325,9 @@
     {
       call USP_BULK_MGT_INS(
       #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
       )
       }
     ]]>

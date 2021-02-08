@@ -758,7 +758,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                     <Form.Row className="w-100 justify-content-between">
                         <Col xs={7}>
                             <Form.Row>
-                                <Col xs={6}>
+                                <Col xs={6} style={{ paddingRight: '40px' }}>
                                     <MokaInputLabel
                                         as="select"
                                         labelWidth={50}
@@ -787,17 +787,17 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Form.Row>
                         </Col>
                         <Col xs={3}>
-                            <Form.Row>
-                                <Col xs={4}>
+                            <Form.Row className="d-flex justify-content-end">
+                                <div className="d-felx pr-1">
                                     <Button variant="positive" onClick={() => handleClickNewQuestionsButton()}>
                                         생성
                                     </Button>
-                                </Col>
-                                <Col xs={8} className="ml-2">
+                                </div>
+                                <div className="d-felx">
                                     <Button variant="searching" onClick={() => handleClickSearchQuestionsButton()}>
                                         문항 검색
                                     </Button>
-                                </Col>
+                                </div>
                             </Form.Row>
                         </Col>
                     </Form.Row>

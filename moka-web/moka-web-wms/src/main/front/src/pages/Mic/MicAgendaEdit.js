@@ -128,6 +128,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     useEffect(() => {
         const agndServiceDt = moment(agenda.agndServiceDt, DB_DATEFORMAT);
         setTemp({
+            ...initialState.agenda,
             ...agenda,
             agndServiceDt: agndServiceDt.isValid() ? agndServiceDt : null,
         });

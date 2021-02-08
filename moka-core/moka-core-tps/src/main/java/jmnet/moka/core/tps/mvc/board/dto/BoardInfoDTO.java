@@ -234,4 +234,18 @@ public class BoardInfoDTO {
 
     @DTODateTimeFormat
     private Date regDt;
+
+    /**
+     * header
+     */
+    @ApiModelProperty("header content")
+    @Size(min = 0, max = 4000, message = "{tps.board-info.error.size.headerContent}")
+    private String headerContent;
+
+    /**
+     * footer
+     */
+    @ApiModelProperty("footer content")
+    @Size(min = 0, max = 4000, message = "{tps.board-info.error.size.footerContent}")
+    private String footerContent;
 }

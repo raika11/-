@@ -98,22 +98,22 @@ const MokaImageInput = forwardRef((props, ref) => {
     const wrapRef = useRef(null);
     const defaultRef = useRef(null);
 
-    const imageHide = () => {
+    const imageHide = useCallback(() => {
         if (imgRef.current) {
             imgRef.current.classList.add('d-none');
         }
         defaultRef.current.classList.remove('d-none');
         defaultRef.current.classList.add('d-flex');
         setImgSrc(null);
-    };
+    }, []);
 
-    const imageShow = () => {
+    const imageShow = useCallback(() => {
         if (imgRef.current) {
             imgRef.current.classList.remove('d-none');
         }
         defaultRef.current.classList.add('d-none');
         defaultRef.current.classList.remove('d-flex');
-    };
+    }, []);
 
     // 기본 얼럿 메시지 유지를 위해.
     const handleEtcAlert = (message) => {
@@ -135,7 +135,7 @@ const MokaImageInput = forwardRef((props, ref) => {
         }
         imageHide();
         setAlert(false);
-    }, [setFileValue]);
+    }, [setFileValue, imageHide]);
 
     /**
      * 파일 드롭
@@ -172,13 +172,13 @@ const MokaImageInput = forwardRef((props, ref) => {
     };
 
     useEffect(() => {
+        setImgSrc(img);
         if (img) {
-            setImgSrc(img);
             imageShow();
         } else {
             imageHide();
         }
-    }, [img]);
+    }, [img, imageShow, imageHide]);
 
     // 리턴 ref 설정
     useImperativeHandle(
@@ -190,8 +190,10 @@ const MokaImageInput = forwardRef((props, ref) => {
             imgRef: imgRef.current,
             defaultTextRef: defaultRef.current,
             deleteFile: deleteFile,
+            imageHide: imageHide,
+            imageShow: imageShow,
         }),
-        [deleteFile],
+        [deleteFile, imageHide, imageShow],
     );
 
     return (

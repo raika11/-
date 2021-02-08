@@ -218,4 +218,16 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Builder.Default
     private String exceptItem = "ADDR";
 
+    /**
+     * header
+     */
+    @Column(name = "HEADER_CONTENT")
+    private String headerContent;
+
+    /**
+     * footer
+     */
+    @Column(name = "FOOTER_CONTENT")
+    private String footerContent;
+
 }

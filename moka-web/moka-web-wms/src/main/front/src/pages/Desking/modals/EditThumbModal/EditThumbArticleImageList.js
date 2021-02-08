@@ -21,7 +21,7 @@ const defaultProps = {};
  * 기사 내 이미지 목록
  */
 const EditThumbArticleImageList = (props) => {
-    const { contentId, onRepClick } = props;
+    const { contentId, onThumbClick, onRepClick } = props;
     const dispatch = useDispatch();
     const imageList = useSelector((store) => store.article.imageList);
     const loading = useSelector((store) => store.loading[GET_ARTICLE_IMAGE_LIST]);
@@ -63,6 +63,7 @@ const EditThumbArticleImageList = (props) => {
                         img={data.thumbPath}
                         data={data}
                         dataType={data.dataType}
+                        onThumbClick={onThumbClick}
                         onRepClick={onRepClick}
                         articleImg
                     />

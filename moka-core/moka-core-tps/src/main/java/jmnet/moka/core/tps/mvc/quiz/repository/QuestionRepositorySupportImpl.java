@@ -55,7 +55,9 @@ public class QuestionRepositorySupportImpl extends TpsQueryDslRepositorySupport 
                         .or(qQuestion.questionSeq.in(JPAExpressions
                                 .selectFrom(qQuizChoice)
                                 .select(qQuizChoice.id.questionSeq)
-                                .where(qQuizChoice.title.contains(search.getKeyword())))));
+                                .where(qQuizChoice.title
+                                        .toUpperCase()
+                                        .contains(search.getKeyword())))));
             } else if (qQuestion.title
                     .getMetadata()
                     .getName()
@@ -67,7 +69,9 @@ public class QuestionRepositorySupportImpl extends TpsQueryDslRepositorySupport 
                 query.where(qQuestion.questionSeq.in(JPAExpressions
                         .selectFrom(qQuizChoice)
                         .select(qQuizChoice.id.questionSeq)
-                        .where(qQuizChoice.title.contains(search.getKeyword()))));
+                        .where(qQuizChoice.title
+                                .toUpperCase()
+                                .contains(search.getKeyword()))));
             }
         }
 

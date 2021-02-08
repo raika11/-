@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+
 /**
  * <pre>
  * 벌크 현황 조회용 VO
@@ -29,60 +31,126 @@ import org.apache.ibatis.type.Alias;
 public class BulkLogVO {
 
     /**
+     * 로그일련번호
+     */
+    @Builder.Default
+    private Long logSeq = 0l;
+
+    /**
+     * MGT일련번호
+     */
+    @Builder.Default
+    private Long mgtSeq = 0l;
+
+    /**
+     * DDREF일련번호
+     */
+    @Builder.Default
+    private Long ddrefSeq = 0l;
+
+    /**
      * 콘텐트구분
      */
     private String contentDiv;
 
     /**
-     * 상태
+     * 콘텐트ID
+     */
+    private String contentId;
+
+    /**
+     * 입력수정삭제
+     */
+    private String iud;
+
+    /**
+     * 매체코드
+     */
+    private String orgSourceCode;
+
+    /**
+     * 매체코드명
+     */
+    private String orgSourceName;
+
+    /**
+     * 등록일시
+     */
+    private Date regDt;
+
+    /**
+     * 최종상태(10:완료,1:Loader진행,3:Loader완료, 5:덤프진행, 8:Dump완료,-3:Loader실패,-5:Dump실패,-10:Sender실패)
      */
     private String status;
 
     /**
-     * 전체 검색 건수
+     * 로더상태(10:완료,1:진행,-1:실패,15:Loader에서 모두완료)
      */
-    @Builder.Default
-    private Long totalCnt = 0l;
+    private String loaderStatus;
 
     /**
-     * Loader 건수
+     * 로더시작일시
      */
-    @Builder.Default
-    private Long loaderCnt = 0l;
+    private Date loaderStartDt;
 
     /**
-     * Dump 건수
+     * 로더종료일시
      */
-    @Builder.Default
-    private Long dumpCnt = 0l;
+    private Date loaderEndDt;
 
     /**
-     * Sender 건수
+     * 덤프상태(15:JHOT완료, 10:완료, 3:JHOT 진행, 1:진행,-1:실패)
      */
-    @Builder.Default
-    private Long senderCnt = 0l;
+    private String dumpStatus;
 
     /**
-     * naver Sender 건수
+     * 덤프시작일시
      */
-    @Builder.Default
-    private Long naverSenderCnt = 0l;
+    private Date dumpStartDt;
 
     /**
-     * empas Sender 건수
+     * 덤프종료일시
      */
-    @Builder.Default
-    private Long empasSenderCnt = 0l;
+    private Date dumpEndDt;
 
     /**
-     * estsoft Sender 건수
+     * 로그메시지
      */
-    @Builder.Default
-    private Long estsoftSenderCnt = 0l;
+    private String msg;
 
     /**
-     * remark Sender 건수
+     * 제목
      */
-    @Builder.Default
-    private Long remarkSenderCnt = 0l;
+    private String title;
+
+    /**
+     * naver 상태
+     */
+    private String naverStatus;
+
+    /**
+     * daum 상태
+     */
+    private String daumStatus;
+
+    /**
+     * nate 상태
+     */
+    private String nateStatus;
+
+    /**
+     * zoom 상태
+     */
+    private String zoomStatus;
+
+    /**
+     * kpf 상태
+     */
+    private String kpfStatus;
+
+    /**
+     * remark 상태
+     */
+    private String remarkStatus;
+
 }

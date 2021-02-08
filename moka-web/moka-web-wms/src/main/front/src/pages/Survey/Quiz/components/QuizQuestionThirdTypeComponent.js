@@ -153,6 +153,25 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
         );
     });
 
+    const setImageFileValue = (file) => {
+        if (!file) {
+            questionInfoChange({
+                ...questionsList[questionIndex],
+                questionIndex: questionIndex,
+                imgFile: null,
+            });
+            return;
+        }
+
+        dispatch(
+            questionInfoChange({
+                ...questionsList[questionIndex],
+                questionIndex: questionIndex,
+                imgFile: file,
+            }),
+        );
+    };
+
     return (
         <>
             <div className="mb-2 p-2 bg-gray-150">
@@ -230,6 +249,24 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                     <Col xs={3}>
                         <MokaInputLabel
                             as="imageFile"
+                            ref={imgFileRef}
+                            labelWidth={90}
+                            inputProps={{ img: questionsList[questionIndex].imgUrl, width: 150, height: 150, setFileValue: setImageFileValue, deleteButton: true }}
+                        />
+                        <Col className="d-flex justify-content-start pl-0 pt-2">
+                            <Button
+                                className="mt-0"
+                                size="sm"
+                                variant="positive"
+                                onClick={(e) => {
+                                    imgFileRef.current.rootRef.onClick(e);
+                                }}
+                            >
+                                신규등록
+                            </Button>
+                        </Col>
+                        {/* <MokaInputLabel
+                            as="imageFile"
                             className="mb-2"
                             name="selectImg"
                             ref={imgFileRef}
@@ -267,7 +304,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                             >
                                 신규등록
                             </Button>
-                        </Col>
+                        </Col> */}
                     </Col>
                 </Form.Row>
                 {/* 정답. */}

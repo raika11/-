@@ -82,6 +82,25 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
         );
     });
 
+    const setImageFileValue = (file) => {
+        if (!file) {
+            questionInfoChange({
+                ...questionsList[questionIndex],
+                questionIndex: questionIndex,
+                imgFile: null,
+            });
+            return;
+        }
+
+        dispatch(
+            questionInfoChange({
+                ...questionsList[questionIndex],
+                questionIndex: questionIndex,
+                imgFile: file,
+            }),
+        );
+    };
+
     return (
         <>
             <div className="mb-2 p-2 bg-gray-150">
@@ -121,7 +140,6 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                 <Form.Row className="pt-3">
                     <Col xs={9}>
                         <Form.Row className="pt-1">
-                            {/* <div class="d-felx mr-0 pr-4"></div> */}
                             <Col xs={12} className="d-felx m-0 pr-2 pl-4">
                                 {/* 정답 */}
                                 <MokaInputLabel
@@ -139,13 +157,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                         </Form.Row>
                         <Form.Row className="pl-4 pt-5 mb-0">
                             <Col xs={12}>
-                                <MokaInputLabel
-                                    as="none"
-                                    label="정답으로 처리할 수 있는 단어는 (,)로 구분하여 다수 등록 가능 "
-                                    required
-                                    // labelWidth={100}
-                                    labelClassName="text-left ml-0 w-100"
-                                />
+                                <MokaInputLabel as="none" label="정답으로 처리할 수 있는 단어는 (,)로 구분하여 다수 등록 가능 " required labelClassName="text-left ml-0 w-100" />
                             </Col>
                         </Form.Row>
                         <Form.Row className="pt-2">
@@ -169,39 +181,17 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                         {/* 이미지 */}
                         <MokaInputLabel
                             as="imageFile"
-                            className="mb-2"
-                            name="selectImg"
                             ref={imgFileRef}
-                            inputProps={{
-                                width: 150,
-                                height: 150,
-                                img: questionsList[questionIndex].imgUrl,
-                            }}
-                            labelClassName="justify-content-end"
-                            onChange={(file) => {
-                                dispatch(
-                                    questionInfoChange({
-                                        ...questionsList[questionIndex],
-                                        questionIndex: questionIndex,
-                                        imgFile: file[0],
-                                    }),
-                                );
-                            }}
+                            labelWidth={90}
+                            inputProps={{ img: questionsList[questionIndex].imgUrl, width: 150, height: 150, setFileValue: setImageFileValue, deleteButton: true }}
                         />
-                        <Col className="d-flex justify-content-start pl-0">
+                        <Col className="d-flex justify-content-start pl-0 pt-2">
                             <Button
                                 className="mt-0"
                                 size="sm"
                                 variant="positive"
                                 onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    imgFileRef.current.deleteFile();
-                                    questionInfoChange({
-                                        ...questionsList[questionIndex],
-                                        questionIndex: questionIndex,
-                                        imgFile: null,
-                                    });
+                                    imgFileRef.current.rootRef.onClick(e);
                                 }}
                             >
                                 신규등록

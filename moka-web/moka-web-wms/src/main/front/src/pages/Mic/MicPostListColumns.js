@@ -1,4 +1,5 @@
 import PostSelectRenderer from './components/PostSelectRenderer';
+import LoginNameRenderer from './components/LoginNameRenderer';
 
 export default [
     {
@@ -18,10 +19,10 @@ export default [
     {
         headerName: '작성자',
         field: 'loginName',
-        wrapText: true,
-        width: 80,
+        width: 120,
         tooltipField: 'loginName',
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px' },
+        cellRendererFramework: LoginNameRenderer,
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '22px' },
     },
     {
         headerName: '공감수',

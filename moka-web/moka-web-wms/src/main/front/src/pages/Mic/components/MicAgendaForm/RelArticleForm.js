@@ -3,8 +3,11 @@ import { useSelector } from 'react-redux';
 import produce from 'immer';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel, MokaImage, MokaIcon } from '@components';
+import commonUtil from '@utils/commonUtil';
+import imageEditer from '@utils/imageEditorUtil';
 import toast, { messageBox } from '@utils/toastUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
+import { EditThumbModal } from '@pages/Desking/modals';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 /**
@@ -13,6 +16,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 const RelArticleForm = ({ agenda, onChange }) => {
     const { relArticleList = [] } = agenda;
     const [show, setShow] = useState(false);
+    const [arcShow, setArcShow] = useState(false);
     const PDS_URL = useSelector(({ app }) => app.PDS_URL);
 
     /**
@@ -85,6 +89,64 @@ const RelArticleForm = ({ agenda, onChange }) => {
         setShow(false);
     };
 
+    /**
+     * 이미지 신규등록
+     * @param {string} imageSrc 이미지 src
+     * @param {*} file 파일데이터
+     * @param {number} idx 기사 index
+     */
+    const handleThumbFileApply = (imageSrc, file, idx) => {
+        const nlist = produce(relArticleList, (draft) => {
+            const no = {
+                ...relArticleList[idx],
+                artThumb: imageSrc,
+                artThumbFile: file,
+            };
+            draft.splice(idx, 1, no);
+        });
+        onChange({
+            key: 'relArticleList',
+            value: nlist,
+        });
+    };
+
+    /**
+     * 이미지 편집
+     * @param {string} imageSrc 이미지 src
+     * @param {number} idx 기사 index
+     */
+    const handleEditClick = (imageSrc, idx) => {
+        if (imageSrc) {
+            imageEditer.create(
+                imageSrc,
+                (editImageSrc) => {
+                    (async () => {
+                        await fetch(editImageSrc)
+                            .then((r) => r.blob())
+                            .then((blobFile) => {
+                                const file = commonUtil.blobToFile(blobFile, new Date().getTime());
+                                const nlist = produce(relArticleList, (draft) => {
+                                    const no = {
+                                        ...relArticleList[idx],
+                                        artThumb: editImageSrc,
+                                        artThumbFile: file,
+                                    };
+                                    draft.splice(idx, 1, no);
+                                });
+                                onChange({
+                                    key: 'relArticleList',
+                                    value: nlist,
+                                });
+                            });
+                    })();
+                },
+                { cropWidth: 300, cropHeight: 300 },
+            );
+        } else {
+            messageBox.alert('편집할 이미지가 없습니다');
+        }
+    };
+
     return (
         <React.Fragment>
             <div className="mb-3 d-flex">
@@ -108,10 +170,10 @@ const RelArticleForm = ({ agenda, onChange }) => {
                             as="none"
                             label={
                                 <React.Fragment>
-                                    <Button variant="gray-700" size="sm" className="w-100">
+                                    <Button variant="gray-700" size="sm" className="w-100" onClick={() => setArcShow(true)}>
                                         신규등록
                                     </Button>
-                                    <Button variant="outline-gray-700" size="sm" className="mt-1 w-100">
+                                    <Button variant="outline-gray-700" size="sm" className="mt-1 w-100" onClick={() => handleEditClick(article.artThumb, idx)}>
                                         편집
                                     </Button>
                                 </React.Fragment>
@@ -136,6 +198,17 @@ const RelArticleForm = ({ agenda, onChange }) => {
                                 <MokaIcon iconName="fas-minus-circle" />
                             </Button>
                         </div>
+
+                        {/* 포토 아카이브 모달 */}
+                        <EditThumbModal
+                            show={arcShow}
+                            cropHeight={300}
+                            cropWidth={300}
+                            onHide={() => setArcShow(false)}
+                            contentId={article.totalId}
+                            thumbFileName={article.artThumb}
+                            apply={(imageSrc, file) => handleThumbFileApply(imageSrc, file, idx)}
+                        />
                     </div>
                 </div>
             ))}

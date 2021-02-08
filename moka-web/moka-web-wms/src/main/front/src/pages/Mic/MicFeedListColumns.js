@@ -8,7 +8,7 @@ export default [
     {
         headerName: '내용',
         field: 'answMemo',
-        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px', paddingTop: '3px', paddingBottom: '3px' },
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px', paddingTop: '3px', paddingBottom: '3px', minHeight: '45px' },
         autoHeight: true,
         wrapText: true,
         flex: 1,

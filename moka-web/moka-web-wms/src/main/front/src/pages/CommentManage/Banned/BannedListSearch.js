@@ -209,7 +209,7 @@ const BannedListSearch = ({ pathName }) => {
                                 <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockUserReason.map((media, index) => (
-                                        <option key={index} value={media.id}>
+                                        <option key={index} value={media.value}>
                                             {media.name}
                                         </option>
                                     ))}

@@ -254,7 +254,7 @@ const BannedListSearch = ({ pathName }) => {
             </div>
             <div className="d-inline-block float-right">
                 <Button variant="positive" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
-                    차단등록
+                    등록
                 </Button>
                 <Button variant="negative" className="mr-2" onClick={() => handleOnClickApplyButton()}>
                     적용하기

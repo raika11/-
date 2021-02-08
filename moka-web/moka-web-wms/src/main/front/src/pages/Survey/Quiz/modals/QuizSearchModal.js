@@ -120,7 +120,7 @@ const QuizSearchModal = (props) => {
                     <Col xs={2} className="p-0">
                         <MokaInput as="select" name="searchType" value={searchData.searchType} onChange={(e) => handleChangeValue(e)}>
                             <option value="">전체</option>
-                            <option value="title">퀴즈제목1</option>
+                            <option value="title">퀴즈제목</option>
                             <option value="quizSeq">퀴즈ID</option>
                         </MokaInput>
                     </Col>

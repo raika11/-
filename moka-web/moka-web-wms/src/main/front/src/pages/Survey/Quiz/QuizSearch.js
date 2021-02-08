@@ -42,9 +42,9 @@ const QuizSearch = ({ onAdd }) => {
             <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="searchType" value={searchData.searchType} onChange={(e) => handleChangeValue(e)}>
-                        <option value="">전체</option>
+                        <option value="all">전체</option>
                         <option value="title">그룹 제목</option>
-                        <option value="grpCd">그룹ID</option>
+                        <option value="quizSeq">그룹ID</option>
                     </MokaInput>
                 </Col>
                 <Col xs={8} className="p-0 pr-2">

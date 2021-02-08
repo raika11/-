@@ -10,6 +10,7 @@ import { initialState, GET_QUESTIONS_LIST, getQuestionsList, changeQuestionsList
  */
 const QuestionSearchModal = (props) => {
     const dispatch = useDispatch();
+    const [selectQuizSeq, setSelectQuizSeq] = useState(null);
     const { show, onHide } = props;
     const [rowData, setRowData] = useState([]);
     const [searchData, setSearchData] = useState(initialState.quizQuestionList.search);
@@ -47,8 +48,8 @@ const QuestionSearchModal = (props) => {
     };
 
     // row 클릭처리가 없어서 함수만 만들어 놈
-    const handleClickListRow = () => {
-        // onHide();
+    const handleClickListRow = (e) => {
+        setSelectQuizSeq(e.questionSeq);
     };
 
     // grid 옵션 변경 처리.
@@ -76,6 +77,7 @@ const QuestionSearchModal = (props) => {
                         Type = '단답식';
                     }
                     return {
+                        questionSeq: element.questionSeq,
                         title: element.title,
                         Type: Type,
                         questionsInfo: element,
@@ -142,7 +144,7 @@ const QuestionSearchModal = (props) => {
                     columnDefs={columnDefs}
                     rowData={rowData}
                     rowHeight={50}
-                    onRowNodeId={(data) => data.castSrl}
+                    onRowNodeId={(data) => data.questionSeq}
                     onRowClicked={(e) => handleClickListRow(e)}
                     loading={loading}
                     page={search.page}
@@ -150,6 +152,7 @@ const QuestionSearchModal = (props) => {
                     total={total}
                     preventRowClickCell={['questionsInfo', 'questionsPriviewInfo']}
                     onChangeSearchOption={handleChangeSearchOption}
+                    selected={selectQuizSeq}
                 />
             </MokaCard>
         </MokaModal>

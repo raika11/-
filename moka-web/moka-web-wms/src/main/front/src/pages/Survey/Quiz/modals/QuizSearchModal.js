@@ -11,6 +11,7 @@ import { initialState, GET_QUIZ_SEARCH_MODAL_LIST, clearQuizmodalsearch, getQuiz
  */
 const QuizSearchModal = (props) => {
     const { show, onHide } = props;
+    const [selectQuizSeq, setSelectQuizSeq] = useState(null);
 
     const [searchData, setSearchData] = useState(initialState.quizSearchList.search);
     const dispatch = useDispatch();
@@ -29,7 +30,9 @@ const QuizSearchModal = (props) => {
     };
 
     // row 클릭시 처리.
-    const handleOnRowClicked = () => {};
+    const handleOnRowClicked = (e) => {
+        setSelectQuizSeq(e.quizSeq);
+    };
 
     // 검색 정보 변경 처리.
     const handleChangeValue = (e) => {
@@ -117,7 +120,7 @@ const QuizSearchModal = (props) => {
                     <Col xs={2} className="p-0">
                         <MokaInput as="select" name="searchType" value={searchData.searchType} onChange={(e) => handleChangeValue(e)}>
                             <option value="">전체</option>
-                            <option value="title">퀴즈제목</option>
+                            <option value="title">퀴즈제목1</option>
                             <option value="quizSeq">퀴즈ID</option>
                         </MokaInput>
                     </Col>
@@ -138,6 +141,7 @@ const QuizSearchModal = (props) => {
                 total={total}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
+                selected={selectQuizSeq}
             />
         </MokaModal>
     );

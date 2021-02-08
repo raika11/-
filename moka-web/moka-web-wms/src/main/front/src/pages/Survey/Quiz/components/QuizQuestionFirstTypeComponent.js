@@ -139,7 +139,13 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                         </Form.Row>
                         <Form.Row className="pl-4 pt-5 mb-0">
                             <Col xs={12}>
-                                <MokaInputLabel as="none" label="정답으로 처리할 수 있는 단어는 (,)로 구분하여 다수 등록 가능 " required labelClassName="w-100 ml-0" />
+                                <MokaInputLabel
+                                    as="none"
+                                    label="정답으로 처리할 수 있는 단어는 (,)로 구분하여 다수 등록 가능 "
+                                    required
+                                    labelWidth={100}
+                                    labelClassName="text-right ml-0"
+                                />
                             </Col>
                         </Form.Row>
                         <Form.Row className="pt-2">

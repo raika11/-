@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import moment from 'moment';
+import jQuery from 'jquery';
 import { useDispatch, useSelector } from 'react-redux';
 import FullCalendar from '@fullcalendar/react';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
@@ -13,35 +14,16 @@ import CancelHolidayModal from './modals/CancelHolidayModal';
 import { getTourSetup, clearStore, getTourDenyMonthList, getTourApplyMonthList } from '@/store/tour';
 
 const holidayEl = document.createElement('div');
+// const findEl = (node, targetClass) => (node && node.classList.contains(targetClass) ? node : node.parentElement ? findEl(node.parentElement, targetClass) : null);
 
-// const demoEvents = {
-//     events: [
-//         {
-//             id: '1',
-//             title: '설날',
-//             start: '2021-02-11',
-//             end: '2021-02-14',
-//             allDay: true,
-//             holiday: true,
-//         },
-//         {
-//             id: '2',
-//             title: '테스트',
-//             start: '2021-02-16',
-//             end: '2021-02-18',
-//         },
-//         { title: '중앙대학교사범대학 부속고등학교', start: '2021-02-16T10:00:00' },
-//     ],
-//     color: '#FF3907',
-//     // display: block, list-item, background (event obj)
-// };
-
-const TourMonthCalendar = (props) => {
+/**
+ * 견학 월별현황 캘린더
+ */
+const TourMonthCalendar = () => {
     const dispatch = useDispatch();
     const holidayList = useSelector((store) => store.tour.holidayList);
     const tourApplyList = useSelector((store) => store.tour.tourApplyList);
     const tourSetup = useSelector((store) => store.tour.tourSetup);
-    // const [calendarApi, setCalendarApi] = useState(null);
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
     const [day, setDay] = useState('');
@@ -54,6 +36,7 @@ const TourMonthCalendar = (props) => {
     const [cancelModal, setCancelModal] = useState(false);
 
     const calendarRef = useRef(null);
+    const mouseenterEventRef = useRef(null);
 
     useEffect(() => {
         return () => {
@@ -136,6 +119,68 @@ const TourMonthCalendar = (props) => {
         }
     }, [tourApplyList]);
 
+    useEffect(() => {
+        mouseenterEventRef && document.removeEventListener('mouseenter', mouseenterEventRef.current);
+
+        (function ($) {
+            function mouseenterEvent(e) {
+                // 이벤트 => 휴일 해제 버튼 렌더링
+                if (day !== '') {
+                    if ($(this).find('.fc-daygrid-event-harness').length > 0) {
+                        const frame = $(this).find('.fc-daygrid-day-frame');
+                        const dowNumber = Number(this.dataset['dow']);
+                        if (day.substr(dowNumber, 1) === 'Y') {
+                            this.style.cursor = 'pointer';
+                            if (this.querySelector('.fc-set-event-button')) {
+                                // 휴일 해제 버튼 있을 때
+                                return;
+                            } else {
+                                // 휴일 해제 버튼 없을 때
+                                if (this.dataset && this.dataset['tourStatus'] === 'undefined' && this.dataset['denyRepeatYn'] === 'N') {
+                                    let button = document.createElement('button');
+                                    button.className = 'btn btn-negative fc-set-event-button';
+                                    button.innerText = '휴일 해제';
+                                    $(frame).append(button);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $(document).on('mouseenter', '.fc-daygrid-day', mouseenterEvent);
+
+            mouseenterEventRef.current = mouseenterEventRef;
+        })((window.jQuery = jQuery));
+    }, [day]);
+
+    useEffect(() => {
+        // 이벤트 id 값으로 object 조회
+        let getEvent = (id) => {
+            return calendarRef.current.getApi().view.calendar.getEventById(id).extendedProps;
+        };
+
+        (function ($) {
+            // 휴일 버튼 해제
+            $(document).on('click', '.fc-set-event-button', function (e) {
+                const harness = $(this).parents('.fc-daygrid-day');
+                if (harness) {
+                    const data = harness[0].dataset['denySeq'];
+                    setSelectedData(getEvent(data));
+                    setCancelModal(true);
+                }
+            });
+
+            // 이벤트 mouseleave
+            $(document).on('mouseleave', '.fc-daygrid-day', function (e) {
+                const targetBtn = $(this).find('.fc-set-event-button');
+                if (targetBtn.length > 0) {
+                    targetBtn.remove();
+                }
+            });
+        })((window.jQuery = jQuery));
+    }, []);
+
     return (
         <>
             <FullCalendar
@@ -172,12 +217,12 @@ const TourMonthCalendar = (props) => {
                         let frame = document.querySelectorAll('.fc-daygrid-day');
                         frame.forEach((e) => {
                             if (day[e.dataset['dow']] === 'N') {
-                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['denyRepeatYn'] === 'N') {
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.dataset['denyRepeatYn'] === 'N') {
                                     e.querySelector('.fc-daygrid-event-harness').style.visibility = 'hidden';
                                 }
                             } else {
                                 // 휴일 지정 el 추가
-                                e.firstChild.addEventListener('mouseenter', () => {
+                                e.firstChild.addEventListener('mouseenter', function () {
                                     if (!e.firstChild.querySelector('.fc-daygrid-event-harness')) {
                                         e.firstChild.style.cursor = 'pointer';
                                         holidayEl.className = 'fc-set-holiday';
@@ -211,24 +256,6 @@ const TourMonthCalendar = (props) => {
                         circle.className = 'fc-set-today-number';
                         top.appendChild(circle);
                     }
-
-                    // mouseenter 휴일 지정 el 추가
-                    // frame.firstChild.addEventListener('mouseenter', function () {
-                    //     const events = this.querySelector('.fc-daygrid-day-events');
-                    //     // if (events.style['padding-bottom'] === '') {
-                    //     if (!events.querySelector('.fc-daygrid-event-harness')) {
-                    //         holidayEl.className = 'fc-set-holiday';
-                    //         holidayEl.innerHTML = '휴일 지정';
-                    //         this.appendChild(holidayEl);
-                    //     }
-                    //     // }
-                    // });
-                    // // mouseleave 휴일 지정 el 제거
-                    // frame.firstChild.addEventListener('mouseleave', function () {
-                    //     if (this.querySelector('.fc-set-holiday')) {
-                    //         this.removeChild(holidayEl);
-                    //     }
-                    // });
                 }}
                 dayCellContent={(c) => {
                     c.dayNumberText = c.dayNumberText.replace('일', '');
@@ -241,73 +268,42 @@ const TourMonthCalendar = (props) => {
                     let eventEl = e.el;
                     let button = document.createElement('button');
 
-                    // 이벤트 id 값으로 object 조회
-                    let getEvent = (id) => {
-                        return e.view.calendar.getEventById(id).extendedProps;
-                    };
-
                     // 이벤트 상위 el에 커스텀 데이터 추가
-                    eventEl.parentElement.dataset['denyRepeatYn'] = e.event.extendedProps.denyRepeatYn;
-                    eventEl.parentElement.dataset['denySeq'] = e.event.extendedProps.denySeq;
-                    eventEl.parentElement.dataset['tourStatus'] = e.event.extendedProps.tourStatus;
-                    eventEl.parentElement.dataset['tourTime'] = e.event.extendedProps.tourTime;
-
+                    eventEl.parentElement.parentElement.parentElement.parentElement.dataset['denyRepeatYn'] = e.event.extendedProps.denyRepeatYn;
+                    eventEl.parentElement.parentElement.parentElement.parentElement.dataset['denySeq'] = e.event.extendedProps.denySeq;
+                    eventEl.parentElement.parentElement.parentElement.parentElement.dataset['tourStatus'] = e.event.extendedProps.tourStatus;
+                    eventEl.parentElement.parentElement.parentElement.parentElement.dataset['tourTime'] = e.event.extendedProps.tourTime;
                     // 이벤트가 있고 매년 반복 이벤트가 아닐시 hidden
                     if (day !== '') {
                         let frameAll = document.querySelectorAll('.fc-daygrid-day');
                         frameAll.forEach((e) => {
                             if (day[e.dataset['dow']] === 'N') {
-                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['denyRepeatYn'] === 'N') {
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.dataset['denyRepeatYn'] === 'N') {
                                     e.querySelector('.fc-daygrid-event-harness').style.visibility = 'hidden';
                                 }
                             } else {
-                                // 관리자 지정 이벤트 셀 mouseenter, mouseleave
-                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['denyRepeatYn'] === 'N') {
-                                    e.style.cursor = 'pointer';
-                                    e.firstChild.addEventListener('mouseenter', () => {
-                                        if (e.firstChild.querySelectorAll('button').length > 0) {
-                                            return;
-                                        } else {
-                                            button.className = 'btn btn-negative fc-set-event-button';
-                                            button.innerText = '휴일 해제';
-                                            e.firstChild.appendChild(button);
-                                        }
-
-                                        if (e.firstChild.querySelector('button')) {
-                                            button.addEventListener(
-                                                'click',
-                                                () => {
-                                                    let data = getEvent(e.querySelector('.fc-daygrid-event-harness').dataset['denySeq']);
-                                                    setSelectedData(data);
-                                                    setCancelModal(true);
-                                                },
-                                                { once: true },
-                                            );
-                                        }
-                                    });
-
-                                    e.firstChild.addEventListener('mouseleave', () => {
-                                        if (e.firstChild.querySelector('button')) {
-                                            e.firstChild.removeChild(button);
-                                        }
-                                    });
-                                }
-
                                 // 견학 신청 목록 버튼 추가
-                                if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['tourStatus'] === 'A') {
+                                if (e.querySelector('.fc-daygrid-event-harness') && e.dataset['tourStatus'] === 'A') {
                                     e.style.cursor = 'pointer';
-                                    button.className = 'btn btn-positive fc-set-event-button';
+                                    button.className = 'btn btn-positive';
+                                    button.style.position = 'absolute';
+                                    button.style.top = '75%';
+                                    button.style.left = '50%';
+                                    button.style.transform = 'translate(-50%, -50%)';
                                     button.innerText = '확정';
                                     e.firstChild.appendChild(button);
-                                } else if (e.querySelector('.fc-daygrid-event-harness') && e.querySelector('.fc-daygrid-event-harness').dataset['tourStatus'] === 'S') {
+                                } else if (e.querySelector('.fc-daygrid-event-harness') && e.dataset['tourStatus'] === 'S') {
                                     e.style.cursor = 'pointer';
-                                    button.className = 'btn btn-negative fc-set-event-button';
+                                    button.className = 'btn btn-negative';
+                                    button.style.position = 'absolute';
+                                    button.style.top = '75%';
+                                    button.style.left = '50%';
+                                    button.style.transform = 'translate(-50%, -50%)';
                                     button.innerText = '대기';
                                     e.firstChild.appendChild(button);
                                 }
-
                                 // 휴일 지정 el 추가
-                                e.firstChild.addEventListener('mouseenter', () => {
+                                e.firstChild.addEventListener('mouseenter', function () {
                                     if (!e.firstChild.querySelector('.fc-daygrid-event-harness')) {
                                         e.firstChild.style.cursor = 'pointer';
                                         holidayEl.className = 'fc-set-holiday';
@@ -315,7 +311,6 @@ const TourMonthCalendar = (props) => {
                                         e.firstChild.appendChild(holidayEl);
                                     }
                                 });
-
                                 // mouseleave 휴일 지정 el 제거
                                 e.firstChild.addEventListener('mouseleave', function () {
                                     if (e.firstChild.querySelector('.fc-set-holiday')) {
@@ -325,7 +320,6 @@ const TourMonthCalendar = (props) => {
                             }
                         });
                     }
-
                     // 견학 타이틀 스타일 변경
                     let title = document.querySelectorAll('.fc-event-title');
                     if (title.length > 0) {
@@ -364,13 +358,6 @@ const TourMonthCalendar = (props) => {
                         setSelectedData(applyDate[0].extendedProps);
                         setSummaryModal(true);
                     }
-                    // let frame = d.dayEl,
-                    //     events = frame.querySelector('.fc-daygrid-day-events');
-                    // if (events.style['padding-bottom'] === '') {
-                    //     if (!events.querySelector('.fc-daygrid-event-harness')) {
-                    //         setHolidayModal(true);
-                    //     }
-                    // }
                 }}
             />
             <SetHolidayModal show={holidayModal} onHide={() => setHolidayModal(false)} date={clickDate} year={year} month={month} />

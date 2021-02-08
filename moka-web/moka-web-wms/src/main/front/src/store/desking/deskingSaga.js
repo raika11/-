@@ -3,6 +3,7 @@ import { createRequestSaga, errorResponse } from '@store/commons/saga';
 import { getRowIndex } from '@utils/agGridUtil';
 import { getMoveMode } from '@utils/deskingUtil';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import * as api from './deskingApi';
 import * as act from './deskingAction';
 import { DEFAULT_LANG } from '@/constants';
@@ -180,11 +181,11 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
             relOrd,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title,
-            subTitle: data.artSubTitle,
+            title: unescapeHtmlArticle(title),
+            subTitle: unescapeHtmlArticle(data.artSubTitle),
             nameplate: null,
             titlePrefix: null,
-            bodyHead: data.artSummary,
+            bodyHead: unescapeHtmlArticle(data.artSummary),
             linkUrl: `//${domain?.domainUrl}/article/${data.totalId}`,
             linkTarget: '_self',
             boxUrl: null,
@@ -247,11 +248,11 @@ const makeRowNode = (data, contentOrd, component, etc) => {
             relOrd: 1,
             lang: DEFAULT_LANG,
             distDt: data.serviceDaytime,
-            title,
-            subTitle: data.artSubTitle,
+            title: unescapeHtmlArticle(title),
+            subTitle: unescapeHtmlArticle(data.artSubTitle),
             nameplate: null,
             titlePrefix: null,
-            bodyHead: data.artSummary,
+            bodyHead: unescapeHtmlArticle(data.artSummary),
             linkUrl: `//${domain?.domainUrl}/article/${data.totalId}`,
             linkTarget: '_self',
             boxUrl: null,

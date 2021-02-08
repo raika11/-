@@ -8,12 +8,13 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { CommentActionModal, BenneHistoryModal } from '@pages/CommentManage/CommentModal';
 import { getCommentsBlocks, blocksUsed, clearBlocksList } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
+import AuthButton from '@pages/Auth/AuthButton';
 
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     return (
-        <div ref={ref} className="px-2" onClick={onClick} id={id}>
+        <AuthButton ref={ref} variant="outline-table-btn" className="px-2" onClick={onClick} id={id}>
             삭제
-        </div>
+        </AuthButton>
     );
 });
 
@@ -21,11 +22,9 @@ export const UserInfoRenderer = ({ value }) => {
     const { memNm, memId } = value;
     return (
         <>
-            <Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>
-                {memId}
-            </Col>
-            <Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>
-                {memNm}
+            {/*<Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>{memId}</Col>*/}
+            <Col className="d-flex pl-0" style={{ lineHeight: '1.1em' }}>
+                {memId} / {memNm}
             </Col>
         </>
     );

@@ -3,6 +3,7 @@ package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
@@ -28,8 +29,8 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
     }
 
     @Override
-    protected BulkJoongangArticle newArticle(BulkDumpTotalVo bulkDumpTotal) {
-        return new BulkJoongangArticle(bulkDumpTotal);
+    protected BulkJoongangArticle newArticle(TotalVo<BulkDumpTotalVo> totalVo) {
+        return new BulkJoongangArticle(totalVo);
     }
 
     @Override

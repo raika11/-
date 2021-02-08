@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.rcv.mapper.moka.JoinsLandMapper">
+  <insert id="callUspBulkJoinslandNewstableIns" parameterType="JoinsLandArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_JOINSLAND_NEWSTABLE_INS(
+      #{mainData.iud, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.aid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{insDt, mode=IN, jdbcType=TIMESTAMP, javaType=Date},
+      #{mainData.code1, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.reporter, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.title, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.content, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.email, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.serviceUrl, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUspBulkJoinslandNewsMMdataIns" parameterType="JoinsLandArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_JOINSLAND_NEWSMMDATA_INS(
+      #{mainData.aid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curImage.imageUrl, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curImage.description, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+</mapper>
+

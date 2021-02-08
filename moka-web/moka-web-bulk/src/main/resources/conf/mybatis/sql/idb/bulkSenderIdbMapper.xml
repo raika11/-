@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.web.bulk.mapper.idb.BulkSenderIdbMapper">
+  <insert id="callUspBulkPortalLogInsBySender" parameterType="TotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_PORTAL_LOG_INS_BY_SENDER(
+      #{mainData.ddrefSeq, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.cpName, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.status, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{msg, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUspBulkLogInsBySender" parameterType="TotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_LOG_INS_BY_SENDER(
+      #{mainData.seqNo, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{msg, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+</mapper>
+

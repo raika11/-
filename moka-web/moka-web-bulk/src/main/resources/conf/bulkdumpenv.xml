@@ -10,9 +10,16 @@
         <CrHtml><![CDATA[▶ <a href="https://joongang.co.kr" target="_blank">중앙일보 '홈페이지'</a> / <a href="https://www.facebook.com/joongang" target="_joins_nw">'페이스북' 친구추가</a>{_CRLF_}▶<a href="https://ssully.joins.com/?ch=bulk" target="_blank"> 이슈를 쉽게 정리해주는 '썰리'</a><br/>{_CRLF_}ⓒ중앙일보(https://joongang.co.kr), 무단 전재 및 재배포 금지]]></CrHtml>
         <CrHtmlNaver><![CDATA[ⓒ중앙일보(https://joongang.co.kr), 무단 전재 및 재배포 금지]]></CrHtmlNaver>
       </Target>
+
       <Target TargetName="SD">
         <CrTxt><![CDATA[[ⓒ중앙SUNDAY(http://sunday.joins.com) and JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrTxt>
         <CrHtml><![CDATA[ ▶ 중앙SUNDAY <a href='https://news.joins.com/sunday' target='_joins_nw'>[홈페이지]</a>{_CRLF_}▶ <a href='https://post.naver.com/my.nhn?memberNo=24386473' target='_joins_nw'>[네이버포스트]</a> <a href='http://me2.do/52Lt5TBq' target='_joins_nw'>[PDF열람]</a><br/>{_CRLF_}ⓒ중앙SUNDAY<a href='https://news.joins.com/sunday' target='_joins_nw'>(https://news.joins.com/sunday)</a> and 중앙일보<a href='https://joongang.co.kr' target='_blank'>(https://joongang.co.kr)</a> 무단 전재 및 재배포 금지]]></CrHtml>
+        <CrHtmlNaver/>
+      </Target>
+
+      <Target TargetName="JL">
+        <CrTxt><![CDATA[[ⓒ 조인스랜드 : JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrTxt>
+        <CrHtml><![CDATA[[ⓒ 조인스랜드 : JTBC Content Hub Co., Ltd. 무단 전재 및 재배포 금지]]]></CrHtml>
         <CrHtmlNaver/>
       </Target>
     </Targets>
@@ -91,7 +98,7 @@
     </Cp>
 
     <Cp Name="DOWNJONES_IG" Comment="# 다우존스(일간)"
-      Dir="C:\box\bulk\CpData\downjones"
+      Dir="C:\box\bulk\CpData\downjonesIg"
       FileExt="xml"
       Content="IGP|IGQ|IGN|IGY"
       Type="HTML"
@@ -103,7 +110,7 @@
     </Cp>
 
     <Cp Name="DOWNJONES_IHT" Comment="# 다우존스(데일리)"
-      Dir="C:\box\bulk\CpData\downjones"
+      Dir="C:\box\bulk\CpData\downjonesIht"
       FileExt="xml"
       Content="IHT"
       Type="HTML"
@@ -152,14 +159,14 @@
     </Cp>
 
     <Cp Name="NAVER_JLAND2" Comment="# 네이버 조인스랜드 - 네이버포맷(HTML),xml 포멧으로 변경 2013.10.18  #Copyright 정보는 FORMAT_IU에 하드코딩 : 중앙일보 Copyright 정보 바뀌면 같이 수정"
-      Dir="C:\box\bulk\CpData\naver_ja"
+      Dir="C:\box\bulk\CpData\naver_jland2"
       DnVideo="N"
       FileExt="xml"
       Content="JJL"
       Type="HTML">
       <Format><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[{_CONTH_NAVER_}]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<category code="244"/>{_CRLF_}{_TAB_}<url href="{_URL_NAVER_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}{_XML_IMG_BLK_NAVER_}{_CRLF_}{_JHOT_NAVER_}</item>]]></Format>
       <FormatDelete><![CDATA[<?xml version="1.0" encoding="euc-kr" ?>{_CRLF_}<item type="text">{_CRLF_}{_TAB_}<press>중앙일보</press>{_CRLF_}{_TAB_}<nsid>{_AID_}</nsid>{_CRLF_}{_TAB_}<action>{_IUD_}</action>{_CRLF_}{_TAB_}<title><![CDATA[{_TTL_}]]]]><![CDATA[</title>{_CRLF_}{_TAB_}<date>{_YY_}-{_MM_}-{_DD_}</date>{_CRLF_}{_TAB_}<time>{_HH_}:{_NN_}:{_SS_}</time>{_CRLF_}{_TAB_}<author><![CDATA[{_REPT_}]]]]><![CDATA[</author>{_CRLF_}{_TAB_}<content><![CDATA[]]]]><![CDATA[</content>{_CRLF_}{_TAB_}<url href="{_D_URL_}"/>{_CRLF_}{_TAB_}<copyright><![CDATA[{_CRH_}]]]]><![CDATA[</copyright>{_CRLF_}</item>]]></FormatDelete>
-      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_ja" passive="0" port="21"/>
+      <FtpConfig ip="127.0.0.1" user="ftp_tester" password="ftp_test" rootDir="/cp/naver_jland2" passive="0" port="21"/>
     </Cp>
 
     <Cp Name="NAVER_IG" Comment="# 네이버 뉴스 - 일간 xml 포멧으로 변경 2013.10.18"

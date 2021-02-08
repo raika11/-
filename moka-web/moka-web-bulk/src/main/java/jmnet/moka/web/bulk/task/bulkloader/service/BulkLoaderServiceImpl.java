@@ -2,6 +2,7 @@ package jmnet.moka.web.bulk.task.bulkloader.service;
 
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.mapper.idb.BulkLoaderIdbMapper;
 import jmnet.moka.web.bulk.mapper.moka.BulkLoaderMokaMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +39,27 @@ public class BulkLoaderServiceImpl implements BulkLoaderService {
 
     @Override
     @Transactional
-    public void insertBulkLoaderData(Map<String, Object> map) {
-        this.bulkLoaderIdbMapper.callUspBulkNewsTableIns(map);
-        this.bulkLoaderMokaMapper.callUspBulkMgtDel(map);
+    public void insertBulkLoaderData(TotalVo<Map<String, Object>> totalVo) {
+        this.bulkLoaderIdbMapper.callUspBulkNewsTableIns(totalVo);
+        this.bulkLoaderMokaMapper.callUspBulkMgtDel(totalVo.getMainData());
+    }
+
+    @Override
+    public void insertBulkLog(TotalVo<Map<String, Object>> totalVo, int status, String message, boolean isError) {
+        totalVo.getMainData().replace("loadStatus", status );
+        if( isError )
+            totalVo.logError(message);
+        else
+            totalVo.logInfo(message);
+        totalVo.setMsg(totalVo.getInfoMessageList());
+
+        this.bulkLoaderIdbMapper.callUspBulkLogInsByLoader(totalVo);
+
+        totalVo.setInfoMessageFlush();
+    }
+
+    @Override
+    public void insertBulkLog(TotalVo<Map<String, Object>> totalVo, int status, String message) {
+        insertBulkLog( totalVo, status, message, false);
     }
 }

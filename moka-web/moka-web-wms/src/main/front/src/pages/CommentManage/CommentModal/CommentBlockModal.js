@@ -21,7 +21,7 @@ const CommentBlockModal = (props) => {
     const [editData, setEditData] = useState({
         BennedType: 'U',
         tagValues: '',
-        tagDiv: '',
+        tagDiv: 'A',
         tagDesc: '',
     });
 
@@ -322,7 +322,6 @@ const CommentBlockModal = (props) => {
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel as="select" label="차단사유" name="tagDiv" id="tagDiv" value={editData.tagDiv} onChange={(e) => handleChangeValue(e)}>
-                            <option value="">선택</option>
                             {COMMENT_TAG_DIV_CODE.map((item, index) => (
                                 <option key={index} value={item.dtlCd}>
                                     {item.cdNm}

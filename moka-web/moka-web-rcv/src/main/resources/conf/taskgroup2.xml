@@ -34,6 +34,18 @@
       retryCount="3"/>
   </Task>
 
+  <Task class="jmnet.moka.web.rcv.task.joinsland.JoinsLandTask"
+    name="JoinsLand"
+    retryCount="3"
+    intervalTime="10s">
+    <TaskInput dirInput="/box/rcv/cp/joinsland"
+      dirSuccess="/box/rcv/cp/joinsland/comp"
+      dirFailed="/box/rcv/cp/joinsland/error"
+      fileFilter="*.xml"
+      fileWaitTime="3s"
+      retryCount="3"/>
+  </Task>
+
   <Task class="jmnet.moka.web.rcv.task.weathershko.WeatherShkoTask"
     name="날씨 데이터 업로드"
     retryCount="3"

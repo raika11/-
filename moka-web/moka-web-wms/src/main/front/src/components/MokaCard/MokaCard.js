@@ -240,7 +240,9 @@ const MokaCard = forwardRef((props, ref) => {
                         <>
                             {footerButtons.map(({ variant, text, useAuth, ...rest }, idx) =>
                                 useAuth ? (
-                                    <AuthButton key={`${text}-${idx}`} variant={variant} {...rest} text={text} />
+                                    <AuthButton key={`${text}-${idx}`} variant={variant} {...rest}>
+                                        {text}
+                                    </AuthButton>
                                 ) : (
                                     <Button key={`${text}-${idx}`} variant={variant} {...rest}>
                                         {text}

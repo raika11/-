@@ -1,12 +1,11 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.sunday;
 
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
-import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
-import jmnet.moka.web.bulk.util.BulkTagUtil;
 
 /**
  * <pre>
@@ -26,8 +25,8 @@ public class BulkSundayProcess extends BulkProcessCommon<BulkSundayArticle> {
     }
 
     @Override
-    protected BulkSundayArticle newArticle(BulkDumpTotalVo bulkDumpTotal) {
-        return new BulkSundayArticle(bulkDumpTotal);
+    protected BulkSundayArticle newArticle(TotalVo<BulkDumpTotalVo> totalVo) {
+        return new BulkSundayArticle(totalVo);
     }
 
     @Override
@@ -60,10 +59,16 @@ public class BulkSundayProcess extends BulkProcessCommon<BulkSundayArticle> {
         // 벌크이미지 사용 안할 경우 본문 이미지묶음 삭제
         article.processImageBulkFlag();
 
-        //카카오다음 전용변수(m_content_html_ig_daum) 2019.09.25
-        //article.processContentDaum();
+        //카카오다음 전용변수(m_content_html_ig_daum)
+        article.processContentDaum();
 
+        // 네이버 제공용 xml 2014.02.10
+        article.processContentNaverXml( article.getContentHtml().toString() );
 
+        if( article.getBulkDumpNewsImageList().size() > 0)
+            article.processContent_ImageBulkYn();
+
+        article.processContent_JHotClick();
 
         return true;
     }

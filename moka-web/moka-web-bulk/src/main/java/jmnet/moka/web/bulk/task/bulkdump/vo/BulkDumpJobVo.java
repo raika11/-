@@ -40,11 +40,17 @@ public class BulkDumpJobVo implements Serializable {
     @JsonProperty(value = "dirWork")
     private String dirWork;
 
+    @JsonProperty(value = "ddrefSeq")
+    private int ddrefSeq;
+
     @JsonProperty(value = "sourceJobFiles")
     private List<BulkDumpJobFileVo> sourceJobFiles;
 
     @JsonIgnore
     private String cpFormat;
+
+    @JsonIgnore
+    private int status;
 
     @JsonIgnore
     private String jobFileName;
@@ -55,6 +61,7 @@ public class BulkDumpJobVo implements Serializable {
                 .totalId(dumpJobTotal.getTotalId())
                 .cpName(dumpEnvCP.getName())
                 .dirWork(dirWork)
+                .ddrefSeq(dumpJobTotal.getSeqNo())
                 .sourceJobFiles( new ArrayList<>())
                 .build();
         dumpJobTotal.getBulkDumpJobs().add(newJob);

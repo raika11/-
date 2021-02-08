@@ -14,9 +14,11 @@
         <!-- <setting name="defaultStatementTimeout" value="60000" /> -->
     </settings>
     <typeAliases>
+        <package name="jmnet.moka.web.bulk.common.vo" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.vo" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.process" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.process.joongang" />
+        <package name="jmnet.moka.web.bulk.task.bulkdump.process.joinsland" />
     </typeAliases>
     <typeHandlers>
         <typeHandler javaType="java.lang.Character" jdbcType="VARCHAR"

@@ -69,63 +69,63 @@ public class SmsUtilServiceImpl implements SmsUtilService {
     @SuppressWarnings("BusyWait")
     @Override
     public void sendSms(String message) {
-        if( pauseGap > System.currentTimeMillis() ) {
-            log.info("SMS Pause : {}", message );
-            return;
-        }
-
-        messageList.put( new Date(), message);
-
-        if( smsThread == null ) {
-            smsThread = new Thread(() -> {
-                while( !Thread.currentThread().isInterrupted() ) {
-                    try {
-                        final long currentTime = System.currentTimeMillis();
-                        if(!messageList.isEmpty()) {
-                            if( currentTime - lastSendDt > lastSendGap ){
-                                String sendMessage = "";
-                                for( Date date : messageList.keySet()) {
-                                    sendMessage = sendMessage.concat(
-                                            McpDate.dateStr(date, McpDate.TIME_FORMAT)
-                                            .concat(" : ")
-                                            .concat(messageList.get(date))).concat("\n");
-                                    if( sendMessage.length() > 80 ) {
-                                        sendMessage = sendMessage.substring(0, 70).concat(String.format(" … %d건",messageList.size()));
-                                        break;
-                                    }
-                                }
-
-                                if (lastSendGap <= 0) {
-                                    lastSendGap = lastSendGap + GAP_TIME_START;
-                                } else {
-                                    lastSendGap = Math.min(lastSendGap * 4, GAP_TIME_LIMIT);
-                                }
-
-                                log.info("sendMessage/sendMessage : [{}] 초 뒤에 전송\n{}  ", lastSendGap / 1000, sendMessage );
-                                sendErrorSMS( sendMessage );
-
-                                lastSendDt = currentTime;
-                                messageList.clear();
-                            }
-                        } else {
-                            if( currentTime - lastSendDt > lastSendGap ){
-                                if( lastSendGap < 0 ) {
-                                    if (currentTime - lastSendDt > GAP_TIME_START)
-                                        lastSendGap = -(GAP_TIME_START * GAP_TIME_COUNT);
-                                }
-                                else
-                                    lastSendGap = - (GAP_TIME_START * GAP_TIME_COUNT);
-                            }
-                        }
-
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            smsThread.start();
-        }
+//        if( pauseGap > System.currentTimeMillis() ) {
+//            log.info("SMS Pause : {}", message );
+//            return;
+//        }
+//
+//        messageList.put( new Date(), message);
+//
+//        if( smsThread == null ) {
+//            smsThread = new Thread(() -> {
+//                while( !Thread.currentThread().isInterrupted() ) {
+//                    try {
+//                        final long currentTime = System.currentTimeMillis();
+//                        if(!messageList.isEmpty()) {
+//                            if( currentTime - lastSendDt > lastSendGap ){
+//                                String sendMessage = "";
+//                                for( Date date : messageList.keySet()) {
+//                                    sendMessage = sendMessage.concat(
+//                                            McpDate.dateStr(date, McpDate.TIME_FORMAT)
+//                                            .concat(" : ")
+//                                            .concat(messageList.get(date))).concat("\n");
+//                                    if( sendMessage.length() > 80 ) {
+//                                        sendMessage = sendMessage.substring(0, 70).concat(String.format(" … %d건",messageList.size()));
+//                                        break;
+//                                    }
+//                                }
+//
+//                                if (lastSendGap <= 0) {
+//                                    lastSendGap = lastSendGap + GAP_TIME_START;
+//                                } else {
+//                                    lastSendGap = Math.min(lastSendGap * 4, GAP_TIME_LIMIT);
+//                                }
+//
+//                                log.info("sendMessage/sendMessage : [{}] 초 뒤에 전송\n{}  ", lastSendGap / 1000, sendMessage );
+//                                sendErrorSMS( sendMessage );
+//
+//                                lastSendDt = currentTime;
+//                                messageList.clear();
+//                            }
+//                        } else {
+//                            if( currentTime - lastSendDt > lastSendGap ){
+//                                if( lastSendGap < 0 ) {
+//                                    if (currentTime - lastSendDt > GAP_TIME_START)
+//                                        lastSendGap = -(GAP_TIME_START * GAP_TIME_COUNT);
+//                                }
+//                                else
+//                                    lastSendGap = - (GAP_TIME_START * GAP_TIME_COUNT);
+//                            }
+//                        }
+//
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//            smsThread.start();
+//        }
     }
 
     @Override

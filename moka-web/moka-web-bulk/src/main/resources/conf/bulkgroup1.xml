@@ -3,6 +3,7 @@
 <TaskGroup>
   <Task class="jmnet.moka.web.bulk.task.bulkloader.BulkLoaderTask"
     name="벌크 Loader"
+    contentDiv="moka"
     intervalTime="10s">
   </Task>
 

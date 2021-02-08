@@ -2,7 +2,7 @@ package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 
 import java.net.URLConnection;
 import java.util.List;
-import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.MediaFullName;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
@@ -32,8 +32,8 @@ import org.apache.commons.io.FilenameUtils;
 public class BulkJoongangArticleEx extends BulkArticle {
     private static final long serialVersionUID = -8044614923572151886L;
 
-    public BulkJoongangArticleEx(BulkDumpTotalVo bulkDumpTotal) {
-        super(bulkDumpTotal);
+    public BulkJoongangArticleEx(TotalVo<BulkDumpTotalVo> totalVo) {
+        super(totalVo);
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -41,8 +41,8 @@ public class BulkJoongangArticleEx extends BulkArticle {
     public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
         super.processBulkDumpNewsVo(newsVo, bulkDumpNewsMMDataList);
 
-        getTotalId().setData(newsVo.getTotalId());
-        getTotalId10().setData(String.format("%010d", BulkUtil.parseInt(newsVo.getTotalId())));
+        getTotalId().setData(newsVo.getContentId());
+        getTotalId10().setData(String.format("%010d", BulkUtil.parseInt(newsVo.getContentId())));
         getOrgSourceCode().setData(newsVo.getOrgSourceCode());
         getMedia1().setData(newsVo.getDep());
         getContCode1().setData(newsVo.getContCode1());

@@ -64,6 +64,8 @@ public class BulkDumpJobTotalVo implements Serializable {
     @JsonIgnore
     private AtomicInteger serialNumber;
 
+    private boolean isNotFinalDump;
+
     public static BulkDumpJobTotalVo makeBulkDumpJobTotal(int dumpSeqNo, String totalId, String dirDump) {
         final String sourceDir = Paths.get( dirDump, String.format( "%010d", dumpSeqNo )).toString();
         BulkFileUtil.createDirectories(sourceDir);

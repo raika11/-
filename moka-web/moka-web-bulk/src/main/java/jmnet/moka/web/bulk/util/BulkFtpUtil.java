@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.config.FtpConfig;
-import lombok.extern.slf4j.Slf4j;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobVo;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -25,14 +25,8 @@ import org.apache.commons.net.ftp.FTPClient;
  * @since 2020-11-04 004 오후 6:10
  */
 
-@Slf4j
-public class FtpUtil {
-    public static boolean uploadFle(FtpConfig ftpConfig, String sourceFile, String uploadPath, String uploadFileName) {
-        return uploadFle(ftpConfig, Collections.singletonList(sourceFile), Collections.singletonList(uploadPath),
-                Collections.singletonList(uploadFileName));
-    }
-
-    public static boolean uploadFle(FtpConfig ftpConfig, List<String> sourceFileList, List<String> uploadPathList,
+public class BulkFtpUtil {
+    public static boolean uploadFle(TotalVo<BulkDumpJobVo> totalVo, String cpName, FtpConfig ftpConfig, List<String> sourceFileList, List<String> uploadPathList,
             List<String> uploadFileNameList) {
         final int count = Math.min(sourceFileList.size(), Math.min(uploadPathList.size(), uploadFileNameList.size()));
         if (count == 0) {
@@ -44,7 +38,7 @@ public class FtpUtil {
             ftp.setControlEncoding("UTF-8");
             ftp.connect(ftpConfig.getIp(), ftpConfig.getPort());
             if (!ftp.login(ftpConfig.getUser(), ftpConfig.getPassword())) {
-                log.error("ftp 로그인 실패 {}:{} id={}", ftpConfig.getIp(), ftpConfig.getPort(), ftpConfig.getUser());
+                totalVo.logError("ftp 로그인 실패 {}:{} id={}", ftpConfig.getIp(), ftpConfig.getPort(), ftpConfig.getUser());
                 return false;
             }
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
@@ -76,9 +70,9 @@ public class FtpUtil {
                         ftp.deleteFile(uploadFileNameList.get(i));
                     }
                     if( success )
-                        log.info("ftp upload file [{}] 성공 ", sourceFileList.get(i));
+                        totalVo.logInfo("ftp upload file {} [{}]->[{} {}] 성공 ", cpName, sourceFileList.get(i), ftpConfig.getRootDir(), uploadFileNameList.get(i));
                 } catch (Exception e) {
-                    log.error("ftp upload file [{}] 실패 {} ", uploadFileNameList.get(i), e);
+                    totalVo.logError("ftp upload file {} [{}]->[{} {}] 실패 {}", cpName, sourceFileList.get(i), ftpConfig.getRootDir(), uploadFileNameList.get(i), e.getMessage());
                     return false;
                 } finally {
                     try {
@@ -91,17 +85,17 @@ public class FtpUtil {
                 }
 
                 if (!success) {
-                    log.error("ftp upload file [{}] 실패 ", uploadFileNameList.get(i));
+                    totalVo.logError("ftp upload file {} [{}]->[{} {}] 실패 {}", cpName, sourceFileList.get(i), ftpConfig.getRootDir(), uploadFileNameList.get(i), ftp.getReplyString());
                     return false;
                 } else {
                     if (!ftp.rename(tmpFileName, uploadFileNameList.get(i))) {
-                        log.info("ftp rename [{}] 실패 1 ", uploadFileNameList.get(i));
+                        totalVo.logInfo("ftp rename [{}] 실패 1 ", uploadFileNameList.get(i));
                         if (checkFileExists(ftp, tmpFileName)) {
                             if (!ftp.rename(tmpFileName, uploadFileNameList.get(i))) {
-                                log.info("ftp rename [{}] 실패 2 ", uploadFileNameList.get(i));
+                                totalVo.logInfo("ftp rename [{}] 실패 2 ", uploadFileNameList.get(i));
                                 if (checkFileExists(ftp, tmpFileName)) {
                                     if (!ftp.rename(tmpFileName, uploadFileNameList.get(i))) {
-                                        log.error("ftp rename [{}] 실패 3 ", uploadFileNameList.get(i));
+                                        totalVo.logError("ftp rename [{}] 실패 3 ", uploadFileNameList.get(i));
                                     }
                                 }
                             }
@@ -110,7 +104,7 @@ public class FtpUtil {
                 }
             }
         } catch (IOException e) {
-            log.error("ftp upload file 실패 {}", e.getMessage());
+            totalVo.logError("ftp upload file 실패 {}", e.getMessage());
             e.printStackTrace();
             return false;
         } finally {

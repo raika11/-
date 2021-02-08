@@ -1,10 +1,12 @@
 package jmnet.moka.web.bulk.common.vo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
 import lombok.Getter;
@@ -34,6 +36,7 @@ public class TotalVo <T> extends BasicVo {
     protected final T mainData;
     protected List<String> errorMessageList = new ArrayList<>();
     protected List<String> infoMessageList = new ArrayList<>();
+    private String msg;
 
     public TotalVo(T mainData) {
         this.mainData = mainData;
@@ -50,9 +53,22 @@ public class TotalVo <T> extends BasicVo {
         return ret;
     }
 
+    public void setInfoMessageFlush(){
+        this.infoMessageList.clear();
+    }
+
+    public String getInfoMessageList(){
+        String ret = "";
+        for( String s : this.infoMessageList) {
+            ret = ret.concat(s).concat("\n");
+        }
+        return ret;
+    }
+
     public void logError( String errorMessage ) {
         log.error(errorMessage);
-        this.errorMessageList.add(errorMessage);
+        this.infoMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + errorMessage);
+        this.errorMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + errorMessage);
     }
 
     public void logError(String s, Object...message) {
@@ -61,7 +77,7 @@ public class TotalVo <T> extends BasicVo {
 
     public void logInfo( String infoMessage ) {
         log.info(infoMessage);
-        this.infoMessageList.add( infoMessage );
+        this.infoMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + infoMessage );
     }
     public void logInfo(String s, Object...message) {
         logInfo(BulkStringUtil.format(s, message));

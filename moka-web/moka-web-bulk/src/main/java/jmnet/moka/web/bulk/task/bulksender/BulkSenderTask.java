@@ -6,15 +6,18 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.task.Task;
 import jmnet.moka.web.bulk.common.taskinput.TaskInput;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.exception.BulkDataAccessException;
 import jmnet.moka.web.bulk.exception.BulkException;
 import jmnet.moka.web.bulk.task.base.TaskGroup;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulksender.channel.BulkSenderClientChannel;
+import jmnet.moka.web.bulk.task.bulksender.service.BulkSenderService;
 import jmnet.moka.web.bulk.taskinput.FileTaskInput;
 import jmnet.moka.web.bulk.taskinput.FileTaskInputData;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
+import jmnet.moka.web.bulk.util.BulkStringUtil;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +88,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
     protected void doProcess(FileTaskInputData taskInputData)
             throws BulkDataAccessException {
         final ObjectMapper objectMapper = getTaskManager().getObjectMapper();
+        final BulkSenderService bulkSenderService = getTaskManager().getBulkSenderService();
 
         for( File f : taskInputData.getInputData()) {
             try {
@@ -103,7 +107,9 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
                     BulkFileUtil.deleteFolder( dumpJobTotal.getSourceDir() );
                     //noinspection ResultOfMethodCallIgnored
                     f.delete();
-                    log.info("Bulk Clean seqNo=[{}] totalId=[{}]", dumpJobTotal.getSeqNo(), dumpJobTotal.getTotalId());
+
+                    bulkSenderService.insertBulkLog( new TotalVo<>(dumpJobTotal),
+                            BulkStringUtil.format("Bulk Clean seqNo=[{}] totalId=[{}]", dumpJobTotal.getSeqNo(), dumpJobTotal.getTotalId()) );
                 }
             } catch (Exception e) {
                 log.error( " BulkSenderTask Exception {}", e.getMessage());

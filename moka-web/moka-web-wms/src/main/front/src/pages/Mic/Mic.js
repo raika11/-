@@ -52,10 +52,10 @@ const Mic = ({ match }) => {
                             tabs={[
                                 <MicAgendaEdit match={match} setActiveTabIdx={setActiveTabIdx} />,
                                 <Suspense fallback={<MokaLoader />}>
-                                    <MicFeedList />
+                                    <MicFeedList show={activeTabIdx === 1} />
                                 </Suspense>,
                                 <Suspense fallback={<MokaLoader />}>
-                                    <MicPostList />
+                                    <MicPostList show={activeTabIdx === 2} />
                                 </Suspense>,
                             ]}
                             tabNavs={[

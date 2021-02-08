@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
@@ -16,7 +17,7 @@ import commonUtil from '@utils/commonUtil';
 import imageEditer from '@utils/imageEditorUtil';
 import { IMAGE_PROXY_API } from '@/constants';
 
-const defaultValue = {
+const defaultRep = {
     id: '',
     dataType: 'represent',
     thumbPath: '',
@@ -28,18 +29,51 @@ const defaultValue = {
     },
     imgProps: {},
 };
+const propTypes = {
+    /**
+     * 크롭Height 기본값
+     */
+    cropHeight: PropTypes.number,
+    /**
+     * 크롭Width 기본값
+     */
+    cropWidth: PropTypes.number,
+    /**
+     * 저장 시 파일명
+     */
+    saveFileName: PropTypes.string,
+    /**
+     * 대표이미지 썸네일 링크
+     */
+    thumbFileName: PropTypes.string,
+    /**
+     * 대표이미지 적용 시 실행되는 함수
+     */
+    apply: PropTypes.func,
+};
+const defaultProps = {};
 
 /**
- * 대표이미지 편집 모달
+ * 포토아카이브 + 대표이미지 편집 모달
  */
 const EditThumbModal = (props) => {
-    const { show, onHide, contentId, cropHeight, cropWidth, saveFileName } = props; // modal props
-    const { thumbFileName, apply } = props; // 대표 이미지 props
+    const {
+        // modal props
+        show,
+        onHide,
+        contentId,
+        cropHeight,
+        cropWidth,
+        saveFileName,
+        // 대표이미지 props
+        thumbFileName,
+        apply,
+    } = props;
     const dispatch = useDispatch();
 
     const [collapse, setCollapse] = useState(true);
     const [cardData, setCardData] = useState({});
-    const [repPhoto, setRepPhoto] = useState(defaultValue);
+    const [repPhoto, setRepPhoto] = useState(defaultRep);
     const [showViewModal, setShowViewModal] = useState(false);
 
     /**
@@ -57,7 +91,7 @@ const EditThumbModal = (props) => {
     const handleDeleteClick = (data, e) => {
         e.stopPropagation();
         if (!data.index) {
-            setRepPhoto(defaultValue);
+            setRepPhoto(defaultRep);
         }
     };
 
@@ -145,7 +179,7 @@ const EditThumbModal = (props) => {
                 await fetch(imagePath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
-                        const file = commonUtil.blobToFile(blobFile, saveFileName);
+                        const file = commonUtil.blobToFile(blobFile, saveFileName || new Date().getTime());
                         apply(repPhoto.thumbPath, file);
                     });
             })();
@@ -158,7 +192,7 @@ const EditThumbModal = (props) => {
      * 취소 버튼 클릭
      */
     const handleHide = () => {
-        setRepPhoto(defaultValue);
+        setRepPhoto(defaultRep);
         setCardData({});
         dispatch(clearStore());
         onHide();
@@ -168,7 +202,7 @@ const EditThumbModal = (props) => {
         // 이미지 필드 thumbPath로 통일
         if (show && thumbFileName) {
             setRepPhoto({
-                ...defaultValue,
+                ...defaultRep,
                 thumbPath: thumbFileName,
             });
         }
@@ -247,5 +281,8 @@ const EditThumbModal = (props) => {
         </MokaModal>
     );
 };
+
+EditThumbModal.propTypes = propTypes;
+EditThumbModal.defaultProps = defaultProps;
 
 export default EditThumbModal;

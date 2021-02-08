@@ -179,6 +179,8 @@ public class MicAnswerServiceImpl implements MicAnswerService {
             rel.setAnswSeq(micAnswerVO.getAnswSeq());
 
             uploaded = this.saveMicAnswerRel(rel);
+        } else {
+            micMapper.deleteAllMicAnswerRel(micAnswerVO.getAnswSeq());
         }
 
         return uploaded;

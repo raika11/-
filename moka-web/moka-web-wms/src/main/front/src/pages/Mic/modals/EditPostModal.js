@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { GET_MIC_POST, SAVE_MIC_POST } from '@store/mic';
 import { MokaModal, MokaInputLabel } from '@components';
@@ -10,7 +12,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 /**
  * 포스트 관리 모달
  */
-const PostEditModal = (props) => {
+const EditPostModal = (props) => {
     const { show, onHide, agenda, post, onChange, onSave, onDelete } = props;
     const loading = useSelector(({ loading }) => loading[GET_MIC_POST] || loading[SAVE_MIC_POST]);
     const PDS_URL = useSelector(({ app }) => app.PDS_URL);
@@ -94,7 +96,7 @@ const PostEditModal = (props) => {
                 artTitle: unescapeHtmlArticle(articleData.artTitle),
                 relUrl: '',
                 artThumbnail: articleData.artThumb ? `${PDS_URL}${articleData.artThumb}` : null,
-                artThumbnailFile: null,
+                artThumbnailFile: undefined,
             },
         });
         setError({ ...error, artTitle: false });
@@ -109,14 +111,20 @@ const PostEditModal = (props) => {
         let isInvalid = false;
         let ne = {};
 
-        // 페이지URL(relUrl) 필수
-        if (!feed.answerRel?.relUrl || !REQUIRED_REGEX.test(feed.answerRel?.relUrl)) {
-            ne = { relUrl: true };
-        }
+        const chkRelUrl = feed.answerRel?.relUrl && REQUIRED_REGEX.test(feed.answerRel?.relUrl);
+        const chkArtTitle = feed.answerRel?.artTitle && REQUIRED_REGEX.test(feed.answerRel?.artTitle);
 
-        // 페이지제목 필수
-        if (!feed.answerRel?.artTitle || !REQUIRED_REGEX.test(feed.answerRel?.artTitle)) {
-            ne = { ...ne, artTitle: true };
+        // answerRel 필드 데이터가 하나라도 있으면 둘 다 필수
+        if (chkRelUrl || chkArtTitle) {
+            // 페이지URL(relUrl) 필수
+            if (!chkRelUrl) {
+                ne = { relUrl: true };
+            }
+
+            // 페이지제목 필수
+            if (!chkArtTitle) {
+                ne = { ...ne, artTitle: true };
+            }
         }
 
         if (Object.keys(ne).length > 0) {
@@ -159,19 +167,36 @@ const PostEditModal = (props) => {
             <h3 className="mb-3 color-primary">{agenda.agndTitle}</h3>
 
             {/* 작성자(수정불가) */}
-            <MokaInputLabel label="작성자" labelWidth={72} className="mb-2" value={post.loginName} inputProps={{ plaintext: true }} disabled />
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="작성자" labelWidth={72} as="none" />
+                <span
+                    className={clsx('mt-1 icon', {
+                        i_kk: post.loginSns === 'K',
+                        i_js: post.loginSns === 'J',
+                        i_tw: post.loginSns === 'T',
+                        i_na: post.loginSns === 'N',
+                        i_fb: post.loginSns === 'F',
+                    })}
+                >
+                    {post.loginName}
+                </span>
+            </Form.Row>
 
             {/* 단문(수정불가) */}
-            <MokaInputLabel
-                label="단문"
-                labelWidth={72}
-                inputClassName="resize-none custom-scroll pr-2"
-                className="mb-2"
-                as="textarea"
-                inputProps={{ plaintext: true, readOnly: true, rows: 4 }}
-                value={post.answMemo}
-                disabled
-            />
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="단문" labelWidth={72} as="none" />
+                <div style={{ maxHeight: 150 }} className="custom-scroll w-100 p-2 input-border pre-wrap user-select-text">
+                    {post.answMemo}
+                </div>
+            </Form.Row>
+
+            {/* 장문(수정불가) */}
+            <Form.Row className="mb-2">
+                <MokaInputLabel label="장문" labelWidth={72} as="none" />
+                <div style={{ maxHeight: 140 }} className="custom-scroll pr-2 pre-wrap user-select-text d-flex align-items-center">
+                    {post.answMemoLong}
+                </div>
+            </Form.Row>
 
             {/* 페이지 URL */}
             <div className="d-flex mb-2">
@@ -238,4 +263,4 @@ const PostEditModal = (props) => {
     );
 };
 
-export default PostEditModal;
+export default EditPostModal;

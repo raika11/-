@@ -415,4 +415,11 @@ public interface DeskingService {
      */
     ComponentWork updateComponentWorkTemplate(Long componentWorkSeq, Long templateSeq, String regId)
             throws Exception;
+
+    /**
+     * 편집기사 텍스트필드 escape
+     *
+     * @param deskingWorkDTO 편집기사워크 정보
+     */
+    void escapeHtml(DeskingWorkDTO deskingWorkDTO);
 }

@@ -166,7 +166,7 @@ public class MicAgendaServiceImpl implements MicAgendaService {
         // 경로
         // https://stg-pds.joongang.co.kr/news/postit/
 
-        String remotePath = "/" + String.join("/", saveFilepath, McpDate.yearStr() + McpDate.monthStr(), McpDate.dayStr());
+        String remotePath = String.join("/", saveFilepath, McpDate.yearStr() + McpDate.monthStr(), McpDate.dayStr());
 
         // 파일 저장
         boolean upload = ftpHelper.upload(FtpHelper.PDS, fileName, thumbnail.getInputStream(), remotePath);

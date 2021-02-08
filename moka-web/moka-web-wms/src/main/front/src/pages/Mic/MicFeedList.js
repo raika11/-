@@ -6,17 +6,18 @@ import { MokaCard, MokaTable } from '@components';
 import { initialState, getMicFeedList, getMicFeed, putMicAnswerTop, putMicAnswerUsed, saveMicFeed, changeFeedSearchOption, clearMicFeed, GET_MIC_FEED_LIST } from '@store/mic';
 import toast, { messageBox } from '@utils/toastUtil';
 import columnDefs from './MicFeedListColumns';
-import FeedEditModal from './modals/FeedEditModal';
+import EditFeedModal from './modals/EditFeedModal';
 
 /**
  * 아젠다 피드 목록
  */
-const MicFeedList = () => {
+const MicFeedList = ({ show: currentTab }) => {
     const dispatch = useDispatch();
     const { agndSeq } = useParams();
     const { total, search, list, feed } = useSelector(({ mic }) => mic.feed);
     const loading = useSelector(({ loading }) => loading[GET_MIC_FEED_LIST]);
     const agenda = useSelector(({ mic }) => mic.agenda);
+    const [instance, setInstance] = useState(null);
     const [show, setShow] = useState(false);
     const [temp, setTemp] = useState({});
     const [rowData, setRowData] = useState([]);
@@ -91,6 +92,7 @@ const MicFeedList = () => {
                     if (header.success && body) {
                         toast.success(header.message);
                         setShow(false);
+                        setTemp(initialState.feed.feed);
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -169,6 +171,12 @@ const MicFeedList = () => {
     }, [handleChangeAnswTop, handleChangeUsedYn, list]);
 
     useEffect(() => {
+        if (currentTab && instance) {
+            instance.api.resetRowHeights();
+        }
+    }, [currentTab, instance]);
+
+    useEffect(() => {
         setTemp(feed);
     }, [feed]);
 
@@ -191,6 +199,7 @@ const MicFeedList = () => {
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
                 rowData={rowData}
+                rowHeight={45}
                 total={total}
                 page={search.page}
                 size={search.size}
@@ -200,10 +209,11 @@ const MicFeedList = () => {
                 onRowClicked={handleRowClicked}
                 preventRowClickCell={['usedYn', 'answTop']}
                 selected={temp.answSeq}
+                setGridInstance={setInstance}
             />
 
             {/* 피드 등록/수정 모달 */}
-            <FeedEditModal
+            <EditFeedModal
                 show={show}
                 onHide={() => {
                     setShow(false);

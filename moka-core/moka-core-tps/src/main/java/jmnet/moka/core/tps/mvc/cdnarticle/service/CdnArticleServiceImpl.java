@@ -30,7 +30,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * Description: 설명
@@ -115,7 +114,6 @@ public class CdnArticleServiceImpl implements CdnArticleService {
 
             // escape
             if (McpString.isNotEmpty(article.getTitle())) {
-                article.setTitle(HtmlUtils.htmlEscape(article.getTitle()));
                 article.setTitle(ArticleEscapeUtil.htmlEscape(article.getTitle()));
             }
 

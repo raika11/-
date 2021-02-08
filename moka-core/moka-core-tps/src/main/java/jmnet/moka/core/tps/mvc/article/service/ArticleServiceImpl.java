@@ -39,7 +39,6 @@ import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * Article 서비스 구현체
@@ -93,7 +92,6 @@ public class ArticleServiceImpl implements ArticleService {
         if (McpString.isNotEmpty(articleTitleDTO.getArtEditTitle())) {
 
             // escape
-            articleTitleDTO.setArtEditTitle(HtmlUtils.htmlEscape(articleTitleDTO.getArtEditTitle()));
             articleTitleDTO.setArtEditTitle(ArticleEscapeUtil.htmlEscape(articleTitleDTO.getArtEditTitle()));
 
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DP");
@@ -119,7 +117,6 @@ public class ArticleServiceImpl implements ArticleService {
         if (McpString.isNotEmpty(articleTitleDTO.getArtEditMobTitle())) {
 
             // escape
-            articleTitleDTO.setArtEditMobTitle(HtmlUtils.htmlEscape(articleTitleDTO.getArtEditMobTitle()));
             articleTitleDTO.setArtEditMobTitle(ArticleEscapeUtil.htmlEscape(articleTitleDTO.getArtEditMobTitle()));
 
             Optional<ArticleTitle> articleTitle = articleTitleRepository.findByTotalIdAndTitleDiv(articleBasic.getTotalId(), "DM");
@@ -454,12 +451,10 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void escapeHtml(ArticleBasicUpdateDTO updateDto) {
         if (McpString.isNotEmpty(updateDto.getArtTitle())) {
-            updateDto.setArtTitle(HtmlUtils.htmlEscape(updateDto.getArtTitle()));
             updateDto.setArtTitle(ArticleEscapeUtil.htmlEscape(updateDto.getArtTitle()));
         }
 
         if (McpString.isNotEmpty(updateDto.getArtSubTitle())) {
-            updateDto.setArtSubTitle(HtmlUtils.htmlEscape(updateDto.getArtSubTitle()));
             updateDto.setArtSubTitle(ArticleEscapeUtil.htmlEscape(updateDto.getArtSubTitle()));
         }
     }

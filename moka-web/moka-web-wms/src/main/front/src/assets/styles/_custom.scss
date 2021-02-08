@@ -684,3 +684,29 @@ body {
         left: 50%;
     }
 }
+
+/* -----------------------
+* 시민마이크 작성자 아이콘
+* ---------------------- */
+.icon {
+    display: inline-block;
+    padding-left: 25px;
+    font-size: 11px;
+    line-height: 22px;
+
+    &.i_tw {
+        background:url('http://images.joins.com/ui_joongang/newsgo/i_sns.png') no-repeat 0 -25px;
+    }
+    &.i_fb {
+        background:url('http://images.joins.com/ui_joongang/newsgo/i_sns.png') no-repeat 0 -53px;
+    }
+    &.i_js {
+        background:url('http://images.joins.com/ui_joongang/newsgo/i_sns.png') no-repeat 0 3px;
+    }
+    &.i_na {
+        background:url('http://images.joins.com/ui_joongang/newsgo/i_sns.png') no-repeat 0 -81px;
+    }
+    &.i_kk {
+        background:url('http://images.joins.com/ui_joongang/newsgo/i_sns.png') no-repeat 0 -109px;
+    }
+}

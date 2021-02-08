@@ -1,6 +1,7 @@
 package jmnet.moka.core.tms.merge;
 
 import java.util.StringJoiner;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.mvc.HttpParamMap;
 
@@ -139,7 +140,7 @@ public class KeyResolver {
                 httpParamMap.containsKey(MokaConstants.PARAM_COUNT)
                         ? httpParamMap.get(MokaConstants.PARAM_COUNT).toString() : ANY;
         String category = httpParamMap.get(MokaConstants.PARAM_CATEGORY);
-        category =  category != null ? category : ANY;
+        category = McpString.isNotEmpty(category) ? category : ANY;
         if (httpParamMap.get(MokaConstants.PARAM_SORT) == null) {
             return String.join(DEFAULT_SEPARATOR, page, count, category);
         } else {

@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.cache.Cacheable;
 import jmnet.moka.common.cache.exception.CacheException;
-import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
@@ -51,6 +50,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <pre>
@@ -76,6 +76,9 @@ public class CommandController {
 
     @Autowired
     private CacheManager cacheManager;
+
+    @Autowired
+    private HttpParamFactory httpParamFactory;
 
     @Lazy
     @Autowired
@@ -196,7 +199,7 @@ public class CommandController {
                     purgeItemResult.put(Cacheable.PURGE_TYPE, String.join(" ", domainId, itemType, itemId));
                     purgeItemResult.put(Cacheable.PURGE_RESULT, Cacheable.PURGE_RESULT_SUCCESS);
                     purgeResult.add(purgeItemResult);
-                    if ( !itemType.equals(MokaConstants.ITEM_DATASET)) { // 데이터셋 아닐경우만 머징된 결과를 purge한다.
+                    if (!itemType.equals(MokaConstants.ITEM_DATASET)) { // 데이터셋 아닐경우만 머징된 결과를 purge한다.
                         String cacheType = KeyResolver.getCacheType(itemType);
                         String cacheKey = KeyResolver.makeItemKey(domainId, itemType, itemId);
                         try {
@@ -258,7 +261,7 @@ public class CommandController {
                 });
                 this.cdnRedirector.updateCdnRedirect(cdnRedirectList);
             } else {
-                throw new CacheException("domainId not found");
+                throw new CacheException("json data is invalid");
             }
             ResultDTO<String> resultDTO = new ResultDTO<String>("CDN Article Updated");
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -268,6 +271,36 @@ public class CommandController {
         }
     }
 
+    @ApiOperation(value = "페이지 변경", nickname = "pageChange")
+    @RequestMapping(method = RequestMethod.POST, path = "/command/pageChange", produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "domainId", value = "도메인 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "itemId", value = "페이지 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "category", value = "카테고리", required = false, dataType = "string", paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "html", value = "페이지 내용", required = true, dataType = "string", paramType = "query", defaultValue = "")})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> _pageUpdate(HttpServletRequest request, HttpServletResponse response, @RequestParam String domainId,
+            @RequestParam String itemId, @RequestParam(required = false) String category, @RequestParam String html) {
+        try {
+            if (McpString.isNotEmpty(html)) {
+                HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
+                String cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
+                MergeItem pageItem = this.domainTemplateMerger.getItem(domainId, MokaConstants.ITEM_PAGE, itemId);
+                if ( pageItem.getBoolYN(ItemConstants.PAGE_FILE_YN) ) {
+                    this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html, 24*60*60*1000L);
+                } else {
+                    this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html);
+                }
+            } else {
+                throw new CacheException("page content not found");
+            }
+            ResultDTO<String> resultDTO = new ResultDTO<String>("Page Content Updated");
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.warn("Page Content update Failed:{}", e.getMessage());
+            return responseException(e);
+        }
+    }
 
     @ApiOperation(value = "아이템 Bulk Purge", nickname = "bulkPurge")
     @RequestMapping(method = RequestMethod.GET, path = "/command/bulkPurge", produces = "application/json")

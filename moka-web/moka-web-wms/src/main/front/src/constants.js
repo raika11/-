@@ -4,6 +4,8 @@ export const API_BASE_URL = process.env.REACT_APP_API_URL;
 // DB 날짜 포맷
 export const DB_DATEFORMAT = 'YYYY-MM-DD HH:mm:ss';
 
+export const BASIC_DATEFORMAT = 'YYYY-MM-DD HH:mm';
+
 // image 확장자
 export const ACCEPTED_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png'];
 export const UPLOAD_PATH_URL = '/moka_storage/';

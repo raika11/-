@@ -1,9 +1,8 @@
-import React, { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import React, { useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
-import util from '@utils/commonUtil';
 import { MokaIcon } from '@components';
 
 const propTypes = {
@@ -17,10 +16,12 @@ const propTypes = {
     onClick: PropTypes.func,
     /**
      * width 컴포넌트의 가로 사이즈
+     * @default
      */
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
      * height 이미지의 세로 사이즈
+     * @default
      */
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /**
@@ -37,18 +38,22 @@ const propTypes = {
     img: PropTypes.string,
     /**
      * alt 이미지 alt
+     * @default
      */
     alt: PropTypes.string,
     /**
      * 렌더링 데이터
+     * @default
      */
     data: PropTypes.object,
     /**
      * 선택 여부
+     * @default
      */
     selected: PropTypes.bool,
     /**
      * 데이터타입
+     * @default
      */
     dataType: PropTypes.oneOf(['archive', 'article', 'local', 'represent', 'drop']),
 };
@@ -72,10 +77,24 @@ export const ItemTypes = {
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
 const EditThumbCard = forwardRef((props, ref) => {
-    const { width, height, data, img, alt, selected, className, moveCard, setAddIndex, dataType, boxShadow } = props;
-    // 대표 사진 설정 props
-    const { represent } = props;
-    const { onThumbClick, onDeleteClick, onRepClick, onEditClick } = props;
+    const {
+        width,
+        height,
+        data,
+        img,
+        alt,
+        selected,
+        className,
+        moveCard,
+        setAddIndex,
+        dataType,
+        boxShadow, // 대표사진 설정 props
+        represent,
+        onThumbClick,
+        onDeleteClick,
+        onRepClick,
+        onEditClick,
+    } = props;
 
     const imgRef = useRef(null);
     const wrapperRef = useRef(null);

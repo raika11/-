@@ -54,7 +54,6 @@ public class QuizRepositorySupportImpl extends TpsQueryDslRepositorySupport impl
             if (qQuiz.title
                     .getMetadata()
                     .getName()
-                    .toUpperCase()
                     .equals(search.getSearchType())) {
                 query.where(qQuiz.title
                         .toUpperCase()
@@ -62,7 +61,6 @@ public class QuizRepositorySupportImpl extends TpsQueryDslRepositorySupport impl
             } else if (qQuiz.quizSeq
                     .getMetadata()
                     .getName()
-                    .toUpperCase()
                     .equals(search.getSearchType())) {
                 query.where(qQuiz.quizSeq.eq(Long.parseLong(keyword)));
             }

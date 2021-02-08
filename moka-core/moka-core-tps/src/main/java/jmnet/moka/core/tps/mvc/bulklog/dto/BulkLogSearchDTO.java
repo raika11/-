@@ -5,7 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,13 +33,13 @@ public class BulkLogSearchDTO extends SearchDTO {
      * 매체코드
      */
     @ApiModelProperty("매체코드")
-    private String sourceCode;
+    private String orgSourceCode;
 
     /**
      * 매체명
      */
     @ApiModelProperty("매체명")
-    private String sourceName;
+    private String orgSourceName;
 
     /**
      * 콘텐트구분
@@ -54,32 +56,12 @@ public class BulkLogSearchDTO extends SearchDTO {
     @ApiModelProperty(value = "전송시작일시", required = true)
     @DTODateTimeFormat
     @NotNull(message = "{tps.search-keyword-log.error.notnull.startDt}")
-    private Date startDt;
+    private String startDt;
 
     @ApiModelProperty(value = "전송종료일시", required = true)
     @DTODateTimeFormat
     @NotNull(message = "{tps.search-keyword-log.error.notnull.endDt}")
-    private Date endDt;
-/*
-    public String getOrder() {
-        if (sort != null) {
-            String sortInfo = McpString.collectionToDelimitedString(sort, "!");
-            String[] sortInfos = sortInfo.split("!")[0].split(",");
-            return sortInfos[0];
-        }
-        return "";
-    }
-
-    public String getDir() {
-        if (sort != null) {
-            String sortInfo = McpString.collectionToDelimitedString(sort, "!");
-            String[] sortInfos = sortInfo.split("!")[0].split(",");
-            return sortInfos.length > 1 ? sortInfos[1] : "asc";
-        }
-        return "";
-    }
-*/
-
+    private String endDt;
 
     /**
      * 종료일자(프로시져용)
@@ -104,6 +86,5 @@ public class BulkLogSearchDTO extends SearchDTO {
         return null;
     }
      */
-
 
 }

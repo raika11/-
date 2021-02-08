@@ -10,6 +10,7 @@ import { initialState, getCommentList, changeSearchOption } from '@store/comment
 import toast from '@utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
 import { messageBox } from '@utils/toastUtil';
+import AuthButton from '@pages/Auth/AuthButton';
 moment.locale('ko');
 
 /**
@@ -197,12 +198,12 @@ const CommentSearch = ({ selectBannedItem }) => {
                     <Button variant="outline-neutral" className="flex-shrink-0 mr-2" onClick={() => handleClickReloadButton()}>
                         새로고침
                     </Button>
-                    <Button variant="positive" className="mr-2 flex-shrink-0" onClick={() => handleClickBlockButton()}>
+                    <AuthButton variant="positive" className="mr-2 flex-shrink-0" onClick={() => handleClickBlockButton()}>
                         차단등록
-                    </Button>
-                    <Button variant="negative" className="flex-shrink-0" onClick={() => handleCLickDeleteButton()}>
+                    </AuthButton>
+                    <AuthButton variant="negative" className="flex-shrink-0" onClick={() => handleCLickDeleteButton()}>
                         삭제
-                    </Button>
+                    </AuthButton>
                 </Col>
             </Form.Row>
 

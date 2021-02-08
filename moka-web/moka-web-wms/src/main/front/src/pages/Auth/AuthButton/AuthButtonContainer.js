@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-const AuthButtonContainer = ({ text, variant, ...rest }) => {
+const AuthButtonContainer = ({ text, variant, children, ...rest }) => {
     const [hasAuth, setHasAuth] = useState(false);
     const { menu, latestMenuId } = useSelector((store) => ({
         menu: store.auth.menu,
@@ -17,7 +17,7 @@ const AuthButtonContainer = ({ text, variant, ...rest }) => {
     return (
         hasAuth && (
             <Button variant={variant} {...rest}>
-                {text}
+                {children}
             </Button>
         )
     );

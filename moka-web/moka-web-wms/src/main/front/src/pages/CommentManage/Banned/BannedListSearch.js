@@ -145,7 +145,10 @@ const BannedListSearch = ({ pathName }) => {
                 }),
             );
 
-            setSearchData(search);
+            setSearchData({
+                ...initialState.banneds.commentsBlocks.search,
+                tagType: tagtype,
+            });
             dispatch(getCommentsBlocks());
         };
 
@@ -174,7 +177,7 @@ const BannedListSearch = ({ pathName }) => {
                                 <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockIpReason.map((media, index) => (
-                                        <option key={index} value={media.id}>
+                                        <option key={index} value={media.value}>
                                             {media.name}
                                         </option>
                                     ))}
@@ -234,7 +237,7 @@ const BannedListSearch = ({ pathName }) => {
                                 <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockWordReason.map((media, index) => (
-                                        <option key={index} value={media.id}>
+                                        <option key={index} value={media.value}>
                                             {media.name}
                                         </option>
                                     ))}

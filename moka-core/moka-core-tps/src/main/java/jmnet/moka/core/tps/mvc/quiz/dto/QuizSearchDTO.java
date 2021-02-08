@@ -64,12 +64,6 @@ public class QuizSearchDTO extends SearchDTO {
     private String delYn = MokaConstants.NO;
 
     /**
-     * 제목
-     */
-    @ApiModelProperty(value = "제목")
-    private String title;
-
-    /**
      * 퀴즈설명
      */
     @ApiModelProperty(value = "퀴즈설명")

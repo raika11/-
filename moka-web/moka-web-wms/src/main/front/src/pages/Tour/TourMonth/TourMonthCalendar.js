@@ -130,13 +130,13 @@ const TourMonthCalendar = () => {
                         const frame = $(this).find('.fc-daygrid-day-frame');
                         const dowNumber = Number(this.dataset['dow']);
                         if (day.substr(dowNumber, 1) === 'Y') {
-                            this.style.cursor = 'pointer';
                             if (this.querySelector('.fc-set-event-button')) {
                                 // 휴일 해제 버튼 있을 때
                                 return;
                             } else {
                                 // 휴일 해제 버튼 없을 때
                                 if (this.dataset && this.dataset['tourStatus'] === 'undefined' && this.dataset['denyRepeatYn'] === 'N') {
+                                    this.style.cursor = 'pointer';
                                     let button = document.createElement('button');
                                     button.className = 'btn btn-negative fc-set-event-button';
                                     button.innerText = '휴일 해제';

@@ -6,7 +6,7 @@ export const columnDefs = [
         headerName: '번호',
         field: 'repSeq',
         tooltipField: 'repSeq',
-        width: 70,
+        width: 55,
     },
     {
         headerName: '아이디',

@@ -3,6 +3,10 @@ export default [
         headerName: '',
         rowDrag: true,
         width: 24,
+        minWidth: 24,
+        rowDragText: (params) => {
+            return params.rowNode.data.columnistNm;
+        },
     },
     {
         headerName: 'seqNo',
@@ -13,23 +17,18 @@ export default [
     {
         headerName: '기자번호',
         field: 'repSeq',
-        width: 90,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 65,
     },
     {
         headerName: '기자이름',
         field: 'columnistNm',
-        width: 90,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        autoHeight: true,
+        width: 70,
         tooltipField: 'columnistNm',
     },
     {
         headerName: '이메일',
         field: 'email',
         width: 200,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        autoHeight: true,
         tooltipField: 'email',
     },
     {
@@ -41,14 +40,14 @@ export default [
     {
         headerName: '약력정보',
         field: 'profile',
+        width: 633,
         flex: 1,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        tooltipField: 'profile',
     },
     {
         headerName: '등록일',
         field: 'regDt',
         width: 90,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'regDt',
     },
 ];

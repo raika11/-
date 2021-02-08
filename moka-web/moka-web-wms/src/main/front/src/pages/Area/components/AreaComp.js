@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { AREA_COMP_ALIGN_LEFT, AREA_COMP_ALIGN_RIGHT } from '@/constants';
 import { MokaInput } from '@components';

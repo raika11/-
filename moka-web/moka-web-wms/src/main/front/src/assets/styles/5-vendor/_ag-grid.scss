@@ -239,56 +239,58 @@ $rel-row-color:  #ededed;
 $rel-row-hover-color: darken($rel-row-color, 5);
 
 .desking-grid {
-    .ag-row {
-        &.next::before {
-            content: "";
-            z-index: 50;
-            position: absolute;
-            top: -3px;
-            bottom: 48px;
-            left: 0px;
-            right: 0px;
-            background: $positive;
+    .ag-root-wrapper {
+        .ag-row {
+            &.next::before {
+                content: "";
+                z-index: 50;
+                position: absolute;
+                top: -3px;
+                bottom: 48px;
+                left: 0px;
+                right: 0px;
+                background: $positive;
+            }
+    
+            &.hover::before {
+                content: "";
+                z-index: 50;
+                position: absolute;
+                top: 48px;
+                bottom: -3px;
+                left: 0px;
+                right: 0px;
+                background: $positive;
+            }
+    
+            &.change::before {
+                font-family: 'Font Awesome 5 Pro';
+                content: '\f2f1';
+                font-weight: 900;
+                color: $positive;
+                z-index: 50;
+                position: absolute;
+                top: 2px;
+                left: 0px;
+                right: 0px;
+                font-size: 20px;
+            }
         }
-
-        &.hover::before {
-            content: "";
-            z-index: 50;
-            position: absolute;
-            top: 48px;
-            bottom: -3px;
-            left: 0px;
-            right: 0px;
-            background: $positive;
-        }
-
-        &.change::before {
-            font-family: 'Font Awesome 5 Pro';
-            content: '\f2f1';
-            font-weight: 900;
-            color: $positive;
-            z-index: 50;
-            position: absolute;
-            top: 2px;
-            left: 0px;
-            right: 0px;
-            font-size: 20px;
-        }
-    }
-
-    .ag-rel-row {
-        background-color: $rel-row-color;
-
-        &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
-            background-color: $rel-row-hover-color;
-        }
-
-        &.next::before {
-            bottom: 37px;
-        }
-
-        &.hover::before {
-            top: 37px;
+    
+        .ag-rel-row {
+            background-color: $rel-row-color;
+    
+            &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
+                background-color: $rel-row-hover-color;
+            }
+    
+            &.next::before {
+                bottom: 37px;
+            }
+    
+            &.hover::before {
+                top: 37px;
+            }
         }
     }
 
@@ -375,13 +377,15 @@ $rel-row-hover-color: darken($rel-row-color, 5);
 
     /* 벌크 핫클릭 예외처리 */
     &.bulk-hot-click {
-        .ag-row {
-            &.next::before {
-                top: 95px;
-            }
+        .ag-root-wrapper {
+            .ag-row {
+                &.next::before {
+                    top: 95px;
+                }
 
-            &.hover::before {
-                top: 95px;
+                &.hover::before {
+                    top: 95px;
+                }
             }
         }
     }

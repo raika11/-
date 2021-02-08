@@ -14,6 +14,7 @@ import ThumbViewModal from './ThumbViewModal';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import imageEditer from '@utils/imageEditorUtil';
+import { IMAGE_PROXY_API } from '@/constants';
 
 const defaultValue = {
     id: '',
@@ -133,17 +134,21 @@ const EditThumbModal = (props) => {
      * 이미지 편집 등록 버튼 클릭
      */
     const handleClickSave = () => {
-        if (repPhoto.dataType === 'local') {
+        if (repPhoto.dataType === 'article') {
+            apply(repPhoto.imageOnlnPath);
+        } else {
+            let imagePath = repPhoto.imageOnlnPath;
+            if (repPhoto.dataType === 'archive') {
+                imagePath = `${IMAGE_PROXY_API}${encodeURIComponent(repPhoto.imageOnlnPath)}`;
+            }
             (async () => {
-                await fetch(repPhoto.imageOnlnPath)
+                await fetch(imagePath)
                     .then((r) => r.blob())
                     .then((blobFile) => {
                         const file = commonUtil.blobToFile(blobFile, saveFileName);
                         apply(repPhoto.thumbPath, file);
                     });
             })();
-        } else {
-            apply(repPhoto.imageOnlnPath);
         }
 
         handleHide();
@@ -200,7 +205,7 @@ const EditThumbModal = (props) => {
                         // 본문 소재 리스트 탭
                         contentId ? (
                             <div className="px-card py-2 d-flex h-100 flex-column">
-                                {contentId ? <EditThumbArticleImageList contentId={contentId} onRepClick={handleRepClick} /> : ''}
+                                {contentId ? <EditThumbArticleImageList contentId={contentId} onThumbClick={handleThumbClick} onRepClick={handleRepClick} /> : ''}
                             </div>
                         ) : (
                             ''

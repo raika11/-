@@ -180,7 +180,7 @@ export const putMicAnswer = ({ answer }) => {
 export const putMicAnswerRel = ({ answSeq, answerRel }) => {
     // 실제로는 post api라서 post...
     return instance
-        .post(`/api/mics/answers/${answSeq}/rel`, objectToFormData(answerRel), {
+        .post(`/api/mics/answers/${answSeq}/rel`, objectToFormData(answerRel) || null, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

@@ -5,20 +5,25 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { GET_MIC_FEED, SAVE_MIC_FEED } from '@store/mic';
 import { MokaModal, MokaInputLabel } from '@components';
+import commonUtil from '@utils/commonUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
+import imageEditer from '@utils/imageEditorUtil';
+import { messageBox } from '@utils/toastUtil';
+import { EditThumbModal } from '@pages/Desking/modals';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 /**
  * 시민 마이크 피드 편집 모달
  */
-const FeedEditModal = (props) => {
+const EditFeedModal = (props) => {
     const { show, onHide, agenda, feed, onChange, onSave } = props;
     const loading = useSelector(({ loading }) => loading[GET_MIC_FEED] || loading[SAVE_MIC_FEED]);
     const ANSWER_REL_DIV = useSelector(({ app }) => app.ANSWER_REL_DIV || []);
     const PDS_URL = useSelector(({ app }) => app.PDS_URL);
     const [error, setError] = useState({});
     const [mshow, setMshow] = useState(false);
+    const [arcShow, setArcShow] = useState(false);
     const imgRef = useRef(null);
 
     /**
@@ -107,6 +112,53 @@ const FeedEditModal = (props) => {
         });
         setError({ ...error, artTitle: false });
         setMshow(false);
+    };
+
+    /**
+     * 기사 이미지 신규등록
+     * @param {string} imageSrc 이미지 src
+     * @param {*} file 파일데이터
+     */
+    const handleThumbFileApply = (imageSrc, file) => {
+        onChange({
+            key: 'answerRel',
+            value: {
+                ...feed.answerRel,
+                artThumbnail: imageSrc,
+                artThumbnailFile: file,
+            },
+        });
+    };
+
+    /**
+     * 기사 이미지 편집
+     */
+    const handleEditClick = () => {
+        if (feed.answerRel?.artThumbnail) {
+            imageEditer.create(
+                feed.answerRel.artThumbnail,
+                (editImageSrc) => {
+                    (async () => {
+                        await fetch(editImageSrc)
+                            .then((r) => r.blob())
+                            .then((blobFile) => {
+                                const file = commonUtil.blobToFile(blobFile, new Date().getTime());
+                                onChange({
+                                    key: 'answerRel',
+                                    value: {
+                                        ...feed.answerRel,
+                                        artThumbnail: editImageSrc,
+                                        artThumbnailFile: file,
+                                    },
+                                });
+                            });
+                    })();
+                },
+                { cropWidth: 300, cropHeight: 300 },
+            );
+        } else {
+            messageBox.alert('편집할 이미지가 없습니다');
+        }
     };
 
     /**
@@ -305,15 +357,26 @@ const FeedEditModal = (props) => {
                             label={
                                 <React.Fragment>
                                     페이지 이미지
-                                    <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
+                                    <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={() => setArcShow(true)}>
                                         신규등록
                                     </Button>
-                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
+                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
                                         편집
                                     </Button>
                                 </React.Fragment>
                             }
                             inputProps={{ img: feed.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'artThumbnail'), deleteButton: true }}
+                        />
+
+                        {/* 포토 아카이브 모달 */}
+                        <EditThumbModal
+                            show={arcShow}
+                            cropHeight={300}
+                            cropWidth={300}
+                            onHide={() => setArcShow(false)}
+                            contentId={feed.answerRel?.totalId}
+                            thumbFileName={feed.answerRel?.artThumbnail}
+                            apply={handleThumbFileApply}
                         />
                     </React.Fragment>
                 )}
@@ -322,4 +385,4 @@ const FeedEditModal = (props) => {
     );
 };
 
-export default FeedEditModal;
+export default EditFeedModal;

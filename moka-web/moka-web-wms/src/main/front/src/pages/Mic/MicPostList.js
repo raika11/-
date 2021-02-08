@@ -4,18 +4,19 @@ import { useParams } from 'react-router-dom';
 import { MokaCard, MokaTable } from '@components';
 import { initialState, changePostSearchOption, getMicPostList, getMicPost, putMicAnswerDiv, saveMicPost, putMicAnswerUsed, GET_MIC_POST_LIST } from '@store/mic';
 import toast, { messageBox } from '@utils/toastUtil';
-import PostEditMadal from './modals/PostEditModal';
+import PostEditMadal from './modals/EditPostModal';
 import columnDefs from './MicPostListColumns';
 
 /**
  * 아젠다 포스트 목록
  */
-const MicPostList = () => {
+const MicPostList = ({ show: currentTab }) => {
     const dispatch = useDispatch();
     const { agndSeq } = useParams();
     const { total, search, list, post } = useSelector(({ mic }) => mic.post);
     const loading = useSelector(({ loading }) => loading[GET_MIC_POST_LIST]);
     const agenda = useSelector(({ mic }) => mic.agenda);
+    const [instance, setInstance] = useState(null);
     const [show, setShow] = useState(false);
     const [temp, setTemp] = useState({});
     const [rowData, setRowData] = useState([]);
@@ -82,11 +83,15 @@ const MicPostList = () => {
     const handleSave = (post) => {
         dispatch(
             saveMicPost({
-                post,
+                post: {
+                    ...post,
+                    answerRel: post.answerRel ? (post.answerRel?.relDiv ? post.answerRel : undefined) : undefined,
+                },
                 callback: ({ header, body }) => {
                     if (header.success && body) {
                         toast.success(header.message);
                         setShow(false);
+                        setTemp(initialState.post.post);
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -166,6 +171,12 @@ const MicPostList = () => {
         setTemp(post);
     }, [post]);
 
+    useEffect(() => {
+        if (currentTab && instance) {
+            instance.api.resetRowHeights();
+        }
+    }, [currentTab, instance]);
+
     return (
         <MokaCard title={` ❛ ${agenda.agndKwd} ❜ 관리자 포스트 목록`} className="w-100" bodyClassName="d-flex flex-column">
             <h1 className="color-primary mb-3">❛ {agenda.agndTitle} ❜</h1>
@@ -183,6 +194,7 @@ const MicPostList = () => {
                 onRowClicked={handleRowClicked}
                 preventRowClickCell={['answDiv']}
                 selected={temp.answSeq}
+                setGridInstance={setInstance}
             />
 
             {/* 포스트 수정 모달 */}

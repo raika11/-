@@ -273,7 +273,8 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                 {/* 정답. */}
                 <Form.Row className="pl-4 pt-0">
                     <Col xs={12}>
-                        <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelClassName="w-100 ml-0" />
+                        <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelClassName="text-left ml-0 w-100" />
+                        {/* <MokaInputLabel as="none" label="정답을 체크해 주세요." required labelClassName="w-100 ml-0" /> */}
                     </Col>
                 </Form.Row>
                 {/* 설명 */}

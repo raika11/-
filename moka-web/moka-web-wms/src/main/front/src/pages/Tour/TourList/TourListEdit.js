@@ -15,7 +15,7 @@ const TourListEdit = forwardRef(({ match }, ref) => {
     const history = useHistory();
     const tourApply = useSelector((store) => store.tour.tourApply);
     const tourPossibleList = useSelector((store) => store.tour.tourPossibleList);
-    const tourStatus = useSelector((store) => store.app.tourStatus);
+    const tourStatus = useSelector((store) => store.app.TOUR_STATUS);
     const tourAgeRows = useSelector((store) => store.codeMgt.tourAgeRows);
     const tourSetup = useSelector((store) => store.tour.tourSetup);
     const { tourSeq } = useParams();
@@ -176,10 +176,6 @@ const TourListEdit = forwardRef(({ match }, ref) => {
                                 {s.name}
                             </option>
                         ))}
-                    <option value="S">신청</option>
-                    <option value="A">승인</option>
-                    <option value="R">반려</option>
-                    <option value="C">취소</option>
                 </MokaInputLabel>
             </div>
             {temp.tourStatus === 'R' && (

@@ -126,7 +126,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                                 {/* 정답 */}
                                 <MokaInputLabel
                                     label={`정답`}
-                                    labelWidth={40}
+                                    labelWidth={43}
                                     placeholder="(단어로 띄어쓰기 1개 까지 가능)"
                                     labelClassName="mr-0 pr-0 mb-0"
                                     inputClassName="quiz-input"

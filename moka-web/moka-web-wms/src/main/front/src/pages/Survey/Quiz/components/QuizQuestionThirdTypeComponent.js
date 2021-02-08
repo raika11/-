@@ -209,7 +209,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                                     <Col xs={10}>
                                         <MokaInputLabel
                                             label={`보기 ${index + 1}`}
-                                            labelWidth={35}
+                                            labelWidth={40}
                                             placeholder="(20자 이내로 입력하세요)"
                                             labelClassName="mr-2 pr-1"
                                             inputClassName="quiz-input"

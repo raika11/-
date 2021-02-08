@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
@@ -27,11 +28,13 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuestionDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizDetailDTO;
+import jmnet.moka.core.tps.mvc.quiz.dto.QuizQuestionSimpleDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizRelDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizSearchDTO;
 import jmnet.moka.core.tps.mvc.quiz.entity.Question;
 import jmnet.moka.core.tps.mvc.quiz.entity.Quiz;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizDetail;
+import jmnet.moka.core.tps.mvc.quiz.entity.QuizQuestionSimple;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizRel;
 import jmnet.moka.core.tps.mvc.quiz.service.QuestionService;
 import jmnet.moka.core.tps.mvc.quiz.service.QuizService;
@@ -107,6 +110,34 @@ public class QuizRestController extends AbstractCommonController {
 
 
         ResultDTO<ResultListDTO<QuizDTO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 퀴즈 질문 목록조회
+     *
+     * @param search 검색조건
+     * @return 퀴즈목록
+     */
+    @ApiOperation(value = "퀴즈 질문 목록 조회")
+    @GetMapping("/quiz-questions")
+    public ResponseEntity<?> getQuizQuestionList(@SearchParam SearchDTO search) {
+
+        ResultListDTO<QuizQuestionSimpleDTO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<QuizQuestionSimple> returnValue = quizService.findAllQuizQuestion(search);
+
+        // 리턴값 설정
+        List<QuizQuestionSimpleDTO> quizList = modelMapper.map(returnValue.getContent(), QuizQuestionSimpleDTO.TYPE);
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
+        resultListMessage.setList(quizList);
+
+
+        ResultDTO<ResultListDTO<QuizQuestionSimpleDTO>> resultDto = new ResultDTO<>(resultListMessage);
 
         tpsLogger.success(ActionType.SELECT);
 
@@ -290,7 +321,7 @@ public class QuizRestController extends AbstractCommonController {
             // 결과리턴
             QuizDetailDTO dto = modelMapper.map(returnValue, QuizDetailDTO.class);
             dto.setQuestions(modelMapper.map(newQuestions, QuestionDTO.TYPE));
-            
+
             StringBuilder resultMessage = new StringBuilder(msg("tps.common.success.update"));
 
             if (fileUploadMessages.size() > 0) {

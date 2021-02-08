@@ -26,7 +26,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "TB_QUIZ_QUESTION")
-public class QuizQuestion implements Serializable {
+public class QuizQuestionSimple implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,11 +59,11 @@ public class QuizQuestion implements Serializable {
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "QUIZ_SEQ", referencedColumnName = "QUIZ_SEQ", nullable = false, insertable = false, updatable = false)
-    private Quiz quiz;
+    private QuizSimple quiz;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "QUESTION_SEQ", referencedColumnName = "QUESTION_SEQ", nullable = false, insertable = false, updatable = false)
-    private Question question;
+    private QuestionSimple question;
 
 
 }

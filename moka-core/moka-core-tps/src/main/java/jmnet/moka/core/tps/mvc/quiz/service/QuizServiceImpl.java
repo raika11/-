@@ -6,12 +6,14 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotEmpty;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizSearchDTO;
 import jmnet.moka.core.tps.mvc.quiz.entity.Question;
 import jmnet.moka.core.tps.mvc.quiz.entity.Quiz;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizDetail;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizQuestion;
+import jmnet.moka.core.tps.mvc.quiz.entity.QuizQuestionSimple;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizRel;
 import jmnet.moka.core.tps.mvc.quiz.repository.QuizDetailRepository;
 import jmnet.moka.core.tps.mvc.quiz.repository.QuizQuestionRepository;
@@ -54,6 +56,11 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Page<Quiz> findAllQuiz(QuizSearchDTO quiz) {
         return quizRepository.findAllQuiz(quiz);
+    }
+
+    @Override
+    public Page<QuizQuestionSimple> findAllQuizQuestion(SearchDTO searchDTO) {
+        return quizQuestionRepository.findAllQuestion(searchDTO);
     }
 
     @Override

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
@@ -16,7 +16,7 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
     const setPcFileValue = (data) => {
         onChange({ key: 'agndImgFile', value: data });
         if (!data) {
-            onChange({ key: 'agndImg', value: '' });
+            onChange({ key: 'agndImg', value: null });
         }
     };
 
@@ -26,9 +26,19 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
     const setMFileValue = (data) => {
         onChange({ key: 'agndImgMobFile', value: data });
         if (!data) {
-            onChange({ key: 'agndImgMob', value: '' });
+            onChange({ key: 'agndImgMob', value: null });
         }
     };
+
+    useEffect(() => {
+        // 키가 바뀌면 이미지미리보기 제거
+        if (pcImgRef.current) {
+            pcImgRef.current.imageHide();
+        }
+        if (mImgRef.current) {
+            mImgRef.current.imageHide();
+        }
+    }, [agenda.agndSeq]);
 
     return (
         <Form.Row className={className}>
@@ -76,7 +86,7 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
                         </Button>
                     </React.Fragment>
                 }
-                inputProps={{ img: agenda.agndImgMob, width: 290, height: 163, setFileValue: setMFileValue, deleteButton: true }}
+                inputProps={{ img: agenda.agndMobImg, width: 290, height: 163, setFileValue: setMFileValue, deleteButton: true }}
             />
         </Form.Row>
     );

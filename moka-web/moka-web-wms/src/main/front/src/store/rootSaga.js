@@ -31,6 +31,7 @@ import articlePageSaga from '@/store/articlePage/articlePageSaga';
 import snsSaga from '@store/snsManage/snsSaga';
 import brightSaga from '@store/bright/brightSaga';
 import bulksSaga from '@store/bulks/bulksSaga';
+import bulkMonitorSaga from '@store/bulks/bulkMonitorSaga';
 import specialSaga from '@store/special/specialSaga';
 import commentSaga from '@store/commentManage/commentSaga';
 import boardSaga from '@store/board/boardsSaga';
@@ -78,6 +79,7 @@ export default function* rootSaga() {
         snsSaga(),
         brightSaga(),
         bulksSaga(),
+        bulkMonitorSaga(),
         specialSaga(),
         commentSaga(),
         boardSaga(),

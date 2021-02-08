@@ -21,12 +21,12 @@ const BulkMonitor = () => {
                 {/* 벌크 모니터링 검색 */}
                 <BulkMonitorSearch />
 
+                {/* 벌크 모니터링 현황 */}
                 <div className="d-flex justify-content-center">
-                    {/* 벌크 모니터링 현황 정보 */}
                     <BulKMonitorSumAgGrid />
                 </div>
 
-                {/* 벌크 모니터링 목록 */}
+                {/* 벌크 전송 목록 */}
                 <BulKMonitorRcvprogsAgGrid />
             </MokaCard>
         </>

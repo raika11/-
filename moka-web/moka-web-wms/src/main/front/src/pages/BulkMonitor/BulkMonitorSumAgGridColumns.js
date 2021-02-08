@@ -1,20 +1,20 @@
 export default [
     {
         headerName: '단계',
-        field: 'progress',
-        width: 130,
+        field: 'status',
         cellStyle: { fontSize: '12px' },
+        flex: 1,
     },
     {
         headerName: 'loader',
-        field: 'loader',
-        width: 110,
+        field: 'loaderCnt',
+        width: 70,
         cellStyle: { fontSize: '12px' },
     },
     {
         headerName: 'dump',
-        field: 'dump',
-        width: 100,
+        field: 'dumpCnt',
+        width: 70,
         cellStyle: { fontSize: '12px' },
     },
     {
@@ -24,40 +24,40 @@ export default [
         children: [
             {
                 headerName: '네이버',
-                field: 'naver',
-                width: 80,
+                field: 'naverSenderCnt',
+                width: 70,
                 cellStyle: { fontSize: '12px' },
             },
             {
                 headerName: '다음',
-                field: 'daum',
-                width: 80,
+                field: 'daumSenderCnt',
+                width: 70,
                 cellStyle: { fontSize: '12px' },
             },
             {
                 headerName: '네이트',
-                field: 'nate',
-                width: 80,
+                field: 'nateSenderCnt',
+                width: 70,
                 cellStyle: { fontSize: '12px' },
             },
             {
                 headerName: '줌',
-                field: 'zoom',
+                field: 'zoomSenderCnt',
+                width: 70,
+                cellStyle: { fontSize: '12px' },
+            },
+            {
+                headerName: '언론 재단',
+                field: 'kpfSenderCnt',
                 width: 80,
                 cellStyle: { fontSize: '12px' },
             },
+            {
+                headerName: '기타',
+                field: 'remarkSenderCnt',
+                width: 60,
+                cellStyle: { fontSize: '12px' },
+            },
         ],
-    },
-];
-
-export const rowData = [
-    {
-        progress: '대기',
-        loader: '0',
-        dump: '0',
-        naver: '0',
-        daum: '0',
-        nate: '0',
-        zoom: '0',
     },
 ];

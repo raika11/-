@@ -378,6 +378,7 @@ export const getPressCate1 = createReadOnlySaga(act.GET_PRESS_CATE1, 'pressCate1
 export const getHttpMethod = createReadOnlySaga(act.GET_HTTP_METHOD, 'httpMethodRows', constants.CODETYPE_HTTP_METHOD);
 export const getApiType = createReadOnlySaga(act.GET_API_TYPE, 'apiTypeRows', constants.CODETYPE_API_TYPE);
 export const getTourAge = createReadOnlySaga(act.GET_TOUR_AGE, 'tourAgeRows', constants.CODETYPE_TOUR_AGE);
+export const getBulkSite = createReadOnlySaga(act.GET_BULK_SITE, 'bulkSiteRows', constants.CODETYPE_BULK_SITE);
 
 /** saga */
 export default function* codeMgt() {
@@ -414,6 +415,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_HTTP_METHOD, getHttpMethod);
     yield takeLatest(act.GET_API_TYPE, getApiType);
     yield takeLatest(act.GET_TOUR_AGE, getTourAge);
+    yield takeLatest(act.GET_BULK_SITE, getBulkSite);
 
     yield takeLatest(act.GET_SPECIAL_CHAR_CODE, getSpecialCharCode);
     yield takeLatest(act.SAVE_SPECIAL_CHAR_CODE, putSpecialCharCode);

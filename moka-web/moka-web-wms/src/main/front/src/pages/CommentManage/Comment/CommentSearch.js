@@ -199,7 +199,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                         새로고침
                     </Button>
                     <AuthButton variant="positive" className="mr-2 flex-shrink-0" onClick={() => handleClickBlockButton()}>
-                        차단등록
+                        등록
                     </AuthButton>
                     <AuthButton variant="negative" className="flex-shrink-0" onClick={() => handleCLickDeleteButton()}>
                         삭제

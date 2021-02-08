@@ -1,25 +1,25 @@
-import React from 'react';
 import { EtcButtonRenderer } from './GridRenderer';
 
-export const tempColumnDefs = [
+export default [
     {
         headerName: 'ID',
         field: 'id',
-        width: 70,
+        width: 80,
         tooltipFied: 'id',
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '전송일시',
         field: 'sendDt',
-        width: 130,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 90,
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '사진',
         field: 'imgUrl',
         cellRenderer: 'imageRenderer',
-        width: 60,
+        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+        width: 90,
     },
     {
         headerName: 'SNS제목',
@@ -49,7 +49,7 @@ export const tempColumnDefs = [
     {
         headerName: '기타',
         field: 'id',
-        width: 195,
-        cellRendererFramework: (params) => <EtcButtonRenderer {...params} />,
+        width: 188,
+        cellRendererFramework: EtcButtonRenderer,
     },
 ];

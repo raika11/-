@@ -1,9 +1,9 @@
 import React from 'react';
-import { tempColumnDefs } from './FbArtAgGridColumns';
-import { MokaTable } from '@components';
-import { changeSnsSendArticleSearchOptions } from '@store/snsManage';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import columnDefs from './FbArtAgGridColumns';
+import { changeSnsSendArticleSearchOptions } from '@store/snsManage';
+import { MokaTable } from '@components';
 
 const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
@@ -20,10 +20,9 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     return (
         <MokaTable
             className="flex-fill overflow-hidden"
-            agGridHeight={650}
-            columnDefs={tempColumnDefs}
+            columnDefs={columnDefs}
             rowData={rows}
-            rowHeight={50}
+            rowHeight={49}
             onRowNodeId={(row) => row.id}
             onRowClicked={handleClickListRow}
             loading={loading}

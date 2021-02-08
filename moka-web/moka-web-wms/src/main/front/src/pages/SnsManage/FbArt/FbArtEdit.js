@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
-import { Container, Row, Col, Figure, Button } from 'react-bootstrap';
+import moment from 'moment';
+import { Row, Col, Figure, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import commonUtil from '@utils/commonUtil';
 import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialState, publishSnsMeta } from '@store/snsManage';
 import toast from '@utils/toastUtil';
 import { snsNames } from '@/constants';
-import { EditThumbModal } from '@pages/Desking/modals';
 import imageEditer from '@utils/imageEditorUtil';
-import moment from 'moment';
+import { MokaCard, MokaInputLabel, MokaInput, MokaImage } from '@components';
+import { EditThumbModal } from '@pages/Desking/modals';
 
 const FbArtEdit = () => {
     const dispatch = useDispatch();
@@ -130,31 +130,39 @@ const FbArtEdit = () => {
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ]}
         >
-            <Container>
-                <Row className="mb-2">
-                    <Col xs={4} className="p-0">
-                        <p className="h6 mb-0">원본 기사</p>
-                    </Col>
-                    <Col xs={8} className="p-0">
-                        기사 ID {edit.totalId}
+            {/* 기사정보 */}
+            <div>
+                <Row className="m-0">
+                    <Col xs={4} className="p-0 pr-2"></Col>
+                    <Col xs={8} className="p-0 text-neutral">
+                        ID {edit.totalId}
                     </Col>
                 </Row>
 
-                <Row className="mb-2">
-                    <Col xs={4} className="p-0">
-                        <Figure.Image className="mb-0" src={edit.article.imgUrl} />
+                <Row className="m-0 mb-2">
+                    <Col xs={4} className="p-0 pr-2 d-flex align-items-center">
+                        <p className="mb-0 h4 font-weight-bold color-gray-800">원본 기사</p>
                     </Col>
                     <Col xs={8} className="p-0">
-                        <div className="d-flex mb-2 display-5 font-weight-bold text-left">{edit.article.title}</div>
+                        <MokaInput value={edit.article.title} inputProps={{ plaintext: true }} className="font-weight-bold" />
+                    </Col>
+                </Row>
+
+                <Row className="m-0">
+                    <Col xs={4} className="p-0 pr-2">
+                        <MokaImage width={159} img={edit.article.imgUrl} />
+                    </Col>
+                    <Col xs={8} className="p-0">
                         <MokaInput as="textarea" className="resize-none custom-scroll" value={edit.article.summary} inputProps={{ readOnly: true, rows: 6 }} />
                     </Col>
                 </Row>
-            </Container>
+            </div>
 
-            <hr />
+            <hr className="divider" />
 
-            <Container>
-                <Row className="mb-2">
+            {/* 페이스북 메타 정보 */}
+            <div>
+                <Row className="m-0">
                     <Col xs={5} className="p-0">
                         <p className="h6 mb-0">페이스북 메타 정보</p>
                     </Col>
@@ -219,7 +227,7 @@ const FbArtEdit = () => {
                         <div className="d-flex justify-content-end">수정정보 {edit.article.snsRegDt}</div>
                     </Col>
                 </Row>
-            </Container>
+            </div>
 
             <EditThumbModal
                 show={showEditThumbModal}

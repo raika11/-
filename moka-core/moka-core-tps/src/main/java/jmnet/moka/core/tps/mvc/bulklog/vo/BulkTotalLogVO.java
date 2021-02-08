@@ -63,16 +63,28 @@ public class BulkTotalLogVO {
     private Long naverSenderCnt = 0l;
 
     /**
-     * empas Sender 건수
+     * daum Sender 건수
      */
     @Builder.Default
-    private Long empasSenderCnt = 0l;
+    private Long daumSenderCnt = 0l;
 
     /**
-     * estsoft Sender 건수
+     * nate Sender 건수
      */
     @Builder.Default
-    private Long estsoftSenderCnt = 0l;
+    private Long nateSenderCnt = 0l;
+
+    /**
+     * zoom Sender 건수
+     */
+    @Builder.Default
+    private Long zoomSenderCnt = 0l;
+
+    /**
+     * kpf 언론재단 Sender 건수
+     */
+    @Builder.Default
+    private Long kpfSenderCnt = 0l;
 
     /**
      * remark Sender 건수

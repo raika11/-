@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/api/bulk")
+@RequestMapping("/api/bulkLogs")
 @Slf4j
 @Api(tags = {"벌크 모니터링 API"})
 public class BulkLogRestController extends AbstractCommonController {
@@ -80,4 +80,30 @@ public class BulkLogRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    /**
+     * 벌크 전송 목록 조회
+     *
+     * @param search 검색조건
+     * @return API목록
+     */
+    @ApiOperation(value = "벌크 전송 목록 조회")
+    @GetMapping("/stat-list")
+    public ResponseEntity<?> getBulkLogStatList(@Valid @SearchParam BulkLogSearchDTO search) {
+
+        ResultListDTO<BulkLogVO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<BulkLogVO> returnValue = bulkLogService.findAllBulkLogStatList(search);
+
+        // 리턴값 설정
+        resultListMessage.setTotalCnt(returnValue.getTotalPages());
+        resultListMessage.setList(returnValue.getContent());
+
+
+        ResultDTO<ResultListDTO<BulkLogVO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }

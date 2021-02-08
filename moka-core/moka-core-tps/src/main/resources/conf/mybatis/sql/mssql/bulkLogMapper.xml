@@ -15,10 +15,26 @@
   <select id="findAllTotal" parameterType="BulkLogSearchDTO" resultType="BulkTotalLogVO"
     statementType="CALLABLE">
     {call UPA_BULK_LOG_TOTAL_STAT_SEL(
-    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-    #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date}
+    #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string}
+
     ) }
   </select>
 
+  <!-- 벌크 전송 목록 조회 -->
+  <select id="findAllList" parameterType="BulkLogSearchDTO" resultType="BulkLogVO"
+          statementType="CALLABLE">
+    {call UPA_BULK_LOG_LIST_STAT_SEL(
+            #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+            #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
+            #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{orgSourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{orgSourceName, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{contentDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+            #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
+      ) }
+  </select>
 
 </mapper>

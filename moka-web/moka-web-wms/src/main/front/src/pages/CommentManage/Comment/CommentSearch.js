@@ -97,6 +97,10 @@ const CommentSearch = ({ selectBannedItem }) => {
         setDefaultInputModalState(true);
     };
 
+    const handleCLickDeleteButton = () => {
+        messageBox.alert('서비스 준비 중입니다.');
+    };
+
     // 최초 로딩시 목록 가지고 옴.
     useEffect(() => {
         dispatch(getCommentList());
@@ -197,7 +201,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                     <Button variant="positive" className="mr-2 flex-shrink-0" onClick={() => handleClickBlockButton()}>
                         차단등록
                     </Button>
-                    <Button variant="negative" className="flex-shrink-0" onClick={() => setDefaultInputModalState(true)}>
+                    <Button variant="negative" className="flex-shrink-0" onClick={() => handleCLickDeleteButton()}>
                         삭제
                     </Button>
                 </Col>

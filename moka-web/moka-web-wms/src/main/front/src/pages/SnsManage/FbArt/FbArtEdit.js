@@ -125,6 +125,7 @@ const FbArtEdit = () => {
                     variant: 'positive',
                     className: 'mr-2',
                     onClick: handleClickPublish,
+                    useAuth: true,
                 },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ]}

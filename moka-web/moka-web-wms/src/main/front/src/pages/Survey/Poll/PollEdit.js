@@ -153,6 +153,7 @@ const PollEdit = () => {
                     variant: 'positive',
                     onClick: handleClickSave,
                     className: 'mr-05',
+                    useAuth: true,
                 },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
             ]}

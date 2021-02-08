@@ -4,6 +4,7 @@ import produce from 'immer';
 import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import AuthButton from '@pages/Auth/AuthButton';
 import { CARD_DEFAULT_HEIGHT, CARD_FOLDING_WIDTH } from '@/constants';
 import { MokaIcon, MokaLoader } from '@components';
 
@@ -237,11 +238,15 @@ const MokaCard = forwardRef((props, ref) => {
                 <Card.Footer className={clsx('d-flex', footerClassName)}>
                     {footerButtons.length > 0 ? (
                         <>
-                            {footerButtons.map(({ variant, text, ...rest }, idx) => (
-                                <Button key={`${text}-${idx}`} variant={variant} {...rest}>
-                                    {text}
-                                </Button>
-                            ))}
+                            {footerButtons.map(({ variant, text, useAuth, ...rest }, idx) =>
+                                useAuth ? (
+                                    <AuthButton key={`${text}-${idx}`} variant={variant} {...rest} text={text} />
+                                ) : (
+                                    <Button key={`${text}-${idx}`} variant={variant} {...rest}>
+                                        {text}
+                                    </Button>
+                                ),
+                            )}
                         </>
                     ) : (
                         footerAs

@@ -1,10 +1,12 @@
 package jmnet.moka.web.rcv.common.vo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.util.RcvStringUtil;
 import lombok.Getter;
@@ -52,7 +54,7 @@ public class TotalVo <T> extends BasicVo {
 
     public void logError( String errorMessage ) {
         log.error(errorMessage);
-        this.errorMessageList.add(errorMessage);
+        this.errorMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + errorMessage);
     }
 
     public void logError(String s, Object...message) {
@@ -61,7 +63,7 @@ public class TotalVo <T> extends BasicVo {
 
     public void logInfo( String infoMessage ) {
         log.info(infoMessage);
-        this.infoMessageList.add( infoMessage );
+        this.infoMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + infoMessage );
     }
     public void logInfo(String s, Object...message) {
         logInfo(RcvStringUtil.format(s, message));

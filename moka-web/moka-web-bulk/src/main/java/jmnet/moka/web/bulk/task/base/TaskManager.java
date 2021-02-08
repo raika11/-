@@ -14,6 +14,7 @@ import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
 import jmnet.moka.web.bulk.service.SmsUtilService;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkloader.service.BulkLoaderService;
+import jmnet.moka.web.bulk.task.bulksender.service.BulkSenderService;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,9 @@ public class TaskManager {
 
     @Autowired
     BulkDumpService bulkDumpService;
+
+    @Autowired
+    BulkSenderService bulkSenderService;
 
     @Autowired
     SmsUtilService smsUtilService;

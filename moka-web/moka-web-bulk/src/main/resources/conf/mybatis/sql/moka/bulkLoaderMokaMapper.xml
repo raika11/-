@@ -15,6 +15,7 @@
     <![CDATA[
     {
       call USP_BULK_MGT_DEL(
+      #{SEQ_NO, mode=IN, jdbcType=INTEGER, javaType=int},
       #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int}
       )

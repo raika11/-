@@ -211,7 +211,12 @@ public class BulkFileUtil {
                 if (System.currentTimeMillis() - f.lastModified() < fileWaitTime) {
                     continue;
                 }
-                files.add(f);
+
+                if( f.length() == 0)
+                    //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+                else
+                    files.add(f);
             }
         }
         if( files.size() <= 0 )

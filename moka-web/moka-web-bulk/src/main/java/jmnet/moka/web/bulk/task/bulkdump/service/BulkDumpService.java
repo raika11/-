@@ -2,6 +2,8 @@ package jmnet.moka.web.bulk.task.bulkdump.service;
 
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
+import jmnet.moka.web.bulk.task.bulkdump.process.joinsland.BulkJoinsLandArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
 import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
@@ -23,7 +25,13 @@ public interface BulkDumpService  {
     List<Map<String, Object>> getUspBulkDdrefListSel(int topCount, int currentSeqNo);
     void delUspBulkDdref( BulkDumpTotalVo bulkDumpTotal );
 
+    void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message, boolean isError);
+    void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message);
+
+    void insertBulkPortalLog( TotalVo<BulkDumpTotalVo> totalVo );
+
     boolean doGetBulkNewstableJoongang( BulkJoongangArticle article );
     boolean doGetBulkNewstableJoongangEx( BulkJoongangArticleEx article );
     boolean doGetBulkNewstableSunday( BulkSundayArticle article );
+    boolean doGetBulkNewstableJoinsLand( BulkJoinsLandArticle article );
 }

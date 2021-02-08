@@ -3,7 +3,10 @@ package jmnet.moka.web.bulk.task.bulkdump.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.mapper.idb.BulkDumpIdbMapper;
+import jmnet.moka.web.bulk.task.bulkdump.process.joinsland.BulkJoinsLandArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
 import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
@@ -45,7 +48,38 @@ public class BulkDumpServiceImpl implements BulkDumpService {
 
     @Override
     public void delUspBulkDdref(BulkDumpTotalVo bulkDumpTotal) {
-        this.bulkDumpIdbMapper.callUspBulkDdrefDel(bulkDumpTotal);
+         this.bulkDumpIdbMapper.callUspBulkDdrefDel(bulkDumpTotal);
+    }
+
+    @Override
+    public void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message, boolean isError) {
+        if( McpString.isNullOrEmpty(totalVo.getMainData().getContentDiv()) ) {
+            if( "JL".equals(totalVo.getMainData().getOrgSourceCode()) )
+                totalVo.getMainData().setContentDiv("joinsland");
+            else
+                totalVo.getMainData().setContentDiv("moka");
+        }
+
+        totalVo.getMainData().setDumpStatus( status );
+        if( isError )
+            totalVo.logError(message);
+        else
+            totalVo.logInfo(message);
+        totalVo.setMsg(totalVo.getInfoMessageList());
+
+        this.bulkDumpIdbMapper.callUspBulkLogInsByDump(totalVo);
+
+        totalVo.setInfoMessageFlush();
+    }
+
+    @Override
+    public void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message) {
+        insertBulkLog( totalVo, status, message, false);
+    }
+
+    @Override
+    public void insertBulkPortalLog(TotalVo<BulkDumpTotalVo> totalVo) {
+        this.bulkDumpIdbMapper.callUspBulkPortalLogInsByDump(totalVo);
     }
 
     @Override
@@ -101,6 +135,20 @@ public class BulkDumpServiceImpl implements BulkDumpService {
 
         final BulkDumpNewsVo newsVo = dumpNewses.get( dumpNewsesLength - 1);
         article.processBulkDumpNewsVo( newsVo, this.bulkDumpIdbMapper.callUspBulkNewsMMDataSel(article) );
+
+        return true;
+    }
+
+    @Override
+    public boolean doGetBulkNewstableJoinsLand(BulkJoinsLandArticle article) {
+        List<BulkDumpNewsVo> dumpNewses = this.bulkDumpIdbMapper.callUspBulkNewstableJoinslandSel(article);
+
+        final int dumpNewsesLength = dumpNewses.size();
+        if( dumpNewsesLength == 0 )
+            return false;
+
+        final BulkDumpNewsVo newsVo = dumpNewses.get( dumpNewsesLength - 1);
+        article.processBulkDumpNewsVo( newsVo, this.bulkDumpIdbMapper.callUspBulkJoinslandNewsMMDataSel(article) );
 
         return true;
     }

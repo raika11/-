@@ -39,10 +39,29 @@ public class BulkDumpTotalVo implements Serializable {
     @JsonProperty(value = "IUD")
     private String iud;
 
-    @JsonProperty(value = "TOTAL_ID")
-    private Integer totalId;
+    @JsonProperty(value = "CONTENT_ID")
+    private Integer contentId;
+
+    @JsonProperty(value = "TITLE")
+    private String title;
+
+    @JsonProperty(value = "ORG_SOURCE_CODE")
+    private String orgSourceCode;
+
+    @JsonProperty(value = "JHOT_YN")
+    private String jHotYn;
 
     private TaskInputData taskInputData;
+
+    private int dumpStatus;
+    private String contentDiv;
+
+    private int dumpLogSeq;
+
+    private String curPortalDiv;
+    private String curPortalIud;
+    private int curPortalSenderStatus;
+    private String curPortalContent;
 
     public boolean isDdrefValid() {
         //noinspection ConstantConditions,LoopStatementThatDoesntLoop
@@ -57,7 +76,9 @@ public class BulkDumpTotalVo implements Serializable {
                 break;
             if( this.iud == null )
                 break;
-            if( this.totalId == null )
+            if( this.contentId == null )
+                break;
+            if( this.orgSourceCode == null )
                 break;
             return true;
         }while (false);

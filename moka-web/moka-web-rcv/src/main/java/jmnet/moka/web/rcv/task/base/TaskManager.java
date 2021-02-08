@@ -16,6 +16,7 @@ import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.service.SmsUtilService;
 import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
 import jmnet.moka.web.rcv.task.calljamapi.service.CallJamApiService;
+import jmnet.moka.web.rcv.task.joinsland.service.JoinsLandService;
 import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
 import jmnet.moka.web.rcv.task.cpxml.service.CpXmlService;
 import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
@@ -74,6 +75,9 @@ public class TaskManager {
 
     @Autowired
     WeatherShkoService weatherShkoService;
+
+    @Autowired
+    JoinsLandService joinsLandService;
 
     @Autowired
     SmsUtilService smsUtilService;

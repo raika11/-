@@ -12,15 +12,19 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.code.SenderStatus;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.exception.BulkException;
 import jmnet.moka.web.bulk.service.SmsUtilService;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvCP;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvGlobal;
+import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJobFileVo;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
@@ -43,26 +47,25 @@ import org.apache.commons.io.Charsets;
 
 @Slf4j
 public class BulkDumpProcess {
-    public static boolean doProcess(BulkArticle article, BulkDumpEnv bulkDumpEnv, BulkDumpTask bulkDumpTask) {
+    public static boolean doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkArticle article, BulkDumpEnv bulkDumpEnv, BulkDumpTask bulkDumpTask, BulkDumpJobTotalVo dumpJobTotal) {
         final BulkDumpEnvGlobal dumpEnvGlobal = bulkDumpEnv.getBulkDumpEnvGlobal();
         final SmsUtilService smsUtilService = bulkDumpTask.getTaskManager().getSmsUtilService();
         final ObjectMapper objectMapper = bulkDumpTask.getTaskManager().getObjectMapper();
+        final BulkDumpService dumpService = bulkDumpTask.getTaskManager().getBulkDumpService();
 
         boolean success = true;
-
-        final Integer dumpSeqNo = article.getBulkDumpTotal().getSeqNo();
-        final BulkDumpJobTotalVo dumpJobTotal = BulkDumpJobTotalVo.makeBulkDumpJobTotal(dumpSeqNo, article.getTotalId().toString(), dumpEnvGlobal.getDirDump());
 
         final String backIud = article.getIud().toString();
         for(BulkDumpEnvCP dumpEnvCP : bulkDumpEnv.getDumpEnvCPs() ) {
             if(!dumpEnvCP.getContent().contains(article.getTargetCode()))
                 continue;
 
-            final boolean isDelSite = Arrays.stream(article.getBulkDelSite().split(",")).filter(c -> dumpEnvCP.getSendSiteCode().equals(c)).findAny().orElse(null) != null;
+            final boolean isDelSite = !McpString.isNullOrEmpty(article.getBulkDelSite()) &&
+                    Arrays.stream(article.getBulkDelSite().split(",")).filter(c -> c.equals(dumpEnvCP.getSendSiteCode())).findAny().orElse(null) != null;
             if( !McpString.isNullOrEmpty(dumpEnvCP.getSendSiteCode()) ) {
                 if( !article.getIud().toString().equals("D")) {
                     // IUD 가 "D" 가 아닐 경우 bulkSendSite 와 bulkDelSite 에 항목이 있는 지 체크
-                    if( Arrays.stream(article.getBulkSendSite().split(",")).filter(c -> dumpEnvCP.getSendSiteCode().equals(c)).findAny().orElse(null) == null) {
+                    if( Arrays.stream(article.getBulkSendSite().split(",")).filter(c -> c.equals(dumpEnvCP.getSendSiteCode())).findAny().orElse(null) == null) {
                         if( !isDelSite ) {
                             continue;
                         }
@@ -83,17 +86,18 @@ public class BulkDumpProcess {
 
             final BulkDumpJobVo dumpJob = BulkDumpJobVo.makeBulkDumpJob( dumpEnvCP, dumpJobTotal, dumpEnvCP.getDir() );
 
-            success &= doProcess_CpProcess( dumpEnvCP, article, dumpJobTotal, dumpJob, bulkDumpTask, smsUtilService );
+            success &= doProcess_CpProcess( totalVo, dumpEnvCP, article, dumpJobTotal, dumpJob, bulkDumpTask, dumpService, smsUtilService );
         }
 
-        success &= dumpJobTotal.exportDumpJobTotal(dumpEnvGlobal.getDirDump(), objectMapper);
+        if( !dumpJobTotal.isNotFinalDump() )
+            success &= dumpJobTotal.exportDumpJobTotal(dumpEnvGlobal.getDirDump(), objectMapper);
 
         return success;
     }
 
     private static final Pattern PATTERN_CpFormat = Pattern.compile("(\\{_.*?_})", Pattern.CASE_INSENSITIVE);
-    private static boolean doProcess_CpProcess(BulkDumpEnvCP dumpEnvCP, BulkArticle article, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob,
-            BulkDumpTask bulkDumpTask, SmsUtilService smsUtilService) {
+    private static boolean doProcess_CpProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpEnvCP dumpEnvCP, BulkArticle article, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob,
+            BulkDumpTask bulkDumpTask, BulkDumpService dumpService, SmsUtilService smsUtilService) {
         final ObjectMapper objectMapper = bulkDumpTask.getTaskManager().getObjectMapper();
 
         //noinspection ConstantConditions,LoopStatementThatDoesntLoop
@@ -108,16 +112,18 @@ public class BulkDumpProcess {
                 }
             }
 
-            if(iud.equals("D"))
-            {
-                if( !doProcess_CpProcessWriteSwitchTags( dumpEnvCP, article, dumpEnvCP.getFormatDelete(), dumpJobTotal, dumpJob, smsUtilService ) )
+            if (iud.equals("D")) {
+                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormatDelete(), dumpJobTotal, dumpJob, smsUtilService)) {
                     break;
-            }else {
+                }
+            } else {
                 final boolean isOvpDownloadSuccess = doProcess_CpProcessOvpDownload(dumpEnvCP, article, dumpJobTotal, dumpJob, smsUtilService);
-                if( !isOvpDownloadSuccess )
+                if (!isOvpDownloadSuccess) {
                     break;
-                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormat(), dumpJobTotal, dumpJob, smsUtilService))
+                }
+                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormat(), dumpJobTotal, dumpJob, smsUtilService)) {
                     break;
+                }
             }
 
             Map<String, String> notReplacedMap = new HashMap<>();
@@ -130,6 +136,12 @@ public class BulkDumpProcess {
             if( !dumpJobTotal.exportDumpJob(dumpEnvCP, dumpJob, objectMapper) )
                 break;
 
+            totalVo.getMainData().setCurPortalDiv( dumpEnvCP.getName() );
+            totalVo.getMainData().setCurPortalIud( iud );
+            totalVo.getMainData().setCurPortalSenderStatus(SenderStatus.Ready);
+            totalVo.getMainData().setCurPortalContent( dumpJob.getCpFormat() );
+
+            dumpService.insertBulkPortalLog(totalVo);
 
 
             /*
@@ -147,7 +159,7 @@ public class BulkDumpProcess {
                 {
                     m_util.SendSMS(m_article.m_sms_recv_no, string.Format("BULK 동영상 다운로드 실패 메일발송, AID:{0},{1}",
                         m_article.m_aid, m_article.m_title), m_log);
-                    m_util.SendMailWithAritlceFile(strFileName,
+                    m_util.SendMailWithArticleFile(strFileName,
                         strFileName.Substring(strFileName.LastIndexOf("\\")+1), m_article, strDownloadMsg, m_log);
                 }
             }
@@ -162,6 +174,8 @@ public class BulkDumpProcess {
         return false;    }
 
     private static boolean doProcess_CpProcessWriteSwitchTags(BulkDumpEnvCP dumpEnvCP, BulkArticle article, String format, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob, SmsUtilService smsUtilService) {
+        boolean success = false;
+
         final String cpFormat = doProcess_CpProcessSwitchTags( article, format, dumpEnvCP.getType());
         String fileName = dumpJobTotal.getBulkJobFileName(dumpEnvCP.getFileExt());
         switch ( dumpEnvCP.getName() ) {
@@ -185,18 +199,19 @@ public class BulkDumpProcess {
             dumpJob.getSourceJobFiles().add( new BulkDumpJobFileVo(tmpFileName, fileName));
             dumpJob.setCpFormat( cpFormat );
 
-            return true;
+            success = true;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (bs != null) {
                 try {
+                    bs.flush();
                     bs.close();
                 } catch (Exception ignore) {
                 }
             }
         }
-        return false;
+        return success;
     }
 
     private static String doProcess_CpProcessSwitchTags(BulkArticle article, String format, String type) {

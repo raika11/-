@@ -10,12 +10,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
-import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +38,7 @@ public abstract class BulkArticle implements Serializable {
 
     protected Map<String, MapString> dataMap = new HashMap<>();
 
+    private final TotalVo<BulkDumpTotalVo> totalVo;
     private final BulkDumpTotalVo bulkDumpTotal;
     private BulkDumpEnvTarget bulkDumpEnvTarget;
 
@@ -155,7 +156,9 @@ public abstract class BulkArticle implements Serializable {
         return this.bulkDumpNewsVideoList.size() > 0;
     }
 
-    public BulkArticle(BulkDumpTotalVo bulkDumpTotal) {
+    public BulkArticle(TotalVo<BulkDumpTotalVo> totalVo ) {
+        final BulkDumpTotalVo bulkDumpTotal = totalVo.getMainData();
+        this.totalVo = totalVo;
         this.bulkDumpTotal = bulkDumpTotal;
 
         setInsDt( bulkDumpTotal.getInsDt() );
@@ -163,12 +166,12 @@ public abstract class BulkArticle implements Serializable {
         this.targetCode = bulkDumpTotal.getTargetCode();
 
         this.iud.setData( bulkDumpTotal.getIud() );
-        if( bulkDumpTotal.getTotalId() != null )
-            this.totalId.setData( bulkDumpTotal.getTotalId().toString());
+        if( bulkDumpTotal.getContentId() != null )
+            this.totalId.setData( bulkDumpTotal.getContentId().toString());
 
         if( this.targetCode != null ) {
             if (!this.targetCode.startsWith("JT")) {
-                this.totalId10.setData(String.format("%010d", bulkDumpTotal.getTotalId()));
+                this.totalId10.setData(String.format("%010d", bulkDumpTotal.getContentId()));
             }
         }
 
@@ -197,8 +200,8 @@ public abstract class BulkArticle implements Serializable {
         this.bulkDumpNewsMMDataList = bulkDumpNewsMMDataList;
         if( bulkDumpNewsMMDataList == null )
             return;
-        this.bulkDumpNewsImageList = bulkDumpNewsMMDataList.stream().filter( data -> data.getMultiType().equals("HP") ).collect( Collectors.toList());
-        this.bulkDumpNewsVideoList = bulkDumpNewsMMDataList.stream().filter( data -> data.getMultiType().equals("MF") ).collect( Collectors.toList());
+        this.bulkDumpNewsImageList = bulkDumpNewsMMDataList.stream().filter( data -> "HP".equals(data.getMultiType()) ).collect( Collectors.toList());
+        this.bulkDumpNewsVideoList = bulkDumpNewsMMDataList.stream().filter( data -> "MF".equals(data.getMultiType()) ).collect( Collectors.toList());
     }
 
     private static final Pattern PATTERN_getContentImages = Pattern.compile("<(\\s*?)img(?<entry>.*?)>", Pattern.CASE_INSENSITIVE);
@@ -277,122 +280,14 @@ public abstract class BulkArticle implements Serializable {
         }
     }
 
-    private static final Pattern PATTERN_ContentTag_daumVod = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id[^>].*?>(\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumKakaoTv = Pattern.compile("<iframe.*?src=(.)http://videofarm.daum.net/controller/video/viewer/Video.html.*?</iframe>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumPhotoBundle = Pattern.compile("<div class=\"tag_photobundle\">(\\s)*<img.*?>(\\s)*</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumImg = Pattern.compile("<(\\s*?)img.[^>]+>", Pattern.CASE_INSENSITIVE);
-    public void processContentDaumBefore(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap,
-            Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
-        //카카오다음 전용변수(m_content_html_ig_daum)
-        String contentHtmlDaum = getContentHtml().toString()
-                                                 .replaceAll("(?i)<!--@img_tag_s@-->.*?<!--@img_tag_e@-->", "")
-                                                 .replaceAll("(?i)<p class=\"caption\">", "</p>");
-
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"" );
-
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumVod, contentHtmlDaum, "daumvod_", daumVideoMap);
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<div class=\"tag_vod\".*?</div>", "" ); //동영상 제외
-
-        //사운드Cloud 안내메시지 제거
-        contentHtmlDaum = contentHtmlDaum.replaceAll("위\\s*재생.+다.", "" ); //동영상 제외
-
-        //미리보는 오늘 증시/날씨 다음카카오 제거 by sean 2016-09-08 - http://pms.joins.com/task/view_task.asp?tid=13574  /////////////////////////////////////////////////
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s)*div(\\s)*class(\\s)*=(\\s)*([\"'])ab_life([\"'])(\\s)*>.*?<(\\s)*/table.*?/table.*?/table.*?./(\\s)*div(\\s)*>", "" );
-
-        //ab_table 컴포넌트 태그제거
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<table(\\s)*class(\\s)*=(\\s)*([\"'])ab_table([\"'])(\\s)*>.*?<(\\s)*/table(\\s)*>", "" );
-
-        //카카오TV팟 <iframe> 태그를 치환 정보구성 by sean - 2016-07-29
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumKakaoTv, contentHtmlDaum, "mark_kakao_tv_podcast_", daumVideoKakaoTvMap);
-
-        //다음카카오 이미지묶음 케이스(tag_photobundle)
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumPhotoBundle, contentHtmlDaum, "tag_photobundle", daumPhotoBundleMap);
-
-        //다음카카오 이미지정렬 태그 치환정보 구성 2016-08-02 by sean.
-        contentHtmlDaum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_daumImg, contentHtmlDaum, "ab_photo", daumImageMap);
-
-        contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<p class=\"caption\">.*?</p>","");
-
-        getContentHtmlDaum().setData(contentHtmlDaum);
-    }
-
-    private static final Pattern PATTERN_ContentTag_daumVodNaverCast = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"navercast[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodKakaoTv = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"kakaotv[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodYouTube = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    private static final Pattern PATTERN_ContentTag_daumVodOvp = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    public void processContentDaumAfter(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap, Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
-        // 다음기사에 QA인 경우 줄바뀜 추가 2016-02-05 지창현
-        String contentHtmlDaum = getContentHtmlDaum().toString();
-        if( contentHtmlDaum.contains("\r\n<strong>Q :")) {
-            contentHtmlDaum = contentHtmlDaum.replace("\r\n<strong>Q :", "\r\n\r\n<strong>Q :");
-        }
-
-        contentHtmlDaum = contentHtmlDaum.replaceAll("[<][a-zA-Z/](.|\n)*?[>]", "");
-
-        // region 다음카카오 TV팟, tag_photobundle 처리
-        // 카카오 TV팟 <iframe> 태그구간 원본치환
-        for (String kakaoTvKey : daumVideoKakaoTvMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace(kakaoTvKey, daumVideoKakaoTvMap.get(kakaoTvKey));
-        }
-
-        //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumPhotoBundleMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
-        }
-
-        //다음카카오 이미지정렬 원래 태그로 치환 ///////////////////////////////////////////////////////////////////////////////////////
-        for (String daumImageKey : daumImageMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( daumImageKey, daumImageMap.get(daumImageKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
-        }
-
-        boolean isOnceDaumTagReplace = true;
-        for( String daumVideoKey : daumVideoMap.keySet() ){
-            final String daumVideoStr = daumVideoMap.get(daumVideoKey);
-
-            // 네이버 cast 삭제
-            if( PATTERN_ContentTag_daumVodNaverCast.matcher(daumVideoStr).find() ) {
-                contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, "");
-                continue;
-            }
-
-            // 카카오 TV
-            Matcher matcherKakaoTv = PATTERN_ContentTag_daumVodKakaoTv.matcher(daumVideoStr);
-            if( matcherKakaoTv.find()) {
-                contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, String.format("<iframe src=\"%s\"></iframe>", matcherKakaoTv.group("url")));
-                continue;
-            }
-
-            // YouTube
-            Matcher matcherYouTube = PATTERN_ContentTag_daumVodYouTube.matcher(daumVideoStr);
-            if( matcherYouTube.find()) {
-                contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, String.format("<iframe src=\"%s\" allowfullscreen=\"true\"></iframe>", matcherYouTube.group("url")));
-                continue;
-            }
-
-            // ovp
-            Matcher matcherOvp = PATTERN_ContentTag_daumVodOvp.matcher(daumVideoStr);
-            if( matcherOvp.find()){
-                if (!isOnceDaumTagReplace) {
-                    contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, "");
-                } else {
-                    isOnceDaumTagReplace = false;
-                    setOvpArticle( true );
-                    contentHtmlDaum = contentHtmlDaum.replace(daumVideoKey, String.format("<video controls><source src=\"%s.mp4\" type=\"video/mp4\"></video>", getTotalId().toString()));
-                }
-            }
-        }
-
-        contentHtmlDaum = contentHtmlDaum.replace("<여기를 누르시면 크게 보실 수 있습니다>", "")
-                                         .replace("▷여기를 누르시면 크게 보실 수 있습니다", "");
-
-        //다음 아티클 개선 style 적용 by sean 2016-08-31 - http://pms.joins.com/task/view_task.asp?tid=13408  ////////////////
-        //다음은 전체태그가 제거되므로 div,span class=dim 에 태그를 제외한 CMS 입력 템플릿을 <br /> 그대로 사용한다.
-        //CMS CK 에디터 템플릿에서 <br><br> 두번을 지정해줘야 <br /> 이 입력되는 특이사항 발생. 2016-09-01 jerome speech.
-        contentHtmlDaum = contentHtmlDaum.replace("■", "\r\n\r\n■")
-                                         .replace("「", "\r\n「")
-                                         .replace("」", "」\r\n\r\n");
-        //다음 아티클 개선 style 적용 by sean 2016-08-31 - http://pms.joins.com/task/view_task.asp?tid=13408  ////////////////
-
-        getContentHtmlDaum().setData(contentHtmlDaum);
+    @SuppressWarnings("SameParameterValue")
+    protected void processContent_replaceAll( String regex, String replacement ) {
+        getContentHtmlNaver().replaceAll(regex, replacement);
+        getContentHtmlDaum().replaceAll(regex, replacement);
+        getContentHtml().replaceAll(regex, replacement);
+        getContentText().replaceAll(regex, replacement);
+        getContentHtmlEx4().replaceAll(regex, replacement);
+        getContentHtmlCyworld().replaceAll(regex, replacement);
+        getContentHtmlNate().replaceAll(regex, replacement);
     }
 }

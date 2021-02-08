@@ -2,12 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jmnet.moka.web.bulk.mapper.idb.BulkLoaderIdbMapper">
-  <insert id="callUspBulkNewsTableIns" parameterType="HashMap" statementType="CALLABLE">
+  <insert id="callUspBulkNewsTableIns" parameterType="TotalVo" statementType="CALLABLE">
     <![CDATA[
     {
       call USP_BULK_NEWSTABLE_INS(
-      #{IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int}
+      #{mainData.IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUspBulkLogInsByLoader" parameterType="TotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_LOG_INS_BY_LOADER(
+      #{mainData.SEQ_NO, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.contentDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{returnValue, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.TOTAL_ID, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.IUD, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.loadStatus, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{msg, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.TITLE, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.ORG_SOURCE_CODE, mode=IN, jdbcType=VARCHAR, javaType=string}
       )
       }
     ]]>

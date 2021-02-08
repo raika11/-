@@ -74,10 +74,10 @@ const BenneHistoryModal = (props) => {
     useEffect(() => {
         const setGridRowData = (data) => {
             setRowData(
-                data.map((e) => {
+                data.map((e, index) => {
                     return {
-                        // bannedYn: e.state === 'A' ? '차단' : '복원',
-                        bannedYn: '차단',
+                        id: `${e.regDt}-${index}`,
+                        bannedYn: e.usedYn === 'Y' ? '차단' : '복원',
                         regInfo: `${e.regMember.memberId}/${e.regMember.memberNm}`,
                         regDt: e.regDt,
                     };

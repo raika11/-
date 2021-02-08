@@ -74,7 +74,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
 
     return (
         <Form>
-            <Form.Row className="mb-3">
+            <Form.Row className="mb-2">
                 <div style={{ width: 110 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="select"

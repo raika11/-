@@ -181,7 +181,6 @@ const CommentSearch = ({ selectBannedItem }) => {
                     </MokaInput>
 
                     <MokaInput as="select" className="ml-1" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
-                        <option value="">전체</option>
                         <option value="memNm">이름</option>
                         <option value="memId">ID</option>
                         <option value="cont">댓글 내용</option>

@@ -46,7 +46,7 @@ export const columnDefs = [
         },
     },
     {
-        headerName: ' ID / \n이름',
+        headerName: ' ID / 이름',
         field: 'userInfo',
         tooltipField: 'userId',
         width: 150,

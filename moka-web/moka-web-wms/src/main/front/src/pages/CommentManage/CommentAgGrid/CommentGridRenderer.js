@@ -12,9 +12,9 @@ import AuthButton from '@pages/Auth/AuthButton';
 
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     return (
-        <AuthButton ref={ref} variant="outline-table-btn" className="px-2" onClick={onClick} id={id}>
+        <div ref={ref} className="px-2" onClick={onClick} id={id}>
             삭제
-        </AuthButton>
+        </div>
     );
 });
 
@@ -93,7 +93,7 @@ export const DeleteButtonRenderer = (props) => {
             {status === 'A' ? (
                 <MokaOverlayTooltipButton tooltipText="삭제" variant="white" className="p-0">
                     <Dropdown style={{ position: 'unset' }}>
-                        <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
+                        <Dropdown.Toggle as={DropdownToggle} id={`dropdown-comment-edit-${cmtSeq}`} />
                         <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
                     </Dropdown>
                 </MokaOverlayTooltipButton>

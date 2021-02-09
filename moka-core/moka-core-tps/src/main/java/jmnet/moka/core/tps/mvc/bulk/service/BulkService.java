@@ -6,6 +6,7 @@ package jmnet.moka.core.tps.mvc.bulk.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkArticleDTO;
+import jmnet.moka.core.tps.mvc.bulk.dto.BulkSaveDTO;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkSearchDTO;
 import jmnet.moka.core.tps.mvc.bulk.entity.Bulk;
 import jmnet.moka.core.tps.mvc.bulk.entity.BulkArticle;
@@ -67,4 +68,28 @@ public interface BulkService {
      * @return 존재 여부
      */
     Bulk insertBulk(Bulk bulk, List<BulkArticleDTO> bulkArticleDTO);
+
+    /**
+     * 벌크 등록 후 content 값 조회
+     *
+     * @param search 벌크문구목록
+     * @return content
+     */
+    String getContent(BulkSaveDTO search);
+
+    /**
+     * 벌크 등록 후 content 값 변경
+     *
+     * @param bulk 벌크등록정보 + content
+     * @return void
+     */
+    void updateContent(Bulk bulk);
+
+    /**
+     * resend 시 JHOT Revised 변경 요청
+     *
+     * @param search sourceCode
+     * @return 1 / -1 (성공 / 실패)
+     */
+    void getRevised(BulkSaveDTO search);
 }

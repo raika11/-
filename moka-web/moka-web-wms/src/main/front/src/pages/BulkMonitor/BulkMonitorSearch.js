@@ -15,9 +15,9 @@ const BulkMonitorSearch = () => {
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.bulkMonitor.search);
     const [search, setSearch] = useState(bmInitialState.search);
-    const [sourceList, setSourceList] = useState('');
-    const [site, setSite] = useState('');
-    const [error, setError] = useState(false);
+    const [temp, setTemp] = useState({});
+    const [sourceOn, setSourceOn] = useState(false);
+    const [siteOn, setSiteOn] = useState(false);
 
     const handleClickSearch = () => {
         dispatch(
@@ -31,8 +31,28 @@ const BulkMonitorSearch = () => {
     };
 
     const handleClickReset = () => {
-        setSourceList(null);
+        dispatch(
+            changeBmSearchOption({
+                ...search,
+                ...temp,
+            }),
+        );
     };
+
+    useEffect(() => {
+        // 벌크 전체 건수
+        if (sourceOn && siteOn) {
+            dispatch(
+                getBulkStatTotal(
+                    changeBmSearchOption({
+                        ...search,
+                        page: 0,
+                    }),
+                ),
+            );
+            setTemp({ ...temp, ...search });
+        }
+    }, [sourceOn, siteOn]);
 
     useEffect(() => {
         setSearch(storeSearch);
@@ -43,7 +63,26 @@ const BulkMonitorSearch = () => {
             <Form className="mb-5">
                 <Form.Row>
                     <div className="d-flex align-items-center">
-                        <SourceSelector width={160} className="mr-2" value={sourceList} sourceType="BULK" onChange={(value) => setSourceList(value)} />
+                        <SourceSelector
+                            width={160}
+                            className="mr-2"
+                            value={search.orgSourceCode}
+                            sourceType="BULK"
+                            onChange={(value) => {
+                                let orgSourceName = {
+                                    3: '중앙일보(집배신)',
+                                    60: '중앙선데이',
+                                    61: '중앙선데이(조판)',
+                                    JL: '조인스랜드',
+                                };
+                                let nameArr = [];
+                                value.split(',').forEach((n) => nameArr.push(orgSourceName[Number(n)]));
+                                setSearch({ ...search, orgSourceCode: value, orgSourceName: nameArr.join(',') });
+                                if (value !== '') {
+                                    setSourceOn(true);
+                                }
+                            }}
+                        />
                         <MokaInputLabel as="none" label="전송일" />
                         {/* 시작일 종료일 */}
                         <div style={{ width: 150 }}>
@@ -56,7 +95,7 @@ const BulkMonitorSearch = () => {
                                     if (typeof date === 'object') {
                                         setSearch({
                                             ...search,
-                                            startDt: moment(date).format('YYYYMMDD'),
+                                            startDt: moment(date).format('YYYY-MM-DD'),
                                         });
                                     } else {
                                         setSearch({
@@ -77,7 +116,7 @@ const BulkMonitorSearch = () => {
                                     if (typeof date === 'object') {
                                         setSearch({
                                             ...search,
-                                            endDt: moment(date).format('YYYYMMDD'),
+                                            endDt: moment(date).format('YYYY-MM-DD'),
                                         });
                                     } else {
                                         setSearch({
@@ -90,7 +129,7 @@ const BulkMonitorSearch = () => {
                         </div>
                         <div className="mr-2" style={{ width: 120 }}>
                             <MokaInput as="select" value={search.searchType} onChange={(e) => setSearch({ ...search, searchType: e.target.value })}>
-                                <option value="">전체</option>
+                                <option value="all">전체</option>
                                 <option value="contentId">기사 ID</option>
                                 <option value="title">기사 제목</option>
                             </MokaInput>
@@ -103,17 +142,26 @@ const BulkMonitorSearch = () => {
                                 onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
                             />
                         </div>
-                        <BulkSiteSelector className="mr-2" value={site} onChange={(value) => setSite(value)} />
+                        <BulkSiteSelector
+                            className="mr-2"
+                            value={search.contentDiv}
+                            onChange={(value) => {
+                                setSearch({ ...search, contentDiv: value });
+                                if (value !== '') {
+                                    setSiteOn(true);
+                                }
+                            }}
+                        />
                         <MokaInput
                             as="checkbox"
                             className="mr-2"
                             id="bulk-error-checkbox"
-                            inputProps={{ label: '진행 + 오류만 보기', custom: true, checked: error === true }}
+                            inputProps={{ label: '진행 + 오류만 보기', custom: true, checked: search.status === 'Y' }}
                             onChange={(e) => {
                                 if (e.target.checked) {
-                                    setError(true);
+                                    setSearch({ ...search, status: 'Y' });
                                 } else {
-                                    setError(false);
+                                    setSearch({ ...search, status: 'N' });
                                 }
                             }}
                         />

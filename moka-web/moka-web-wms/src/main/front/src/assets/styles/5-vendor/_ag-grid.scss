@@ -20,6 +20,22 @@
     z-index: 1051 !important; // bootstrap Modal 보다 높게 설정
 }
 
+.ag-header-no {
+    .ag-header {
+        display: none;
+    }
+
+    .ag-root-wrapper {
+        border-top: solid $table-border-width;
+        border-bottom: solid $table-border-width;
+        border-color: $table-border-color;
+    }
+}
+
+.ag-layout-normal {
+    min-height: 36px;
+}
+
 /* -------------------------------------------------------------------
  * ag-theme-moka-grid (include ag-theme-aplpine)
  * 기본 테이블 + appStack 테이블 스타일
@@ -39,18 +55,6 @@
             selected-row-background-color: rgba(33, 150, 243, 0.3),
         )
     );
-
-    &.ag-header-no {
-        .ag-header {
-            display: none;
-        }
-
-        .ag-root-wrapper {
-            border-top: solid $table-border-width;
-            border-bottom: solid $table-border-width;
-            border-color: $table-border-color;
-        }
-    }
 
     .ag-root-wrapper {
         border: none;

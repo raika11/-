@@ -182,11 +182,11 @@ const Dashboard = () => {
                     className="mr-gutter"
                     fill
                     tabs={[
-                        <Form className="py-3 px-card h-100 custom-scroll">
+                        <Form>
                             {/* 테마 예제 */}
                             <ThemeEx />
                         </Form>,
-                        <Form className="py-3 px-card h-100 custom-scroll">
+                        <Form>
                             {/* Form 예제 */}
                             {/* text input */}
                             <Form.Group className="mb-2">
@@ -297,7 +297,7 @@ const Dashboard = () => {
                                 {/* <MokaSearchInput variant="warning" onSearch={() => toast.success('성공')} /> */}
                             </Form.Group>
                         </Form>,
-                        <div className="py-3 px-card h-100 custom-scroll">
+                        <div>
                             {/* 점보트론 */}
                             <Form.Label>11) Jumbotron</Form.Label>
                             <Jumbotron>
@@ -308,7 +308,7 @@ const Dashboard = () => {
                                 </p>
                             </Jumbotron>
                         </div>,
-                        <div className="py-3 px-card h-100 custom-scroll">
+                        <div>
                             {/* 캐러셀 */}
                             <Form.Label>12) Carousel</Form.Label>
                             <Carousel>

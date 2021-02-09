@@ -5,8 +5,8 @@ import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/columnist';
 
-import ColumnistEdit from './ColumnistEdit';
 const ColumnistList = React.lazy(() => import('./ColumnistList'));
+const ColumnistEdit = React.lazy(() => import('@pages/Columnist/ColumnistEdit'));
 
 const Columnist = ({ match }) => {
     const dispatch = useDispatch();

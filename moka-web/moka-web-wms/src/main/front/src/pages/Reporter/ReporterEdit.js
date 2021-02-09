@@ -4,7 +4,7 @@ import { MokaInputLabel, MokaInput } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, saveReporter } from '@store/reporter';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import bg from '@assets/images/v_noimg.jpg';
 
 /**
@@ -15,8 +15,6 @@ const ReporterEdit = ({ match }) => {
     const dispatch = useDispatch();
     const { repSeq: paramSeq } = useParams();
     const reporter = useSelector(({ reporter }) => reporter.reporter);
-
-    // state
     const [inputDisabled, setInputDisabled] = useState(true);
     const [temp, setTemp] = useState({});
 
@@ -43,7 +41,7 @@ const ReporterEdit = ({ match }) => {
                     }),
                 ],
                 callback: ({ header }) => {
-                    header.success ? toast.success(header.message) : toast.fail(header.message);
+                    header.success ? toast.success(header.message) : messageBox.alert(header.message);
                 },
             }),
         );

@@ -13,7 +13,7 @@ const DeployServer = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 배포 서버 목록 */}
-            <div className="mr-gutter d-flex flex-column" style={{ width: 892, padding: '20px 24px' }}>
+            <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
                 <h2 style={{ marginBottom: '20px' }}>삭제 작업 목록</h2>
                 <Suspense>
                     <DeployServerList />
@@ -23,7 +23,7 @@ const DeployServer = (props) => {
             {/* 배포 서버 등록, 수정 */}
             <Switch>
                 <Route path={[`${match.path}/deploy-server/add`, `${match.path}/deploy-server/:seqNo`]}>
-                    <div className="d-flex flex-column" style={{ width: 688, padding: '20px 24px' }}>
+                    <div className="d-flex flex-column" style={{ width: 688 }}>
                         <DeployServerEdit />
                     </div>
                 </Route>

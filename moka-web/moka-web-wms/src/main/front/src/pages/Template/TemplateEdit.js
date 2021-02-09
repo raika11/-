@@ -267,7 +267,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                             name="templateWidth"
                         />
                     </Col>
-                    <Col xs={4} className="p-0">
+                    <Col xs={4} className="p-0 pl-2">
                         <MokaInputLabel
                             label="이미지"
                             labelWidth={36}

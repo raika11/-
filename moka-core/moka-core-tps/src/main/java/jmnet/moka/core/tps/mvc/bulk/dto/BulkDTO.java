@@ -116,4 +116,11 @@ public class BulkDTO implements Serializable {
     @ApiModelProperty("벌크전송일시")
     @DTODateTimeFormat
     private Date bulkSendDt;
+
+    /**
+     * varchar  4000  YES 종합문구
+     */
+    //종합문구(저장 후 자동입력 / 현재 수정 시 입력없음)
+    @ApiModelProperty(hidden = true)
+    private String content;
 }

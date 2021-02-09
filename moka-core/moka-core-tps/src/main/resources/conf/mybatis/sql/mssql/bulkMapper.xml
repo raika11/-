@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jmnet.moka.core.tps.mvc.bulk.mapper.BulkMapper">
+
+    <!-- content 값 생성 -->
+    <select id="findOne" parameterType="BulkSaveDTO" resultType="string" statementType="CALLABLE">
+        {call USP_BULK_ARTICLE_SEL(
+                #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{bulkartDiv, mode=IN, jdbcType=VARCHAR, javaType=string}
+            ) }
+    </select>
+
+    <!-- JHOT Revised 변경 요청 -->
+    <select id="getResult" parameterType="BulkSaveDTO" statementType="CALLABLE">
+        {call USP_BULK_JHOT_REVISED_INS(
+                #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{returnValue, mode=OUT, jdbcType=INTEGER, javaType=integer}
+            ) }
+    </select>
+</mapper>

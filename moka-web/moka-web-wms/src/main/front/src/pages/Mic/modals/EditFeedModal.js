@@ -4,14 +4,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { GET_MIC_FEED, SAVE_MIC_FEED } from '@store/mic';
-import { MokaModal, MokaInputLabel } from '@components';
+import { MokaModal, MokaInputLabel, MokaImage } from '@components';
 import commonUtil from '@utils/commonUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { unescapeHtmlArticle } from '@utils/convertUtil';
 import imageEditer from '@utils/imageEditorUtil';
 import { messageBox } from '@utils/toastUtil';
 import { EditThumbModal } from '@pages/Desking/modals';
-import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 /**
  * 시민 마이크 피드 편집 모달
@@ -20,9 +18,7 @@ const EditFeedModal = (props) => {
     const { show, onHide, agenda, feed, onChange, onSave } = props;
     const loading = useSelector(({ loading }) => loading[GET_MIC_FEED] || loading[SAVE_MIC_FEED]);
     const ANSWER_REL_DIV = useSelector(({ app }) => app.ANSWER_REL_DIV || []);
-    const PDS_URL = useSelector(({ app }) => app.PDS_URL);
     const [error, setError] = useState({});
-    const [mshow, setMshow] = useState(false);
     const [arcShow, setArcShow] = useState(false);
     const imgRef = useRef(null);
 
@@ -93,25 +89,6 @@ const EditFeedModal = (props) => {
         if (error[imgLinkField]) {
             setError({ ...error, [imgLinkField]: false });
         }
-    };
-
-    /**
-     * 기사 변경
-     * @param {object} articleData 기사데이터
-     */
-    const handleChangeArticle = (articleData) => {
-        onChange({
-            key: 'answerRel',
-            value: {
-                ...feed.answerRel,
-                artTitle: unescapeHtmlArticle(articleData.artTitle),
-                relUrl: '',
-                artThumbnail: articleData.artThumb ? `${PDS_URL}${articleData.artThumb}` : null,
-                artThumbnailFile: null,
-            },
-        });
-        setError({ ...error, artTitle: false });
-        setMshow(false);
     };
 
     /**
@@ -313,22 +290,16 @@ const EditFeedModal = (props) => {
                 {/* 피드 타입별 입력(기사) */}
                 {feed.answerRel?.relDiv === 'A' && (
                     <React.Fragment>
-                        <div className="d-flex my-2">
-                            <MokaInputLabel
-                                label="페이지 URL"
-                                labelWidth={72}
-                                name="relUrl"
-                                value={feed.answerRel?.relUrl}
-                                className="flex-fill"
-                                onChange={handleChangeValue}
-                                isInvalid={error.relUrl}
-                                required
-                            />
-                            <Button variant="searching" className="flex-shrink-0 ml-2" onClick={() => setMshow(true)}>
-                                기사 검색
-                            </Button>
-                            <ArticleListModal show={mshow} onHide={() => setMshow(false)} onRowClicked={handleChangeArticle} />
-                        </div>
+                        <MokaInputLabel
+                            label="페이지 URL"
+                            labelWidth={72}
+                            name="relUrl"
+                            value={feed.answerRel?.relUrl}
+                            className="flex-fill my-2"
+                            onChange={handleChangeValue}
+                            isInvalid={error.relUrl}
+                            required
+                        />
                         <MokaInputLabel
                             className="mb-2"
                             label="페이지 제목"
@@ -350,23 +321,24 @@ const EditFeedModal = (props) => {
                             value={feed.answerRel?.artSummary}
                             onChange={handleChangeValue}
                         />
-                        <MokaInputLabel
-                            as="imageFile"
-                            ref={imgRef}
-                            labelWidth={72}
-                            label={
-                                <React.Fragment>
-                                    페이지 이미지
-                                    <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={() => setArcShow(true)}>
-                                        신규등록
-                                    </Button>
-                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
-                                        편집
-                                    </Button>
-                                </React.Fragment>
-                            }
-                            inputProps={{ img: feed.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'artThumbnail'), deleteButton: true }}
-                        />
+                        <div className="d-flex">
+                            <MokaInputLabel
+                                as="none"
+                                labelWidth={72}
+                                label={
+                                    <React.Fragment>
+                                        페이지 이미지
+                                        <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={() => setArcShow(true)}>
+                                            신규등록
+                                        </Button>
+                                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
+                                            편집
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                            />
+                            <MokaImage img={feed.answerRel?.artThumbnail} width={178} />
+                        </div>
 
                         {/* 포토 아카이브 모달 */}
                         <EditThumbModal

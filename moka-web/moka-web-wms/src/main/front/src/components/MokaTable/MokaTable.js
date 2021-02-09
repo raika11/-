@@ -76,6 +76,11 @@ const propTypes = {
      */
     selected: PropTypes.any,
     /**
+     * 드래그 테이블 스타일 적용
+     * @default
+     */
+    dragStyle: PropTypes.bool,
+    /**
      * 드래그 기능을 직접 구현하는지 (false시 ag-grid의 unmanaged drag 기능이 동작)
      * @default
      */
@@ -112,6 +117,7 @@ const defaultProps = {
     localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
     loading: false,
     paging: true,
+    dragStyle: false,
     dragManaged: false,
     header: true,
     total: 0,
@@ -160,6 +166,7 @@ const MokaTable = forwardRef((props, ref) => {
         suppressRefreshCellAfterUpdate,
         onRowDataUpdated,
         refreshCellsParams,
+        dragStyle,
         dragManaged,
         // 페이지네이션 props
         paginationClassName,
@@ -294,9 +301,16 @@ const MokaTable = forwardRef((props, ref) => {
     return (
         <React.Fragment>
             {/* ag-grid */}
-            <div className={clsx('ag-theme-moka-grid position-relative', className, { 'ag-header-no': !header })} style={{ height: `${agGridHeight}px` }} ref={divRef}>
+            <div
+                className={clsx('position-relative', className, { 'ag-header-no': !header, 'ag-theme-moka-grid': !dragStyle, 'ag-theme-moka-dnd-grid': dragStyle })}
+                style={{ height: `${agGridHeight}px` }}
+                ref={divRef}
+            >
                 {loading && <MokaLoader />}
                 <AgGridReact
+                    suppressMoveWhenRowDragging={dragManaged}
+                    suppressMovableColumns
+                    suppressRowClickSelection
                     {...rest}
                     immutableData
                     columnDefs={columnDefs}
@@ -309,12 +323,9 @@ const MokaTable = forwardRef((props, ref) => {
                     onSelectionChanged={handleSelectionChanged}
                     onGridReady={onGridReady}
                     rowSelection={rowSelection}
-                    suppressMoveWhenRowDragging={dragManaged}
-                    suppressMovableColumns
                     onRowDataUpdated={handleRowDataUpdated}
                     tooltipShowDelay={0}
                     frameworkComponents={{ imageRenderer: ImageRenderer, usedYnRenderer: UsedYnRenderer, switchRenderer: SwitchRenderer, ...frameworkComponents }}
-                    suppressRowClickSelection
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
                     enableMultiRowDragging={rowSelection === 'multiple'}

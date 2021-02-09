@@ -8,7 +8,7 @@ import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/r
  * 페이지편집 > 기자 목록 AgGrid
  */
 const ReporterDeskAgGrid = forwardRef((props, ref) => {
-    const { onDragStop, dropTargetAgGrid } = props;
+    // const { onDragStop, dropTargetAgGrid } = props;
     const dispatch = useDispatch();
     const [reporterRows, setRepoterRows] = useState([]);
 

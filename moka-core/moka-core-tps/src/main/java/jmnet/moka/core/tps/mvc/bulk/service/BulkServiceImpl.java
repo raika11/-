@@ -5,14 +5,17 @@ import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkArticleDTO;
+import jmnet.moka.core.tps.mvc.bulk.dto.BulkSaveDTO;
 import jmnet.moka.core.tps.mvc.bulk.dto.BulkSearchDTO;
 import jmnet.moka.core.tps.mvc.bulk.entity.Bulk;
 import jmnet.moka.core.tps.mvc.bulk.entity.BulkArticle;
 import jmnet.moka.core.tps.mvc.bulk.entity.BulkArticlePK;
+import jmnet.moka.core.tps.mvc.bulk.mapper.BulkMapper;
 import jmnet.moka.core.tps.mvc.bulk.repository.BulkArticleRepository;
 import jmnet.moka.core.tps.mvc.bulk.repository.BulkRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,9 @@ public class BulkServiceImpl implements BulkService {
     private final BulkRepository bulkRepository;
 
     private final BulkArticleRepository bulkArticleRepository;
+
+    @Autowired
+    private BulkMapper bulkMapper;
 
     private final ModelMapper modelMapper;
 
@@ -88,11 +94,30 @@ public class BulkServiceImpl implements BulkService {
                 bulkArticle.setId(bulkArticlePK);
                 bulkArticleRepository.save(bulkArticle);
             }
+
+            //content 조회
+
+
         } catch (Exception e) {
             log.error(e.toString());
         }
 
         return saveBulk;
+    }
+
+    @Override
+    public String getContent(BulkSaveDTO search) {
+        return bulkMapper.findOne(search);
+    }
+
+    @Override
+    public void updateContent(Bulk bulk) {
+        bulkRepository.updateContent(bulk);
+    }
+
+    @Override
+    public void getRevised(BulkSaveDTO search) {
+        bulkMapper.getResult(search);
     }
 
     @Override

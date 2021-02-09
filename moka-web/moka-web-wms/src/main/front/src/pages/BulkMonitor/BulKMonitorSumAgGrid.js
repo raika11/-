@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
-import { changeBmSearchOption, getBulkStatTotal } from '@/store/bulks';
+import { GET_BULK_STAT_TOTAL, changeBmSearchOption, getBulkStatTotal } from '@/store/bulks';
 import columnDefs from './BulkMonitorSumAgGridColumns';
 
 /**
@@ -11,27 +11,24 @@ const BulKMonitorSumAgGrid = () => {
     const dispatch = useDispatch();
     const search = useSelector((store) => store.bulkMonitor.search);
     const totalList = useSelector((store) => store.bulkMonitor.list);
-
-    useEffect(() => {
-        dispatch(
-            getBulkStatTotal(
-                changeBmSearchOption({
-                    ...search,
-                    page: 0,
-                }),
-            ),
-        );
-    }, []);
+    const loading = useSelector((store) => store.loading[GET_BULK_STAT_TOTAL]);
 
     return (
-        <div className="mb-5 d-flex align-items-center" style={{ width: 758 }}>
-            <div className="mr-3">
+        <div className="mb-5 d-flex align-items-center" style={{ width: 786 }}>
+            <div className="mr-3 text-center">
                 <p className="mb-0">
                     {search.startDt} ~ {search.endDt}
                 </p>
                 <p className="mb-0">벌크 현황 정보</p>
             </div>
-            <MokaTable className="flex-fill ag-grid-align-center" columnDefs={columnDefs} onRowNodeId={(params) => params.progress} rowData={totalList} paging={false} />
+            <MokaTable
+                className="flex-fill ag-grid-align-center"
+                columnDefs={columnDefs}
+                onRowNodeId={(params) => params.status}
+                rowData={totalList}
+                paging={false}
+                loading={loading}
+            />
         </div>
     );
 };

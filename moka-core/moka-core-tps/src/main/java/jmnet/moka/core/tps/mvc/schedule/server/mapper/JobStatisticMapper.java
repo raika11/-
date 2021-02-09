@@ -1,7 +1,6 @@
 package jmnet.moka.core.tps.mvc.schedule.server.mapper;
 
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
-import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.vo.JobStatisticVO;
 

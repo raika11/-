@@ -110,4 +110,17 @@ public class BulkRepositorySupportImpl extends TpsQueryDslRepositorySupport impl
                 .execute();
 
     }
+
+    @Override
+    @Transactional
+    public void updateContent(Bulk bulk) {
+        QBulk qBulk = QBulk.bulk;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qBulk.bulkartSeq.eq(bulk.getBulkartSeq()));
+        update(qBulk)
+                .where(builder)
+                .set(qBulk.content, bulk.getContent())
+                .execute();
+    }
 }

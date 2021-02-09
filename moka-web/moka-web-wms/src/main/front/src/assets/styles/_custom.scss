@@ -152,6 +152,14 @@ body {
     box-shadow: 0 0 .875rem 0 rgba($dark, 0.7);
 }
 
+.onerror-image-wrap {
+    background-color: $gray-400 !important;
+}
+
+.onerror-image {
+    padding: 0 15%;
+}
+
 /* -----------------------
 * card
 * ---------------------- */
@@ -222,7 +230,7 @@ body {
         text-align: center;
 
         .nav-link {
-            padding: map-get($spacers, 3) 0;
+            padding: 20px 0 16px 0;
             border-radius: 0;
             margin-bottom: 0;
             letter-spacing: -1.4px;

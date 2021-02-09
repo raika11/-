@@ -103,7 +103,7 @@ public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport im
         }
 
         // 삭제가 아닌 경우 노출
-        query.where(qTrendpoll.status.ne(PollStatusCode.D));
+        //query.where(qTrendpoll.status.ne(PollStatusCode.D));
 
         if (McpString.isYes(searchDTO.getUseTotal())) {
             query = getQuerydsl().applyPagination(pageable, query);

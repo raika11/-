@@ -13,7 +13,7 @@ const Work = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 작업 목록 */}
-            <div className="mr-gutter d-flex flex-column" style={{ width: 892, padding: '20px 24px' }}>
+            <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
                 <h2 style={{ marginBottom: '20px' }}>작업 목록</h2>
                 <Suspense>
                     <WorkList />
@@ -23,7 +23,7 @@ const Work = (props) => {
             {/* 작업 등록, 수정 */}
             <Switch>
                 <Route path={[`${match.path}/work-list/add`, `${match.path}/work-list/:seqNo`]}>
-                    <div className="d-flex flex-column" style={{ width: 688, padding: '20px 24px' }}>
+                    <div className="d-flex flex-column" style={{ width: 688 }}>
                         <WorkEdit />
                     </div>
                 </Route>

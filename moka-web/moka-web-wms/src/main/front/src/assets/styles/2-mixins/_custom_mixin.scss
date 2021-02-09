@@ -26,6 +26,11 @@
     color: $gray-500;
 }
 
+@mixin dim {
+    opacity: 0.6;
+    background-color: $gray-800;
+}
+
 @mixin toast-footer($element: button) {
     display: flex;
     justify-content: space-between;

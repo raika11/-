@@ -5,17 +5,11 @@ export default [
         headerName: 'No',
         field: 'histSeq',
         width: 60,
-        cellClassRules: {
-            'ft-12': () => true,
-        },
     },
     {
         headerName: '기사 ID',
         field: 'contentId',
         width: 75,
-        cellClassRules: {
-            'ft-12': () => true,
-        },
         cellRendererFramework: (row) => {
             const { data } = row;
             return data.parentContentId ? (
@@ -33,8 +27,5 @@ export default [
         width: 565,
         tooltipField: 'title',
         flex: 1,
-        cellClassRules: {
-            'ft-12': () => true,
-        },
     },
 ];

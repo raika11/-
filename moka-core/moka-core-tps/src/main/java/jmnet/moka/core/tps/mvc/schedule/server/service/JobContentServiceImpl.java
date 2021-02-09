@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
-
 @Service
 @Slf4j
 public class JobContentServiceImpl implements JobContentService{
@@ -53,12 +52,7 @@ public class JobContentServiceImpl implements JobContentService{
     public JobContent updateJobContent(JobContent jobContent) {
         return jobContentRepository.save(jobContent);
     }
-/*
-    @Override
-    public void deleteJobContent(JobContent jobContent) {
-        jobContentRepository.delete(jobContent);
-    }
-*/
+
     @Override
     @Transactional
     public void deleteJobContent(JobDeletedContent jobDeletedContent, JobContent jobContent) {

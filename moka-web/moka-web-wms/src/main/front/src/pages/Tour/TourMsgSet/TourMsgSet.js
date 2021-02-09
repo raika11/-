@@ -54,9 +54,6 @@ const MessageSettings = () => {
 
     useEffect(() => {
         dispatch(getTourGuideList());
-        return () => {
-            dispatch(clearStore());
-        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -66,6 +63,12 @@ const MessageSettings = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tourGuideList]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, []);
 
     return (
         <>

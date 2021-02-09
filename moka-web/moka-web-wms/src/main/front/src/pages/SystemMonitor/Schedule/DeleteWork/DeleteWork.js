@@ -13,7 +13,7 @@ const DeleteWork = (props) => {
     return (
         <div className="h-100 d-flex">
             {/* 삭제 작업 목록 */}
-            <div className="mr-gutter d-flex flex-column" style={{ width: 892, padding: '20px 24px' }}>
+            <div className="mr-gutter d-flex flex-column" style={{ width: 892 }}>
                 <h2 style={{ marginBottom: '20px' }}>삭제 작업 목록</h2>
                 <Suspense>
                     <DeleteWorkList />
@@ -23,7 +23,7 @@ const DeleteWork = (props) => {
             {/* 삭제 작업 조회 */}
             <Switch>
                 <Route path={[`${match.path}/work-delete/:seqNo`]}>
-                    <div className="d-flex flex-column" style={{ width: 688, padding: '20px 24px' }}>
+                    <div className="d-flex flex-column" style={{ width: 688 }}>
                         <h2 style={{ marginBottom: '20px' }}>삭제 작업 조회</h2>
                         <Suspense>
                             <DeleteWorkEdit />

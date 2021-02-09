@@ -1,4 +1,3 @@
-import React from 'react';
 import ReporterPageButton from './components/ReporterPageButton';
 
 export const columnDefs = [
@@ -20,28 +19,27 @@ export const columnDefs = [
         width: 80,
     },
     {
-        headerName: '소속',
-        field: 'belong',
-        width: 200,
-        tooltipField: 'belong',
-        flex: 1,
+        headerName: '수정일시',
+        field: 'modDt',
+        width: 120,
     },
     {
         headerName: '이메일',
         field: 'repEmail1',
         tooltipField: 'repEmail1',
         width: 180,
+        flex: 1,
     },
-    // {
-    //     headerName: '노출여부',
-    //     field: 'usedYn',
-    //     cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-    //     width: 64,
-    // },
+    {
+        headerName: '노출여부',
+        field: 'usedYn',
+        cellRenderer: 'usedYnRenderer',
+        width: 64,
+    },
     {
         headerName: '',
         field: 'reporterPage',
         width: 95,
-        cellRendererFramework: (row) => <ReporterPageButton {...row} />,
+        cellRendererFramework: ReporterPageButton,
     },
 ];

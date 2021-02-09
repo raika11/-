@@ -16,7 +16,7 @@ const ColumnistList = forwardRef((props, ref) => {
     }, [dispatch, show]);
 
     return (
-        <div className={clsx('d-flex flex-column h-100 py-3 px-card', className)}>
+        <div className={clsx('d-flex flex-column h-100', className)}>
             <ColumnistDeskSearch selectedComponent={selectedComponent} show={show} />
             <ColumnistDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
         </div>

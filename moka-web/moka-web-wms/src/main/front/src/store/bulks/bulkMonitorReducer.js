@@ -11,15 +11,15 @@ export const bmInitialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        searchType: '',
+        searchType: 'all',
         keyword: '',
         useTotal: '',
-        orgSourceCode: '',
-        orgSourceName: '',
-        contentDiv: '',
-        status: '',
-        startDt: moment().format('YYYYMMDD'),
-        endDt: moment().format('YYYYMMDD'),
+        orgSourceCode: null,
+        orgSourceName: null,
+        contentDiv: null,
+        status: 'Y',
+        startDt: moment().format('YYYY-MM-DD'),
+        endDt: moment().format('YYYY-MM-DD'),
     },
 };
 

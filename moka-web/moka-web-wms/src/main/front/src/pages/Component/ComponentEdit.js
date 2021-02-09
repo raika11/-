@@ -233,7 +233,7 @@ const ComponentEdit = ({ onDelete, match }) => {
     }, []);
 
     return (
-        <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '정보' : '등록'}`} className="flex-fill mr-gutter" loading={loading} bodyClassName="pb-0 d-flex flex-column">
+        <MokaCard width={688} title={`컴포넌트 ${componentSeq ? '편집' : '등록'}`} className="flex-fill mr-gutter" loading={loading} bodyClassName="pb-0 d-flex flex-column">
             <BasicForm
                 component={temp}
                 setComponent={setTemp}

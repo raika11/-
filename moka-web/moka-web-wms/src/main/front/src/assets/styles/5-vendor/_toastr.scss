@@ -109,3 +109,9 @@
         }
     }
 }
+
+.rrt-confirm-holder {
+    .shadow {
+        @include dim;
+    }
+}

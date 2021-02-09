@@ -8,17 +8,13 @@ export default [
         field: 'seq',
         width: 50,
         tooltipField: 'seq',
-        cellClassRules: {
-            'ft-12': () => true,
-        },
     },
     {
         headerName: '작업일시',
         field: 'regDt',
-        width: 130,
+        width: 150,
         cellClassRules: {
             'text-positive': ({ data }) => data.approvalYn === 'N' && data.status === DESK_HIST_PUBLISH,
-            'ft-12': () => true,
         },
     },
     {
@@ -27,9 +23,6 @@ export default [
         width: 90,
         flex: 1,
         tooltipField: 'regId',
-        cellClassRules: {
-            'ft-12': () => true,
-        },
     },
     {
         headerName: '불러오기',

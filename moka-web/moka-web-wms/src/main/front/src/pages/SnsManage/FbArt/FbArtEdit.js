@@ -135,7 +135,7 @@ const FbArtEdit = () => {
                 <Row className="m-0">
                     <Col xs={4} className="p-0 pr-12"></Col>
                     <Col xs={8} className="p-0 text-neutral">
-                        ID {edit.totalId}
+                        <span className="ft-12">ID {edit.totalId}</span>
                     </Col>
                 </Row>
 
@@ -168,9 +168,9 @@ const FbArtEdit = () => {
                     </Col>
                     <Col xs={8} className="p-0">
                         <MokaInputLabel
-                            labelClassName="d-flex"
+                            labelClassName="ft-13"
                             label="사용유무"
-                            labelWidth={47}
+                            labelWidth={50}
                             as="switch"
                             name="usedYn"
                             id="temp-status"

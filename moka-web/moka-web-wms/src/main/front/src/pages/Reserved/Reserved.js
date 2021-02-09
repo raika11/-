@@ -4,9 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { GET_RESERVED, SAVE_RESERVED, DELETE_RESERVED } from '@store/reserved';
-import toast, { messageBox } from '@utils/toastUtil';
+import { messageBox } from '@utils/toastUtil';
 import { deleteReserved, clearStore } from '@store/reserved';
-
 import ReservedEdit from './ReservedEdit';
 const ReservedList = React.lazy(() => import('./ReservedList'));
 
@@ -76,11 +75,7 @@ const Reserved = ({ match }) => {
                 <Route
                     path={[`${match.path}/add`, `${match.path}/:reservedSeq`]}
                     exact
-                    render={() => (
-                        <MokaCard width={780} title="예약어 정보" loading={loading}>
-                            <ReservedEdit match={match} onDelete={handleClickDelete} />
-                        </MokaCard>
-                    )}
+                    render={() => <ReservedEdit match={match} onDelete={handleClickDelete} loading={loading} />}
                 />
             </Switch>
         </div>

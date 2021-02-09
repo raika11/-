@@ -174,7 +174,7 @@ const ContainerEdit = ({ onDelete, match }) => {
     }, [container.containerSeq]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0" title={`컨테이너 ${container.containerSeq ? '정보' : '등록'}`} loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0" title={`컨테이너 ${container.containerSeq ? '편집' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-end">

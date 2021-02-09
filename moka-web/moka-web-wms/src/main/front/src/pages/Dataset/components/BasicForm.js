@@ -23,6 +23,8 @@ const BasicForm = (props) => {
     useEffect(() => {
         if (dataset?.datasetSeq) {
             setBtnDisabled(false);
+        } else {
+            setBtnDisabled(true);
         }
     }, [dataset.datasetSeq]);
 

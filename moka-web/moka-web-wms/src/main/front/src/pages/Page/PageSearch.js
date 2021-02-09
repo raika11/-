@@ -2,7 +2,6 @@ import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getPageTree, changeSearchOption, initialState, clearPage } from '@store/page';
@@ -81,7 +80,7 @@ const PageSearch = ({ match }) => {
             </Form.Row>
             <Form.Row>
                 {/* 검색조건 */}
-                <Col xs={4} className="p-0 pr-2">
+                <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" value={search.searchType} name="searchType" onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -89,11 +88,9 @@ const PageSearch = ({ match }) => {
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
+                </div>
                 {/* 키워드 */}
-                <Col xs={8} className="p-0">
-                    <MokaSearchInput value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
-                </Col>
+                <MokaSearchInput value={search.keyword} className="flex-fill" name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
             </Form.Row>
         </Form>
     );

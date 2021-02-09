@@ -219,6 +219,7 @@ const ComponentEdit = ({ onDelete, match }) => {
         } else {
             dispatch(clearComponent());
         }
+        setError({});
     }, [dispatch, componentSeq]);
 
     useEffect(() => {

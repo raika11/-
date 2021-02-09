@@ -76,4 +76,11 @@ public class BulkArticleDTO implements Serializable {
     @Min(value = 0, message = "{tps.bulk.error.min.totalId}")
     private Long totalId;
 
+    /**
+     * nvarchar 2 YES  심볼
+     */
+    @ApiModelProperty("심볼")
+    //@Length(max = 2, message = "{tps.bulk.error.length.symbol}")
+    private String symbol;
+
 }

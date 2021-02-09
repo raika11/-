@@ -28,5 +28,13 @@ public interface BulkRepositorySupport {
 
     public void updateArticle(Bulk bulk);
 
+    /**
+     * content 값 수정
+     *
+     * @param bulk 벌크정보 + content
+     * @return 없음
+     */
+    public void updateContent(Bulk bulk);
+
 
 }

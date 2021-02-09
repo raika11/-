@@ -244,6 +244,15 @@ public class BulkRestController extends AbstractCommonController {
                     return new NoDataException(msg("tps.bulk.error.no-data"));
                 });
 
+        //JHOT Revised 변경요청 실패 시 resend 실패처리
+        BulkSaveDTO search = modelMapper.map(bulk, BulkSaveDTO.class);
+        naverBulkService.getRevised(search);
+        Integer resultJhotRevised = search.getReturnValue();
+        if(resultJhotRevised != 1){
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND JHOTREVISED]",true);
+            new InvalidDataException(msg("tps.common.error.invalidContent"));
+        }
+
         try {
             // update
             bulk.setBulkSendYn(MokaConstants.YES);
@@ -313,6 +322,11 @@ public class BulkRestController extends AbstractCommonController {
                 // insert
                 Bulk returnValue = naverBulkService.insertBulk(modelMapper.map(bulkSave, Bulk.class), list);
 
+                // 트랜잭션 완료 후 content 조회 + 입력한 데이터의 content값 변경
+                String content = naverBulkService.getContent(bulkSave);
+                returnValue.setContent(content);
+                naverBulkService.updateContent(returnValue);
+
                 // 결과리턴
                 BulkDTO dto = modelMapper.map(returnValue, BulkDTO.class);
                 ResultDTO<BulkDTO> resultDto = new ResultDTO<>(dto);
@@ -323,6 +337,7 @@ public class BulkRestController extends AbstractCommonController {
             } else {
                 throw new Exception(msg("tps.bulk.error.save"));
             }
+
 
         } catch (Exception e) {
             log.error("[FAIL TO INSERT]", e);

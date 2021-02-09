@@ -83,6 +83,12 @@ public class Bulk extends RegAudit {
     @Column(name = "BULK_SEND_DT")
     Date bulkSendDt;
 
+    /**
+     * varchar 4000 YES 종합문구
+     */
+    @Column(name = "CONTENT")
+    String content;
+
     @PrePersist
     @PreUpdate
     public void prePersist() {

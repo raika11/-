@@ -50,6 +50,12 @@ public class BulkArticle implements Serializable {
     @Column(name = "TOTAL_ID", length = 10)
     Long totalId;
 
+    /**
+     * varchar  2   YES 심볼
+     */
+    @Column(name = "SYMBOL", length = 2)
+    String symbol;
+
 }
 
 

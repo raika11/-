@@ -43,4 +43,12 @@ public class BulkSaveDTO implements Serializable {
 
     @ApiModelProperty("사용여부")
     private String usedYn;
+
+    //종합문구(저장 후 자동입력)
+    @ApiModelProperty(hidden = true)
+    private String content;
+
+    //JHOT Revised 변경요청 procedure 반환값
+    @ApiModelProperty(hidden = true)
+    private Integer returnValue;
 }

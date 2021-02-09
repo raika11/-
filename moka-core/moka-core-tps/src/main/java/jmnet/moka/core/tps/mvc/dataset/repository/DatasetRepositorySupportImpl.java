@@ -41,7 +41,7 @@ public class DatasetRepositorySupportImpl extends TpsQueryDslRepositorySupport i
                 builder.and(dataset.datasetName.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
                 builder.and(dataset.datasetSeq
-                        .like(keyword)
+                        .like('%' + keyword + '%')
                         .or(dataset.datasetName.contains(keyword)));
             }
         }

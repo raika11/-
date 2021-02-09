@@ -48,7 +48,7 @@ public class CdnArticleRepositorySupportImpl extends TpsQueryDslRepositorySuppor
                 builder.and(article.title.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
                 builder.and(article.totalId
-                        .like(keyword)
+                        .like('%' + keyword + '%')
                         .or(article.title.contains(keyword)));
             }
         }

@@ -58,7 +58,7 @@ public class ArticlePageRepositorySupportImpl extends TpsQueryDslRepositorySuppo
                 builder.and(articlePage.artPageBody.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
                 builder.and(articlePage.artPageSeq
-                        .like(keyword)
+                        .like('%' + keyword + '%')
                         .or(articlePage.artPageName.contains(keyword))
                         .or(articlePage.artPageBody.contains(keyword)));
             }

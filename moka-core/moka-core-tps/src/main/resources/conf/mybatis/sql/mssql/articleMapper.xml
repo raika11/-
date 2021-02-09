@@ -441,7 +441,7 @@
   <!-- 기사를 중지 또는 삭제-->
   <select id="insertArticleIud" parameterType="hashMap" statementType="CALLABLE">
   {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_ARTICLE_IUD_INS(
-  #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+  #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
   #{iud, mode=IN, jdbcType=VARCHAR, javaType=string}
   ) }
   </select>

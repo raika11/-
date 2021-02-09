@@ -65,16 +65,7 @@
           </otherwise>
       </choose>
 
-
-      <choose>
-          <when test="searchType == 'status' and keyword != null and keyword != ''">
-              #{keyword},
-          </when>
-          <otherwise>
-              NULL,
-          </otherwise>
-      </choose>
-
+      #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
       #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
       ) }

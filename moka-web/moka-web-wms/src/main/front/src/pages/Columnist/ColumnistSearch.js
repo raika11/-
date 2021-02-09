@@ -6,7 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaInputLabel, MokaSearchInput } from '@components';
-import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
+import { initialState, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
+import AuthButton from '@pages/Auth/AuthButton';
 
 const ColumnistSearch = ({ match }) => {
     const dispatch = useDispatch();
@@ -38,7 +39,8 @@ const ColumnistSearch = ({ match }) => {
 
     // 검색 조건 초기화
     const handleSearchReset = (e) => {
-        dispatch(getColumnistList(clearSearchOption()));
+        //dispatch(getColumnistList(clearSearchOption()));
+        setSearch(initialState.columnlist_list.search);
     };
 
     // 검색
@@ -77,9 +79,9 @@ const ColumnistSearch = ({ match }) => {
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
-                    <option value="">상태정보 전체</option>
-                    <option value="Y">상태정보 설정</option>
-                    <option value="N">상태정보 해제</option>
+                    <option value="">상태전체</option>
+                    <option value="Y">사용</option>
+                    <option value="N">미사용</option>
                 </MokaInputLabel>
             </Col>
 
@@ -99,9 +101,9 @@ const ColumnistSearch = ({ match }) => {
                     초기화
                 </Button>
 
-                <Button variant="positive" onClick={handleNewColumnlist} className="flex-shrink-0">
-                    신규등록
-                </Button>
+                <AuthButton variant="positive" onClick={handleNewColumnlist} className="flex-shrink-0">
+                    등록
+                </AuthButton>
             </Col>
         </Form.Row>
     );

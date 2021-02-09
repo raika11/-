@@ -59,16 +59,16 @@ const ColumnistEdit = ({ history, match }) => {
             let tmpEmail = [];
             tmpEmail = repoterData.repEmail1 && repoterData.repEmail1 && repoterData.repEmail1.split('@');
             setEditData({
-                seqNo: null,
-                status: 'Y', // 디폴드 값.
+                seqNo: columnist.seqNo !== '' ? columnist.seqNo : null,
+                status: 'N', // 디폴드 값.
                 repSeq: repoterData.repSeq,
                 columnistNm: repoterData.repName,
                 email1: tmpEmail[0],
                 email2: tmpEmail[1],
-                position: '',
+                position: repoterData.jplusJobInfo,
                 profile: '',
                 selectImg: '',
-                profilePhoto: '',
+                profilePhoto: repoterData.repImg,
             });
         } catch (e) {
             console.log('기자 선택후 데이터 set 중 에러발생.', e);
@@ -286,18 +286,19 @@ const ColumnistEdit = ({ history, match }) => {
     return (
         <MokaCard
             width={635}
-            title={`칼럼니스트 ${columnist ? '정보' : '등록'}`}
+            title={`칼럼니스트 ${columnist && columnist.seqNo && columnist.seqNo !== '' ? '수정' : '등록'}`}
             titleClassName="mb-0"
             loading={loading}
             footer
             footerClassName="justify-content-center"
             footerButtons={[
                 {
-                    text: '저장',
+                    text: `${columnist && columnist.seqNo && columnist.seqNo !== '' ? '수정' : '저장'}`,
                     onClick: handleClickSaveButton,
                     variant: 'positive',
                     disabled: editDisabled.editBoxButton,
                     className: 'mr-2',
+                    useAuth: true,
                 },
                 {
                     text: '취소',
@@ -323,7 +324,7 @@ const ColumnistEdit = ({ history, match }) => {
                 </Form.Row>
 
                 <Form.Row className="mb-1">
-                    <Col xs={7} className="p-0 d-flex">
+                    <Col xs={4} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자명"
                             className="mr-2"
@@ -334,8 +335,10 @@ const ColumnistEdit = ({ history, match }) => {
                             disabled={editDisabled.columnistNm}
                             required
                         />
+                    </Col>
+                    <Col xs={3}>
                         <Button variant="searching" className="flex-shrink-0" onClick={handleClickReportSearchbutton} disabled={editDisabled.editBoxButton}>
-                            검색
+                            가자검색
                         </Button>
                     </Col>
                 </Form.Row>
@@ -346,7 +349,7 @@ const ColumnistEdit = ({ history, match }) => {
                 </div>
 
                 <Form.Row className="mb-2">
-                    <Col xs={7} className="p-0 d-flex">
+                    <Col xs={4} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자번호"
                             className="mr-2"
@@ -356,9 +359,26 @@ const ColumnistEdit = ({ history, match }) => {
                             isInvalid={error.repSeq}
                             disabled={editDisabled.repSeq}
                         />
+                    </Col>
+                    <Col xs={3}>
                         <Button variant="negative" className="flex-shrink-0" onClick={handleClickDeleterepSeq} disabled={editDisabled.editBoxButton}>
                             삭제
                         </Button>
+                    </Col>
+                </Form.Row>
+
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            label="직책"
+                            className="mb-0"
+                            name="position"
+                            value={selectRepoterData.position}
+                            onChange={(e) => tempOnchange(e)}
+                            isInvalid={error.position}
+                            disabled={editDisabled.position}
+                            required
+                        />
                     </Col>
                 </Form.Row>
 
@@ -393,21 +413,6 @@ const ColumnistEdit = ({ history, match }) => {
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
-                            label="직책"
-                            className="mb-0"
-                            name="position"
-                            value={selectRepoterData.position}
-                            onChange={(e) => tempOnchange(e)}
-                            isInvalid={error.position}
-                            disabled={editDisabled.position}
-                            required
-                        />
-                    </Col>
-                </Form.Row>
-
-                <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0">
-                        <MokaInputLabel
                             as="textarea"
                             label="약력정보"
                             className="mb-0"
@@ -433,6 +438,21 @@ const ColumnistEdit = ({ history, match }) => {
                         <React.Fragment>
                             이미지
                             <br />
+                            <span className="color-danger">(200*200)</span>
+                            <Button
+                                variant="gray-700"
+                                size="sm"
+                                className="mt-2"
+                                onClick={(e) => {
+                                    imgFileRef.current.rootRef.onClick(e);
+                                }}
+                            >
+                                신규등록
+                            </Button>
+                        </React.Fragment>
+                        /*<React.Fragment>
+                            이미지
+                            <br />
                             (200*200)
                             <br />
                             <Button
@@ -452,15 +472,16 @@ const ColumnistEdit = ({ history, match }) => {
                             >
                                 삭제
                             </Button>
-                        </React.Fragment>
+                        </React.Fragment>*/
                     }
                     ref={imgFileRef}
                     inputProps={{
-                        height: 150,
-                        width: 267,
+                        height: 200,
+                        width: 200,
                         img: selectRepoterData.profilePhoto,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,
+                        deleteButton: true,
                     }}
                     labelClassName="justify-content-end"
                 />

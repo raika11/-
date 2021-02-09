@@ -44,7 +44,7 @@ export default [
         cellStyle: { fontSize: '12px' },
         width: 50,
         cellRendererFramework: ({ data }) => {
-            let status;
+            let status = '';
             if (data.tourStatus === 'S') {
                 status = '신청';
             } else if (data.tourStatus === 'A') {

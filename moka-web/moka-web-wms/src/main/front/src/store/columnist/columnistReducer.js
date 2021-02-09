@@ -11,7 +11,7 @@ export const initialState = {
         search: {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            status: 'Y',
+            status: '',
             keyword: '',
         },
     },

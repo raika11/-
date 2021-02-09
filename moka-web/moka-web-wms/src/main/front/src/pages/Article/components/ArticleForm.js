@@ -228,6 +228,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 totalId: temp.totalId,
                 artContent: content,
             },
+            artSubTitle: temp.artSubTitle,
             reporterList: temp.reporterList,
             tagList: temp.tagList,
             categoryList: temp.categoryList,

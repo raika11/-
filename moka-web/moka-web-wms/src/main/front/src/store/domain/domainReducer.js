@@ -16,7 +16,7 @@ export const initialState = {
         sort: 'domainId,asc',
     },
     domain: {
-        usedYn: 'N',
+        usedYn: 'Y',
         domainId: null,
         domainName: '',
         domainUrl: '',

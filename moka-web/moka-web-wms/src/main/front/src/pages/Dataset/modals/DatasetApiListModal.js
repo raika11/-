@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, GET_DATASET_API_LIST, getDatasetApiList } from '@store/dataset';
 import columnDefs from './DatasetApiListModalColumns';
@@ -101,9 +100,10 @@ const DatsetListModal = (props) => {
      * 검색
      */
     const handleSearch = (search) => {
+        setSearch(search);
         dispatch(
             getDatasetApiList({
-                search: { ...search, apiCodeId: apiCodeId, size: 100, page: 0, exclude },
+                search,
                 callback: responseCallback,
             }),
         );
@@ -113,11 +113,11 @@ const DatsetListModal = (props) => {
      * 테이블 검색옵션 변경
      */
     const handleChangeSearchOption = ({ key, value }) => {
-        let temp = { ...search, [key]: value };
+        let ns = { ...search, [key]: value };
         if (key !== 'page') {
-            temp['page'] = 0;
+            ns['page'] = 0;
         }
-        setSearch(temp);
+        handleSearch(ns);
     };
 
     /**
@@ -154,7 +154,7 @@ const DatsetListModal = (props) => {
             handleSearch({
                 ...search,
                 apiCodeId: apiCodeId,
-                size: 100,
+                size: MODAL_PAGESIZE_OPTIONS[0],
                 page: 0,
                 exclude,
             });
@@ -180,7 +180,7 @@ const DatsetListModal = (props) => {
             <Form>
                 <Form.Row className="mb-2">
                     {/* 검색 조건 */}
-                    <Col xs={4} className="p-0 pr-2">
+                    <div className="mr-2 flex-shrink-0">
                         <MokaInput
                             as="select"
                             className="mb-0"
@@ -198,20 +198,19 @@ const DatsetListModal = (props) => {
                                 </option>
                             ))}
                         </MokaInput>
-                    </Col>
+                    </div>
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0">
-                        <MokaSearchInput
-                            value={search.keyword}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    keyword: e.target.value,
-                                });
-                            }}
-                            onSearch={() => handleSearch(search)}
-                        />
-                    </Col>
+                    <MokaSearchInput
+                        className="flex-fill"
+                        value={search.keyword}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
+                        }}
+                        onSearch={() => handleSearch({ ...search, page: 0 })}
+                    />
                 </Form.Row>
             </Form>
 

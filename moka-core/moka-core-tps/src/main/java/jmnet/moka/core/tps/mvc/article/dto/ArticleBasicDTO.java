@@ -16,6 +16,7 @@ import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleBulkSimpleVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleContentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleServiceVO;
 import jmnet.moka.core.tps.mvc.articlesource.dto.ArticleSourceSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -200,4 +201,9 @@ public class ArticleBasicDTO implements Serializable {
      * 기사부제목
      */
     private String artSubTitle;
+
+    /**
+     * 기사 서비스 정보
+     */
+    private ArticleServiceVO articleService;
 }

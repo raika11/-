@@ -198,14 +198,14 @@
 		) }
   	</select>
 
-  <!-- 기사 부가정보 조회(분류코드,기자,키워드,벌크,본문) -->
+  <!-- 기사 부가정보 조회(분류코드,기자,키워드,벌크,로그인여부,본문) -->
   <resultMap id="CodeMap" type="string"/>
   <resultMap id="ArtReporterMap" type="ArticleReporterVO"/>
   <resultMap id="ArtKeywordMap" type="string"/>
-  <resultMap id="bulkSiteMap" type="string"/>
+  <resultMap id="ArticleServiceMap" type="ArticleServiceVO"/>
   <resultMap id="contentMap" type="ArticleContentVO"/>
   <select id="findInfo" parameterType="hashMap"
-    resultMap="CodeMap,ArtReporterMap,ArtKeywordMap,bulkSiteMap,contentMap"
+    resultMap="CodeMap,ArtReporterMap,ArtKeywordMap,ArticleServiceMap,contentMap"
     statementType="CALLABLE">
   { call UPA_ARTICLE_BASIC_SEL_BY_INFO(
     #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}

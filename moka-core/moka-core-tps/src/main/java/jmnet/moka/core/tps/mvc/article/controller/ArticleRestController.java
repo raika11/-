@@ -115,7 +115,7 @@ public class ArticleRestController extends AbstractCommonController {
     @ApiOperation(value = "기사 상세조회")
     @GetMapping("/{totalId}")
     public ResponseEntity<?> getArticle(@ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId)
-            throws NoDataException {
+            throws Exception {
 
         ArticleBasic articleBasic = articleService
                 .findArticleBasicById(totalId)
@@ -127,11 +127,17 @@ public class ArticleRestController extends AbstractCommonController {
 
         ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
 
-        articleService.findArticleInfo(dto);
+        try {
+            articleService.findArticleInfo(dto);
 
-        ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
-        tpsLogger.success(ActionType.SELECT);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto);
+            tpsLogger.success(ActionType.SELECT);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD ARTICLE]", e);
+            tpsLogger.error(ActionType.INSERT, "[FAIL TO LOAD ARTICLE]", e, true);
+            throw new Exception(msg("tps.article.error.select"), e);
+        }
     }
 
     @ApiOperation(value = "기사 편집제목 등록/수정")
@@ -320,12 +326,12 @@ public class ArticleRestController extends AbstractCommonController {
                 });
 
         try {
-            // 삭제는 D로 등록
+            // 중지는 E로 등록
             boolean insertOk = articleService.insertArticleIudWithTotalId(articleBasic, "E");
 
             String message = "";
             if (insertOk) {
-                message = msg("ttps.article.success.stop");
+                message = msg("tps.article.success.stop");
             } else {
                 message = msg("tps.article.error.stop");
             }

@@ -189,4 +189,10 @@ public class ArticleBasicVO implements Serializable {
      */
     @Column(name = "CONTENT_TYPE")
     private String contentType;
+
+    /**
+     * 백오피스에서 중지(E)/삭제(D) 여부
+     */
+    @Column(name = "IUD")
+    private String iud;
 }

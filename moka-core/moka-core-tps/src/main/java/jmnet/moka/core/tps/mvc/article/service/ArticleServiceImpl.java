@@ -35,6 +35,7 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleContentVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleHistoryVO;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleServiceVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -227,17 +228,20 @@ public class ArticleServiceImpl implements ArticleService {
                 articleDto.setTagList(tagList);
             }
 
-            // 벌크목록
+            // 서비스정보, 벌크목록
             if (listMap.get(3) != null && listMap
                     .get(3)
                     .size() > 0 && listMap
                     .get(3)
                     .get(0) != null) {
-                List<String> dbList = modelMapper.map(listMap.get(3), new TypeReference<List<String>>() {
-                }.getType());
-                if (dbList.size() > 0) {
-                    String[] bulkSiteList = dbList
-                            .get(0)
+                ArticleServiceVO articleServiceVO = modelMapper.map(listMap
+                        .get(3)
+                        .get(0), ArticleServiceVO.class);
+                articleDto.setArticleService(articleServiceVO);
+
+                if (articleServiceVO.getBulkSite() != null) {
+                    String[] bulkSiteList = articleServiceVO
+                            .getBulkSite()
                             .split(",");
                     List<ArticleBulkSimpleVO> list = new ArrayList<>();
 
@@ -259,6 +263,7 @@ public class ArticleServiceImpl implements ArticleService {
 
                     articleDto.setBulkSiteList(list);
                 }
+
             }
 
             // 본문

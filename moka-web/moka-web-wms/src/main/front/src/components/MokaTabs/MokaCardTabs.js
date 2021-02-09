@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -47,6 +47,10 @@ const propTypes = {
      * nav 클릭 콜백
      */
     onSelectNav: PropTypes.func,
+    /**
+     * 탭의 activeKey를 직접 제어하고 싶을 때 전달
+     */
+    activeKey: PropTypes.any,
 };
 const defaultProps = {
     width: 410,
@@ -60,20 +64,31 @@ const defaultProps = {
  * 카드 외형 + 상단에 탭이 달린 컴포넌트 (SSC 개발)
  */
 const MokaCardTabs = (props) => {
-    const { className, fill, id, tabs, tabNavs, width, navWidth, height, tabContentClass, tabContentWrapperClassName, onSelectNav } = props;
+    const { className, fill, id, tabs, tabNavs, width, navWidth, height, tabContentClass, tabContentWrapperClassName, onSelectNav, activeKey: parentKey } = props;
     const [activeKey, setActiveKey] = useState(0);
 
     /**
      * Nav 선택 콜백
      * @param {any} eventKey 이벤트키
      */
-    const handleSelect = (eventKey, e) => {
-        setActiveKey(eventKey);
-        if (onSelectNav) {
-            onSelectNav(Number(eventKey));
+    const handleSelect = useCallback(
+        (eventKey, e) => {
+            setActiveKey(eventKey);
+            if (onSelectNav) {
+                onSelectNav(Number(eventKey));
+            }
+            e.currentTarget.blur();
+        },
+        [onSelectNav],
+    );
+
+    useEffect(() => {
+        // 탭의 activeKey를 직접 제어
+        if (parentKey !== null && parentKey !== undefined) {
+            handleSelect(String(parentKey));
         }
-        e.currentTarget.blur();
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [parentKey]);
 
     return (
         <div className={clsx('tab card-tab flex-fill', className)} style={{ width, height }}>

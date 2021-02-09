@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
+import { PAGESIZE_OPTIONS } from '@/constants';
 import * as act from './pageAction';
 
 /**
@@ -29,6 +30,8 @@ export const initialState = {
             domainId: null,
             searchType: 'all',
             keyword: '',
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
         },
         page: {},
         pageError: null,

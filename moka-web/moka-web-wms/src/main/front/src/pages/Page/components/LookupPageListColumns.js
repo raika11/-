@@ -10,7 +10,8 @@ export const columnDefs = [
     {
         headerName: '페이지명',
         field: 'pageName',
-        width: 204,
+        flex: 1,
+        width: 190,
         tooltipField: 'pageName',
     },
     {

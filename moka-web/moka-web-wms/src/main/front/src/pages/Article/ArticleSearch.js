@@ -245,7 +245,7 @@ const ArticleSearch = ({ ja, sun }) => {
                 <Col xs={5} className="p-0 pl-2 d-flex">
                     {/* 출판 카테고리 */}
                     <MokaInput as="select" className="mr-2" name="pressCategory" value={search.pressCategory} onChange={handleChangeValue}>
-                        <option>출판 전체</option>
+                        <option value="all">출판 전체</option>
                         {pressCate1Rows &&
                             pressCate1Rows.map((code) => (
                                 <option key={code.id} value={code.id}>

@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-
 import { MokaModal, MokaInput, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getPageListModal, GET_PAGE_LIST_MODAL } from '@store/page';
 import columnDefs from './PageListModalColums';
@@ -196,7 +194,7 @@ const PageListModal = (props) => {
             <Form>
                 <Form.Row className="mb-2">
                     {/* 검색 조건 */}
-                    <Col xs={4} className="p-0 pr-2">
+                    <div className="mr-2 flex-shrink-0">
                         <MokaInput
                             as="select"
                             value={search.searchType}
@@ -213,20 +211,19 @@ const PageListModal = (props) => {
                                 </option>
                             ))}
                         </MokaInput>
-                    </Col>
+                    </div>
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0">
-                        <MokaSearchInput
-                            value={search.keyword}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    keyword: e.target.value,
-                                });
-                            }}
-                            onSearch={handleSearch}
-                        />
-                    </Col>
+                    <MokaSearchInput
+                        className="flex-fill"
+                        value={search.keyword}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
+                        }}
+                        onSearch={handleSearch}
+                    />
                 </Form.Row>
             </Form>
 

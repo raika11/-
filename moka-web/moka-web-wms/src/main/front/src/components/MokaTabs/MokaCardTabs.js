@@ -77,7 +77,9 @@ const MokaCardTabs = (props) => {
             if (onSelectNav) {
                 onSelectNav(Number(eventKey));
             }
-            e.currentTarget.blur();
+            if (e) {
+                e.currentTarget.blur();
+            }
         },
         [onSelectNav],
     );
@@ -92,7 +94,7 @@ const MokaCardTabs = (props) => {
 
     return (
         <div className={clsx('tab card-tab flex-fill', className)} style={{ width, height }}>
-            <Tab.Container id={id} defaultActiveKey={0}>
+            <Tab.Container id={id} activeKey={activeKey}>
                 <div className="d-flex px-card">
                     <Nav fill={fill} activeKey={activeKey} variant="tabs" className="flex-row" onSelect={handleSelect}>
                         {tabNavs.map((nav, idx) =>

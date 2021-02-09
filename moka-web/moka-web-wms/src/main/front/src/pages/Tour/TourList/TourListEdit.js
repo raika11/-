@@ -107,7 +107,7 @@ const TourListEdit = forwardRef(({ match }, ref) => {
             onSave: onSave,
             onDelete: onDelete,
         }),
-        [onDelete, onSave],
+        [onSave, onDelete],
     );
 
     useEffect(() => {

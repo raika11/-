@@ -14,7 +14,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 배포서버 엔티티 2021. 1. 26. 김정민
+ * <pre>
+ * 배포서버 entity
+ * Project : moka
+ * Package : jmnet.moka.web.schedule.mvc.gen.entity
+ * ClassName : GenTarget
+ * Created : 2021-02-08 ince
+ * </pre>
+ *
+ * @author ince
+ * @since 2021-02-08 12:00
  */
 @AllArgsConstructor
 @NoArgsConstructor

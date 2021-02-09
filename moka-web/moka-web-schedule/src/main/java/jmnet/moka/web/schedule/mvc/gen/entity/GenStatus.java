@@ -16,7 +16,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 작업 상태 엔티티 2021. 2. 1. 김정민
+ * <pre>
+ * job 상태 entity
+ * Project : moka
+ * Package : jmnet.moka.web.schedule.mvc.gen.entity
+ * ClassName : GenStatus
+ * Created : 2021-02-08 ince
+ * </pre>
+ *
+ * @author ince
+ * @since 2021-02-08 12:00
  */
 @AllArgsConstructor
 @NoArgsConstructor

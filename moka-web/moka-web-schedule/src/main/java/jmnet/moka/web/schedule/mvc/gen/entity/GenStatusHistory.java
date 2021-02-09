@@ -9,10 +9,10 @@ import lombok.Setter;
 
 /**
  * <pre>
- *
+ * 작업 결과 entity
  * Project : moka
- * Package : jmnet.moka.web.schedule.mvc.schedule.entity
- * ClassName : JobStatusHistory
+ * Package : jmnet.moka.web.schedule.mvc.gen.entity
+ * ClassName : GenStatusHistory
  * Created : 2021-02-08 ince
  * </pre>
  *

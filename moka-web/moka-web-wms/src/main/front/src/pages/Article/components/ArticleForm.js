@@ -197,7 +197,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
         let errList = [];
 
         // 제목 체크
-        if (!REQUIRED_REGEX.test(articleData.artTitle)) {
+        if (!articleData.artTitle || !REQUIRED_REGEX.test(articleData.artTitle)) {
             errList.push({
                 field: 'artTitle',
                 reason: '',
@@ -222,6 +222,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
      */
     const handleClickSave = () => {
         const saveObj = {
+            artTitle: temp.artTitle,
             totalId: temp.totalId,
             artContent: {
                 totalId: temp.totalId,

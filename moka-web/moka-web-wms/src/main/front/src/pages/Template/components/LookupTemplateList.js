@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import produce from 'immer';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { ITEM_PG, ITEM_CT, ITEM_AP, API_BASE_URL, ITEM_TP } from '@/constants';
 import { MokaCard, MokaInput, MokaSearchInput, MokaTableTypeButton, MokaTable } from '@components';
 import { TemplateThumbTable } from '@pages/Template/components';
@@ -55,6 +55,7 @@ const LookupTemplateList = (props) => {
 
     // state
     const [search, setSearch] = useState(initialState.lookup.search);
+    const [searchTypeList, setSearchTypeList] = useState(initialState.searchTypeList);
     const [listType, setListType] = useState('list');
     const [rowData, setRowData] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -171,6 +172,28 @@ const LookupTemplateList = (props) => {
     }, [UPLOAD_PATH_URL, handleClickAppend, list]);
 
     useEffect(() => {
+        if (seqType === ITEM_PG) {
+            setSearchTypeList(
+                produce(initialState.searchTypeList, (draft) => {
+                    draft.splice(1, 0, { id: 'pageSeq', name: '페이지ID' });
+                }),
+            );
+        } else if (seqType === ITEM_AP) {
+            setSearchTypeList(
+                produce(initialState.searchTypeList, (draft) => {
+                    draft.splice(1, 0, { id: 'artPageSeq', name: '기사페이지ID' });
+                }),
+            );
+        } else if (seqType === ITEM_CT) {
+            setSearchTypeList(
+                produce(initialState.searchTypeList, (draft) => {
+                    draft.splice(1, 0, { id: 'containerSeq', name: '컨테이너ID' });
+                }),
+            );
+        }
+    }, [seqType]);
+
+    useEffect(() => {
         if (show) {
             dispatch(
                 getTemplateLookupList(
@@ -230,7 +253,7 @@ const LookupTemplateList = (props) => {
                 </Form.Row>
                 <Form.Row>
                     {/* 검색조건 */}
-                    <Col xs={5} className="p-0 pr-2">
+                    <div className="mr-2 flex-shrink-0">
                         <MokaInput
                             as="select"
                             value={search.searchType}
@@ -241,29 +264,25 @@ const LookupTemplateList = (props) => {
                                 });
                             }}
                         >
-                            {seqType === ITEM_PG && <option value="pageSeq">페이지ID</option>}
-                            {seqType === ITEM_AP && <option value="artPageSeq">기사페이지ID</option>}
-                            {seqType === ITEM_CT && <option value="containerSeq">컨테이너ID</option>}
-                            {initialState.searchTypeList.map((type) => (
+                            {searchTypeList.map((type) => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>
                             ))}
                         </MokaInput>
-                    </Col>
+                    </div>
                     {/* 키워드 */}
-                    <Col xs={7} className="p-0">
-                        <MokaSearchInput
-                            value={search.keyword}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    keyword: e.target.value,
-                                });
-                            }}
-                            onSearch={handleSearch}
-                        />
-                    </Col>
+                    <MokaSearchInput
+                        className="flex-fill"
+                        value={search.keyword}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
+                        }}
+                        onSearch={handleSearch}
+                    />
                 </Form.Row>
             </Form>
 

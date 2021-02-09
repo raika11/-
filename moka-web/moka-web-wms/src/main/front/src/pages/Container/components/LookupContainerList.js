@@ -149,13 +149,7 @@ const LookupContainerList = (props) => {
     }, [handleClickAppend, handleClickLoad, list]);
 
     useEffect(() => {
-        if (seqType === ITEM_CT) {
-            setSearchTypeList(
-                produce(initialState.searchTypeList, (draft) => {
-                    draft.splice(1, 0, { id: 'containerSeq', name: '컨테이너ID' });
-                }),
-            );
-        } else if (seqType === ITEM_PG) {
+        if (seqType === ITEM_PG) {
             setSearchTypeList(
                 produce(initialState.searchTypeList, (draft) => {
                     draft.splice(1, 0, { id: 'pageSeq', name: '페이지ID' });

@@ -464,7 +464,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                             </div>
                         </Col>
                         <Col xs={5} className="d-flex p-0">
-                            <hr class="vertical-divider" />
+                            <hr className="vertical-divider" />
                             <MokaInputLabel label="종류" labelWidth={30} as="none" />
                             <div className="d-flex flex-column flex-fill">
                                 <div>

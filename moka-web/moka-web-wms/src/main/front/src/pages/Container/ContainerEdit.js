@@ -185,9 +185,11 @@ const ContainerEdit = ({ onDelete, match }) => {
                         <Button variant="negative" className="mr-05" onClick={handleClickCancle}>
                             취소
                         </Button>
-                        <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
-                            삭제
-                        </Button>
+                        {container.containerSeq && (
+                            <Button variant="negative" disabled={btnDisabled} onClick={handleClickDelete}>
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </Form.Group>
                 {/* 컨테이너ID */}

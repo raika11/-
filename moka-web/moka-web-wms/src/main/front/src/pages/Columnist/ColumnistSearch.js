@@ -6,7 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import { MokaInputLabel, MokaSearchInput } from '@components';
-import { initialState, getColumnistList, changeSearchOption, clearSearchOption, clearColumnist } from '@store/columnist';
+import { initialState, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
+import AuthButton from '@pages/Auth/AuthButton';
 
 const ColumnistSearch = ({ match }) => {
     const dispatch = useDispatch();
@@ -100,9 +101,9 @@ const ColumnistSearch = ({ match }) => {
                     초기화
                 </Button>
 
-                <Button variant="positive" onClick={handleNewColumnlist} className="flex-shrink-0">
+                <AuthButton variant="positive" onClick={handleNewColumnlist} className="flex-shrink-0">
                     등록
-                </Button>
+                </AuthButton>
             </Col>
         </Form.Row>
     );

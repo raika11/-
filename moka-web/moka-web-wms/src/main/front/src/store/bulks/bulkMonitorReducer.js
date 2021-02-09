@@ -14,12 +14,12 @@ export const bmInitialState = {
         searchType: '',
         keyword: '',
         useTotal: '',
-        orgSourceCode: '',
-        orgSourceName: '',
-        contentDiv: '',
+        orgSourceCode: null,
+        orgSourceName: null,
+        contentDiv: null,
         status: '',
-        startDt: moment().format('YYYYMMDD'),
-        endDt: moment().format('YYYYMMDD'),
+        startDt: moment().format('YYYY-MM-DD'),
+        endDt: moment().format('YYYY-MM-DD'),
     },
 };
 

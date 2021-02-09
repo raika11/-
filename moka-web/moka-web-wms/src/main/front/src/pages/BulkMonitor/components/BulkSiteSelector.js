@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputGroup, MokaIcon } from '@components';
-import { getDeskingSourceList, getTypeSourceList } from '@store/articleSource';
 import { getBulkSite } from '@/store/codeMgt';
 
 /**
@@ -36,7 +35,7 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
             <MokaInputGroup
                 value={children}
                 inputProps={{ readOnly: true }}
-                placeholder="매체를 선택하세요"
+                placeholder="사이트를 선택하세요"
                 inputClassName="bg-white cursor-pointer"
                 isInvalid={isInvalid}
                 append={
@@ -59,11 +58,11 @@ const propTypes = {
      */
     isInvalid: PropTypes.bool,
     /**
-     * 매체 sourceCode의 리스트 (필수)
+     * 벌크 사이트 value 리스트 (필수)
      */
     value: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.oneOf([null])]),
     /**
-     * 매체 checked 변경 시 실행되는 함수 (필수)
+     * 사이트 checked 변경 시 실행되는 함수 (필수)
      */
     onChange: PropTypes.func.isRequired,
     /**
@@ -80,113 +79,116 @@ const defaultProps = {
 };
 
 /**
- * 매체 선택자
+ * 벌크 사이트 선택
  * (value, onChange 필수로 받음)
  */
 const BulkSiteSelector = (props) => {
     const { className, isInvalid, value, onChange, width, dropdownHeight } = props;
     const dispatch = useDispatch();
-    const [selectedList, setSelectedList] = useState([]); // 체크 리스트
-    const [renderList, setRenderList] = useState([]); // 렌더링 리스트
+    const [selectedList, setSelectedList] = useState([]); // 체크 목록
+    const [siteList, setSiteList] = useState([]); // 기타코드에서 받은 벌크 사이트 목록
     const [toggleText, setToggleText] = useState('사이트 전체');
-    const bulkSiteRows = useSelector((store) => store.codeMgt.bulkSiteRows); // 벌크 사이트 목록
+    const bulkSiteRows = useSelector((store) => store.codeMgt.bulkSiteRows); // 기타코드 벌크 사이트 목록
 
     /**
-     * 벌크 사이트 목록에서 매체 데이터의 index를 찾음
-     * @param {string} 매체ID
-     */
-    const findSiteIndex = useCallback((id) => renderList.findIndex((sc) => sc.sourceCode === id), [renderList]);
-
-    /**
-     * 매체 리스트에서 sourceCode로 매체 데이터 찾음
+     * 벌크 사이트 목록에서 사이트의 index를 찾음
      * @param {string} site id
      */
-    const findSite = useCallback((id) => renderList.find((sc) => sc.sourceCode === id), [renderList]);
+    const findSiteIndex = useCallback((id) => siteList.findIndex((site) => site.id === id), [siteList]);
+
+    /**
+     * 사이트 목록에서 site id로 해당 요소 찾음
+     * @param {string} site id
+     */
+    const findSite = useCallback((id) => siteList.find((site) => site.id === id), [siteList]);
 
     /**
      * 매체check change
      * @param {object} e 이벤트
      */
-    const handleChangeValue = useCallback((e) => {
-        //         const { checked, id } = e.target;
-        //         let resultList = [];
-        //         const target = findSource(id);
-        //         if (checked) {
-        //             resultList = [...selectedList, target].sort(function (a, b) {
-        //                 return a.index - b.index;
-        //             });
-        //         } else {
-        //             const isSelected = selectedList.findIndex((sl) => sl.sourceCode === id);
-        //             if (isSelected > -1) {
-        //                 resultList = produce(selectedList, (draft) => {
-        //                     draft.splice(isSelected, 1);
-        //                 });
-        //             }
-        //         }
-        //         if (typeof onChange === 'function') {
-        //             onChange(resultList.map((r) => r.sourceCode).join(','));
-        //         }
-    }, []);
+    const handleChangeValue = useCallback(
+        (e) => {
+            const { checked, id } = e.target;
+            let resultList = [];
+            const target = findSite(id);
+            if (checked) {
+                resultList = [...selectedList, target].sort(function (a, b) {
+                    return a.index - b.index;
+                });
+            } else {
+                const isSelected = selectedList.findIndex((site) => site.id === id);
+                if (isSelected > -1) {
+                    resultList = produce(selectedList, (draft) => {
+                        draft.splice(isSelected, 1);
+                    });
+                }
+            }
+
+            if (typeof onChange === 'function') {
+                onChange(resultList.map((r) => r.id).join(','));
+            }
+        },
+        [findSite, onChange, selectedList],
+    );
 
     /**
      * 렌더링 시 checked true인지 false인지 판단
-     * @param {string} sourceCode 매체코드
+     * @param {string} site id
      */
-    // const chkTrue = useCallback(
-    //     (site) => {
-    //         if (!value) return false;
-    //         else return value.split(',').indexOf(site) > -1;
-    //     },
-    //     [value],
-    // );
+    const chkTrue = useCallback(
+        (site) => {
+            if (!value) return false;
+            else return value.split(',').indexOf(site) > -1;
+        },
+        [value],
+    );
 
     useEffect(() => {
         if (!bulkSiteRows) {
             dispatch(getBulkSite());
         } else {
-            setRenderList(bulkSiteRows.map((li, idx) => ({ ...li, index: idx })));
+            setSiteList(bulkSiteRows.map((site, idx) => ({ ...site, index: idx })));
         }
     }, [bulkSiteRows]);
 
-    // useEffect(() => {
-    //     if (selectedList.length > 0) {
-    //         const target = findSource(selectedList[0].sourceCode);
-    //         if (!target) return;
+    useEffect(() => {
+        if (selectedList.length > 0) {
+            const target = findSite(selectedList[0].id);
+            if (!target) return;
 
-    //         if (selectedList.length === renderList.length) {
-    //             setToggleText('매체 전체');
-    //         } else if (selectedList.length === 1) {
-    //             setToggleText(target.sourceName);
-    //         } else {
-    //             setToggleText(`${target.sourceName} 외 ${selectedList.length - 1}개`);
-    //         }
-    //     } else {
-    //         setToggleText('');
-    //     }
-    // }, [findSource, renderList, selectedList]);
+            if (selectedList.length === siteList.length) {
+                setToggleText('사이트 전체');
+            } else if (selectedList.length === 1) {
+                setToggleText(target.name);
+            } else {
+                setToggleText(`${target.name} 외 ${selectedList.length - 1}개`);
+            }
+        } else {
+            setToggleText('');
+        }
+    }, [findSite, selectedList, siteList.length]);
 
-    // useEffect(() => {
-    //     if (renderList.length < 1) return;
-    //     if (value || value === '') {
-    //         // 1,3,60,61 => [1, 3, 60, 61]로 파싱하고, renderList에 포함되어 있는 데이터만 남기도록 필터링한다
-    //         const valueArr = value
-    //             .split(',')
-    //             .filter((v) => v !== '')
-    //             .filter((v) => findSourceIndex(v) > -1);
+    useEffect(() => {
+        if (siteList.length < 1) return;
+        if (value || value === '') {
+            const valueArr = value
+                .split(',')
+                .filter((v) => v !== '')
+                .filter((v) => findSiteIndex(v) > -1);
 
-    //         // 필터링된 valueArr과 selectedList와 비교하여 다를 경우 value, selectedList 변경
-    //         const selectedListStr = selectedList.map((r) => r.sourceCode).join(',');
-    //         if (selectedListStr !== valueArr.join(',')) {
-    //             setSelectedList(valueArr.map((v) => findSource(v)));
-    //             onChange(valueArr.join(','));
-    //         }
-    //     } else {
-    //         // 값이 없을 때는(value === null) 모든 매체 선택
-    //         if (typeof onChange === 'function') {
-    //             onChange(renderList.map((sc) => sc.sourceCode).join(','));
-    //         }
-    //     }
-    // }, []);
+            // 필터링된 valueArr과 selectedList와 비교하여 다를 경우 value, selectedList 변경
+            const selectedListStr = selectedList.map((r) => r.id).join(',');
+            if (selectedListStr !== valueArr.join(',')) {
+                setSelectedList(valueArr.map((v) => findSite(v)));
+                onChange(valueArr.join(','));
+            }
+        } else {
+            // 값이 없을 때는(value === null) 모든 매체 선택
+            if (typeof onChange === 'function') {
+                onChange(siteList.map((site) => site.id).join(','));
+            }
+        }
+    }, [findSite, findSiteIndex, onChange, selectedList, siteList, value]);
 
     return (
         <Dropdown style={{ width }} className={clsx('flex-fill', className)}>
@@ -195,8 +197,8 @@ const BulkSiteSelector = (props) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu} height={dropdownHeight} className="custom-scroll w-100">
-                {bulkSiteRows &&
-                    bulkSiteRows.map((s, idx) => (
+                {siteList &&
+                    siteList.map((s, idx) => (
                         <MokaInput
                             key={s.id}
                             name="bulkSiteList"
@@ -208,7 +210,7 @@ const BulkSiteSelector = (props) => {
                             inputProps={{
                                 label: s.name,
                                 custom: true,
-                                // checked: chkTrue(s.id)
+                                checked: chkTrue(s.id),
                             }}
                             id={s.id}
                         />

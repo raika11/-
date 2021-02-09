@@ -44,3 +44,9 @@ export const getQuestions = ({ search }) => {
         throw err;
     });
 };
+
+export const getQuizzesQuestions = ({ questionSeq }) => {
+    return instance.get(`/api/quizzes/questions/${questionSeq}`).catch((err) => {
+        throw err;
+    });
+};

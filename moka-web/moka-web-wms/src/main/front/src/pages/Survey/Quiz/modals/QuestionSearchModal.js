@@ -49,7 +49,8 @@ const QuestionSearchModal = (props) => {
 
     // row 클릭처리가 없어서 함수만 만들어 놈
     const handleClickListRow = (e) => {
-        setSelectQuizSeq(e.questionSeq);
+        // console.log(e);
+        setSelectQuizSeq(e.seqNo);
     };
 
     // grid 옵션 변경 처리.
@@ -71,14 +72,16 @@ const QuestionSearchModal = (props) => {
             setRowData(
                 data.map((element) => {
                     let Type = '';
-                    if (element.questionType === 'S') {
+                    if (element.question.questionType === 'S') {
                         Type = '주관식';
                     } else {
-                        Type = '단답식';
+                        Type = '객관식';
                     }
                     return {
+                        seqNo: element.seqNo,
                         questionSeq: element.questionSeq,
-                        title: element.title,
+                        quizTitle: element.quiz.title,
+                        title: element.question.title,
                         Type: Type,
                         questionsInfo: element,
                         questionsPriviewInfo: element,
@@ -144,7 +147,7 @@ const QuestionSearchModal = (props) => {
                     columnDefs={columnDefs}
                     rowData={rowData}
                     rowHeight={50}
-                    onRowNodeId={(data) => data.questionSeq}
+                    onRowNodeId={(data) => data.seqNo}
                     onRowClicked={(e) => handleClickListRow(e)}
                     loading={loading}
                     page={search.page}

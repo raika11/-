@@ -8,7 +8,7 @@ export const QuestionsInfoAddButtonRenderer = ({ questionsInfo }) => {
     const dispatch = useDispatch();
 
     const handleClickButton = () => {
-        dispatch(selectQuestions(questionsInfo));
+        dispatch(selectQuestions({ questionSeq: questionsInfo.questionSeq }));
     };
 
     return (
@@ -28,7 +28,7 @@ export const QuestionsInfoAddButtonRenderer = ({ questionsInfo }) => {
 };
 
 export const QuestionsPreviewRenderer = ({ questionsPriviewInfo }) => {
-    const title = questionsPriviewInfo.title;
+    const title = questionsPriviewInfo.question.title;
 
     const [previewModalState, setPreviewModalState] = useState(false);
 

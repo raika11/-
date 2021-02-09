@@ -206,6 +206,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         setQuestionSearchModalState(true);
     };
 
+    // 벨리데이션 처리.
     const checkValidation = () => {
         if (!quizInfo.title) {
             messageBox.alert('퀴즈 제목을 입력해 주세요.', () => {});
@@ -467,18 +468,19 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
         };
 
         if (selectQuizQuestion !== initialState.selectQuizQuestion) {
+            // console.log(selectQuizQuestion);
             setAddQuestion(selectQuizQuestion);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectQuizQuestion]);
 
-    // 문항 리스트 업데이트시 문항 리스트 업데이트.
+    // 스토어에 문항 리스트가 변경되면 실제 문항 리스트 변경.
     useEffect(() => {
         setSortableItems(
             questionsItem.map((item, index) => {
                 // eslint-disable-next-line no-unused-vars
                 const { questionCount, questionType } = item;
-                // 사용장에 문제가 없는것 같아서 우선 주석처리..
+                // 사용상에 문제가 없는것 같아서 우선 주석처리..
                 if (questionType === 'S') {
                     return {
                         id: index,

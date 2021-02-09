@@ -14,8 +14,10 @@ import {
     DELETE_QUESTION_RESULT,
     GET_QUESTIONS_LIST,
     GET_QUIZ_SEARCH_MODAL_LIST,
+    SELECT_QUESTIONS,
+    SELECT_QUESTIONS_SUCCESS,
 } from './quizAction';
-import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes, getQuestions } from './quizApi';
+import { getQuizzes, getQuizzesInfo, saveQuizzes, updateQuizzes, getQuestions, getQuizzesQuestions } from './quizApi';
 
 // 퀴즈 목록 죄회.
 const getQuizzesListSaga = callApiAfterActions(GET_QUIZZES_LIST, getQuizzes, (state) => state.quiz.quizzes);
@@ -108,6 +110,33 @@ function* deleteQuestionSaga({ payload: { questionIndex } }) {
     });
 }
 
+function* getSelectQuestionsInfoSaga({ payload: { questionSeq, callback } }) {
+    yield put(startLoading(SELECT_QUESTIONS));
+    let response;
+    try {
+        response = yield call(getQuizzesQuestions, { questionSeq: questionSeq });
+        const {
+            header: { success, message },
+        } = response.data;
+        if (success === true) {
+            if (typeof callback === 'function') {
+                yield call(callback, response.data);
+            } else {
+                yield put({ type: SELECT_QUESTIONS_SUCCESS, payload: response.data });
+            }
+        } else {
+            // 에러 나면 서버 에러 메시지 토스트 전달.
+            toast.error(message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    yield put(finishLoading(SELECT_QUESTIONS));
+}
+
 export default function* quizSaga() {
     yield takeLatest(GET_QUIZZES_LIST, getQuizzesListSaga);
     yield takeLatest(GET_QUIZZES, getQuizzesSaga);
@@ -116,4 +145,5 @@ export default function* quizSaga() {
     yield takeLatest(DELETE_QUESTION, deleteQuestionSaga);
     yield takeLatest(GET_QUESTIONS_LIST, getQuestionsListSaga);
     yield takeLatest(GET_QUIZ_SEARCH_MODAL_LIST, getQuizSearchListSaga);
+    yield takeLatest(SELECT_QUESTIONS, getSelectQuestionsInfoSaga);
 }

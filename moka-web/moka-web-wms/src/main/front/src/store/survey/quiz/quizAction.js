@@ -63,8 +63,8 @@ export const changeQuestionsListSearchOption = createAction(CHANGE_QUESTIONS_LIS
 export const [GET_QUESTIONS_LIST, GET_QUESTIONS_LIST_SUCCESS] = createRequestActionTypes('quiz/GET_QUESTIONS_LIST');
 export const getQuestionsList = createAction(GET_QUESTIONS_LIST, (...actions) => actions);
 
-export const SELECT_QUESTIONS = 'quiz/SELECT_QUESTIONS';
-export const selectQuestions = createAction(SELECT_QUESTIONS, (actions) => actions);
+export const [SELECT_QUESTIONS, SELECT_QUESTIONS_SUCCESS] = createRequestActionTypes('quiz/SELECT_QUESTIONS');
+export const selectQuestions = createAction(SELECT_QUESTIONS, ({ questionSeq, callback }) => ({ questionSeq, callback }));
 
 // 퀴즈 검색 모달.
 export const CHANGE_QUIZ_LIST_SEARCH_OPTION = 'quiz/CHANGE_QUIZ_LIST_SEARCH_OPTION';

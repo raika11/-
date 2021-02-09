@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { MokaModal, MokaInputLabel } from '@components';
 import { Form, Col, Figure } from 'react-bootstrap';
-
+import { selectQuestions } from '@store/survey/quiz';
+import toast, { messageBox } from '@utils/toastUtil';
+import { useDispatch } from 'react-redux';
 /**
  * 미리보기 모달.
  */
 const QuestionsPreviewModal = (props) => {
+    const dispatch = useDispatch();
     const { privewShow, onPriviewHide, priviewInfo } = props;
 
     const [priviewInfoState, setPriviewInfoState] = useState({
@@ -30,7 +33,25 @@ const QuestionsPreviewModal = (props) => {
     useEffect(() => {
         if (privewShow === true) {
             const setPriviewInfo = (data) => {
-                setPriviewInfoState(data);
+                dispatch(
+                    selectQuestions({
+                        questionSeq: data.questionSeq,
+                        callback: ({ header: { success, message }, body }) => {
+                            if (success === true) {
+                                setPriviewInfoState(body);
+                            } else {
+                                const { totalCnt, list } = body;
+                                if (totalCnt > 0 && Array.isArray(list)) {
+                                    // 에러 메시지 확인.
+                                    messageBox.alert(list[0].reason, () => {});
+                                } else {
+                                    // 에러이지만 에러메시지가 없으면 서버 메시지를 alert 함.
+                                    messageBox.alert(message, () => {});
+                                }
+                            }
+                        },
+                    }),
+                );
             };
 
             setPriviewInfo(priviewInfo);

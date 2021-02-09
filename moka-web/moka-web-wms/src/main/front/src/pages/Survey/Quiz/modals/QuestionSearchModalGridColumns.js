@@ -13,7 +13,7 @@ export const columnDefs = [
     },
     {
         headerName: '퀴즈명',
-        field: 'repoterSeq',
+        field: 'quizTitle',
         width: 250,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },

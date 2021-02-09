@@ -16,6 +16,7 @@ import {
     SET_QUESTION,
     CHANGE_QUESTIONS_LIST_SEARCH_OPTION,
     SELECT_QUESTIONS,
+    SELECT_QUESTIONS_SUCCESS,
     GET_QUESTIONS_LIST_SUCCESS,
     CHANGE_QUIZ_LIST_SEARCH_OPTION,
     GET_QUIZ_SEARCH_MODAL_LIST_SUCCESS,
@@ -196,9 +197,9 @@ export default handleActions(
             });
         },
 
-        [SELECT_QUESTIONS]: (state, { payload }) => {
+        [SELECT_QUESTIONS_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.selectQuizQuestion = payload;
+                draft.selectQuizQuestion = body;
             });
         },
 

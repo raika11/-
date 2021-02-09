@@ -12,11 +12,12 @@ const QuizAgGrid = () => {
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
     // 공통 구분값 URL
-    const { search, list, total, loading } = useSelector((store) => ({
+    const { search, list, total, loading, quizInfo } = useSelector((store) => ({
         search: store.quiz.quizzes.search,
         list: store.quiz.quizzes.list,
         total: store.quiz.quizzes.total,
         loading: store.loading[GET_QUIZZES_LIST],
+        quizInfo: store.quiz.quizInfo,
     }));
 
     // 검색
@@ -103,6 +104,7 @@ const QuizAgGrid = () => {
                 total={total}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
+                selected={quizInfo.quizSeq}
             />
         </>
     );

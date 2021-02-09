@@ -1,12 +1,11 @@
-import React from 'react';
 import { ListTitleRenderer, ButtonStatusRenderer, SendStatusRenderer } from './component';
 
-export const columnDefs = [
+export default [
     {
         headerName: 'ID',
         field: 'id',
         width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        cellStyle: { lineHeight: '23px' },
         headerClass: 'ag-grid-sns-meta-header',
     },
     {
@@ -14,39 +13,36 @@ export const columnDefs = [
         headerClass: 'ag-grid-sns-meta-header',
         field: 'forwardDate',
         width: 90,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        cellStyle: { lineHeight: '23px' },
     },
     {
         headerName: '이미지',
         field: 'thumbnail',
         headerClass: 'ag-grid-sns-meta-header',
         cellRenderer: 'imageRenderer',
-        width: 80,
+        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+        width: 90,
     },
     {
         headerName: '기사제목',
         headerClass: 'ag-grid-sns-meta-header',
-        width: 120,
+        width: 135,
         children: [
             {
                 headerName: 'SNS제목',
                 field: 'listTitle',
                 flex: 1,
                 headerClass: 'ag-grid-sns-meta-header',
-                cellRendererFramework: (params) => {
-                    return <ListTitleRenderer title={params.data.title} summary={params.data.summary} />;
-                },
+                cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+                cellRendererFramework: ListTitleRenderer,
             },
         ],
     },
     {
         headerName: '전송상태',
         field: 'sendType',
-        width: 100,
-        cellRendererFramework: (params) => (
-            <SendStatusRenderer sendFlag={params.data.sendStatus.button} facebook={params.data.sendStatus.facebook} twitter={params.data.sendStatus.twitter} />
-        ),
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
+        width: 85,
+        cellRendererFramework: SendStatusRenderer,
         headerClass: 'ag-grid-sns-meta-header',
     },
     {
@@ -56,26 +52,22 @@ export const columnDefs = [
             {
                 headerName: '상태',
                 field: 'status',
-                width: 80,
-                /*cellRendererFramework: ({ value }) => {
-                    let clazz = value === 'Y' ? 'color-primary' : 'color-gray-200';
-                    return <FontAwesomeIcon icon={faCircle} fixedWidth className={clazz} />;
-                },*/
-                cellStyle: { fontSize: '12px', lineHeight: '23px' },
+                width: 60,
+                // cellRenderer: 'usedYnRenderer',
                 headerClass: 'ag-grid-sns-meta-header',
             },
             {
                 headerName: '전송일',
                 field: 'sendDt',
                 width: 100,
-                cellStyle: { fontSize: '12px', lineHeight: '23px' },
+                cellStyle: { lineHeight: '23px' },
                 headerClass: 'ag-grid-sns-meta-header',
             },
             {
                 headerName: '전송',
                 field: 'insStatus',
-                width: 65,
-                cellRendererFramework: (params) => <ButtonStatusRenderer hasButtons={params.data.hasSnsArticleSendButtons} />,
+                width: 57,
+                cellRendererFramework: ButtonStatusRenderer,
                 headerClass: 'ag-grid-sns-meta-header',
             },
         ],

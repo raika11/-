@@ -186,7 +186,9 @@ const ComponentWorkList = (props) => {
                         <React.Fragment>
                             <div style={{ width: 170 }}>
                                 <MokaInput as="select" className="h-100" value={null} inputProps={{ size: 'sm' }} onChange={handleChangeDisabled}>
-                                    <option hidden>비활성 영역 보기</option>
+                                    <option value="" disabled>
+                                        비활성 영역 보기
+                                    </option>
                                     {disabledList.map((work) => (
                                         <option key={work.seq} value={work.seq}>
                                             {work.componentName}

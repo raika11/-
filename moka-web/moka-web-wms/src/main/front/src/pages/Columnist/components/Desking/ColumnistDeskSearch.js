@@ -65,7 +65,7 @@ const ColumnistDeskSearch = (props) => {
     }, [show]);
 
     return (
-        <Form.Row className="mb-3">
+        <Form.Row className="mb-2">
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">

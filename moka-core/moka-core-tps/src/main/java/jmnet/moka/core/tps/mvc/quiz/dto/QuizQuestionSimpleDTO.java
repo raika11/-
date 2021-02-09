@@ -19,9 +19,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class QuizQuestionDTO implements Serializable {
+public class QuizQuestionSimpleDTO implements Serializable {
 
-    public static final Type TYPE = new TypeReference<List<QuizQuestionDTO>>() {
+    public static final Type TYPE = new TypeReference<List<QuizQuestionSimpleDTO>>() {
     }.getType();
 
     private static final long serialVersionUID = 1L;
@@ -55,12 +55,12 @@ public class QuizQuestionDTO implements Serializable {
      * 퀴즈정보
      */
     @ApiModelProperty(value = "퀴즈정보", hidden = true)
-    private QuizDTO quiz;
+    private QuizSimpleDTO quiz;
 
     /**
      * 질문정보
      */
     @ApiModelProperty(value = "질문정보", hidden = true)
-    private QuestionDTO question;
+    private QuestionSimpleDTO question;
 
 }

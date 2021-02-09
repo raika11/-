@@ -34,6 +34,7 @@ import articlePage from '@store/articlePage/articlePageReducer';
 import sns from '@store/snsManage/snsReducer';
 import bright from '@store/bright/brightReducer';
 import bulks from '@store/bulks/bulksReducer';
+import bulkMonitor from '@store/bulks/bulkMonitorReducer';
 import special from '@store/special/specialReducer';
 import comment from '@store/commentManage/commentReducer';
 import board from '@store/board/boardsReducer';
@@ -83,6 +84,7 @@ export default combineReducers({
     columnist,
     sns,
     bulks,
+    bulkMonitor,
     special,
     board,
     seoMeta,

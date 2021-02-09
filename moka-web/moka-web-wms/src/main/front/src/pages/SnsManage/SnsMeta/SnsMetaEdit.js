@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Figure } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta, saveSnsMeta, publishSnsMeta, getSnsMetaList, clearSnsMetaList } from '@store/snsManage';
+import { MokaCard, MokaInputLabel, MokaInput, MokaImage } from '@components';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
 import { DB_DATEFORMAT, snsNames } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
-import moment from 'moment';
 import { EditThumbModal } from '@pages/Desking/modals';
 import imageEditer from '@utils/imageEditorUtil';
 
@@ -253,7 +253,6 @@ const SnsMetaEdit = () => {
         <MokaCard
             width={550}
             title={`메타 ${true ? '정보' : '등록'}`}
-            titleClassName="mb-0"
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[
@@ -268,47 +267,33 @@ const SnsMetaEdit = () => {
             <div className="d-flex mb-2 w-100">
                 <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
                 <div className="d-flex">
-                    <Button size="sm" variant="outline-neutral" className="mr-2" onClick={handleClickFbTokenModalShow}>
+                    <Button variant="outline-neutral" className="mr-1" onClick={handleClickFbTokenModalShow}>
                         토큰 관리
                     </Button>
                     <Button
                         variant="outline-neutral"
-                        className="mr-2"
-                        onClick={() => {
-                            window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${totalId}`, '', 'width=500,height=500');
-                        }}
-                        size="sm"
+                        className="mr-1"
+                        onClick={() => window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${totalId}`, '', 'width=500,height=500')}
                     >
                         공유
                     </Button>
                     <Button
                         variant="outline-fb"
-                        className="mr-2"
+                        className="mr-1"
                         onClick={() => {
                             handleClickPublish('fb');
                         }}
-                        size="sm"
                     >
                         FB 전송
                     </Button>
                     <Button
                         variant="outline-fb"
-                        className="mr-2"
-                        onClick={() => {
-                            window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`);
-                        }}
-                        size="sm"
+                        className="mr-1"
+                        onClick={() => window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`)}
                     >
                         FB 캐시삭제
                     </Button>
-                    <Button
-                        variant="outline-tw"
-                        className="mr-2"
-                        onClick={() => {
-                            handleClickCopyContent('fb');
-                        }}
-                        size="sm"
-                    >
+                    <Button variant="outline-tw" onClick={() => handleClickCopyContent('fb')}>
                         TW로 복사
                     </Button>
                 </div>
@@ -321,6 +306,7 @@ const SnsMetaEdit = () => {
                         name="fb-usedYn"
                         id="fb-usedYn"
                         label="사용유무"
+                        labelWidth={68}
                         onChange={handleChangeCheckedValue}
                         inputProps={{ label: '', checked: edit.fb.usedYn }}
                     />
@@ -328,7 +314,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="타이틀" name="fb-title" onChange={handleChangeTextValue} value={edit.fb.title} />
+                        <MokaInputLabel label="타이틀" labelWidth={68} name="fb-title" onChange={handleChangeTextValue} value={edit.fb.title} />
                     </Col>
                 </Form.Row>
 
@@ -338,6 +324,7 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="fb-summary"
                             label="설명\n(리드문)"
+                            labelWidth={68}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.fb.summary}
@@ -351,6 +338,7 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="fb-postMessage"
                             label="메시지"
+                            labelWidth={68}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.fb.postMessage}
@@ -360,38 +348,35 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100">
-                        <MokaInputLabel as="none" label="SNS 이미지\n850*350px" />
-                        <div className="d-flex flex-column mr-2 flex-fill">
-                            <Figure.Image className="mb-1" src={edit.fb.imgUrl} />
-                            <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
-                        </div>
-                        <div className="d-flex flex-column">
-                            <Button
-                                variant="outline-neutral"
-                                size="sm"
-                                className="mb-1"
-                                onClick={() => {
-                                    handleEditClick('fb', edit.fb.imgUrl);
-                                }}
-                            >
-                                편집
-                            </Button>
-                            <Button
-                                variant="positive"
-                                onClick={() => {
-                                    handleEditThumbClick('fb', edit.fb.imgUrl);
-                                }}
-                                size="sm"
-                            >
-                                신규 등록
-                            </Button>
+                        <MokaInputLabel
+                            as="none"
+                            labelWidth={68}
+                            label={
+                                <React.Fragment>
+                                    <p className="mb-gutter">
+                                        SNS 이미지
+                                        <br />
+                                        850*350px
+                                    </p>
+                                    <Button variant="gray-700" size="sm" onClick={() => handleEditThumbClick('fb', edit.fb.imgUrl)} className="w-100 mb-1">
+                                        신규등록
+                                    </Button>
+                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={() => handleEditClick('fb', edit.fb.imgUrl)}>
+                                        편집
+                                    </Button>
+                                </React.Fragment>
+                            }
+                        />
+                        <div className="d-flex flex-column flex-fill">
+                            <MokaImage className="mb-1 input-border" img={edit.fb.imgUrl} width={414} />
+                            <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                         </div>
                     </div>
                 </Form.Row>
 
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
-                        <MokaInputLabel as="none" label="예약" />
+                        <MokaInputLabel as="none" label="예약" labelWidth={68} />
                         <MokaInput
                             as="checkbox"
                             name="fb-isReserve"
@@ -420,46 +405,26 @@ const SnsMetaEdit = () => {
             <div className="d-flex mb-2 w-100">
                 <MokaInputLabel label="Twitter" className="m-0 h5" as="none" />
                 <div className="d-flex">
-                    <Button
-                        variant="outline-tw"
-                        className="mr-2"
-                        size="sm"
-                        onClick={() => {
-                            handleClickPublish('tw');
-                        }}
-                    >
+                    <Button variant="outline-tw" className="mr-1" onClick={() => handleClickPublish('tw')}>
                         TW 전송
                     </Button>
-                    <Button
-                        variant="outline-tw"
-                        className="mr-2"
-                        size="sm"
-                        onClick={() => {
-                            window.open('https://cards-dev.twitter.com/validator');
-                        }}
-                    >
+                    <Button variant="outline-tw" className="mr-1" onClick={() => window.open('https://cards-dev.twitter.com/validator')}>
                         TW 캐시삭제
                     </Button>
-                    <Button
-                        variant="outline-fb"
-                        className="mr-2"
-                        size="sm"
-                        onClick={() => {
-                            handleClickCopyContent('tw');
-                        }}
-                    >
+                    <Button variant="outline-fb" onClick={() => handleClickCopyContent('tw')}>
                         FB로 복사
                     </Button>
                 </div>
             </div>
 
-            <Form className="mb-gutter">
+            <Form>
                 <Form.Row className="mb-2">
                     <MokaInputLabel
                         as="switch"
                         name="tw-usedYn"
                         id="tw-usedYn"
                         label="사용유무"
+                        labelWidth={68}
                         variant="positive"
                         onChange={handleChangeCheckedValue}
                         inputProps={{ label: '', checked: edit.tw.usedYn }}
@@ -468,7 +433,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="타이틀" name="tw-title" onChange={handleChangeTextValue} value={edit.tw.title} />
+                        <MokaInputLabel label="타이틀" labelWidth={68} name="tw-title" onChange={handleChangeTextValue} value={edit.tw.title} />
                     </Col>
                 </Form.Row>
 
@@ -478,6 +443,7 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="tw-summary"
                             label="설명\n(리드문)"
+                            labelWidth={68}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.tw.summary}
@@ -491,6 +457,7 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="tw-postMessage"
                             label="메시지"
+                            labelWidth={68}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.tw.postMessage}
@@ -500,38 +467,35 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100">
-                        <MokaInputLabel as="none" label="SNS 이미지\n850*350px" />
-                        <div className="d-flex flex-column mr-2 flex-fill">
-                            <Figure.Image className="mb-1" src={edit.tw.imgUrl} />
-                            <Form.Label className="text-danger ft-12">1200*628 이미지 용량 제한: 1MB.</Form.Label>
-                        </div>
-                        <div className="d-flex flex-column">
-                            <Button
-                                variant="outline-neutral"
-                                size="sm"
-                                className="mb-1"
-                                onClick={() => {
-                                    handleEditClick('tw', edit.tw.imgUrl);
-                                }}
-                            >
-                                편집
-                            </Button>
-                            <Button
-                                variant="positive"
-                                onClick={() => {
-                                    handleEditThumbClick('tw', edit.tw.imgUrl);
-                                }}
-                                size="sm"
-                            >
-                                신규 등록
-                            </Button>
+                        <MokaInputLabel
+                            as="none"
+                            labelWidth={68}
+                            label={
+                                <React.Fragment>
+                                    <p className="mb-gutter">
+                                        SNS 이미지
+                                        <br />
+                                        850*350px
+                                    </p>
+                                    <Button variant="gray-700" size="sm" onClick={() => handleEditThumbClick('tw', edit.tw.imgUrl)} className="w-100 mb-1">
+                                        신규등록
+                                    </Button>
+                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={() => handleEditClick('tw', edit.tw.imgUrl)}>
+                                        편집
+                                    </Button>
+                                </React.Fragment>
+                            }
+                        />
+                        <div className="d-flex flex-column flex-fill">
+                            <MokaImage className="mb-1 input-border" img={edit.tw.imgUrl} width={414} />
+                            <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                         </div>
                     </div>
                 </Form.Row>
 
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <div className="d-flex w-100 align-items-center">
-                        <MokaInputLabel as="none" label="예약" />
+                        <MokaInputLabel as="none" label="예약" labelWidth={68} />
                         <MokaInput
                             as="checkbox"
                             name="tw-isReserve"
@@ -561,6 +525,7 @@ const SnsMetaEdit = () => {
                 onHide={handleClickFbTokenModalHide}
                 onSave={handleClickFbTokenModalSave}
             />
+
             <SnsPreviewModal show={articlePreviewModalShow} onHide={handleClickArticlePreviewModalHide} totalId={totalId} />
 
             <EditThumbModal

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { columnDefs } from './SnsMetaAgGridColumns';
-import { MokaTable } from '@components';
 import { useDispatch } from 'react-redux';
-import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import { useHistory } from 'react-router-dom';
 import produce from 'immer';
+import { MokaTable } from '@components';
+import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
+import columnDefs from './SnsMetaAgGridColumns';
 
 const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
@@ -38,14 +38,11 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
 
     return (
         <MokaTable
-            agGridHeight={650}
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={65}
+            rowHeight={49}
             onRowNodeId={(row) => row.id}
-            onRowClicked={(row) => {
-                handleClickListRow(row);
-            }}
+            onRowClicked={(row) => handleClickListRow(row)}
             loading={loading}
             total={total}
             page={searchOptions.page}

@@ -1,10 +1,10 @@
 import React from 'react';
-import { MokaIcon } from '@components';
 import { Button } from 'react-bootstrap';
+import { MokaIcon } from '@components';
 
 const StatusIdle = () => (
     <div className="d-flex text-center">
-        <Button variant="outline-table-btn" size="sm" className="mr-0">
+        <Button variant="outline-table-btn" size="sm">
             등록/전송
         </Button>
     </div>
@@ -13,23 +13,36 @@ const StatusIdle = () => (
 const StatusSend = ({ faceBook, twitter }) => {
     return (
         <>
-            <div className="d-flex justify-content-between p-1">
-                <MokaIcon iconName="fab-facebook-square" size="2x" style={faceBook ? { color: '3B5998' } : { color: 'ADB1BE' }} />
+            <div className="p-1">
+                <MokaIcon
+                    iconName="fab-facebook-square"
+                    style={{
+                        color: faceBook ? '3B5998' : 'ADB1BE',
+                        fontSize: '20px',
+                    }}
+                />
             </div>
-            <div className="d-flex justify-content-between p-1">
-                <MokaIcon iconName="fab-twitter-square" size="2x" style={twitter ? { color: '00ACEE' } : { color: 'ADB1BE' }} />
+            <div className="p-1">
+                <MokaIcon
+                    iconName="fab-twitter-square"
+                    style={{
+                        color: twitter ? '00ACEE' : 'ADB1BE',
+                        fontSize: '20px',
+                    }}
+                />
             </div>
         </>
     );
 };
 
-const SendStatusComponent = ({ sendFlag, facebook, twitter }) => {
+const SendStatusComponent = (params) => {
+    const { sendFlag, facebook, twitter } = params.node.data;
     // sendFlag Y : 보낸기사, N: 보내지 않은 기사.
     // facebook Y: 페이스북 보낸기사. N : 보내지 않은 기사.
     // twitter Y: 트위터 보낸기사. N : 보내지 않은 기사.
 
     return (
-        <div className="d-flex py-3 justify-content-center">
+        <div className="h-100 d-flex align-items-center justify-content-center">
             <div className="d-flex">{!sendFlag ? <StatusSend faceBook={facebook} twitter={twitter} /> : <StatusIdle />}</div>
         </div>
     );

@@ -7,7 +7,6 @@ import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
-import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import jmnet.moka.core.tps.mvc.quiz.entity.QQuestion;
 import jmnet.moka.core.tps.mvc.quiz.entity.QQuizChoice;
 import jmnet.moka.core.tps.mvc.quiz.entity.Question;
@@ -38,7 +37,6 @@ public class QuestionRepositorySupportImpl extends TpsQueryDslRepositorySupport 
     public Page<Question> findAllQuestion(SearchDTO search) {
         QQuestion qQuestion = QQuestion.question;
         QQuizChoice qQuizChoice = QQuizChoice.quizChoice;
-        QMemberInfo qRegMember = new QMemberInfo("regMember");
         JPQLQuery<Question> query = from(qQuestion);
 
 

@@ -2,17 +2,15 @@ package jmnet.moka.core.tps.mvc.bulklog.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.bulklog.vo.BulkLogVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -20,7 +18,6 @@ import lombok.Setter;
  * 벌크 모니터링 로그
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Setter
 @Getter
 @Builder
@@ -33,32 +30,21 @@ public class BulkLogSearchDTO extends SearchDTO {
      * 매체코드
      */
     @ApiModelProperty("매체코드")
-    private String orgSourceCode;
+    private String sourceCode;
 
-    /**
-     * 매체명
-     */
-    @ApiModelProperty("매체명")
-    private String orgSourceName;
+    public BulkLogSearchDTO() {
+        super(BulkLogVO.class, "totalId,desc");
+        super.setUseTotal(MokaConstants.YES);
+        super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);
+        super.setReturnValue(TpsConstants.PROCEDURE_SUCCESS);
+    }
 
-    /**
-     * 콘텐트구분
-     */
-    @ApiModelProperty("콘텐트구분")
-    private String contentDiv;
-
-    /**
-     * 상태(진행+오류)
-     */
-    @ApiModelProperty("상태(진행+오류)")
-    private String status;
-
-    @ApiModelProperty(value = "전송시작일시", required = true)
+    @ApiModelProperty(value = "전송시작일자", required = true)
     @DTODateTimeFormat
     @NotNull(message = "{tps.search-keyword-log.error.notnull.startDt}")
     private String startDt;
 
-    @ApiModelProperty(value = "전송종료일시", required = true)
+    @ApiModelProperty(value = "전송종료일자", required = true)
     @DTODateTimeFormat
     @NotNull(message = "{tps.search-keyword-log.error.notnull.endDt}")
     private String endDt;

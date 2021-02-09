@@ -6,6 +6,9 @@ import Work from './Work/index';
 import DeleteWork from './DeleteWork/index';
 import DeployServer from './DeployServer/index';
 
+/**
+ * 스케줄 서버 관리
+ */
 const Schedule = ({ match }) => {
     return (
         <>

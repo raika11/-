@@ -42,6 +42,7 @@ public class CommentUrl implements Serializable {
     private String infoDesc;
 
     @Column(name = "GROUP_ID")
+    @Builder.Default
     private Integer urlGrp = 1;
 
 }

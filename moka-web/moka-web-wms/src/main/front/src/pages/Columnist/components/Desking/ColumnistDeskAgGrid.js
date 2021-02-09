@@ -45,6 +45,7 @@ const ColumnistDeskAgGrid = forwardRef((props, ref) => {
                     ...data,
                     regDt,
                     modDt,
+                    profile: data.profile.replaceAll('\n', ' / '),
                 };
             }),
         );

@@ -19,7 +19,6 @@ const propTypes = {
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
      * height
-     * @default
      */
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /**
@@ -68,7 +67,6 @@ const propTypes = {
 };
 const defaultProps = {
     width: 171,
-    height: 180,
     alertProps: {
         outline: false,
         variant: 'danger',
@@ -219,7 +217,7 @@ const MokaImageInput = forwardRef((props, ref) => {
                             className,
                             { 'is-invalid': isInvalid },
                         )}
-                        style={{ width, height }}
+                        style={{ width, height: height || (width * 9) / 16 }}
                         ref={wrapRef}
                         as="div"
                     >

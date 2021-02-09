@@ -6,6 +6,7 @@ import columnDefs, { list } from './BulKMonitorRcvprogsAgGridColumns.js';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
 import RcvProgsRenderer from './components/RcvProgsRenderer.js';
 import RcvprogsModal from './modals/RcvprogsModal.js';
+
 /**
  * 벌크 모니터링 목록
  */

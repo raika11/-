@@ -25,15 +25,58 @@
   <select id="findAllList" parameterType="BulkLogSearchDTO" resultType="BulkLogVO"
           statementType="CALLABLE">
     {call UPA_BULK_LOG_LIST_STAT_SEL(
-            #{startDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-            #{endDt, mode=IN, jdbcType=VARCHAR, javaType=java.util.Date},
-            #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-            #{orgSourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-            #{orgSourceName, mode=IN, jdbcType=VARCHAR, javaType=string},
-            #{contentDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-            #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
-            #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-            #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
+            #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+      <choose>
+          <when test="searchType == 'all' and keyword != null and keyword != ''">
+              #{keyword},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
+
+      <choose>
+          <when test="searchType == 'totalId' and keyword != null and keyword != ''">
+              #{keyword},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
+
+      <choose>
+          <when test="searchType == 'title' and keyword != null and keyword != ''">
+              #{keyword},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
+
+      <choose>
+          <when test="searchType == 'reporterName' and keyword != null and keyword != ''">
+              #{keyword},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
+
+
+      <choose>
+          <when test="searchType == 'status' and keyword != null and keyword != ''">
+              #{keyword},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
+
+      #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
       ) }
   </select>
 

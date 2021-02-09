@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MokaCardTabs } from '@components';
 import ArticleList from '@pages/Article/components/Desking/ArticleList';
 import ArticleMediaList from '@pages/Article/components/Desking/ArticleMediaList';
-import { ReporterDeskList } from '@/pages/Reporter/components';
-import { ColumnistDeskList } from '@/pages/Columnist/components';
+import ReporterList from '@pages/Reporter/components/Desking/ReporterList';
+import ColumnistList from '@pages/Columnist/components/Desking/ColumnistList';
 import { deskingDragStop } from '@store/desking';
 import toast from '@utils/toastUtil';
 
@@ -88,7 +88,7 @@ const DeskingArticleTab = (props) => {
             // 기자 조회 컴포넌트
             else if (nav === '기자') {
                 return (
-                    <ReporterDeskList
+                    <ReporterList
                         className="pb-3"
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
@@ -101,7 +101,7 @@ const DeskingArticleTab = (props) => {
             // 칼럼 리스트 컴포넌트
             else if (nav === '칼럼니스트') {
                 return (
-                    <ColumnistDeskList
+                    <ColumnistList
                         className="pb-3"
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}

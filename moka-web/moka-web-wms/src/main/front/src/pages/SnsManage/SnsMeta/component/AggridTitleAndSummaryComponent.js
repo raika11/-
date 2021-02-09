@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { MokaIcon } from '@components';
 
-const AggridTitleAndSummaryComponent = ({ title, summary, reservation }) => {
+const AggridTitleAndSummaryComponent = forwardRef((params, ref) => {
+    const { title, reservation, summary } = params.node.data;
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: () => true,
+        }),
+        [],
+    );
+
     return (
-        <div className="h-100">
-            <div className="d-flex">
-                <p className="mb-0 flex-fill text-truncate" dangerouslySetInnerHTML={{ __html: title }} />
-            </div>
+        <div className="h-100 d-flex flex-column justify-content-center">
+            <p className="mb-0 flex-fill text-truncate" dangerouslySetInnerHTML={{ __html: title }} style={{ lineHeight: 'normal' }} />
             <div className="d-flex">
                 {reservation === true && (
                     <div className="d-flex pr-2">
@@ -14,11 +22,11 @@ const AggridTitleAndSummaryComponent = ({ title, summary, reservation }) => {
                     </div>
                 )}
                 <div className="d-flex text-truncate">
-                    <p className="mb-0 flex-fill h5 text-truncate" dangerouslySetInnerHTML={{ __html: summary }} />
+                    <p className="mb-0 flex-fill font-weight-bold text-truncate" dangerouslySetInnerHTML={{ __html: summary }} style={{ lineHeight: 'normal' }} />
                 </div>
             </div>
         </div>
     );
-};
+});
 
 export default AggridTitleAndSummaryComponent;

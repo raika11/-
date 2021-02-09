@@ -103,6 +103,7 @@ export const GET_PRESS_CATE1 = 'codeMgt/GET_PRESS_CATE1';
 export const GET_HTTP_METHOD = 'codeMgt/GET_HTTP_METHOD';
 export const GET_API_TYPE = 'codeMgt/GET_API_TYPE';
 export const GET_TOUR_AGE = 'codeMgt/GET_TOUR_AGE';
+export const GET_BULK_SITE = 'codeMgt/GET_BULK_SITE';
 export const getTpSize = createAction(GET_TP_SIZE);
 export const getTpZone = createAction(GET_TP_ZONE);
 export const getLang = createAction(GET_LANG);
@@ -125,6 +126,7 @@ export const getPressCate1 = createAction(GET_PRESS_CATE1);
 export const getHttpMethod = createAction(GET_HTTP_METHOD);
 export const getApiType = createAction(GET_API_TYPE);
 export const getTourAge = createAction(GET_TOUR_AGE);
+export const getBulkSite = createAction(GET_BULK_SITE);
 
 export const [GET_SPECIAL_CHAR_CODE, GET_SPECIAL_CHAR_CODE_SUCCESS, GET_SPECIAL_CHAR_CODE_FAILURE] = createRequestActionTypes('codeMgt/GET_SPECIAL_CHAR_CODE');
 export const getSpecialCharCode = createAction(GET_SPECIAL_CHAR_CODE);

@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotEmpty;
+import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.mvc.quiz.dto.QuizSearchDTO;
 import jmnet.moka.core.tps.mvc.quiz.entity.Question;
 import jmnet.moka.core.tps.mvc.quiz.entity.Quiz;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizDetail;
+import jmnet.moka.core.tps.mvc.quiz.entity.QuizQuestionSimple;
 import jmnet.moka.core.tps.mvc.quiz.entity.QuizRel;
 import org.springframework.data.domain.Page;
 
@@ -26,6 +28,8 @@ import org.springframework.data.domain.Page;
 public interface QuizService {
 
     Page<Quiz> findAllQuiz(QuizSearchDTO quiz);
+
+    Page<QuizQuestionSimple> findAllQuizQuestion(SearchDTO searchDTO);
 
     Optional<Quiz> findQuizBySeq(Long quizSeq);
 

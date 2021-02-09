@@ -37,7 +37,8 @@ const ReporterDeskAgGrid = forwardRef((props, ref) => {
             list.map((row) => ({
                 ...row,
                 id: String(row.repSeq),
-                belong: (row.r1CdNm || '') + (row.r2CdNm || '') + (row.r3CdNm || '') + (row.r4CdNm || ''),
+                belong:
+                    (row.r1CdNm ? `${row.r1CdNm} / ` : '') + (row.r2CdNm ? `${row.r2CdNm} / ` : '') + (row.r3CdNm ? `${row.r3CdNm} / ` : '') + (row.r4CdNm ? `${row.r4CdNm}` : ''),
             })),
         );
     }, [list]);

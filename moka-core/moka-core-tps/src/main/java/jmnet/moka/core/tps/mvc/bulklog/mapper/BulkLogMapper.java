@@ -39,10 +39,17 @@ public interface BulkLogMapper extends BaseMapper<BulkTotalLogVO, BulkLogSearchD
     List<BulkLogVO> findAllList(BulkLogSearchDTO searchDTO);
 
     /**
-     * 벌크 전송 상세정보 조회
+     * 벌크 전송 상세정보/메세지 조회
      *
      * @param searchDTO 검색 조건
      * @return 조회 결과
      */
     List<BulkLogVO> findAllListInfo(BulkLogTotalIdDTO searchDTO);
+    /**
+     * 벌크 전송 목록 메세지 조회
+     *
+     * @param searchDTO 검색 조건
+     * @return 조회 결과
+     */
+    List<BulkLogVO> findAllListInfoMsg(BulkLogTotalIdDTO searchDTO);
 }

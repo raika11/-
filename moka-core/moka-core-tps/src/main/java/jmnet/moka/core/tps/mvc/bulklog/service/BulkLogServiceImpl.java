@@ -51,4 +51,10 @@ public class BulkLogServiceImpl implements BulkLogService {
         List<BulkLogVO> list = bulkLogMapper.findAllListInfo(searchDTO);
         return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }
+
+    @Override
+    public Page<BulkLogVO> findAllBulkLogStatListByInfoMsg(BulkLogTotalIdDTO searchDTO) {
+        List<BulkLogVO> list = bulkLogMapper.findAllListInfoMsg(searchDTO);
+        return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
+    }
 }

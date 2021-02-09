@@ -25,4 +25,6 @@ public interface BulkLogService {
     Page<BulkLogVO> findAllBulkLogStatList(BulkLogSearchDTO searchDTO);
 
     Page<BulkLogVO> findAllBulkLogStatListByInfo(BulkLogTotalIdDTO searchDTO);
+
+    Page<BulkLogVO> findAllBulkLogStatListByInfoMsg(BulkLogTotalIdDTO searchDTO);
 }

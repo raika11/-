@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "crawling.driver.path",
+    "type": "java.lang.String",
+    "description": "A description for 'crawling.driver.path'"
+  },
+  {
+    "name": "scheduler.pool.size",
+    "type": "java.lang.String",
+    "description": "A description for 'scheduler.pool.size'"
+  },
+  {
+    "name": "crawling.data.keep.cycle",
+    "type": "java.lang.String",
+    "description": "A description for 'crawling.data.keep.cycle'"
+  },
+  {
+    "name": "security.access.ip.pattern",
+    "type": "java.lang.String",
+    "description": "A description for 'security.access.ip.pattern'"
+  }
+]}

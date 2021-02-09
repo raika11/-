@@ -152,6 +152,14 @@ body {
     box-shadow: 0 0 .875rem 0 rgba($dark, 0.7);
 }
 
+.onerror-image-wrap {
+    background-color: $gray-400 !important;
+}
+
+.onerror-image {
+    padding: 0 15%;
+}
+
 /* -----------------------
 * card
 * ---------------------- */

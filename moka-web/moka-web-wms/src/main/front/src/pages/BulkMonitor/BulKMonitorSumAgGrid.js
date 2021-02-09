@@ -14,7 +14,7 @@ const BulKMonitorSumAgGrid = () => {
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_TOTAL]);
 
     return (
-        <div className="mb-5 d-flex align-items-center" style={{ width: 796 }}>
+        <div className="mb-5 d-flex align-items-center" style={{ width: 786 }}>
             <div className="mr-3 text-center">
                 <p className="mb-0">
                     {search.startDt} ~ {search.endDt}

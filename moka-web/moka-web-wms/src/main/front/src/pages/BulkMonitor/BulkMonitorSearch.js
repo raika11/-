@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaInputLabel } from '@components';
 import { SourceSelector } from '@pages/commons';
 import BulkSiteSelector from './components/BulkSiteSelector';
-import { changeBmSearchOption, getBulkStatTotal, bmInitialState, clearBmSearch } from '@/store/bulks';
+import { changeBmSearchOption, getBulkStatTotal, bmInitialState } from '@/store/bulks';
 
 /**
  * 벌크 모니터링 검색
@@ -18,7 +18,6 @@ const BulkMonitorSearch = () => {
     const [temp, setTemp] = useState({});
     const [sourceOn, setSourceOn] = useState(false);
     const [siteOn, setSiteOn] = useState(false);
-    const [error, setError] = useState(true);
 
     const handleClickSearch = () => {
         dispatch(
@@ -48,7 +47,6 @@ const BulkMonitorSearch = () => {
                     changeBmSearchOption({
                         ...search,
                         page: 0,
-                        status: 'status < 10',
                     }),
                 ),
             );
@@ -131,7 +129,7 @@ const BulkMonitorSearch = () => {
                         </div>
                         <div className="mr-2" style={{ width: 120 }}>
                             <MokaInput as="select" value={search.searchType} onChange={(e) => setSearch({ ...search, searchType: e.target.value })}>
-                                <option value="">전체</option>
+                                <option value="all">전체</option>
                                 <option value="contentId">기사 ID</option>
                                 <option value="title">기사 제목</option>
                             </MokaInput>
@@ -158,14 +156,12 @@ const BulkMonitorSearch = () => {
                             as="checkbox"
                             className="mr-2"
                             id="bulk-error-checkbox"
-                            inputProps={{ label: '진행 + 오류만 보기', custom: true, checked: error === true }}
+                            inputProps={{ label: '진행 + 오류만 보기', custom: true, checked: search.status === 'Y' }}
                             onChange={(e) => {
                                 if (e.target.checked) {
-                                    setError(true);
-                                    setSearch({ ...search, status: 'status < 10' });
+                                    setSearch({ ...search, status: 'Y' });
                                 } else {
-                                    setError(false);
-                                    setSearch({ ...search, status: '' });
+                                    setSearch({ ...search, status: 'N' });
                                 }
                             }}
                         />

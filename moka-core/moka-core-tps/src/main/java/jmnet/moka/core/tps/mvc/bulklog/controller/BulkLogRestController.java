@@ -14,6 +14,7 @@ import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogSearchDTO;
+import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalIdDTO;
 import jmnet.moka.core.tps.mvc.bulklog.service.BulkLogService;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkLogVO;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkTotalLogVO;
@@ -94,6 +95,33 @@ public class BulkLogRestController extends AbstractCommonController {
 
         // 조회
         Page<BulkLogVO> returnValue = bulkLogService.findAllBulkLogStatList(search);
+
+        // 리턴값 설정
+        resultListMessage.setTotalCnt(returnValue.getTotalPages());
+        resultListMessage.setList(returnValue.getContent());
+
+
+        ResultDTO<ResultListDTO<BulkLogVO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 벌크 전송 상세정보 조회
+     *
+     * @param search 검색조건
+     * @return API목록
+     */
+    @ApiOperation(value = "벌크 전송 상세정보 조회")
+    @GetMapping("/stat-list-info")
+    public ResponseEntity<?> getBulkLogStatListByInfo(@Valid @SearchParam BulkLogTotalIdDTO search) {
+
+        ResultListDTO<BulkLogVO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<BulkLogVO> returnValue = bulkLogService.findAllBulkLogStatListByInfo(search);
 
         // 리턴값 설정
         resultListMessage.setTotalCnt(returnValue.getTotalPages());

@@ -15,7 +15,7 @@ import lombok.Setter;
 
 
 /**
- * 벌크 모니터링 로그
+ * 벌크 모니터링 리스트 검색
  */
 @AllArgsConstructor
 @Setter

@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.bulklog.service;
 
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogSearchDTO;
+import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalIdDTO;
 import jmnet.moka.core.tps.mvc.bulklog.mapper.BulkLogMapper;
 import jmnet.moka.core.tps.mvc.bulklog.repository.BulkLogRepository;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkTotalLogVO;
@@ -45,4 +46,9 @@ public class BulkLogServiceImpl implements BulkLogService {
         return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }
 
+    @Override
+    public Page<BulkLogVO> findAllBulkLogStatListByInfo(BulkLogTotalIdDTO searchDTO) {
+        List<BulkLogVO> list = bulkLogMapper.findAllListInfo(searchDTO);
+        return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
+    }
 }

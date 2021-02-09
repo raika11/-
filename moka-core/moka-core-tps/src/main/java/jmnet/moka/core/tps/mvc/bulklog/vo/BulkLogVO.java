@@ -153,4 +153,22 @@ public class BulkLogVO {
      */
     private String remarkStatus;
 
+    /**
+     * 시작일시
+     */
+    private Date startDt;
+
+    /**
+     * 종료일시
+     */
+    private Date endDt;
+
+    /**
+     * 포털구분(기타코드BULK_SITE)
+     */
+    private String portalDiv;
+    /**
+     * 콘텐트
+     */
+    private String content;
 }

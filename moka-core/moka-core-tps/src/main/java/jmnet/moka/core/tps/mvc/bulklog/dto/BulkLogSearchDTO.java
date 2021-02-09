@@ -32,6 +32,12 @@ public class BulkLogSearchDTO extends SearchDTO {
     @ApiModelProperty("매체코드")
     private String sourceCode;
 
+    /**
+     * 전송 진행중인 목록 체크(진행+오류)
+     */
+    @ApiModelProperty("진행+오류만 보기(체크 Y)")
+    private String status;
+
     public BulkLogSearchDTO() {
         super(BulkLogVO.class, "totalId,desc");
         super.setUseTotal(MokaConstants.YES);

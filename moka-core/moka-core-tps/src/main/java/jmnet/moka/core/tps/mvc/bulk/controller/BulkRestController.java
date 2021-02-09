@@ -248,8 +248,8 @@ public class BulkRestController extends AbstractCommonController {
         BulkSaveDTO search = modelMapper.map(bulk, BulkSaveDTO.class);
         naverBulkService.getRevised(search);
         Integer resultJhotRevised = search.getReturnValue();
-        if(resultJhotRevised != 1){
-            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND JHOTREVISED]",true);
+        if (resultJhotRevised != 1) {
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND JHOTREVISED]", true);
             new InvalidDataException(msg("tps.common.error.invalidContent"));
         }
 
@@ -329,7 +329,8 @@ public class BulkRestController extends AbstractCommonController {
 
                 // 결과리턴
                 BulkDTO dto = modelMapper.map(returnValue, BulkDTO.class);
-                ResultDTO<BulkDTO> resultDto = new ResultDTO<>(dto);
+                String message = msg(MokaConstants.STATUS_SAVE.equals(bulkSave.getStatus()) ? "tps.bulk.success.insert" : "tps.bulk.success.publish");
+                ResultDTO<BulkDTO> resultDto = new ResultDTO<>(dto, message);
 
                 // 액션 로그에 성공 로그 출력
                 tpsLogger.success(ActionType.INSERT);

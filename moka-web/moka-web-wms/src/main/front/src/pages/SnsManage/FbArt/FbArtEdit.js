@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Row, Col, Figure, Button } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import commonUtil from '@utils/commonUtil';
+import { snsNames } from '@/constants';
 import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialState, publishSnsMeta } from '@store/snsManage';
 import toast from '@utils/toastUtil';
-import { snsNames } from '@/constants';
+import commonUtil from '@utils/commonUtil';
 import imageEditer from '@utils/imageEditorUtil';
 import { MokaCard, MokaInputLabel, MokaInput, MokaImage } from '@components';
 import { EditThumbModal } from '@pages/Desking/modals';
@@ -133,14 +133,14 @@ const FbArtEdit = () => {
             {/* 기사정보 */}
             <div>
                 <Row className="m-0">
-                    <Col xs={4} className="p-0 pr-2"></Col>
+                    <Col xs={4} className="p-0 pr-12"></Col>
                     <Col xs={8} className="p-0 text-neutral">
                         ID {edit.totalId}
                     </Col>
                 </Row>
 
                 <Row className="m-0 mb-2">
-                    <Col xs={4} className="p-0 pr-2 d-flex align-items-center">
+                    <Col xs={4} className="p-0 pr-12 d-flex align-items-center">
                         <p className="mb-0 h4 font-weight-bold color-gray-800">원본 기사</p>
                     </Col>
                     <Col xs={8} className="p-0">
@@ -149,63 +149,61 @@ const FbArtEdit = () => {
                 </Row>
 
                 <Row className="m-0">
-                    <Col xs={4} className="p-0 pr-2">
-                        <MokaImage width={159} img={edit.article.imgUrl} />
+                    <Col xs={4} className="p-0 pr-12">
+                        <MokaImage width={155} img={edit.article.imgUrl} />
                     </Col>
                     <Col xs={8} className="p-0">
-                        <MokaInput as="textarea" className="resize-none custom-scroll" value={edit.article.summary} inputProps={{ readOnly: true, rows: 6 }} />
+                        <MokaInput as="textarea" className="resize-none custom-scroll bg-white" value={edit.article.summary} inputProps={{ readOnly: true, rows: 6 }} />
                     </Col>
                 </Row>
             </div>
 
-            <hr className="divider" />
+            <hr className="divider my-32" />
 
             {/* 페이스북 메타 정보 */}
             <div>
-                <Row className="m-0">
-                    <Col xs={5} className="p-0">
-                        <p className="h6 mb-0">페이스북 메타 정보</p>
+                <Row className="m-0 mb-2">
+                    <Col xs={4} className="p-0 pr-12 d-flex align-items-center">
+                        <p className="mb-0 h4 font-weight-bold color-gray-800">페이스북 메타 정보</p>
+                    </Col>
+                    <Col xs={8} className="p-0">
+                        <MokaInputLabel
+                            labelClassName="d-flex"
+                            label="사용유무"
+                            labelWidth={47}
+                            as="switch"
+                            name="usedYn"
+                            id="temp-status"
+                            variant="positive"
+                            onChange={(e) => {
+                                handleChangeEditValue(e, true);
+                            }}
+                            inputProps={{ checked: edit.fb.usedYn }}
+                        />
                     </Col>
                 </Row>
 
-                <Row className="mb-2">
-                    <Col xs={4} className="p-0">
-                        <p className="text-danger mb-0 ft-12">SNS 이미지 (850*350 px)</p>
-                    </Col>
-                    <MokaInputLabel
-                        labelClassName="d-flex"
-                        label="사용유무"
-                        as="switch"
-                        name="usedYn"
-                        id="temp-status"
-                        variant="positive"
-                        onChange={(e) => {
-                            handleChangeEditValue(e, true);
-                        }}
-                        inputProps={{ label: '', checked: edit.fb.usedYn }}
-                    />
-                </Row>
+                <Row className="m-0 mb-2">
+                    <Col xs={4} className="p-0 pr-12 d-flex flex-column justify-content-between">
+                        <div className="d-flex flex-column justify-content-start">
+                            <MokaImage width={155} img={edit.fb.imgUrl} className="mb-1" />
+                            <p className="text-danger mb-0">SNS 이미지 (850*350px)</p>
+                        </div>
+                        <div>
+                            <Button
+                                variant="gray-700"
+                                onClick={() => {
+                                    setShowEditThumbModal(true);
+                                }}
+                                size="sm"
+                                className="mr-1"
+                            >
+                                신규등록
+                            </Button>
 
-                <Row className="mb-2">
-                    <Col xs={4} className="p-0 pr-2">
-                        <Figure.Image className="mb-0" src={edit.fb.imgUrl} />
-                        <div className="d-flex justify-content-end mb-0 pt-3">
-                            <div className="d-flex justify-content-end">
-                                <Button
-                                    variant="positive"
-                                    onClick={() => {
-                                        setShowEditThumbModal(true);
-                                    }}
-                                    size="sm"
-                                    className="mr-2"
-                                >
-                                    신규 등록
-                                </Button>
-
-                                <Button variant="outline-neutral" size="sm" onClick={handleEditClick}>
-                                    편집
-                                </Button>
-                            </div>
+                            <Button variant="outline-gray-700" size="sm" onClick={handleEditClick}>
+                                편집
+                            </Button>
                         </div>
                     </Col>
 
@@ -222,9 +220,9 @@ const FbArtEdit = () => {
                     </Col>
                 </Row>
 
-                <Row className="mb-2">
-                    <Col xs={12} className="p-0">
-                        <div className="d-flex justify-content-end">수정정보 {edit.article.snsRegDt}</div>
+                <Row className="m-0 mb-2">
+                    <Col xs={12} className="p-0 d-flex justify-content-end">
+                        <span className="ft-12">수정정보 {edit.article.snsRegDt}</span>
                     </Col>
                 </Row>
             </div>

@@ -399,7 +399,7 @@ const SnsMetaEdit = () => {
                 </Form.Row>
             </Form>
 
-            <hr />
+            <hr className="divider" />
 
             {/* 트위터 */}
             <div className="d-flex mb-2 w-100">

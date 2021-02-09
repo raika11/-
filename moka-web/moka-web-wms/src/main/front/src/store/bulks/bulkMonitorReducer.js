@@ -7,7 +7,8 @@ import { PAGESIZE_OPTIONS } from '@/constants';
 export const bmInitialState = {
     total: 0,
     error: null,
-    list: [],
+    totalList: [],
+    sendList: [],
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
@@ -16,7 +17,7 @@ export const bmInitialState = {
         useTotal: '',
         orgSourceCode: null,
         orgSourceName: null,
-        contentDiv: null,
+        portalDiv: null,
         status: 'Y',
         startDt: moment().format('YYYY-MM-DD'),
         endDt: moment().format('YYYY-MM-DD'),
@@ -32,7 +33,7 @@ export default handleActions(
         [act.CLEAR_BM_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.total = bmInitialState.total;
-                draft.list = bmInitialState.list;
+                draft.totalList = bmInitialState.totalList;
                 draft.error = bmInitialState.error;
             });
         },
@@ -54,15 +55,30 @@ export default handleActions(
          */
         [act.GET_BULK_STAT_TOTAL_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.total = body.totalCnt;
-                draft.list = body.list;
+                draft.totalList = body.list;
                 draft.error = bmInitialState.error;
             });
         },
         [act.GET_BULK_STAT_TOTAL_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
+                draft.totalList = bmInitialState.list;
+                draft.error = payload;
+            });
+        },
+        /**
+         * 벌크 모니터링 전송 목록 조회
+         */
+        [act.GET_BULK_STAT_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.total = body.totalCnt;
+                draft.sendList = body.list;
+                draft.error = bmInitialState.error;
+            });
+        },
+        [act.GET_BULK_STAT_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
                 draft.total = bmInitialState.total;
-                draft.list = bmInitialState.list;
+                draft.sendList = bmInitialState.list;
                 draft.error = payload;
             });
         },

@@ -149,6 +149,7 @@ const BulkSiteSelector = (props) => {
         } else {
             setSiteList(bulkSiteRows.map((site, idx) => ({ ...site, index: idx })));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulkSiteRows]);
 
     useEffect(() => {

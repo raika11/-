@@ -1,17 +1,20 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useCallback, forwardRef, useImperativeHandle } from 'react';
 
-const RcvProgsRenderer = (props) => {
-    const { value, onClick, data, colDef } = props;
-    const valueRef = useRef(null);
+/**
+ * 벌크 모니터링 전송 목록 테이블 상태
+ */
+const RcvProgsRenderer = forwardRef((props, ref) => {
+    const { value, onClick } = props;
 
-    let cn = value === '실패' ? 'mb-0 color-primary' : 'mb-0';
-    let dtKey = `${colDef.field}Dt`;
+    useImperativeHandle(ref, () => ({
+        refresh: () => false,
+    }));
 
     const handleClick = useCallback(
         (e) => {
             e.stopPropagation();
             e.preventDefault();
-            // console.log(data);
+
             if (onClick) {
                 onClick(value);
             }
@@ -19,14 +22,25 @@ const RcvProgsRenderer = (props) => {
         [onClick, value],
     );
 
-    return (
-        <>
-            <p ref={valueRef} className={cn} onClick={handleClick}>
-                {value}
+    if (Number(value) < 0) {
+        return (
+            <p className="mb-0 color-primary" onClick={handleClick}>
+                실패
             </p>
-            {Object.keys(data).includes(dtKey) && <p className="mb-0">{data[dtKey]}</p>}
-        </>
-    );
-};
+        );
+    } else if (Number(value) >= 10) {
+        return (
+            <p className="mb-0" onClick={handleClick}>
+                성공
+            </p>
+        );
+    } else {
+        return (
+            <p className="mb-0" onClick={handleClick}>
+                진행
+            </p>
+        );
+    }
+});
 
 export default RcvProgsRenderer;

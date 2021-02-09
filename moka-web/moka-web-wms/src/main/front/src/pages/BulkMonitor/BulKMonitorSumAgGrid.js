@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
-import { GET_BULK_STAT_TOTAL, changeBmSearchOption, getBulkStatTotal } from '@/store/bulks';
+import { GET_BULK_STAT_TOTAL } from '@/store/bulks';
 import columnDefs from './BulkMonitorSumAgGridColumns';
 
 /**
  * 벌크 모니터링 현황
  */
 const BulKMonitorSumAgGrid = () => {
-    const dispatch = useDispatch();
     const search = useSelector((store) => store.bulkMonitor.search);
-    const totalList = useSelector((store) => store.bulkMonitor.list);
+    const totalList = useSelector((store) => store.bulkMonitor.totalList);
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_TOTAL]);
 
     return (

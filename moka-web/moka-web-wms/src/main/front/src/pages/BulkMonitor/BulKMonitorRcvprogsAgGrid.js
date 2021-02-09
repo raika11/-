@@ -1,19 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
-import { MokaLoader, MokaPagination } from '@/components';
-import columnDefs, { list } from './BulKMonitorRcvprogsAgGridColumns.js';
-import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import RcvProgsRenderer from './components/RcvProgsRenderer.js';
+import { MokaLoader } from '@/components';
+import columnDefs from './BulKMonitorRcvprogsAgGridColumns.js';
 import RcvprogsModal from './modals/RcvprogsModal.js';
+import { GET_BULK_STAT_LIST } from '@/store/bulks';
+
+const propTypes = {};
+
+const defaultProps = {
+    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
+};
 
 /**
  * 벌크 모니터링 목록
  */
 const BulKMonitorRcvprogsAgGrid = () => {
-    const [total] = useState(0);
-    const [loading] = useState(false);
-    const [search] = useState({ page: 0, size: 20 });
+    const search = useSelector((store) => store.bulkMonitor.search);
+    const sendList = useSelector((store) => store.bulkMonitor.sendList);
+    const loading = useSelector((store) => store.loading[GET_BULK_STAT_LIST]);
     const [rowData, setRowData] = useState([]);
     const [showRcvprogsModal, setShowRcvprogsModal] = useState(false);
     const [modalData, setModalData] = useState(null);
@@ -43,24 +49,15 @@ const BulKMonitorRcvprogsAgGrid = () => {
     };
 
     /**
-     * 테이블 검색 옵션 변경
-     * @param {object} payload 변경된 값
-     */
-    const handleChangeSearchOption = useCallback((search) => console.log(search), []);
-
-    /**
      * 목록 Row클릭
      */
-    const handleRowClicked = useCallback(
-        (row) => {
-            if (preventRowClickCell.includes(row.colDef.field)) {
-                return;
-            } else {
-                console.log(row);
-            }
-        },
-        [preventRowClickCell],
-    );
+    const handleRowClicked = (row) => {
+        if (preventRowClickCell.includes(row.colDef.field)) {
+            return;
+        } else {
+            console.log(row);
+        }
+    };
 
     const handleClickValue = (value) => {
         if (value === '완료' || value === '실패') {
@@ -71,16 +68,20 @@ const BulKMonitorRcvprogsAgGrid = () => {
         }
     };
 
+    const handleClickBulkLog = (value) => {};
+
     useEffect(() => {
         // row 생성
-        setRowData(
-            list.map((data) => ({
-                ...data,
-                handleClickValue,
-                // handleClickPreview,
-            })),
-        );
-    }, []);
+        if (sendList.length > 0) {
+            setRowData(
+                sendList.map((data) => ({
+                    ...data,
+                    handleClickValue,
+                    handleClickBulkLog,
+                })),
+            );
+        }
+    }, [sendList]);
 
     return (
         <>
@@ -92,30 +93,21 @@ const BulKMonitorRcvprogsAgGrid = () => {
                         wrapText: true,
                         autoHeight: true,
                     }}
-                    // onGridReady={onGridReady}
-                    getRowNodeId={(params) => params.seqNo}
+                    localeText={{ noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' }}
+                    getRowNodeId={(params) => params.orgSourceName}
                     columnDefs={columnDefs}
-                    frameworkComponents={{ RcvProgsRenderer: RcvProgsRenderer }}
-                    // localeText={localeText}
                     getRowHeight={getRowHeight}
                     onColumnResized={onColumnResized}
                     onColumnVisible={onColumnVisible}
                     onCellClicked={handleRowClicked}
                 />
             </div>
-            <div className="mt-3">
-                <MokaPagination
-                    total={total}
-                    page={search.page}
-                    size={search.size}
-                    displayPageNum={DISPLAY_PAGE_NUM}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    pageSizes={PAGESIZE_OPTIONS}
-                />
-            </div>
             <RcvprogsModal show={showRcvprogsModal} onHide={() => setShowRcvprogsModal(false)} data={modalData} />
         </>
     );
 };
+
+BulKMonitorRcvprogsAgGrid.propTypes = propTypes;
+BulKMonitorRcvprogsAgGrid.defaultProps = defaultProps;
 
 export default BulKMonitorRcvprogsAgGrid;

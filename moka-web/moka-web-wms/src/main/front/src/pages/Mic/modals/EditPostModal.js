@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { GET_MIC_POST, SAVE_MIC_POST } from '@store/mic';
-import { MokaModal, MokaInputLabel } from '@components';
+import { MokaModal, MokaInputLabel, MokaImage } from '@components';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 
 /**
@@ -213,23 +213,24 @@ const EditPostModal = (props) => {
             />
 
             {/* 페이지 이미지 */}
-            <MokaInputLabel
-                as="imageFile"
-                ref={imgRef}
-                labelWidth={72}
-                label={
-                    <React.Fragment>
-                        페이지 이미지
-                        <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
-                            신규등록
-                        </Button>
-                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
-                            편집
-                        </Button>
-                    </React.Fragment>
-                }
-                inputProps={{ img: post.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: handleImgFile, deleteButton: true }}
-            />
+            <div className="d-flex">
+                <MokaInputLabel
+                    as="none"
+                    labelWidth={72}
+                    label={
+                        <React.Fragment>
+                            페이지 이미지
+                            <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
+                                신규등록
+                            </Button>
+                            <Button variant="outline-gray-700" size="sm" className="w-100" onClick={(e) => imgRef.current.rootRef.onClick(e)}>
+                                편집
+                            </Button>
+                        </React.Fragment>
+                    }
+                />
+                <MokaImage img={post.answerRel?.artThumbnail} width={178} />
+            </div>
         </MokaModal>
     );
 };

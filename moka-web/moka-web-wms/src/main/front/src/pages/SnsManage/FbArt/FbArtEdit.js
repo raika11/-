@@ -144,7 +144,7 @@ const FbArtEdit = () => {
                         <p className="mb-0 h4 font-weight-bold color-gray-800">원본 기사</p>
                     </Col>
                     <Col xs={8} className="p-0">
-                        <MokaInput value={edit.article.title} inputProps={{ plaintext: true }} className="font-weight-bold" />
+                        <MokaInput value={edit.article.title} inputProps={{ plaintext: true }} className="font-weight-bold" disabled />
                     </Col>
                 </Row>
 

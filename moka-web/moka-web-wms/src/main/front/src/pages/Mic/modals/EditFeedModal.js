@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { GET_MIC_FEED, SAVE_MIC_FEED } from '@store/mic';
-import { MokaModal, MokaInputLabel } from '@components';
+import { MokaModal, MokaInputLabel, MokaImage } from '@components';
 import commonUtil from '@utils/commonUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import imageEditer from '@utils/imageEditorUtil';
@@ -321,23 +321,24 @@ const EditFeedModal = (props) => {
                             value={feed.answerRel?.artSummary}
                             onChange={handleChangeValue}
                         />
-                        <MokaInputLabel
-                            as="imageFile"
-                            ref={imgRef}
-                            labelWidth={72}
-                            label={
-                                <React.Fragment>
-                                    페이지 이미지
-                                    <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={() => setArcShow(true)}>
-                                        신규등록
-                                    </Button>
-                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
-                                        편집
-                                    </Button>
-                                </React.Fragment>
-                            }
-                            inputProps={{ img: feed.answerRel?.artThumbnail, width: 178, height: 100, setFileValue: (o) => handleImgFile(o, 'artThumbnail'), deleteButton: true }}
-                        />
+                        <div className="d-flex">
+                            <MokaInputLabel
+                                as="none"
+                                labelWidth={72}
+                                label={
+                                    <React.Fragment>
+                                        페이지 이미지
+                                        <Button variant="gray-700" size="sm" className="my-1 w-100" onClick={() => setArcShow(true)}>
+                                            신규등록
+                                        </Button>
+                                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={handleEditClick}>
+                                            편집
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                            />
+                            <MokaImage img={feed.answerRel?.artThumbnail} width={178} />
+                        </div>
 
                         {/* 포토 아카이브 모달 */}
                         <EditThumbModal

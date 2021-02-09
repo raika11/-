@@ -8,25 +8,35 @@ import img_logo from '@assets/images/img_logo.png';
  * @param {object} params ag grid params
  */
 const MokaTableImageRenderer = forwardRef((params, ref) => {
-    const { data: initialData, colDef } = params;
+    const { colDef } = params;
     const [field] = useState(colDef.field);
-    const [data, setData] = useState(initialData);
-
+    const [data, setData] = useState(params.node.data);
     const boxRef = useRef(null);
     const imgRef = useRef(null);
 
+    const onError = (e) => {
+        e.target.src = img_logo;
+        boxRef.current.classList.add('onerror-image-wrap');
+        e.target.classList.add('onerror-image');
+    };
+
+    const onLoad = (e) => {
+        if (e.target.src.replace(window.location.origin, '') !== img_logo) {
+            boxRef.current.classList.remove('onerror-image-wrap');
+            e.target.classList.remove('onerror-image');
+        }
+    };
+
     useImperativeHandle(ref, () => ({
         refresh: (params) => {
-            if (params.data[field] !== data[field]) {
-                setData(params.data);
-            }
-            return false;
+            setData(params.node.data);
+            return true;
         },
     }));
 
     return (
         <div className="d-flex h-100 w-100 align-items-center justify-content-center bg-white border overflow-hidden position-relative" ref={boxRef}>
-            <img src={data?.[field] || img_logo} className="center-image" ref={imgRef} alt={data?.imgAlt || ''} />
+            <img src={data?.[field] || img_logo} className="center-image" ref={imgRef} alt={data?.imgAlt || ''} onError={onError} onLoad={onLoad} />
         </div>
     );
 });

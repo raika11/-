@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, forwardRef } from 'react';
+import React, { useRef, forwardRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-bootstrap/Dropdown';
 import BSImage from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import util from '@utils/commonUtil';
 import { MokaIcon } from '@components';
 
 const propTypes = {
@@ -26,10 +25,12 @@ const propTypes = {
     img: PropTypes.string,
     /**
      * alt 이미지 alt
+     * @default
      */
     alt: PropTypes.string,
     /**
      * 템플릿 데이터
+     * @default
      */
     data: PropTypes.shape({
         templateName: PropTypes.string,
@@ -38,6 +39,7 @@ const propTypes = {
     }),
     /**
      * 오른쪽 드롭다운 메뉴에 리스트 객체
+     * @default
      */
     menus: PropTypes.arrayOf(
         PropTypes.shape({
@@ -47,6 +49,7 @@ const propTypes = {
     ),
     /**
      * 선택 여부
+     * @default
      */
     selected: PropTypes.bool,
 };

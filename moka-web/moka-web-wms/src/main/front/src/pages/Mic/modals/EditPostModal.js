@@ -6,8 +6,6 @@ import Button from 'react-bootstrap/Button';
 import { GET_MIC_POST, SAVE_MIC_POST } from '@store/mic';
 import { MokaModal, MokaInputLabel } from '@components';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { unescapeHtmlArticle } from '@utils/convertUtil';
-import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
 /**
  * 포스트 관리 모달
@@ -15,9 +13,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 const EditPostModal = (props) => {
     const { show, onHide, agenda, post, onChange, onSave, onDelete } = props;
     const loading = useSelector(({ loading }) => loading[GET_MIC_POST] || loading[SAVE_MIC_POST]);
-    const PDS_URL = useSelector(({ app }) => app.PDS_URL);
     const [error, setError] = useState({});
-    const [mshow, setMshow] = useState(false);
     const imgRef = useRef(null);
 
     /**
@@ -82,25 +78,6 @@ const EditPostModal = (props) => {
                 artThumbnail: !data ? null : post.answerRel?.artThumbnail,
             },
         });
-    };
-
-    /**
-     * 기사 변경
-     * @param {object} articleData 기사데이터
-     */
-    const handleChangeArticle = (articleData) => {
-        onChange({
-            key: 'answerRel',
-            value: {
-                ...post.answerRel,
-                artTitle: unescapeHtmlArticle(articleData.artTitle),
-                relUrl: '',
-                artThumbnail: articleData.artThumb ? `${PDS_URL}${articleData.artThumb}` : null,
-                artThumbnailFile: undefined,
-            },
-        });
-        setError({ ...error, artTitle: false });
-        setMshow(false);
     };
 
     /**
@@ -185,7 +162,7 @@ const EditPostModal = (props) => {
             {/* 단문(수정불가) */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="단문" labelWidth={72} as="none" />
-                <div style={{ maxHeight: 150 }} className="custom-scroll w-100 p-2 input-border pre-wrap user-select-text">
+                <div style={{ maxHeight: 150 }} className="custom-scroll w-100 p-2 input-border pre-wrap user-select-text ft-14">
                     {post.answMemo}
                 </div>
             </Form.Row>
@@ -193,28 +170,22 @@ const EditPostModal = (props) => {
             {/* 장문(수정불가) */}
             <Form.Row className="mb-2">
                 <MokaInputLabel label="장문" labelWidth={72} as="none" />
-                <div style={{ maxHeight: 140 }} className="custom-scroll pr-2 pre-wrap user-select-text d-flex align-items-center">
+                <div style={{ maxHeight: 140 }} className="custom-scroll pr-2 pre-wrap user-select-text d-flex align-items-center ft-14">
                     {post.answMemoLong}
                 </div>
             </Form.Row>
 
             {/* 페이지 URL */}
-            <div className="d-flex mb-2">
-                <MokaInputLabel
-                    label="페이지 URL"
-                    labelWidth={72}
-                    className="flex-fill"
-                    name="relUrl"
-                    value={post.answerRel?.relUrl}
-                    onChange={handleChangeValue}
-                    isInvalid={error.relUrl}
-                    required
-                />
-                <Button variant="searching" className="flex-shrink-0 ml-2" onClick={() => setMshow(true)}>
-                    기사 검색
-                </Button>
-                <ArticleListModal show={mshow} onHide={() => setMshow(false)} onRowClicked={handleChangeArticle} />
-            </div>
+            <MokaInputLabel
+                label="페이지 URL"
+                labelWidth={72}
+                className="mb-2"
+                name="relUrl"
+                value={post.answerRel?.relUrl}
+                onChange={handleChangeValue}
+                isInvalid={error.relUrl}
+                required
+            />
 
             {/* 페이지 제목 */}
             <MokaInputLabel

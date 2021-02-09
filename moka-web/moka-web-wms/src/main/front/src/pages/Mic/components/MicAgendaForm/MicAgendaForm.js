@@ -3,13 +3,14 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInputLabel } from '@components';
 import BackgroundImageForm from './BackgroundImageForm';
-import RelArticleForm from './RelArticleForm';
+// import RelArticleForm from './RelArticleForm';
+import RelArticleTable from './RelArticleTable';
 import RelationPollModal from '@pages/Survey/Poll/modals/RelationPollModal';
 
 /**
  * 시민마이크 아젠다 폼
  */
-const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, error }) => {
+const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categoryAllList, error, gridInstance, setGridInstance }) => {
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [cts, setCts] = useState([]);
     const [show, setShow] = useState(false);
@@ -238,7 +239,8 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             <hr className="divider" />
 
             {/* 관련기사 1,2,3,4 */}
-            <RelArticleForm agenda={agenda} onChange={onChange} />
+            {/* <RelArticleForm agenda={agenda} onChange={onChange} /> */}
+            <RelArticleTable agenda={agenda} gridInstance={gridInstance} setGridInstance={setGridInstance} />
         </Form>
     );
 };

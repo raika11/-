@@ -20,3 +20,16 @@ export const getRowIndex = (event) => {
     }
     return -1;
 };
+
+/**
+ * ag grid의 displayed rows 목록 조회
+ * @param {object} api agGrid api
+ */
+export const getDisplayedRows = (gridApi) => {
+    let displayedRows = [];
+    for (let i = 0; i < gridApi.getDisplayedRowCount(); i++) {
+        const data = gridApi.getDisplayedRowAtIndex(i).data;
+        displayedRows.push(data);
+    }
+    return displayedRows;
+};

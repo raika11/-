@@ -6,6 +6,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { SAVE_MIC_CATEGORY, saveMicCategory } from '@store/mic';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { getDisplayedRows } from '@utils/agGridUtil';
 import columnDefs from './CategoryModalAgGridColumns';
 import InputRenderer from '../components/InputRenderer';
 import CategorySelectRenderer from '../components/CategorySelectRenderer';
@@ -22,18 +23,6 @@ const CategoryModal = (props) => {
     const [error, setError] = useState(false);
     const [instance, setInstance] = useState(null);
     const [draggable, setDraggable] = useState(true);
-
-    /**
-     * ag grid rows 조회
-     */
-    const getRows = (api) => {
-        let displayedRows = [];
-        for (let i = 0; i < api.getDisplayedRowCount(); i++) {
-            const data = api.getDisplayedRowAtIndex(i).data;
-            displayedRows.push(data);
-        }
-        return displayedRows;
-    };
 
     /**
      * 그리드 onGridReady
@@ -73,7 +62,7 @@ const CategoryModal = (props) => {
             return;
         }
 
-        const displayedRows = getRows(instance.api);
+        const displayedRows = getDisplayedRows(instance.api);
 
         // 기존 리스트에서 중복 체크
         const duplicated = displayedRows.filter((row) => row.catNm === keyword);
@@ -117,7 +106,7 @@ const CategoryModal = (props) => {
      * 수정
      */
     const handleEdit = () => {
-        const displayedRows = getRows(instance.api);
+        const displayedRows = getDisplayedRows(instance.api);
 
         // 갯수 체크
         if (displayedRows.length < 1) {
@@ -157,7 +146,7 @@ const CategoryModal = (props) => {
      * @param {object} params grid instance
      */
     const handleDragEnd = (params) => {
-        const displayedRows = getRows(params.api);
+        const displayedRows = getDisplayedRows(params.api);
         const ordered = displayedRows.map((data, idx) => ({
             ...data,
             ordNo: idx + 1,

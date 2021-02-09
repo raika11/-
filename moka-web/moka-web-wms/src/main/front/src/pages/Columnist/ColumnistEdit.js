@@ -476,8 +476,7 @@ const ColumnistEdit = ({ history, match }) => {
                     }
                     ref={imgFileRef}
                     inputProps={{
-                        height: 200,
-                        width: 200,
+                        width: 267,
                         img: selectRepoterData.profilePhoto,
                         selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
                         setFileValue,

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import produce from 'immer';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@components';
 import EditDeskingPartModal from '../modals/EditDeskingPartModal';

@@ -17,9 +17,7 @@ import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 moment.locale('ko');
 
 const EditThumbDropzone = (props) => {
-    const { collapse, setCollapse } = props;
-    const { onThumbClick, onRepClick, setRepPhoto } = props;
-    const { cropWidth, cropHeight } = props;
+    const { collapse, setCollapse, onThumbClick, onRepClick, setRepPhoto } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);

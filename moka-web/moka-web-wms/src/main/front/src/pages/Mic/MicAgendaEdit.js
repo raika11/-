@@ -8,6 +8,7 @@ import { DB_DATEFORMAT } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { invalidListToError } from '@utils/convertUtil';
+import { getDisplayedRows } from '@utils/agGridUtil';
 import MicAgendaForm from './components/MicAgendaForm/index';
 
 moment.locale('ko');
@@ -27,6 +28,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     }));
     const AGENDA_ARTICLE_PROGRESS = useSelector(({ app }) => app.AGENDA_ARTICLE_PROGRESS); //  기사화 단계
     const [temp, setTemp] = useState(initialState.agenda);
+    const [gridInstance, setGridInstance] = useState(null);
     const [error, setError] = useState({});
 
     /**
@@ -65,8 +67,9 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
         // 공개일 포맷 변환
         let agndServiceDt = moment(temp.agndServiceDt);
         agndServiceDt = agndServiceDt.isValid() ? agndServiceDt.format(DB_DATEFORMAT) : null;
-
-        const saveObj = { ...temp, agndServiceDt };
+        // 관련기사 목록
+        const relArticleList = getDisplayedRows(gridInstance.api);
+        const saveObj = { ...temp, agndServiceDt, relArticleList };
 
         if (validate(saveObj)) {
             dispatch(
@@ -166,6 +169,8 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
                 categoryAllList={categoryAllList.filter((cate) => cate.usedYn === 'Y')}
                 setError={setError}
                 onChange={handleChangeValue}
+                gridInstance={gridInstance}
+                setGridInstance={setGridInstance}
             />
         </MokaCard>
     );

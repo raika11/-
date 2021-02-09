@@ -13,7 +13,7 @@ import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
  */
 const AgGrid = forwardRef((props, ref) => {
-    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, show } = props;
+    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption } = props;
     const { PDS_URL, IR_URL } = useSelector((store) => ({
         PDS_URL: store.app.PDS_URL,
         IR_URL: store.app.IR_URL,

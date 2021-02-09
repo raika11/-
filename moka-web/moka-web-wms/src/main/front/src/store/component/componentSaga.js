@@ -1,7 +1,6 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 import { startLoading, finishLoading } from '@store/loading';
-
 import * as act from './componentAction';
 import * as api from './componentApi';
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -35,7 +34,6 @@ const defaultProps = {
  */
 const RelationInPageList = (props) => {
     const { show, relSeqType, relSeq } = props;
-    const history = useHistory();
     const dispatch = useDispatch();
 
     const { search: storeSearch, list, total, error, loading, latestDomainId, domainList } = useSelector((store) => ({

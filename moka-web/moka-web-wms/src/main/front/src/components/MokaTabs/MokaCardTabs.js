@@ -77,7 +77,9 @@ const MokaCardTabs = (props) => {
             if (onSelectNav) {
                 onSelectNav(Number(eventKey));
             }
-            e.currentTarget.blur();
+            if (e) {
+                e.currentTarget.blur();
+            }
         },
         [onSelectNav],
     );

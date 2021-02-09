@@ -196,7 +196,7 @@ const ArticleList = (props) => {
     }, [sourceOn]);
 
     return (
-        <div className={clsx('d-flex flex-column h-100 py-3 px-card', className)}>
+        <div className={clsx('d-flex flex-column h-100', className)}>
             <Search
                 search={search}
                 period={period}

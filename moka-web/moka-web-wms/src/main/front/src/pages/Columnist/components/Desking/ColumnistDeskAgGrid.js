@@ -6,7 +6,7 @@ import { GET_COLUMNIST_LIST, getColumnistList, changeSearchOption } from '@store
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
 const ColumnistDeskAgGrid = forwardRef((props, ref) => {
-    const { onDragStop, dropTargetAgGrid } = props;
+    // const { onDragStop, dropTargetAgGrid } = props;
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
 
@@ -45,7 +45,7 @@ const ColumnistDeskAgGrid = forwardRef((props, ref) => {
                     ...data,
                     regDt,
                     modDt,
-                    profile: data.profile.replaceAll('\n', ' / '),
+                    profile: (data.profile || '').replaceAll('\n', ' / '),
                 };
             }),
         );

@@ -58,7 +58,13 @@ const MokaImage = (props) => {
     };
 
     useEffect(() => {
-        setImgSrc(img);
+        if (img) {
+            setImgSrc(img);
+        } else {
+            setImgSrc(img_logo);
+            wrapRef.current.classList.add('onerror-image-wrap');
+            imgRef.current.classList.add('onerror-image');
+        }
     }, [img]);
 
     return (

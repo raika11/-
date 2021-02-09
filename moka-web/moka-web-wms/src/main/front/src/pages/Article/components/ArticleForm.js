@@ -463,8 +463,9 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                                 </div>
                             </div>
                         </Col>
-                        <Col xs={5} className="d-flex p-0 pl-3">
-                            <MokaInputLabel label="종류" labelWidth={50} as="none" />
+                        <Col xs={5} className="d-flex p-0">
+                            <hr class="vertical-divider" />
+                            <MokaInputLabel label="종류" labelWidth={30} as="none" />
                             <div className="d-flex flex-column flex-fill">
                                 <div>
                                     <MokaInput as="checkbox" className="mr-2 float-left ft-12" inputProps={{ label: '로그인', custom: true, readOnly: true }} />

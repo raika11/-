@@ -19,7 +19,7 @@ const ReporterList = forwardRef((props, ref) => {
     }, [dispatch, show]);
 
     return (
-        <div className={clsx('d-flex flex-column h-100 py-3 px-card', className)}>
+        <div className={clsx('d-flex flex-column h-100', className)}>
             <ReporterDeskSearch selectedComponent={selectedComponent} show={show} />
             <ReporterDeskAgGrid ref={ref} dropTargetAgGrid={dropTargetAgGrid} onDragStop={onDragStop} />
         </div>

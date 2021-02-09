@@ -62,7 +62,6 @@ const DeskingArticleTab = (props) => {
             if (nav === '기사') {
                 return (
                     <ArticleList
-                        className="pb-3"
                         selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         onDragStop={handleArticleDragStop}
@@ -75,7 +74,6 @@ const DeskingArticleTab = (props) => {
             else if (nav === '영상') {
                 return (
                     <ArticleMediaList
-                        className="pb-3"
                         selectedComponent={selectedComponent}
                         dropTargetAgGrid={componentAgGridInstances}
                         dropTargetComponent={componentList}
@@ -89,7 +87,6 @@ const DeskingArticleTab = (props) => {
             else if (nav === '기자') {
                 return (
                     <ReporterList
-                        className="pb-3"
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
                         dropTargetComponent={componentList}
@@ -102,7 +99,6 @@ const DeskingArticleTab = (props) => {
             else if (nav === '칼럼니스트') {
                 return (
                     <ColumnistList
-                        className="pb-3"
                         selectedComponent={{}}
                         dropTargetAgGrid={componentAgGridInstances}
                         dropTargetComponent={componentList}

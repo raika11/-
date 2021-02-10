@@ -41,7 +41,7 @@ public class ReserveJobHandler {
      */
     @PostConstruct
     public void initSchedulerMap() {
-        // todo 작업 목록을 조회하여 미실행된 status_flag = 0인 9인 작업 예약 작업으로 추가
+        // todo 1. 작업 목록을 조회하여 미실행된 status_flag = 0인 9인 작업 예약 작업으로 추가
     }
 
     /**
@@ -50,7 +50,10 @@ public class ReserveJobHandler {
      * @param reserveJob 작업 정보
      */
     public boolean addReserveJob(ReserveJobDTO reserveJob) {
-        // todo 작업 정보로 GenContent 조회
+        /**
+         * todo 2. 작업 정보로 GenContent 조회
+         * - 작업 정보의 컬럼명은 확정되지 않음
+         */
         GenContent genContent = null;
 
         return addReserveJob(reserveJob, genContent);
@@ -83,7 +86,7 @@ public class ReserveJobHandler {
      */
     public boolean removeReserveJob(Long reserveJobProcSeq) {
 
-        // todo 예약 작업 테이블에 del_yn을 'N'으로 변경
+        // todo 3. 예약 작업 테이블에 del_yn을 'N'으로 변경
         return false;
     }
 

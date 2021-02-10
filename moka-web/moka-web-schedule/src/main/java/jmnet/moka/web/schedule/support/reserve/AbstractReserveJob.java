@@ -39,14 +39,14 @@ public abstract class AbstractReserveJob implements ReserveJob {
      * 초기화
      */
     protected void init() {
-        
+
     }
 
     /**
      * 마무리 처리
      */
-    public void finish() {
-        // todo 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
+    public void finish(Long taskSeq) {
+        // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class AbstractReserveJob implements ReserveJob {
         } catch (Exception ex) {
             logger.error("schedule invoke error ", ex);
         } finally {
-            finish();
+            finish(taskSeq);
         }
 
     }

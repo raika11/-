@@ -50,7 +50,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      * 마무리 처리
      */
     public void finish() {
-        // todo 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
+        // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
     }
 
     @Override

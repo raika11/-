@@ -95,7 +95,6 @@ const PageListModal = (props) => {
      */
     const handleClickSave = () => {
         if (onClickSave) onClickSave(selectedPage);
-        handleHide();
     };
 
     /**

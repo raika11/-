@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getOvpList, GET_OVP_LIST } from '@store/bright';
@@ -78,24 +77,20 @@ const OvpList = ({ show, resultVId, setResultVId }) => {
     }, [ovpList]);
 
     return (
-        <div className="d-flex flex-column overflow-hidden px-card  pt-3 h-100">
-            <Form className="mb-2">
-                <Form.Row>
-                    <MokaSearchInput
-                        placeholder="검색어를 입력하세요"
-                        className="flex-fill mr-2"
-                        name="keyword"
-                        value={search.keyword}
-                        onChange={handleChangeValue}
-                        onSearch={handleSearch}
-                        inputClassName="ft-12"
-                        buttonClassName="ft-12"
-                    />
-                    <Button variant="negative" className="ft-12" onClick={() => setSearch(initialState.ovp.search)}>
-                        초기화
-                    </Button>
-                </Form.Row>
-            </Form>
+        <div className="d-flex flex-column overflow-hidden h-100">
+            <div className="mb-2 d-flex">
+                <MokaSearchInput
+                    placeholder="검색어를 입력하세요"
+                    className="flex-fill mr-2"
+                    name="keyword"
+                    value={search.keyword}
+                    onChange={handleChangeValue}
+                    onSearch={handleSearch}
+                />
+                <Button variant="negative" className="flex-shrink-0" onClick={() => setSearch(initialState.ovp.search)}>
+                    초기화
+                </Button>
+            </div>
 
             <MokaTable
                 loading={loading}

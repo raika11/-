@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
 import { messageBox } from '@utils/toastUtil';
@@ -84,13 +82,11 @@ const AreaAgGridDepth3 = ({ areaDepth2, areaDepth3, setAreaDepth3, onDelete, fla
 
     return (
         <MokaCard header={false} width={280} className="mr-gutter" bodyClassName="d-flex flex-column">
-            <Form.Row className="mb-2">
-                <Col xs={12} className="p-0 d-flex justify-content-end">
-                    <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth2?.area?.areaSeq}>
-                        추가
-                    </Button>
-                </Col>
-            </Form.Row>
+            <div className="d-flex justify-content-end mb-2">
+                <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth2?.area?.areaSeq}>
+                    추가
+                </Button>
+            </div>
 
             <MokaTable
                 className="overflow-hidden flex-fill"

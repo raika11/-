@@ -27,16 +27,16 @@ const EditDeskingWorkModal = (props) => {
     const dispatch = useDispatch();
 
     const loading = useSelector(
-        (store) =>
-            store.loading[PUT_DESKING_WORK] ||
-            store.loading[GET_BULK_CHAR] ||
-            store.loading[GET_DS_FONT_IMGD] ||
-            store.loading[GET_DS_FONT_IMGW] ||
-            store.loading[GET_DS_FONT_VODD] ||
-            store.loading[GET_DS_ICON] ||
-            store.loading[GET_DS_PRE] ||
-            store.loading[GET_DS_PRE_LOC] ||
-            store.loading[GET_DS_TITLE_LOC],
+        ({ loading }) =>
+            loading[PUT_DESKING_WORK] ||
+            loading[GET_BULK_CHAR] ||
+            loading[GET_DS_FONT_IMGD] ||
+            loading[GET_DS_FONT_IMGW] ||
+            loading[GET_DS_FONT_VODD] ||
+            loading[GET_DS_ICON] ||
+            loading[GET_DS_PRE] ||
+            loading[GET_DS_PRE_LOC] ||
+            loading[GET_DS_TITLE_LOC],
     );
     // const { IR_URL, PHOTO_ARCHIVE_URL } = useSelector((store) => ({
     //     IR_URL: store.app.IR_URL,
@@ -130,6 +130,27 @@ const EditDeskingWorkModal = (props) => {
         setFileValue(file);
     };
 
+    /**
+     * 이미지 편집
+     */
+    const handleEditClick = () => {
+        imageEditer.create(
+            temp.thumbFileName,
+            (imageSrc) => {
+                (async () => {
+                    await fetch(imageSrc)
+                        .then((r) => r.blob())
+                        .then((blobFile) => {
+                            const file = commonUtil.blobToFile(blobFile, deskingWorkData.seq);
+                            setFileValue(file);
+                            setTemp({ ...temp, irImg: imageSrc, thumbFileName: imageSrc });
+                        });
+                })();
+            },
+            { cropWidth: 300, cropHeight: 300 },
+        );
+    };
+
     useEffect(() => {
         // deskingPart 안에서 폰트사이즈 분리
         if (!deskingPartStr || deskingPartStr === '') return;
@@ -170,24 +191,6 @@ const EditDeskingWorkModal = (props) => {
             setError({});
         };
     }, []);
-
-    const handleEditClick = () => {
-        imageEditer.create(
-            temp.thumbFileName,
-            (imageSrc) => {
-                (async () => {
-                    await fetch(imageSrc)
-                        .then((r) => r.blob())
-                        .then((blobFile) => {
-                            const file = commonUtil.blobToFile(blobFile, deskingWorkData.seq);
-                            setFileValue(file);
-                            setTemp({ ...temp, irImg: imageSrc, thumbFileName: imageSrc });
-                        });
-                })();
-            },
-            { cropWidth: 300, cropHeight: 300 },
-        );
-    };
 
     return (
         <MokaModal
@@ -234,10 +237,10 @@ const EditDeskingWorkModal = (props) => {
                                     <MokaImage img={temp.irImg} width={216} height={150} />
                                 </div>
                                 <div className="d-flex flex-column justify-content-end ml-2">
-                                    <Button variant="positive" size="sm" onClick={() => setShowModal(true)} className="mb-2">
+                                    <Button variant="gray-700" size="sm" onClick={() => setShowModal(true)} className="mb-2">
                                         신규등록
                                     </Button>
-                                    <Button variant="outline-neutral" size="sm" onClick={handleEditClick}>
+                                    <Button variant="outline-gray-700" size="sm" onClick={handleEditClick}>
                                         편집
                                     </Button>
                                 </div>
@@ -272,7 +275,7 @@ const EditDeskingWorkModal = (props) => {
                 cropWidth={component?.cropWidth}
                 onHide={() => setShowModal(false)}
                 contentId={deskingWorkData.contentId}
-                saveFileName={deskingWorkData.seq}
+                saveFileName={String(deskingWorkData.seq)}
                 thumbFileName={temp.thumbFileName}
                 apply={handleThumbFileApply}
             />

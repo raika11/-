@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
 import { initialState, getAreaListModal, getAreaModal, changeSelectedDepth } from '@store/area';
@@ -87,13 +85,11 @@ const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, setAreaDepth2, setAreaDep
     return (
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
-                <Form.Row className="mb-2">
-                    <Col xs={12} className="p-0 d-flex justify-content-end">
-                        <Button variant="positive" onClick={handleClickAdd}>
-                            추가
-                        </Button>
-                    </Col>
-                </Form.Row>
+                <div className="d-flex justify-content-end mb-2">
+                    <Button variant="positive" onClick={handleClickAdd}>
+                        추가
+                    </Button>
+                </div>
 
                 <MokaTable
                     className="overflow-hidden flex-fill"

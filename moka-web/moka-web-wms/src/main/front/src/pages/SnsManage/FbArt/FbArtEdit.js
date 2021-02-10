@@ -114,7 +114,7 @@ const FbArtEdit = () => {
     return (
         <MokaCard
             width={550}
-            title={`페이스북 메타 ${true ? '편집' : '등록'}`}
+            title={`페이스북 메타 ${true ? '정보' : '등록'}`}
             titleClassName="mb-0"
             loading={loading}
             footer

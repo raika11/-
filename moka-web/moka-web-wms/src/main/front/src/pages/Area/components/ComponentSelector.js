@@ -36,7 +36,7 @@ const ComponentSelector = ({ component, areaComp, setAreaComp, compOptions, onCh
                 ))}
             </MokaInput>
             {component.dataType === 'DESK' && (
-                <Button variant="outline-neutral" className="ft-12 ml-2 flex-shrink-0" onClick={handleOpenModal} disabled={!component.componentSeq}>
+                <Button variant="outline-neutral" className="ml-2 flex-shrink-0" onClick={handleOpenModal} disabled={!component.componentSeq}>
                     편집파트 수정
                 </Button>
             )}

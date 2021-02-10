@@ -3,6 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
+import Badge from 'react-bootstrap/Badge';
 import { MokaIcon } from '@components';
 
 const propTypes = {
@@ -282,9 +283,9 @@ const EditThumbCard = forwardRef((props, ref) => {
                                     >
                                         <MokaIcon iconName="fas-pencil" />
                                     </Button>
-                                    <Button size="sm" style={{ position: 'absolute', bottom: '5px', left: '5px' }} as="a">
+                                    <Badge variant="positive" style={{ position: 'absolute', bottom: '5px', left: '5px' }}>
                                         대표 이미지
-                                    </Button>
+                                    </Badge>
                                 </React.Fragment>
                             )}
                         </div>

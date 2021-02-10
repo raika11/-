@@ -54,7 +54,7 @@ const LiveList = ({ show, resultVId, setResultVId, OVP_PREVIEW_URL }) => {
     }, [handleClickPreview, liveList]);
 
     return (
-        <div className="px-card pt-3">
+        <div>
             <MokaTable
                 loading={loading}
                 agGridHeight={190}

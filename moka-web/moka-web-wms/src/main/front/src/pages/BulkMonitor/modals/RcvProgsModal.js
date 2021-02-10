@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import { MokaModal } from '@/components';
 
-const RcvprogsModal = (props) => {
+const RcvProgsModal = (props) => {
     const { show, onHide, data } = props;
     const [message, setMessage] = useState('');
     const [xml, setXml] = useState('');
@@ -44,4 +44,4 @@ const RcvprogsModal = (props) => {
     );
 };
 
-export default RcvprogsModal;
+export default RcvProgsModal;

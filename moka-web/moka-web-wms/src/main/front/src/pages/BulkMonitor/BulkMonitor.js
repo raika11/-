@@ -2,8 +2,8 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { MokaCard } from '@/components';
 import BulkMonitorSearch from './BulkMonitorSearch';
-import BulKMonitorSumAgGrid from './BulKMonitorSumAgGrid';
-//import BulKMonitorRcvprogsAgGrid from './BulKMonitorRcvprogsAgGrid';
+import BulkMonitorSumAgGrid from './BulkMonitorSumAgGrid';
+import BulkMonitorRcvprogsAgGrid from './BulkMonitorRcvprogsAgGrid';
 
 /**
  * 벌크 모니터링
@@ -23,11 +23,11 @@ const BulkMonitor = () => {
 
                 {/* 벌크 모니터링 현황 */}
                 <div className="d-flex justify-content-center">
-                    <BulKMonitorSumAgGrid />
+                    <BulkMonitorSumAgGrid />
                 </div>
 
                 {/* 벌크 전송 목록 */}
-                {/* <BulKMonitorRcvprogsAgGrid /> */}
+                <BulkMonitorRcvprogsAgGrid />
             </MokaCard>
         </>
     );

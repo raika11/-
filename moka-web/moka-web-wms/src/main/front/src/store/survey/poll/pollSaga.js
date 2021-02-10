@@ -52,7 +52,13 @@ function toPollListData(list, codes) {
 function* getPollList({ type, payload }) {
     yield put(startLoading(type));
     try {
-        const response = yield call(pollApi.getPollList, { search: payload.search });
+        let search = payload.search;
+        if (commonUtil.isEmpty(search.status) || search.status === '') {
+            search = produce(search, (draft) => {
+                draft['status'] = ['S', 'T'];
+            });
+        }
+        const response = yield call(pollApi.getPollList, { search });
 
         if (response.data.header.success) {
             const codes = yield select((store) => store.poll.codes);

@@ -2,7 +2,7 @@ import instance from '@store/commons/axios';
 import qs from 'qs';
 
 export const getPollList = ({ search }) => {
-    const queryString = qs.stringify(search);
+    const queryString = qs.stringify(search, { arrayFormat: 'repeat' });
     return instance.get(`/api/polls?${queryString}`).catch((err) => {
         throw err;
     });

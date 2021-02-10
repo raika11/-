@@ -179,7 +179,7 @@ const PollChildRelation = () => {
                 footer
                 footerClassName="justify-content-center"
                 footerButtons={[
-                    { text: '저장', variant: 'positive', onClick: handleChangeSave, className: 'mr-05' },
+                    { text: '저장', variant: 'positive', onClick: handleChangeSave, className: 'mr-05', useAuth: true },
                     { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
                 ]}
                 loading={loading}

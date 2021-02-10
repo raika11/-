@@ -68,7 +68,7 @@ const Poll = ({ match }) => {
                         onSelectNav={(idx) => setActiveTabIdx(idx)}
                         tabs={[
                             <Suspense fallback={<MokaLoader />}>
-                                <PollEdit show={activeTabIdx === 0} />
+                                <PollEdit show={activeTabIdx === 0} onDelete={handleClickDelete} />
                             </Suspense>,
                             <Suspense fallback={<MokaLoader />}>
                                 <PollChildRelation show={activeTabIdx === 1} />

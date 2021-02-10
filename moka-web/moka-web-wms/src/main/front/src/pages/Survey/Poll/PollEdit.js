@@ -19,7 +19,7 @@ import { selectArticleItemChange, selectArticleListChange } from '@store/survey/
 
 const tempItem = { imgUrl: null, linkUrl: '', pollSeq: 1897, title: '' };
 
-const PollEdit = () => {
+const PollEdit = ({ onDelete }) => {
     const { pollSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -141,25 +141,36 @@ const PollEdit = () => {
         }
     }, [dispatch, poll]);
 
-    return (
-        <MokaCard
-            title="투표 등록"
-            className="w-100"
-            footer
-            footerClassName="justify-content-center"
-            footerButtons={[
+    const getFooterButtons = () => {
+        let buttons = [
+            {
+                text: '저장',
+                variant: 'positive',
+                onClick: handleClickSave,
+                className: 'mr-05',
+                useAuth: true,
+            },
+            { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
+        ];
+        if (!commonUtil.isEmpty(edit.pollSeq)) {
+            buttons = [
                 {
-                    text: '저장',
+                    text: '수정',
                     variant: 'positive',
                     onClick: handleClickSave,
                     className: 'mr-05',
                     useAuth: true,
                 },
+                { text: '삭제', variant: 'negative', onClick: () => onDelete(edit.pollSeq), className: 'mr-05', useAuth: true },
                 { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
-            ]}
-            width={570}
-            loading={loading}
-        >
+            ];
+        }
+
+        return buttons;
+    };
+
+    return (
+        <MokaCard title="투표 등록" className="w-100" footer footerClassName="justify-content-center" footerButtons={getFooterButtons()} width={570} loading={loading}>
             <Form>
                 <Form.Row className="mb-2 justify-content-between">
                     <Col xs={6}>

@@ -4,14 +4,27 @@
     align-items: center;
 
     .custom-control-label::before {
-        top: 0.14rem;
+        top: 0.1rem;
     }
 
     .custom-control-label::after {
-        top: 0.14rem;
+        top: 0.1rem;
     }
 }
 
 .custom-control-label {
     font-size: 12px;
+}
+
+.custom-switch {
+    .custom-control-label {
+        margin-top: 1px;
+
+        &::before {
+            margin-top: -1px;
+        }
+        &::after {
+            margin-top: -1px;
+        }
+    }
 }

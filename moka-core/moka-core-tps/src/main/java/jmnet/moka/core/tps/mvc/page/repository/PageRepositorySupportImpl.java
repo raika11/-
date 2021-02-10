@@ -99,7 +99,7 @@ public class PageRepositorySupportImpl extends TpsQueryDslRepositorySupport impl
                 builder.and(page.pageServiceName.contains(keyword));
             } else if (searchType.equals(TpsConstants.SEARCH_TYPE_ALL)) {
                 builder.and(page.pageSeq
-                        .like(keyword)
+                        .like('%' + keyword + '%')
                         .or(page.pageName.contains(keyword))
                         .or(page.pageServiceName.contains(keyword)));
             }

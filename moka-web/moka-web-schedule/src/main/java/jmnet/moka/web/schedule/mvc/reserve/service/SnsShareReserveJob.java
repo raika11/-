@@ -1,5 +1,6 @@
 package jmnet.moka.web.schedule.mvc.reserve.service;
 
+import jmnet.moka.web.schedule.mvc.reserve.dto.ReserveJobDTO;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class SnsShareReserveJob extends AbstractReserveJob {
 
 
     @Override
-    public void invoke() {
+    public void invoke(ReserveJobDTO reserveJob, Long taskSeq) {
         // 작업 테이블에서 조회하여
         log.debug("비동기 예약 작업 처리 : {}", reserveJob.getJobSeq());
     }

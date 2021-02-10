@@ -1,12 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
-
 import { changeLatestDomainId } from '@store/auth';
 import { getTemplateList, changeSearchOption, initialState } from '@store/template';
 import { getTpSize, getTpZone } from '@store/codeMgt';
@@ -28,6 +26,18 @@ const TemplateSearch = () => {
         shallowEqual,
     );
     const [search, setSearch] = React.useState(initialState.search);
+
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
+        setSearch({
+            ...search,
+            [name]: value,
+        });
+    };
 
     /**
      * 검색
@@ -122,16 +132,7 @@ const TemplateSearch = () => {
             <Form.Row className="mb-2">
                 {/* 템플릿 위치그룹 */}
                 <Col xs={7} className="p-0 pr-2">
-                    <MokaInput
-                        as="select"
-                        value={search.templateGroup}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                templateGroup: e.target.value,
-                            });
-                        }}
-                    >
+                    <MokaInput as="select" name="templateGroup" value={search.templateGroup} onChange={handleChangeValue}>
                         <option value="all">위치그룹 전체</option>
                         {tpZoneRows &&
                             tpZoneRows.map((cd) => (
@@ -156,37 +157,17 @@ const TemplateSearch = () => {
             </Form.Row>
             <Form.Group as={Row}>
                 {/* 검색조건 */}
-                <Col xs={4} className="p-0 pr-2">
-                    <MokaInput
-                        as="select"
-                        value={search.searchType || undefined}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                searchType: e.target.value,
-                            });
-                        }}
-                    >
+                <div className="mr-2 flex-shrink-0">
+                    <MokaInput as="select" name="searchType" value={search.searchType || undefined} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
                                 {type.name}
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
+                </div>
                 {/* 키워드 */}
-                <Col xs={8} className="p-0">
-                    <MokaSearchInput
-                        value={search.keyword}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                keyword: e.target.value,
-                            });
-                        }}
-                        onSearch={handleSearch}
-                    />
-                </Col>
+                <MokaSearchInput className="flex-fill" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
             </Form.Group>
         </Form>
     );

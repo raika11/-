@@ -8,103 +8,6 @@ body {
     letter-spacing: -0.5px;
     color: $gray-600;
     font-size: 13px;
-
-    .signin-main{
-        color:$white;
-            
-        h1{
-            color:$white;
-        }
-        .card{ 
-            width: 500px !important;
-            background: rgba($black, 0.4);
-            padding: 30px;
-        }
-        .form-group{
-            border-bottom: 1px solid $white;
-            &:first-child{
-                margin-bottom: 45px !important;
-            }
-            label{
-                font-size: 1.5em;
-            }
-            input{
-                border:0;
-                color: $white;
-                background-color: transparent;
-                display: inline-block;
-                width: calc(100% - 1.5em);
-                &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-                    color: $white;
-                    opacity: 1; /* Firefox */
-                }
-            }
-        }
-        .user-info{
-            > *{
-                display: inline-block;
-            }
-            .password-error{
-                float: right;
-                span{
-                    color: $primary
-                }
-            }
-        }
-        .signin-btn{
-            margin-top: 60px;
-            margin-bottom: 40px;
-            button{
-                padding: 13px !important;
-                font-size: 15px;
-            }
-        }
-        .etc-btn{
-            font-size: 15px;
-            label{
-                cursor: pointer;
-                span{
-                    color: #FFB495;
-                }
-            }
-        }
-        input[type=checkbox]:after {
-            width: 15px;
-            height: 15px;
-            top: -2px;
-            left: -1px;
-            position: relative;
-            content: '';
-            display: inline-block;
-            visibility: visible;
-            background-color:  $white;
-            border: 1px solid $primary;
-            box-shadow: none !important;
-            line-height: 15px;
-            text-align: center;
-        }
-            
-        input[type=checkbox]:checked:after {
-            width: 15px;
-            height: 15px;
-            top: -3px;
-            left: -1px;
-            position: relative;
-            background-color: $primary;
-            content: '\2714';
-            display: inline-block;
-            visibility: visible;
-            border: 1px solid $primary;
-            box-shadow: none !important;
-            color:  $white !important;
-            line-height: 15px;
-        }
-    }
-    
-}
-
-.gap {
-    margin-right: 10px;
 }
 
 .custom-scroll {
@@ -158,6 +61,108 @@ body {
 
 .onerror-image {
     padding: 0 15%;
+}
+
+/* -----------------------
+* sign In
+* ---------------------- */
+.signin-main{
+    color: $white;
+
+    h1 {
+        color:$white;
+    }
+
+    .card { 
+        width: 500px !important;
+        background: rgba($black, 0.4);
+        padding: 30px;
+    }
+
+    .form-group {
+        border-bottom: 1px solid $white;
+        &:first-child{
+            margin-bottom: 45px !important;
+        }
+        label{
+            font-size: 1.5em;
+            color: $white;
+        }
+        input{
+            border:0;
+            color: $white;
+            background-color: transparent;
+            display: inline-block;
+            width: calc(100% - 1.5em);
+            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: $white;
+                opacity: 1; /* Firefox */
+            }
+        }
+    }
+
+    .user-info {
+        > *{
+            display: inline-block;
+        }
+        .password-error{
+            float: right;
+            span{
+                color: $primary
+            }
+        }
+    }
+
+    .signin-btn {
+        margin-top: 60px;
+        margin-bottom: 40px;
+        button{
+            padding: 13px !important;
+            font-size: 15px;
+        }
+    }
+
+    .etc-btn {
+        font-size: 15px;
+        label{
+            cursor: pointer;
+            span{
+                color: #FFB495;
+            }
+        }
+    }
+
+    input[type=checkbox]:after {
+        width: 15px;
+        height: 15px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        background-color:  $white;
+        border: 1px solid $primary;
+        box-shadow: none !important;
+        line-height: 15px;
+        text-align: center;
+    }
+        
+    input[type=checkbox]:checked:after {
+        width: 15px;
+        height: 15px;
+        top: -3px;
+        left: -1px;
+        position: relative;
+        background-color: $primary;
+        content: '\2714';
+        display: inline-block;
+        visibility: visible;
+        border: 1px solid $primary;
+        box-shadow: none !important;
+        color:  $white !important;
+        line-height: 15px;
+    }
 }
 
 /* -----------------------

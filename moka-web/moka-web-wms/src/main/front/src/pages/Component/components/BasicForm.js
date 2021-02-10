@@ -37,12 +37,14 @@ const BasicForm = (props) => {
                         <Button variant="positive" className="mr-2" onClick={onClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" className="mr-2" onClick={onClickCancle}>
+                        <Button variant="negative" onClick={onClickCancle}>
                             취소
                         </Button>
-                        <Button variant="negative" onClick={onClickDelete} disabled={btnDisabled}>
-                            삭제
-                        </Button>
+                        {!btnDisabled && (
+                            <Button variant="negative" onClick={onClickDelete} className="ml-2">
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </Col>
             </Form.Row>

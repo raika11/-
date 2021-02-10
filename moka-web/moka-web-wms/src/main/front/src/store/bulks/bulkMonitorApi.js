@@ -8,3 +8,11 @@ export const getBulkStatTotal = ({ search }) => {
         throw err;
     });
 };
+
+// 벌크 모니터링 전송 목록 조회
+export const getBulkStatList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/bulkLogs/stat-list?${queryString}`).catch((err) => {
+        throw err;
+    });
+};

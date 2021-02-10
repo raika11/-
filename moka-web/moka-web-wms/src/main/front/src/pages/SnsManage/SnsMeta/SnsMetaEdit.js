@@ -252,7 +252,7 @@ const SnsMetaEdit = () => {
     return (
         <MokaCard
             width={550}
-            title={`메타 ${true ? '정보' : '등록'}`}
+            title={`메타 ${true ? '편집' : '등록'}`}
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[

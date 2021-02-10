@@ -24,12 +24,6 @@
     .ag-header {
         display: none;
     }
-
-    .ag-root-wrapper {
-        border-top: solid $table-border-width;
-        border-bottom: solid $table-border-width;
-        border-color: $table-border-color;
-    }
 }
 
 .ag-layout-normal {
@@ -131,6 +125,14 @@
         }
     }
 
+    &.ag-header-no {
+        .ag-root-wrapper {
+            border-top: solid $table-border-width;
+            border-bottom: solid $table-border-width;
+            border-color: $table-border-color;
+        }
+    }
+
     &:not(.article-list) .ag-checkbox-input-wrapper {
         border-radius: 50%;
         font-size: 18px;
@@ -187,13 +189,13 @@ $row-hover-color: darken($desking-row-color, 5);
         )
     );
 
-    .ag-root-wrapper-body {
-        overflow: hidden;
-        height: unset !important;
-        min-height: unset !important;
-    }
-
     .ag-root-wrapper {
+        .ag-root-wrapper-body {
+            overflow: hidden;
+            height: unset !important;
+            min-height: unset !important;
+        }
+
         .ag-body-viewport {
             @include custom-scroll;
             overflow-y: auto;

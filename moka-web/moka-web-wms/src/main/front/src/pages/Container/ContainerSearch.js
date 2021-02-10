@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaSearchInput } from '@components';
-
 import { initialState, getContainerList, changeSearchOption } from '@store/container';
 import { changeLatestDomainId } from '@store/auth';
 
@@ -92,7 +89,7 @@ const ContainerSearch = () => {
                 ))}
             </MokaInput>
             <Form.Group as={Row}>
-                <Col xs={5} className="p-0 pr-2">
+                <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" value={search.searchType} onChange={handleChangeSearchOption} name="searchType">
                         {searchTypeList.map((searchType) => (
                             <option key={searchType.id} value={searchType.id}>
@@ -100,10 +97,8 @@ const ContainerSearch = () => {
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
-                <Col xs={7} className="p-0">
-                    <MokaSearchInput value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
-                </Col>
+                </div>
+                <MokaSearchInput className="flex-fill" value={search.keyword} onChange={handleChangeSearchOption} onSearch={handleSearch} name="keyword" />
             </Form.Group>
         </Form>
     );

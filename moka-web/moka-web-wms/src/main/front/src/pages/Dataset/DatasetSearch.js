@@ -101,7 +101,7 @@ const DatasetSearch = ({ match }) => {
                 </Col>
             </Form.Row>
             <Form.Row className="mb-2">
-                <Col xs={5} className="p-0 pr-2">
+                <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue} value={search.searchType}>
                         {initialState.searchTypeList.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -109,10 +109,8 @@ const DatasetSearch = ({ match }) => {
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
-                <Col xs={7} className="p-0">
-                    <MokaSearchInput name="keyword" value={search.keyword} onChange={handleChangeSearchValue} onSearch={handleClickSearch} />
-                </Col>
+                </div>
+                <MokaSearchInput className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeSearchValue} onSearch={handleClickSearch} />
             </Form.Row>
             <div className="d-flex justify-content-end">
                 <Button variant="positive" onClick={handleClickAddDataSet}>

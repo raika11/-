@@ -23,17 +23,10 @@ const PageEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[PREVIEW_PAGE] || loading[W3C_PAGE]);
-    const { PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(({ app }) => ({
-        PAGE_TYPE_HTML: app.PAGE_TYPE_HTML,
-        EXCLUDE_PAGE_SERVICE_NAME_LIST: app.EXCLUDE_PAGE_SERVICE_NAME_LIST,
-    }));
+    const { PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(({ app }) => app);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const pageTypeRows = useSelector(({ codeMgt }) => codeMgt.pageTypeRows);
-    const { page, pageBody, invalidList } = useSelector(({ page }) => ({
-        page: page.page,
-        pageBody: page.pageBody,
-        invalidList: page.invalidList,
-    }));
+    const { page, pageBody, invalidList } = useSelector(({ page }) => page);
 
     // state
     const [temp, setTemp] = useState(initialState.page);
@@ -237,9 +230,7 @@ const PageEdit = ({ onDelete }) => {
      * 이동URL 팝업 저장 시
      * @param {object} data data
      */
-    const handleClickMoveSave = (data) => {
-        setTemp({ ...temp, moveUrl: data.pageUrl });
-    };
+    const handleClickMoveSave = (data) => setTemp({ ...temp, moveUrl: data.pageUrl });
 
     /**
      * 미리보기 팝업
@@ -320,7 +311,7 @@ const PageEdit = ({ onDelete }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${page.pageSeq ? '정보' : '등록'}`} loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`페이지 ${page.pageSeq ? '편집' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
@@ -336,9 +327,11 @@ const PageEdit = ({ onDelete }) => {
                         <Button variant="positive" className="mr-05" onClick={handleClickSave}>
                             전송
                         </Button>
-                        <Button variant="negative" disabled={btnDisabled} onClick={(e) => onDelete(page)}>
-                            삭제
-                        </Button>
+                        {page.pageSeq && (
+                            <Button variant="negative" onClick={(e) => onDelete(page)}>
+                                삭제
+                            </Button>
+                        )}
                     </div>
                 </Form.Group>
                 {/* 사용여부,페이지 ID */}

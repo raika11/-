@@ -213,7 +213,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
     return (
         <form onSubmit={handleSubmit(handleClickSave)}>
             <MokaCard
-                title="도메인 등록"
+                title={`도메인 ${paramId ? '편집' : '등록'}`}
                 width={820}
                 headerClassName="d-flex justify-content-between align-item-center"
                 loading={loading}
@@ -231,24 +231,24 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                         variant: 'negative',
                         onClick: handleClickCancle,
                     },
-                    {
+                    paramId && {
                         text: '삭제',
                         variant: 'negative',
                         onClick: handleClickDelete,
                         className: 'ml-2',
-                        disabled: !paramId,
                     },
-                ]}
+                ].filter((a) => a)}
             >
-                <div style={{ width: 650, margin: 'auto' }}>
+                <div style={{ width: 730, margin: 'auto' }}>
                     {/* 사용여부 */}
-                    <MokaInputLabel label="사용여부" className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />
+                    <MokaInputLabel label="사용여부" labelWidth={74} className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />
 
                     {/* 도메인ID */}
                     <Form.Row className="mb-2">
                         <Col xs={4} className="p-0">
                             <MokaInputLabel
                                 label="도메인ID"
+                                labelWidth={74}
                                 className="mb-0"
                                 placeholder="ID"
                                 name="domainId"
@@ -272,6 +272,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     {/* 도메인명 */}
                     <MokaInputLabel
                         label="도메인명"
+                        labelWidth={74}
                         className="mb-2"
                         placeholder="도메인 명을 입력하세요"
                         name="domainName"
@@ -287,6 +288,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     {/* 도메인주소 */}
                     <MokaInputLabel
                         label="도메인주소"
+                        labelWidth={74}
                         className="mb-2"
                         placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
                         name="domainUrl"
@@ -304,6 +306,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                         <Col xs={3} className="p-0">
                             <MokaInputLabel
                                 label="플랫폼"
+                                labelWidth={74}
                                 as="radio"
                                 inputProps={{
                                     custom: true,
@@ -338,7 +341,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     {/* 언어 */}
                     <Form.Row className="mb-2">
                         <Col xs={4} className="p-0">
-                            <MokaInputLabel as="select" label="언어" className="mb-0" name="lang" ref={register} uncontrolled>
+                            <MokaInputLabel as="select" label="언어" labelWidth={74} className="mb-0" name="lang" ref={register} uncontrolled>
                                 {langRows &&
                                     langRows.map((row) => (
                                         <option key={row.id} value={row.dtlCd}>
@@ -352,7 +355,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     {/* API 경로 */}
                     <Form.Row className="mb-2">
                         <Col xs={12} className="p-0">
-                            <MokaInputLabel label="API 경로" as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
+                            <MokaInputLabel label="API HOST 경로" labelWidth={74} as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
                                 {apiRows &&
                                     apiRows.map((row) => (
                                         <option key={row.id} value={row.dtlCd}>
@@ -367,6 +370,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     <MokaInputLabel
                         as="textarea"
                         label="메모"
+                        labelWidth={74}
                         className="mb-2"
                         inputClassName="resize-none"
                         inputProps={{ rows: 3 }}

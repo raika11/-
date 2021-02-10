@@ -67,7 +67,7 @@ const DetailPagingForm = (props) => {
                     {component.pagingYn === 'Y' && (
                         <Form.Row>
                             {/* 이전 다음 */}
-                            <Col xs={4} className="d-flex p-0 align-items-center ml-2">
+                            <Col xs={4} className="d-flex p-0 align-items-center">
                                 <MokaInput
                                     as="radio"
                                     id="paging-type-n"

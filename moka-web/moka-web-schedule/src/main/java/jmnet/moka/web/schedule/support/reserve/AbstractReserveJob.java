@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractReserveJob implements ReserveJob {
     private static final Logger logger = LoggerFactory.getLogger(AbstractReserveJob.class);
 
-    protected ReserveJobDTO reserveJob;
     protected GenStatusHistory scheduleHistory;
 
     @Autowired
@@ -39,8 +38,8 @@ public abstract class AbstractReserveJob implements ReserveJob {
     /**
      * 초기화
      */
-    protected void init(ReserveJobDTO reserveJob) {
-        this.reserveJob = reserveJob;
+    protected void init() {
+        
     }
 
     /**
@@ -52,10 +51,10 @@ public abstract class AbstractReserveJob implements ReserveJob {
 
     @Override
     public void asyncTask(ReserveJobDTO reserveJob, Long taskSeq) {
-        init(reserveJob);
+
         try {
             Thread.sleep(McpDate.term(reserveJob.getReserveDt()));
-            invoke();
+            invoke(reserveJob, taskSeq);
         } catch (Exception ex) {
             logger.error("schedule invoke error ", ex);
         } finally {
@@ -67,5 +66,5 @@ public abstract class AbstractReserveJob implements ReserveJob {
     /**
      * 각 Job별 기능 구현
      */
-    public abstract void invoke();
+    public abstract void invoke(ReserveJobDTO reserveJob, Long taskSeq);
 }

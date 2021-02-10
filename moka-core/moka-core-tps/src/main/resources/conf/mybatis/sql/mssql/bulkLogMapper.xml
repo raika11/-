@@ -71,7 +71,7 @@
       ) }
   </select>
 
-    <!-- 벌크 전송 상세정보 조회 -->
+    <!-- 벌크 전송 상세정보/메세지 조회 -->
     <select id="findAllListInfo" parameterType="BulkLogTotalIdDTO" resultType="BulkLogVO"
             statementType="CALLABLE">
         {call UPA_BULK_LOG_LIST_STAT_SEL_BY_INFO(
@@ -80,5 +80,14 @@
         #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
         #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
         ) }
+    </select>
+    <!-- 벌크 전송 목록/메세지 조회 -->
+    <select id="findAllListInfoMsg" parameterType="BulkLogTotalIdDTO" resultType="BulkLogVO"
+            statementType="CALLABLE">
+        {call UPA_BULK_LOG_LIST_STAT_SEL_BY_MSG(
+                #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+                #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
+            ) }
     </select>
 </mapper>

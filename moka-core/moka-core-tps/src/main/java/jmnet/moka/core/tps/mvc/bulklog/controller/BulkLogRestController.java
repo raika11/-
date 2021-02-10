@@ -114,7 +114,7 @@ public class BulkLogRestController extends AbstractCommonController {
      * @param search 검색조건
      * @return API목록
      */
-    @ApiOperation(value = "벌크 전송 상세정보 조회")
+    @ApiOperation(value = "벌크 전송 상세정보/메세지 조회")
     @GetMapping("/stat-list-info")
     public ResponseEntity<?> getBulkLogStatListByInfo(@Valid @SearchParam BulkLogTotalIdDTO search) {
 
@@ -122,6 +122,32 @@ public class BulkLogRestController extends AbstractCommonController {
 
         // 조회
         Page<BulkLogVO> returnValue = bulkLogService.findAllBulkLogStatListByInfo(search);
+
+        // 리턴값 설정
+        resultListMessage.setTotalCnt(returnValue.getTotalPages());
+        resultListMessage.setList(returnValue.getContent());
+
+
+        ResultDTO<ResultListDTO<BulkLogVO>> resultDto = new ResultDTO<>(resultListMessage);
+
+        tpsLogger.success(ActionType.SELECT);
+
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+    /**
+     * 벌크 전송 상세정보 조회
+     *
+     * @param search 검색조건
+     * @return API목록
+     */
+    @ApiOperation(value = "벌크 전송 목록/메세지 조회")
+    @GetMapping("/stat-list-info-msg")
+    public ResponseEntity<?> getBulkLogStatListByInfoMsg(@Valid @SearchParam BulkLogTotalIdDTO search) {
+
+        ResultListDTO<BulkLogVO> resultListMessage = new ResultListDTO<>();
+
+        // 조회
+        Page<BulkLogVO> returnValue = bulkLogService.findAllBulkLogStatListByInfoMsg(search);
 
         // 리턴값 설정
         resultListMessage.setTotalCnt(returnValue.getTotalPages());

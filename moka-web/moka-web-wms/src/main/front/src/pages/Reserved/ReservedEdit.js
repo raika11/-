@@ -6,21 +6,18 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import toast from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
-import { MokaInputLabel } from '@components';
+import { MokaInputLabel, MokaCard } from '@components';
 import { getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
 /**
  * 예약어 정보 컴포넌트
  */
-const ReservedEdit = ({ match, onDelete }) => {
+const ReservedEdit = ({ match, onDelete, loading }) => {
     const { reservedSeq: paramSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, reserved, invalidList } = useSelector((store) => ({
-        reserved: store.reserved.reserved,
-        latestDomainId: store.auth.latestDomainId,
-        invalidList: store.reserved.invalidList,
-    }));
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const { reserved, invalidList } = useSelector(({ reserved }) => reserved);
 
     // state
     const [reservedId, setReservedId] = useState('');
@@ -32,25 +29,6 @@ const ReservedEdit = ({ match, onDelete }) => {
     // error
     const [reservedIdError, setReservedIdError] = useState(false);
     const [reservedValueError, setReservedValueError] = useState(false);
-
-    useEffect(() => {
-        if (paramSeq) {
-            dispatch(getReserved(paramSeq));
-        } else {
-            dispatch(clearReserved());
-        }
-    }, [dispatch, paramSeq]);
-
-    /**
-     * 예약어 데이터 셋팅
-     */
-    useEffect(() => {
-        setReservedId(reserved.reservedId || '');
-        setReservedSeq(reserved.reservedSeq || '');
-        setReservedValue(reserved.reservedValue || '');
-        setdescription(reserved.description || '');
-        setUsedYn(reserved.usedYn || 'N');
-    }, [reserved]);
 
     /**
      * input change
@@ -200,6 +178,25 @@ const ReservedEdit = ({ match, onDelete }) => {
     const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
+        if (paramSeq) {
+            dispatch(getReserved(paramSeq));
+        } else {
+            dispatch(clearReserved());
+        }
+    }, [dispatch, paramSeq]);
+
+    /**
+     * 예약어 데이터 셋팅
+     */
+    useEffect(() => {
+        setReservedId(reserved.reservedId || '');
+        setReservedSeq(reserved.reservedSeq || '');
+        setReservedValue(reserved.reservedValue || '');
+        setdescription(reserved.description || '');
+        setUsedYn(reserved.usedYn || 'N');
+    }, [reserved]);
+
+    useEffect(() => {
         // invalidList 처리
         if (invalidList.length > 0) {
             invalidList.forEach((i) => {
@@ -221,80 +218,82 @@ const ReservedEdit = ({ match, onDelete }) => {
     }, []);
 
     return (
-        <Form>
-            {/* 사용여부 */}
-            <Form.Group className="d-flex mb-2 justify-content-between align-content-center">
-                <MokaInputLabel
-                    label="사용여부"
-                    labelWidth={80}
-                    as="switch"
-                    className="mb-0"
-                    id="usedYn"
-                    name="usedYn"
-                    inputProps={{ label: '', checked: usedYn === 'Y' }}
-                    onChange={handleChangeValue}
-                />
-                {/* 버튼 그룹 */}
-                <Form.Group className="mb-0 d-flex align-items-center">
-                    <Button variant="positive" className="mr-2" onClick={handleClickSave}>
-                        저장
-                    </Button>
-                    <Button variant="negative" onClick={handleClickCancle}>
-                        취소
-                    </Button>
-                    {reserved.reservedSeq && (
-                        <Button variant="negative" className="ml-2" onClick={() => onDelete(reserved)}>
-                            삭제
+        <MokaCard width={780} title={`예약어 ${paramSeq ? '편집' : '등록'}`} loading={loading}>
+            <Form>
+                {/* 사용여부 */}
+                <Form.Group className="d-flex mb-2 justify-content-between align-content-center">
+                    <MokaInputLabel
+                        label="사용여부"
+                        labelWidth={80}
+                        as="switch"
+                        className="mb-0"
+                        id="usedYn"
+                        name="usedYn"
+                        inputProps={{ label: '', checked: usedYn === 'Y' }}
+                        onChange={handleChangeValue}
+                    />
+                    {/* 버튼 그룹 */}
+                    <Form.Group className="mb-0 d-flex align-items-center">
+                        <Button variant="positive" className="mr-2" onClick={handleClickSave}>
+                            저장
                         </Button>
-                    )}
+                        <Button variant="negative" onClick={handleClickCancle}>
+                            취소
+                        </Button>
+                        {reserved.reservedSeq && (
+                            <Button variant="negative" className="ml-2" onClick={() => onDelete(reserved)}>
+                                삭제
+                            </Button>
+                        )}
+                    </Form.Group>
                 </Form.Group>
-            </Form.Group>
-            {/* 예약어 */}
-            <Form.Row>
-                <Col xs={7} className="p-0">
-                    <MokaInputLabel
-                        label="예약어"
-                        labelWidth={80}
-                        className="mb-2"
-                        placeholder="예약어를 입력하세요"
-                        name="reservedId"
-                        inputProps={{ plaintext: paramSeq && true, readOnly: paramSeq && true }}
-                        onChange={handleChangeValue}
-                        isInvalid={reservedIdError}
-                        required
-                        value={reservedId}
-                    />
-                </Col>
-            </Form.Row>
-            {/* 값 */}
-            <Form.Row>
-                <Col xs={12} className="p-0">
-                    <MokaInputLabel
-                        label="값"
-                        labelWidth={80}
-                        className="mb-2"
-                        placeholder="값을 입력하세요"
-                        name="reservedValue"
-                        onChange={handleChangeValue}
-                        isInvalid={reservedValueError}
-                        required
-                        value={reservedValue}
-                    />
-                </Col>
-            </Form.Row>
-            {/* 예약어 설명 */}
-            <MokaInputLabel
-                as="textarea"
-                label="예약어 설명"
-                labelWidth={80}
-                className="mb-0"
-                placeholder="설명을 입력하세요"
-                name="description"
-                inputProps={{ rows: 5 }}
-                onChange={handleChangeValue}
-                value={description}
-            />
-        </Form>
+                {/* 예약어 */}
+                <Form.Row>
+                    <Col xs={7} className="p-0">
+                        <MokaInputLabel
+                            label="예약어"
+                            labelWidth={80}
+                            className="mb-2"
+                            placeholder="예약어를 입력하세요"
+                            name="reservedId"
+                            onChange={handleChangeValue}
+                            isInvalid={reservedIdError}
+                            required
+                            disabled={paramSeq}
+                            value={reservedId}
+                        />
+                    </Col>
+                </Form.Row>
+                {/* 값 */}
+                <Form.Row>
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel
+                            label="값"
+                            labelWidth={80}
+                            className="mb-2"
+                            placeholder="값을 입력하세요"
+                            name="reservedValue"
+                            onChange={handleChangeValue}
+                            isInvalid={reservedValueError}
+                            required
+                            value={reservedValue}
+                        />
+                    </Col>
+                </Form.Row>
+                {/* 예약어 설명 */}
+                <MokaInputLabel
+                    as="textarea"
+                    label="예약어 설명"
+                    labelWidth={80}
+                    className="mb-0"
+                    placeholder="설명을 입력하세요"
+                    name="description"
+                    inputProps={{ rows: 5 }}
+                    onChange={handleChangeValue}
+                    value={description}
+                />
+            </Form>
+        </MokaCard>
     );
 };
 

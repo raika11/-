@@ -20,6 +20,7 @@ import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.common.util.ImageUtil;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
@@ -55,7 +56,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * <pre>
@@ -505,13 +505,13 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
 
     private ArticleSnsShare escapeHtml(ArticleSnsShare articleSnsShare) {
         if (McpString.isNotEmpty(articleSnsShare.getArtTitle())) {
-            articleSnsShare.setArtTitle(HtmlUtils.htmlEscape(articleSnsShare.getArtTitle()));
+            articleSnsShare.setArtTitle(ArticleEscapeUtil.htmlEscape(articleSnsShare.getArtTitle()));
         }
         if (McpString.isNotEmpty(articleSnsShare.getArtSummary())) {
-            articleSnsShare.setArtSummary(HtmlUtils.htmlEscape(articleSnsShare.getArtSummary()));
+            articleSnsShare.setArtSummary(ArticleEscapeUtil.htmlEscape(articleSnsShare.getArtSummary()));
         }
         if (McpString.isNotEmpty(articleSnsShare.getSnsPostMsg())) {
-            articleSnsShare.setSnsPostMsg(HtmlUtils.htmlEscape(articleSnsShare.getSnsPostMsg()));
+            articleSnsShare.setSnsPostMsg(ArticleEscapeUtil.htmlEscape(articleSnsShare.getSnsPostMsg()));
         }
         return articleSnsShare;
     }

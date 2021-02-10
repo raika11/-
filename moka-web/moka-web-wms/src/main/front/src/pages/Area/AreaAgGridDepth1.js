@@ -52,6 +52,7 @@ const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, setAreaDepth2, setAreaDep
      * 목록에서 Row클릭
      */
     const handleRowClicked = (data) => {
+        const nt = new Date().getTime();
         dispatch(
             getAreaModal({
                 areaSeq: data.areaSeq,
@@ -60,7 +61,7 @@ const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, setAreaDepth2, setAreaDep
                         setAreaDepth1(body);
                         setAreaDepth2(initialState.initData);
                         setAreaDepth3(initialState.initData);
-                        setFlag({ ...flag, depth2: new Date().getTime() });
+                        setFlag({ ...flag, depth2: nt, depth3: nt });
                         dispatch(changeSelectedDepth(1));
                     } else {
                         messageBox.alert(header.message);

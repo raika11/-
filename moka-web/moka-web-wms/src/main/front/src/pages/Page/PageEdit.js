@@ -230,7 +230,10 @@ const PageEdit = ({ onDelete }) => {
      * 이동URL 팝업 저장 시
      * @param {object} data data
      */
-    const handleClickMoveSave = (data) => setTemp({ ...temp, moveUrl: data.pageUrl });
+    const handleClickMoveSave = (data) => {
+        setTemp({ ...temp, moveUrl: data.pageUrl });
+        setMoveModalShow(false);
+    };
 
     /**
      * 미리보기 팝업

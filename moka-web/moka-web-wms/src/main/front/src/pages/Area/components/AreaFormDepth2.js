@@ -476,10 +476,10 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                         {temp.areaDiv === ITEM_CT && <ContainerSelector container={container} onChange={handleChangeValue} contOptions={contOptions} error={error} />}
                     </Form.Row>
 
-                    {/* 세로형/가로형 선택 */}
+                    {/* 일반형/가로형 선택 */}
                     <div className="ml-2 flex-shrink-0">
                         <MokaInput as="select" name="areaAlign" className="ft-13" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
-                            <option value={AREA_ALIGN_V}>세로형</option>
+                            <option value={AREA_ALIGN_V}>일반형</option>
                             {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
                         </MokaInput>
                     </div>

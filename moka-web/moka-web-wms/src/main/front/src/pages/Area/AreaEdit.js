@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Form1 from './components/AreaFormDepth1';
 import Form2 from './components/AreaFormDepth2';
+import { messageBox } from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
 const AreaEdit = ({ onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listDepth2, listDepth3, flag }) => {
@@ -14,7 +15,16 @@ const AreaEdit = ({ onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listD
      * 페이지선택 모달의 저장버튼
      * @param {object} data page
      */
-    const handleClickSave = (data) => setPage(data);
+    const handleClickSave = (data) => {
+        messageBox.confirm(
+            '페이지 정보가 변경되어 컴포넌트&컨테이너 정보가 초기화됩니다.',
+            () => {
+                setPage(data);
+                setModalShow(false);
+            },
+            () => {},
+        );
+    };
 
     useEffect(() => {
         if (selectedDepth === 1) {

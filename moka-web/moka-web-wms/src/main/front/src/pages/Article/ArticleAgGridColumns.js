@@ -1,4 +1,3 @@
-import React from 'react';
 import ArticleActionBtn from './components/ArticleActionBtn';
 import ArticleViewBtn from './components/ArticleViewBtn';
 import SourceRenderer from './components/SourceRenderer';
@@ -12,14 +11,14 @@ export default [
         wrapText: true,
         autoHeight: true,
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <SourceRenderer {...row} />,
+        cellRendererFramework: SourceRenderer,
     },
     {
         headerName: '보기',
         field: 'view',
         width: 110,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <ArticleViewBtn {...row} />,
+        cellRendererFramework: ArticleViewBtn,
     },
     {
         headerName: '제목',
@@ -30,7 +29,7 @@ export default [
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
         wrapText: true,
         autoHeight: true,
-        cellRendererFramework: (row) => <TitleRenderer {...row} />,
+        cellRendererFramework: TitleRenderer,
     },
     {
         headerName: '면/판',
@@ -59,6 +58,6 @@ export default [
         field: 'register',
         width: 80,
         cellStyle: { display: 'flex', alignItems: 'center' },
-        cellRendererFramework: (row) => <ArticleActionBtn {...row} />,
+        cellRendererFramework: ArticleActionBtn,
     },
 ];

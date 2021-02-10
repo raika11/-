@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MokaLoader } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GET_BOARD_GROUP_LIST, getBoardGroupList, getListmenuSelectBoard } from '@store/board';
-import clsx from 'clsx';
-
+import { MokaLoader } from '@components';
 import TreeCategory from './TreeCategory';
 import TreeItem from './TreeItem';
 
@@ -12,13 +10,8 @@ const TreeBox = (props) => {
     const dispatch = useDispatch();
     const params = useParams();
     const boardId = useRef(null);
-    const { boardType, groupList, loading } = useSelector((store) => ({
-        pagePathName: store.board.pagePathName,
-        boardType: store.board.boardType,
-        groupList: store.board.listmenu.groupList,
-        loading: store.loading[GET_BOARD_GROUP_LIST],
-    }));
-
+    const loading = useSelector(({ loading }) => loading[GET_BOARD_GROUP_LIST]);
+    const { boardType, groupList, pagePathName } = useSelector(({ board }) => board);
     const [treeData, setTreeData] = useState([]);
     const [selectCategory, setSelectCategory] = useState(0);
 
@@ -88,42 +81,37 @@ const TreeBox = (props) => {
     }, [dispatch, params]);
 
     return (
-        <div className={clsx('border custom-scroll treeview h-100')}>
+        <div className="custom-scroll treeview h-100">
             <ul className="list-unstyled tree-list">
-                {loading ? (
-                    <MokaLoader />
-                ) : (
-                    treeData.map((e, index) => {
-                        return (
-                            <TreeCategory
-                                key={e.listIndex}
-                                listIndex={Number(e.listIndex)}
-                                selected={selectCategory}
-                                onSelected={setSelectCategory}
-                                nodeData={{
-                                    boardTypeName: e.boardTypeName,
-                                    listIndex: e.listIndex,
-                                    depth: e.listIndex,
-                                }}
-                                {...props}
-                            >
-                                {e.boardInfoList &&
-                                    e.boardInfoList.map((nodeData, idx) => {
-                                        return (
-                                            <TreeItem
-                                                key={nodeData.boardId}
-                                                selectItem={Number(params.boardId) === nodeData.boardId}
-                                                boardId={nodeData.boardId}
-                                                nodeId={String(nodeData.listIndex)}
-                                                nodeData={nodeData}
-                                                {...props}
-                                            />
-                                        );
-                                    })}
-                            </TreeCategory>
-                        );
-                    })
-                )}
+                {loading && <MokaLoader />}
+                {treeData.map((e, index) => (
+                    <TreeCategory
+                        key={e.listIndex}
+                        listIndex={Number(e.listIndex)}
+                        selected={selectCategory}
+                        onSelected={setSelectCategory}
+                        nodeData={{
+                            boardTypeName: e.boardTypeName,
+                            listIndex: e.listIndex,
+                            depth: e.listIndex,
+                        }}
+                        {...props}
+                    >
+                        {e.boardInfoList &&
+                            e.boardInfoList.map((nodeData, idx) => {
+                                return (
+                                    <TreeItem
+                                        key={nodeData.boardId}
+                                        selectItem={Number(params.boardId) === nodeData.boardId}
+                                        boardId={nodeData.boardId}
+                                        nodeId={String(nodeData.listIndex)}
+                                        nodeData={nodeData}
+                                        {...props}
+                                    />
+                                );
+                            })}
+                    </TreeCategory>
+                ))}
             </ul>
         </div>
     );

@@ -148,24 +148,27 @@ const ArticleSourceModal = (props) => {
                 <hr className="divider my-2" />
                 <div className="flex-fill overflow-hidden pt-2">
                     <Form.Row className="flex-wrap input-border custom-scroll h-100">
-                        {renderList.map((source, idx) => (
-                            <Col
-                                xs={6}
-                                key={idx}
-                                className={clsx('p-2', {
-                                    'border-right': idx % 2 === 0,
-                                    'border-bottom': !((idx % 2 === 0 && idx === renderList.length - 2) || (idx % 2 === 1 && idx === renderList.length - 1)),
-                                })}
-                            >
-                                <MokaInput
-                                    as="checkbox"
-                                    name="source"
-                                    id={source.sourceCode}
-                                    onChange={handleChangeValue}
-                                    inputProps={{ label: source.sourceName, custom: true, checked: selectedList.findIndex((s) => s.sourceCode === source.sourceCode) > -1 }}
-                                />
-                            </Col>
-                        ))}
+                        {renderList.map((source, idx) => {
+                            let isLastRow = false;
+
+                            if (renderList.length % 2 === 0) {
+                                isLastRow = (idx % 2 === 0 && idx === renderList.length - 1) || (idx % 2 === 1 && idx === renderList.length - 2);
+                            } else if (renderList.length % 2 === 1) {
+                                isLastRow = idx === renderList.length - 1;
+                            }
+
+                            return (
+                                <Col xs={6} key={idx} className={clsx('p-2', { 'border-right': idx % 2 === 0, 'border-bottom': !isLastRow })}>
+                                    <MokaInput
+                                        as="checkbox"
+                                        name="source"
+                                        id={source.sourceCode}
+                                        onChange={handleChangeValue}
+                                        inputProps={{ label: source.sourceName, custom: true, checked: selectedList.findIndex((s) => s.sourceCode === source.sourceCode) > -1 }}
+                                    />
+                                </Col>
+                            );
+                        })}
                     </Form.Row>
                 </div>
             </div>

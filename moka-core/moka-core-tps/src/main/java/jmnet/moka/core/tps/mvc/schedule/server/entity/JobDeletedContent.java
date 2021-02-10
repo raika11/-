@@ -43,12 +43,6 @@ public class JobDeletedContent implements Serializable {
     private Long serverSeq;
 
     /**
-     * 카테고리
-     */
-    @Column(name = "CATEGORY", nullable = false)
-    private String category;
-
-    /**
      * 주기
      */
     @Column(name = "PERIOD", nullable = false)
@@ -71,6 +65,18 @@ public class JobDeletedContent implements Serializable {
      */
     @Column(name = "FTP_PASSIVE", columnDefinition = "char")
     private String ftpPassive;
+
+    /**
+     * 카테고리
+     */
+    @Column(name = "CATEGORY", nullable = false)
+    private String category;
+
+    /**
+     * 서버 IP
+     */
+    @Column(name = "SERVER_IP", nullable = false)
+    private String serverIp;
 
     /**
      * 배포경로

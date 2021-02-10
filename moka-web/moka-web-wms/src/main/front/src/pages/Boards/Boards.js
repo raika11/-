@@ -1,7 +1,6 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearStore, initializeParams, getBoardChannelTypeList } from '@store/board';
-
 const BoardsSet = React.lazy(() => import('./BoardsSet'));
 const BoardsList = React.lazy(() => import('./BoardsList'));
 

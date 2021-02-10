@@ -11,15 +11,10 @@ const ContainerEditor = (props) => {
     const dispatch = useDispatch();
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
-    const { containerBody, container, invalidList, appendTag } = useSelector(({ container }) => ({
-        containerBody: container.containerBody,
-        container: container.container,
-        invalidList: container.invalidList,
-        appendTag: container.appendTag,
-    }));
+    const { containerBody, container, invalidList, appendTag } = useSelector(({ container }) => container);
 
     // state
-    const [title, setTitle] = useState('컨테이너 편집');
+    const [title, setTitle] = useState('컨테이너 수정');
     const [defaultValue, setDefaultValue] = useState('');
     const [error, setError] = useState({});
 
@@ -34,11 +29,11 @@ const ContainerEditor = (props) => {
     useEffect(() => {
         // 타이틀 변경
         if (container.containerSeq) {
-            setTitle(`${container.containerSeq}_${container.containerName}`);
+            setTitle(`컨테이너 수정(${container.containerSeq}_${container.containerName})`);
             // defaultValue 변경
             setDefaultValue(containerBody);
         } else {
-            setTitle('컨테이너 편집');
+            setTitle('컨테이너 등록');
             setDefaultValue('');
         }
 

@@ -23,7 +23,7 @@ const PageEditor = (props) => {
     }));
 
     // state
-    const [title, setTitle] = useState('페이지 편집');
+    const [title, setTitle] = useState('페이지 수정');
     const [error, setError] = useState({});
     const [defaultValue, setDefaultValue] = useState('');
 
@@ -38,9 +38,9 @@ const PageEditor = (props) => {
          * 타이틀 변경
          */
         if (page.pageSeq) {
-            setTitle(`페이지 편집(${page.pageSeq}_${page.pageName})`);
+            setTitle(`페이지 수정(${page.pageSeq}_${page.pageName})`);
         } else {
-            setTitle('페이지 편집');
+            setTitle('페이지 등록');
         }
     }, [page]);
 

@@ -321,7 +321,7 @@ const DirectLinkEdit = ({ history, match }) => {
     return (
         <MokaCard
             className="flex-fill"
-            title={`사이트 바로 가기 ${linkSeq ? '편집' : '등록'}`}
+            title={`사이트 바로 가기 ${linkSeq ? '수정' : '등록'}`}
             loading={loading}
             footer
             footerClassName="justify-content-center"

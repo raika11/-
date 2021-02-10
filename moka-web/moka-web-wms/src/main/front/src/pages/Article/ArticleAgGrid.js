@@ -17,16 +17,9 @@ moment.locale('ko');
 const ArticleAgGrid = ({ match, ja }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST]);
-    const article = useSelector((store) => store.article.article);
-    const OVP_PREVIEW_URL = useSelector((store) => store.app.OVP_PREVIEW_URL);
-    const { total, list, search } = useSelector(({ article }) => ({
-        total: article.total,
-        list: article.list,
-        search: article.search,
-    }));
-
-    //state
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_LIST]);
+    const OVP_PREVIEW_URL = useSelector(({ app }) => app.OVP_PREVIEW_URL);
+    const { total, list, search, article } = useSelector(({ article }) => article);
     const [rowData, setRowData] = useState([]);
 
     /**

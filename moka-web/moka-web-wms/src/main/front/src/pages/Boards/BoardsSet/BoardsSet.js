@@ -1,12 +1,10 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, getSetmenuBoardsList, changeSetMenuSearchOption } from '@store/board';
-import { MokaLoader } from '@components';
-
-const BoardsList = React.lazy(() => import('./Component/BoardsList'));
-const BoardsEdit = React.lazy(() => import('./Component/BoardsEdit'));
+import BoardsList from './Component/BoardsList';
+import BoardsEdit from './Component/BoardsEdit';
 
 const BoardsSet = () => {
     const dispatch = useDispatch();
@@ -35,29 +33,11 @@ const BoardsSet = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <Switch>
-                <Route
-                    path={[`/${pagePathName}`, `/${pagePathName}/add`, `/${pagePathName}/:boardId`]}
-                    exact
-                    render={() => (
-                        <Suspense fallback={<MokaLoader />}>
-                            <BoardsList />
-                        </Suspense>
-                    )}
-                />
-            </Switch>
+            <BoardsList />
 
             {/* 수정창 */}
             <Switch>
-                <Route
-                    path={[`/${pagePathName}/add`, `/${pagePathName}/:boardId`]}
-                    exact
-                    render={() => (
-                        <Suspense fallback={<MokaLoader />}>
-                            <BoardsEdit />
-                        </Suspense>
-                    )}
-                />
+                <Route path={[`/${pagePathName}/add`, `/${pagePathName}/:boardId`]} exact render={() => <BoardsEdit />} />
             </Switch>
         </div>
     );

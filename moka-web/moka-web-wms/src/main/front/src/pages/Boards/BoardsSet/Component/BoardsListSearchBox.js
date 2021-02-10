@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -57,9 +57,9 @@ const BoardsListSearchBox = (props) => {
     }, []);
 
     return (
-        <Form>
-            <Form.Row className="d-flex mb-3">
-                <Col xs={2}>
+        <Form.Row className="d-flex justify-content-between mb-2">
+            <div className="d-flex flex-fill">
+                <div className="mr-2">
                     <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
                         <option hidden>사용여부</option>
                         {selectItem.usedYn.map((item, index) => (
@@ -68,29 +68,24 @@ const BoardsListSearchBox = (props) => {
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
-                <Col xs={7}>
-                    <MokaSearchInput
-                        id="keyword"
-                        name="keyword"
-                        placeholder={'게시판명, 설명'}
-                        value={searchData.keyword}
-                        onChange={(e) => handleSearchChange(e)}
-                        onSearch={() => handleClickSearchButton()}
-                    />
-                </Col>
-                <Col xs={1} className="mr-2">
-                    <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
-                        초기화
-                    </Button>
-                </Col>
-                <Col xs={2} className="mr-2 text-center">
-                    <Button variant="positive" onClick={() => handleBoardNewButton()}>
-                        게시판 생성
-                    </Button>
-                </Col>
-            </Form.Row>
-        </Form>
+                </div>
+                <MokaSearchInput
+                    id="keyword"
+                    name="keyword"
+                    className="mr-2 w-50"
+                    placeholder={'게시판명, 설명'}
+                    value={searchData.keyword}
+                    onChange={(e) => handleSearchChange(e)}
+                    onSearch={() => handleClickSearchButton()}
+                />
+                <Button variant="negative" className="h-100" onClick={() => handleClickSearchResetButton()}>
+                    초기화
+                </Button>
+            </div>
+            <Button variant="positive" className="h-100" onClick={() => handleBoardNewButton()}>
+                게시판 등록
+            </Button>
+        </Form.Row>
     );
 };
 

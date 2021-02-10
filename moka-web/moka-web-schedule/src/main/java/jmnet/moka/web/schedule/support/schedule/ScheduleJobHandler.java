@@ -94,6 +94,9 @@ public class ScheduleJobHandler {
             // 클래스 bean생성
             if (McpString.isNotEmpty(genContent.getProgrameNm())) {
                 Runnable r = getRunnable(genContent);
+                /**
+                 * todo 1. 변경 된 테이블에 DummyScheduleJob 데이터 추가 후 해당 조건을 통과하는지 체크 필요
+                 */
                 if (McpString
                         .defaultValue(genContent.getJobType())
                         .equals("SCHEDULE") && genContent.getPeriod() > 0) {
@@ -103,7 +106,6 @@ public class ScheduleJobHandler {
                 }
             }
         } catch (BeansException | ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             log.error(e.toString());
         }
 

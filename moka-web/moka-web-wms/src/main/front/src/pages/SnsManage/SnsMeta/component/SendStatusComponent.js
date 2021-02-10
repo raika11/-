@@ -36,7 +36,9 @@ const StatusSend = ({ faceBook, twitter }) => {
 };
 
 const SendStatusComponent = (params) => {
-    const { sendFlag, facebook, twitter } = params.node.data;
+    const {
+        sendStatus: { button: sendFlag, facebook, twitter },
+    } = params.node.data;
     // sendFlag Y : 보낸기사, N: 보내지 않은 기사.
     // facebook Y: 페이스북 보낸기사. N : 보내지 않은 기사.
     // twitter Y: 트위터 보낸기사. N : 보내지 않은 기사.

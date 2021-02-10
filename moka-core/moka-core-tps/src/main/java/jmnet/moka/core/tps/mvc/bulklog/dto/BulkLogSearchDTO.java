@@ -33,6 +33,12 @@ public class BulkLogSearchDTO extends SearchDTO {
     private String sourceCode;
 
     /**
+     * 포털구분
+    @ApiModelProperty("포털구분(기타코드BULK_SITE)")
+    private String portalDiv;
+     */
+
+    /**
      * 전송 진행중인 목록 체크(진행+오류)
      */
     @ApiModelProperty("진행+오류만 보기(체크 Y)")
@@ -54,29 +60,5 @@ public class BulkLogSearchDTO extends SearchDTO {
     @DTODateTimeFormat
     @NotNull(message = "{tps.search-keyword-log.error.notnull.endDt}")
     private String endDt;
-
-    /**
-     * 종료일자(프로시져용)
-     *
-     * @return 종료일자
-    public String getEndDt() {
-        if (this.endDt != null) {
-            return McpDate.dateStr(this.endDt, MokaConstants.JSON_DATE_FORMAT);
-        }
-        return null;
-    }
-     */
-
-    /**
-     * 시작일자(프로시져용)
-     *
-     * @return 시작일자
-    public String getStartDt() {
-        if (this.startDt != null) {
-            return McpDate.dateStr(this.startDt, MokaConstants.JSON_DATE_FORMAT);
-        }
-        return null;
-    }
-     */
 
 }

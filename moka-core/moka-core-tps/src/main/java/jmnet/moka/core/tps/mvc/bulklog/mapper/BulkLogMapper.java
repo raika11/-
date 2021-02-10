@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.bulklog.mapper;
 
 import jmnet.moka.common.data.mybatis.support.BaseMapper;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogSearchDTO;
+import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalDTO;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalIdDTO;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkTotalLogVO;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkLogVO;
@@ -28,7 +29,7 @@ public interface BulkLogMapper extends BaseMapper<BulkTotalLogVO, BulkLogSearchD
      * @param searchDTO 검색 조건
      * @return 조회 결과
      */
-    List<BulkTotalLogVO> findAllTotal(BulkLogSearchDTO searchDTO);
+    List<BulkTotalLogVO> findAllTotal(BulkLogTotalDTO searchDTO);
 
     /**
      * 벌크 전송 목록 조회

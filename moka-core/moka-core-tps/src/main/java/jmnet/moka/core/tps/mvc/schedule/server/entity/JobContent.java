@@ -36,16 +36,40 @@ public class JobContent extends BaseAudit {
     private String usedYn;
 
     /**
-     * 서버 번호
+     * 삭제여부(Y:삭제, N:미삭제)
      */
-    @Column(name = "SERVER_SEQ", nullable = false)
-    private Long serverSeq;
+    @Column(name = "DEL_YN", columnDefinition = "char")
+    private String delYn;
 
     /**
      * 카테고리
      */
     @Column(name = "CATEGORY", nullable = false)
     private String category;
+
+    /**
+     * 패키지 명
+     */
+    @Column(name = "PKG_NM")
+    private String pkgNm;
+
+    /**
+     * 작업 타입
+     */
+    @Column(name = "JOB_TYPE")
+    private String jobType;
+
+    /**
+     * 작업 코드
+     */
+    @Column(name = "JOB_CD")
+    private String jobCd;
+
+    /**
+     * 서버 번호
+     */
+    @Column(name = "SERVER_SEQ", nullable = false)
+    private Long serverSeq;
 
     /**
      * 주기

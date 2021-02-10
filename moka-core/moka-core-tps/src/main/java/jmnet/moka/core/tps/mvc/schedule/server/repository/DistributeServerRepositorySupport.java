@@ -32,6 +32,6 @@ public interface DistributeServerRepositorySupport {
     Page<DistributeServer> findDistibuteServerList(DistributeServerSearchDTO search, Pageable pageable);
 
 
-
+    //미사용 추후 삭제예정
     Page<DistributeServerDTO> findList2(DistributeServerSearchDTO search, Pageable pageable);
 }

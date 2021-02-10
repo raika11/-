@@ -24,5 +24,11 @@ public interface JobContentRepositorySupport {
      */
     Page<JobContent> findJobContentList(JobContentSearchDTO search, Pageable pageable);
 
+    /**
+     * 특정작업 존재여부 확인
+     *
+     * @param search   검색조건
+     * @return 작업
+     */
     Optional<JobContent> findJobContent(JobContentSearchDTO search);
 }

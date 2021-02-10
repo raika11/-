@@ -45,7 +45,7 @@ const BulkhHotClicAgGrid = () => {
             setRowData(
                 element.map((data) => {
                     const { boardType } = selectItem;
-                    const regDt = data.regDt && data.regDt.length > 10 ? data.regDt.substr(0, 10) : data.regDt;
+                    const regDt = (data.regDt || '').slice(0, -3);
                     const boardTypeName = boardType.find((element) => {
                         return element.value === data.boardType;
                     });

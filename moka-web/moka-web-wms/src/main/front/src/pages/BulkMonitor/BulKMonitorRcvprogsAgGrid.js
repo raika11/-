@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader } from '@/components';
 import columnDefs from './BulKMonitorRcvprogsAgGridColumns';
-import RcvProgsModal from './modals/RcvProgsModal';
+// import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { GET_BULK_STAT_LIST } from '@/store/bulks';
 
@@ -106,7 +106,7 @@ const BulKMonitorRcvprogsAgGrid = () => {
                     onCellClicked={handleRowClicked}
                 />
             </div>
-            <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />
+            {/* <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} /> */}
             <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} />
         </>
     );

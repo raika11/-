@@ -59,7 +59,7 @@ const HistoryDetailAgGrid = () => {
                 }
             >
                 <MokaTable
-                    agGridHeight={550}
+                    agGridHeight={540}
                     columnDefs={historyDetailColumnDefs}
                     rowData={rowData}
                     onRowNodeId={(row) => row.id}

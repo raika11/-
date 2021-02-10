@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MokaCard, MokaInputLabel } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
@@ -27,8 +27,9 @@ const BulknEdit = (props) => {
     const params = useParams();
     const history = useHistory();
 
-    const { loading, bulkArticle, bulkPathName, cdNm: symbol } = useSelector((store) => ({
+    const { loading, bulkArticle, bulkartSeq, bulkPathName, cdNm: symbol } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
+        bulkartSeq: store.bulks.bulkn.bulkartSeq,
         bulkArticle: store.bulks.bulkn.bulkArticle,
         cdNm: store.codeMgt.specialCharCode.cdNm,
         loading: store.loading[GET_BULK_LIST],
@@ -37,19 +38,22 @@ const BulknEdit = (props) => {
     const dispatch = useDispatch();
     const checkBulkSeqNumber = useRef();
     const [modalMShow, setModalMShow] = useState(false);
-    const [editState, setEditState] = useState(true); // edit 상태 true 일일때 input 상태가 disable.
+    // 최초엔 정보 영역이 계속 보여지는 상태여서 disable 기능이 필요했지만
+    // 현재는 살아졌다 나타났다 하기 때문에 disable 기능이 필요 없어져서 항상 enable 상태로 변경..
+    const [editState] = useState(false); // edit 상태 true 일일때 input 상태가 disable.
     const [bulkArticleRow, setBulkArticleRow] = useState(rowInit); // 선택된 벌크 기사들.
 
     // 약물 수정 삭제 모달 창.
-    const handleClickSpecialCharModalButton = () => {
-        setModalMShow(true);
-    };
+    // const handleClickSpecialCharModalButton = () => {
+    //     setModalMShow(true);
+    // };
 
     // 모달창 스토어에 문구들과 상태값 전달.
     const handlePreviewModalButton = (e) => {
         dispatch(
             showPreviewModal({
                 state: true,
+                activeKey: bulkartSeq ? 1 : 0,
                 bulkArticle: bulkArticleRow,
             }),
         );
@@ -79,19 +83,19 @@ const BulknEdit = (props) => {
     };
 
     // props 로 전달 받은 edit 상태가 변경 되었을떄 처리.
-    useEffect(() => {
-        const changeEditState = (state) => {
-            if (state === 'enable') {
-                setEditState(false);
-            } else if (state === 'clear') {
-                // clear 는 라우터 이동시 clear
-                setEditState(false);
-            } else {
-                setEditState(true);
-            }
-        };
-        changeEditState(props.EditState);
-    }, [props.EditState]);
+    // useEffect(() => {
+    //     const changeEditState = (state) => {
+    //         if (state === 'enable') {
+    //             // setEditState(false);
+    //         } else if (state === 'clear') {
+    //             // clear 는 라우터 이동시 clear
+    //             // setEditState(false);
+    //         } else {
+    //             // setEditState(true);
+    //         }
+    //     };
+    //     changeEditState(props.EditState);
+    // }, [props.EditState]);
 
     // 리스트 창에서 item 클릭시 변경되는 라우터 로 문구 정보를 가지고 오는 처리.
     useEffect(() => {
@@ -130,12 +134,14 @@ const BulknEdit = (props) => {
             let tempList = rowInit.map(function (e, index) {
                 const t_title = list[index] ? list[index].title.replace(/^\s+|\s+$/g, '') : '';
                 const t_url = list[index] ? list[index].url.replace(/^\s+|\s+$/g, '') : '';
+                const t_symbol = list[index] ? list[index].symbol : '';
                 const title_length = checkTextLength(t_title);
 
                 return {
                     ...e,
                     title: t_title,
                     url: t_url,
+                    symbol: t_symbol,
                     title_length: title_length,
                 };
             });
@@ -184,13 +190,14 @@ const BulknEdit = (props) => {
 
     // 실제 저장 처리.
     const handleSaveBulkArticle = (type) => {
-        let tempArray = { title: [], url: [] };
+        let tempArray = { title: [], url: [], symbol: [] };
 
         bulkArticleRow
-            .filter((e) => e.title || e.url)
+            .filter((e) => e.title || e.url || e.symbol)
             .map((element) => {
                 if (element.title) tempArray.title.push(element.title);
                 if (element.url) tempArray.url.push(element.url);
+                if (element.symbol) tempArray.symbol.push(element.symbol);
 
                 return element;
             });
@@ -211,10 +218,11 @@ const BulknEdit = (props) => {
                 ordNo: 0,
                 title: e,
                 totalId: 0,
+                symbol: tempArray.symbol[i],
                 url: tempArray.url[i],
             };
         });
-
+        // return;
         dispatch(
             saveBulkArticle({
                 type: type,
@@ -237,7 +245,8 @@ const BulknEdit = (props) => {
     // 문구 정보에 약물 정보를 가지고 오는 처리.
     useEffect(() => {
         dispatch(getSpecialCharCode({ grpCd: 'specialChar', dtlCd: 'bulkChar' }));
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // props 로 받은 edit 상태가 변경되면 라우터를 이동 시킴. ( edit disabled 변경.)
     useEffect(() => {
@@ -254,14 +263,33 @@ const BulknEdit = (props) => {
         <>
             <MokaCard
                 loading={loading}
-                title={`네이버 문구 ${true ? '정보' : '등록'}`}
+                title={`네이버 문구 ${bulkartSeq ? '정보' : '등록'}`}
                 titleClassName="mb-0"
-                width={425}
+                width={325}
                 className={'mr-gutter flex-fill'}
                 bodyClassName="overflow-hidden"
+                footerClassName="justify-content-end"
+                footer
+                footerAs={
+                    <>
+                        <Form.Row>
+                            <Col className="justify-content-center align-items-center text-center">
+                                <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editState}>
+                                    저장
+                                </Button>
+                                <Button variant="positive" className="mr-05" onClick={handleClickTempSaveButton} disabled={bulkartSeq ? true : false}>
+                                    임시저장
+                                </Button>
+                                <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editState}>
+                                    취소
+                                </Button>
+                            </Col>
+                        </Form.Row>
+                    </>
+                }
             >
                 <Form>
-                    <Form.Row>
+                    {/* <Form.Row>
                         <Col xs={10} className="justify-content-center align-items-center">
                             <MokaInputLabel
                                 name={`bulk_medic`}
@@ -279,16 +307,32 @@ const BulknEdit = (props) => {
                                 약물 설정
                             </Button>
                         </Col>
-                    </Form.Row>
+                    </Form.Row> */}
                     {[0, 1, 2].map(function (e, index) {
                         return (
-                            <div key={index}>
+                            <div key={index} className="mb-2 pb-2">
                                 <Form.Row>
-                                    <Col xs={11} className="justify-content-center align-items-center">
+                                    <MokaInputLabel label="타이틀" as="none" labelWidth={30} />
+                                    <Col xs={1} className="justify-content-center align-items-center">
+                                        <MokaInput
+                                            as="select"
+                                            name="symbol"
+                                            id="symbol"
+                                            value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
+                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                        >
+                                            <option hidden>선택</option>
+                                            {symbol.split(' ').map((item, index) => (
+                                                <option key={index} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </MokaInput>
+                                    </Col>
+                                    <Col xs={9} className="justify-content-center align-items-center">
                                         <MokaInputLabel
                                             name="title"
                                             id="title"
-                                            label="타이틀"
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
                                             labelWidth={87}
                                             value={bulkArticleRow[index] ? bulkArticleRow[index].title : ''}
@@ -306,19 +350,19 @@ const BulknEdit = (props) => {
                                     </Col>
                                 </Form.Row>
 
-                                <Form.Row>
-                                    <Col xs={12} className="justify-content-center align-items-center">
+                                <Form.Row className="pt-1">
+                                    <MokaInputLabel label="url" as="none" labelWidth={30} />
+                                    <Col xs={11} className="justify-content-center align-items-center">
                                         <MokaInputLabel
                                             name="url"
                                             id="url"
-                                            label="url"
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
                                             value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
-                                            labelWidth={87}
                                             disabled={editState}
                                         />
                                     </Col>
                                 </Form.Row>
+                                <hr />
                             </div>
                         );
                     })}
@@ -331,20 +375,6 @@ const BulknEdit = (props) => {
                         </Col>
                     </Form.Row>
                 </Form>
-                <hr />
-                <Form.Row>
-                    <Col className="justify-content-center align-items-center text-center">
-                        <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editState}>
-                            저장
-                        </Button>
-                        <Button variant="positive" className="mr-05" onClick={handleClickTempSaveButton} disabled={editState}>
-                            임시저장
-                        </Button>
-                        <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editState}>
-                            취소
-                        </Button>
-                    </Col>
-                </Form.Row>
                 {/*<SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />*/}
                 <DefaultInputModal
                     title="약물 등록"
@@ -371,6 +401,7 @@ const rowInit = [
         title: '',
         totalId: 0,
         url: '',
+        symbol: '▶',
         title_length: 0,
     },
     {
@@ -379,6 +410,7 @@ const rowInit = [
         title: '',
         totalId: 0,
         url: '',
+        symbol: '▶',
         title_length: 0,
     },
     {
@@ -387,6 +419,7 @@ const rowInit = [
         title: '',
         totalId: 0,
         url: '',
+        symbol: '▶',
         title_length: 0,
     },
 ];

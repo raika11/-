@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import { MokaModal, MokaCardTabs, MokaInput } from '@components';
-import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { hidePreviewModal, getCopyright } from '@store/bulks';
 
@@ -112,7 +111,7 @@ const BulkPreviewModal = () => {
             } else if (nav === '소스보기') {
                 return (
                     <Col xs={12} className="pt-4">
-                        <MokaInput as={'textarea'} className="resize-none" value={xmlString} inputProps={{ plaintext: true, readOnly: true, rows: '7' }} />
+                        <MokaInput as={'textarea'} className="resize-none" value={xmlString} inputProps={{ plaintext: true, readOnly: true, rows: '6' }} />
                     </Col>
                 );
             }
@@ -125,20 +124,22 @@ const BulkPreviewModal = () => {
             show={mokaModalShow}
             onHide={hidePreviewModel}
             title="네이버 벌크 문구 미리보기"
-            size="xl"
-            footerClassName="justify-content-center"
+            size="md"
             width={700}
-            height={400}
+            height={450}
             draggable
+            buttons={[{ text: '취소', variant: 'negative', onClick: hidePreviewModel }]}
         >
-            <MokaCardTabs width={840} className="w-100" onSelectNav={(idx) => setNavIdx(idx)} fill tabs={createTabs()} tabNavs={tabNavs} height={250} />
-            <div className="d-flex justify-content-center" style={{ marginTop: 30 }}>
-                <div className="d-flex justify-content-center">
-                    <Button variant="negative" className="mr-05" onClick={hidePreviewModel}>
-                        취소
-                    </Button>
-                </div>
-            </div>
+            <MokaCardTabs
+                width={840}
+                className="w-100"
+                onSelectNav={(idx) => setNavIdx(idx)}
+                fill
+                tabs={createTabs()}
+                tabNavs={tabNavs}
+                height={250}
+                activeKey={previewModal.activeKey}
+            />
         </MokaModal>
     );
 };

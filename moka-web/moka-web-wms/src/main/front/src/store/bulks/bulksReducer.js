@@ -1,6 +1,5 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import moment from 'moment';
 import {
     INITIALIZED_PARAMS,
     CLEAR_STORE,
@@ -42,9 +41,10 @@ export const initialState = {
             size: PAGESIZE_OPTIONS[0],
             bulkartDiv: '',
             sourceCode: '',
-            startDt: moment().format('YYYY-MM-DD 00:00:00'),
-            endDt: moment().format('YYYY-MM-DD 23:59:00'),
+            startDt: '',
+            endDt: '',
         },
+        bulkartSeq: null,
         bulkArticle: {
             totalCnt: 0,
             list: [],
@@ -53,6 +53,7 @@ export const initialState = {
         invalidList: [],
         previewModal: {
             state: false,
+            activeKey: 0,
             bulkArticle: null,
         },
         specialchar: {
@@ -83,9 +84,10 @@ export const initialState = {
             list: [],
             search: {
                 page: 0,
-                size: PAGESIZE_OPTIONS[0],
+                size: 15,
                 bulkartDiv: '',
                 sourceCode: '',
+                status: 'publish',
             },
             article: {
                 totalCnt: 0,
@@ -122,6 +124,7 @@ export default handleActions(
         },
         [CLEAR_BULKS_ARTICLE]: (state) => {
             return produce(state, (draft) => {
+                draft.bulkn.bulkartSeq = initialState.bulkn.bulkartSeq;
                 draft.bulkn.bulkArticle = initialState.bulkn.bulkArticle;
             });
         },
@@ -174,6 +177,7 @@ export default handleActions(
         [SHOW_PREVIEW_MODAL]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.bulkn.previewModal.state = payload.state;
+                draft.bulkn.previewModal.activeKey = payload.activeKey;
                 draft.bulkn.previewModal.bulkArticle = payload.bulkArticle;
             });
         },
@@ -185,8 +189,9 @@ export default handleActions(
             });
         },
         // 문구 상세 정보 가기고 오기 성공.
-        [GET_BULK_ARTICLE_SUCCESS]: (state, { payload: { body } }) => {
+        [GET_BULK_ARTICLE_SUCCESS]: (state, { payload: { body, bulkartSeq } }) => {
             return produce(state, (draft) => {
+                draft.bulkn.bulkartSeq = bulkartSeq;
                 draft.bulkn.bulkArticle = body;
                 draft.bulkn.bulksError = initialState.bulkn.bulksError;
             });
@@ -213,7 +218,7 @@ export default handleActions(
             });
         },
         // 핫클릭 리스트 초기화.
-        [CLEAR_HOTCLICK_LIST]: (state, { payload }) => {
+        [CLEAR_HOTCLICK_LIST]: (state) => {
             return produce(state, (draft) => {
                 draft.bulkh.hotclickList = initialState.bulkh.hotclickList;
             });
@@ -227,7 +232,9 @@ export default handleActions(
         // 핫클릭 히스토리 클리어.
         [CLEAR_HOTCLICK_HISTORYLIST]: (state) => {
             return produce(state, (draft) => {
+                draft.bulkh.historyList.totalCnt = initialState.bulkh.historyList.totalCnt;
                 draft.bulkh.historyList.list = initialState.bulkh.historyList.list;
+                draft.bulkh.historyList.article = initialState.bulkh.historyList.article;
             });
         },
 

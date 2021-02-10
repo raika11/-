@@ -1,12 +1,12 @@
 import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { BulkPreviewModal } from './Modal';
 import { useSelector } from 'react-redux';
 import { MokaLoader } from '@components';
 
-const BulknMain = React.lazy(() => import('./BulknMain'));
+// const BulknMain = React.lazy(() => import('./BulknMain'));
 const BulknList = React.lazy(() => import('./BulknList'));
 const BulknEdit = React.lazy(() => import('./BulknEdit'));
 
@@ -46,9 +46,9 @@ const Bulkn = ({ bulksParams, bulksURL }) => {
             </Helmet>
 
             {/* 임시. */}
-            <Switch>
+            {/* <Switch>
                 <Route path={[`/${bulkPathName}`, `/${bulkPathName}/:tempSeq`]} exact render={() => <BulknMain bulksParams={bulksParams} />} />
-            </Switch>
+            </Switch> */}
 
             {/* 리스트 창 */}
             <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />

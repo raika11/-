@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Col, Button } from 'react-bootstrap';
-import { MokaInput, MokaInputLabel } from '@components';
+import { MokaInput } from '@components';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeSearchOption, getBulkList, clearBulksArticle } from '@store/bulks';
 import { useHistory } from 'react-router-dom';
-import { DB_DATEFORMAT } from '@/constants';
+// import { DB_DATEFORMAT } from '@/constants';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -78,10 +78,7 @@ const BulknListSearchBox = (props) => {
     return (
         <>
             <Form>
-                <Form.Row className="mb-3">
-                    <Col xs={1} className="d-flex justify-content-center align-items-center">
-                        <MokaInputLabel label="기간" labelWidth={50} as="none" value="tempvalue1" className="m-0 pr-3" name="tag" labelClassName="text-center" />
-                    </Col>
+                <Form.Row className="d-flex mb-3">
                     <Col xs={3} className="d-flex justify-content-center align-items-center">
                         <MokaInput
                             as="dateTimePicker"
@@ -91,9 +88,11 @@ const BulknListSearchBox = (props) => {
                             value={searchData.startDt}
                             // onChange={(e) => handleDateChange('startDt', e)}
                             onChange={(param) => {
-                                const selectDate = param._d;
-                                const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('startDt', date);
+                                let selectDate = param._d;
+                                if (selectDate) {
+                                    // selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                                }
+                                handleDateChange('startDt', selectDate);
                             }}
                             inputProps={{ timeFormat: null }}
                         />
@@ -101,28 +100,28 @@ const BulknListSearchBox = (props) => {
                     <Col xs={3} className="justify-content-center align-items-center pr-0">
                         <MokaInput
                             as="dateTimePicker"
-                            className="mb-0"
+                            className="mb-0 pr-1"
                             name="endDt"
                             id="endDt"
                             value={searchData.endDt}
                             onChange={(param) => {
-                                const selectDate = param._d;
-                                const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('endDt', date);
+                                let selectDate = param._d;
+                                if (selectDate) {
+                                    // selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                                }
+                                handleDateChange('endDt', selectDate);
                             }}
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
-                    <Col xs={1} className="justify-content-center align-items-center pr-0">
-                        <Button variant="searching" onClick={() => handleClickSearchButton()}>
-                            검색
-                        </Button>
-                    </Col>
-                    <Col xs={4} className="justify-content-end align-items-end text-right">
-                        <Button variant="positive" onClick={() => handleClickNewButton()}>
-                            벌크 문구 등록
-                        </Button>
-                    </Col>
+                    <div className="d-felx pr-1"></div>
+                    <Button variant="searching" onClick={() => handleClickSearchButton()} className="sm">
+                        검색
+                    </Button>
+                    <Col xs={4}></Col>
+                    <Button variant="positive" onClick={() => handleClickNewButton()} className="sm">
+                        벌크 문구 등록
+                    </Button>
                 </Form.Row>
             </Form>
         </>

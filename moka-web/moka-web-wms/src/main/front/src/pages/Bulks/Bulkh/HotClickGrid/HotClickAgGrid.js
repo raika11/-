@@ -5,9 +5,10 @@ import { getRow } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, findNextMainRow } from '@utils/deskingUtil';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeHotClickList } from '@store/bulks';
-
 const hoverCssName = 'hover';
 const nextCssName = 'next';
+
+// const AgGridReact = React.lazy(() => import('ag-grid-react'));
 
 let hoverBox = makeHoverBox();
 
@@ -48,12 +49,14 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
     }));
 
     const [rowData, setRowData] = useState([]);
+    // const [gridApi, setGridApi] = useState();
     const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
     const [nextNode, setNextNode] = useState(null);
 
     // 그리드 옵션, 드래그핼때 필요함.
     const OnGridReady = (params) => {
+        // setGridApi(params.api);
         setComponentAgGridInstances(params);
         setGridInstance(params);
     };
@@ -153,36 +156,50 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
         [dispatch, hotClickList, rowData],
     );
 
+    // 드레그 영역 밖으로 벗어 났을경우 hover css 초기화.
+    const onRowDragLeave = (params) => {
+        clearHoverStyle(hoverNode);
+        clearNextStyle(nextNode);
+        findWork(params.api.gridOptionsWrapper.layoutElements[0]).removeChild(hoverBox);
+    };
+
     // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
-        setRowData(
-            hotClickList.map(function (e, index) {
-                return {
-                    dataIndex: index,
-                    totalId: e.totalId,
-                    title: e.title,
-                    item: {
-                        itemIndex: index,
+        const SetRowData = async (data) => {
+            setRowData(
+                data.map(function (e, index) {
+                    return {
+                        dataIndex: index,
+                        totalId: e.totalId,
                         title: e.title,
-                        url: e.url,
-                    },
-                };
-            }),
-        );
+                        item: {
+                            itemIndex: index,
+                            title: e.title,
+                            url: e.url,
+                        },
+                    };
+                }),
+            );
+        };
+
+        SetRowData(hotClickList);
     }, [hotClickList]);
 
     return (
         <div className="ag-theme-moka-dnd-grid desking-grid bulk-hot-click w-100">
             <AgGridReact
+                key="grid"
                 immutableData
                 onGridReady={OnGridReady}
                 rowData={rowData}
                 getRowNodeId={(params) => params.dataIndex}
+                deltaRowDataMode={true}
                 columnDefs={columnDefs}
                 localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
                 onRowDragEnter={onRowDragEnter}
                 onRowDragEnd={onRowDragEnd}
                 onRowDragMove={onRowDragMove}
+                onRowDragLeave={onRowDragLeave}
                 rowSelection="multiple"
                 animateRows={true}
                 rowDragManaged={true}

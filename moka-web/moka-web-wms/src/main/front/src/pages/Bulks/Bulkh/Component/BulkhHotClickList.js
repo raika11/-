@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MokaCard, MokaInputLabel } from '@components';
-import { Col, Row, Form, Container } from 'react-bootstrap';
+import { MokaCard } from '@components';
+import { Col, Row, Form, Container, Card } from 'react-bootstrap';
 import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
@@ -78,6 +78,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                     if (success === true) {
                         // 저장 완료.
                         toast.success(message);
+                        dispatch(getHotClickTitle());
                         history.push(`/${bulkPathName}/${bulkartSeq}`);
                     } else {
                         // 저장 실패.
@@ -96,6 +97,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 callback: ({ header: { success, message } }) => {
                     if (success === true) {
                         toast.success(message);
+                        dispatch(getHotClickTitle());
                     } else {
                         messageBox.alert(message, () => {});
                     }
@@ -125,9 +127,11 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
     // 상단 타이틀 설정.
     useEffect(() => {
         const setTopTitle = ({ send, wait }) => {
+            let sendDt = send.regDt && send.regDt.length > 10 ? send.regDt.substr(0, 16) : send.regDt;
+            let waitDt = wait.regDt && wait.regDt.length > 10 ? wait.regDt.substr(0, 16) : wait.regDt;
             setTopTitleItem({
-                send: send && send.regId ? `${send.regId} | 전송 ${send.sendDt}` : '',
-                wait: wait && wait.regId ? `${wait.regId} | 대기 ${wait.regDt}` : '',
+                send: send && send.regId ? `${send.regId} | 전송 ${sendDt}` : '',
+                wait: wait && wait.regId ? `${wait.regId} | 대기 ${waitDt}` : '',
             });
 
             // 현재 url 기준으로 선택되어 있지 않으면 대기 기준으로 최근것을 불러 오기.
@@ -137,7 +141,8 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
         };
 
         setTopTitle(topTitle);
-    }, [dispatch, params.seqNo, topTitle]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [topTitle]);
 
     return (
         <>
@@ -149,10 +154,13 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 titleAs={
                     <>
                         <Row>
-                            <Col className="align-self-center justify-content-start" xs={2}>
-                                <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" />
+                            <Col className="align-self-center justify-content-start" xs={3}>
+                                {/* <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" /> */}
+                                <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
+                                    {`아티클 핫클릭`}
+                                </Card.Title>
                             </Col>
-                            <Col className="align-self-center justify-content-end mb-0 p-0" xs={8}>
+                            <Col className="align-self-center justify-content-end mb-0 p-0" xs={7}>
                                 <Col className="align-self-top justify-content-end text-right">{topTitleItem.send}</Col>
                                 <Col className="align-self-bottom justify-content-end text-right">
                                     <Form.Label className="text-danger">{topTitleItem.wait}</Form.Label>

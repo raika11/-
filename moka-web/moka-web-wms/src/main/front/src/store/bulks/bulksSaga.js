@@ -57,7 +57,8 @@ function* getBulkArticleSaga({ payload: { bulkartSeq, callback } }) {
             body,
         } = response.data;
         if (success === true) {
-            yield put({ type: GET_BULK_ARTICLE_SUCCESS, payload: response.data });
+            yield put({ type: GET_BULK_ARTICLE_SUCCESS, payload: response.data, bulkartSeq: bulkartSeq });
+            yield put({ type: GET_BULK_ARTICLE_SUCCESS, payload: { body: response.data.body, bulkartSeq: bulkartSeq } });
         } else {
             yield put({ type: GET_BULK_ARTICLE_FAILURE, payload: body });
         }
@@ -245,6 +246,8 @@ function* getHotClickTopTitleSaga() {
                 size: 1,
                 bulkartDiv: bulkartDiv,
                 sourceCode: sourceCode,
+                usedYn: 'N',
+                status: 'save',
             },
         });
         yield put({

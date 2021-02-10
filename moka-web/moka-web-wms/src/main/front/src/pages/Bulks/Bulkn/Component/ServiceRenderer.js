@@ -48,20 +48,23 @@ const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
 
     return (
         <>
-            <Form.Row>
-                <Col xs={12}>
-                    <MokaInputLabel
-                        as="switch"
-                        name={`usedYn_${bulkartSeq}`}
-                        id={`usedYn_${bulkartSeq}`}
-                        variant="positive"
-                        labelWidth={87}
-                        inputProps={{ checked: usedYn === 'Y' }}
-                        onChange={(e) => handleOnchange(e.target.checked)}
-                        disabled={usedYn === 'Y' ? true : false}
-                    />
-                </Col>
-            </Form.Row>
+            <Form>
+                <Form.Row>
+                    <Col xs={12}>
+                        <MokaInputLabel
+                            as="switch"
+                            name={`usedYn_${bulkartSeq}`}
+                            id={`usedYn_${bulkartSeq}`}
+                            // variant="positive"
+                            // labelWidth={87}
+                            // label="사용여부"
+                            inputProps={{ checked: usedYn === 'Y' }}
+                            onChange={(e) => handleOnchange(e.target.checked)}
+                            disabled={usedYn === 'Y' ? true : false}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
         </>
     );
 };

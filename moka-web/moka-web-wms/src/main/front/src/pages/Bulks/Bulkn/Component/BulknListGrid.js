@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ColumnDefs } from './BulknListGridColumns';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBulkList, GET_BULK_LIST, changeSearchOption } from '@store/bulks';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
 const BulknListGrid = () => {
-    const params = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-    const { list, total, search, loading, bulkPathName } = useSelector((store) => ({
+    const { list, total, search, loading, bulkartSeq, bulkPathName } = useSelector((store) => ({
         total: store.bulks.bulkn.total,
         search: store.bulks.bulkn.search,
         list: store.bulks.bulkn.list,
         bulkPathName: store.bulks.bulkPathName,
+        bulkartSeq: store.bulks.bulkn.bulkartSeq,
         loading: store.loading[GET_BULK_LIST],
     }));
 
@@ -43,9 +43,10 @@ const BulknListGrid = () => {
         const setGridRowData = (list) => {
             setRowData(
                 list.map((element) => {
+                    let sendDt = element.sendDt && element.sendDt.length > 10 ? element.sendDt.substr(0, 16) : element.sendDt;
                     return {
                         ...element,
-                        sendDt: element.sendDt ? element.sendDt : null,
+                        sendDt: sendDt,
                         used: {
                             bulkartSeq: element.bulkartSeq,
                             status: element.status,
@@ -59,13 +60,15 @@ const BulknListGrid = () => {
             );
         };
 
-        setGridRowData(list);
+        if (list) {
+            setGridRowData(list);
+        }
     }, [list]);
 
     return (
         <>
             <MokaTable
-                agGridHeight={650}
+                agGridHeight={680}
                 columnDefs={ColumnDefs}
                 rowData={rowData}
                 rowHeight={40}
@@ -77,7 +80,7 @@ const BulknListGrid = () => {
                 size={search.size}
                 displayPageNum={DISPLAY_PAGE_NUM}
                 onChangeSearchOption={handleChangeSearchOption}
-                selected={params.bulkartSeq}
+                selected={bulkartSeq}
                 preventRowClickCell={['used', 'preview']}
             />
         </>

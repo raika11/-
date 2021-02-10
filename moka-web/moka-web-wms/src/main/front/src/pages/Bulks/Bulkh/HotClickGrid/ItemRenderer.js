@@ -21,15 +21,15 @@ const ItemRenderer = ({ itemIndex, title, url }) => {
         // 삭제 하고 난후에 바로 state 를 업데이트 하면 grid row 렌더링과 곂쳐 져서 에러가 남.
         // 시간을 주고 업데이트를 시킴
         dispatch(clearHotclicklist());
-        setTimeout(function () {
-            dispatch(
-                changeHotClickList(
-                    hotClickList.filter(function (e, index) {
-                        return index !== itemIndex;
-                    }),
-                ),
-            );
-        }, 10);
+        // setTimeout(function () {
+        dispatch(
+            changeHotClickList(
+                hotClickList.filter(function (e, index) {
+                    return index !== itemIndex;
+                }),
+            ),
+        );
+        // }, 20);
         // #3
     }, [dispatch, hotClickList, itemIndex]);
 
@@ -38,16 +38,8 @@ const ItemRenderer = ({ itemIndex, title, url }) => {
             <Row>
                 <Col className="align-self-center justify-content-start mb-0 pr-0 pl-2 w-100">{itemIndex + 1}</Col>
                 <Col className="d-felx" xs={10}>
-                    <MokaInputLabel
-                        name="title"
-                        id="title"
-                        label="타이틀"
-                        onChange={(e) => handleChangeBulkinputBox(e)}
-                        labelWidth={30}
-                        value={title}
-                        className="col mb-0 pl-0 pr-0"
-                    />
-                    <MokaInputLabel name="url" id="url" label="url" onChange={(e) => handleChangeBulkinputBox(e)} labelWidth={30} value={url} className="col mb-0 pl-0 pr-0" />
+                    <MokaInputLabel name="title" label="타이틀" onChange={(e) => handleChangeBulkinputBox(e)} labelWidth={30} value={title} className="col mb-0 pl-0 pr-0" />
+                    <MokaInputLabel name="url" label="url" onChange={(e) => handleChangeBulkinputBox(e)} labelWidth={30} value={url} className="col mb-0 pl-0 pr-0" />
                 </Col>
                 <Col className="d-felx align-self-center text-left mb-0 pl-0">
                     <MokaTableEditCancleButton onClick={handleClickCancleButton} />

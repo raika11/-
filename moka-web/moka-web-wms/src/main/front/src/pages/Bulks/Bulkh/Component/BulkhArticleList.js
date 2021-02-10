@@ -47,6 +47,12 @@ const BulkhArticleList = ({ componentAgGridInstances }) => {
             });
         }
 
+        // 등록 기사 카운트.
+        if (hotClickList.length >= 11) {
+            toast.error('기사는 11개까지 등록 가능합니다.');
+            return null;
+        }
+
         // 드래스 선택 기사 여러게 일때.
         if (Array.isArray(sourceNode)) {
             items = Object.values(sourceNode)

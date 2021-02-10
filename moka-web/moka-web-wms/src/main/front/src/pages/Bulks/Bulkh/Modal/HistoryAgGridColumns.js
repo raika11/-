@@ -25,7 +25,7 @@ export const historyColumnDefs = [
         headerName: 'ID',
         field: 'regId',
         headerClass: 'ag-grid-sns-meta-header',
-        width: 120,
+        width: 80,
     },
 ];
 

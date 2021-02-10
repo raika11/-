@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const BulkhMain = React.lazy(() => import('./Component/BulkhMain'));
+// const BulkhMain = React.lazy(() => import('./Component/BulkhMain'));
 const BulkhHotClickList = React.lazy(() => import('./Component/BulkhHotClickList'));
 const BulkhArticleList = React.lazy(() => import('./Component/BulkhArticleList'));
 
@@ -24,9 +24,9 @@ const Bulkh = () => {
             </Helmet>
 
             {/* 임시. */}
-            <Switch>
+            {/* <Switch>
                 <Route path={[`/${bulkPathName}`, `/${bulkPathName}/:seqNo`]} exact render={() => <BulkhMain />} />
-            </Switch>
+            </Switch> */}
 
             {/* 수정창 */}
             <Switch>

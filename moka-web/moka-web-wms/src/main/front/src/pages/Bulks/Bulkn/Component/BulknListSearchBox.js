@@ -119,12 +119,12 @@ const BulknListSearchBox = (props) => {
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
-                    <div className="d-felx pr-1"></div>
-                    <Button variant="searching" onClick={() => handleClickSearchButton()} className="sm">
+                    <div className="d-flex pr-1"></div>
+                    <Button variant="searching" onClick={() => handleClickSearchButton()} size="sm">
                         검색
                     </Button>
                     <Col xs={4}></Col>
-                    <Button variant="positive" onClick={() => handleClickNewButton()} className="sm">
+                    <Button variant="positive" onClick={() => handleClickNewButton()} size="sm">
                         벌크 문구 등록
                     </Button>
                 </Form.Row>

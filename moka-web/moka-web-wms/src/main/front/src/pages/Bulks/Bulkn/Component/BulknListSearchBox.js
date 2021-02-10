@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeSearchOption, getBulkList, clearBulksArticle } from '@store/bulks';
 import { useHistory } from 'react-router-dom';
-// import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT } from '@/constants';
 import toast from '@utils/toastUtil';
 
 const propTypes = {
@@ -61,8 +61,8 @@ const BulknListSearchBox = (props) => {
             getBulkList(
                 changeSearchOption({
                     ...storeSearch,
-                    startDt: searchData.startDt ? moment(searchData.startDt).format('YYYY-MM-DD 00:00:00') : '',
-                    endDt: searchData.endDt ? moment(searchData.endDt).format('YYYY-MM-DD 23:59:00') : '',
+                    startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
+                    endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
                 }),
             ),
         );
@@ -93,13 +93,9 @@ const BulknListSearchBox = (props) => {
                             value={searchData.startDt}
                             // onChange={(e) => handleDateChange('startDt', e)}
                             onChange={(param) => {
-                                let selectDate = param._d;
-                                if (selectDate) {
-                                    // selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                }
-                                handleDateChange('startDt', selectDate);
+                                handleDateChange('startDt', param);
                             }}
-                            inputProps={{ timeFormat: null }}
+                            inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         />
                     </Col>
                     <Col xs={3} className="justify-content-center align-items-center pr-2">
@@ -110,23 +106,21 @@ const BulknListSearchBox = (props) => {
                             id="endDt"
                             value={searchData.endDt}
                             onChange={(param) => {
-                                let selectDate = param._d;
-                                if (selectDate) {
-                                    // selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                }
-                                handleDateChange('endDt', selectDate);
+                                handleDateChange('endDt', param);
                             }}
-                            inputProps={{ timeFormat: null }}
+                            inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         />
                     </Col>
-                    <div className="d-flex pr-1"></div>
-                    <Button variant="searching" onClick={() => handleClickSearchButton()} size="sm">
-                        검색
-                    </Button>
-                    <Col xs={4}></Col>
-                    <Button variant="positive" onClick={() => handleClickNewButton()} size="sm">
-                        등록
-                    </Button>
+                    <Col xs={2} className="justify-content-center text-left">
+                        <Button variant="searching" onClick={() => handleClickSearchButton()}>
+                            검색
+                        </Button>
+                    </Col>
+                    <Col xs={4} className="pr-2 text-right">
+                        <Button variant="positive" onClick={() => handleClickNewButton()}>
+                            등록
+                        </Button>
+                    </Col>
                 </Form.Row>
             </Form>
         </>

@@ -8,6 +8,8 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { getBulkArticle, GET_BULK_LIST, saveBulkArticle, getBulkList, showPreviewModal } from '@store/bulks';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
+import { W3C_URL } from '@/constants';
+import commonUtil from '@utils/commonUtil';
 
 const propTypes = {
     EditState: PropTypes.string,
@@ -27,11 +29,12 @@ const BulknEdit = (props) => {
     const params = useParams();
     const history = useHistory();
 
-    const { loading, bulkArticle, bulkartSeq, bulkPathName, cdNm: symbol } = useSelector((store) => ({
+    const { loading, bulkArticle, bulkartSeq, bulkPathName, cdNm: symbol, copyright } = useSelector((store) => ({
         bulkPathName: store.bulks.bulkPathName,
         bulkartSeq: store.bulks.bulkn.bulkartSeq,
         bulkArticle: store.bulks.bulkn.bulkArticle,
         cdNm: store.codeMgt.specialCharCode.cdNm,
+        copyright: store.bulks.bulkn.copyright,
         loading: store.loading[GET_BULK_LIST],
     }));
 
@@ -222,7 +225,7 @@ const BulknEdit = (props) => {
                 url: tempArray.url[i],
             };
         });
-        // return;
+
         dispatch(
             saveBulkArticle({
                 type: type,
@@ -240,6 +243,54 @@ const BulknEdit = (props) => {
                 },
             }),
         );
+    };
+
+    const handleClickW3ccheck = () => {
+        let tempArray = { title: [], url: [], symbol: [] };
+
+        const checkBody = `<!doctype html>
+<html lang="ko">
+<head>
+
+<base href="https://joongang.joins.com"/>
+<meta charset="utf-8">
+<title>JoongAng Ilbo</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="title" content="중앙일보 - title">
+<meta name="description" content="description - 대한민국 No.1 종합 일간지 중앙일보">
+<meta name="keywords" content="중앙일보, 중앙, joongang, 조인스, 뉴스, 속보, 신문, 보도, 속보, 이슈, 스페셜, 정치, 경제, 오피니언, 사회, 국제, 문화, 스포츠, 스타기자, 뉴스레터, news, newspaper, south Korea, korea">
+<meta property="og:title" content="중앙일보 - title">
+<meta property="og:url" content="url">
+<meta property="og:image" content="...png">
+<meta property="og:description" content="description - 대한민국 No.1 종합 일간지 중앙일보">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="중앙일보 - title">
+<meta name="twitter:url" content="url">
+<meta name="twitter:image" content="...png">
+<meta name="twitter:description" content="description - 대한민국 No.1 종합 일간지 중앙일보">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+<body>
+${bulkArticleRow
+    .filter((e) => e.title || e.url || e.symbol)
+    .map((element) => {
+        if (element.title) tempArray.title.push(element.title);
+        if (element.url) tempArray.url.push(element.url);
+        if (element.symbol) tempArray.symbol.push(element.symbol);
+
+        return element;
+    })
+    .filter((e) => e.url.length > 0)
+    .map(function (e) {
+        return `▶ <a href="${e.url}" target="joins_nw">${e.title}</a>
+`;
+    })
+    .join(``)}${copyright.cdNm}
+</body>
+</html>`;
+        commonUtil.popupPreview(W3C_URL, { fragment: checkBody }, 'multipart/form-data');
     };
 
     // 문구 정보에 약물 정보를 가지고 오는 처리.
@@ -268,25 +319,15 @@ const BulknEdit = (props) => {
                 width={325}
                 className={'mr-gutter flex-fill'}
                 bodyClassName="overflow-hidden"
-                footerClassName="justify-content-end"
+                footerClassName="justify-content-center"
                 footer
-                footerAs={
-                    <>
-                        <Form.Row>
-                            <Col className="justify-content-center align-items-center text-center">
-                                <Button variant="positive" className="mr-05" onClick={handleClickSaveButton} disabled={editState}>
-                                    저장
-                                </Button>
-                                <Button variant="positive" className="mr-05" onClick={handleClickTempSaveButton} disabled={bulkartSeq ? true : false}>
-                                    임시저장
-                                </Button>
-                                <Button variant="negative" className="mr-05" onClick={handleClickCancleButton} disabled={editState}>
-                                    취소
-                                </Button>
-                            </Col>
-                        </Form.Row>
-                    </>
-                }
+                footerButtons={[
+                    { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-05' },
+                    { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05', useAuth: true },
+                    { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: bulkartSeq ? true : false, useAuth: true },
+                    // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
+                    { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
+                ]}
             >
                 <Form>
                     {/* <Form.Row>
@@ -322,11 +363,14 @@ const BulknEdit = (props) => {
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
                                         >
                                             <option hidden>선택</option>
-                                            {symbol.split(' ').map((item, index) => (
-                                                <option key={index} value={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
+                                            {symbol
+                                                .split(' ')
+                                                .filter((e) => e !== '')
+                                                .map((item, index) => (
+                                                    <option key={index} value={item}>
+                                                        {item}
+                                                    </option>
+                                                ))}
                                         </MokaInput>
                                     </Col>
                                     <Col xs={9} className="justify-content-center align-items-center">

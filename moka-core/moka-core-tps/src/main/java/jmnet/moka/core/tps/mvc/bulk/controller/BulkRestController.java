@@ -173,7 +173,7 @@ public class BulkRestController extends AbstractCommonController {
     /**
      * 벌크문구 서비스 여부 저장
      *
-     * @param bulkDTO 등록할 벌크문구 저장
+     * @param bulkartSeq 벌크 일련번호
      * @return 등록된 벌크문구 서비스여부
      * @throws InvalidDataException 데이타 유효성 오류
      * @throws Exception            예외처리
@@ -181,43 +181,23 @@ public class BulkRestController extends AbstractCommonController {
     @ApiOperation(value = "벌크 사용여부 수정")
     @PutMapping(value = "/{bulkartSeq}/used")
     public ResponseEntity<?> putBulkWordServiceYn(
-            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq,
-            @Valid BulkDTO bulkDTO)
+            @ApiParam("벌크 일련번호") @PathVariable("bulkartSeq") @Min(value = 0, message = "{tps.bulk.error.pattern.bulkartSeq}") Long bulkartSeq)
             throws InvalidDataException, Exception {
 
-        // naverbulkDto -> naverbulk 변환
-        Bulk newBulk = modelMapper.map(bulkDTO, Bulk.class);
         Bulk orgBulk = naverBulkService
-                .findById(newBulk.getBulkartSeq())
+                .findById(bulkartSeq)
                 .orElseThrow(() -> {
                     return new NoDataException(msg("tps.bulk.error.no-data"));
                 });
 
-        // SourceCode check
-        List<ArticleSource> articleSources = articleSourceService.findAllArticleSourceByBulk();
-        boolean isSourceCodeMatch = articleSources
-                .stream()
-                .anyMatch(articleSource -> articleSource
-                        .getSourceCode()
-                        .equals(newBulk.getSourceCode()));
-
-        // status check
-        if (!isSourceCodeMatch) {
-            throw new Exception(msg("tps.bulk.error.pattern.sourceCode"));
-        }
-
-        // status check
-        if (!MokaConstants.STATUS_SAVE.equals(bulkDTO.getStatus()) && !MokaConstants.STATUS_PUBLISH.equals(bulkDTO.getStatus())) {
-            throw new Exception(msg("tps.bulk.error.pattern.status"));
-        }
-
         try {
 
             // update
-            naverBulkService.updateArticle(newBulk);
+            orgBulk.setUsedYn(MokaConstants.YES);
+            naverBulkService.updateArticle(orgBulk);
 
             // 결과리턴
-            BulkDTO dto = modelMapper.map(newBulk, BulkDTO.class);
+            BulkDTO dto = modelMapper.map(orgBulk, BulkDTO.class);
             String message = msg("tps.bulk.success.update");
             ResultDTO<BulkDTO> resultDto = new ResultDTO<>(dto, message);
 
@@ -225,7 +205,7 @@ public class BulkRestController extends AbstractCommonController {
             tpsLogger.success(ActionType.UPDATE);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("[FAIL TO UPDATE Article] seq: {} {}", bulkDTO.getBulkartSeq(), e.getMessage());
+            log.error("[FAIL TO UPDATE Article] seq: {} {}", bulkartSeq, e.getMessage());
             // 액션 로그에 에러 로그 출력
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE Article]", e, true);
             throw new Exception(msg("tps.bulk.error.save"), e);
@@ -249,7 +229,7 @@ public class BulkRestController extends AbstractCommonController {
         naverBulkService.getRevised(search);
         Integer resultJhotRevised = search.getReturnValue();
         if (resultJhotRevised != 1) {
-            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND JHOTREVISED]", true);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE BULK RESEND]", true);
             new InvalidDataException(msg("tps.common.error.invalidContent"));
         }
 

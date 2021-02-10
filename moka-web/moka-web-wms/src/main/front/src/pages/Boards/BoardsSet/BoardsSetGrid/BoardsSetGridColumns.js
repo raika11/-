@@ -13,7 +13,7 @@ export const ColumnDefs = [
     {
         headerName: '게시판 설명',
         field: 'boardDesc',
-        width: 210,
+        width: 260,
         flex: 1,
         tooltipField: 'boardDesc',
     },

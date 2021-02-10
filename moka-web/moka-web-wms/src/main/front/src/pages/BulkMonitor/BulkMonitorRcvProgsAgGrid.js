@@ -3,21 +3,15 @@ import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader } from '@/components';
-import columnDefs from './BulKMonitorRcvProgsAgGridColumns';
+import columnDefs from './BulkMonitorRcvProgsAgGridColumns';
 import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { GET_BULK_STAT_LIST } from '@/store/bulks';
 
-const propTypes = {};
-
-const defaultProps = {
-    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
-};
-
 /**
  * 벌크 모니터링 목록
  */
-const BulKMonitorRcvProgsAgGrid = () => {
+const BulkMonitorRcvProgsAgGrid = () => {
     const search = useSelector((store) => store.bulkMonitor.search);
     const sendList = useSelector((store) => store.bulkMonitor.sendList);
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_LIST]);
@@ -112,7 +106,4 @@ const BulKMonitorRcvProgsAgGrid = () => {
     );
 };
 
-BulKMonitorRcvProgsAgGrid.propTypes = propTypes;
-BulKMonitorRcvProgsAgGrid.defaultProps = defaultProps;
-
-export default BulKMonitorRcvProgsAgGrid;
+export default BulkMonitorRcvProgsAgGrid;

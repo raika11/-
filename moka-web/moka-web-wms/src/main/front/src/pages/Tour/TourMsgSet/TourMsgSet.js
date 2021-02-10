@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard, MokaInputLabel } from '@/components';
-import { clearStore, getTourGuideList, putTourGuideList } from '@/store/tour';
 import toast from '@/utils/toastUtil';
+import { MokaEditorCore } from '@/components/MokaEditor';
+import { clearStore, getTourGuideList, putTourGuideList } from '@/store/tour';
 
 /**
  * 견학 메세지 설정
@@ -12,6 +13,10 @@ const MessageSettings = () => {
     const dispatch = useDispatch();
     const tourGuideList = useSelector((store) => store.tour.list);
     const [mgObj, setMgObj] = useState({});
+
+    const handleBlur = (value) => {
+        setMgObj({ ...mgObj, E: value });
+    };
 
     /**
      * 저장 버튼
@@ -81,6 +86,7 @@ const MessageSettings = () => {
             <MokaCard
                 width={772}
                 title="견학 메시지 설정"
+                bodyClassName="d-flex flex-column"
                 footer
                 footerButtons={[
                     { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
@@ -136,18 +142,12 @@ const MessageSettings = () => {
                     onChange={handleChangeValue}
                     // isInvalid={}
                 />
-                <MokaInputLabel
-                    label="질의응답\n'자주하는 질문'"
-                    labelWidth={92}
-                    className="mb-2"
-                    as="textarea"
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 9 }}
-                    name="E"
-                    value={mgObj.E}
-                    onChange={handleChangeValue}
-                    // isInvalid={}
-                />
+                <div className="d-flex flex-fill">
+                    <MokaInputLabel label="질의응답\n'자주하는 질문'" labelWidth={92} as="none" />
+                    <div className="flex-fill input-border overflow-hidden">
+                        <MokaEditorCore value={mgObj.E} onBlur={handleBlur} />
+                    </div>
+                </div>
             </MokaCard>
         </>
     );

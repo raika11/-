@@ -222,6 +222,9 @@ public class ArticlePageRestController extends AbstractCommonController {
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
 
+            Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+            dto.setPreviewTotalId(totalId);
+
             String message = msg("tps.common.success.insert");
             ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
@@ -273,6 +276,9 @@ public class ArticlePageRestController extends AbstractCommonController {
 
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
+
+            Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
+            dto.setPreviewTotalId(totalId);
 
             String message = msg("tps.common.success.update");
             ResultDTO<ArticlePageDTO> resultDto = new ResultDTO<>(dto, message);

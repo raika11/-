@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
@@ -61,17 +61,13 @@ public class CodeMgtServiceImpl implements CodeMgtService {
     }
 
     @Override
-    public Page<CodeMgt> findList(CodeMgtSearchDTO search, Pageable pageable) {
+    public Page<CodeMgt> findAllCodeMgt(CodeMgtSearchDTO search, Pageable pageable) {
         return codeMgtRepository.findList(search, pageable);
     }
 
     @Override
-    public Page<CodeMgtGrp> findGrpList(Pageable pageable, String secretYn) {
-        if (secretYn.equals(TpsConstants.SEARCH_TYPE_ALL)) {
-            return codeMgtGrpRepository.findByUsedYn(MokaConstants.YES, pageable);
-        } else {
-            return codeMgtGrpRepository.findBySecretYnAndUsedYn(secretYn, MokaConstants.YES, pageable);
-        }
+    public Page<CodeMgtGrp> findAllCodeMgtGrp(CodeMgtGrpSearchDTO search) {
+        return codeMgtGrpRepository.findAll(search);
     }
 
     @Override

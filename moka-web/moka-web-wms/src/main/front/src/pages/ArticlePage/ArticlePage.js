@@ -4,14 +4,12 @@ import produce from 'immer';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
 import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { MokaIconTabs } from '@/components/MokaTabs';
 import { ITEM_AP, ITEM_CT, ITEM_CP, ITEM_TP, TEMS_PREFIX } from '@/constants';
 import { getArticleType } from '@store/codeMgt';
 import { clearStore, deleteArticlePage, appendTag, changeArticlePageBody } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import ArticlePageEditor from './ArticlePageEditor';
 import ArticlePageEdit from './ArticlePageEdit';
 const ArticlePageList = React.lazy(() => import('./ArticlePageList'));

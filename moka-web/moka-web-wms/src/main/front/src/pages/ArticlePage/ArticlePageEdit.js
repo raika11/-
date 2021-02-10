@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@components';
 import { previewPage, w3cArticlePage } from '@store/merge';
-import { initialState, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList, clearArticlePage } from '@store/articlePage';
+import { initialState, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -16,24 +16,17 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const loading = useSelector(
-        (store) =>
-            store.loading['articlePage/GET_ARTICLE_PAGE'] ||
-            store.loading['articlePage/POST_ARTICLE_PAGE'] ||
-            store.loading['articlePage/PUT_ARTICLE_PAGE'] ||
-            store.loading['articlePage/DELETE_ARTICLE_PAGE'] ||
-            store.loading['merge/PREVIEW_PAGE'] ||
-            store.loading['merge/W3C_PAGE'],
+        ({ loading }) =>
+            loading['articlePage/GET_ARTICLE_PAGE'] ||
+            loading['articlePage/POST_ARTICLE_PAGE'] ||
+            loading['articlePage/PUT_ARTICLE_PAGE'] ||
+            loading['articlePage/DELETE_ARTICLE_PAGE'] ||
+            loading['merge/PREVIEW_PAGE'] ||
+            loading['merge/W3C_PAGE'],
     );
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
-    const { articlePage, artPageBody, invalidList } = useSelector(
-        (store) => ({
-            articlePage: store.articlePage.articlePage,
-            artPageBody: store.articlePage.artPageBody,
-            invalidList: store.page.invalidList,
-        }),
-        [shallowEqual],
-    );
+    const { articlePage, artPageBody, invalidList } = useSelector(({ articlePage }) => articlePage);
 
     // state
     const [temp, setTemp] = useState(initialState.articlePage);
@@ -275,7 +268,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" title={`기사페이지 ${articlePage.artPageSeq ? '편집' : '등록'}`} loading={loading}>
+        <MokaCard title={`기사페이지 ${articlePage.artPageSeq ? '편집' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
@@ -309,7 +302,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                             value={temp.artPageSeq}
                             name="artPageSeq"
                             onChange={handleChangeValue}
-                            className="mb-0 w-100"
+                            className="w-100"
                             labelWidth={84}
                             placeholder="기사페이지ID를 입력하세요"
                             isInvalid={error.artPageName}
@@ -325,7 +318,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                         value={temp.artPageName}
                         name="artPageName"
                         onChange={handleChangeValue}
-                        className="mb-0 w-100"
+                        className="w-100"
                         labelWidth={84}
                         placeholder="기사페이지명을 입력하세요"
                         isInvalid={error.artPageName}
@@ -341,7 +334,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                         value={temp.artType}
                         name="artType"
                         onChange={handleChangeArtType}
-                        className="mb-0 w-100"
+                        className="w-100"
                         labelWidth={84}
                         placeholder="기사타입을 선택하세요."
                         required
@@ -361,7 +354,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                         value={previewTotalId}
                         name="previewTotalId"
                         onChange={handleChangeValue}
-                        className="mb-0 w-100"
+                        className="w-100"
                         labelWidth={84}
                         placeholder="기사ID를 입력하세요."
                         inputProps={{ autoComplete: 'off' }}

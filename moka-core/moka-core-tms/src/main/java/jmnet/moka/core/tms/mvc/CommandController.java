@@ -23,14 +23,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.cache.CacheManager;
-import jmnet.moka.common.cache.Cacheable;
 import jmnet.moka.common.cache.exception.CacheException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
-import jmnet.moka.core.common.purge.model.PagePurgeTask;
 import jmnet.moka.core.common.purge.model.PurgeItem;
+import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.MokaDomainTemplateMerger;
@@ -178,6 +177,7 @@ public class CommandController {
         }
     }
 
+    /*
     @ApiOperation(value = "아이템 Purge", nickname = "itemPurge")
     @RequestMapping(method = RequestMethod.GET, path = "/command/purge", produces = "application/json")
     @ApiImplicitParams({
@@ -226,9 +226,90 @@ public class CommandController {
             return responseException(e);
         }
     }
+     */
 
-    @ApiOperation(value = "예약어 Purge", nickname = "reservedPurge")
-    @RequestMapping(method = RequestMethod.GET, path = "/command/reservedPurge", produces = "application/json")
+    @ApiOperation(value = "아이템 및 캐시 Purge", nickname = "purge")
+    @RequestMapping(method = RequestMethod.POST, path = "/command/purge", produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "itemListJson", value = "아이템목록 json", required = true, dataType = "string", paramType = "body", defaultValue = "")})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> _purge(HttpServletRequest request, HttpServletResponse response, @RequestBody String itemListJson) {
+        try {
+            if (McpString.isNotEmpty(itemListJson)) {
+                List<PurgeItem> purgeItemList = ResourceMapper
+                        .getDefaultObjectMapper()
+                        .readValue(itemListJson, new TypeReference<List<PurgeItem>>() {
+                        });
+
+                List<List<Map<String, Object>>> list = new ArrayList<List<Map<String, Object>>>();
+                for (PurgeItem purgeItem : purgeItemList) {
+                    String domainId = purgeItem.getDomainId();
+                    String itemType = purgeItem.getItemType();
+                    String itemId = purgeItem.getItemId();
+                    try {
+                        this.domainTemplateMerger.purgeItem(domainId, itemType, itemId);
+                        if (!itemType.equals(MokaConstants.ITEM_DATASET) && !itemType.equals(MokaConstants.ITEM_ARTICLE_PAGE)) {
+                            // Dataset 데이터는 캐시하지 않음
+                            // 기사페이지는 기사정보를 매번 조회해야 기사페이지별 캐시가 가능하므로 성능상 불리하므로 이미 캐싱된 기사는 만료시간후 반영
+                            String cacheType = KeyResolver.getCacheType(itemType);
+                            String cacheKey = KeyResolver.makeItemKey(domainId, itemType, itemId);
+                            List<Map<String, Object>> purgeResult = this.cacheManager.purgeStartsWith(cacheType, cacheKey);
+                            list.add(purgeResult);
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Purge Failed: {}", e);
+                        list.add(this.cacheManager.errorResult(e));
+                    }
+                }
+                ResultDTO<List<List<Map<String, Object>>>> resultDTO = new ResultDTO<List<List<Map<String, Object>>>>(list);
+                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            } else {
+                throw new CacheException("json is null");
+            }
+        } catch (Exception e) {
+            logger.warn("Purge Failed:{}", e.getMessage());
+            return responseException(e);
+        }
+    }
+
+    @ApiOperation(value = "머징된 기사페이지 Purge", nickname = "articlePurge")
+    @RequestMapping(method = RequestMethod.GET, path = "/command/articlePurge", produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "articleId", value = "기사 Id", required = true, dataType = "string", paramType = "query", defaultValue = "")})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> _articlePurge(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            List<List<Map<String, Object>>> list = new ArrayList<List<Map<String, Object>>>();
+            String articleId = request.getParameter("articleId");
+            if (McpString.isNotEmpty(articleId)) {
+                // 기사페이지 purge
+                String cacheType = KeyResolver.CACHE_ARTICLE_MERGE;
+                for(DomainItem domainItem : domainResolver.getDomainInfoList()) {
+                    String cacheKey = KeyResolver.makeArticleCacheKey(domainItem.getItemId(), articleId);
+                    List<Map<String, Object>> purgeResult = this.cacheManager.purge(cacheType, cacheKey);
+                    list.add(purgeResult);
+                }
+                // 기사페이지중 AMP 페이지 purge
+                cacheType = KeyResolver.CACHE_AMP_ARTICLE_MERGE;
+                for(DomainItem domainItem : domainResolver.getDomainInfoList()) {
+                    String cacheKey = KeyResolver.makeArticleCacheKey(domainItem.getItemId(), articleId);
+                    List<Map<String, Object>> purgeResult = this.cacheManager.purge(cacheType, cacheKey);
+                    list.add(purgeResult);
+                }
+
+                ResultDTO<List<List<Map<String, Object>>>> resultDTO = new ResultDTO<>(list);
+                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            } else {
+                throw new CacheException("ArticleId not found");
+            }
+        } catch (Exception e) {
+            logger.warn("Article Purge Failed:{}", e.getMessage());
+            return responseException(e);
+        }
+    }
+
+    @ApiOperation(value = "예약어 Update", nickname = "reservedUpdate")
+    @RequestMapping(method = RequestMethod.GET, path = "/command/reservedUpdate", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "domainId", value = "도메인 Id", required = true, dataType = "string", paramType = "query", defaultValue = "")})
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
@@ -248,8 +329,8 @@ public class CommandController {
         }
     }
 
-    @ApiOperation(value = "CDN 기사 변경", nickname = "CDNChange")
-    @RequestMapping(method = RequestMethod.POST, path = "/command/cdnChange", produces = "application/json", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "CDN 기사 변경", nickname = "CDNUpdate")
+    @RequestMapping(method = RequestMethod.POST, path = "/command/cdnUpdate", produces = "application/json", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cdnArticle", value = "CDN 기사 목록", required = true, dataType = "string", paramType = "body", defaultValue = "")})
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
@@ -271,8 +352,8 @@ public class CommandController {
         }
     }
 
-    @ApiOperation(value = "페이지 변경", nickname = "pageChange")
-    @RequestMapping(method = RequestMethod.POST, path = "/command/pageChange", produces = "application/json")
+    @ApiOperation(value = "페이지 변경", nickname = "pageUpdate")
+    @RequestMapping(method = RequestMethod.POST, path = "/command/pageUpdate", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "domainId", value = "도메인 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
             @ApiImplicitParam(name = "itemId", value = "페이지 Id", required = true, dataType = "string", paramType = "query", defaultValue = ""),
@@ -286,8 +367,8 @@ public class CommandController {
                 HttpParamMap httpParamMap = this.httpParamFactory.creatHttpParamMap(request);
                 String cacheKey = KeyResolver.makePgItemCacheKey(domainId, itemId, httpParamMap);
                 MergeItem pageItem = this.domainTemplateMerger.getItem(domainId, MokaConstants.ITEM_PAGE, itemId);
-                if ( pageItem.getBoolYN(ItemConstants.PAGE_FILE_YN) ) {
-                    this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html, 24*60*60*1000L);
+                if (pageItem.getBoolYN(ItemConstants.PAGE_FILE_YN)) {
+                    this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html, 24 * 60 * 60 * 1000L);
                 } else {
                     this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html);
                 }
@@ -302,46 +383,6 @@ public class CommandController {
         }
     }
 
-    @ApiOperation(value = "아이템 Bulk Purge", nickname = "bulkPurge")
-    @RequestMapping(method = RequestMethod.GET, path = "/command/bulkPurge", produces = "application/json")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "json", value = "아이템정보 json", required = true, dataType = "string", paramType = "query", defaultValue = "")})
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class), @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> _bulkPurge(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String json = request.getParameter(PagePurgeTask.TMS_BULK_PURGE_PARAM);
-            if (McpString.isNotEmpty(json)) {
-                List<PurgeItem> purgeItemList = ResourceMapper
-                        .getDefaultObjectMapper()
-                        .readValue(json, new TypeReference<List<PurgeItem>>() {
-                        });
-
-                List<List<Map<String, Object>>> list = new ArrayList<List<Map<String, Object>>>();
-                for (PurgeItem purgeItem : purgeItemList) {
-                    String domainId = purgeItem.getDomainId();
-                    String itemType = purgeItem.getItemType();
-                    String itemId = purgeItem.getItemId();
-                    try {
-                        this.domainTemplateMerger.purgeItem(domainId, itemType, itemId);
-                        String cacheType = KeyResolver.getCacheType(itemType);
-                        String cacheKey = KeyResolver.makeItemKey(domainId, itemType, itemId);
-                        List<Map<String, Object>> purgeResult = this.cacheManager.purgeStartsWith(cacheType, cacheKey);
-                        list.add(purgeResult);
-                    } catch (Exception e) {
-                        logger.warn("Purge Failed: {}", e);
-                        list.add(this.cacheManager.errorResult(e));
-                    }
-                }
-                ResultDTO<List<List<Map<String, Object>>>> resultDTO = new ResultDTO<List<List<Map<String, Object>>>>(list);
-                return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-            } else {
-                throw new CacheException("json is null");
-            }
-        } catch (Exception e) {
-            logger.warn("Purge Failed:{}", e.getMessage());
-            return responseException(e);
-        }
-    }
 
 
     @ApiOperation(value = "아이템 정보 조회", nickname = "itemInfo")

@@ -35,6 +35,7 @@ public class KeyResolver {
     public static final String CACHE_AD_MERGE = "ad" + CACHE_MERGE_POSTFIX;
 
     public static String getCacheType(String itemType) {
+        // 기사페이지(AP)는 article.merge와 ampArticle.merge에 별도로 처리됨
         return itemType.toLowerCase()+CACHE_MERGE_POSTFIX;
     }
 
@@ -144,7 +145,7 @@ public class KeyResolver {
         if (httpParamMap.get(MokaConstants.PARAM_SORT) == null) {
             return String.join(DEFAULT_SEPARATOR, page, count, category);
         } else {
-            return String.join(DEFAULT_SEPARATOR, page, count,
+            return String.join(DEFAULT_SEPARATOR, page, count, category,
                     httpParamMap.get(MokaConstants.PARAM_SORT));
         }
     }

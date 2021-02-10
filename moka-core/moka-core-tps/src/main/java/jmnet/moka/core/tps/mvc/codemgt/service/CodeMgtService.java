@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.codemgt.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtDtlDTO;
+import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
@@ -48,18 +49,17 @@ public interface CodeMgtService {
      * @param pageable 페이징
      * @return 코드목록
      */
-    public Page<CodeMgt> findList(CodeMgtSearchDTO search, Pageable pageable);
+    public Page<CodeMgt> findAllCodeMgt(CodeMgtSearchDTO search, Pageable pageable);
 
     /**
      * <pre>
      * 그룹 목록 조회
      * </pre>
      *
-     * @param pageable 페이징
-     * @param secretYn 숨김여부
+     * @param search 검색조건
      * @return 그룹 목록
      */
-    public Page<CodeMgtGrp> findGrpList(Pageable pageable, String secretYn);
+    public Page<CodeMgtGrp> findAllCodeMgtGrp(CodeMgtGrpSearchDTO search);
 
     /**
      * <pre>

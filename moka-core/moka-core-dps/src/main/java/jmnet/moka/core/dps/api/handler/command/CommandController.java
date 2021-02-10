@@ -194,15 +194,23 @@ public class CommandController {
             @ApiImplicitParam(name = "apiPath", value = "api 경로", required = true,
                     dataType = "string",
                     paramType = "query", defaultValue = ""),
-            @ApiImplicitParam(name = "apiId", value = "api Id", required = false,
+            @ApiImplicitParam(name = "apiId", value = "api Id", required = true,
                     dataType = "string",
-                    paramType = "query", defaultValue = "")})
+                    paramType = "query", defaultValue = ""),
+            @ApiImplicitParam(name = "prefix", value = "key prefix", required = false,
+                    dataType = "string", paramType = "query", defaultValue = "")})
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = String.class),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> _purge(HttpServletRequest request, HttpServletResponse response)
             throws ParameterException {
         try {
-            List<Map<String, Object>> purgeResult = this.apiRequestHandler.purge(request, response);
+            List<Map<String, Object>> purgeResult = null;
+            if ( request.getParameter("prefix") == null) {
+                purgeResult = this.apiRequestHandler.purge(request, response);
+            } else {
+                purgeResult =
+                        this.apiRequestHandler.purgeStartsWith(request, response);
+            }
             ResultDTO<List<Map<String, Object>>> resultDTO =
                     new ResultDTO<List<Map<String, Object>>>(purgeResult);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
@@ -211,6 +219,7 @@ public class CommandController {
         }
     }
 
+    /*
     @ApiOperation(value = "API Purge(StartsWith), 특정 문자열로 시작하는 key들을 purge한다.",
             nickname = "purgeStartsWithApi")
     @RequestMapping(method = RequestMethod.GET, path = "/command/purgeStartsWith",
@@ -236,6 +245,7 @@ public class CommandController {
             return responseException(e);
         }
     }
+    */
 
     @ApiOperation(value = "log level변경", nickname = "changeLogLevel")
     @RequestMapping(method = RequestMethod.GET, path = "/command/logLevel",

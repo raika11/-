@@ -88,7 +88,6 @@ public class ArticleView extends AbstractView {
         String domainId = (String) mergeContext.get(MokaConstants.MERGE_DOMAIN_ID);
         String path = (String) mergeContext.get(MokaConstants.MERGE_PATH);
         String articleId = (String) mergeContext.get(MokaConstants.MERGE_CONTEXT_ARTICLE_ID);
-
         MokaTemplateMerger templateMerger = null;
         PrintWriter writer = null;
 

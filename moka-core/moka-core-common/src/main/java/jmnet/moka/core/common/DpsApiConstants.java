@@ -21,6 +21,8 @@ public class DpsApiConstants {
     public static final String COMMAND_API = COMMAND_PREFIX + "/api";             // DPS API 목록
     public static final String COMMAND_API_PATH = COMMAND_PREFIX + "/apiPath";    // DPS API 경로 목록
     public static final String COMMAND_LOAD = COMMAND_PREFIX + "/load";           // API 재로딩
+    public static final String COMMAND_PURGE = COMMAND_PREFIX + "/purge";         // API purge
+    public static final String COMMAND_PURGE_STARTSWITH = COMMAND_PREFIX + "/purgeStartsWith"; // API purgeStartsWith
 
     /**
      * 기사 관련 API

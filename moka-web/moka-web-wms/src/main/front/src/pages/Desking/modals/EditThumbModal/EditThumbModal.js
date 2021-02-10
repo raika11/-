@@ -231,14 +231,14 @@ const EditThumbModal = (props) => {
                     className="shadow-none w-100"
                     tabs={[
                         // 아카이브 탭
-                        <div className="px-card py-2 d-flex h-100 flex-column">
+                        <div className="d-flex h-100 flex-column">
                             <EditThumbSearch />
                             <EditThumbTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
                         </div>,
 
                         // 본문 소재 리스트 탭
                         contentId ? (
-                            <div className="px-card py-2 d-flex h-100 flex-column">
+                            <div className="d-flex h-100 flex-column">
                                 {contentId ? <EditThumbArticleImageList contentId={contentId} onThumbClick={handleThumbClick} onRepClick={handleRepClick} /> : ''}
                             </div>
                         ) : (

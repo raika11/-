@@ -116,67 +116,64 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                     className: 'mr-2',
                     onClick: handleClickSave,
                 },
-                {
+                temp.areaSeq && {
                     text: '삭제',
                     variant: 'negative',
                     onClick: handleClickDelete,
-                    disabled: !temp.areaSeq,
                 },
-            ]}
+            ].filter((a) => a)}
         >
-            <div className="d-flex justify-content-center">
-                <Col xs={10} className="p-0">
-                    {/* 사용여부 */}
-                    <Form.Row className="mb-2">
+            <div>
+                {/* 사용여부 */}
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        className="mb-0"
+                        as="switch"
+                        labelWidth={87}
+                        label="사용여부"
+                        id="usedYn"
+                        name="usedYn"
+                        inputProps={{ checked: temp.usedYn === 'Y' }}
+                        onChange={handleChangeValue}
+                    />
+                </Form.Row>
+                {/* 그룹영역명 */}
+                <Form.Row className="mb-2">
+                    <Col xs={8} className="p-0 pr-40">
                         <MokaInputLabel
                             className="mb-0"
-                            as="switch"
                             labelWidth={87}
-                            label="사용여부"
-                            id="usedYn"
-                            name="usedYn"
-                            inputProps={{ checked: temp.usedYn === 'Y' }}
+                            label="그룹 영역명"
+                            placeholder="그룹 영역명을 입력하세요"
+                            value={temp.areaNm}
+                            name="areaNm"
                             onChange={handleChangeValue}
                         />
-                    </Form.Row>
-                    {/* 그룹영역명 */}
-                    <Form.Row className="mb-2">
-                        <Col xs={8} className="p-0 pr-2">
-                            <MokaInputLabel
-                                className="mb-0"
-                                labelWidth={87}
-                                label="그룹 영역명"
-                                placeholder="그룹 영역명을 입력하세요"
-                                value={temp.areaNm}
-                                name="areaNm"
-                                onChange={handleChangeValue}
-                            />
-                        </Col>
-                        <Col xs={4} className="p-0">
-                            <MokaInputLabel className="mb-0" labelWidth={87} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
-                        </Col>
-                    </Form.Row>
-                    {/* 도메인 */}
-                    <MokaInputLabel
-                        className="mb-2"
-                        as="select"
-                        label="도메인"
-                        name="domainId"
-                        labelWidth={87}
-                        value={domain.domainId}
-                        onChange={handleChangeValue}
-                        disabled={temp.areaSeq ? true : false}
-                        isInvalid={error.domainId}
-                        required
-                    >
-                        <option hidden>도메인을 선택하세요</option>
-                        {domainList.map((d) => (
-                            <option key={d.domainId} value={d.domainId}>
-                                {d.domainName} ({d.domainUrl})
-                            </option>
-                        ))}
-                    </MokaInputLabel>
-                </Col>
+                    </Col>
+                    <Col xs={4} className="p-0">
+                        <MokaInputLabel className="mb-0" labelWidth={46} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                    </Col>
+                </Form.Row>
+                {/* 도메인 */}
+                <MokaInputLabel
+                    className="mb-2"
+                    as="select"
+                    label="도메인"
+                    name="domainId"
+                    labelWidth={87}
+                    value={domain.domainId}
+                    onChange={handleChangeValue}
+                    disabled={temp.areaSeq ? true : false}
+                    isInvalid={error.domainId}
+                    required
+                >
+                    <option hidden>도메인을 선택하세요</option>
+                    {domainList.map((d) => (
+                        <option key={d.domainId} value={d.domainId}>
+                            {d.domainName} ({d.domainUrl})
+                        </option>
+                    ))}
+                </MokaInputLabel>
             </div>
         </MokaCard>
     );

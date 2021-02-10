@@ -2,12 +2,14 @@ export default [
     {
         colId: 'checkbox',
         width: 30,
+        minWidth: 30,
         checkboxSelection: true,
         suppressMenu: true,
     },
     {
         headerName: '이미지',
         width: 60,
+        cellStyle: { paddingTop: '14px', paddingBottom: '14px' },
         field: 'thumbFileName',
         cellRenderer: 'imageRenderer',
     },

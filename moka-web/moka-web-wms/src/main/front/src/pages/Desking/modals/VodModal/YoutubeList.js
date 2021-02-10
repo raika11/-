@@ -13,7 +13,7 @@ const YoutubeList = ({ youtubeUrl, setYoutubeUrl }) => {
     };
 
     return (
-        <div className="px-card pt-3">
+        <div>
             <p className="text-positive mb-0">※&nbsp;입력예제</p>
             <p className="mb-2">https://www.youtube.com/embed/-WWWIWDD0G44</p>
 

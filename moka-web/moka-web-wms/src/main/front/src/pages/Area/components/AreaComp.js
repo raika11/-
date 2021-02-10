@@ -36,7 +36,7 @@ const AreaComp = ({ areaComp, areaComps, index, onChange, disabled, setAreaComps
             </div>
             <MokaInput value={areaComp.component?.componentName} inputProps={{ readOnly: true }} />
             {areaComp.component?.dataType === 'DESK' && (
-                <Button variant="outline-neutral" className="ft-12 ml-2 flex-shrink-0" onClick={handleOpenModal}>
+                <Button variant="outline-neutral" className="ml-2 flex-shrink-0" onClick={handleOpenModal}>
                     편집파트 수정
                 </Button>
             )}

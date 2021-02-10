@@ -5,6 +5,7 @@ export default [
     {
         colId: 'checkbox',
         width: 30,
+        minWidth: 30,
         checkboxSelection: true,
         suppressMenu: true,
     },

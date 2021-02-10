@@ -102,7 +102,7 @@ const BulknListSearchBox = (props) => {
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
-                    <Col xs={3} className="justify-content-center align-items-center pr-0">
+                    <Col xs={3} className="justify-content-center align-items-center pr-2">
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0 pr-1"
@@ -119,13 +119,13 @@ const BulknListSearchBox = (props) => {
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
-                    <div className="d-felx pr-1"></div>
-                    <Button variant="searching" onClick={() => handleClickSearchButton()} className="sm">
+                    {/* <Button variant="searching" onClick={() => handleClickSearchButton()} className="sm"> */}
+                    <Button variant="searching" className="flex-shrink-0" onClick={() => handleClickSearchButton()}>
                         검색
                     </Button>
                     <Col xs={4}></Col>
-                    <Button variant="positive" onClick={() => handleClickNewButton()} className="sm">
-                        벌크 문구 등록
+                    <Button variant="positive" onClick={() => handleClickNewButton()} className="flex-shrink-0">
+                        등록
                     </Button>
                 </Form.Row>
             </Form>

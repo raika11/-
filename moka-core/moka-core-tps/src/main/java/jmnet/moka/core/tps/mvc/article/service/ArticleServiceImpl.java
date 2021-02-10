@@ -219,7 +219,9 @@ public class ArticleServiceImpl implements ArticleService {
 
             // 중앙기자가 아닌 기자 추가
             if (McpString.isNotEmpty(articleDto.getArtReporter())) {
-                String[] otherReps = McpString.split(articleDto.getArtReporter(), ".");
+                String[] otherReps = articleDto
+                        .getArtReporter()
+                        .split("\\.");
                 for (String rep : otherReps) {
                     long cnt = reporterList
                             .stream()

@@ -192,9 +192,9 @@ const TourMonthCalendar = () => {
                 initialDate={moment().format(DB_DATEFORMAT)}
                 // 달력 상단의 버튼, 제목을 정의
                 headerToolbar={{
-                    left: 'prev next today',
+                    left: 'prev',
                     center: 'title',
-                    right: false,
+                    right: 'today next',
                 }}
                 locale="ko"
                 // 제목에 표시 될 텍스트

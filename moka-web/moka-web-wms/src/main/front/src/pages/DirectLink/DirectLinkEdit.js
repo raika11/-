@@ -158,6 +158,7 @@ const DirectLinkEdit = ({ history, match }) => {
         const result = validateLinkCheck();
         if (result) {
             toast.success('유효한 URL입니다');
+            setError({ ...error, linkUrl: false });
         } else {
             setError({ ...error, linkUrl: !result, linkUrlMessage: URL_ERROR });
         }

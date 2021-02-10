@@ -30,6 +30,10 @@
     min-height: 36px;
 }
 
+.selected-row {
+    background-color: rgba(33, 150, 243, 0.3);
+}
+
 /* -------------------------------------------------------------------
  * ag-theme-moka-grid (include ag-theme-aplpine)
  * 기본 테이블 + appStack 테이블 스타일

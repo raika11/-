@@ -9,19 +9,12 @@ import { GET_ARTICLE_PAGE_LIST, getArticlePageList, changeSearchOption } from '@
 /**
  * 템플릿 AgGrid 컴포넌트
  */
-const ArticlePageAgGrid = ({ onDelete }) => {
+const ArticlePageAgGrid = ({ match, onDelete }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
-    //state
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE_LIST]);
+    const { total, list, search, articlePage } = useSelector(({ articlePage }) => articlePage);
     const [rowData, setRowData] = useState([]);
-    const { total, list, search, loading, articlePage } = useSelector((store) => ({
-        total: store.articlePage.total,
-        list: store.articlePage.list,
-        search: store.articlePage.search,
-        loading: store.loading[GET_ARTICLE_PAGE_LIST],
-        articlePage: store.articlePage.articlePage,
-    }));
 
     /**
      * 테이블 검색옵션 변경
@@ -42,9 +35,9 @@ const ArticlePageAgGrid = ({ onDelete }) => {
      */
     const handleRowClicked = useCallback(
         (articlePage) => {
-            history.push(`/article-page/${articlePage.artPageSeq}`);
+            history.push(`${match.path}/${articlePage.artPageSeq}`);
         },
-        [history],
+        [history, match],
     );
 
     useEffect(() => {
@@ -63,7 +56,7 @@ const ArticlePageAgGrid = ({ onDelete }) => {
     return (
         <>
             <div className="mb-2 d-flex justify-content-end">
-                <Button variant="positive" onClick={() => history.push('/article-page/add')}>
+                <Button variant="positive" onClick={() => history.push(`${match.path}/add`)}>
                     기사페이지 등록
                 </Button>
             </div>

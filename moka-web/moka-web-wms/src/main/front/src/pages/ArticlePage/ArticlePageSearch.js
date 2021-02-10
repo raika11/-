@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { MokaSearchInput, MokaInput } from '@components';
 import { changeLatestDomainId } from '@store/auth';
 import { getArticlePageList, changeSearchOption, initialState } from '@store/articlePage';
@@ -75,7 +74,7 @@ const ArticlePageSearch = ({ match }) => {
             </Form.Row>
             <Form.Group as={Row}>
                 {/* 검색조건 */}
-                <Col xs={5} className="p-0 pr-2">
+                <div className="flex-shrink-0 mr-2">
                     <MokaInput
                         as="select"
                         value={search.searchType}
@@ -92,20 +91,19 @@ const ArticlePageSearch = ({ match }) => {
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
+                </div>
                 {/* 검색어 */}
-                <Col xs={7} className="p-0">
-                    <MokaSearchInput
-                        value={search.keyword}
-                        onChange={(e) => {
-                            setSearch({
-                                ...search,
-                                keyword: e.target.value,
-                            });
-                        }}
-                        onSearch={handleSearch}
-                    />
-                </Col>
+                <MokaSearchInput
+                    className="flex-fill"
+                    value={search.keyword}
+                    onChange={(e) => {
+                        setSearch({
+                            ...search,
+                            keyword: e.target.value,
+                        });
+                    }}
+                    onSearch={handleSearch}
+                />
             </Form.Group>
         </Form>
     );

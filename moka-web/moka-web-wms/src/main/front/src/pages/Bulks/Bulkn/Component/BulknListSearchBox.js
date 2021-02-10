@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Col, Button } from 'react-bootstrap';
 import { MokaInput } from '@components';
@@ -74,6 +74,11 @@ const BulknListSearchBox = (props) => {
         dispatch(clearBulksArticle());
         history.push(`/${bulkPathName}/add`);
     };
+
+    useEffect(() => {
+        dispatch(getBulkList());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>

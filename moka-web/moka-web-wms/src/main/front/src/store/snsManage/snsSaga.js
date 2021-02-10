@@ -293,7 +293,8 @@ function* getSnsMeta({ type, payload: totalId }) {
 function* getSnsMetaList({ type, payload }) {
     yield put(startLoading(type));
     try {
-        const response = yield call(api.getSnsMetaList, { search: payload });
+        const search = { ...payload, startDt: moment(payload.startDt).format(DB_DATEFORMAT), endDt: moment(payload.endDt).format(DB_DATEFORMAT) };
+        const response = yield call(api.getSnsMetaList, { search });
 
         if (response.data.header.success) {
             const list = toSnsMetaListData(response.data.body.list);

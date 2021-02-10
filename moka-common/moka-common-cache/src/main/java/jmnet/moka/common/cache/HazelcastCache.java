@@ -92,7 +92,10 @@ public class HazelcastCache extends AbstractCache {
                 throw new CacheException("Type or key is not found");
             } else {
                 if (this.typeList.contains(type) == false) {
-                    throw new CacheException("Type is not found");
+                    if (this.typeList.contains(type) == false) {
+                        logger.debug("type {} is not found");
+                        return result;
+                    }
                 }
                 IMap<String, String> typeMap = this.hzDelegator.getMap(type);
                 if (typeMap != null) {
@@ -122,7 +125,8 @@ public class HazelcastCache extends AbstractCache {
                 throw new CacheException("Type or keyPrefix is null");
             } else {
                 if (this.typeList.contains(type) == false) {
-                    throw new CacheException("Type is not found");
+                    logger.debug("type {} is not found");
+                    return result;
                 }
                 IMap<String, String> typeMap = this.hzDelegator.getMap(type);
                 if (typeMap != null) {

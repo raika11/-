@@ -10,6 +10,7 @@ import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.core.common.ItemConstants;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.mvc.domain.DomainResolver;
@@ -154,8 +155,14 @@ public class MokaDomainTemplateMerger implements DomainTemplateMerger {
     @Override
     public void purgeItem(String domainId, String itemType, String itemId)
             throws TemplateMergeException, TemplateParseException {
-        MokaTemplateMerger templateMerger = getTemplateMerger(domainId);
-        templateMerger.purgeItem(itemType, itemId);
+        if ( itemType.equals(MokaConstants.ITEM_DATASET)) {
+            for (MokaTemplateMerger templateMerger : this.templateMergerMap.values()) {
+                templateMerger.purgeItem(itemType, itemId);
+            }
+        } else {
+            MokaTemplateMerger templateMerger = getTemplateMerger(domainId);
+            templateMerger.purgeItem(itemType, itemId);
+        }
     }
 
 

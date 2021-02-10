@@ -21,8 +21,9 @@ public class TmsApiConstants {
      **/
     public static final String COMMAND_BULK_PURGE = COMMAND_PREFIX + "/bulkPurge";
     public static final String COMMAND_PURGE = COMMAND_PREFIX + "/purge";
-    public static final String COMMAND_RESERVED_PURGE = COMMAND_PREFIX + "/reservedPurge";
-    public static final String COMMAND_CDN_CHANGE = COMMAND_PREFIX + "/cdnChange";
+    public static final String COMMAND_RESERVED_UPDATE = COMMAND_PREFIX + "/reservedUpdate";
+    public static final String COMMAND_CDN_UPDATE = COMMAND_PREFIX + "/cdnUpdate";
+    public static final String COMMAND_PAGE_UPDATE = COMMAND_PREFIX + "/pageUpdate";
     public static final String COMMAND_COMMAND_LIST = COMMAND_PREFIX + "/commandList";
     public static final String COMMAND_DOMAIN = COMMAND_PREFIX + "/domain";
     public static final String COMMAND_HEALTH = COMMAND_PREFIX + "/health";

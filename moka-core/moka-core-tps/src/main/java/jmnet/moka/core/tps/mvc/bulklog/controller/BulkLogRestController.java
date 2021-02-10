@@ -13,8 +13,10 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
+import jmnet.moka.core.tps.mvc.article.vo.ArticleBasicVO;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogSearchDTO;
 import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalIdDTO;
+import jmnet.moka.core.tps.mvc.bulklog.dto.BulkLogTotalDTO;
 import jmnet.moka.core.tps.mvc.bulklog.service.BulkLogService;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkLogVO;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkTotalLogVO;
@@ -62,23 +64,28 @@ public class BulkLogRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "벌크 모니터링 전체 건수")
     @GetMapping("/stat-total")
-    public ResponseEntity<?> getBulkLogStatTotal(@Valid @SearchParam BulkLogSearchDTO search) {
+    public ResponseEntity<?> getBulkLogStatTotal(@Valid @SearchParam BulkLogTotalDTO search) throws Exception {
 
         ResultListDTO<BulkTotalLogVO> resultListMessage = new ResultListDTO<>();
 
-        // 조회
-        Page<BulkTotalLogVO> returnValue = bulkLogService.findAllBulkLogStat(search);
+        try {
+            // 조회
+            List<BulkTotalLogVO> returnValue = bulkLogService.findAllBulkLogStat(search);
 
-        // 리턴값 설정
-        resultListMessage.setTotalCnt(returnValue.getTotalPages());
-        resultListMessage.setList(returnValue.getContent());
+            // 리턴값 설정
+            //ResultListDTO<BulkTotalLogVO> resultListMessage = new ResultListDTO<>();
+            resultListMessage.setList(returnValue);
 
+            ResultDTO<ResultListDTO<BulkTotalLogVO>> resultDto = new ResultDTO<>(resultListMessage);
 
-        ResultDTO<ResultListDTO<BulkTotalLogVO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT);
 
-        tpsLogger.success(ActionType.SELECT);
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD BULK LOG]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD BULK LOG]", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
     }
 
     /**

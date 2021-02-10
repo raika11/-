@@ -153,17 +153,30 @@ const PollEdit = ({ onDelete }) => {
             { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
         ];
         if (!commonUtil.isEmpty(edit.pollSeq)) {
-            buttons = [
-                {
-                    text: '수정',
-                    variant: 'positive',
-                    onClick: handleClickSave,
-                    className: 'mr-05',
-                    useAuth: true,
-                },
-                { text: '삭제', variant: 'negative', onClick: () => onDelete(edit.pollSeq), className: 'mr-05', useAuth: true },
-                { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
-            ];
+            if (edit.voteCnt === 0) {
+                buttons = [
+                    {
+                        text: '수정',
+                        variant: 'positive',
+                        onClick: handleClickSave,
+                        className: 'mr-05',
+                        useAuth: true,
+                    },
+                    { text: '삭제', variant: 'negative', onClick: () => onDelete(edit.pollSeq), className: 'mr-05', useAuth: true },
+                    { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
+                ];
+            } else {
+                buttons = [
+                    {
+                        text: '수정',
+                        variant: 'positive',
+                        onClick: handleClickSave,
+                        className: 'mr-05',
+                        useAuth: true,
+                    },
+                    { text: '취소', variant: 'negative', onClick: () => history.push('/poll'), className: 'mr-05' },
+                ];
+            }
         }
 
         return buttons;

@@ -1,6 +1,9 @@
 package jmnet.moka.core.common.rest;
 
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +76,8 @@ public class RestTemplateConfiguration {
      */
     @Bean
     @ConditionalOnProperty(name = "moka.rest-template.enable", havingValue = "true")
-    public RestTemplateHelper restTemplate() {
+    public RestTemplateHelper restTemplate()
+            throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         RestTemplate restTemplate = new RestTemplate();
 
         List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
@@ -83,7 +87,9 @@ public class RestTemplateConfiguration {
                 .readTimeout(connectionReadTimeout, TimeUnit.MILLISECONDS)
                 .connectTimeout(connectionTimeout, TimeUnit.MILLISECONDS)
                 .connectionPool(new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.MILLISECONDS)) //커넥션풀 적용
+                .hostnameVerifier((hostname, session) -> true)
                 .build();
+
 
         OkHttp3ClientHttpRequestFactory crf = new OkHttp3ClientHttpRequestFactory(client);
         restTemplate.setRequestFactory(crf);

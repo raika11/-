@@ -208,12 +208,36 @@ public class ArticleServiceImpl implements ArticleService {
             }
 
             // 기자목록
+            List<ArticleReporterVO> reporterList = new ArrayList<>();
             if (listMap.get(1) != null && listMap
                     .get(1)
                     .size() > 0 && listMap
                     .get(1)
                     .get(0) != null) {
-                List<ArticleReporterVO> reporterList = modelMapper.map(listMap.get(1), ArticleReporterVO.TYPE);
+                reporterList = modelMapper.map(listMap.get(1), ArticleReporterVO.TYPE);
+            }
+
+            // 중앙기자가 아닌 기자 추가
+            if (McpString.isNotEmpty(articleDto.getArtReporter())) {
+                String[] otherReps = McpString.split(articleDto.getArtReporter(), ".");
+                for (String rep : otherReps) {
+                    long cnt = reporterList
+                            .stream()
+                            .filter(r -> r
+                                    .getRepName()
+                                    .equals(rep))
+                            .count();
+                    if (cnt == 0) {
+                        ArticleReporterVO vo = ArticleReporterVO
+                                .builder()
+                                .repName(rep)
+                                .build();
+                        reporterList.add(vo);
+                    }
+                }
+            }
+
+            if (reporterList.size() > 0) {
                 articleDto.setReporterList(reporterList);
             }
 

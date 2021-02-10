@@ -28,7 +28,8 @@ public class PageVO implements Serializable {
 
     private static final long serialVersionUID = 947646099080077257L;
 
-    public static final Type TYPE = new TypeReference<List<PageVO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<PageVO>>() {
+    }.getType();
 
     @Column(name = "PAGE_SEQ")
     private Long pageSeq;
@@ -40,4 +41,7 @@ public class PageVO implements Serializable {
 
     @Column(name = "PAGE_URL")
     private String pageUrl;
+
+    @Column(name = "CATEGORY")
+    private String category;
 }

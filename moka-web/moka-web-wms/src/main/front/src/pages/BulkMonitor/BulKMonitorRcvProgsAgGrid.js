@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader } from '@/components';
-import columnDefs from './BulKMonitorRcvprogsAgGridColumns';
-// import RcvProgsModal from './modals/RcvProgsModal';
+import columnDefs from './BulKMonitorRcvProgsAgGridColumns';
+import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { GET_BULK_STAT_LIST } from '@/store/bulks';
 
@@ -17,7 +17,7 @@ const defaultProps = {
 /**
  * 벌크 모니터링 목록
  */
-const BulKMonitorRcvprogsAgGrid = () => {
+const BulKMonitorRcvProgsAgGrid = () => {
     const search = useSelector((store) => store.bulkMonitor.search);
     const sendList = useSelector((store) => store.bulkMonitor.sendList);
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_LIST]);
@@ -106,13 +106,13 @@ const BulKMonitorRcvprogsAgGrid = () => {
                     onCellClicked={handleRowClicked}
                 />
             </div>
-            {/* <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} /> */}
+            <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />
             <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} />
         </>
     );
 };
 
-BulKMonitorRcvprogsAgGrid.propTypes = propTypes;
-BulKMonitorRcvprogsAgGrid.defaultProps = defaultProps;
+BulKMonitorRcvProgsAgGrid.propTypes = propTypes;
+BulKMonitorRcvProgsAgGrid.defaultProps = defaultProps;
 
-export default BulKMonitorRcvprogsAgGrid;
+export default BulKMonitorRcvProgsAgGrid;

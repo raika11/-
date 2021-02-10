@@ -39,8 +39,8 @@ export const initialState = {
         },
         total: 0,
         search: {
-            startDt: moment(new Date(2020, 7, 21, 0, 0, 0)).format(DB_DATEFORMAT),
-            endDt: moment(new Date(2020, 7, 21, 23, 59, 59)).format(DB_DATEFORMAT),
+            startDt: moment().set('hour', 0).set('minute', 0).set('seconds', 0),
+            endDt: moment(),
             searchType: 'artTitle',
             keyword: '',
             page: 0,

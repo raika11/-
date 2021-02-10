@@ -10,7 +10,8 @@ import { initialState, getCommentList, changeSearchOption } from '@store/comment
 import toast from '@utils/toastUtil';
 import { DB_DATEFORMAT } from '@/constants';
 import { messageBox } from '@utils/toastUtil';
-import AuthButton from '@pages/Auth/AuthButton';
+import { AuthButton } from '@pages/Auth/AuthButton';
+
 moment.locale('ko');
 
 /**

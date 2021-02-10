@@ -172,7 +172,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                 </Col>
                 <Col xs={2} className="p-0  pr-2 text-right">
                     <Button variant="positive" onClick={onAdd}>
-                        투표 등록
+                        등록
                     </Button>
                 </Col>
             </Form.Row>

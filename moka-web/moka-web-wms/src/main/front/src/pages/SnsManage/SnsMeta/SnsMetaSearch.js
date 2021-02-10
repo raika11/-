@@ -100,19 +100,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         name="startDt"
                         value={options.startDt}
                         onChange={(param) => {
-                            let selectDate = param._d;
-
-                            if (selectDate) {
-                                selectDate = moment()
-                                    .set('year', selectDate.getFullYear())
-                                    .set('month', selectDate.getMonth())
-                                    .set('date', selectDate.getDate())
-                                    .set('hour', 0)
-                                    .set('minute', 0)
-                                    .set('seconds', 0)
-                                    .format(DB_DATEFORMAT);
-                            }
-                            handleChangeValue('startDt', selectDate);
+                            handleChangeValue('startDt', param);
                         }}
                         inputProps={{ timeFormat: null }}
                         disabled={disabled.date}
@@ -125,19 +113,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         name="endDt"
                         value={options.endDt}
                         onChange={(param) => {
-                            let selectDate = param._d;
-
-                            if (selectDate) {
-                                selectDate = moment()
-                                    .set('year', selectDate.getFullYear())
-                                    .set('month', selectDate.getMonth())
-                                    .set('date', selectDate.getDate())
-                                    .set('hour', 23)
-                                    .set('minute', 59)
-                                    .set('seconds', 59)
-                                    .format(DB_DATEFORMAT);
-                            }
-                            handleChangeValue('endDt', selectDate);
+                            handleChangeValue('endDt', param);
                         }}
                         inputProps={{ timeFormat: null }}
                         disabled={disabled.date}

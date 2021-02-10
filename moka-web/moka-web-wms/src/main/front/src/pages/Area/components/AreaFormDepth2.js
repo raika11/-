@@ -34,45 +34,6 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
     const [error, setError] = useState({}); // 에러
 
     /**
-     * 입력값 변경
-     * @param {object} e 이벤트객체
-     * @param {number} index
-     */
-    const handleChangeValue = (e, idx) => {
-        const { name, value, checked, selectedOptions } = e.target;
-
-        if (name === 'usedYn') {
-            setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
-        } else if (name === 'areaDiv') {
-            setTemp({ ...temp, areaDiv: value });
-            setAreaComps([]);
-            setAreaComp({});
-        } else if (name === 'component') {
-            // ComponentSelector에서 option이 변경될 때 (areaComps를 제거하고, areaComp의 deskingPart를 초기화)
-            const { datatype } = selectedOptions[0].dataset;
-            setComponent({ componentSeq: value, dataType: datatype });
-            setAreaComps([]);
-            setAreaComp({ ...areaComp, deskingPart: null });
-            setError({ ...error, component: false });
-        } else if (name === 'container') {
-            // ContainerSelector에서 option이 변경될 때
-            setContainer({ containerSeq: value });
-            handleCompLoad({ containerSeq: value });
-            setError({ ...error, container: false });
-        } else if (name === 'compAlign') {
-            const newComps = produce(areaComps, (draft) => {
-                draft.splice(idx, 1, {
-                    ...areaComps[idx],
-                    compAlign: value,
-                });
-            });
-            setAreaComps(newComps);
-        } else {
-            setTemp({ ...temp, [name]: value });
-        }
-    };
-
-    /**
      * validate
      * @param {object} saveObj area data
      */
@@ -205,12 +166,12 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                             domainId: page.domain?.domainId,
                         },
                         callback: ({ body }) => {
-                            // 오리지널 areaComps의 deskingPart를 셋팅
                             setAreaComps(
                                 body.list.map((b) => {
+                                    // 원본 데이터의 deskingPart를 셋팅
                                     let deskingPart = null;
-                                    if (origin.areaComps?.length > 0) {
-                                        const tgt = origin.areaComps.find((o) => o.component !== null && o.component?.componentSeq === b.componentSeq);
+                                    if (area.area?.areaComps?.length > 0) {
+                                        const tgt = area.area.areaComps.find((o) => o.component !== null && o.component?.componentSeq === b.componentSeq);
                                         deskingPart = tgt?.deskingPart;
                                     }
 
@@ -240,7 +201,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                 });
             }
         },
-        [areaCompLoad, dispatch, page.domain],
+        [areaCompLoad, dispatch, area, page.domain],
     );
 
     /**
@@ -316,6 +277,62 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
         },
         [dispatch, page.pageSeq, domain.domainId, areaCompLoad],
     );
+
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트객체
+     * @param {number} index
+     */
+    const handleChangeValue = useCallback(
+        (e, idx) => {
+            const { name, value, checked, selectedOptions } = e.target;
+
+            if (name === 'usedYn') {
+                setTemp({ ...temp, usedYn: checked ? 'Y' : 'N' });
+            } else if (name === 'areaDiv') {
+                setTemp({ ...temp, areaDiv: value });
+                setAreaComps([]);
+                setAreaComp({});
+            } else if (name === 'component') {
+                // ComponentSelector에서 option이 변경될 때 (areaComps를 제거하고, areaComp의 deskingPart를 초기화)
+                const { datatype } = selectedOptions[0].dataset;
+                setComponent({ componentSeq: value, dataType: datatype });
+                setAreaComps([]);
+                setAreaComp({ ...areaComp, deskingPart: null });
+                setError({ ...error, component: false });
+            } else if (name === 'container') {
+                // ContainerSelector에서 option이 변경될 때
+                setContainer({ containerSeq: value });
+                handleCompLoad({ containerSeq: value });
+                setError({ ...error, container: false });
+            } else if (name === 'compAlign') {
+                const newComps = produce(areaComps, (draft) => {
+                    draft.splice(idx, 1, {
+                        ...areaComps[idx],
+                        compAlign: value,
+                    });
+                });
+                setAreaComps(newComps);
+            } else {
+                setTemp({ ...temp, [name]: value });
+            }
+        },
+        [areaComp, areaComps, error, handleCompLoad, temp],
+    );
+
+    useEffect(() => {
+        return () => {
+            setTemp({});
+            setLoadCnt(0);
+            setError({});
+            setCompOptions([]);
+            setContOptions([]);
+            setComponent({});
+            setContainer({});
+            setAreaComps([]);
+            setAreaComp({});
+        };
+    }, []);
 
     useEffect(() => {
         // 데이터 초기화
@@ -469,15 +486,13 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                 </Form.Row>
 
                 {/* 컨테이너 리로드 문구 */}
-                {origin.areaDiv === ITEM_CT && areaCompLoad.byContainer && <ContainerLoadBox message={areaCompLoad.byContainerMessage} onClick={() => getContOptions(true)} />}
+                {areaCompLoad.byContainer && <ContainerLoadBox message={areaCompLoad.byContainerMessage} onClick={() => getContOptions(true)} />}
 
                 {/* 컴포넌트 리로드 (페이지에 컴포넌트가 없어졌을 때) 문구 */}
-                {origin.areaDiv === ITEM_CP && areaCompLoad.byPage && <ComponentLoadBox message={areaCompLoad.byPageMessage} onClick={() => getCompOptions(true)} />}
+                {areaCompLoad.byPage && <ComponentLoadBox message={areaCompLoad.byPageMessage} onClick={() => getCompOptions(true)} />}
 
                 {/* 컴포넌트 리로드 (컨테이너에 컴포넌트가 없어졌을 때) 문구 */}
-                {origin.areaDiv === ITEM_CT && areaCompLoad.byContainerComp && (
-                    <ComponentLoadBox message={areaCompLoad.byContainerCompMessage} onClick={() => handleCompLoad(container)} />
-                )}
+                {areaCompLoad.byContainerComp && <ComponentLoadBox message={areaCompLoad.byContainerCompMessage} onClick={() => handleCompLoad(container)} />}
 
                 {/* 컨테이너일 경우 하위 컴포넌트 나열 */}
                 {temp.areaDiv === ITEM_CT &&
@@ -488,7 +503,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                             areaComps={areaComps}
                             index={idx}
                             onChange={handleChangeValue}
-                            disalbed={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
+                            disabled={areaCompLoad.byContainer || areaCompLoad.byContainerComp || temp.areaAlign === AREA_ALIGN_V}
                             setAreaComps={setAreaComps}
                         />
                     ))}

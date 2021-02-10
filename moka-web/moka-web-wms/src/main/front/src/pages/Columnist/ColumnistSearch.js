@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 import { MokaInputLabel, MokaSearchInput } from '@components';
 import { initialState, getColumnistList, changeSearchOption, clearColumnist } from '@store/columnist';
-import AuthButton from '@pages/Auth/AuthButton';
+import { AuthButton } from '@pages/Auth/AuthButton';
 
 const ColumnistSearch = ({ match }) => {
     const dispatch = useDispatch();

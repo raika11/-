@@ -19,7 +19,7 @@ const ArticlePageEditor = (props) => {
     }));
 
     // state
-    const [title, setTitle] = useState('기사페이지 편집');
+    const [title, setTitle] = useState('기사페이지 수정');
     const [defaultValue, setDefalutValue] = useState('');
     const [error, setError] = useState({});
 
@@ -34,11 +34,11 @@ const ArticlePageEditor = (props) => {
     useEffect(() => {
         // 타이틀 변경
         if (articlePage.artPageSeq) {
-            setTitle(`기사페이지 편집(${articlePage.artPageSeq}_${articlePage.artPageName})`);
+            setTitle(`기사페이지 수정(${articlePage.artPageSeq}_${articlePage.artPageName})`);
             // defaultValue 변경
             setDefalutValue(artPageBody);
         } else {
-            setTitle('기사페이지 편집');
+            setTitle('기사페이지 등록');
             setDefalutValue('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -268,7 +268,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     }, [invalidList]);
 
     return (
-        <MokaCard title={`기사페이지 ${articlePage.artPageSeq ? '편집' : '등록'}`} loading={loading}>
+        <MokaCard title={`기사페이지 ${articlePage.artPageSeq ? '수정' : '등록'}`} loading={loading}>
             <Form>
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">

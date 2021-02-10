@@ -375,7 +375,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
 
     return (
         <MokaCard
-            title={`편집영역 ${temp.areaSeq ? '편집' : '등록'}`}
+            title={`편집영역 ${temp.areaSeq ? '수정' : '등록'}`}
             className="flex-fill"
             loading={loading}
             footer

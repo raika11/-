@@ -53,6 +53,10 @@ public class RelationSearchDTO extends SearchDTO {
     @NotNull(message = "{tps.domain.error.notnull.domainId}")
     private String domainId;
 
+    @ApiModelProperty("파일저장여부")
+    @Builder.Default
+    private String fileYn = MokaConstants.NO;
+
     public RelationSearchDTO() {
         // 검색 조건의 기본값을 설정
         super("pageSeq,desc");

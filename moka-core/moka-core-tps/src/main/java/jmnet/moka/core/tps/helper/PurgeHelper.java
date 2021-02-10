@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 import jmnet.moka.core.common.DpsApiConstants;
@@ -23,7 +22,9 @@ import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tps.mvc.cdnarticle.entity.CdnArticle;
-import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
+import jmnet.moka.core.tps.mvc.merge.service.MergeService;
+import jmnet.moka.core.tps.mvc.page.service.PageService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class PurgeHelper {
     @Value("${tms.port}")
     private int tmsPort;
 
-    @Value("${tms.command.targets")
+    @Value("${tms.command.targets}")
     private String[] tmsTargets;
 
     @Value("${dps.command.targets}")
@@ -72,6 +73,12 @@ public class PurgeHelper {
     private RestTemplateHelper restTemplateHelper;
     @Autowired
     private MessageByLocale messageByLocale;
+    @Autowired
+    private PageService pageService;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private MergeService mergeService;
 
     /**
      * tms퍼지. 모든 아이템에 해당. 한개 도메인 퍼지
@@ -167,18 +174,23 @@ public class PurgeHelper {
         return success ? "" : message;
     }
 
+
+
     /**
      * TMS의 TEMS 아이템을 purge 한다.
+     *
      * @param itemList TEMS 아이템
      * @return 퍼지 결과
      */
     public String tmsPurge(List<MergeItem> itemList) {
-        List<Map<String,String>> purgeItemList = new ArrayList<>();
-        for ( MergeItem mergeItem : itemList) {
-            Map<String,String> itemMap = new HashMap<>();
-            itemMap.put(TMS_PARAM_ITEM_TYPE,mergeItem.getItemType());
-            itemMap.put(TMS_PARAM_ITEM_ID,mergeItem.getItemId());
-            if ( mergeItem.getItemType().equals(MokaConstants.ITEM_DATASET)) {
+        List<Map<String, String>> purgeItemList = new ArrayList<>();
+        for (MergeItem mergeItem : itemList) {
+            Map<String, String> itemMap = new HashMap<>();
+            itemMap.put(TMS_PARAM_ITEM_TYPE, mergeItem.getItemType());
+            itemMap.put(TMS_PARAM_ITEM_ID, mergeItem.getItemId());
+            if (mergeItem
+                    .getItemType()
+                    .equals(MokaConstants.ITEM_DATASET)) {
                 itemMap.put(TMS_PARAM_DOMAIN_ID, null);
             } else {
                 itemMap.put(TMS_PARAM_DOMAIN_ID, mergeItem.getString(ITEM_DOMAIN_ID));
@@ -221,12 +233,30 @@ public class PurgeHelper {
         }
     }
 
+    //    public String tmsPageUpdate(List<PageVO> pageList){
+    //        for (PageVO page : pageList) {
+    //            Page pageInfo = pageService
+    //                    .findPageBySeq(page.getPageSeq())
+    //                    .orElseThrow(() -> {
+    //                        String message = messageByLocale.get("tps.common.error.no-data");
+    //                        return new NoDataException(message);
+    //                    });
+    //            PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
+    //
+    //            String html = mergeService.getMergePage(pageDto);
+    //            this.tmsPageUpdate(doaminId, page
+    //                    .getPageSeq()
+    //                    .toString(), page.getCategory(), html);
+    //        }
+    //    }
+
     /**
      * 페이지 내용을 변경한다.
+     *
      * @param domainId 도메인 Id
-     * @param itemId 페이지 아이템 Id
+     * @param itemId   페이지 아이템 Id
      * @param category 카테고리
-     * @param html 머징된 결과
+     * @param html     머징된 결과
      * @return 업데이트 결과
      */
     public String tmsPageUpdate(String domainId, String itemId, String category, String html) {
@@ -261,14 +291,14 @@ public class PurgeHelper {
 
     /**
      * 예약어를 업데이트 한다.
+     *
      * @param domainId 도메인 Id
      * @return 업데이트 결과
      */
     public String tmsReservedUpdate(String domainId) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
         builder.path(TmsApiConstants.COMMAND_RESERVED_UPDATE);
-        builder
-                .queryParam(TMS_PARAM_DOMAIN_ID, domainId);
+        builder.queryParam(TMS_PARAM_DOMAIN_ID, domainId);
         String uriAndQuery = builder
                 .build()
                 .encode()
@@ -299,6 +329,7 @@ public class PurgeHelper {
 
     /**
      * CDN으로 redirect할 기사 목록을 업데이트 한다.
+     *
      * @param cdnArticleList CDN 목록
      * @return 업데이트 결과
      */

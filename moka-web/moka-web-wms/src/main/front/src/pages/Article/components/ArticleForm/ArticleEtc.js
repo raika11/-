@@ -73,7 +73,7 @@ const ArticleEtc = ({ bulkSiteList, articleService = {} }) => {
                         <MokaInput
                             as="checkbox"
                             className="mr-2 float-left ft-12"
-                            inputProps={{ label: '로그인', checked: articleService.loginFlag === 'Y', custom: true, readOnly: true }}
+                            inputProps={{ label: '로그인', checked: articleService?.loginFlag === 'Y', custom: true, readOnly: true }}
                         />
                         <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: 'AB테스트용', custom: true, readOnly: true }} />
                     </div>

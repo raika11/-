@@ -450,10 +450,9 @@ const BoardsEdit = () => {
     return (
         <MokaCard
             width={550}
-            title={`${editState.title}`}
-            titleClassName="mb-0"
-            loading={null}
-            className="mr-gutter flex-fill"
+            title={editState.title}
+            loading={false}
+            className="flex-fill"
             bodyClassName="d-flex flex-column"
             footer
             footerClassName="justify-content-center"
@@ -530,7 +529,7 @@ const BoardsEdit = () => {
                 if (editState.mode === 'new' || editState.mode === 'modify') {
                     // info
                     return (
-                        <Form className="mb-gutter">
+                        <Form>
                             {editState.mode === 'modify' && (
                                 <Form.Row>
                                     <Col xs={6} style={{ fontSize: '1px' }}>
@@ -606,7 +605,7 @@ const BoardsEdit = () => {
                                 <Form.Row className="mb-2">
                                     {/* 말머리1 */}
                                     {selectboard.titlePrefix1 !== null && (
-                                        <Col xs={6} className="p-0">
+                                        <Col xs={6} className="p-0 pr-20">
                                             <MokaInputLabel
                                                 as="select"
                                                 label="말머리1"
@@ -623,7 +622,7 @@ const BoardsEdit = () => {
 
                                     {/* 말머리2*/}
                                     {selectboard.titlePrefix2 !== null && (
-                                        <Col xs={6} className="p-0">
+                                        <Col xs={6} className="p-0 pl-20">
                                             <MokaInputLabel
                                                 as="select"
                                                 label="말머리2"
@@ -706,13 +705,13 @@ const BoardsEdit = () => {
                                     );
                                 }
                             })()}
-                            <hr />
+                            <hr className="divider" />
                             {(function () {
                                 // 게시판 등롱시 파일 업로드 활성화 선택시
                                 if (selectboard.fileYn === 'Y') {
                                     return (
                                         <>
-                                            <Form.Row className="mb-2">
+                                            <Form.Row>
                                                 <Col xs={4} className="p-0">
                                                     <MokaInputLabel label={`첨부파일`} as="none" className="mb-2" />
                                                 </Col>
@@ -760,7 +759,7 @@ const BoardsEdit = () => {
                 } else if (editState.mode === 'reply') {
                     // 대답.
                     return (
-                        <Form className="mb-gutter">
+                        <Form>
                             <Form.Row className="mb-2">
                                 <Col className="p-0">
                                     <MokaInputLabel
@@ -810,12 +809,11 @@ const BoardsEdit = () => {
                                 }
                             })()}
 
-                            <Form.Row className="mb-2">
+                            <Form.Row>
                                 <Col xs={7} className="p-0">
                                     <MokaInputLabel
                                         label="등록자"
                                         labelWidth={80}
-                                        className="mb-0"
                                         id="regName"
                                         name="regName"
                                         value={replyEditData.regName}

@@ -234,7 +234,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             </Form.Row>
 
             {/* 배경이미지 */}
-            <BackgroundImageForm className="mb-2 flex-wrap justify-content-between" onChange={onChange} agenda={agenda} />
+            <BackgroundImageForm className="mb-2 justify-content-between" onChange={onChange} agenda={agenda} />
 
             <hr className="divider" />
 

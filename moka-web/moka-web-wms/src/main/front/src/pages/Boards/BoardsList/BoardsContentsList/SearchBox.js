@@ -109,14 +109,13 @@ const SearchBox = (props) => {
     }, []);
 
     return (
-        <Form>
+        <Form className="mb-2">
             {/* 날짜 */}
-            <Form.Row className="d-flex mb-3">
+            <Form.Row className="d-flex mb-2">
                 {/* 시작 날짜 */}
-                <div style={{ width: 150 }} className="mb-0 pl-1 pr-2">
+                <div style={{ width: 130 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
                         name="startDt"
                         id="startDt"
                         value={searchData.startDt}
@@ -128,11 +127,11 @@ const SearchBox = (props) => {
                         inputProps={{ timeFormat: null }}
                     />
                 </div>
+
                 {/* 종료 날짜 */}
-                <div style={{ width: 145 }} className="mb-0 pl-1 pr-1">
+                <div style={{ width: 130 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
                         name="endDt"
                         id="endDt"
                         value={searchData.endDt}
@@ -144,8 +143,9 @@ const SearchBox = (props) => {
                         inputProps={{ timeFormat: null }}
                     />
                 </div>
+
                 {/* 게시판 사용 비상용 선택. */}
-                <div style={{ width: 100 }} className="mb-0 pl-1 pr-1">
+                <div className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="usedYn" id="usedYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
                         <option hidden>선택</option>
                         {selectItem.usedYn.map((item, index) => (
@@ -155,21 +155,26 @@ const SearchBox = (props) => {
                         ))}
                     </MokaInput>
                 </div>
+
                 {/* 말머리1 검색. */}
-                <div style={{ width: 250 }} className="mb-0 pl-1 pr-1">
-                    <MokaInput id="titlePrefix1" name="titlePrefix1" placeholder={'말머리1'} value={searchData.titlePrefix1} onChange={(e) => handleSearchChange(e)}></MokaInput>
-                </div>
+                <MokaInput
+                    className="mr-2 flex-fill"
+                    id="titlePrefix1"
+                    name="titlePrefix1"
+                    placeholder="말머리1"
+                    value={searchData.titlePrefix1}
+                    onChange={(e) => handleSearchChange(e)}
+                />
+
                 {/* 검색 옵션 리셋. */}
-                <div style={{ width: 70 }} className="mb-0 pl-1 pr-1">
-                    <Button variant="outline-neutral" onClick={() => handleClickResetButton()}>
-                        초기화
-                    </Button>
-                </div>
+                <Button className="flex-shrink-0" variant="negative" onClick={() => handleClickResetButton()}>
+                    초기화
+                </Button>
             </Form.Row>
 
-            <Form.Row className="d-flex mb-3">
-                <Col xs={2}>
-                    {/* 채널 선택. */}
+            <Form.Row>
+                {/* 채널 선택. */}
+                <div className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="searchType" id="searchType" value={searchData.searchType} onChange={(e) => handleSearchChange(e)}>
                         <option hidden>선택</option>
                         {channeltype_list.map((item, index) => (
@@ -178,23 +183,22 @@ const SearchBox = (props) => {
                             </option>
                         ))}
                     </MokaInput>
-                </Col>
-                <Col xs={9} className="p-0">
-                    <MokaSearchInput
-                        id="keyword"
-                        name="keyword"
-                        placeholder={'제목, 내용, 등록자 명'}
-                        value={searchData.keyword}
-                        onChange={(e) => handleSearchChange(e)}
-                        onSearch={() => handleClickSearchButton()}
-                    />
-                </Col>
-                <Col xs={1}>
-                    {/* 게시글 등록 버튼 */}
-                    <Button variant="positive" onClick={() => handleClickNewButton()}>
-                        등록
-                    </Button>
-                </Col>
+                </div>
+
+                <MokaSearchInput
+                    id="keyword"
+                    name="keyword"
+                    className="mr-2 flex-fill"
+                    placeholder={'제목, 내용, 등록자 명'}
+                    value={searchData.keyword}
+                    onChange={(e) => handleSearchChange(e)}
+                    onSearch={() => handleClickSearchButton()}
+                />
+
+                {/* 게시글 등록 버튼 */}
+                <Button className="flex-shrink-0" variant="positive" onClick={() => handleClickNewButton()}>
+                    등록
+                </Button>
             </Form.Row>
         </Form>
     );

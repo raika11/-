@@ -11,7 +11,11 @@ const TreeBox = (props) => {
     const params = useParams();
     const boardId = useRef(null);
     const loading = useSelector(({ loading }) => loading[GET_BOARD_GROUP_LIST]);
-    const { boardType, groupList, pagePathName } = useSelector(({ board }) => board);
+    const { boardType, groupList, pagePathName } = useSelector(({ board }) => ({
+        pagePathName: board.pagePathName,
+        boardType: board.boardType,
+        groupList: board.listmenu.groupList,
+    }));
     const [treeData, setTreeData] = useState([]);
     const [selectCategory, setSelectCategory] = useState(0);
 

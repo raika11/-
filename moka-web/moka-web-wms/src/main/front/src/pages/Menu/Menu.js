@@ -8,6 +8,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { clearStore } from '@store/menu';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { changeSearchOption, deleteMenu, existAuth } from '@store/menu';
+import Button from 'react-bootstrap/Button';
 const MenuLargeLIst = React.lazy(() => import('./MenuLargeLIst'));
 const MenuMiddleLIst = React.lazy(() => import('./MenuMiddleLIst'));
 const MenuSmallLIst = React.lazy(() => import('./MenuSmallLIst'));
@@ -47,7 +48,9 @@ const Menu = () => {
         setMenuSearchInfo(rowData.menuSeq, rowData.depth, rowData.menuId, rowData.parentMenuId);
     };
 
-    const handleSaveOrder = () => {};
+    const handleSaveOrder = (data) => {
+        console.log(data);
+    };
 
     const handleNewMenu = (event) => {
         const btnDepth = event.currentTarget.getAttribute('depth');
@@ -164,23 +167,15 @@ const Menu = () => {
                 title="대메뉴"
                 width={LIST_WIDTH}
                 height={CARD_DEFAULT_HEIGHT}
-                buttons={[
-                    // 메뉴 추가 버튼
-                    {
-                        depth: '1',
-                        parentmenuid: rootParentMenuId,
-                        onClick: handleNewMenu,
-                        icon: <MokaIcon iconName="fal-plus" />,
-                    },
-                    // 메뉴 순서변경 저장 버튼
-                    {
-                        depth: '1',
-                        parentmenuid: rootParentMenuId,
-                        onClick: handleSaveOrder,
-                        icon: <MokaIcon iconName="fal-save" />,
-                    },
-                ]}
             >
+                <div className="mb-2 d-flex justify-content-end">
+                    <Button depth="1" parentmenuid={rootParentMenuId} variant="positive" className="mr-10" onClick={handleNewMenu}>
+                        등록
+                    </Button>
+                    <Button depth="1" parentmenuid={rootParentMenuId} variant="positive" onClick={handleNewMenu}>
+                        저장
+                    </Button>
+                </div>
                 <Suspense>
                     <MenuLargeLIst handleRowClicked={handleRowClicked} menuId={largeMenuId} parentMenuId={rootParentMenuId} depth="1" />
                 </Suspense>
@@ -192,23 +187,15 @@ const Menu = () => {
                 title="중메뉴"
                 width={LIST_WIDTH}
                 height={CARD_DEFAULT_HEIGHT}
-                buttons={[
-                    // 메뉴 추가 버튼
-                    {
-                        depth: '2',
-                        parentmenuid: largeMenuId,
-                        onClick: handleNewMenu,
-                        icon: <MokaIcon iconName="fal-plus" />,
-                    },
-                    // 메뉴 순서변경 저장 버튼
-                    {
-                        depth: '2',
-                        parentmenuid: largeMenuId,
-                        onClick: handleSaveOrder,
-                        icon: <MokaIcon iconName="fal-save" />,
-                    },
-                ]}
             >
+                <div className="mb-2 d-flex justify-content-end">
+                    <Button depth="2" parentmenuid={largeMenuId} variant="positive" className="mr-10" onClick={handleNewMenu}>
+                        등록
+                    </Button>
+                    <Button depth="2" parentmenuid={largeMenuId} variant="positive" onClick={handleNewMenu}>
+                        저장
+                    </Button>
+                </div>
                 <Suspense>
                     <MenuMiddleLIst handleRowClicked={handleRowClicked} parentMenuId={largeMenuId} menuId={middleMenuId} depth="2" />
                 </Suspense>
@@ -220,23 +207,15 @@ const Menu = () => {
                 title="소메뉴"
                 width={LIST_WIDTH}
                 height={CARD_DEFAULT_HEIGHT}
-                buttons={[
-                    // 메뉴 추가 버튼
-                    {
-                        depth: '3',
-                        parentmenuid: middleMenuId,
-                        onClick: handleNewMenu,
-                        icon: <MokaIcon iconName="fal-plus" />,
-                    },
-                    // 메뉴 순서변경 저장 버튼
-                    {
-                        depth: '3',
-                        parentmenuid: middleMenuId,
-                        onClick: handleSaveOrder,
-                        icon: <MokaIcon iconName="fal-save" />,
-                    },
-                ]}
             >
+                <div className="mb-2 d-flex justify-content-end">
+                    <Button depth="3" parentmenuid={middleMenuId} variant="positive" className="mr-10" onClick={handleNewMenu}>
+                        등록
+                    </Button>
+                    <Button depth="3" parentmenuid={middleMenuId} variant="positive" onClick={handleNewMenu}>
+                        저장
+                    </Button>
+                </div>
                 <Suspense>
                     <MenuSmallLIst handleRowClicked={handleRowClicked} parentMenuId={middleMenuId} menuId={smallMenuId} depth="3" />
                 </Suspense>

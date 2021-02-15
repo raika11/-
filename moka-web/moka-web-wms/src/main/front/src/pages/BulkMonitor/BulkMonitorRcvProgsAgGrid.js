@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import clsx from 'clsx';
-import { AgGridReact } from 'ag-grid-react';
-import { MokaLoader } from '@/components';
+import { MokaTable } from '@/components';
 import columnDefs from './BulkMonitorRcvProgsAgGridColumns';
 import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
@@ -18,53 +16,24 @@ const BulkMonitorRcvProgsAgGrid = () => {
     const [rowData, setRowData] = useState([]);
     const [showRcvProgsModal, setShowRcvProgsModal] = useState(false);
     const [showBulkLogModal, setShowBulkLogModal] = useState(false);
-    const [modalData, setModalData] = useState(null);
-
-    const getRowHeight = useCallback((params) => {
-        const dtKeys = Object.keys(params.data).filter((dtKey) => {
-            return dtKey.includes('Dt');
-        });
-        let dtVal = [];
-
-        for (let i = 0; i < dtKeys.length; i++) {
-            if (params.data[dtKeys[i]] !== null) {
-                dtVal.push(params.data[dtKeys[i]]);
-            }
-        }
-
-        return dtVal.length > 0 ? 65 : 34;
-    }, []);
-
-    const onColumnResized = (params) => {
-        params.api.resetRowHeights();
-    };
-
-    const onColumnVisible = (params) => {
-        params.api.resetRowHeights();
-    };
+    const [modalData, setModalData] = useState({});
 
     /**
      * 목록 Row클릭
      */
     const handleRowClicked = useCallback((params) => {
-        const preventRowClickCell = ['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'bulkLogBtn'];
-        if (!preventRowClickCell.includes(params.colDef.field)) {
-            console.log(params);
-        }
+        console.log(params);
     }, []);
 
-    const handleClickValue = (value) => {
-        if (value === '완료' || value === '실패') {
-            setShowRcvProgsModal(true);
-            setModalData(value);
-        } else {
-            return;
-        }
-    };
+    const handleClickValue = useCallback((data, type) => {
+        setModalData({ ...data, type });
+        setShowRcvProgsModal(true);
+    }, []);
 
-    const handleClickBulkLog = () => {
+    const handleClickBulkLog = useCallback((data) => {
+        setModalData({ ...data });
         setShowBulkLogModal(true);
-    };
+    }, []);
 
     useEffect(() => {
         // row 생성
@@ -79,29 +48,25 @@ const BulkMonitorRcvProgsAgGrid = () => {
         } else {
             setRowData([]);
         }
-    }, [sendList]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [handleClickValue, sendList]);
 
     return (
         <>
-            <div className={clsx('ag-theme-moka-grid ag-grid-align-center position-relative overflow-hidden flex-fill')}>
-                {loading && <MokaLoader />}
-                <AgGridReact
-                    rowData={rowData}
-                    defaultColDef={{
-                        wrapText: true,
-                        autoHeight: true,
-                    }}
-                    localeText={{ noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' }}
-                    getRowNodeId={(params) => params.orgSourceName}
-                    columnDefs={columnDefs}
-                    getRowHeight={getRowHeight}
-                    onColumnResized={onColumnResized}
-                    onColumnVisible={onColumnVisible}
-                    onCellClicked={handleRowClicked}
-                />
-            </div>
+            <MokaTable
+                className="overflow-hidden flex-fill ag-grid-align-center"
+                columnDefs={columnDefs}
+                rowData={rowData}
+                onRowNodeId={(params) => params.logSeq}
+                onRowClicked={handleRowClicked}
+                loading={loading}
+                page={search.page}
+                size={search.size}
+                preventRowClickCell={['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'bulkLogBtn']}
+                paging={false}
+            />
             <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />
-            <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} />
+            <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} data={modalData} />
         </>
     );
 };

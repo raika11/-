@@ -7,20 +7,20 @@ export default [
         headerName: '매체',
         field: 'orgSourceName',
         width: 150,
-        cellStyle: {},
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '기사 번호',
         field: 'contentId',
         width: 100,
-        cellStyle: {},
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '기사 제목',
         wrapText: true,
         autoHeight: true,
         field: 'title',
-        cellStyle: {},
+        cellStyle: { display: 'flex', alignItems: 'center', height: '64px', paddingTop: '4px', paddingBottom: '4px' },
         flex: 1,
         tooltipField: 'title',
     },
@@ -28,13 +28,17 @@ export default [
         headerName: 'IUD',
         field: 'iud',
         width: 60,
-        cellStyle: { textAlign: 'center' },
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '상태',
         field: 'status',
-        width: 130,
-        cellStyle: { textAlign: 'center' },
+        width: 100,
+        cellStyle: {},
+        cellRendererFramework: (params) => {
+            const { data } = params;
+            return <RcvProgsRenderer {...params} type="status" value={data.status} onClick={params.data.handleClickValue} />;
+        },
     },
     {
         headerName: '사이트',
@@ -44,48 +48,58 @@ export default [
             {
                 headerName: '네이버',
                 field: 'naverStatus',
-                width: 130,
-                cellStyle: { textAlign: 'center' },
+                width: 100,
+                cellStyle: {},
                 cellRendererFramework: (params) => {
                     const { data } = params;
-                    return <RcvProgsRenderer {...params} value={data.naverStatus} onClick={params.data.handleClickValue} />;
+                    return <RcvProgsRenderer {...params} type="naver" value={data.naverStatus} onClick={params.data.handleClickValue} />;
                 },
             },
             {
                 headerName: '다음',
                 field: 'daumStatus',
-                width: 130,
-                cellStyle: { textAlign: 'center' },
+                width: 100,
+                cellStyle: {},
                 cellRendererFramework: (params) => {
                     const { data } = params;
-                    return <RcvProgsRenderer {...params} value={data.daumStatus} onClick={params.data.handleClickValue} />;
+                    return <RcvProgsRenderer {...params} type="daum" value={data.daumStatus} onClick={params.data.handleClickValue} />;
                 },
             },
             {
                 headerName: '네이트',
                 field: 'nateStatus',
-                width: 130,
-                cellStyle: { textAlign: 'center' },
+                width: 100,
+                cellStyle: {},
                 cellRendererFramework: (params) => {
                     const { data } = params;
-                    return <RcvProgsRenderer {...params} value={data.nateStatus} onClick={params.data.handleClickValue} />;
+                    return <RcvProgsRenderer {...params} type="nate" value={data.nateStatus} onClick={params.data.handleClickValue} />;
                 },
             },
             {
                 headerName: '줌',
                 field: 'zoomStatus',
-                width: 130,
-                cellStyle: { textAlign: 'center' },
+                width: 100,
+                cellStyle: {},
                 cellRendererFramework: (params) => {
                     const { data } = params;
-                    return <RcvProgsRenderer {...params} value={data.zoomStatus} onClick={params.data.handleClickValue} />;
+                    return <RcvProgsRenderer {...params} type="zoom" value={data.zoomStatus} onClick={params.data.handleClickValue} />;
+                },
+            },
+            {
+                headerName: '언론재단',
+                field: 'kpfStatus',
+                width: 100,
+                cellStyle: {},
+                cellRendererFramework: (params) => {
+                    const { data } = params;
+                    return <RcvProgsRenderer {...params} type="kpf" value={data.kpfStatus} onClick={params.data.handleClickValue} />;
                 },
             },
             {
                 headerName: '기타',
                 field: 'bulkLogBtn',
-                width: 130,
-                cellStyle: { textAlign: 'center' },
+                width: 100,
+                cellStyle: {},
                 cellRendererFramework: (params) => {
                     const { data } = params;
                     return <RcvProgsBulkLogBtnRenderer {...params} onClick={data.handleClickBulkLog} />;

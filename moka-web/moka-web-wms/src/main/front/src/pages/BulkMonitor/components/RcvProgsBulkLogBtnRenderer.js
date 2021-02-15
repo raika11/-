@@ -23,9 +23,11 @@ const RcvProgsBulkLogBtnRenderer = forwardRef((props, ref) => {
         [data, onClick],
     );
     return (
-        <Button variant="outline-table-btn" size="sm" onClick={handleClick}>
-            상세
-        </Button>
+        <div className="h-100 d-flex align-items-center justify-content-center">
+            <Button variant="outline-table-btn" size="sm" onClick={handleClick}>
+                상세
+            </Button>
+        </div>
     );
 });
 

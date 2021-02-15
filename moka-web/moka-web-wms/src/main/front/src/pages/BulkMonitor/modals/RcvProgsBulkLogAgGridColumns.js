@@ -1,33 +1,33 @@
 export default [
     {
         headerName: '로그 ID',
-        field: 'orgSourceName',
+        field: 'logSeq',
         width: 100,
         cellStyle: {},
     },
     {
         headerName: '포털',
-        field: 'contentId',
-        width: 80,
+        field: 'portalDiv',
         cellStyle: {},
+        flex: 1,
+        tooltipField: 'portalDiv',
     },
     {
         headerName: 'IUD',
         field: 'iud',
         cellStyle: {},
         width: 60,
-        tooltipField: 'title',
     },
     {
         headerName: '시작일시',
         field: 'startDt',
-        width: 120,
+        width: 150,
         cellStyle: { textAlign: 'center' },
     },
     {
         headerName: '종료일시',
         field: 'endDt',
-        width: 120,
+        width: 150,
         cellStyle: { textAlign: 'center' },
     },
     {

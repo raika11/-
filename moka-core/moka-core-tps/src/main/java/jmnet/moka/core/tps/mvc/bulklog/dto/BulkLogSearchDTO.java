@@ -34,9 +34,9 @@ public class BulkLogSearchDTO extends SearchDTO {
 
     /**
      * 포털구분
+     */
     @ApiModelProperty("포털구분(기타코드BULK_SITE)")
     private String portalDiv;
-     */
 
     /**
      * 전송 진행중인 목록 체크(진행+오류)

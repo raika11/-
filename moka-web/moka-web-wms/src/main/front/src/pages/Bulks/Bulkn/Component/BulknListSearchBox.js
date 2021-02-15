@@ -76,6 +76,7 @@ const BulknListSearchBox = (props) => {
     };
 
     useEffect(() => {
+        console.log(1);
         dispatch(getBulkList());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

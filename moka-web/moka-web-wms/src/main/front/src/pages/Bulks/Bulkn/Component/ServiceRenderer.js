@@ -3,7 +3,7 @@ import { Form, Col } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useDispatch } from 'react-redux';
-import { changeBulkused, getBulkList } from '@store/bulks';
+import { changeBulkused, clearBulksArticle, getBulkList } from '@store/bulks';
 
 // grid 서비스 부분 렌더.
 const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
@@ -32,6 +32,7 @@ const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
                 bulkartSeq: bulkartSeq,
                 callback: ({ header: { success, message }, body: { list } }) => {
                     if (success === true) {
+                        dispatch(clearBulksArticle());
                         dispatch(getBulkList()); // 상태가 변경 되면 리스트를 다시 가시고 오기.
                         toast.success(message);
                     } else {

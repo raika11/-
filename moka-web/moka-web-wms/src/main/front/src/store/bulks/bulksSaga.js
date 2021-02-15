@@ -188,12 +188,13 @@ function* changeBulkusedSaga({ payload: { bulkartSeq, callback } }) {
 
         response = yield call(putChangeBulkused, {
             bulkartSeq: bulkartSeq,
-            parameter: {
-                bulkartDiv: bulkartDiv,
-                sourceCode: sourceCode,
-                bulkartSeq: bulkartSeq,
-                status: 'publish',
-            },
+            // parameter: {
+            //     bulkartDiv: bulkartDiv,
+            //     sourceCode: sourceCode,
+            //     bulkartSeq: bulkartSeq,
+            //     usedYn: 'Y',
+            //     status: 'publish',
+            // },
         });
         callbackData = response.data;
     } catch (e) {

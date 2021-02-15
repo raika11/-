@@ -117,7 +117,7 @@ export default handleActions(
         // 리스트 초기화.
         [CLEAR_BULKS_LIST]: (state) => {
             return produce(state, (draft) => {
-                draft.bulkn.bulks_list = initialState.bulkn.list;
+                draft.bulkn.list = initialState.bulkn.list;
                 draft.bulkn.bulksError = initialState.bulkn.bulksError;
                 draft.bulkn.invalidList = initialState.bulkn.invalidList;
             });

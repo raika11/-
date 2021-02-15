@@ -30,7 +30,7 @@ public class BulkLogSearchDTO extends SearchDTO {
      * 매체코드
      */
     @ApiModelProperty("매체코드")
-    private String sourceCode;
+    private String orgSourceCode;
 
     /**
      * 포털구분

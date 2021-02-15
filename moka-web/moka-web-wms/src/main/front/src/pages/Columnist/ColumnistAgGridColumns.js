@@ -2,20 +2,18 @@ export default [
     {
         headerName: '기자번호',
         field: 'repSeq',
-        width: 90,
+        width: 65,
     },
     {
         headerName: '기자이름',
         field: 'columnistNm',
-        width: 90,
-        autoHeight: true,
+        width: 100,
         tooltipField: 'columnistNm',
     },
     {
         headerName: '이메일',
         field: 'email',
         width: 200,
-        autoHeight: true,
         tooltipField: 'email',
     },
     {
@@ -27,6 +25,7 @@ export default [
     {
         headerName: '약력정보',
         field: 'profile',
+        tooltipField: 'profile',
         width: 200,
         flex: 1,
     },
@@ -34,6 +33,5 @@ export default [
         headerName: '등록일',
         field: 'regDt',
         width: 130,
-        tooltipField: 'regDt',
     },
 ];

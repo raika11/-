@@ -70,7 +70,7 @@ public class CodeMgtRestController extends AbstractCommonController {
     @GetMapping
     public ResponseEntity<?> getCodeMgtGrpList(@Valid @SearchParam CodeMgtGrpSearchDTO search) {
         // 조회
-        Page<CodeMgtGrp> returnValue = codeMgtService.findGrpList(search.getPageable(), search.getSecretYn());
+        Page<CodeMgtGrp> returnValue = codeMgtService.findAllCodeMgtGrp(search);
 
         // 리턴값 설정
         ResultListDTO<CodeMgtGrpDTO> resultListMessage = new ResultListDTO<CodeMgtGrpDTO>();
@@ -102,7 +102,7 @@ public class CodeMgtRestController extends AbstractCommonController {
         validSearchData(grpCd, search, ActionType.SELECT);
 
         // 조회
-        Page<CodeMgt> returnValue = codeMgtService.findList(search, search.getPageable());
+        Page<CodeMgt> returnValue = codeMgtService.findAllCodeMgt(search, search.getPageable());
 
         // 리턴값 설정
         ResultListDTO<CodeMgtDTO> resultListMessage = new ResultListDTO<CodeMgtDTO>();

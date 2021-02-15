@@ -8,6 +8,7 @@ import * as act from './articlePageAction';
 export const initialState = {
     error: null,
     list: null,
+    total: 0,
     search: {
         domainId: null,
         searchType: 'all',
@@ -99,12 +100,14 @@ export default handleActions(
         [act.GET_ARTICLE_PAGE_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.list = body.list;
+                draft.total = body.totalCnt;
                 draft.error = initialState.error;
             });
         },
         [act.GET_ARTICLE_PAGE_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.list = initialState.list;
+                draft.total = initialState.total;
                 draft.error = payload;
             });
         },

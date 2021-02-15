@@ -20,7 +20,6 @@ export const initialState = {
     },
     searchTypeList: [
         { id: 'all', name: '전체' },
-        { id: 'seqNo', name: '아이디' },
         { id: 'pageTitle', name: '제목' },
         { id: 'devName', name: '담당자' },
     ],

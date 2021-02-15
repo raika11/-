@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE, getRcvArticleList } from '@store/rcvArticle';
-import ArticleForm from '@pages/Article/components/ArticleForm';
+import ArticleForm from '@pages/Article/components/ArticleForm/index';
 import RctArticleForm from './components/RcvArticleForm';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';

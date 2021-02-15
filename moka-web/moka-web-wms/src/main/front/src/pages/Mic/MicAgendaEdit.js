@@ -158,8 +158,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
             footerButtons={[
                 { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancel },
-                !!agndSeq && { text: '삭제', variant: 'negative', onClick: handleClickDelete },
-            ].filter((a) => a)}
+            ]}
             loading={loading}
         >
             <MicAgendaForm

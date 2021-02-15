@@ -218,7 +218,7 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
     }, []);
 
     return (
-        <MokaCard width={780} title={`예약어 ${paramSeq ? '편집' : '등록'}`} loading={loading}>
+        <MokaCard width={780} title={`예약어 ${paramSeq ? '수정' : '등록'}`} loading={loading}>
             <Form>
                 {/* 사용여부 */}
                 <Form.Group className="d-flex mb-2 justify-content-between align-content-center">

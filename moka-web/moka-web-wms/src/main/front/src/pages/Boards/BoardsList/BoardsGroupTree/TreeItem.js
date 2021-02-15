@@ -32,7 +32,12 @@ const TreeItem = (props) => {
     return (
         <li className="tree-item" onClick={(e) => handleSelected(e)} key={nodeId} data-depth={depth} data-usedyn={usedYn}>
             <div className={clsx('tree-label', { selected: selectItem })} data-match={match}>
-                <Button variant="searching" size="sm" className="mr-1" disabled>
+                <Button
+                    variant={selectItem ? 'info' : 'white'}
+                    size="sm"
+                    className={clsx('d-flex align-items-center justify-content-center mr-1', { border: !selectItem })}
+                    disabled
+                >
                     <MokaIcon iconName="fal-minus" />
                 </Button>
                 <span>{nodeData.boardName}</span>

@@ -1,9 +1,5 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
-import {
-    callApiAfterActions,
-    // createRequestSaga,
-    errorResponse,
-} from '@store/commons/saga';
+import { callApiAfterActions, createRequestSaga, errorResponse } from '@store/commons/saga';
 // import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import * as api from './bulkMonitorApi';
 import * as act from './bulkMonitorAction';
@@ -11,7 +7,7 @@ import * as act from './bulkMonitorAction';
 /**
  * 벌크 모니터링 전체 건수 조회
  */
-const getBulkStatTotal = callApiAfterActions(act.GET_BULK_STAT_TOTAL, api.getBulkStatTotal, (store) => store.bulkMonitor);
+const getBulkStatTotal = createRequestSaga(act.GET_BULK_STAT_TOTAL, api.getBulkStatTotal);
 
 /**
  * 벌크 모니터링 전송 목록 조회

@@ -80,7 +80,7 @@ public class DistributeServerRepositorySupportImpl extends TpsQueryDslRepository
 
 
 
-    //not formal
+    //미사용 추후 삭제예정
     @Override
     public Page<DistributeServerDTO> findList2(DistributeServerSearchDTO search, Pageable pageable) {
         QDistributeServer distributeServer = QDistributeServer.distributeServer;

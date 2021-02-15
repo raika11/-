@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
 import { GET_DIRECT_LINK_LIST, getDirectLinkList, changeSearchOption } from '@store/directLink';
 import Table from './components/Table';
 import Search from './DirectLinkSearch';
@@ -12,14 +11,7 @@ const DirectLinkList = (props) => {
     const dispatch = useDispatch();
     const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
     const loading = useSelector(({ loading }) => loading[GET_DIRECT_LINK_LIST]);
-    const { total, list, search, directLink } = useSelector((store) => ({
-        total: store.directLink.total,
-        list: store.directLink.list,
-        search: store.directLink.search,
-        directLink: store.directLink.directLink,
-    }));
-
-    //state
+    const { total, list, search, directLink } = useSelector(({ directLink }) => directLink);
     const [rowData, setRowData] = useState([]);
 
     /**
@@ -65,22 +57,9 @@ const DirectLinkList = (props) => {
         );
     }, [UPLOAD_PATH_URL, list]);
 
-    /**
-     * 신규 등록
-     */
-    const handleClickAdd = () => history.push(`${match.path}/add`);
-
     return (
         <React.Fragment>
-            <Search {...props} />
-
-            <div className="d-flex justify-content-end mb-2">
-                <div className="pt-0">
-                    <Button variant="positive" onClick={() => handleClickAdd()}>
-                        신규 등록
-                    </Button>
-                </div>
-            </div>
+            <Search {...props} history={history} />
 
             <Table
                 list={rowData}

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getReporterAllList } from '@store/reporter';
 import { getArticleType } from '@store/codeMgt';
 import { clearArticle, getArticleList } from '@store/article';
-import ArticleForm from '@pages/Article/components/ArticleForm';
+import ArticleForm from '@pages/Article/components/ArticleForm/index';
 
 const ArticleEdit = ({ match }) => {
     const { totalId } = useParams();

@@ -21,6 +21,7 @@
     #{relSeqType, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{relSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
     #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+    #{fileYn, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
     #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},

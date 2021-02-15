@@ -13,7 +13,7 @@ const columnDefs = [
     {
         headerName: '제목',
         field: 'pageTitle',
-        width: 320,
+        width: 300,
         flex: 1,
         tooltipField: 'pageTitle',
     },

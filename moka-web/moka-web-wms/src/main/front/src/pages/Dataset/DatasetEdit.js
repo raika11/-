@@ -327,7 +327,7 @@ const DatasetEdit = ({ onDelete, match }) => {
     }, []);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-gutter custom-scroll flex-fill" title={`데이터셋 ${datasetSeq ? '편집' : '등록'}`} loading={loading}>
+        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-gutter custom-scroll flex-fill" title={`데이터셋 ${datasetSeq ? '수정' : '등록'}`} loading={loading}>
             <BasicForm
                 dataset={temp}
                 setDataset={setTemp}

@@ -87,23 +87,22 @@ const ContentsListGrid = () => {
     }, [dispatch, params]);
 
     return (
-        <>
-            <MokaTable
-                agGridHeight={590}
-                columnDefs={ColumnDefs}
-                rowData={rowData}
-                rowHeight={50}
-                onRowNodeId={(data) => data.boardSeq}
-                onRowClicked={(e) => handleOnRowClicked(e)}
-                loading={loading}
-                total={total}
-                page={search.page}
-                size={search.size}
-                displayPageNum={DISPLAY_PAGE_NUM}
-                onChangeSearchOption={handleChangeSearchOption}
-                selected={params.boardSeq}
-            />
-        </>
+        <MokaTable
+            className="overflow-hidden flex-fill"
+            headerHeight={50}
+            columnDefs={ColumnDefs}
+            rowData={rowData}
+            rowHeight={50}
+            onRowNodeId={(data) => data.boardSeq}
+            onRowClicked={(e) => handleOnRowClicked(e)}
+            loading={loading}
+            total={total}
+            page={search.page}
+            size={search.size}
+            displayPageNum={DISPLAY_PAGE_NUM}
+            onChangeSearchOption={handleChangeSearchOption}
+            selected={params.boardSeq}
+        />
     );
 };
 

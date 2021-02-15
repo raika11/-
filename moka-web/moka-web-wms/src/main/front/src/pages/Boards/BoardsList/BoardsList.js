@@ -1,12 +1,10 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { MokaLoader } from '@components';
-
-const BoardsGroupTree = React.lazy(() => import('./BoardsGroupTree/BoardsGroupTree'));
-const BoardsContentsList = React.lazy(() => import('./BoardsContentsList/BoardsContentsList'));
-const BoardsEdit = React.lazy(() => import('./BoardsEdit/BoardsEdit'));
+import BoardsGroupTree from './BoardsGroupTree/BoardsGroupTree';
+import BoardsContentsList from './BoardsContentsList/BoardsContentsList';
+import BoardsEdit from './BoardsEdit/BoardsEdit';
 
 const BoardsList = () => {
     // 공통 구분값 URL
@@ -33,11 +31,7 @@ const BoardsList = () => {
                         `/${pagePathName}/:boardId/:parentBoardSeq/reply/:boardSeq`,
                     ]}
                     exact
-                    render={() => (
-                        <Suspense fallback={<MokaLoader />}>
-                            <BoardsGroupTree />
-                        </Suspense>
-                    )}
+                    render={() => <BoardsGroupTree />}
                 />
             </Switch>
 
@@ -51,11 +45,7 @@ const BoardsList = () => {
                         `/${pagePathName}/:boardId/:parentBoardSeq/reply/:boardSeq`,
                     ]}
                     exact
-                    render={() => (
-                        <Suspense fallback={<MokaLoader />}>
-                            <BoardsContentsList />
-                        </Suspense>
-                    )}
+                    render={() => <BoardsContentsList />}
                 />
             </Switch>
 
@@ -69,11 +59,7 @@ const BoardsList = () => {
                         `/${pagePathName}/:boardId/:parentBoardSeq/reply/:boardSeq`,
                     ]}
                     exact
-                    render={() => (
-                        <Suspense fallback={<MokaLoader />}>
-                            <BoardsEdit />
-                        </Suspense>
-                    )}
+                    render={() => <BoardsEdit />}
                 />
             </Switch>
         </div>

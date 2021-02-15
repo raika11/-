@@ -3,27 +3,22 @@ import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { AgGridReact } from 'ag-grid-react';
 import { MokaLoader } from '@/components';
-import columnDefs from './BulKMonitorRcvprogsAgGridColumns.js';
-import RcvprogsModal from './modals/RcvprogsModal.js';
+import columnDefs from './BulkMonitorRcvProgsAgGridColumns';
+import RcvProgsModal from './modals/RcvProgsModal';
+import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { GET_BULK_STAT_LIST } from '@/store/bulks';
-
-const propTypes = {};
-
-const defaultProps = {
-    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
-};
 
 /**
  * 벌크 모니터링 목록
  */
-const BulKMonitorRcvprogsAgGrid = () => {
+const BulkMonitorRcvProgsAgGrid = () => {
     const search = useSelector((store) => store.bulkMonitor.search);
     const sendList = useSelector((store) => store.bulkMonitor.sendList);
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_LIST]);
     const [rowData, setRowData] = useState([]);
-    const [showRcvprogsModal, setShowRcvprogsModal] = useState(false);
+    const [showRcvProgsModal, setShowRcvProgsModal] = useState(false);
+    const [showBulkLogModal, setShowBulkLogModal] = useState(false);
     const [modalData, setModalData] = useState(null);
-    const preventRowClickCell = ['loader', 'dump', 'naver', 'daum', 'nate', 'zoom'];
 
     const getRowHeight = useCallback((params) => {
         const dtKeys = Object.keys(params.data).filter((dtKey) => {
@@ -51,24 +46,25 @@ const BulKMonitorRcvprogsAgGrid = () => {
     /**
      * 목록 Row클릭
      */
-    const handleRowClicked = (row) => {
-        if (preventRowClickCell.includes(row.colDef.field)) {
-            return;
-        } else {
-            console.log(row);
+    const handleRowClicked = useCallback((params) => {
+        const preventRowClickCell = ['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'bulkLogBtn'];
+        if (!preventRowClickCell.includes(params.colDef.field)) {
+            console.log(params);
         }
-    };
+    }, []);
 
     const handleClickValue = (value) => {
         if (value === '완료' || value === '실패') {
-            setShowRcvprogsModal(true);
+            setShowRcvProgsModal(true);
             setModalData(value);
         } else {
             return;
         }
     };
 
-    const handleClickBulkLog = (value) => {};
+    const handleClickBulkLog = () => {
+        setShowBulkLogModal(true);
+    };
 
     useEffect(() => {
         // row 생성
@@ -80,6 +76,8 @@ const BulKMonitorRcvprogsAgGrid = () => {
                     handleClickBulkLog,
                 })),
             );
+        } else {
+            setRowData([]);
         }
     }, [sendList]);
 
@@ -102,12 +100,10 @@ const BulKMonitorRcvprogsAgGrid = () => {
                     onCellClicked={handleRowClicked}
                 />
             </div>
-            <RcvprogsModal show={showRcvprogsModal} onHide={() => setShowRcvprogsModal(false)} data={modalData} />
+            <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />
+            <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} />
         </>
     );
 };
 
-BulKMonitorRcvprogsAgGrid.propTypes = propTypes;
-BulKMonitorRcvprogsAgGrid.defaultProps = defaultProps;
-
-export default BulKMonitorRcvprogsAgGrid;
+export default BulkMonitorRcvProgsAgGrid;

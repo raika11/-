@@ -83,12 +83,12 @@ export default [
             },
             {
                 headerName: '기타',
-                field: '',
+                field: 'bulkLogBtn',
                 width: 130,
                 cellStyle: { textAlign: 'center' },
                 cellRendererFramework: (params) => {
                     const { data } = params;
-                    return <RcvProgsBulkLogBtnRenderer {...params} onClick={params.data.handleClickBulkLog} />;
+                    return <RcvProgsBulkLogBtnRenderer {...params} onClick={data.handleClickBulkLog} />;
                 },
             },
         ],

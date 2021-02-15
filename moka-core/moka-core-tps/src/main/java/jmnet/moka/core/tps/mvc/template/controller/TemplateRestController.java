@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -259,23 +260,11 @@ public class TemplateRestController extends AbstractCommonController {
             //                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
             //            }
 
+            // purge 날림!!
+            purge(returnValDTO);
+
             String message = msg("tps.common.success.update");
             ResultDTO<TemplateDTO> resultDTO = new ResultDTO<TemplateDTO>(returnValDTO, message);
-
-            // purge 날림!!
-            //            if (returnVal.getDomain() == null) {
-            //                // 공통 도메인일 때
-            //                List<String> domainIds =
-            //                        templateService.findDomainIdListByTemplateSeq(returnVal.getTemplateSeq());
-            //                purgeHelper.purgeTms(request, domainIds, MokaConstants.ITEM_TEMPLATE,
-            //                        returnVal.getTemplateSeq());
-            //            } else {
-            purgeHelper.purgeTms(returnVal
-                    .getDomain()
-                    .getDomainId(), MokaConstants.ITEM_TEMPLATE, returnVal.getTemplateSeq());
-            //                actionLogger.success(principal.getName(), ActionType.PURGE, System.currentTimeMillis() - processStartTime);
-            //            }
-
             tpsLogger.success(ActionType.UPDATE, true);
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
@@ -284,6 +273,40 @@ public class TemplateRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE TEMPLATE]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
         }
+    }
+
+    private void purge(TemplateDTO returnValDTO) {
+        //            if (returnVal.getDomain() == null) {
+        //                // 공통 도메인일 때
+        //                List<String> domainIds =
+        //                        templateService.findDomainIdListByTemplateSeq(returnVal.getTemplateSeq());
+        //                purgeHelper.purgeTms(request, domainIds, MokaConstants.ITEM_TEMPLATE,
+        //                        returnVal.getTemplateSeq());
+        //            } else {
+        //                actionLogger.success(principal.getName(), ActionType.PURGE, System.currentTimeMillis() - processStartTime);
+        //            }
+
+        purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toTemplateItem()));
+
+        //        RelationSearchDTO search = RelationSearchDTO
+        //                .builder()
+        //                .domainId(returnValDTO
+        //                        .getDomain()
+        //                        .getDomainId())
+        //                .fileYn(MokaConstants.YES)
+        //                .relSeq(returnValDTO.getTemplateSeq())
+        //                .relSeqType(MokaConstants.ITEM_TEMPLATE)
+        //                .relType(MokaConstants.ITEM_PAGE)
+        //                .build();
+        //        List<PageVO> pageList = relationService.findAllPage(search);
+        //        for (PageVO page : pageList) {
+        //            String html = mergeService.getMergePage(page.getPageSeq());
+        //            purgeHelper.tmsPageUpdate(page
+        //                    .getDomain()
+        //                    .getDomainId(), page
+        //                    .getPageSeq()
+        //                    .toString(), page.getCategory(), html);
+        //        }
     }
 
     /**

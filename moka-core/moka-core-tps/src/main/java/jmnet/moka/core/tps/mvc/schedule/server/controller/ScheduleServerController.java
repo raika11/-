@@ -68,6 +68,13 @@ public class ScheduleServerController extends AbstractCommonController {
         this.mokaCrypt = mokaCrypt;
     }
 
+
+    /**
+     * 작업 실행통계 목록조회
+     *
+     * @param search 검색조건 : 분류, 주기, 타입, 배포서버, 상태, 검색타입, 검색어
+     * @return 작업 실행통계 목록
+     */
     @ApiOperation(value = "작업 실행통계 목록조회")
     @GetMapping("/job-statistic")
     public ResponseEntity<?> getJobStatisticList(@Valid @SearchParam JobStatisticSearchDTO search){
@@ -84,6 +91,12 @@ public class ScheduleServerController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    /**
+     * 작업 실행현황 목록조회
+     *
+     * @param search 검색조건 : 분류, 주기, 타입, 배포서버, 상태, 검색타입, 검색어
+     * @return 작업 실행현황 목록
+     */
     @ApiOperation(value = "작업 실행현황 목록조회")
     @GetMapping("/job-statistic/search")
     public ResponseEntity<?> getJobContentList(@Valid @SearchParam JobStatisticSearchDTO search) {
@@ -100,6 +113,12 @@ public class ScheduleServerController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    /**
+     * 작업 목록조회
+     *
+     * @param search 검색조건 : 분류, 주기, 타입, 배포서버, 사용여부, URL
+     * @return 작업 목록
+     */
     @ApiOperation(value = "작업 목록조회")
     @GetMapping("/job")
     public ResponseEntity<?> getJobContentList(@Valid @SearchParam JobContentSearchDTO search) {
@@ -116,6 +135,12 @@ public class ScheduleServerController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    /**
+     * 작업 상세조회
+     *
+     * @param jobSeq 작업번호
+     * @return 작업
+     */
     @ApiOperation(value = "작업 상세조회")
     @GetMapping("/job/{jobSeq}")
     public ResponseEntity<?> getJobContent(@ApiParam("작업 번호(필수)") @PathVariable("jobSeq") Long jobSeq) throws NoDataException {
@@ -136,6 +161,12 @@ public class ScheduleServerController extends AbstractCommonController {
 
     }
 
+    /**
+     * 작업 등록
+     *
+     * @param jobContentSaveDTO 등록할 작업
+     * @return 실행 결과
+     */
     @ApiOperation(value = "작업 등록")
     @PostMapping("/job")
     public ResponseEntity<?> postJobContent(HttpServletRequest request,
@@ -172,6 +203,12 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 작업 수정
+     *
+     * @param jobSeq 작업번호, jobContentUpdateDTO 수정할 작업
+     * @return 실행 결과
+     */
     @ApiOperation(value = "작업 수정")
     @PutMapping("/job/{jobSeq}")
     public ResponseEntity<?> putJobContent(@ApiParam("작업번호") @PathVariable("jobSeq") @Min(value = 0, message = "") Long jobSeq,
@@ -214,6 +251,12 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 작업 삭제
+     *
+     * @param jobSeq 작업번호
+     * @return 실행 결과
+     */
     @ApiOperation(value = "작업 삭제")
     @PutMapping("/job/{jobSeq}/delete")
     public ResponseEntity<?> deleteJobContent(@ApiParam("작업번호") @PathVariable("jobSeq") @Min(value = 0, message = "") Long jobSeq,
@@ -248,7 +291,12 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
-
+    /**
+     * 삭제된 작업 목록조회
+     *
+     * @param search 검색조건 : 분류, 주기, 타입, 배포서버, 검색타입, 검색어
+     * @return 작업 목록
+     */
     @ApiOperation(value = "삭제된 작업 목록조회")
     @GetMapping("/job-deleted")
     public ResponseEntity<?> getJobDeletedContentList(@Valid @SearchParam JobDeletedContentSearchDTO search) {
@@ -265,6 +313,12 @@ public class ScheduleServerController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    /**
+     * 삭제된 작업 상세조회
+     *
+     * @param seqNo 삭제된 작업 번호
+     * @return 삭제된 작업
+     */
     @ApiOperation(value = "삭제된 작업 상세조회")
     @GetMapping("/job-deleted/{seqNo}")
     public ResponseEntity<?> getJobDeletedContent(@ApiParam("일련 번호(필수)") @PathVariable("seqNo") Long seqNo) throws NoDataException {
@@ -285,6 +339,12 @@ public class ScheduleServerController extends AbstractCommonController {
 
     }
 
+    /**
+     * 삭제된 작업 복원
+     *
+     * @param seqNo 삭제된 작업 번호
+     * @return 실행 결과
+     */
     @ApiOperation(value = "삭제된 작업 복원")
     @PutMapping("/job-deleted/{seqNo}/recover")
     public ResponseEntity<?> recoverJobDeletedContent(@ApiParam("일련번호") @PathVariable("seqNo") Long seqNo,
@@ -325,12 +385,12 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
-
-
-
-
-
-
+    /**
+     * 배포서버 목록 조회(코드)
+     *
+     * @param
+     * @return 배포서버 목록
+     */
     @ApiOperation(value = "배포서버 목록조회(검색조건 코드)")
     @GetMapping("/distribute-server-code")
     public ResponseEntity<?> getDistributeServerCodeList() {
@@ -346,6 +406,12 @@ public class ScheduleServerController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    /**
+     * 배포서버 목록조회
+     *
+     * @param search 검색조건 : 별칭, 서버IP
+     * @return 배포서버 목록
+     */
     @ApiOperation(value = "배포서버 목록조회")
     @GetMapping("/distribute-server")
     public ResponseEntity<?> getDistributeServerList(@Valid @SearchParam DistributeServerSearchDTO search) {
@@ -362,6 +428,12 @@ public class ScheduleServerController extends AbstractCommonController {
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
+    /**
+     * 배포서버 상세 조회
+     *
+     * @param serverSeq 배포서버 일련번호
+     * @return 배포서버
+     */
     @ApiOperation(value = "배포서버 상세조회")
     @GetMapping("/distribute-server/{serverSeq}")
     public ResponseEntity<?> getDistributeServer(@ApiParam("배포서버 번호(필수)") @PathVariable("serverSeq") Long serverSeq) throws NoDataException {
@@ -382,6 +454,12 @@ public class ScheduleServerController extends AbstractCommonController {
 
     }
 
+    /**
+     * 배포서버 등록
+     *
+     * @param distServerSaveDTO 배포서버 정보
+     * @return 실행 결과
+     */
     @ApiOperation(value = "배포서버 등록")
     @PostMapping("/distribute-server")
     public ResponseEntity<?> postDistributeServer(HttpServletRequest request,
@@ -408,6 +486,12 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 배포서버 수정
+     *
+     * @param serverSeq 배포서버 일련번호
+     * @return 실행 결과
+     */
     @ApiOperation(value = "배포서버 수정")
     @PutMapping("/distribute-server/{serverSeq}")
     public ResponseEntity<?> putDistributeServer(@ApiParam("서버번호") @PathVariable("serverSeq") @Min(value = 0, message = "") Long serverSeq,
@@ -442,6 +526,12 @@ public class ScheduleServerController extends AbstractCommonController {
         }
     }
 
+    /**
+     * 배포서버 삭제
+     *
+     * @param serverSeq 배포서버 일련번호
+     * @return 실행 결과
+     */
     @ApiOperation(value = "배포서버 삭제")
     @PutMapping("/distribute-server/{serverSeq}/delete")
     public ResponseEntity<?> deleteDistributeServer(@ApiParam("서버번호") @PathVariable("serverSeq") @Min(value = 0, message = "") Long serverSeq,

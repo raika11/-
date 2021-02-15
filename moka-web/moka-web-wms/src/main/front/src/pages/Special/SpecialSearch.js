@@ -14,7 +14,6 @@ const SpecialSearch = ({ match }) => {
     const history = useHistory();
     const ptRows = useSelector((store) => store.codeMgt.ptRows);
     const storeSearch = useSelector((store) => store.special.search);
-
     const [search, setSearch] = useState(initialState.search);
 
     /**
@@ -63,7 +62,7 @@ const SpecialSearch = ({ match }) => {
 
     return (
         <Form>
-            <Form.Row className="mb-3">
+            <Form.Row className="mb-2">
                 <Col xs={12} className="p-0 d-flex">
                     <div className="flex-shrink-0 mr-2">
                         <MokaInput as="select" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>

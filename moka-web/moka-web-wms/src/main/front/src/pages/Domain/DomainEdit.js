@@ -213,7 +213,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
     return (
         <form onSubmit={handleSubmit(handleClickSave)}>
             <MokaCard
-                title={`도메인 ${paramId ? '편집' : '등록'}`}
+                title={`도메인 ${paramId ? '수정' : '등록'}`}
                 width={820}
                 headerClassName="d-flex justify-content-between align-item-center"
                 loading={loading}

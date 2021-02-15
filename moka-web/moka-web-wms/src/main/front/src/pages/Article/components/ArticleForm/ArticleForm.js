@@ -18,6 +18,7 @@ import commonUtil from '@utils/commonUtil';
 import { unescapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
 import { ARTICLE_URL, API_BASE_URL } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
+import ArticleEtc from './ArticleEtc';
 
 /**
  * 등록기사 수정폼
@@ -31,7 +32,6 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
     const [tagStr, setTagStr] = useState(''); // 태그리스트
     const [repStr, setRepStr] = useState(''); // 기자리스트
     const [content, setContent] = useState(''); // 본문
-    const [bulkSiteObj, setBulkSiteObj] = useState({}); // 벌크 체크
     const [codeModalShow, setCodeModalShow] = useState(false); // 분류코드 모달
     const [historyModalShow, setHistoryModalShow] = useState(false); // 히스토리 모달
     const [temp, setTemp] = useState(initialState.article);
@@ -290,16 +290,6 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
         setTagStr(article.tagList.join(','));
         // 기자리스트(text)
         setRepStr(article.reporterList.map((r) => r.repName).join('.'));
-        // 벌크사이트 => obj
-        setBulkSiteObj(
-            article.bulkSiteList.reduce(
-                (all, cu) => ({
-                    ...all,
-                    [cu.siteName]: cu,
-                }),
-                {},
-            ),
-        );
         // 본문
         setContent(article.artContent?.artContent || '');
     }, [article, temp.totalId]);
@@ -387,10 +377,8 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                     <Col className="p-0" xs={6}>
                         <MokaInputLabel label="기자" name="repStr" value={repStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurRep }} />
                     </Col>
-                    <Col className="p-0 d-flex justify-content-center align-items-center" xs={2}>
-                        <p className="mb-0 ft-12">구분자는 마침표(.)</p>
-                    </Col>
-                    <Col className="p-0 d-flex align-items-center" xs={4}>
+                    <Col className="p-0 d-flex align-items-center" xs={6}>
+                        <p className="mb-0 mx-3 flex-shrink-0 ft-12">구분자는 마침표(.)</p>
                         <MokaInput
                             className="mb-0"
                             as="autocomplete"
@@ -418,67 +406,10 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         </div>
                     </Col>
                 </Form.Row>
-                {!inRcv && (
-                    <Form.Row className="mb-2">
-                        <Col xs={7} className="d-flex p-0">
-                            <MokaInputLabel label="벌크" as="none" />
-                            <div className="d-flex flex-column flex-fill">
-                                <div>
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="mr-2 float-left ft-12"
-                                        inputProps={{ label: '기사', custom: true, checked: bulkSiteObj['기사']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="float-left ft-12"
-                                        inputProps={{ label: '이미지', custom: true, checked: bulkSiteObj['이미지']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                </div>
-                                <div>
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="mr-2 float-left ft-12"
-                                        inputProps={{ label: '네이버', custom: true, checked: bulkSiteObj['네이버']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="mr-2 float-left ft-12"
-                                        inputProps={{ label: '다음', custom: true, checked: bulkSiteObj['다음']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="mr-2 float-left ft-12"
-                                        inputProps={{ label: '네이트', custom: true, checked: bulkSiteObj['네이트']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="mr-2 float-left ft-12"
-                                        inputProps={{ label: '줌', custom: true, checked: bulkSiteObj['줌']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                    <MokaInput
-                                        as="checkbox"
-                                        className="float-left ft-12"
-                                        inputProps={{ label: '기타', custom: true, checked: bulkSiteObj['기타']?.bulkYn === 'Y', readOnly: true }}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col xs={5} className="d-flex p-0">
-                            <hr className="vertical-divider" />
-                            <MokaInputLabel label="종류" labelWidth={30} as="none" />
-                            <div className="d-flex flex-column flex-fill">
-                                <div>
-                                    <MokaInput as="checkbox" className="mr-2 float-left ft-12" inputProps={{ label: '로그인', custom: true, readOnly: true }} />
-                                    <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: 'AB테스트용', custom: true, readOnly: true }} />
-                                </div>
-                                <div>
-                                    <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: '연재기사(번호: 000)', custom: true, readOnly: true }} />
-                                </div>
-                            </div>
-                        </Col>
-                    </Form.Row>
-                )}
+
+                {/* 벌크 사이트 리스트, 조회 (AB테스트 등) */}
+                {!inRcv && <ArticleEtc bulkSiteList={article.bulkSiteList} articleService={article.articleService} />}
+
                 <Form.Row>
                     <Col className="p-0" xs={12}>
                         <MokaInputGroup

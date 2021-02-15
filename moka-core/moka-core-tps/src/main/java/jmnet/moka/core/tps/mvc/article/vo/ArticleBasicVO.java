@@ -195,4 +195,5 @@ public class ArticleBasicVO implements Serializable {
      */
     @Column(name = "IUD")
     private String iud;
+
 }

@@ -1,12 +1,11 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/columnist';
-
-const ColumnistList = React.lazy(() => import('./ColumnistList'));
-const ColumnistEdit = React.lazy(() => import('@pages/Columnist/ColumnistEdit'));
+import ColumnistList from './ColumnistList';
+import ColumnistEdit from '@pages/Columnist/ColumnistEdit';
 
 const Columnist = ({ match }) => {
     const dispatch = useDispatch();
@@ -27,9 +26,7 @@ const Columnist = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={940} className="mr-gutter" bodyClassName="d-flex flex-column" title="칼럼니스트 관리">
-                <Suspense>
-                    <ColumnistList match={match} />
-                </Suspense>
+                <ColumnistList match={match} />
             </MokaCard>
 
             {/* 등록/수정창 */}

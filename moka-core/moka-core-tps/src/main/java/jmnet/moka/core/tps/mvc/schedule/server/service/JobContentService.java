@@ -13,14 +13,45 @@ import java.util.Optional;
  *
  */
 public interface JobContentService {
+
+    /**
+     * 작업목록 조회
+     *
+     * @param search 작업 정보
+     * @return 작업목록
+     */
     Page<JobContent> findJobContentList(JobContentSearchDTO search);
 
+    /**
+     * 작업 상세정보 조회
+     *
+     * @param jobSeq 작업 번호
+     * @return 작업
+     */
     Optional<JobContent> findJobContentById(Long jobSeq);
 
+    /**
+     * 작업 등록
+     *
+     * @param jobContent 작업
+     * @return 작업
+     */
     JobContent saveJobContent(JobContent jobContent);
 
+    /**
+     * 작업 수정
+     *
+     * @param jobContent 작업
+     * @return 작업
+     */
     JobContent updateJobContent(JobContent jobContent);
 
+    /**
+     * 작업 삭제
+     *
+     * @param jobContent 작업
+     * @return 없음
+     */
     void deleteJobContent(JobDeletedContent jobDeletedContent, JobContent jobContent);
 
     /**

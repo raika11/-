@@ -14,7 +14,6 @@ const RcvProgsRenderer = forwardRef((props, ref) => {
         (e) => {
             e.stopPropagation();
             e.preventDefault();
-
             if (onClick) {
                 onClick(value);
             }
@@ -31,7 +30,7 @@ const RcvProgsRenderer = forwardRef((props, ref) => {
     } else if (Number(value) >= 10) {
         return (
             <p className="mb-0" onClick={handleClick}>
-                성공
+                완료
             </p>
         );
     } else {

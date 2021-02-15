@@ -21,7 +21,7 @@ const TemplateEditor = (props) => {
     }));
 
     // state
-    const [title, setTitle] = useState('템플릿 편집');
+    const [title, setTitle] = useState('템플릿 수정');
     const [defaultValue, setDefalutValue] = useState('');
     const [error, setError] = useState({});
 
@@ -36,11 +36,11 @@ const TemplateEditor = (props) => {
     useEffect(() => {
         // 타이틀 변경
         if (template.templateSeq) {
-            setTitle(`템플릿 편집(${template.templateSeq}_${template.templateName})`);
+            setTitle(`템플릿 수정(${template.templateSeq}_${template.templateName})`);
             // defaultValue 변경
             setDefalutValue(templateBody);
         } else {
-            setTitle('템플릿 편집');
+            setTitle('템플릿 등록');
             setDefalutValue('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

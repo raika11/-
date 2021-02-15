@@ -158,6 +158,7 @@ const DirectLinkEdit = ({ history, match }) => {
         const result = validateLinkCheck();
         if (result) {
             toast.success('유효한 URL입니다');
+            setError({ ...error, linkUrl: false });
         } else {
             setError({ ...error, linkUrl: !result, linkUrlMessage: URL_ERROR });
         }
@@ -320,7 +321,7 @@ const DirectLinkEdit = ({ history, match }) => {
     return (
         <MokaCard
             className="flex-fill"
-            title={`사이트 바로 가기 ${linkSeq ? '편집' : '등록'}`}
+            title={`사이트 바로 가기 ${linkSeq ? '수정' : '등록'}`}
             loading={loading}
             footer
             footerClassName="justify-content-center"

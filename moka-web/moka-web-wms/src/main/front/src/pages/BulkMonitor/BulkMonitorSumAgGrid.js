@@ -7,7 +7,7 @@ import columnDefs from './BulkMonitorSumAgGridColumns';
 /**
  * 벌크 모니터링 현황
  */
-const BulKMonitorSumAgGrid = () => {
+const BulkMonitorSumAgGrid = () => {
     const search = useSelector((store) => store.bulkMonitor.search);
     const totalList = useSelector((store) => store.bulkMonitor.totalList);
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_TOTAL]);
@@ -32,4 +32,4 @@ const BulKMonitorSumAgGrid = () => {
     );
 };
 
-export default BulKMonitorSumAgGrid;
+export default BulkMonitorSumAgGrid;

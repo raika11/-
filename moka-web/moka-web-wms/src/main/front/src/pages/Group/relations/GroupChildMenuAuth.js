@@ -81,7 +81,7 @@ const GroupChildMenuAuth = () => {
             footerButtons={
                 groupCd && [
                     { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                    { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
+                    { text: '새로고침', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
                 ]
             }
             footer
@@ -89,16 +89,6 @@ const GroupChildMenuAuth = () => {
             <Row style={{ padding: '0 20px 0 20px' }} className="rc-tree-group">
                 <MenuAuthTree menuAuthInfo={menuAuthInfo} onChange={handleChange} />
             </Row>
-            {/*{groupCd && (
-                <Row className="d-flex pt-20 justify-content-center">
-                    <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
-                        저장
-                    </Button>
-                    <Button variant="gray-150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickCancel}>
-                        취소
-                    </Button>
-                </Row>
-            )}*/}
         </MokaCard>
     );
 };

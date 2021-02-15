@@ -21,7 +21,7 @@ const Group = () => {
 
     // 마스터 그리드 클릭시 초기화 이벤트
     const handleClickAddGroup = (e) => {
-        history.push('/group');
+        history.push('/group/add');
     };
 
     React.useEffect(() => {
@@ -57,7 +57,7 @@ const Group = () => {
             </MokaCard>
             <Switch>
                 <Route
-                    path={['/group', '/group/:groupCd']}
+                    path={['/group/add', '/group/:groupCd']}
                     exact
                     render={() => (
                         <MokaIconTabs

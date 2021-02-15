@@ -339,7 +339,7 @@ public class DatasetRestController extends AbstractCommonController {
                 dto.setDataApiParamShape(getParameters(dto));
             }
 
-            // purge 날림!!
+            // purge 날림!! 성공실패여부는 리턴하지 않는다.
             purge(dto);
 
             String message = msg("tps.common.success.update");
@@ -459,7 +459,7 @@ public class DatasetRestController extends AbstractCommonController {
             // 2. 삭제
             datasetService.deleteDataset(datasetSeq);
 
-            // purge 날림!!
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
             purge(dto);
 
             // 3. 결과리턴
@@ -546,6 +546,16 @@ public class DatasetRestController extends AbstractCommonController {
         return this.postDataset(dto);
     }
 
+    /**
+     * tms서버의 데이타셋정보를 갱신한다. 해당 데이타셋과 관련된 fileYn=Y인 페이지도 갱신한다.
+     *
+     * @param returnValDTO 데이타셋정보
+     * @return 갱신오류메세지
+     * @throws DataLoadException
+     * @throws TemplateMergeException
+     * @throws TemplateParseException
+     * @throws NoDataException
+     */
     private String purge(DatasetDTO returnValDTO)
             throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
 
@@ -569,7 +579,7 @@ public class DatasetRestController extends AbstractCommonController {
         List<PageVO> pageList = relationService.findAllPage(search);
         String retPage = purgeHelper.tmsPageUpdate(pageList);
         if (McpString.isNotEmpty(retPage)) {
-            log.error("[FAIL TO PAGE UPATE] seq: {} {}", returnValDTO.getDatasetSeq(), retPage);
+            log.error("[FAIL TO PAGE UPATE] datasetSeq: {} {}", returnValDTO.getDatasetSeq(), retPage);
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
             returnValue = String.join("\r\n", retPage);
         }

@@ -243,12 +243,13 @@ public class PurgeHelper {
 
     /**
      * 머징된 기사에 대한 기사 페이지를 purge한다.
+     *
      * @param articleId 기사 id
      * @return 머징 결과
      */
     public String tmsArticlePurge(String articleId) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        builder.path(TmsApiConstants.COMMAND_RESERVED_UPDATE);
+        builder.path(TmsApiConstants.COMMAND_ARTICLE_PURGE);
         builder.queryParam(TMS_PARAM_ARTICLE_ID, articleId);
         String uriAndQuery = builder
                 .build()
@@ -271,7 +272,7 @@ public class PurgeHelper {
             }
         }
         if (resultHeader.isSuccess()) {
-            logger.info("ARTICLE PURGE Fail: {}", articleId);
+            logger.info("ARTICLE PURGE Success: {}", articleId);
             return "";
         } else {
             return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
@@ -387,7 +388,7 @@ public class PurgeHelper {
             }
         }
         if (resultHeader.isSuccess()) {
-            logger.info("RESERVED UPDATE Fail: {}", domainId);
+            logger.info("RESERVED UPDATE Success: {}", domainId);
             return "";
         } else {
             return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());

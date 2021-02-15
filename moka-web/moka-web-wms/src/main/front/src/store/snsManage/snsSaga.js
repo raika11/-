@@ -7,7 +7,7 @@ import { errorResponse } from '@store/commons/saga';
 import { BLANK_IMAGE_PATH, DB_DATEFORMAT, IR_URL, PDS_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 /************* 메타 **********************/
 function toSaveSnsMeta(data) {
     const params = {};
@@ -43,9 +43,9 @@ function toSnsMetaViewData({ snsShare, article }) {
         totalId: commonUtil.setDefaultValue(totalId),
         fb: {
             usedYn: commonUtil.setDefaultValue(fbMetaUsedYn, 'N') === 'Y',
-            title: unescapeHtml(commonUtil.setDefaultValue(fbMetaTitle)),
-            summary: unescapeHtml(commonUtil.setDefaultValue(fbMetaSummary)),
-            postMessage: unescapeHtml(commonUtil.setDefaultValue(fbMetaPostMsg)),
+            title: unescapeHtmlArticle(commonUtil.setDefaultValue(fbMetaTitle)),
+            summary: unescapeHtmlArticle(commonUtil.setDefaultValue(fbMetaSummary)),
+            postMessage: unescapeHtmlArticle(commonUtil.setDefaultValue(fbMetaPostMsg)),
             imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
                     fbMetaImage,
@@ -57,9 +57,9 @@ function toSnsMetaViewData({ snsShare, article }) {
         },
         tw: {
             usedYn: commonUtil.setDefaultValue(twMetaUsedYn, 'N') === 'Y',
-            title: unescapeHtml(commonUtil.setDefaultValue(twMetaTitle)),
-            summary: unescapeHtml(commonUtil.setDefaultValue(twMetaSummary)),
-            postMessage: unescapeHtml(commonUtil.setDefaultValue(twMetaPostMsg)),
+            title: unescapeHtmlArticle(commonUtil.setDefaultValue(twMetaTitle)),
+            summary: unescapeHtmlArticle(commonUtil.setDefaultValue(twMetaSummary)),
+            postMessage: unescapeHtmlArticle(commonUtil.setDefaultValue(twMetaPostMsg)),
             imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
                     twMetaImage,
@@ -71,8 +71,8 @@ function toSnsMetaViewData({ snsShare, article }) {
         },
         article: {
             serviceFlag: commonUtil.setDefaultValue(serviceFlag, 'N') === 'Y',
-            title: unescapeHtml(commonUtil.setDefaultValue(artTitle)),
-            summary: unescapeHtml(commonUtil.setDefaultValue(artSummary)),
+            title: unescapeHtmlArticle(commonUtil.setDefaultValue(artTitle)),
+            summary: unescapeHtmlArticle(commonUtil.setDefaultValue(artSummary)),
             imgUrl: toMetaImage(
                 commonUtil.setDefaultValue(
                     artThumb,
@@ -90,7 +90,7 @@ function toSnsMetaListData(response) {
         const id = data.totalId;
         const { thumbnail, snsFlag } = setThumbnail(data.artThumb, data.fbMetaImage);
         const forwardDate = moment(new Date(data.serviceDt)).format('YYYY-MM-DD');
-        const title = data.artTitle;
+        const title = unescapeHtmlArticle(data.artTitle);
         const summary = data.fbMetaTitle;
         const sendStatus = setHasSendSnsIcons(data);
         const status = setStatus(data);
@@ -314,7 +314,7 @@ function* getSnsMetaList({ type, payload }) {
 function toSnsSendArticleListData(response) {
     return response.map((data) => ({
         id: data.id.totalId,
-        title: unescapeHtml(data.artTitle),
+        title: unescapeHtmlArticle(data.artTitle),
         imgUrl: data.imgUrl,
         usedYn: data.usedYn,
         sendDt: data.snsInsDt,

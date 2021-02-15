@@ -12,6 +12,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.reporter.dto.ReporterSearchDTO;
@@ -50,7 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/reporters")
 @Api(tags = {"기자 API"})
-public class ReporterRestController {
+public class ReporterRestController extends AbstractCommonController {
 
     private final ReporterService reporterService;
 
@@ -150,7 +151,7 @@ public class ReporterRestController {
             dto.setR2CdNm(cd2Nm);
             dto.setR3CdNm(cd3Nm);
             dto.setR4CdNm(cd4Nm);
-            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto);
+            ResultDTO<ReporterSimpleDTO> resultDto = new ResultDTO<ReporterSimpleDTO>(dto, msg("tps.common.success.update"));
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE);

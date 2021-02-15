@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { getRelationPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import produce from 'immer';
 
 const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
@@ -52,7 +52,7 @@ const RelationPollModal = ({ show, onHide, onAdd, onRowClicked, codes }) => {
                             setRows(
                                 response.body.list.map((row) => ({
                                     id: row.pollSeq,
-                                    title: unescapeHtml(row.title),
+                                    title: unescapeHtmlArticle(row.title),
                                     category: commonUtil.toKorFromCode(row.pollCategory, codes.pollCategory),
                                     status: row.status === 'S' ? '진행' : '종료',
                                     onClick: handleClickAdd,

@@ -3,11 +3,14 @@ package jmnet.moka.core.tps.mvc.reporter.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -109,4 +112,11 @@ public class ReporterDTO implements Serializable {
      * 기자페이지
      */
     private String joinsBlog;
+
+    /**
+     * 수정일시
+     */
+    @DTODateTimeFormat
+    @ApiModelProperty(value = "수정일시", hidden = true)
+    private Date modDt;
 }

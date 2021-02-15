@@ -1,8 +1,11 @@
 package jmnet.moka.core.tps.mvc.reporter.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -302,4 +305,11 @@ public class ReporterVO implements Serializable {
      */
     @Column(name = "USER_TALK")
     private String userTalk;
+
+    /**
+     * 수정일시
+     */
+    @DTODateTimeFormat
+    @ApiModelProperty(value = "수정일시", hidden = true)
+    private Date modDt;
 }

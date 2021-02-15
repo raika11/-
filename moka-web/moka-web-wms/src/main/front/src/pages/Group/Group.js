@@ -21,7 +21,7 @@ const Group = () => {
 
     // 마스터 그리드 클릭시 초기화 이벤트
     const handleClickAddGroup = (e) => {
-        history.push('/group');
+        history.push('/group/add');
     };
 
     React.useEffect(() => {
@@ -48,7 +48,7 @@ const Group = () => {
             >
                 <div className="mb-2 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleClickAddGroup}>
-                        그룹 추가
+                        등록
                     </Button>
                 </div>
                 <Suspense>
@@ -57,7 +57,7 @@ const Group = () => {
             </MokaCard>
             <Switch>
                 <Route
-                    path={['/group', '/group/:groupCd']}
+                    path={['/group/add', '/group/:groupCd']}
                     exact
                     render={() => (
                         <MokaIconTabs
@@ -65,21 +65,17 @@ const Group = () => {
                             //onExpansion={handleTabExpansion}
                             tabWidth={1050}
                             tabs={[
-                                <Suspense>
-                                    <MokaCard className="flex-fill w-100" bodyClassName="m-0 p-0" header={false}>
-                                        <Row className="m-0">
-                                            <Col xs={6} className="p-0">
-                                                <GroupEdit />
-                                            </Col>
-                                            <Col xs={6} className="p-0">
-                                                <GroupChildMenuAuth />
-                                            </Col>
-                                        </Row>
-                                    </MokaCard>
-                                </Suspense>,
-                                <Suspense>
-                                    <GroupChildGroupMemberEdit />
-                                </Suspense>,
+                                <MokaCard className="flex-fill w-100" bodyClassName="m-0 p-0" header={false}>
+                                    <Row className="m-0">
+                                        <Col xs={6} className="p-0">
+                                            <GroupEdit />
+                                        </Col>
+                                        <Col xs={6} className="p-0">
+                                            <GroupChildMenuAuth />
+                                        </Col>
+                                    </Row>
+                                </MokaCard>,
+                                <GroupChildGroupMemberEdit />,
                             ]}
                             tabNavWidth={48}
                             tabNavPosition="right"

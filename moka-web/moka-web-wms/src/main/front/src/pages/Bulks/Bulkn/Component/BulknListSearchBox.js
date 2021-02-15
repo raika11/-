@@ -18,9 +18,11 @@ const defaultProps = {};
 const BulknListSearchBox = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { search: storeSearch, bulkPathName } = useSelector((store) => ({
+    const { search: storeSearch, bulkPathName, bulkartDiv, sourceCode } = useSelector((store) => ({
         search: store.bulks.bulkn.search,
         bulkPathName: store.bulks.bulkPathName,
+        bulkartDiv: store.bulks.bulkartDiv,
+        sourceCode: store.bulks.sourceCode,
     }));
 
     // 기본 설정.
@@ -76,10 +78,8 @@ const BulknListSearchBox = (props) => {
     };
 
     useEffect(() => {
-        console.log(1);
         dispatch(getBulkList());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [bulkPathName, bulkartDiv, dispatch, sourceCode]);
 
     return (
         <>

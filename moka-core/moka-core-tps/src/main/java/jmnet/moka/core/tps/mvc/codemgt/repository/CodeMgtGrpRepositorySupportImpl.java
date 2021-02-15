@@ -79,9 +79,10 @@ public class CodeMgtGrpRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         JPQLQuery<CodeMgtGrp> query = queryFactory.selectFrom(codeMgtGrp);
         query = getQuerydsl().applyPagination(search.getPageable(), query);
         QueryResults<CodeMgtGrp> list = query
-                .join(codeMgtGrp.codeMgts, codeMgt)
+                .leftJoin(codeMgtGrp.codeMgts, codeMgt)
                 .distinct()
                 .where(builder)
+                .orderBy(codeMgtGrp.seqNo.desc())
                 .fetchResults();
 
         return new PageImpl<>(list.getResults(), search.getPageable(), list.getTotal());

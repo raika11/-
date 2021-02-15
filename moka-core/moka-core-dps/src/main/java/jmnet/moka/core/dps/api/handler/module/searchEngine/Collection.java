@@ -69,7 +69,7 @@ public class Collection extends ResultParser {
             Map map = (Map)object;
             String date = (String)map.get("Date");
             if (McpString.isNotEmpty(date)) {
-                map.put("Date",McpDate.dateTimeStr(McpDate.date("yyyMMddHHmmss",(String)map.get("Date"))));
+                map.put("Date",McpDate.dateTimeStr(McpDate.date("yyyyMMddHHmmss",(String)map.get("Date"))));
             }
         }
     }

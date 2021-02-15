@@ -42,13 +42,11 @@ public class BulkLogServiceImpl implements BulkLogService {
 
     @Override
     public Page<BulkLogVO> findAllBulkLogStatList(BulkLogSearchDTO searchDTO) {
-
         String chkPortalDiv = searchDTO.getPortalDiv();
 
         if (chkPortalDiv == null || searchDTO.getPortalDiv().isEmpty()) {
             searchDTO.setPortalDiv(" ");
         }
-
         List<BulkLogVO> list = bulkLogMapper.findAllList(searchDTO);
         return new PageImpl<>(list, searchDTO.getPageable(), searchDTO.getTotal() == null ? 0 : searchDTO.getTotal());
     }

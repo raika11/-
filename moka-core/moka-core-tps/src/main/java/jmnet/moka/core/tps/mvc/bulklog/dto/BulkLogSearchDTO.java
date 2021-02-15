@@ -1,6 +1,7 @@
 package jmnet.moka.core.tps.mvc.bulklog.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchDTO;
@@ -8,10 +9,8 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import jmnet.moka.core.tps.mvc.bulklog.vo.BulkLogVO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.apache.ibatis.type.Alias;
 
 
 /**
@@ -22,6 +21,9 @@ import lombok.Setter;
 @Getter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode(callSuper = true)
+@Alias("BulkLogSearchDTO")
+@ApiModel("벌크 전송 목록 검색 DTO")
 public class BulkLogSearchDTO extends SearchDTO {
 
     private static final long serialVersionUID = 1L;

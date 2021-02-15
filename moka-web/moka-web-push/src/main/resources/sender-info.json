@@ -1,0 +1,8 @@
+{
+  "EXAMPLE_SENDER": {
+    "className": "jmnet.moka.web.push.sender.ExampleSender",
+    "pushTitle": "푸시 발송 테스트",
+    "tokenCnt": 1000,
+    "threadPoolCnt": 10
+  }
+}

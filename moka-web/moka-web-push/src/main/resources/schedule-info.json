@@ -1,0 +1,20 @@
+[
+  {
+    "name": "EXAMPLE_SCHEDULE",
+    "term": "1 * * * * *",
+    "className": "jmnet.moka.web.push.scheduler.ExampleScheduler",
+    "pushTitle": "반복 푸시 발송 테스트",
+    "apps": [
+      {
+        "appOs": "AND",
+        "devDiv": "Mobile",
+        "appDiv": "J"
+      },
+      {
+        "appOs": "iOS",
+        "devDiv": "Mobile",
+        "appDiv": "J"
+      }
+    ]
+  }
+]

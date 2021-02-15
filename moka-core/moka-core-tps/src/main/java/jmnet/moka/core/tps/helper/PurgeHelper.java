@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 import jmnet.moka.core.common.DpsApiConstants;
@@ -21,9 +24,13 @@ import jmnet.moka.core.common.purge.model.PurgeResult;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tms.merge.item.MergeItem;
+import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.cdnarticle.entity.CdnArticle;
 import jmnet.moka.core.tps.mvc.merge.service.MergeService;
+import jmnet.moka.core.tps.mvc.page.dto.PageDTO;
+import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
+import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -225,30 +232,46 @@ public class PurgeHelper {
                 break;
             }
         }
-        if (resultHeader != null) {
-            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
-        } else {
+        if (resultHeader.isSuccess()) {
             logger.info("TMS PURGE Success: [{}] ", params);
             return "";
+        } else {
+            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
         }
     }
 
-    //    public String tmsPageUpdate(List<PageVO> pageList){
-    //        for (PageVO page : pageList) {
-    //            Page pageInfo = pageService
-    //                    .findPageBySeq(page.getPageSeq())
-    //                    .orElseThrow(() -> {
-    //                        String message = messageByLocale.get("tps.common.error.no-data");
-    //                        return new NoDataException(message);
-    //                    });
-    //            PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
-    //
-    //            String html = mergeService.getMergePage(pageDto);
-    //            this.tmsPageUpdate(doaminId, page
-    //                    .getPageSeq()
-    //                    .toString(), page.getCategory(), html);
-    //        }
-    //    }
+    /**
+     * 페이지 내용을 변경한다.
+     *
+     * @param pageList 페이지목록
+     * @return
+     * @throws NoDataException
+     * @throws TemplateMergeException
+     * @throws DataLoadException
+     * @throws TemplateParseException
+     */
+    public String tmsPageUpdate(List<PageVO> pageList)
+            throws NoDataException, TemplateMergeException, DataLoadException, TemplateParseException {
+        String returnValue = "";
+        for (PageVO page : pageList) {
+            Page pageInfo = pageService
+                    .findPageBySeq(page.getPageSeq())
+                    .orElseThrow(() -> {
+                        String message = messageByLocale.get("tps.common.error.no-data");
+                        return new NoDataException(message);
+                    });
+            PageDTO pageDto = modelMapper.map(pageInfo, PageDTO.class);
+
+            String html = mergeService.getMergePage(pageDto);
+            String ret = this.tmsPageUpdate(pageDto
+                    .getDomain()
+                    .getDomainId(), page
+                    .getPageSeq()
+                    .toString(), page.getCategory(), html);
+            returnValue = String.join("\r\n", ret);
+        }
+        return returnValue;
+    }
 
     /**
      * 페이지 내용을 변경한다.
@@ -281,12 +304,18 @@ public class PurgeHelper {
                 break;
             }
         }
-        if (resultHeader != null) {
-            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
-        } else {
+        if (resultHeader.isSuccess()) {
             logger.info("TMS PAGE UPDATE Success: [{}] [{}] [{}]", domainId, itemId, category);
             return "";
+        } else {
+            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
         }
+        //        if (resultHeader != null) {
+        //            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
+        //        } else {
+        //            logger.info("TMS PAGE UPDATE Success: [{}] [{}] [{}]", domainId, itemId, category);
+        //            return "";
+        //        }
     }
 
     /**
@@ -319,11 +348,11 @@ public class PurgeHelper {
                 break;
             }
         }
-        if (resultHeader != null) {
-            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
-        } else {
+        if (resultHeader.isSuccess()) {
             logger.info("RESERVED UPDATE Fail: {}", domainId);
             return "";
+        } else {
+            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
         }
     }
 
@@ -361,11 +390,11 @@ public class PurgeHelper {
                 break;
             }
         }
-        if (resultHeader != null) {
-            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
-        } else {
+        if (resultHeader.isSuccess()) {
             logger.info("TMS CDN UPDATE Success: [{}] ", params);
             return "";
+        } else {
+            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
         }
     }
 
@@ -409,11 +438,11 @@ public class PurgeHelper {
                 break;
             }
         }
-        if (resultHeader != null) {
-            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
-        } else {
+        if (resultHeader.isSuccess()) {
             logger.info("DPS PURGE Success: [{}] [{}] [{}]", apiPath, apiId, prefix);
             return "";
+        } else {
+            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
         }
     }
 

@@ -13,7 +13,9 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tms.merge.item.DatasetItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +37,8 @@ public class DatasetDTO implements Serializable {
 
     private static final long serialVersionUID = -8944721450946210579L;
 
-    public static final Type TYPE = new TypeReference<List<DatasetDTO>>() {}.getType();
+    public static final Type TYPE = new TypeReference<List<DatasetDTO>>() {
+    }.getType();
 
     @ApiModelProperty("데이터셋SEQ")
     @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}")
@@ -49,8 +52,8 @@ public class DatasetDTO implements Serializable {
 
     @ApiModelProperty("API코드(기타코드) : apiHost + apiPath(필수)")
     @NotNull(message = "{tps.dataset.error.notnull.apiCodeId}")
-    @Length(min=1, max = 24, message = "{tps.dataset.error.length.apiCodeId}")
-    private String apiCodeId;	// apiHost + apiPath 공통코드
+    @Length(min = 1, max = 24, message = "{tps.dataset.error.length.apiCodeId}")
+    private String apiCodeId;    // apiHost + apiPath 공통코드
 
     @ApiModelProperty("데이터API경로")
     @Length(max = 256, message = "{tps.dataset.error.length.dataApiPath}")
@@ -79,4 +82,16 @@ public class DatasetDTO implements Serializable {
 
     @ApiModelProperty("디비상에는 없는 파라미터의 형식정보.(dps의 parameter정보)")
     private String dataApiParamShape;
+
+    public DatasetItem toDatasetItem() {
+        DatasetItem datasetItem = new DatasetItem();
+        datasetItem.put(ItemConstants.DATASET_ID, this.datasetSeq);
+        datasetItem.put(ItemConstants.DATASET_NAME, this.datasetName);
+        datasetItem.put(ItemConstants.DATASET_API_PATH, this.dataApiPath);
+        datasetItem.put(ItemConstants.DATASET_API_HOST, this.dataApiHost);
+        datasetItem.put(ItemConstants.DATASET_API, this.dataApi);
+        datasetItem.put(ItemConstants.DATASET_API_PARAM, this.dataApiParam);
+        datasetItem.put(ItemConstants.DATASET_AUTO_CREATE_YN, this.autoCreateYn);
+        return datasetItem;
+    }
 }

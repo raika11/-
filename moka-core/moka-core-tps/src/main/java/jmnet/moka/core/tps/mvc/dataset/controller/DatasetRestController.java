@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,9 @@ import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
 import jmnet.moka.common.proxy.http.HttpProxy;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -30,6 +34,7 @@ import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.ApiCodeHelper;
+import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
@@ -37,6 +42,8 @@ import jmnet.moka.core.tps.mvc.dataset.dto.DatasetSearchDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
 import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.dataset.vo.DatasetVO;
+import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +86,9 @@ public class DatasetRestController extends AbstractCommonController {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private PurgeHelper purgeHelper;
 
     /**
      * 데이타셋정보 목록조회
@@ -329,6 +339,9 @@ public class DatasetRestController extends AbstractCommonController {
                 dto.setDataApiParamShape(getParameters(dto));
             }
 
+            // purge 날림!!
+            purge(dto);
+
             String message = msg("tps.common.success.update");
             ResultDTO<DatasetDTO> resultDto = new ResultDTO<DatasetDTO>(dto, message);
             tpsLogger.success(ActionType.UPDATE, true);
@@ -423,7 +436,7 @@ public class DatasetRestController extends AbstractCommonController {
         validData(datasetSeq, null);
 
         // 1.2. 데이타 존재여부 검사
-        datasetService
+        Dataset returnValue = datasetService
                 .findDatasetBySeq(datasetSeq)
                 .orElseThrow(() -> {
                     String message = msg("tps.common.error.no-data");
@@ -432,6 +445,8 @@ public class DatasetRestController extends AbstractCommonController {
                 });
 
         try {
+
+            DatasetDTO dto = modelMapper.map(returnValue, DatasetDTO.class);
 
             // 1.3. 관련데이타가 있는지 조사.
             if (datasetService.isRelated(datasetSeq)) {
@@ -443,6 +458,9 @@ public class DatasetRestController extends AbstractCommonController {
 
             // 2. 삭제
             datasetService.deleteDataset(datasetSeq);
+
+            // purge 날림!!
+            purge(dto);
 
             // 3. 결과리턴
             String message = msg("tps.common.success.delete");
@@ -526,5 +544,36 @@ public class DatasetRestController extends AbstractCommonController {
         dto.setDatasetName(datasetName);
 
         return this.postDataset(dto);
+    }
+
+    private String purge(DatasetDTO returnValDTO)
+            throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
+
+        // 1. 데이타셋 tms purge
+        String returnValue = "";
+        String retDataset = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toDatasetItem()));
+        if (McpString.isNotEmpty(retDataset)) {
+            log.error("[FAIL TO PURGE DATASET] seq: {} {}", returnValDTO.getDatasetSeq(), retDataset);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE DATASET]", true);
+            returnValue = String.join("\r\n", retDataset);
+        }
+
+        // 2. fileYn=Y인 관련페이지 tms pageUpdate
+        RelationSearchDTO search = RelationSearchDTO
+                .builder()
+                .fileYn(MokaConstants.YES)
+                .relSeq(returnValDTO.getDatasetSeq())
+                .relSeqType(MokaConstants.ITEM_DATASET)
+                .relType(MokaConstants.ITEM_PAGE)
+                .build();
+        List<PageVO> pageList = relationService.findAllPage(search);
+        String retPage = purgeHelper.tmsPageUpdate(pageList);
+        if (McpString.isNotEmpty(retPage)) {
+            log.error("[FAIL TO PAGE UPATE] seq: {} {}", returnValDTO.getDatasetSeq(), retPage);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
+            returnValue = String.join("\r\n", retPage);
+        }
+
+        return returnValue;
     }
 }

@@ -107,8 +107,8 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 상세조회")
     @GetMapping("/{componentSeq}")
-    public ResponseEntity<?> getComponent(
-            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+    public ResponseEntity<?> getComponent(@ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
         Component component = componentService
@@ -145,7 +145,7 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 등록")
     @PostMapping
-    public ResponseEntity<?> postComponent(@ApiParam("컴포넌트 정보")  @RequestBody @Valid ComponentDTO componentDTO)
+    public ResponseEntity<?> postComponent(@ApiParam("컴포넌트 정보") @RequestBody @Valid ComponentDTO componentDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이터 유효성 검사
@@ -274,8 +274,8 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 수정")
     @PutMapping("/{componentSeq}")
-    public ResponseEntity<?> putComponent(
-            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
+    public ResponseEntity<?> putComponent(@ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
             @ApiParam("컴포넌트 정보") @Valid @RequestBody ComponentDTO componentDTO)
             throws NoDataException, InvalidDataException, Exception {
 
@@ -357,9 +357,8 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 복사")
     @PostMapping("/{componentSeq}/copy")
-    public ResponseEntity<?> copyComponent(
-            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq,
-            @ApiParam("컴포넌트명") String componentName)
+    public ResponseEntity<?> copyComponent(@ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq, @ApiParam("컴포넌트명") String componentName)
             throws InvalidDataException, Exception {
 
         // 조회
@@ -436,8 +435,8 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 삭제")
     @DeleteMapping("/{componentSeq}")
-    public ResponseEntity<?> deleteComponent(
-            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+    public ResponseEntity<?> deleteComponent(@ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws NoDataException, Exception {
 
         // 데이타 확인
@@ -482,8 +481,8 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "컴포넌트 히스토리 목록조회")
     @GetMapping("/{componentSeq}/histories")
-    public ResponseEntity<?> getHistoryList(@Valid @SearchParam SearchDTO search,
-            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq) {
+    public ResponseEntity<?> getHistoryList(@Valid @SearchParam SearchDTO search, @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq) {
 
         // 페이징조건 설정 (order by seq desc)
         List<String> sort = new ArrayList<String>();
@@ -516,8 +515,8 @@ public class ComponentRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "관련 아이템 존재여부")
     @GetMapping("/{componentSeq}/has-relations")
-    public ResponseEntity<?> hasRelationList(
-            @ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq") @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
+    public ResponseEntity<?> hasRelationList(@ApiParam("컴포넌트 일련번호(필수)") @PathVariable("componentSeq")
+    @Min(value = 0, message = "{tps.component.error.min.componentSeq}") Long componentSeq)
             throws Exception {
 
         // 컴포넌트 확인
@@ -576,4 +575,5 @@ public class ComponentRestController extends AbstractCommonController {
             throw new InvalidDataException(invalidList, validMessage);
         }
     }
+    
 }

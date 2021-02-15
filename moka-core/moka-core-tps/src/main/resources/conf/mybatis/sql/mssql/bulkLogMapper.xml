@@ -25,7 +25,15 @@
   <select id="findAllList" parameterType="BulkLogSearchDTO" resultType="BulkLogVO"
           statementType="CALLABLE">
     {call UPA_BULK_LOG_LIST_STAT_SEL(
-            #{orgSourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+
+      <choose>
+          <when test="orgSourceCode != null and orgSourceCode != ''">
+              #{orgSourceCode},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
             #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
             #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
 
@@ -65,8 +73,23 @@
           </otherwise>
       </choose>
 
-      #{portalDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
+      <choose>
+          <when test="portalDiv != 'all' and portalDiv != null and portalDiv != ''">
+              #{portalDiv},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+      </choose>
+
+      <choose>
+          <when test="status != 'all' and status != null and status != ''">
+              #{status},
+          </when>
+          <otherwise>
+              NULL,
+          </otherwise>
+        </choose>
       #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
       #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
       ) }
@@ -76,8 +99,22 @@
     <select id="findAllListInfo" parameterType="BulkLogTotalIdDTO" resultType="BulkLogVO"
             statementType="CALLABLE">
         {call UPA_BULK_LOG_LIST_STAT_SEL_BY_INFO(
-        #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{portalDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
+        <choose>
+            <when test="totalId != 'all' and totalId != null and totalId != ''">
+                #{totalId},
+            </when>
+            <otherwise>
+                NULL,
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="portalDiv != 'all' and portalDiv != null and portalDiv != ''">
+                #{portalDiv},
+            </when>
+            <otherwise>
+                NULL,
+            </otherwise>
+        </choose>
         #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
         #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
         ) }
@@ -86,7 +123,14 @@
     <select id="findAllListInfoMsg" parameterType="BulkLogTotalIdDTO" resultType="BulkLogVO"
             statementType="CALLABLE">
         {call UPA_BULK_LOG_LIST_STAT_SEL_BY_MSG(
-                #{totalId, mode=IN, jdbcType=VARCHAR, javaType=string},
+        <choose>
+            <when test="totalId != 'all' and totalId != null and totalId != ''">
+                #{totalId},
+            </when>
+            <otherwise>
+                NULL,
+            </otherwise>
+        </choose>
                 #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
                 #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
             ) }

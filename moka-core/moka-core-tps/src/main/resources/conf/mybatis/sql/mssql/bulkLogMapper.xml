@@ -25,7 +25,7 @@
   <select id="findAllList" parameterType="BulkLogSearchDTO" resultType="BulkLogVO"
           statementType="CALLABLE">
     {call UPA_BULK_LOG_LIST_STAT_SEL(
-            #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{orgSourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
             #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
             #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
 

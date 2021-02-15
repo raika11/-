@@ -5,7 +5,7 @@ import PollDetailBasicPhotoAnswerComponent from '@pages/Survey/Poll/components/P
 import PollDetailBasicCombineAnswerComponent from '@pages/Survey/Poll/components/PollDetailBasicCombineAnswerComponent';
 import produce from 'immer';
 
-const PollDetailBasicAnswerContainer = ({ items, type, onChange }) => {
+const PollDetailBasicAnswerContainer = ({ items, type, onChange, hasUrl }) => {
     const [editItems, setEditItems] = useState([]);
 
     let AnswerComponent = null;
@@ -45,7 +45,7 @@ const PollDetailBasicAnswerContainer = ({ items, type, onChange }) => {
                         key={index}
                         item={editItem}
                         index={index}
-                        hasUrl={false}
+                        hasUrl={hasUrl}
                         onChange={(item) => {
                             handleChangeValue(index, item);
                         }}

@@ -5,7 +5,7 @@ import PollDetailComparePhotoAnswerComponent from '@pages/Survey/Poll/components
 import PollDetailCompareCombineAnswerComponent from '@pages/Survey/Poll/components/PollDetailCompareCombineAnswerComponent';
 import produce from 'immer';
 
-const PollDetailCompareAnswerContainer = ({ items, type, onChange }) => {
+const PollDetailCompareAnswerContainer = ({ items, type, onChange, hasUrl }) => {
     const [editItems, setEditItems] = useState([
         { title: '', linkUrl: '', imgUrl: null, imgFile: null },
         { title: '', linkUrl: '', imgUrl: null, imgFile: null },
@@ -44,7 +44,7 @@ const PollDetailCompareAnswerContainer = ({ items, type, onChange }) => {
             break;
     }
 
-    return <>{!commonUtil.isEmpty(AnswerComponent) && <AnswerComponent items={editItems} hasUrl={false} onChange={handleChangeItems} />}</>;
+    return <>{!commonUtil.isEmpty(AnswerComponent) && <AnswerComponent items={editItems} hasUrl={hasUrl} onChange={handleChangeItems} />}</>;
 };
 
 export default PollDetailCompareAnswerContainer;

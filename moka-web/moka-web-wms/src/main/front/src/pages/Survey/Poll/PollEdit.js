@@ -27,6 +27,7 @@ const PollEdit = ({ onDelete }) => {
     const [isCompared, setIsCompared] = useState(false);
     const [isSet, setIsSet] = useState(false);
     const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
+    const [hasUrl, setHasUrl] = useState(false);
 
     const { codes, poll, loading, search } = useSelector((store) => ({
         codes: store.poll.codes,
@@ -110,6 +111,10 @@ const PollEdit = ({ onDelete }) => {
                 }),
             );
         }
+    };
+
+    const handleClickHasLink = () => {
+        setHasUrl(!hasUrl);
     };
 
     useEffect(() => {
@@ -508,16 +513,25 @@ const PollEdit = ({ onDelete }) => {
                             className="flex-fill pl-0 h-100"
                             minHeight="300px"
                             titleAs={
-                                <MokaInputLabel
-                                    as="textarea"
-                                    name="title"
-                                    onChange={(e) => {
-                                        handleChangeValue(e.target);
-                                    }}
-                                    value={edit.title}
-                                    label="Q."
-                                    labelWidth={20}
-                                />
+                                <Form.Row>
+                                    <Col xs={11}>
+                                        <MokaInputLabel
+                                            as="textarea"
+                                            name="title"
+                                            onChange={(e) => {
+                                                handleChangeValue(e.target);
+                                            }}
+                                            value={edit.title}
+                                            label="Q."
+                                            labelWidth={20}
+                                        />
+                                    </Col>
+                                    <Col xs={1} className="d-flex align-items-center">
+                                        <Button variant="white" className="flex-fill" onClick={handleClickHasLink}>
+                                            <MokaIcon iconName="fal-link" />
+                                        </Button>
+                                    </Col>
+                                </Form.Row>
                             }
                         >
                             {edit.pollDiv === 'W' && (
@@ -530,6 +544,7 @@ const PollEdit = ({ onDelete }) => {
                                             value: items,
                                         });
                                     }}
+                                    hasUrl={hasUrl}
                                 />
                             )}
                             {edit.pollDiv === 'V' && (
@@ -542,6 +557,7 @@ const PollEdit = ({ onDelete }) => {
                                             value: items,
                                         });
                                     }}
+                                    hasUrl={hasUrl}
                                 />
                             )}
                         </MokaCard>

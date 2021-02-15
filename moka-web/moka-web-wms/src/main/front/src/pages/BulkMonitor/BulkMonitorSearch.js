@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaInputLabel } from '@components';
-import { SourceSelector } from '@pages/commons';
+import { MokaInput } from '@components';
+import BulkSourceCodeSelector from './components/BulkSourceCodeSelector';
 import BulkSiteSelector from './components/BulkSiteSelector';
 import { changeBmSearchOption, getBulkStatTotal, getBulkStatList, bmInitialState } from '@/store/bulks';
 
@@ -71,6 +71,7 @@ const BulkMonitorSearch = () => {
 
             setTemp({ ...temp, ...search });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sourceOn, siteOn]);
 
     useEffect(() => {
@@ -81,7 +82,7 @@ const BulkMonitorSearch = () => {
         <>
             <Form className="mb-5">
                 <Form.Row className="d-flex align-items-center justify-content-between">
-                    <SourceSelector
+                    <BulkSourceCodeSelector
                         width={160}
                         className="mr-2"
                         value={search.orgSourceCode}
@@ -160,9 +161,9 @@ const BulkMonitorSearch = () => {
                     </div>
                     <BulkSiteSelector
                         className="mr-2"
-                        value={null}
+                        value={search.portalDiv}
                         onChange={(value) => {
-                            // setSearch({ ...search, portalDiv: value });
+                            setSearch({ ...search, portalDiv: value });
                             if (value !== '') {
                                 setSiteOn(true);
                             }

@@ -97,7 +97,7 @@ const MemberChildMenuAuth = () => {
             footerButtons={
                 memberId && [
                     { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                    { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
+                    { text: '새로고침', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
                 ]
             }
             footer

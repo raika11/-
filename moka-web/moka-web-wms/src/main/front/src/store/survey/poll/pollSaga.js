@@ -4,7 +4,7 @@ import * as pollApi from './pollApi';
 import * as codeMgtApi from '@store/codeMgt/codeMgtApi';
 import { finishLoading, startLoading } from '@store/loading';
 import produce from 'immer';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import moment from 'moment';
 import { BASIC_DATEFORMAT, DB_DATEFORMAT } from '@/constants';
 import commonUtil from '@utils/commonUtil';
@@ -37,7 +37,7 @@ function toPollListData(list, codes) {
             category: commonUtil.toKorFromCode(data.pollCategory, codes.pollCategory),
             group: commonUtil.toKorFromCode(data.pollGroup, codes.pollGroup),
             status: commonUtil.toKorFromCode(data.status, codes.status),
-            title: unescapeHtml(data.title),
+            title: unescapeHtmlArticle(data.title),
             regDt,
             modDt,
             startDt,
@@ -85,7 +85,7 @@ function* getPollList({ type, payload }) {
 function toPollData(poll) {
     return {
         ...poll,
-        title: unescapeHtml(poll.title),
+        title: unescapeHtmlArticle(poll.title),
         pollItems: poll.pollItems.sort(function (a, b) {
             if (a.ordNo > b.ordNo) {
                 return 1;

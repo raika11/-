@@ -18,7 +18,7 @@ export const bmInitialState = {
         // sourceCode: null,
         orgSourceCode: null,
         // orgSourceName: null,
-        // portalDiv: null,
+        portalDiv: null,
         status: 'Y',
         startDt: moment().format('YYYY-MM-DD'),
         endDt: moment().format('YYYY-MM-DD'),

@@ -65,6 +65,7 @@
           </otherwise>
       </choose>
 
+      #{portalDiv, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
       #{size, mode=IN, jdbcType=INTEGER, javaType=integer}

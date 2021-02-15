@@ -16,6 +16,7 @@ export const columnDefs = [
         // cellClass: 'ag-cell-center',
         //cellStyle: { textAlign: 'center' },
         width: 75,
+        flex: 1,
         tooltipField: 'groupNm',
         cellClassRules,
     },
@@ -38,7 +39,7 @@ export const columnDefs = [
     {
         headerName: '등록일시',
         field: 'regDt', // 안나옴.
-        width: 125,
+        width: 110,
         cellClassRules,
     },
 ];

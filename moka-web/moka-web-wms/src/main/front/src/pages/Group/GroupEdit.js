@@ -83,6 +83,10 @@ const GroupEdit = () => {
         );
     };
 
+    const handleClickCancel = () => {
+        history.push('/group');
+    };
+
     /**
      * 도메인 삭제
      * @param {object} domain domain
@@ -333,16 +337,20 @@ const GroupEdit = () => {
 
     return (
         <MokaCard
-            title="그룹정보"
+            title={`그룹 ${paramCd ? '수정' : '등록'}`}
             className="w-100 shadow-none"
             footerClassName="justify-content-center"
             footerButtons={
                 groupCd
                     ? [
-                          { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                          { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'float-left mr-0 pr-20 pl-20' },
+                          { text: '수정', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
+                          { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'float-left mr-10 pr-20 pl-20' },
+                          { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
                       ]
-                    : [{ text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' }]
+                    : [
+                          { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
+                          { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
+                      ]
             }
             footer
         >

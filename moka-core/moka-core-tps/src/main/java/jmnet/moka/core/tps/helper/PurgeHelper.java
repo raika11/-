@@ -61,6 +61,7 @@ public class PurgeHelper {
     public static final String TMS_PARAM_ITEM_ID = "itemId";
     public static final String TMS_PARAM_CATEGORY = "category";
     public static final String TMS_PARAM_HTML = "html";
+    public static final String TMS_PARAM_ARTICLE_ID = "articleId";
     public static final String ITEM_DOMAIN_ID = "domainId";
 
     private static final Logger logger = LoggerFactory.getLogger(PurgeHelper.class);
@@ -234,6 +235,43 @@ public class PurgeHelper {
         }
         if (resultHeader.isSuccess()) {
             logger.info("TMS PURGE Success: [{}] ", params);
+            return "";
+        } else {
+            return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());
+        }
+    }
+
+    /**
+     * 머징된 기사에 대한 기사 페이지를 purge한다.
+     * @param articleId 기사 id
+     * @return 머징 결과
+     */
+    public String tmsArticlePurge(String articleId) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        builder.path(TmsApiConstants.COMMAND_RESERVED_UPDATE);
+        builder.queryParam(TMS_PARAM_ARTICLE_ID, articleId);
+        String uriAndQuery = builder
+                .build()
+                .encode()
+                .toString();
+
+        ResultHeaderDTO resultHeader = null;
+        String errorHost = null;
+        for (String tmsHost : tmsTargets) {
+            try {
+                ResponseEntity responseEntity = restTemplateHelper.get(tmsHost + uriAndQuery);
+                resultHeader = this.parseResultHeaderDTO(responseEntity);
+            } catch (Exception e) {
+                resultHeader = new ResultHeaderDTO(false, 500, 500, e.getMessage());
+                logger.error("TMS ARTICLE PURGE Fail: {}", e);
+            }
+            if (!resultHeader.isSuccess()) {
+                errorHost = tmsHost;
+                break;
+            }
+        }
+        if (resultHeader.isSuccess()) {
+            logger.info("ARTICLE PURGE Fail: {}", articleId);
             return "";
         } else {
             return String.format("%s\n%s:%s", messageByLocale.get("tps.common.error.purge"), errorHost, resultHeader.getMessage());

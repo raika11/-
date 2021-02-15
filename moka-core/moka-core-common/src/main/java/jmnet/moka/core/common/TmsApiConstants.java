@@ -19,8 +19,8 @@ public class TmsApiConstants {
     /**
      * 커맨드 API
      **/
-    public static final String COMMAND_BULK_PURGE = COMMAND_PREFIX + "/bulkPurge";
     public static final String COMMAND_PURGE = COMMAND_PREFIX + "/purge";
+    public static final String COMMAND_ARTICLE_PURGE = COMMAND_PREFIX + "/articlePurge";
     public static final String COMMAND_RESERVED_UPDATE = COMMAND_PREFIX + "/reservedUpdate";
     public static final String COMMAND_CDN_UPDATE = COMMAND_PREFIX + "/cdnUpdate";
     public static final String COMMAND_PAGE_UPDATE = COMMAND_PREFIX + "/pageUpdate";

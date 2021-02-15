@@ -65,21 +65,17 @@ const Group = () => {
                             //onExpansion={handleTabExpansion}
                             tabWidth={1050}
                             tabs={[
-                                <Suspense>
-                                    <MokaCard className="flex-fill w-100" bodyClassName="m-0 p-0" header={false}>
-                                        <Row className="m-0">
-                                            <Col xs={6} className="p-0">
-                                                <GroupEdit />
-                                            </Col>
-                                            <Col xs={6} className="p-0">
-                                                <GroupChildMenuAuth />
-                                            </Col>
-                                        </Row>
-                                    </MokaCard>
-                                </Suspense>,
-                                <Suspense>
-                                    <GroupChildGroupMemberEdit />
-                                </Suspense>,
+                                <MokaCard className="flex-fill w-100" bodyClassName="m-0 p-0" header={false}>
+                                    <Row className="m-0">
+                                        <Col xs={6} className="p-0">
+                                            <GroupEdit />
+                                        </Col>
+                                        <Col xs={6} className="p-0">
+                                            <GroupChildMenuAuth />
+                                        </Col>
+                                    </Row>
+                                </MokaCard>,
+                                <GroupChildGroupMemberEdit />,
                             ]}
                             tabNavWidth={48}
                             tabNavPosition="right"

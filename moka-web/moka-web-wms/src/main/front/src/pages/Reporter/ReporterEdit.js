@@ -42,7 +42,7 @@ const ReporterEdit = ({ match }) => {
                 ],
                 callback: ({ header, body }) => {
                     header.success ? toast.success(header.message) : messageBox.alert(header.message);
-                    dispatch(getReporter(body.jamRepSeq));
+                    dispatch(getReporter(body.repSeq));
                 },
             }),
         );

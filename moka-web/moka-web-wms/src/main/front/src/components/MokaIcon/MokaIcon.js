@@ -54,6 +54,7 @@ import {
     faCommentAltLines as falCommentAltLines,
     faCommentAlt as falCommentAlt,
     faTrashAlt as falTrashAlt,
+    faUserCircle as falUserCircle,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -71,8 +72,9 @@ import {
     faSearch as fasSearch,
     faCircle as fasCircle,
     faInfoCircle as fasInfoCircle,
+    faUserCircle as fasUserCircle,
 } from '@moka/fontawesome-pro-solid-svg-icons';
-import { faRedoAlt as farRedoAlt } from '@moka/fontawesome-pro-regular-svg-icons';
+import { faRedoAlt as farRedoAlt, faUserCircle as farUserCircle } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage, faThumbsUp as fadThumbsUp, faThumbsDown as fadThumbsDown } from '@moka/fontawesome-pro-duotone-svg-icons';
 import { faFacebook as fabFacebook, faTwitter as fabTwitter, faFacebookSquare as fabFacebookSquare, faTwitterSquare as fabTwitterSquare } from '@fortawesome/free-brands-svg-icons';
 
@@ -128,9 +130,12 @@ library.add(falLockAlt);
 library.add(falCommentAltLines);
 library.add(falCommentAlt);
 library.add(falTrashAlt);
+library.add(falUserCircle);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);
+library.add(farUserCircle);
+library.add(fasUserCircle);
 
 // 아이콘 등록 (fas)
 library.add(fasThLarge);

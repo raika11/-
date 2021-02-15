@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
-import { MokaInputLabel, MokaInput } from '@components';
+import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearReporter, getReporter, changeReporter, saveReporter } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
-import bg from '@assets/images/v_noimg.jpg';
+// import bg from '@assets/images/v_noimg.jpg';
 
 /**
  * 기자 정보 조회/수정
@@ -90,6 +90,7 @@ const ReporterEdit = ({ match }) => {
             rMail2: reporter.repEmail2 || ''.split('|')[1] || '',
             rMail3: reporter.repEmail2 || ''.split('|')[2] || '',
             rMail4: reporter.repEmail2 || ''.split('|')[3] || '',
+            modDt: reporter.modDt && reporter.modDt.length > 10 ? reporter.modDt.substr(0, 11) : reporter.modDt,
         });
     }, [reporter]);
 
@@ -105,7 +106,19 @@ const ReporterEdit = ({ match }) => {
             <hr className="divider mt-0" />
 
             <div className="d-flex align-items-center">
-                <Image width="100" height="100" src={temp.repImg || bg} className="flex-shrink-0" roundedCircle />
+                {/* <Image width="100" height="100" src={temp.repImg || bg} className="flex-shrink-0" roundedCircle /> */}
+                {temp.repImg ? (
+                    <Image width="100" height="100" src={temp.repImg} className="flex-shrink-0" roundedCircle />
+                ) : (
+                    <MokaIcon
+                        iconName="fas-user-circle"
+                        className="gray-800"
+                        style={{
+                            fontSize: '100px',
+                        }}
+                    />
+                )}
+
                 <div className="flex-fill d-flex align-items-center justify-content-between ml-4">
                     <div className="d-flex flex-column">
                         <p className="mb-gutter">
@@ -138,6 +151,12 @@ const ReporterEdit = ({ match }) => {
                             취소
                         </Button>
                     </div>
+                </div>
+            </div>
+
+            <div className="d-flex align-items-center">
+                <div className="flex-fill d-flex align-items-center justify-content-end ml-4">
+                    <div className="d-flex align-items-center">최종 수정일: {temp.modDt}</div>
                 </div>
             </div>
 

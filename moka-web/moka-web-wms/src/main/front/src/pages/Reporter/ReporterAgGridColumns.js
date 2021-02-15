@@ -21,7 +21,7 @@ export const columnDefs = [
     {
         headerName: '수정일시',
         field: 'modDt',
-        width: 120,
+        width: 130,
     },
     {
         headerName: '이메일',

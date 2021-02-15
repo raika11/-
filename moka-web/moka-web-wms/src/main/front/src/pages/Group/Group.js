@@ -48,7 +48,7 @@ const Group = () => {
             >
                 <div className="mb-2 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleClickAddGroup}>
-                        그룹 추가
+                        등록
                     </Button>
                 </div>
                 <Suspense>

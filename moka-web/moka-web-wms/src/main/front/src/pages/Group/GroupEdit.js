@@ -333,7 +333,7 @@ const GroupEdit = () => {
 
     return (
         <MokaCard
-            title="그룹정보"
+            title={`그룹 ${paramCd ? '수정' : '등록'}`}
             className="w-100 shadow-none"
             footerClassName="justify-content-center"
             footerButtons={

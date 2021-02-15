@@ -188,7 +188,15 @@ const PollEdit = ({ onDelete }) => {
     };
 
     return (
-        <MokaCard title="투표 등록" className="w-100" footer footerClassName="justify-content-center" footerButtons={getFooterButtons()} width={570} loading={loading}>
+        <MokaCard
+            title={`투표 ${pollSeq ? '수정' : '등록'}`}
+            className="w-100"
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={getFooterButtons()}
+            width={570}
+            loading={loading}
+        >
             <Form>
                 <Form.Row className="mb-2 justify-content-between">
                     <Col xs={6}>

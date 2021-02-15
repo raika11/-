@@ -4,6 +4,8 @@ import { columnDefs } from '@pages/Group/GroupAgGridColumns';
 import { useHistory } from 'react-router-dom';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { changeSearchOption, GET_GROUP_LIST, getGroupList, initialState } from '@store/group';
+import moment from 'moment';
+import { BASIC_DATEFORMAT } from '@/constants';
 
 /**
  * group AgGrid 목록
@@ -57,7 +59,7 @@ const GroupAgGrid = (props) => {
                 groupNm: row.groupNm,
                 groupKorNm: row.groupKorNm,
                 regId: row.regMember.memberNm,
-                regDt: row.regDt,
+                regDt: moment(row.regDt).format(BASIC_DATEFORMAT),
                 onDelete,
             })),
         );

@@ -112,10 +112,17 @@ const ReporterEdit = ({ match }) => {
                     <Image width="100" height="100" src={temp.repImg} className="flex-shrink-0" roundedCircle />
                 ) : (
                     <MokaIcon
-                        iconName="fas-user-circle"
-                        className="gray-800"
+                        iconName="fal-user"
                         style={{
-                            fontSize: '100px',
+                            color: '#fff',
+                            background: '#CED1DB',
+                            width: '100px',
+                            height: '100px',
+                            borderRadius: '50%',
+                            textAlign: 'center',
+                            lineHeight: '10px',
+                            verticalAlign: 'middle',
+                            padding: '20px',
                         }}
                     />
                 )}

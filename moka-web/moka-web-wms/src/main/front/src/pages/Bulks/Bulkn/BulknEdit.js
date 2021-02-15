@@ -56,7 +56,7 @@ const BulknEdit = (props) => {
         dispatch(
             showPreviewModal({
                 state: true,
-                activeKey: bulkartSeq ? 1 : 0,
+                activeKey: 1,
                 bulkArticle: bulkArticleRow,
             }),
         );
@@ -323,8 +323,8 @@ ${bulkArticleRow
                 footer
                 footerButtons={[
                     { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-05' },
-                    { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05', useAuth: true },
-                    { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: bulkartSeq ? true : false, useAuth: true },
+                    { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
+                    { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: bulkartSeq ? true : false }, //useAuth: true
                     // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
                 ]}

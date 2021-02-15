@@ -72,7 +72,8 @@ const Bulks = ({ match }) => {
             pathName.current = match.path;
             initPageParams(match);
         }
-    }, [bulksParams, match]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [match]);
 
     // 파라미터가 변경 되면 store에 등록.
     useEffect(() => {

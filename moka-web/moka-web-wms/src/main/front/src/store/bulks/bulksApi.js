@@ -57,8 +57,8 @@ export const resendHotClick = ({ bulkartSeq }) => {
 };
 
 // 벌크 상태값 변경.
-export const putChangeBulkused = ({ bulkartSeq, parameter }) => {
-    return instance.put(`/api/bulks/${bulkartSeq}/used?${qs.stringify(parameter)}`).catch((err) => {
+export const putChangeBulkused = ({ bulkartSeq }) => {
+    return instance.put(`/api/bulks/${bulkartSeq}/used`).catch((err) => {
         throw err;
     });
 };

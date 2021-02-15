@@ -18,6 +18,7 @@ const PreviewRenderer = ({ bulkartSeq }) => {
                         dispatch(
                             showPreviewModal({
                                 state: true,
+                                activeKey: 0,
                                 bulkArticle: list,
                             }),
                         );

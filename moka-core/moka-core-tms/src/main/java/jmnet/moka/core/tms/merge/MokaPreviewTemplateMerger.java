@@ -427,9 +427,13 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         basicJson.replace("ART_TITLE", title);
         basicJson.replace("ART_SUB_TITLE", subTitle);
         article.put("basic", basicJson);
-        Map<String, Object> contentJson = jsonResult.getDataListFirst("CONTENT");
-        contentJson.replace("ART_CONTENT", content);
-        article.put("content", contentJson);
+        List<Map<String, Object>> contentList = jsonResult.getDataList("CONTENT");
+        if (contentList.size() > 0) {
+            contentList
+                    .get(0)
+                    .replace("ART_CONTENT", content);
+        }
+        article.put("content", contentList);
         article.put("reporter", reporterList);
         article.put("mastercode", categoryList);
         article.put("keyword", tagList);

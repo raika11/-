@@ -4,6 +4,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { getBulkSite } from '@/store/codeMgt';
 
+/**
+ * 사이트 이름 렌더링
+ */
 const PortalNameRenderer = (props) => {
     const { data } = props;
     const dispatch = useDispatch();

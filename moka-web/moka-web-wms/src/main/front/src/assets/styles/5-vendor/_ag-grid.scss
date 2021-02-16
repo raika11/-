@@ -237,6 +237,10 @@ $row-hover-color: darken($desking-row-color, 5);
     svg {
         color: $gray-600;
     }
+
+    .color-positive {
+        color: $positive
+    }
 }
 
 

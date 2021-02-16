@@ -47,7 +47,7 @@
       </choose>
 
       <choose>
-          <when test="searchType == 'totalId' and keyword != null and keyword != ''">
+          <when test="searchType == 'contentId' and keyword != null and keyword != ''">
               #{keyword},
           </when>
           <otherwise>
@@ -100,8 +100,8 @@
             statementType="CALLABLE">
         {call UPA_BULK_LOG_LIST_STAT_SEL_BY_INFO(
         <choose>
-            <when test="totalId != 'all' and totalId != null and totalId != ''">
-                #{totalId},
+            <when test="contentId != 'all' and contentId != null and contentId != ''">
+                #{contentId},
             </when>
             <otherwise>
                 NULL,
@@ -124,8 +124,8 @@
             statementType="CALLABLE">
         {call UPA_BULK_LOG_LIST_STAT_SEL_BY_MSG(
         <choose>
-            <when test="totalId != 'all' and totalId != null and totalId != ''">
-                #{totalId},
+            <when test="contentId != 'all' and contentId != null and contentId != ''">
+                #{contentId},
             </when>
             <otherwise>
                 NULL,

@@ -65,13 +65,16 @@ const RcvProgsModal = (props) => {
         if (bulkSendListInfo.length === 1) {
             setBulkContent(bulkSendListInfo[0].content);
             setBulkMsg(bulkSendListInfo[0].msg);
+        } else {
+            setBulkContent(bulkSendListInfo.map((c) => c.content));
+            setBulkMsg(bulkSendListInfo.map((m) => m.msg));
         }
     }, [bulkSendListInfo]);
 
     return (
         <MokaModal
             size="md"
-            width={400}
+            width={430}
             height={600}
             bodyClassName="d-flex flex-column flex-fill"
             show={show}

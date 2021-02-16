@@ -22,5 +22,7 @@ public class DummyScheduleJob extends AbstractScheduleJob {
     @Override
     public void invoke() {
         log.debug("task 실행!!");
+        log.debug("jobSeq : "+ scheduleInfo.getJobSeq());
+        log.debug("period : "+ scheduleInfo.getPeriod());
     }
 }

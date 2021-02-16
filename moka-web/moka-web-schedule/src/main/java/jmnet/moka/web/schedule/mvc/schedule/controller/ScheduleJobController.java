@@ -46,15 +46,16 @@ public class ScheduleJobController {
     @ApiOperation(value = "신규 Job 추가")
     @PostMapping("/{jobSeq}")
     public ResponseEntity<?> postJob(@ApiParam("job 일련번호") @PathVariable("jobSeq") @Min(value = 0) Long jobSeq) {
-
+/*
         boolean success = handler.appendJob(GenContent
                 .builder()
-                .jobSeq(1l)
+                .jobSeq(jobSeq)
                 .jobType("SCHEDULE")
                 .programeNm("jmnet.moka.web.schedule.mvc.schedule.service.DummyScheduleJob")
-                .period(1l)
+                .period(10L)
                 .build());
-
+*/
+        boolean success = handler.appendJob(jobSeq);
         log.debug("실행 테스트 : {}", success);
 
         ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
@@ -72,7 +73,7 @@ public class ScheduleJobController {
     @DeleteMapping("/{jobSeq}")
     public ResponseEntity<?> deleteJob(@ApiParam("job 일련번호") @PathVariable("jobSeq") @Min(value = 0) Long jobSeq) {
 
-        boolean success = handler.removeJob(1L);
+        boolean success = handler.removeJob(jobSeq);
 
         log.debug("스케줄 Job 제거 테스트 : {}", success);
 

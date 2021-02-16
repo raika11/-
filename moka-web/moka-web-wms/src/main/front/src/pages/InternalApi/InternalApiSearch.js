@@ -69,7 +69,7 @@ const InternalApiSearch = ({ match }) => {
             <Form.Row className="mb-2">
                 <Col xs={4} className="d-flex p-0 pr-2">
                     <MokaInput as="select" name="apiMethod" value={search.apiMethod} onChange={handleChangeValue}>
-                        <option value="">HTTP메소드 전체</option>
+                        <option value="">방식 전체</option>
                         {httpMethodRows &&
                             httpMethodRows.map((method) => (
                                 <option key={method.id} value={method.id}>
@@ -112,7 +112,7 @@ const InternalApiSearch = ({ match }) => {
             </Form.Row>
             <div className="float-right">
                 <Button variant="positive" onClick={handleClickAdd}>
-                    신규 등록
+                    등록
                 </Button>
             </div>
         </div>

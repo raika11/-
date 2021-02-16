@@ -2,11 +2,12 @@ export default [
     {
         headerName: 'API명',
         field: 'apiName',
+        cellStyle: { display: 'flex', alignItems: 'center' },
         width: 120,
         tooltipField: 'apiName',
     },
     {
-        headerName: 'API경로',
+        headerName: 'API 경로',
         field: 'apiPath',
         cellStyle: { lineHeight: '21px' },
         wrapText: true,
@@ -28,8 +29,9 @@ export default [
         cellRenderer: 'usedYnRenderer',
     },
     {
-        headerName: 'API방식',
+        headerName: 'API 방식',
         field: 'apiMethod',
+        cellStyle: { display: 'flex', alignItems: 'center' },
         width: 80,
     },
 ];

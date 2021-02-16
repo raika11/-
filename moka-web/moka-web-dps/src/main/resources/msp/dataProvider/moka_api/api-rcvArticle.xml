@@ -4,7 +4,7 @@
   -->
 
 <apiConfig>
-  <api id="rcvArticle">
+  <api id="rcvArticle" expire="0">
     <description>수신기사 기본 정보를 반환한다.</description>
     <parameter>
       <rid desc="수신기사Id">[0-9]{1,9}</rid>

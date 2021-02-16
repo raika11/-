@@ -57,6 +57,6 @@ public class SwaggerConfiguration {
 
     private ApiInfo metaData() {
         Contact contact = new Contact("서울시스템기술연구소", "http://www.ssc.co.kr", "");
-        return new ApiInfo("moka sms", "중앙일보 스케줄 관리 서비스", "1.0", "", contact, "", "", ApiInfo.DEFAULT.getVendorExtensions());
+        return new ApiInfo("moka push", "중앙일보 푸시 서버", "1.0", "", contact, "", "", ApiInfo.DEFAULT.getVendorExtensions());
     }
 }

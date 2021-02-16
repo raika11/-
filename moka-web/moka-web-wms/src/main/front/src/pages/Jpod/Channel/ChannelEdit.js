@@ -258,13 +258,15 @@ const ChannelEdit = ({ match }) => {
         formData.append(`chnlMemo`, editData.chnlMemo); // 채널 소개.
 
         // 개설일, 종료일 처리.
-        if (editData.chnlSdt && editData.chnlSdt.length > 0) {
-            let chnlSdt = editData.chnlSdt && editData.chnlSdt.length > 10 ? editData.chnlSdt.substr(0, 10) : editData.chnlSdt;
-            formData.append(`chnlSdt`, chnlSdt);
+        if (editData.chnlSdt && typeof editData.chnlSdt === 'object') {
+            // let chnlSdt = editData.chnlSdt && editData.chnlSdt.length > 10 ? editData.chnlSdt.substr(0, 10) : editData.chnlSdt;
+            // let chnlSdt = editData.chnlSdt ? moment(editData.chnlSdt).format('YYYY-MM-DD') : '';
+            formData.append(`chnlSdt`, moment(editData.chnlSdt).format('YYYY-MM-DD'));
         }
-        if (editData.chnlEdt && editData.chnlEdt.length > 0) {
-            let chnlEdt = editData.chnlEdt && editData.chnlEdt.length > 10 ? editData.chnlEdt.substr(0, 10) : editData.chnlEdt;
-            formData.append(`chnlEdt`, chnlEdt);
+        if (editData.chnlEdt && typeof editData.chnlEdt === 'object') {
+            // let chnlEdt = editData.chnlEdt && editData.chnlEdt.length > 10 ? editData.chnlEdt.substr(0, 10) : editData.chnlEdt;
+            // let chnlEdt = editData.chnlEdt ? moment(editData.chnlEdt).format('YYYY-MM-DD') : '';
+            formData.append(`chnlEdt`, moment(editData.chnlEdt).format('YYYY-MM-DD'));
         }
 
         // 이미지, 썸네일, 모바일용 이미지를 선택 한 경우.
@@ -433,8 +435,8 @@ const ChannelEdit = ({ match }) => {
                 usedYn: usedYn,
                 chnlNm: chnlNm,
                 chnlMemo: chnlMemo,
-                chnlSdt: chnlSdt,
-                chnlEdt: chnlEdt,
+                chnlSdt: chnlSdt && chnlSdt !== '' ? moment(chnlSdt) : '',
+                chnlEdt: chnlEdt && chnlEdt !== '' ? moment(chnlEdt) : '',
                 podtyChnlSrl: podtyChnlSrl === 0 ? `0` : podtyChnlSrl,
                 podtyUrl: podtyUrl,
                 keywords: keyword,
@@ -576,7 +578,7 @@ const ChannelEdit = ({ match }) => {
                             id="podtyChnlSrl"
                             name="podtyChnlSrl"
                             placeholder=""
-                            value={editData.podtyChnlSrl}
+                            value={editData.podtyChnlSrl === '0' ? '' : editData.podtyChnlSrl}
                             inputProps={{ readOnly: true }}
                             onChange={(e) => handleChangeChannelEditData(e)}
                         />
@@ -645,7 +647,7 @@ const ChannelEdit = ({ match }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 개설일 */}
-                    <Col xs={5} className="p-0">
+                    <Col xs={5} className="p-0 pr-2">
                         <MokaInputLabel
                             label={`개설일`}
                             labelWidth={64}
@@ -655,9 +657,9 @@ const ChannelEdit = ({ match }) => {
                             id="chnlSdt"
                             value={editData.chnlSdt}
                             onChange={(param) => {
-                                const selectDate = param._d;
-                                const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('chnlSdt', date);
+                                // const selectDate = param._d;
+                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                                handleDateChange('chnlSdt', param);
                             }}
                             inputProps={{ timeFormat: null }}
                         />
@@ -673,9 +675,7 @@ const ChannelEdit = ({ match }) => {
                             id="chnlEdt"
                             value={editData.chnlEdt}
                             onChange={(param) => {
-                                const selectDate = param._d;
-                                const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('chnlEdt', date);
+                                handleDateChange('chnlEdt', param);
                             }}
                             inputProps={{ timeFormat: null }}
                         />

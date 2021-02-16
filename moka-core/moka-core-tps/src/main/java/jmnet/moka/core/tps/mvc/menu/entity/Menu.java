@@ -49,7 +49,8 @@ public class Menu extends BaseAudit {
     private String menuId;
 
     @Column(name = "DEPTH", nullable = false)
-    private Integer depth;
+    @Builder.Default
+    private Integer depth = 0;
 
     /**
      * 사용여부(Y:사용, N:미사용)

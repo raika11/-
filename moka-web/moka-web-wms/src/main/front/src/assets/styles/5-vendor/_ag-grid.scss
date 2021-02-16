@@ -214,7 +214,11 @@ $row-hover-color: darken($desking-row-color, 5);
             &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
                 background-color: $row-hover-color;
             }
+            &.ag-row-selected {
+                background-color: rgba(33, 150, 243, 0.3);
+            }
         }
+
     }
 
     .ag-header {
@@ -236,6 +240,10 @@ $row-hover-color: darken($desking-row-color, 5);
 
     svg {
         color: $gray-600;
+    }
+
+    .color-positive {
+        color: $positive
     }
 }
 

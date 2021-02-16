@@ -4,6 +4,9 @@ import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaModal } from '@/components';
 import { getBulkStatListInfo } from '@/store/bulks';
 
+/**
+ * 벌크 진행 상황 모달
+ */
 const RcvProgsModal = (props) => {
     const { show, onHide, data } = props;
     const dispatch = useDispatch();

@@ -4,6 +4,7 @@ import { MokaTable } from '@/components';
 import columnDefs from './BulkMonitorRcvProgsAgGridColumns';
 import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
+import { unescapeHtml } from '@utils/convertUtil';
 import { GET_BULK_STAT_LIST } from '@/store/bulks';
 
 /**
@@ -41,6 +42,7 @@ const BulkMonitorRcvProgsAgGrid = () => {
             setRowData(
                 sendList.map((data) => ({
                     ...data,
+                    title: unescapeHtml(data.title),
                     handleClickValue,
                     handleClickBulkLog,
                 })),

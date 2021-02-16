@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { selectItem } from '@pages/Boards/BoardConst';
 import moment from 'moment';
@@ -75,7 +75,13 @@ const SearchBox = (props) => {
 
     // 검색 버튼 클릭 처리.
     const handleClickSearchButton = () => {
-        dispatch(changeListmenuSearchOption(searchData));
+        dispatch(
+            changeListmenuSearchOption({
+                ...searchData,
+                startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
+                endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
+            }),
+        );
         dispatch(getListmenuContentsList({ boardId: boardId.current }));
     };
 
@@ -120,9 +126,9 @@ const SearchBox = (props) => {
                         id="startDt"
                         value={searchData.startDt}
                         onChange={(param) => {
-                            const selectDate = param._d;
-                            const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                            handleDateChange('startDt', date);
+                            // const selectDate = param._d;
+                            // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                            handleDateChange('startDt', param);
                         }}
                         inputProps={{ timeFormat: null }}
                     />
@@ -136,9 +142,9 @@ const SearchBox = (props) => {
                         id="endDt"
                         value={searchData.endDt}
                         onChange={(param) => {
-                            const selectDate = param._d;
-                            const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                            handleDateChange('endDt', date);
+                            // const selectDate = param._d;
+                            // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                            handleDateChange('endDt', param);
                         }}
                         inputProps={{ timeFormat: null }}
                     />

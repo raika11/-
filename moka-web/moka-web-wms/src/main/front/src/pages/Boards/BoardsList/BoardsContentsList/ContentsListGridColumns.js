@@ -10,11 +10,11 @@ export const ColumnDefs = [
         width: 70,
     },
     // front 에서 각 게시글 마다에 채널명을 가지고 올수가 없어서 안보이게 처리.
-    // {
-    //     headerName: '채널명',
-    //     field: 'channelName',
-    //     width: 150,
-    // },
+    {
+        headerName: '채널명',
+        field: 'channelName',
+        width: 100,
+    },
     {
         headerName: '제목',
         field: 'titleItem',

@@ -56,16 +56,17 @@ const BulkPreviewModal = () => {
             ${bulkArticle
                 .filter((e) => e.url.length > 0)
                 .map(function (e) {
-                    return `▶ <a href="${e.url}" target="_joins_nw">${e.title}</a>`;
+                    // eslint-disable-next-line prettier/prettier
+                    return `${e.symbol.replace(/^\s+|\s+$/g, '')}&nbsp; &nbsp;<a href="${e.url}" target="_joins_nw">${e.title}</a>`;
                 })
-                .join(`<br >`)}<br><br>${copyright.cdNm}
-            `;
+                .join(`<br />`)}<br/><br/>${copyright.cdNm}
+                `;
 
             // 미리 보기 창에 보여줄 xml 처리.
             const tempXmlString = `<copyright><![CDATA[${bulkArticle
                 .filter((e) => e.url.length > 0)
                 .map(function (e) {
-                    return `▶️ <a href="${e.url}" target="_joins_nw">${e.title}</a>`;
+                    return `${e.symbol} <a href="${e.url}" target="_joins_nw">${e.title}</a>`;
                 })
                 .join(``)}${copyright.cdNm}]]></copyright>`;
 
@@ -105,13 +106,14 @@ const BulkPreviewModal = () => {
             if (nav === '미리보기') {
                 return (
                     <Col xs={12} className="pt-4">
-                        <div className="text-justify" dangerouslySetInnerHTML={{ __html: htmlString }} />
+                        <div className="text-left" dangerouslySetInnerHTML={{ __html: htmlString }} />
                     </Col>
                 );
             } else if (nav === '소스보기') {
                 return (
                     <Col xs={12} className="pt-4">
                         <MokaInput as={'textarea'} className="resize-none" value={xmlString} inputProps={{ plaintext: true, readOnly: true, rows: '6' }} />
+                        {/* <div>{xmlString}</div> */}
                     </Col>
                 );
             }
@@ -124,7 +126,7 @@ const BulkPreviewModal = () => {
             show={mokaModalShow}
             onHide={hidePreviewModel}
             title="네이버 벌크 문구 미리보기"
-            size="md"
+            size="xl"
             width={700}
             height={450}
             draggable

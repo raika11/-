@@ -1,39 +1,45 @@
+import React from 'react';
+import PortalNameRenderer from '../components/PortalNameRenderer';
+
 export default [
     {
         headerName: '로그 ID',
-        field: 'orgSourceName',
-        width: 100,
+        field: 'logSeq',
+        width: 80,
         cellStyle: {},
+        tooltipField: 'logSeq',
     },
     {
         headerName: '포털',
-        field: 'contentId',
-        width: 80,
+        field: 'portalDiv',
         cellStyle: {},
+        flex: 1,
+        cellRendererFramework: (param) => {
+            return <PortalNameRenderer {...param} />;
+        },
     },
     {
         headerName: 'IUD',
         field: 'iud',
         cellStyle: {},
-        width: 60,
-        tooltipField: 'title',
+        width: 40,
     },
     {
         headerName: '시작일시',
         field: 'startDt',
-        width: 120,
-        cellStyle: { textAlign: 'center' },
+        width: 150,
+        cellStyle: {},
     },
     {
         headerName: '종료일시',
         field: 'endDt',
-        width: 120,
-        cellStyle: { textAlign: 'center' },
+        width: 150,
+        cellStyle: {},
     },
     {
         headerName: '상태',
         field: 'status',
-        width: 70,
-        cellStyle: { textAlign: 'center' },
+        width: 50,
+        cellStyle: {},
     },
 ];

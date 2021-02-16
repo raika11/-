@@ -1,5 +1,5 @@
 import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput, MokaTableEditCancleButton, MokaAutocomplete } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
 import { Form, Col, Button, Row } from 'react-bootstrap';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,6 +18,8 @@ import {
     uploadBoardContentImage,
     getListmenuContentsList,
 } from '@store/board';
+
+import BoardRepoterSelect from './BoardRepoterSelect';
 
 const BoardsEdit = () => {
     const editInitData = initialState.listmenu.contents;
@@ -133,7 +135,7 @@ const BoardsEdit = () => {
                 boardId: boardId.current,
                 contents: {
                     ...editData,
-                    channelId: selectboard.channelType === 'BOARD_DIVC2' ? selectReport.value : editData.channelId,
+                    channelId: selectboard.channelType === 'BOARD_DIVC2' ? selectReport : editData.channelId,
                     boardId: null,
                     depth: 0,
                     indent: 0,
@@ -171,6 +173,7 @@ const BoardsEdit = () => {
                 contents: {
                     ...editData,
                     boardId: null,
+                    channelId: selectboard.channelType === 'BOARD_DIVC2' ? selectReport : editData.channelId,
                     depth: 0,
                     indent: 0,
                 },
@@ -179,7 +182,7 @@ const BoardsEdit = () => {
                     if (success === true) {
                         toast.success(message);
                         const { boardSeq } = body;
-                        history.push(`/${pagePathName}/${boardId.current}/${boardSeq}`);
+                        history.push(`/${pagePathName}/${boardId.current}`);
                         dispatch(getListmenuContentsList({ boardId: boardId.current }));
                         dispatch(getListmenuContentsInfo({ boardId: boardId.current, boardSeq: boardSeq }));
                     } else {
@@ -260,6 +263,23 @@ const BoardsEdit = () => {
 
     // 이미지 추가 처리.
     const handleChangeFileInput = (event) => {
+        // 게시판 설정 확장자 체크.
+        let extCheck = false;
+        try {
+            let tempFile = event.target.files[0].name.split('.');
+            let tempFileExt = tempFile[1];
+
+            if (editData.boardInfo.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
+                messageBox.alert(`해당 게시판의 첨부 파일은 (${editData.boardInfo.allowFileExt}) 만 등록 가능합니다.`, () => {});
+            } else {
+                extCheck = true;
+            }
+        } catch (e) {
+            throw e;
+        }
+
+        if (!extCheck) return;
+
         if (uploadFiles.length + 1 > selectboard.allowFileCnt) {
             messageBox.alert('해당 게시판의 첨부 파일 최대 건수는 2개 입니다.', () => {});
         } else {
@@ -335,14 +355,6 @@ const BoardsEdit = () => {
     const handleClickImageName = (element) => {
         const { file_url } = element;
         if (file_url) {
-            // window.open(file_url, '', '_blank');
-
-            // const link = document.createElement('a');
-            // link.href = file_url;
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
-
             var win = window.open(file_url, '_blank');
             win.focus();
         }
@@ -388,6 +400,10 @@ const BoardsEdit = () => {
 
     // 게시글 정보 업데이트시
     useEffect(() => {
+        if (selectboard.channelType === 'BOARD_DIVC2') {
+            setSelectReport(contentsinfo.channelId);
+        }
+
         setEditData({
             ...contentsinfo,
             regInfo: `등록 일시: ${contentsinfo && contentsinfo.regDt && contentsinfo.regDt.length > 16 ? contentsinfo.regDt.substr(0, 16) : contentsinfo.regDt} ${
@@ -420,7 +436,7 @@ const BoardsEdit = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentsreply]);
 
-    // 라우터 및 에디드 상태가 답변을때 초기화 처리.
+    // 라우터 및 에디드 상태가 답변일때 초기화 처리.
     useEffect(() => {
         basicStateReset();
         if (editState.mode === 'reply' && history.location.pathname === `/${pagePathName}/${boardId.current}/${boardSeq.current}/reply`) {
@@ -533,10 +549,10 @@ const BoardsEdit = () => {
                             {editState.mode === 'modify' && (
                                 <Form.Row>
                                     <Col xs={6} style={{ fontSize: '1px' }}>
-                                        {`${editData.regInfo}`}
+                                        {`${editData.regInfo ? editData.regInfo : ''}`}
                                     </Col>
                                     <Col xs={6} style={{ fontSize: '1px' }}>
-                                        {`${editData.modInfo}`}
+                                        {`${editData.modInfo ? editData.modInfo : ''}`}
                                     </Col>
                                 </Form.Row>
                             )}
@@ -555,23 +571,33 @@ const BoardsEdit = () => {
                             {(function () {
                                 // 게시판 등록시 채널을 기자로 선택 했을경우 기자 리스트를 보여줘야 하는데
                                 // 기자 리스트가 너무 많기 떄문에 검색기능을 할수 있게 MokaAutocomplete 를 사용
-                                if (selectboard.channelType === 'BOARD_DIVC2') {
+                                if (selectboard.channelType === 'BOARD_DIVC2' && channalList) {
                                     return (
-                                        <Form.Row className="mb-2">
-                                            <Col xs={2.5} className="p-0 pt-2">
-                                                <MokaInputLabel as="none" label="기자명"></MokaInputLabel>
-                                            </Col>
-                                            <MokaAutocomplete
-                                                options={channalList}
-                                                closeMenuOnSelect={true}
-                                                searchIcon={true}
-                                                // value={editData.channelId}
-                                                value={selectReport}
-                                                onChange={(e) => {
-                                                    setSelectReport(e);
+                                        <>
+                                            {/* <Form.Row className="mb-2">
+                                                <Col xs={2.5} className="p-0 pt-2">
+                                                    <MokaInputLabel as="none" label="기자명"></MokaInputLabel>
+                                                </Col>
+                                                <MokaAutocomplete
+                                                    options={channalList}
+                                                    closeMenuOnSelect={true}
+                                                    searchIcon={true}
+                                                    // value={editData.channelId}
+                                                    value={1001}
+                                                    onChange={(e) => {
+                                                        setSelectReport(e);
+                                                    }}
+                                                />
+                                            </Form.Row> */}
+
+                                            <BoardRepoterSelect
+                                                ChannalList={channalList}
+                                                SelectValue={selectReport}
+                                                OnChange={(e) => {
+                                                    setSelectReport(e.value);
                                                 }}
                                             />
-                                        </Form.Row>
+                                        </>
                                     );
                                 } else {
                                     // 게시판 등록시 기자명 이외에는 기본 select box를 사용.

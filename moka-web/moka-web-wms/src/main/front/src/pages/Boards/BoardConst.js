@@ -55,7 +55,7 @@ export const selectItem = {
         },
         {
             value: 'N',
-            name: '중지',
+            name: '삭제',
         },
     ],
     boardType: [

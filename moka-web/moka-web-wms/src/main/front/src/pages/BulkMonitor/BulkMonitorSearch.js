@@ -4,9 +4,9 @@ import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaInput } from '@components';
-import BulkSourceCodeSelector from './components/BulkSourceCodeSelector';
 import BulkSiteSelector from './components/BulkSiteSelector';
 import { changeBmSearchOption, getBulkStatTotal, getBulkStatList, bmInitialState } from '@/store/bulks';
+import { getTypeSourceList } from '@store/articleSource';
 
 /**
  * 벌크 모니터링 검색
@@ -14,11 +14,15 @@ import { changeBmSearchOption, getBulkStatTotal, getBulkStatList, bmInitialState
 const BulkMonitorSearch = () => {
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.bulkMonitor.search);
+    const typeSourceList = useSelector((store) => store.articleSource.typeSourceList);
     const [search, setSearch] = useState(bmInitialState.search);
     const [temp, setTemp] = useState({});
-    const [sourceOn, setSourceOn] = useState(false);
+    const [bulkSourceList, setBulkSourceList] = useState([]);
     const [siteOn, setSiteOn] = useState(false);
 
+    /**
+     * 검색 버튼
+     */
     const handleClickSearch = () => {
         dispatch(
             getBulkStatTotal({
@@ -39,6 +43,9 @@ const BulkMonitorSearch = () => {
         );
     };
 
+    /**
+     * 초기화 버튼
+     */
     const handleClickReset = () => {
         dispatch(
             changeBmSearchOption({
@@ -50,7 +57,7 @@ const BulkMonitorSearch = () => {
 
     useEffect(() => {
         // 벌크 전체 건수, 벌크 전송 목록
-        if (sourceOn && siteOn) {
+        if (siteOn) {
             dispatch(
                 getBulkStatTotal({
                     date: {
@@ -72,7 +79,17 @@ const BulkMonitorSearch = () => {
             setTemp({ ...temp, ...search });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sourceOn, siteOn]);
+    }, [siteOn]);
+
+    useEffect(() => {
+        // BULK 매체 조회
+        if (!typeSourceList?.['BULK']) {
+            dispatch(getTypeSourceList({ type: 'BULK' }));
+        } else {
+            setBulkSourceList([...typeSourceList['BULK'], { sourceCode: 'JL', sourceName: '조인스랜드' }]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [typeSourceList]);
 
     useEffect(() => {
         setSearch(storeSearch);
@@ -82,30 +99,24 @@ const BulkMonitorSearch = () => {
         <>
             <Form className="mb-5">
                 <Form.Row className="d-flex align-items-center justify-content-between">
-                    <BulkSourceCodeSelector
-                        width={160}
-                        className="mr-2"
-                        value={search.orgSourceCode}
-                        sourceType="BULK"
-                        onChange={(value) => {
-                            // let orgSourceName = {
-                            //     3: '중앙일보(집배신)',
-                            //     60: '중앙선데이',
-                            //     61: '중앙선데이(조판)',
-                            //     JL: '조인스랜드',
-                            // };
-                            // let nameArr = [];
-                            // value.split(',').forEach((n) => nameArr.push(orgSourceName[Number(n)]));
-                            setSearch({
-                                ...search,
-                                orgSourceCode: value,
-                                // , orgSourceName: nameArr.join(',')
-                            });
-                            if (value !== '') {
-                                setSourceOn(true);
-                            }
-                        }}
-                    />
+                    <div className="mr-2" style={{ width: 160 }}>
+                        <MokaInput
+                            as="select"
+                            value={search.orgSourceCode}
+                            onChange={(e) => {
+                                setSearch({ ...search, orgSourceCode: e.target.value });
+                            }}
+                        >
+                            <option value="all">전체</option>
+                            {bulkSourceList &&
+                                bulkSourceList.map((s) => (
+                                    <option key={s.sourceCode} value={s.sourceCode}>
+                                        {s.sourceName}
+                                    </option>
+                                ))}
+                        </MokaInput>
+                    </div>
+
                     {/* 시작일 종료일 */}
                     <div style={{ width: 150 }}>
                         <MokaInput
@@ -178,7 +189,7 @@ const BulkMonitorSearch = () => {
                             if (e.target.checked) {
                                 setSearch({ ...search, status: 'Y' });
                             } else {
-                                setSearch({ ...search, status: 'N' });
+                                setSearch({ ...search, status: undefined });
                             }
                         }}
                     />

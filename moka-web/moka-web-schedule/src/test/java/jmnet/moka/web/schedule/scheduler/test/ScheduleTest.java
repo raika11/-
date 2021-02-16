@@ -23,7 +23,7 @@ public class ScheduleTest {
         handler.appendJob(GenContent
                 .builder()
                 .jobSeq(1l)
-                .jobType("SCHEDULE")
+                .jobType("S") //SCHEDULE 에서 TB_GEN_CONTENT.JOB_TYPE의 형태로 변경
                 .programeNm("jmnet.moka.web.schedule.mvc.schedule.service.DummyScheduleJob")
                 .period(1l)
                 .build());

@@ -23,6 +23,7 @@ const RcvProgsBulkLogModal = (props) => {
     const handleHide = () => {
         setRcvProgs(false);
         setBulkContent('');
+        setRowData([]);
         setType('');
         setBulkMsg('');
         onHide();
@@ -71,9 +72,9 @@ const RcvProgsBulkLogModal = (props) => {
     }, [bulkSendListInfo]);
 
     return (
-        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1000} show={show} onHide={handleHide}>
+        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={680} show={show} onHide={handleHide}>
             <div className="d-flex justify-content-between">
-                <div className="d-flex flex-column" style={{ width: 700 }}>
+                <div style={{ width: 700 }}>
                     <Form className="mb-3">
                         <MokaInputLabel className="mb-2" label="기사 ID" value={data.contentId} inputProps={{ readOnly: true, plaintext: true }} />
                         <MokaInputLabel className="mb-2" label="제목" value={data.title} inputProps={{ readOnly: true, plaintext: true }} />
@@ -86,7 +87,7 @@ const RcvProgsBulkLogModal = (props) => {
                         </Form.Row>
                     </Form>
                     <MokaTable
-                        className="overflow-hidden flex-fill ag-grid-align-center"
+                        agGridHeight={475}
                         columnDefs={columnDefs}
                         rowData={rowData}
                         loading={loading}
@@ -96,7 +97,7 @@ const RcvProgsBulkLogModal = (props) => {
                     />
                 </div>
                 {rcvProgs === true && (
-                    <div className="ml-2 d-flex flex-column" style={{ width: 300 }}>
+                    <div className="ml-2 d-flex flex-column" style={{ width: 420 }}>
                         {type !== 'btn' && (
                             <>
                                 <p className="mb-2">생성 XML</p>

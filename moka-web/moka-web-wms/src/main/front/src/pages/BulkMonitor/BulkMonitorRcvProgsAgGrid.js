@@ -62,7 +62,7 @@ const BulkMonitorRcvProgsAgGrid = () => {
                 loading={loading}
                 page={search.page}
                 size={search.size}
-                preventRowClickCell={['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'bulkLogBtn']}
+                preventRowClickCell={['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'kpfStatus', 'bulkLogBtn']}
                 paging={false}
             />
             <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />

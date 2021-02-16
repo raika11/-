@@ -19,6 +19,7 @@ import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.reserved.dto.ReservedDTO;
 import jmnet.moka.core.tps.mvc.reserved.dto.ReservedSearchDTO;
 import jmnet.moka.core.tps.mvc.reserved.entity.Reserved;
@@ -52,8 +53,11 @@ public class ReservedRestController extends AbstractCommonController {
 
     private final ReservedService reservedService;
 
-    public ReservedRestController(ReservedService reservedService) {
+    private final PurgeHelper purgeHelper;
+
+    public ReservedRestController(ReservedService reservedService, PurgeHelper purgeHelper) {
         this.reservedService = reservedService;
+        this.purgeHelper = purgeHelper;
     }
 
     /**
@@ -164,6 +168,11 @@ public class ReservedRestController extends AbstractCommonController {
         try {
             Reserved returnValue = reservedService.insertReserved(reserved);
 
+            // 퍼지
+            purgeHelper.tmsReservedUpdate(reservedDTO
+                    .getDomain()
+                    .getDomainId());
+
             ReservedDTO dto = modelMapper.map(returnValue, ReservedDTO.class);
 
             String message = messageByLocale.get("tps.common.success.insert");
@@ -209,6 +218,11 @@ public class ReservedRestController extends AbstractCommonController {
         try {
             Reserved returnValue = reservedService.updateReserved(newReserved);
 
+            // 퍼지
+            purgeHelper.tmsReservedUpdate(reservedDTO
+                    .getDomain()
+                    .getDomainId());
+
             ReservedDTO dto = modelMapper.map(returnValue, ReservedDTO.class);
 
             String message = messageByLocale.get("tps.common.success.update");
@@ -249,8 +263,15 @@ public class ReservedRestController extends AbstractCommonController {
                 });
 
         try {
+            String domainId = reserved
+                    .getDomain()
+                    .getDomainId();
+
             // 삭제
             reservedService.deleteReserved(reserved);
+
+            // 퍼지
+            purgeHelper.tmsReservedUpdate(domainId);
 
             // 3. 결과리턴
             String message = messageByLocale.get("tps.common.success.delete");

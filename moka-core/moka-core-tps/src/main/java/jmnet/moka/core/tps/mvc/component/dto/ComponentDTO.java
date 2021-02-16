@@ -159,7 +159,7 @@ public class ComponentDTO implements Serializable {
         componentItem.put(ItemConstants.COMPONENT_ID, this.componentSeq);
         componentItem.put(ItemConstants.COMPONENT_DOMAIN_ID, this.domain.getDomainId());
         componentItem.put(ItemConstants.COMPONENT_TEMPLATE_ID, this.template.getTemplateSeq());
-        componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.dataset.getDatasetSeq());
+        componentItem.put(ItemConstants.COMPONENT_DATASET_ID, this.dataset != null ? this.dataset.getDatasetSeq() : null);
         componentItem.put(ItemConstants.COMPONENT_NAME, this.componentName);
         componentItem.put(ItemConstants.COMPONENT_DESCRIPTION, this.description);
         componentItem.put(ItemConstants.COMPONENT_PERIOD_YN, this.periodYn);

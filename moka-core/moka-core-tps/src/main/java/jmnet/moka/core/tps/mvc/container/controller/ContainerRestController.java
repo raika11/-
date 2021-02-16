@@ -5,11 +5,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
@@ -25,6 +29,8 @@ import jmnet.moka.core.tps.mvc.container.dto.ContainerSearchDTO;
 import jmnet.moka.core.tps.mvc.container.entity.Container;
 import jmnet.moka.core.tps.mvc.container.service.ContainerService;
 import jmnet.moka.core.tps.mvc.container.vo.ContainerVO;
+import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -227,13 +233,11 @@ public class ContainerRestController extends AbstractCommonController {
         try {
             Container returnValue = containerService.updateContainer(newContainer);
 
-            // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-            purgeHelper.purgeTms(returnValue
-                    .getDomain()
-                    .getDomainId(), MokaConstants.ITEM_CONTAINER, returnValue.getContainerSeq());
-
             // 결과리턴
             ContainerDTO dto = modelMapper.map(returnValue, ContainerDTO.class);
+
+            // purge 날림!!!! 성공실패여부는 리턴하지 않는다.
+            purge(dto);
 
             String message = msg("tps.common.success.update");
             ResultDTO<ContainerDTO> resultDto = new ResultDTO<ContainerDTO>(dto, message);
@@ -283,8 +287,13 @@ public class ContainerRestController extends AbstractCommonController {
         }
 
         try {
+            ContainerDTO dto = modelMapper.map(container, ContainerDTO.class);
+
             // 삭제
             containerService.deleteContainer(container, principal.getName());
+
+            // purge 날림!!!! 성공실패여부는 리턴하지 않는다.
+            purge(dto);
 
             // 결과리턴
             String message = msg("tps.common.success.delete");
@@ -337,6 +346,49 @@ public class ContainerRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.DELETE, "[CONTAINER RELATION EXISTENCE CHECK FAILED]", e, true);
             throw new Exception(msg("tps.common.error.has-relation"), e);
         }
+    }
+
+    /**
+     * tms서버의 컨테이너정보를 갱신한다. 해당 컨테이너와 관련된 fileYn=Y인 페이지도 갱신한다.
+     *
+     * @param returnValDTO 컨테이너정보
+     * @return 갱신오류메세지
+     * @throws DataLoadException
+     * @throws TemplateMergeException
+     * @throws TemplateParseException
+     * @throws NoDataException
+     */
+    private String purge(ContainerDTO returnValDTO)
+            throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
+        // 1. 컨테이너 tms purge
+        String returnValue = "";
+        String retTemplate = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toContainerItem()));
+        if (McpString.isNotEmpty(retTemplate)) {
+            log.error("[FAIL TO PURGE CONTAINER] seq: {} {}", returnValDTO.getContainerSeq(), retTemplate);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE CONTAINER]", true);
+            returnValue = String.join("\r\n", retTemplate);
+        }
+
+        // 2. fileYn=Y인 관련페이지 tms pageUpdate
+        RelationSearchDTO search = RelationSearchDTO
+                .builder()
+                .domainId(returnValDTO
+                        .getDomain()
+                        .getDomainId())
+                .fileYn(MokaConstants.YES)
+                .relSeq(returnValDTO.getContainerSeq())
+                .relSeqType(MokaConstants.ITEM_CONTAINER)
+                .relType(MokaConstants.ITEM_PAGE)
+                .build();
+        List<PageVO> pageList = relationService.findAllPage(search);
+        String retPage = purgeHelper.tmsPageUpdate(pageList);
+        if (McpString.isNotEmpty(retPage)) {
+            log.error("[FAIL TO PAGE UPATE] containerSeq: {} {}", returnValDTO.getContainerSeq(), retPage);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
+            returnValue = String.join("\r\n", retPage);
+        }
+
+        return returnValue;
     }
 
 }

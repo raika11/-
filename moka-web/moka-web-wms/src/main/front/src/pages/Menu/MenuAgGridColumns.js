@@ -6,6 +6,15 @@ export const localeText = { noRowsToShow: '조회 결과가 없습니다.', load
 
 export const columnDefs = [
     {
+        rowDrag: true,
+        width: 24,
+        suppressMenu: true,
+        rowDragText: (params) => {
+            return params.rowNode.data.menuDisplayNm;
+        },
+        valueSetter: () => true,
+    },
+    {
         headerName: '번호',
         field: 'menuSeq',
         width: 50,

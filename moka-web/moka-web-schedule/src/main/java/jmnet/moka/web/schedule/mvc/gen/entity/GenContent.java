@@ -119,7 +119,11 @@ public class GenContent {
     @Transient
     private String programeNm;
 
-    @Transient
+    /**
+     * JOB_TYPE
+     */
+    @Column(name = "JOB_TYPE")
+    //@Transient
     private String jobType;
 
     @Transient

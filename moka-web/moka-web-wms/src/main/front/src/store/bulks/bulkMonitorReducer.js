@@ -6,6 +6,7 @@ import { PAGESIZE_OPTIONS } from '@/constants';
 
 export const bmInitialState = {
     total: 0,
+    sendTotal: 0,
     error: null,
     totalList: [],
     sendList: [],
@@ -15,14 +16,13 @@ export const bmInitialState = {
         searchType: 'all',
         keyword: '',
         useTotal: '',
-        // sourceCode: null,
-        orgSourceCode: null,
-        // orgSourceName: null,
+        orgSourceCode: 'all',
         portalDiv: null,
         status: 'Y',
         startDt: moment().format('YYYY-MM-DD'),
         endDt: moment().format('YYYY-MM-DD'),
     },
+    bulkSendListInfo: [],
 };
 
 export default handleActions(
@@ -81,6 +81,21 @@ export default handleActions(
                 draft.total = bmInitialState.total;
                 draft.sendList = bmInitialState.list;
                 draft.error = payload;
+            });
+        },
+        /**
+         * 벌크 모니터링 전송 상세 정보 조회
+         */
+        [act.GET_BULK_STAT_LIST_INFO_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.sendTotal = body.totalCnt;
+                draft.bulkSendListInfo = body.list;
+            });
+        },
+        [act.GET_BULK_STAT_LIST_INFO_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.sendTotal = bmInitialState.totalCnt;
+                draft.bulkSendListInfo = bmInitialState.bulkSendListInfo;
             });
         },
     },

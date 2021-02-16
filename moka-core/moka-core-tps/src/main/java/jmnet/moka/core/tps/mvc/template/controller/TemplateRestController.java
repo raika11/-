@@ -264,7 +264,7 @@ public class TemplateRestController extends AbstractCommonController {
             //                returnValDTO.setTemplateThumb(templateImagePrefix + returnValDTO.getTemplateThumb());
             //            }
 
-            // purge 날림!!
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
             purge(returnValDTO);
 
             String message = msg("tps.common.success.update");
@@ -277,49 +277,6 @@ public class TemplateRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE TEMPLATE]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
         }
-    }
-
-    private String purge(TemplateDTO returnValDTO)
-            throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
-        //        if (returnVal.getDomain() == null) {
-        //            // 공통 도메인일 때
-        //            List<String> domainIds =
-        //                    templateService.findDomainIdListByTemplateSeq(returnVal.getTemplateSeq());
-        //            purgeHelper.purgeTms(request, domainIds, MokaConstants.ITEM_TEMPLATE,
-        //                    returnVal.getTemplateSeq());
-        //        } else {
-        //            actionLogger.success(principal.getName(), ActionType.PURGE, System.currentTimeMillis() - processStartTime);
-        //        }
-
-        // 1. 템플릿 tms purge
-        String returnValue = "";
-        String retTemplate = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toTemplateItem()));
-        if (McpString.isNotEmpty(retTemplate)) {
-            log.error("[FAIL TO PURGE TEMPLATE] seq: {} {}", returnValDTO.getTemplateSeq(), retTemplate);
-            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE TEMPLATE]", true);
-            returnValue = String.join("\r\n", retTemplate);
-        }
-
-        // 2. fileYn=Y인 관련페이지 tms pageUpdate
-        RelationSearchDTO search = RelationSearchDTO
-                .builder()
-                .domainId(returnValDTO
-                        .getDomain()
-                        .getDomainId())
-                .fileYn(MokaConstants.YES)
-                .relSeq(returnValDTO.getTemplateSeq())
-                .relSeqType(MokaConstants.ITEM_TEMPLATE)
-                .relType(MokaConstants.ITEM_PAGE)
-                .build();
-        List<PageVO> pageList = relationService.findAllPage(search);
-        String retPage = purgeHelper.tmsPageUpdate(pageList);
-        if (McpString.isNotEmpty(retPage)) {
-            log.error("[FAIL TO PAGE UPATE] seq: {} {}", returnValDTO.getTemplateSeq(), retPage);
-            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
-            returnValue = String.join("\r\n", retPage);
-        }
-
-        return returnValue;
     }
 
     /**
@@ -399,7 +356,7 @@ public class TemplateRestController extends AbstractCommonController {
                 tpsLogger.success(ActionType.FILE_DELETE, true);
             }
 
-            // purge 날림!!
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
             purge(templateDTO);
 
             String message = msg("tps.common.success.delete");
@@ -499,5 +456,58 @@ public class TemplateRestController extends AbstractCommonController {
             String validMessage = msg("tps.common.error.invalidContent");
             throw new InvalidDataException(invalidList, validMessage);
         }
+    }
+
+    /**
+     * tms서버의 템플릿정보를 갱신한다. 해당 템플릿과 관련된 fileYn=Y인 페이지도 갱신한다.
+     *
+     * @param returnValDTO 템플릿정보
+     * @return 갱신오류메세지
+     * @throws DataLoadException
+     * @throws TemplateMergeException
+     * @throws TemplateParseException
+     * @throws NoDataException
+     */
+    private String purge(TemplateDTO returnValDTO)
+            throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
+        //        if (returnVal.getDomain() == null) {
+        //            // 공통 도메인일 때
+        //            List<String> domainIds =
+        //                    templateService.findDomainIdListByTemplateSeq(returnVal.getTemplateSeq());
+        //            purgeHelper.purgeTms(request, domainIds, MokaConstants.ITEM_TEMPLATE,
+        //                    returnVal.getTemplateSeq());
+        //        } else {
+        //            actionLogger.success(principal.getName(), ActionType.PURGE, System.currentTimeMillis() - processStartTime);
+        //        }
+
+        // 1. 템플릿 tms purge
+        String returnValue = "";
+        String retTemplate = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toTemplateItem()));
+        if (McpString.isNotEmpty(retTemplate)) {
+            log.error("[FAIL TO PURGE TEMPLATE] templateSeq: {} {}", returnValDTO.getTemplateSeq(), retTemplate);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE TEMPLATE]", true);
+            returnValue = String.join("\r\n", retTemplate);
+        }
+
+        // 2. fileYn=Y인 관련페이지 tms pageUpdate
+        RelationSearchDTO search = RelationSearchDTO
+                .builder()
+                .domainId(returnValDTO
+                        .getDomain()
+                        .getDomainId())
+                .fileYn(MokaConstants.YES)
+                .relSeq(returnValDTO.getTemplateSeq())
+                .relSeqType(MokaConstants.ITEM_TEMPLATE)
+                .relType(MokaConstants.ITEM_PAGE)
+                .build();
+        List<PageVO> pageList = relationService.findAllPage(search);
+        String retPage = purgeHelper.tmsPageUpdate(pageList);
+        if (McpString.isNotEmpty(retPage)) {
+            log.error("[FAIL TO PAGE UPATE] templateSeq: {} {}", returnValDTO.getTemplateSeq(), retPage);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
+            returnValue = String.join("\r\n", retPage);
+        }
+
+        return returnValue;
     }
 }

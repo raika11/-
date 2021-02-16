@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
+import { useDispatch } from 'react-redux';
 import { MokaCard } from '@/components';
 import BulkMonitorSearch from './BulkMonitorSearch';
 import BulkMonitorSumAgGrid from './BulkMonitorSumAgGrid';
 import BulkMonitorRcvProgsAgGrid from './BulkMonitorRcvProgsAgGrid';
+import { clearBmStore } from '@store/bulks';
 
 /**
  * 벌크 모니터링
  */
 const BulkMonitor = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearBmStore());
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             <Helmet>

@@ -4,11 +4,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
+import jmnet.moka.common.template.exception.TemplateParseException;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
@@ -32,6 +37,8 @@ import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
 import jmnet.moka.core.tps.mvc.dataset.dto.DatasetDTO;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
 import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -328,10 +335,8 @@ public class ComponentRestController extends AbstractCommonController {
             ComponentDTO returnValDTO = modelMapper.map(returnVal, ComponentDTO.class);
             returnValDTO = this.setPrevDataset(returnValDTO);
 
-            // purge 날림!!!!
-            purgeHelper.purgeTms(returnVal
-                    .getDomain()
-                    .getDomainId(), MokaConstants.ITEM_COMPONENT, returnVal.getComponentSeq());
+            // purge 날림!!!!  성공실패여부는 리턴하지 않는다.
+            purge(returnValDTO);
 
             // 리턴
             String message = msg("tps.common.success.update");
@@ -342,7 +347,7 @@ public class ComponentRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE COMPONENT] seq: {} {}", componentDTO.getComponentSeq(), e.getMessage());
             tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE COMPONENT]", e, true);
-            throw new Exception(msg("tps.coommon.error.update"), e);
+            throw new Exception(msg("tps.common.error.update"), e);
         }
     }
 
@@ -457,8 +462,13 @@ public class ComponentRestController extends AbstractCommonController {
         }
 
         try {
+            ComponentDTO returnValDTO = modelMapper.map(component, ComponentDTO.class);
+
             // 컴포넌트 삭제
             componentService.deleteComponent(component);
+
+            // purge 날림!!!!
+            purge(returnValDTO);
 
             String message = msg("tps.common.success.delete");
             ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
@@ -575,5 +585,48 @@ public class ComponentRestController extends AbstractCommonController {
             throw new InvalidDataException(invalidList, validMessage);
         }
     }
-    
+
+    /**
+     * tms서버의 컴포넌트정보를 갱신한다. 해당 컴포넌트과 관련된 fileYn=Y인 페이지도 갱신한다.
+     *
+     * @param returnValDTO 컴포넌트정보
+     * @return 갱신오류메세지
+     * @throws DataLoadException
+     * @throws TemplateMergeException
+     * @throws TemplateParseException
+     * @throws NoDataException
+     */
+    private String purge(ComponentDTO returnValDTO)
+            throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
+        // 1. 컴포넌트 tms purge
+        String returnValue = "";
+        String retTemplate = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toComponentItem()));
+        if (McpString.isNotEmpty(retTemplate)) {
+            log.error("[FAIL TO PURGE COMPONENT] seq: {} {}", returnValDTO.getComponentSeq(), retTemplate);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE COMPONENT]", true);
+            returnValue = String.join("\r\n", retTemplate);
+        }
+
+        // 2. fileYn=Y인 관련페이지 tms pageUpdate
+        RelationSearchDTO search = RelationSearchDTO
+                .builder()
+                .domainId(returnValDTO
+                        .getDomain()
+                        .getDomainId())
+                .fileYn(MokaConstants.YES)
+                .relSeq(returnValDTO.getComponentSeq())
+                .relSeqType(MokaConstants.ITEM_COMPONENT)
+                .relType(MokaConstants.ITEM_PAGE)
+                .build();
+        List<PageVO> pageList = relationService.findAllPage(search);
+        String retPage = purgeHelper.tmsPageUpdate(pageList);
+        if (McpString.isNotEmpty(retPage)) {
+            log.error("[FAIL TO PAGE UPATE] componentSeq: {} {}", returnValDTO.getComponentSeq(), retPage);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
+            returnValue = String.join("\r\n", retPage);
+        }
+
+        return returnValue;
+    }
+
 }

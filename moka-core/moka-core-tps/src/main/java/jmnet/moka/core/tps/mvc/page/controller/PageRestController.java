@@ -6,11 +6,14 @@ import io.swagger.annotations.ApiParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchParam;
+import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
@@ -31,6 +34,7 @@ import jmnet.moka.core.tps.mvc.page.dto.PageSearchDTO;
 import jmnet.moka.core.tps.mvc.page.dto.ParentPageDTO;
 import jmnet.moka.core.tps.mvc.page.entity.Page;
 import jmnet.moka.core.tps.mvc.page.service.PageService;
+import jmnet.moka.core.tps.mvc.page.vo.PageVO;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -240,6 +244,9 @@ public class PageRestController extends AbstractCommonController {
                 dto.setParent(parentDto);
             }
 
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
+            purge(dto);
+
             String message = msg("tps.common.success.insert");
             ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
@@ -285,17 +292,15 @@ public class PageRestController extends AbstractCommonController {
         try {
             Page returnValue = pageService.updatePage(newPage);
 
-            // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-            purgeHelper.purgeTms(returnValue
-                    .getDomain()
-                    .getDomainId(), MokaConstants.ITEM_PAGE, returnValue.getPageSeq());
-
             // 결과리턴
             PageDTO dto = modelMapper.map(returnValue, PageDTO.class);
             if (returnValue.getParent() != null) {
                 ParentPageDTO parentDto = modelMapper.map(returnValue.getParent(), ParentPageDTO.class);
                 dto.setParent(parentDto);
             }
+
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
+            purge(dto);
 
             String message = msg("tps.common.success.update");
             ResultDTO<PageDTO> resultDto = new ResultDTO<PageDTO>(dto, message);
@@ -338,8 +343,13 @@ public class PageRestController extends AbstractCommonController {
                 });
 
         try {
+            PageDTO dto = modelMapper.map(page, PageDTO.class);
+
             // 2. 삭제
             pageService.deletePage(page, principal.getName());
+
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
+            purge(dto);
 
             // 3. 결과리턴
             String message = msg("tps.common.success.delete");
@@ -393,55 +403,6 @@ public class PageRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
-    //    /**
-    //     * 페이지 PURGE
-    //     *
-    //     * @param request 요청
-    //     * @param pageSeq 페이지 순번 (필수)
-    //     * @return 퍼지성공여부
-    //     * @throws URISyntaxException
-    //     * @throws IOException
-    //     * @throws Exception          기타예외
-    //     */
-    //    @ApiOperation(value = "페이지 PURGE - 삭제될 수 있음")
-    //    @GetMapping("/{pageSeq}/purge")
-    //    public ResponseEntity<?> getPurge(HttpServletRequest request,
-    //            @PathVariable("pageSeq") @Min(value = 0, message = "{tps.page.error.min.pageSeq}") Long pageSeq)
-    //            throws Exception {
-    //
-    //        // 데이타유효성검사.
-    //        validData(request, pageSeq, null, ActionType.SELECT);
-    //
-    //        // 1.1 아이디체크
-    //        validData(request, pageSeq, null, ActionType.SELECT);
-    //
-    //        // 1.2. 데이타 존재여부 검사
-    //        Page page = pageService.findPageBySeq(pageSeq)
-    //                               .orElseThrow(() -> {
-    //                                   String message = msg("tps.page.error.no-data", request);
-    //                                   tpsLogger.fail(ActionType.SELECT, message, true);
-    //                                   return new NoDataException(message);
-    //                               });
-    //
-    //        // 페이지 바니시 퍼지. 성공실패여부는 리턴하지 않는다.
-    //        String message = purgeHelper.purgeVarnish(request, page);
-    //
-    //        boolean success = true;
-    //        if (McpString.isNotEmpty(message)) {
-    //            success = false;
-    //        }
-    //
-    //        ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(success);
-    //        resultDTO.getHeader()
-    //                 .setSuccess(success);
-    //        resultDTO.getHeader()
-    //                 .setMessage(message);
-    //
-    //        log.debug("[PAGE PURGE] pageSeq: {}, pageUrl: {}", pageSeq, page.getPageUrl());
-    //
-    //        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
-    //    }
-
     /**
      * 페이지 목록조회(목록용)
      *
@@ -469,6 +430,42 @@ public class PageRestController extends AbstractCommonController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    /**
+     * tms서버의 페이지정보를 갱신한다. fileYn=Y면 pageUpdate, N이면 purge
+     *
+     * @param returnValDTO 페이지정보
+     * @return 갱신오류메세지
+     * @throws DataLoadException
+     * @throws TemplateMergeException
+     * @throws TemplateParseException
+     * @throws NoDataException
+     */
+    private String purge(PageDTO returnValDTO)
+            throws DataLoadException, TemplateMergeException, TemplateParseException, NoDataException {
 
+        String returnValue = "";
+
+        // fileYn=Y면 pageUpdate, N이면 purge
+        if (returnValDTO
+                .getFileYn()
+                .equals(MokaConstants.YES)) {
+            PageVO vo = modelMapper.map(returnValDTO, PageVO.class);
+            String retPage = purgeHelper.tmsPageUpdate(Collections.singletonList(vo));
+            if (McpString.isNotEmpty(retPage)) {
+                log.error("[FAIL TO PAGE UPATE] pageSeq: {} {}", returnValDTO.getPageSeq(), retPage);
+                tpsLogger.error(ActionType.UPDATE, "[FAIL TO PAGE UPATE]", true);
+                returnValue = String.join("\r\n", retPage);
+            }
+        } else {
+            String retTemplate = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toPageItem()));
+            if (McpString.isNotEmpty(retTemplate)) {
+                log.error("[FAIL TO PURGE PAGE] pageSeq: {} {}", returnValDTO.getPageSeq(), retTemplate);
+                tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE PAGE]", true);
+                returnValue = String.join("\r\n", retTemplate);
+            }
+        }
+
+        return returnValue;
+    }
 
 }

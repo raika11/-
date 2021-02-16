@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -22,7 +23,6 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.template.helper.TemplateParserHelper;
@@ -269,13 +269,11 @@ public class ArticlePageRestController extends AbstractCommonController {
         try {
             ArticlePage returnValue = articlePageService.updateArticlePage(newPage);
 
-            // 페이지 퍼지. 성공실패여부는 리턴하지 않는다.
-            purgeHelper.purgeTms(returnValue
-                    .getDomain()
-                    .getDomainId(), MokaConstants.ITEM_ARTICLE_PAGE, returnValue.getArtPageSeq());
-
             // 결과리턴
             ArticlePageDTO dto = modelMapper.map(returnValue, ArticlePageDTO.class);
+
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
+            purge(dto);
 
             Long totalId = articleService.findLastestArticleBasicByArtType(dto.getArtType());
             dto.setPreviewTotalId(totalId);
@@ -319,8 +317,13 @@ public class ArticlePageRestController extends AbstractCommonController {
                 });
 
         try {
+            ArticlePageDTO dto = modelMapper.map(page, ArticlePageDTO.class);
+
             // 2. 삭제
             articlePageService.deleteArticlePage(page);
+
+            // purge 날림!!  성공실패여부는 리턴하지 않는다.
+            purge(dto);
 
             // 3. 결과리턴
             String message = msg("tps.common.success.delete");
@@ -373,5 +376,24 @@ public class ArticlePageRestController extends AbstractCommonController {
         Long totalId = articleService.findLastestArticleBasicByArtType(artType);
         ResultDTO<Long> resultDTO = new ResultDTO<>(totalId);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    /**
+     * tms서버의 기사페이지정보를 갱신한다. 기사타입에 해당하는 모든기사페이지를 갱신하지는 않는다.
+     *
+     * @param returnValDTO 기사페이지정보
+     * @return 갱신오류메세지
+     */
+    private String purge(ArticlePageDTO returnValDTO) {
+
+        String returnValue = "";
+        String retTemplate = purgeHelper.tmsPurge(Collections.singletonList(returnValDTO.toArticlePageItem()));
+        if (McpString.isNotEmpty(retTemplate)) {
+            log.error("[FAIL TO PURGE ARTICLE_PAGE] artPageSeq: {} {}", returnValDTO.getArtPageSeq(), retTemplate);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO PURGE ARTICLE_PAGE]", true);
+            returnValue = String.join("\r\n", retTemplate);
+        }
+
+        return returnValue;
     }
 }

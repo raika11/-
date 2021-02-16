@@ -30,5 +30,5 @@ export const GET_BULK_MONITOR = 'bulkMonitor/GET_BULK_MONITOR';
 export const getBulkMonitor = createAction(GET_BULK_MONITOR);
 
 // 벌크 모니터링 전송 상세 정보 조회
-export const [GET_BULK_STAT_LIST_INFO, GET_BULK_STAT_LIST_INFO_SUCCESS] = createRequestActionTypes('bulkMonitor/GET_BULK_STAT_LIST_INFO');
-export const getBulkStatListInfo = createAction(GET_BULK_STAT_LIST_INFO, ({ search }) => ({ search }));
+export const [GET_BULK_STAT_LIST_INFO, GET_BULK_STAT_LIST_INFO_SUCCESS, GET_BULK_STAT_LIST_INFO_FAILURE] = createRequestActionTypes('bulkMonitor/GET_BULK_STAT_LIST_INFO');
+export const getBulkStatListInfo = createAction(GET_BULK_STAT_LIST_INFO, ({ totalId, portalDiv }) => ({ totalId, portalDiv }));

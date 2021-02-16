@@ -516,7 +516,7 @@ public class MergeServiceImpl implements MergeService {
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회(기본타입으로 조회)
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, TpsConstants.DEFAULT_ART_TYPE);
+        ArticlePage articlePage = articlePageService.findByArticePage(TpsConstants.DEFAULT_ART_TYPE, domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);
@@ -601,7 +601,7 @@ public class MergeServiceImpl implements MergeService {
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        ArticlePage articlePage = articlePageService.findByArticePage(artType, domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);
@@ -690,7 +690,7 @@ public class MergeServiceImpl implements MergeService {
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        ArticlePage articlePage = articlePageService.findByArticePage(artType, domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);
@@ -738,7 +738,7 @@ public class MergeServiceImpl implements MergeService {
                 });
 
         // 기사페이지 정보 조회
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, articleBasic.getArtType());
+        ArticlePage articlePage = articlePageService.findByArticePage(articleBasic.getArtType(), domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);

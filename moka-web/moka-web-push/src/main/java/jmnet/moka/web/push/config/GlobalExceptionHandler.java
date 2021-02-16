@@ -22,12 +22,9 @@ import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.common.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -36,7 +33,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * <pre>
@@ -48,9 +44,8 @@ import org.springframework.web.servlet.ModelAndView;
  * @since 2019. 11. 29. 오후 2:41:30
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @Autowired
     private MessageByLocale messageByLocale;
@@ -68,7 +63,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class, MokaException.class})
     public Object defaultException(HttpServletRequest request, HttpServletResponse response, Exception ex)
             throws IOException {
-        logger.error("[defaultException] {}", ex);
+        log.error("[defaultException] ", ex);
         if (ex.getCause() != null && ex
                 .getCause()
                 .getClass()
@@ -76,18 +71,8 @@ public class GlobalExceptionHandler {
             return null;
         } else {
             String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
-            if (acceptHeader.contains("html")) {
-                //                ModelAndView mav = new ModelAndView(MokaConstants.ERROR_PAGE_500);
-                request.setAttribute("javax.servlet.error.status_code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                ModelAndView mav = new ModelAndView("/error");
-                Throwable rootCause = NestedExceptionUtils.getRootCause(ex);
-                mav.addObject(MokaConstants.MODEL_ATTR_EXCEPTION, ex);
-                mav.addObject(MokaConstants.MODEL_ATTR_ROOTCAUSE, rootCause == null ? ex : rootCause);
-                return mav;
-            } else {
-                String message = McpString.isNullOrEmpty(ex.getMessage()) ? messageByLocale.get("common.error", request) : ex.getMessage();
-                return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_SERVER_ERROR, message);
-            }
+            String message = McpString.isNullOrEmpty(ex.getMessage()) ? messageByLocale.get("common.error", request) : ex.getMessage();
+            return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_SERVER_ERROR, message);
         }
     }
 
@@ -102,16 +87,16 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {BindException.class})
     public ResponseEntity<?> handleBindException(HttpServletRequest request, HttpServletResponse response, BindException ex) {
-        logger.error("[validation BindException] {}", ex);
+        log.error("[validation BindException] ", ex);
 
         if (ex.getFieldErrorCount() > 0) {
             String message = messageByLocale.get("common.error.invalidContent", request);
-            List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+            List<InvalidDataDTO> invalidList = new ArrayList<>();
             for (FieldError err : ex.getFieldErrors()) {
                 invalidList.add(new InvalidDataDTO(err.getField(), err.getDefaultMessage()));
             }
 
-            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<InvalidDataDTO>();
+            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<>();
             resultInvalidList.setTotalCnt(invalidList.size());
             resultInvalidList.setList(invalidList);
 
@@ -124,12 +109,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ConstraintViolationException.class})
     public ResponseEntity<?> handleConstraintViolationException(HttpServletRequest request, HttpServletResponse response,
             ConstraintViolationException ex) {
-        logger.error("[validation ConstraintViolationException] {}", ex);
+        log.error("[validation ConstraintViolationException] ", ex);
 
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
         if (violations.size() > 0) {
             String message = messageByLocale.get("common.error.invalidContent", request);
-            List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+            List<InvalidDataDTO> invalidList = new ArrayList<>();
             for (ConstraintViolation<?> violation : violations) {
 
                 String messageProp = violation.getMessage();
@@ -146,7 +131,7 @@ public class GlobalExceptionHandler {
                 invalidList.add(new InvalidDataDTO(argName, messageByLocale.get(argMessage, request)));
             }
 
-            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<InvalidDataDTO>();
+            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<>();
             resultInvalidList.setTotalCnt(invalidList.size());
             resultInvalidList.setList(invalidList);
 
@@ -169,17 +154,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<?> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response,
             MethodArgumentNotValidException ex) {
-        logger.error("[MethodArgumentNotValidException] {}", ex);
+        log.error("[MethodArgumentNotValidException] ", ex);
 
         BindingResult bindingResult = ex.getBindingResult();
         if (bindingResult.getFieldErrorCount() > 0) {
             String message = messageByLocale.get("common.error.invalidContent", request);
-            List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+            List<InvalidDataDTO> invalidList = new ArrayList<>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 invalidList.add(new InvalidDataDTO(err.getField(), err.getDefaultMessage()));
             }
 
-            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<InvalidDataDTO>();
+            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<>();
             resultInvalidList.setTotalCnt(invalidList.size());
             resultInvalidList.setList(invalidList);
 
@@ -202,7 +187,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     public ResponseEntity<?> handleMethodArgumentTypeMismatchException(HttpServletRequest request, HttpServletResponse response,
             MethodArgumentTypeMismatchException ex) {
-        logger.error("[MethodArgumentNotValidException] {}", ex);
+        log.error("[MethodArgumentNotValidException] ", ex);
 
         String message = messageByLocale.get("common.error.invalidUrl", request);
         return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_BAD_REQUEST, message);
@@ -220,7 +205,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoDataException.class)
     public ResponseEntity<?> noDataException(HttpServletRequest request, HttpServletResponse response, NoDataException ex) {
 
-        logger.error("[NoContentException] {}", ex);
+        log.error("[NoContentException] ", ex);
         return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_NO_DATA, ex.getMessage());
     }
 
@@ -236,11 +221,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<?> invalidDataException(HttpServletRequest request, HttpServletResponse response, InvalidDataException ex) {
 
-        logger.error("[invalidContentException] {}", ex);
+        log.error("[invalidContentException] ", ex);
 
         List<InvalidDataDTO> invalidList = ex.getInvalidList();
         if (invalidList != null && invalidList.size() > 0) {
-            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<InvalidDataDTO>();
+            ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<>();
             resultInvalidList.setTotalCnt(invalidList.size());
             resultInvalidList.setList(invalidList);
 
@@ -262,7 +247,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public ResponseEntity<?> ioException(HttpServletRequest request, HttpServletResponse response, IOException ex) {
 
-        logger.error("[IOException] {}", ex);
+        log.error("[IOException] ", ex);
 
         String message = "입출력에 오류가 있습니다. " + ex.getMessage();
         return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_FILE_ERROR, message);
@@ -280,7 +265,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileFormatException.class)
     public ResponseEntity<?> fileFormatException(HttpServletRequest request, HttpServletResponse response, FileFormatException ex) {
 
-        logger.error("[FileFormatException] {}", ex);
+        log.error("[FileFormatException] ", ex);
 
         String message = "파일 형식 오류입니다.";
         return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_FILE_ERROR, message);
@@ -298,15 +283,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TemplateParseException.class)
     public ResponseEntity<?> templateParseException(HttpServletRequest request, HttpServletResponse response, TemplateParseException ex) {
 
-        logger.error("[TemplateParseException] {}", ex);
+        log.error("[TemplateParseException] ", ex);
 
         String message = messageByLocale.get("common.error.invalid.syntax", request);
 
-        List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
+        List<InvalidDataDTO> invalidList = new ArrayList<>();
         invalidList.add(new InvalidDataDTO("syntax", TemplateParseException.ErrorMessage.getMessage(ex.getErrorCode()),
                 Integer.toString(ex.getLineNumber())));
 
-        ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<InvalidDataDTO>();
+        ResultListDTO<InvalidDataDTO> resultInvalidList = new ResultListDTO<>();
         resultInvalidList.setTotalCnt(invalidList.size());
         resultInvalidList.setList(invalidList);
 

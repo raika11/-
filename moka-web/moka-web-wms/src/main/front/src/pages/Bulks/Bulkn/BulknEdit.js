@@ -354,7 +354,7 @@ ${bulkArticleRow
                             <div key={index} className="mb-2 pb-2">
                                 <Form.Row>
                                     <MokaInputLabel label="타이틀" as="none" labelWidth={30} />
-                                    <Col xs={1} className="justify-content-center align-items-center">
+                                    <Col xs={2} className="justify-content-center align-items-center">
                                         <MokaInput
                                             as="select"
                                             name="symbol"
@@ -373,7 +373,7 @@ ${bulkArticleRow
                                                 ))}
                                         </MokaInput>
                                     </Col>
-                                    <Col xs={9} className="justify-content-center align-items-center">
+                                    <Col xs={8} className="justify-content-center align-items-center">
                                         <MokaInputLabel
                                             name="title"
                                             id="title"

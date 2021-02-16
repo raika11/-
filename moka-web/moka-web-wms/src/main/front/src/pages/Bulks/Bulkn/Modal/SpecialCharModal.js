@@ -28,7 +28,8 @@ const propTypes = {
 const defaultProps = {};
 
 /**
- * 데이터셋 리스트 공통 모달
+ * 약물 정보 수정 모달
+ * 2021-02-16 09:49 현재는 사용하지 않음.
  */
 const SpecialCharModal = (props) => {
     const dispatch = useDispatch();

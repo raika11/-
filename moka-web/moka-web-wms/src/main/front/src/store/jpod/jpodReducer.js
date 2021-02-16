@@ -49,7 +49,7 @@ export const initialState = {
             usedYn: 'Y', // 사용유무
             chnlNm: '', // 채널명
             chnlMemo: '', // 채널소개
-            chnlSdt: moment().format('YYYY-MM-DD'), // 채널 개설일
+            chnlSdt: '', // 채널 개설일
             chnlImg: '', // 커버 이미지.
             chnlThumb: '', // 썸네일 이미지
             podtyUrl: '', // 파치채널

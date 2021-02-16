@@ -25,7 +25,13 @@ const ChannelSearchBox = ({ match }) => {
 
     // 검색 버튼 처리.
     const handleClickSearchButton = () => {
-        dispatch(changeJpodSearchOption(searchData));
+        dispatch(
+            changeJpodSearchOption({
+                ...searchData,
+                startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
+                endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
+            }),
+        );
         dispatch(getChannels());
     };
 
@@ -33,8 +39,8 @@ const ChannelSearchBox = ({ match }) => {
     const handleClickSearchResetButton = () => {
         setSearchData(initialState.channel.jpod.search);
         dispatch(changeJpodSearchOption(initialState.channel.jpod.search));
-        history.push(`${match.path}`);
-        dispatch(getChannels());
+        // history.push(`${match.path}`);
+        // dispatch(getChannels());
     };
 
     // 등록 버튼
@@ -86,9 +92,9 @@ const ChannelSearchBox = ({ match }) => {
                             id="startDt"
                             value={searchData.startDt}
                             onChange={(param) => {
-                                const selectDate = param._d;
-                                const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('startDt', date);
+                                // const selectDate = param._d;
+                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                                handleDateChange('startDt', param);
                             }}
                             inputProps={{ timeFormat: null }}
                         />
@@ -101,9 +107,9 @@ const ChannelSearchBox = ({ match }) => {
                             id="endDt"
                             value={searchData.endDt}
                             onChange={(param) => {
-                                const selectDate = param._d;
-                                const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('endDt', date);
+                                // const selectDate = param._d;
+                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                                handleDateChange('endDt', param);
                             }}
                             inputProps={{ timeFormat: null }}
                         />

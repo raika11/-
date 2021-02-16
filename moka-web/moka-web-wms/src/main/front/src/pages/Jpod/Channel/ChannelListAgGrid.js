@@ -56,6 +56,7 @@ const ChannelListAgGrid = ({ match }) => {
                         chnlThumb: element.chnlThumb,
                         chnlNm: element.chnlNm,
                         chnlMemo: element.chnlMemo,
+                        usedYn: element.usedYn,
                         roundinfo: `${totalEpsdCnt}/${lastEpsdNo}`,
                         subscribe: ``,
                     };

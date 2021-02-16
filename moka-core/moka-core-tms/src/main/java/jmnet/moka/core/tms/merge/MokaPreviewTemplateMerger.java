@@ -352,7 +352,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
     }
 
     /**
-     * 수신기사 미리보기
+     * 등록기사 미리보기
      *
      * @param articlePageItem 기사페이지아이템
      * @param totalId         기사키

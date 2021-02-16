@@ -46,4 +46,7 @@ public interface MergeService {
 
     String getMergeArticle(Long totalId, String domainType, String artType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
+
+    String getMergeArticle(Long totalId, String domainId)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException;
 }

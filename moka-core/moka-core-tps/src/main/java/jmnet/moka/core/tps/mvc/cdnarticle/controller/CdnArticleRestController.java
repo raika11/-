@@ -15,11 +15,13 @@ import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.cdnarticle.dto.CdnArticleDTO;
 import jmnet.moka.core.tps.mvc.cdnarticle.dto.CdnArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.cdnarticle.entity.CdnArticle;
@@ -54,10 +56,12 @@ public class CdnArticleRestController extends AbstractCommonController {
 
     private final CdnArticleService cdnArticleService;
     private final ModelMapper modelMapper;
+    private final PurgeHelper purgeHelper;
 
-    public CdnArticleRestController(CdnArticleService cdnArticleService, ModelMapper modelMapper) {
+    public CdnArticleRestController(CdnArticleService cdnArticleService, ModelMapper modelMapper, PurgeHelper purgeHelper) {
         this.cdnArticleService = cdnArticleService;
         this.modelMapper = modelMapper;
+        this.purgeHelper = purgeHelper;
     }
 
     /**
@@ -139,6 +143,9 @@ public class CdnArticleRestController extends AbstractCommonController {
             CdnArticle returnValue = cdnArticleService.saveCdnArticle(article);
             CdnArticleDTO dto = modelMapper.map(returnValue, CdnArticleDTO.class);
 
+            // 퍼지!!!
+            purge();
+
             String message = msg("tps.common.success.insert");
             ResultDTO<CdnArticleDTO> resultDto = new ResultDTO<CdnArticleDTO>(dto, message);
             tpsLogger.success(ActionType.INSERT, true);
@@ -177,6 +184,9 @@ public class CdnArticleRestController extends AbstractCommonController {
             article.setRegId(orgArticle.getRegId());
 
             CdnArticle returnValue = cdnArticleService.saveCdnArticle(article);
+
+            // 퍼지!!!
+            purge();
 
             CdnArticleDTO dto = modelMapper.map(returnValue, CdnArticleDTO.class);
 
@@ -247,5 +257,11 @@ public class CdnArticleRestController extends AbstractCommonController {
         ResultDTO<Boolean> resultDto = new ResultDTO<>(exists, message);
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    private String purge() {
+        List<CdnArticle> useArticleList = cdnArticleService.findUseCdnArticle(MokaConstants.YES);
+        String ret = purgeHelper.tmsCdnUpdate(useArticleList);
+        return ret;
     }
 }

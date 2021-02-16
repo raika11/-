@@ -203,6 +203,7 @@ public class PreviewController extends AbstractCommonController {
      * @param response  결과
      * @param rid       수신기사키
      * @param updateDto 수신기사 수정정보
+     * @param domainId  도메인ID
      * @throws InvalidDataException         페이지정보오류
      * @throws NoDataException              도메인,페이지 정보 없음 오류
      * @throws IOException                  입출력오류
@@ -215,12 +216,12 @@ public class PreviewController extends AbstractCommonController {
     @PostMapping("/rcv-article/{rid}")
     public void perviewRcvArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
             @ApiParam("수신기사아이디(필수)") @PathVariable("rid") Long rid, @ApiParam("수정할 정보(기자목록,분류코드목록,태그목록)") @Valid RcvArticleBasicUpdateDTO updateDto,
-            @ApiParam("서비스플랫폼(P/M)") String servicePlatform)
+            @ApiParam("도메인ID") String domainId)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
         try {
-            String html = mergeService.getMergeRcvArticle(rid, updateDto, servicePlatform);
+            String html = mergeService.getMergeRcvArticle(rid, updateDto, domainId);
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] rid: {} {}", rid, e);
@@ -234,12 +235,12 @@ public class PreviewController extends AbstractCommonController {
     /**
      * 등록기사 수정정보로 미리보기
      *
-     * @param request         요청
-     * @param response        결과
-     * @param totalId         기사키
-     * @param updateDto       수정정보
-     * @param servicePlatform 서비스플랫폼(P/M)
-     * @param artType         기사타입
+     * @param request   요청
+     * @param response  결과
+     * @param totalId   기사키
+     * @param updateDto 수정정보
+     * @param domainId  도메인ID
+     * @param artType   기사타입
      * @throws InvalidDataException         페이지정보오류
      * @throws NoDataException              도메인,페이지 정보 없음 오류
      * @throws IOException                  입출력오류
@@ -252,13 +253,13 @@ public class PreviewController extends AbstractCommonController {
     @PostMapping("/article/update/{totalId}")
     public void perviewUpdateArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
             @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId,
-            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @Valid ArticleBasicUpdateDTO updateDto, @ApiParam("서비스플랫폼(P/M)") String servicePlatform,
+            @ApiParam("수정할 정보(제목,본문,기자목록,분류코드목록,태그목록)") @Valid ArticleBasicUpdateDTO updateDto, @ApiParam("도메인아이디") String domainId,
             @ApiParam("기사유형") String artType)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
         try {
-            String html = mergeService.getMergeUpdateArticle(totalId, updateDto, servicePlatform, artType);
+            String html = mergeService.getMergeUpdateArticle(totalId, updateDto, domainId, artType);
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] totalId: {} {}", totalId, e);
@@ -272,11 +273,11 @@ public class PreviewController extends AbstractCommonController {
     /**
      * 등록기사 미리보기
      *
-     * @param request         요청
-     * @param response        결과
-     * @param totalId         기사키
-     * @param servicePlatform 서비스플랫폼(P/M)
-     * @param artType         기사타입
+     * @param request  요청
+     * @param response 결과
+     * @param totalId  기사키
+     * @param domainId 도메인ID
+     * @param artType  기사타입
      * @throws InvalidDataException         페이지정보오류
      * @throws NoDataException              도메인,페이지 정보 없음 오류
      * @throws IOException                  입출력오류
@@ -288,13 +289,12 @@ public class PreviewController extends AbstractCommonController {
      */
     @PostMapping("/article/{totalId}")
     public void perviewArticle(@ApiParam(hidden = true) HttpServletRequest request, @ApiParam(hidden = true) HttpServletResponse response,
-            @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId, @ApiParam("서비스플랫폼(P/M)") String servicePlatform,
-            @ApiParam("기사유형") String artType)
+            @ApiParam("서비스기사아이디(필수)") @PathVariable("totalId") Long totalId, @ApiParam("도메인ID") String domainId, @ApiParam("기사유형") String artType)
             throws InvalidDataException, NoDataException, IOException, Exception, TemplateMergeException, UnsupportedEncodingException,
             TemplateParseException, TemplateLoadException {
 
         try {
-            String html = mergeService.getMergeArticle(totalId, servicePlatform, artType);
+            String html = mergeService.getMergeArticle(totalId, domainId, artType);
             writeResonse(response, html, TpsConstants.PAGE_TYPE_HTML);
         } catch (Exception e) {
             log.error("[FAIL TO MERGE] totalId: {} {}", totalId, e);

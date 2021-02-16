@@ -47,7 +47,8 @@ public interface CdnArticleService {
      *
      * @param totalId 기사키
      */
-    void clearCacheCdnArticle(Long totalId);
+    void clearCacheCdnArticle(Long totalId)
+            throws Exception;
 
     /**
      * 사용여부에 따른 CDN기사목록

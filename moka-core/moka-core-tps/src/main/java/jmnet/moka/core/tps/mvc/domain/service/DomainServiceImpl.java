@@ -150,15 +150,15 @@ public class DomainServiceImpl implements DomainService {
         return false;
     }
 
-    @Override
-    public Domain findByServiceFlatform(String servicePlatform) {
-        List<Domain> domainList = domainRepository.findByServicePlatformOrderByUsedYn(servicePlatform);
-        if (domainList.size() > 0) {
-            return domainList.get(0);
-        } else {
-            return null;
-        }
-    }
+    //    @Override
+    //    public Domain findByServiceFlatform(String servicePlatform) {
+    //        List<Domain> domainList = domainRepository.findByServicePlatformOrderByUsedYn(servicePlatform);
+    //        if (domainList.size() > 0) {
+    //            return domainList.get(0);
+    //        } else {
+    //            return null;
+    //        }
+    //    }
 
     public List<DomainDTO> findDomainByMapper(String domainId) {
         Map<String, Object> param = new HashMap<String, Object>();

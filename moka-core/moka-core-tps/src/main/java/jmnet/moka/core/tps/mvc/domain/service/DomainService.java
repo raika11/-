@@ -102,11 +102,11 @@ public interface DomainService {
      */
     public boolean hasRelations(String domainId);
 
-    /**
-     * 서비스플랫폼별 도메인 조회
-     *
-     * @param servicePlatform 서비스플랫포
-     * @return 도메인
-     */
-    Domain findByServiceFlatform(String servicePlatform);
+    //    /**
+    //     * 서비스플랫폼별 도메인 조회
+    //     *
+    //     * @param servicePlatform 서비스플랫포
+    //     * @return 도메인
+    //     */
+    //    Domain findByServiceFlatform(String servicePlatform);
 }

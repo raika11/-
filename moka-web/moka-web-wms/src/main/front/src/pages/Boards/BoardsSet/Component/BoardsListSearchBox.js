@@ -61,7 +61,7 @@ const BoardsListSearchBox = (props) => {
             <div className="d-flex flex-fill">
                 <div className="mr-2">
                     <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
-                        <option hidden>사용여부</option>
+                        <option value="">선택</option>
                         {selectItem.usedYn.map((item, index) => (
                             <option key={index} value={item.value}>
                                 {item.name}

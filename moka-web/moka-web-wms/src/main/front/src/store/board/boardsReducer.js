@@ -61,7 +61,7 @@ export const initialState = {
             page: 0,
             sort: 'boardId,desc',
             size: PAGESIZE_OPTIONS[0],
-            usedYn: 'Y',
+            usedYn: '',
             searchType: '',
             keyword: '',
         },

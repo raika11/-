@@ -8,12 +8,12 @@ const TitleItemRenderer = ({ paramsValue: { replyFlag, delYn, title } }) => {
         <>
             {delYn === 'N' ? (
                 <Row>
-                    <Col>{replyFlag ? `ㄴ ${title}` : title}</Col>
+                    <Col style={{ width: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{replyFlag ? `ㄴ ${title}` : title}</Col>
                 </Row>
             ) : (
                 <Row>
                     <Col>
-                        <div style={{ color: '#a0a0a0' }}>{title}</div>
+                        <div style={{ width: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#a0a0a0' }}>{title}</div>
                     </Col>
                 </Row>
             )}

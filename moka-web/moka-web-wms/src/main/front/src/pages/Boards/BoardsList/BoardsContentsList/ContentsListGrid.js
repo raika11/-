@@ -56,7 +56,7 @@ const ContentsListGrid = () => {
                         selectBoardId: data.boardId,
                         boardSeq: data.boardSeq,
                         parentBoardSeq: data.parentBoardSeq,
-                        channelName: data.channelName,
+                        channelName: data.boardInfo.boardName,
                         titleItem: {
                             replyFlag: data.boardSeq !== data.parentBoardSeq,
                             title: data.title,
@@ -64,7 +64,7 @@ const ContentsListGrid = () => {
                         },
                         titlePrefix1: data.titlePrefix1,
                         registItem: {
-                            regDt: data.regDt,
+                            regDt: data.modDt && data.modDt.length > 10 ? data.modDt.substr(0, 16) : data.modDt,
                             regName: data.regName,
                         },
                         viewCnt: data.viewCnt,

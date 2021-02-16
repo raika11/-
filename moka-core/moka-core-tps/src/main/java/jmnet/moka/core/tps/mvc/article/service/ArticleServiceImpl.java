@@ -41,6 +41,7 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleServiceVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -65,21 +66,20 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final FtpHelper ftpHelper;
 
-    private final PurgeHelper purgeHelper;
+    @Autowired
+    private PurgeHelper purgeHelper;
 
     @Value("${tms.default.api.path}")
     private String defaultApiPath;
 
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
-            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper,
-            PurgeHelper purgeHelper) {
+            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper) {
         this.articleBasicRepository = articleBasicRepository;
         this.articleTitleRepository = articleTitleRepository;
         this.articleHistoryRepository = articleHistoryRepository;
         this.articleMapper = articleMapper;
         this.modelMapper = modelMapper;
         this.ftpHelper = ftpHelper;
-        this.purgeHelper = purgeHelper;
     }
 
     @Override

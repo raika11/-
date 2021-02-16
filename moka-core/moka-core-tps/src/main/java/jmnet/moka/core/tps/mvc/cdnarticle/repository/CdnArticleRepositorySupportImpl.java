@@ -57,6 +57,7 @@ public class CdnArticleRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<CdnArticle> list = query
                 .where(builder)
+                .orderBy(article.regDt.desc())
                 .fetchResults();
 
         return new PageImpl<CdnArticle>(list.getResults(), pageable, list.getTotal());

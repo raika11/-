@@ -7,6 +7,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import toast from '@utils/toastUtil';
 import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard, MokaInput, MokaIcon } from '@components';
+import { PREVIEW_DOMAIN_ID } from '@/constants';
 
 const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview, onRegister, error, setError }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
@@ -118,12 +119,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => onPreview('P');
+    const handlePCPreview = () => onPreview(PREVIEW_DOMAIN_ID);
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => onPreview('M');
+    // const handleMobilePreview = () => onPreview(PREVIEW_DOMAIN_ID);
 
     useEffect(() => {
         if (article.pressDt) {
@@ -157,7 +158,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             footerClassName="d-flex justify-content-center"
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
-                { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
+                // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
                 { variant: 'positive', text: '기사등록', className: 'mr-2', onClick: onRegister, disabled: article.iudYn === 'Y' },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}

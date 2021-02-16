@@ -55,3 +55,9 @@ export const deleteMenu = ({ menuId }) => {
         throw err;
     });
 };
+
+export const changeOrderChildren = (parentId, children) => {
+    return instance.put(`api/menus/${parentId}/change-order-children`, children).catch((err) => {
+        throw err;
+    });
+};

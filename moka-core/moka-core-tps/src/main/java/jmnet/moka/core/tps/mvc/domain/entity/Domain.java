@@ -55,9 +55,8 @@ public class Domain extends BaseAudit {
     /**
      * 서비스 플랫폼 P : PC, M : 모바일
      */
-    @Column(name = "SERVICE_PLATFORM", columnDefinition = "char", nullable = false)
-    @Builder.Default
-    private String servicePlatform = "P";
+    @Column(name = "SERVICE_PLATFORM", columnDefinition = "char")
+    private String servicePlatform;
 
     /**
      * 사용여부 Y : 예, N : 아니오
@@ -97,7 +96,6 @@ public class Domain extends BaseAudit {
      */
     @PrePersist
     public void prePersist() {
-        this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
         this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
         this.lang = McpString.defaultValue(this.lang, TpsConstants.DEFAULT_LANG);
     }
@@ -107,7 +105,6 @@ public class Domain extends BaseAudit {
      */
     @PreUpdate
     public void preUpdate() {
-        this.servicePlatform = McpString.defaultValue(this.servicePlatform, "P");
         this.usedYn = McpString.defaultValue(this.usedYn, MokaConstants.YES);
         this.lang = McpString.defaultValue(this.lang, TpsConstants.DEFAULT_LANG);
     }

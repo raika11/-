@@ -5,6 +5,7 @@ package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,14 +26,17 @@ import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
 import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.helper.UploadFileHelper;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
+import jmnet.moka.core.tps.mvc.component.dto.ComponentDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.component.service.ComponentHistService;
 import jmnet.moka.core.tps.mvc.component.service.ComponentService;
 import jmnet.moka.core.tps.mvc.dataset.entity.Dataset;
+import jmnet.moka.core.tps.mvc.dataset.service.DatasetService;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingHistSearchDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingOrdDTO;
 import jmnet.moka.core.tps.mvc.desking.dto.DeskingWorkDTO;
@@ -49,6 +53,9 @@ import jmnet.moka.core.tps.mvc.desking.repository.DeskingWorkRepository;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentHistVO;
 import jmnet.moka.core.tps.mvc.desking.vo.ComponentWorkVO;
 import jmnet.moka.core.tps.mvc.desking.vo.DeskingWorkVO;
+import jmnet.moka.core.tps.mvc.page.vo.PageVO;
+import jmnet.moka.core.tps.mvc.relation.dto.RelationSearchDTO;
+import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +127,15 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Value("${wimage.url}")
     private String wimageUrl;
+
+    @Autowired
+    private PurgeHelper purgeHelper;
+
+    @Autowired
+    private DatasetService datasetService;
+
+    @Autowired
+    private RelationService relationService;
 
     @Autowired
     public DeskingServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
@@ -315,7 +331,63 @@ public class DeskingServiceImpl implements DeskingService {
         updateDesking(component, componentWorkVO.getDeskingWorks(), regId, histPublishDTO);
 
         // purge
+        purge(componentWorkVO);
 
+    }
+
+    private String purge(ComponentWorkVO componentWorkVO)
+            throws Exception {
+        // 데이타셋 조회
+        Dataset dataset = datasetService
+                .findDatasetBySeq(componentWorkVO.getDatasetSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    return new NoDataException(message);
+                });
+        String prefix = componentWorkVO
+                .getDatasetSeq()
+                .toString() + "_";
+
+        // 1. dps purge
+        String returnValue = "";
+        String retDataset = purgeHelper.dpsPurge(dataset.getDataApiPath(), dataset.getDataApi(), prefix);
+        if (McpString.isNotEmpty(retDataset)) {
+            log.error("[FAIL TO PURGE DESKING] datasetSeq: {} {}", componentWorkVO.getDatasetSeq(), retDataset);
+            returnValue = String.join("\r\n", retDataset);
+        }
+
+        // 컴포넌트 조회
+        Component component = componentService
+                .findComponentBySeq(componentWorkVO.getComponentSeq())
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    return new NoDataException(message);
+                });
+        ComponentDTO componentDTO = modelMapper.map(component, ComponentDTO.class);
+
+        // 2. 컴포넌트 tms purge
+        String retComponent = purgeHelper.tmsPurge(Collections.singletonList(componentDTO.toComponentItem()));
+        if (McpString.isNotEmpty(retComponent)) {
+            log.error("[FAIL TO PURGE COMPONENT] componentSeq: {} {}", componentWorkVO.getComponentSeq(), retComponent);
+            returnValue = String.join("\r\n", retComponent);
+        }
+
+        // 3. fileYn=Y인 관련페이지 tms pageUpdate
+        RelationSearchDTO search = RelationSearchDTO
+                .builder()
+                .fileYn(MokaConstants.YES)
+                .relSeq(componentWorkVO.getDatasetSeq())
+                .relSeqType(MokaConstants.ITEM_DATASET)
+                .relType(MokaConstants.ITEM_PAGE)
+                .build();
+        List<PageVO> pageList = relationService.findAllPage(search);
+        String retPage = purgeHelper.tmsPageUpdate(pageList);
+        if (McpString.isNotEmpty(retPage)) {
+            log.error("[FAIL TO PAGE UPATE] datasetSeq: {} {}", componentWorkVO.getDatasetSeq(), retPage);
+            returnValue = String.join("\r\n", retPage);
+        }
+
+        return returnValue;
 
     }
 

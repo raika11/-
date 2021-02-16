@@ -147,3 +147,6 @@ export const IMAGE_PROXY_API = `${API_BASE_URL}/api/app/image-proxy?url=`;
 // 등록기사, 수신기사 매체 스토리지 키
 export const ARTICLE_SOURCE_LIST_KEY = 'articleSourceList';
 export const RCV_ARTICLE_SOURCE_LIST_KEY = 'rcvArticleSourceList';
+
+// 미리보기 도메인ID
+export const PREVIEW_DOMAIN_ID = '1000';

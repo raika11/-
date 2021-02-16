@@ -3,7 +3,7 @@ import copy from 'copy-to-clipboard';
 import Button from 'react-bootstrap/Button';
 import utils from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
-import { API_BASE_URL } from '@/constants';
+import { API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
 import { MokaModal } from '@components';
 import useClickPreventionOnDoubleClick from '@hooks/useClickPreventionOnDoubleClick';
 
@@ -32,7 +32,7 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = () => {
-        utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, servicePlatform: 'P' });
+        utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, domainId: PREVIEW_DOMAIN_ID });
     };
 
     return (

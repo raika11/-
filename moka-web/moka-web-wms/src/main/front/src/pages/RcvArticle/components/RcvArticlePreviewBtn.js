@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import Button from 'react-bootstrap/Button';
 import commonUtil from '@utils/commonUtil';
-import { API_BASE_URL } from '@/constants';
+import { API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
 import { messageBox } from '@utils/toastUtil';
 
 const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
@@ -14,7 +14,7 @@ const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
      */
     const handleClickPreviewOpen = () => {
         if (data.totalId && data.totalId !== 0) {
-            commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, servicePlatform: 'P' });
+            commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, domainId: PREVIEW_DOMAIN_ID });
         } else {
             messageBox.alert('등록되지 않은 기사입니다', () => {});
         }

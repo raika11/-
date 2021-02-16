@@ -16,7 +16,7 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import commonUtil from '@utils/commonUtil';
 import { unescapeHtmlArticle, invalidListToError } from '@utils/convertUtil';
-import { ARTICLE_URL, API_BASE_URL } from '@/constants';
+import { ARTICLE_URL, API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
 import ArticleHistoryModal from '@pages/Article/modals/ArticleHistoryModal';
 import ArticleEtc from './ArticleEtc';
 
@@ -181,12 +181,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'P' });
+    const handlePCPreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: PREVIEW_DOMAIN_ID });
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
+    // const handleMobilePreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: PREVIEW_DOMAIN_ID });
 
     /**
      * validate
@@ -313,7 +313,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             footerClassName="d-flex justify-content-center"
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
-                { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
+                // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
                 { variant: 'positive', text: '기사수정', className: 'mr-2', onClick: handleClickSave },
                 { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2', onClick: handleClickCdn },
                 { variant: 'negative', text: '취소', onClick: onCancle },

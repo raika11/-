@@ -56,3 +56,9 @@ export const existAuth = createAction(EXIST_AUTH, ({ menuId, callback }) => ({ m
  */
 export const [DELETE_MENU, DELETE_MENU_SUCCESS, DELETE_MENU_FAILURE] = createRequestActionTypes('menu/DELETE_MENU');
 export const deleteMenu = createAction(DELETE_MENU, ({ menuId, callback }) => ({ menuId, callback }));
+
+/**
+ * 순서변경
+ */
+export const CHANGE_ORDER_CHILDREN = 'menu/CHANGE_ORDER_CHILDREN';
+export const changeOrderChildren = createAction(CHANGE_ORDER_CHILDREN, (parentId, children, callback) => ({ parentId, children, callback }));

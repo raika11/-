@@ -30,6 +30,8 @@ import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
+import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
+import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleReporterVO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePage;
@@ -97,6 +99,9 @@ public class MergeServiceImpl implements MergeService {
 
     @Autowired
     private CodeService codeService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @Override
     public String getMergePage(PageDTO pageDto)
@@ -497,16 +502,16 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergeRcvArticle(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainType)
+    public String getMergeRcvArticle(Long rid, RcvArticleBasicUpdateDTO updateDto, String domainId)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
-        // 도메인Id조회
-        Domain domainInfo = domainService.findByServiceFlatform(domainType);
-        String domainId = domainInfo != null ? domainInfo.getDomainId() : null;
-        if (domainInfo == null) {
-            String message = messageByLocale.get("tps.common.error.no-data");
-            tpsLogger.fail(message, true);
-            throw new NoDataException(message);
-        }
+        // 도메인
+        Domain domainInfo = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
@@ -582,16 +587,16 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergeUpdateArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainType, String artType)
+    public String getMergeUpdateArticle(Long totalId, ArticleBasicUpdateDTO updateDto, String domainId, String artType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
-        // 도메인Id조회
-        Domain domainInfo = domainService.findByServiceFlatform(domainType);
-        String domainId = domainInfo != null ? domainInfo.getDomainId() : null;
-        if (domainInfo == null) {
-            String message = messageByLocale.get("tps.common.error.no-data");
-            tpsLogger.fail(message, true);
-            throw new NoDataException(message);
-        }
+        // 도메인
+        Domain domainInfo = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
@@ -671,21 +676,69 @@ public class MergeServiceImpl implements MergeService {
     }
 
     @Override
-    public String getMergeArticle(Long totalId, String domainType, String artType)
+    public String getMergeArticle(Long totalId, String domainId, String artType)
             throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
         // 도메인Id조회
-        Domain domainInfo = domainService.findByServiceFlatform(domainType);
-        String domainId = domainInfo != null ? domainInfo.getDomainId() : null;
-        if (domainInfo == null) {
-            String message = messageByLocale.get("tps.common.error.no-data");
-            tpsLogger.fail(message, true);
-            throw new NoDataException(message);
-        }
+        Domain domainInfo = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
         DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회
         ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        if (articlePage == null) {
+            String message = messageByLocale.get("tps.common.error.no-data");
+            tpsLogger.fail(message, true);
+            throw new NoDataException(message);
+        }
+        ArticlePageDTO articlePageDto = modelMapper.map(articlePage, ArticlePageDTO.class);
+
+        ArticlePageItem articlePageItem = articlePageDto.toArticlePageItem();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(MokaConstants.JSON_DATE_FORMAT);
+        articlePageItem.put(ItemConstants.ITEM_MODIFIED, LocalDateTime
+                .now()
+                .format(df));
+
+        MokaPreviewTemplateMerger dtm = (MokaPreviewTemplateMerger) appContext.getBean(PreviewConfiguration.PREVIEW_TEMPLATE_MERGER, domainItem);
+
+        // 랜더링
+        StringBuilder sb = dtm.merge(articlePageItem, totalId);
+
+        String content = sb.toString();
+
+        return content;
+    }
+
+    @Override
+    public String getMergeArticle(Long totalId, String domainId)
+            throws NoDataException, TemplateParseException, DataLoadException, TemplateMergeException {
+        // 도메인Id조회
+        Domain domainInfo = domainService
+                .findDomainById(domainId)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(ActionType.SELECT, message, true);
+                    return new NoDataException(message);
+                });
+        DomainDTO domainDto = modelMapper.map(domainInfo, DomainDTO.class);
+        DomainItem domainItem = domainDto.toDomainItem();
+
+        // 기사정보조회
+        ArticleBasic articleBasic = articleService
+                .findArticleBasicById(totalId)
+                .orElseThrow(() -> {
+                    String message = messageByLocale.get("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
+
+        // 기사페이지 정보 조회
+        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, articleBasic.getArtType());
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);

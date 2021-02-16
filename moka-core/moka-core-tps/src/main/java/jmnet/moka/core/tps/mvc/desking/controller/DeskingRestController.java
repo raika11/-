@@ -225,7 +225,7 @@ public class DeskingRestController extends AbstractCommonController {
             // 컴포넌트워크 조회(편집기사워크포함)
             ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
-            // 컴포넌트 저장, 편집기사 저장
+            // 컴포넌트 저장, 편집기사 저장, purge
             deskingService.publish(returnValue, principal.getName(), templateSeq);
             checkPublish = true;
 

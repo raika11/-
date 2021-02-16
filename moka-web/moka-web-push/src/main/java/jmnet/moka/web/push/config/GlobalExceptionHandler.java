@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
                 mav.addObject(MokaConstants.MODEL_ATTR_ROOTCAUSE, rootCause == null ? ex : rootCause);
                 return mav;
             } else {
-                String message = McpString.isNullOrEmpty(ex.getMessage()) ? messageByLocale.get("wms.common.error", request) : ex.getMessage();
+                String message = McpString.isNullOrEmpty(ex.getMessage()) ? messageByLocale.get("common.error", request) : ex.getMessage();
                 return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_SERVER_ERROR, message);
             }
         }
@@ -105,7 +105,7 @@ public class GlobalExceptionHandler {
         logger.error("[validation BindException] {}", ex);
 
         if (ex.getFieldErrorCount() > 0) {
-            String message = messageByLocale.get("wms.common.error.invalidContent", request);
+            String message = messageByLocale.get("common.error.invalidContent", request);
             List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
             for (FieldError err : ex.getFieldErrors()) {
                 invalidList.add(new InvalidDataDTO(err.getField(), err.getDefaultMessage()));
@@ -128,7 +128,7 @@ public class GlobalExceptionHandler {
 
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
         if (violations.size() > 0) {
-            String message = messageByLocale.get("wms.common.error.invalidContent", request);
+            String message = messageByLocale.get("common.error.invalidContent", request);
             List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
             for (ConstraintViolation<?> violation : violations) {
 
@@ -173,7 +173,7 @@ public class GlobalExceptionHandler {
 
         BindingResult bindingResult = ex.getBindingResult();
         if (bindingResult.getFieldErrorCount() > 0) {
-            String message = messageByLocale.get("wms.common.error.invalidContent", request);
+            String message = messageByLocale.get("common.error.invalidContent", request);
             List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 invalidList.add(new InvalidDataDTO(err.getField(), err.getDefaultMessage()));
@@ -204,7 +204,7 @@ public class GlobalExceptionHandler {
             MethodArgumentTypeMismatchException ex) {
         logger.error("[MethodArgumentNotValidException] {}", ex);
 
-        String message = messageByLocale.get("tps.common.error.invalidUrl", request);
+        String message = messageByLocale.get("common.error.invalidUrl", request);
         return ResponseUtil.getErrorResponseEntity(response, MokaConstants.HEADER_BAD_REQUEST, message);
     }
 
@@ -300,7 +300,7 @@ public class GlobalExceptionHandler {
 
         logger.error("[TemplateParseException] {}", ex);
 
-        String message = messageByLocale.get("wms.common.error.invalid.syntax", request);
+        String message = messageByLocale.get("common.error.invalid.syntax", request);
 
         List<InvalidDataDTO> invalidList = new ArrayList<InvalidDataDTO>();
         invalidList.add(new InvalidDataDTO("syntax", TemplateParseException.ErrorMessage.getMessage(ex.getErrorCode()),

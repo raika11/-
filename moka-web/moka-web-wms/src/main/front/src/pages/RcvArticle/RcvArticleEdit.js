@@ -140,8 +140,8 @@ const RcvArticleEdit = ({ match }) => {
     /**
      * 미리보기 팝업
      */
-    const handleClickPreviewOpen = (servicePlatform) => {
-        commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, servicePlatform });
+    const handleClickPreviewOpen = (domainId) => {
+        commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${temp.rid}`, { ...temp, domainId });
     };
 
     if (!rcvArticle.rid) return null;

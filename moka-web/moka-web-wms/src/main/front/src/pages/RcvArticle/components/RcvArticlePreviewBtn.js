@@ -14,7 +14,7 @@ const RcvArticlePreviewBtn = forwardRef(({ data }, ref) => {
      */
     const handleClickPreviewOpen = () => {
         if (data.totalId && data.totalId !== 0) {
-            commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, servicePlatform: 'P' });
+            commonUtil.popupPreview(`${API_BASE_URL}/preview/rcv-article/${data.rid}`, { ...data, domainId: '1000' });
         } else {
             messageBox.alert('등록되지 않은 기사입니다', () => {});
         }

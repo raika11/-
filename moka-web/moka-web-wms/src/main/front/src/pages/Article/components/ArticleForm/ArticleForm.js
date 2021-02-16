@@ -181,12 +181,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'P' });
+    const handlePCPreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: '1000' });
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, servicePlatform: 'M' });
+    const handleMobilePreview = () => commonUtil.popupPreview(`${API_BASE_URL}/preview/article/update/${temp.totalId}`, { ...temp, domainId: '1000' });
 
     /**
      * validate

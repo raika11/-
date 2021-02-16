@@ -118,12 +118,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
     /**
      * PC 미리보기
      */
-    const handlePCPreview = () => onPreview('P');
+    const handlePCPreview = () => onPreview('1000');
 
     /**
      * 모바일 미리보기
      */
-    const handleMobilePreview = () => onPreview('M');
+    const handleMobilePreview = () => onPreview('1000');
 
     useEffect(() => {
         if (article.pressDt) {

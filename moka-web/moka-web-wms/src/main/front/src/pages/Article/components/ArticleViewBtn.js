@@ -32,7 +32,7 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = () => {
-        utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, servicePlatform: 'P' });
+        utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, domainId: '1000' });
     };
 
     return (

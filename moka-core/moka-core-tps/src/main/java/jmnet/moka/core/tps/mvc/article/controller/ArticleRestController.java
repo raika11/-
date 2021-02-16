@@ -451,9 +451,12 @@ public class ArticleRestController extends AbstractCommonController {
                 message = msg("tps.common.error.insert");
             }
 
-            // 수신기사정보 조회
+            // 기사정보 조회
             ArticleBasicDTO dto = modelMapper.map(articleBasic, ArticleBasicDTO.class);
             articleService.findArticleInfo(dto);
+
+            // purge
+            articleService.purge(articleBasic);
 
             ResultDTO<ArticleBasicDTO> resultDto = new ResultDTO<>(dto, message);
             tpsLogger.success(ActionType.SELECT);
@@ -465,4 +468,5 @@ public class ArticleRestController extends AbstractCommonController {
             throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
+
 }

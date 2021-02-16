@@ -10,10 +10,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.BulkSiteCode;
 import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
+import jmnet.moka.core.tps.helper.PurgeHelper;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleHistorySearchDTO;
@@ -39,6 +41,7 @@ import jmnet.moka.core.tps.mvc.article.vo.ArticleServiceVO;
 import jmnet.moka.core.tps.mvc.reporter.vo.ReporterVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -62,14 +65,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final FtpHelper ftpHelper;
 
+    private final PurgeHelper purgeHelper;
+
+    @Value("${tms.default.api.path}")
+    private String defaultApiPath;
+
     public ArticleServiceImpl(ArticleBasicRepository articleBasicRepository, ArticleTitleRepository articleTitleRepository,
-            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper) {
+            ArticleHistoryRepository articleHistoryRepository, ArticleMapper articleMapper, ModelMapper modelMapper, FtpHelper ftpHelper,
+            PurgeHelper purgeHelper) {
         this.articleBasicRepository = articleBasicRepository;
         this.articleTitleRepository = articleTitleRepository;
         this.articleHistoryRepository = articleHistoryRepository;
         this.articleMapper = articleMapper;
         this.modelMapper = modelMapper;
         this.ftpHelper = ftpHelper;
+        this.purgeHelper = purgeHelper;
     }
 
     @Override
@@ -488,6 +498,31 @@ public class ArticleServiceImpl implements ArticleService {
         if (McpString.isNotEmpty(updateDto.getArtSubTitle())) {
             updateDto.setArtSubTitle(ArticleEscapeUtil.htmlEscape(updateDto.getArtSubTitle()));
         }
+    }
+
+    @Override
+    public String purge(ArticleBasic articleBasic)
+            throws Exception {
+        String totalId = articleBasic
+                .getTotalId()
+                .toString();
+
+        // 1. dps purge
+        String returnValue = "";
+        String retArticle = purgeHelper.dpsPurge(defaultApiPath, DpsApiConstants.ARTICLE, totalId);
+        if (McpString.isNotEmpty(retArticle)) {
+            log.error("[FAIL TO PURGE ARTILCE] totalId: {} {}", totalId, retArticle);
+            returnValue = String.join("\r\n", retArticle);
+        }
+
+        // 2. tms articlePurge
+        String retArticlePurge = purgeHelper.tmsArticlePurge(totalId);
+        if (McpString.isNotEmpty(retArticlePurge)) {
+            log.error("[FAIL TO ARTILCE_PURGE] totalId: {} {}", totalId, retArticlePurge);
+            returnValue = String.join("\r\n", retArticlePurge);
+        }
+
+        return returnValue;
     }
 
     //    @Override

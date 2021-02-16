@@ -43,10 +43,11 @@ const BulknEdit = (props) => {
     const [modalMShow, setModalMShow] = useState(false);
     // 최초엔 정보 영역이 계속 보여지는 상태여서 disable 기능이 필요했지만
     // 현재는 살아졌다 나타났다 하기 때문에 disable 기능이 필요 없어져서 항상 enable 상태로 변경..
-    const [editState] = useState(false); // edit 상태 true 일일때 input 상태가 disable.
+    const [editState] = useState(false); // edit 상태 true 일때 input 상태가 disable.
     const [bulkArticleRow, setBulkArticleRow] = useState(rowInit); // 선택된 벌크 기사들.
 
     // 약물 수정 삭제 모달 창.
+    // 사용안함.
     // const handleClickSpecialCharModalButton = () => {
     //     setModalMShow(true);
     // };
@@ -353,14 +354,16 @@ ${bulkArticleRow
                         return (
                             <div key={index} className="mb-2 pb-2">
                                 <Form.Row>
-                                    <MokaInputLabel label="타이틀" as="none" labelWidth={30} />
-                                    <Col xs={2} className="justify-content-center align-items-center">
+                                    <MokaInputLabel label="타이틀" as="none" labelWidth={35} />
+                                    {/* <Col xs={1} className="justify-content-center align-items-center"></Col> */}
+                                    <div className="mr-2">
                                         <MokaInput
                                             as="select"
                                             name="symbol"
                                             id="symbol"
                                             value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                            style={{ width: '70px' }}
                                         >
                                             <option hidden>선택</option>
                                             {symbol
@@ -372,8 +375,8 @@ ${bulkArticleRow
                                                     </option>
                                                 ))}
                                         </MokaInput>
-                                    </Col>
-                                    <Col xs={8} className="justify-content-center align-items-center">
+                                    </div>
+                                    <Col xs={9} className="justify-content-center align-items-center">
                                         <MokaInputLabel
                                             name="title"
                                             id="title"
@@ -390,11 +393,12 @@ ${bulkArticleRow
                                             label={`${bulkArticleRow[index] ? bulkArticleRow[index].title_length : 0}자`}
                                             labelWidth={30}
                                             as="none"
+                                            className="pt-1"
                                         />
                                     </Col>
                                 </Form.Row>
 
-                                <Form.Row className="pt-1">
+                                <Form.Row className="pt-3">
                                     <MokaInputLabel label="url" as="none" labelWidth={30} />
                                     <Col xs={11} className="justify-content-center align-items-center">
                                         <MokaInputLabel

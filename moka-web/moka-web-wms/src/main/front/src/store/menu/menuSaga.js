@@ -176,6 +176,17 @@ function* deleteMenu({ payload: { menuId, actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+function* changeOrderChildren({ type, payload: { parentId, children, callback } }) {
+    try {
+        const response = yield call(menuAPI.changeOrderChildren, parentId, children);
+        if (callback instanceof Function) {
+            callback(response.data);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* menuSaga() {
     yield takeLatest(menuAction.GET_MENU_LIST, getMenuList);
     yield takeLatest(menuAction.GET_MENU, getMenu);
@@ -183,4 +194,5 @@ export default function* menuSaga() {
     yield takeLatest(menuAction.SAVE_MENU, saveMenu);
     yield takeLatest(menuAction.DELETE_MENU, deleteMenu);
     yield takeLatest(menuAction.EXIST_AUTH, existAuth);
+    yield takeLatest(menuAction.CHANGE_ORDER_CHILDREN, changeOrderChildren);
 }

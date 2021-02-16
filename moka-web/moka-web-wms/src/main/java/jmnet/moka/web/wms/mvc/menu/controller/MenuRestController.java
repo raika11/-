@@ -302,9 +302,14 @@ public class MenuRestController {
 
         // 데이터 조회
         String noContentMessage = messageByLocale.get("tps.menu.error.no-data", request);
-        Menu parentMenu = menuService
-                .findMenuById(parentMenuId)
-                .orElseThrow(() -> new NoDataException(noContentMessage));
+
+
+
+        Menu parentMenu = parentMenuId.equals(MenuService.ROOT_MENU_ID)
+                ? new Menu()
+                : menuService
+                        .findMenuById(parentMenuId)
+                        .orElseThrow(() -> new NoDataException(noContentMessage));
 
         List<Menu> menuList = menuService.findAllMenuByParentId(parentMenuId);
 

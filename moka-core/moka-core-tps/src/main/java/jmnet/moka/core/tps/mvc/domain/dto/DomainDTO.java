@@ -59,7 +59,6 @@ public class DomainDTO implements Serializable {
     private String domainUrl;
 
     @ApiModelProperty("서비스 플랫폼 P : PC, M : 모바일(필수)")
-    @NotNull(message = "{tps.domain.error.notnull.servicePlatform}")
     @Pattern(regexp = "[P|M]{1}$", message = "{tps.domain.error.notnull.servicePlatform}")
     private String servicePlatform;
 

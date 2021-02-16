@@ -24,17 +24,15 @@ export const columnDefs = [
     {
         headerName: '채널명',
         field: 'chnlNm',
-        width: 200,
+        width: 150,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
-        // autoHeight: true,
         tooltipField: 'chnlNm',
     },
     {
         headerName: '설명',
         field: 'chnlMemo',
-        width: 80,
+        width: 100,
         flex: 1,
-        // warpText: 1,
         tooltipField: 'chnlMemo',
         autoHeight: true,
         cellStyle: {
@@ -50,6 +48,12 @@ export const columnDefs = [
             overflow: 'hidden',
             cursor: 'pointer',
         },
+    },
+    {
+        headerName: '\t사용',
+        field: 'usedYn',
+        width: 80,
+        cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '회차',

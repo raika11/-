@@ -119,4 +119,17 @@ public class JpodChannel extends jmnet.moka.core.tps.common.entity.BaseAudit imp
      */
     @Transient
     private String lastEpsdNo;
+
+    /**
+     * 총시즌수
+     */
+    @Column(name = "SEASON_CNT")
+    @Builder.Default
+    private Integer seasonCnt = 0;
+
+    /**
+     * 시즌명
+     */
+    @Column(name = "SEASON_NM")
+    private String seasonNm;
 }

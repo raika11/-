@@ -162,6 +162,14 @@ public class JpodEpisodeDetailDTO implements Serializable {
     private Integer shareCnt = 0;
 
     /**
+     * 시즌번호
+     */
+    @ApiModelProperty(value = "시즌번호")
+    @Builder.Default
+    @Min(value = 0, message = "{tps.jpod-episode.error.min.seasonNo}")
+    private Integer seasonNo = 0;
+
+    /**
      * 구독수
      */
     @ApiModelProperty(value = "구독수", hidden = true)

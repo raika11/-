@@ -302,7 +302,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     />
 
                     {/* 플랫폼 */}
-                    <Form.Row className="mb-2">
+                    {/* <Form.Row className="mb-2">
                         <Col xs={3} className="p-0">
                             <MokaInputLabel
                                 label="플랫폼"
@@ -336,7 +336,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                                 uncontrolled
                             />
                         </Col>
-                    </Form.Row>
+                    </Form.Row> */}
 
                     {/* 언어 */}
                     <Form.Row className="mb-2">

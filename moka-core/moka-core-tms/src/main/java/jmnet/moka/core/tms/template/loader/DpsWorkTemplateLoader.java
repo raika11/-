@@ -40,8 +40,8 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
 
     public DpsWorkTemplateLoader(GenericApplicationContext appContext, String domainId, HttpProxyDataLoader httpProxyDataLoader, String regId,
             List<String> workComponentIdList)
-            throws TmsException {
-        super(appContext, domainId, httpProxyDataLoader, false, 0L);
+            throws TmsException, DataLoadException {
+        super(appContext, domainId, httpProxyDataLoader,  null,false, true,0L);
         this.regId = regId;
         this.workComponentIdList = workComponentIdList;
     }

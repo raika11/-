@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import jmnet.moka.common.TimeHumanizer;
+import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.proxy.http.ApiHttpProxyFactory;
 import jmnet.moka.common.proxy.http.HttpProxy;
 import jmnet.moka.common.template.exception.TemplateMergeException;
@@ -176,11 +177,12 @@ public class TmsAutoConfiguration {
     @Scope("prototype")
     @ConditionalOnMissingBean
     public AbstractTemplateLoader templateLoader(String domainId) {
+        CacheManager cacheManager = (CacheManager)appContext.getBean("cacheManager");
         AbstractTemplateLoader templateLoader = null;
         try {
             HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
             long itemExpireTime = TimeHumanizer.parseLong(this.itemExpireTimeStr, ITEM_EXPIRE_TIME);
-            templateLoader = new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, templateLoaderCache, itemExpireTime);
+            templateLoader = new DpsTemplateLoader(appContext, domainId, httpProxyDataLoader, cacheManager, templateLoaderCache, false, itemExpireTime);
         } catch (Exception e) {
             logger.warn("TemplateLoader Creation failed: {}", e.getMessage());
         }

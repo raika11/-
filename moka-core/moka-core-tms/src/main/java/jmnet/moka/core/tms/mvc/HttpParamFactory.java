@@ -67,6 +67,13 @@ public class HttpParamFactory {
         return parameterMap;
     }
 
+    public HttpParamMap createDefault() {
+        HttpParamMap parameterMap = new HttpParamMap(this, DEFAULT_SIZE);
+        parameterMap.put(MokaConstants.PARAM_PAGE, this.pageValue);
+        parameterMap.put(MokaConstants.PARAM_COUNT, this.countValue);
+        return parameterMap;
+    }
+
     public String getMergeUrl(TemplateRoot templateRoot, TemplateElement element,
             MergeContext context,
             HttpParamMap paramMap) {

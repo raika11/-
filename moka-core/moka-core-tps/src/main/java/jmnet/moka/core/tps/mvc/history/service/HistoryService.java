@@ -4,7 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.history.service;
 
-import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
 
 /**
@@ -14,12 +14,12 @@ import jmnet.moka.core.tps.mvc.history.dto.HistDTO;
  * @since 2020-11-02
  */
 public interface HistoryService {
-    
+
     HistDTO findPageHist(Long histSeq)
             throws NoDataException;
 
     HistDTO findArticlePageHist(Long histSeq)
-        throws NoDataException;
+            throws NoDataException;
 
     HistDTO findContainerHist(Long histSeq)
             throws NoDataException;

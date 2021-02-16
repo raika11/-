@@ -7,7 +7,7 @@ package jmnet.moka.core.tps.mvc.merge.service;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
-import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
 import jmnet.moka.core.tps.mvc.articlepage.dto.ArticlePageDTO;
 import jmnet.moka.core.tps.mvc.page.dto.PageDTO;

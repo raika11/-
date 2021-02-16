@@ -4,7 +4,7 @@
 
 package jmnet.moka.core.tps.mvc.history.service;
 
-import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.articlepage.entity.ArticlePageHist;
 import jmnet.moka.core.tps.mvc.articlepage.service.ArticlePageService;
 import jmnet.moka.core.tps.mvc.container.entity.ContainerHist;
@@ -46,8 +46,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public HistDTO findPageHist(Long histSeq)
             throws NoDataException {
-        PageHist hist = pageService.findPageHistBySeq(histSeq)
-                                   .orElseThrow(() -> new NoDataException(""));
+        PageHist hist = pageService
+                .findPageHistBySeq(histSeq)
+                .orElseThrow(() -> new NoDataException(""));
 
         HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
         histDTO.setBody(hist.getPageBody());
@@ -57,9 +58,11 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public HistDTO findArticlePageHist(Long histSeq) throws NoDataException {
-        ArticlePageHist hist = articlePageService.findArticlePageHistBySeq(histSeq)
-                                   .orElseThrow(() -> new NoDataException(""));
+    public HistDTO findArticlePageHist(Long histSeq)
+            throws NoDataException {
+        ArticlePageHist hist = articlePageService
+                .findArticlePageHistBySeq(histSeq)
+                .orElseThrow(() -> new NoDataException(""));
 
         HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
         histDTO.setBody(hist.getArtPageBody());
@@ -71,8 +74,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public HistDTO findContainerHist(Long histSeq)
             throws NoDataException {
-        ContainerHist hist = containerService.findContainerHistBySeq(histSeq)
-                                             .orElseThrow(() -> new NoDataException(""));
+        ContainerHist hist = containerService
+                .findContainerHistBySeq(histSeq)
+                .orElseThrow(() -> new NoDataException(""));
 
         HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
         histDTO.setBody(hist.getContainerBody());
@@ -84,8 +88,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public HistDTO findTemplateHist(Long histSeq)
             throws NoDataException {
-        TemplateHist hist = templateHistService.findTemplateHistBySeq(histSeq)
-                                               .orElseThrow(() -> new NoDataException(""));
+        TemplateHist hist = templateHistService
+                .findTemplateHistBySeq(histSeq)
+                .orElseThrow(() -> new NoDataException(""));
 
         HistDTO histDTO = modelMapper.map(hist, HistDTO.class);
         histDTO.setBody(hist.getTemplateBody());

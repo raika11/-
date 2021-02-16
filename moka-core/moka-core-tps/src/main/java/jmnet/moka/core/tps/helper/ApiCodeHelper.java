@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.core.common.dto.InvalidDataDTO;
+import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
-import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
-import jmnet.moka.core.tps.exception.InvalidDataException;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,19 +27,22 @@ public class ApiCodeHelper {
     public Map<String, String> getDataApi(List<CodeMgt> codeMgts, String apiCodeId)
             throws InvalidDataException {
 
-        Optional<CodeMgt> codeMgt = codeMgts.stream()
-                                            .filter(code -> {
-                                                String dtlCd = code.getDtlCd();
-                                                return apiCodeId.equalsIgnoreCase(dtlCd) ? true : false;
-                                            })
-                                            .findFirst();
+        Optional<CodeMgt> codeMgt = codeMgts
+                .stream()
+                .filter(code -> {
+                    String dtlCd = code.getDtlCd();
+                    return apiCodeId.equalsIgnoreCase(dtlCd) ? true : false;
+                })
+                .findFirst();
 
         Map<String, String> returnMap = new HashMap<String, String>();
         if (codeMgt.isPresent()) {
-            returnMap.put(TpsConstants.API_HOST, codeMgt.get()
-                                                        .getCdNmEtc1());
-            returnMap.put(TpsConstants.API_PATH, codeMgt.get()
-                                                        .getCdNmEtc2());
+            returnMap.put(TpsConstants.API_HOST, codeMgt
+                    .get()
+                    .getCdNmEtc1());
+            returnMap.put(TpsConstants.API_PATH, codeMgt
+                    .get()
+                    .getCdNmEtc2());
         } else {
             InvalidDataDTO validDto = new InvalidDataDTO("apiCodeId", messageByLocale.get("tps.dataset.error.invalid.apiCodeId"));
             String validMessage = messageByLocale.get("tps.common.error.invalidSearch");
@@ -63,15 +65,16 @@ public class ApiCodeHelper {
             return null;
         }
 
-        Optional<CodeMgt> codeMgt = CodeMgts.stream()
-                                            .filter(code -> {
-                                                return dsApiHost.equalsIgnoreCase(code.getCdNmEtc1()) && dsApiPath.equalsIgnoreCase(
-                                                        code.getCdNmEtc2()) ? true : false;
-                                            })
-                                            .findFirst();
+        Optional<CodeMgt> codeMgt = CodeMgts
+                .stream()
+                .filter(code -> {
+                    return dsApiHost.equalsIgnoreCase(code.getCdNmEtc1()) && dsApiPath.equalsIgnoreCase(code.getCdNmEtc2()) ? true : false;
+                })
+                .findFirst();
         if (codeMgt.isPresent()) {
-            return codeMgt.get()
-                          .getDtlCd();
+            return codeMgt
+                    .get()
+                    .getDtlCd();
         }
         return null;
     }

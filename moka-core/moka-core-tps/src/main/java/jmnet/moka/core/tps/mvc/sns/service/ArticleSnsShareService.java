@@ -1,8 +1,8 @@
 package jmnet.moka.core.tps.mvc.sns.service;
 
 import java.util.Optional;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;

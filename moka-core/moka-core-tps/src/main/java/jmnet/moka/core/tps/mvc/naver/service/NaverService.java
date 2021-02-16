@@ -5,7 +5,7 @@
 package jmnet.moka.core.tps.mvc.naver.service;
 
 import java.io.IOException;
-import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 
 /**
  * Description: 설명

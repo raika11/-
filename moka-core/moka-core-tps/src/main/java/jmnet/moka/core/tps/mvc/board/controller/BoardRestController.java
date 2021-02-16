@@ -20,6 +20,8 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
+import jmnet.moka.core.common.exception.InvalidDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -28,8 +30,6 @@ import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.common.util.ImageUtil;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardAttachSaveDTO;
 import jmnet.moka.core.tps.mvc.board.dto.BoardDTO;
@@ -657,7 +657,7 @@ public class BoardRestController extends AbstractCommonController {
                                 //String saveFilePath = "/board/" + board.getBoardId() + "/" + yearMonth;
                                 String filename = UUIDGenerator.uuid() + "." + ext;
                                 String saveFilePath = "/bbs_attach/board/" + board.getBoardId() + "/" + filename;
-                                        // root 디렉토리(/bbs_attach)/board/게시판설정정보번호(BOARDINFO_SEQ)/파일명
+                                // root 디렉토리(/bbs_attach)/board/게시판설정정보번호(BOARDINFO_SEQ)/파일명
 
                                 ftpHelper.upload(FtpHelper.PDS, filename, boardAttachSaveDTO
                                         .getAttachFile()

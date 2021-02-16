@@ -3,18 +3,36 @@ package jmnet.moka.core.tps.mvc.schedule.server.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.security.Principal;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
+import jmnet.moka.core.common.exception.InvalidDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
-import jmnet.moka.core.tps.mvc.schedule.server.dto.*;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerCodeDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSaveDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.DistributeServerUpdateDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSaveDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobContentUpdateDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobDeletedContentSearchDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticDTO;
+import jmnet.moka.core.tps.mvc.schedule.server.dto.JobStatisticSearchDTO;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.DistributeServer;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobContent;
 import jmnet.moka.core.tps.mvc.schedule.server.entity.JobDeletedContent;
@@ -29,14 +47,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.security.Principal;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
@@ -56,10 +72,8 @@ public class ScheduleServerController extends AbstractCommonController {
     //암호화 모듈
     private final MokaCrypt mokaCrypt;
 
-    public ScheduleServerController(
-            JobStatisticService jobStatisticService,
-            DistributeServerService distServerService, JobContentService jobContentService,
-            JobDeletedContentService jobDeletedContentService, MokaCrypt mokaCrypt) {
+    public ScheduleServerController(JobStatisticService jobStatisticService, DistributeServerService distServerService,
+            JobContentService jobContentService, JobDeletedContentService jobDeletedContentService, MokaCrypt mokaCrypt) {
 
         this.jobStatisticService = jobStatisticService;
         this.distServerService = distServerService;
@@ -77,7 +91,7 @@ public class ScheduleServerController extends AbstractCommonController {
      */
     @ApiOperation(value = "작업 실행통계 목록조회")
     @GetMapping("/job-statistic")
-    public ResponseEntity<?> getJobStatisticList(@Valid @SearchParam JobStatisticSearchDTO search){
+    public ResponseEntity<?> getJobStatisticList(@Valid @SearchParam JobStatisticSearchDTO search) {
         ResultListDTO<JobStatisticVO> resultListMessage = new ResultListDTO<>();
 
         Page<JobStatisticVO> returnValue = jobStatisticService.findAllJobStat(search);
@@ -143,15 +157,15 @@ public class ScheduleServerController extends AbstractCommonController {
      */
     @ApiOperation(value = "작업 상세조회")
     @GetMapping("/job/{jobSeq}")
-    public ResponseEntity<?> getJobContent(@ApiParam("작업 번호(필수)") @PathVariable("jobSeq") Long jobSeq) throws NoDataException {
+    public ResponseEntity<?> getJobContent(@ApiParam("작업 번호(필수)") @PathVariable("jobSeq") Long jobSeq)
+            throws NoDataException {
         JobContent jobContent = jobContentService
                 .findJobContentById(jobSeq)
                 .orElseThrow(() -> {
-                            String message = msg("tps.common.error.no-data");
-                            tpsLogger.fail(message, true);
-                            return new NoDataException(message);
-                        }
-                );
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         JobContentDTO dto = modelMapper.map(jobContent, JobContentDTO.class);
 
@@ -169,20 +183,20 @@ public class ScheduleServerController extends AbstractCommonController {
      */
     @ApiOperation(value = "작업 등록")
     @PostMapping("/job")
-    public ResponseEntity<?> postJobContent(HttpServletRequest request,
-                                                  @Valid JobContentSaveDTO jobContentSaveDTO,
-                                                  @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+    public ResponseEntity<?> postJobContent(HttpServletRequest request, @Valid JobContentSaveDTO jobContentSaveDTO,
+            @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
 
         JobContentSearchDTO checkItem = new JobContentSearchDTO();
         checkItem.setServerSeq(jobContentSaveDTO.getServerSeq());
         checkItem.setCallUrl(jobContentSaveDTO.getCallUrl());
         checkItem.setPeriod(jobContentSaveDTO.getPeriod());
         //등록불가 작업인지 확인(기존데이터와 serverSeq, callUrl, period 가 동일하면 등록불가)
-        if(jobContentService.isValidData(checkItem)){
+        if (jobContentService.isValidData(checkItem)) {
             throw new InvalidDataException(msg("tps.common.error.duplicated.data"));
         }
 
-        try{
+        try {
 
             JobContent jobContent = modelMapper.map(jobContentSaveDTO, JobContent.class);
             jobContent.setRegId(getUserId(principal));  //등록자ID 추가
@@ -196,7 +210,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO INSERT DISTRIBUTE SERVER]", e);
             tpsLogger.error(LoggerCodes.ActionType.INSERT, "[FAIL TO INSERT DISTRIBUTE SERVER]", e, true);
             throw new Exception(msg("tps.common.error.insert"), e);
@@ -212,8 +226,8 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "작업 수정")
     @PutMapping("/job/{jobSeq}")
     public ResponseEntity<?> putJobContent(@ApiParam("작업번호") @PathVariable("jobSeq") @Min(value = 0, message = "") Long jobSeq,
-                                                 @Valid JobContentUpdateDTO jobContentUpdateDTO,
-                                                 @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+            @Valid JobContentUpdateDTO jobContentUpdateDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
         //수정할 데이터가 없는 경우 FAIL
         String infoMessage = msg("tps.common.error.no-data");
         jobContentService
@@ -225,11 +239,11 @@ public class ScheduleServerController extends AbstractCommonController {
         checkItem.setCallUrl(jobContentUpdateDTO.getCallUrl());
         checkItem.setPeriod(jobContentUpdateDTO.getPeriod());
         //등록불가 작업인지 확인(기존데이터와 serverSeq, callUrl, period 가 동일하면 등록불가)
-        if(jobContentService.isValidData(checkItem)){
+        if (jobContentService.isValidData(checkItem)) {
             throw new InvalidDataException(msg("tps.common.error.duplicated.data"));
         }
 
-        try{
+        try {
             JobContent jobContent = modelMapper.map(jobContentUpdateDTO, JobContent.class);
             jobContent.setModId(getUserId(principal));  //수정자ID 추가
             jobContent.setJobSeq(jobSeq);
@@ -243,7 +257,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO UPDATE DISTRIBUTE SERVER]", e);
             tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
             throw new Exception(msg("tps.common.error.update"), e);
@@ -260,7 +274,8 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "작업 삭제")
     @PutMapping("/job/{jobSeq}/delete")
     public ResponseEntity<?> deleteJobContent(@ApiParam("작업번호") @PathVariable("jobSeq") @Min(value = 0, message = "") Long jobSeq,
-                                                    @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+            @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");
         JobContent jobContent = jobContentService
@@ -269,7 +284,7 @@ public class ScheduleServerController extends AbstractCommonController {
 
 
 
-        try{
+        try {
             JobDeletedContent jobDeletedContent = modelMapper.map(jobContent, JobDeletedContent.class);
             jobDeletedContent.setRegId(getUserId(principal));  //삭제자 ID 추가
 
@@ -283,7 +298,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO DELETE JOB CONTENT]", e);
             tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
             throw new Exception(msg("tps.common.error.delete"), e);
@@ -321,15 +336,15 @@ public class ScheduleServerController extends AbstractCommonController {
      */
     @ApiOperation(value = "삭제된 작업 상세조회")
     @GetMapping("/job-deleted/{seqNo}")
-    public ResponseEntity<?> getJobDeletedContent(@ApiParam("일련 번호(필수)") @PathVariable("seqNo") Long seqNo) throws NoDataException {
+    public ResponseEntity<?> getJobDeletedContent(@ApiParam("일련 번호(필수)") @PathVariable("seqNo") Long seqNo)
+            throws NoDataException {
         JobDeletedContent jobDeletedContent = jobDeletedContentService
                 .findJobDeletedContentById(seqNo)
                 .orElseThrow(() -> {
-                            String message = msg("tps.common.error.no-data");
-                            tpsLogger.fail(message, true);
-                            return new NoDataException(message);
-                        }
-                );
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         JobDeletedContentDTO dto = modelMapper.map(jobDeletedContent, JobDeletedContentDTO.class);
 
@@ -348,20 +363,20 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "삭제된 작업 복원")
     @PutMapping("/job-deleted/{seqNo}/recover")
     public ResponseEntity<?> recoverJobDeletedContent(@ApiParam("일련번호") @PathVariable("seqNo") Long seqNo,
-                                              @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+            @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
 
         JobDeletedContent jobDeletedContent = jobDeletedContentService
                 .findJobDeletedContentById(seqNo)
                 .orElseThrow(() -> {
-                            String message = msg("tps.common.error.no-data");
-                            tpsLogger.fail(message, true);
-                            return new NoDataException(message);
-                        }
-                );
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
 
 
-        try{
+        try {
             JobContent jobContent = modelMapper.map(jobDeletedContent, JobContent.class);
             jobContent.setUsedYn("Y");
             jobContent.setRegId(getUserId(principal));  //복원자 ID 추가
@@ -377,7 +392,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO RECOVER JOB CONTENT]", e);
             tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
             throw new Exception(msg("tps.common.error.delete"), e);
@@ -436,15 +451,15 @@ public class ScheduleServerController extends AbstractCommonController {
      */
     @ApiOperation(value = "배포서버 상세조회")
     @GetMapping("/distribute-server/{serverSeq}")
-    public ResponseEntity<?> getDistributeServer(@ApiParam("배포서버 번호(필수)") @PathVariable("serverSeq") Long serverSeq) throws NoDataException {
+    public ResponseEntity<?> getDistributeServer(@ApiParam("배포서버 번호(필수)") @PathVariable("serverSeq") Long serverSeq)
+            throws NoDataException {
         DistributeServer distServer = distServerService
                 .findDistributeServerById(serverSeq)
                 .orElseThrow(() -> {
-                        String message = msg("tps.common.error.no-data");
-                        tpsLogger.fail(message, true);
-                        return new NoDataException(message);
-                    }
-                );
+                    String message = msg("tps.common.error.no-data");
+                    tpsLogger.fail(message, true);
+                    return new NoDataException(message);
+                });
 
         DistributeServerDTO dto = modelMapper.map(distServer, DistributeServerDTO.class);
 
@@ -462,10 +477,10 @@ public class ScheduleServerController extends AbstractCommonController {
      */
     @ApiOperation(value = "배포서버 등록")
     @PostMapping("/distribute-server")
-    public ResponseEntity<?> postDistributeServer(HttpServletRequest request,
-                                                  @Valid DistributeServerSaveDTO distServerSaveDTO,
-                                                  @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
-        try{
+    public ResponseEntity<?> postDistributeServer(HttpServletRequest request, @Valid DistributeServerSaveDTO distServerSaveDTO,
+            @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
+        try {
             DistributeServer distServer = modelMapper.map(distServerSaveDTO, DistributeServer.class);
             setPassword(distServer);    //패스워드 암호화
             distServer.setRegId(getUserId(principal));  //등록자ID 추가
@@ -479,7 +494,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO INSERT DISTRIBUTE SERVER]", e);
             tpsLogger.error(LoggerCodes.ActionType.INSERT, "[FAIL TO INSERT DISTRIBUTE SERVER]", e, true);
             throw new Exception(msg("tps.common.error.insert"), e);
@@ -495,15 +510,15 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "배포서버 수정")
     @PutMapping("/distribute-server/{serverSeq}")
     public ResponseEntity<?> putDistributeServer(@ApiParam("서버번호") @PathVariable("serverSeq") @Min(value = 0, message = "") Long serverSeq,
-                                                 @Valid DistributeServerUpdateDTO distServerUpdateDTO,
-                                                 @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+            @Valid DistributeServerUpdateDTO distServerUpdateDTO, @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");
         distServerService
                 .findDistributeServerById(serverSeq)
                 .orElseThrow(() -> new NoDataException((infoMessage)));
 
-        try{
+        try {
             DistributeServer distServer = modelMapper.map(distServerUpdateDTO, DistributeServer.class);
             setPassword(distServer);
             distServer.setModId(getUserId(principal));  //수정자ID 추가
@@ -518,7 +533,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO UPDATE DISTRIBUTE SERVER]", e);
             tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
             throw new Exception(msg("tps.common.error.update"), e);
@@ -535,7 +550,8 @@ public class ScheduleServerController extends AbstractCommonController {
     @ApiOperation(value = "배포서버 삭제")
     @PutMapping("/distribute-server/{serverSeq}/delete")
     public ResponseEntity<?> deleteDistributeServer(@ApiParam("서버번호") @PathVariable("serverSeq") @Min(value = 0, message = "") Long serverSeq,
-                                                 @ApiParam(hidden = true) @NotNull Principal principal) throws Exception {
+            @ApiParam(hidden = true) @NotNull Principal principal)
+            throws Exception {
 
         String infoMessage = msg("tps.common.error.no-data");
         DistributeServer distServer = distServerService
@@ -545,11 +561,11 @@ public class ScheduleServerController extends AbstractCommonController {
         JobContentSearchDTO checkItem = new JobContentSearchDTO();
         checkItem.setServerSeq(distServer.getServerSeq());
         //삭제가능 서버인지 확인(작업이 등록되어 있으면 삭제불가)
-        if(jobContentService.isValidData(checkItem)){
+        if (jobContentService.isValidData(checkItem)) {
             throw new InvalidDataException(msg("tps.common.error.delete.related"));
         }
 
-        try{
+        try {
             distServer.setDelYn(MokaConstants.YES);
             distServer.setModId(getUserId(principal));  //수정자ID 추가
 
@@ -563,7 +579,7 @@ public class ScheduleServerController extends AbstractCommonController {
             return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 
 
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error("[FAIL TO DELETE(UPDATE DELYN) DISTRIBUTE SERVER]", e);
             tpsLogger.error(LoggerCodes.ActionType.UPDATE, e);
             throw new Exception(msg("tps.common.error.update"), e);
@@ -572,24 +588,21 @@ public class ScheduleServerController extends AbstractCommonController {
     }
 
     //패스워드 암호화 적용
-    private void setPassword(DistributeServer distServer){
-        if(McpString.isNotEmpty(distServer.getAccessPwd())) {
-            try{
+    private void setPassword(DistributeServer distServer) {
+        if (McpString.isNotEmpty(distServer.getAccessPwd())) {
+            try {
                 distServer.setAccessPwd(mokaCrypt.encrypt(distServer.getAccessPwd()));
-            } catch(Exception e){
+            } catch (Exception e) {
                 log.error("[FAIL TO DISTRIBUTESERVER PASSWORD] password: {} {}", distServer.getAccessPwd(), e.getMessage());
             }
         }
     }
 
     //현재 사용자ID 반환
-    private String getUserId(Principal principal){
+    private String getUserId(Principal principal) {
         UserDTO userDTO = (UserDTO) ((UsernamePasswordAuthenticationToken) principal).getDetails();
         return userDTO.getUserId();
     }
-
-
-
 
 
 

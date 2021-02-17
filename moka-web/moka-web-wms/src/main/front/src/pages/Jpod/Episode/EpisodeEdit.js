@@ -336,9 +336,9 @@ const ChannelEdit = ({ match }) => {
     // 진행자 배열 조합
     const reportCombine = (reporpter, setFunc) => {
         // 리스트 중에 값이 없는 필드가 있는지 체크.
-        console.log(reporpter);
         const tmpCh = reporpter.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
 
+        // 빈 필드가 없으면 추가.
         if (tmpCh.length === 0) {
             if (reporpter.length === reporterCountConst.length) {
                 handleRepoterAddAlert();
@@ -346,6 +346,7 @@ const ChannelEdit = ({ match }) => {
             }
             setFunc([...reporpter, selectReporter]);
         } else {
+            // 빈 필드가 있으면 빈필드에 진행자 정보 추가.
             let status = false;
             setFunc(
                 reporpter.map((e) => {
@@ -482,23 +483,6 @@ const ChannelEdit = ({ match }) => {
                     }),
                 ),
             );
-
-            // dispatch(
-            //     selectArticleListChange({
-            //         constntId: element.id.totalId,
-            //         title: element.relTitle,
-            //         linkUrl: element.totalId,
-            //         linkTarget: element.relLinkTarget,
-            //     }),
-            // );
-            // dispatch(
-            //     selectArticleItemChange({
-            //         constntId: element.id.totalId,
-            //         title: element.relTitle,
-            //         linkUrl: element.totalId,
-            //         linkTarget: element.relLinkTarget,
-            //     }),
-            // );
         };
 
         // store 에 episodeInfo 가 변경이 되었지만 초기값과 같다면 아무 것도 하지 않는다.
@@ -699,13 +683,19 @@ const ChannelEdit = ({ match }) => {
                 {/* 시즌 회차. */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`시즌 및 회차`} labelWidth={90} className="mb-0" as="none" />
-                    <MokaInputLabel className="pr-5" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={(e) => handleEditDataChange(e)}>
+                    <MokaInputLabel className="pr-5" as="select" id="seasonNo" name="seasonNo" value={editData.chnlSeq} onChange={(e) => handleEditDataChange(e)}>
                         <option value="">시즌 선택</option>
-                        {channel_list.map((item, index) => (
-                            <option key={index} value={item.podtyChnlSrl}>
-                                {item.chnlNm}
-                            </option>
-                        ))}
+                        {/* {channel_list.map((item, index) => ( */}
+                        <option key={0} value={'0'}>
+                            0
+                        </option>
+                        <option key={1} value={'1'}>
+                            1
+                        </option>
+                        <option key={2} value={'2'}>
+                            2
+                        </option>
+                        {/* ))} */}
                     </MokaInputLabel>
                     <Col xs={2}>
                         <MokaInputLabel

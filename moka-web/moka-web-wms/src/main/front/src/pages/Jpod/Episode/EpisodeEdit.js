@@ -462,7 +462,7 @@ const ChannelEdit = ({ match }) => {
                 selectArticleListChange(
                     element.map((e) => {
                         return {
-                            constntId: e.id.totalId,
+                            contentId: e.id.totalId,
                             title: e.relTitle,
                             linkUrl: e.relLink,
                             linkTarget: e.relLinkTarget,
@@ -474,7 +474,7 @@ const ChannelEdit = ({ match }) => {
                 selectArticleItemChange(
                     element.map((e) => {
                         return {
-                            constntId: e.id.totalId,
+                            contentId: e.id.totalId,
                             title: e.relTitle,
                             linkUrl: e.relLink,
                             linkTarget: e.relLinkTarget,

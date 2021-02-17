@@ -25,10 +25,6 @@ export const getBulkStatTotal = createAction(GET_BULK_STAT_TOTAL, ({ date }) => 
 export const [GET_BULK_STAT_LIST, GET_BULK_STAT_LIST_SUCCESS, GET_BULK_STAT_LIST_FAILURE] = createRequestActionTypes('bulkMonitor/GET_BULK_STAT_LIST');
 export const getBulkStatList = createAction(GET_BULK_STAT_LIST, (...actions) => actions);
 
-// 벌크 모니터링 전체 테이블을 조회하는 액션
-// export const GET_BULK_MONITOR = 'bulkMonitor/GET_BULK_MONITOR';
-// export const getBulkMonitor = createAction(GET_BULK_MONITOR);
-
 // 벌크 모니터링 전송 상세 정보 조회
 export const [GET_BULK_STAT_LIST_INFO, GET_BULK_STAT_LIST_INFO_SUCCESS, GET_BULK_STAT_LIST_INFO_FAILURE] = createRequestActionTypes('bulkMonitor/GET_BULK_STAT_LIST_INFO');
-export const getBulkStatListInfo = createAction(GET_BULK_STAT_LIST_INFO, ({ totalId, portalDiv }) => ({ totalId, portalDiv }));
+export const getBulkStatListInfo = createAction(GET_BULK_STAT_LIST_INFO, ({ contentId, portalDiv }) => ({ contentId, portalDiv }));

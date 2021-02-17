@@ -75,7 +75,7 @@ const RcvProgsBulkLogModal = (props) => {
     }, [bulkSendListInfo]);
 
     return (
-        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={680} show={show} onHide={handleHide}>
+        <MokaModal size="xl" width={rcvProgs === false ? 700 : 1120} height={800} show={show} onHide={handleHide} draggable>
             <div className="d-flex justify-content-between">
                 <div style={{ width: 700 }}>
                     <Form className="mb-3">
@@ -89,15 +89,17 @@ const RcvProgsBulkLogModal = (props) => {
                             </div>
                         </Form.Row>
                     </Form>
-                    <MokaTable
-                        agGridHeight={475}
-                        columnDefs={columnDefs}
-                        rowData={rowData}
-                        loading={loading}
-                        onRowNodeId={(params) => params.portalDiv}
-                        onRowClicked={handleRowClicked}
-                        paging={false}
-                    />
+                    <div className="d-flex flex-column">
+                        <MokaTable
+                            agGridHeight={595}
+                            columnDefs={columnDefs}
+                            rowData={rowData}
+                            loading={loading}
+                            onRowNodeId={(params) => params.portalDiv}
+                            onRowClicked={handleRowClicked}
+                            paging={false}
+                        />
+                    </div>
                 </div>
                 {rcvProgs === true && (
                     <div className="ml-2 d-flex flex-column" style={{ width: 420 }}>

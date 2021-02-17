@@ -57,14 +57,14 @@ const DtlAgGrid = ({ grpCd }) => {
                     ? ((data) => {
                           let w = `${data.modMember?.memberNm || ''}`;
                           if (data.modMember?.memberId) {
-                              w += `(${data.modMember?.memberId || ''});`;
+                              w += `(${data.modMember?.memberId || ''})`;
                           }
                           return w;
                       })(data)
                     : ((data) => {
                           let w = `${data.regMember?.memberNm || ''}`;
                           if (data.regMember?.memberId) {
-                              w += `(${data.regMember?.memberId || ''});`;
+                              w += `(${data.regMember?.memberId || ''})`;
                           }
                           return w;
                       })(data);

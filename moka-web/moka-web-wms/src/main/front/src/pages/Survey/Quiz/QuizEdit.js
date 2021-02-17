@@ -757,7 +757,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                     })}
                 </DndProvider>
 
-                <Form.Row className="mb-2 p-2 bg-gray-150">
+                <Form.Row className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}>
                     <Form.Row className="w-100 justify-content-between">
                         <Col xs={7}>
                             <Form.Row>

@@ -158,7 +158,7 @@ function createReadOnlySaga(actionType, rowName, grpCd) {
     return function* () {
         yield put(startLoading(actionType));
         try {
-            const response = yield call(api.getUseDtlList, grpCd);
+            const response = yield call(api.getUseDtlList, { grpCd });
             if (response.data.header.success) {
                 yield put({
                     type: act.READ_ONLY_SUCCESS,

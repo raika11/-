@@ -13,7 +13,7 @@ export const initialState = {
             page: 0,
             size: PAGESIZE_OPTIONS[0],
             secretYn: 'N',
-            searchType: 'grpAll',
+            searchType: 'grp',
             keyword: '',
         },
         total: 0,

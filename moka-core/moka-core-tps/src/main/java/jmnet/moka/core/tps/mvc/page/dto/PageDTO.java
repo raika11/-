@@ -94,7 +94,7 @@ public class PageDTO implements Serializable {
     private String pageBody = "";
 
     @ApiModelProperty("URL파라미터")
-    @Pattern(regexp = "^[a-zA-Z0-9,_\\-\\/]*$", message = "{tps.page.error.pattern.urlParam}")
+    @Pattern(regexp = "^[a-zA-Z0-9_\\-\\/]*$", message = "{tps.page.error.pattern.urlParam}")
     @Length(max = 64, message = "{tps.page.error.length.urlParam}")
     private String urlParam;
 

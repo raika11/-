@@ -85,9 +85,13 @@ export const changeEpisodesSearchOption = createAction(CHANGE_EPISODES_SEARCH_OP
 export const [GET_EPISODE_GUBUN_CHANNELS, GET_EPISODE_GUBUN_CHANNELS_SUCCESS, GET_EPISODE_GUBUN_CHANNELS_FAILURE] = createRequestActionTypes('jpod/GET_EPISODE_GUBUN_CHANNELS');
 export const getEpisodeGubunChannels = createAction(GET_EPISODE_GUBUN_CHANNELS, (actions) => actions);
 
-// 에피소드 목록 가지고 오기.
+// 에피소드 목록 가지고 오기. ( 에피소드 관리 목록 )
 export const [GET_EPISODES, GET_EPISODES_SUCCESS, GET_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES');
 export const getEpisodes = createAction(GET_EPISODES, (actions) => actions);
+
+// 에피소드 목록 가지고 오기. ( 채널 정보에 필요한 에피소드 목록. )
+export const [GET_CH_EPISODES, GET_CH_EPISODES_SUCCESS, GET_CH_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_CH_EPISODES');
+export const getChEpisodes = createAction(GET_CH_EPISODES, (actions) => actions);
 
 // 에피소드 정보 초기화.
 export const CLEAR_EPISODE_INFO = 'jpod/CLEAR_EPISODE_INFO';

@@ -70,3 +70,63 @@ export const columnDefs = [
         tooltipField: 'subscribe',
     },
 ];
+
+export const channelEpisodeColumnDefs = [
+    {
+        headerName: 'ID',
+        field: 'chnlSeq',
+        width: 50,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '회차',
+        field: 'chnlSeq',
+        width: 50,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '에피소드 명',
+        field: 'chnlSeq',
+        width: 100,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '설명',
+        field: 'chnlMemo',
+        width: 100,
+        flex: 1,
+        tooltipField: 'chnlMemo',
+        autoHeight: true,
+        cellStyle: {
+            boxSizing: 'border-box',
+            whiteSpace: 'normal',
+            lineHeight: '20px',
+            fontSize: '14px',
+            height: '50px',
+            display: '-webkit-box',
+            paddingTop: '5px',
+            '-webkit-line-clamp': 2,
+            '-webkit-box-orient': 'vertical',
+            overflow: 'hidden',
+            cursor: 'pointer',
+        },
+    },
+    {
+        headerName: '방송일',
+        field: 'chnlSeq',
+        width: 100,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '재생시간',
+        field: 'chnlSeq',
+        width: 100,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    },
+    {
+        headerName: '사용',
+        field: 'usedYn',
+        width: 80,
+        cellRenderer: 'usedYnRenderer',
+    },
+];

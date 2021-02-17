@@ -29,7 +29,19 @@ const EpisodeSearchBox = ({ match }) => {
 
     // 검색 버튼 처리.
     const handleClickSearchButton = () => {
-        dispatch(changeEpisodesSearchOption(searchData));
+        let searchdata = {};
+
+        // 파라미터 값이 없을떄 삭제 해줘 store searchdata 를 업데이트 해줌 ( 에피소드 검색이 복잡해서 이렇게 처리 해줬습니다.)
+        // eslint-disable-next-line array-callback-return
+        Object.keys(searchData).map((e) => {
+            if (searchData[e] !== '') {
+                searchdata = {
+                    ...searchdata,
+                    [e]: searchData[e],
+                };
+            }
+        });
+        dispatch(changeEpisodesSearchOption(searchdata));
         dispatch(getEpisodes());
     };
 
@@ -85,7 +97,7 @@ const EpisodeSearchBox = ({ match }) => {
             <Form>
                 <Form.Row className="d-flex mb-3">
                     <Col xs={2}>
-                        <MokaInput as="select" name="chnlSeq" id="chnlSeq" value={searchData.chnlSeq} onChange={(e) => handleSearchChange(e)}>
+                        <MokaInput as="select" name="podtyChnlSrl" id="podtyChnlSrl" value={searchData.podtyChnlSrl} onChange={(e) => handleSearchChange(e)}>
                             <option value="">채널 전체</option>
                             {channel_list.map((item, index) => (
                                 <option key={index} value={item.podtyChnlSrl}>

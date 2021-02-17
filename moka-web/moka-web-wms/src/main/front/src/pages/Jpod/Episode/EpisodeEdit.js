@@ -6,8 +6,10 @@ import { DB_DATEFORMAT } from '@/constants';
 import { PodtyEpisodeModal, RepoterModal, PodCastModal } from '@pages/Jpod/JpodModal';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { initialState, SAVE_JPOD_EPISODE, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
+import { initialState, GET_EPISODES_INFO, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
+import { clearSelectArticleList, selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import toast, { messageBox } from '@utils/toastUtil';
+import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 
 // 진행 기본 3명을 보여주기 위해 기본 init 데이터로 배열 3개를 추가 해줌.
 const reporterCountConst = [0, 1, 2];
@@ -52,14 +54,19 @@ const ChannelEdit = ({ match }) => {
         selectPodtyEpisode: store.jpod.selectPodtyEpisode,
         search: store.jpod.episode.episodes.search,
         selectBrightOvp: store.jpod.selectBrightOvp,
-        loading: store.loading[SAVE_JPOD_EPISODE],
+        loading: store.loading[GET_EPISODES_INFO],
+    }));
+
+    const { selectArticleItem, selectArticleList } = useSelector((store) => ({
+        selectArticleItem: store.quiz.selectArticle.item,
+        selectArticleList: store.quiz.selectArticle.list,
     }));
 
     // 정보 기본 데이터 리셋시 사용할 함수.
     const resetEditData = () => {
         setEditData(initialState.episode.episodeInfo);
-        setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
-        setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
+        setEditSelectCPRepoters([]);
+        setEditSelectEGRepoters([]);
     };
 
     // 정보 창에서 값 변경시 스테이트에 저장.
@@ -150,7 +157,7 @@ const ChannelEdit = ({ match }) => {
         formData.append(`epsdNm`, editData.epsdNm); // 에피소드 명.
         formData.append(`epsdMemo`, editData.epsdMemo); // 에피소드 내용.
         formData.append(`epsdNo`, editData.epsdNo); // 회차.
-        formData.append(`epsdDate`, editData.epsdDate); // 방송일.
+        formData.append(`epsdDate`, moment(editData.epsdDate).format('YYYY-MM-DD'));
 
         formData.append(`epsdFile`, editData.epsdFile); // 등록 파일?.
         formData.append(`playTime`, editData.playTime); // 재생시간.
@@ -224,6 +231,17 @@ const ChannelEdit = ({ match }) => {
             formData.append(`katalkImgFile`, katalkImgFile[0]);
         }
 
+        selectArticleItem.map((item, index) => {
+            if (item.contentId) {
+                formData.append(`articles[${index}].id.totalId`, item.contentId);
+            }
+            formData.append(`articles[${index}].ordNo`, index);
+            formData.append(`articles[${index}].relTitle`, item.title);
+            formData.append(`articles[${index}].relLink`, item.linkUrl);
+            formData.append(`articles[${index}].relLinkTarget`, item.linkTarget ? item.linkTarget : 'S');
+            return item;
+        });
+
         // // formData 출력(테스트).
         // for (let [key, value] of formData) {
         //     console.log(`${key}: ${value}`);
@@ -261,6 +279,12 @@ const ChannelEdit = ({ match }) => {
         );
     };
 
+    // 진행자 3명이상 추가 할떄 alert 띄워 주는 함수.
+    const handleRepoterAddAlert = () => {
+        messageBox.alert(`${reporterCountConst.length}명 이상 등록할수 없습니다.`);
+        return;
+    };
+
     // 취소 버튼 클릭시 URL 이동.
     const handleClickCancleButton = () => {
         history.push(`${match.path}`);
@@ -292,27 +316,50 @@ const ChannelEdit = ({ match }) => {
         }
     };
 
+    // 진행자 추가 버튼 클릭 처리.
+    const handleClickRepoterAddButton = (gubun) => {
+        if (gubun === 'CP') {
+            if (editSelectCPRepoters.length === reporterCountConst.length) {
+                handleRepoterAddAlert();
+                return;
+            }
+            setEditSelectCPRepoters([...editSelectCPRepoters, reporterInit]);
+        } else if (gubun === 'EG') {
+            if (editSelectEGRepoters.length === reporterCountConst.length) {
+                handleRepoterAddAlert();
+                return;
+            }
+            setEditSelectEGRepoters([...editSelectEGRepoters, reporterInit]);
+        }
+    };
+
     // 진행자 배열 조합
     const reportCombine = (reporpter, setFunc) => {
+        // 리스트 중에 값이 없는 필드가 있는지 체크.
+        console.log(reporpter);
         const tmpCh = reporpter.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
+
         if (tmpCh.length === 0) {
-            toast.warning(`진행자는 ${reporterCountConst.length}명까지 선택 할수 있습니다.`);
-            return;
+            if (reporpter.length === reporterCountConst.length) {
+                handleRepoterAddAlert();
+                return;
+            }
+            setFunc([...reporpter, selectReporter]);
+        } else {
+            let status = false;
+            setFunc(
+                reporpter.map((e) => {
+                    const { memMemo, memNm, memRepSeq, nickNm, seqNo } = e;
+
+                    if (status === false && memMemo === '' && memNm === '' && memRepSeq === '' && nickNm === '' && seqNo === '') {
+                        status = true;
+                        return selectReporter;
+                    } else {
+                        return e;
+                    }
+                }),
+            );
         }
-
-        let status = false;
-        setFunc(
-            reporpter.map((e) => {
-                const { memMemo, memNm, memRepSeq, nickNm, seqNo } = e;
-
-                if (status === false && memMemo === '' && memNm === '' && memRepSeq === '' && nickNm === '' && seqNo === '') {
-                    status = true;
-                    return selectReporter;
-                } else {
-                    return e;
-                }
-            }),
-        );
     };
 
     // 기자 검색 모달 창에서 기자를 선택 하면 store 에 업데이트를 해주고
@@ -333,6 +380,9 @@ const ChannelEdit = ({ match }) => {
     useEffect(() => {
         setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
         setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
+
+        dispatch(clearSelectArticleList());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
@@ -406,6 +456,51 @@ const ChannelEdit = ({ match }) => {
             );
         };
 
+        // 기사 정보 설정.
+        const setArticle = (element) => {
+            dispatch(
+                selectArticleListChange(
+                    element.map((e) => {
+                        return {
+                            constntId: e.id.totalId,
+                            title: e.relTitle,
+                            linkUrl: e.relLink,
+                            linkTarget: e.relLinkTarget,
+                        };
+                    }),
+                ),
+            );
+            dispatch(
+                selectArticleItemChange(
+                    element.map((e) => {
+                        return {
+                            constntId: e.id.totalId,
+                            title: e.relTitle,
+                            linkUrl: e.relLink,
+                            linkTarget: e.relLinkTarget,
+                        };
+                    }),
+                ),
+            );
+
+            // dispatch(
+            //     selectArticleListChange({
+            //         constntId: element.id.totalId,
+            //         title: element.relTitle,
+            //         linkUrl: element.totalId,
+            //         linkTarget: element.relLinkTarget,
+            //     }),
+            // );
+            // dispatch(
+            //     selectArticleItemChange({
+            //         constntId: element.id.totalId,
+            //         title: element.relTitle,
+            //         linkUrl: element.totalId,
+            //         linkTarget: element.relLinkTarget,
+            //     }),
+            // );
+        };
+
         // store 에 episodeInfo 가 변경이 되었지만 초기값과 같다면 아무 것도 하지 않는다.
         if (episodeInfo === initialState.episode.episodeInfo) {
             resetEditData();
@@ -416,7 +511,9 @@ const ChannelEdit = ({ match }) => {
         if (episodeInfo && episodeInfo !== initialState.episode.episodeInfo) {
             setBasic(episodeInfo);
             setMember(episodeInfo.members);
+            setArticle(episodeInfo.articles);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [episodeInfo]);
 
     // 브라이트 코브 값이 선택되서 store 가 변경되면 정보창에서 변경 시켜 준다.
@@ -464,6 +561,31 @@ const ChannelEdit = ({ match }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const sortGridSearchFrom = ({ HandleSearchClick, HandleAddClick }) => {
+        return (
+            <React.Fragment>
+                <Form.Row className="mb-2">
+                    <MokaInputLabel label={`관련 기사`} labelWidth={95} as="none" />
+                    <Col xs={1} className="p-0">
+                        <Button
+                            variant="searching"
+                            onClick={() => {
+                                HandleSearchClick();
+                            }}
+                        >
+                            검색
+                        </Button>
+                    </Col>
+                    <Col xs={1} className="p-0">
+                        <Button variant="positive" onClick={() => HandleAddClick()}>
+                            추가
+                        </Button>
+                    </Col>
+                </Form.Row>
+            </React.Fragment>
+        );
+    };
 
     return (
         <MokaCard
@@ -574,8 +696,51 @@ const ChannelEdit = ({ match }) => {
                         />
                     </Col>
                 </Form.Row>
-                {/* 회차. */}
+                {/* 시즌 회차. */}
                 <Form.Row className="mb-2">
+                    <MokaInputLabel label={`시즌 및 회차`} labelWidth={90} className="mb-0" as="none" />
+                    <MokaInputLabel className="pr-5" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={(e) => handleEditDataChange(e)}>
+                        <option value="">시즌 선택</option>
+                        {channel_list.map((item, index) => (
+                            <option key={index} value={item.podtyChnlSrl}>
+                                {item.chnlNm}
+                            </option>
+                        ))}
+                    </MokaInputLabel>
+                    <Col xs={2}>
+                        <MokaInputLabel
+                            label={`회차`}
+                            type="number"
+                            labelWidth={25}
+                            className="mb-0 w-10"
+                            id="chnlMemo"
+                            name="chnlMemo"
+                            value={editData.chnlMemo}
+                            onChange={(e) => console.log(e)}
+                        />
+                    </Col>
+                    <Col xs={2} className="d-flex p-0 pl-4 justify-content-center align-items-center">
+                        마지막 회차: {editData.playCnt && editData.playCnt > 0 ? `${editData.playCnt}회` : ``}
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <MokaInputLabel
+                            label={`방송일`}
+                            labelWidth={90}
+                            as="dateTimePicker"
+                            className="mb-0"
+                            name="epsdDate"
+                            id="epsdDate"
+                            value={editData.epsdDate}
+                            onChange={(param) => {
+                                handleEditDataChange({ target: { name: 'epsdDate', value: param } });
+                            }}
+                            inputProps={{ timeFormat: null }}
+                        />
+                    </Col>
+                </Form.Row>
+                {/* <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
                             label={`회차`}
@@ -609,7 +774,7 @@ const ChannelEdit = ({ match }) => {
                             inputProps={{ timeFormat: null }}
                         />
                     </Col>
-                </Form.Row>
+                </Form.Row> */}
                 {/* 태그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
@@ -801,17 +966,22 @@ const ChannelEdit = ({ match }) => {
                 {/* 진행자( 고정 패널 ) */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`진행자(고정패널)`} labelWidth={95} as="none" />
-                    <Button
-                        xs={12}
-                        variant="searching"
-                        className="mb-0"
-                        onClick={() => {
-                            setSelectRepoterType('CP');
-                            handleClickSearchRepoterButton();
-                        }}
-                    >
-                        검색
-                    </Button>
+                    <Col xs={1} className="p-0 pr-0">
+                        <Button
+                            variant="searching"
+                            onClick={() => {
+                                setSelectRepoterType('CP');
+                                handleClickSearchRepoterButton();
+                            }}
+                        >
+                            검색
+                        </Button>
+                    </Col>
+                    <Col xs={1} className="p-0 pl-0">
+                        <Button variant="positive" onClick={() => handleClickRepoterAddButton('CP')}>
+                            추가
+                        </Button>
+                    </Col>
                 </Form.Row>
                 {/* 기본 3개 를 뿌려준다. */}
                 {editSelectCPRepoters.map((element, index) => {
@@ -825,7 +995,7 @@ const ChannelEdit = ({ match }) => {
                             <Col className="p-0">
                                 <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
                                     <Col className="d-flex w-100 h-50 align-items-center">
-                                        <div>
+                                        <div style={{ width: '70px' }}>
                                             <MokaInput
                                                 name="memRepSeq"
                                                 className="ft-12"
@@ -887,17 +1057,22 @@ const ChannelEdit = ({ match }) => {
                 <hr />
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`진행자(게스트)`} labelWidth={95} as="none" />
-                    <Button
-                        xs={12}
-                        variant="searching"
-                        className="mb-0"
-                        onClick={() => {
-                            setSelectRepoterType('EG');
-                            handleClickSearchRepoterButton();
-                        }}
-                    >
-                        검색
-                    </Button>
+                    <Col xs={1} className="p-0">
+                        <Button
+                            variant="searching"
+                            onClick={() => {
+                                setSelectRepoterType('EG');
+                                handleClickSearchRepoterButton();
+                            }}
+                        >
+                            검색
+                        </Button>
+                    </Col>
+                    <Col xs={1} className="p-0">
+                        <Button variant="positive" onClick={() => handleClickRepoterAddButton('EG')}>
+                            추가
+                        </Button>
+                    </Col>
                 </Form.Row>
                 {/* 기본 3개 를 뿌려준다. */}
                 {editSelectEGRepoters.map((element, index) => {
@@ -911,7 +1086,7 @@ const ChannelEdit = ({ match }) => {
                             <Col className="p-0">
                                 <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
                                     <Col className="d-flex w-100 h-50 align-items-center">
-                                        <div>
+                                        <div style={{ width: '70px' }}>
                                             <MokaInput
                                                 name="memRepSeq"
                                                 className="ft-12"
@@ -971,13 +1146,15 @@ const ChannelEdit = ({ match }) => {
                     );
                 })}
                 <hr />
-                <Form.Row className="mb-2">
-                    <MokaInputLabel label={`관련기사`} labelWidth={90} as="none" />
+                {/* <Form.Row className="mb-2">
+                    <MokaInputLabel label={`관련기사`} labelWidth={95} as="none" />
                     <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickArticleButton()}>
                         검색
                     </Button>
-                </Form.Row>
+                </Form.Row> */}
+                <SortAgGrid SearchForm={sortGridSearchFrom} />
             </Form>
+            {/* <ArticleAgGrid /> */}
             {/* 팟티 에피소드 검색 */}
             <PodtyEpisodeModal
                 show={podtyEpisodeModalState}

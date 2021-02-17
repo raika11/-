@@ -7,6 +7,7 @@ import { clearStore } from '@store/jpod';
 
 const ChannelList = React.lazy(() => import('./Channel/ChannelList'));
 const ChannelEdit = React.lazy(() => import('./Channel/ChannelEdit'));
+const ChannelTab = React.lazy(() => import('./Channel/ChannelTab'));
 
 const JpodChannel = ({ match }) => {
     const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const JpodChannel = ({ match }) => {
             {/* 등록 / 수정창 */}
             <Switch>
                 <Suspense fallback={<MokaLoader />}>
-                    <Route path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])} exact render={(props) => <ChannelEdit {...props} match={match} />} />
+                    <Route path={([`${match.path}/add`], [`${match.path}/:chnlSeq`])} exact render={(props) => <ChannelTab {...props} match={match} />} />
                 </Suspense>
             </Switch>
         </div>

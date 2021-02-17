@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+// import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
 import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, clearReporter } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,6 +47,29 @@ const ChannelEdit = ({ match }) => {
     // 기자검색 버튼
     const handleClickSearchRepoterButton = () => {
         setRepoterModalState(true);
+    };
+
+    // 기자 추가 버튼.
+    const handleClickRepoterAddButton = () => {
+        if (editSelectRepoters.length === 6) {
+            toast.warning('6명 이상 등록할수 없습니다.');
+            return;
+        }
+
+        setEditSelectRepoters([
+            ...editSelectRepoters,
+            {
+                chnlSeq: '',
+                desc: '',
+                epsdSeq: '',
+                memDiv: '',
+                memMemo: '',
+                memNm: '',
+                memRepSeq: '',
+                nickNm: '',
+                seqNo: '',
+            },
+        ]);
     };
 
     // 진행자(기자) 선택 및 내용 수정 처리.
@@ -134,6 +157,7 @@ const ChannelEdit = ({ match }) => {
     // 방송요일 변경 처리.
     const handleChannelDay = (e) => {
         const { name, checked } = e.target;
+        console.log(name, checked);
 
         if (checked === true) {
             // 매일 일떄 모든 요일을 스테이트에 담아둔다.
@@ -385,25 +409,38 @@ const ChannelEdit = ({ match }) => {
     // 스토어가 변경 되면 진행자 스테이트를 업데이트 해줌.
     useEffect(() => {
         if (selectReporter) {
-            const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
-            if (tmpCh.length === 0) {
+            // const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
+            // if (tmpCh.length === 0) {
+            //     toast.warning('진행자는 6명까지 선택 할수 있습니다.');
+            //     return;
+            // }
+
+            if (editSelectRepoters.length === 6) {
                 toast.warning('진행자는 6명까지 선택 할수 있습니다.');
                 return;
             }
 
-            let status = false;
-            setEditSelectRepoters(
-                editSelectRepoters.map((e) => {
-                    const { memMemo, memNm, memRepSeq, nickNm, seqNo } = e;
+            const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
 
-                    if (status === false && memMemo === '' && memNm === '' && memRepSeq === '' && nickNm === '' && seqNo === '') {
-                        status = true;
-                        return selectReporter;
-                    } else {
-                        return e;
-                    }
-                }),
-            );
+            // 추가 버튼을 눌렀을경우 데이터가 없이 폼이 있기 떄문에
+            // 데이터가 없는 폼이 있으면 해당 폼에 입력 아니면 추가.
+            if (tmpCh.length === 0) {
+                setEditSelectRepoters([...editSelectRepoters, selectReporter]);
+            } else {
+                let status = false;
+                setEditSelectRepoters(
+                    editSelectRepoters.map((e) => {
+                        const { memMemo, memNm, memRepSeq, nickNm, seqNo } = e;
+
+                        if (status === false && memMemo === '' && memNm === '' && memRepSeq === '' && nickNm === '' && seqNo === '') {
+                            status = true;
+                            return selectReporter;
+                        } else {
+                            return e;
+                        }
+                    }),
+                );
+            }
         }
         // 기자 선택 스토어가 변경 되었을 경우만 실행.
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -449,20 +486,40 @@ const ChannelEdit = ({ match }) => {
 
         // 진행자 설정.
         // reporterCountConst 고정 개수로 6를 값이 있든 없든 배열을 생성 하준다.
+        // const setMember = (members) => {
+        //     if (Array.isArray(members) && members.length > 0) {
+        //         setEditSelectRepoters(
+        //             reporterCountConst.map((index) => {
+        //                 return {
+        //                     chnlSeq: members[index] && members[index].chnlSeq ? members[index].chnlSeq : '',
+        //                     desc: members[index] && members[index].desc ? members[index].desc : '',
+        //                     epsdSeq: members[index] && members[index].epsdSeq ? members[index].epsdSeq : '',
+        //                     memDiv: members[index] && members[index].memDiv ? members[index].memDiv : '',
+        //                     memMemo: members[index] && members[index].memMemo ? members[index].memMemo : '',
+        //                     memNm: members[index] && members[index].memNm ? members[index].memNm : '',
+        //                     memRepSeq: members[index] && members[index].memRepSeq ? members[index].memRepSeq : '',
+        //                     nickNm: members[index] && members[index].nickNm ? members[index].nickNm : '',
+        //                     seqNo: members[index] && members[index].seqNo ? members[index].seqNo : '',
+        //                 };
+        //             }),
+        //         );
+        //     }
+        // };
+
         const setMember = (members) => {
-            if (Array.isArray(members) && members.length > 0) {
+            if (Array.isArray(members)) {
                 setEditSelectRepoters(
-                    reporterCountConst.map((index) => {
+                    members.map((element, index) => {
                         return {
-                            chnlSeq: members[index] && members[index].chnlSeq ? members[index].chnlSeq : '',
-                            desc: members[index] && members[index].desc ? members[index].desc : '',
-                            epsdSeq: members[index] && members[index].epsdSeq ? members[index].epsdSeq : '',
-                            memDiv: members[index] && members[index].memDiv ? members[index].memDiv : '',
-                            memMemo: members[index] && members[index].memMemo ? members[index].memMemo : '',
-                            memNm: members[index] && members[index].memNm ? members[index].memNm : '',
-                            memRepSeq: members[index] && members[index].memRepSeq ? members[index].memRepSeq : '',
-                            nickNm: members[index] && members[index].nickNm ? members[index].nickNm : '',
-                            seqNo: members[index] && members[index].seqNo ? members[index].seqNo : '',
+                            chnlSeq: element.chnlSeq ? element.chnlSeq : '',
+                            desc: element.desc ? element.desc : '',
+                            epsdSeq: element.epsdSeq ? element.epsdSeq : '',
+                            memDiv: element.memDiv ? element.memDiv : '',
+                            memMemo: element.memMemo ? element.memMemo : '',
+                            memNm: element.memNm ? element.memNm : '',
+                            memRepSeq: element.memRepSeq ? element.memRepSeq : '',
+                            nickNm: element.nickNm ? element.nickNm : '',
+                            seqNo: element.seqNo ? element.seqNo : '',
                         };
                     }),
                 );
@@ -520,7 +577,7 @@ const ChannelEdit = ({ match }) => {
 
     return (
         <MokaCard
-            className="overflow-hidden flex-fill"
+            className="overflow-hidden flex-fill w-100"
             title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
             titleClassName="mb-0"
             loading={loading}
@@ -628,6 +685,39 @@ const ChannelEdit = ({ match }) => {
                         }`}</Col>
                     </Form.Row>
                 )}
+
+                <Form.Row className="mb-2">
+                    <Col xs={8} className="p-0">
+                        {/* 시즌명 */}
+                        <MokaInputLabel
+                            label={`시즌명`}
+                            labelWidth={64}
+                            className="mb-2 pr-2"
+                            inputClassName="resize-none"
+                            inputProps={{ rows: 6 }}
+                            id="chnlMemo"
+                            name="chnlMemo"
+                            value={editData.chnlMemo}
+                            onChange={(e) => handleChangeChannelEditData(e)}
+                        />
+                    </Col>
+                    <Col xs={4} className="p-0">
+                        {/* 총시즌 */}
+                        <MokaInputLabel
+                            label={`총시즌`}
+                            type="number"
+                            labelWidth={30}
+                            className="mb-2"
+                            inputClassName="resize-none"
+                            inputProps={{ rows: 6 }}
+                            id="chnlMemo"
+                            name="chnlMemo"
+                            value={editData.chnlMemo}
+                            onChange={(e) => handleChangeChannelEditData(e)}
+                        />
+                    </Col>
+                </Form.Row>
+
                 {/* 채널 소개 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
@@ -684,86 +774,61 @@ const ChannelEdit = ({ match }) => {
                 {/* 방송요일 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`방송요일`} labelWidth={64} as="none" />
-                    <MokaInputLabel
-                        className="d-felx p-0 pl-0 pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day0"
                         id="day0"
-                        label="매일"
-                        labelWidth={30}
-                        inputProps={{ checked: editDays.includes('day0') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '매일', custom: true, checked: editDays.includes('day0') }}
                     />
-                    <MokaInputLabel
-                        labelClassName="pl-0 pr-0"
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day1"
                         id="day1"
-                        label="월"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day1') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '월', custom: true, checked: editDays.includes('day1') }}
                     />
-                    <MokaInputLabel
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day2"
                         id="day2"
-                        label="화"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day2') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '화', custom: true, checked: editDays.includes('day2') }}
                     />
-                    <MokaInputLabel
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day3"
                         id="day3"
-                        label="수"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day3') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '수', custom: true, checked: editDays.includes('day3') }}
                     />
-                    <MokaInputLabel
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day4"
                         id="day4"
-                        label="목"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day4') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '목', custom: true, checked: editDays.includes('day4') }}
                     />
-                    <MokaInputLabel
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day5"
                         id="day5"
-                        label="금"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day5') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '금', custom: true, checked: editDays.includes('day5') }}
                     />
-                    <MokaInputLabel
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day6"
                         id="day6"
-                        label="토"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day6') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '토', custom: true, checked: editDays.includes('day6') }}
                     />
-                    <MokaInputLabel
-                        className="pr-0"
-                        as="switch"
+                    <MokaInput
+                        as="checkbox"
                         name="day7"
                         id="day7"
-                        label="일"
-                        labelWidth={10}
-                        inputProps={{ checked: editDays.includes('day7') }}
                         onChange={(e) => handleChannelDay(e)}
+                        inputProps={{ label: '일', custom: true, checked: editDays.includes('day7') }}
                     />
                 </Form.Row>
                 {/* 테그 */}
@@ -785,9 +850,16 @@ const ChannelEdit = ({ match }) => {
                 {/* 진행자 검색(모달) */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`진행자`} labelWidth={64} as="none" />
-                    <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
-                        검색
-                    </Button>
+                    <Col xs={1} className="p-0">
+                        <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
+                            검색
+                        </Button>
+                    </Col>
+                    <Col xs={1} className="p-0">
+                        <Button variant="positive" onClick={(e) => handleClickRepoterAddButton()}>
+                            추가
+                        </Button>
+                    </Col>
                 </Form.Row>
                 {/* 기본 6개 를 뿌려준다. */}
                 {editSelectRepoters.map((element, index) => {
@@ -878,7 +950,7 @@ const ChannelEdit = ({ match }) => {
                                 <br />
                                 (1920*360)
                                 <br />
-                                <Button
+                                {/* <Button
                                     className="mt-1"
                                     size="sm"
                                     variant="negative"
@@ -894,6 +966,16 @@ const ChannelEdit = ({ match }) => {
                                     }}
                                 >
                                     삭제
+                                </Button> */}
+                                <Button
+                                    className="mt-0"
+                                    size="sm"
+                                    variant="positive"
+                                    onClick={(e) => {
+                                        imgFileRef1.current.rootRef.onClick(e);
+                                    }}
+                                >
+                                    신규등록
                                 </Button>
                             </React.Fragment>
                         }
@@ -903,6 +985,7 @@ const ChannelEdit = ({ match }) => {
                             // width: 600, // width: '100%' number type 에러남.
                             img: editData.chnlImg,
                             selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                            deleteButton: true,
                         }}
                         onChange={(file) =>
                             handleChangeFIle({
@@ -929,7 +1012,7 @@ const ChannelEdit = ({ match }) => {
                                     <br />
                                     (750*330)
                                     <br />
-                                    <Button
+                                    {/* <Button
                                         className="mt-1"
                                         size="sm"
                                         variant="negative"
@@ -945,6 +1028,22 @@ const ChannelEdit = ({ match }) => {
                                         }}
                                     >
                                         삭제
+                                    </Button> */}
+                                    <Button
+                                        className="mt-0"
+                                        size="sm"
+                                        variant="positive"
+                                        onClick={(e) => {
+                                            imgFileRef3.current.rootRef.onClick(e);
+                                            // imgFileRef3.current.deleteFile();
+                                            setThumbfile(null);
+                                            setEditData({
+                                                ...editData,
+                                                chnlImgMob: null,
+                                            });
+                                        }}
+                                    >
+                                        신규등록
                                     </Button>
                                 </React.Fragment>
                             }
@@ -953,6 +1052,7 @@ const ChannelEdit = ({ match }) => {
                                 height: 80,
                                 // width: 400, // width: '100%' number type 에러남.
                                 img: editData.chnlImgMob,
+                                deleteButton: true,
                             }}
                             onChange={(file) =>
                                 handleChangeFIle({
@@ -978,7 +1078,7 @@ const ChannelEdit = ({ match }) => {
                                     <br />
                                     (150*150)
                                     <br />
-                                    <Button
+                                    {/* <Button
                                         className="mt-1"
                                         size="sm"
                                         variant="negative"
@@ -994,6 +1094,23 @@ const ChannelEdit = ({ match }) => {
                                         }}
                                     >
                                         삭제
+                                    </Button> */}
+                                    <Button
+                                        className="mt-0"
+                                        size="sm"
+                                        variant="positive"
+                                        onClick={(e) => {
+                                            // e.preventDefault();
+                                            // e.stopPropagation();
+                                            imgFileRef2.current.rootRef.onClick(e);
+                                            setMobfile(null);
+                                            setEditData({
+                                                ...editData,
+                                                chnlThumb: null,
+                                            });
+                                        }}
+                                    >
+                                        신규등록
                                     </Button>
                                 </React.Fragment>
                             }
@@ -1001,6 +1118,7 @@ const ChannelEdit = ({ match }) => {
                             inputProps={{
                                 height: 80,
                                 img: editData.chnlThumb,
+                                deleteButton: true,
                             }}
                             onChange={(file) =>
                                 handleChangeFIle({

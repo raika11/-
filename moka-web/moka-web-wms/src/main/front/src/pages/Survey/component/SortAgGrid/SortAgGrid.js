@@ -8,7 +8,7 @@ import ItemRenderer from './ItemRenderer';
 import { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 
-const SortAgGrid = () => {
+const SortAgGrid = ({ SearchForm }) => {
     const dispatch = useDispatch();
     const [articleListModalState, setArticleListModalState] = useState(false);
     const [rowData, setRowData] = useState([]);
@@ -134,21 +134,34 @@ const SortAgGrid = () => {
 
     return (
         <>
-            <Form.Group>
-                <Form.Row>
-                    <Col xs={12}>
+            {(function () {
+                if (SearchForm) {
+                    return (
+                        <React.Fragment>
+                            <SearchForm HandleSearchClick={() => setArticleListModalState(true)} HandleAddClick={() => handleClickRelationArticleAdd()} />
+                        </React.Fragment>
+                    );
+                } else {
+                    return (
                         <Form.Group>
-                            <Form.Label className="pr-2 mb-0">관련 기사</Form.Label>
-                            <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
-                                기사 검색
-                            </Button>
-                            <Button variant="positive" onClick={() => handleClickRelationArticleAdd()}>
-                                추가
-                            </Button>
+                            <Form.Row>
+                                <Col xs={12}>
+                                    <Form.Group>
+                                        <Form.Label className="pr-2 mb-0">관련 기사</Form.Label>
+                                        <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
+                                            기사 검색
+                                        </Button>
+                                        <Button variant="positive" onClick={() => handleClickRelationArticleAdd()}>
+                                            추가
+                                        </Button>
+                                    </Form.Group>
+                                </Col>
+                            </Form.Row>
                         </Form.Group>
-                    </Col>
-                </Form.Row>
-            </Form.Group>
+                    );
+                }
+            })()}
+
             <Form.Group>
                 <Form.Row>
                     <Col xs={12}>

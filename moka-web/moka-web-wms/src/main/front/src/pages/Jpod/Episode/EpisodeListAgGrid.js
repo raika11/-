@@ -4,6 +4,7 @@ import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './EpisodeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { clearSelectArticleList } from '@store/survey/quiz';
 
 import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, clearEpisodeInfo, getEpisodesInfo } from '@store/jpod';
 
@@ -20,9 +21,15 @@ const EpisodeListAgGrid = ({ match }) => {
         loading: store.loading[GET_EPISODES],
     }));
 
+    const { selectArticleItem, selectArticleList } = useSelector((store) => ({
+        selectArticleItem: store.quiz.selectArticle.item,
+        selectArticleList: store.quiz.selectArticle.list,
+    }));
+
     // 목록 클릭 했을때.
     const handleClickListRow = ({ chnlSeq, epsdSeq }) => {
         history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
+        dispatch(clearSelectArticleList());
         dispatch(clearEpisodeInfo());
         dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
     };
@@ -56,6 +63,7 @@ const EpisodeListAgGrid = ({ match }) => {
                         epsdMemo: element.epsdMemo,
                         epsdDate: element.epsdDate,
                         playTime: element.playTime,
+                        usedYn: element.usedYn,
                     };
                 }),
             );

@@ -7,17 +7,17 @@ export const columnDefs = [
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
+        headerName: '채널명',
+        field: 'chnlThumb',
+        width: 90,
+        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+    },
+    {
         headerName: '회차',
         field: 'epsdNo',
         width: 90,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'epsdNo',
-    },
-    {
-        headerName: '채널명',
-        field: 'chnlThumb',
-        width: 90,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '에피소드 명',
@@ -59,5 +59,11 @@ export const columnDefs = [
         width: 90,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
         tooltipField: 'playTime',
+    },
+    {
+        headerName: '\t사용',
+        field: 'usedYn',
+        width: 80,
+        cellRenderer: 'usedYnRenderer',
     },
 ];

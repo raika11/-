@@ -20,41 +20,42 @@ const RcvProgsModal = (props) => {
         setBulkMsg('');
         onHide();
     };
+    console.log(data);
 
     useEffect(() => {
         if (data && show) {
             if (data.type === 'naver') {
                 dispatch(
                     getBulkStatListInfo({
-                        totalId: data.contentId,
+                        contentId: data.contentId,
                         portalDiv: 'NAVER_JA',
                     }),
                 );
             } else if (data.type === 'daum') {
                 dispatch(
                     getBulkStatListInfo({
-                        totalId: data.contentId,
+                        contentId: data.contentId,
                         portalDiv: 'DAUM_JA',
                     }),
                 );
             } else if (data.type === 'nate') {
                 dispatch(
                     getBulkStatListInfo({
-                        totalId: data.contentId,
+                        contentId: data.contentId,
                         portalDiv: 'EMPAS_JA',
                     }),
                 );
             } else if (data.type === 'zoom') {
                 dispatch(
                     getBulkStatListInfo({
-                        totalId: data.contentId,
+                        contentId: data.contentId,
                         portalDiv: 'ESTSOFT',
                     }),
                 );
             } else if (data.type === 'kpf') {
                 dispatch(
                     getBulkStatListInfo({
-                        totalId: data.contentId,
+                        contentId: data.contentId,
                         portalDiv: 'KPF_JA',
                     }),
                 );

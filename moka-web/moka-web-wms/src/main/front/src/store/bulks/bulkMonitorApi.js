@@ -16,8 +16,8 @@ export const getBulkStatList = ({ search }) => {
 };
 
 // 벌크 전송 상세 정보 조회
-export const getBulkStatListInfo = ({ totalId, portalDiv }) => {
-    return instance.get(`/api/bulkLogs/stat-list-info?${qs.stringify({ totalId, portalDiv })}`).catch((err) => {
+export const getBulkStatListInfo = ({ contentId, portalDiv }) => {
+    return instance.get(`/api/bulkLogs/stat-list-info?${qs.stringify({ contentId, portalDiv })}`).catch((err) => {
         throw err;
     });
 };

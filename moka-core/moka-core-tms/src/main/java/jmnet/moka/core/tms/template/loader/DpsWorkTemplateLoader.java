@@ -9,6 +9,7 @@ import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.exception.TmsException;
@@ -31,7 +32,6 @@ import org.springframework.context.support.GenericApplicationContext;
  * @since 2019. 9. 4. 오후 4:16:52
  */
 public class DpsWorkTemplateLoader extends DpsTemplateLoader {
-    public static final String ITEM_API_COMPONENT_WORK = "component.work";
     private final String regId;
     /** Work Component List */
     private final List<String> workComponentIdList;
@@ -74,7 +74,7 @@ public class DpsWorkTemplateLoader extends DpsTemplateLoader {
             }
         }
         if (isWorkComponent) {
-            api = ITEM_API_COMPONENT_WORK;
+            api = DpsApiConstants.ITEM_COMPONENT_WORK;
         }
         Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
         parameterMap.put(PARAM_DOMAIN_ID, this.domainId);

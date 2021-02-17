@@ -19,6 +19,7 @@ import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -46,16 +47,16 @@ import org.springframework.context.support.GenericApplicationContext;
  * @since 2019. 9. 4. 오후 4:16:52
  */
 public class DpsTemplateLoader extends AbstractTemplateLoader {
-    public static final String ITEM_API_DOMAIN = "domain.list";
-    public static final String API_RESERVED = "reserved.list";
-    public static final String ITEM_API_PAGE = "page.list";
-    public static final String ITEM_API_CONTAINER = "container";
-    public static final String ITEM_API_COMPONENT = "component";
-    public static final String ITEM_API_TEMPLATE = "template";
-    public static final String ITEM_API_DATASET = "dataset";
-    public static final String ITEM_API_AD = "ad";
-    public static final String ITEM_API_ARTICLE_PAGE = "articlePage";
-    public static final String ITEM_API_ARTICLE_PAGE_ID = "articlePageId";
+//    public static final String ITEM_API_DOMAIN = "domain.list";
+//    public static final String API_RESERVED = "reserved.list";
+//    public static final String ITEM_API_PAGE = "page.list";
+//    public static final String ITEM_API_CONTAINER = "container";
+//    public static final String ITEM_API_COMPONENT = "component";
+//    public static final String ITEM_API_TEMPLATE = "template";
+//    public static final String ITEM_API_DATASET = "dataset";
+//    public static final String ITEM_API_AD = "ad";
+//    public static final String ITEM_API_ARTICLE_PAGE = "articlePage";
+//    public static final String ITEM_API_ARTICLE_PAGE_ID = "articlePageId";
     public static final String PARAM_DOMAIN_ID = "domainId";
     public static final String PARAM_ITEM_ID = "id";
     public static final String PARAM_TBODY = "tBody";
@@ -77,14 +78,14 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     private Map<String, String> artTypeToArticlePageIdMap = new HashMap<>();
 
     static {
-        itemApiMap.put(MokaConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);
-        itemApiMap.put(MokaConstants.ITEM_PAGE, ITEM_API_PAGE);
-        itemApiMap.put(MokaConstants.ITEM_CONTAINER, ITEM_API_CONTAINER);
-        itemApiMap.put(MokaConstants.ITEM_COMPONENT, ITEM_API_COMPONENT);
-        itemApiMap.put(MokaConstants.ITEM_TEMPLATE, ITEM_API_TEMPLATE);
-        itemApiMap.put(MokaConstants.ITEM_DATASET, ITEM_API_DATASET);
-        itemApiMap.put(MokaConstants.ITEM_AD, ITEM_API_AD);
-        itemApiMap.put(MokaConstants.ITEM_ARTICLE_PAGE, ITEM_API_ARTICLE_PAGE);
+        itemApiMap.put(MokaConstants.ITEM_DOMAIN, DpsApiConstants.ITEM_DOMAIN);
+        itemApiMap.put(MokaConstants.ITEM_PAGE, DpsApiConstants.ITEM_PAGE);
+        itemApiMap.put(MokaConstants.ITEM_CONTAINER, DpsApiConstants.ITEM_CONTAINER);
+        itemApiMap.put(MokaConstants.ITEM_COMPONENT, DpsApiConstants.ITEM_COMPONENT);
+        itemApiMap.put(MokaConstants.ITEM_TEMPLATE, DpsApiConstants.ITEM_TEMPLATE);
+        itemApiMap.put(MokaConstants.ITEM_DATASET, DpsApiConstants.ITEM_DATASET);
+        itemApiMap.put(MokaConstants.ITEM_AD, DpsApiConstants.ITEM_AD);
+        itemApiMap.put(MokaConstants.ITEM_ARTICLE_PAGE, DpsApiConstants.ITEM_ARTICLE_PAGE);
     }
 
     protected HttpProxyDataLoader httpProxyDataLoader;
@@ -135,7 +136,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
             parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
             parameterMap.put(PARAM_TBODY, "N");
-            JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_PAGE, parameterMap, true);
+            JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(DpsApiConstants.ITEM_PAGE, parameterMap, true);
             Object jsonArray = jsonResult.getDataList();
             for (JSONObject jsonObject : (List<JSONObject>) jsonArray) {
                 Map<String, Object> valueMap = ResourceMapper.getDefaultObjectMapper()
@@ -191,7 +192,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
         parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
         parameterMap.put(PARAM_ARTICLE_TYPE, articleType);
-        JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_ARTICLE_PAGE_ID, parameterMap, true);
+        JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(DpsApiConstants.ITEM_ARTICLE_PAGE_ID, parameterMap, true);
         Object jsonArray = jsonResult.getDataList();
         if ( jsonArray instanceof List) {
             List list = (List)jsonArray;

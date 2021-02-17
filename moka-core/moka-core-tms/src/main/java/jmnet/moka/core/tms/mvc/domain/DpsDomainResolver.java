@@ -3,6 +3,7 @@ package jmnet.moka.core.tms.mvc.domain;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jmnet.moka.core.common.DpsApiConstants;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class DpsDomainResolver extends AbstractDomainResolver {
         try {
             Map<String, Object> parameterMap = new HashMap<String, Object>();
             JSONResult jsonResult = this.httpProxyDataLoader
-                    .getJSONResult(DpsTemplateLoader.ITEM_API_DOMAIN, parameterMap, true);
+                    .getJSONResult(DpsApiConstants.ITEM_DOMAIN, parameterMap, true);
             Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
 
             List<DomainItem> newDomainItemList = dpsItemFactory
@@ -121,7 +122,7 @@ public class DpsDomainResolver extends AbstractDomainResolver {
             Map<String, Object> parameterMap = new HashMap<String, Object>();
             parameterMap.put("domainId", domainId);
             JSONResult jsonResult = this.httpProxyDataLoader
-                    .getJSONResult(DpsTemplateLoader.API_RESERVED, parameterMap, true);
+                    .getJSONResult(DpsApiConstants.ITEM_RESERVED, parameterMap, true);
             Object resultObject = jsonResult.get(Constants.DEFAULT_LOOP_DATA_SELECT);
             ReservedMap reservedMap = new ReservedMap(this.reservedExpireTime);
             if (resultObject != null && resultObject instanceof JSONArray) {

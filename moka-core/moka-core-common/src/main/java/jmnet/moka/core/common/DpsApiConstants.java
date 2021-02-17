@@ -24,6 +24,20 @@ public class DpsApiConstants {
     public static final String COMMAND_PURGE = COMMAND_PREFIX + "/purge";         // API purge
     public static final String COMMAND_PURGE_STARTSWITH = COMMAND_PREFIX + "/purgeStartsWith"; // API purgeStartsWith
 
+
+    /** TEMS 아이템 관련 : apiPath = sys_api */
+    public static final String ITEM_DOMAIN = "domain.list";
+    public static final String ITEM_RESERVED = "reserved.list";
+    public static final String ITEM_PAGE = "page.list";
+    public static final String ITEM_CONTAINER = "container";
+    public static final String ITEM_COMPONENT = "component";
+    public static final String ITEM_COMPONENT_WORK = "component.work";
+    public static final String ITEM_TEMPLATE = "template";
+    public static final String ITEM_DATASET = "dataset";
+    public static final String ITEM_AD = "ad";
+    public static final String ITEM_ARTICLE_PAGE = "articlePage";
+    public static final String ITEM_ARTICLE_PAGE_ID = "articlePageId";
+
     /**
      * 기사 관련 API
      **/

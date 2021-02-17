@@ -48,7 +48,7 @@ public class JpodEpisodeRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         if (search.getChnlSeq() != null && search.getChnlSeq() > 0) {
             query.where(qJpodEpisode.chnlSeq.eq(search.getChnlSeq()));
         }
-        // 채널번호
+        // 팟티 채널번호
         if (search.getPodtyChnlSrl() != null && search.getPodtyChnlSrl() > 0) {
             query.where(qJpodEpisode.chnlSeq.in(JPAExpressions
                     .selectFrom(jpodChannel)

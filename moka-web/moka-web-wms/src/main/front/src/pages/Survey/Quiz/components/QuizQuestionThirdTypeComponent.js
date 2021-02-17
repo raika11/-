@@ -174,7 +174,8 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
 
     return (
         <>
-            <div className="mb-2 p-2 bg-gray-150">
+            <div className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}>
+                {/* <div className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}> */}
                 {/* 질문. */}
                 <Form.Row>
                     <div className="d-felx m-0 pr-2">
@@ -201,7 +202,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                         />
                     </Col>
                     <div className="d-felx pt-1">
-                        <MokaOverlayTooltipButton tooltipText="더보기" variant="bg-gray-150" className="p-0 bg-gray-150">
+                        <MokaOverlayTooltipButton tooltipText="더보기" variant="bg-gray-150" className="p-0">
                             <Dropdown style={{ position: 'unset' }}>
                                 <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>

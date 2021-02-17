@@ -15,6 +15,7 @@ import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgtGrp;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -65,6 +66,8 @@ public class CodeMgtRepositorySupportImpl extends TpsQueryDslRepositorySupport i
     public Page<CodeMgt> findList(CodeMgtSearchDTO search, Pageable pageable) {
         QCodeMgt codeMgt = QCodeMgt.codeMgt;
         QCodeMgtGrp codeMgtGrp = QCodeMgtGrp.codeMgtGrp;
+        QMemberInfo regMemberInfo = QMemberInfo.memberInfo;
+        QMemberInfo modMemberInfo = QMemberInfo.memberInfo;
 
         BooleanBuilder builder = new BooleanBuilder();
         String grpCd = search.getGrpCd();
@@ -85,6 +88,8 @@ public class CodeMgtRepositorySupportImpl extends TpsQueryDslRepositorySupport i
         query = getQuerydsl().applyPagination(pageable, query);
         QueryResults<CodeMgt> list = query
                 .innerJoin(codeMgt.codeMgtGrp, codeMgtGrp)
+                .leftJoin(codeMgt.regMember, regMemberInfo)
+                .leftJoin(codeMgt.modMember, modMemberInfo)
                 .fetchJoin()
                 .where(builder)
                 .fetchResults();

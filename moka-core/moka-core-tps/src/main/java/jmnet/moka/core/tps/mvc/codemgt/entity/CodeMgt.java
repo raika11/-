@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
+import jmnet.moka.core.tps.mvc.member.entity.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -21,6 +22,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 /**
@@ -115,6 +118,22 @@ public class CodeMgt extends BaseAudit {
     @Column(name = "USED_YN", columnDefinition = "char")
     @Builder.Default
     private String usedYn = MokaConstants.YES;
+
+    /**
+     * 등록자
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "REG_ID", insertable = false, updatable = false)
+    private MemberInfo regMember;
+
+    /**
+     * 등록자
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "MOD_ID", insertable = false, updatable = false)
+    private MemberInfo modMember;
 
     @PrePersist
     @PreUpdate

@@ -30,12 +30,14 @@ import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -254,8 +256,8 @@ public class CodeMgtRestController extends AbstractCommonController {
      * @throws Exception
      */
     @ApiOperation(value = "그룹등록")
-    @PostMapping
-    public ResponseEntity<?> postCodeMgtGrp(@Valid CodeMgtGrpDTO codeMgtGrpDTO)
+    @PostMapping(headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postCodeMgtGrp(@RequestBody @Valid CodeMgtGrpDTO codeMgtGrpDTO)
             throws Exception {
 
         // 데이타유효성검사.
@@ -293,10 +295,10 @@ public class CodeMgtRestController extends AbstractCommonController {
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "그룹 수정")
-    @PutMapping("/{seqNo}")
+    @PutMapping(value = "/{seqNo}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putCodeMgtGrp(
             @ApiParam("그룹코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgtGrp.error.min.seqNo}") Long seqNo,
-            @Valid CodeMgtGrpDTO codeMgtGrpDTO)
+            @RequestBody @Valid CodeMgtGrpDTO codeMgtGrpDTO)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이타유효성검사.
@@ -483,8 +485,8 @@ public class CodeMgtRestController extends AbstractCommonController {
      * @throws Exception
      */
     @ApiOperation(value = "코드등록")
-    @PostMapping("/codemgts")
-    public ResponseEntity<?> postCodeMgt(@Valid CodeMgtDTO codeMgtDTO)
+    @PostMapping(value = "/codemgts", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postCodeMgt(@RequestBody @Valid CodeMgtDTO codeMgtDTO)
             throws Exception {
 
         // 데이타유효성검사.
@@ -520,10 +522,10 @@ public class CodeMgtRestController extends AbstractCommonController {
      * @throws Exception            기타예외
      */
     @ApiOperation(value = "코드수정")
-    @PutMapping("/codemgts/{seqNo}")
+    @PutMapping(value = "/codemgts/{seqNo}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putCodeMgt(
             @ApiParam("상세코드 일련번호(필수)") @PathVariable("seqNo") @Min(value = 0, message = "{tps.codeMgt.error.min.seqNo}") Long seqNo,
-            @Valid CodeMgtDTO codeMgtDTO)
+            @RequestBody @Valid CodeMgtDTO codeMgtDTO)
             throws InvalidDataException, NoDataException, Exception {
         // 데이타유효성검사.
         validData(seqNo, codeMgtDTO, ActionType.UPDATE);

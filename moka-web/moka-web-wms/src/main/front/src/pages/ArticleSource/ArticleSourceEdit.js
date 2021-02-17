@@ -50,7 +50,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
             if (!obj.sourceType || !/^[a-zA-Z0-9\s]{1,5}$/.test(obj.sourceType)) {
                 errList.push({
                     field: 'sourceType',
-                    reason: '매체 타입은 필수 입력값입니다. (5자리 이하 입력)',
+                    reason: '매체 타입은 필수 입력값입니다. (영문 5자리 이하 입력)',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -58,7 +58,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
             if (!obj.sourceCode || !/^[a-zA-Z0-9]{1,2}$/.test(obj.sourceCode)) {
                 errList.push({
                     field: 'sourceCode',
-                    reason: '매체 코드는 필수 입력값입니다. (2자리 이하 입력)',
+                    reason: '매체 코드는 필수 입력값입니다. (영문, 숫자 2자리 이하 입력)',
                 });
                 isInvalid = isInvalid || true;
             }

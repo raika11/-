@@ -100,40 +100,47 @@ const SearchKeywordSearch = () => {
      * 검색
      */
     const handleSearch = () => {
-        if (validate()) {
-            const ns = {
-                ...search,
-                startDt: moment(search.startDt).format(DB_DATEFORMAT),
-                endDt: moment(search.endDt).format(DB_DATEFORMAT),
-                page: 0,
-            };
+        const targetDt = moment(search.endDt).subtract('1', 'y').format('YYYY-MM-DD');
+        console.log(targetDt);
+        if (moment(search.startDt).format('YYYY-MM-DD') < targetDt) {
+            setSearch({ ...search, startDt: null, endDt: null });
+            messageBox.alert('검색 기간은 1년을 넘길 수 없습니다. 기간을 다시 설정해 주세요.');
+        } else {
+            if (validate()) {
+                const ns = {
+                    ...search,
+                    startDt: moment(search.startDt).format(DB_DATEFORMAT),
+                    endDt: moment(search.endDt).format(DB_DATEFORMAT),
+                    page: 0,
+                };
 
-            dispatch(changeStatSearchOption(ns));
-            // 통계 조회
-            dispatch(
-                getSearchKeywordStat({
-                    search: ns,
-                    callback: ({ header }) => {
-                        if (!header.success) {
-                            messageBox.alert(header.mesage);
-                        }
-                    },
-                }),
-            );
-            // 전체 건수 조회
-            dispatch(
-                getSearchKeywordStatTotal({
-                    search: {
-                        startDt: ns.startDt,
-                        endDt: ns.endDt,
-                    },
-                    callback: ({ header }) => {
-                        if (!header.success) {
-                            messageBox.alert(header.mesage);
-                        }
-                    },
-                }),
-            );
+                dispatch(changeStatSearchOption(ns));
+                // 통계 조회
+                dispatch(
+                    getSearchKeywordStat({
+                        search: ns,
+                        callback: ({ header }) => {
+                            if (!header.success) {
+                                messageBox.alert(header.mesage);
+                            }
+                        },
+                    }),
+                );
+                // 전체 건수 조회
+                dispatch(
+                    getSearchKeywordStatTotal({
+                        search: {
+                            startDt: ns.startDt,
+                            endDt: ns.endDt,
+                        },
+                        callback: ({ header }) => {
+                            if (!header.success) {
+                                messageBox.alert(header.mesage);
+                            }
+                        },
+                    }),
+                );
+            }
         }
     };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTable } from '@components';
 import { GET_SEARCH_KEYWORD_STAT_DETAIL, changeDetailSearchOption, getSearchKeywordStatDetail } from '@store/searchKeyword';
@@ -12,6 +12,7 @@ const SearchKeywordDetailAgGrid = ({ type }) => {
         list: searchKeyword.statDetail.list,
     }));
     const loading = useSelector(({ loading }) => loading[GET_SEARCH_KEYWORD_STAT_DETAIL]);
+    const [rowData, setRowData] = useState([]);
 
     /**
      * 테이블 검색옵션 변경
@@ -25,6 +26,14 @@ const SearchKeywordDetailAgGrid = ({ type }) => {
         dispatch(getSearchKeywordStatDetail({ search: temp }));
     };
 
+    useEffect(() => {
+        setRowData(
+            list.map((data, idx) => {
+                return { ...data, rowId: `${data.rank}.${idx}.${data.schKwd}` };
+            }),
+        );
+    }, [list]);
+
     return (
         <MokaTable
             loading={loading}
@@ -37,9 +46,9 @@ const SearchKeywordDetailAgGrid = ({ type }) => {
             page={search.page}
             size={search.size}
             total={total}
-            rowData={list}
+            rowData={rowData}
             className="ag-grid-align-center flex-fill overflow-hidden"
-            onRowNodeId={(row) => row.rank}
+            onRowNodeId={(row) => row.rowId}
             onChangeSearchOption={handleChangeSearchOption}
         />
     );

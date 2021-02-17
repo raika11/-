@@ -53,7 +53,22 @@ const DtlAgGrid = ({ grpCd }) => {
     useEffect(() => {
         setRowData(
             list.map((data) => {
-                const worker = data.modMember ? `${data.modMember.memberNm}(${data.modMember.memberId})` : `${data.regMember.memberNm}(${data.regMember.memberId})`;
+                const worker = data.modMember
+                    ? ((data) => {
+                          let w = `${data.modMember?.memberNm || ''}`;
+                          if (data.modMember?.memberId) {
+                              w += `(${data.modMember?.memberId || ''});`;
+                          }
+                          return w;
+                      })(data)
+                    : ((data) => {
+                          let w = `${data.regMember?.memberNm || ''}`;
+                          if (data.regMember?.memberId) {
+                              w += `(${data.regMember?.memberId || ''});`;
+                          }
+                          return w;
+                      })(data);
+
                 return {
                     ...data,
                     worker,

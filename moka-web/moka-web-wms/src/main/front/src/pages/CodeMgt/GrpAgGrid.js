@@ -49,13 +49,28 @@ const GrpAgGrid = ({ match }) => {
     useEffect(() => {
         if (list.length > 0) {
             setRowData(
-                list.map((data) => ({
-                    ...data,
-                    edit: (data) => {
-                        setShow(true);
-                        setSelectedGrpCd(data.grpCd);
-                    },
-                })),
+                list.map((data) => {
+                    const worker = data.modDt
+                        ? ((data) => {
+                              let w = `${data.modMember?.memberNm || ''}\n`;
+                              w += (data.modDt || '').slice(0, -3);
+                              return w;
+                          })(data)
+                        : ((data) => {
+                              let w = `${data.regMember?.memberNm || ''}\n`;
+                              w += (data.regDt || '').slice(0, -3);
+                              return w;
+                          })(data);
+
+                    return {
+                        ...data,
+                        worker,
+                        edit: (data) => {
+                            setShow(true);
+                            setSelectedGrpCd(data.grpCd);
+                        },
+                    };
+                }),
             );
         } else {
             setRowData([]);
@@ -66,6 +81,8 @@ const GrpAgGrid = ({ match }) => {
         <React.Fragment>
             <MokaTable
                 className="overflow-hidden flex-fill"
+                rowHeight={43}
+                headerHeight={50}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(grp) => grp.grpCd}
@@ -74,8 +91,6 @@ const GrpAgGrid = ({ match }) => {
                 page={search.page}
                 size={search.size}
                 total={total}
-                displayPageNum={3}
-                pageSizes={false}
                 onChangeSearchOption={handleChangeSearchOption}
                 selected={dtlSearch.grpCd}
                 preventRowClickCell={['edit']}

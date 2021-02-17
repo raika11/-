@@ -106,6 +106,7 @@ export default [
         field: 'articleDt',
         cellClassRules: {
             'pre-wrap-cell': () => true,
+            'ft-12': () => true,
         },
         cellStyle: {
             height: '50px',

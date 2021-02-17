@@ -186,15 +186,15 @@ const EditGrpModal = ({ show, onHide, grpCd }) => {
                     variant: 'positive',
                     onClick: handleClickSave,
                 },
-                {
-                    text: '취소',
-                    variant: 'negative',
-                    onClick: handleHide,
-                },
                 grpCd && {
                     text: '삭제',
                     variant: 'negative',
                     onClick: handleClickDelete,
+                },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleHide,
                 },
             ].filter((a) => a)}
             centered

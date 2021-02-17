@@ -2,6 +2,7 @@ package jmnet.moka.core.tps.mvc.jpod.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpDate;
@@ -9,6 +10,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodEpisode;
+import jmnet.moka.core.tps.mvc.jpod.entity.QJpodChannel;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodEpisode;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodEpisodeRelArt;
 import jmnet.moka.core.tps.mvc.jpod.entity.QJpodKeyword;
@@ -39,13 +41,21 @@ public class JpodEpisodeRepositorySupportImpl extends TpsQueryDslRepositorySuppo
     @Override
     public Page<JpodEpisode> findAllJpodEpisode(JpodEpisodeSearchDTO search) {
         QJpodEpisode qJpodEpisode = QJpodEpisode.jpodEpisode;
-
+        QJpodChannel jpodChannel = QJpodChannel.jpodChannel;
 
         JPQLQuery<JpodEpisode> query = from(qJpodEpisode);
-        // 채널명
+        // 채널번호
         if (search.getChnlSeq() != null && search.getChnlSeq() > 0) {
             query.where(qJpodEpisode.chnlSeq.eq(search.getChnlSeq()));
         }
+        // 채널번호
+        if (search.getPodtyChnlSrl() != null && search.getPodtyChnlSrl() > 0) {
+            query.where(qJpodEpisode.chnlSeq.in(JPAExpressions
+                    .selectFrom(jpodChannel)
+                    .select(jpodChannel.chnlSeq)
+                    .where(jpodChannel.podtyChnlSrl.eq(search.getPodtyChnlSrl()))));
+        }
+
         // 에피소드명
         if (McpString.isNotEmpty(search.getKeyword())) {
             query.where(qJpodEpisode.epsdNm.contains(search.getKeyword()));

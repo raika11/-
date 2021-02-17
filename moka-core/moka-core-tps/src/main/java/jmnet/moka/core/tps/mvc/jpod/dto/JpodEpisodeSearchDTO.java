@@ -36,6 +36,9 @@ public class JpodEpisodeSearchDTO extends SearchDTO {
     @ApiModelProperty("채널 일련번호")
     private Long chnlSeq;
 
+    @ApiModelProperty("팟티 채널번호")
+    private Integer podtyChnlSrl;
+
     @ApiModelProperty("사용여부")
     @Pattern(regexp = "[N|Y]{1}$", message = "{tps.common.error.pattern.usedYn}")
     private String usedYn;

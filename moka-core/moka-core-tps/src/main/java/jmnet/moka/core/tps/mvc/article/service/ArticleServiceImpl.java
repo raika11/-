@@ -438,7 +438,7 @@ public class ArticleServiceImpl implements ArticleService {
             return false;
         }
 
-        // ARTICLE_BASIC에 제목,부제목,기자 수정 : UPA_ARTICLE_BASIC_UPD_BY_TOTALID
+        // ARTICLE_BASIC에 제목,부제목,기자 수정 (서비스플래그수정): UPA_ARTICLE_BASIC_UPD_BY_TOTALID
         String reporters = updateDto
                 .getReporterList()
                 .stream()

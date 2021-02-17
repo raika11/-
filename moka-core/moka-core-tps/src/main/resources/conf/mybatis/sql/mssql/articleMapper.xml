@@ -193,10 +193,10 @@
   <select id="findByIdForMapList" parameterType="Long"
     resultMap="ArticleDetailMap,ArticleCodeMap,ArticleReporterMap,ArticleComponentRelMap"
     statementType="CALLABLE">
-		 {call UPU_15RE_ARTICLE_SEL(
-			#{value, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-		) }
-  	</select>
+    {call UPU_15RE_ARTICLE_SEL(
+      #{value, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </select>
 
   <!-- 기사 부가정보 조회(분류코드,기자,키워드,벌크,로그인여부,본문) -->
   <resultMap id="CodeMap" type="string"/>
@@ -207,9 +207,9 @@
   <select id="findInfo" parameterType="hashMap"
     resultMap="CodeMap,ArtReporterMap,ArtKeywordMap,ArticleServiceMap,contentMap"
     statementType="CALLABLE">
-  { call UPA_ARTICLE_BASIC_SEL_BY_INFO(
-    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-    ) }
+    { call UPA_ARTICLE_BASIC_SEL_BY_INFO(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
   <!-- 네이버채널 기사 목록 조회(bulk_flag=Y) -->
@@ -311,9 +311,9 @@
   <select id="findAllImageComponent" parameterType="java.lang.Long"
     resultType="ArticleComponentVO"
     statementType="CALLABLE">
-  { call UPA_15RE_COMPONENT_LIST_SEL_IN_ARTICLE(
-    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-    ) }
+    { call UPA_15RE_COMPONENT_LIST_SEL_IN_ARTICLE(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
   <!-- 기사 목록 조회-->
@@ -362,6 +362,15 @@
     <choose>
       <when test="bulkYn != 'all' and bulkYn != null and bulkYn != ''">
         #{bulkYn},
+      </when>
+      <otherwise>
+        NULL,
+      </otherwise>
+    </choose>
+
+    <choose>
+      <when test="serviceFlag != 'all' and serviceFlag != null and serviceFlag != ''">
+        #{serviceFlag},
       </when>
       <otherwise>
         NULL,
@@ -440,10 +449,10 @@
 
   <!-- 기사를 중지 또는 삭제-->
   <select id="insertArticleIud" parameterType="hashMap" statementType="CALLABLE">
-  {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_ARTICLE_IUD_INS(
-  #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-  #{iud, mode=IN, jdbcType=VARCHAR, javaType=string}
-  ) }
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_ARTICLE_IUD_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{iud, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
   </select>
 
   <!--분류삭제-->
@@ -553,23 +562,23 @@
   <!--제목,기자 수정-->
   <update id="callUpaArticleBasicUpdByTotalId" parameterType="hashMap"
     statementType="CALLABLE">
-   { call UPA_ARTICLE_BASIC_UPD_BY_TOTALID(
-    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-    #{artReporter, mode=IN, jdbcType=NVARCHAR, javaType=string},
-    #{artTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
-    #{artSubTitle, mode=IN, jdbcType=NVARCHAR, javaType=string}
-    )}
+    { call UPA_ARTICLE_BASIC_UPD_BY_TOTALID(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{artReporter, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{artTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
+      #{artSubTitle, mode=IN, jdbcType=NVARCHAR, javaType=string}
+      )}
   </update>
 
   <select id="upaArticleHistoryListSel" parameterType="java.lang.Long"
     resultType="ArticleHistoryVO" statementType="CALLABLE">
     { call UPA_ARTICLE_HISTORY_LIST_SEL(
-    #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-    #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-    #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
-    #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
-    )}
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+      )}
   </select>
 
 </mapper>

@@ -143,6 +143,16 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "RESERVE_DT")
     private Date reserveDt;
 
+    @ApiModelProperty("임시저장 최종일시")
+    @DTODateTimeFormat
+    @Column(name = "LAST_SAVE_DT")
+    private Date lastSaveDt;
+
+    @ApiModelProperty("전송 최종일시")
+    @DTODateTimeFormat
+    @Column(name = "LAST_PUBLISH_DT")
+    private Date lastPublishDt;
+
     @ApiModelProperty("편집기사워크 목록")
     @Builder.Default
     private List<DeskingWorkVO> deskingWorks = new ArrayList<DeskingWorkVO>();

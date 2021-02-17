@@ -38,7 +38,7 @@ const CodeMgtEditButton = (props) => {
     return (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
             <Button variant="white" className="border-0 p-0 moka-table-button bg-transparent" onClick={handleClick}>
-                <MokaIcon iconName="fal-pencil" />
+                <MokaIcon iconName="fas-pencil" />
             </Button>
         </div>
     );

@@ -5,75 +5,57 @@ import { createRequestActionTypes } from '@store/commons/saga';
  * 검색조건 변경 액션
  */
 export const CHANGE_GRP_SEARCH_OPTION = 'codeMgt/CHANGE_SEARCH_GRP_OPTION';
-export const CHANGE_CD_SEARCH_OPTION = 'codeMgt/CHANGE_CD_SEARCH_OPTION';
+export const CHANGE_DTL_SEARCH_OPTION = 'codeMgt/CHANGE_DTL_SEARCH_OPTION';
 export const changeGrpSearchOption = createAction(CHANGE_GRP_SEARCH_OPTION, (search) => search);
-export const changeCdSearchOption = createAction(CHANGE_CD_SEARCH_OPTION, (search) => search);
-
-/**
- * 유효성 검사
- */
-export const CHANGE_GRP_INVALID_LIST = 'codeMgt/CHANGE_GRP_INVALID_LIST';
-export const CHANGE_CD_INVALID_LIST = 'codeMgt/CHANGE_CD_INVALID_LIST';
-export const changeGrpInvalidList = createAction(CHANGE_GRP_INVALID_LIST, (invalidList) => invalidList);
-export const changeCdInvalidList = createAction(CHANGE_CD_INVALID_LIST, (invalidList) => invalidList);
+export const changeDtlSearchOption = createAction(CHANGE_DTL_SEARCH_OPTION, (search) => search);
 
 /**
  * 스토어 데이터 삭제 액션
  */
 export const CLEAR_STORE = 'codeMgt/CLEAR_STORE';
-export const CLEAR_GRP = 'codeMgt/CLEAR_GRP';
-export const CLEAR_CD = 'codeMgt/CLEAR_CD';
-export const CLEAR_GRP_LIST = 'codeMgt/CLEAR_GRP_LIST';
-export const CLEAR_CD_LIST = 'codeMgt/CLEAR_CD_LIST';
 export const clearStore = createAction(CLEAR_STORE, (payload) => payload);
-export const clearGrp = createAction(CLEAR_GRP, (payload) => payload);
-export const clearCd = createAction(CLEAR_CD, (payload) => payload);
+export const CLEAR_GRP_LIST = 'codeMgt/CLEAR_GRP_LIST';
 export const clearGrpList = createAction(CLEAR_GRP_LIST, (payload) => payload);
-export const clearCdList = createAction(CLEAR_CD_LIST, (payload) => payload);
+export const CLEAR_DTL_LIST = 'codeMgt/CLEAR_DTL_LIST';
+export const clearDtlList = createAction(CLEAR_DTL_LIST, (payload) => payload);
 
 /**
  * 데이터 조회 액션
  */
-export const [GET_CODE_MGT_GRP_LIST, GET_CODE_MGT_GRP_LIST_SUCCESS, GET_CODE_MGT_GRP_LIST_FAILURE] = createRequestActionTypes('codeMgt/GET_CODE_MGT_GRP_LIST');
-export const [GET_CODE_MGT_LIST, GET_CODE_MGT_LIST_SUCCESS, GET_CODE_MGT_LIST_FAILURE] = createRequestActionTypes('codeMgt/GET_CODE_MGT_LIST');
-export const [GET_CODE_MGT_GRP, GET_CODE_MGT_GRP_SUCCESS, GET_CODE_MGT_GRP_FAILURE] = createRequestActionTypes('codeMgt/GET_CODE_MGT_GRP');
-export const [GET_CODE_MGT, GET_CODE_MGT_SUCCESS, GET_CODE_MGT_FAILURE] = createRequestActionTypes('codeMgt/GET_CODE_MGT');
-export const getCodeMgtGrpList = createAction(GET_CODE_MGT_GRP_LIST, (...actions) => actions);
-export const getCodeMgtList = createAction(GET_CODE_MGT_LIST, (...actions) => actions);
-export const getCodeMgtGrp = createAction(GET_CODE_MGT_GRP, (grpCd) => grpCd);
-export const getCodeMgt = createAction(GET_CODE_MGT, (cdSeq) => cdSeq);
+export const [GET_GRP_LIST, GET_GRP_LIST_SUCCESS, GET_GRP_LIST_FAILURE] = createRequestActionTypes('codeMgt/GET_GRP_LIST');
+export const getGrpList = createAction(GET_GRP_LIST, ({ search, callback }) => ({ search, callback }));
+export const [GET_DTL_LIST, GET_DTL_LIST_SUCCESS, GET_DTL_LIST_FAILURE] = createRequestActionTypes('codeMgt/GET_DTL_LIST');
+export const getDtlList = createAction(GET_DTL_LIST, ({ search, callback }) => ({ search, callback }));
+export const [GET_GRP, GET_GRP_SUCCESS] = createRequestActionTypes('codeMgt/GET_GRP'); // 사용하는지 체크해야함
+export const getGrp = createAction(GET_GRP, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const GET_GRP_MODAL = 'codeMgt/GET_GRP_MODAL';
+export const getGrpModal = createAction(GET_GRP_MODAL, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const GET_DTL_MODAL = 'codeMgt/GET_DTL_MODAL';
+export const getDtlModal = createAction(GET_DTL_MODAL, ({ seqNo, callback }) => ({ seqNo, callback }));
 
 /**
  * 데이터 저장 액션
  */
-export const SAVE_CODE_MGT_GRP = 'codeMgt/SAVE_CODE_MGT_GRP';
-export const SAVE_CODE_MGT = 'codeMgt/SAVE_CODE_MGT';
-export const saveCodeMgtGrp = createAction(SAVE_CODE_MGT_GRP, ({ type, actions, callback }) => ({ type, actions, callback }));
-export const saveCodeMgt = createAction(SAVE_CODE_MGT, ({ type, actions, callback }) => ({ type, actions, callback }));
-
-/**
- * 데이터 변경 액션
- */
-export const CHANGE_GRP = 'codeMgt/CHANGE_GRP';
-export const CHANGE_CD = 'codeMgt/CHANGE_CD';
-export const changeGrp = createAction(CHANGE_GRP, (grp) => grp);
-export const changeCd = createAction(CHANGE_CD, (cd) => cd);
+export const SAVE_GRP = 'codeMgt/saveGrp';
+export const saveGrp = createAction(SAVE_GRP, ({ grp, callback }) => ({ grp, callback }));
+export const SAVE_DTL = 'codeMgt/SAVE_DTL';
+export const saveDtl = createAction(SAVE_DTL, ({ dtl, callback }) => ({ dtl, callback }));
 
 /**
  * 데이터 삭제 액션
  */
-export const [DELETE_CODE_MGT_GRP, DELETE_CODE_MGT_GRP_SUCCESS, DELETE_CODE_MGT_GRP_FAILURE] = createRequestActionTypes('codeMgt/DELETE_CODE_MGT_GRP');
-export const [DELETE_CODE_MGT, DELETE_CODE_MGT_SUCCESS, DELETE_CODE_MGT_FAILURE] = createRequestActionTypes('codeMgt/DELETE_CODE_MGT');
-export const deleteCodeMgtGrp = createAction(DELETE_CODE_MGT_GRP, ({ grpSeq, callback }) => ({ grpSeq, callback }));
-export const deleteCodeMgt = createAction(DELETE_CODE_MGT, (cdSeq) => cdSeq);
+export const DELETE_GRP = 'codeMgt/DELETE_GRP';
+export const deleteGrp = createAction(DELETE_GRP, ({ seqNo, callback }) => ({ seqNo, callback }));
+export const DELETE_DTL = 'codeMgt/DELETE_DTL';
+export const deleteDtl = createAction(DELETE_DTL, ({ seqNo, callback }) => ({ seqNo, callback }));
 
 /**
  * 중복 검사
  */
-export const GET_CODE_MGT_GRP_DUPLICATE_CHECK = 'codeMgt/GET_CODE_MGT_GRP_DUPLICATE_CHECK';
-export const GET_CODE_MGT_DUPLICATE_CHECK = 'codeMgt/GET_CODE_MGT_DUPLICATE_CHECK';
-export const getCodeMgtGrpDuplicateCheck = createAction(GET_CODE_MGT_GRP_DUPLICATE_CHECK, ({ grpCd, callback }) => ({ grpCd, callback }));
-export const getCodeMgtDuplicateCheck = createAction(GET_CODE_MGT_DUPLICATE_CHECK, ({ grpCd, dtlCd, callback }) => ({ grpCd, dtlCd, callback }));
+export const EXISTS_GRP = 'codeMgt/EXISTS_GRP';
+export const EXISTS_DTL = 'codeMgt/EXISTS_DTL';
+export const existsGrp = createAction(EXISTS_GRP, ({ grpCd, callback }) => ({ grpCd, callback }));
+export const existsDtl = createAction(EXISTS_DTL, ({ grpCd, dtlCd, callback }) => ({ grpCd, dtlCd, callback }));
 
 /**
  * 조회용 데이터 액션

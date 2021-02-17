@@ -3,9 +3,15 @@ import CodeMgtEditButton from './components/CodeMgtEditButton';
 
 export default [
     {
-        headerName: '기타코드',
+        headerName: '그룹코드',
+        field: 'grpCd',
+        width: 160,
+        tooltipField: 'grpCd',
+    },
+    {
+        headerName: '그룹명',
         field: 'cdNm',
-        width: 168,
+        width: 200,
         flex: 1,
         tooltipField: 'cdNm',
     },

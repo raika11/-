@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/codeMgt';
-import CodeMgtEdit from './CodeMgtEdit';
-const CodeMgtList = React.lazy(() => import('./CodeMgtList'));
+import DtlList from './DtlList';
+const GrpList = React.lazy(() => import('./GrpList'));
 
 /**
  * 기타코드 관리
@@ -28,21 +28,21 @@ const CodeMgt = ({ match }) => {
                     <meta name="robots" content="noindex" />
                 </Helmet>
 
-                {/* 기타코드 그룹 목록 */}
-                <MokaCard width={280} className="mr-gutter" bodyClassName="d-flex flex-column" header={false}>
+                {/* 그룹코드 목록 */}
+                <MokaCard width={480} className="mr-gutter" bodyClassName="d-flex flex-column" title="기타코드 관리">
                     <Suspense>
-                        <CodeMgtList match={match} />
+                        <GrpList match={match} />
                     </Suspense>
                 </MokaCard>
 
-                {/* 기타코드 편집 */}
+                {/* 그룹의 상세코드 목록 */}
                 <Switch>
                     <Route
-                        path={[`${match.path}/:grpCd`, `${match.path}/:grpCd/:cdSeq`]}
+                        path={[`${match.path}/:grpCd`]}
                         exact
                         render={() => (
-                            <MokaCard width={1316} bodyClassName="d-flex flex-column" header={false}>
-                                <CodeMgtEdit match={match} />
+                            <MokaCard className="flex-fill" bodyClassName="d-flex flex-column" header={false}>
+                                <DtlList match={match} />
                             </MokaCard>
                         )}
                     />

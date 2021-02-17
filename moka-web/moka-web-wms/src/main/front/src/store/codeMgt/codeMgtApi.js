@@ -2,37 +2,22 @@ import qs from 'qs';
 import instance from '@store/commons/axios';
 
 // 그룹 목록 조회
-export const getCodeMgtGrpList = ({ grpSearch }) => {
-    const queryString = qs.stringify(grpSearch);
+export const getGrpList = ({ search }) => {
+    const queryString = qs.stringify(search);
     return instance.get(`/api/codemgt-grps?${queryString}`).catch((err) => {
         throw err;
     });
 };
 
-// 코드 목록 조회
-export const getCodeMgtList = ({ cdSearch }) => {
-    const queryString = qs.stringify(cdSearch);
-    return instance.get(`/api/codemgt-grps/${cdSearch.grpCd}/codemgts?${queryString}`).catch((err) => {
-        throw err;
-    });
-};
-
 // 그룹 상세 조회
-export const getCodeMgtGrp = (grpCd) => {
+export const getGrp = ({ grpCd }) => {
     return instance.get(`/api/codemgt-grps/${grpCd}`).catch((err) => {
         throw err;
     });
 };
 
-// 코드 상세 조회
-export const getCodeMgt = (cdSeq) => {
-    return instance.get(`/api/codemgt-grps/codemgts/${cdSeq}`).catch((err) => {
-        throw err;
-    });
-};
-
 // 그룹 등록 (application/json)
-export const postCodeMgtGrp = ({ grp }) => {
+export const postGrp = ({ grp }) => {
     return instance
         .post('/api/codemgt-grps', grp, {
             headers: {
@@ -44,34 +29,10 @@ export const postCodeMgtGrp = ({ grp }) => {
         });
 };
 
-// 코드 등록 (application/json)
-export const postCodeMgt = ({ cd }) => {
-    return instance
-        .post('/api/codemgt-grps/codemgts', cd, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
-// export const postCodeMgt = ({ cd }) => {
-//     const codeMgts = {
-//         ...cd,
-//         'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
-//         'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
-//         codeMgtGrp: undefined,
-//     };
-//     return instance.post('/api/codemgt-grps/codemgts', qs.stringify(codeMgts)).catch((err) => {
-//         throw err;
-//     });
-// };
-
 // 그룹 수정 (application/json)
-export const putCodeMgtGrp = ({ grp }) => {
+export const putGrp = ({ grp }) => {
     return instance
-        .put(`/api/codemgt-grps/${grp.grpSeq}`, grp, {
+        .put(`/api/codemgt-grps/${grp.seqNo}`, grp, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -80,61 +41,78 @@ export const putCodeMgtGrp = ({ grp }) => {
             throw err;
         });
 };
-
-// 코드 수정 (application/json)
-export const putCodeMgt = ({ cd }) => {
-    return instance
-        .put(`/api/codemgt-grps/codemgts/${cd.seqNo}`, cd, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
-};
-// export const putCodeMgt = ({ cd }) => {
-//     const codeMgts = {
-//         ...cd,
-//         'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
-//         'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
-//         codeMgtGrp: undefined,
-//     };
-//     return instance.put(`/api/codemgt-grps/codemgts/${codeMgts.seqNo}`, qs.stringify(codeMgts)).catch((err) => {
-//         throw err;
-//     });
-// };
 
 // 그룹 삭제
-export const deleteCodeMgtGrp = ({ grpSeq }) => {
-    return instance.delete(`/api/codemgt-grps/${grpSeq}`).catch((err) => {
-        throw err;
-    });
-};
-
-// 코드 삭제
-export const deleteCodeMgt = ({ cdSeq }) => {
-    return instance.delete(`/api/codemgt-grps/codemgts/${cdSeq}`).catch((err) => {
-        throw err;
-    });
-};
-
-// 사용중인 코드 목록 조회(페이징 없음)
-export const getUseCodeMgtList = (grpCd) => {
-    return instance.get(`/api/codemgt-grps/${grpCd}/use-codemgts`).catch((err) => {
+export const deleteGrp = ({ seqNo }) => {
+    return instance.delete(`/api/codemgt-grps/${seqNo}`).catch((err) => {
         throw err;
     });
 };
 
 // 그룹 중복검사
-export const getCodeMgtGrpDuplicateCheck = ({ grpCd }) => {
+export const existsGrp = ({ grpCd }) => {
     return instance.get(`/api/codemgt-grps/${grpCd}/exists`).catch((err) => {
         throw err;
     });
 };
 
-// 코드 중복검사
-export const getCodeMgtDuplicateCheck = ({ grpCd, dtlCd }) => {
+// 상세코드 목록 조회
+export const getDtlList = ({ search }) => {
+    const queryString = qs.stringify(search);
+    return instance.get(`/api/codemgt-grps/${search.grpCd}/codemgts?${queryString}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 상세코드 상세 조회
+export const getDtl = ({ seqNo }) => {
+    return instance.get(`/api/codemgt-grps/codemgts/${seqNo}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 상세코드 등록 (application/json)
+export const postDtl = ({ dtl }) => {
+    return instance
+        .post('/api/codemgt-grps/codemgts', dtl, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 상세코드 수정 (application/json)
+export const putDtl = ({ dtl }) => {
+    return instance
+        .put(`/api/codemgt-grps/codemgts/${dtl.seqNo}`, dtl, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
+// 상세코드 삭제
+export const deleteDtl = ({ seqNo }) => {
+    return instance.delete(`/api/codemgt-grps/codemgts/${seqNo}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 사용중인 상세코드 목록 조회(페이징 없음)
+export const getUseDtlList = ({ grpCd }) => {
+    return instance.get(`/api/codemgt-grps/${grpCd}/use-codemgts`).catch((err) => {
+        throw err;
+    });
+};
+
+// 상세코드 중복검사
+export const existsDtl = ({ grpCd, dtlCd }) => {
     return instance.get(`/api/codemgt-grps/${grpCd}/${dtlCd}/exists`).catch((err) => {
         throw err;
     });

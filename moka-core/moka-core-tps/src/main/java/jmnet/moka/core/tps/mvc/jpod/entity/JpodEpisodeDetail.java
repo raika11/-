@@ -170,6 +170,13 @@ public class JpodEpisodeDetail extends BaseAudit implements Serializable {
     @Builder.Default
     private Integer scbCnt = 0;
 
+    /**
+     * 시즌번호
+     */
+    @Column(name = "SEASON_NO")
+    @Builder.Default
+    private Integer seasonNo = 0;
+
     @Builder.Default
     @OrderBy("ordNo asc")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "episode", cascade = {CascadeType.MERGE, CascadeType.REMOVE})

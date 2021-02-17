@@ -3,7 +3,7 @@
  */
 package jmnet.moka.core.tps.common;
 
-import org.springframework.http.HttpStatus;
+import jmnet.moka.core.common.MokaConstants;
 
 /**
  * <pre>
@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
  * @author ssc
  * @since 2019. 11. 29. 오후 1:33:35
  */
-public class TpsConstants {
+public class TpsConstants extends MokaConstants {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
     public static final String CONTENT_TYPE = "Content-Type";
@@ -37,32 +37,6 @@ public class TpsConstants {
      */
     public static final String ROLE_SUPERADMIN = "ROLE_SUPERADMIN";
     public static final String ROLE_USER = "ROLE_USER";
-
-    /**
-     * 에러페이지
-     */
-    public static final String MODEL_ATTR_ROOTCAUSE = "rootCause";
-    public static final String MODEL_ATTR_EXCEPTION = "exception";
-    //    public static final String ERROR_PAGE_403 = "/html/error/403.html";
-    //    public static final String ERROR_PAGE_500 = "/html/error/500.html";
-    //    public static final String SESSION_EXPIRED_URL = "/html/error/sessionExpired.html"; // 세션 종료 페이지
-
-    /**
-     * ResultDTO의 헤더코드
-     */
-    public static final int HEADER_SUCCESS = HttpStatus.OK.value();           // 성공
-    public static final int HEADER_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR.value();      // 서버오류
-    public static final int HEADER_BAD_REQUEST = HttpStatus.BAD_REQUEST.value();        // 요청오류
-    public static final int HEADER_BAD_GATEWAY = HttpStatus.BAD_GATEWAY.value();        // 요청오류
-    public static final int HEADER_UNAUTHORIZED = HttpStatus.UNAUTHORIZED.value();        // 인증오류
-    public static final int HEADER_UNAUTHORIZED_GROUPWARE_NOTFOUND = 490;        // 그룹웨어 ID 없음 오류
-    public static final int HEADER_UNAUTHORIZED_USERNAME_NOTFOUND = 491;        //
-    public static final int HEADER_FORBIDDEN = HttpStatus.FORBIDDEN.value();        // 인증오류
-    public static final int HEADER_NO_DATA = HttpStatus.NO_CONTENT.value();           // 데이타없음
-    public static final int HEADER_INVALID_DATA = HttpStatus.BAD_REQUEST.value();        // 데이타 유효성검사 실패
-
-    public static final int HEADER_FILE_ERROR = 470;        // 파일관련 에러
-    public static final int HEADER_RELEATED_DATA = 471;        // 관련데이타로 인해 삭제실패
 
     /**
      * 히스토리 작업구분

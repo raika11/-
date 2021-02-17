@@ -15,6 +15,7 @@ import jmnet.moka.core.tps.mvc.codemgt.dto.CodeMgtGrpSearchDTO;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgtGrp;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeMgtGrp;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -37,6 +38,8 @@ public class CodeMgtGrpRepositorySupportImpl extends TpsQueryDslRepositorySuppor
     public Page<CodeMgtGrp> findAll(CodeMgtGrpSearchDTO search) {
         QCodeMgtGrp codeMgtGrp = QCodeMgtGrp.codeMgtGrp;
         QCodeMgt codeMgt = QCodeMgt.codeMgt;
+        QMemberInfo regMemberInfo = QMemberInfo.memberInfo;
+        QMemberInfo modMemberInfo = QMemberInfo.memberInfo;
 
         BooleanBuilder builder = new BooleanBuilder();
         String keyword = search.getKeyword();
@@ -80,6 +83,8 @@ public class CodeMgtGrpRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         query = getQuerydsl().applyPagination(search.getPageable(), query);
         QueryResults<CodeMgtGrp> list = query
                 .leftJoin(codeMgtGrp.codeMgts, codeMgt)
+                .leftJoin(codeMgtGrp.regMember, regMemberInfo)
+                .leftJoin(codeMgtGrp.modMember, modMemberInfo)
                 .distinct()
                 .where(builder)
                 .orderBy(codeMgtGrp.seqNo.desc())

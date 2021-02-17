@@ -27,11 +27,12 @@ public interface ArticlePageRepository extends JpaRepository<ArticlePage, Long>,
     int countByDomainDomainIdAndArtType(String domainId, String artType);
 
     /**
-     * 유형에 해당하는 기사페이지 조회
+     * 도메인, 유형에 해당하는 기사페이지 조회
      *
      * @param domainId 도메인ID
      * @param artType  유형
      * @return 기사페이지
      */
     List<ArticlePage> findByDomainDomainIdAndArtType(String domainId, String artType);
+
 }

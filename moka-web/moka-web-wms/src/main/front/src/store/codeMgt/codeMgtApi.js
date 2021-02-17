@@ -31,45 +31,79 @@ export const getCodeMgt = (cdSeq) => {
     });
 };
 
-// 그룹 등록
+// 그룹 등록 (application/json)
 export const postCodeMgtGrp = ({ grp }) => {
-    return instance.post('/api/codemgt-grps', qs.stringify(grp)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .post('/api/codemgt-grps', grp, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
-// 코드 등록
+// 코드 등록 (application/json)
 export const postCodeMgt = ({ cd }) => {
-    const codeMgts = {
-        ...cd,
-        'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
-        'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
-        codeMgtGrp: undefined,
-    };
-    return instance.post('/api/codemgt-grps/codemgts', qs.stringify(codeMgts)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .post('/api/codemgt-grps/codemgts', cd, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
+// export const postCodeMgt = ({ cd }) => {
+//     const codeMgts = {
+//         ...cd,
+//         'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
+//         'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
+//         codeMgtGrp: undefined,
+//     };
+//     return instance.post('/api/codemgt-grps/codemgts', qs.stringify(codeMgts)).catch((err) => {
+//         throw err;
+//     });
+// };
 
-// 그룹 수정
+// 그룹 수정 (application/json)
 export const putCodeMgtGrp = ({ grp }) => {
-    return instance.put(`/api/codemgt-grps/${grp.grpSeq}`, qs.stringify(grp)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(`/api/codemgt-grps/${grp.grpSeq}`, grp, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
 
-// 코드 수정
+// 코드 수정 (application/json)
 export const putCodeMgt = ({ cd }) => {
-    const codeMgts = {
-        ...cd,
-        'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
-        'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
-        codeMgtGrp: undefined,
-    };
-    return instance.put(`/api/codemgt-grps/codemgts/${codeMgts.seqNo}`, qs.stringify(codeMgts)).catch((err) => {
-        throw err;
-    });
+    return instance
+        .put(`/api/codemgt-grps/codemgts/${cd.seqNo}`, cd, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
 };
+// export const putCodeMgt = ({ cd }) => {
+//     const codeMgts = {
+//         ...cd,
+//         'codeMgtGrp.seqNo': cd.codeMgtGrp.seqNo,
+//         'codeMgtGrp.grpCd': cd.codeMgtGrp.grpCd,
+//         codeMgtGrp: undefined,
+//     };
+//     return instance.put(`/api/codemgt-grps/codemgts/${codeMgts.seqNo}`, qs.stringify(codeMgts)).catch((err) => {
+//         throw err;
+//     });
+// };
 
 // 그룹 삭제
 export const deleteCodeMgtGrp = ({ grpSeq }) => {

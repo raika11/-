@@ -129,6 +129,17 @@ public class JpodChannelDetailDTO implements Serializable {
     @DTODateTimeFormat
     private Date regDt;
 
+    @ApiModelProperty("총시즌건수")
+    @Min(value = 0, message = "{tps.jpod-channel.error.min.seasonCnt}")
+    private Integer seasonCnt = 0;
+
+    /**
+     * 시즌명
+     */
+    @ApiModelProperty("시즌명")
+    @Size(max = 100, message = "{tps.jpod-channel.error.size.seasonNm}")
+    private String seasonNm;
+
     @ApiModelProperty("키워드 목록")
     private List<JpodKeywordDTO> keywords;
 

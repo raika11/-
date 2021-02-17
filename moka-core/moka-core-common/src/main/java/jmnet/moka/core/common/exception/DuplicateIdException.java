@@ -1,6 +1,4 @@
-package jmnet.moka.core.tps.exception;
-
-import jmnet.moka.core.common.exception.MokaException;
+package jmnet.moka.core.common.exception;
 
 /**
  * <pre>

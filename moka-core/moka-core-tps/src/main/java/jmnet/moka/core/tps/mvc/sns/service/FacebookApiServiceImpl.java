@@ -3,9 +3,9 @@ package jmnet.moka.core.tps.mvc.sns.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.Map;
 import jmnet.moka.common.utils.MapBuilder;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
@@ -46,7 +46,7 @@ public class FacebookApiServiceImpl implements SnsApiService {
     @Value("${sns.facebook.token-code}")
     private String facebookTokenCode;
 
-    
+
 
     private final RestTemplateHelper restTemplateHelper;
 

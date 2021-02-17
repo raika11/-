@@ -6,11 +6,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,4 +79,18 @@ public class CodeMgtGrpDTO implements Serializable {
 
     @ApiModelProperty("하위 기타코드 갯수. 디비에는 없는 데이타임.")
     private Long countCodeMgt;
+
+    @ApiModelProperty(value = "등록일시", hidden = true)
+    @DTODateTimeFormat
+    private Date regDt;
+
+    @ApiModelProperty(value = "등록자", hidden = true)
+    private MemberSimpleDTO regMember;
+
+    @ApiModelProperty(value = "수정일시", hidden = true)
+    @DTODateTimeFormat
+    private Date modDt;
+
+    @ApiModelProperty(value = "수정자", hidden = true)
+    private MemberSimpleDTO modMember;
 }

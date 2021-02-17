@@ -1,9 +1,15 @@
 package jmnet.moka.web.schedule.support.reserve;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executor;
 import javax.annotation.PostConstruct;
+
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.schedule.config.PropertyHolder;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
 import jmnet.moka.web.schedule.mvc.reserve.dto.ReserveJobDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -36,27 +42,71 @@ public class ReserveJobHandler {
     @Autowired
     public Executor reserveJobTaskExecutor;
 
+    @Autowired
+    private PropertyHolder propertyHolder;
+
     /**
      * 예약작업 초기화
      */
     @PostConstruct
     public void initSchedulerMap() {
         // todo 1. 작업 목록을 조회하여 미실행된 status_flag = 0인 9인 작업 예약 작업으로 추가
+
+        if (propertyHolder.getReservedAction()) { // 스케줄 작업 실행 여부 체크
+            List<GenContent> scheduleList = jobContentService.findAllReservedJobContent();
+
+            for (GenContent info : scheduleList) {
+                //우선 350서버만 통과
+                if(info.getServerSeq() == 350) {
+                    info.setProgrameNm("jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob");
+                }
+                ReserveJobDTO reserveJob = new ReserveJobDTO();
+                reserveJob.setJobSeq(info.getJobSeq());
+
+                GenStatusHistory genStatusHist = jobContentService.findGenStatusHistory(info.getJobSeq());
+                if(genStatusHist != null){
+                    reserveJob.setSeqNo(genStatusHist.getSeqNo());
+                    reserveJob.setWorkType(genStatusHist.getStatus());
+                    reserveJob.setReserveDt(genStatusHist.getReserveDt());
+
+                    addReserveJob(reserveJob, info);
+                }
+            }
+
+        }
     }
 
     /**
      * 비동기 예약 작업 추가
      *
-     * @param reserveJob 작업 정보
+     * @param jobSeq 작업 번호
      */
-    public boolean addReserveJob(ReserveJobDTO reserveJob) {
+    public boolean addReserveJob(Long jobSeq) {
         /**
          * todo 2. 작업 정보로 GenContent 조회
          * - 작업 정보의 컬럼명은 확정되지 않음
          */
-        GenContent genContent = null;
+        GenContent genContent = jobContentService
+                .findJobContentBySeq(jobSeq)
+                .orElseThrow();
 
-        return addReserveJob(reserveJob, genContent);
+        //우선 350서버만 통과
+        if(genContent.getServerSeq() == 350) {
+            genContent.setProgrameNm("jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob");
+        }
+        ReserveJobDTO reserveJob = new ReserveJobDTO();
+        reserveJob.setJobSeq(genContent.getJobSeq());
+
+        GenStatusHistory genStatusHist = jobContentService.findGenStatusHistory(genContent.getJobSeq());
+        if(genStatusHist != null){
+            reserveJob.setSeqNo(genStatusHist.getSeqNo());
+            reserveJob.setWorkType(genStatusHist.getStatus());
+            reserveJob.setReserveDt(genStatusHist.getReserveDt());
+
+            return addReserveJob(reserveJob, genContent);
+        }
+
+        return false;
     }
 
     /**
@@ -66,10 +116,11 @@ public class ReserveJobHandler {
      */
     public boolean addReserveJob(ReserveJobDTO reserveJob, GenContent genContent) {
         boolean result = false;
-        if (McpString.isNotEmpty(genContent.getProgrameNm())) {// 프로그램명이 존재할 경우 실행
+
+        if (McpString.isNotEmpty(genContent.getProgrameNm()) && 0 < McpDate.term(reserveJob.getReserveDt())) {// 프로그램명이 존재할 경우 + 예약시간이 미래시간인 경우 실행
             try {
                 ReserveJob job = (ReserveJob) context.getBean(Class.forName(genContent.getProgrameNm()));
-                Long newTaskSeq = 0l;
+                Long newTaskSeq = reserveJob.getSeqNo();
                 reserveJobTaskExecutor.execute(() -> job.asyncTask(reserveJob, newTaskSeq));
                 result = true;
             } catch (BeansException | ClassNotFoundException e) {

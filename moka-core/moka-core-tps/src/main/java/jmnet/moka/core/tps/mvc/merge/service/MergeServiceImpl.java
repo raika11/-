@@ -15,6 +15,7 @@ import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tms.merge.MokaPreviewTemplateMerger;
@@ -26,7 +27,6 @@ import jmnet.moka.core.tms.merge.item.PageItem;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.config.PreviewConfiguration;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.service.AreaService;
 import jmnet.moka.core.tps.mvc.article.dto.ArticleBasicUpdateDTO;
@@ -516,7 +516,7 @@ public class MergeServiceImpl implements MergeService {
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회(기본타입으로 조회)
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, TpsConstants.DEFAULT_ART_TYPE);
+        ArticlePage articlePage = articlePageService.findByArticePage(TpsConstants.DEFAULT_ART_TYPE, domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);
@@ -601,7 +601,7 @@ public class MergeServiceImpl implements MergeService {
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        ArticlePage articlePage = articlePageService.findByArticePage(artType, domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);
@@ -690,7 +690,7 @@ public class MergeServiceImpl implements MergeService {
         DomainItem domainItem = domainDto.toDomainItem();
 
         // 기사페이지 정보 조회
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, artType);
+        ArticlePage articlePage = articlePageService.findByArticePage(artType, domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);
@@ -738,7 +738,7 @@ public class MergeServiceImpl implements MergeService {
                 });
 
         // 기사페이지 정보 조회
-        ArticlePage articlePage = articlePageService.findByArticePageByArtType(domainId, articleBasic.getArtType());
+        ArticlePage articlePage = articlePageService.findByArticePage(articleBasic.getArtType(), domainId);
         if (articlePage == null) {
             String message = messageByLocale.get("tps.common.error.no-data");
             tpsLogger.fail(message, true);

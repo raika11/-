@@ -1,16 +1,25 @@
 package jmnet.moka.core.tms.template.loader;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.JSONResult;
+import jmnet.moka.common.cache.CacheManager;
 import jmnet.moka.common.template.Constants;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -18,10 +27,14 @@ import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.KeyResolver;
 import jmnet.moka.core.tms.merge.item.MergeItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
+import jmnet.moka.core.tms.mvc.HttpParamFactory;
+import jmnet.moka.core.tms.mvc.HttpParamMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.GenericApplicationContext;
 
 /**
@@ -34,16 +47,16 @@ import org.springframework.context.support.GenericApplicationContext;
  * @since 2019. 9. 4. 오후 4:16:52
  */
 public class DpsTemplateLoader extends AbstractTemplateLoader {
-    public static final String ITEM_API_DOMAIN = "domain.list";
-    public static final String API_RESERVED = "reserved.list";
-    public static final String ITEM_API_PAGE = "page.list";
-    public static final String ITEM_API_CONTAINER = "container";
-    public static final String ITEM_API_COMPONENT = "component";
-    public static final String ITEM_API_TEMPLATE = "template";
-    public static final String ITEM_API_DATASET = "dataset";
-    public static final String ITEM_API_AD = "ad";
-    public static final String ITEM_API_ARTICLE_PAGE = "articlePage";
-    public static final String ITEM_API_ARTICLE_PAGE_ID = "articlePageId";
+//    public static final String ITEM_API_DOMAIN = "domain.list";
+//    public static final String API_RESERVED = "reserved.list";
+//    public static final String ITEM_API_PAGE = "page.list";
+//    public static final String ITEM_API_CONTAINER = "container";
+//    public static final String ITEM_API_COMPONENT = "component";
+//    public static final String ITEM_API_TEMPLATE = "template";
+//    public static final String ITEM_API_DATASET = "dataset";
+//    public static final String ITEM_API_AD = "ad";
+//    public static final String ITEM_API_ARTICLE_PAGE = "articlePage";
+//    public static final String ITEM_API_ARTICLE_PAGE_ID = "articlePageId";
     public static final String PARAM_DOMAIN_ID = "domainId";
     public static final String PARAM_ITEM_ID = "id";
     public static final String PARAM_TBODY = "tBody";
@@ -51,38 +64,65 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
     public static final String VALUE_ARTICLE_PAGE_SEQ = "ART_PAGE_SEQ";
     private static final String DEFAULT_ARTICLE_TYPE = "B";
 
+    // @Value anotation으로 로딩되지 않아 생성자에서 처리
+    private String savePagePath;
+
+    // 미리보기용 여부
+    private boolean preview;
+
+    private CacheManager cacheManager;
+
+    private HttpParamFactory httpParamFactory ;
+
     protected static Map<String, String> itemApiMap = new HashMap<String, String>();
     private Map<String, String> artTypeToArticlePageIdMap = new HashMap<>();
 
     static {
-        itemApiMap.put(MokaConstants.ITEM_DOMAIN, ITEM_API_DOMAIN);
-        itemApiMap.put(MokaConstants.ITEM_PAGE, ITEM_API_PAGE);
-        itemApiMap.put(MokaConstants.ITEM_CONTAINER, ITEM_API_CONTAINER);
-        itemApiMap.put(MokaConstants.ITEM_COMPONENT, ITEM_API_COMPONENT);
-        itemApiMap.put(MokaConstants.ITEM_TEMPLATE, ITEM_API_TEMPLATE);
-        itemApiMap.put(MokaConstants.ITEM_DATASET, ITEM_API_DATASET);
-        itemApiMap.put(MokaConstants.ITEM_AD, ITEM_API_AD);
-        itemApiMap.put(MokaConstants.ITEM_ARTICLE_PAGE, ITEM_API_ARTICLE_PAGE);
+        itemApiMap.put(MokaConstants.ITEM_DOMAIN, DpsApiConstants.ITEM_DOMAIN);
+        itemApiMap.put(MokaConstants.ITEM_PAGE, DpsApiConstants.ITEM_PAGE);
+        itemApiMap.put(MokaConstants.ITEM_CONTAINER, DpsApiConstants.ITEM_CONTAINER);
+        itemApiMap.put(MokaConstants.ITEM_COMPONENT, DpsApiConstants.ITEM_COMPONENT);
+        itemApiMap.put(MokaConstants.ITEM_TEMPLATE, DpsApiConstants.ITEM_TEMPLATE);
+        itemApiMap.put(MokaConstants.ITEM_DATASET, DpsApiConstants.ITEM_DATASET);
+        itemApiMap.put(MokaConstants.ITEM_AD, DpsApiConstants.ITEM_AD);
+        itemApiMap.put(MokaConstants.ITEM_ARTICLE_PAGE, DpsApiConstants.ITEM_ARTICLE_PAGE);
     }
 
     protected HttpProxyDataLoader httpProxyDataLoader;
     private static final Logger logger = LoggerFactory.getLogger(DpsTemplateLoader.class);
     private static final DpsItemFactory DPS_ITEM_FACTORY = new DpsItemFactory();
     private GenericApplicationContext appContext;
-    public DpsTemplateLoader(GenericApplicationContext appContext,String domainId, HttpProxyDataLoader httpProxyDataLoader)  {
-        this(appContext, domainId, httpProxyDataLoader, false, 0L);
-    }
 
-    public DpsTemplateLoader(GenericApplicationContext appContext, String domainId, HttpProxyDataLoader httpProxyDataLoader, boolean cacheable,
-            long itemExpireSeconds) {
+    /**
+     * DPS로 부터 아이템 정보를 가져와 처리한다.
+     * @param appContext context
+     * @param domainId 도메인 Id
+     * @param httpProxyDataLoader 로더
+     * @param cacheManager 캐시매니저
+     * @param cacheable 캐시여부
+     * @param preview 미리보기 여부
+     * @param itemExpireSeconds 아이템 만료 시간(초)
+     */
+    public DpsTemplateLoader(GenericApplicationContext appContext, String domainId, HttpProxyDataLoader httpProxyDataLoader,
+            CacheManager cacheManager, boolean cacheable, boolean preview, long itemExpireSeconds)
+            throws DataLoadException, TmsException {
         super(appContext, domainId, cacheable, itemExpireSeconds);
         try {
             this.httpProxyDataLoader = httpProxyDataLoader;
-            loadUri();
-            // 기본 article 페이지를 로딩한다.
-            getArticlePageId(this.domainId,DEFAULT_ARTICLE_TYPE);
+            this.cacheManager = cacheManager;
+            this.preview = preview;
+            if ( !preview ) {
+                this.httpParamFactory = (HttpParamFactory)appContext.getBean("httpParamFactory");
+                this.savePagePath = appContext
+                        .getBeanFactory()
+                        .resolveEmbeddedValue("${tms.merge.save.page.path}");
+                loadUri();
+                // 기본 article 페이지를 로딩한다.
+                getArticlePageId(this.domainId,DEFAULT_ARTICLE_TYPE);
+            }
         } catch (Exception e) {
-            logger.warn("TemplateLoader Creation failed: {}", e.getMessage());
+            logger.error("TemplateLoader Creation failed: {}", e.getMessage());
+            throw e;
         }
     }
 
@@ -96,7 +136,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
             Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
             parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
             parameterMap.put(PARAM_TBODY, "N");
-            JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_PAGE, parameterMap, true);
+            JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(DpsApiConstants.ITEM_PAGE, parameterMap, true);
             Object jsonArray = jsonResult.getDataList();
             for (JSONObject jsonObject : (List<JSONObject>) jsonArray) {
                 Map<String, Object> valueMap = ResourceMapper.getDefaultObjectMapper()
@@ -110,6 +150,23 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
                     String uri = getPageUriLowerCase(pageItem.getString(ItemConstants.PAGE_URL), pageItem.getString(ItemConstants.PAGE_URL_PARAM));
                     logger.debug("load uri: {} {}", this.domainId,uri);
                     newUri2ItemMap.put(uri, itemKey);
+                    // FILE_YN = Y 일경우 머징된 파일을 로딩한다.
+                    if ( pageItem.getBoolYN(ItemConstants.PAGE_FILE_YN)) {
+                        String mergedPagePath = String.join("/", this.savePagePath, this.domainId, pageItem.getItemId());
+                        File mergedPageFile = new File(mergedPagePath);
+                        try {
+                            String mergedPage = "";
+                            if (mergedPageFile.exists()) {
+                                mergedPage = new String(Files.readAllBytes(mergedPageFile.toPath()), "UTF-8");
+                                this.cacheManager.set(KeyResolver.getCacheType(MokaConstants.ITEM_PAGE),
+                                        KeyResolver.makePgItemCacheKey(this.domainId, pageItem.getItemId(),
+                                                this.httpParamFactory.createDefault()), mergedPage, 24 * 60 * 60 * 1000L);
+                                logger.debug("Merged Page Loaded:{}",uri);
+                            }
+                        } catch (IOException e) {
+                            logger.warn("Page Not Loaded: {} {}", this.domainId, pageItem.getItemId());
+                        }
+                    }
                 }
             }
 //            this.uri2ItemMap = newUri2ItemMap;
@@ -135,7 +192,7 @@ public class DpsTemplateLoader extends AbstractTemplateLoader {
         Map<String, Object> parameterMap = new LinkedHashMap<String, Object>();
         parameterMap.put(PARAM_DOMAIN_ID, this.domainId);
         parameterMap.put(PARAM_ARTICLE_TYPE, articleType);
-        JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(ITEM_API_ARTICLE_PAGE_ID, parameterMap, true);
+        JSONResult jsonResult = this.httpProxyDataLoader.getJSONResult(DpsApiConstants.ITEM_ARTICLE_PAGE_ID, parameterMap, true);
         Object jsonArray = jsonResult.getDataList();
         if ( jsonArray instanceof List) {
             List list = (List)jsonArray;

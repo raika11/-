@@ -6,6 +6,9 @@ import { MokaInput, MokaInputLabel, MokaModal, MokaTable } from '@/components';
 import columnDefs from './RcvProgsBulkLogAgGridColumns';
 import { GET_BULK_STAT_LIST_INFO, getBulkStatListInfo } from '@/store/bulks';
 
+/**
+ * 벌크 전송 상세 모달
+ */
 const RcvProgsBulkLogModal = (props) => {
     const { show, onHide, data } = props;
     const dispatch = useDispatch();

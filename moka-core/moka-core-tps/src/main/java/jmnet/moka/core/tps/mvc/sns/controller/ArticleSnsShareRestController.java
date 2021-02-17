@@ -16,14 +16,14 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.common.utils.exception.FileFormatException;
+import jmnet.moka.core.common.exception.InvalidDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.code.SnsTypeCode;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.common.util.ImageUtil;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleBasic;
 import jmnet.moka.core.tps.mvc.article.service.ArticleService;
 import jmnet.moka.core.tps.mvc.article.vo.ArticleDetailVO;
@@ -255,7 +255,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             @ApiParam("기사 ID") @PathVariable("totalId") @Pattern(regexp = "[0-9]{4}$", message = "{tps.sns.error.pattern.totalId}") Long totalId,
             @Valid ArticleSnsShareSaveDTO articleSnsShareSaveDTO,
             @ApiParam("이미지 파일") @RequestParam(value = "imgFile", required = false) MultipartFile imgFile)
-            throws FileFormatException, NoDataException, IOException {
+            throws Exception {
 
         // ArticleSnsShareDTO -> ArticleSnsShare 변환
         ArticleSnsShare newArticleSnsShare = modelMapper.map(articleSnsShareSaveDTO, ArticleSnsShare.class);
@@ -302,6 +302,8 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             returnValue = articleSnsShareService.insertArticleSnsShare(newArticleSnsShare);
         }
 
+        //purge
+        articleService.purge(articleBasic);
 
         // 결과리턴
         ArticleSnsShareDTO dto = modelMapper.map(returnValue, ArticleSnsShareDTO.class);

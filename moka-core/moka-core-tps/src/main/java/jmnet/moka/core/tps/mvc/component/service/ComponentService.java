@@ -2,8 +2,8 @@ package jmnet.moka.core.tps.mvc.component.service;
 
 import java.util.List;
 import java.util.Optional;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.dto.ComponentSearchDTO;
 import jmnet.moka.core.tps.mvc.component.entity.Component;
 import jmnet.moka.core.tps.mvc.component.vo.ComponentVO;
@@ -62,8 +62,8 @@ public interface ComponentService {
     /**
      * 컴포넌트 등록
      *
-     * @param component 등록할 컴포넌트
-     * @param histPublishDTO    임시저장/전송/예약 정보
+     * @param component      등록할 컴포넌트
+     * @param histPublishDTO 임시저장/전송/예약 정보
      * @return 등록된 컴포넌트
      * @throws NoDataException 데이터 없음
      * @throws Exception       예외
@@ -74,8 +74,8 @@ public interface ComponentService {
     /**
      * 여러개의 컴포넌트 등록
      *
-     * @param components 등록할 컴포넌트 리스트
-     * @param histPublishDTO    임시저장/전송/예약 정보
+     * @param components     등록할 컴포넌트 리스트
+     * @param histPublishDTO 임시저장/전송/예약 정보
      * @return 등록된 컴포넌트 리스트
      * @throws Exception 에러
      */
@@ -86,7 +86,7 @@ public interface ComponentService {
      * 컴포넌트 업데이트
      *
      * @param component      새로운 컴포넌트
-     * @param histPublishDTO    임시저장/전송/예약 정보
+     * @param histPublishDTO 임시저장/전송/예약 정보
      * @return
      * @throws Exception 예외
      */
@@ -96,9 +96,9 @@ public interface ComponentService {
     /**
      * 컴포넌트 업데이트(프런트에서 컴포넌트 수정할 때 사용)
      *
-     * @param newComponent      새로운 컴포넌트
-     * @param orgComponent      원래 컴포넌트
-     * @param histPublishDTO    임시저장/전송/예약 정보
+     * @param newComponent   새로운 컴포넌트
+     * @param orgComponent   원래 컴포넌트
+     * @param histPublishDTO 임시저장/전송/예약 정보
      * @return
      * @throws Exception 예외
      */

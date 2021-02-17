@@ -1,20 +1,20 @@
 /**
  * msp-tps InValidContentException.java 2020. 1. 10. 오후 2:23:40 ssc
  */
-package jmnet.moka.core.tps.exception;
+package jmnet.moka.core.common.exception;
 
 import java.util.ArrayList;
 import java.util.List;
-import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
+import jmnet.moka.core.common.dto.InvalidDataDTO;
 
 /**
  * <pre>
- * 데이타가 유효하지 않을경우 예외처리 
+ * 데이타가 유효하지 않을경우 예외처리
  * 2020. 1. 10. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 1. 10. 오후 2:23:40
+ *
  * @author ssc
+ * @since 2020. 1. 10. 오후 2:23:40
  */
 public class InvalidDataException extends Exception {
 

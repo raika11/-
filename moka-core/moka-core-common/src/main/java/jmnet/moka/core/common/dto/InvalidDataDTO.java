@@ -1,9 +1,9 @@
-package jmnet.moka.core.tps.common.dto;
+package jmnet.moka.core.common.dto;
 
-import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
  * 유효성오류 정보
  * 2020. 5. 21. ssc 최초생성
  * </pre>
- * 
- * @since 2020. 5. 21. 오전 11:17:56
+ *
  * @author ssc
+ * @since 2020. 5. 21. 오전 11:17:56
  */
 @NoArgsConstructor
 @AllArgsConstructor

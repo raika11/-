@@ -48,11 +48,20 @@ const MenuDraggableAgGrid = ({ onRowClicked, depth, menuId, parentMenuId, onChan
         }
     };
 
+    const handleSelectionChanged = (param) => {
+        param.api.getSelectedNodes();
+        if (commonUtil.isEmpty(menuId)) {
+            param.api.deselectAll();
+        }
+    };
+
     return (
         <div className="ag-theme-moka-dnd-grid position-relative overflow-hidden flex-fill">
             {loading && <MokaLoader />}
             <AgGridReact
+                onGridReady={handleGridReady}
                 onRowDragEnd={handleRowDragEnd}
+                onSelectionChanged={handleSelectionChanged}
                 immutableData
                 rowData={list}
                 getRowNodeId={(params) => params.menuId}

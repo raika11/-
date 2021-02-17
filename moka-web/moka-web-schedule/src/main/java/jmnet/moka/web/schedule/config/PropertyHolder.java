@@ -18,11 +18,21 @@ public class PropertyHolder {
     @Value("${schedule.action:true}")
     private boolean scheduleAction;
 
+    @Value("${reserved.action:true}")
+    private boolean reservedAction;
+
     /**
      * @return the scheduleAction
      */
     public boolean getScheduleAction() {
         return scheduleAction;
+    }
+
+    /**
+     * @return the reservedAction
+     */
+    public boolean getReservedAction() {
+        return reservedAction;
     }
 
     /**

@@ -10,10 +10,18 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -89,6 +98,9 @@ public class CommandController {
     @Qualifier("domainTemplateMerger")
     @Autowired
     private MokaDomainTemplateMerger domainTemplateMerger;
+
+    @Value("${tms.merge.save.page.path}")
+    private String savePagePath;
 
     private ResponseEntity<?> responseException(Exception e) {
         logger.error("Command Execute Fail:", e);
@@ -369,6 +381,21 @@ public class CommandController {
                 MergeItem pageItem = this.domainTemplateMerger.getItem(domainId, MokaConstants.ITEM_PAGE, itemId);
                 if (pageItem.getBoolYN(ItemConstants.PAGE_FILE_YN)) {
                     this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html, 24 * 60 * 60 * 1000L);
+                    // page내용을 저장한다.
+                    String domainPath = String.join("/", this.savePagePath, domainId);
+                    String pagePath = domainPath + "/" + itemId;
+                    try {
+                        File domainDir = new File(domainPath);
+                        if (!domainDir.exists()) {
+                            domainDir.mkdirs();
+                        }
+                        File pageFile = new File(pagePath);
+                        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pageFile), "UTF-8"));
+                        writer.write(html);
+                        writer.close();
+                    } catch (IOException e) {
+                        logger.error("Page Not Saved: {}", pagePath);
+                    }
                 } else {
                     this.cacheManager.set(KeyResolver.CACHE_PG_MERGE, cacheKey, html);
                 }

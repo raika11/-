@@ -17,12 +17,12 @@ import jmnet.moka.common.utils.UUIDGenerator;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.exception.InvalidDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.util.ImageUtil;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeDTO;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeDetailDTO;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodEpisodeSearchDTO;
@@ -307,7 +307,7 @@ public class JpodEpisodeRestController extends AbstractCommonController {
         try {
             // 삭제
             jpodEpisodeService.deleteJpodEpisode(jpodEpisode);
-            
+
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.DELETE);
 

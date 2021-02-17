@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.AgendaArticleProgressCode;
@@ -32,7 +33,6 @@ import jmnet.moka.core.tps.common.code.MemberStatusCode;
 import jmnet.moka.core.tps.common.code.PhotoArchiveMenuCode;
 import jmnet.moka.core.tps.common.code.TourStatusCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
@@ -202,7 +202,7 @@ public class AppRestController {
 
         // 답변 LOGIN_SNS
         result.put("ANSWER_LOGIN_SNS", AnswerLoginSnsCode.toList());
-        
+
         // 링크 타켓 유형
         result.put("LINK_TARGET", LinkTargetCode.toList());
 

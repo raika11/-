@@ -5,11 +5,11 @@ import AgGrid from './ArticleSourceAgGrid';
 /**
  * 수신 매체 목록
  */
-const ArticleSourceList = () => {
+const ArticleSourceList = ({ match }) => {
     return (
         <>
             {/* 매체 검색 */}
-            <Search />
+            <Search match={match} />
             {/* 매체 목록 테이블 */}
             <AgGrid />
         </>

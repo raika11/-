@@ -6,11 +6,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -91,5 +94,19 @@ public class CodeMgtDTO implements Serializable {
     @Pattern(regexp = "^[Y|N]?$", message = "{tps.codeMgt.error.pattern.usedYn}")
     @Builder.Default
     private String usedYn = McpString.YES;
+
+    @ApiModelProperty(value = "등록일시", hidden = true)
+    @DTODateTimeFormat
+    private Date regDt;
+
+    @ApiModelProperty(value = "등록자", hidden = true)
+    private MemberSimpleDTO regMember;
+
+    @ApiModelProperty(value = "수정일시", hidden = true)
+    @DTODateTimeFormat
+    private Date modDt;
+
+    @ApiModelProperty(value = "수정자", hidden = true)
+    private MemberSimpleDTO modMember;
 
 }

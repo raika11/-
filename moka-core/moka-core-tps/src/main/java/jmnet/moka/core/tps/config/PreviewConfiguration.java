@@ -5,6 +5,7 @@ import java.util.List;
 import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.proxy.autoConfig.HttpProxyConfiguration;
 import jmnet.moka.common.proxy.http.HttpProxy;
+import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.loader.HttpProxyDataLoader;
@@ -91,7 +92,7 @@ public class PreviewConfiguration {
     @Bean(name = TEMPLATE_LOADER)
     @Scope("prototype")
     public AbstractTemplateLoader templateLoader(String domainId)
-            throws TemplateParseException, TmsException {
+            throws TemplateParseException, TmsException, DataLoadException {
         long expire = 10000L;
         try {
             String expireSeconds = appContext
@@ -103,13 +104,13 @@ public class PreviewConfiguration {
         } catch (Exception e) {
             logger.info("property {} not set, item will not cache", "tms.item.preview.expire.seconds");
         }
-        return new DpsTemplateLoader(appContext, domainId, itemDataLoader(), templateLoaderCache, expire);
+        return new DpsTemplateLoader(appContext, domainId, itemDataLoader(), null, templateLoaderCache, true, expire);
     }
 
     @Bean(name = WORK_TEMPLATE_LOADER)
     @Scope("prototype")
     public AbstractTemplateLoader workTemplateLoader(String domainId, String workerId, List<String> workComponentIdList)
-            throws TemplateParseException, TmsException {
+            throws TemplateParseException, TmsException, DataLoadException {
         return new DpsWorkTemplateLoader(appContext, domainId, itemDataLoader(), workerId, workComponentIdList);
     }
 

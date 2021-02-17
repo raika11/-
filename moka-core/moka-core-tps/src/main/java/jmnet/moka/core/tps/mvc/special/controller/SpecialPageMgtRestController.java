@@ -19,12 +19,12 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.dto.InvalidDataDTO;
+import jmnet.moka.core.common.exception.InvalidDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.util.ImageUtil;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtDTO;
 import jmnet.moka.core.tps.mvc.special.dto.SpecialPageMgtSearchDTO;
 import jmnet.moka.core.tps.mvc.special.entity.SpecialPageMgt;
@@ -56,7 +56,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/specials")
 @Api(tags = {"디지털 스페셜 API"})
 public class SpecialPageMgtRestController extends AbstractCommonController {
-    
+
     private final SpecialPageMgtService specialPageMgtService;
 
     public SpecialPageMgtRestController(SpecialPageMgtService specialPageMgtService) {

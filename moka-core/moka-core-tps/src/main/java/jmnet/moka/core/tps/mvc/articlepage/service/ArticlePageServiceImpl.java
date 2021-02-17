@@ -337,7 +337,7 @@ public class ArticlePageServiceImpl implements ArticlePageService {
     }
 
     @Override
-    public ArticlePage findByArticePageByArtType(String domainId, String artType) {
+    public ArticlePage findByArticePage(String artType, String domainId) {
         List<ArticlePage> pageList = articlePageRepository.findByDomainDomainIdAndArtType(domainId, artType);
         if (pageList.size() > 0) {
             return pageList.get(0);

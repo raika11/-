@@ -165,6 +165,14 @@ public class JpodEpisodeDTO implements Serializable {
     @Builder.Default
     private Integer scbCnt = 0;
 
+    /**
+     * 시즌번호
+     */
+    @ApiModelProperty(value = "시즌번호")
+    @Builder.Default
+    @Min(value = 0, message = "{tps.jpod-episode.error.min.seasonNo}")
+    private Integer seasonNo = 0;
+
 
 
 }

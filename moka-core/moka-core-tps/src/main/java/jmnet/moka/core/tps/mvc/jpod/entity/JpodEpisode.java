@@ -165,5 +165,13 @@ public class JpodEpisode extends BaseAudit implements Serializable {
     private Integer scbCnt = 0;
 
 
+    /**
+     * 시즌번호
+     */
+    @Column(name = "SEASON_NO")
+    @Builder.Default
+    private Integer seasonNo = 0;
+
+
 
 }

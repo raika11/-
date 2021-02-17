@@ -3,16 +3,21 @@ package jmnet.moka.core.tps.mvc.watermark.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.core.common.dto.InvalidDataDTO;
+import jmnet.moka.core.common.exception.InvalidDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
-import jmnet.moka.core.tps.common.dto.InvalidDataDTO;
 import jmnet.moka.core.tps.common.util.ImageUtil;
-import jmnet.moka.core.tps.exception.InvalidDataException;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkDTO;
 import jmnet.moka.core.tps.mvc.watermark.dto.WatermarkSearchDTO;
 import jmnet.moka.core.tps.mvc.watermark.entity.Watermark;
@@ -24,14 +29,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <pre>
@@ -99,14 +105,14 @@ public class WatermarkRestController extends AbstractCommonController {
      * 워터마크 조회
      *
      * @param request 요청
-     * @param seqNo 일련번호 (필수)
+     * @param seqNo   일련번호 (필수)
      * @return 워터마크정보
      * @throws NoDataException 워터마크 정보가 없음
      */
     @ApiOperation(value = "워터마크 조회")
     @GetMapping("/{seqNo}")
     public ResponseEntity<?> getWatermark(HttpServletRequest request,
-                                           @ApiParam("일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.watermark.error.pattern.seqNo}") Long seqNo)
+            @ApiParam("일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.watermark.error.pattern.seqNo}") Long seqNo)
             throws NoDataException {
 
         String message = msg("tps.common.error.invalidSearch");
@@ -133,9 +139,9 @@ public class WatermarkRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "워터마크 등록")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_UTF8_VALUE})
+                                                                                 MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> postWatermark(@Valid WatermarkDTO watermarkDTO,
-                                            @ApiParam("썸네일파일") @RequestParam(value = "watermarkThumbnailFile", required = false) MultipartFile watermarkThumbnailFile)
+            @ApiParam("썸네일파일") @RequestParam(value = "watermarkThumbnailFile", required = false) MultipartFile watermarkThumbnailFile)
             throws InvalidDataException, Exception {
 
         // 널이면 강제로 셋팅
@@ -193,7 +199,7 @@ public class WatermarkRestController extends AbstractCommonController {
     /**
      * 수정
      *
-     * @param seqNo                   일련번호
+     * @param seqNo                  일련번호
      * @param watermarkDTO           수정할 워터마크
      * @param watermarkThumbnailFile 등록할 워터마크 이미지
      * @return 수정된 워터마크정보
@@ -201,7 +207,7 @@ public class WatermarkRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "워터마크 수정")
     @PutMapping(value = "/{seqNo}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_UTF8_VALUE})
+                                                                                                    MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<?> putWatermark(
             @ApiParam("워터마크 일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long seqNo,
             @Valid WatermarkDTO watermarkDTO,
@@ -265,7 +271,7 @@ public class WatermarkRestController extends AbstractCommonController {
      * 삭제
      *
      * @param request 요청
-     * @param seqNo                 삭제 할 일련번호 (필수)
+     * @param seqNo   삭제 할 일련번호 (필수)
      * @return 삭제성공여부
      * @throws InvalidDataException 데이타유효성오류
      * @throws NoDataException      삭제 할 사이트정보 없음
@@ -274,7 +280,7 @@ public class WatermarkRestController extends AbstractCommonController {
     @ApiOperation(value = "워터마크 삭제")
     @DeleteMapping("/{seqNo}")
     public ResponseEntity<?> deleteWatermark(HttpServletRequest request,
-                                              @ApiParam("워터마크 일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long seqNo)
+            @ApiParam("워터마크 일련번호") @PathVariable("seqNo") @Min(value = 0, message = "{tps.common.error.min.seqNo}") Long seqNo)
             throws InvalidDataException, NoDataException, Exception {
 
 

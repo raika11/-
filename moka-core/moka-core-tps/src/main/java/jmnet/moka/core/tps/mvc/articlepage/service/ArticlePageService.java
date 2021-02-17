@@ -122,11 +122,12 @@ public interface ArticlePageService {
     boolean existArtType(String domainId, String artType);
 
     /**
-     * 유형에 해당하는 기사페이지 조회
+     * 도메인,유형에 해당하는 기사페이지 조회
      *
-     * @param domainId       도메인ID
-     * @param defaultArtType 유형
+     * @param artType  유형
+     * @param domainId 도메인ID
      * @return 기사페이지
      */
-    ArticlePage findByArticePageByArtType(String domainId, String defaultArtType);
+    ArticlePage findByArticePage(String artType, String domainId);
+
 }

@@ -10,8 +10,8 @@ package jmnet.moka.core.tps.mvc.desking.service;
 
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
-import jmnet.moka.core.tps.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.component.entity.ComponentHist;
 import jmnet.moka.core.tps.mvc.desking.entity.ComponentWork;
 import jmnet.moka.core.tps.mvc.desking.repository.ComponentWorkRepository;

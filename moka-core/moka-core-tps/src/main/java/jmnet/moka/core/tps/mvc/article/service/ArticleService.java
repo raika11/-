@@ -117,13 +117,11 @@ public interface ArticleService {
      */
     void escapeHtml(ArticleBasicUpdateDTO updateDto);
 
-    //    /**
-    //     * CDN등록
-    //     *
-    //     * @param totalId   기사키
-    //     * @param resultDto cdn업로드 결과정보
-    //     * @return 등록성공여부
-    //     */
-    //    boolean insertCdn(Long totalId, CdnUploadResultDTO resultDto)
-    //            throws Exception;
+    /**
+     * 등록기사 dps, tms 갱신
+     *
+     * @param articleBasic 등록기사정보
+     */
+    String purge(ArticleBasic articleBasic)
+            throws Exception;
 }

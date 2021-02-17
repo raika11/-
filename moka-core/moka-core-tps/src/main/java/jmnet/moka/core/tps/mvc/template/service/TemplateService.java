@@ -2,7 +2,7 @@ package jmnet.moka.core.tps.mvc.template.service;
 
 import java.util.List;
 import java.util.Optional;
-import jmnet.moka.core.tps.exception.NoDataException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.template.dto.TemplateSearchDTO;
 import jmnet.moka.core.tps.mvc.template.entity.Template;
 import jmnet.moka.core.tps.mvc.template.vo.TemplateVO;

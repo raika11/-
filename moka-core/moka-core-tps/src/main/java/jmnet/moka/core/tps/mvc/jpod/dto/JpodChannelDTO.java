@@ -144,4 +144,15 @@ public class JpodChannelDTO implements Serializable {
     @Transient
     private String lastEpsdNo;
 
+    @ApiModelProperty("총시즌건수")
+    @Min(value = 0, message = "{tps.jpod-channel.error.min.seasonCnt}")
+    private Integer seasonCnt = 0;
+
+    /**
+     * 시즌명
+     */
+    @ApiModelProperty("시즌명")
+    @Size(max = 100, message = "{tps.jpod-channel.error.size.seasonNm}")
+    private String seasonNm;
+
 }

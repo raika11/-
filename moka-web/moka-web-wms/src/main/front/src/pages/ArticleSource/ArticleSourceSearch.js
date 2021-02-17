@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaSearchInput } from '@/components';
+import { MokaInput } from '@/components';
 import { initialState, changeSearchOption, getSourceList } from '@store/articleSource';
 
 /**
  * 수신 매체 검색
  */
-const ArticleSourceSearch = () => {
+const ArticleSourceSearch = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const storeSearch = useSelector((store) => store.articleSource.search);
@@ -57,10 +57,10 @@ const ArticleSourceSearch = () => {
     };
 
     /**
-     * 신규 등록 버튼
+     * 등록 버튼
      */
     const handleClickAdd = () => {
-        history.push('/article-sources/add');
+        history.push(`${match.path}/add`);
     };
 
     useEffect(() => {
@@ -73,14 +73,17 @@ const ArticleSourceSearch = () => {
     }, [dispatch]);
 
     return (
-        <div className="mb-2 d-flex align-items-center justify-content-between">
-            <div className="d-flex">
+        <>
+            <div className="mb-2 d-flex">
                 <div style={{ width: 100 }} className="mr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         <option value="all">전체</option>
                         <option value="sourceName">매체명</option>
                         <option value="sourceCode">매체코드</option>
                     </MokaInput>
+                </div>
+                <div className="mr-2 flex-fill">
+                    <MokaInput className="mr-2" placeholder="검색어를 입력하세요" value={search.keyword} name="keyword" onChange={handleChangeValue} />
                 </div>
                 <div style={{ width: 150 }} className="mr-2">
                     <MokaInput as="select" name="rcvUsedYn" value={search.rcvUsedYn} onChange={handleChangeValue}>
@@ -89,15 +92,19 @@ const ArticleSourceSearch = () => {
                         <option value="N">미수신</option>
                     </MokaInput>
                 </div>
-                <MokaSearchInput className="mr-2" value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
+                <Button className="mr-2" variant="searching" onClick={handleSearch}>
+                    검색
+                </Button>
                 <Button variant="negative" onClick={handleClickInitialize}>
                     초기화
                 </Button>
             </div>
-            <Button variant="positive" onClick={handleClickAdd}>
-                신규 등록
-            </Button>
-        </div>
+            <div className="mb-2 d-flex justify-content-end">
+                <Button variant="positive" onClick={handleClickAdd}>
+                    등록
+                </Button>
+            </div>
+        </>
     );
 };
 

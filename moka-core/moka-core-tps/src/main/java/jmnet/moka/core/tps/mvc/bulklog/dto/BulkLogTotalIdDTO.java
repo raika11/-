@@ -29,7 +29,7 @@ public class BulkLogTotalIdDTO extends SearchDTO {
      * 기사ID
      */
     @ApiModelProperty(value = "기사ID", required = true)
-    private String totalId;
+    private String contentId;
 
     /**
      * 포털구분(기타코드BULK_SITE)

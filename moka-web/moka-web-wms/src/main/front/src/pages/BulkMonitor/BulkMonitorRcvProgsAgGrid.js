@@ -19,13 +19,6 @@ const BulkMonitorRcvProgsAgGrid = () => {
     const [showBulkLogModal, setShowBulkLogModal] = useState(false);
     const [modalData, setModalData] = useState({});
 
-    /**
-     * 목록 Row클릭
-     */
-    const handleRowClicked = useCallback((params) => {
-        console.log(params);
-    }, []);
-
     const handleClickValue = useCallback((data, type) => {
         setModalData({ ...data, type });
         setShowRcvProgsModal(true);
@@ -60,7 +53,6 @@ const BulkMonitorRcvProgsAgGrid = () => {
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(params) => params.logSeq}
-                onRowClicked={handleRowClicked}
                 loading={loading}
                 page={search.page}
                 size={search.size}

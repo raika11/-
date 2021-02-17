@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaModal } from '@/components';
-import { getBulkStatListInfo } from '@/store/bulks';
+import { GET_BULK_STAT_LIST_INFO, getBulkStatListInfo } from '@/store/bulks';
 
 /**
  * 벌크 진행 상황 모달
@@ -11,6 +11,7 @@ const RcvProgsModal = (props) => {
     const { show, onHide, data } = props;
     const dispatch = useDispatch();
     const bulkSendListInfo = useSelector((store) => store.bulkMonitor.bulkSendListInfo);
+    const loading = useSelector((store) => store.loading[GET_BULK_STAT_LIST_INFO]);
     const [bulkContent, setBulkContent] = useState('');
     const [bulkMsg, setBulkMsg] = useState('');
 
@@ -76,13 +77,15 @@ const RcvProgsModal = (props) => {
 
     return (
         <MokaModal
-            size="md"
-            width={430}
-            height={600}
+            size="lg"
+            width={900}
+            height={800}
             bodyClassName="d-flex flex-column flex-fill"
             show={show}
             onHide={handleHide}
             buttons={[{ variant: 'negative', text: '닫기', onClick: handleHide }]}
+            loading={loading}
+            draggable
         >
             <Form className="d-flex flex-column flex-fill">
                 {data.type !== 'status' && (

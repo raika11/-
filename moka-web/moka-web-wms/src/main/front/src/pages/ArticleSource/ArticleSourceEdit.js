@@ -63,7 +63,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
             }
             // 서버구분 체크
             if (obj.serverGubun) {
-                if (!/^[a-zA-Z]{1,10}/.test(obj.serverGubun)) {
+                if (!/^[a-zA-Z0-9]{1,10}/.test(obj.serverGubun)) {
                     errList.push({
                         field: 'serverGubun',
                         reason: '서버구분을 10자리 이하로 입력하세요.',
@@ -85,27 +85,10 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
         const saveObj = { ...temp, add: sourceCode ? false : true };
 
         if (!sourceCode) {
-            if (disabledBtn === false) {
-                toast.warning('매체코드 중복 확인을 해주세요');
-            } else if (disabledBtn === true) {
-                if (validate(saveObj)) {
-                    dispatch(
-                        saveArticleSource({
-                            source: saveObj,
-                            callback: ({ header, body }) => {
-                                if (header.success) {
-                                    toast.success(header.message);
-                                    history.push(`${match.path}/${body.sourceCode}`);
-                                } else {
-                                    toast.fail(header.message);
-                                }
-                            },
-                        }),
-                    );
-                }
-            }
-        } else {
             if (validate(saveObj)) {
+                if (saveObj.add === true && disabledBtn === false) {
+                    toast.warning('매체코드 중복 확인을 해주세요');
+                }
                 dispatch(
                     saveArticleSource({
                         source: saveObj,

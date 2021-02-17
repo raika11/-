@@ -51,6 +51,7 @@ export default [
         width: 83,
         cellClassRules: {
             'pre-wrap-cell': () => true,
+            'ft-12': () => true,
         },
         cellStyle: {
             lineHeight: '20px',

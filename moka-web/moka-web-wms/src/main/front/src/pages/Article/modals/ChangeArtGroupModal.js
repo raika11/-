@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { MAX_GROUP_NUMBER, CODETYPE_ART_GROUP_NAME, CODETYPE_ART_GROUP } from '@/constants';
+import { MAX_GROUP_NUMBER, CODETYPE_ART_GROUP_NAME } from '@/constants';
 import { MokaModal, MokaInputLabel } from '@components';
 import toast from '@utils/toastUtil';
-import { getCodeMgtGrp, getArtGroup, getCodeMgt, saveCodeMgt, changeCd, GET_CODE_MGT, GET_CODE_MGT_GRP, SAVE_CODE_MGT, GET_ART_GROUP } from '@store/codeMgt';
+import { getArtGroup, getDtl, saveDtl, GET_DTL_MODAL, GET_GRP_MODAL, SAVE_DTL, GET_ART_GROUP } from '@store/codeMgt';
 
 /**
  * 그룹 갯수 지정하는 모달
@@ -11,10 +11,10 @@ import { getCodeMgtGrp, getArtGroup, getCodeMgt, saveCodeMgt, changeCd, GET_CODE
 const ChangeArtGroupModal = (props) => {
     const { show, onHide, onSave } = props;
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_CODE_MGT_GRP] || store.loading[GET_CODE_MGT] || store.loading[SAVE_CODE_MGT] || store.loading[GET_ART_GROUP]);
-    const { artGroupRows, cd } = useSelector((store) => ({
+    const loading = useSelector((store) => store.loading[GET_GRP_MODAL] || store.loading[GET_DTL_MODAL] || store.loading[SAVE_DTL] || store.loading[GET_ART_GROUP]);
+    const { artGroupRows, dtl } = useSelector((store) => ({
         artGroupRows: store.codeMgt.artGroupRows,
-        cd: store.codeMgt.cd,
+        dtl: store.codeMgt.dtl.dtl,
     }));
 
     // state
@@ -25,14 +25,11 @@ const ChangeArtGroupModal = (props) => {
      */
     const handleClickSave = () => {
         dispatch(
-            saveCodeMgt({
-                type: 'update',
-                actions: [
-                    changeCd({
-                        ...cd,
-                        cdNmEtc1: String(value),
-                    }),
-                ],
+            saveDtl({
+                dtl: {
+                    ...dtl,
+                    cdNmEtc1: String(value),
+                },
                 callback: ({ header }) => {
                     if (header.success) {
                         toast.success(header.message);
@@ -61,19 +58,18 @@ const ChangeArtGroupModal = (props) => {
                 dispatch(getArtGroup());
             } else {
                 const code = artGroupRows.find((a) => a.dtlCd === CODETYPE_ART_GROUP_NAME);
-                if (code) {
-                    dispatch(getCodeMgtGrp(CODETYPE_ART_GROUP));
-                    dispatch(getCodeMgt(code.seqNo));
-                }
+                // if (code) {
+                //     dispatch(getDtl(code.seqNo));
+                // }
             }
         }
     }, [artGroupRows, dispatch, show]);
 
     useEffect(() => {
         if (show) {
-            setValue(cd.cdNmEtc1);
+            setValue(dtl.cdNmEtc1);
         }
-    }, [cd, show]);
+    }, [dtl, show]);
 
     return (
         <MokaModal
@@ -94,7 +90,6 @@ const ChangeArtGroupModal = (props) => {
                     onClick: handleHide,
                 },
             ]}
-            draggable
             centered
             loading={loading}
         >

@@ -7,85 +7,66 @@ import { PAGESIZE_OPTIONS } from '@/constants';
  * initialState
  */
 export const initialState = {
-    // 코드 그룹 검색 조건
-    grpSearch: {
-        page: 0,
-        size: 25,
-        secretYn: 'N',
-        sort: undefined,
+    // 그룹코드
+    grp: {
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            secretYn: 'N',
+            searchType: 'grpAll',
+            keyword: '',
+        },
+        total: 0,
+        list: [],
+        error: null,
+        grp: {},
     },
-    // 코드 그룹의 리스트 검색 조건
-    cdSearch: {
-        page: 0,
-        size: PAGESIZE_OPTIONS[0],
-        sort: undefined,
-        grpCd: null,
-        searchType: 'dtlCd',
-        keyword: '',
+    searchTypeList: [
+        { name: '그룹명', id: 'grpCdNm' },
+        { name: '그룹코드', id: 'grpCd' },
+        { name: '그룹 전체', id: 'grp' },
+        { name: '상세코드명', id: 'dtlCdNm' },
+        { name: '상세코드', id: 'dtlCd' },
+        { name: '상세코드 전체', id: 'dtl' },
+    ],
+    // 상세코드
+    dtl: {
+        search: {
+            page: 0,
+            size: PAGESIZE_OPTIONS[0],
+            grpCd: null,
+            searchType: 'dtlCd',
+            keyword: '',
+        },
+        total: 0,
+        list: [],
+        error: null,
+        dtl: {
+            usedYn: 'N',
+        },
     },
-    grpList: [],
-    grp: {},
     specialCharCode: {
         cdNm: '',
         dtlCd: '',
         grpCd: '',
         seqNo: null,
     },
-    grpTotal: 0,
-    grpError: null,
-    cdList: [],
-    cd: {},
-    cdTotal: 0,
-    cdError: null,
-    grpInvalidList: [],
-    cdInvalidList: [],
 };
 
 export default handleActions(
     {
         /**
-         * 스토어 클리어
+         * 스토어 데이터 삭제
          */
         [act.CLEAR_STORE]: () => initialState,
-        [act.CLEAR_GRP]: (state) => {
-            return produce(state, (draft) => {
-                draft.grp = initialState.grp;
-                draft.grpInvalidList = initialState.grpInvalidList;
-                draft.grpError = initialState.grpError;
-            });
-        },
-        [act.CLEAR_CD]: (state) => {
-            return produce(state, (draft) => {
-                draft.cd = initialState.cd;
-                draft.cdInvalidList = initialState.cdInvalidList;
-                draft.cdError = initialState.cdError;
-            });
-        },
         [act.CLEAR_GRP_LIST]: (state) => {
             return produce(state, (draft) => {
-                draft.grpTotal = initialState.grpTotal;
-                draft.grpSearch = initialState.grpSearch;
-                draft.grpList = initialState.grpList;
+                draft.grp.list = initialState.grp.list;
             });
         },
-        [act.CLEAR_CD_LIST]: (state) => {
+        [act.CLEAR_DTL_LIST]: (state) => {
             return produce(state, (draft) => {
-                draft.cdTotal = initialState.cdTotal;
-                draft.cdSearch = initialState.cdSearch;
-                draft.cdList = initialState.cdList;
-            });
-        },
-        /**
-         * 유효성 검사
-         */
-        [act.CHANGE_GRP_INVALID_LIST]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.grpInvalidList = payload;
-            });
-        },
-        [act.CHANGE_CD_INVALID_LIST]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.cdInvalidList = payload;
+                draft.dtl.list = initialState.dtl.list;
             });
         },
         /**
@@ -93,108 +74,43 @@ export default handleActions(
          */
         [act.CHANGE_GRP_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.grpSearch = payload;
+                draft.grp.search = payload;
             });
         },
-        [act.CHANGE_CD_SEARCH_OPTION]: (state, { payload }) => {
+        [act.CHANGE_DTL_SEARCH_OPTION]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.cdSearch = payload;
-            });
-        },
-        /**
-         * 데이터 변경
-         */
-        [act.CHANGE_GRP]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.grp = payload;
-            });
-        },
-        [act.CHANGE_CD]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.cd = payload;
+                draft.dtl.search = payload;
             });
         },
         /**
          * 목록 조회
          */
-        [act.GET_CODE_MGT_GRP_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_GRP_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.grpList = body.list;
-                draft.grpTotal = body.totalCnt;
-                draft.grpError = initialState.grpError;
+                draft.grp.list = body.list;
+                draft.grp.total = body.totalCnt;
+                draft.grp.error = initialState.grp.error;
             });
         },
-        [act.GET_CODE_MGT_GRP_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_GRP_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.grpList = initialState.grpList;
-                draft.grpTotal = initialState.grpTotal;
-                draft.grpError = payload;
+                draft.grp.list = initialState.grp.list;
+                draft.grp.total = initialState.grp.total;
+                draft.grp.error = payload;
             });
         },
-        [act.GET_CODE_MGT_LIST_SUCCESS]: (state, { payload: { body } }) => {
+        [act.GET_DTL_LIST_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.cdList = body.list;
-                draft.cdTotal = body.totalCnt;
-                draft.cdError = initialState.cdError;
+                draft.dtl.list = body.list;
+                draft.dtl.total = body.totalCnt;
+                draft.dtl.error = initialState.dtl.error;
             });
         },
-        [act.GET_CODE_MGT_LIST_FAILURE]: (state, { payload }) => {
+        [act.GET_DTL_LIST_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.cdList = initialState.cdList;
-                draft.cdTotal = initialState.cdTotal;
-                draft.cdError = payload;
-            });
-        },
-        /**
-         * 상세 조회, 등록, 수정
-         */
-        [act.GET_CODE_MGT_GRP_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.grp = body;
-                draft.grpError = initialState.grpError;
-            });
-        },
-        [act.GET_CODE_MGT_GRP_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.grp = initialState.grp;
-                draft.grpError = payload;
-            });
-        },
-        [act.GET_CODE_MGT_SUCCESS]: (state, { payload: { body } }) => {
-            return produce(state, (draft) => {
-                draft.cd = body;
-                draft.cdError = initialState.cdError;
-            });
-        },
-        [act.GET_CODE_MGT_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.cd = initialState.cd;
-                draft.cdError = payload;
-            });
-        },
-        /**
-         * 데이터 삭제
-         */
-        [act.DELETE_CODE_MGT_GRP_SUCCESS]: (state) => {
-            return produce(state, (draft) => {
-                draft.grp = initialState.grp;
-                draft.grpError = initialState.grpError;
-            });
-        },
-        [act.DELETE_CODE_MGT_GRP_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.grpError = payload;
-            });
-        },
-        [act.DELETE_CODE_MGT_SUCCESS]: (state) => {
-            return produce(state, (draft) => {
-                draft.cd = initialState.cd;
-                draft.cdError = initialState.cdError;
-            });
-        },
-        [act.DELETE_CODE_MGT_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.cdError = payload;
+                draft.dtl.list = initialState.dtl.list;
+                draft.dtl.total = initialState.dtl.totalCnt;
+                draft.dtl.error = payload;
             });
         },
         /**
@@ -217,19 +133,19 @@ export default handleActions(
                 draft[rowName] = [];
             });
         },
-
+        /**
+         * specialCharCode
+         */
         [act.GET_SPECIAL_CHAR_CODE_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.specialCharCode = { ...draft.specialCharCode, ...payload };
             });
         },
-
         [act.CLEAR_SPECIAL_CHAR_CODE]: (state) => {
             return produce(state, (draft) => {
                 draft.specialCharCode = initialState.specialCharCode;
             });
         },
-
         [act.CHANGE_SPECIAL_CHAR_CODE]: (state, { payload: cdNm }) => {
             return produce(state, (draft) => {
                 draft.specialCharCode.cdNm = cdNm;

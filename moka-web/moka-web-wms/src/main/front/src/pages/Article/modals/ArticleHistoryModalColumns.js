@@ -2,6 +2,7 @@ const cellClassRules = {
     'custom-scroll': () => true,
     'user-select-text': () => true,
     'pre-wrap-cell': () => true,
+    'ft-12': () => true,
 };
 
 export default [

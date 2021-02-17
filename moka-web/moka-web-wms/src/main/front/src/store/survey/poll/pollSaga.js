@@ -18,7 +18,7 @@ function toOptionCodes(list) {
 
 function* getPollCodes({ type, payload }) {
     try {
-        const response = yield call(codeMgtApi.getUseCodeMgtList, payload);
+        const response = yield call(codeMgtApi.getUseDtlList, payload);
         if (response.data.header.success) {
             const codes = toOptionCodes(response.data.body.list);
             yield put({ type: `${type}_SUCCESS`, payload: codes });

@@ -9,11 +9,16 @@
     width: 100%;
 }
 
+.pre-cell {
+    display: flex;
+    align-items: center;
+    white-space: pre !important;
+}
+
 .pre-wrap-cell {
     display: flex;
     align-items: center;
     white-space: pre-wrap !important;
-    font-size: 12px;
 }
 
 .ag-dnd-ghost {

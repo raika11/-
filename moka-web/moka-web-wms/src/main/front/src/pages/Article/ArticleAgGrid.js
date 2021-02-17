@@ -159,8 +159,11 @@ const ArticleAgGrid = ({ match, ja }) => {
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
             preventRowClickCell={['view', 'register']}
+            refreshCellsParams={{
+                force: true,
+                columns: ['register'],
+            }}
             selected={article.totalId}
-            suppressRefreshCellAfterUpdate
             onAnimationQueueEmpty={handleRowRendered}
         />
     );

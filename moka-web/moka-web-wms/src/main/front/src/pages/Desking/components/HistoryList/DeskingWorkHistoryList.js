@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MokaTable } from '@components';
 import columnDefs from './DeskingWorkHistoryListColumns';
-import { unescapeHtml } from '@utils/convertUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 
 const DeskingWorkHistoryList = (props) => {
     const { loading, rowData } = props;
@@ -11,7 +11,7 @@ const DeskingWorkHistoryList = (props) => {
         setRows(
             rowData.map((r) => ({
                 ...r,
-                title: unescapeHtml(r.title),
+                title: unescapeHtmlArticle(r.title),
             })),
         );
     }, [rowData]);

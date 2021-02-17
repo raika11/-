@@ -51,9 +51,10 @@ const propTypes = {
      * masterCode => 1000000,
      * korname => 대분류 > 중분류 > 소분류
      * contentKorname => 소분류
+     * masterCodeContentKorname => 1000000 소분류명
      * @default
      */
-    labelType: PropTypes.oneOf(['masterCode', 'korname', 'contentKorname']),
+    labelType: PropTypes.oneOf(['masterCode', 'korname', 'contentKorname', 'masterCodeContentKorname']),
     /**
      * 선택가능한 마스터코드의 최대 갯수
      */
@@ -208,6 +209,8 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                         label = masterCode;
                     } else if (labelType === 'contentKorname') {
                         label = contentKorname;
+                    } else if (labelType === 'masterCodeContentKorname') {
+                        label = `${masterCode} ${contentKorname}`;
                     }
 
                     return {

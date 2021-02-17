@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MAX_GROUP_NUMBER, CODETYPE_ART_GROUP_NAME } from '@/constants';
 import { MokaModal, MokaInputLabel } from '@components';
-import toast from '@utils/toastUtil';
-import { getArtGroup, getDtl, saveDtl, GET_DTL_MODAL, GET_GRP_MODAL, SAVE_DTL, GET_ART_GROUP } from '@store/codeMgt';
+import toast, { messageBox } from '@utils/toastUtil';
+import { getArtGroup, saveDtl, SAVE_DTL, GET_ART_GROUP } from '@store/codeMgt';
 
 /**
  * 그룹 갯수 지정하는 모달
@@ -11,13 +11,9 @@ import { getArtGroup, getDtl, saveDtl, GET_DTL_MODAL, GET_GRP_MODAL, SAVE_DTL, G
 const ChangeArtGroupModal = (props) => {
     const { show, onHide, onSave } = props;
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_GRP_MODAL] || store.loading[GET_DTL_MODAL] || store.loading[SAVE_DTL] || store.loading[GET_ART_GROUP]);
-    const { artGroupRows, dtl } = useSelector((store) => ({
-        artGroupRows: store.codeMgt.artGroupRows,
-        dtl: store.codeMgt.dtl.dtl,
-    }));
-
-    // state
+    const loading = useSelector((store) => store.loading[SAVE_DTL] || store.loading[GET_ART_GROUP]);
+    const artGroupRows = useSelector(({ codeMgt }) => codeMgt.artGroupRows);
+    const [dtl, setDtl] = useState({});
     const [value, setValue] = useState();
 
     /**
@@ -37,7 +33,7 @@ const ChangeArtGroupModal = (props) => {
                             onSave();
                         }
                     } else {
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),
@@ -54,16 +50,18 @@ const ChangeArtGroupModal = (props) => {
 
     useEffect(() => {
         if (show) {
-            if (!artGroupRows) {
-                dispatch(getArtGroup());
-            } else {
-                const code = artGroupRows.find((a) => a.dtlCd === CODETYPE_ART_GROUP_NAME);
-                // if (code) {
-                //     dispatch(getDtl(code.seqNo));
-                // }
+            dispatch(getArtGroup());
+        }
+    }, [dispatch, show]);
+
+    useEffect(() => {
+        if (artGroupRows) {
+            const code = artGroupRows.find((a) => a.dtlCd === CODETYPE_ART_GROUP_NAME);
+            if (code) {
+                setDtl(code);
             }
         }
-    }, [artGroupRows, dispatch, show]);
+    }, [show, artGroupRows]);
 
     useEffect(() => {
         if (show) {

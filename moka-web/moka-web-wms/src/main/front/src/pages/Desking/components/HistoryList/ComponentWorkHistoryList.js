@@ -7,7 +7,7 @@ import { initialState } from '@store/history';
 import columnDefs from './ComponentWorkHistoryListColumns';
 
 const ComponentWorkHistoryList = (props) => {
-    const { search, setSearch, componentList, total, loading, rowData, onChange, onRowClick, onSearch, isNaverChannel = false } = props;
+    const { search, setSearch, componentList, total, loading, rowData, onChange, onRowClick, onSearch, isNaverChannel = false, selectedComponentHistSeq } = props;
 
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
@@ -45,7 +45,7 @@ const ComponentWorkHistoryList = (props) => {
 
             {/* 날짜 검색 */}
             <Form.Row className="mb-2">
-                <div className="flex-shrink-0 mr-2">
+                <div className="flex-shrink-0 mr-40">
                     <MokaInput as="select" value={search.status} name="status" onChange={handleChangeValue}>
                         <option value={DESK_HIST_PUBLISH}>전송 기록</option>
                         <option value={DESK_HIST_SAVE}>임시저장 기록</option>
@@ -98,6 +98,7 @@ const ComponentWorkHistoryList = (props) => {
                 size={search.size}
                 onChangeSearchOption={onChange}
                 preventRowClickCell={['load']}
+                selected={selectedComponentHistSeq}
             />
         </div>
     );

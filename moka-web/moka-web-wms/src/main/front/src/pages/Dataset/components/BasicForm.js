@@ -78,7 +78,7 @@ const BasicForm = (props) => {
             {/* 데이터 타입 */}
             <Form.Row>
                 <Col xs={12} className="p-0">
-                    {dataset.autoCreateYn === 'N' && <MokaInputLabel label="데이터" value="수동" inputProps={{ plaintext: true, readOnly: true }} />}
+                    {dataset.autoCreateYn === 'N' && <MokaInputLabel label="데이터" value="편집" inputProps={{ plaintext: true, readOnly: true }} />}
                     {dataset.autoCreateYn === 'Y' && (
                         <Form.Row>
                             <Col xs={3} className="p-0">

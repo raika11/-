@@ -174,14 +174,14 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2 flex-shrink-0">
                     <Col className="p-0" xs={10}>
                         <CodeAutocomplete
                             max={4}
                             label="분류표"
                             className="mb-0"
                             searchIcon={false}
-                            labelType="contentKorname"
+                            labelType="masterCodeContentKorname"
                             value={selectedMasterCode.join(',')}
                             onChange={handleMasterCode}
                             maxMenuHeight={150}

@@ -31,9 +31,9 @@ const HistoryList = (props) => {
         deskingWorkLoading: store.loading[GET_DESKING_WORK_HISTORY],
     }));
     const selectedComponent = useSelector(({ desking }) => desking.selectedComponent);
-    const { area, total, HistoryList, deskingWorkHistoryList } = useSelector(
+    const area = useSelector(({ desking }) => desking.area);
+    const { total, HistoryList, deskingWorkHistoryList } = useSelector(
         ({ desking }) => ({
-            area: desking.area,
             total: desking.history.componentWorkHistory.total,
             HistoryList: desking.history.componentWorkHistory.list,
             deskingWorkHistoryList: desking.history.deskingWorkHistory.list,
@@ -43,6 +43,7 @@ const HistoryList = (props) => {
 
     // state
     const [search, setSearch] = useState(initialSearch);
+    const [selectedComponentHistSeq, setSelectedComponentHistSeq] = useState();
     const [rowData, setRowData] = useState([]);
     const [loadCnt, setLoadCnt] = useState(0);
 
@@ -92,6 +93,7 @@ const HistoryList = (props) => {
                 componentHistSeq: row.seq,
             }),
         );
+        setSelectedComponentHistSeq(row.seq);
     };
 
     /**
@@ -132,6 +134,7 @@ const HistoryList = (props) => {
         // area 변경 => search, table clear
         dispatch(clearHistoryList());
         setSearch(initialSearch);
+        setSelectedComponentHistSeq(null);
         setLoadCnt(0);
     }, [dispatch, area.areaSeq]);
 
@@ -152,6 +155,7 @@ const HistoryList = (props) => {
                 componentSeq: selectedComponent.componentSeq,
             });
             setLoadCnt(loadCnt + 1);
+            setSelectedComponentHistSeq(null);
         }
     }, [selectedComponent.componentSeq, show, handleSearch, loadCnt]);
 
@@ -165,6 +169,7 @@ const HistoryList = (props) => {
                     componentList={componentList}
                     onSearch={handleSearch}
                     selectedComponent={selectedComponent}
+                    selectedComponentHistSeq={selectedComponentHistSeq}
                     show={show}
                     loading={componentWorkLoading}
                     total={total}

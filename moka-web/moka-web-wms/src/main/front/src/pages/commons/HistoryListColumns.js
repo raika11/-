@@ -3,7 +3,7 @@ import { MokaTableLoadButton } from '@components';
 
 export default [
     {
-        headerName: 'ID',
+        headerName: 'No',
         field: 'seq',
         width: 70,
         tooltipField: 'seq',
@@ -20,9 +20,9 @@ export default [
         flex: 1,
     },
     {
-        headerName: '',
+        headerName: '불러오기',
         field: 'load',
-        width: 33,
+        width: 64,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;

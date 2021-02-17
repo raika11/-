@@ -22,7 +22,7 @@ export const columnDefs = [
         width: 50,
         cellRendererFramework: (params) => {
             const { autoCreateYn } = params.data;
-            let autoCreateText = '수동형';
+            let autoCreateText = '편집형';
             if (autoCreateYn === 'Y') {
                 autoCreateText = '자동형';
             }

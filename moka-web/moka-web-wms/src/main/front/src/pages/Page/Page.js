@@ -89,7 +89,7 @@ const Page = ({ match }) => {
      * @returns {object} { findSeq: page.pageSeq, node: null, path: [String(pageTree.pageSeq)] };
      */
     const findNode = useCallback((findInfo, rootNode) => {
-        if (rootNode.pageSeq === findInfo.findSeq) {
+        if (String(rootNode.pageSeq) === String(findInfo.findSeq)) {
             const strSeq = String(rootNode.parentPageSeq);
             return produce(findInfo, (draft) => {
                 if (draft.path.indexOf(strSeq) < 0) {

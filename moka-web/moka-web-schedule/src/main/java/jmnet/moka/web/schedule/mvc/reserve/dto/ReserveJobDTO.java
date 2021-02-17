@@ -28,6 +28,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Builder
 public class ReserveJobDTO {
 
+    private Long seqNo;
+
     private Long jobSeq;
 
     private String workType;

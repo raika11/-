@@ -46,15 +46,7 @@ public class ScheduleJobController {
     @ApiOperation(value = "신규 Job 추가")
     @PostMapping("/{jobSeq}")
     public ResponseEntity<?> postJob(@ApiParam("job 일련번호") @PathVariable("jobSeq") @Min(value = 0) Long jobSeq) {
-/*
-        boolean success = handler.appendJob(GenContent
-                .builder()
-                .jobSeq(jobSeq)
-                .jobType("SCHEDULE")
-                .programeNm("jmnet.moka.web.schedule.mvc.schedule.service.DummyScheduleJob")
-                .period(10L)
-                .build());
-*/
+
         boolean success = handler.appendJob(jobSeq);
         log.debug("실행 테스트 : {}", success);
 

@@ -61,8 +61,15 @@ public class ScheduleJobHandler {
             //scheduleMap = new IdentityHashMap<>();
             //key value만으로 key값을 처리하기 위해 일반해쉬맵으로 변경
             scheduleMap = new HashMap<>();
-            List<GenContent> scheduleList = jobContentService.findAllJobContent();
+            //List<GenContent> scheduleList = jobContentService.findAllJobContent();
+            List<GenContent> scheduleList = jobContentService.findAllScheduleJobContent();
             for (GenContent info : scheduleList) {
+
+                //우선 350서버만 통과
+                if(info.getServerSeq() == 350) {
+                    info.setProgrameNm("jmnet.moka.web.schedule.mvc.schedule.service.DummyScheduleJob");
+                }
+
                 appendJob(info);
             }
         }
@@ -133,11 +140,6 @@ public class ScheduleJobHandler {
      */
     public boolean removeJob(Long jobSeq) {
         boolean result = false;
-        log.debug("=========== jobSeq : "+ jobSeq);
-        log.debug("=========== jobSeq : "+ jobSeq.getClass().getName());
-        log.debug("=========== scheduleMap : "+ scheduleMap.keySet().toString());
-        log.debug("=========== scheduleMap : "+ scheduleMap.keySet().contains(jobSeq));
-        log.debug("=========== scheduleMap.containsKey(jobSeq) : "+ scheduleMap.containsKey(jobSeq));
 
         if (scheduleMap.containsKey(jobSeq)) {
             scheduleMap

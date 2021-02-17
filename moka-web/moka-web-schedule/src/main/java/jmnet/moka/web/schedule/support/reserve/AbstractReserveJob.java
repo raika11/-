@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
+
 /**
  * <pre>
  * 예약 Job 공통 기능
@@ -34,6 +36,7 @@ public abstract class AbstractReserveJob implements ReserveJob {
 
     protected String success;
     protected StringBuffer scheduleDesc;
+    private GenStatusHistory genStatusHistory;
 
     /**
      * 초기화
@@ -47,16 +50,32 @@ public abstract class AbstractReserveJob implements ReserveJob {
      */
     public void finish(Long taskSeq) {
         // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
+
+        //실행 완료 시 상태변경 후 저장
+        genStatusHistory.setStatus("1");
+        genStatusHistory.setEndDt(new Date());
+        jobContentService.updateGenStatusHistory(genStatusHistory);
     }
 
     @Override
     public void asyncTask(ReserveJobDTO reserveJob, Long taskSeq) {
 
         try {
+            logger.debug("=========== sleep : "+ McpDate.term(reserveJob.getReserveDt()));
             Thread.sleep(McpDate.term(reserveJob.getReserveDt()));
+
+            //실행 전 유효한 reserved 인지 체크
+            genStatusHistory = jobContentService
+                    .findGenStatusHistoryById(reserveJob.getSeqNo())
+                    .orElseThrow();
+
             invoke(reserveJob, taskSeq);
+
+            //실행 후 상태변경 후 저장
+            genStatusHistory.setStatus("9");
+            jobContentService.updateGenStatusHistory(genStatusHistory);
         } catch (Exception ex) {
-            logger.error("schedule invoke error ", ex);
+            logger.error("reserved invoke error ", ex);
         } finally {
             finish(taskSeq);
         }

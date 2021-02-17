@@ -1,21 +1,15 @@
 package jmnet.moka.web.schedule.mvc.gen.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * <pre>
@@ -53,6 +47,12 @@ public class GenContent {
      */
     @Column(name = "USED_YN", columnDefinition = "char")
     private String usedYn;
+
+    /**
+     * 삭제여부(Y:삭제, N:미삭제)
+     */
+    @Column(name = "DEL_YN", columnDefinition = "char")
+    private String delYn;
 
     /**
      * 서버 번호

@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useCallback } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@/components';
@@ -8,22 +8,39 @@ import ArticleSourceEdit from './ArticleSourceEdit';
 
 const ArticleSourceList = React.lazy(() => import('./ArticleSourceList'));
 
+/**
+ * 수신 매체 관리
+ */
 const ArticleSource = (props) => {
     const { match } = props;
+    const history = useHistory();
     const dispatch = useDispatch();
     const editRef = useRef(null);
 
+    /**
+     * 코드 매핑
+     */
     const handleClickMapping = useCallback(() => {
         if (editRef.current) {
             editRef.current.onMapping();
         }
     }, []);
 
+    /**
+     * 저장, 수정
+     */
     const handleClickSave = useCallback(() => {
         if (editRef.current) {
             editRef.current.onSave();
         }
     }, []);
+
+    /**
+     * 취소
+     */
+    const handleClickCancel = () => {
+        history.push(`${match.path}`);
+    };
 
     useEffect(() => {
         return () => {
@@ -43,7 +60,7 @@ const ArticleSource = (props) => {
             {/* 수신 매체 리스트 */}
             <MokaCard width={812} className="mr-gutter" bodyClassName="d-flex flex-column" title="수신 매체 관리">
                 <Suspense>
-                    <ArticleSourceList />
+                    <ArticleSourceList match={match} />
                 </Suspense>
             </MokaCard>
 
@@ -62,11 +79,12 @@ const ArticleSource = (props) => {
                                 footer
                                 footerButtons={[
                                     { text: '코드 매핑', variant: 'outline-table-btn', className: 'mr-2', onClick: handleClickMapping },
-                                    { text: params?.sourceCode ? '수정' : '등록', variant: 'positive', onClick: handleClickSave },
+                                    { text: params?.sourceCode ? '수정' : '등록', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
+                                    { text: '취소', variant: 'negative', onClick: handleClickCancel },
                                 ]}
                                 footerClassName="justify-content-center"
                             >
-                                <ArticleSourceEdit ref={editRef} />
+                                <ArticleSourceEdit match={match} ref={editRef} />
                             </MokaCard>
                         );
                     }}

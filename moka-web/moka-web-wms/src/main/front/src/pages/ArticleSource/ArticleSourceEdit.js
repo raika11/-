@@ -15,6 +15,7 @@ import CodeMappingModal from './modals/CodeMappingModal';
  * 수신 매체 편집
  */
 const ArticleSourceEdit = forwardRef((props, ref) => {
+    const { match } = props;
     const history = useHistory();
     const dispatch = useDispatch();
     const { sourceCode } = useParams();
@@ -94,7 +95,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             callback: ({ header, body }) => {
                                 if (header.success) {
                                     toast.success(header.message);
-                                    history.push(`/article-sources/${body.sourceCode}`);
+                                    history.push(`${match.path}/${body.sourceCode}`);
                                 } else {
                                     toast.fail(header.message);
                                 }
@@ -111,7 +112,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                         callback: ({ header, body }) => {
                             if (header.success) {
                                 toast.success(header.message);
-                                history.push(`/article-sources/${body.sourceCode}`);
+                                history.push(`${match.path}/${body.sourceCode}`);
                             } else {
                                 toast.fail(header.message);
                             }
@@ -120,7 +121,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                 );
             }
         }
-    }, [disabledBtn, dispatch, history, sourceCode, temp, validate]);
+    }, [disabledBtn, dispatch, history, match.path, sourceCode, temp, validate]);
 
     const handleChangeValue = (e) => {
         const { name, value, checked } = e.target;

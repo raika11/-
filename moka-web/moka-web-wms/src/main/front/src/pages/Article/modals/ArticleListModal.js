@@ -24,6 +24,7 @@ const propTypes = {
     onRowClicked: PropTypes.func,
 };
 const defaultProps = {};
+const initialSearch = { ...initialState.search, serviceFlag: 'Y' }; // 서비스플래그 Y인 것만 조회
 
 /**
  * 기사 검색 모달
@@ -33,16 +34,19 @@ const ArticleListModal = (props) => {
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_ARTICLE_LIST_MODAL]);
     const [period, setPeriod] = useState([0, 'days']);
-    const [search, setSearch] = useState(initialState.search);
+    const [search, setSearch] = useState(initialSearch);
     const [valError, setValError] = useState({});
-    const [sourceOn, setSourceOn] = useState(false);
-    const [sourceList, setSourceList] = useState(null);
+    const [sourceOn, setSourceOn] = useState(false); // 매체검색조건이 셋팅됐는지 체크
+    const [sourceList, setSourceList] = useState(null); // 매체리스트 (String)
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
 
+    /**
+     * 모달 닫기
+     */
     const handelHide = () => {
         setPeriod([0, 'days']);
-        setSearch(initialState.search);
+        setSearch(initialSearch);
         setValError({});
         setSourceOn(false);
         setSourceList(null);
@@ -168,7 +172,7 @@ const ArticleListModal = (props) => {
         const endServiceDay = moment(nt);
         setPeriod([0, 'days']);
         setSearch({
-            ...initialState.search,
+            ...initialSearch,
             masterCode: null,
             startServiceDay: startServiceDay,
             endServiceDay: endServiceDay,

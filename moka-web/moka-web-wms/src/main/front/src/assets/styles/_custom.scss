@@ -403,8 +403,8 @@ body {
 
             &:hover {
                 background-color: rgba(0,0,0,.04);
-                border: solid transparent;
-                border-width: 1px 1px 1px 0;
+                // border: solid transparent;
+                // border-width: 1px 1px 1px 0;
                 // border-radius: 0 66px 66px 0;
             }
 
@@ -431,8 +431,8 @@ body {
 
         .selected {
             background-color: #e8f0fe;
-            border: solid transparent;
-            border-width: 1px 1px 1px 0;
+            // border: solid transparent;
+            // border-width: 1px 1px 1px 0;
             // border-radius: 0 66px 66px 0;
             color: #1967d2;
 
@@ -449,28 +449,28 @@ body {
 
         /*2뎁스 padding*/
         > .tree-category > div ul li .tree-label {
-            padding-left: 28px;
+            padding-left: 22px;
         }
         > .tree-category > div ul li div ul li .tree-label {
-            padding-left: 56px;
+            padding-left: 50px;
         }
 
         /*3뎁스 padding*/
         > .tree-category > div ul li div ul .tree-category div ul li .tree-label {
-            padding-left: 84px;
+            padding-left: 78px;
         }
         > .tree-category > div ul li div ul li .tree-category div ul li div ul li .tree-label {
-            padding-left: 112px;
+            padding-left: 106px;
         }
 
         /*4뎁스 padding*/
         > .tree-category > div ul li div ul div ul .tree-category div ul li .tree-label {
-            padding-left: 112px;
+            padding-left: 106px;
         }
 
         /*5뎁스 padding*/
         > .tree-category > div ul li div ul div ul li div ul .tree-category div ul li .tree-label {
-            padding-left: 140px;
+            padding-left: 134px;
         }
     }
 

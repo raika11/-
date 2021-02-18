@@ -29,7 +29,7 @@ const IconForm = ({ show, temp, setTemp, onChange }) => {
         <Form.Row className="mb-2">
             <Col xs={4} className="p-0">
                 <MokaInputLabel as="select" label="아이콘" labelClassName="pr-3" className="mb-0 w-100" value={temp.iconFileName} name="iconFileName" onChange={onChange}>
-                    <option hidden>선택</option>
+                    <option value="">선택</option>
                     {dsIconRows &&
                         dsIconRows.map((code) => (
                             <option key={code.id} value={code.id}>

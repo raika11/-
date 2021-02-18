@@ -180,6 +180,7 @@ $row-hover-color: darken($desking-row-color, 5);
     @include ag-theme-alpine(
         (
             background-color: $desking-row-color,
+            odd-row-background-color: $desking-row-color,
             font-family: $font-family-sans-serif,
             font-size: 13px,    // _ag-theme-alpine-mixin에서 +1하여 처리함
             header-column-separator: false,

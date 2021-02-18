@@ -219,6 +219,7 @@ const ArticleList = (props) => {
                 onSearch={handleSearch}
                 onChangeSearchOption={changeTableSearchOption}
                 show={show}
+                getArticleList={() => getArticleList({ type, search })}
             />
         </div>
     );

@@ -257,15 +257,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                 {/* 사이즈, 이미지 크기 */}
                 <Row className="m-0 mb-2">
                     <Col xs={5} className="p-0 m-0">
-                        <MokaInputLabel
-                            className="mb-0"
-                            label="사이즈"
-                            value={temp.templateWidth}
-                            onChange={handleChangeValue}
-                            inputClassName="ft-12"
-                            type="number"
-                            name="templateWidth"
-                        />
+                        <MokaInputLabel className="mb-0" label="사이즈" value={temp.templateWidth} onChange={handleChangeValue} type="number" name="templateWidth" />
                     </Col>
                     <Col xs={4} className="p-0 pl-2">
                         <MokaInputLabel
@@ -276,7 +268,6 @@ const TemplateEdit = ({ onDelete, match }) => {
                             value={temp.cropWidth}
                             name="cropWidth"
                             onChange={handleChangeValue}
-                            inputClassName="ft-12"
                             type="number"
                         />
                     </Col>
@@ -302,9 +293,8 @@ const TemplateEdit = ({ onDelete, match }) => {
                     label={
                         <>
                             대표이미지
-                            <br />
                             <Button
-                                className="mt-1 w-100"
+                                className="mt-1 w-75"
                                 size="sm"
                                 variant="negative"
                                 onClick={(e) => {

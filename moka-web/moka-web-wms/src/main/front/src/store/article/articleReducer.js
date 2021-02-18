@@ -24,6 +24,7 @@ export const initialState = {
         contentType: null, // 기사타입(all, P, N)
         pressCategory: null, // 출판 카테고리
         bulkYn: 'all', // 벌크여부(all, Y, N)
+        serviceFlag: '', // 서비스여부('', Y, N)
     },
     article: {
         totalId: null,

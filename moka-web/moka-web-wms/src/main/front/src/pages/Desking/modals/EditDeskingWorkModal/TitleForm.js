@@ -48,7 +48,7 @@ const TitleForm = ({ show, mappingData, temp, onChange, fontListType, error }) =
                         <React.Fragment>
                             {label}
                             {fontListType && (
-                                <MokaInput as="select" size="sm" name="titleSize" value={temp.titleSize} onChange={onChange}>
+                                <MokaInput className="mt-1" as="select" size="sm" name="titleSize" value={temp.titleSize} onChange={onChange}>
                                     <option value="">선택</option>
                                     {fontList.map((font, idx) => (
                                         <option key={idx} value={font.id}>

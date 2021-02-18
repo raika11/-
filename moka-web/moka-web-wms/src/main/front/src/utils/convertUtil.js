@@ -1,3 +1,5 @@
+import { decode } from 'html-entities';
+
 /**
  * js object를 폼데이터로 변환한다
  * https://stackoverflow.com/a/63840358
@@ -32,20 +34,7 @@ export const objectToFormData = (val, formData = new FormData(), namespace = '')
  */
 export const unescapeHtml = (str) => {
     if (str && str !== '') {
-        return str
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>')
-            .replace(/&#0*39;/g, "'")
-            .replace(/&#91;/g, '[')
-            .replace(/&#93;/g, ']')
-            .replace(/&quot;/g, '"')
-            .replace(/&#34;/g, '"')
-            .replace(/&#8216;/g, '‘')
-            .replace(/&#8217;/g, '’')
-            .replace(/&#037;/g, '%')
-            .replace(/&middot;/g, '·')
-            .replace(/&hellip;/g, '…')
-            .replace(/&amp;/g, '&');
+        return decode(str);
     } else return str;
 };
 

@@ -13,7 +13,7 @@ import ChangeArtTitleModal from '@pages/Article/modals/ChangeArtTitleModal';
  * 기사관리 ag-grid 컴포넌트 (페이지편집)
  */
 const AgGrid = forwardRef((props, ref) => {
-    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption } = props;
+    const { search, list, total, loading, onDragStop, dropTargetAgGrid, onChangeSearchOption, getArticleList } = props;
     const { PDS_URL, IR_URL } = useSelector((store) => ({
         PDS_URL: store.app.PDS_URL,
         IR_URL: store.app.IR_URL,
@@ -36,6 +36,11 @@ const AgGrid = forwardRef((props, ref) => {
             setModalShow(true);
         }
     };
+
+    /**
+     * 기사 제목 저장 후 리스트 다시 조회
+     */
+    const afterChangeTitle = () => getArticleList();
 
     useEffect(() => {
         setRowData(
@@ -120,7 +125,7 @@ const AgGrid = forwardRef((props, ref) => {
                 animateRows={false}
                 rowSelection="multiple"
             />
-            <ChangeArtTitleModal show={modalShow} onHide={() => setModalShow(false)} artData={selected} />
+            <ChangeArtTitleModal show={modalShow} onHide={() => setModalShow(false)} artData={selected} onSave={afterChangeTitle} />
         </React.Fragment>
     );
 });

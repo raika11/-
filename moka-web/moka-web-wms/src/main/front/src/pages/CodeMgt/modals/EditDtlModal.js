@@ -239,16 +239,7 @@ const EditDtlModal = ({ show, onHide, seqNo, grpCd, grp }) => {
             />
             <MokaInputLabel label="코드 한글명" className="mb-2" value={dtl.cdNm} name="cdNm" onChange={handleChangeValue} isInvalid={error.cdNm} required />
             <MokaInputLabel label="코드 영문명" className="mb-2" value={dtl.cdEngNm} name="cdEngNm" onChange={handleChangeValue} />
-            <MokaInputLabel
-                label="순서"
-                className="mb-2"
-                value={dtl.cdOrd}
-                name="cdOrd"
-                onChange={handleChangeValue}
-                isInvalid={error.cdOrd}
-                inputProps={{ type: 'number' }}
-                required
-            />
+            <MokaInputLabel label="순서" className="mb-2" value={dtl.cdOrd} name="cdOrd" onChange={handleChangeValue} isInvalid={error.cdOrd} type="number" required />
             <MokaInputLabel label="코드 설명" className="mb-2" value={dtl.cdComment} name="cdComment" onChange={handleChangeValue} />
             <MokaInputLabel label="기타1" className="mb-2" value={dtl.cdNmEtc1} name="cdNmEtc1" onChange={handleChangeValue} />
             <MokaInputLabel label="기타2" className="mb-2" value={dtl.cdNmEtc2} name="cdNmEtc2" onChange={handleChangeValue} />

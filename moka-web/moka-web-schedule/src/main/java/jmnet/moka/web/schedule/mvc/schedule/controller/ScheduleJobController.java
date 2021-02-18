@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.utils.dto.ResultDTO;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.support.schedule.ScheduleJobHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,16 +49,22 @@ public class ScheduleJobController {
         boolean success = handler.appendJob(jobSeq);
         log.debug("실행 테스트 : {}", success);
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+        HttpStatus httpStatus = HttpStatus.NOT_ACCEPTABLE;
+        String message = "fail";
+        if(success){
+            httpStatus = HttpStatus.OK;
+            message = "success";
+        }
 
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
+        return new ResponseEntity<>(resultDto, httpStatus);
     }
 
     /**
-     * 신규 Job 추가
+     * 등록된 Job 제거
      *
      * @param jobSeq job 일련번호
-     * @return 추가 결과
+     * @return 제거 결과
      */
     @ApiOperation(value = "Job 제거")
     @DeleteMapping("/{jobSeq}")
@@ -69,8 +74,14 @@ public class ScheduleJobController {
 
         log.debug("스케줄 Job 제거 테스트 : {}", success);
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+        HttpStatus httpStatus = HttpStatus.NOT_ACCEPTABLE;
+        String message = "fail";
+        if(success){
+            httpStatus = HttpStatus.OK;
+            message = "success";
+        }
 
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
+        return new ResponseEntity<>(resultDto, httpStatus);
     }
 }

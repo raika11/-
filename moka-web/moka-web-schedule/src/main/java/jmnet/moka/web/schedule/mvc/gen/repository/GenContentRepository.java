@@ -2,7 +2,6 @@ package jmnet.moka.web.schedule.mvc.gen.repository;
 
 import java.util.List;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;

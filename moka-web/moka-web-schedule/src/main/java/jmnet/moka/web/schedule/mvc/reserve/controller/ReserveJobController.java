@@ -41,7 +41,7 @@ public class ReserveJobController {
 
 
     /**
-     * 신규 Job 추가
+     * 예약 Job 추가
      *
      * @param reserveJob job 일련번호
      * @return 추가 결과
@@ -52,13 +52,11 @@ public class ReserveJobController {
     public ResponseEntity<?> postJob(@Valid ReserveJobDTO reserveJob)
             throws MokaException {
 
-        handler.addReserveJob(reserveJob, GenContent
-                .builder()
-                .jobSeq(reserveJob.getJobSeq())
-                .jobType("RESERVE")
-                .programeNm("jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob")
-                .period(1l)
-                .build());
+        log.debug("reserveJob : "+ reserveJob.getSeqNo());
+        log.debug("reserveJob : "+ reserveJob.getJobSeq());
+        log.debug("reserveJob : "+ reserveJob.getWorkType());
+
+        handler.addReserveJob(reserveJob.getJobSeq());
 
         log.debug("예약작업 Job 추가 테스트");
 
@@ -68,7 +66,7 @@ public class ReserveJobController {
     }
 
     /**
-     * 신규 Job 추가
+     * 예약 Job 실행 취소
      *
      * @param jobTaskSeq Task 일련번호
      * @return 추가 결과
@@ -81,7 +79,7 @@ public class ReserveJobController {
 
         handler.removeReserveJob(jobTaskSeq);
 
-        log.debug("예약작업 Job 제거 테스트");
+        log.debug("예약작업 Job 실행취소 테스트");
 
         ResultDTO<Boolean> resultDto = new ResultDTO<>(true, "success");
 

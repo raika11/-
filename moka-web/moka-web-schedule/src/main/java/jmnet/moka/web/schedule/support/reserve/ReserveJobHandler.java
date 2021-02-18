@@ -1,6 +1,5 @@
 package jmnet.moka.web.schedule.support.reserve;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import javax.annotation.PostConstruct;
@@ -136,9 +135,21 @@ public class ReserveJobHandler {
      * @param reserveJobProcSeq 작업 일련번호
      */
     public boolean removeReserveJob(Long reserveJobProcSeq) {
+        boolean result = false;
 
         // todo 3. 예약 작업 테이블에 del_yn을 'N'으로 변경
-        return false;
+        GenStatusHistory scheduleHistory = jobContentService
+                .findGenStatusHistoryById(reserveJobProcSeq)
+                .orElseThrow();
+
+        if (scheduleHistory != null) {
+            scheduleHistory.setDelYn("Y");
+            jobContentService.updateGenStatusHistory(scheduleHistory);
+
+            result = true;
+        }
+
+        return result;
     }
 
 

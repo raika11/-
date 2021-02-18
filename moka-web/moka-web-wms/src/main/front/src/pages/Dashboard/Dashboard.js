@@ -319,7 +319,7 @@ const Dashboard = () => {
                                 <Form.Row className="mb-3">
                                     <Col xs={12} className="d-flex align-items-center p-0">
                                         <MokaInputLabel
-                                            label="9-2-1) 날짜 입력창 하단 우측"
+                                            label="9-2-1) 날짜 선택 이후 달력 닫기"
                                             labelWidth={200}
                                             as="dateTimePicker"
                                             className="w-100"

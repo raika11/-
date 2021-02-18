@@ -153,16 +153,12 @@ export function* getUserMenuTree({ payload: { pathName } }) {
     yield put(finishLoading(ACTION));
 }
 
-const getOpenMenuParentMenuId = (menu, pathName, menuById, menuOpens, menuPaths, isOpen) => {
+const getOpenMenuParentMenuId = (menu, pathName, menuById, menuOpens, menuPaths) => {
     for (let i = 0; i < menu.length; i++) {
         const menuItem = menu[i];
         menuById[menuItem.menuId] = menuItem;
-        isOpen = false;
         if (menuItem.children !== null) {
-            getOpenMenuParentMenuId(menuItem.children, pathName, menuById, menuOpens, menuPaths, isOpen);
-            if (isOpen && menuItem.depth !== 1) {
-                menuOpens[menuItem.parentMenuId] = true;
-            }
+            getOpenMenuParentMenuId(menuItem.children, pathName, menuById, menuOpens, menuPaths);
         } else {
             let menuPath = '';
             if (menuItem.menuUrl === '/') {
@@ -170,12 +166,13 @@ const getOpenMenuParentMenuId = (menu, pathName, menuById, menuOpens, menuPaths,
             } else if (menuItem.menuUrl.length > 0) {
                 menuPath = '/' + menuItem.menuUrl.split('/')[1];
             }
-
             if (pathName === menuPath) {
-                menuOpens[menuItem.parentMenuId] = true;
-                isOpen = true;
+                if (menuItem.parents) {
+                    menuItem.parents.forEach((parent) => {
+                        menuOpens[parent.menuId] = true;
+                    });
+                }
             }
-
             menuPaths[menuItem.menuUrl] = menuItem.menuId;
         }
     }

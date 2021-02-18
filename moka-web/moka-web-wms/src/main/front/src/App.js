@@ -2,13 +2,14 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // BrowserRouter
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ReduxToastr from 'react-redux-toastr';
 
-import Routes from './routes/Routes';
 import SignIn from '@pages/Auth/SignIn';
 import { init } from '@store/app';
 import { getDomainList } from '@store/auth';
+import Page404 from './pages/Auth/Page404';
+import { BaseLayout } from './layout';
 
 const WithToastr = ({ children }) => (
     <React.Fragment>
@@ -42,7 +43,10 @@ const App = () => {
         return (
             <WithToastr>
                 <BrowserRouter>
-                    <Routes />
+                    <Switch>
+                        <Route path={`/`} name="MOKA BackOffice" component={BaseLayout} />
+                        <Route exact path={`/404`} name="Page404" render={(props) => <Page404 defaultLink="/" {...props} />} />
+                    </Switch>
                 </BrowserRouter>
             </WithToastr>
         );

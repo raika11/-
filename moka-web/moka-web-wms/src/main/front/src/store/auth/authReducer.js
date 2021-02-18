@@ -15,6 +15,9 @@ const initialState = {
     },
     menu: [],
     latestMenuId: null,
+    currentMenu: null,
+    nonResponsive: false,
+    side: true,
 };
 
 /**
@@ -34,7 +37,10 @@ export default handleActions(
         },
         [act.CHANGE_LATEST_MENUID]: (state, { payload }) => {
             return produce(state, (draft) => {
-                draft.latestMenuId = payload;
+                draft.latestMenuId = payload.menuId;
+                draft.currentMenu = payload.currentMenu;
+                draft.nonResponsive = payload.nonResponsive;
+                draft.side = payload.side;
             });
         },
         /**

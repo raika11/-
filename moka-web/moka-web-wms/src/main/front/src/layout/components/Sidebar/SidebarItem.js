@@ -24,7 +24,7 @@ const SidebarItem = (props) => {
     return (
         <li
             className={clsx('sidebar-item', {
-                active: match.path === nodeData.menuUrl,
+                active: (match ? match.menuUrl : '') === nodeData.menuUrl,
             })}
         >
             <NavLink

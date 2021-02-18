@@ -2,13 +2,14 @@ import React, { Suspense, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import utils from '@utils/commonUtil';
 
 // routes
 import routes from './index';
 import { getUserMenuTree, changeLatestMenuId } from '@store/auth/authAction';
 import { MokaLoader, ScrollToTop } from '@components';
 
-const MenuBox = ({ children, menu, path }) => {
+const MenuBox = ({ children, menu, path, nonResponsive = false, side = true }) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -19,12 +20,14 @@ const MenuBox = ({ children, menu, path }) => {
             if (menu.menuPaths[path] === undefined) {
                 history.push('/404');
             } else {
-                dispatch(changeLatestMenuId(menu.menuPaths[path]));
+                const menuId = menu.menuPaths[path];
+                const currentMenu = utils.isEmpty(menuId) ? null : menu.menuById[menuId];
+                dispatch(changeLatestMenuId({ menuId, currentMenu, nonResponsive, side }));
             }
         }
-    }, [dispatch, history, menu.length, menu.menuPaths, path]);
+    }, [side, dispatch, history, menu.length, menu.menuById, menu.menuPaths, nonResponsive, path]);
 
-    return React.cloneElement(children, { menuPaths: menu.menuPaths, menuById: menu.menuById });
+    return React.cloneElement(children, { menuPaths: menu.menuPaths, menuById: menu.menuById, nonResponsive, side });
 };
 
 const Routes = () => {
@@ -35,18 +38,16 @@ const Routes = () => {
     return (
         <ScrollToTop>
             <Switch>
-                {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, ...rest }) => (
+                {routes.map(({ path, layout: Layout, component: Component, name, nonResponsive, side, ...rest }) => (
                     <Route
                         key={name}
                         path={path}
                         {...rest}
                         render={(props) => (
-                            <MenuBox path={path} menu={menu}>
-                                <Layout nonResponsive={nonResponsive} name={name} {...props} {...rest}>
-                                    <Suspense fallback={<MokaLoader clsOpt="black" />}>
-                                        <Component {...props} name={name} {...rest} />
-                                    </Suspense>
-                                </Layout>
+                            <MenuBox path={path} menu={menu} nonResponsive={nonResponsive} side={side}>
+                                <Suspense fallback={<MokaLoader clsOpt="black" />}>
+                                    <Component {...props} name={name} {...rest} />
+                                </Suspense>
                             </MenuBox>
                         )}
                     />

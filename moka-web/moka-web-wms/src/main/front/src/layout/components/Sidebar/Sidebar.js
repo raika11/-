@@ -1,6 +1,6 @@
-import React, { Suspense, useEffect, useCallback, useRef } from 'react';
+import React, { Suspense, useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { changeSidebarOpenItem, initSidebarOpenItem } from '@store/layout/layoutAction';
@@ -11,7 +11,7 @@ import logo from '@assets/images/img_logo.png';
 /**
  * 사이드바
  */
-const Sidebar = ({ match }) => {
+const Sidebar = ({ match, currentMenu }) => {
     const location = useLocation();
     const dispatch = useDispatch();
     const scrollbarRef = useRef(null);
@@ -83,7 +83,7 @@ const Sidebar = ({ match }) => {
                                                   e.stopPropagation();
                                                   changeNodeToggle(depth1);
                                               }}
-                                              match={match}
+                                              match={currentMenu}
                                           >
                                               <>
                                                   {depth1.children.map((depth2) =>
@@ -97,23 +97,23 @@ const Sidebar = ({ match }) => {
                                                                   e.stopPropagation();
                                                                   changeNodeToggle(depth2);
                                                               }}
-                                                              match={match}
+                                                              match={currentMenu}
                                                           >
                                                               {depth2.children.map((depth3) => (
                                                                   // 3depth
-                                                                  <SidebarItem key={depth3.menuId} nodeData={depth3} match={match} />
+                                                                  <SidebarItem key={depth3.menuId} nodeData={depth3} match={currentMenu} />
                                                               ))}
                                                           </SidebarCategory>
                                                       ) : (
                                                           // 2depth
-                                                          <SidebarItem key={depth2.menuId} nodeData={depth2} match={match} />
+                                                          <SidebarItem key={depth2.menuId} nodeData={depth2} match={currentMenu} />
                                                       ),
                                                   )}
                                               </>
                                           </SidebarCategory>
                                       ) : (
                                           // 1depth
-                                          <SidebarItem key={depth1.menuId} nodeData={depth1} match={match} />
+                                          <SidebarItem key={depth1.menuId} nodeData={depth1} match={currentMenu} />
                                       ),
                                   )
                                 : ''}

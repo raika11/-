@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
-import { columnDefs, testRows } from './NoticeListAgGridColumns';
+import { columnDefs } from './NoticeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { GET_CHANNELS } from '@store/jpod';
+import { GET_BOARD_CONTENTS_LIST } from '@store/jpod';
 
 const NoticeListAgGrid = ({ match }) => {
     // const dispatch = useDispatch();
     const params = useParams();
     // 스토어 연결.
-    const { search, loading } = useSelector((store) => ({
-        search: store.jpod.channel.jpod.search,
-        list: store.jpod.channel.jpod.list,
-        total: store.jpod.channel.jpod.total,
-        loading: store.loading[GET_CHANNELS],
+    const { search, loading, list, total } = useSelector((store) => ({
+        search: store.jpod.jpodBoard.jpodBoards.search,
+        list: store.jpod.jpodBoard.jpodBoards.list,
+        total: store.jpod.jpodBoard.jpodBoards.total,
+        loading: store.loading[GET_BOARD_CONTENTS_LIST],
     }));
 
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
 
     // 목록 클릭 했을때.
-    const handleClickListRow = ({ noticeSeq }) => {
-        history.push(`${match.path}/${noticeSeq}`);
+    const handleClickListRow = ({ boardSeq }) => {
+        history.push(`${match.path}/${boardSeq}`);
         // dispatch(clearChannelInfo());
         // dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
         // dispatch(getChEpisodes({ chnlSeq: chnlSeq }));
@@ -71,21 +71,21 @@ const NoticeListAgGrid = ({ match }) => {
         const inirGridRow = (data) => {
             setRowData(
                 data.map((element) => {
-                    // let chnlSdt = element.chnlSdt && element.chnlSdt.length > 10 ? element.chnlSdt.substr(0, 10) : element.chnlSdt;
+                    let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 10) : element.regDt;
                     return {
-                        noticeSeq: element.noticeSeq,
-                        chName: element.chName,
+                        boardSeq: element.boardSeq,
+                        chName: element.boardInfo.boardName,
                         title: element.title,
-                        regUser: element.regUser,
-                        regDt: element.regDt,
-                        viewCount: element.viewCount,
+                        regName: element.regName,
+                        regDt: regDt,
+                        viewCnt: element.viewCnt,
                     };
                 }),
             );
         };
 
-        inirGridRow(testRows);
-    }, []);
+        inirGridRow(list);
+    }, [list]);
 
     return (
         <MokaTable
@@ -93,12 +93,12 @@ const NoticeListAgGrid = ({ match }) => {
             columnDefs={columnDefs}
             rowData={rowData}
             rowHeight={50}
-            onRowNodeId={(data) => data.noticeSeq}
+            onRowNodeId={(data) => data.boardSeq}
             onRowClicked={(e) => handleClickListRow(e)}
             loading={loading}
-            total={testRows.length}
-            page={0}
-            size={0}
+            total={total}
+            page={search.page}
+            size={search.size}
             displayPageNum={DISPLAY_PAGE_NUM}
             onChangeSearchOption={handleChangeSearchOption}
             selected={params.noticeSeq}

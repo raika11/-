@@ -21,6 +21,11 @@ import {
     SAVE_BRIGHTOVP,
     GET_CH_EPISODES,
     GET_CH_EPISODES_SUCCESS,
+    GET_BOARD_CONTENTS_LIST,
+    GET_BOARD_CONTENTS_LIST_SUCCESS,
+    GET_BOARD_CONTENTS,
+    GET_BOARD_CONTENTS_SUCCESS,
+    GET_BOARD_CHANNEL_LIST,
 } from './jpodAction';
 import {
     getReporterList,
@@ -38,6 +43,9 @@ import {
     getBrightOvp,
     saveBrightOvp,
     getEpisodeChannels,
+    getBoardContentsList,
+    getBoardContentsInfo,
+    getBoardJpodChannalList,
 } from './jpodApi';
 
 const getReporterListSaga = callApiAfterActions(GET_REPORTER_LIST, getReporterList, (store) => store.jpod.reporter);
@@ -270,6 +278,99 @@ function* saveBrightovpSaga({ payload: { ovpdata, callback } }) {
     yield put(finishLoading(SAVE_BRIGHTOVP));
 }
 
+// 게시판 게시글 리스트 가지고 오기.
+function* getBoardContentsListSaga({ payload: { boardId } }) {
+    yield put(startLoading(GET_BOARD_CONTENTS_LIST));
+
+    let response;
+    try {
+        const search = yield select((store) => store.jpod.jpodBoard.jpodBoards.search);
+        response = yield call(getBoardContentsList, { boardId: boardId, search: search });
+        const {
+            header: { success, message },
+        } = response.data;
+        if (success === true) {
+            yield put({ type: GET_BOARD_CONTENTS_LIST_SUCCESS, payload: response.data.body });
+        } else {
+            // 에러 나면 서버 에러 메시지 토스트 전달.
+            toast.error(message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(GET_BOARD_CONTENTS_LIST));
+}
+
+// 게시글 정보 가지고 오기.
+function* getListmenuContentsInfoSaga({ payload: { boardId, boardSeq } }) {
+    yield put(startLoading(GET_BOARD_CONTENTS));
+
+    let response;
+    try {
+        response = yield call(getBoardContentsInfo, { boardId: boardId, boardSeq: boardSeq });
+        const {
+            header: { success, message },
+        } = response.data;
+        if (success === true) {
+            yield put({ type: GET_BOARD_CONTENTS_SUCCESS, payload: response.data });
+        } else {
+            // 에러 나면 서버 에러 메시지 토스트 전달.
+            toast.error(message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+
+    yield put(finishLoading(GET_BOARD_CONTENTS));
+}
+
+// 게시판 채널 (JPOD, 기자) 리스트 가지고 와서 조합 해서 store 에 저장.
+function* getBoardChannelListSaga({ payload: { type, callback } }) {
+    yield put(startLoading(GET_BOARD_CHANNEL_LIST));
+    let response;
+    let callbackData = {};
+    try {
+        // jpod 채널 리스트 목록 가지고 오기.
+        if (type === 'BOARD_DIVC1') {
+            response = yield call(getBoardJpodChannalList);
+
+            const {
+                header: { success, message },
+                body: { list },
+            } = response.data;
+
+            if (success === true) {
+                callbackData = list.map((data) => {
+                    return {
+                        name: data.chnlNm,
+                        value: data.chnlSeq,
+                    };
+                });
+            } else {
+                toast.error(message);
+            }
+            // 기자 목록 가지고 오기.
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    if (typeof callback === 'function') {
+        yield call(callback, callbackData);
+    }
+
+    yield put(finishLoading(GET_BOARD_CHANNEL_LIST));
+}
+
 export default function* jpodSaga() {
     yield takeLatest(GET_REPORTER_LIST, getReporterListSaga); // 기자 검색 모달 리스트
     yield takeLatest(GET_CHANNEL_PODTY_LIST, getChannelPodtyListsaga); // 팟티 검색 모달 리스트
@@ -286,4 +387,9 @@ export default function* jpodSaga() {
     yield takeLatest(GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
     yield takeLatest(GET_CH_EPISODES, getChEpisodesSaga); // 브라이트 코브 저장.
+
+    // 보드
+    yield takeLatest(GET_BOARD_CONTENTS_LIST, getBoardContentsListSaga);
+    yield takeLatest(GET_BOARD_CONTENTS, getListmenuContentsInfoSaga);
+    yield takeLatest(GET_BOARD_CHANNEL_LIST, getBoardChannelListSaga);
 }

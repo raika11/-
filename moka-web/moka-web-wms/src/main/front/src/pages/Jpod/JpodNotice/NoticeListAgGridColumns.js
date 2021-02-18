@@ -94,11 +94,11 @@ export const testRows = [
         viewCount: 1000,
     },
     {
-        noticeSeq: 10,
+        noticeSeq: 4,
         chName: '뉴요커가 읽어주는 3분 뉴스',
         title: '테스트 공지 사항 제목입니다.',
         regUser: 'ssc001',
         regDt: '2021-02-18 09:00',
-        viewCount: 4444,
+        viewCount: 3333,
     },
 ];

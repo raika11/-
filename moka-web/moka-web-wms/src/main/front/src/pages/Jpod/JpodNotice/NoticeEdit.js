@@ -1,7 +1,8 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
 import { Form, Col, Button, Row } from 'react-bootstrap';
 import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummernote';
+import { useSelector } from 'react-redux';
 // import { uploadBoardContentImage } from '@store/board';
 import { messageBox } from '@utils/toastUtil';
 // import moment from 'moment';
@@ -10,26 +11,20 @@ import { messageBox } from '@utils/toastUtil';
 // import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChEpisodes, getChannels, clearReporter } from '@store/jpod';
 // import { useDispatch } from 'react-redux';
 // import toast, { messageBox } from '@utils/toastUtil';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-const channel_list = [
-    {
-        name: '테스트 1 채널',
-        value: '0001',
-    },
-    {
-        name: '테스트 2 채널',
-        value: '0002',
-    },
-];
 const NoticeEdit = ({ match }) => {
     // const dispatch = useDispatch();
     const history = useHistory();
-    // const params = useParams();
+    const params = useParams();
+    const selectNoticeSeq = useRef(null);
+    const [editTitle, setEditTitle] = useState(null);
 
-    const tempValue = 'add';
+    const [editData, setEditData] = useState({});
 
-    const [editData] = useState({});
+    const { channel_list } = useSelector((store) => ({
+        channel_list: store.jpod.episode.channel.list,
+    }));
 
     // 게시글 데이터 변경시 스테이트 업데이트.
     // const handleChangeFormData = useCallback(
@@ -92,10 +87,32 @@ const NoticeEdit = ({ match }) => {
         // );
     };
 
+    // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
+    useEffect(() => {
+        const { noticeSeq } = params;
+        if (!isNaN(noticeSeq) && selectNoticeSeq.current !== noticeSeq) {
+            selectNoticeSeq.current = noticeSeq;
+            setEditTitle(null);
+        } else if (history.location.pathname === `${match.path}/add` && selectNoticeSeq.current !== 'add') {
+            selectNoticeSeq.current = 'add';
+            setEditTitle('add');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params]);
+
+    useEffect(() => {
+        setEditData({
+            ...editData,
+            regInfo: `등록 일시: 2021-02-18 11:40 ssc001`,
+            modInfo: `수정 일시: 2021-02-19 11:40 ssc001`,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <MokaCard
             className="overflow-hidden flex-fill"
-            title={`게시글 ${tempValue === 'add' ? '등록' : '정보'}`}
+            title={`게시글 ${editTitle === 'add' ? '등록' : '정보'}`}
             titleClassName="mb-0"
             loading={false}
             footer
@@ -103,33 +120,66 @@ const NoticeEdit = ({ match }) => {
             footerAs={
                 <>
                     {(function () {
-                        return (
-                            <Row className="justify-content-md-center text-center">
-                                <Col className="mp-0 pr-0">
-                                    <Button variant="positive" onClick={() => handleClickSaveButton()}>
-                                        저장
-                                    </Button>
-                                </Col>
-                                <Col className="mp-0 pr-0">
-                                    <Button variant="negative" onClick={() => handleClickCancleButton()}>
-                                        취소
-                                    </Button>
-                                </Col>
-                            </Row>
-                        );
+                        if (editTitle === 'add') {
+                            return (
+                                <Row className="justify-content-md-center text-center">
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="positive" onClick={() => handleClickSaveButton()}>
+                                            저장
+                                        </Button>
+                                    </Col>
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                            취소
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            );
+                        } else {
+                            return (
+                                <Row className="justify-content-md-center text-center">
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="positive" onClick={() => handleClickSaveButton()}>
+                                            수정
+                                        </Button>
+                                    </Col>
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                            취소
+                                        </Button>
+                                    </Col>
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="negative" onClick={() => handleClickSaveButton()}>
+                                            삭제
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            );
+                        }
                     })()}
                 </>
             }
         >
             <Form className="mb-gutter">
+                {editTitle !== 'add' && (
+                    <Form.Row>
+                        <Form.Label style={{ width: 90, minWidth: 90, marginRight: 12 }}></Form.Label>
+                        <Col xs={5} style={{ fontSize: '1px' }}>
+                            {`${editData.regInfo ? editData.regInfo : ''}`}
+                        </Col>
+                        <Col xs={5} style={{ fontSize: '1px' }}>
+                            {`${editData.modInfo ? editData.modInfo : ''}`}
+                        </Col>
+                    </Form.Row>
+                )}
                 {/* 채널 선택. */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={90} value={editData.chnlSeq} onChange={(e) => console.log(e)}>
                             <option value="">채널 전체</option>
                             {channel_list.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
+                                <option key={index} value={item.podtyChnlSrl}>
+                                    {item.chnlNm}
                                 </option>
                             ))}
                         </MokaInputLabel>
@@ -160,6 +210,19 @@ const NoticeEdit = ({ match }) => {
                         </Suspense>
                     </Col>
                 </Form.Row>
+                {editTitle !== 'add' && (
+                    <Form.Row>
+                        <MokaInputLabel
+                            label="조회수"
+                            labelWidth={90}
+                            inputProps={{ plaintext: true, readOnly: true }}
+                            value={`111`}
+                            name=""
+                            className="overflow-hidden flex-fill mb-0"
+                            labelClassName="ml-0"
+                        />
+                    </Form.Row>
+                )}
             </Form>
         </MokaCard>
     );

@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { selectItem } from '@pages/Jpod/JpodConst';
+import { useDispatch, useSelector } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, changeJpodSearchOption, getChannels } from '@store/jpod';
+import { initialState, changeJpodSearchOption, getChannels, getEpisodeGubunChannels } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
 const NoticeListSearchBox = ({ match }) => {
     const [searchData, setSearchData] = useState(initialState.channel.jpod.search);
     const history = useHistory();
     const dispatch = useDispatch();
+
+    const { channel_list } = useSelector((store) => ({
+        channel_list: store.jpod.episode.channel.list,
+    }));
 
     // 검색 항목 변경시 스테이트 업데이트.
     const handleSearchChange = (e) => {
@@ -76,7 +79,7 @@ const NoticeListSearchBox = ({ match }) => {
 
     // 최초 로딩시 목록 가져오기.
     useEffect(() => {
-        dispatch(getChannels());
+        dispatch(getEpisodeGubunChannels()); // 채널 목록.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -116,20 +119,16 @@ const NoticeListSearchBox = ({ match }) => {
                     </div>
                     <div className="mb-0 pl-1 pr-2">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
-                            <option value="">서비스</option>
-                            {/* {selectItem.usedYn.map((item, index) => ( */}
-                            <option key={0} value={`1`}>
-                                {`서비스`}
-                            </option>
-                            {/* ))} */}
+                            <option value={`Y`}>{`서비스`}</option>
+                            <option value={`N`}>{`삭제`}</option>
                         </MokaInput>
                     </div>
                     <div className="mb-0 pl-1 pr-2">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             <option value="">j팟 채널 전체</option>
-                            {selectItem.usedYn.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
+                            {channel_list.map((item, index) => (
+                                <option key={index} value={item.podtyChnlSrl}>
+                                    {item.chnlNm}
                                 </option>
                             ))}
                         </MokaInput>

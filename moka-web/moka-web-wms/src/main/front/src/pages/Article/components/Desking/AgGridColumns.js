@@ -1,3 +1,6 @@
+import React from 'react';
+import ArticleTableCopyBtn from '../ArticleTableCopyBtn';
+
 export default [
     {
         rowDrag: true,
@@ -86,6 +89,20 @@ export default [
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
             cursor: 'pointer',
+        },
+    },
+    {
+        headerName: '',
+        width: 34,
+        maxWidth: 34,
+        field: 'copy',
+        cellRendererFramework: (params) => {
+            const data = params.node.data;
+            return (
+                <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                    <ArticleTableCopyBtn artTitle={data.artTitle} artUrl={data.artUrl} />
+                </div>
+            );
         },
     },
     {

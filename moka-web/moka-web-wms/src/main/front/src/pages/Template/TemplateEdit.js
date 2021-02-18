@@ -294,7 +294,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                         <>
                             대표이미지
                             <Button
-                                className="mt-1 w-75"
+                                className="mt-1"
                                 size="sm"
                                 variant="negative"
                                 onClick={(e) => {

@@ -59,9 +59,9 @@ const Article = ({ match, displayName, name }) => {
                         path={[`${match.path}/:totalId`]}
                         exact
                         render={() => (
-                            <div className="absolute-top-right h-100 overlay-shadow" style={{ width: 640, zIndex: 2 }}>
+                            <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
                                 <ArticleEdit match={match} ja={name === 'articleJa' ? true : false} sun={name === 'articleSun' ? true : false} />
-                            </div>
+                            </Col>
                         )}
                     />
                 )}

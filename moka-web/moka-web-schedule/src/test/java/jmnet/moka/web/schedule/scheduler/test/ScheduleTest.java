@@ -34,4 +34,25 @@ public class ScheduleTest {
 
         log.debug("종료 테스트");
     }
+
+    @Test
+    public void ovpScheduleTest()
+            throws InterruptedException {
+
+        handler.appendJob(GenContent
+                .builder()
+                .jobSeq(1l)
+                .jobType("S") //SCHEDULE 에서 TB_GEN_CONTENT.JOB_TYPE의 형태로 변경
+                .programeNm("jmnet.moka.web.schedule.mvc.schedule.service.OvpAudioScheduleJob")
+                .period(5l)
+                .build());
+
+        log.debug("실행 테스트");
+
+        handler.removeJob(1000l);
+
+        Thread.sleep(1000000000);
+
+        log.debug("종료 테스트");
+    }
 }

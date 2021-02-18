@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
+import { DB_DATEFORMAT, ARTICLE_URL } from '@/constants';
 import { MokaTable } from '@components';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { addDeskingWorkDropzone } from '@utils/deskingUtil';
@@ -73,6 +73,7 @@ const AgGrid = forwardRef((props, ref) => {
                 return {
                     ...art,
                     artTitle: unescapeHtmlArticle(art.artTitle),
+                    artUrl: `${ARTICLE_URL}${art.totalId}`,
                     artIdType,
                     myunPan,
                     articleDt,

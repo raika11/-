@@ -75,6 +75,7 @@ public class MokaConstants {
     public static final String MERGE_ARTICE_PREFIX = "/article";
     public static final String MERGE_AMP_ARTICE_PREFIX = "/amparticle";
     public static final String MERGE_DIGITAL_SPECIAL_PREFIX = "/digitalspecial";
+    public static final String MERGE_SITEMAP_PREFIX = "/sitemap/index";
 
     /* TMS Custom Token */
     public static final String MERGE_CONTEXT_DOMAIN = "domain";

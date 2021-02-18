@@ -23,7 +23,7 @@ export const getRowIndex = (event) => {
 
 /**
  * ag grid의 displayed rows 목록 조회
- * @param {object} api agGrid api
+ * @param {object} gridApi agGrid api
  */
 export const getDisplayedRows = (gridApi) => {
     let displayedRows = [];
@@ -32,4 +32,14 @@ export const getDisplayedRows = (gridApi) => {
         displayedRows.push(data);
     }
     return displayedRows;
+};
+
+/**
+ * ag grid의 모든 row Data 조회
+ * @param {object} gridApi agGrid api
+ */
+export const getAllRowData = (gridApi) => {
+    let rowData = [];
+    gridApi.forEachNode((node) => rowData.push(node.data));
+    return rowData;
 };

@@ -119,9 +119,12 @@ const ButtonGroup = (props) => {
      * 기사이동
      */
     const handleOpenRegister = useCallback(() => {
-        if (!componentAgGridInstances[agGridIndex]) return;
-        const api = componentAgGridInstances[agGridIndex].api;
-        api.getSelectedRows().length < 1 ? messageBox.alert('기사를 선택해주세요') : handleModalShow('register', true);
+        if (componentAgGridInstances[agGridIndex]) {
+            const api = componentAgGridInstances[agGridIndex].api;
+            api.getSelectedRows().length < 1 ? messageBox.alert('기사를 선택해주세요') : handleModalShow('register', true);
+        } else {
+            messageBox.alert('이동 대상이 없습니다. 새로고침하세요.');
+        }
     }, [agGridIndex, componentAgGridInstances, handleModalShow]);
 
     /**

@@ -500,7 +500,10 @@ const DeskingWorkAgGrid = (props) => {
         (params) => {
             setComponentAgGridInstances(
                 produce(componentAgGridInstances, (draft) => {
-                    draft[agGridIndex] = params;
+                    draft[agGridIndex] = {
+                        ...params,
+                        component,
+                    };
                 }),
             );
             setGridInstance(params);

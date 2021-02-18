@@ -21,6 +21,21 @@
     top: 50%;
     left: 50%;
 }
+.is-not-position-center .rdtPicker {
+    position: absolute;
+    top: 31px;
+    left: 0;
+    transform: none;
+}
+
+.is-not-position-center.right .rdtPicker {
+    position: absolute;
+    top: 31px;
+    left: initial;
+    right: 0;
+    transform: none;
+}
+
 .rdtOpen .rdtPicker {
     display: block;
 }

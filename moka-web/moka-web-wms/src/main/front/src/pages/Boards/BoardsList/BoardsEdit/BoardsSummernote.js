@@ -26,6 +26,7 @@ const BoardsSummernote = forwardRef((props, ref) => {
             <div className="p-0 d-flex moka-summernote">
                 {/* <div className="d-flex moka-summernote"> */}
                 <ReactSummernote
+                    className="overflow-hidden flex-fill mb-0"
                     value={contentValue !== '' ? unescapeHtml(contentValue) : contentValue}
                     options={{
                         lang: 'ko-KR',

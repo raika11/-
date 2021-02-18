@@ -29,7 +29,7 @@ const JpodChannel = ({ match }) => {
 
             <Switch>
                 <Route
-                    path={[`${match.path}`, `${match.path}/add`, `${match.path}/:chnlSeq`]}
+                    path={[`${match.path}`, `${match.path}/add`, `${match.path}/:noticeSeq`]}
                     exact
                     render={() => (
                         <Suspense fallback={<MokaLoader />}>

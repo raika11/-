@@ -24,5 +24,5 @@ public interface JpodEpisodeMapper extends BaseMapper<JpodEpisodeVO, JpodEpisode
 
     void deleteAllArticle(JpodEpisodeVO episodeVO);
 
-    JpodEpisodeStatVO findEpisodeStat(Long chnlSeq);
+    JpodEpisodeStatVO findEpisodeStat(JpodEpisodeVO episodeVO);
 }

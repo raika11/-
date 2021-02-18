@@ -134,7 +134,40 @@ public class JpodChannelRestController extends AbstractCommonController {
         dto.setKeywords(modelMapper.map(jpodChannelService.findAllJpodChannelKeyword(chnlSeq), JpodKeywordDTO.TYPE));
         dto.setMembers(modelMapper.map(jpodChannelService.findAllJpodChannelMember(chnlSeq), JpodMemberDTO.TYPE));
 
-        dto.setEpisodeStat(jpodChannelService.findEpisodeStat(chnlSeq));
+        dto.setEpisodeStat(jpodChannelService.findEpisodeStat(chnlSeq, 0));
+
+        tpsLogger.success(ActionType.SELECT);
+
+        ResultDTO<JpodChannelDetailDTO> resultDto = new ResultDTO<>(dto);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * JpodChannel정보 조회 - podty 채널번호로 조회
+     *
+     * @param podtyChnlSrl podty 채널번호로 조회 (필수)
+     * @return JpodChannel정보
+     * @throws NoDataException JpodChannel 정보가 없음
+     */
+    @ApiOperation(value = "JpodChannel 조회")
+    @GetMapping("/{podtyChnlSrl}/by-podty-seq")
+    public ResponseEntity<?> getJpodChannel(@ApiParam("podty채널번호") @PathVariable("podtyChnlSrl")
+    @Min(value = 0, message = "{tps.jpod-episode.error.min.seasonNo}") Integer podtyChnlSrl,
+            @RequestParam(value = "seasonNo", required = false, defaultValue = "0") Integer seasonNo)
+            throws NoDataException {
+
+        String message = msg("tps.common.error.no-data");
+        JpodChannel jpodChannel = jpodChannelService
+                .findJpodChannelByPodtyChnlSrl(podtyChnlSrl)
+                .orElseThrow(() -> new NoDataException(message));
+
+
+
+        JpodChannelDetailDTO dto = modelMapper.map(jpodChannel, JpodChannelDetailDTO.class);
+
+        if (seasonNo > 0) {
+            dto.setEpisodeStat(jpodChannelService.findEpisodeStat(dto.getChnlSeq(), seasonNo));
+        }
 
         tpsLogger.success(ActionType.SELECT);
 

@@ -46,6 +46,14 @@ public interface JpodChannelService {
     Optional<JpodChannel> findJpodChannelBySeq(Long channelSeq);
 
     /**
+     * 채널 일련번호로 채널정보 조회
+     *
+     * @param podtyChnlSrl 팟티 일련번호
+     * @return 채널 정보
+     */
+    Optional<JpodChannel> findJpodChannelByPodtyChnlSrl(Integer podtyChnlSrl);
+
+    /**
      * 채널 정보 저장
      *
      * @param channel JpodChannel
@@ -98,5 +106,5 @@ public interface JpodChannelService {
      */
     List<JpodMember> findAllJpodChannelMember(Long chnlSeq);
 
-    JpodEpisodeStatVO findEpisodeStat(Long chnlSeq);
+    JpodEpisodeStatVO findEpisodeStat(Long chnlSeq, Integer seasonNo);
 }

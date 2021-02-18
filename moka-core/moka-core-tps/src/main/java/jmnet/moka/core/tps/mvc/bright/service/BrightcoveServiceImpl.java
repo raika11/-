@@ -10,16 +10,16 @@ import java.util.Map;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
+import jmnet.moka.core.common.brightcove.BrightcoveProperties;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSaveDTO;
 import jmnet.moka.core.tps.mvc.bright.dto.OvpSearchDTO;
-import jmnet.moka.core.tps.mvc.bright.vo.BrightcoveCredentailVO;
 import jmnet.moka.core.tps.mvc.bright.vo.OvpVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,39 +45,8 @@ public class BrightcoveServiceImpl implements BrightcoveService {
     @Autowired
     private RestTemplateHelper restTemplateHelper;
 
-    @Value("${brightcove.account}")
-    private String account;
-
-    @Value("${brightcove.api-key}")
-    private String apiKey;
-
-    @Value("${brightcove.client-id}")
-    private String clientId;
-
-    @Value("${brightcove.client-secret}")
-    private String clientSecret;
-
-    @Value("${brightcove.address}")
-    private String baseUrl;
-
-    @Value("${brightcove.api.token}")
-    private String tokenApi;
-
-    @Value("${brightcove.cms.api.base-url}")
-    private String cmsBaseUrl;
-
-    @Value("${brightcove.cms.api.ingest-url}")
-    private String cmsIngestUrl;
-
-    @Value("${brightcove.api.bcovlive-url}")
-    private String bcovliveUrl;
-
-    @Value("${brightcove.job-id.channel1}")
-    private String channel1JobId;
-
-    @Value("${brightcove.job-id.channel2}")
-    private String channel2JobId;
-
+    @Autowired
+    private BrightcoveProperties brightcoveProperties;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -91,8 +60,8 @@ public class BrightcoveServiceImpl implements BrightcoveService {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        //headers.add("X-API-KEY", apiKey);
-        String requestUrl = cmsBaseUrl;
+        //headers.add("X-API-KEY", brightcoveProperties.getApiKey());
+        String requestUrl = brightcoveProperties.getCmsBaseUrl();
         if (McpString.isNotEmpty(searchDTO.getFolderId())) {
             requestUrl = String.format(requestUrl + "/folders/%s/videos", searchDTO.getFolderId());
         } else {
@@ -121,10 +90,11 @@ public class BrightcoveServiceImpl implements BrightcoveService {
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
             headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-            params.add("client_id", clientId);
-            params.add("client_secret", clientSecret);
+            params.add("client_id", brightcoveProperties.getClientId());
+            params.add("client_secret", brightcoveProperties.getClientSecret());
             synchronized (BrightcoveCredentailVO.class) {
-                ResponseEntity<String> responseEntity = restTemplateHelper.post(baseUrl + tokenApi, params, headers);
+                ResponseEntity<String> responseEntity =
+                        restTemplateHelper.post(brightcoveProperties.getBaseUrl() + brightcoveProperties.getTokenApi(), params, headers);
                 try {
                     BrightcoveCredentailVO newCredentialVO = ResourceMapper
                             .getDefaultObjectMapper()
@@ -149,10 +119,10 @@ public class BrightcoveServiceImpl implements BrightcoveService {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        //headers.add("X-API-KEY", apiKey);
+        //headers.add("X-API-KEY", brightcoveProperties.getApiKey());
 
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        builder.path(cmsBaseUrl + "/videos");
+        builder.path(brightcoveProperties.getCmsBaseUrl() + "/videos");
         builder.queryParam("limit", search.getSize());
         builder.queryParam("offset", search.getPage() * search.getSize());
         if (McpString.isNotEmpty(search.getKeyword())) {
@@ -237,12 +207,12 @@ public class BrightcoveServiceImpl implements BrightcoveService {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        headers.add("X-API-KEY", apiKey);
+        headers.add("X-API-KEY", brightcoveProperties.getApiKey());
 
-        String jobId = (channel == 1) ? channel1JobId : channel2JobId;
+        String jobId = (channel == 1) ? brightcoveProperties.getChannel1JobId() : brightcoveProperties.getChannel2JobId();
 
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-        builder.path(bcovliveUrl + "/jobs/" + jobId);
+        builder.path(brightcoveProperties.getBcovliveUrl() + "/jobs/" + jobId);
         String requestUrl = builder
                 .build()
                 .encode()
@@ -280,9 +250,9 @@ public class BrightcoveServiceImpl implements BrightcoveService {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        //headers.add("X-API-KEY", apiKey);
-        String requestUrl = cmsBaseUrl;
-        requestUrl = String.format(requestUrl + "/%s/videos", account);
+        //headers.add("X-API-KEY", brightcoveProperties.getApiKey());
+        String requestUrl = brightcoveProperties.getCmsBaseUrl();
+        requestUrl = String.format(requestUrl + "/%s/videos", brightcoveProperties.getAccount());
 
         String params = "";
         try {

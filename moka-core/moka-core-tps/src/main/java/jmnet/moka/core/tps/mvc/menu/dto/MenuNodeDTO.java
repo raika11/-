@@ -10,8 +10,9 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.menu.vo.MenuVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <pre>
@@ -24,7 +25,8 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName("menuNode")
@@ -52,6 +54,8 @@ public class MenuNodeDTO implements Serializable {
     private String parentMenuId;
 
     private String iconName;
+
+    private List<MenuParentNodeDTO> parents;
 
     /**
      * 조회권한여부
@@ -137,6 +141,13 @@ public class MenuNodeDTO implements Serializable {
             this.children = new ArrayList<>();
         }
         this.children.add(menuNodeDTO);
+    }
+
+    public void addParent(MenuParentNodeDTO parentNodeDTO) {
+        if (this.parents == null) {
+            this.parents = new ArrayList<>();
+        }
+        this.parents.add(parentNodeDTO);
     }
 
     /**

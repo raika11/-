@@ -31,7 +31,8 @@
   <select id="findEpisodeStat" parameterType="java.lang.Long" resultType="JpodEpisodeStatVO"
     statementType="CALLABLE">
     {call UPA_JPOD_EPISODE_INFO_SELECT(
-    #{chnlSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+    #{chnlSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+    #{seasonNo, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
     )}
   </select>
 

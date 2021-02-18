@@ -36,4 +36,9 @@ public class JpodEpisodeVO {
      * 채널일련번호
      */
     private Long chnlSeq;
+
+    /**
+     * 시즌 번호
+     */
+    private Integer seasonNo;
 }

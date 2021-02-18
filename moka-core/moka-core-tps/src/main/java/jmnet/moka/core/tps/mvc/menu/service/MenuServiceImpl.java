@@ -11,6 +11,7 @@ import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.MenuAuthTypeCode;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuNodeDTO;
+import jmnet.moka.core.tps.mvc.menu.dto.MenuParentNodeDTO;
 import jmnet.moka.core.tps.mvc.menu.dto.MenuSearchDTO;
 import jmnet.moka.core.tps.mvc.menu.entity.Menu;
 import jmnet.moka.core.tps.mvc.menu.entity.MenuAuth;
@@ -111,6 +112,16 @@ public class MenuServiceImpl implements MenuService {
                         .getParentMenuId()
                         .equals(menuNodeDTO.getMenuId())) {
                     MenuNodeDTO child = new MenuNodeDTO(menu);
+                    if (menuNodeDTO.getParents() != null) {
+                        menuNodeDTO
+                                .getParents()
+                                .forEach(parentNodeDTO -> {
+                                    child.addParent(parentNodeDTO);
+                                });
+                    }
+
+
+                    child.addParent(new MenuParentNodeDTO(menuNodeDTO));
                     menuNodeDTO.addNode(traceMenuNode(child, menuList, maxDepth));
                 }
             }

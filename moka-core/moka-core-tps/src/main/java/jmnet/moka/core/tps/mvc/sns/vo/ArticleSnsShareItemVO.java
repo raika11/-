@@ -64,6 +64,11 @@ public class ArticleSnsShareItemVO implements Serializable {
     private String sourceCode;
 
     /**
+     * 소스 명
+     */
+    private String sourceName;
+
+    /**
      * 서비스 일시
      */
     @DTODateTimeFormat

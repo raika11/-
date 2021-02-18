@@ -12,6 +12,7 @@ import jmnet.moka.core.tps.mvc.jpod.repository.JpodChannelRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodKeywordRepository;
 import jmnet.moka.core.tps.mvc.jpod.repository.JpodMemberRepository;
 import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeStatVO;
+import jmnet.moka.core.tps.mvc.jpod.vo.JpodEpisodeVO;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,11 @@ public class JpodChannelServiceImpl implements JpodChannelService {
         return jpodChannelRepository.findById(channelSeq);
     }
 
+    @Override
+    public Optional<JpodChannel> findJpodChannelByPodtyChnlSrl(Integer podtyChnlSrl) {
+        return jpodChannelRepository.findFirstByPodtyChnlSrl(podtyChnlSrl);
+    }
+
 
     @Override
     public JpodChannel insertJpodChannel(JpodChannel channel, List<JpodKeyword> keywords, List<JpodMember> members) {
@@ -100,8 +106,12 @@ public class JpodChannelServiceImpl implements JpodChannelService {
     }
 
     @Override
-    public JpodEpisodeStatVO findEpisodeStat(Long chnlSeq) {
-        return jpodEpisodeMapper.findEpisodeStat(chnlSeq);
+    public JpodEpisodeStatVO findEpisodeStat(Long chnlSeq, Integer seasonNo) {
+        return jpodEpisodeMapper.findEpisodeStat(JpodEpisodeVO
+                .builder()
+                .chnlSeq(chnlSeq)
+                .seasonNo(seasonNo)
+                .build());
     }
 
     public JpodChannel saveJpodEpisodeDetail(JpodChannel jpodChannel, List<JpodKeyword> keywords, List<JpodMember> members) {

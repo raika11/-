@@ -29,12 +29,13 @@ const MokaBreadcrumb = ({ match, menuPaths, menuById, nonResponsive, side, curre
 
     return (
         <Breadcrumb listProps={{ className: 'mb-0 bg-white p-0 pl-3 pr-3' }}>
-            {parents.map((data) => (
-                // 클릭 못하게 하려고 active로 함
-                <Breadcrumb.Item key={data.menuId} active>
-                    {data.menuDisplayNm}
-                </Breadcrumb.Item>
-            ))}
+            {parents &&
+                parents.map((data) => (
+                    // 클릭 못하게 하려고 active로 함
+                    <Breadcrumb.Item key={data.menuId} active>
+                        {data.menuDisplayNm}
+                    </Breadcrumb.Item>
+                ))}
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: current.menuUrl }} data-current="true" active>
                 {current.menuDisplayNm}
             </Breadcrumb.Item>

@@ -2,7 +2,7 @@ export const localeText = { noRowsToShow: '조회 결과가 없습니다.', load
 export const columnDefs = [
     {
         headerName: '번호',
-        field: 'noticeSeq',
+        field: 'boardSeq',
         width: 50,
         cellStyle: { fontSize: '14px', display: 'flex', alignItems: 'center' },
     },
@@ -23,10 +23,10 @@ export const columnDefs = [
     },
     {
         headerName: '작성자',
-        field: 'regUser',
+        field: 'regName',
         width: 100,
         cellStyle: { fontSize: '14px', display: 'flex', alignItems: 'center' },
-        tooltipField: 'regUser',
+        tooltipField: 'regName',
     },
     {
         headerName: '작성일자',
@@ -37,10 +37,10 @@ export const columnDefs = [
     },
     {
         headerName: '조회',
-        field: 'viewCount',
+        field: 'viewCnt',
         width: 80,
         cellStyle: { fontSize: '14px', display: 'flex', alignItems: 'center' },
-        tooltipField: 'viewCount',
+        tooltipField: 'viewCnt',
     },
 ];
 

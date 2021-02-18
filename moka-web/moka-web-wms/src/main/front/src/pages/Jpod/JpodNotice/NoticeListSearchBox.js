@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, changeJpodSearchOption, getChannels, getEpisodeGubunChannels } from '@store/jpod';
+import { initialState, changeJpodSearchOption, getChannels, getEpisodeGubunChannels, getBoardContentsList, getBoardChannelList } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
-const NoticeListSearchBox = ({ match }) => {
+const NoticeListSearchBox = ({ match, SelectBoard }) => {
     const [searchData, setSearchData] = useState(initialState.channel.jpod.search);
     const history = useHistory();
     const dispatch = useDispatch();
+    const [channalList, setChannalList] = useState([]); // 채넌 선택.
 
-    const { channel_list } = useSelector((store) => ({
-        channel_list: store.jpod.episode.channel.list,
-    }));
+    // const { channel_list } = useSelector((store) => ({
+    //     channel_list: store.jpod.episode.channel.list,
+    // }));
 
     // 검색 항목 변경시 스테이트 업데이트.
     const handleSearchChange = (e) => {
@@ -80,6 +81,18 @@ const NoticeListSearchBox = ({ match }) => {
     // 최초 로딩시 목록 가져오기.
     useEffect(() => {
         dispatch(getEpisodeGubunChannels()); // 채널 목록.
+
+        dispatch(
+            getBoardChannelList({
+                type: 'BOARD_DIVC1',
+                callback: (element) => {
+                    setChannalList(element);
+                },
+            }),
+        );
+
+        dispatch(getBoardContentsList({ boardId: SelectBoard.boardId }));
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -126,9 +139,9 @@ const NoticeListSearchBox = ({ match }) => {
                     <div className="mb-0 pl-1 pr-2">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             <option value="">j팟 채널 전체</option>
-                            {channel_list.map((item, index) => (
-                                <option key={index} value={item.podtyChnlSrl}>
-                                    {item.chnlNm}
+                            {channalList.map((item, index) => (
+                                <option key={index} value={item.value}>
+                                    {item.name}
                                 </option>
                             ))}
                         </MokaInput>

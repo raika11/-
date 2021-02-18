@@ -28,6 +28,8 @@ import {
     SELECT_BRIGHTOVP,
     CHANGE_BRIGHTOVP_SEARCH_OPTION,
     GET_CH_EPISODES_SUCCESS,
+    GET_BOARD_CONTENTS_LIST_SUCCESS,
+    GET_BOARD_CONTENTS_SUCCESS,
 } from './jpodAction';
 
 export const initialState = {
@@ -119,20 +121,20 @@ export const initialState = {
             list: [],
         },
     },
-    notice: {
-        notices: {
+    jpodBoard: {
+        jpodBoards: {
             total: 0,
             list: [],
             search: {
                 page: 0,
+                sort: 'boardId,desc',
                 size: PAGESIZE_OPTIONS[0],
-                sort: 'repSeq,asc',
-                searchType: 'all',
+                usedYn: 'Y',
+                searchType: '',
                 keyword: '',
-                usePaging: 'Y',
             },
         },
-        notice: {},
+        jpodBoard: {},
     },
     reporter: {
         total: 0,
@@ -332,6 +334,19 @@ export default handleActions(
             // console.log(payload);
             return produce(state, (draft) => {
                 draft.channel.channelInfoEpisode.list = body.list;
+            });
+        },
+        [GET_BOARD_CONTENTS_LIST_SUCCESS]: (state, { payload: { list, totalCnt } }) => {
+            // console.log(payload);
+            return produce(state, (draft) => {
+                draft.jpodBoard.jpodBoards.list = list;
+                draft.jpodBoard.jpodBoards.total = totalCnt;
+            });
+        },
+        [GET_BOARD_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
+            // console.log(payload);
+            return produce(state, (draft) => {
+                draft.jpodBoard.jpodBoard = body;
             });
         },
     },

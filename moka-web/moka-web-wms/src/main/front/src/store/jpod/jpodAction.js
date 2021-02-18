@@ -104,3 +104,15 @@ export const getChEpisodes = createAction(GET_CH_EPISODES, ({ chnlSeq }) => ({ c
 // 채널 등록, 수정 처리.
 export const [SAVE_JPOD_EPISODE, SAVE_JPOD_EPISODE_SUCCESS, SAVE_JPOD_EPISODE_FAILURE] = createRequestActionTypes('jpod/SAVE_JPOD_EPISODE');
 export const saveJpodEpisode = createAction(SAVE_JPOD_EPISODE, ({ chnlSeq, epsdSeq, episodeinfo, callback }) => ({ chnlSeq, epsdSeq, episodeinfo, callback }));
+
+// 공지 게시판.
+// 게시글 목록 가지고 오기.
+export const [GET_BOARD_CONTENTS_LIST, GET_BOARD_CONTENTS_LIST_SUCCESS, GET_BOARD_CONTENTS_LIST_LIST_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CONTENTS_LIST');
+export const getBoardContentsList = createAction(GET_BOARD_CONTENTS_LIST, ({ boardId }) => ({ boardId }));
+
+export const [GET_BOARD_CONTENTS, GET_BOARD_CONTENTS_SUCCESS, GET_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CONTENTS');
+export const getBoardContents = createAction(GET_BOARD_CONTENTS, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));
+
+// 게시판 channalType 별 목록 가지고 오기. ( store 를 거치지 않고 call back 으로 목록 전달.)
+export const [GET_BOARD_CHANNEL_LIST] = createRequestActionTypes('jpod/GET_BOARD_CHANNEL_LIST');
+export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST, ({ type, callback }) => ({ type, callback }));

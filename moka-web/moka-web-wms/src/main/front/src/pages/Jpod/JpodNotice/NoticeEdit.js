@@ -9,21 +9,25 @@ import { messageBox } from '@utils/toastUtil';
 // import { DB_DATEFORMAT } from '@/constants';
 // import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
 // import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChEpisodes, getChannels, clearReporter } from '@store/jpod';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // import toast, { messageBox } from '@utils/toastUtil';
 import { useHistory, useParams } from 'react-router-dom';
 
-const NoticeEdit = ({ match }) => {
-    // const dispatch = useDispatch();
+import { getBoardContents, getBoardChannelList } from '@store/jpod';
+
+const NoticeEdit = ({ match, SelectBoard }) => {
+    const dispatch = useDispatch();
     const history = useHistory();
     const params = useParams();
     const selectNoticeSeq = useRef(null);
     const [editTitle, setEditTitle] = useState(null);
+    const [channalList, setChannalList] = useState([]); // 채넌 선택.
 
     const [editData, setEditData] = useState({});
 
-    const { channel_list } = useSelector((store) => ({
+    const { jpodBoard } = useSelector((store) => ({
         channel_list: store.jpod.episode.channel.list,
+        jpodBoard: store.jpod.jpodBoard.jpodBoard,
     }));
 
     // 게시글 데이터 변경시 스테이트 업데이트.
@@ -89,9 +93,10 @@ const NoticeEdit = ({ match }) => {
 
     // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
     useEffect(() => {
-        const { noticeSeq } = params;
-        if (!isNaN(noticeSeq) && selectNoticeSeq.current !== noticeSeq) {
-            selectNoticeSeq.current = noticeSeq;
+        const { boardSeq } = params;
+        if (!isNaN(boardSeq) && selectNoticeSeq.current !== boardSeq) {
+            selectNoticeSeq.current = boardSeq;
+            dispatch(getBoardContents({ boardId: SelectBoard.boardId, boardSeq: boardSeq }));
             setEditTitle(null);
         } else if (history.location.pathname === `${match.path}/add` && selectNoticeSeq.current !== 'add') {
             selectNoticeSeq.current = 'add';
@@ -109,6 +114,21 @@ const NoticeEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        setEditData(jpodBoard);
+    }, [jpodBoard]);
+
+    useEffect(() => {
+        dispatch(
+            getBoardChannelList({
+                type: 'BOARD_DIVC1',
+                callback: (element) => {
+                    setChannalList(element);
+                },
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <MokaCard
             className="overflow-hidden flex-fill"
@@ -175,11 +195,11 @@ const NoticeEdit = ({ match }) => {
                 {/* 채널 선택. */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={90} value={editData.chnlSeq} onChange={(e) => console.log(e)}>
+                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={90} value={editData.channelId} onChange={(e) => console.log(e)}>
                             <option value="">채널 전체</option>
-                            {channel_list.map((item, index) => (
-                                <option key={index} value={item.podtyChnlSrl}>
-                                    {item.chnlNm}
+                            {channalList.map((item, index) => (
+                                <option key={index} value={item.value}>
+                                    {item.name}
                                 </option>
                             ))}
                         </MokaInputLabel>
@@ -216,7 +236,7 @@ const NoticeEdit = ({ match }) => {
                             label="조회수"
                             labelWidth={90}
                             inputProps={{ plaintext: true, readOnly: true }}
-                            value={`111`}
+                            value={editData.viewCnt === 0 ? `0` : editData.viewCnt}
                             name=""
                             className="overflow-hidden flex-fill mb-0"
                             labelClassName="ml-0"

@@ -137,3 +137,23 @@ export const saveBrightOvp = ({ ovpdata }) => {
             throw err;
         });
 };
+
+export const getBoardContentsList = ({ boardId, search }) => {
+    return instance.get(`/api/boards/${boardId}/contents?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 게시판 게시글 정보.
+export const getBoardContentsInfo = ({ boardId, boardSeq }) => {
+    return instance.get(`/api/boards/${boardId}/contents/${boardSeq}`).catch((err) => {
+        throw err;
+    });
+};
+
+// 보드 채널 목록 가지고 오기 ( JPOD )
+export const getBoardJpodChannalList = () => {
+    return instance.get(`/api/jpods?usedYn=Y`).catch((err) => {
+        throw err;
+    });
+};

@@ -131,6 +131,18 @@ public class ArticleBasicVO implements Serializable {
     private String ovpLink;
 
     /**
+     * JTBC VOD동영상 첨부여부(DTL_CD = MV)
+     */
+    @Column(name = "JTBCVOD_YN")
+    private String jtbcvodYn;
+
+    /**
+     * OVP동영상 링크
+     */
+    @Column(name = "JTBCVOD_LINK")
+    private String jtbcvodLink;
+
+    /**
      * 유투브동영상 첨부여부(DTL_CD = MY)
      */
     @Column(name = "YOUTUBE_YN")

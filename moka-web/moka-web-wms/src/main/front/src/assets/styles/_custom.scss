@@ -384,14 +384,8 @@ body {
             position: relative;
         }
 
-        .tree-item {
-            &[data-usedyn='N'] {
-                color: rgba($black, 0.5)
-            }
-        }
-
         .tree-label {
-            height: 40px;
+            min-height: 40px;
             padding: 7px 7px;
             display: flex;
             align-items: center;
@@ -411,9 +405,6 @@ body {
                 background-color: rgba(0,0,0,.04);
                 border: solid transparent;
                 border-width: 1px 1px 1px 0;
-                padding-bottom: 0;
-                padding-right: 0;
-                padding-top: 0;
                 // border-radius: 0 66px 66px 0;
             }
 
@@ -442,14 +433,17 @@ body {
             background-color: #e8f0fe;
             border: solid transparent;
             border-width: 1px 1px 1px 0;
-            padding-bottom: 0;
-            padding-right: 0;
-            padding-top: 0;
             // border-radius: 0 66px 66px 0;
             color: #1967d2;
 
             &:hover {
                 background-color: #e8f0fe;
+            }
+        }
+
+        [data-usedyn='N'] {
+            .tree-label {
+                color: rgba($black, 0.3);
             }
         }
 

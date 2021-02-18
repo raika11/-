@@ -71,6 +71,9 @@ public class ArticleSearchDTO extends SearchDTO {
     @ApiModelProperty("벌크여부")
     private String bulkYn;
 
+    @ApiModelProperty("서비스여부")
+    private String serviceFlag;
+
     public ArticleSearchDTO() {
         super(ArticleBasicVO.class, "totalId,desc");
         super.setUseTotal(MokaConstants.YES);
@@ -80,6 +83,7 @@ public class ArticleSearchDTO extends SearchDTO {
         this.contentType = TpsConstants.SEARCH_TYPE_ALL;
         this.pressCategory = TpsConstants.SEARCH_TYPE_ALL;
         this.bulkYn = TpsConstants.SEARCH_TYPE_ALL;
+        this.serviceFlag = TpsConstants.SEARCH_TYPE_ALL;
     }
 
     /**

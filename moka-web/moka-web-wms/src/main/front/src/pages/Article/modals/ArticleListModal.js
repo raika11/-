@@ -40,6 +40,17 @@ const ArticleListModal = (props) => {
     const [rowData, setRowData] = useState([]);
     const [total, setTotal] = useState(0);
 
+    const handelHide = () => {
+        setPeriod([0, 'days']);
+        setSearch(initialState.search);
+        setValError({});
+        setSourceOn(false);
+        setSourceList(null);
+        setRowData([]);
+        setTotal(0);
+        onHide();
+    };
+
     /**
      * 입력값 변경
      * @param {object} e Event
@@ -208,7 +219,7 @@ const ArticleListModal = (props) => {
     }, [sourceOn, show]);
 
     return (
-        <MokaModal title="기사 검색" show={show} onHide={onHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
+        <MokaModal title="기사 검색" show={show} onHide={handelHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
             <Form>
                 <Form.Row className="mb-2">
                     {/* 검색 기간, 시작일, 종료일 */}
@@ -236,19 +247,8 @@ const ArticleListModal = (props) => {
                         <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="ml-1" onChange={handleChangeEDate} value={search.endServiceDay} />
                     </Col>
 
-                    {/* 검색 조건 */}
-                    <Col xs={2} className="p-0 pr-2">
-                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            {initialState.searchTypeList.map((searchType) => (
-                                <option key={searchType.id} value={searchType.id}>
-                                    {searchType.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </Col>
-
                     {/* 분류 전체 */}
-                    <Col xs={4} className="p-0 pr-2">
+                    <Col xs={6} className="p-0 pr-2">
                         <CodeAutocomplete name="masterCode" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
                     </Col>
 
@@ -277,8 +277,19 @@ const ArticleListModal = (props) => {
                         />
                     </Col>
 
+                    {/* 검색 조건 */}
+                    <Col xs={2} className="p-0 pr-2">
+                        <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                            {initialState.searchTypeList.map((searchType) => (
+                                <option key={searchType.id} value={searchType.id}>
+                                    {searchType.name}
+                                </option>
+                            ))}
+                        </MokaInput>
+                    </Col>
+
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0 pr-2">
+                    <Col xs={6} className="p-0 pr-2">
                         <MokaInput className="flex-fill" name="keyword" value={search.keyword} placeholder="검색어를 입력하세요" onChange={handleChangeValue} />
                     </Col>
 

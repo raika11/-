@@ -46,7 +46,7 @@
 .ag-theme-moka-grid {
     @include ag-theme-alpine(
         (
-            odd-row-background-color: #fff,
+            odd-row-background-color: $table-accent-bg,
             row-height: 34px,
             header-height: 36px,
             font-family: $font-family-sans-serif,
@@ -56,6 +56,7 @@
             row-hover-color: rgba(33, 150, 243, 0.1),
             alpine-active-color: rgba(33, 150, 243, 0.3),
             selected-row-background-color: rgba(33, 150, 243, 0.3),
+            checkbox-checked-color: rgba(33, 150, 243, 1)
         )
     );
 
@@ -110,18 +111,6 @@
                 border-bottom-style: none;
             }
 
-            &:nth-of-type(odd) {
-                background-color: $table-accent-bg;
-            }
-
-            &:hover {
-                background-color: var(--ag-row-hover-color, rgba(33, 150, 243, 0.1));
-            }
-
-            &.ag-row-selected {
-                background-color: var(--ag-selected-row-background-color, rgba(33, 150, 243, 0.3));
-            }
-
             // usedyn-n row
             &.usedyn-n {
                 @include disabled-font;
@@ -130,6 +119,9 @@
             // deskingyn-y row
             &.deskingyn-y {
                 background-color: #fffcde;
+                &:hover {
+                    background-color: darken(#fffcde, 1.1);
+                }
             }
         }
     }
@@ -187,12 +179,12 @@ $row-hover-color: darken($desking-row-color, 5);
 .ag-theme-moka-dnd-grid {
     @include ag-theme-alpine(
         (
-            odd-row-background-color: $desking-row-color,
+            background-color: $desking-row-color,
             font-family: $font-family-sans-serif,
             font-size: 13px,    // _ag-theme-alpine-mixin에서 +1하여 처리함
             header-column-separator: false,
             row-hover-color: $row-hover-color,
-            selected-row-background-color: #efefef,
+            selected-row-background-color: $row-hover-color,
             range-selection-border-color: transparent,
             border-color: $white
         )
@@ -214,16 +206,7 @@ $row-hover-color: darken($desking-row-color, 5);
             border-top: 3px solid $white;
             border-bottom: 3px solid $white;
             border-radius: 8px;
-            background-color: $desking-row-color;
-    
-            &:hover, &.ag-row-hover, &.ag-row-highlight-below, &.ag-row-highlight-above {
-                background-color: $row-hover-color;
-            }
-            &.ag-row-selected {
-                background-color: rgba(33, 150, 243, 0.3);
-            }
         }
-
     }
 
     .ag-header {

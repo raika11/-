@@ -2,6 +2,8 @@ package jmnet.moka.core.tps.mvc.jpod.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -80,7 +82,18 @@ public class JpodEpisodeRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         }
 
 
-        QueryResults<JpodEpisode> list = query.fetchResults();
+
+        QueryResults<JpodEpisode> list = query
+                .select(Projections.fields(JpodEpisode.class, qJpodEpisode.epsdSeq, qJpodEpisode.chnlSeq, qJpodEpisode.epsdDate,
+                        qJpodEpisode.epsdFile, qJpodEpisode.epsdMemo, qJpodEpisode.epsdNm, qJpodEpisode.epsdNo, qJpodEpisode.jpodType,
+                        qJpodEpisode.katalkImg, qJpodEpisode.likeCnt, qJpodEpisode.modDt, qJpodEpisode.modId, qJpodEpisode.playCnt,
+                        qJpodEpisode.playTime, qJpodEpisode.podtyEpsdSrl, qJpodEpisode.regDt, qJpodEpisode.regId, qJpodEpisode.replyCnt,
+                        qJpodEpisode.scbCnt, qJpodEpisode.seasonNo, qJpodEpisode.shareCnt, qJpodEpisode.shrImg, qJpodEpisode.viewCnt,
+                        ExpressionUtils.as(JPAExpressions
+                                .select(jpodChannel.chnlNm)
+                                .from(jpodChannel)
+                                .where(jpodChannel.chnlSeq.eq(qJpodEpisode.chnlSeq)), "chnlNm")))
+                .fetchResults();
 
         return new PageImpl<JpodEpisode>(list.getResults(), search.getPageable(), list.getTotal());
     }

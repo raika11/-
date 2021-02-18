@@ -46,6 +46,12 @@ public class JpodEpisodeDTO implements Serializable {
     private Long chnlSeq;
 
     /**
+     * 채널명
+     */
+    @ApiModelProperty(value = "채널명", hidden = true)
+    private String chnlNm;
+
+    /**
      * 에피소드회차
      */
     @ApiModelProperty("에피소드회차")

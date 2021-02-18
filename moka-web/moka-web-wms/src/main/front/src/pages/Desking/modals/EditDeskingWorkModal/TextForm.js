@@ -3,13 +3,17 @@ import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel } from '@components';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 
 /**
  * deskingPartMapping에서 text 형식의 기본 리스트
  * 링크는 타겟 셀렉트 박스 자동 생성
  * 링크타겟을 받는 DTO 필드는 ~Target으로 고정
+ *
+ * +)
+ * unescape === true 이면 unescapeHtmlArticle 처리
  */
-const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
+const TextForm = ({ mappingData, urlRegex, temp, onChange, error, unescape = false }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const isUrl = urlRegex.test(field);
     const urlTarget = isUrl ? `${field.replace('Url', '')}Target` : '';
@@ -23,7 +27,7 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error }) => {
                     labelClassName="pr-3"
                     name={field}
                     className="mb-0 w-100"
-                    value={temp[field]}
+                    value={unescape ? unescapeHtmlArticle(temp[field]) : temp[field]}
                     onChange={onChange}
                     isInvalid={errorCheck && error[field]}
                     {...mappingProps}

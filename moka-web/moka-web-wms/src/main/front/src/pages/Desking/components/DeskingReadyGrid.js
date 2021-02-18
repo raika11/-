@@ -5,7 +5,7 @@ import { addDeskingWorkDropzone } from '@utils/deskingUtil';
 import toast from '@utils/toastUtil';
 
 /**
- * 데스킹워크 간의 드롭존 생성
+ * 다른 컴포넌트워크에 데스킹을 드롭할 수 있도록 드롭존을 생성한다
  */
 const DeskingReadyGrid = (props) => {
     const { componentAgGridInstances = [], agGridIndex: sourceIdx, component } = props;

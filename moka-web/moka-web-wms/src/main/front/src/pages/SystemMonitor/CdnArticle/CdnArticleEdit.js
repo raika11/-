@@ -30,7 +30,6 @@ const CdnArticleEdit = ({ match }) => {
         cdnArticle: cdnArticle.cdnArticle,
     }));
     const [modalShow, setModalShow] = useState(false);
-    const [btns, setBtns] = useState([]);
     const [temp, setTemp] = useState(initialState.cdnArticle);
     const [error, setError] = useState({});
 
@@ -91,6 +90,7 @@ const CdnArticleEdit = ({ match }) => {
                     callback: ({ header }) => {
                         if (header.success) {
                             toast.success(header.message);
+                            history.push(`${match.path}/${temp.totalId}`);
                         } else {
                             toast.fail(header.message);
                         }
@@ -154,22 +154,6 @@ const CdnArticleEdit = ({ match }) => {
     }, [cdnArticle]);
 
     useEffect(() => {
-        if (totalId) {
-            setBtns([
-                { text: '수정', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancle },
-                { text: '캐시 삭제', variant: 'negative', onClick: handleClear },
-            ]);
-        } else {
-            setBtns([
-                { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancle },
-            ]);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalId]);
-
-    useEffect(() => {
         return () => {
             dispatch(clearCdnArticle());
         };
@@ -183,7 +167,11 @@ const CdnArticleEdit = ({ match }) => {
             footerClassName="d-flex justify-content-center"
             loading={loading}
             footer
-            footerButtons={btns}
+            footerButtons={[
+                { text: totalId ? '수정' : '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancle },
+                totalId && { text: '캐시 삭제', variant: 'negative', onClick: handleClear },
+            ].filter((a) => a)}
         >
             <Form>
                 <Form.Row className="mb-2">

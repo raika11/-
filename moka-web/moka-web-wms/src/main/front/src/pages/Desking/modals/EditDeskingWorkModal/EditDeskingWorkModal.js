@@ -261,7 +261,17 @@ const EditDeskingWorkModal = (props) => {
                     } else if (partKey === 'VOD_URL') {
                         return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
                     } else if (mappingData) {
-                        return <TextForm key={partKey} mappingData={mappingData} temp={temp} urlRegex={urlRegex} onChange={handleChangeValue} error={error} />;
+                        return (
+                            <TextForm
+                                key={partKey}
+                                unescape={partKey === 'BODY_HEAD'}
+                                mappingData={mappingData}
+                                temp={temp}
+                                urlRegex={urlRegex}
+                                onChange={handleChangeValue}
+                                error={error}
+                            />
+                        );
                     } else {
                         return null;
                     }

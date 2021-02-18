@@ -24,7 +24,7 @@ export const initialState = {
     autoCreateYnSearchTypeList: [
         { id: 'all', name: '데이터 전체' },
         { id: 'Y', name: '자동' },
-        { id: 'N', name: '수동' },
+        { id: 'N', name: '편집' },
     ],
     apiSearchTypeList: [
         { id: 'all', name: '전체' },

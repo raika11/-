@@ -24,7 +24,6 @@ export default [
         field: 'worker',
         width: 125,
         wrapText: true,
-        tooltipField: 'worker',
         cellClassRules: {
             'pre-cell': () => true,
         },

@@ -1,15 +1,12 @@
 package jmnet.moka.web.schedule.mvc.gen.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 /**
  * <pre>

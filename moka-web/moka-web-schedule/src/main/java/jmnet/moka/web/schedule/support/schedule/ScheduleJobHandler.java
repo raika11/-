@@ -78,7 +78,7 @@ public class ScheduleJobHandler {
     /**
      * 스케줄 Job 추가
      *
-     * @param jobSeq 스케줄 정보
+     * @param jobSeq 일련번호
      * @return 추가 여부
      */
     public boolean appendJob(Long jobSeq) {
@@ -136,7 +136,7 @@ public class ScheduleJobHandler {
      * 스케줄 Job 제거
      *
      * @param jobSeq 스케줄 일련번호
-     * @return 추가 여부
+     * @return 삭제 여부
      */
     public boolean removeJob(Long jobSeq) {
         boolean result = false;

@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.code.JpodTypeCode;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
@@ -172,6 +173,10 @@ public class JpodEpisode extends BaseAudit implements Serializable {
     @Builder.Default
     private Integer seasonNo = 0;
 
-
+    /**
+     * 채널명
+     */
+    @Transient
+    private String chnlNm;
 
 }

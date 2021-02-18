@@ -198,7 +198,7 @@ public class SitemapView extends AbstractView {
         int paramDay = Integer.parseInt(dayString);
         Calendar calendar = Calendar.getInstance();
         int nowYear = calendar.get(Calendar.YEAR);
-        int nowMonth = calendar.get(Calendar.MONTH);
+        int nowMonth = calendar.get(Calendar.MONTH) + 1;
         int nowDay = calendar.get(Calendar.DATE);
         calendar.set(paramYear, paramMonth - 1, 1);
         int startDay = 1;
@@ -214,7 +214,7 @@ public class SitemapView extends AbstractView {
             Map<String, String> map = new HashMap<>(1);
             map.put("zeroPadDay", String.format("%02d", day));
             map.put("day", String.format("%d", day));
-            map.put("select", paramDay == day?"selected":"");
+            map.put("select", paramDay == day ? "selected" : "");
             dayList.add(map);
         }
         mergeContext.set("year", paramYear);

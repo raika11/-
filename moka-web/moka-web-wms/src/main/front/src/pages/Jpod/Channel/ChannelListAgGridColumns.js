@@ -74,28 +74,28 @@ export const columnDefs = [
 export const channelEpisodeColumnDefs = [
     {
         headerName: 'ID',
-        field: 'chnlSeq',
+        field: 'epsdSeq',
         width: 50,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '회차',
-        field: 'chnlSeq',
+        field: 'epsdNo',
         width: 50,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '에피소드 명',
-        field: 'chnlSeq',
+        field: 'epsdNm',
         width: 100,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '설명',
-        field: 'chnlMemo',
+        field: 'epsdMemo',
         width: 100,
         flex: 1,
-        tooltipField: 'chnlMemo',
+        tooltipField: 'epsdMemo',
         autoHeight: true,
         cellStyle: {
             boxSizing: 'border-box',
@@ -113,13 +113,13 @@ export const channelEpisodeColumnDefs = [
     },
     {
         headerName: '방송일',
-        field: 'chnlSeq',
+        field: 'epsdDate',
         width: 100,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '재생시간',
-        field: 'chnlSeq',
+        field: 'playTime',
         width: 100,
         cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
     },

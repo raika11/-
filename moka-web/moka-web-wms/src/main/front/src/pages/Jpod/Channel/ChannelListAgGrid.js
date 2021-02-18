@@ -6,7 +6,7 @@ import ImageRenderer from './ImageRenderer';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { GET_CHANNELS, changeJpodSearchOption, getChannels, getChannelInfo, clearChannelInfo } from '@store/jpod';
+import { GET_CHANNELS, changeJpodSearchOption, getChannels } from '@store/jpod';
 
 const ChannelListAgGrid = ({ match }) => {
     const dispatch = useDispatch();
@@ -25,8 +25,9 @@ const ChannelListAgGrid = ({ match }) => {
     // 목록 클릭 했을때.
     const handleClickListRow = ({ chnlSeq }) => {
         history.push(`${match.path}/${chnlSeq}`);
-        dispatch(clearChannelInfo());
-        dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+        // dispatch(clearChannelInfo());
+        // dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+        // dispatch(getChEpisodes({ chnlSeq: chnlSeq }));
     };
 
     // grid 에서 상태 변경시 리스트를 가지고 오기.

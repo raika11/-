@@ -89,10 +89,6 @@ export const getEpisodeGubunChannels = createAction(GET_EPISODE_GUBUN_CHANNELS, 
 export const [GET_EPISODES, GET_EPISODES_SUCCESS, GET_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES');
 export const getEpisodes = createAction(GET_EPISODES, (actions) => actions);
 
-// 에피소드 목록 가지고 오기. ( 채널 정보에 필요한 에피소드 목록. )
-export const [GET_CH_EPISODES, GET_CH_EPISODES_SUCCESS, GET_CH_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_CH_EPISODES');
-export const getChEpisodes = createAction(GET_CH_EPISODES, (actions) => actions);
-
 // 에피소드 정보 초기화.
 export const CLEAR_EPISODE_INFO = 'jpod/CLEAR_EPISODE_INFO';
 export const clearEpisodeInfo = createAction(CLEAR_EPISODE_INFO);
@@ -100,6 +96,10 @@ export const clearEpisodeInfo = createAction(CLEAR_EPISODE_INFO);
 // 에피소드 정보 가지고 오기.
 export const [GET_EPISODES_INFO, GET_EPISODES_INFO_SUCCESS, GET_EPISODES_INFO_FAILURE] = createRequestActionTypes('jpod/GET_EPISODES_INFO');
 export const getEpisodesInfo = createAction(GET_EPISODES_INFO, ({ chnlSeq, epsdSeq }) => ({ chnlSeq, epsdSeq }));
+
+// 에피소드 목록 가지고 오기. ( 채널 정보에 필요한 에피소드 목록. )
+export const [GET_CH_EPISODES, GET_CH_EPISODES_SUCCESS, GET_CH_EPISODES_FAILURE] = createRequestActionTypes('jpod/GET_CH_EPISODES');
+export const getChEpisodes = createAction(GET_CH_EPISODES, ({ chnlSeq }) => ({ chnlSeq }));
 
 // 채널 등록, 수정 처리.
 export const [SAVE_JPOD_EPISODE, SAVE_JPOD_EPISODE_SUCCESS, SAVE_JPOD_EPISODE_FAILURE] = createRequestActionTypes('jpod/SAVE_JPOD_EPISODE');

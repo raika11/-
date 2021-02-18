@@ -19,6 +19,8 @@ import {
     GET_BRIGHT_OVP,
     GET_BRIGHT_OVP_SUCCESS,
     SAVE_BRIGHTOVP,
+    GET_CH_EPISODES,
+    GET_CH_EPISODES_SUCCESS,
 } from './jpodAction';
 import {
     getReporterList,
@@ -44,6 +46,32 @@ const getChannelsSaga = callApiAfterActions(GET_CHANNELS, getJpods, (store) => s
 const getEpisodesSaga = callApiAfterActions(GET_EPISODES, getEpisodes, (store) => store.jpod.episode.episodes);
 const getPodtyEpisodeListSaga = callApiAfterActions(GET_PODTY_EPISODE_LIST, getPodtyEpisodesList, (store) => store.jpod.podtyEpisode);
 const getEpisodeGubunChannelsSaga = callApiAfterActions(GET_EPISODE_GUBUN_CHANNELS, getEpisodeChannels, (store) => store.jpod.episode.channel);
+// const getChEpisodesSaga = callApiAfterActions(GET_CH_EPISODES, getChEpisodes, (payload) => payload);
+
+// 채널 목록에서 채널 정보 가지고 올때 에피소드 텝 목록 용.
+// 에피소드 목록 조회 api 와 같은 api 인제 파라미터가 다르고 store 를 구분 하려고 사용.
+function* getChEpisodesSaga({ payload: { chnlSeq } }) {
+    yield put(startLoading(GET_CH_EPISODES));
+    let response;
+    try {
+        response = yield call(getEpisodes, { search: { page: 0, sort: 'chnlSeq,desc', size: 4, chnlSeq: chnlSeq } });
+        const {
+            header: { success, message },
+        } = response.data;
+        if (success === true) {
+            yield put({ type: GET_CH_EPISODES_SUCCESS, payload: response.data });
+        } else {
+            // 에러 나면 서버 에러 메시지 토스트 전달.
+            toast.error(message);
+        }
+    } catch (e) {
+        const {
+            header: { message },
+        } = errorResponse(e);
+        toast.error(message);
+    }
+    yield put(finishLoading(GET_CH_EPISODES));
+}
 
 // 채널 등록 수정.
 function* saveChannelInfoSaga({ payload: { chnlSeq, channelinfo, callback } }) {
@@ -257,4 +285,5 @@ export default function* jpodSaga() {
     yield takeLatest(SAVE_JPOD_EPISODE, saveJpodEpisodeSaga); // 에피소드 등록.
     yield takeLatest(GET_BRIGHT_OVP, getBrightOvpSaga); // 브라이트 코브 목록 조회.
     yield takeLatest(SAVE_BRIGHTOVP, saveBrightovpSaga); // 브라이트 코브 저장.
+    yield takeLatest(GET_CH_EPISODES, getChEpisodesSaga); // 브라이트 코브 저장.
 }

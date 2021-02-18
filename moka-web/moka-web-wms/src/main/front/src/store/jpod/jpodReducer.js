@@ -1,6 +1,5 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
-import moment from 'moment';
 import { PAGESIZE_OPTIONS } from '@/constants';
 import {
     CLEAR_STORE,
@@ -28,6 +27,7 @@ import {
     CLEAR_BRIGHT_OVP,
     SELECT_BRIGHTOVP,
     CHANGE_BRIGHTOVP_SEARCH_OPTION,
+    GET_CH_EPISODES_SUCCESS,
 } from './jpodAction';
 
 export const initialState = {
@@ -60,6 +60,14 @@ export const initialState = {
             chnlImgFile: '', // 커버 이미지
             chnlThumbFile: '', // 썸네일
             chnlImgMobFile: '', // 모바일.
+            episodeState: {
+                lastEpsoNo: null,
+                unusedCnt: 0,
+                usedCnt: 0,
+            },
+        },
+        channelInfoEpisode: {
+            list: [],
         },
     },
     episode: {
@@ -301,9 +309,14 @@ export default handleActions(
         },
         // 기자 검색 모달 검색 옵션 처리.
         [CHANGE_BRIGHTOVP_SEARCH_OPTION]: (state, { payload }) => {
-            console.log(payload);
             return produce(state, (draft) => {
                 // draft.brightOvp.search = payload;
+            });
+        },
+        [GET_CH_EPISODES_SUCCESS]: (state, { payload: { body } }) => {
+            // console.log(payload);
+            return produce(state, (draft) => {
+                draft.channel.channelInfoEpisode.list = body.list;
             });
         },
     },

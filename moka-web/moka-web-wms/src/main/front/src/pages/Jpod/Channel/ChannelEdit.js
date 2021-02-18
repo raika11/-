@@ -4,7 +4,7 @@ import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
 // import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChannels, clearReporter } from '@store/jpod';
+import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, getChannelInfo, getChEpisodes, getChannels, clearReporter } from '@store/jpod';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';
@@ -314,6 +314,17 @@ const ChannelEdit = ({ match }) => {
             formData.append(`podtyUrl`, editData.podtyUrl);
         }
 
+        if (editData.seasonNm && editData.seasonNm.length > 0 && editData.seasonNm.trim().length > 0) {
+            formData.append(`seasonNm`, editData.seasonNm);
+        }
+
+        // 시즌 번호
+        if (editData.seasonCnt && editData.seasonCnt > 0) {
+            formData.append(`seasonCnt`, editData.seasonCnt);
+        } else {
+            formData.append(`seasonCnt`, 0);
+        }
+
         // // formData 출력(테스트).
         // for (let [key, value] of formData) {
         //     console.log(`${key}: ${value}`);
@@ -463,7 +474,7 @@ const ChannelEdit = ({ match }) => {
 
     // 그리드에서 리스트 클릭후 스토어 업데이트 되었을떄.
     useEffect(() => {
-        const setBasic = ({ usedYn, chnlNm, chnlMemo, chnlSdt, chnlEdt, podtyChnlSrl, podtyUrl, keywords, chnlImg, chnlImgMob, chnlThumb, episodeStat }) => {
+        const setBasic = ({ usedYn, chnlNm, chnlMemo, chnlSdt, chnlEdt, podtyChnlSrl, podtyUrl, keywords, chnlImg, chnlImgMob, chnlThumb, episodeStat, seasonCnt, seasonNm }) => {
             // 키워드 업데이트시 ordNo 를 어떻게 할껀지?
             const keyword = Array.isArray(keywords) && keywords.length > 0 ? keywords[0].keyword : '';
 
@@ -481,6 +492,8 @@ const ChannelEdit = ({ match }) => {
                 chnlImgMob: chnlImgMob,
                 chnlThumb: chnlThumb,
                 episodeStat: episodeStat,
+                seasonCnt: seasonCnt,
+                seasonNm: seasonNm,
             });
         };
 
@@ -506,6 +519,7 @@ const ChannelEdit = ({ match }) => {
         //     }
         // };
 
+        // 진행자 설정.
         const setMember = (members) => {
             if (Array.isArray(members)) {
                 setEditSelectRepoters(
@@ -563,6 +577,7 @@ const ChannelEdit = ({ match }) => {
         if (!isNaN(Number(params.chnlSeq)) && selectChnlSeq.current !== params.chnlSeq) {
             dispatch(clearChannelInfo());
             dispatch(getChannelInfo({ chnlSeq: params.chnlSeq }));
+            dispatch(getChEpisodes({ chnlSeq: params.chnlSeq }));
         } else if (selectChnlSeq.current !== params.chnlSeq && params.chnlSeq === 'add') {
             dispatch(clearChannelInfo());
             handleResetEditBasicData();
@@ -650,7 +665,7 @@ const ChannelEdit = ({ match }) => {
                 <Form.Row className="mb-2">
                     <Col className="p-0">
                         <MokaInputLabel
-                            label={`외부 채널\n(URL)`}
+                            label={`팟티 채널\n(URL)`}
                             labelWidth={64}
                             className="mb-0"
                             id="podtyUrl"
@@ -680,9 +695,9 @@ const ChannelEdit = ({ match }) => {
                     <Form.Row className="mb-2">
                         <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
                         {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
-                        <Col className="p-0">{`* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : ${
-                            editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``
-                        }`}</Col>
+                        <Col className="p-0">{`* 등록된 에피소드: 사용(${editData.episodeStat.usedCnt ? editData.episodeStat.usedCnt : 0}) | 중지(${
+                            editData.episodeStat.unusedCnt ? editData.episodeStat.unusedCnt : 0
+                        }) * 마지막 회차 정보 : ${editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``}`}</Col>
                     </Form.Row>
                 )}
 
@@ -695,9 +710,9 @@ const ChannelEdit = ({ match }) => {
                             className="mb-2 pr-2"
                             inputClassName="resize-none"
                             inputProps={{ rows: 6 }}
-                            id="chnlMemo"
-                            name="chnlMemo"
-                            value={editData.chnlMemo}
+                            id="seasonNm"
+                            name="seasonNm"
+                            value={editData.seasonNm}
                             onChange={(e) => handleChangeChannelEditData(e)}
                         />
                     </Col>
@@ -710,9 +725,9 @@ const ChannelEdit = ({ match }) => {
                             className="mb-2"
                             inputClassName="resize-none"
                             inputProps={{ rows: 6 }}
-                            id="chnlMemo"
-                            name="chnlMemo"
-                            value={editData.chnlMemo}
+                            id="seasonCnt"
+                            name="seasonCnt"
+                            value={editData.seasonCnt}
                             onChange={(e) => handleChangeChannelEditData(e)}
                         />
                     </Col>

@@ -683,17 +683,11 @@ const ChannelEdit = ({ match }) => {
                 {/* 시즌 회차. */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`시즌 및 회차`} labelWidth={90} className="mb-0" as="none" />
-                    <MokaInputLabel className="pr-5" as="select" id="seasonNo" name="seasonNo" value={editData.chnlSeq} onChange={(e) => handleEditDataChange(e)}>
+                    <MokaInputLabel className="pr-5" as="select" id="seasonNo" name="seasonNo" value={editData.seasonNo} onChange={(e) => handleEditDataChange(e)}>
                         <option value="">시즌 선택</option>
                         {/* {channel_list.map((item, index) => ( */}
                         <option key={0} value={'0'}>
                             0
-                        </option>
-                        <option key={1} value={'1'}>
-                            1
-                        </option>
-                        <option key={2} value={'2'}>
-                            2
                         </option>
                         {/* ))} */}
                     </MokaInputLabel>

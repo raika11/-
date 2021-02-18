@@ -78,7 +78,7 @@ public class DataMerger extends MokaAbstractElementMerger {
             }
         }
         MokaTemplateMerger mokaMerger = (MokaTemplateMerger)this.templateMerger;
-        DataLoader loader = mokaMerger.isDefaultApiHostPathUse() ? mokaMerger.getDefaultDataLoader() : mokaMerger.getDataLoader();
+        DataLoader loader = mokaMerger.getDataLoader();
         JSONResult jsonResult = null;
         try {
             if (api != null) {

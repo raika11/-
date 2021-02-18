@@ -17,11 +17,16 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleBasicUpdateDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleJiSearchDTO;
+import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleJiXmlDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.dto.RcvArticleSearchDTO;
 import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleBasic;
+import jmnet.moka.core.tps.mvc.rcvArticle.entity.RcvArticleJiXml;
+import jmnet.moka.core.tps.mvc.rcvArticle.service.RcvArticleJiService;
 import jmnet.moka.core.tps.mvc.rcvArticle.service.RcvArticleService;
 import jmnet.moka.core.tps.mvc.rcvArticle.vo.RcvArticleBasicVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +53,11 @@ public class RcvArticleRestController extends AbstractCommonController {
 
     private final RcvArticleService rcvArticleService;
 
-    public RcvArticleRestController(RcvArticleService rcvArticleService) {
+    private final RcvArticleJiService rcvArticleJiService;
+
+    public RcvArticleRestController(RcvArticleService rcvArticleService, RcvArticleJiService rcvArticleJiService) {
         this.rcvArticleService = rcvArticleService;
+        this.rcvArticleJiService = rcvArticleJiService;
     }
 
     /**
@@ -212,4 +220,36 @@ public class RcvArticleRestController extends AbstractCommonController {
             throw new Exception(msg("tps.common.error.insert"), e);
         }
     }
+
+    /**
+     * 조판 목록조회
+     *
+     * @param search 검색조건
+     * @return 조판 목록
+     */
+    @ApiOperation(value = "조판 목록조회")
+    @GetMapping("/jopans")
+    public ResponseEntity<?> getRcvArticleJiList(@Valid @SearchParam RcvArticleJiSearchDTO search)
+            throws Exception {
+
+        try {
+            Page<RcvArticleJiXml> returnValue = rcvArticleJiService.findAllRcvArticleJi(search);
+
+            // 리턴값 설정
+            ResultListDTO<RcvArticleJiXmlDTO> resultListMessage = new ResultListDTO<>();
+            List<RcvArticleJiXmlDTO> dtoList = modelMapper.map(returnValue.getContent(), RcvArticleJiXmlDTO.TYPE);
+            resultListMessage.setTotalCnt(returnValue.getTotalElements());
+            resultListMessage.setList(dtoList);
+
+            ResultDTO<ResultListDTO<RcvArticleJiXmlDTO>> resultDto = new ResultDTO<>(resultListMessage);
+            tpsLogger.success(ActionType.SELECT, true);
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO LOAD RCV ARTICLE JI XML]", e);
+            tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD RCV ARTICLE JI XML]", e, true);
+            throw new Exception(msg("tps.common.error.select"), e);
+        }
+    }
+
 }

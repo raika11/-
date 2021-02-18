@@ -273,13 +273,17 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
 
     @Override
     public DataLoader getDataLoader() {
-        return this.dataLoader;
+        if ( this.defaultApiHostPathUse || this.dataLoader == null) {
+            return this.defaultDataLoader;
+        } else {
+            return this.dataLoader;
+        }
     }
 
-    @Override
-    public DataLoader getDefaultDataLoader() {
-        return this.defaultDataLoader;
-    }
+//    @Override
+//    public DataLoader getDefaultDataLoader() {
+//        return this.defaultDataLoader;
+//    }
 
     public CacheManager getCacheManager() {
         return this.cacheManager;

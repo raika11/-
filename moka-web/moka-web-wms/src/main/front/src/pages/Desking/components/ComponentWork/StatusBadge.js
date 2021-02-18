@@ -19,7 +19,9 @@ const StatusBadge = (props) => {
     const popover = (
         <Popover id="popover-status-badge">
             <Popover.Content>
-                <span className="font-weight-bold">{published ? '전송' : '임시'} 박진숙(ID)</span>
+                <span className="font-weight-bold">
+                    {published ? `전송 ${component.lastPublishNm}(${component.lastPublishId})` : `임시 ${component.lastSaveNm}(${component.lastSaveId})`}
+                </span>
                 <br />
                 <span>{published ? component.lastPublishDt : component.lastSaveDt}</span>
             </Popover.Content>
@@ -39,7 +41,7 @@ const StatusBadge = (props) => {
     }, [component.lastPublishDt, component.lastSaveDt]);
 
     return (
-        <OverlayTrigger trigger="hover" placement="bottom" overlay={popover}>
+        <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={popover}>
             <Badge variant={published ? 'info' : 'gray-600'} className={clsx('rounded-0', className)}>
                 {published ? '전송' : '임시'}
             </Badge>

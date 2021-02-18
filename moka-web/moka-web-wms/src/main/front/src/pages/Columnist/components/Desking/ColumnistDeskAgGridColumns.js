@@ -40,7 +40,7 @@ export default [
     {
         headerName: '약력정보',
         field: 'profile',
-        width: 633,
+        width: 620,
         flex: 1,
         tooltipField: 'profile',
     },

@@ -63,7 +63,7 @@ export const columnDefs = [
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
         cellClassRules: cellClassRules,
-        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+        cellStyle: { paddingTop: '3px', paddingBottom: '3px' },
     },
     {
         width: 200,
@@ -94,7 +94,7 @@ export const naverChannelColumnDefs = [
         width: 50,
         field: 'irThumbFileName',
         cellRenderer: 'imageRenderer',
-        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
+        cellStyle: { paddingTop: '3px', paddingBottom: '3px' },
     },
     {
         width: 200,

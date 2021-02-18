@@ -161,9 +161,9 @@ public class CpTemplateRoot extends MokaTemplateRoot {
             MergeContext context)
             throws DataLoadException {
         JSONResult jsonResult = null;
+        DataLoader loader = merger.getDataLoader();
         if (merger.isDefaultApiHostPathUse()) {
-            DataLoader defaultDoader = merger.getDefaultDataLoader();
-            jsonResult = defaultDoader.getJSONResult(api, datasetParam, true);
+            jsonResult = loader.getJSONResult(api, datasetParam, true);
         } else {
             String apiHost = datasetItem.getString(ItemConstants.DATASET_API_HOST);
             String apiPath = datasetItem.getString(ItemConstants.DATASET_API_PATH);
@@ -171,7 +171,6 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                 api = datasetItem.getString(ItemConstants.DATASET_API);
             }
             String uri = String.join("/", apiHost, apiPath, api);
-            DataLoader loader = merger.getDataLoader();
             jsonResult = loader.getJSONResult(uri, datasetParam, false);
         }
         if (jsonResult != null) {

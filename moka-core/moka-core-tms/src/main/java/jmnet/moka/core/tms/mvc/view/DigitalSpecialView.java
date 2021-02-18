@@ -83,12 +83,7 @@ public class DigitalSpecialView extends AbstractView {
 
         try {
             MokaTemplateMerger templateMerger = this.domainTemplateMerger.getTemplateMerger(domainId);
-            DataLoader loader = null;
-            if (templateMerger.isDefaultApiHostPathUse()) {
-                loader = templateMerger.getDefaultDataLoader();
-            } else {
-                loader = templateMerger.getDataLoader();
-            }
+            DataLoader loader = templateMerger.getDataLoader();
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put(MokaConstants.MERGE_CONTEXT_DIGITAL_SPECIAL_ID, digitalSpecialId);
             JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.DIGITAL_SPECIAL_LIST, paramMap, true);

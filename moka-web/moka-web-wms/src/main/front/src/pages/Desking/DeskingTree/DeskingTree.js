@@ -65,11 +65,14 @@ const DeskingTree = ({ setComponentAgGridInstances }) => {
      */
     const handleClick = useCallback(
         (item) => {
+            // componentAgGridInstaces를 초기화한다.
+            // 트리 클릭 => (초기화) => 컴포넌트워크 데이터 조회 => 컴포넌트 agGrid인스턴스 추가
+            // (DeskingWorkAgGrid.js에서 agGrid인스턴스를 추가하고 있음)
+            setComponentAgGridInstances([]);
             dispatch(
                 getComponentWorkList({
                     areaSeq: item.areaSeq,
                     callback: ({ header, body }) => {
-                        setComponentAgGridInstances([]);
                         if (header.success) {
                             setSelected(String(item.areaSeq));
                             history.push(`/desking/${item.areaSeq}`);

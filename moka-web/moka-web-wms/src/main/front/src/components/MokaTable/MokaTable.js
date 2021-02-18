@@ -334,7 +334,7 @@ const MokaTable = forwardRef((props, ref) => {
 
             {/* 페이지네이션 */}
             {paging ? (
-                <div className="mt-3">
+                <div className="mt-card">
                     <MokaPagination
                         total={total}
                         page={page}

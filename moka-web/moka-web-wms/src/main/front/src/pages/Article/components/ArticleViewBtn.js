@@ -1,32 +1,12 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import copy from 'copy-to-clipboard';
 import Button from 'react-bootstrap/Button';
 import utils from '@utils/commonUtil';
-import toast from '@utils/toastUtil';
 import { API_BASE_URL, PREVIEW_DOMAIN_ID } from '@/constants';
 import { MokaModal } from '@components';
-import useClickPreventionOnDoubleClick from '@hooks/useClickPreventionOnDoubleClick';
+import ArticleTableCopyBtn from './ArticleTableCopyBtn';
 
 const ArticleViewBtn = forwardRef(({ data }, ref) => {
     const [previewOn, setPreviewOn] = useState(false);
-
-    useImperativeHandle(ref, () => ({
-        refresh: () => false,
-    }));
-
-    /**
-     * 복사
-     */
-    const [handleClickCopy, handleDoubleClickCopy] = useClickPreventionOnDoubleClick(
-        () => {
-            copy(data.artUrl);
-            toast.success('기사 링크를 복사하였습니다');
-        },
-        () => {
-            copy(`${data.artTitle}\n${data.artUrl}`);
-            toast.success('제목과 기사 링크를 복사하였습니다');
-        },
-    );
 
     /**
      * 미리보기 팝업
@@ -35,8 +15,13 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
         utils.popupPreview(`${API_BASE_URL}/preview/article/${data.totalId}`, { ...data, domainId: PREVIEW_DOMAIN_ID });
     };
 
+    useImperativeHandle(ref, () => ({
+        refresh: () => false,
+    }));
+
     return (
         <div className="d-flex align-items-center h-100">
+            {/* 포토/보기 */}
             <Button
                 variant={data.artThumb && data.artThumb !== '' ? 'table-btn' : 'outline-table-btn'}
                 className="mr-1 px-1 flex-shrink-0"
@@ -45,14 +30,18 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
             >
                 {data.artThumb && data.artThumb !== '' ? '포토' : '보기'}
             </Button>
+
+            {/* 편집그룹 */}
             {data.ja && data.artGroupNum !== '' && (
                 <div className="article-group-number mr-1" style={{ width: 17, height: 24 }} data-group-number={data.artGroupNum}>
                     {data.artGroupNum}
                 </div>
             )}
-            <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0 px-1" onClick={handleClickCopy} onDoubleClick={handleDoubleClickCopy}>
-                C
-            </Button>
+
+            {/* copy */}
+            <ArticleTableCopyBtn className="mr-1" artTitle={data.artTitle} artUrl={data.artUrl} />
+
+            {/* jtbcvod */}
             {data.jtbcvodYn === 'Y' && (
                 <Button size="sm" variant="outline-table-btn px-1" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
                     B

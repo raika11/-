@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { MokaModal, MokaLoader } from '@components';
 import { GET_COMPONENT_WORK_LIST, postDeskingWorkListMove } from '@store/desking';
-import toast, { messageBox } from '@utils/toastUtil';
+import { getAllRowData } from '@utils/agGridUtil';
+import { messageBox } from '@utils/toastUtil';
 
 /**
  * 기사 이동 모달 컴포넌트
@@ -24,21 +25,33 @@ const RegisterModal = (props) => {
         e.preventDefault();
         e.stopPropagation();
 
-        let targetIndex = null,
-            tgtComponent = null,
-            selectedNodes = [];
-        targetIndex = filterList.findIndex((c) => c.seq === rowData.seq);
-        tgtComponent = targetIndex > -1 ? list[targetIndex] : null;
+        let selectedData = [],
+            tgtGrid = null;
 
-        if (!tgtComponent) {
-            toast.warning('선택한 컴포넌트가 올바르지 않은 컴포넌트입니다');
+        tgtGrid = componentAgGridInstances.find((ag) => ag?.component?.componentSeq === rowData.componentSeq);
+        if (!tgtGrid) {
+            messageBox.alert('선택한 컴포넌트가 올바르지 않은 컴포넌트입니다');
             return;
         }
 
-        selectedNodes = componentAgGridInstances[agGridIndex].api.getSelectedNodes().map((node) => node.data);
+        selectedData = componentAgGridInstances[agGridIndex].api.getSelectedNodes().map((node) => node.data);
+        const tgtData = getAllRowData(tgtGrid.api);
+
+        // 타겟에 존재하는 기사이면 이동시키지 않는다
+        let exists = false;
+        selectedData.forEach((data) => {
+            if (tgtData.findIndex((d) => d.contentId === data.contentId) > -1) {
+                exists = true;
+            }
+        });
+
+        if (exists) {
+            messageBox.alert('이미 존재하는 기사가 포함되어 있습니다');
+            return;
+        }
 
         // sourceNode 정렬
-        selectedNodes = selectedNodes.sort(function (a, b) {
+        selectedData = selectedData.sort(function (a, b) {
             if (a.contentOrd === b.contentOrd) {
                 return a.relOrd - b.relOrd;
             } else {
@@ -46,21 +59,22 @@ const RegisterModal = (props) => {
             }
         });
 
+        // selectedData contentOrd 순번처리
         let contentOrd = 0;
-        for (let i = 0; i < selectedNodes.length; i++) {
-            if (!selectedNodes[i].rel) {
+        for (let i = 0; i < selectedData.length; i++) {
+            if (!selectedData[i].rel) {
                 contentOrd++;
             }
-            selectedNodes[i].contentOrd = contentOrd;
+            selectedData[i].contentOrd = contentOrd;
         }
 
         dispatch(
             postDeskingWorkListMove({
-                componentWorkSeq: tgtComponent.seq,
-                datasetSeq: tgtComponent.datasetSeq,
+                componentWorkSeq: tgtGrid.component.seq,
+                datasetSeq: rowData.datasetSeq,
                 srcComponentWorkSeq: component.seq,
                 srcDatasetSeq: component.datasetSeq,
-                list: selectedNodes,
+                list: selectedData,
                 callback: ({ header }) => {
                     if (!header.success) {
                         messageBox.alert(header.message);
@@ -74,15 +88,15 @@ const RegisterModal = (props) => {
 
     useEffect(() => {
         if (Array.isArray(list)) {
-            // 현재 선택된 부모 컴포넌트는 제외
-            setFilterList(list.filter((obj) => obj.seq !== component.seq));
+            // 현재 선택된 부모 컴포넌트, viewYn !== Y는 제외
+            setFilterList(list.filter((obj) => obj.seq !== component.seq).filter((obj) => obj.viewYn === 'Y'));
         }
     }, [component.seq, list]);
 
     return (
         <MokaModal title="기사 이동" show={show} onHide={onHide} size="sm" width={300} height={441} centered draggable>
             {loading && <MokaLoader />}
-            <ListGroup variant="flush" className="border custom-scroll h-100">
+            <ListGroup variant="flush" className="border custom-scroll" style={{ maxHeight: '100%' }}>
                 {filterList.length < 1 && (
                     <div className="d-flex align-items-center justify-content-center h-100 v-100 p-2">
                         <p className="h5">이동할 컴포넌트가 존재하지 않습니다.</p>

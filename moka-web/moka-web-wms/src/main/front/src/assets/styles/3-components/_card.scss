@@ -18,8 +18,8 @@
 }
 
 .card-body {
-  padding: $input-escape-focus-width $card-spacer-x ;
-  margin-bottom: $card-spacer-y + -1 * $input-escape-focus-width;
+  padding: 0 $card-spacer-x;
+  margin-bottom: $spacer-card + -1 * $input-escape-focus-width;
   margin-top: $card-spacer-y + -1 * $input-escape-focus-width;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .card-footer {
-  padding: 24px 0 32px 0;
+  padding: $spacer-card 0 $spacer-card 0;
   margin: 0px $card-spacer-x;
   border-top: 1px solid $gray-400;
 }

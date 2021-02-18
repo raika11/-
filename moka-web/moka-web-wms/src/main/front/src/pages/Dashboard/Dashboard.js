@@ -298,6 +298,7 @@ const Dashboard = () => {
                                             onChange={(date) => {
                                                 console.log(date);
                                             }}
+                                            timeFormat={false}
                                         />
                                     </Col>
                                 </Form.Row>
@@ -312,6 +313,7 @@ const Dashboard = () => {
                                             onChange={(date) => {
                                                 console.log(date);
                                             }}
+                                            timeFormat={false}
                                         />
                                     </Col>
                                 </Form.Row>
@@ -334,6 +336,7 @@ const Dashboard = () => {
                                                 console.log(date);
                                             }}
                                             closeOnSelect={true}
+                                            timeFormat={false}
                                         />
                                     </Col>
                                 </Form.Row>

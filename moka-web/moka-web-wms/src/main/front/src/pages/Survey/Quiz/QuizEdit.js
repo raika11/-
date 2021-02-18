@@ -686,7 +686,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                     as="imageFile"
                                     ref={imgFileRef}
                                     labelWidth={90}
-                                    inputProps={{ img: quizInfo.imgUrl, width: 150, height: 150, setFileValue: setImageFileValue, deleteButton: true }}
+                                    inputProps={{ img: quizInfo.imgUrl, width: 150, height: 84, setFileValue: setImageFileValue, deleteButton: true }}
                                 />
                                 <Col className="d-flex justify-content-start pl-0 pt-2">
                                     <Button

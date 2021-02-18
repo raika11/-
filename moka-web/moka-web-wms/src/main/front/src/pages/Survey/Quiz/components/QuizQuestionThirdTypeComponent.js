@@ -216,32 +216,33 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                         {questionsList[questionIndex].choices.map((element, index) => {
                             return (
                                 <Form.Row className="pt-1" key={index}>
-                                    <Col xs={1} className="d-flex align-items-center justify-content-center">
+                                    <div className="d-flex">
                                         <MokaInputLabel
                                             name={`answYn`}
                                             id={`answYn_${index}_${questionIndex}`}
                                             as="checkbox"
-                                            className="ml-2 pl-4"
+                                            className="ml-0 pl-4"
                                             inputProps={{ label: '', custom: true, checked: element.answYn === 'Y' }}
                                             onChange={(e) => handleChangeEditData(e, index)}
                                         />
-                                    </Col>
-                                    <Col xs={10}>
+                                    </div>
+                                    <div className="overflow-hidden flex-fill">
                                         <MokaInputLabel
+                                            className="d-flex flex-fill"
                                             label={`보기 ${index + 1}`}
                                             labelWidth={40}
                                             placeholder="(20자 이내로 입력하세요)"
-                                            labelClassName="mr-2 pr-1"
+                                            labelClassName="mr-0 pr-1"
                                             inputClassName="quiz-input"
                                             name={`title`}
                                             id={`title_${index}_${questionIndex}`}
                                             value={element.title}
                                             onChange={(e) => handleChangeEditData(e, index)}
                                         />
-                                    </Col>
-                                    <Col className="d-felx align-self-center text-left mb-0 pl-0">
+                                    </div>
+                                    <div className="d-felx align-self-center text-left mb-0 pl-0">
                                         <MokaTableDeleteButton onClick={() => handleClickDeleteButton(index)} />
-                                    </Col>
+                                    </div>
                                 </Form.Row>
                             );
                         })}

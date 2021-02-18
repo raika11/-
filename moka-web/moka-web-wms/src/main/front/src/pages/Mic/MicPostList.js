@@ -83,10 +83,8 @@ const MicPostList = ({ show: currentTab }) => {
     const handleSave = (post) => {
         dispatch(
             saveMicPost({
-                post: {
-                    ...post,
-                    answerRel: post.answerRel ? (post.answerRel?.relDiv ? post.answerRel : undefined) : undefined,
-                },
+                answSeq: post.answSeq,
+                answerRel: post.answerRel ? (post.answerRel?.relDiv ? post.answerRel : undefined) : undefined,
                 callback: ({ header, body }) => {
                     if (header.success && body) {
                         toast.success(header.message);

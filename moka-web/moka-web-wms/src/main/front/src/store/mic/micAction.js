@@ -123,10 +123,10 @@ export const [GET_MIC_POST, GET_MIC_POST_SUCCESS, GET_MIC_POST_FAILURE] = create
 export const getMicPost = createAction(GET_MIC_POST, ({ answSeq, callback }) => ({ answSeq, callback }));
 
 /**
- * 포스트 저장
+ * 포스트의 answerRel 저장
  */
 export const SAVE_MIC_POST = 'mic/SAVE_MIC_POST';
-export const saveMicPost = createAction(SAVE_MIC_POST, ({ post, callback }) => ({ post, callback }));
+export const saveMicPost = createAction(SAVE_MIC_POST, ({ answSeq, answerRel, callback }) => ({ answSeq, answerRel, callback }));
 
 /**
  * 답변 최상위 수정

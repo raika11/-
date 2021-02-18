@@ -295,6 +295,9 @@ const Dashboard = () => {
                                             as="dateTimePicker"
                                             className="w-100 is-not-position-center"
                                             placeholder="날짜를 선택해주세요"
+                                            onChange={(date) => {
+                                                console.log(date);
+                                            }}
                                         />
                                     </Col>
                                 </Form.Row>
@@ -304,8 +307,11 @@ const Dashboard = () => {
                                             label="9-1-2) 날짜 입력창 하단 우측"
                                             labelWidth={200}
                                             as="dateTimePicker"
-                                            className="w-100 is-not-position-center"
+                                            className="w-100 is-not-position-center right"
                                             placeholder="날짜를 선택해주세요"
+                                            onChange={(date) => {
+                                                console.log(date);
+                                            }}
                                         />
                                     </Col>
                                 </Form.Row>
@@ -324,6 +330,9 @@ const Dashboard = () => {
                                             as="dateTimePicker"
                                             className="w-100"
                                             placeholder="날짜를 선택해주세요"
+                                            onChange={(date) => {
+                                                console.log(date);
+                                            }}
                                             closeOnSelect={true}
                                         />
                                     </Col>

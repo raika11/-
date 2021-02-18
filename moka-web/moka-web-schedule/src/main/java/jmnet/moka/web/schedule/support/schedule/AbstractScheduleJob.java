@@ -34,7 +34,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      * 외부 API URL 호출용
      */
     @Autowired
-    private RestTemplateHelper restTemplateHelper;
+    protected RestTemplateHelper restTemplateHelper;
 
 
     /**

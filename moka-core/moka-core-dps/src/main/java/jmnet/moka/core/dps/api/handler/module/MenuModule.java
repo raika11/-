@@ -230,12 +230,16 @@ public class MenuModule implements ModuleInterface {
         Menu foundMenu = null;
         // 상위레벨부터 조회하도록 루프를 두번 수행한다.
         for (Menu menu : parentMenu.getChildren()) {
-            if (menu.getCategoryKey() != null) {
-                if (menu
-                        .getCategoryKey()
-                        .equalsIgnoreCase(categoryKey)) {
-                    return menu;
-                }
+//            if (menu.getCategoryKey() != null) {
+//                if (menu
+//                        .getCategoryKey()
+//                        .equalsIgnoreCase(categoryKey)) {
+//                    return menu;
+//                }
+//            }
+
+            if (menu.getKey().equalsIgnoreCase(categoryKey)) {
+                return menu;
             }
         }
         for (Menu menu : parentMenu.getChildren()) {

@@ -39,7 +39,7 @@ public class RcvArticleJiXmlRepositorySupportImpl extends TpsQueryDslRepositoryS
         BooleanBuilder builder = new BooleanBuilder();
 
         if (McpString.isNotEmpty(search.getSourceCode()) && !TpsConstants.SEARCH_TYPE_ALL.equals(search.getSourceCode())) {
-            builder.and(rcvArticleJiXml.id.sourceCode.eq(search.getSection()));
+            builder.and(rcvArticleJiXml.id.sourceCode.eq(search.getSourceCode()));
         }
 
         if (McpString.isNotEmpty(search.getSection()) && !TpsConstants.SEARCH_TYPE_ALL.equals(search.getSection())) {
@@ -47,7 +47,7 @@ public class RcvArticleJiXmlRepositorySupportImpl extends TpsQueryDslRepositoryS
         }
 
         if (search.getPressDate() != null) {
-            String pressDate = McpDate.dateStr(search.getPressDate(), "yyyy-MM-dd");
+            String pressDate = McpDate.dateStr(search.getPressDate(), "yyyyMMdd");
             builder.and(rcvArticleJiXml.pressDate.eq(pressDate));
         }
 

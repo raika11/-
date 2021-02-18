@@ -29,4 +29,5 @@ public class RcvArticleJiServiceImpl implements RcvArticleJiService {
     public Page<RcvArticleJiXml> findAllRcvArticleJi(RcvArticleJiSearchDTO search) {
         return rcvArticleJiXmlRepository.findList(search);
     }
+
 }

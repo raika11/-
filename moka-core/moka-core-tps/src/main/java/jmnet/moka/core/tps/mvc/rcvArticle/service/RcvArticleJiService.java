@@ -23,4 +23,5 @@ public interface RcvArticleJiService {
      * @return 조판목록
      */
     Page<RcvArticleJiXml> findAllRcvArticleJi(RcvArticleJiSearchDTO search);
+
 }

@@ -30,6 +30,7 @@ import {
     MokaModal,
     MokaCardTabs,
     NewIcon,
+    MokaInputLabel,
 } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { SourceSelector } from '@pages/commons';
@@ -273,7 +274,72 @@ const Dashboard = () => {
                             {/* 달력 */}
                             <Form.Group className="mb-2">
                                 <Form.Label>9) Datetime picker</Form.Label>
-                                <MokaDateTimePicker className="mb-3" placeholder="날짜를 선택해주세요" />
+                                <Form.Row className="mb-3">
+                                    <Col xs={12} className="d-flex align-items-center p-0">
+                                        <MokaInputLabel label="기본 달력" labelWidth={200} as="dateTimePicker" className="w-100" placeholder="날짜를 선택해주세요" />
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Form.Label>
+                                        9-1) 달력 위치 조정
+                                        <br />- 해당 컴포넌트에 is-not-position-center class를 추가해준다
+                                        <br />- 날짜입력창의 우측에 표기할 경우 right class도 추가해 준다.
+                                        <br />- ex) className="is-not-position-center right"
+                                    </Form.Label>
+                                </Form.Row>
+                                <Form.Row className="mb-3">
+                                    <Col xs={12} className="d-flex align-items-center p-0">
+                                        <MokaInputLabel
+                                            label="9-1-1) 날짜 입력창 하단 좌측"
+                                            labelWidth={200}
+                                            as="dateTimePicker"
+                                            className="w-100 is-not-position-center"
+                                            placeholder="날짜를 선택해주세요"
+                                            onChange={(date) => {
+                                                console.log(date);
+                                            }}
+                                            timeFormat={false}
+                                        />
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row className="mb-3">
+                                    <Col xs={12} className="d-flex align-items-center p-0">
+                                        <MokaInputLabel
+                                            label="9-1-2) 날짜 입력창 하단 우측"
+                                            labelWidth={200}
+                                            as="dateTimePicker"
+                                            className="w-100 is-not-position-center right"
+                                            placeholder="날짜를 선택해주세요"
+                                            onChange={(date) => {
+                                                console.log(date);
+                                            }}
+                                            timeFormat={false}
+                                        />
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Form.Label>
+                                        9-2) 날짜 선택 이후 달력 닫기
+                                        <br />- 해당 컴포넌트에 closeOnSelect props를 전달해 준다 true일 경우 닫기 false일 경우 창 유지
+                                        <br />- default: false
+                                    </Form.Label>
+                                </Form.Row>
+                                <Form.Row className="mb-3">
+                                    <Col xs={12} className="d-flex align-items-center p-0">
+                                        <MokaInputLabel
+                                            label="9-2-1) 날짜 선택 이후 달력 닫기"
+                                            labelWidth={200}
+                                            as="dateTimePicker"
+                                            className="w-100"
+                                            placeholder="날짜를 선택해주세요"
+                                            onChange={(date) => {
+                                                console.log(date);
+                                            }}
+                                            closeOnSelect={true}
+                                            timeFormat={false}
+                                        />
+                                    </Col>
+                                </Form.Row>
                                 <MokaDateTimePicker className="mb-3" dateFormat={false} />
                                 <MokaDateTimePicker className="mb-3" timeFormat={false} />
                             </Form.Group>

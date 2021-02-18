@@ -148,10 +148,26 @@ public class ComponentWorkVO implements Serializable {
     @Column(name = "LAST_SAVE_DT")
     private Date lastSaveDt;
 
+    @ApiModelProperty("임시저장 최종작업자")
+    @Column(name = "LAST_SAVE_ID")
+    private String lastSaveId;
+
+    @ApiModelProperty("임시저장 최종작업자명")
+    @Column(name = "LAST_SAVE_NM")
+    private String lastSaveNm;
+
     @ApiModelProperty("전송 최종일시")
     @DTODateTimeFormat
     @Column(name = "LAST_PUBLISH_DT")
     private Date lastPublishDt;
+
+    @ApiModelProperty("전송 최종작업자")
+    @Column(name = "LAST_PUBLISH_ID")
+    private String lastPublishId;
+
+    @ApiModelProperty("전송 최종작업자명")
+    @Column(name = "LAST_PUBLISH_NM")
+    private String lastPublishNm;
 
     @ApiModelProperty("편집기사워크 목록")
     @Builder.Default

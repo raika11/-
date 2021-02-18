@@ -184,10 +184,13 @@ public class DeskingRestController extends AbstractCommonController {
 
         try {
             // 컴포넌트워크 조회(편집기사워크포함)
-            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+            ComponentWorkVO componentWork = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장
-            deskingService.save(returnValue, principal.getName(), templateSeq);
+            deskingService.save(componentWork, principal.getName(), templateSeq);
+
+            // 다시 조회
+            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // work를 그대로 리턴
             String message = msg("tps.desking.success.save");
@@ -223,10 +226,10 @@ public class DeskingRestController extends AbstractCommonController {
         boolean checkAfterApi = true;      // afterApi성공여부
         try {
             // 컴포넌트워크 조회(편집기사워크포함)
-            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
+            ComponentWorkVO componentWork = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // 컴포넌트 저장, 편집기사 저장, purge
-            deskingService.publish(returnValue, principal.getName(), templateSeq);
+            deskingService.publish(componentWork, principal.getName(), templateSeq);
             checkPublish = true;
 
             String message = msg("tps.desking.success.publish");
@@ -266,6 +269,9 @@ public class DeskingRestController extends AbstractCommonController {
                     checkAfterApi = false;
                 }
             }
+
+            // 다시조회
+            ComponentWorkVO returnValue = deskingService.findComponentWorkBySeq(componentWorkSeq, true);
 
             // work를 그대로 리턴
             ResultDTO<ComponentWorkVO> resultDto = new ResultDTO<ComponentWorkVO>(returnValue, message);

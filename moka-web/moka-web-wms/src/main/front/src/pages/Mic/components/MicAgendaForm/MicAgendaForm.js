@@ -106,7 +106,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             <Form.Row className="mb-2">
                 <MokaInputLabel
                     label="공개일"
-                    className="mr-3"
+                    className="mr-40"
                     labelWidth={90}
                     as="dateTimePicker"
                     value={agenda.agndServiceDt}
@@ -114,7 +114,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                     name="agndServiceDt"
                     onChange={handleDate}
                 />
-                <MokaInputLabel label="타입" labelWidth={46} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
+                <MokaInputLabel label="타입" labelWidth={26} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
                     <option value="0">일반</option>
                     <option value="">그외</option>
                 </MokaInputLabel>
@@ -122,7 +122,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
 
             {/* 기사화 단계, 관련기사 URL */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-3" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
+                <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-40" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
                     <option hidden>선택</option>
                     {AGENDA_ARTICLE_PROGRESS.map((progress) => (
                         <option key={progress.code} value={progress.code}>
@@ -130,7 +130,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                         </option>
                     ))}
                 </MokaInputLabel>
-                <MokaInputLabel label="관련기사 URL" labelWidth={90} className="flex-fill" name="artLink" value={agenda.artLink} onChange={handleChangeValue} />
+                <MokaInputLabel label="관련기사 URL" labelWidth={71} className="flex-fill" name="artLink" value={agenda.artLink} onChange={handleChangeValue} />
             </Form.Row>
 
             {/* 카테고리 */}

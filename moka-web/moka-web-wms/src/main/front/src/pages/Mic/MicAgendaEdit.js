@@ -96,11 +96,6 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
     const handleClickCancel = () => history.push(match.path);
 
     /**
-     * 삭제
-     */
-    const handleClickDelete = () => {};
-
-    /**
      * 아젠다 데이터 변경
      */
     const handleChangeValue = ({ key, value }) => {

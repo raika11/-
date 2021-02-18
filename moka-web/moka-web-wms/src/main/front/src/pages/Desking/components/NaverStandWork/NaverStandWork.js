@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaLoader } from '@components';
 import { DATA_TYPE_DESK } from '@/constants';
-import { deleteDeskingWorkList } from '@store/desking';
+import { deleteDeskingWorkList, putDeskingWork } from '@store/desking';
 import ButtonGroup from './ButtonGroup';
+import { EditDeskingWorkModal } from '@pages/Desking/modals';
 import DeskingWorkAgGrid from '../ComponentWork/DeskingWorkAgGrid';
 import { messageBox } from '@utils/toastUtil';
 
@@ -46,11 +47,45 @@ const defaultProps = {
  * 네이버스탠드에서만 쓰는 컴포넌트 워크
  */
 const NaverStandWork = (props) => {
-    const { component, componentWorkList, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
+    const { component, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
     const dispatch = useDispatch();
     const workStatus = useSelector(({ desking }) => desking.workStatus);
-    const [workTemplateSeq, setWorkTemplateSeq] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [deskingWorkData, setDeskingWorkData] = useState({});
+    const [editModalShow, setEditModalShow] = useState(false);
+
+    /**
+     * 편집기사 목록에서 Row클릭
+     */
+    const handleRowClicked = (rowData) => {
+        // deskingPart로 지정된 필드가 없으면 수정불가
+        if (deskingPart && deskingPart !== '') {
+            setDeskingWorkData(rowData);
+            setEditModalShow(true);
+        }
+    };
+
+    /**
+     * 편집기사 저장 (put)
+     * @param {object} deskingWork 저장할 편집기사 데이터
+     * @param {func} callback 저장 후 실행
+     */
+    const handleClickSave = (deskingWork, callback) => {
+        let saveData = deskingWork;
+        delete saveData.onRowClicked;
+        delete saveData.onSave;
+        delete saveData.onDelete;
+        delete saveData.deskingPart;
+
+        dispatch(
+            putDeskingWork({
+                componentWorkSeq: component.seq,
+                areaSeq,
+                deskingWork: saveData,
+                callback,
+            }),
+        );
+    };
 
     /**
      * 편집기사 삭제 (delete)
@@ -71,14 +106,6 @@ const NaverStandWork = (props) => {
         );
     };
 
-    useEffect(() => {
-        if (componentWorkList.length > 0) {
-            setWorkTemplateSeq(componentWorkList[0].templateSeq);
-        } else {
-            setWorkTemplateSeq(null);
-        }
-    }, [componentWorkList]);
-
     return (
         <div
             className={clsx('component-work', 'border-top', {
@@ -98,7 +125,6 @@ const NaverStandWork = (props) => {
                 agGridIndex={agGridIndex}
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
-                workTemplateSeq={workTemplateSeq}
                 setLoading={setLoading}
             />
 
@@ -110,9 +136,20 @@ const NaverStandWork = (props) => {
                     componentAgGridInstances={componentAgGridInstances}
                     setComponentAgGridInstances={setComponentAgGridInstances}
                     deskingPart={deskingPart}
-                    onRowClicked={() => {}}
+                    onRowClicked={handleRowClicked}
                     onDelete={handleClickDelete}
-                    isNaverChannel
+                />
+            )}
+
+            {/* 편집기사 수정 모달 */}
+            {component.dataType === DATA_TYPE_DESK && (
+                <EditDeskingWorkModal
+                    show={editModalShow}
+                    onHide={() => setEditModalShow(false)}
+                    deskingWorkData={deskingWorkData}
+                    component={component}
+                    onSave={handleClickSave}
+                    deskingPart={deskingPart}
                 />
             )}
         </div>

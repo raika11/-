@@ -6,7 +6,7 @@ import { MokaCard, MokaInput, MokaInputLabel } from '@components';
 import { AREA_ALIGN_H, ITEM_CT, ITEM_CP, AREA_COMP_ALIGN_LEFT, API_BASE_URL } from '@/constants';
 import { GET_COMPONENT_WORK_LIST, changeWorkStatus, putComponentWorkTemplate, PUT_COMPONENT_WORK_TEMPLATE } from '@store/desking';
 import { getChannelTp } from '@store/codeMgt';
-import { ComponentWork, NaverChannelWork } from './components';
+import { ComponentWork, NaverChannelWork, NaverStandWork } from './components';
 
 /**
  * 컴포넌트의 워크 리스트
@@ -14,18 +14,12 @@ import { ComponentWork, NaverChannelWork } from './components';
 const ComponentWorkList = (props) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_COMPONENT_WORK_LIST] || loading[PUT_COMPONENT_WORK_TEMPLATE]);
-    const { area, isNaverChannel } = useSelector((store) => ({
-        area: store.desking.area,
-        isNaverChannel: store.desking.isNaverChannel,
-    }));
-    const { componentWorkList, workStatus } = useSelector((store) => ({
-        componentWorkList: store.desking.list,
-        workStatus: store.desking.workStatus,
-    }));
-    const channelTpRows = useSelector((store) => store.codeMgt.channelTpRows);
+    const { area, isNaverChannel, isNaverStand } = useSelector(({ desking }) => desking);
+    const { list: componentWorkList, workStatus } = useSelector(({ desking }) => desking);
+    const channelTpRows = useSelector(({ codeMgt }) => codeMgt.channelTpRows);
 
     // state
-    const [disabledList, setDisabledList] = useState([]);
+    const [disabledList, setDisabledList] = useState([]); // 비활성영역 리스트
     const [leftList, setLeftList] = useState([]); // 왼쪽 워크리스트
     const [rightList, setRightList] = useState([]); // 오른쪽 워크리스트
 
@@ -33,7 +27,7 @@ const ComponentWorkList = (props) => {
      * 페이지 미리보기
      */
     const handleClickPreview = () => {
-        if (area.page.pageSeq) {
+        if (area.page?.pageSeq) {
             window.open(`${API_BASE_URL}/preview/desking/page?pageSeq=${area.page.pageSeq}&areaSeq=${area.areaSeq}`, '페이지미리보기');
         }
     };
@@ -80,6 +74,7 @@ const ComponentWorkList = (props) => {
             const { componentSeq, editFormPart } = areaComp.component;
             const targetIdx = componentWorkList.findIndex((comp) => comp.componentSeq === componentSeq);
             const component = componentWorkList[targetIdx];
+            const key = `${area.areaSeq}-${componentSeq}`;
 
             if (!component) {
                 return null;
@@ -89,7 +84,7 @@ const ComponentWorkList = (props) => {
                 // 네이버채널 예외처리
                 return (
                     <NaverChannelWork
-                        key={`${area.areaSeq}-${componentSeq}`}
+                        key={key}
                         deskingPart={areaComp.deskingPart}
                         area={area}
                         areaSeq={area.areaSeq}
@@ -100,10 +95,13 @@ const ComponentWorkList = (props) => {
                         {...props}
                     />
                 );
+            } else if (isNaverStand) {
+                // 네이버스탠드 예외처리
+                return <NaverStandWork key={key} deskingPart={areaComp.deskingPart} area={area} areaSeq={area.areaSeq} component={component} agGridIndex={targetIdx} {...props} />;
             } else {
                 return (
                     <ComponentWork
-                        key={`${area.areaSeq}-${componentSeq}`}
+                        key={key}
                         deskingPart={areaComp.deskingPart}
                         area={area}
                         areaSeq={area.areaSeq}
@@ -115,7 +113,7 @@ const ComponentWorkList = (props) => {
                 );
             }
         },
-        [area, componentWorkList, isNaverChannel, props, workStatus],
+        [area, componentWorkList, isNaverChannel, isNaverStand, props, workStatus],
     );
 
     useEffect(() => {
@@ -203,7 +201,7 @@ const ComponentWorkList = (props) => {
                     )}
                 </div>
 
-                <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
+                <div className="custom-scroll overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
                     {leftList.map((areaComp) => render(areaComp))}
                 </div>
             </MokaCard>
@@ -213,7 +211,7 @@ const ComponentWorkList = (props) => {
                 <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter" bodyClassName="p-0 mt-0 overflow-hidden">
                     <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
-                    <div className="custom-scroll" style={{ height: 'calc(100% - 45px)' }}>
+                    <div className="custom-scroll overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
                         {rightList.map((areaComp) => render(areaComp))}
                     </div>
                 </MokaCard>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { MokaModal, MokaLoader } from '@components';
 import { GET_COMPONENT_WORK_LIST, postDeskingWorkListMove } from '@store/desking';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 
 /**
  * 기사 이동 모달 컴포넌트
@@ -54,22 +54,22 @@ const RegisterModal = (props) => {
             selectedNodes[i].contentOrd = contentOrd;
         }
 
-        const option = {
-            componentWorkSeq: tgtComponent.seq,
-            datasetSeq: tgtComponent.datasetSeq,
-            srcComponentWorkSeq: component.seq,
-            srcDatasetSeq: component.datasetSeq,
-            list: selectedNodes,
-            callback: ({ header }) => {
-                if (!header.success) {
-                    toast.fail(header.message);
-                } else {
-                    onHide();
-                }
-            },
-        };
-
-        dispatch(postDeskingWorkListMove(option));
+        dispatch(
+            postDeskingWorkListMove({
+                componentWorkSeq: tgtComponent.seq,
+                datasetSeq: tgtComponent.datasetSeq,
+                srcComponentWorkSeq: component.seq,
+                srcDatasetSeq: component.datasetSeq,
+                list: selectedNodes,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        messageBox.alert(header.message);
+                    } else {
+                        onHide();
+                    }
+                },
+            }),
+        );
     };
 
     useEffect(() => {
@@ -90,7 +90,7 @@ const RegisterModal = (props) => {
                 )}
                 {filterList.length > 0 &&
                     filterList.map((rg) => (
-                        <ListGroup.Item className="w-100 user-select-none" key={rg.seq} action onClick={(e) => handleClickItem(e, rg)}>
+                        <ListGroup.Item className="w-100 flex-shrink-0 user-select-none" key={rg.seq} action onClick={(e) => handleClickItem(e, rg)}>
                             <span>
                                 {rg.componentSeq}_{rg.componentName}
                             </span>

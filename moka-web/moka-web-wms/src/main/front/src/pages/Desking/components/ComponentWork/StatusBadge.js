@@ -19,7 +19,9 @@ const StatusBadge = (props) => {
     const popover = (
         <Popover id="popover-status-badge">
             <Popover.Content>
-                <span className="font-weight-bold">{published ? '전송' : '임시'} 박진숙(ID)</span>
+                <span className="font-weight-bold">
+                    {published ? `전송 ${component.lastPublishNm}(${component.lastPublishId})` : `임시 ${component.lastSaveNm}(${component.lastSaveId})`}
+                </span>
                 <br />
                 <span>{published ? component.lastPublishDt : component.lastSaveDt}</span>
             </Popover.Content>

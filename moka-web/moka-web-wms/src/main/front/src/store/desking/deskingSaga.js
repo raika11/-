@@ -63,12 +63,13 @@ function* getComponentWorkList({ payload }) {
     const ACTION = act.GET_COMPONENT_WORK_LIST;
     let response,
         callbackData,
-        isNaverChannel = false;
+        isNaverChannel = false,
+        isNaverStand = false;
 
     yield put(startLoading(ACTION));
     try {
         response = yield call(api.getComponentWorkList, { areaSeq });
-        callbackData = { ...response.data, isNaverChannel };
+        callbackData = { ...response.data, isNaverChannel, isNaverStand };
 
         if (response.data.header.success) {
             const { area, desking } = response.data.body;
@@ -76,7 +77,7 @@ function* getComponentWorkList({ payload }) {
             if (area.page?.pageUrl === '/naver-channel') {
                 // 편집영역의 페이지가 네이버채널 페이지면 컴포넌트 워크의 임시저장된 템플릿 정보를 조회한다
                 isNaverChannel = true;
-                callbackData = { ...response.data, isNaverChannel };
+                callbackData.isNaverChannel = isNaverChannel;
 
                 // 컴포넌트가 1개만 있다고 가정 (여러개가 되면 소스 수정해야함)
                 const targetComponent = desking[0];
@@ -87,10 +88,14 @@ function* getComponentWorkList({ payload }) {
                     if (second.data.body.templateSeq !== targetComponent.templateSeq) {
                         const third = yield call(api.putComponentWorkTemplate, { componentWorkSeq: targetComponent.seq, templateSeq: second.data.body?.templateSeq });
                         if (third.data.header.success) {
-                            callbackData = { ...third.data, isNaverChannel };
+                            callbackData = { ...callbackData, ...third.data, isNaverChannel };
                         }
                     }
                 }
+            } else if (area.page?.pageUrl === '/naver-stand') {
+                // 편집영역의 페이지가 네이버스탠드 페이지인지 체크
+                isNaverStand = true;
+                callbackData.isNaverStand = isNaverStand;
             }
 
             yield put({
@@ -104,7 +109,7 @@ function* getComponentWorkList({ payload }) {
             });
         }
     } catch (e) {
-        callbackData = { ...errorResponse(e), isNaverChannel };
+        callbackData = { ...errorResponse(e), isNaverChannel, isNaverStand };
     }
 
     if (typeof callback === 'function') {
@@ -135,7 +140,7 @@ const putSnapshotComponentWork = createDeskingRequestSaga(act.PUT_SNAPSHOT_COMPO
 const putComponentWorkTemplate = createDeskingRequestSaga(act.PUT_COMPONENT_WORK_TEMPLATE, api.putComponentWorkTemplate, 'work');
 
 /**
- * 데스킹 워크의 관련기사 생성
+ * 데스킹 워크의 관련기사 Row 생성
  * @param {object} data 기사 데이터
  * @param {number} relOrd 관련기사 순서
  * @param {object} parentData 주기사 데이터
@@ -200,7 +205,7 @@ const makeRelRowNode = (data, relOrd, parentData, component, etc) => {
 };
 
 /**
- * 데스킹 워크의 rowNode 생성
+ * 데스킹 워크의 주기사 Row 생성
  * @param {object} data 기사 데이터
  * @param {number} contentOrd 기사 순서
  * @param {object} component 컴포넌트워크 데이터

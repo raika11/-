@@ -12,6 +12,7 @@ export const initialState = {
         areaComp: {},
     },
     isNaverChannel: false,
+    isNaverStand: false,
     list: [],
     workStatus: {},
     total: 0,
@@ -115,7 +116,7 @@ export default handleActions(
         /**
          * 편집영역 데이터 조회
          */
-        [act.GET_COMPONENT_WORK_LIST_SUCCESS]: (state, { payload: { body, isNaverChannel } }) => {
+        [act.GET_COMPONENT_WORK_LIST_SUCCESS]: (state, { payload: { body, isNaverChannel, isNaverStand } }) => {
             return produce(state, (draft) => {
                 if (body === null) {
                     draft.list = initialState.list;
@@ -132,6 +133,9 @@ export default handleActions(
 
                     // 네이버채널 페이지 체크
                     draft.isNaverChannel = isNaverChannel;
+
+                    // 네이버스탠드 페이지 체크
+                    draft.isNaverStand = isNaverStand;
 
                     if (!area.areaComps && !Array.isArray(area.areaComps)) {
                         draft.area.areaComps = [];

@@ -2,14 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { DATA_TYPE_DESK, DATA_TYPE_FORM } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
 import { postSaveComponentWork, postPublishComponentWork, deleteDeskingWorkList } from '@store/desking';
 import DropdownToggle from '@pages/Desking/components/ComponentWork/DropdownToggle';
+import ComponentInfo from '../ComponentWork/ComponentInfo';
+import StatusBadge from '../ComponentWork/StatusBadge';
 
 /**
  * 네이버채널 컴포넌트 워크의 버튼 그룹 컴포넌트
@@ -18,9 +17,7 @@ const ButtonGroup = (props) => {
     const { areaSeq, component, workTemplateSeq, workStatus, setLoading } = props;
     // const { workStatus } = props;
     const dispatch = useDispatch();
-    const [title, setTitle] = useState('');
     const [viewN, setViewN] = useState(false);
-    const [tooltipText, setTooltipText] = useState('');
     const [iconButton, setIconButton] = useState([]);
 
     /**
@@ -116,20 +113,8 @@ const ButtonGroup = (props) => {
     }, [handleClickDelete, viewN]);
 
     useEffect(() => {
-        if (component.componentSeq) setTitle(component.componentName);
-    }, [component.componentName, component.componentSeq]);
-
-    useEffect(() => {
         setViewN(component.viewYn === 'N');
     }, [component.viewYn]);
-
-    useEffect(() => {
-        if (component.dataType === DATA_TYPE_DESK) {
-            setTooltipText(`컴포넌트ID: ${component.componentSeq}, 데이터셋ID: ${component.datasetSeq}, 템플릿ID: ${component.templateSeq}`);
-        } else if (component.dataType === DATA_TYPE_FORM) {
-            setTooltipText(`컴포넌트ID: ${component.componentSeq}, 파트ID: ${component.partSeq}, 템플릿ID: ${component.templateSeq}`);
-        }
-    }, [component.componentSeq, component.dataType, component.datasetSeq, component.partSeq, component.templateSeq]);
 
     useEffect(() => {
         let btns = [
@@ -144,12 +129,13 @@ const ButtonGroup = (props) => {
             <Row className="m-0 d-flex align-items-center justify-content-between position-relative">
                 {/* 예약(안씀) + 타이틀 */}
                 <Col className="d-flex align-items-center p-0 position-static" xs={8}>
-                    <OverlayTrigger overlay={<Tooltip>{tooltipText}</Tooltip>}>
-                        <p className="mb-0 component-title text-truncate">{title}</p>
-                    </OverlayTrigger>
+                    <ComponentInfo component={component} />
                 </Col>
 
                 <Col className="p-0 d-flex align-items-center justify-content-end" xs={4}>
+                    {/* 최종 전송 상태 표기 */}
+                    <StatusBadge className="mr-1" component={component} />
+
                     {/* 기능 버튼 */}
                     {iconButton.map((icon, idx) => (
                         <MokaOverlayTooltipButton key={idx} tooltipText={icon.title} variant="white" className="px-1 py-0 mr-1" onClick={icon.onClick}>

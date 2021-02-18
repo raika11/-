@@ -11,20 +11,9 @@ import toast from '@utils/toastUtil';
 const RegisterModal = (props) => {
     const { show, onHide, component, agGridIndex, componentAgGridInstances } = props;
     const dispatch = useDispatch();
-    const { list, loading } = useSelector((store) => ({
-        list: store.desking.list,
-        loading: store.loading[GET_COMPONENT_WORK_LIST],
-    }));
-
-    // state
+    const loading = useSelector(({ loading }) => loading[GET_COMPONENT_WORK_LIST]);
+    const list = useSelector(({ desking }) => desking.list);
     const [filterList, setFilterList] = useState([]);
-
-    useEffect(() => {
-        if (Array.isArray(list)) {
-            // 현재 선택된 부모 컴포넌트는 제외
-            setFilterList(list.filter((obj) => obj.seq !== component.seq));
-        }
-    }, [component.seq, list]);
 
     /**
      * 아이템 클릭
@@ -83,8 +72,15 @@ const RegisterModal = (props) => {
         dispatch(postDeskingWorkListMove(option));
     };
 
+    useEffect(() => {
+        if (Array.isArray(list)) {
+            // 현재 선택된 부모 컴포넌트는 제외
+            setFilterList(list.filter((obj) => obj.seq !== component.seq));
+        }
+    }, [component.seq, list]);
+
     return (
-        <MokaModal title="기사 이동" show={show} onHide={onHide} size="sm" width={300} height={441} draggable>
+        <MokaModal title="기사 이동" show={show} onHide={onHide} size="sm" width={300} height={441} centered draggable>
             {loading && <MokaLoader />}
             <ListGroup variant="flush" className="border custom-scroll h-100">
                 {filterList.length < 1 && (
@@ -95,7 +91,9 @@ const RegisterModal = (props) => {
                 {filterList.length > 0 &&
                     filterList.map((rg) => (
                         <ListGroup.Item className="w-100 user-select-none" key={rg.seq} action onClick={(e) => handleClickItem(e, rg)}>
-                            {rg.componentSeq}_{rg.componentName}
+                            <span>
+                                {rg.componentSeq}_{rg.componentName}
+                            </span>
                         </ListGroup.Item>
                     ))}
             </ListGroup>

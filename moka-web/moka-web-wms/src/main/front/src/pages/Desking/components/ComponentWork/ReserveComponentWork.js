@@ -13,8 +13,6 @@ import toast, { messageBox } from '@utils/toastUtil';
  */
 const ReserveComponentWork = ({ component, workStatus }) => {
     const dispatch = useDispatch();
-
-    // state
     const [reservation, setReservation] = useState(false);
     const [originReDt, setOriginReDt] = useState(null);
     const [reserveDt, setReserveDt] = useState(null);
@@ -57,7 +55,6 @@ const ReserveComponentWork = ({ component, workStatus }) => {
         }
 
         let message = reservation === true ? '예약을 변경하시겠습니까?' : '예약하시겠습니까?';
-
         messageBox.confirm(message, () => {
             dispatch(
                 postReserveComponentWork({
@@ -65,7 +62,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                     reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
                     callback: ({ header }) => {
                         if (!header.success) {
-                            toast.fail(header.message);
+                            messageBox.alert(header.message);
                         } else {
                             toast.success(header.message);
                             setOpenReserve(false);
@@ -114,6 +111,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             let rd = moment(component.reserveDt, DB_DATEFORMAT);
             setOriginReDt(rd);
             setReserveDt(rd);
+            // 현재 시각보다 예약일이 크면 예약상태
             if (rd > moment()) {
                 setReservation(true);
             }

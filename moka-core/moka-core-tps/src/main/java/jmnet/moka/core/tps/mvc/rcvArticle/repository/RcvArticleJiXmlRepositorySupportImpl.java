@@ -67,6 +67,8 @@ public class RcvArticleJiXmlRepositorySupportImpl extends TpsQueryDslRepositoryS
         query = getQuerydsl().applyPagination(search.getPageable(), query);
         QueryResults<RcvArticleJiXml> list = query
                 .where(builder)
+                .orderBy(rcvArticleJiXml.pressDate.desc(), rcvArticleJiXml.id.section.asc(), rcvArticleJiXml.id.myun.asc(),
+                        rcvArticleJiXml.id.pan.desc(), rcvArticleJiXml.id.revision.asc())
                 .fetchResults();
 
         return new PageImpl<RcvArticleJiXml>(list.getResults(), search.getPageable(), list.getTotal());

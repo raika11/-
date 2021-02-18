@@ -63,6 +63,7 @@ const SEOMeta = React.lazy(() => retry(() => import('@pages/SEOMeta')));
 const SearchKeyword = React.lazy(() => retry(() => import('@pages/Search/SearchKeyword')));
 const JpodChannel = React.lazy(() => retry(() => import('@pages/Jpod/JpodChannel')));
 const JpodEpisode = React.lazy(() => retry(() => import('@pages/Jpod/JpodEpisode')));
+const JpodNotice = React.lazy(() => retry(() => import('@pages/Jpod/JpodNotice')));
 const EditLog = React.lazy(() => retry(() => import('@pages/EditLog')));
 const SystemMonitor = React.lazy(() => retry(() => import('@pages/SystemMonitor')));
 const BulkMonitor = React.lazy(() => retry(() => import('@pages/BulkMonitor')));
@@ -646,6 +647,16 @@ const routes = [
         name: 'package',
         displayName: '패키지 관리',
         component: Package,
+        layout: SidebarOpenLayout,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/jpod-notice',
+        name: 'jpod-notice',
+        displayName: 'Jpod 공지 게시판 관리',
+        component: JpodNotice,
         layout: SidebarOpenLayout,
         nonResponsive: false,
         exact: false,

@@ -119,6 +119,21 @@ export const initialState = {
             list: [],
         },
     },
+    notice: {
+        notices: {
+            total: 0,
+            list: [],
+            search: {
+                page: 0,
+                size: PAGESIZE_OPTIONS[0],
+                sort: 'repSeq,asc',
+                searchType: 'all',
+                keyword: '',
+                usePaging: 'Y',
+            },
+        },
+        notice: {},
+    },
     reporter: {
         total: 0,
         list: [],

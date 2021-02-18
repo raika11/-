@@ -192,6 +192,8 @@ $row-hover-color: darken($desking-row-color, 5);
     );
 
     .ag-root-wrapper {
+        background-color: $white;
+        
         .ag-root-wrapper-body {
             overflow: hidden;
             height: unset !important;

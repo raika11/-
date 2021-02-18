@@ -12,10 +12,12 @@ import { messageBox } from '@utils/toastUtil';
 const propTypes = {
     /**
      * 컴포넌트 데이터
+     * @default
      */
     component: PropTypes.object,
     /**
      * 해당 컴포넌트의 인덱스 (데스킹 AgGrid의 index)
+     * @default
      */
     agGridIndex: PropTypes.number,
     /**
@@ -41,9 +43,9 @@ const defaultProps = {
 };
 
 /**
- * 네이버채널에서만 쓰는 컴포넌트 워크
+ * 네이버스탠드에서만 쓰는 컴포넌트 워크
  */
-const NaverChannelWork = (props) => {
+const NaverStandWork = (props) => {
     const { component, componentWorkList, agGridIndex, componentAgGridInstances, setComponentAgGridInstances, areaSeq, deskingPart } = props;
     const dispatch = useDispatch();
     const workStatus = useSelector(({ desking }) => desking.workStatus);
@@ -117,7 +119,7 @@ const NaverChannelWork = (props) => {
     );
 };
 
-NaverChannelWork.propTypes = propTypes;
-NaverChannelWork.defaultProps = defaultProps;
+NaverStandWork.propTypes = propTypes;
+NaverStandWork.defaultProps = defaultProps;
 
-export default NaverChannelWork;
+export default NaverStandWork;

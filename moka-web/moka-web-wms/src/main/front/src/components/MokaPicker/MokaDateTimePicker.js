@@ -67,6 +67,11 @@ const propTypes = {
      * @default
      */
     timeDefault: PropTypes.oneOf(['start', 'end', 'default']),
+
+    /**
+     * 날짜 선택시 닫기 여부
+     */
+    closeOnSelect: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -74,6 +79,7 @@ const defaultProps = {
     timeFormat: 'HH:mm',
     disabled: false,
     timeDefault: 'default',
+    closeOnSelect: false,
 };
 
 /**
@@ -98,6 +104,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
         onMouseEnter,
         onMouseLeave,
         timeDefault,
+        closeOnSelect,
         ...rest
     } = props;
     const dateTimeRef = useRef(null);
@@ -182,6 +189,7 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
             {...rest}
             renderDay={renderDay}
             renderInput={renderInput}
+            closeOnSelect={closeOnSelect}
         />
     );
 });

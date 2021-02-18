@@ -43,6 +43,7 @@ export const initialState = {
         error: null,
         dtl: {
             usedYn: 'N',
+            cdOrd: 1,
         },
     },
     specialCharCode: {

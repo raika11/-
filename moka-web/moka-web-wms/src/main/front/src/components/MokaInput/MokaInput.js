@@ -104,7 +104,25 @@ const defaultProps = {
  * controlled input
  */
 const MokaInput = forwardRef((props, ref) => {
-    const { className, as, type, placeholder, onChange, value, id, name, children, inputProps, isInvalid, invalidMessage, disabled, uncontrolled, size, ...rest } = props;
+    const {
+        className,
+        as,
+        type,
+        placeholder,
+        onChange,
+        value,
+        id,
+        name,
+        children,
+        inputProps,
+        isInvalid,
+        invalidMessage,
+        disabled,
+        uncontrolled,
+        size,
+        closeOnSelect,
+        ...rest
+    } = props;
     const inputRef = useRef(null);
     const [invalidShow, setInvalidShow] = React.useState(false);
     useImperativeHandle(ref, () => inputRef?.current);
@@ -202,7 +220,7 @@ const MokaInput = forwardRef((props, ref) => {
     // dateTimePicker
     else if (as === 'dateTimePicker') {
         Type = MokaDateTimePicker;
-        contextProps = { ...contextProps, placeholder };
+        contextProps = { ...contextProps, placeholder, closeOnSelect };
     }
     // 기본 input
     else {

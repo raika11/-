@@ -20,7 +20,7 @@ const propTypes = {
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     /**
      * 라벨의 넓이
-     * @default 66
+     * @default
      */
     labelWidth: PropTypes.number,
     /**
@@ -52,14 +52,31 @@ const newlineRegex = /[\n|\\n]/;
  * 라벨 + input
  */
 const MokaInputLabel = forwardRef((props, ref) => {
-    // label props
-    const { label, labelWidth, className, labelClassName, required } = props;
-
-    // common props
-    const { inputClassName, as, type, placeholder, onChange, children, inputProps, isInvalid, invalidMessage, disabled, id, name, uncontrolled, ...rest } = props;
-
-    // MokaInput props
-    const { value } = props;
+    const {
+        // label props
+        label,
+        labelWidth,
+        className,
+        labelClassName,
+        required,
+        // common props
+        inputClassName,
+        as,
+        type,
+        placeholder,
+        onChange,
+        children,
+        inputProps,
+        isInvalid,
+        invalidMessage,
+        disabled,
+        id,
+        name,
+        uncontrolled,
+        // MokaInput props
+        value,
+        ...rest
+    } = props;
 
     // state
     const [ln, setLn] = useState('');

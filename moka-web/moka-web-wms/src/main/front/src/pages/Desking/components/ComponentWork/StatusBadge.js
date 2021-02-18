@@ -41,7 +41,7 @@ const StatusBadge = (props) => {
     }, [component.lastPublishDt, component.lastSaveDt]);
 
     return (
-        <OverlayTrigger trigger="hover" placement="bottom" overlay={popover}>
+        <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={popover}>
             <Badge variant={published ? 'info' : 'gray-600'} className={clsx('rounded-0', className)}>
                 {published ? '전송' : '임시'}
             </Badge>

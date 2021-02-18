@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.bright.vo;
+package jmnet.moka.core.common.brightcove;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;

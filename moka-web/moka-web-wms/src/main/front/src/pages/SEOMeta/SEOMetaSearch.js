@@ -1,191 +1,170 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
-import { MokaInput, MokaSearchInput } from '@components';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
-import produce from 'immer';
 import commonUtil from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
+import { initialState, changeSeoMetaSearchOptions, getSeoMetaList } from '@store/seoMeta';
 
-const SEOMetaSearch = ({ searchOptions, onSearch, onReset }) => {
+/**
+ * SEO 메타 검색
+ */
+const SEOMetaSearch = () => {
+    const dispatch = useDispatch();
+    const storeSearch = useSelector((store) => store.seoMeta.search);
     const [dateType, setDateType] = useState('today');
-    const [options, setOptions] = useState({});
+    const [search, setSearch] = useState(initialState.search);
     const [disabled, setDisabled] = useState({ date: true });
 
-    const handleChangeDateType = (name, value) => {
-        let startDt = options.startDt;
-        let endDt = moment().format(DB_DATEFORMAT);
-        let disable = true;
-
-        switch (value) {
-            case 'today':
-                startDt = moment().format(DB_DATEFORMAT);
-                break;
-            case 'thisWeek':
-                startDt = moment(new Date(new Date().getTime() - new Date().getDay() * 24 * 60 * 60 * 1000)).format(DB_DATEFORMAT);
-                break;
-            case 'thisMonth':
-                startDt = moment(new Date(new Date().setDate(1))).format(DB_DATEFORMAT);
-                break;
-            case 'direct':
-                disable = false;
-                break;
-            default:
-                break;
-        }
-
-        setDateType(value);
-        setDisabled({ ...disabled, date: disable });
-        setOptions({ ...options, startDt, endDt });
-    };
-
-    const handleChangeValue = (name, value) => {
+    /**
+     * change input value
+     */
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
         if (name === 'dateType') {
             setDateType(value);
         } else {
-            if (name === 'startDt') {
-                const startDt = new Date(value);
-                const endDt = new Date(options.endDt);
-
-                if (startDt > endDt) {
-                    toast.warning('시작일은 종료일 보다 클 수 없습니다.');
-                    return;
-                }
-            } else if (name === 'endDt') {
-                const startDt = new Date(options.startDt);
-                const endDt = new Date(value);
-
-                if (endDt < startDt) {
-                    toast.warning('종료일은 시작일 보다 작을 수 없습니다.');
-                    return;
-                }
-            }
-            setOptions(
-                produce(options, (draft) => {
-                    draft[name] = value;
-                }),
-            );
+            setSearch({ ...search, [name]: value });
         }
     };
 
+    /**
+     * 검색 버튼
+     */
     const handleClickSearch = () => {
-        if (onSearch instanceof Function) {
-            onSearch(options);
-        }
+        const ns = {
+            ...search,
+            startDt: moment(search.startDt).startOf('day').format(DB_DATEFORMAT),
+            endDt: moment(search.endDt).endOf('day').format(DB_DATEFORMAT),
+            page: 0,
+        };
+        console.log(ns.startDt);
+        console.log(ns.endDt);
+        dispatch(changeSeoMetaSearchOptions(ns));
+        dispatch(getSeoMetaList(ns));
     };
 
+    /**
+     * 초기화 버튼
+     */
     const handleClickReset = () => {
         setDateType('today');
-        if (onReset instanceof Function) {
-            onReset(setOptions);
-        }
+        setSearch(initialState.search);
     };
 
     useEffect(() => {
-        if (!commonUtil.isEmpty(searchOptions)) {
-            setOptions(searchOptions);
+        let st = moment(storeSearch.startDt, DB_DATEFORMAT);
+        if (!st.isValid()) {
+            st = null;
         }
-    }, [searchOptions]);
+        let nt = moment(storeSearch.endDt, DB_DATEFORMAT);
+        if (!nt.isValid()) {
+            nt = null;
+        }
+        setSearch({ ...storeSearch, startDt: st, endDt: nt });
+    }, [storeSearch]);
 
     useEffect(() => {
+        // SEO 메타 목록 조회
+        dispatch(getSeoMetaList(storeSearch));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // useEffect(() => {
+    //     if (!commonUtil.isEmpty(storeSearch)) {
+    //         setSearch(storeSearch);
+    //     }
+    // }, [storeSearch]);
+
+    useEffect(() => {
+        const diff = moment(search.endDt).diff(moment(search.startDt));
+        if (diff < 0) {
+            toast.warning('시작일은 종료일 보다 클 수 없습니다.');
+            setSearch({ ...search, startDt: moment().format(DB_DATEFORMAT) });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search.startDt, search.endDt]);
+
+    useEffect(() => {
+        // 날짜 타입에 따른 셋팅
         if (dateType === 'direct') {
             setDisabled({ ...disabled, date: false });
         } else {
             const { startDt, endDt } = commonUtil.toRangeDateForDateType(dateType);
-            setOptions({ ...options, startDt, endDt });
+            setSearch({ ...search, startDt: moment(startDt, DB_DATEFORMAT), endDt: moment(endDt, DB_DATEFORMAT) });
             setDisabled({ ...disabled, date: true });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateType]);
 
     return (
-        <Form className="pb-2">
-            <Form.Row className="mb-2">
-                <Col xs={2} className="p-0 pr-2">
-                    <MokaInput
-                        as="select"
-                        name="dateType"
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            //handleChangeDateType(name, value);
-                            handleChangeValue(name, value);
-                        }}
-                        value={dateType}
-                    >
+        <Form>
+            <Form.Row className="mb-2 justify-content-between align-items-center">
+                <Col className="p-0 pr-2" xs={2}>
+                    <MokaInput as="select" name="dateType" onChange={handleChangeValue} value={dateType}>
                         <option value="today">오늘</option>
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
                         <option value="direct">직접입력</option>
                     </MokaInput>
                 </Col>
-                <Col xs={2} className="p-0 pr-2">
+                <Col className="p-0 pr-2" xs={2}>
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
                         name="startDt"
                         placeholder="YYYY-MM-DD"
                         inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
-                        value={options.startDt}
-                        onChange={(param) => {
-                            let selectDate = param._d;
-                            if (selectDate) {
-                                selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                        value={search.startDt}
+                        onChange={(date) => {
+                            if (typeof date === 'object') {
+                                setSearch({ ...search, startDt: date });
+                            } else if (date === '') {
+                                setSearch({ ...search, startDt: null });
                             }
-                            handleChangeValue('startDt', selectDate);
                         }}
                         disabled={disabled.date}
                     />
                 </Col>
-                <Col xs={2} className="p-0 pr-2">
+                <Col className="p-0 pr-2" xs={2}>
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
                         name="endDt"
                         placeholder="YYYY-MM-DD"
                         inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
-                        value={options.endDt}
-                        onChange={(param) => {
-                            let selectDate = param._d;
-                            if (selectDate) {
-                                selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                        value={search.endDt}
+                        onChange={(date) => {
+                            if (typeof date === 'object') {
+                                setSearch({ ...search, endDt: date });
+                            } else if (date === '') {
+                                setSearch({ ...search, endDt: null });
                             }
-                            handleChangeValue('endDt', selectDate);
                         }}
                         disabled={disabled.date}
                     />
                 </Col>
-                <Col xs={1} className="p-0 pr-2">
-                    <MokaInput
-                        as="select"
-                        name="searchType"
-                        value={options.searchType}
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            handleChangeValue(name, value);
-                        }}
-                    >
+                <Col className="p-0 pr-2" xs={1}>
+                    <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         <option value="artTitle">제목</option>
                         <option value="totalId">기사ID</option>
                     </MokaInput>
                 </Col>
-                <Col xs={4} className="p-0 pr-2">
+                <Col className="p-0 pr-2">
                     <MokaSearchInput
                         buttonClassName="ft-12"
                         inputClassName="ft-12"
                         name="keyword"
-                        value={options.keyword}
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            handleChangeValue(name, value);
-                        }}
+                        value={search.keyword}
+                        onChange={handleChangeValue}
                         onSearch={handleClickSearch}
                     />
                 </Col>
-                <Col xs={1} className="p-0">
-                    <Button variant="negative" onClick={handleClickReset}>
-                        초기화
-                    </Button>
-                </Col>
+                <Button variant="negative" onClick={handleClickReset}>
+                    초기화
+                </Button>
             </Form.Row>
         </Form>
     );

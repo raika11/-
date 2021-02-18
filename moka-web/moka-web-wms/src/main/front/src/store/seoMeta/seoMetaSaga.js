@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
+import moment from 'moment';
 import * as api from '@store/seoMeta/seoMetaApi';
 import * as action from '@store/seoMeta/seoMetaAction';
 import commonUtil from '@utils/commonUtil';
@@ -10,14 +11,17 @@ import { snsNames } from '@/constants';
 function toSeoMetaListData(list) {
     return list.map((data) => {
         return {
-            id: data.totalId,
-            title: unescapeHtml(data.artTitle),
-            serviceDt: data.serviceDt,
+            ...data,
+            artTitle: unescapeHtml(data.artTitle),
+            serviceDt: moment(data.serviceDt).format('YYYY-MM-DD HH:mm'),
             isInsert: data.sendSnsType.indexOf('JA') < 0,
         };
     });
 }
 
+/**
+ * SNS 메타 목록 조회
+ */
 function* getSeoMetaList({ type, payload }) {
     yield put(startLoading(type));
     try {

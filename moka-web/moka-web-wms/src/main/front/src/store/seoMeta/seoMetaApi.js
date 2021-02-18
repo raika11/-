@@ -1,6 +1,9 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
 
+/**
+ * SNS 메타 목록 조회
+ */
 export const getSeoMetaList = ({ search }) => {
     const queryString = qs.stringify(search);
     return instance.get(`/api/sns?${queryString}`).catch((err) => {

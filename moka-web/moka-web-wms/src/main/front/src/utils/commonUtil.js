@@ -377,7 +377,7 @@ export const toRangeDateForDateType = (dateType) => {
             startDt = today;
             break;
         case 'thisWeek':
-            startDt = today.day(0);
+            startDt = today.day(1);
             break;
         case 'thisMonth':
             startDt = today.set('date', 1);

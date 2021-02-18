@@ -8,6 +8,10 @@ import produce from 'immer';
 import toast from '@utils/toastUtil';
 
 const labelWidth = 50;
+
+/**
+ * SEO 메타 정보
+ */
 const SEOMetaEdit = () => {
     const dispatch = useDispatch();
     const history = useHistory();

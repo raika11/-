@@ -1,5 +1,4 @@
-import { DB_DATEFORMAT, PAGESIZE_OPTIONS } from '@/constants';
-import moment from 'moment';
+import { PAGESIZE_OPTIONS } from '@/constants';
 import { handleActions } from 'redux-actions';
 import * as actions from './seoMetaAction';
 import produce from 'immer';
@@ -17,8 +16,8 @@ export const initialState = {
     search: {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
-        startDt: moment(new Date(2020, 7, 21, 0, 0, 0)).format(DB_DATEFORMAT),
-        endDt: moment(new Date(2020, 7, 21, 23, 59, 59)).format(DB_DATEFORMAT),
+        startDt: null,
+        endDt: null,
         searchType: 'artTitle',
         keyword: '',
     },

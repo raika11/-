@@ -30,10 +30,12 @@ const propTypes = {
     onHide: PropTypes.func.isRequired,
     /**
      * Modal타이틀
+     * @default
      */
     title: PropTypes.string,
     /**
      * 단일 선택(라디오버튼) / 멀티 선택(체크박스)
+     * @default
      */
     selection: PropTypes.oneOf(['single', 'multiple']),
     /**
@@ -51,6 +53,7 @@ const propTypes = {
     /**
      * 선택 가능한 마스터코드 종류
      * [service, section, content]
+     * @default
      */
     selectable: PropTypes.arrayOf(PropTypes.string),
 };

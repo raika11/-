@@ -14,10 +14,7 @@ const PageTree = ({ onDelete, match, findNode }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_PAGE_TREE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const { tree, page } = useSelector(({ page }) => ({
-        tree: page.tree,
-        page: page.page,
-    }));
+    const { tree, page } = useSelector(({ page }) => page);
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
 

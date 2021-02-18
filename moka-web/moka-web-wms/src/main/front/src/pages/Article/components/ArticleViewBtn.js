@@ -53,7 +53,7 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
             <Button size="sm" variant="outline-table-btn" className="mr-1 flex-shrink-0 px-1" onClick={handleClickCopy} onDoubleClick={handleDoubleClickCopy}>
                 C
             </Button>
-            {data.ovpYn === 'Y' && (
+            {data.jtbcvodYn === 'Y' && (
                 <Button size="sm" variant="outline-table-btn px-1" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
                     B
                 </Button>
@@ -61,7 +61,7 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
 
             {/* ovp 미리보기 */}
             <MokaModal show={previewOn} onHide={() => setPreviewOn(false)} width={500} size="md" title="영상보기" centered>
-                <iframe src={data.ovpFullLink} title="미리보기" frameBorder="0" className="w-100" style={{ height: 300 }} />
+                <iframe src={data.vodFullLink} title="미리보기" frameBorder="0" className="w-100" style={{ height: 300 }} />
             </MokaModal>
         </div>
     );

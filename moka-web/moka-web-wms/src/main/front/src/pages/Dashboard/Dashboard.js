@@ -281,6 +281,16 @@ const Dashboard = () => {
                                 </Form.Row>
                                 <Form.Row>
                                     <Form.Label>
+                                        <h2>9-0) 기본 설정</h2>
+                                        <br />- 검색 및 상세 Container 내의 달력 Component는 아래 9-1에 정의된 클래스(is-not-position-center)를 추가한다.
+                                        <br />- 검색 및 상세 Container 내의 달력 Component는 아래 9-2에 정의된 props의 옵션을 true로 설정한다.
+                                        <br />- 단, 시간을 선택하는 달력 Component가 있을 경우 9-2에 정의된 props를 적용하지 않는다.
+                                        <br />- 검색 및 상세 Container 내의 달력을 이용할 경우 상황에 따라 오른쪽으로 위치로 조정해 준다(right 클래스 추가).
+                                        <br />- 오른쪽으로 위치를 조정해야 하는 상황의 예: 달력이 부모 Container를 넘어서 가로 스크롤이 생기는 경우
+                                    </Form.Label>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Form.Label>
                                         9-1) 달력 위치 조정
                                         <br />- 해당 컴포넌트에 is-not-position-center class를 추가해준다
                                         <br />- 날짜입력창의 우측에 표기할 경우 right class도 추가해 준다.

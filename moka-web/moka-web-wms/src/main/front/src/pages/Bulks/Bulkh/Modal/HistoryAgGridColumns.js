@@ -3,7 +3,6 @@ export const historyColumnDefs = [
         headerName: '',
         field: 'bulkartSeq',
         width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
         headerClass: 'ag-grid-sns-meta-header',
     },
     {
@@ -12,14 +11,12 @@ export const historyColumnDefs = [
         field: 'regDt',
         width: 90,
         flex: 1,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
         headerName: '작업자',
         field: 'regId',
         headerClass: 'ag-grid-sns-meta-header',
         width: 80,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
         headerName: 'ID',
@@ -34,7 +31,6 @@ export const historyDetailColumnDefs = [
         headerName: '순서',
         field: 'ordNo',
         width: 70,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
         headerClass: 'ag-grid-sns-meta-header',
     },
     {
@@ -43,13 +39,11 @@ export const historyDetailColumnDefs = [
         field: 'title',
         width: 90,
         flex: 1,
-        cellStyle: { fontSize: '12px', lineHeight: '23px' },
     },
     {
         headerName: '기사ID',
         field: 'totalId',
         headerClass: 'ag-grid-sns-meta-header',
         width: 80,
-        cellStyle: { fontSize: '12px', lineHeight: '23px', paddingTop: '8px' },
     },
 ];

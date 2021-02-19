@@ -55,16 +55,20 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
         const { value } = e.target;
         let tmpArr = selectedReporter;
 
-        const result = value.split('.').map((reporterName) => {
-            let idx = tmpArr.findIndex((t) => t.reporterName === reporterName);
-            if (idx > -1) {
-                return tmpArr.splice(idx, 1)[0];
-            } else {
-                return {
-                    reporterName,
-                };
-            }
-        });
+        const result =
+            value !== ''
+                ? value.split('.').map((reporterName) => {
+                      let idx = tmpArr.findIndex((t) => t.reporterName === reporterName);
+                      if (idx > -1) {
+                          return tmpArr.splice(idx, 1)[0];
+                      } else {
+                          return {
+                              reporterName,
+                          };
+                      }
+                  })
+                : [];
+
         onChange({
             key: 'reporterList',
             value: result,
@@ -87,7 +91,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
         });
     };
 
-    const valueCreator = (name, email) => `${name}/${email}`;
+    const valueCreator = (name, email) => `${name}/${email || ''}`;
 
     /**
      * 기자 자동완성 변경
@@ -106,7 +110,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             };
 
             if (selectedReporter.findIndex((s) => s.value === result.value) > -1) {
-                toast.warning('이미 선택한 기자입니다');
+                toast.warning('포함된 기자입니다');
             } else {
                 onChange({
                     key: 'reporterList',
@@ -165,6 +169,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             loading={loading}
         >
             <Form className="d-flex flex-column h-100">
+                {/* 수신 정보 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
                         <MokaInputLabel label="매체" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
@@ -174,6 +179,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
+                {/* 분류 */}
                 <Form.Row className="mb-2 flex-shrink-0">
                     <Col className="p-0" xs={10}>
                         <CodeAutocomplete
@@ -197,14 +203,17 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         </Button>
                     </Col>
                 </Form.Row>
+                {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
                         <MokaInputLabel label="제목" value={article.title} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
+                {/* 부제목 */}
                 <div className="mb-2 w-100">
                     <MokaInputLabel as="textarea" label="부제목" inputClassName="resize-none" value={article.subTitle} inputProps={{ rows: 2 }} disabled />
                 </div>
+                {/* 기자 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={6}>
                         <MokaInputLabel label="기자" name="repStr" value={repStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurRep }} />
@@ -224,6 +233,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         </OverlayTrigger>
                     </Col>
                 </Form.Row>
+                {/* 태그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurTag }} />
@@ -232,6 +242,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>
+                {/* 본문(단순 보기) */}
                 <Form.Row className="flex-fill">
                     <Col className="p-0 d-flex" xs={12}>
                         <MokaInputLabel label="본문" className="mb-0" as="none" />

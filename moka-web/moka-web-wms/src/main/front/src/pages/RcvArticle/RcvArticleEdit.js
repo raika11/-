@@ -6,23 +6,21 @@ import { getArticleType } from '@store/codeMgt';
 import { initialState, getRcvArticle, clearRcvArticle, GET_RCV_ARTICLE, postRcvArticle, POST_RCV_ARTICLE, getRcvArticleList } from '@store/rcvArticle';
 import ArticleForm from '@pages/Article/components/ArticleForm/index';
 import RctArticleForm from './components/RcvArticleForm';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
 const RcvArticleEdit = ({ match }) => {
-    const { rid } = useParams();
+    const { rid, isRcv } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
-    const { search, rcvArticle } = useSelector(({ rcvArticle }) => ({
-        rcvArticle: rcvArticle.rcvArticle,
-        search: rcvArticle.search,
-    }));
+    const { search, rcvArticle } = useSelector(({ rcvArticle }) => rcvArticle);
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
+    const [register, setRegister] = useState(false); // 등록된 기사이면 등록폼으로 연결
     const [reporterList, setReporterList] = useState([]);
     const [temp, setTemp] = useState(initialState.rcvArticle);
     const [error, setError] = useState({});
@@ -86,21 +84,8 @@ const RcvArticleEdit = ({ match }) => {
     }, [articleTypeRows, dispatch]);
 
     useEffect(() => {
-        // 기자 리스트 조회
-        if (!allReporter) {
-            dispatch(getReporterAllList());
-        } else {
-            // 등록기사인 경우 동일 기자 비교 => repSeq,
-            // 수신기사인 경우 동일 기자 비교 => 기자명/기자이메일
-            setReporterList(
-                allReporter.map((reporter) => ({
-                    ...reporter,
-                    value: rcvArticle.totalId ? reporter.repSeq : `${reporter.repName}/${reporter.repEmail1}`,
-                    label: reporter.repName,
-                })),
-            );
-        }
-    }, [allReporter, dispatch, rcvArticle.totalId]);
+        setRegister(false);
+    }, [rid]);
 
     useEffect(() => {
         // 기사 상세 조회
@@ -110,8 +95,13 @@ const RcvArticleEdit = ({ match }) => {
                     rid,
                     callback: ({ header }) => {
                         if (!header.success) {
-                            toast.fail(header.message);
+                            messageBox.alert(header.message);
                             history.push(match.path);
+                        }
+                        if (isRcv === 'N') {
+                            setRegister(true);
+                        } else {
+                            setRegister(false);
                         }
                     },
                 }),
@@ -119,7 +109,24 @@ const RcvArticleEdit = ({ match }) => {
         } else {
             dispatch(clearRcvArticle());
         }
-    }, [dispatch, history, match.path, rid]);
+    }, [dispatch, history, match.path, rid, isRcv]);
+
+    useEffect(() => {
+        // 기자 리스트 조회
+        if (!allReporter) {
+            dispatch(getReporterAllList());
+        } else {
+            // 등록기사인 경우 동일 기자 비교 => repSeq,
+            // 수신기사인 경우 동일 기자 비교 => 기자명/기자이메일
+            setReporterList(
+                allReporter.map((reporter) => ({
+                    ...reporter,
+                    value: register ? reporter.repSeq : `${reporter.repName}/${reporter.repEmail1}`,
+                    label: reporter.repName,
+                })),
+            );
+        }
+    }, [allReporter, dispatch, register]);
 
     useEffect(() => {
         return () => {
@@ -148,7 +155,17 @@ const RcvArticleEdit = ({ match }) => {
 
     return (
         <React.Fragment>
-            {!rcvArticle.totalId || rcvArticle.totalId === 0 ? (
+            {register ? (
+                <ArticleForm
+                    totalId={rcvArticle.totalId}
+                    returnUrl="/rcv-article"
+                    articleTypeRows={articleTypeRows}
+                    reporterList={reporterList || []}
+                    onCancle={handleCancle}
+                    onSave={reloadList}
+                    inRcv
+                />
+            ) : (
                 <RctArticleForm
                     article={temp}
                     error={error}
@@ -160,16 +177,6 @@ const RcvArticleEdit = ({ match }) => {
                     onCancle={handleCancle}
                     onPreview={handleClickPreviewOpen}
                     onRegister={handleRegister}
-                />
-            ) : (
-                <ArticleForm
-                    totalId={rcvArticle.totalId}
-                    returnUrl="/rcv-article"
-                    articleTypeRows={articleTypeRows}
-                    reporterList={reporterList || []}
-                    onCancle={handleCancle}
-                    onSave={reloadList}
-                    inRcv
                 />
             )}
         </React.Fragment>

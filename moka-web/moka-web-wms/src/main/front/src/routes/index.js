@@ -27,7 +27,6 @@ function retry(fn, retriesLeft = 2, interval = 1000) {
 // page
 const Dashboard = React.lazy(() => retry(() => import('@pages/Dashboard')));
 const Desking = React.lazy(() => retry(() => import('@pages/Desking')));
-const AgGrid = React.lazy(() => retry(() => import('@pages/AgGrid')));
 const Page = React.lazy(() => retry(() => import('@pages/Page')));
 const Domain = React.lazy(() => retry(() => import('@pages/Domain')));
 const Template = React.lazy(() => retry(() => import('@pages/Template')));
@@ -105,16 +104,6 @@ const routes = [
         displayName: '403',
         component: () => <Page403 defaultLink="/" />,
         layout: NoFrameLayout,
-    },
-    {
-        path: '/aggrid',
-        name: 'AgGrid',
-        displayName: 'AgGrid',
-        component: AgGrid,
-        layout: SidebarOpenLayout,
-        side: true,
-        nonResponsive: false,
-        exact: true,
     },
     {
         path: '/page',

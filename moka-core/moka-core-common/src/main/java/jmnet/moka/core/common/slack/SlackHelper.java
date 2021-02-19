@@ -1,7 +1,9 @@
 package jmnet.moka.core.common.slack;
 
 import jmnet.moka.common.utils.McpString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,14 +24,21 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author sapark
  * @since 2021-02-19 019 오후 1:32
  */
+@Slf4j
 public class SlackHelper {
-    private static final String URL = "http://buzz.joins.com/send/devmessage/";
+    private final String URL; // = "http://buzz.joins.com/send/devmessage/";
     private static final String PARAM_TITLE = "tit";
     private static final String PARAM_SUBTITLE = "sub";
     private static final String PARAM_MESSAGE = "txt";
 
     @Autowired
+    @Qualifier(value = "slackRestTemplate")
     RestTemplate restTemplate;
+
+    public SlackHelper(String url) {
+        this.URL = url;
+    }
+
     /**
      * <pre>
      * Slack channel에 Message를 보낸다.
@@ -81,10 +90,12 @@ public class SlackHelper {
         if( !McpString.isNullOrEmpty(subTitle))
             builder.queryParam(PARAM_SUBTITLE, subTitle);
         builder.queryParam(PARAM_MESSAGE, message);
-        final String url = URL + builder.build().encode().toString();
+        final String url = URL + builder.build().toString();
+
+        log.info("Slack message url = {}", url);
 
         //ResponseEntity<String> response = restTemplateHelper.get(url);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(new HttpHeaders()), String.class);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), String.class);
         return response.getStatusCode() == HttpStatus.OK;
     }
 }

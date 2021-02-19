@@ -34,23 +34,21 @@ export default [
     {
         headerName: '면/판',
         field: 'myunPan',
-        width: 45,
+        width: 50,
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '12px',
             whiteSpace: 'pre',
         },
     },
     {
         headerName: '등록시간',
         field: 'regDt',
-        width: 80,
+        width: 100,
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
-            fontSize: '12px',
         },
     },
     {

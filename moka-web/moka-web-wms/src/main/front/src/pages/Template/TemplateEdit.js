@@ -66,7 +66,7 @@ const TemplateEdit = ({ onDelete, match }) => {
         let errList = [];
 
         // 템플릿명 체크
-        if (!REQUIRED_REGEX.test(template.templateName)) {
+        if (!template.templateName || !REQUIRED_REGEX.test(template.templateName)) {
             errList.push({
                 field: 'templateName',
                 reason: '',

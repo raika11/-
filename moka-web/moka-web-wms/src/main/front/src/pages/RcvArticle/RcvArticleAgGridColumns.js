@@ -7,22 +7,22 @@ export default [
     {
         headerName: '월일',
         field: 'rcvDt',
-        width: 45,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 48,
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '수신',
         field: 'rcvTime',
-        width: 45,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 48,
+        cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '구분',
         field: 'sourceName',
-        width: 70,
+        width: 80,
         cellRendererFramework: ({ data }) => (
             <div
-                className="h-100 d-flex align-items-center ft-12"
+                className="h-100 d-flex align-items-center"
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -56,8 +56,8 @@ export default [
     {
         headerName: '입력',
         field: 'serviceTime',
-        width: 45,
-        cellStyle: { fontSize: '12px', display: 'flex', alignItems: 'center' },
+        width: 48,
+        cellStyle: { display: 'flex', alignItems: 'center' },
         cellClassRules: {
             'text-positive': () => true,
         },

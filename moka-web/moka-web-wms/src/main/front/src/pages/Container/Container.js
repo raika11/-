@@ -203,7 +203,7 @@ const Container = ({ match }) => {
             <MokaCard
                 width={412}
                 className="mr-gutter"
-                title="컨테이너 검색"
+                title="컨테이너 관리"
                 bodyClassName="d-flex flex-column"
                 foldable
                 expansion={expansionState[0]}

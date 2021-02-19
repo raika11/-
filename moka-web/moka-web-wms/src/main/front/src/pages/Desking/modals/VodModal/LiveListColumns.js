@@ -19,9 +19,6 @@ export default [
             display: 'flex',
             alignItems: 'center',
         },
-        cellClassRules: {
-            'ft-12': () => true,
-        },
     },
     {
         headerName: '송출상태',
@@ -30,9 +27,6 @@ export default [
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
-        },
-        cellClassRules: {
-            'ft-12': () => true,
         },
     },
     {
@@ -50,8 +44,7 @@ export default [
         width: 170,
         cellRenderer: 'optionRenderer',
         cellStyle: {
-            lineHeight: '22px',
-            fontSize: '12px',
+            lineHeight: '20px',
         },
     },
 ];

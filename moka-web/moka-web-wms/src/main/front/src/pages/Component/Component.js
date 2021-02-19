@@ -101,7 +101,7 @@ const Component = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="컴포넌트 검색">
+            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="컴포넌트 관리">
                 <Suspense>
                     <ComponentList onDelete={handleClickDelete} match={match} />
                 </Suspense>

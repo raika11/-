@@ -25,13 +25,11 @@ export default [
     },
     {
         headerName: '매체',
-        width: 100,
+        width: 110,
         field: 'sourceName',
         tooltipField: 'sourceName',
         cellStyle: {
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '12px',
+            lineHeight: '50px',
         },
     },
     {
@@ -43,7 +41,6 @@ export default [
             whiteSpace: 'pre-wrap',
             lineHeight: '20px',
             display: '-webkit-box',
-            fontSize: '12px',
             '-webkit-line-clamp': 2,
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
@@ -81,7 +78,6 @@ export default [
             boxSizing: 'border-box',
             whiteSpace: 'normal',
             lineHeight: '20px',
-            fontSize: '14px',
             height: '50px',
             display: '-webkit-box',
             paddingTop: '5px',
@@ -107,13 +103,12 @@ export default [
     },
     {
         headerName: '면/판',
-        width: 45,
+        width: 50,
         field: 'myunPan',
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '12px',
             whiteSpace: 'pre',
         },
     },
@@ -123,7 +118,6 @@ export default [
         field: 'articleDt',
         cellClassRules: {
             'pre-wrap-cell': () => true,
-            'ft-12': () => true,
         },
         cellStyle: {
             height: '50px',
@@ -138,7 +132,6 @@ export default [
         cellStyle: {
             display: 'flex',
             alignItems: 'center',
-            fontSize: '12px',
         },
     },
 ];

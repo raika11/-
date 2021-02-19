@@ -236,23 +236,23 @@ $btn-focus-box-shadow: none !default;
 $btn-focus-width: 0 !default; // focus, active box-shadow에 사용되는 width 값임
 
 // Buttons default (md)
-$btn-padding-y: 3px !default;
+$btn-padding-y: 4px !default;
 $btn-padding-x: 11px !default;
 $btn-font-size: $h5-font-size !default;
 $btn-font-weight: $font-weight-bold !default;
-$btn-line-height: 23px !default;
+$btn-line-height: 21px !default;
 
 // Buttons default (sm)
-$btn-padding-y-sm: 1px;
-$btn-padding-x-sm: 8px;
-$btn-font-size-sm: $h6-font-size;
-$btn-line-height-sm: 22px;
+$btn-padding-y-sm: 2px !default;
+$btn-padding-x-sm: 8px !default;
+$btn-font-size-sm: $h6-font-size !default;
+$btn-line-height-sm: 20px !default;
 
 // Buttons default (lg)
-$btn-padding-y-lg: 4px;
-$btn-padding-x-lg: 16px;
-$btn-font-size-lg: $h3-font-size;
-$btn-line-height-lg: 27px;
+$btn-padding-y-lg: 5px !default;
+$btn-padding-x-lg: 16px !default;
+$btn-font-size-lg: $h3-font-size !default;
+$btn-line-height-lg: 25px !default;
 
 // Forms
 $input-bg: $white !default;

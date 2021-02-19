@@ -167,7 +167,7 @@ const Template = ({ match }) => {
             <MokaCard
                 width={412}
                 className="mr-gutter"
-                title="템플릿 검색"
+                title="템플릿 관리"
                 bodyClassName="d-flex flex-column"
                 expansion={expansionState[0]}
                 onExpansion={handleListExpansion}

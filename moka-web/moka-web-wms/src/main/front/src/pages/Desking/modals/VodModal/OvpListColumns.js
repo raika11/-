@@ -24,7 +24,6 @@ export default [
             boxSizing: 'border-box',
             whiteSpace: 'normal',
             lineHeight: '22px',
-            fontSize: '12px',
             height: '66px',
             display: '-webkit-box',
             '-webkit-line-clamp': 3,
@@ -41,9 +40,6 @@ export default [
             display: 'flex',
             alignItems: 'center',
         },
-        cellClassRules: {
-            'ft-12': () => true,
-        },
     },
     {
         headerName: '등록일',
@@ -51,7 +47,6 @@ export default [
         width: 83,
         cellClassRules: {
             'pre-wrap-cell': () => true,
-            'ft-12': () => true,
         },
         cellStyle: {
             lineHeight: '20px',
@@ -63,8 +58,7 @@ export default [
         width: 83,
         cellRenderer: 'optionRenderer',
         cellStyle: {
-            lineHeight: '22px',
-            fontSize: '12px',
+            lineHeight: '20px',
         },
         // valueGetter: (params) => {
         //     debugger;

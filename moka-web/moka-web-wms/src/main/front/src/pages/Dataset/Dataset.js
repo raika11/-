@@ -94,7 +94,7 @@ const Dataset = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="데이터셋 검색">
+            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="데이터셋 관리">
                 <Suspense>
                     <DatasetList onDelete={handleClickDelete} match={match} />
                 </Suspense>

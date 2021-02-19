@@ -1,5 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MokaInputLabel } from '@components';
 import { initialState, getCodeKornameList, changeKornameSearchOption, GET_CODE_KORNAME_LIST } from '@store/code';
@@ -97,13 +97,10 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
-    const { storeSearch, codeList } = useSelector(
-        (store) => ({
-            storeSearch: store.code.korname.search,
-            codeList: store.code.korname.list,
-        }),
-        [shallowEqual],
-    );
+    const { storeSearch, codeList } = useSelector(({ code }) => ({
+        storeSearch: code.korname.search,
+        codeList: code.korname.list,
+    }));
 
     // state
     const [search, setSearch] = useState(initialState.korname.search);

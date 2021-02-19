@@ -419,7 +419,7 @@ body {
             }
 
             &[data-match='Y'] {
-                color: $positive
+                color: $positive !important;
             }
         }
 

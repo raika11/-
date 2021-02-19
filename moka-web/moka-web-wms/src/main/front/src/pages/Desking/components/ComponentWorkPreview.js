@@ -76,7 +76,7 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
     }, [previewContent]);
 
     return (
-        <div className="px-card py-20 position-relative overflow-hidden">
+        <div className="px-card py-20 position-relative overflow-hidden h-100 d-flex flex-column">
             {loading && <MokaLoader />}
             <div className="d-flex align-items-center justify-content-between mb-2" style={{ height: 30 }}>
                 <h2 className="mb-0">미리보기</h2>
@@ -88,25 +88,27 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
             {/* iframe 클릭 막기 */}
             {/* <div className="absolute-top" style={{ bottom: 0, top: 58, right: 41 }} /> */}
 
-            <iframe
-                ref={iframeRef}
-                title="컴포넌트미리보기"
-                frameBorder="0"
-                className={clsx('float-left', { 'w-100': !isNaverChannel })}
-                style={{ height: 733, width: isNaverChannel ? 530 : undefined }}
-            />
+            <div className="custom-scroll flex-fill">
+                <iframe
+                    ref={iframeRef}
+                    title="컴포넌트미리보기"
+                    frameBorder="0"
+                    className={clsx('float-left h-100', { 'w-100': !isNaverChannel })}
+                    style={{ width: isNaverChannel ? 530 : undefined }}
+                />
 
-            {isNaverChannel && (
-                <div className="float-left pt-card pl-gutter" style={{ width: 'calc(100% - 530px)' }}>
-                    <h2 className="color-positive">네이버 채널</h2>
-                    <h4 className="color-positive">연예/스포츠 기사 편집시 오류!</h4>
-                    <p className="mb-2 color-gray-900">top-single: 상단 이미지 기사 1꼭지 (이미지 없는 기사 편집 시 텍스트로 노출)</p>
-                    <p className="mb-2 color-gray-900">bottom-double: 하단 이미지 기사 2꼭지 (이미지 없는 기사 편집 시 오류!)</p>
-                    <p className="mb-2 color-gray-900">반드시 기사 SE버튼을 통해서 선택하여 입력 (벌크전송 기사만 편집하기 위함)</p>
-                    <p className="mb-2 color-gray-900">오류 발생 시 통째로 반영되지 않으며 오류 내용은</p>
-                    <p className="mb-2 color-gray-900">jj.digital@joongang.co.kr 메일로 피드백</p>
-                </div>
-            )}
+                {isNaverChannel && (
+                    <div className="float-left pt-card pl-gutter" style={{ width: 'calc(100% - 530px)' }}>
+                        <h2 className="color-positive">네이버 채널</h2>
+                        <h4 className="color-positive">연예/스포츠 기사 편집시 오류!</h4>
+                        <p className="mb-2 color-gray-900">top-single: 상단 이미지 기사 1꼭지 (이미지 없는 기사 편집 시 텍스트로 노출)</p>
+                        <p className="mb-2 color-gray-900">bottom-double: 하단 이미지 기사 2꼭지 (이미지 없는 기사 편집 시 오류!)</p>
+                        <p className="mb-2 color-gray-900">반드시 기사 SE버튼을 통해서 선택하여 입력 (벌크전송 기사만 편집하기 위함)</p>
+                        <p className="mb-2 color-gray-900">오류 발생 시 통째로 반영되지 않으며 오류 내용은</p>
+                        <p className="mb-2 color-gray-900">jj.digital@joongang.co.kr 메일로 피드백</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

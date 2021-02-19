@@ -30,11 +30,7 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 const Page = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
-    const { page, tree } = useSelector((store) => ({
-        page: store.page.page,
-        tree: store.page.tree,
-    }));
+    const { page, tree } = useSelector(({ page }) => page);
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 

@@ -47,10 +47,10 @@ const SetHolidayModal = (props) => {
             width={600}
             title="휴일 지정"
             show={show}
-            onHide={onHide}
+            onHide={handleHide}
             buttons={[
                 { text: '확인', variant: 'positive', onClick: handleClickConfirm },
-                { text: '취소', variant: 'negative', onClick: () => onHide() },
+                { text: '취소', variant: 'negative', onClick: handleHide },
             ]}
             centered
             draggable

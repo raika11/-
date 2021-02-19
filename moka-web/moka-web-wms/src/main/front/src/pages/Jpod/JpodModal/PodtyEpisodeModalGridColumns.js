@@ -7,15 +7,15 @@ export const columnDefs = [
         headerName: '에피소드명',
         field: 'title',
         width: 200,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px' },
         tooltipField: 'title',
         wrapText: true,
     },
     {
         headerName: '게시일',
         field: 'crtDt',
-        width: 80,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        width: 90,
+        cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '21px' },
         tooltipField: 'crtDt',
     },
     {

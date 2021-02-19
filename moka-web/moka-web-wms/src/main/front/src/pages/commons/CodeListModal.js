@@ -211,7 +211,7 @@ const CodeListModal = (props) => {
     }, [masterCodeList]);
 
     useEffect(() => {
-        if (masterCodeList) {
+        if (show && masterCodeList) {
             let ns = [];
 
             if (!value || value === null) {
@@ -232,7 +232,7 @@ const CodeListModal = (props) => {
             ns = ns.filter((s) => s);
             setSelectedList(ns);
         }
-    }, [masterCodeList, value]);
+    }, [masterCodeList, value, show]);
 
     useEffect(() => {
         return () => {

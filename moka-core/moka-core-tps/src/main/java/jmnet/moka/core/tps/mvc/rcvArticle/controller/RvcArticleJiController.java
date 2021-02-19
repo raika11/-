@@ -353,7 +353,7 @@ public class RvcArticleJiController extends AbstractCommonController {
         String revision = rcvArticleJiXmlDTO
                 .getId()
                 .getRevision();
-        return String.format("%s년 %s월 %s일 - %s면 - 판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode), myun, pan,
+        return String.format("%s년 %s월 %s일 - %s면 - %s판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode), myun, pan,
                 revision);
     }
 

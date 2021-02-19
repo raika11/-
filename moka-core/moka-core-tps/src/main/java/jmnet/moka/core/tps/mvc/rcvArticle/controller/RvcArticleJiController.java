@@ -27,7 +27,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.util.ResourceMapper;
@@ -76,7 +75,7 @@ public class RvcArticleJiController extends AbstractCommonController {
 
     static {
         //제대로 적용되지 않는다.
-//        documentBuilderFactory.setIgnoringElementContentWhitespace(false);
+        //        documentBuilderFactory.setIgnoringElementContentWhitespace(false);
     }
 
     private TemplateEngine templateEngine;
@@ -118,20 +117,20 @@ public class RvcArticleJiController extends AbstractCommonController {
     public void getRcvArticleJi(@Valid RcvArticleJiSearchDTO search, @ApiParam(hidden = true) HttpServletResponse response)
             throws Exception {
         try {
-            RcvArticleJiSearchDTO sch = RcvArticleJiSearchDTO
-                    .builder()
-                    .sourceCode("1")
-                    .ho(17148)
-                    .pressDate(McpDate.date("2020-09-04 00:00:00"))
-                    .myun("01")
-                    .section("D1001")
-                    .revision("01")
-                    .build();
-            Page<RcvArticleJiXml> returnValue = rcvArticleJiService.findAllRcvArticleJi(sch);
+            //            RcvArticleJiSearchDTO sch = RcvArticleJiSearchDTO
+            //                    .builder()
+            //                    .sourceCode("1")
+            //                    .ho(17149)
+            //                    .pressDate(McpDate.date("2020-09-07 00:00:00"))
+            //                    .myun("01")
+            //                    .section("D1025")
+            //                    .revision("02")
+            //                    .build();
+            Page<RcvArticleJiXml> returnValue = rcvArticleJiService.findAllRcvArticleJi(search);
 
             List<RcvArticleJiXmlDTO> dtoList = modelMapper.map(returnValue.getContent(), RcvArticleJiXmlDTO.TYPE);
 
-            if ( dtoList != null && dtoList.size()>0) {
+            if (dtoList != null && dtoList.size() > 0) {
                 RcvArticleJiXmlDTO rcvArticleJiXmlDTO = dtoList.get(0);
 
                 response.setHeader("X-XSS-Protection", "0");
@@ -224,7 +223,7 @@ public class RvcArticleJiController extends AbstractCommonController {
                     content = getNodeValue(dataContentNode); // 내용
                 }
                 if (McpString.isNotEmpty(content)) {
-//                    content = content.replace("\r", "\n");
+                    //                    content = content.replace("\r", "\n");
                     content = content.replace("\n", "\n\n");
                     content = content.replace("\n\n\n\n", "\n\n\n");
                     int nbreak = 0; // 최대 10개의 \n 제거
@@ -340,7 +339,7 @@ public class RvcArticleJiController extends AbstractCommonController {
     }
 
     private String scale(String value) {
-//        return Integer.toString((int) Math.ceil(Double.parseDouble(value) * nPersPective));
+        //        return Integer.toString((int) Math.ceil(Double.parseDouble(value) * nPersPective));
         return Double.toString(Double.parseDouble(value) * nPersPective);
     }
 
@@ -361,8 +360,8 @@ public class RvcArticleJiController extends AbstractCommonController {
         String revision = rcvArticleJiXmlDTO
                 .getId()
                 .getRevision();
-        return String.format("%s년 %s월 %s일 - %s - %s면 - %s판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode),
-                myun, pan, revision);
+        return String.format("%s년 %s월 %s일 - %s - %s면 - %s판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode), myun, pan,
+                revision);
     }
 
     private String getJoongangSectionName(String sectionCode) {
@@ -431,7 +430,7 @@ public class RvcArticleJiController extends AbstractCommonController {
         XPathExpression exp = this.xpath.compile(xpathStr);
         Object result = exp.evaluate(node, XPathConstants.NODE);
         if (result != null) {
-            Node resultNode = (Node)result;
+            Node resultNode = (Node) result;
             return resultNode.getNodeValue();
         }
         return "";

@@ -1,6 +1,5 @@
 package jmnet.moka.web.schedule.mvc.schedule.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,20 +9,14 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.brightcove.BrightcoveCredentailVO;
 import jmnet.moka.core.common.brightcove.BrightcoveProperties;
-import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.schedule.mvc.brightcove.service.BrightcoveService;
 import jmnet.moka.web.schedule.mvc.schedule.vo.OvpVideoRssVO;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 /**
  * <pre>
@@ -41,12 +34,13 @@ import org.springframework.util.MultiValueMap;
 public abstract class OvpScheduleJob extends AbstractScheduleJob {
 
     @Autowired
+    private BrightcoveService brightcoveService;
+
+    @Autowired
     private BrightcoveProperties brightcoveProperties;
 
     @Value("${pc-home.rss-url}")
     private String pcHomeRssUrl;
-
-    BrightcoveCredentailVO credentail;
 
     protected String type;
 
@@ -58,71 +52,65 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
         TimeZone UTC = TimeZone.getTimeZone("UTC");
 
 
-        credentail = getClientCredentials();
-
-        String result = findAllOvp();
+        BrightcoveCredentailVO credentail = brightcoveService.getClientCredentials();
 
         final SimpleDateFormat sdf = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
         sdf.setTimeZone(UTC);
 
         try {
-            if (McpString.isNotEmpty(result)) {
-                List<Map<String, Object>> list = ResourceMapper
-                        .getDefaultObjectMapper()
-                        .readValue(result, new TypeReference<List<Map<String, Object>>>() {
-                        });
+            List<Map<String, Object>> list = brightcoveService.findAllOvp(credentail);
 
-                /**
-                 * 동일 타입 목록만 필터링, 배포일시 내림차순 정렬
-                 */
-                List<Map<String, Object>> filteredList = list
-                        .stream()
-                        .filter(stringObjectMap -> {
-                            Map<String, Object> fields = (Map<String, Object>) stringObjectMap.get("custom_fields");
+            /**
+             * 동일 타입 목록만 필터링, 배포일시 내림차순 정렬
+             */
+            List<Map<String, Object>> filteredList = list
+                    .stream()
+                    .filter(stringObjectMap -> {
+                        Map<String, Object> fields = (Map<String, Object>) stringObjectMap.get("custom_fields");
 
+                        return fields
+                                .getOrDefault("media_ratio", "")
+                                .toString()
+                                .toLowerCase()
+                                .equals(getOvpType().toLowerCase());
+                    })
+                    .sorted((o1, o2) -> {
+                        try {
+                            Long p1 = (Long) sdf
+                                    .parse((String) o1.get("published_at"))
+                                    .getTime();
+                            Long p2 = (Long) sdf
+                                    .parse((String) o2.get("published_at"))
+                                    .getTime();
+                            return (int) (p2 - p1);
+                        } catch (Exception ex) {
+                            return 0;
+                        }
+                    })
+                    .collect(Collectors.toList());
 
-                            return fields
-                                    .getOrDefault("media_ratio", "")
-                                    .toString()
-                                    .toLowerCase()
-                                    .equals(getOvpType().toLowerCase());
-                        })
-                        .sorted((o1, o2) -> {
-                            try {
-                                Long p1 = (Long) sdf
-                                        .parse((String) o1.get("published_at"))
-                                        .getTime();
-                                Long p2 = (Long) sdf
-                                        .parse((String) o2.get("published_at"))
-                                        .getTime();
-                                return (int) (p2 - p1);
-                            } catch (Exception ex) {
-                                return 0;
-                            }
-                        })
-                        .collect(Collectors.toList());
-
-                // rss 문서용 목록
-                List<OvpVideoRssVO> rssList = new ArrayList<>();
-                for (Map<String, Object> videoMap : filteredList) {
-                    String id = (String) videoMap.get("id");
-                    Map<String, Object> source = findAllVideoSource(id, brightcoveProperties.getOvpDefaultSize());
-                    log.debug(source.toString());
-                    rssList.add(OvpVideoRssVO
-                            .builder()
-                            .container(getMediaType())
-                            .description(String.valueOf(videoMap.get("description")))
-                            .id(String.valueOf(videoMap.get("id")))
-                            .size(Long.parseLong(String.valueOf(source.get("size"))))
-                            .sourceUrl(String.valueOf(source.get("src")))
-                            .pubDate(sdf.parse((String) videoMap.get("published_at")))
-                            .duration(TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(String.valueOf(source.get("duration")))))
-                            .title(String.valueOf(videoMap.get("name")))
-                            .build());
-                }
-                log.debug(generateNewsbriefingByGoogle(rssList));
-
+            // rss 문서용 목록
+            List<OvpVideoRssVO> rssList = new ArrayList<>();
+            for (Map<String, Object> videoMap : filteredList) {
+                String id = (String) videoMap.get("id");
+                Map<String, Object> source = getOvpSource(credentail, id, brightcoveProperties.getOvpDefaultSize());
+                log.debug(source.toString());
+                rssList.add(OvpVideoRssVO
+                        .builder()
+                        .container(getMediaType())
+                        .description(String.valueOf(videoMap.get("description")))
+                        .id(String.valueOf(videoMap.get("id")))
+                        .size(Long.parseLong(String.valueOf(source.get("size"))))
+                        .sourceUrl(String.valueOf(source.get("src")))
+                        .pubDate(sdf.parse((String) videoMap.get("published_at")))
+                        .duration(TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(String.valueOf(source.get("duration")))))
+                        .title(String.valueOf(videoMap.get("name")))
+                        .build());
             }
+
+            boolean success = rssFileUpload(generateNewsbriefingByGoogle(rssList));
+
+            log.debug("file upload : {}", success);
 
         } catch (Exception ex) {
             log.error(ex.toString());
@@ -134,23 +122,10 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
      *
      * @return
      */
-    public Map<String, Object> findAllVideoSource(String id, String size)
+    public Map<String, Object> getOvpSource(BrightcoveCredentailVO credentail, String id, String size)
             throws IOException {
 
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
-        headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        String requestUrl = brightcoveProperties.getCmsBaseUrl();
-        requestUrl = String.format(requestUrl + "/videos/%s/sources", id);
-        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("limit", brightcoveProperties.getOvpDefaultLimit());
-        params.add("sort", brightcoveProperties.getOvpDefaultSort());
-        ResponseEntity<String> responseEntity = restTemplateHelper.get(requestUrl, params, headers);
-
-        List<Map<String, Object>> list = ResourceMapper
-                .getDefaultObjectMapper()
-                .readValue(responseEntity.getBody(), new TypeReference<List<Map<String, Object>>>() {
-                });
+        List<Map<String, Object>> list = brightcoveService.findAllOvpSource(credentail, id, size);
 
         Map<String, Object> mp4Video = list
                 .stream()
@@ -183,27 +158,6 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
     }
 
 
-
-    /**
-     * brightcove ovp 목록 조회
-     *
-     * @return
-     */
-    public String findAllOvp() {
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
-        headers.add(MokaConstants.AUTHORIZATION, String.format("%s %s", credentail.getTokenType(), credentail.getAccessToken()));
-        //headers.add("X-API-KEY", brightcoveProperties.getApiKey());
-        String requestUrl = brightcoveProperties.getCmsBaseUrl();
-        requestUrl = String.format(requestUrl + "/folders/%s/videos", brightcoveProperties.getOvpFolderId());
-        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("limit", brightcoveProperties.getOvpDefaultLimit());
-        params.add("sort", brightcoveProperties.getOvpDefaultSort());
-        ResponseEntity<String> responseEntity = restTemplateHelper.get(requestUrl, params, headers);
-
-
-        return responseEntity.getBody();
-    }
 
     /**
      * rss 문자열 생성
@@ -247,32 +201,6 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
         return sb.toString();
     }
 
-    /**
-     * brightcove 인증 처리
-     *
-     * @return
-     */
-    private BrightcoveCredentailVO getClientCredentials() {
-        BrightcoveCredentailVO brightcoveCredentailVO = null;
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(MokaConstants.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("client_id", brightcoveProperties.getClientId());
-        params.add("client_secret", brightcoveProperties.getClientSecret());
-        ResponseEntity<String> responseEntity =
-                restTemplateHelper.post(brightcoveProperties.getBaseUrl() + brightcoveProperties.getTokenApi(), params, headers);
-        try {
-            BrightcoveCredentailVO newCredentialVO = ResourceMapper
-                    .getDefaultObjectMapper()
-                    .readValue(responseEntity.getBody(), BrightcoveCredentailVO.class);
-            brightcoveCredentailVO = newCredentialVO;
-            brightcoveCredentailVO.setExpireDt(McpDate.secondPlus(newCredentialVO.getExpiresIn()));
-        } catch (Exception ex) {
-            log.error(ex.toString());
-        }
-
-        return brightcoveCredentailVO;
-    }
 
     /**
      * ovp type

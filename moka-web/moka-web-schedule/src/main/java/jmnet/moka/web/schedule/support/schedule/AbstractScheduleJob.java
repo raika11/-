@@ -70,4 +70,20 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      * 각 Job별 기능 구현
      */
     public abstract void invoke();
+
+    /**
+     * rss 문자열을 받아 ftp 서버로 전송한다.
+     *
+     * @param rss
+     * @return
+     */
+    protected boolean rssFileUpload(String rss) {
+        /**
+         * todo 2. ftp 또는 NAS에 파일 저장하는 기능 구현 필요
+         * 1. sendType을 통해 ftp인지 네트워크 드라이브인지 판단
+         * 2. ftp 접속 정보 : GetTarget 클래스 이용
+         * 3. 저장 경로 : scheduleInfo 객체의 targetPath 속성 값
+         */
+        return false;
+    }
 }

@@ -76,7 +76,7 @@ public class RvcArticleJiController extends AbstractCommonController {
 
     static {
         //제대로 적용되지 않는다.
-        documentBuilderFactory.setIgnoringElementContentWhitespace(false);
+//        documentBuilderFactory.setIgnoringElementContentWhitespace(false);
     }
 
     private TemplateEngine templateEngine;
@@ -224,7 +224,8 @@ public class RvcArticleJiController extends AbstractCommonController {
                     content = getNodeValue(dataContentNode); // 내용
                 }
                 if (McpString.isNotEmpty(content)) {
-                    content = content.replace("\r", "\n");
+//                    content = content.replace("\r", "\n");
+                    content = content.replace("\n", "\n\n");
                     content = content.replace("\n\n\n\n", "\n\n\n");
                     int nbreak = 0; // 최대 10개의 \n 제거
                     while (content.endsWith("\n") && nbreak < 10) {

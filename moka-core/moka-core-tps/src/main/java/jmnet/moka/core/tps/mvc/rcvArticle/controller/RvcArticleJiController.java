@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -130,11 +131,17 @@ public class RvcArticleJiController extends AbstractCommonController {
 
             List<RcvArticleJiXmlDTO> dtoList = modelMapper.map(returnValue.getContent(), RcvArticleJiXmlDTO.TYPE);
 
-            RcvArticleJiXmlDTO rcvArticleJiXmlDTO = dtoList.get(0);
+            if ( dtoList != null && dtoList.size()>0) {
+                RcvArticleJiXmlDTO rcvArticleJiXmlDTO = dtoList.get(0);
 
-            response.setHeader("X-XSS-Protection", "0");
-            response.setContentType("text/html; charset=UTF-8");
-            previewHtml(rcvArticleJiXmlDTO, response);
+                response.setHeader("X-XSS-Protection", "0");
+                response.setContentType("text/html; charset=UTF-8");
+                previewHtml(rcvArticleJiXmlDTO, response);
+            } else {
+                Writer writer = response.getWriter();
+                writer.write("<script type='text/javascript'>\nalert('데이터가 없습니다.');</script>");
+                writer.close();
+            }
         } catch (Exception e) {
             log.error("[FAIL TO LOAD RCV ARTICLE JI XML]", e);
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD RCV ARTICLE JI XML]", e, true);
@@ -353,8 +360,8 @@ public class RvcArticleJiController extends AbstractCommonController {
         String revision = rcvArticleJiXmlDTO
                 .getId()
                 .getRevision();
-        return String.format("%s년 %s월 %s일 - %s면 - %s판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode), myun, pan,
-                revision);
+        return String.format("%s년 %s월 %s일 - %s - %s면 - %s판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode),
+                myun, pan, revision);
     }
 
     private String getJoongangSectionName(String sectionCode) {

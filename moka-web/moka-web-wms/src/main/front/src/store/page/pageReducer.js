@@ -9,6 +9,7 @@ import * as act from './pageAction';
 export const initialState = {
     error: null,
     tree: null,
+    findPage: [],
     search: {
         domainId: null,
         searchType: 'all',
@@ -118,13 +119,16 @@ export default handleActions(
          */
         [act.GET_PAGE_TREE_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
-                draft.tree = body;
+                const { tree, findPage } = body;
+                draft.tree = tree;
+                draft.findPage = findPage;
                 draft.error = initialState.error;
             });
         },
         [act.GET_PAGE_TREE_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.tree = initialState.tree;
+                draft.findPage = initialState.findPage;
                 draft.error = payload;
             });
         },

@@ -12,10 +12,8 @@ const PodtyChannelModal = (props) => {
     const { show, onHide } = props;
     const [rowData, setRowData] = useState([]);
 
-    const { list, loading } = useSelector((store) => ({
-        list: store.jpod.podtyChannel.list,
-        loading: store.loading[GET_CHANNEL_PODTY_LIST],
-    }));
+    const list = useSelector((store) => store.jpod.podtyChannel.list);
+    const loading = useSelector((store) => store.loading[GET_CHANNEL_PODTY_LIST]);
 
     // 닫기 버튼
     const handleClickHide = () => {
@@ -30,32 +28,21 @@ const PodtyChannelModal = (props) => {
 
     // store list 가 변경되면 grid 목록 업데이트.
     useEffect(() => {
-        const initGridRow = (data) => {
-            setRowData(
-                data.map((element) => {
-                    let crtDt = element.crtDt && element.crtDt.length > 10 ? element.crtDt.substr(0, 10) : element.crtDt;
-                    return {
-                        castSrl: element.castSrl,
-                        getCastName: element.getCastName,
-                        crtDt: crtDt,
-                        // castSrl: element.castSrl, // 채널번호
-                        trackCnt: element.trackCnt,
-                        simpodCategory: element.simpodCategory,
-                        shareUrl: element.shareUrl,
-                        info: element,
-                    };
-                }),
-            );
-        };
-
-        if (list.length > 0) {
-            initGridRow(list);
-        }
+        setRowData(
+            list.map((element) => {
+                let crtDt = element.crtDt && element.crtDt.length > 10 ? element.crtDt.substr(0, 10) : element.crtDt;
+                return {
+                    ...element,
+                    crtDt: crtDt,
+                    info: element,
+                };
+            }),
+        );
     }, [list]);
 
     // 모달창이 열리면 팟티 목록 가져오기.
     useEffect(() => {
-        if (show === true) {
+        if (show) {
             dispatch(getChannelPodtyList());
         } else {
             dispatch(clearChannelPodty());
@@ -81,7 +68,7 @@ const PodtyChannelModal = (props) => {
                 rowData={rowData}
                 rowHeight={50}
                 onRowNodeId={(data) => data.castSrl}
-                onRowClicked={(e) => handleClickListRow(e)}
+                onRowClicked={handleClickListRow}
                 loading={loading}
                 paging={false}
                 preventRowClickCell={['shareUrl']}

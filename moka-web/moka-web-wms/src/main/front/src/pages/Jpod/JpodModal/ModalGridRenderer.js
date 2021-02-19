@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Col } from 'react-bootstrap';
-import { selectReporter } from '@store/jpod';
 import { useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import { selectReporter } from '@store/jpod';
 
 // 팟티 채널 새창 이동 버튼
 export const ChannelMoveButtonRenderer = ({ shareUrl }) => {
@@ -9,13 +9,11 @@ export const ChannelMoveButtonRenderer = ({ shareUrl }) => {
         window.open(shareUrl, '_blank', 'noopener,noreferrer');
     };
     return (
-        <>
-            <Col className="pt-2">
-                <Button variant="negative" onClick={() => handleClickMoveButton()}>
-                    이동
-                </Button>
-            </Col>
-        </>
+        <div className="h-100 d-flex jutify-content-center align-items-center">
+            <Button variant="outline-table-btn" size="sm" onClick={handleClickMoveButton}>
+                이동
+            </Button>
+        </div>
     );
 };
 
@@ -28,12 +26,10 @@ export const RepoterAddButtonRenderer = ({ repoterInfo }) => {
     };
 
     return (
-        <>
-            <Col className="pt-2">
-                <Button variant="negative" onClick={() => handleClickButton()}>
-                    등록
-                </Button>
-            </Col>
-        </>
+        <div className="h-100 d-flex jutify-content-center align-items-center">
+            <Button variant="outline-table-btn" size="sm" onClick={handleClickButton}>
+                등록
+            </Button>
+        </div>
     );
 };

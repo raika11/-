@@ -84,7 +84,6 @@ public class PageServiceImpl implements PageService {
     private PageNode makeTree(List<Page> pageList, PageSearchDTO search, List<Long> findPageList) {
         PageNode rootNode = null;
         Iterator<Page> it = pageList.iterator();
-        boolean find = false;
         while (it.hasNext()) {
             Page page = it.next();
             if (page.getParent() == null || page
@@ -92,7 +91,7 @@ public class PageServiceImpl implements PageService {
                     .getPageSeq() == 0) {
                 rootNode = new PageNode(page);
 
-                find = getMatch(page, search);
+                boolean find = getMatch(page, search);
                 rootNode.setMatch(find ? "Y" : "N");
                 if (find) {
                     findPageList.add(page.getPageSeq());
@@ -103,7 +102,11 @@ public class PageServiceImpl implements PageService {
                         .getPageSeq(), rootNode);
                 if (parentNode != null) {
                     PageNode pageNode = new PageNode(page);
-                    pageNode.setMatch(getMatch(page, search) ? "Y" : "N");
+                    boolean find = getMatch(page, search);
+                    pageNode.setMatch(find ? "Y" : "N");
+                    if (find) {
+                        findPageList.add(page.getPageSeq());
+                    }
                     parentNode.addNode(pageNode);
                 }
             }

@@ -42,7 +42,7 @@
     </choose>
 
     <choose>
-      <when test='modify != "all" and modify != null and status == "U"'>
+      <when test='modify != "all" and modify != null and modify == "U"'>
         #{modify},
       </when>
       <otherwise>
@@ -51,7 +51,7 @@
     </choose>
 
     <choose>
-      <when test='modify != "all" and modify != null and status == "D"'>
+      <when test='modify != "all" and modify != null and modify == "D"'>
         #{modify},
       </when>
       <otherwise>
@@ -100,63 +100,63 @@
   <resultMap id="KeywordMap" type="string"/>
   <select id="findInfo" parameterType="hashMap" resultMap="CodeMap,ReporterMap,KeywordMap"
     statementType="CALLABLE">
-  { call UPA_RCV_ARTICLE_BASIC_SEL_BY_INFO(
-    #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-    #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{iudYn, mode=OUT, jdbcType=VARCHAR, javaType=string}
-    ) }
+    { call UPA_RCV_ARTICLE_BASIC_SEL_BY_INFO(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{iudYn, mode=OUT, jdbcType=VARCHAR, javaType=string}
+      ) }
   </select>
 
 
   <!-- 수신 기사를 등록기사로 등록 -->
   <select id="insertRcvArticleIud" parameterType="hashMap" statementType="CALLABLE">
-  {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_RCV_ARTICLE_IUD_INS(
-  #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-  ) }
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_RCV_ARTICLE_IUD_INS(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
   <!--수신기자 등록-->
   <select id="callUspRcvArticleReporterIns" parameterType="hashMap"
     resultType="Integer" statementType="CALLABLE">
     { call USP_RCV_ARTICLE_REPORTER_INS(
-        #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-        NULL,
-        #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{reporter.reporterName, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{reporter.reporterEmail, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{reporter.reporterBlog, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{reporter.reporterEtc, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      NULL,
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{reporter.reporterName, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{reporter.reporterEmail, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{reporter.reporterBlog, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{reporter.reporterEtc, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
   <!--수신기자 삭제-->
   <select id="callUspRcvArticleReporterDel" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
-      { call USP_RCV_ARTICLE_REPORTER_DEL(
-        #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-        NULL,
-        #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+    { call USP_RCV_ARTICLE_REPORTER_DEL(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      NULL,
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
   <!--분류코드 등록-->
   <select id="callUspRcvArticleCodeInsByMasterCode" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
-      { call UPA_RCV_ARTICLE_CODE_INS_BY_MASTER_CODE(
-        #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-        #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{code, mode=IN, jdbcType=VARCHAR, javaType=string},
-        #{ord, mode=IN, jdbcType=INTEGER, javaType=integer}
-        )}
+    { call UPA_RCV_ARTICLE_CODE_INS_BY_MASTER_CODE(
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{code, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{ord, mode=IN, jdbcType=INTEGER, javaType=integer}
+      )}
   </select>
 
   <!--분류코드 삭제-->
   <select id="callUspRcvArticleCodeDel" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
     { call USP_RCV_ARTICLE_CODE_DEL(
-        #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-        NULL,
-        #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      NULL,
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
       )}
   </select>
 
@@ -164,20 +164,20 @@
   <select id="callUspRcvArticleKeywordIns" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
     { call USP_RCV_ARTICLE_KEYWORD_INS(
-         #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-          NULL,
-          #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-          #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string}
-    )}
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      NULL,
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
   </select>
 
   <!--태그삭제-->
   <select id="callUspRcvArticleKeywordDel" parameterType="hashMap" resultType="Integer"
     statementType="CALLABLE">
     { call USP_RCV_ARTICLE_KEYWORD_DEL(
-        #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-        NULL,
-        #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
-    )}
+      #{rid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      NULL,
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )}
   </select>
 </mapper>

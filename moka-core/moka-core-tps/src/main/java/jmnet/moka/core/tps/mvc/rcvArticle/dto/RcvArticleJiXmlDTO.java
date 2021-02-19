@@ -36,40 +36,12 @@ public class RcvArticleJiXmlDTO implements Serializable {
     public static final Type TYPE = new TypeReference<List<RcvArticleJiXmlDTO>>() {
     }.getType();
 
-    /**
-     * 출처구분(CP)
-     */
-    private String sourceCode;
-
-    /**
-     * 호(회차)
-     */
-    private Integer ho;
+    RcvArticleJiXmlId id;
 
     /**
      * 출판일자
      */
     private String pressDate;
-
-    /**
-     * 면
-     */
-    private String myun;
-
-    /**
-     * 판
-     */
-    private String pan;
-
-    /**
-     * 섹션
-     */
-    private String section;
-
-    /**
-     * 수정버전
-     */
-    private String revision;
 
     /**
      * 등록일시

@@ -119,7 +119,7 @@ public class ArticleBasicVO implements Serializable {
     private String artReporter;
 
     /**
-     * OVP동영상 첨부여부(DTL_CD = MJ)
+     * OVP동영상 첨부여부(DTL_CD = MF)
      */
     @Column(name = "OVP_YN")
     private String ovpYn;
@@ -129,18 +129,6 @@ public class ArticleBasicVO implements Serializable {
      */
     @Column(name = "OVP_LINK")
     private String ovpLink;
-
-    /**
-     * JTBC VOD동영상 첨부여부(DTL_CD = MV)
-     */
-    @Column(name = "JTBCVOD_YN")
-    private String jtbcvodYn;
-
-    /**
-     * OVP동영상 링크
-     */
-    @Column(name = "JTBCVOD_LINK")
-    private String jtbcvodLink;
 
     /**
      * 유투브동영상 첨부여부(DTL_CD = MY)

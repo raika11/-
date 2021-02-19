@@ -1,13 +1,15 @@
 import React, { Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-import { MokaLoader } from '@components';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/jpod';
 
 const EpisodeList = React.lazy(() => import('./Episode/EpisodeList'));
 const EpisodeEdit = React.lazy(() => import('./Episode/EpisodeEdit'));
 
+/**
+ * J팟 관리 - 에피소드
+ */
 const JpodEpisode = ({ match }) => {
     const dispatch = useDispatch();
 
@@ -21,7 +23,7 @@ const JpodEpisode = ({ match }) => {
         <div className="d-flex">
             <Helmet>
                 <title>에피소드 관리</title>
-                <meta name="description" content="에피소드 관리페이지입니다." />
+                <meta name="description" content="에피소드 관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
@@ -31,7 +33,7 @@ const JpodEpisode = ({ match }) => {
                     path={[`${match.path}`, `${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
                     exact
                     render={() => (
-                        <Suspense fallback={<MokaLoader />}>
+                        <Suspense>
                             <EpisodeList match={match} />
                         </Suspense>
                     )}
@@ -40,7 +42,7 @@ const JpodEpisode = ({ match }) => {
 
             {/* 등록 / 수정창 */}
             <Switch>
-                <Suspense fallback={<MokaLoader />}>
+                <Suspense>
                     <Route
                         path={[`${match.path}/:chnlSeq/:epsdSeq`, `${match.path}/:chnlSeq`, `${match.path}/add`]}
                         exact

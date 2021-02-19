@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput } from '@components';
 import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
 import { PodtyEpisodeModal, RepoterModal, PodCastModal } from '@pages/Jpod/JpodModal';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,6 +25,9 @@ const reporterInit = {
     seqNo: '',
 };
 
+/**
+ * J팟 관리 - 에피소드 등록 / 수정
+ */
 const ChannelEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -46,21 +48,17 @@ const ChannelEdit = ({ match }) => {
     const [editSelectCPRepoters, setEditSelectCPRepoters] = useState([]); // 선택된 진행자 고정 패널을(3명) 담아둘 스테이트
     const [editSelectEGRepoters, setEditSelectEGRepoters] = useState([]); // 선택된 진행자 게스트를(3명) 담아둘 스테이트
 
-    // store 연결.
-    const { channel_list, search, loading, selectReporter, selectPodtyEpisode, episodeInfo, selectBrightOvp } = useSelector((store) => ({
-        channel_list: store.jpod.episode.channel.list,
-        episodeInfo: store.jpod.episode.episodeInfo,
-        selectReporter: store.jpod.selectReporter,
-        selectPodtyEpisode: store.jpod.selectPodtyEpisode,
-        search: store.jpod.episode.episodes.search,
-        selectBrightOvp: store.jpod.selectBrightOvp,
-        loading: store.loading[GET_EPISODES_INFO],
-    }));
+    // store 연결
+    const channel_list = useSelector((store) => store.jpod.episode.channel.list);
+    const episodeInfo = useSelector((store) => store.jpod.episode.episodeInfo);
+    const selectReporter = useSelector((store) => store.jpod.selectReporter);
+    const selectPodtyEpisode = useSelector((store) => store.jpod.selectPodtyEpisode);
+    const search = useSelector((store) => store.jpod.episode.episodes.search);
+    const selectBrightOvp = useSelector((store) => store.jpod.selectBrightOvp);
+    const loading = useSelector((store) => store.loading[GET_EPISODES_INFO]);
 
-    const { selectArticleItem, selectArticleList } = useSelector((store) => ({
-        selectArticleItem: store.quiz.selectArticle.item,
-        selectArticleList: store.quiz.selectArticle.list,
-    }));
+    const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
+    const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
 
     // 정보 기본 데이터 리셋시 사용할 함수.
     const resetEditData = () => {
@@ -86,6 +84,23 @@ const ChannelEdit = ({ match }) => {
             setEditData({
                 ...editData,
                 [name]: value,
+            });
+        }
+    };
+
+    const handleChangeChnl = (e) => {
+        try {
+            const { podtychnlsrl } = e.target.selectedOptions[0].dataset;
+            setEditData({
+                ...editData,
+                podtyChnlSrl: String(podtychnlsrl),
+                chnlSeq: e.target.value,
+            });
+        } catch (err) {
+            setEditData({
+                ...editData,
+                podtyChnlSrl: null,
+                chnlSeq: '',
             });
         }
     };
@@ -522,22 +537,6 @@ const ChannelEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
 
-    // 팟티 에피소드검색 모달에서 선택시 해당 값을 정보창에도 변경 시켜준다.
-    useEffect(() => {
-        const setPodtyEpisodeSrl = (podtyepsdsrl) => {
-            if (editData.podtyEpsdSrl !== podtyepsdsrl) {
-                setEditData({
-                    ...editData,
-                    podtyEpsdSrl: podtyepsdsrl,
-                });
-            }
-        };
-        if (selectPodtyEpisode) {
-            setPodtyEpisodeSrl(selectPodtyEpisode.episodeSrl);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectPodtyEpisode]);
-
     // 최초 로딩시에 에피소드 정보를 가지고 와야 할떄. ( url 에 에피소드 정보를 포함하고 페이지를 로딩 할떄..)
     useEffect(() => {
         if (selectChnlSeq.current && selectEpsdSeq.current && !isNaN(Number(selectChnlSeq.current)) && !isNaN(Number(selectEpsdSeq.current))) {
@@ -545,6 +544,14 @@ const ChannelEdit = ({ match }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // 팟티 에피소드검색 모달에서 선택시 해당 값을 정보창에도 변경 시켜준다.
+    useEffect(() => {
+        if (Object.keys(selectPodtyEpisode).length > 0) {
+            setEditData({ ...editData, podtyEpsdSrl: selectPodtyEpisode.podtyepsdsrl, epsdNm: selectPodtyEpisode.title, epsdMemo: selectPodtyEpisode.summary });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectPodtyEpisode]);
 
     const sortGridSearchFrom = ({ HandleSearchClick, HandleAddClick }) => {
         return (
@@ -575,7 +582,6 @@ const ChannelEdit = ({ match }) => {
         <MokaCard
             className="overflow-hidden flex-fill"
             title={`에피소드 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
-            titleClassName="mb-0"
             loading={loading}
             footer
             footerClassName="d-flex justify-content-center"
@@ -585,12 +591,12 @@ const ChannelEdit = ({ match }) => {
                         return (
                             <Row className="justify-content-md-center text-center">
                                 <Col className="mp-0 pr-0">
-                                    <Button variant="positive" onClick={() => handleClickSaveButton()}>
+                                    <Button variant="positive" onClick={handleClickSaveButton}>
                                         저장
                                     </Button>
                                 </Col>
                                 <Col className="mp-0 pr-0">
-                                    <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                    <Button variant="negative" onClick={handleClickCancleButton}>
                                         취소
                                     </Button>
                                 </Col>
@@ -600,28 +606,28 @@ const ChannelEdit = ({ match }) => {
                 </>
             }
         >
-            <Form className="mb-gutter">
-                {/* 사용여부 */}
+            <Form>
+                {/* 사용 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             as="switch"
                             name="usedYn"
                             id="usedYn"
-                            label="사용여부"
+                            label="사용"
                             labelWidth={90}
                             inputProps={{ checked: editData.usedYn === 'Y' ? true : false }}
-                            onChange={(e) => handleEditDataChange(e)}
+                            onChange={handleEditDataChange}
                         />
                     </Col>
                 </Form.Row>
                 {/* 채널 선택. */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={90} value={editData.chnlSeq} onChange={(e) => handleEditDataChange(e)}>
+                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={90} value={editData.chnlSeq} onChange={handleChangeChnl}>
                             <option value="">채널 전체</option>
-                            {channel_list.map((item, index) => (
-                                <option key={index} value={item.podtyChnlSrl}>
+                            {channel_list.map((item) => (
+                                <option key={item.chnlSeq} value={item.chnlSeq} data-podtychnlsrl={item.podtyChnlSrl}>
                                     {item.chnlNm}
                                 </option>
                             ))}
@@ -629,7 +635,7 @@ const ChannelEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
                 {/* 팟티 에피소드 검색 */}
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-2 align-items-center">
                     <Col xs={9} className="p-0">
                         <MokaInputLabel
                             label={`팟티\n(에피소드 연결)`}
@@ -639,11 +645,11 @@ const ChannelEdit = ({ match }) => {
                             name="podtyEpsdSrl"
                             placeholder=""
                             value={editData.podtyEpsdSrl}
-                            onChange={(e) => handleEditDataChange(e)}
+                            onChange={handleEditDataChange}
                         />
                     </Col>
-                    <Col xs={3} className="p-0 pt-1 pl-1 text-right">
-                        <Button variant="searching" className="mb-0" onClick={() => handleClickPodtyEpisodeButton()}>
+                    <Col xs={3} className="p-0 text-right">
+                        <Button variant="searching" className="mb-0" onClick={handleClickPodtyEpisodeButton}>
                             팟티 에피소드 검색
                         </Button>
                     </Col>
@@ -659,7 +665,7 @@ const ChannelEdit = ({ match }) => {
                             name="epsdNm"
                             placeholder=""
                             value={editData.epsdNm}
-                            onChange={(e) => handleEditDataChange(e)}
+                            onChange={handleEditDataChange}
                         />
                     </Col>
                 </Form.Row>
@@ -676,14 +682,14 @@ const ChannelEdit = ({ match }) => {
                             id="epsdMemo"
                             name="epsdMemo"
                             value={editData.epsdMemo}
-                            onChange={(e) => handleEditDataChange(e)}
+                            onChange={handleEditDataChange}
                         />
                     </Col>
                 </Form.Row>
                 {/* 시즌 회차. */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`시즌 및 회차`} labelWidth={90} className="mb-0" as="none" />
-                    <MokaInputLabel className="pr-5" as="select" id="seasonNo" name="seasonNo" value={editData.seasonNo} onChange={(e) => handleEditDataChange(e)}>
+                    <MokaInputLabel className="pr-5" as="select" id="seasonNo" name="seasonNo" value={editData.seasonNo} onChange={handleEditDataChange}>
                         <option value="">시즌 선택</option>
                         {/* {channel_list.map((item, index) => ( */}
                         <option key={0} value={'0'}>
@@ -770,14 +776,14 @@ const ChannelEdit = ({ match }) => {
                             name="keywords"
                             placeholder=""
                             value={editData.keywords}
-                            onChange={(e) => handleEditDataChange(e)}
+                            onChange={handleEditDataChange}
                         />
                     </Col>
                 </Form.Row>
                 {/* 팟캐스트 구분( 오디오, 비디오 ) */}
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
-                        <MokaInputLabel as="none" label="팻캐스트 구분" labelWidth={90} />
+                        <MokaInputLabel as="none" label="팟캐스트 구분" labelWidth={90} />
                         <Col xs={2} className="p-0">
                             <MokaInputLabel
                                 as="radio"
@@ -788,7 +794,7 @@ const ChannelEdit = ({ match }) => {
                                 }}
                                 id="jpodType1"
                                 name="jpodType"
-                                onChange={(e) => handleEditDataChange(e)}
+                                onChange={handleEditDataChange}
                                 value="A"
                                 className="mb-0 h-100"
                                 required
@@ -804,7 +810,7 @@ const ChannelEdit = ({ match }) => {
                                 }}
                                 id="jpodType2"
                                 name="jpodType"
-                                onChange={(e) => handleEditDataChange(e)}
+                                onChange={handleEditDataChange}
                                 value="V"
                                 className="mb-0 h-100"
                                 required
@@ -821,7 +827,7 @@ const ChannelEdit = ({ match }) => {
                     <Col className="p-0">
                         <Col className="d-flex p-0 align-items-center" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                             <Col xs={4}>
-                                <MokaInput name="epsdFile" id="epsdFile" className="ft-12" value={editData.epsdFile} onChange={(e) => handleEditDataChange(e)} placeholder={``} />
+                                <MokaInput name="epsdFile" id="epsdFile" className="ft-12" value={editData.epsdFile} onChange={handleEditDataChange} placeholder={``} />
                             </Col>
                             <Col xs={2} className="pl-3">
                                 <Button variant="positive" className="mb-0" onClick={() => handleClickAddPodCast()}>
@@ -835,7 +841,7 @@ const ChannelEdit = ({ match }) => {
                                     name="playTime"
                                     className="ft-12"
                                     value={editData.playTime}
-                                    onChange={(e) => handleEditDataChange(e)}
+                                    onChange={handleEditDataChange}
                                     placeholder={``}
                                 />
                             </Col>
@@ -1142,7 +1148,7 @@ const ChannelEdit = ({ match }) => {
             {/* 팟티 에피소드 검색 */}
             <PodtyEpisodeModal
                 show={podtyEpisodeModalState}
-                chnlSeq={editData.chnlSeq}
+                podtyChnlSrl={editData.podtyChnlSrl}
                 onHide={() => {
                     setPodtyEpisodeModalState(false);
                 }}

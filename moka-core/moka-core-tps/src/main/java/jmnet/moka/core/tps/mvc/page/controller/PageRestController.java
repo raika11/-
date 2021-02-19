@@ -18,6 +18,7 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.dto.InvalidDataDTO;
 import jmnet.moka.core.common.exception.InvalidDataException;
@@ -95,13 +96,14 @@ public class PageRestController extends AbstractCommonController {
     @GetMapping("/tree")
     public ResponseEntity<?> getPageTree(@Valid @SearchParam PageSearchDTO search) {
 
-        PageNode pageNode = pageService.makeTree(search);
+        List<Long> findPageList = new ArrayList<>();
+        PageNode pageNode = pageService.makeTree(search, findPageList);
 
-        ResultDTO<PageNode> resultDto = new ResultDTO<PageNode>(pageNode);
-
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
+        resultMapDTO.addBodyAttribute("tree", pageNode);
+        resultMapDTO.addBodyAttribute("findPage", findPageList);
         tpsLogger.success(true);
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
     }
 
     /**

@@ -18,13 +18,15 @@ import org.springframework.data.domain.Pageable;
  * 페이지 서비스
  */
 public interface PageService {
+
     /**
      * 페이지트리조회
      *
-     * @param search 검색정보
-     * @return 페이지목록
+     * @param search       검색정보
+     * @param findPageList 검색된 페이지
+     * @return 페이지트리
      */
-    public PageNode makeTree(PageSearchDTO search);
+    PageNode makeTree(PageSearchDTO search, List<Long> findPageList);
 
     /**
      * 페이지정보 조회

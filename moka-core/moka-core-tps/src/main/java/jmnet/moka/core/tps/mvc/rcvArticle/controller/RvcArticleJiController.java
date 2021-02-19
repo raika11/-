@@ -57,6 +57,7 @@ public class RvcArticleJiController extends AbstractCommonController {
             List<RcvArticleJiXmlDTO> dtoList = modelMapper.map(returnValue.getContent(), RcvArticleJiXmlDTO.TYPE);
 
             RcvArticleJiXmlDTO jopan = dtoList.get(0);
+            
 
             // 작업...
             String xmlBody = jopan.getXmlBody();

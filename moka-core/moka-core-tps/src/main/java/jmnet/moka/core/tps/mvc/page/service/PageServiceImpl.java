@@ -73,26 +73,34 @@ public class PageServiceImpl implements PageService {
     private PageMapper pageMapper;
 
     @Override
-    public PageNode makeTree(PageSearchDTO search) {
+    public PageNode makeTree(PageSearchDTO search, List<Long> findPageList) {
         // List<Page> pageList =
         // pageRepository.findWithPageRelationByDomainInfo_DomainIdOrderByPageServiceUrl(
         // search.getDomainId());
         List<Page> pageList = pageRepository.findByDomainId(search.getDomainId());
-        return pageList.isEmpty() ? null : makeTree(pageList, search);
+        return pageList.isEmpty() ? null : makeTree(pageList, search, findPageList);
     }
 
-    private PageNode makeTree(List<Page> pageList, PageSearchDTO search) {
+    private PageNode makeTree(List<Page> pageList, PageSearchDTO search, List<Long> findPageList) {
         PageNode rootNode = null;
         Iterator<Page> it = pageList.iterator();
+        boolean find = false;
         while (it.hasNext()) {
             Page page = it.next();
-            if (page.getParent() == null || page.getParent()
-                                                .getPageSeq() == 0) {
+            if (page.getParent() == null || page
+                    .getParent()
+                    .getPageSeq() == 0) {
                 rootNode = new PageNode(page);
-                rootNode.setMatch(getMatch(page, search) ? "Y" : "N");
+
+                find = getMatch(page, search);
+                rootNode.setMatch(find ? "Y" : "N");
+                if (find) {
+                    findPageList.add(page.getPageSeq());
+                }
             } else {
-                PageNode parentNode = rootNode.findNode(page.getParent()
-                                                            .getPageSeq(), rootNode);
+                PageNode parentNode = rootNode.findNode(page
+                        .getParent()
+                        .getPageSeq(), rootNode);
                 if (parentNode != null) {
                     PageNode pageNode = new PageNode(page);
                     pageNode.setMatch(getMatch(page, search) ? "Y" : "N");
@@ -108,7 +116,8 @@ public class PageServiceImpl implements PageService {
         String searchType = search.getSearchType();
         CharSequence keyword = search.getKeyword() == null
                 ? ""
-                : search.getKeyword()
+                : search
+                        .getKeyword()
                         .trim();
         boolean match = false;
 
@@ -120,30 +129,38 @@ public class PageServiceImpl implements PageService {
         if (McpString.isNotEmpty(keyword)) {
             // pageId 검색
             if (searchType.equals("pageSeq")) {
-                match = page.getPageSeq()
-                            .toString()
-                            .equals(keyword) ? true : false;
+                match = page
+                        .getPageSeq()
+                        .toString()
+                        .equals(keyword) ? true : false;
             }
             // pageName 검색
             else if (searchType.equals("pageName")) {
-                match = page.getPageName()
-                            .contains(keyword);
+                match = page
+                        .getPageName()
+                        .contains(keyword);
             }
             // pageUrl 검색
             else if (searchType.equals("pageUrl")) {
-                match = page.getPageUrl()
-                            .contains(keyword);
+                match = page
+                        .getPageUrl()
+                        .contains(keyword);
             }
             // pageData 검색
             else if (searchType.equals("pageBody")) {
-                match = page.getPageBody()
-                            .contains(keyword);
+                match = page
+                        .getPageBody()
+                        .contains(keyword);
             } else {
-                match = String.valueOf(page.getPageSeq())
-                              .contains(keyword) || page.getPageName()
-                                                        .contains(keyword) || page.getPageUrl()
-                                                                                  .contains(keyword) || page.getPageBody()
-                                                                                                            .contains(keyword);
+                match = String
+                        .valueOf(page.getPageSeq())
+                        .contains(keyword) || page
+                        .getPageName()
+                        .contains(keyword) || page
+                        .getPageUrl()
+                        .contains(keyword) || page
+                        .getPageBody()
+                        .contains(keyword);
             }
         }
 
@@ -183,9 +200,10 @@ public class PageServiceImpl implements PageService {
             throws UnsupportedEncodingException, IOException, TemplateParseException {
 
         List<ParsedItemDTO> parsedItemDTOList = TemplateParserHelper.getItemList(page.getPageBody());
-        List<ItemDTO> itemDTOList = ResourceMapper.getDefaultObjectMapper()
-                                                  .convertValue(parsedItemDTOList, new TypeReference<List<ItemDTO>>() {
-                                                  });
+        List<ItemDTO> itemDTOList = ResourceMapper
+                .getDefaultObjectMapper()
+                .convertValue(parsedItemDTOList, new TypeReference<List<ItemDTO>>() {
+                });
         for (ItemDTO item : itemDTOList) {
             PageRel relation = new PageRel();
             relation.setRelType(item.getNodeName());
@@ -223,7 +241,8 @@ public class PageServiceImpl implements PageService {
             // }
             // }
             // } else
-            if (item.getNodeName()
+            if (item
+                    .getNodeName()
                     .equals(MokaConstants.ITEM_COMPONENT)) {    // 컴포넌트 자식을 찾아서
                 // 추가한다.
                 Optional<Component> component = componentService.findComponentBySeq(Long.parseLong(item.getId()));
@@ -233,12 +252,14 @@ public class PageServiceImpl implements PageService {
                     // template 아이템 추가
                     PageRel relationTP = new PageRel();
                     relationTP.setRelType(MokaConstants.ITEM_TEMPLATE);
-                    relationTP.setRelSeq(component.get()
-                                                  .getTemplate()
-                                                  .getTemplateSeq());
+                    relationTP.setRelSeq(component
+                            .get()
+                            .getTemplate()
+                            .getTemplateSeq());
                     relationTP.setRelParentType(MokaConstants.ITEM_COMPONENT);
-                    relationTP.setRelParentSeq(component.get()
-                                                        .getComponentSeq());
+                    relationTP.setRelParentSeq(component
+                            .get()
+                            .getComponentSeq());
                     relationTP.setRelOrd(item.getOrder());
 
                     // 동일한 아이템은 추가하지 않는다.
@@ -249,16 +270,19 @@ public class PageServiceImpl implements PageService {
                     }
 
                     // data 아이템 추가
-                    if (component.get()
-                                 .getDataset() != null) {
+                    if (component
+                            .get()
+                            .getDataset() != null) {
                         PageRel relatioDS = new PageRel();
                         relatioDS.setRelType(MokaConstants.ITEM_DATASET);
-                        relatioDS.setRelSeq(component.get()
-                                                     .getDataset()
-                                                     .getDatasetSeq());
+                        relatioDS.setRelSeq(component
+                                .get()
+                                .getDataset()
+                                .getDatasetSeq());
                         relatioDS.setRelParentType(MokaConstants.ITEM_COMPONENT);
-                        relatioDS.setRelParentSeq(component.get()
-                                                           .getComponentSeq());
+                        relatioDS.setRelParentSeq(component
+                                .get()
+                                .getComponentSeq());
                         relatioDS.setRelOrd(item.getOrder());
 
                         if (!page.isEqualRel(relatioDS)) {
@@ -330,8 +354,9 @@ public class PageServiceImpl implements PageService {
     @Override
     public void deletePage(Page page, String userName) {
 
-        String domainId = page.getDomain()
-                              .getDomainId();
+        String domainId = page
+                .getDomain()
+                .getDomainId();
 
         Long pageSeq = page.getPageSeq();
 
@@ -361,8 +386,9 @@ public class PageServiceImpl implements PageService {
             // 히스토리저장
             insertPageHist(page, TpsConstants.WORKTYPE_DELETE, userName);
 
-            log.info("[DELETE PAGE] domainId : {} pageSeq : {}", page.getDomain()
-                                                                     .getDomainId(), page.getPageSeq());
+            log.info("[DELETE PAGE] domainId : {} pageSeq : {}", page
+                    .getDomain()
+                    .getDomainId(), page.getPageSeq());
 
             // 삭제
             pageRepository.deleteById(page.getPageSeq());
@@ -401,24 +427,29 @@ public class PageServiceImpl implements PageService {
     @Override
     public void updatePageRelItems(Component newComponent, Component orgComponent) {
         // 템플릿 업데이트
-        if (!newComponent.getTemplate()
-                         .getTemplateSeq()
-                         .equals(orgComponent.getTemplate()
-                                             .getTemplateSeq())) {
+        if (!newComponent
+                .getTemplate()
+                .getTemplateSeq()
+                .equals(orgComponent
+                        .getTemplate()
+                        .getTemplateSeq())) {
             pageRelRepository.updateRelTemplates(newComponent);
         }
 
         // 데이타셋 업데이트
         boolean updateDS = false;
-        if (!newComponent.getDataType()
-                         .equals(orgComponent.getDataType())) {
+        if (!newComponent
+                .getDataType()
+                .equals(orgComponent.getDataType())) {
             updateDS = true;
         }
         if (newComponent.getDataset() != null && orgComponent.getDataset() != null) {
-            if (!newComponent.getDataset()
-                             .getDatasetSeq()
-                             .equals(orgComponent.getDataset()
-                                                 .getDatasetSeq())) {
+            if (!newComponent
+                    .getDataset()
+                    .getDatasetSeq()
+                    .equals(orgComponent
+                            .getDataset()
+                            .getDatasetSeq())) {
                 updateDS = true;
             }
         }
@@ -432,23 +463,27 @@ public class PageServiceImpl implements PageService {
 
         if (updateDS) {
             // datasetSeq가 추가된 경우: select -> insert. querydsl에서 insert는 안되므로 여기서 처리
-            if (!newComponent.getDataType()
-                             .equals(TpsConstants.DATATYPE_NONE) && orgComponent.getDataType()
-                                                                                .equals(TpsConstants.DATATYPE_NONE)) {
+            if (!newComponent
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_NONE) && orgComponent
+                    .getDataType()
+                    .equals(TpsConstants.DATATYPE_NONE)) {
 
                 List<PageRel> relList = pageRelRepository.findList(MokaConstants.ITEM_COMPONENT, newComponent.getComponentSeq());
 
                 for (PageRel rel : relList) {
-                    PageRel newRel = PageRel.builder()
-                                            .page(rel.getPage())
-                                            .domain(rel.getDomain())
-                                            .relType(MokaConstants.ITEM_DATASET)
-                                            .relSeq(newComponent.getDataset()
-                                                                .getDatasetSeq())
-                                            .relParentType(MokaConstants.ITEM_COMPONENT)
-                                            .relParentSeq(newComponent.getComponentSeq())
-                                            .relOrd(rel.getRelOrd())
-                                            .build();
+                    PageRel newRel = PageRel
+                            .builder()
+                            .page(rel.getPage())
+                            .domain(rel.getDomain())
+                            .relType(MokaConstants.ITEM_DATASET)
+                            .relSeq(newComponent
+                                    .getDataset()
+                                    .getDatasetSeq())
+                            .relParentType(MokaConstants.ITEM_COMPONENT)
+                            .relParentSeq(newComponent.getComponentSeq())
+                            .relOrd(rel.getRelOrd())
+                            .build();
                     pageRelRepository.save(newRel);
                 }
             } else {

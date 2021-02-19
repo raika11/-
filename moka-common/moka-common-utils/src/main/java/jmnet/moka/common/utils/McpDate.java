@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class McpDate {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String TIME_FORMAT = "HH:mm:ss";
     public static final String DATETIME_FORMAT = DATE_FORMAT + " " + TIME_FORMAT;
+
+    public static final String ISO_8601_24H_FULL_FORMAT = DATE_FORMAT + "'T'" + TIME_FORMAT + ".SSSXXX";
 
     /**
      * <pre>
@@ -585,5 +588,34 @@ public class McpDate {
             return now();
         }
         return date;
+    }
+
+    /**
+     * utc 시간 변환
+     *
+     * @param dateStr 시간 문자열
+     * @return Date
+     * @throws ParseException
+     */
+    public Date utcDate(String dateStr)
+            throws ParseException {
+        return utcDate(ISO_8601_24H_FULL_FORMAT, dateStr);
+    }
+
+    /**
+     * utc 시간 반환
+     *
+     * @param format  형태
+     * @param dateStr 시간 문자열
+     * @return Date
+     * @throws ParseException
+     */
+    public Date utcDate(String format, String dateStr)
+            throws ParseException {
+        TimeZone UTC = TimeZone.getTimeZone("UTC");
+        final SimpleDateFormat sdf = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
+        sdf.setTimeZone(UTC);
+
+        return sdf.parse(dateStr);
     }
 }

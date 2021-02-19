@@ -90,6 +90,11 @@ public class PageNode implements Serializable {
     private List<PageNode> nodes;
 
     /**
+     * 부모노드 경로
+     */
+    private String parentNodes;
+
+    /**
      * 노드생성
      *
      * @param page Page Entity
@@ -100,21 +105,26 @@ public class PageNode implements Serializable {
         this.pageUrl = page.getPageUrl();
         this.parentPageSeq = page.getParent() == null
                 ? 0
-                : page.getParent()
-                      .getPageSeq();
+                : page
+                        .getParent()
+                        .getPageSeq();
         this.parentPageName = page.getParent() == null
                 ? null
-                : page.getParent()
-                      .getPageName();
+                : page
+                        .getParent()
+                        .getPageName();
         this.parentPageUrl = page.getParent() == null
                 ? null
-                : page.getParent()
-                      .getPageUrl();
-        this.pageOrd = page.getPageOrd()
-                           .intValue();
+                : page
+                        .getParent()
+                        .getPageUrl();
+        this.pageOrd = page
+                .getPageOrd()
+                .intValue();
         this.btnShow = false;
-        this.usedYn = page.getUsedYn()
-                          .equals("Y") ? "Y" : "N";
+        this.usedYn = page
+                .getUsedYn()
+                .equals("Y") ? "Y" : "N";
     }
 
     /**
@@ -129,8 +139,9 @@ public class PageNode implements Serializable {
             return rootNode;
         } else {
             if (rootNode.hasChild()) {
-                Iterator<PageNode> iterator = rootNode.getNodes()
-                                                      .iterator();
+                Iterator<PageNode> iterator = rootNode
+                        .getNodes()
+                        .iterator();
                 while (iterator.hasNext()) {
                     PageNode pageNode = iterator.next();
                     if (findPageSeq.equals(pageNode.getPageSeq())) {
@@ -154,8 +165,9 @@ public class PageNode implements Serializable {
      * @return 존재여부
      */
     public boolean hasChild() {
-        return this.getNodes() != null && this.getNodes()
-                                              .size() > 0 ? true : false;
+        return this.getNodes() != null && this
+                .getNodes()
+                .size() > 0 ? true : false;
     }
 
     /**
@@ -176,31 +188,37 @@ public class PageNode implements Serializable {
     public void sort() {
         if (this.getNodes() != null) {
             // 자식노드가 하나만 있을경우는, 자식의 자식노드를 정렬하도록 한다.
-            if (this.getNodes()
+            if (this
+                    .getNodes()
                     .size() == 1) {
-                this.getNodes()
-                    .get(0)
-                    .sort();
+                this
+                        .getNodes()
+                        .get(0)
+                        .sort();
             } else {
-                this.getNodes()
-                    .sort((a, b) -> {
+                this
+                        .getNodes()
+                        .sort((a, b) -> {
 
-                        if (a.getNodes() != null && a.getNodes()
-                                                     .size() > 0) {
-                            a.sort();
-                        }
-                        if (b.getNodes() != null && b.getNodes()
-                                                     .size() > 0) {
-                            b.sort();
-                        }
+                            if (a.getNodes() != null && a
+                                    .getNodes()
+                                    .size() > 0) {
+                                a.sort();
+                            }
+                            if (b.getNodes() != null && b
+                                    .getNodes()
+                                    .size() > 0) {
+                                b.sort();
+                            }
 
-                        if (a.getPageOrd()
-                             .equals(b.getPageOrd())) {
-                            return (int) (long) (a.getPageSeq() - b.getPageSeq());
-                        } else {
-                            return a.getPageOrd() - b.getPageOrd();
-                        }
-                    });
+                            if (a
+                                    .getPageOrd()
+                                    .equals(b.getPageOrd())) {
+                                return (int) (long) (a.getPageSeq() - b.getPageSeq());
+                            } else {
+                                return a.getPageOrd() - b.getPageOrd();
+                            }
+                        });
             }
         }
     }

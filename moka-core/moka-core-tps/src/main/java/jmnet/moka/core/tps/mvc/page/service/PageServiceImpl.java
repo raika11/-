@@ -96,6 +96,9 @@ public class PageServiceImpl implements PageService {
                 if (find) {
                     findPageList.add(page.getPageSeq());
                 }
+                rootNode.setParentNodes(page
+                        .getPageSeq()
+                        .toString());
             } else {
                 PageNode parentNode = rootNode.findNode(page
                         .getParent()
@@ -107,6 +110,9 @@ public class PageServiceImpl implements PageService {
                     if (find) {
                         findPageList.add(page.getPageSeq());
                     }
+                    pageNode.setParentNodes(parentNode.getParentNodes() + "." + page
+                            .getPageSeq()
+                            .toString());
                     parentNode.addNode(pageNode);
                 }
             }

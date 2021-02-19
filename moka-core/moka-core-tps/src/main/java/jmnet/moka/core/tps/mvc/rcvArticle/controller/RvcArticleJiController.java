@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,11 +72,16 @@ public class RvcArticleJiController extends AbstractCommonController {
     private static final String iDEFAULTFONT = "12"; // 기본 폰트 사이즈
     private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     private static XPathFactory xPathFactory = XPathFactory.newInstance();
+
+    static {
+        //제대로 적용되지 않는다.
+        documentBuilderFactory.setIgnoringElementContentWhitespace(false);
+    }
+
     private TemplateEngine templateEngine;
     private Template htmlTemplate;
     private Map<String, String> specialCodeMap = new LinkedHashMap<>(128);
     private XPath xpath;
-
     @Autowired
     private RcvArticleJiService rcvArticleJiService;
 
@@ -157,15 +161,15 @@ public class RvcArticleJiController extends AbstractCommonController {
         String xmlBody = rcvArticleJiXmlDTO.getXmlBody();
         StringBuilder sb = new StringBuilder(1024);
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        ByteArrayInputStream bi =  new ByteArrayInputStream(xmlBody.getBytes("EUC-KR"));
+        ByteArrayInputStream bi = new ByteArrayInputStream(xmlBody.getBytes("EUC-KR"));
         Document document = documentBuilder.parse(bi);
         Node rootNode = document.getDocumentElement();
-        NodeList newsComponentList = getNodeList(rootNode,"//NewsItem/NewsComponent/NewsComponent");
+        NodeList newsComponentList = getNodeList(rootNode, "//NewsItem/NewsComponent/NewsComponent");
         double fontSize = 0;
         int index = 1;
-        for ( int i=0; i< newsComponentList.getLength(); i ++) {
+        for (int i = 0; i < newsComponentList.getLength(); i++) {
             String content = null;
-            Node newsComponentNode =  newsComponentList.item(i);
+            Node newsComponentNode = newsComponentList.item(i);
             String headLine = getNodeValue(newsComponentNode, "NewsLines/HeadLine"); //이미지타이틀 또는 이미지설명
             String byLine = getNodeValue(newsComponentNode, "NewsLines/ByLine"); //ByLine
             String byLineEmail = getNodeValue(newsComponentNode, "NewsLines/ByLineAddress"); //이메일
@@ -178,8 +182,9 @@ public class RvcArticleJiController extends AbstractCommonController {
             String[] arrPageCoord = pageCoord.split(" ");
             String xSize = scale(arrPageCoord[2]);
             String ySize = scale(arrPageCoord[3]);
-            if ( index == 1) {
-                sb.append("<div id=\"JContent\" style=\"float:left;position:relative;border:1px solid #000;width:" + xSize + "px;height:" + ySize + "px;\">");
+            if (index == 1) {
+                sb.append("<div id=\"JContent\" style=\"float:left;position:relative;border:1px solid #000;width:" + xSize + "px;height:" + ySize
+                        + "px;\">");
             }
 
             String itemCoord = getNodeValue(newsComponentNode, "ContentItem/Characteristics/ItemCoordinate");
@@ -190,40 +195,42 @@ public class RvcArticleJiController extends AbstractCommonController {
             String xWidth = scale(arrItemCoord[2]);
             String yHeight = scale(arrItemCoord[3]);
             Node propertyNode = getNode(newsComponentNode, "ContentItem/Characteristics/Property");
-            if ( propertyNode != null) {
+            if (propertyNode != null) {
                 String propertyAttr = getAttributeValue(newsComponentNode, "ContentItem/Characteristics/Property/@FormalName");
-                if ( McpString.isNotEmpty(propertyAttr) && propertyAttr.equals("FontSize")) {
-                    String fontSizeStr = getAttributeValue(newsComponentNode,"ContentItem/Characteristics/Property/@Value");
+                if (McpString.isNotEmpty(propertyAttr) && propertyAttr.equals("FontSize")) {
+                    String fontSizeStr = getAttributeValue(newsComponentNode, "ContentItem/Characteristics/Property/@Value");
                     fontSize = convertDobule(fontSizeStr, 0);
                 }
             }
             Node orgIdNode = getNode(newsComponentNode, "NewsLines/OrgID");
-            if ( orgIdNode != null) {
-                orgId =  orgIdNode.getTextContent();
+            if (orgIdNode != null) {
+                orgId = getNodeValue(orgIdNode);
             }
 
             String imageFile = getAttributeValue(newsComponentNode, "ContentItem/@Href");
-            if ( mediaType.equals("Image")) {
-                imageFile = imageFile.substring(imageFile.lastIndexOf("/")+1)+".jpg";
+            if (mediaType.equals("Image")) {
+                imageFile = imageFile.substring(imageFile.lastIndexOf("/") + 1) + ".jpg";
                 content = "<img src=\"" + RECEIVE_HOST + IMAGE_FOLDER + pressYear + pressMonth + "/" + imageFile + "\" width='100%'>";
             } else {
                 Node dataContentNode = getNode(newsComponentNode, "ContentItem/DataContent");
-                if ( dataContentNode != null) {
-                    content = dataContentNode.getTextContent(); // 내용
+                if (dataContentNode != null) {
+                    content = getNodeValue(dataContentNode); // 내용
                 }
-                if ( McpString.isNotEmpty(content)) {
-                    content = content.replace("\r","\n");
-                    content = content.replace("\n\n\n\n","\n\n\n");
+                if (McpString.isNotEmpty(content)) {
+                    content = content.replace("\r", "\n");
+                    content = content.replace("\n\n\n\n", "\n\n\n");
                     int nbreak = 0; // 최대 10개의 \n 제거
-                    while ( content.endsWith("\n") && nbreak < 10 ) {
+                    while (content.endsWith("\n") && nbreak < 10) {
                         nbreak++;
-                        content = content.substring(0,content.length()-1);
+                        content = content.substring(0, content.length() - 1);
                     }
                     content = content.replaceAll("( *)([a-z0-9.]*)@(joongang.co.kr|jcubei.com)", "$1&lt;$2@$3&gt;"); //기자 메일주소 <>로 감싸기
                 }
             }
 
-            if ( content != null && content.trim().length() > 0) {
+            if (content != null && content
+                    .trim()
+                    .length() > 0) {
                 String jCompCssColor = "";
                 String jCompCssZindex = "z-index:1;";
                 String jCompCssBorder = "border:1px dashed #00f;";
@@ -231,9 +238,10 @@ public class RvcArticleJiController extends AbstractCommonController {
                 String jCompCssFontBd = "";
                 String jCompCssStyle = "";
                 String jCompCssName = "jcomp";
-                String jCompTypeCode = "";   //영역 타입 사용자정의 {"Image": "IM", "ImageDesc": "ID", "Contents": "CO", "Reporter": "RE", "SubTitle": "ST", "Title": "TT"}
-                if ( Double.parseDouble(yPos)>33) {
-                    if ( mediaType.equals("Image")) {
+                String jCompTypeCode =
+                        "";   //영역 타입 사용자정의 {"Image": "IM", "ImageDesc": "ID", "Contents": "CO", "Reporter": "RE", "SubTitle": "ST", "Title": "TT"}
+                if (Double.parseDouble(yPos) > 33) {
+                    if (mediaType.equals("Image")) {
                         jCompTypeCode = "IM";  //이미지
                         jCompCssColor = "background-color:#F6FFCC;";
                     } else {
@@ -248,7 +256,7 @@ public class RvcArticleJiController extends AbstractCommonController {
                             }
                         } else if (kisaType.equals("본문")) {
                             if (fontSize < 10) {
-                                if (fontSize == 8.6){
+                                if (fontSize == 8.6) {
                                     jCompTypeCode = "ID";  //사진설명
                                     jCompCssColor = "background-color:#D2E5A8;";
                                 } else {
@@ -265,8 +273,9 @@ public class RvcArticleJiController extends AbstractCommonController {
                                 }
                             }
                         } else {
-                            if ( content.replaceAll("[a-z]","").length() < 30 && content.indexOf("기자") > 0
-                                    || content.indexOf("@joongang.co.kr")>0) {
+                            if (content
+                                    .replaceAll("[a-z]", "")
+                                    .length() < 30 && content.indexOf("기자") > 0 || content.indexOf("@joongang.co.kr") > 0) {
                                 jCompTypeCode = "RE";  //기자정보
                                 jCompCssColor = "background-color:#FAED7D;";
                                 content = content.replace("\n\n", "\n");
@@ -307,13 +316,14 @@ public class RvcArticleJiController extends AbstractCommonController {
                     jCompTypeCode = "XX";
                     jCompCssZindex = "z-index:0;";
                 }
-                jCompCssStyle = "style=\"" + jCompCssColor + jCompCssZindex + jCompCssFontSz + jCompCssFontBd + jCompCssBorder + "position:absolute;overflow:hidden;left:"
-                        + xPos + "px;top:" + yPos + "px;width:" + xWidth + "px;height:" + yHeight + "px;\"";
+                jCompCssStyle = "style=\"" + jCompCssColor + jCompCssZindex + jCompCssFontSz + jCompCssFontBd + jCompCssBorder
+                        + "position:absolute;overflow:hidden;left:" + xPos + "px;top:" + yPos + "px;width:" + xWidth + "px;height:" + yHeight
+                        + "px;\"";
                 content = convertSpecialTag(content); // 특수문자들 변환
                 sb.append("<div class=\"" + jCompCssName + "\" id=\"JComp" + index + "\" CustomCD=\"" + jCompTypeCode + "\" OrgID=\"" + orgId
                         + "\" kysatype=\"" + kisaType + "\" FontSize=\"" + Double.toString(fontSize) + "\" MediaType=\"" + mediaType
-                        + "\" ImageFile=\"" + imageFile + "\" HeadLine=\"" + headLine + "\" ByLine=\"" + byLine + "\" ByLineAddress=\""
-                        + byLineEmail + "\" ByLineDept=\"" + byLineDept + "\" " + jCompCssStyle + ">" + content + "</div>");
+                        + "\" ImageFile=\"" + imageFile + "\" HeadLine=\"" + headLine + "\" ByLine=\"" + byLine + "\" ByLineAddress=\"" + byLineEmail
+                        + "\" ByLineDept=\"" + byLineDept + "\" " + jCompCssStyle + ">" + content + "</div>");
                 index++;
             }
         } // 일반
@@ -322,7 +332,8 @@ public class RvcArticleJiController extends AbstractCommonController {
     }
 
     private String scale(String value) {
-        return Integer.toString((int)Math.ceil(Double.parseDouble(value) * nPersPective));
+//        return Integer.toString((int) Math.ceil(Double.parseDouble(value) * nPersPective));
+        return Double.toString(Double.parseDouble(value) * nPersPective);
     }
 
     private String getJopanInfo(RcvArticleJiXmlDTO rcvArticleJiXmlDTO) {
@@ -330,10 +341,18 @@ public class RvcArticleJiController extends AbstractCommonController {
         String pressYear = pressDate.substring(0, 4);
         String pressMonth = pressDate.substring(4, 6);
         String pressDay = pressDate.substring(6);
-        String sectionCode = rcvArticleJiXmlDTO.getId().getSection();
-        String myun = rcvArticleJiXmlDTO.getId().getMyun();
-        String pan = rcvArticleJiXmlDTO.getId().getPan();
-        String revision = rcvArticleJiXmlDTO.getId().getRevision();
+        String sectionCode = rcvArticleJiXmlDTO
+                .getId()
+                .getSection();
+        String myun = rcvArticleJiXmlDTO
+                .getId()
+                .getMyun();
+        String pan = rcvArticleJiXmlDTO
+                .getId()
+                .getPan();
+        String revision = rcvArticleJiXmlDTO
+                .getId()
+                .getRevision();
         return String.format("%s년 %s월 %s일 - %s면 - 판(Ver.%s)", pressYear, pressMonth, pressDay, getJoongangSectionName(sectionCode), myun, pan,
                 revision);
     }
@@ -366,36 +385,66 @@ public class RvcArticleJiController extends AbstractCommonController {
             throws XPathExpressionException {
         XPathExpression exp = this.xpath.compile(xpathStr);
         Object result = exp.evaluate(node, XPathConstants.NODE);
-        if ( result != null) {
-            return ((Node) result).getTextContent();
+        if (result != null) {
+            Node resultNode = (Node) result;
+            return getNodeValue(resultNode);
         }
         return "";
+    }
+
+    private String getNodeValue(Node node) {
+        NodeList children = node.getChildNodes();
+        if (children != null && children.getLength() > 0) {
+            int childrenCount = children.getLength();
+            if (childrenCount == 1) {
+                return node.getTextContent();
+            } else {
+                boolean hasCDATA = false;
+                Node cdataNode = null;
+                for (int i = 0; i < childrenCount; i++) {
+                    Node childNode = children.item(i);
+                    if (childNode.getNodeType() == Node.CDATA_SECTION_NODE) {
+                        hasCDATA = true;
+                        cdataNode = childNode;
+                    }
+                }
+                if (hasCDATA) {
+                    return cdataNode.getTextContent();
+                }
+                return node.getTextContent();
+            }
+        } else {
+            return "";
+        }
     }
 
     private String getAttributeValue(Node node, String xpathStr)
             throws XPathExpressionException {
         XPathExpression exp = this.xpath.compile(xpathStr);
         Object result = exp.evaluate(node, XPathConstants.NODE);
-        if ( result != null) {
-            return result.toString();
+        if (result != null) {
+            Node resultNode = (Node)result;
+            return resultNode.getNodeValue();
         }
         return "";
     }
 
     private String removeBracket(String text) {
-        return text.replace("[", "").replace("]", "");
+        return text
+                .replace("[", "")
+                .replace("]", "");
     }
 
     private double convertDobule(String value, double defaultValue) {
         try {
             return Double.parseDouble(value);
-        } catch ( NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return 0;
         }
     }
 
     private String convertSpecialTag(String content) {
-        for ( Entry<String,String> entry : this.specialCodeMap.entrySet()) {
+        for (Entry<String, String> entry : this.specialCodeMap.entrySet()) {
             content = content.replace(entry.getKey(), entry.getValue());
         }
         return content;

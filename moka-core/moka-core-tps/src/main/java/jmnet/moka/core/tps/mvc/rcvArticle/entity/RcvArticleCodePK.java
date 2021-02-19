@@ -49,6 +49,12 @@ public class RcvArticleCodePK implements Serializable {
     /**
      * 수신기사코드
      */
-    @Column(name = "CODE_ID", nullable = false, insertable = false, updatable = false)
+    @Column(name = "CODE_ID", insertable = false, updatable = false)
     private String codeId;
+
+    /**
+     * 수신기사코드
+     */
+    @Column(name = "MASTER_CODE", insertable = false, updatable = false)
+    private String masterCode;
 }

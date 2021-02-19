@@ -18,15 +18,8 @@ const RcvArticleAgGrid = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE_LIST] || store.loading[POST_RCV_ARTICLE_WITH_RID]);
-    const { total, list, search } = useSelector((store) => ({
-        total: store.rcvArticle.total,
-        list: store.rcvArticle.list,
-        search: store.rcvArticle.search,
-    }));
-
-    //state
+    const { total, list, search, rcvArticle } = useSelector(({ rcvArticle }) => rcvArticle);
     const [rowData, setRowData] = useState([]);
-    const rcvArticle = useSelector((store) => store.rcvArticle.rcvArticle);
 
     /**
      * 테이블 검색옵션 변경
@@ -48,7 +41,8 @@ const RcvArticleAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (data) => {
-            history.push(`/rcv-article/${data.rid}`);
+            const isRcv = !data.serviceDaytime && data.iudYn === 'N';
+            history.push(`/rcv-article/${data.rid}/${isRcv ? 'Y' : 'N'}`);
         },
         [history],
     );

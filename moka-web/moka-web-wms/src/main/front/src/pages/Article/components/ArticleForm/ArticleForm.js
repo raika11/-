@@ -86,16 +86,20 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
         const { value } = e.target;
         let tmpArr = temp.reporterList;
 
-        const result = value.split('.').map((repName) => {
-            let idx = tmpArr.findIndex((t) => t.repName === repName);
-            if (idx > -1) {
-                return tmpArr.splice(idx, 1)[0];
-            } else {
-                return {
-                    repName,
-                };
-            }
-        });
+        const result =
+            value !== ''
+                ? value.split('.').map((repName) => {
+                      let idx = tmpArr.findIndex((t) => t.repName === repName);
+                      if (idx > -1) {
+                          return tmpArr.splice(idx, 1)[0];
+                      } else {
+                          return {
+                              repName,
+                          };
+                      }
+                  })
+                : [];
+
         setTemp({
             ...temp,
             reporterList: result,
@@ -321,6 +325,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             loading={loading}
         >
             <Form className="d-flex flex-column h-100 overflow-y-hidden">
+                {/* 등록정보 + 작업정보 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={3}>
                         <MokaInputLabel label="매체" inputClassName="ft-12" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
@@ -334,6 +339,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         </Button>
                     </Col>
                 </Form.Row>
+                {/* 분류 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
                         <CodeAutocomplete
@@ -356,11 +362,13 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         </Button>
                     </Col>
                 </Form.Row>
+                {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
                         <MokaInputLabel label="제목" name="artTitle" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} isInvalid={error.artTitle} required />
                     </Col>
                 </Form.Row>
+                {/* 부제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
                         <MokaInputLabel
@@ -373,6 +381,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         />
                     </Col>
                 </Form.Row>
+                {/* 기자 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={6}>
                         <MokaInputLabel label="기자" name="repStr" value={repStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurRep }} />
@@ -390,6 +399,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         </OverlayTrigger>
                     </Col>
                 </Form.Row>
+                {/* 태그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleTagBlur }} />
@@ -398,6 +408,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>
+                {/* 본문 */}
                 <Form.Row className="mb-2 flex-fill" style={{ height: 295 }}>
                     <Col className="p-0 d-flex overflow-hidden" xs={12}>
                         <MokaInputLabel label="본문" as="none" />
@@ -410,6 +421,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 {/* 벌크 사이트 리스트, 조회 (AB테스트 등) */}
                 {!inRcv && <ArticleEtc bulkSiteList={article.bulkSiteList} articleService={article.articleService} />}
 
+                {/* 링크정보 */}
                 <Form.Row>
                     <Col className="p-0" xs={12}>
                         <MokaInputGroup

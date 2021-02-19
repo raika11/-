@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { REQUIRED_REGEX } from '@utils/regexUtil';
+import { invalidListToError } from '@utils/convertUtil';
 import { MokaInputLabel, MokaCard } from '@components';
-import { getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
+import { initialState, getReserved, duplicateCheck, clearReserved, changeReserved, changeInvalidList, saveReserved } from '@store/reserved';
 
 /**
  * 예약어 정보 컴포넌트
@@ -18,34 +19,24 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
     const dispatch = useDispatch();
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const { reserved, invalidList } = useSelector(({ reserved }) => reserved);
-
-    // state
-    const [reservedId, setReservedId] = useState('');
-    const [reservedSeq, setReservedSeq] = useState('');
-    const [reservedValue, setReservedValue] = useState('');
-    const [usedYn, setUsedYn] = useState('N');
-    const [description, setdescription] = useState('');
-
-    // error
-    const [reservedIdError, setReservedIdError] = useState(false);
-    const [reservedValueError, setReservedValueError] = useState(false);
+    const [temp, setTemp] = useState(initialState.reserved);
+    const [error, setError] = useState({});
 
     /**
-     * input change
+     * 입력값 변경
+     * @param {object} e 이벤트
      */
-    const handleChangeValue = ({ target }) => {
-        const { name, value, checked } = target;
+    const handleChangeValue = (e) => {
+        const { name, value, checked } = e.target;
+
         if (name === 'usedYn') {
-            const useVal = checked ? 'Y' : 'N';
-            setUsedYn(useVal);
-        } else if (name === 'reservedId') {
-            setReservedId(value);
-            setReservedIdError(false);
-        } else if (name === 'reservedValue') {
-            setReservedValue(value);
-            setReservedValueError(false);
-        } else if (name === 'description') {
-            setdescription(value);
+            setTemp({ ...temp, [name]: checked ? 'Y' : 'N' });
+        } else {
+            setTemp({ ...temp, [name]: value });
+        }
+
+        if (error[name]) {
+            setError({ ...error, [name]: false });
         }
     };
 
@@ -59,14 +50,14 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
         let errList = [];
 
         // 예약어 아이디 체크
-        if (!/^[a-zA-z]([A-Za-z0-9_-`/])+$/g.test(reserved.reservedId)) {
+        if (!reserved.reservedId || !/^[a-zA-z]([A-Za-z0-9_-`/])+$/g.test(reserved.reservedId)) {
             errList.push({
                 field: 'reservedId',
                 reason: '예약어를 확인해주세요',
             });
             isInvalid = isInvalid | true;
         }
-        if (!REQUIRED_REGEX.test(reserved.reservedValue)) {
+        if (!reserved.reservedValue || !REQUIRED_REGEX.test(reserved.reservedValue)) {
             errList.push({
                 field: 'reservedValue',
                 reason: '예약어 값을 확인해주세요',
@@ -116,16 +107,15 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                 },
                 callback: ({ header, body }) => {
                     if (header.success) {
-                        // 중복 없음
                         if (!body) {
+                            // 중복 없음
                             saveCallback(tmp, 'insert');
-                        }
-                        // 중복 있음
-                        else {
-                            toast.fail(header.message);
+                        } else {
+                            // 중복 있음
+                            messageBox.alert('중복된 예약어가 존재합니다.');
                         }
                     } else {
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),
@@ -137,28 +127,16 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
      */
     const handleClickSave = () => {
         let newReserved;
-        if (reservedSeq) {
+        if (temp.reservedSeq) {
             newReserved = {
-                ...reserved,
+                ...temp,
                 domainId: reserved.domain.domainId,
-                reservedId,
-                reservedValue,
-                description,
-                usedYn,
             };
         } else {
             newReserved = {
+                ...temp,
                 domainId: latestDomainId,
-                reservedId,
-                reservedValue,
-                description,
-                usedYn,
             };
-        }
-        if (newReserved.usedYn === 'Y') {
-            newReserved.usedYn = 'Y';
-        } else {
-            newReserved.usedYn = 'N';
         }
 
         if (validate(newReserved)) {
@@ -183,31 +161,15 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
         } else {
             dispatch(clearReserved());
         }
+        setError({});
     }, [dispatch, paramSeq]);
 
-    /**
-     * 예약어 데이터 셋팅
-     */
     useEffect(() => {
-        setReservedId(reserved.reservedId || '');
-        setReservedSeq(reserved.reservedSeq || '');
-        setReservedValue(reserved.reservedValue || '');
-        setdescription(reserved.description || '');
-        setUsedYn(reserved.usedYn || 'N');
+        setTemp(reserved);
     }, [reserved]);
 
     useEffect(() => {
-        // invalidList 처리
-        if (invalidList.length > 0) {
-            invalidList.forEach((i) => {
-                if (i.field === 'reservedId') {
-                    setReservedIdError(true);
-                }
-                if (i.field === 'reservedValue') {
-                    setReservedValueError(true);
-                }
-            });
-        }
+        setError(invalidListToError(invalidList));
     }, [invalidList]);
 
     useEffect(() => {
@@ -229,7 +191,7 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                         className="mb-0"
                         id="usedYn"
                         name="usedYn"
-                        inputProps={{ label: '', checked: usedYn === 'Y' }}
+                        inputProps={{ label: '', checked: temp.usedYn === 'Y' }}
                         onChange={handleChangeValue}
                     />
                     {/* 버튼 그룹 */}
@@ -237,14 +199,14 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                         <Button variant="positive" className="mr-2" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" onClick={handleClickCancle}>
-                            취소
-                        </Button>
                         {reserved.reservedSeq && (
-                            <Button variant="negative" className="ml-2" onClick={() => onDelete(reserved)}>
+                            <Button variant="negative" className="mr-2" onClick={() => onDelete(reserved)}>
                                 삭제
                             </Button>
                         )}
+                        <Button variant="negative" onClick={handleClickCancle}>
+                            취소
+                        </Button>
                     </Form.Group>
                 </Form.Group>
                 {/* 예약어 */}
@@ -257,10 +219,10 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                             placeholder="예약어를 입력하세요"
                             name="reservedId"
                             onChange={handleChangeValue}
-                            isInvalid={reservedIdError}
+                            isInvalid={error.reservedId}
                             required
-                            disabled={paramSeq}
-                            value={reservedId}
+                            disabled={paramSeq && true}
+                            value={temp.reservedId}
                         />
                     </Col>
                 </Form.Row>
@@ -274,9 +236,9 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                             placeholder="값을 입력하세요"
                             name="reservedValue"
                             onChange={handleChangeValue}
-                            isInvalid={reservedValueError}
+                            isInvalid={error.reservedValue}
                             required
-                            value={reservedValue}
+                            value={temp.reservedValue}
                         />
                     </Col>
                 </Form.Row>
@@ -290,7 +252,7 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                     name="description"
                     inputProps={{ rows: 5 }}
                     onChange={handleChangeValue}
-                    value={description}
+                    value={temp.description}
                 />
             </Form>
         </MokaCard>

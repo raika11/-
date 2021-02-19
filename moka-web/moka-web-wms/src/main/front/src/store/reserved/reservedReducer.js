@@ -23,9 +23,10 @@ export const initialState = {
         { id: 'reservedId', name: '예약어' },
         { id: 'reservedValue', name: '값' },
     ],
-    reserved: {},
+    reserved: {
+        usedYn: 'N',
+    },
     reservedError: null,
-    latestReservedSeq: null,
     invalidList: [],
 };
 
@@ -57,8 +58,8 @@ export default handleActions(
         [act.GET_RESERVED_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.reserved = body;
-                draft.latestReservedSeq = body.reservedSeq;
                 draft.reservedError = initialState.reservedError;
+                draft.invalidList = initialState.invalidList;
             });
         },
         [act.GET_RESERVED_FAILURE]: (state, { payload }) => {
@@ -112,7 +113,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.reserved = initialState.reserved;
                 draft.reservedError = initialState.reservedError;
-                draft.latestReservedSeq = initialState.latestReservedSeq;
+                draft.invalidList = initialState.invalidList;
             });
         },
         [act.CLEAR_LIST]: (state) => {

@@ -273,25 +273,25 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={handleClickW3COpen}>
+                        <Button variant="outline-neutral" className="mr-2" disabled={btnDisabled} onClick={handleClickW3COpen}>
                             W3C
                         </Button>
-                        <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
+                        <Button variant="outline-neutral" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
                             미리보기
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="positive" className="mr-05" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-2" onClick={handleClickSave}>
                             전송
                         </Button>
-                        <Button variant="negative" onClick={handleClickCancle}>
-                            취소
-                        </Button>
                         {!btnDisabled && (
-                            <Button variant="negative" className="ml-05" onClick={(e) => onDelete(articlePage)}>
+                            <Button variant="negative" className="mr-2" onClick={(e) => onDelete(articlePage)}>
                                 삭제
                             </Button>
                         )}
+                        <Button variant="negative" onClick={handleClickCancle}>
+                            취소
+                        </Button>
                     </div>
                 </Form.Group>
                 {/* 기사페이지ID */}

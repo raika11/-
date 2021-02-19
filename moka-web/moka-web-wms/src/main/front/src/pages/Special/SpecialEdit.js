@@ -222,8 +222,8 @@ const SpecialEdit = ({ match }) => {
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: special.seqNo ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
+                special.seqNo && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'mr-2' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancle },
-                special.seqNo && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'ml-2' },
             ].filter((a) => a)}
             footer
         >

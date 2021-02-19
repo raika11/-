@@ -211,7 +211,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div>
-                        <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
+                        <Button variant="outline-neutral" className="mr-2" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
                             컴포넌트 생성
                         </Button>
                         <Button variant="outline-neutral" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
@@ -219,17 +219,17 @@ const TemplateEdit = ({ onDelete, match }) => {
                         </Button>
                     </div>
                     <div>
-                        <Button variant="positive" className="mr-05" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-2" onClick={handleClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" onClick={handleClickCancle}>
-                            취소
-                        </Button>
                         {!btnDisabled && (
-                            <Button variant="negative" className="ml-05" onClick={handleClickDelete}>
+                            <Button variant="negative" className="mr-2" onClick={handleClickDelete}>
                                 삭제
                             </Button>
                         )}
+                        <Button variant="negative" onClick={handleClickCancle}>
+                            취소
+                        </Button>
                     </div>
                 </Form.Group>
                 {/* 템플릿ID */}

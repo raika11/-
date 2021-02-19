@@ -50,14 +50,14 @@ const BasicForm = (props) => {
                         <Button variant="positive mr-2" onClick={onClickSave}>
                             저장
                         </Button>
-                        <Button variant="negative" onClick={onClickCancle}>
-                            취소
-                        </Button>
                         {dataset.autoCreateYn === 'Y' && dataset.datasetSeq && (
-                            <Button variant="negative" className="ml-2" onClick={() => onClickDelete(dataset)}>
+                            <Button variant="negative" className="mr-2" onClick={() => onClickDelete(dataset)}>
                                 삭제
                             </Button>
                         )}
+                        <Button variant="negative" onClick={onClickCancle}>
+                            취소
+                        </Button>
                     </div>
                 </Col>
             </Form.Row>

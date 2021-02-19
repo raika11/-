@@ -8,7 +8,7 @@ import { invalidListToError } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { clearDomain, getDomain, saveDomain, changeDomain, duplicateCheck, changeInvalidList } from '@store/domain';
 import { getApi, getLang } from '@store/codeMgt';
-import { MokaInput, MokaInputLabel, MokaCard } from '@components';
+import { MokaInputLabel, MokaCard } from '@components';
 
 /**
  * 도메인 상세/수정/등록
@@ -37,42 +37,6 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
         shallowEqual,
     );
 
-    useEffect(() => {
-        if (!langRows) dispatch(getLang());
-        if (!apiRows) dispatch(getApi());
-    }, [apiRows, dispatch, langRows]);
-
-    useEffect(() => {
-        if (paramId) {
-            dispatch(getDomain(paramId));
-        } else {
-            dispatch(clearDomain());
-        }
-    }, [dispatch, paramId]);
-
-    useEffect(() => {
-        // 데이터 변경 시 useForm의 value 변경(setValue)
-        Object.keys(domain).forEach((key) => {
-            if (key === 'usedYn') {
-                setValue('usedYn', domain[key] === 'Y' ? true : false);
-            } else if (key === 'lang') {
-                if (!domain[key]) {
-                    if (langRows && langRows.length > 0) {
-                        setValue('lang', langRows[0].dtlCd);
-                    }
-                }
-            } else if (key === 'apiCodeId') {
-                if (!domain[key]) {
-                    if (apiRows && apiRows.length > 0) {
-                        setValue('apiCodeId', apiRows[0].dtlCd);
-                    }
-                }
-            } else {
-                setValue(`${key}`, domain[key]);
-            }
-        });
-    }, [apiRows, langRows, setValue, domain]);
-
     /**
      * input 변경
      * @param {object} e 이벤트
@@ -90,26 +54,6 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
             setDomainError({ ...domainError, domainUrl: false });
         }
     };
-
-    /**
-     * 에러 처리 테스트
-     * set ~~ Error ===> 스토어의 invalidList로만 관리
-     * setError로 에러 추가해도 errors 가 변하지 않음 => submit될 때만 errors 변경됨
-     */
-    useEffect(() => {
-        const iv = Object.keys(errors).reduce((ac, current) => {
-            ac.push({
-                field: current,
-                reason: errors[current].message,
-            });
-            return ac;
-        }, []);
-        dispatch(changeInvalidList(iv));
-    }, [dispatch, errors]);
-
-    useEffect(() => {
-        setDomainError(invalidListToError(invalidList));
-    }, [invalidList]);
 
     /**
      * 도메인 수정
@@ -204,6 +148,62 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
     };
 
     useEffect(() => {
+        if (!langRows) dispatch(getLang());
+        if (!apiRows) dispatch(getApi());
+    }, [apiRows, dispatch, langRows]);
+
+    useEffect(() => {
+        if (paramId) {
+            dispatch(getDomain(paramId));
+        } else {
+            dispatch(clearDomain());
+        }
+    }, [dispatch, paramId]);
+
+    useEffect(() => {
+        // 데이터 변경 시 useForm의 value 변경(setValue)
+        Object.keys(domain).forEach((key) => {
+            if (key === 'usedYn') {
+                setValue('usedYn', domain[key] === 'Y' ? true : false);
+            } else if (key === 'lang') {
+                if (!domain[key]) {
+                    if (langRows && langRows.length > 0) {
+                        setValue('lang', langRows[0].dtlCd);
+                    }
+                }
+            } else if (key === 'apiCodeId') {
+                if (!domain[key]) {
+                    if (apiRows && apiRows.length > 0) {
+                        setValue('apiCodeId', apiRows[0].dtlCd);
+                    }
+                }
+            } else {
+                setValue(`${key}`, domain[key]);
+            }
+        });
+    }, [apiRows, langRows, setValue, domain]);
+
+    useEffect(() => {
+        /**
+         * 에러 처리 테스트
+         * set ~~ Error ===> 스토어의 invalidList로만 관리
+         * setError로 에러 추가해도 errors 가 변하지 않음 => submit될 때만 errors 변경됨
+         */
+        const iv = Object.keys(errors).reduce((ac, current) => {
+            ac.push({
+                field: current,
+                reason: errors[current].message,
+            });
+            return ac;
+        }, []);
+        dispatch(changeInvalidList(iv));
+    }, [dispatch, errors]);
+
+    useEffect(() => {
+        setDomainError(invalidListToError(invalidList));
+    }, [invalidList]);
+
+    useEffect(() => {
         return () => {
             dispatch(clearDomain());
         };
@@ -221,9 +221,15 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 footerClassName="justify-content-center"
                 footerButtons={[
                     {
-                        text: '저장',
+                        text: paramId ? '수정' : '저장',
                         variant: 'positive',
                         type: 'submit',
+                        className: 'mr-2',
+                    },
+                    paramId && {
+                        text: '삭제',
+                        variant: 'negative',
+                        onClick: handleClickDelete,
                         className: 'mr-2',
                     },
                     {
@@ -231,23 +237,16 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                         variant: 'negative',
                         onClick: handleClickCancle,
                     },
-                    paramId && {
-                        text: '삭제',
-                        variant: 'negative',
-                        onClick: handleClickDelete,
-                        className: 'ml-2',
-                    },
                 ].filter((a) => a)}
             >
                 {/* 사용여부 */}
-                <MokaInputLabel label="사용여부" labelWidth={74} className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />
+                <MokaInputLabel label="사용여부" className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />
 
                 {/* 도메인ID */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="p-0">
                         <MokaInputLabel
                             label="도메인ID"
-                            labelWidth={74}
                             className="mb-0"
                             placeholder="ID"
                             name="domainId"
@@ -271,7 +270,6 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 {/* 도메인명 */}
                 <MokaInputLabel
                     label="도메인명"
-                    labelWidth={74}
                     className="mb-2"
                     placeholder="도메인 명을 입력하세요"
                     name="domainName"
@@ -287,7 +285,6 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 {/* 도메인주소 */}
                 <MokaInputLabel
                     label="도메인주소"
-                    labelWidth={74}
                     className="mb-2"
                     placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
                     name="domainUrl"
@@ -305,7 +302,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     <Col xs={3} className="p-0">
                         <MokaInputLabel
                             label="플랫폼"
-                            labelWidth={74}
+                            
                             as="radio"
                             inputProps={{
                                 custom: true,
@@ -340,7 +337,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 {/* 언어 */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="p-0">
-                        <MokaInputLabel as="select" label="언어" labelWidth={74} className="mb-0" name="lang" ref={register} uncontrolled>
+                        <MokaInputLabel as="select" label="언어" className="mb-0" name="lang" ref={register} uncontrolled>
                             {langRows &&
                                 langRows.map((row) => (
                                     <option key={row.id} value={row.dtlCd}>
@@ -354,7 +351,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 {/* API 경로 */}
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="API HOST 경로" labelWidth={74} as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
+                        <MokaInputLabel label="API HOST\n경로" as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
                             {apiRows &&
                                 apiRows.map((row) => (
                                     <option key={row.id} value={row.dtlCd}>
@@ -366,17 +363,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 </Form.Row>
 
                 {/* 메모 */}
-                <MokaInputLabel
-                    as="textarea"
-                    label="메모"
-                    labelWidth={74}
-                    className="mb-2"
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 3 }}
-                    ref={register}
-                    name="description"
-                    uncontrolled
-                />
+                <MokaInputLabel as="textarea" label="메모" className="mb-2" inputClassName="resize-none" inputProps={{ rows: 3 }} ref={register} name="description" uncontrolled />
             </MokaCard>
         </form>
     );

@@ -12,7 +12,7 @@ export const columnDefs = [
         headerName: '값',
         field: 'reservedValue',
         flex: 1,
-        width: 202,
+        width: 145,
         tooltipField: 'reservedValue',
     },
     {
@@ -24,7 +24,8 @@ export const columnDefs = [
     {
         headerName: '',
         field: 'delete',
-        width: 24,
+        width: 28,
+        maxWidth: 28,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

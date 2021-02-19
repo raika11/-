@@ -27,7 +27,7 @@ const DetailSchForm = (props) => {
     }, [available]);
 
     return (
-        <Form className="collapsed-box">
+        <div>
             <Card.Title className={clsx('mb-2 d-flex', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <div className="d-flex align-items-center" onClick={handleClickTitle}>
                     <MokaInputLabel as="none" className="mb-0" label="검색설정" />
@@ -45,7 +45,7 @@ const DetailSchForm = (props) => {
                     </Col>
                 </Form.Row>
             </Collapse>
-        </Form>
+        </div>
     );
 };
 

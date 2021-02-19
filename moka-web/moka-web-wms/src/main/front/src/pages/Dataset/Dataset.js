@@ -1,13 +1,11 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { ITEM_DS } from '@/constants';
 import { MokaCard, MokaIcon, MokaLoader, MokaIconTabs } from '@components';
-import { useDispatch } from 'react-redux';
 import { clearStore, deleteDataset, hasRelationList } from '@store/dataset';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import DatasetEdit from './DatasetEdit';
 import RelationInPageList from '@pages/Page/components/RelationInPageList';
 const DatasetList = React.lazy(() => import('./DatasetList'));
@@ -22,8 +20,6 @@ const Dataset = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const dataset = useSelector(({ dataset }) => dataset.dataset);
-
-    // state
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
     /**
@@ -57,7 +53,7 @@ const Dataset = ({ match }) => {
      */
     const handleClickDelete = (dataset) => {
         if (dataset.autoCreateYn !== 'Y') {
-            messageBox.alert('수동 데이터셋은 삭제할 수 없습니다.');
+            messageBox.alert('편집 데이터셋은 삭제할 수 없습니다.');
             return;
         }
         dispatch(

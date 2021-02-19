@@ -6,6 +6,9 @@ import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaInput, MokaDateTimePicker } from '@components';
 
+/**
+ * 기간 설정
+ */
 const DetailPeriodForm = (props) => {
     const { component, setComponent, available, error, setError } = props;
     const [disabled, setDisabled] = useState(true);
@@ -63,7 +66,7 @@ const DetailPeriodForm = (props) => {
     }, [available]);
 
     return (
-        <Form className="collapsed-box">
+        <div>
             <Card.Title className={clsx('mb-2 d-flex', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <div className="d-flex align-items-center" onClick={handleClickTitle}>
                     <MokaInputLabel className="mb-0" as="none" label="기간설정" />
@@ -102,7 +105,7 @@ const DetailPeriodForm = (props) => {
                     </Form.Row>
                 </div>
             </Collapse>
-        </Form>
+        </div>
     );
 };
 

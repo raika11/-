@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-
 import { MokaModal, MokaInputLabel, MokaSearchInput, MokaTable } from '@components';
 import { initialState, getDatasetListModal, GET_DATASET_LIST_MODAL } from '@store/dataset';
 import columnDefs from './DatasetListModalColumns';
@@ -38,7 +36,6 @@ const defaultProps = {};
 const DatsetListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
-
     const { latestDomainId, loading } = useSelector((store) => ({
         latestDomainId: store.auth.latestDomainId,
         loading: store.loading[GET_DATASET_LIST_MODAL],
@@ -53,11 +50,6 @@ const DatsetListModal = (props) => {
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
 
-    useEffect(() => {
-        // 선택된 값 셋팅
-        setSelected(defaultSelected);
-    }, [defaultSelected]);
-
     /**
      * 리스트 조회 콜백
      */
@@ -66,7 +58,7 @@ const DatsetListModal = (props) => {
             setRowData(
                 body.list.map((data) => ({
                     ...data,
-                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '편집형',
                 })),
             );
             setTotal(body.totalCnt);
@@ -157,6 +149,11 @@ const DatsetListModal = (props) => {
     );
 
     useEffect(() => {
+        // 선택된 값 셋팅
+        setSelected(defaultSelected);
+    }, [defaultSelected]);
+
+    useEffect(() => {
         if (show && cnt < 1) {
             const ns = {
                 ...initialState.search,
@@ -190,11 +187,12 @@ const DatsetListModal = (props) => {
             ]}
             footerClassName="justify-content-center"
             draggable
+            centered
         >
             <Form>
                 <Form.Row className="mb-2">
                     {/* 검색 조건 */}
-                    <Col xs={4} className="p-0 pr-2">
+                    <div className="flex-shrink-0 mr-2">
                         <MokaInputLabel
                             as="select"
                             value={search.searchType}
@@ -211,20 +209,19 @@ const DatsetListModal = (props) => {
                                 </option>
                             ))}
                         </MokaInputLabel>
-                    </Col>
+                    </div>
                     {/* 키워드 */}
-                    <Col xs={8} className="p-0">
-                        <MokaSearchInput
-                            value={search.keyword}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    keyword: e.target.value,
-                                });
-                            }}
-                            onSearch={handleSearch}
-                        />
-                    </Col>
+                    <MokaSearchInput
+                        value={search.keyword}
+                        className="flex-fill"
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
+                        }}
+                        onSearch={handleSearch}
+                    />
                 </Form.Row>
             </Form>
 

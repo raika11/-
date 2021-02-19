@@ -85,7 +85,7 @@ const DetailRelationForm = (props) => {
     }, [component]);
 
     return (
-        <Form>
+        <div>
             {/* 템플릿 */}
             <MokaInputGroup
                 className="mb-2"
@@ -243,7 +243,7 @@ const DetailRelationForm = (props) => {
                 onClickSave={(editFormPart) => setComponent({ ...component, editFormPart })}
                 selected={editFormPart.partSeq}
             />
-        </Form>
+        </div>
     );
 };
 

@@ -22,19 +22,10 @@ const ComponentEdit = ({ onDelete, match }) => {
     const { componentSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const loading = useSelector((store) => store.loading[GET_COMPONENT] || store.loading[SAVE_COMPONENT] || store.loading[DELETE_COMPONENT]);
-    const latestDomainId = useSelector((store) => store.auth.latestDomainId);
-    const { MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector((store) => ({
-        MORE_COUNT: store.app.MORE_COUNT,
-        DISP_PAGE_COUNT: store.app.DISP_PAGE_COUNT,
-        PER_PAGE_COUNT: store.app.PER_PAGE_COUNT,
-        MAX_PAGE_COUNT: store.app.MAX_PAGE_COUNT,
-    }));
-    const { component, inputTag, invalidList } = useSelector((store) => ({
-        component: store.component.component,
-        inputTag: store.component.inputTag,
-        invalidList: store.component.invalidList,
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_COMPONENT] || loading[SAVE_COMPONENT] || loading[DELETE_COMPONENT]);
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const { MORE_COUNT, DISP_PAGE_COUNT, PER_PAGE_COUNT, MAX_PAGE_COUNT } = useSelector(({ app }) => app);
+    const { component, inputTag, invalidList } = useSelector(({ component }) => component);
 
     // state
     const [temp, setTemp] = useState(initialState.component);
@@ -98,7 +89,7 @@ const ComponentEdit = ({ onDelete, match }) => {
                         toast.success(header.message);
                         history.push(`${match.path}/${body.componentSeq}`);
                     } else {
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),
@@ -126,7 +117,7 @@ const ComponentEdit = ({ onDelete, match }) => {
                             );
                         }
                     } else {
-                        toast.error(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),

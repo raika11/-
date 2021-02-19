@@ -71,7 +71,7 @@ const BulknListGrid = () => {
     return (
         <>
             <MokaTable
-                agGridHeight={680}
+                agGridHeight={633}
                 columnDefs={ColumnDefs}
                 rowData={rowData}
                 rowHeight={40}

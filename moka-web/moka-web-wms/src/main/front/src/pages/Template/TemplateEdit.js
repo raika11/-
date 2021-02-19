@@ -220,7 +220,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                     </div>
                     <div>
                         <Button variant="positive" className="mr-2" onClick={handleClickSave}>
-                            저장
+                            {btnDisabled ? '저장' : '수정'}
                         </Button>
                         {!btnDisabled && (
                             <Button variant="negative" className="mr-2" onClick={handleClickDelete}>

@@ -48,7 +48,7 @@ const BasicForm = (props) => {
                     </div>
                     <div className="d-flex">
                         <Button variant="positive mr-2" onClick={onClickSave}>
-                            저장
+                            {btnDisabled ? '저장' : '수정'}
                         </Button>
                         {dataset.autoCreateYn === 'Y' && dataset.datasetSeq && (
                             <Button variant="negative" className="mr-2" onClick={() => onClickDelete(dataset)}>

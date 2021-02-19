@@ -35,7 +35,7 @@ const BasicForm = (props) => {
                     </div>
                     <div className="d-flex">
                         <Button variant="positive" className="mr-2" onClick={onClickSave}>
-                            저장
+                            {btnDisabled ? '저장' : '수정'}
                         </Button>
                         {!btnDisabled && (
                             <Button variant="negative" onClick={onClickDelete} className="mr-2">

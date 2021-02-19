@@ -11,7 +11,7 @@ export const columnDefs = [
     {
         headerName: 'URL',
         field: 'domainUrl',
-        width: 180,
+        width: 200,
         tooltipField: 'domainUrl',
     },
     {
@@ -22,15 +22,15 @@ export const columnDefs = [
         tooltipField: 'domainName',
     },
     {
-        headerName: '사용여부',
+        headerName: '사용',
         field: 'usedYn',
-        width: 65,
+        width: 40,
         cellRenderer: 'usedYnRenderer',
     },
     {
         headerName: '',
         field: 'delete',
-        width: 24,
+        width: 28,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableDeleteButton {...row} onClick={data.onDelete} />;

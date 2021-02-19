@@ -56,7 +56,7 @@ const DatsetListModal = (props) => {
             setRowData(
                 body.list.map((data) => ({
                     ...data,
-                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '수동형',
+                    autoCreateYnName: data.autoCreateYn === 'Y' ? '자동형' : '편집형',
                 })),
             );
             setTotal(body.totalCnt);

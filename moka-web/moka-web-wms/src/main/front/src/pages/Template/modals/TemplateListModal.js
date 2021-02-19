@@ -307,6 +307,7 @@ const TemplateListModal = (props) => {
             ]}
             footerClassName="justify-content-center"
             draggable
+            centered
         >
             {topAs}
             <Form>

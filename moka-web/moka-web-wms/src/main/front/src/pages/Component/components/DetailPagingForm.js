@@ -23,7 +23,7 @@ const DetailPagingForm = (props) => {
     }, [available]);
 
     return (
-        <Form className="collapsed-box">
+        <div>
             <Card.Title className={clsx('mb-2 d-flex', { collapsed: !open, disabled: !available })} aria-controls={controls} aria-expanded={open} data-toggle="collapse">
                 <div className="d-flex align-items-center" onClick={handleClickTitle}>
                     <MokaInputLabel className="mb-0" as="none" label="목록설정" />
@@ -127,7 +127,7 @@ const DetailPagingForm = (props) => {
                     )}
                 </div>
             </Collapse>
-        </Form>
+        </div>
     );
 };
 

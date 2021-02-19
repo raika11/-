@@ -203,9 +203,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="select"
                             label="서비스 상태"
-                            labelWidth={70}
                             name="status"
-                            labelClassName="text-right"
                             value={edit.status}
                             onChange={(e) => {
                                 handleChangeValue(e.target);
@@ -219,7 +217,7 @@ const PollEdit = ({ onDelete }) => {
                         </MokaInputLabel>
                     </Col>
                     <Col xs={6}>
-                        <MokaInputLabel label="투표ID" labelWidth={70} name="pollSeq" labelClassName="text-right" value={edit.pollSeq} disabled={true} />
+                        <MokaInputLabel label="투표ID" labelWidth={35} className="ml-32" name="pollSeq" value={edit.pollSeq} disabled={true} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2 justify-content-between">
@@ -228,8 +226,6 @@ const PollEdit = ({ onDelete }) => {
                             as="select"
                             label="그룹"
                             name="pollGroup"
-                            labelWidth={70}
-                            labelClassName="text-right"
                             value={edit.pollGroup}
                             onChange={(e) => {
                                 handleChangeValue(e.target);
@@ -246,9 +242,9 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="select"
                             label="분류"
-                            labelWidth={70}
+                            labelWidth={35}
+                            className="ml-32"
                             name="pollCategory"
-                            labelClassName="text-right"
                             value={edit.pollCategory}
                             onChange={(e) => {
                                 handleChangeValue(e.target);
@@ -267,9 +263,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="select"
                             label="레이아웃"
-                            labelWidth={70}
                             name="pollDiv"
-                            labelClassName="text-right"
                             value={edit.pollDiv}
                             onChange={(e) => {
                                 handleChangeValue(e.target);
@@ -288,6 +282,7 @@ const PollEdit = ({ onDelete }) => {
                             id="type1"
                             as="radio"
                             value="T"
+                            className="ml-20"
                             labelWidth={30}
                             inputProps={{ custom: true, label: 'text형', checked: edit.pollType === 'T' }}
                             onChange={(e) => {
@@ -332,9 +327,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="dateTimePicker"
                             label="투표기간"
-                            labelWidth={70}
                             name="startDt"
-                            labelClassName="text-right"
                             value={edit.startDt}
                             onChange={(data) => {
                                 handleChangeValue({ name: 'startDt', value: moment(data._d).format(DB_DATEFORMAT) });
@@ -359,8 +352,6 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="switch"
                             label="메인노출"
-                            labelWidth={70}
-                            labelClassName="text-right"
                             name="mainYn"
                             id="mainYn"
                             onChange={(e) => {
@@ -379,7 +370,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="switch"
                             label="로그인"
-                            labelWidth={70}
+                            labelWidth={35}
                             name="loginYn"
                             id="loginYn"
                             labelClassName="text-right"
@@ -398,7 +389,7 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="switch"
                             label="댓글"
-                            labelWidth={50}
+                            labelWidth={23}
                             labelClassName="text-right"
                             name="replyYn"
                             id="replyYn"
@@ -418,10 +409,9 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="switch"
                             label="중복 투표 제한"
-                            labelWidth={120}
+                            labelWidth={80}
                             name="repetitionYn"
                             id="repetitionYn"
-                            labelClassName="text-right mr-1"
                             onChange={(e) => {
                                 const { name, checked } = e.target;
                                 let value = 'N';
@@ -439,10 +429,8 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInputLabel
                             as="switch"
                             label="게시판"
-                            labelWidth={70}
                             name="bbsYn"
                             id="bbsYn"
-                            labelClassName="text-right"
                             onChange={(e) => {
                                 const { name, checked } = e.target;
                                 let value = 'N';
@@ -458,7 +446,7 @@ const PollEdit = ({ onDelete }) => {
                         <Col xs={9}>
                             <MokaInputLabel
                                 label="url"
-                                labelWidth={35}
+                                labelWidth={15}
                                 name="bbsUrl"
                                 labelClassName="text-right"
                                 onChange={(e) => {

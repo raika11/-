@@ -197,7 +197,7 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                     {/* 버튼 그룹 */}
                     <Form.Group className="mb-0 d-flex align-items-center">
                         <Button variant="positive" className="mr-2" onClick={handleClickSave}>
-                            저장
+                            {reserved.reservedSeq ? '수정' : '저장'}
                         </Button>
                         {reserved.reservedSeq && (
                             <Button variant="negative" className="mr-2" onClick={() => onDelete(reserved)}>

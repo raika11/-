@@ -93,6 +93,10 @@ const Page = ({ match }) => {
                 if (target.pageSeq !== tree.pageSeq) {
                     paths.push(String(target.parentPageSeq));
                     loop(target.parentPageSeq, paths);
+                } else {
+                    if (paths.indexOf(String(target.pageSeq)) < 0) {
+                        paths.push(String(target.pageSeq));
+                    }
                 }
             };
 
@@ -110,9 +114,9 @@ const Page = ({ match }) => {
             if (item.pageUrl === '/') {
                 messageBox.alert('메인화면은 삭제할 수 없습니다.');
             } else {
-                const node = treeBySeq(item.pageSeq);
+                const node = treeBySeq[item.pageSeq];
                 const msg =
-                    node.nodes.length > 0
+                    node.nodes && node.nodes.length > 0
                         ? `하위 페이지도 삭제됩니다.\n${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`
                         : `${item.pageSeq}_${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`;
 

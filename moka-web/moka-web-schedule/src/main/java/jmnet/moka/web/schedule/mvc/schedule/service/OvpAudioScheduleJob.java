@@ -28,4 +28,9 @@ public class OvpAudioScheduleJob extends OvpScheduleJob {
     public String getMediaType() {
         return "audio/mpeg";
     }
+
+    @Override
+    public int getBeforeDay() {
+        return 3;
+    }
 }

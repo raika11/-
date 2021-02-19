@@ -1,11 +1,10 @@
 package jmnet.moka.web.schedule.mvc.schedule.service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
@@ -44,43 +43,43 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
 
     protected String type;
 
-    public static final String ISO_8601_24H_FULL_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-
     @Override
     public void invoke() {
 
-        TimeZone UTC = TimeZone.getTimeZone("UTC");
-
-
         BrightcoveCredentailVO credentail = brightcoveService.getClientCredentials();
-
-        final SimpleDateFormat sdf = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
-        sdf.setTimeZone(UTC);
 
         try {
             List<Map<String, Object>> list = brightcoveService.findAllOvp(credentail);
 
-            /**
-             * 동일 타입 목록만 필터링, 배포일시 내림차순 정렬
-             */
             List<Map<String, Object>> filteredList = list
                     .stream()
                     .filter(stringObjectMap -> {
                         Map<String, Object> fields = (Map<String, Object>) stringObjectMap.get("custom_fields");
-
-                        return fields
+                        long term = 0l;
+                        try {
+                            Date upd = McpDate.utcDate((String) stringObjectMap.get("updated_at"));
+                            term = McpDate.term(upd, McpDate.dateMinus(McpDate.now(), getBeforeDay()));
+                        } catch (Exception ex) {
+                            term = 0;
+                        }
+                        /**
+                         * 수정일시를 기준으로 현재일 보다 3일전 기사인 경우 제외
+                         * type과 media_ratio 동일 하지 않은 경우 제외
+                         */
+                        return term > 0 && fields
                                 .getOrDefault("media_ratio", "")
                                 .toString()
                                 .toLowerCase()
                                 .equals(getOvpType().toLowerCase());
                     })
                     .sorted((o1, o2) -> {
+                        //배포일시 내림차순 정렬
                         try {
-                            Long p1 = (Long) sdf
-                                    .parse((String) o1.get("published_at"))
+                            Long p1 = McpDate
+                                    .utcDate((String) o1.get("published_at"))
                                     .getTime();
-                            Long p2 = (Long) sdf
-                                    .parse((String) o2.get("published_at"))
+                            Long p2 = McpDate
+                                    .utcDate((String) o2.get("published_at"))
                                     .getTime();
                             return (int) (p2 - p1);
                         } catch (Exception ex) {
@@ -102,7 +101,7 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
                         .id(String.valueOf(videoMap.get("id")))
                         .size(Long.parseLong(String.valueOf(source.get("size"))))
                         .sourceUrl(String.valueOf(source.get("src")))
-                        .pubDate(sdf.parse((String) videoMap.get("published_at")))
+                        .pubDate(McpDate.utcDate((String) videoMap.get("published_at")))
                         .duration(TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(String.valueOf(source.get("duration")))))
                         .title(String.valueOf(videoMap.get("name")))
                         .build());
@@ -215,4 +214,11 @@ public abstract class OvpScheduleJob extends AbstractScheduleJob {
      * @return
      */
     public abstract String getMediaType();
+
+    /**
+     * 현재일부터 이전 몇일까지의 컨텐츠만 추출할지의 기준값
+     *
+     * @return beforeDay
+     */
+    public abstract int getBeforeDay();
 }

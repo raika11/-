@@ -597,7 +597,7 @@ public class McpDate {
      * @return Date
      * @throws ParseException
      */
-    public Date utcDate(String dateStr)
+    public static Date utcDate(String dateStr)
             throws ParseException {
         return utcDate(ISO_8601_24H_FULL_FORMAT, dateStr);
     }
@@ -610,7 +610,7 @@ public class McpDate {
      * @return Date
      * @throws ParseException
      */
-    public Date utcDate(String format, String dateStr)
+    public static Date utcDate(String format, String dateStr)
             throws ParseException {
         TimeZone UTC = TimeZone.getTimeZone("UTC");
         final SimpleDateFormat sdf = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);

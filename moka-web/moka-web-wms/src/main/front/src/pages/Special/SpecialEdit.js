@@ -11,7 +11,7 @@ import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial,
 import SpecialEditForm from './components/SpecialEditForm';
 
 moment.locale('ko');
-const textReg = /['"]/;
+const textReg = /[\*'"]/;
 
 const SpecialEdit = ({ match }) => {
     const dispatch = useDispatch();
@@ -22,7 +22,6 @@ const SpecialEdit = ({ match }) => {
     const { special, depts, invalidList } = useSelector(({ special }) => special);
     const [temp, setTemp] = useState({});
     const [error, setError] = useState({});
-    const [footerBtns, setFooterBtns] = useState([]);
 
     /**
      * 취소
@@ -94,7 +93,7 @@ const SpecialEdit = ({ match }) => {
             if (textReg.test(saveObj.schKwd)) {
                 errList.push({
                     field: 'schKwd',
-                    reason: '\', "를 입력할 수 없습니다',
+                    reason: '특수문자를 입력할 수 없습니다',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -102,7 +101,7 @@ const SpecialEdit = ({ match }) => {
             if (textReg.test(saveObj.pageDesc)) {
                 errList.push({
                     field: 'pageDesc',
-                    reason: '\', "를 입력할 수 없습니다',
+                    reason: '특수문자를 입력할 수 없습니다',
                 });
                 isInvalid = isInvalid || true;
             }
@@ -190,17 +189,6 @@ const SpecialEdit = ({ match }) => {
     }, [depts, dispatch]);
 
     useEffect(() => {
-        let btns = [
-            { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
-            { text: '취소', variant: 'negative', onClick: handleClickCancle },
-        ];
-        if (special.seqNo) {
-            btns.push({ text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'ml-2' });
-        }
-        setFooterBtns(btns);
-    }, [handleClickCancle, handleClickDelete, handleClickSave, special.seqNo]);
-
-    useEffect(() => {
         setTemp({
             ...special,
             pageSdate: moment(special.pageSdate, 'YYYYMMDD'),
@@ -232,7 +220,11 @@ const SpecialEdit = ({ match }) => {
                 </div>
             }
             footerClassName="justify-content-center"
-            footerButtons={footerBtns}
+            footerButtons={[
+                { text: special.seqNo ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
+                { text: '취소', variant: 'negative', onClick: handleClickCancle },
+                special.seqNo && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'ml-2' },
+            ].filter((a) => a)}
             footer
         >
             <SpecialEditForm special={temp} onChange={setTemp} ptRows={ptRows} error={error} setError={setError} depts={depts} />

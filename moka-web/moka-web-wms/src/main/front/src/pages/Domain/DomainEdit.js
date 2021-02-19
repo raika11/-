@@ -239,146 +239,144 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                     },
                 ].filter((a) => a)}
             >
-                <div style={{ width: 730, margin: 'auto' }}>
-                    {/* 사용여부 */}
-                    <MokaInputLabel label="사용여부" labelWidth={74} className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />
+                {/* 사용여부 */}
+                <MokaInputLabel label="사용여부" labelWidth={74} className="mb-2" as="switch" id="domain-usedYn" name="usedYn" ref={register} required uncontrolled />
 
-                    {/* 도메인ID */}
-                    <Form.Row className="mb-2">
-                        <Col xs={4} className="p-0">
-                            <MokaInputLabel
-                                label="도메인ID"
-                                labelWidth={74}
-                                className="mb-0"
-                                placeholder="ID"
-                                name="domainId"
-                                ref={register({
-                                    required: true,
-                                    pattern: {
-                                        value: /^\d{4}$/,
-                                    },
-                                })}
-                                inputProps={{
-                                    readOnly: domain.domainId && true,
-                                }}
-                                onChange={handleChangeValue}
-                                isInvalid={domainError.domainId}
-                                required
-                                uncontrolled
-                            />
-                        </Col>
-                    </Form.Row>
+                {/* 도메인ID */}
+                <Form.Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <MokaInputLabel
+                            label="도메인ID"
+                            labelWidth={74}
+                            className="mb-0"
+                            placeholder="ID"
+                            name="domainId"
+                            ref={register({
+                                required: true,
+                                pattern: {
+                                    value: /^\d{4}$/,
+                                },
+                            })}
+                            inputProps={{
+                                readOnly: domain.domainId && true,
+                            }}
+                            onChange={handleChangeValue}
+                            isInvalid={domainError.domainId}
+                            required
+                            uncontrolled
+                        />
+                    </Col>
+                </Form.Row>
 
-                    {/* 도메인명 */}
-                    <MokaInputLabel
-                        label="도메인명"
-                        labelWidth={74}
-                        className="mb-2"
-                        placeholder="도메인 명을 입력하세요"
-                        name="domainName"
-                        ref={register({
-                            required: 'required',
-                        })}
-                        isInvalid={domainError.domainName}
-                        onChange={handleChangeValue}
-                        required
-                        uncontrolled
-                    />
+                {/* 도메인명 */}
+                <MokaInputLabel
+                    label="도메인명"
+                    labelWidth={74}
+                    className="mb-2"
+                    placeholder="도메인 명을 입력하세요"
+                    name="domainName"
+                    ref={register({
+                        required: 'required',
+                    })}
+                    isInvalid={domainError.domainName}
+                    onChange={handleChangeValue}
+                    required
+                    uncontrolled
+                />
 
-                    {/* 도메인주소 */}
-                    <MokaInputLabel
-                        label="도메인주소"
-                        labelWidth={74}
-                        className="mb-2"
-                        placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
-                        name="domainUrl"
-                        isInvalid={domainError.domainUrl}
-                        ref={register({
-                            required: true,
-                        })}
-                        onChange={handleChangeValue}
-                        required
-                        uncontrolled
-                    />
+                {/* 도메인주소 */}
+                <MokaInputLabel
+                    label="도메인주소"
+                    labelWidth={74}
+                    className="mb-2"
+                    placeholder="도메인 주소에서 http(s)://를 빼고 입력하세요"
+                    name="domainUrl"
+                    isInvalid={domainError.domainUrl}
+                    ref={register({
+                        required: true,
+                    })}
+                    onChange={handleChangeValue}
+                    required
+                    uncontrolled
+                />
 
-                    {/* 플랫폼 */}
-                    {/* <Form.Row className="mb-2">
-                        <Col xs={3} className="p-0">
-                            <MokaInputLabel
-                                label="플랫폼"
-                                labelWidth={74}
-                                as="radio"
-                                inputProps={{
-                                    custom: true,
-                                    label: 'PC',
-                                }}
-                                id="domain-pc"
-                                name="servicePlatform"
-                                value="P"
-                                className="mb-0 h-100"
-                                ref={register}
-                                required
-                                uncontrolled
-                            />
-                        </Col>
-                        <Col xs={1} className="p-0">
-                            <MokaInput
-                                as="radio"
-                                inputProps={{
-                                    custom: true,
-                                    label: 'Mobile',
-                                }}
-                                id="domain-mobile"
-                                name="servicePlatform"
-                                value="M"
-                                className="mb-0 h-100 align-items-center d-flex"
-                                ref={register}
-                                uncontrolled
-                            />
-                        </Col>
-                    </Form.Row> */}
+                {/* 플랫폼 */}
+                {/* <Form.Row className="mb-2">
+                    <Col xs={3} className="p-0">
+                        <MokaInputLabel
+                            label="플랫폼"
+                            labelWidth={74}
+                            as="radio"
+                            inputProps={{
+                                custom: true,
+                                label: 'PC',
+                            }}
+                            id="domain-pc"
+                            name="servicePlatform"
+                            value="P"
+                            className="mb-0 h-100"
+                            ref={register}
+                            required
+                            uncontrolled
+                        />
+                    </Col>
+                    <Col xs={1} className="p-0">
+                        <MokaInput
+                            as="radio"
+                            inputProps={{
+                                custom: true,
+                                label: 'Mobile',
+                            }}
+                            id="domain-mobile"
+                            name="servicePlatform"
+                            value="M"
+                            className="mb-0 h-100 align-items-center d-flex"
+                            ref={register}
+                            uncontrolled
+                        />
+                    </Col>
+                </Form.Row> */}
 
-                    {/* 언어 */}
-                    <Form.Row className="mb-2">
-                        <Col xs={4} className="p-0">
-                            <MokaInputLabel as="select" label="언어" labelWidth={74} className="mb-0" name="lang" ref={register} uncontrolled>
-                                {langRows &&
-                                    langRows.map((row) => (
-                                        <option key={row.id} value={row.dtlCd}>
-                                            {row.name}
-                                        </option>
-                                    ))}
-                            </MokaInputLabel>
-                        </Col>
-                    </Form.Row>
+                {/* 언어 */}
+                <Form.Row className="mb-2">
+                    <Col xs={4} className="p-0">
+                        <MokaInputLabel as="select" label="언어" labelWidth={74} className="mb-0" name="lang" ref={register} uncontrolled>
+                            {langRows &&
+                                langRows.map((row) => (
+                                    <option key={row.id} value={row.dtlCd}>
+                                        {row.name}
+                                    </option>
+                                ))}
+                        </MokaInputLabel>
+                    </Col>
+                </Form.Row>
 
-                    {/* API 경로 */}
-                    <Form.Row className="mb-2">
-                        <Col xs={12} className="p-0">
-                            <MokaInputLabel label="API HOST 경로" labelWidth={74} as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
-                                {apiRows &&
-                                    apiRows.map((row) => (
-                                        <option key={row.id} value={row.dtlCd}>
-                                            {row.name}
-                                        </option>
-                                    ))}
-                            </MokaInputLabel>
-                        </Col>
-                    </Form.Row>
+                {/* API 경로 */}
+                <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel label="API HOST 경로" labelWidth={74} as="select" className="mb-0" name="apiCodeId" ref={register} uncontrolled>
+                            {apiRows &&
+                                apiRows.map((row) => (
+                                    <option key={row.id} value={row.dtlCd}>
+                                        {row.name}
+                                    </option>
+                                ))}
+                        </MokaInputLabel>
+                    </Col>
+                </Form.Row>
 
-                    {/* 메모 */}
-                    <MokaInputLabel
-                        as="textarea"
-                        label="메모"
-                        labelWidth={74}
-                        className="mb-2"
-                        inputClassName="resize-none"
-                        inputProps={{ rows: 3 }}
-                        ref={register}
-                        name="description"
-                        uncontrolled
-                    />
-                </div>
+                {/* 메모 */}
+                <MokaInputLabel
+                    as="textarea"
+                    label="메모"
+                    labelWidth={74}
+                    className="mb-2"
+                    inputClassName="resize-none"
+                    inputProps={{ rows: 3 }}
+                    ref={register}
+                    name="description"
+                    uncontrolled
+                />
             </MokaCard>
         </form>
     );

@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
+import { MokaEditorCore } from '@components/MokaEditor';
 import { SAVE_AREA, DELETE_AREA, GET_AREA_MODAL, saveArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
@@ -22,6 +23,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
     const loading = useSelector(({ loading }) => loading[SAVE_AREA] || loading[DELETE_AREA] || loading[GET_AREA_MODAL]);
     const { invalidList, selectedDepth } = useSelector(({ area }) => area);
     const [temp, setTemp] = useState({}); // 수정가능한 데이터
+    const [previewRsrc, setPreviewRsrc] = useState(''); // 미리보기 리소스
     const [domain, setDomain] = useState({}); // 도메인
     const [container, setContainer] = useState({}); // 선택한 컨테이너 담고 있는 state
     const [component, setComponent] = useState({}); // 선택한 컴포넌트 담고 있는 state
@@ -120,7 +122,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
             return;
         }
 
-        let save = { ...temp, page: { pageSeq: page.pageSeq }, parent: { areaSeq: parent.areaSeq }, domain: { domainId: domain.domainId } };
+        let save = { ...temp, page: { pageSeq: page.pageSeq }, parent: { areaSeq: parent.areaSeq }, domain: { domainId: domain.domainId }, previewRsrc };
         if (temp.areaDiv === ITEM_CP) {
             save.container = null;
             save.areaComps = null;
@@ -323,6 +325,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
     useEffect(() => {
         return () => {
             setTemp({});
+            setPreviewRsrc('');
             setLoadCnt(0);
             setError({});
             setCompOptions([]);
@@ -340,6 +343,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
         const ac = ar.areaComp || {};
         const acs = ar.areaComps || [];
         setTemp(ar);
+        setPreviewRsrc(ar.previewRsrc);
         setAreaCompLoad(area.areaCompLoad || {});
         setAreaComp(ac);
         setAreaComps(acs);
@@ -509,16 +513,12 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                     ))}
 
                 {/* 미리보기 리소스 */}
-                <MokaInputLabel
-                    as="textarea"
-                    name="previewRsrc"
-                    label="미리보기\n리소스"
-                    labelWidth={81}
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 5 }}
-                    value={temp.previewRsrc}
-                    onChange={handleChangeValue}
-                />
+                <Form.Row style={{ height: 200 }}>
+                    <MokaInputLabel label="미리보기\n리소스" labelWidth={81} as="none" />
+                    <div className="flex-fill input-border overflow-hidden">
+                        <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} />
+                    </div>
+                </Form.Row>
             </div>
         </MokaCard>
     );

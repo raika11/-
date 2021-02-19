@@ -67,9 +67,9 @@ const propTypes = {
      * @default
      */
     timeDefault: PropTypes.oneOf(['start', 'end', 'default']),
-
     /**
      * 날짜 선택시 닫기 여부
+     * @default
      */
     closeOnSelect: PropTypes.bool,
 };
@@ -110,12 +110,9 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
     const dateTimeRef = useRef(null);
     const inputGroupRef = useRef(null);
 
-    useImperativeHandle(ref, () => ({
-        dateTimeRef: dateTimeRef.current,
-        inputGroupRef: inputGroupRef.current,
-    }));
-
-    // 날짜시간 포맷
+    /**
+     * 날짜시간 포맷
+     */
     const dateTimeFormat = (() => {
         if (dateFormat && timeFormat) {
             return `${dateFormat} ${timeFormat}`;
@@ -126,6 +123,9 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
         }
     })();
 
+    /**
+     * renderDay
+     */
     const renderDay = (props, currentDate, selectedDate) => {
         // 일요일 스타일 변경
         if (currentDate._d.getDay() === 0) {
@@ -153,7 +153,12 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
         onChange(date);
     };
 
-    // input element 생성
+    /**
+     * input element 생성
+     * @param {object} props DateTime에서 넣어주는 props
+     * @param {func} openCalendar 캘린더 여는 함수
+     * @param {func} closeCalendar 캘린더 닫는 함수
+     */
     const renderInput = (props, openCalendar, closeCalendar) => {
         return (
             <InputGroup ref={inputGroupRef} style={{ width }} size={size} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
@@ -176,6 +181,11 @@ const MokaDateTimePicker = forwardRef((props, ref) => {
             </InputGroup>
         );
     };
+
+    useImperativeHandle(ref, () => ({
+        dateTimeRef: dateTimeRef.current,
+        inputGroupRef: inputGroupRef.current,
+    }));
 
     return (
         <DateTime

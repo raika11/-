@@ -92,6 +92,8 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
     useEffect(() => {
         if (special.seqNo) {
             setArticleUrl(`${DIGITAL_SPECIAL_URL}${special.seqNo}`);
+        } else {
+            setArticleUrl('');
         }
     }, [special.seqNo]);
 
@@ -289,7 +291,14 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 required
             />
             {/* 중계페이지 URL */}
-            <MokaInputGroup label="중계페이지 URL" labelWidth={110} value={articleUrl} className="mb-2" append={<MokaCopyTextButton copyText={articleUrl} />} disabled />
+            <MokaInputGroup
+                label="중계페이지 URL"
+                labelWidth={110}
+                value={articleUrl}
+                className="mb-2"
+                append={<MokaCopyTextButton copyText={articleUrl} successText="태그가 복사 되었습니다" />}
+                disabled
+            />
             {/* 광고추적 PC URL */}
             <MokaInputLabel
                 label="광고추척 PC URL"

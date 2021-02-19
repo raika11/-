@@ -8,6 +8,8 @@ import { MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { postReserveComponentWork, deleteReserveComponentWork } from '@store/desking';
 import toast, { messageBox } from '@utils/toastUtil';
 
+moment.locale('ko');
+
 /**
  * 컴포넌트 워크 예약
  */
@@ -18,6 +20,8 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     const [reserveDt, setReserveDt] = useState(null);
     const [openReserve, setOpenReserve] = useState(false);
     const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const thisTime = new Date(); // 예약일시 지금보다 이후로 설정
 
     /**
      * 날짜 변경
@@ -25,13 +29,24 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     const handleDate = (date) => {
         if (typeof date === 'object') {
             setReserveDt(date);
-            setError(false);
+            if (date.isAfter(thisTime)) {
+                setError(false);
+            } else {
+                setError(true);
+                setErrorMessage('예약 일시는 현재 일시보다 커야합니다');
+            }
         } else if (date === '') {
             setReserveDt(null);
         } else {
             setError(true);
+            setErrorMessage('선택된 날짜가 없습니다');
         }
     };
+
+    /**
+     * 달력 오늘날짜 이후로 선택할 수 있게 처리한다
+     */
+    const isValidDate = (current) => current.isAfter(moment(thisTime).subtract(1, 'days'));
 
     /**
      * 예약 아이콘버튼 클릭
@@ -46,31 +61,34 @@ const ReserveComponentWork = ({ component, workStatus }) => {
     const handleClickSave = () => {
         if (!reserveDt) {
             setError(true);
+            setErrorMessage('선택된 날짜가 없습니다');
             return;
         }
 
         if (workStatus !== 'save' && workStatus) {
-            toast.warning('임시저장한 데이터만 예약할 수 있습니다');
+            messageBox.alert('임시저장한 데이터만 예약할 수 있습니다.');
             return;
         }
 
-        let message = reservation === true ? '예약을 변경하시겠습니까?' : '예약하시겠습니까?';
-        messageBox.confirm(message, () => {
-            dispatch(
-                postReserveComponentWork({
-                    componentWorkSeq: component.seq,
-                    reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
-                    callback: ({ header }) => {
-                        if (!header.success) {
-                            messageBox.alert(header.message);
-                        } else {
-                            toast.success(header.message);
-                            setOpenReserve(false);
-                        }
-                    },
-                }),
-            );
-        });
+        if (!error) {
+            let message = reservation === true ? '예약을 변경하시겠습니까?' : '예약하시겠습니까?';
+            messageBox.confirm(message, () => {
+                dispatch(
+                    postReserveComponentWork({
+                        componentWorkSeq: component.seq,
+                        reserveDt: moment(reserveDt).format(DB_DATEFORMAT),
+                        callback: ({ header }) => {
+                            if (!header.success) {
+                                messageBox.alert(header.message);
+                            } else {
+                                toast.success(header.message);
+                                setOpenReserve(false);
+                            }
+                        },
+                    }),
+                );
+            });
+        }
     };
 
     /**
@@ -96,7 +114,7 @@ const ReserveComponentWork = ({ component, workStatus }) => {
                                 toast.success(header.message);
                                 setOpenReserve(false);
                             } else {
-                                toast.fail(header.message);
+                                messageBox.alert(header.message);
                             }
                         },
                     }),
@@ -131,7 +149,16 @@ const ReserveComponentWork = ({ component, workStatus }) => {
             {openReserve && (
                 <div className="d-flex align-items-center justify-content-between position-absolute bg-white" style={{ left: 27, right: 0, zIndex: 1 }}>
                     <div style={{ width: 180 }}>
-                        <MokaInput as="dateTimePicker" size="sm" value={reserveDt} onChange={handleDate} isInvalid={error} />
+                        <MokaInput
+                            as="dateTimePicker"
+                            className="is-not-position-center"
+                            size="sm"
+                            value={reserveDt}
+                            onChange={handleDate}
+                            isInvalid={error}
+                            invalidMessage={errorMessage}
+                            inputProps={{ isValidDate: isValidDate }}
+                        />
                     </div>
                     <div className="d-flex align-items-center">
                         <Button variant="positive" className="mr-1" size="sm" onClick={handleClickSave}>

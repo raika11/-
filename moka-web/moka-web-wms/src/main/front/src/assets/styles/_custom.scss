@@ -441,12 +441,6 @@ body {
             }
         }
 
-        [data-usedyn='N'] {
-            .tree-label {
-                color: rgba($black, 0.3);
-            }
-        }
-
         /*2뎁스 padding*/
         > .tree-category > div ul li .tree-label {
             padding-left: 22px;

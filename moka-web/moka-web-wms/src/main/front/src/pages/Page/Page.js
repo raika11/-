@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import produce from 'immer';
 import { Helmet } from 'react-helmet';
-
 import { MokaCard, MokaIcon, MokaLoader } from '@components';
 import { CARD_DEFAULT_HEIGHT, ITEM_PG, ITEM_TP, ITEM_CT, ITEM_CP, TEMS_PREFIX } from '@/constants';
-import { MokaIconTabs } from '@/components/MokaTabs';
+import { MokaIconTabs } from '@components/MokaTabs';
 import { clearStore, deletePage, appendTag, changePageBody } from '@store/page';
 import { clearStore as clearHistoryStore } from '@store/history';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -30,7 +29,7 @@ const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 const Page = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { page, tree } = useSelector(({ page }) => page);
+    const { page, tree, treeBySeq } = useSelector(({ page }) => page);
     const [expansionState, setExpansionState] = useState([true, false, true]);
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
@@ -81,33 +80,27 @@ const Page = ({ match }) => {
     };
 
     /**
-     * 노드 찾기 (재귀)
-     * @returns {object} { findSeq: page.pageSeq, node: null, path: [String(pageTree.pageSeq)] };
+     * 트리아이템의 path찾기
+     * @params {number} targetSeq pageSeq
+     * @returns {array} ['13', '3']
      */
-    const findNode = useCallback((findInfo, rootNode) => {
-        if (String(rootNode.pageSeq) === String(findInfo.findSeq)) {
-            const strSeq = String(rootNode.parentPageSeq);
-            return produce(findInfo, (draft) => {
-                if (draft.path.indexOf(strSeq) < 0) {
-                    draft.path.push(strSeq);
-                }
-            });
-        }
+    const findPath = useCallback(
+        (targetSeq) => {
+            let paths = [];
 
-        if (rootNode.nodes && rootNode.nodes.length > 0) {
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const newInfo = produce(findInfo, (draft) => {
-                    draft.node = rootNode.nodes[i];
-                });
-                const fnode = findNode(newInfo, rootNode.nodes[i]);
-                if (fnode !== null && fnode.node !== null) {
-                    return fnode;
+            const loop = (targetSeq, paths) => {
+                const target = treeBySeq[targetSeq];
+                if (target.pageSeq !== tree.pageSeq) {
+                    paths.push(String(target.parentPageSeq));
+                    loop(target.parentPageSeq, paths);
                 }
-            }
-            return null;
-        }
-        return null;
-    }, []);
+            };
+
+            loop(targetSeq, paths);
+            return paths;
+        },
+        [tree, treeBySeq],
+    );
 
     /**
      * 삭제 이벤트
@@ -115,43 +108,36 @@ const Page = ({ match }) => {
     const handleClickDelete = useCallback(
         (item) => {
             if (item.pageUrl === '/') {
-                toast.warning('메인화면은 삭제할 수 없습니다.');
+                messageBox.alert('메인화면은 삭제할 수 없습니다.');
             } else {
-                let findInfo = {
-                    findSeq: item.pageSeq,
-                    node: null,
-                    path: [],
-                };
-                let fnode = findNode(findInfo, tree);
-
-                let msg;
-                if (fnode.node.nodes && fnode.node.nodes.length > 0) {
-                    msg = `하위 페이지도 삭제됩니다.\n${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`;
-                } else {
-                    msg = `${item.pageSeq}_${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`;
-                }
+                const node = treeBySeq(item.pageSeq);
+                const msg =
+                    node.nodes.length > 0
+                        ? `하위 페이지도 삭제됩니다.\n${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`
+                        : `${item.pageSeq}_${item.pageName}(${item.pageUrl}) 페이지를 삭제하시겠습니까?`;
 
                 messageBox.confirm(
                     msg,
                     () => {
-                        const option = {
-                            pageSeq: item.pageSeq,
-                            callback: ({ header, body }) => {
-                                if (header.success && body) {
-                                    toast.success(header.message);
-                                    history.push(match.path);
-                                } else {
-                                    messageBox.alert(header.message);
-                                }
-                            },
-                        };
-                        dispatch(deletePage(option));
+                        dispatch(
+                            deletePage({
+                                pageSeq: item.pageSeq,
+                                callback: ({ header, body }) => {
+                                    if (header.success && body) {
+                                        toast.success(header.message);
+                                        history.push(match.path);
+                                    } else {
+                                        messageBox.alert(header.message);
+                                    }
+                                },
+                            }),
+                        );
                     },
                     () => {},
                 );
             }
         },
-        [dispatch, findNode, history, match.path, tree],
+        [dispatch, history, match.path, treeBySeq],
     );
 
     /**
@@ -226,7 +212,7 @@ const Page = ({ match }) => {
                 bodyClassName="d-flex flex-column"
             >
                 <Suspense fallback={<MokaLoader />}>
-                    <PageList onDelete={handleClickDelete} match={match} findNode={findNode} />
+                    <PageList onDelete={handleClickDelete} match={match} findPath={findPath} />
                 </Suspense>
             </MokaCard>
 

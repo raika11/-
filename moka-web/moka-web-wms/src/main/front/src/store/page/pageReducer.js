@@ -9,6 +9,7 @@ import * as act from './pageAction';
 export const initialState = {
     error: null,
     tree: null,
+    treeBySeq: {},
     findPage: [],
     search: {
         domainId: null,
@@ -70,6 +71,16 @@ export const initialState = {
     invalidList: [],
 };
 
+const makeTreeBySeq = (list, treeBySeq) => {
+    for (let i = 0; i < list.length; i++) {
+        const node = list[i];
+        treeBySeq[node.pageSeq] = node;
+        if (node.nodes) {
+            makeTreeBySeq(node.nodes, treeBySeq);
+        }
+    }
+};
+
 export default handleActions(
     {
         /**
@@ -101,6 +112,7 @@ export default handleActions(
         [act.CLEAR_TREE]: (state) => {
             return produce(state, (draft) => {
                 draft.tree = initialState.tree;
+                draft.treeBySeq = initialState.treeBySeq;
                 draft.error = initialState.error;
             });
         },
@@ -118,9 +130,13 @@ export default handleActions(
          * 데이터 조회
          */
         [act.GET_PAGE_TREE_SUCCESS]: (state, { payload: { body } }) => {
+            const { tree, findPage } = body;
+            const treeBySeq = {};
+            makeTreeBySeq([tree], treeBySeq);
+
             return produce(state, (draft) => {
-                const { tree, findPage } = body;
                 draft.tree = tree;
+                draft.treeBySeq = treeBySeq;
                 draft.findPage = findPage;
                 draft.error = initialState.error;
             });
@@ -128,6 +144,7 @@ export default handleActions(
         [act.GET_PAGE_TREE_FAILURE]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.tree = initialState.tree;
+                draft.treeBySeq = initialState.treeBySeq;
                 draft.findPage = initialState.findPage;
                 draft.error = payload;
             });

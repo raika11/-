@@ -9,7 +9,7 @@ import PageTreeView from './components/PageTreeView';
 /**
  * 페이지 Tree 컴포넌트
  */
-const PageTree = ({ onDelete, match, findNode }) => {
+const PageTree = ({ onDelete, match, findPath }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_PAGE_TREE]);
@@ -41,34 +41,23 @@ const PageTree = ({ onDelete, match, findNode }) => {
     useEffect(() => {
         if (tree && page.pageSeq) {
             // pageSeq까지 트리 오픈
-            let target = {
-                findSeq: page.pageSeq,
-                node: null,
-                path: [String(tree.pageSeq)],
-            };
-            let parent = findNode(target, tree);
+            let paths = findPath(page.pageSeq);
 
             if (findPage.length > 0) {
                 // 검색결과로 넘어온 페이지seq 리스트가 있으면 그 페이지들도 열어줘야하므로 걔들의 부모 노드를 검색해서 path에 추가함
                 findPage.forEach((seq) => {
-                    const ps = findNode({ findSeq: seq, node: null, path: [] }, tree);
-                    if (ps) {
-                        const filtered = ps.path.filter((p) => parent.path.indexOf(p) < 0);
-                        if (filtered.length > 0) {
-                            parent = {
-                                ...parent,
-                                path: [...parent.path, ...filtered],
-                            };
-                        }
+                    const ps = findPath(seq);
+                    const filtered = ps.filter((p) => paths.indexOf(p) < 0);
+                    if (filtered.length > 0) {
+                        paths = [...paths, ...filtered];
                     }
                 });
             }
-            if (parent) {
-                setExpanded(parent.path);
-                setSelected(String(page.pageSeq));
-            }
+
+            setExpanded(paths);
+            setSelected(String(page.pageSeq));
         }
-    }, [findNode, page.pageSeq, findPage, tree]);
+    }, [findPath, page.pageSeq, findPage, tree]);
 
     useEffect(() => {
         if (tree?.pageSeq) {

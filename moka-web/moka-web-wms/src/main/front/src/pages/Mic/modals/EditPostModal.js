@@ -193,9 +193,9 @@ const EditPostModal = (props) => {
             onHide={onHide}
             title={`❛ ${agenda.agndKwd} ❜ 포스트 관리`}
             buttons={[
-                { text: '저장', variant: 'positive', onClick: handleSave },
-                { text: '취소', variant: 'negative', onClick: onHide },
+                { text: '수정', variant: 'positive', onClick: handleSave },
                 { text: '삭제', variant: 'negative', onClick: () => onDelete(post) },
+                { text: '취소', variant: 'negative', onClick: onHide },
             ]}
             centered
             loading={loading}

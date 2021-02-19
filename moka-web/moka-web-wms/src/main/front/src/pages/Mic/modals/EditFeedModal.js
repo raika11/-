@@ -200,7 +200,7 @@ const EditFeedModal = (props) => {
             onHide={onHide}
             title={`❛ ${agenda.agndKwd} ❜ 관리자 피드 ${feed.answSeq ? '수정' : '등록'}`}
             buttons={[
-                { text: '저장', variant: 'positive', onClick: handleSave },
+                { text: feed.answSeq ? '수정' : '저장', variant: 'positive', onClick: handleSave },
                 { text: '취소', variant: 'negative', onClick: onHide },
             ]}
             centered

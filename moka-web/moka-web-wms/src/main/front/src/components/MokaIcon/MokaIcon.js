@@ -55,6 +55,7 @@ import {
     faCommentAlt as falCommentAlt,
     faTrashAlt as falTrashAlt,
     faUserCircle as falUserCircle,
+    faFileExcel as falFileExcel,
 } from '@moka/fontawesome-pro-light-svg-icons';
 import {
     faThList as fasThList,
@@ -131,6 +132,7 @@ library.add(falCommentAltLines);
 library.add(falCommentAlt);
 library.add(falTrashAlt);
 library.add(falUserCircle);
+library.add(falFileExcel);
 
 // 아이콘 등록(far)
 library.add(farRedoAlt);

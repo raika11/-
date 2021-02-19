@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
+import { MokaIcon } from '@components';
 
 const propTypes = {
     /**
@@ -8,6 +9,7 @@ const propTypes = {
      */
     nodeData: PropTypes.shape({
         pageName: PropTypes.string,
+        usedYn: PropTypes.oneOf(['Y', 'N']),
     }).isRequired,
     /**
      * 트리라벨에 마우스 hover할 때 나오는 버튼 리스트
@@ -25,11 +27,14 @@ const defaultProps = {
 
 const MokaTreeLabel = (props) => {
     const { nodeData, labelHoverButtons } = props;
-    const { pageName } = nodeData;
+    const { pageName, usedYn } = nodeData;
 
     return (
         <React.Fragment>
-            <span>{pageName}</span>
+            <span>
+                {usedYn === 'N' && <MokaIcon iconName="fal-file-excel" className="mr-1" />}
+                {pageName}
+            </span>
             <div className="d-flex align-items-center tree-buttons">
                 {labelHoverButtons.map((button, idx) => (
                     <Button

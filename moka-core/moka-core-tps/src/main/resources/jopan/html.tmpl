@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head id="Head1" runat="server">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <script type="text/javascript" src="http://static.joins.com/joongang_15re/scripts/lib/jquery/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="http://static.joins.com/joongang_15re/scripts/lib/jquery/ui/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="http://static.joins.com/joongang_15re/scripts/lib/jquery/ui/jquery-ui.min.css">
+  <script type="text/javascript">
+    function fnJaJopanClick(jaID, evt) {
+      var kisaType = $("#" + jaID).attr("kysatype");
+      var mediatype = $("#" + jaID).attr("mediatype");
+      var contentBody = $("#" + jaID).html();
+      var compCustomCode = $("#" + jaID).attr("customcd");
+      var winEvent = evt || window.event;
+      if (winEvent) {
+        //if (kisaType == "본문") {
+        if (compCustomCode == "CO") { //본문
+          if (winEvent.ctrlKey == true) {
+            $("#txtContent").val($("#txtContent").val() + "\n\n" + contentBody);
+          }
+          else if (winEvent.shiftKey == true) { // 사진 설명
+            for (var tmpi = 1; tmpi <= 10; tmpi++) {
+              if ($("#sImage" + tmpi + "_cation").val() == "") {
+                $("#sImage" + tmpi + "_cation").val($("#" + jaID).html());
+                break;
+              }
+            }
+          }
+          else {
+            $("#txtContent").val(contentBody);
+          }
+        }
+        else {
+          if (winEvent.ctrlKey == true) {
+            $("#txtContent").val($("#txtContent").val() + "\n\n" + contentBody);
+          }
+          else if (winEvent.altKey == true) {
+            $("#txtSubTitle").val(contentBody);
+          }
+          else if (winEvent.shiftKey == true) { // 사진 설명
+            for (var tmpi = 1; tmpi <= 10; tmpi++) {
+              if ($("#sImage" + tmpi + "_cation").val() == "") {
+                $("#sImage" + tmpi + "_cation").val($("#" + jaID).html());
+                break;
+              }
+            }
+          }
+          else {
+            if (compCustomCode == "TT") { //제목
+              $("#txtTitle").val(contentBody);
+            }
+            else if (compCustomCode == "ST") { //제목
+              $("#txtSubTitle").val(contentBody);
+            }
+            else if (compCustomCode == "RE") { //리포터
+              $("#txtContent").val($("#txtContent").val() + "\n\n" + contentBody);
+            }
+            else if (compCustomCode == "ID") { //이미지설명
+              $("#txtContent").val(contentBody + "\n\n" + $("#txtContent").val());
+            }
+            else if (compCustomCode == "IM") {
+              /*for (var tmpi = 1; tmpi <= 10; tmpi++) {
+                  if ($("#sImage" + tmpi).val() == "") {
+                      $("#sImage" + tmpi).val($("#" + jaID).attr("ImageFile"));
+                      $("#txtContent").val("<!--@IMAGE" + tmpi + "@-->" + $("#txtContent").val());
+                      break;
+                  }
+              }*/
+            }
+            else {
+              $("#txtContent").val($("#txtContent").val() + "\n\n" + contentBody);
+            }
+          }
+        }
+      }
+      else {
+        alert("안되용");
+      }
+    }
+
+    //중첩된 영역 조정
+    function fnCheckNested() {
+      var tCompCnt = $("#tCompCnt").val(); // 전체 콤포넌트 갯수
+      for (var tmpi = 1; tmpi <= tCompCnt; tmpi++) {
+        var pYpos = parseFloat($("#JComp" + tmpi).css("top").replace("px", ""), 0);
+        var pXpos = parseFloat($("#JComp" + tmpi).css("left").replace("px", ""), 0);
+        var pXwith = parseFloat($("#JComp" + tmpi).css("width").replace("px", ""), 0);
+        var pYheight = parseFloat($("#JComp" + tmpi).css("height").replace("px", ""), 0);
+        for (var tmpj = 1; tmpj <= tCompCnt; tmpj++) {
+          if (tmpj != tmpi) {
+            var cYpos = parseFloat($("#JComp" + tmpj).css("top").replace("px", ""), 0);
+            var cXpos = parseFloat($("#JComp" + tmpj).css("left").replace("px", ""), 0);
+            var cXwith = parseFloat($("#JComp" + tmpj).css("width").replace("px", ""), 0);
+            var cYheight = parseFloat($("#JComp" + tmpj).css("height").replace("px", ""), 0);
+            if (pXpos <= cXpos && pYpos <= cYpos && (pXpos + pXwith + 1) >= (cXpos + cXwith) && (pYpos + pYheight + 1) >= (cYpos + cYheight)) {
+              if ($("#JComp" + tmpi).attr("customcd") == "CO" && $("#JComp" + tmpj).attr("customcd") == "CO") {
+                $("#JComp" + tmpj).css("background", "#D5D5D5");
+                $("#JComp" + tmpj).css("z-index", '1');
+              }
+              //$("#JComp" + tmpi).add($("#JComp" + tmpj).html()); // 포함 관계임
+              //$("#JComp" + tmpj).hide();
+            }
+          }
+        }
+      }
+    }
+
+    //div 레이어팝업 제어
+    function menuclick(obj_id, visibility, menuNM) {
+      var obj = document.getElementById(obj_id);
+      if (visibility == null || visibility == "visible") {
+        $(obj).show();
+      }
+      else {
+        $(obj).hide();
+        $("iframe", $(obj)).attr("src", "about:blank");
+      }
+      if (menuNM != '')
+        $('#' + obj_id + 'NM').html(menuNM);
+    }
+
+    function fnViewFrame(frame_id, pagename) {
+      document.getElementById(frame_id).src = pagename;
+    }
+
+    function fnClipBoardCopy() {
+      var clipText = "";
+      clipText = "<stitle>" + $("#txtTitle").val() + "</stitle>" + "<subtitle>" + $("#txtSubTitle").val() + "</subtitle>" + "<cont>" + $("#txtContent").val() + "</cont>";
+      window.clipboardData.setData('Text', clipText);
+      alert("클립보드에 저장하였습니다");
+    }
+
+    function fnClipBoardPaste() {
+      var clipText = window.clipboardData.getData('Text');
+      var sTitle = "";
+      var sSubTitle = "";
+      var sCont = "";
+
+      if (clipText.indexOf("<stitle>") >= 0) {
+        sTitle = clipText.substring(clipText.indexOf("<stitle>"), clipText.indexOf("</stitle>"));
+        sTitle = sTitle.replace("<stitle>", "");
+      }
+
+      if (clipText.indexOf("<subtitle>") >= 0) {
+        sSubTitle = clipText.substring(clipText.indexOf("<subtitle>"), clipText.indexOf("</subtitle>"));
+        sSubTitle = sSubTitle.replace("<subtitle>", "");
+      }
+      if (clipText.indexOf("<cont>") >= 0) {
+        sCont = clipText.substring(clipText.indexOf("<cont>"), clipText.indexOf("</cont>"));
+        sCont = sCont.replace("<cont>", "");
+      }
+
+      if ($("#txtTitle").val().length > 2) $("#txtTitle").val($("#txtTitle").val() + "<br/>" + sTitle);
+      else $("#txtTitle").val(sTitle);
+
+      if ($("#txtSubTitle").length > 2) $("#txtSubTitle").val($("#txtSubTitle").val() + "<br/>" + sSubTitle);
+      else $("#txtSubTitle").val(sSubTitle);
+
+      $("#txtContent").val($("#txtContent").val() + "\n\n" + sCont);
+    }
+
+    function fnClear(sDiv) {
+      $('#' + sDiv).val("");
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    $(document).ready(function () {
+      $("#jCompOutput").css({width:$("#JContent").width() + $("#divInputform").width() + 20 + "px"});
+      //$("#divInputForm").draggable();
+      $("#divArticleCommonLayer").draggable();
+      fnCheckNested();
+
+      $("div.jcomp").click(function(e){
+        fnJaJopanClick($(this).prop("id"), e)
+      }).hover(
+          function(e){
+            $(".jcomp").css("border", "1px dashed #00f");
+            $(".jcomp").css("font-size", "12px");
+            $("#" + $(this).prop("id")).css("border", "2px solid #CC3300");
+            $("#" + $(this).prop("id")).css("font-size", "12px");
+          },
+          function(e){
+            $(".jcomp").css("border", "1px dashed #00f");
+            $(".jcomp").css("font-size", "12px");
+          }
+      );
+
+      $(this).keyup(function(e) {
+        if (e.keyCode === 27) {
+          fnClear('txtTitle');
+          fnClear('txtSubTitle');
+          fnClear('txtContent');
+        }
+      });
+    });
+  </script>
+  <style>
+    form,p,h1,h2,h3,h4,h5,h6,dl,dt,dd,ul,ol,li,fieldset,input,button,blockquote,th,td {
+      margin:0;
+      padding:0;
+      font:12px/1.3 "돋움",dotum,arial;
+      color:#666; }
+    .table_form {
+      width:100%;
+    }
+    .table_form td, th {
+      padding-top:3px;
+      padding-bottom:2px;
+      border-bottom:1px solid #e4e4e4;
+      padding-left:5px;
+      color:#6a6a6a; }
+    .table_form th {
+      width:30px; }
+    .table_form td * {
+      vertical-align:middle; }
+    .table_form input.txt {
+      border:1px solid #949494;
+      color:#6a6a6a;
+      padding: 5px;
+      width:95%; }
+    .table_form input.point {
+      border:1px solid #949494 !important; }
+    .table_form td.contents textarea {
+      border: 1px solid #949494;
+      color: #3C3C3C;
+      font-family: "굴림",gulim,AppleGothic,Arial,Helvetica,Clean,Sans-serif;
+      font-size: 13px;
+      line-height: 19px;
+      padding: 5px;
+      height: 570px;
+      width: 95%; }
+    .table_form td.subtitle textarea {
+      border: 1px solid #949494;
+      color: #3C3C3C;
+      font-family: "굴림",gulim,AppleGothic,Arial,Helvetica,Clean,Sans-serif;
+      font-size: 11px;
+      padding: 5px;
+      height: 100px;
+      width: 95%; }
+    .table_form td a {
+      color: #565968;
+      cursor: pointer;
+      font-size: 11px;
+      letter-spacing: -1px;
+      text-decoration: none; }
+    input.s {
+      height:14px;
+      padding:3px 3px 1px;
+      padding /*\**/: 4px 3px 0\9;
+      *padding:4px 3px 0;
+      border:1px solid #d7d7d7;
+      color:#333;
+      font:12px 굴림,gulim,AppleGothic,Arial,Helvetica,Clean,Sans-serif; }
+    #divInputform {
+      float:left;
+      margin-left:10px;
+      width:550px;
+    }
+    #divArticleCommonLayer {
+      display:none;
+      position:absolute;
+      top:10px;
+      left:10px;
+      background:white;
+      border:2px solid red;
+      width:420px;
+      height:600px;
+      z-index:10;}
+    .jcomp {
+      cursor:pointer;
+    }
+    .JopanPaperInfo {
+      font-weight:bold;
+      text-align:center;
+      font-size:16px;
+    }
+    .btnClear {
+      font-weight:bold;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .spnColorDesc {
+      border:1px dashed #00F;padding:0 10px 0 10px;margin-right:5px;font-size:13px;font-weight:normal;
+    }
+    body {
+      padding:0px; margin:0px;
+    }
+
+    #jCompOutput{clear:both;zoom:1;}
+    #jCompOutput:after {content:'.';display:block;font-size:0;height:0px;line-height:0;clear:both;}
+    #form1{float:left;}
+  </style>
+</head>
+<body>
+<div id="jCompOutput" style="">
+  ${preview}
+</div>
+<form name="form1" id="form1" runat="server">
+  <div id="divInputform">
+    <table class="table_form">
+      <tr>
+        <td colspan="2" class="JopanPaperInfo">
+          ${info}
+        </td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <span style="background-color:#FF9DFF;" class="spnColorDesc">제목</span>
+          <span style="background-color:#FFD8D8;" class="spnColorDesc">부제목</span>
+          <span style="background-color:#FFFFFF;" class="spnColorDesc">본문</span>
+          <span style="background-color:#F6FFCC;" class="spnColorDesc">이미지</span>
+          <span style="background-color:#D2E5A8;" class="spnColorDesc">이미지설명</span>
+          <span style="background-color:#FAED7D;" class="spnColorDesc">기자정보</span>
+        </td>
+      </tr>
+      <tr>
+        <th><a class="btnClear" onclick="fnClear('txtTitle');" title="삭제">제목 X</a></th>
+        <td>
+          <input runat="server" type="text" name="txtTitle" id="txtTitle" class="txt" />
+          <!-- input type="button" value="복사" onclick="fnClipBoardCopy();"/> <input type="button" value="붙이기" onclick="fnClipBoardPaste();"/ -->
+        </td>
+      </tr>
+      <tr>
+        <th><a class="btnClear" onclick="fnClear('txtSubTitle');" title="삭제">부제 X</a></th>
+        <td class="subtitle">
+          <textarea runat="server" name="txtSubTitle" id="txtSubTitle" value=""></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th><a class="btnClear" onclick="fnClear('txtContent');" title="삭제">본문 X</a></th>
+        <td class="contents">
+          <textarea runat="server" name="txtContent" id="txtContent"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan="2" style="padding-left:20px;">
+          <ul>
+            <li>본문 + Ctrl => 본문 뒤에 추가 </li>
+            <li>제목 + Ctrl => 본문 뒤에 추가 </li>
+            <li>제목 + Alt  => 부제에 추가 </li>
+            <li>ESC => 전체삭제 </li>
+            <!-- li><a onclick="menuclick('divArticleCommonLayer', 'visible', '태그변환');fnViewFrame('frmArticleCommonLayer', './Layer/SpecialTagConvert.aspx');" style="cursor:hand;color:red;">태그변환 관리</a></li -->
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="divArticleCommonLayer" class="search_layer cms_layer cms_layer2 publish_log_layer ui-draggable">
+    <div class="layer_hd">
+      <h3 id="divArticleCommonLayerNM"></h3>
+      <div class="btn_area">
+				<span class="btn">
+					<a class="close btn_gray" onclick="menuclick('divArticleCommonLayer', 'hidden', '');" style="cursor:hand;"><span>닫기</span></a>
+				</span>
+      </div>
+    </div>
+    <div class="layer_bd">
+      <iframe id="frmArticleCommonLayer" style="width:100%;height:550px;border:0px;margin:0 0 0 0;" frameborder="0"></iframe>
+    </div>
+  </div>
+</form>
+</body>
+</html>

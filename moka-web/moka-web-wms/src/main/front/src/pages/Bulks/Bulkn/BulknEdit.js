@@ -327,6 +327,7 @@ ${bulkArticleRow
                     { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
                     { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: bulkartSeq ? true : false }, //useAuth: true
                     // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
+                    { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), disabled: editState, className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
                 ]}
             >
@@ -414,14 +415,6 @@ ${bulkArticleRow
                             </div>
                         );
                     })}
-
-                    <Form.Row>
-                        <Col xs={12} className="justify-content-center align-items-center text-right">
-                            <Button variant="outline-neutral" onClick={(e) => handlePreviewModalButton(e)} disabled={editState}>
-                                미리보기
-                            </Button>
-                        </Col>
-                    </Form.Row>
                 </Form>
                 {/*<SpecialCharModal show={modalMShow} onHide={() => setModalMShow(false)} onClickSave={null} />*/}
                 <DefaultInputModal

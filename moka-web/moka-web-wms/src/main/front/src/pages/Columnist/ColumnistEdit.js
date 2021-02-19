@@ -338,7 +338,7 @@ const ColumnistEdit = ({ history, match }) => {
                     </Col>
                     <Col xs={3}>
                         <Button variant="searching" className="flex-shrink-0" onClick={handleClickReportSearchbutton} disabled={editDisabled.editBoxButton}>
-                            가자검색
+                            기자검색
                         </Button>
                     </Col>
                 </Form.Row>

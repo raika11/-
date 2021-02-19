@@ -1,3 +1,4 @@
+import React from 'react';
 import { EtcButtonRenderer } from './GridRenderer';
 
 export default [
@@ -28,16 +29,32 @@ export default [
         width: 250,
         flex: 1,
         tooltipField: 'title',
+        cellRendererFramework: ({ value }) => {
+            return (
+                <>
+                    <div
+                        style={{
+                            boxSizing: 'border-box',
+                            whiteSpace: 'normal',
+                            lineHeight: '20px',
+                            fontSize: '14px',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                        }}
+                    >
+                        {value}
+                    </div>
+                </>
+            );
+        },
         cellStyle: {
-            boxSizing: 'border-box',
-            whiteSpace: 'normal',
-            lineHeight: '20px',
-            fontSize: '14px',
-            display: '-webkit-box',
-            paddingTop: '5px',
-            '-webkit-line-clamp': 2,
-            '-webkit-box-orient': 'vertical',
-            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+            flexDirection: 'column',
+            height: '100%',
         },
     },
     {

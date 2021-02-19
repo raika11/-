@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.schedule.server.entity;
 
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.entity.BaseAudit;
 import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.*;
@@ -39,7 +40,7 @@ public class JobContent extends BaseAudit {
      * 삭제여부(Y:삭제, N:미삭제)
      */
     @Column(name = "DEL_YN", columnDefinition = "char")
-    private String delYn;
+    private String delYn = MokaConstants.NO;
 
     /**
      * 카테고리

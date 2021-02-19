@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -27,10 +28,23 @@ public class JobContentSaveDTO implements Serializable {
     private Long jobSeq;
 
     @ApiModelProperty("사용 여부")
+    //@Pattern(regexp = "[Y|N]{1}$", message = "{tps.schedule-server.error.pattern.usedYn}")
+    //@NotNull(message = "{tps.schedule-server.error.notnull.usedYn}")
     private String usedYn;
 
     @ApiModelProperty("분류")
     private String category;
+
+    @ApiModelProperty("패키지 명")
+    //@NotNull(message = "{tps.schedule-server.error.notnull.pkgNm}")
+    private String pkgNm;
+
+    @ApiModelProperty("작업 타입 (S: 반복성, R: 일회성)")
+    //@Pattern(regexp = "[S|R]{1}$", message = "{tps.schedule-server.error.pattern.jobType}")
+    private String jobType;
+
+    @ApiModelProperty("작업 코드")
+    private String jobCd;
 
     @ApiModelProperty("주기")
     private Long period;

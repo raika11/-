@@ -27,18 +27,29 @@ public class JobContentDTO implements Serializable {
     }.getType();
 
 
+    @ApiModelProperty("작업 번호")
+    private Long jobSeq;
 
     @ApiModelProperty("사용 여부")
     private String usedYn;
 
-    @ApiModelProperty("작업 번호")
-    private Long jobSeq;
-
-    @ApiModelProperty("배포서버 일련번호")
-    private Long serverSeq;
+    @ApiModelProperty("삭제 여부")
+    private String delYn;
 
     @ApiModelProperty("분류")
     private String category;
+
+    @ApiModelProperty("패키지 명")
+    private String pkgNm;
+
+    @ApiModelProperty("작업 타입")
+    private String jobType;
+
+    @ApiModelProperty("작업 코드")
+    private String jobCd;
+
+    @ApiModelProperty("배포서버 일련번호")
+    private Long serverSeq;
 
     @ApiModelProperty("주기")
     private Long period;
@@ -73,7 +84,7 @@ public class JobContentDTO implements Serializable {
     @ApiModelProperty("수정자")
     private String modId;
 
-    @ApiModelProperty("작업정보")
+    @ApiModelProperty("작업설명")
     private JobStatus jobStatus;
 
     @ApiModelProperty("등록자정보")

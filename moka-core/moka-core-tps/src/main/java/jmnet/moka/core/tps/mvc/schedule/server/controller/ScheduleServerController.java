@@ -211,8 +211,8 @@ public class ScheduleServerController extends AbstractCommonController {
 
 
         } catch (Exception e) {
-            log.error("[FAIL TO INSERT DISTRIBUTE SERVER]", e);
-            tpsLogger.error(LoggerCodes.ActionType.INSERT, "[FAIL TO INSERT DISTRIBUTE SERVER]", e, true);
+            log.error("[FAIL TO INSERT SCHEDULE]", e);
+            tpsLogger.error(LoggerCodes.ActionType.INSERT, "[FAIL TO INSERT SCHEDULE]", e, true);
             throw new Exception(msg("tps.common.error.insert"), e);
         }
     }

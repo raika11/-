@@ -60,10 +60,10 @@ public abstract class AbstractReserveJob implements ReserveJob {
     public void asyncTask(ReserveJobDTO reserveJob, Long taskSeq) {
 
         try {
-            logger.debug("=========== sleep : "+ McpDate.term(reserveJob.getReserveDt()));
+            logger.debug("reserved jobseq : {} , sleep : {}", reserveJob.getJobSeq(), McpDate.term(reserveJob.getReserveDt()));
             Thread.sleep(McpDate.term(reserveJob.getReserveDt()));
 
-            //실행 전 유효한 reserved 인지 체크
+            //실행 전 유효한 작업예약 인지 체크
             scheduleHistory = jobContentService
                     .findGenStatusHistoryById(reserveJob.getSeqNo())
                     .orElseThrow();

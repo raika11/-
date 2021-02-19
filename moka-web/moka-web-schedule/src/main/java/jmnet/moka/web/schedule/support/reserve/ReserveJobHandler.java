@@ -48,30 +48,31 @@ public class ReserveJobHandler {
      * 예약작업 초기화
      */
     @PostConstruct
-    public void initSchedulerMap() {
+    public void initReservedJob() {
         // todo 1. 작업 목록을 조회하여 미실행된 status_flag = 0인 9인 작업 예약 작업으로 추가
+        try{
+            if (propertyHolder.getReservedAction()) { // 예약 스케줄 초기화 실행 여부 체크
+                //Reserved Job 조회
+                List<GenContent> scheduleList = jobContentService.findAllReservedJobContent();
 
-        if (propertyHolder.getReservedAction()) { // 스케줄 작업 실행 여부 체크
-            List<GenContent> scheduleList = jobContentService.findAllReservedJobContent();
+                for (GenContent info : scheduleList) {
+                    ReserveJobDTO reserveJob = new ReserveJobDTO();
+                    reserveJob.setJobSeq(info.getJobSeq());
 
-            for (GenContent info : scheduleList) {
-                //우선 350서버만 통과
-                if(info.getServerSeq() == 350) {
-                    info.setProgrameNm("jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob");
-                }
-                ReserveJobDTO reserveJob = new ReserveJobDTO();
-                reserveJob.setJobSeq(info.getJobSeq());
+                    //Reserved Job의 예약상태 조회
+                    GenStatusHistory genStatusHist = jobContentService.findGenStatusHistory(info.getJobSeq());
+                    if(genStatusHist != null){
+                        reserveJob.setSeqNo(genStatusHist.getSeqNo());
+                        reserveJob.setStatus(genStatusHist.getStatus());
+                        reserveJob.setWorkType("");
+                        reserveJob.setReserveDt(genStatusHist.getReserveDt());
 
-                GenStatusHistory genStatusHist = jobContentService.findGenStatusHistory(info.getJobSeq());
-                if(genStatusHist != null){
-                    reserveJob.setSeqNo(genStatusHist.getSeqNo());
-                    reserveJob.setWorkType(genStatusHist.getStatus());
-                    reserveJob.setReserveDt(genStatusHist.getReserveDt());
-
-                    addReserveJob(reserveJob, info);
+                        addReserveJob(reserveJob, info);
+                    }
                 }
             }
-
+        }catch(Exception e){
+            log.error("init ReserveJob fail {}", e);
         }
     }
 
@@ -89,17 +90,14 @@ public class ReserveJobHandler {
                 .findJobContentBySeq(jobSeq)
                 .orElseThrow();
 
-        //우선 350서버만 통과
-        if(genContent.getServerSeq() == 350) {
-            genContent.setProgrameNm("jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob");
-        }
         ReserveJobDTO reserveJob = new ReserveJobDTO();
         reserveJob.setJobSeq(genContent.getJobSeq());
 
         GenStatusHistory genStatusHist = jobContentService.findGenStatusHistory(genContent.getJobSeq());
-        if(genStatusHist != null){
+        if(genStatusHist != null ){
             reserveJob.setSeqNo(genStatusHist.getSeqNo());
-            reserveJob.setWorkType(genStatusHist.getStatus());
+            reserveJob.setStatus(genStatusHist.getStatus());
+            reserveJob.setWorkType("");
             reserveJob.setReserveDt(genStatusHist.getReserveDt());
 
             return addReserveJob(reserveJob, genContent);
@@ -116,10 +114,14 @@ public class ReserveJobHandler {
     public boolean addReserveJob(ReserveJobDTO reserveJob, GenContent genContent) {
         boolean result = false;
 
-        if (McpString.isNotEmpty(genContent.getProgrameNm()) && 0 < McpDate.term(reserveJob.getReserveDt())) {// 프로그램명이 존재할 경우 + 예약시간이 미래시간인 경우 실행
+        // PKG_NM 이 등록된 경우만 Job 할당 가능 + 예약시간이 미래시간인 경우 실행
+        // 작업예약상태가 0(실행대기)인 경우만 등록, 9(실행 중)은 다른 서버에서 실행 중인 JOB을 간주하여 미등록
+        if (McpString.isNotEmpty(genContent.getProgrameNm())
+                && 0 < McpDate.term(reserveJob.getReserveDt())
+                && reserveJob.getStatus().equals("0")) {
             try {
                 ReserveJob job = (ReserveJob) context.getBean(Class.forName(genContent.getProgrameNm()));
-                Long newTaskSeq = reserveJob.getSeqNo();
+                Long newTaskSeq = reserveJob.getSeqNo();    //reservedJob taskSeq 에 TB_GEN_CONTENT_HIST.SEQ_NO 입력
                 reserveJobTaskExecutor.execute(() -> job.asyncTask(reserveJob, newTaskSeq));
                 result = true;
             } catch (BeansException | ClassNotFoundException e) {
@@ -142,6 +144,7 @@ public class ReserveJobHandler {
                 .findGenStatusHistoryById(reserveJobProcSeq)
                 .orElseThrow();
 
+        //DEL_YN을 Y로 변경 처리
         if (scheduleHistory != null) {
             scheduleHistory.setDelYn("Y");
             jobContentService.updateGenStatusHistory(scheduleHistory);

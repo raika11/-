@@ -56,22 +56,19 @@ public class ScheduleJobHandler {
      */
     @PostConstruct
     public void initSchedulerMap() {
-
-        if (propertyHolder.getScheduleAction()) { // 스케줄 작업 실행 여부 체크
-            //scheduleMap = new IdentityHashMap<>();
-            //key value만으로 key값을 처리하기 위해 일반해쉬맵으로 변경
-            scheduleMap = new HashMap<>();
-            //List<GenContent> scheduleList = jobContentService.findAllJobContent();
-            List<GenContent> scheduleList = jobContentService.findAllScheduleJobContent();
-            for (GenContent info : scheduleList) {
-
-                //우선 350서버만 통과
-                if(info.getServerSeq() == 350) {
-                    info.setProgrameNm("jmnet.moka.web.schedule.mvc.schedule.service.DummyScheduleJob");
+        try{
+            if (propertyHolder.getScheduleAction()) { // 스케줄 작업 초기화 실행 여부 체크
+                //scheduleMap = new IdentityHashMap<>();
+                //key value만으로 key값을 처리하기 위해 일반해쉬맵으로 변경
+                scheduleMap = new HashMap<>();
+                //Schedule Job 조회
+                List<GenContent> scheduleList = jobContentService.findAllScheduleJobContent();
+                for (GenContent info : scheduleList) {
+                    appendJob(info);
                 }
-
-                appendJob(info);
             }
+        }catch(Exception e){
+            log.error("init ScheduleJob fail {}", e);
         }
     }
 
@@ -86,11 +83,6 @@ public class ScheduleJobHandler {
                 .findJobContentBySeq(jobSeq)
                 .orElseThrow();
 
-        //우선 350서버만 통과
-        if(genContent.getServerSeq() == 350) {
-            genContent.setProgrameNm("jmnet.moka.web.schedule.mvc.schedule.service.DummyScheduleJob");
-        }
-
         return appendJob(genContent);
 
     }
@@ -104,15 +96,15 @@ public class ScheduleJobHandler {
     public boolean appendJob(GenContent genContent) {
         boolean result = false;
         try {
-            // 클래스 bean생성
+            //PKG_NM 이 등록된 경우만 Job 할당 가능
             if (McpString.isNotEmpty(genContent.getProgrameNm())) {
                 Runnable r = getRunnable(genContent);
                 /**
                  * todo 1. 변경 된 테이블에 DummyScheduleJob 데이터 추가 후 해당 조건을 통과하는지 체크 필요
                  */
-                if (McpString
-                        .defaultValue(genContent.getJobType())
-                        .equals("S") && genContent.getPeriod() > 0) {
+                //Schedule Job + 동작주기가 0초 초과인 경우만 실행
+                if (McpString.defaultValue(genContent.getJobType()).equals("S")
+                        && genContent.getPeriod() > 0) {
 
                     //ScheduledFuture<?> scheduledFuture = taskScheduler.scheduleAtFixedRate(r, genContent.getPeriod() * 1000);
                     //등록 시 바로 JOB이 실행되는 관계로 PERIOD 만큼 시작시간을 늦춰서 등록 추가

@@ -32,6 +32,8 @@ public class ReserveJobDTO {
 
     private Long jobSeq;
 
+    private String status;
+
     private String workType;
 
     @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)

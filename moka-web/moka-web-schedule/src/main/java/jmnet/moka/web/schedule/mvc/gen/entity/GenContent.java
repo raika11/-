@@ -113,7 +113,11 @@ public class GenContent {
     @JoinColumn(name = "SERVER_SEQ", insertable = false, updatable = false)
     private GenTarget genTarget;
 
-    @Transient
+    /**
+     * 작업 패키지+서비스 명
+     */
+    @Column(name = "PKG_NM")
+    //@Transient
     private String programeNm;
 
     /**

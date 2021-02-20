@@ -29,19 +29,20 @@ public class JobContentUpdateDTO implements Serializable {
     private Long jobSeq;
 
     @ApiModelProperty("사용 여부")
-    //@Pattern(regexp = "[Y|N]{1}$", message = "{tps.schedule-server.error.pattern.usedYn}")
-    //@NotNull(message = "{tps.schedule-server.error.notnull.usedYn}")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.common.error.pattern.usedYn}")
+    @NotNull(message = "{tps.schedule-server.error.notnull.usedYn}")
     private String usedYn;
 
     @ApiModelProperty("분류")
     private String category;
 
     @ApiModelProperty("패키지 명")
-    //@NotNull(message = "{tps.schedule-server.error.notnull.pkgNm}")
+    @NotNull(message = "{tps.schedule-server.error.notnull.pkgNm}")
     private String pkgNm;
 
     @ApiModelProperty("작업 타입 (S: 반복성, R: 일회성)")
-    //@Pattern(regexp = "[S|R]{1}$", message = "{tps.schedule-server.error.pattern.jobType}")
+    @Pattern(regexp = "[S|R]{1}$", message = "{tps.schedule-server.error.pattern.jobType}")
+    @NotNull(message = "{tps.schedule-server.error.notnull.jobType}")
     private String jobType;
 
     @ApiModelProperty("작업 코드")

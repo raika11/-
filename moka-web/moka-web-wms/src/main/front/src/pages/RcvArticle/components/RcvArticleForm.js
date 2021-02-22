@@ -179,6 +179,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
+
                 {/* 분류 */}
                 <Form.Row className="mb-2 flex-shrink-0">
                     <Col className="p-0" xs={10}>
@@ -203,16 +204,27 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         </Button>
                     </Col>
                 </Form.Row>
+
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
                         <MokaInputLabel label="제목" value={article.title} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
+
                 {/* 부제목 */}
                 <div className="mb-2 w-100">
                     <MokaInputLabel as="textarea" label="부제목" inputClassName="resize-none" value={article.subTitle} inputProps={{ rows: 2 }} disabled />
                 </div>
+
+                {/* 본문(단순 보기) */}
+                <Form.Row className="flex-fill mb-2">
+                    <Col className="p-0 d-flex" xs={12}>
+                        <MokaInputLabel label="본문" className="mb-0" as="none" />
+                        <div className="flex-fill overflow-hidden overflow-y-scroll input-border p-2 user-select-text" dangerouslySetInnerHTML={{ __html: article.content }} />
+                    </Col>
+                </Form.Row>
+
                 {/* 기자 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={6}>
@@ -233,20 +245,14 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                         </OverlayTrigger>
                     </Col>
                 </Form.Row>
+
                 {/* 태그 */}
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <Col className="p-0" xs={10}>
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurTag }} />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
-                    </Col>
-                </Form.Row>
-                {/* 본문(단순 보기) */}
-                <Form.Row className="flex-fill">
-                    <Col className="p-0 d-flex" xs={12}>
-                        <MokaInputLabel label="본문" className="mb-0" as="none" />
-                        <div className="flex-fill overflow-hidden overflow-y-scroll input-border p-2 user-select-text" dangerouslySetInnerHTML={{ __html: article.content }} />
                     </Col>
                 </Form.Row>
 

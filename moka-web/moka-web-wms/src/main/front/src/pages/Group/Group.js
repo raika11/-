@@ -14,14 +14,14 @@ const MemberGroupList = React.lazy(() => import('./GroupList'));
 const GroupEdit = React.lazy(() => import('./GroupEdit'));
 const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
 
-const Group = () => {
+const Group = ({ match }) => {
     // 히스토리셋팅
     const history = useHistory();
     const dispatch = useDispatch();
 
     // 마스터 그리드 클릭시 초기화 이벤트
     const handleClickAddGroup = (e) => {
-        history.push('/group/add');
+        history.push(`${match.path}/add`);
     };
 
     React.useEffect(() => {
@@ -39,13 +39,7 @@ const Group = () => {
             </Helmet>
 
             {/*리스트*/}
-            <MokaCard
-                title="사용자 그룹관리"
-                width={480}
-                headerClassName="d-flex justify-content-between align-item-center"
-                className="mr-gutter"
-                bodyClassName="d-flex flex-column"
-            >
+            <MokaCard title="사용자 그룹관리" width={480} className="mr-gutter" bodyClassName="d-flex flex-column">
                 <div className="mb-2 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleClickAddGroup}>
                         등록
@@ -57,18 +51,16 @@ const Group = () => {
             </MokaCard>
             <Switch>
                 <Route
-                    path={['/group/add', '/group/:groupCd']}
+                    path={[`${match.path}/add`, `${match.path}/:groupCd`]}
                     exact
                     render={() => (
                         <MokaIconTabs
-                            //expansion={expansionState[2]}
-                            //onExpansion={handleTabExpansion}
                             tabWidth={1050}
                             tabs={[
                                 <MokaCard className="flex-fill w-100" bodyClassName="m-0 p-0" header={false}>
                                     <Row className="m-0">
                                         <Col xs={6} className="p-0">
-                                            <GroupEdit />
+                                            <GroupEdit match={match} />
                                         </Col>
                                         <Col xs={6} className="p-0">
                                             <GroupChildMenuAuth />

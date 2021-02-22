@@ -4,6 +4,9 @@ import { MokaCard } from '@components';
 import { BoardsSetGrid } from '@pages/Boards/BoardsSet/BoardsSetGrid';
 import BoardsListSearchBox from './BoardsListSearchBox';
 
+/**
+ * 전체 게시판
+ */
 const BoardsList = () => {
     const { boardType } = useSelector((store) => ({
         boardType: store.board.boardType,

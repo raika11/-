@@ -11,6 +11,8 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.push.config.PropertyHolder;
 import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
+import jmnet.moka.web.push.mvc.sender.entity.PushContents;
+import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class PushSenderHandler {
     /**
      * 스케줄 설정 정보 파일
      */
-    private final String RESOURCE_PATH = "sender-info.json";
+    private final String RESOURCE_PATH = ".json";
 
     @Autowired
     public Executor pushSendJobTaskExecutor;
@@ -52,9 +54,12 @@ public class PushSenderHandler {
 
     private Map<String, Sender> scheduleMap;
 
-    public PushSenderHandler(PropertyHolder propertyHolder, Map<String, Sender> scheduleMap) {
+    private final PushContentsService pushContentsService;
+
+    public PushSenderHandler(PropertyHolder propertyHolder, Map<String, Sender> scheduleMap, PushContentsService pushContentsService) {
         this.propertyHolder = propertyHolder;
         this.scheduleMap = scheduleMap;
+        this.pushContentsService = pushContentsService;
     }
 
     /**
@@ -116,11 +121,23 @@ public class PushSenderHandler {
     /**
      * 예약 작업 제거
      *
-     * @param pushSendJobProcSeq 작업 일련번호
+     * @param pushContents 작업 일련번호
      */
-    public boolean removeReservePushJob(Long pushSendJobProcSeq) {
+    public boolean removeReservePushJob(PushContents pushContents) throws Exception {
 
         // TODO 1. 예약 작업 테이블에 del_yn을 'N'으로 변경
+
+        try {
+            PushContents returnValue = pushContentsService.saveDelYn(pushContents);
+            log.debug("[SUCCESS TO INSERT PUSH CONTENTS]");
+        } catch (Exception e) {
+            log.error("[FAIL TO INSERT PUSH CONTENTS]", e);
+            throw new Exception("예약 작업 테이블에 del_yn 변경이 되지 않았습니다.", e);
+        }
+
+
+
+
         return false;
     }
 

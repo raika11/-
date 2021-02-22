@@ -62,7 +62,7 @@ const DtlSearch = ({ grpCd, grp }) => {
     }, [grpCd]);
 
     return (
-        <Form.Row className="mb-2">
+        <Form.Row className="mb-14">
             <div className="mr-2 flex-shrink-0">
                 <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                     <option value="dtlCd">코드</option>

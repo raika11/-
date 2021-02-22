@@ -82,7 +82,7 @@ const AreaAgGridDepth3 = ({ areaDepth2, areaDepth3, setAreaDepth3, onDelete, fla
 
     return (
         <MokaCard header={false} width={280} className="mr-gutter" bodyClassName="d-flex flex-column">
-            <div className="d-flex justify-content-end mb-2">
+            <div className="d-flex justify-content-end mb-14">
                 <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth2?.area?.areaSeq}>
                     추가
                 </Button>

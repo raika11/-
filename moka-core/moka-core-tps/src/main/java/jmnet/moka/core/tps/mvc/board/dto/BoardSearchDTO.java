@@ -63,4 +63,18 @@ public class BoardSearchDTO extends SearchDTO {
 
     @ApiModelProperty("상위 게시글 일련번호")
     private Long parentBoardSeq;
+
+    /**
+     * 팟티채널SRL
+     */
+    @ApiModelProperty(value = "팟티채널SRL", hidden = true)
+    @Builder.Default
+    private Integer podtyChnlSrl = 0;
+
+    /**
+     * 팟티채널SRL
+     */
+    @ApiModelProperty(value = "j팟", hidden = true)
+    @Builder.Default
+    private Integer channelUsedYn = 0;
 }

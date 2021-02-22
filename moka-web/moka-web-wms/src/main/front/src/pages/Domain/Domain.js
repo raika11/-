@@ -98,14 +98,14 @@ const Domain = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard
-                className="mb-0 mr-gutter"
+                className="mr-gutter"
                 height={CARD_DEFAULT_HEIGHT}
                 headerClassName="d-flex justify-content-between align-item-center"
                 bodyClassName="d-flex flex-column"
                 title="도메인 관리"
                 width={480}
             >
-                <div className="mb-2 d-flex justify-content-end">
+                <div className="mb-14 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleAddClickDomain}>
                         도메인 등록
                     </Button>

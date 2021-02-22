@@ -220,7 +220,7 @@ const MokaInput = forwardRef((props, ref) => {
     // dateTimePicker
     else if (as === 'dateTimePicker') {
         Type = MokaDateTimePicker;
-        contextProps = { ...contextProps, placeholder, closeOnSelect };
+        contextProps = { ...contextProps, className, placeholder, closeOnSelect };
     }
     // 기본 input
     else {

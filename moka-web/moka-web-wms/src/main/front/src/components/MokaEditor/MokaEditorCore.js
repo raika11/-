@@ -1,13 +1,20 @@
-import React, { Suspense, useEffect, useCallback, forwardRef, useRef, useImperativeHandle } from 'react';
+import React, { Suspense, useEffect, useState, useCallback, forwardRef, useRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
+import { MokaIcon } from '@components';
 import { propTypes as editorPropTypes } from './MonacoEditor';
-
 const MonacoEditor = React.lazy(() => import('./MonacoEditor'));
 let errorDecoId = 0;
 
 export const propTypes = {
     ...editorPropTypes,
+    /**
+     * 전체화면 버튼 노출
+     * @default
+     */
+    fullWindowButton: PropTypes.bool,
     /**
      * 에러표시 객체
      */
@@ -34,6 +41,7 @@ export const propTypes = {
 const defaultProps = {
     langunage: 'html',
     error: {},
+    fullWindowButton: false,
 };
 
 /**
@@ -42,13 +50,22 @@ const defaultProps = {
  * - tag 삽입 처리
  */
 const MokaEditorCore = forwardRef((props, ref) => {
-    // editor props
-    const { defaultValue, value, language, options, theme } = props;
-
-    // etc
-    const { onBlur, error, tag } = props;
+    const {
+        // editor props
+        defaultValue,
+        value,
+        language,
+        options,
+        theme,
+        // etc
+        onBlur,
+        error,
+        tag,
+        fullWindowButton,
+    } = props;
 
     const editorRef = useRef(null);
+    const [expansion, setExpansion] = useState(false);
     useImperativeHandle(ref, () => editorRef.current);
 
     /**
@@ -150,15 +167,22 @@ const MokaEditorCore = forwardRef((props, ref) => {
 
     return (
         <Suspense>
-            <MonacoEditor
-                ref={editorRef}
-                defaultValue={defaultValue}
-                value={value}
-                theme={theme}
-                language={language}
-                options={{ ...defaultOptions, ...options, glyphMargin: error.line }}
-                editorDidMount={editorDidMount}
-            />
+            <div className={clsx('w-100 h-100', { 'position-relative': !expansion, 'fixed-top': expansion })} style={{ zIndex: expansion ? 3 : undefined }}>
+                {fullWindowButton && (
+                    <Button variant="white" className="absolute-top-right border py-0 px-1" onClick={() => setExpansion(!expansion)} style={{ right: 15, zIndex: 1 }}>
+                        <MokaIcon iconName={expansion ? 'fal-compress-arrows-alt' : 'fal-expand-arrows'} />
+                    </Button>
+                )}
+                <MonacoEditor
+                    ref={editorRef}
+                    defaultValue={defaultValue}
+                    value={value}
+                    theme={theme}
+                    language={language}
+                    options={{ ...defaultOptions, ...options, glyphMargin: error.line }}
+                    editorDidMount={editorDidMount}
+                />
+            </div>
         </Suspense>
     );
 });

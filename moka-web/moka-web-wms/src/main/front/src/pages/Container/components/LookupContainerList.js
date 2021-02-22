@@ -180,8 +180,8 @@ const LookupContainerList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 컨테이너" bodyClassName="d-flex flex-column">
-            <Form className="mb-2">
+        <MokaCard title="관련 컨테이너" bodyClassName="d-flex flex-column">
+            <Form className="mb-14">
                 {/* 검색조건, 키워드 */}
                 <Form.Row>
                     <div className="mr-2 flex-shrink-0">
@@ -218,7 +218,7 @@ const LookupContainerList = (props) => {
 
             {/* 버튼 그룹 */}
             {seqType !== ITEM_CT && (
-                <div className="d-flex mb-10 justify-content-end">
+                <div className="d-flex mb-14 justify-content-end">
                     <Button variant="positive" onClick={() => window.open('/container/add')}>
                         컨테이너 등록
                     </Button>

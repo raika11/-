@@ -61,39 +61,37 @@ const SpecialSearch = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <Form>
-            <Form.Row className="mb-2">
-                <Col xs={12} className="p-0 d-flex">
-                    <div className="flex-shrink-0 mr-2">
-                        <MokaInput as="select" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>
-                            <option value="all">페이지 코드 전체</option>
-                            {ptRows &&
-                                ptRows.map((cd) => (
-                                    <option key={cd.id} value={cd.id}>
-                                        {cd.name}
-                                    </option>
-                                ))}
-                        </MokaInput>
-                    </div>
-
-                    <div className="flex-shrink-0 mr-2">
-                        <MokaInput as="select" className="m-0" name="searchType" value={search.searchType} onChange={handleChangeValue}>
-                            {initialState.searchTypeList.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
+        <Form.Row className="mb-14">
+            <Col xs={12} className="p-0 d-flex">
+                <div className="flex-shrink-0 mr-2">
+                    <MokaInput as="select" name="pageCd" value={search.pageCd} onChange={handleChangeValue}>
+                        <option value="all">페이지 코드 전체</option>
+                        {ptRows &&
+                            ptRows.map((cd) => (
+                                <option key={cd.id} value={cd.id}>
+                                    {cd.name}
                                 </option>
                             ))}
-                        </MokaInput>
-                    </div>
+                    </MokaInput>
+                </div>
 
-                    <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <div className="flex-shrink-0 mr-2">
+                    <MokaInput as="select" className="m-0" name="searchType" value={search.searchType} onChange={handleChangeValue}>
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </div>
 
-                    <Button variant="positive" className="flex-shrink-0" onClick={handleClickAdd}>
-                        페이지 등록
-                    </Button>
-                </Col>
-            </Form.Row>
-        </Form>
+                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+
+                <Button variant="positive" className="flex-shrink-0" onClick={handleClickAdd}>
+                    페이지 등록
+                </Button>
+            </Col>
+        </Form.Row>
     );
 };
 

@@ -56,7 +56,7 @@ const ReservedAgGrid = ({ match, onDelete }) => {
 
     return (
         <>
-            <div className="d-flex justify-content-end mb-2">
+            <div className="d-flex justify-content-end mb-14">
                 <Button variant="positive" onClick={handleAddClick}>
                     예약어 등록
                 </Button>

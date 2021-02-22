@@ -78,12 +78,10 @@ const GroupChildMenuAuth = () => {
             className="w-100 shadow-none"
             loading={loading}
             footerClassName="justify-content-center"
-            footerButtons={
-                groupCd && [
-                    { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                    { text: '새로고침', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
-                ]
-            }
+            footerButtons={[
+                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                { text: '새로고침', variant: 'negative', onClick: handleClickCancel },
+            ]}
             footer
         >
             <Row style={{ padding: '0 20px 0 20px' }} className="rc-tree-group">

@@ -79,7 +79,7 @@ const TemplateAgGrid = ({ onDelete, match }) => {
     return (
         <>
             {/* 버튼 그룹 */}
-            <div className="d-flex mb-2">
+            <div className="d-flex mb-14">
                 <MokaTableTypeButton
                     onSelect={(selectedKey) => {
                         setListType(selectedKey);

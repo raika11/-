@@ -15,7 +15,7 @@ const MemberChildLoginHistoryList = React.lazy(() => import('./relations/MemberC
 /**
  * 사용자 관리
  */
-const Member = () => {
+const Member = ({ match }) => {
     const dispatch = useDispatch();
     const [activeTabIdx, setActiveTabIdx] = useState(0);
 
@@ -34,14 +34,7 @@ const Member = () => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard
-                className="mb-0 mr-gutter"
-                height={CARD_DEFAULT_HEIGHT}
-                headerClassName="d-flex justify-content-between align-item-center"
-                bodyClassName="d-flex flex-column"
-                title="사용자 관리"
-                width={1016}
-            >
+            <MokaCard className="mb-0 mr-gutter" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title="사용자 관리" width={1016}>
                 <Suspense>
                     <MemberList />
                 </Suspense>
@@ -49,7 +42,7 @@ const Member = () => {
 
             <Switch>
                 <Route
-                    path={['/member/add', '/member/:memberId']}
+                    path={[`${match.path}/add`, `${match.path}/:memberId`]}
                     exact
                     render={() => (
                         <React.Fragment>
@@ -59,7 +52,7 @@ const Member = () => {
                                 tabWidth={520}
                                 onSelectNav={(idx) => setActiveTabIdx(Number(idx))}
                                 tabs={[
-                                    <MemberEdit />,
+                                    <MemberEdit match={match} />,
                                     <Suspense fallback={<MokaLoader />}>
                                         <MemberChildLoginHistoryList show={activeTabIdx === 1} />
                                     </Suspense>,

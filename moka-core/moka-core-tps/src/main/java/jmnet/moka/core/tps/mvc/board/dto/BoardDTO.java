@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -196,6 +197,12 @@ public class BoardDTO {
     @ApiModelProperty("주소")
     @Size(max = 512, message = "{tps.board.error.size.addr}")
     private String addr;
+
+    /**
+     * J팟채널
+     */
+    @ApiModelProperty(value = "J팟채널", hidden = true)
+    private JpodChannelDTO jpodChannel;
 
     @DTODateTimeFormat
     private Date regDt;

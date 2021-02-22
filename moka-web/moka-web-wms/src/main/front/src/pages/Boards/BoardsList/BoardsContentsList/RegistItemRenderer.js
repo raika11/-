@@ -6,10 +6,10 @@ const RegistItemRenderer = ({ regDt, regName }) => {
     return (
         <>
             <Row>
-                <Col style={{ marginBottom: '-10px' }}>{regDt}</Col>
+                <Col style={{ marginBottom: '-10px' }}>{regName}</Col>
             </Row>
             <Row>
-                <Col>{regName}</Col>
+                <Col>{regDt}</Col>
             </Row>
         </>
     );

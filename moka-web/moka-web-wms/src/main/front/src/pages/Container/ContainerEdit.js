@@ -179,11 +179,11 @@ const ContainerEdit = ({ onDelete, match }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-end">
                     <div className="d-flex">
-                        <Button variant="positive" className="mr-2" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                             저장
                         </Button>
                         {container.containerSeq && (
-                            <Button variant="negative" className="mr-2" disabled={btnDisabled} onClick={handleClickDelete}>
+                            <Button variant="negative" className="mr-1" disabled={btnDisabled} onClick={handleClickDelete}>
                                 삭제
                             </Button>
                         )}

@@ -95,20 +95,33 @@ const defaultProps = {
  * 템플릿관리의 썸네일 테이블
  */
 const TemplateThumbTable = (props) => {
-    // table props
-    const { loading, tableHeight, className } = props;
-
-    // card props
-    const { cardWidth, cardHeight, onClick, menus, rowData, selected } = props;
-
-    // pagination props
-    const { paging, total, page, size, pageSizes, displayPageNum, onChangeSearchOption } = props;
+    const {
+        // table props
+        loading,
+        tableHeight,
+        className,
+        // card props
+        cardWidth,
+        cardHeight,
+        onClick,
+        menus,
+        rowData,
+        selected,
+        // pagination props
+        paging,
+        total,
+        page,
+        size,
+        pageSizes,
+        displayPageNum,
+        onChangeSearchOption,
+    } = props;
 
     return (
         <>
-            <div className={clsx('mb-3 input-border', className)} style={{ height: tableHeight }}>
+            <div className={clsx('mb-card input-border', className)} style={{ height: tableHeight }}>
                 {loading && <MokaLoader />}
-                <div className="d-flex flex-wrap align-content-start custom-scroll overflow-y-scroll p-05 h-100">
+                <div className="d-flex flex-wrap align-content-start custom-scroll overflow-y-scroll p-1 h-100">
                     {rowData.map((data) => (
                         <TemplateThumbCard
                             key={data.id}

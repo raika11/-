@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
@@ -42,8 +41,6 @@ const SEOMetaSearch = () => {
             endDt: moment(search.endDt).endOf('day').format(DB_DATEFORMAT),
             page: 0,
         };
-        console.log(ns.startDt);
-        console.log(ns.endDt);
         dispatch(changeSeoMetaSearchOptions(ns));
         dispatch(getSeoMetaList(ns));
     };
@@ -74,12 +71,6 @@ const SEOMetaSearch = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // useEffect(() => {
-    //     if (!commonUtil.isEmpty(storeSearch)) {
-    //         setSearch(storeSearch);
-    //     }
-    // }, [storeSearch]);
-
     useEffect(() => {
         const diff = moment(search.endDt).diff(moment(search.startDt));
         if (diff < 0) {
@@ -104,20 +95,21 @@ const SEOMetaSearch = () => {
     return (
         <Form>
             <Form.Row className="mb-2 justify-content-between align-items-center">
-                <Col className="p-0 pr-2" xs={2}>
+                {/* 날짜 선택 */}
+                <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" name="dateType" onChange={handleChangeValue} value={dateType}>
                         <option value="today">오늘</option>
                         <option value="thisWeek">이번주</option>
                         <option value="thisMonth">이번달</option>
                         <option value="direct">직접입력</option>
                     </MokaInput>
-                </Col>
-                <Col className="p-0 pr-2" xs={2}>
+                </div>
+                <div className="mr-2">
                     <MokaInput
                         as="dateTimePicker"
                         name="startDt"
                         placeholder="YYYY-MM-DD"
-                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                        inputProps={{ timeFormat: null, width: 140 }}
                         value={search.startDt}
                         onChange={(date) => {
                             if (typeof date === 'object') {
@@ -128,13 +120,13 @@ const SEOMetaSearch = () => {
                         }}
                         disabled={disabled.date}
                     />
-                </Col>
-                <Col className="p-0 pr-2" xs={2}>
+                </div>
+                <div className="mr-2">
                     <MokaInput
                         as="dateTimePicker"
                         name="endDt"
                         placeholder="YYYY-MM-DD"
-                        inputProps={{ timeFormat: null, inputClassName: 'ft-12' }}
+                        inputProps={{ timeFormat: null, width: 140 }}
                         value={search.endDt}
                         onChange={(date) => {
                             if (typeof date === 'object') {
@@ -145,24 +137,21 @@ const SEOMetaSearch = () => {
                         }}
                         disabled={disabled.date}
                     />
-                </Col>
-                <Col className="p-0 pr-2" xs={1}>
+                </div>
+
+                {/* 검색조건 */}
+                <div className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         <option value="artTitle">제목</option>
                         <option value="totalId">기사ID</option>
                     </MokaInput>
-                </Col>
-                <Col className="p-0 pr-2">
-                    <MokaSearchInput
-                        buttonClassName="ft-12"
-                        inputClassName="ft-12"
-                        name="keyword"
-                        value={search.keyword}
-                        onChange={handleChangeValue}
-                        onSearch={handleClickSearch}
-                    />
-                </Col>
-                <Button variant="negative" onClick={handleClickReset}>
+                </div>
+
+                {/* 검색어 */}
+                <MokaSearchInput className="mr-2 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleClickSearch} />
+
+                {/* 초기화 */}
+                <Button variant="negative" onClick={handleClickReset} className="flex-shrink-0">
                     초기화
                 </Button>
             </Form.Row>

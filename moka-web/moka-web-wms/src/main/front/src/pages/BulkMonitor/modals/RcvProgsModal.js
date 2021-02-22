@@ -20,7 +20,6 @@ const RcvProgsModal = (props) => {
         setBulkMsg('');
         onHide();
     };
-    console.log(data);
 
     useEffect(() => {
         if (data && show) {

@@ -29,7 +29,7 @@ import {
     faCloudUpload as falCloudUpload,
     faMinusSquare as falMinusSquare,
     faSignOutAlt as falSignOutAlt,
-    faCalendarAlt as falCalendarAlt,
+    // faCalendarAlt as falCalendarAlt,
     faMinusCircle as falMinusCircle,
     faClock as falClock,
     faSave as falSave,
@@ -75,7 +75,7 @@ import {
     faInfoCircle as fasInfoCircle,
     faUserCircle as fasUserCircle,
 } from '@moka/fontawesome-pro-solid-svg-icons';
-import { faRedoAlt as farRedoAlt, faUserCircle as farUserCircle } from '@moka/fontawesome-pro-regular-svg-icons';
+import { faRedoAlt as farRedoAlt, faUserCircle as farUserCircle, faCalendarAlt as farCalendarAlt } from '@moka/fontawesome-pro-regular-svg-icons';
 import { faImage as fadImage, faThumbsUp as fadThumbsUp, faThumbsDown as fadThumbsDown } from '@moka/fontawesome-pro-duotone-svg-icons';
 import { faFacebook as fabFacebook, faTwitter as fabTwitter, faFacebookSquare as fabFacebookSquare, faTwitterSquare as fabTwitterSquare } from '@fortawesome/free-brands-svg-icons';
 
@@ -106,7 +106,7 @@ library.add(falCloudUpload);
 library.add(falMinusSquare);
 library.add(falMinus);
 library.add(falSignOutAlt);
-library.add(falCalendarAlt);
+// library.add(falCalendarAlt);
 library.add(falMinusCircle);
 library.add(falClock);
 library.add(falMoneyCheck);
@@ -138,6 +138,7 @@ library.add(falFileExcel);
 library.add(farRedoAlt);
 library.add(farUserCircle);
 library.add(fasUserCircle);
+library.add(farCalendarAlt);
 
 // 아이콘 등록 (fas)
 library.add(fasThLarge);

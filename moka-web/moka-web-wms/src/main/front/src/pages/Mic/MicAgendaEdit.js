@@ -128,7 +128,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
         setTemp({
             ...initialState.agenda,
             ...agenda,
-            agndServiceDt: agndServiceDt.isValid() ? agndServiceDt : null,
+            agndServiceDt: agndServiceDt.isValid() ? agndServiceDt : moment(new Date()),
         });
         setError({});
     }, [agenda]);
@@ -151,7 +151,7 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
             footerClassName="justify-content-center"
             footer
             footerButtons={[
-                { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
+                { text: agndSeq ? '수정' : '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancel },
             ]}
             loading={loading}

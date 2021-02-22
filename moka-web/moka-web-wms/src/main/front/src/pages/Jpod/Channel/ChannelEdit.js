@@ -102,7 +102,8 @@ const ChannelEdit = ({ match }) => {
     const handleResetEditBasicData = () => {
         dispatch(clearReporter());
         setEditData(initialState.channel.channelInfo);
-        resetReporter();
+        //resetReporter();
+        setEditSelectRepoters([]);
         setEditDays([]);
         setImgfile(null);
         setThumbfile(null);
@@ -158,7 +159,6 @@ const ChannelEdit = ({ match }) => {
     // 방송요일 변경 처리.
     const handleChannelDay = (e) => {
         const { name, checked } = e.target;
-        console.log(name, checked);
 
         if (checked === true) {
             // 매일 일떄 모든 요일을 스테이트에 담아둔다.
@@ -181,7 +181,7 @@ const ChannelEdit = ({ match }) => {
     const handleClickReporterDelete = (index) => {
         // 삭제를 누르면 배열에서 삭제 후 마지막을 디폴트 값으로 채움
         let tempList = editSelectRepoters.filter((e, i) => i !== index);
-        tempList = [
+        /*tempList = [
             ...tempList,
             {
                 chnlSeq: '',
@@ -194,7 +194,7 @@ const ChannelEdit = ({ match }) => {
                 nickNm: '',
                 seqNo: '',
             },
-        ];
+        ];*/
         setEditSelectRepoters(tempList);
     };
 
@@ -426,6 +426,12 @@ const ChannelEdit = ({ match }) => {
             //     toast.warning('진행자는 6명까지 선택 할수 있습니다.');
             //     return;
             // }
+            const duplicateReporter = editSelectRepoters.filter((data) => data.memRepSeq == selectReporter.memRepSeq);
+
+            if (duplicateReporter.length > 0) {
+                toast.warning('중복된 진행자는 등록 할수 없습니다.');
+                return;
+            }
 
             if (editSelectRepoters.length === 6) {
                 toast.warning('진행자는 6명까지 선택 할수 있습니다.');
@@ -588,7 +594,7 @@ const ChannelEdit = ({ match }) => {
     }, [params]);
 
     useEffect(() => {
-        resetReporter(); // 최초에 한번 혹시 몰라서 진행자 배열 스테이트를 초기화 해줌.
+        //resetReporter(); // 최초에 한번 혹시 몰라서 진행자 배열 스테이트를 초기화 해줌.
     }, []);
 
     return (

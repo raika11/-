@@ -15,15 +15,11 @@ import OrderModal from './modals/OrderModal';
 const MicAgendaSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
+    const { search: storeSearch, answTotal, agndTotal } = useSelector(({ mic }) => mic);
     const [showBannerModal, setShowBannerModal] = useState(false);
     const [showCtModal, setShowCtModal] = useState(false);
     const [showOrderModal, setShowOrderModal] = useState(false);
     const [search, setSearch] = useState(initialState.search);
-    const storeSearch = useSelector(({ mic }) => mic.search);
-    const { answTotal, agndTotal } = useSelector(({ mic }) => ({
-        answTotal: mic.answTotal,
-        agndTotal: mic.agndTotal,
-    }));
 
     /**
      * 입력값 변경
@@ -90,7 +86,7 @@ const MicAgendaSearch = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <div className="mb-2">
+        <div className="mb-14">
             {/* 검색조건 */}
             <div className="d-flex mb-2">
                 <MokaInput name="keyword" className="mr-2" placeholder="아젠다 명을 입력해주세요" value={search.keyword} onChange={handleChangeValue} />
@@ -103,7 +99,7 @@ const MicAgendaSearch = ({ match }) => {
                         ))}
                     </MokaInput>
                 </div>
-                <Button className="mr-2 flex-shrink-0" variant="searching" onClick={handleClickSearch}>
+                <Button className="mr-1 flex-shrink-0" variant="searching" onClick={handleClickSearch}>
                     검색
                 </Button>
                 <Button variant="negative" className="flex-shrink-0" onClick={handleClickReset}>
@@ -122,13 +118,13 @@ const MicAgendaSearch = ({ match }) => {
                     </p>
                 </div>
                 <div className="d-flex">
-                    <Button className="mr-2" variant="outline-neutral" onClick={() => setShowBannerModal(true)}>
+                    <Button className="mr-1" variant="outline-neutral" onClick={() => setShowBannerModal(true)}>
                         다른 주제 공통 배너
                     </Button>
-                    <Button className="mr-2" variant="outline-neutral" onClick={() => setShowCtModal(true)}>
+                    <Button className="mr-1" variant="outline-neutral" onClick={() => setShowCtModal(true)}>
                         카테고리
                     </Button>
-                    <Button className="mr-2" variant="outline-neutral" onClick={() => setShowOrderModal(true)}>
+                    <Button className="mr-1" variant="outline-neutral" onClick={() => setShowOrderModal(true)}>
                         아젠다 순서
                     </Button>
                     <Button variant="positive" onClick={handleClickAdd}>

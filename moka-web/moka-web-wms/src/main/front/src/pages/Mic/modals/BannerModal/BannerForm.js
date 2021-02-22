@@ -47,7 +47,7 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
             footerClassName="justify-content-center pb-0 mr-0"
             footer
             footerButtons={[
-                { text: '저장', variant: 'positive', className: 'mr-2', onClick: () => onSave(temp) },
+                { text: temp.bnnrSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: () => onSave(temp) },
                 { text: '취소', variant: 'negative', onClick: onCancle },
             ]}
             loading={loading}
@@ -58,20 +58,13 @@ const BannerForm = ({ banner, onCancle, onSave, loading, error, setError }) => {
                     <React.Fragment>
                         배너이미지
                         <br />
-                        <Button
-                            variant="gray-700"
-                            className="mt-1"
-                            size="sm"
-                            onClick={(e) => {
-                                fileRef.current.rootRef.onClick(e);
-                            }}
-                        >
+                        <Button variant="gray-700" className="mt-1" size="sm" onClick={(e) => fileRef.current.rootRef.onClick(e)}>
                             신규등록
                         </Button>
                     </React.Fragment>
                 }
                 ref={fileRef}
-                inputProps={{ img: temp.imgLink, width: 280, height: 157.5, deleteButton: true, setFileValue }}
+                inputProps={{ img: temp.imgLink, width: 280, height: (280 * 9) / 16, deleteButton: true, setFileValue }}
                 required
                 className="mb-2"
                 isInvalid={error.imgLink}

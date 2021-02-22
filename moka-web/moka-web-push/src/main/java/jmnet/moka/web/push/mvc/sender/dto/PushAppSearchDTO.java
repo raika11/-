@@ -1,23 +1,16 @@
 package jmnet.moka.web.push.mvc.sender.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.core.common.MokaConstants;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * <pre>
  * 푸시 전송 앱 정보
  * Project : moka
  * Package : jmnet.moka.web.push.mvc.sender.dto
- * ClassName : PushAppDTO
+ * ClassName : PushAppSearchDTO
  * Created : 2021-02-08 ince
  * </pre>
  *
@@ -29,25 +22,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Setter
 @Getter
 @Builder
-public class PushAppDTO implements Serializable {
+public class PushAppSearchDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
+     * 앱 일련번호
+     */
+    private Long appSeq;
+    /**
+     * 관련 콘텐트ID
+     */
+    private Long relContentId;
+
+    /**
      * Device OS (AND, iOS, PWA)
      */
-    @ApiModelProperty(value = "Device OS", required = true)
     private String appOs;
-
     /**
      * 디바이스 구분 (T:Tablet, M:Mobile)
      */
-    @ApiModelProperty(value = "디바이스 구분 (T:Tablet, M:Mobile)", required = true)
     private String devDiv;
 
     /**
      * 앱 구분(J:중앙일보, M:미세먼지)
      */
-    @ApiModelProperty(value = "앱 구분(J:중앙일보, M:미세먼지)", required = true)
     private String appDiv;
 }

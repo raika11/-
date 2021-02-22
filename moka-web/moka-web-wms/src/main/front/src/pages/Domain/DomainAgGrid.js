@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@components';
 import { GET_DOMAIN_LIST, changeSearchOption, getDomainList, initialState } from '@store/domain';
 import { columnDefs } from './DomainAgGridColumns';
@@ -13,16 +13,8 @@ const DomainAgGrid = ({ onDelete, match }) => {
     const history = useHistory();
     const [search, setSearch] = useState(initialState);
     const [domainRows, setDomainRows] = useState([]);
-    const { domain, list, total, search: storeSearch, loading } = useSelector(
-        (store) => ({
-            domain: store.domain.domain,
-            list: store.domain.list,
-            total: store.domain.total,
-            search: store.domain.search,
-            loading: store.loading[GET_DOMAIN_LIST],
-        }),
-        shallowEqual,
-    );
+    const loading = useSelector(({ loading }) => loading[GET_DOMAIN_LIST]);
+    const { domain, list, total, search: storeSearch } = useSelector(({ domain }) => domain);
 
     /**
      * 테이블에서 검색옵션 변경

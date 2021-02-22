@@ -24,22 +24,15 @@ const TemplateEdit = ({ onDelete, match }) => {
     const UPLOAD_PATH_URL = useSelector((store) => store.app.UPLOAD_PATH_URL);
     const tpZoneRows = useSelector((store) => store.codeMgt.tpZoneRows);
     const latestDomainId = useSelector((store) => store.auth.latestDomainId);
-    const { template, inputTag, invalidList } = useSelector((store) => ({
-        template: store.template.template,
-        inputTag: store.template.inputTag,
-        invalidList: store.template.invalidList,
-    }));
+    const { template, inputTag, invalidList } = useSelector(({ template }) => template);
 
     // state
     const [temp, setTemp] = useState({});
-    const [fileValue, setFileValue] = useState(null);
     const [thumbSrc, setThumbSrc] = useState();
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [error, setError] = useState({});
     const [copyModalShow, setCopyModalShow] = useState(false);
     const [addComponentModalShow, setAddComponentModalShow] = useState(false);
-
-    // ref
     const imgFileRef = useRef(null);
 
     /**
@@ -55,6 +48,16 @@ const TemplateEdit = ({ onDelete, match }) => {
         }
 
         setTemp({ ...temp, [name]: value });
+    };
+
+    /**
+     * 이미지 파일 변경
+     */
+    const setFileValue = (data) => {
+        setTemp({
+            ...temp,
+            templateThumbnailFile: data,
+        });
     };
 
     /**
@@ -143,18 +146,13 @@ const TemplateEdit = ({ onDelete, match }) => {
         e.preventDefault();
         e.stopPropagation();
 
-        let saveObj = {
-            ...temp,
-            templateThumbnailFile: fileValue,
-        };
-
-        if (validate(saveObj)) {
+        if (validate(temp)) {
             if (!template.templateSeq || template.templateSeq === '') {
                 // 새 템플릿 저장 시에 도메인ID 셋팅
-                saveObj.domain = { domainId: latestDomainId };
-                saveCallback(saveObj);
+                temp.domain = { domainId: latestDomainId };
+                saveCallback(temp);
             } else {
-                checkRelationList(saveObj);
+                checkRelationList(temp);
             }
         }
     };
@@ -211,19 +209,26 @@ const TemplateEdit = ({ onDelete, match }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div>
-                        <Button variant="outline-neutral" className="mr-2" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
+                        <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={() => setAddComponentModalShow(true)}>
                             컴포넌트 생성
                         </Button>
+
+                        {/* 컴포넌트생성 Modal */}
+                        <AddComponentModal show={addComponentModalShow} onHide={() => setAddComponentModalShow(false)} />
+
                         <Button variant="outline-neutral" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
                             복사
                         </Button>
+
+                        {/* 템플릿복사 Modal */}
+                        <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={template} />
                     </div>
                     <div>
-                        <Button variant="positive" className="mr-2" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                             {btnDisabled ? '저장' : '수정'}
                         </Button>
                         {!btnDisabled && (
-                            <Button variant="negative" className="mr-2" onClick={handleClickDelete}>
+                            <Button variant="negative" className="mr-1" onClick={handleClickDelete}>
                                 삭제
                             </Button>
                         )}
@@ -232,8 +237,10 @@ const TemplateEdit = ({ onDelete, match }) => {
                         </Button>
                     </div>
                 </Form.Group>
+
                 {/* 템플릿ID */}
                 <MokaInputLabel className="mb-2" label="템플릿ID" value={template.templateSeq} inputProps={{ plaintext: true, readOnly: true }} />
+
                 {/* 템플릿명 */}
                 <MokaInputLabel
                     className="mb-2"
@@ -245,6 +252,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                     isInvalid={error.templateName}
                     required
                 />
+
                 {/* 위치그룹 */}
                 <MokaInputLabel className="mb-2" label="위치 그룹" as="select" value={temp.templateGroup} onChange={handleChangeValue} name="templateGroup">
                     {tpZoneRows &&
@@ -254,6 +262,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                             </option>
                         ))}
                 </MokaInputLabel>
+
                 {/* 사이즈, 이미지 크기 */}
                 <Row className="m-0 mb-2">
                     <Col xs={5} className="p-0 m-0">
@@ -275,6 +284,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                         x <MokaInput className="ml-2 mb-0 ft-12" value={temp.cropHeight} onChange={handleChangeValue} type="number" name="cropHeight" />{' '}
                     </Col>
                 </Row>
+
                 {/* 입력태그 */}
                 <MokaInputGroup
                     label="입력태그"
@@ -286,6 +296,7 @@ const TemplateEdit = ({ onDelete, match }) => {
                     disabled
                     append={<MokaCopyTextButton copyText={inputTag} />}
                 />
+
                 {/* 대표이미지 */}
                 <MokaInputLabel
                     ref={imgFileRef}
@@ -293,33 +304,18 @@ const TemplateEdit = ({ onDelete, match }) => {
                     label={
                         <>
                             대표이미지
-                            <Button
-                                className="mt-1"
-                                size="sm"
-                                variant="negative"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    imgFileRef.current.deleteFile();
-                                    setTemp({ ...temp, templateThumb: null });
-                                }}
-                            >
-                                삭제
+                            <Button className="mt-1" size="sm" variant="gray-700" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
+                                신규등록
                             </Button>
                         </>
                     }
-                    inputProps={{ width: 284, height: 280, img: thumbSrc, alt: temp.templateName, setFileValue }}
+                    inputProps={{ width: 284, height: (284 * 9) / 16, img: thumbSrc, alt: temp.templateName, deleteButton: true, setFileValue }}
                     className="mb-2"
                 />
+
                 {/* 설명 */}
                 <MokaInputLabel label="설명" placeholder="내용설명" value={temp.description} onChange={handleChangeValue} name="description" />
             </Form>
-
-            {/* 템플릿복사 Modal */}
-            <CopyModal show={copyModalShow} onHide={() => setCopyModalShow(false)} template={template} />
-
-            {/* 컴포넌트생성 Modal */}
-            <AddComponentModal show={addComponentModalShow} onHide={() => setAddComponentModalShow(false)} />
         </MokaCard>
     );
 };

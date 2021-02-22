@@ -111,7 +111,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
             footerClassName="justify-content-center"
             footerButtons={[
                 {
-                    text: '저장',
+                    text: temp.areaSeq ? '수정' : '저장',
                     variant: 'positive',
                     className: 'mr-2',
                     onClick: handleClickSave,

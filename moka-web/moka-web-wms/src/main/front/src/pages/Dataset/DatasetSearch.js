@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { MokaSearchInput, MokaInput } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getApi } from '@store/codeMgt';
@@ -43,15 +42,6 @@ const DatasetSearch = ({ match }) => {
         );
     }, [dispatch, search]);
 
-    /**
-     * 데이터셋 등록
-     */
-    const handleClickAddDataSet = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        history.push(`${match.path}/add`);
-    };
-
     useEffect(() => {
         dispatch(getApi());
     }, [dispatch]);
@@ -78,7 +68,7 @@ const DatasetSearch = ({ match }) => {
     }, [apiRows, dispatch, search]);
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             <Form.Row className="mb-2">
                 <Col xs={8} className="p-0 pr-2">
                     <MokaInput as="select" name="apiCodeId" onChange={handleChangeSearchValue} value={search.apiCodeId}>
@@ -100,7 +90,7 @@ const DatasetSearch = ({ match }) => {
                     </MokaInput>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-2">
+            <Form.Row>
                 <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" name="searchType" onChange={handleChangeSearchValue} value={search.searchType}>
                         {initialState.searchTypeList.map((type) => (
@@ -112,11 +102,6 @@ const DatasetSearch = ({ match }) => {
                 </div>
                 <MokaSearchInput className="flex-fill" name="keyword" value={search.keyword} onChange={handleChangeSearchValue} onSearch={handleClickSearch} />
             </Form.Row>
-            <div className="d-flex justify-content-end">
-                <Button variant="positive" onClick={handleClickAddDataSet}>
-                    데이터셋 등록
-                </Button>
-            </div>
         </Form>
     );
 };

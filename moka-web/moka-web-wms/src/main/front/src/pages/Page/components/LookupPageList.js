@@ -153,8 +153,8 @@ const LookupPageList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 페이지" bodyClassName="d-flex flex-column">
-            <Form className="mb-2">
+        <MokaCard title="관련 페이지" bodyClassName="d-flex flex-column">
+            <Form className="mb-14">
                 {/* 검색조건, 키워드 */}
                 <Form.Row>
                     <div className="mr-2 flex-shrink-0">
@@ -192,7 +192,7 @@ const LookupPageList = (props) => {
 
             {/* 버튼 그룹 */}
             {seqType !== ITEM_PG && (
-                <div className="d-flex mb-10 justify-content-end">
+                <div className="d-flex mb-14 justify-content-end">
                     <Button variant="positive" onClick={() => window.open('/page/add')}>
                         페이지 등록
                     </Button>

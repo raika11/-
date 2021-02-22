@@ -60,7 +60,7 @@ const ComponentAgGrid = ({ onDelete, match }) => {
     return (
         <>
             {/* 버튼 그룹 */}
-            <div className="d-flex mb-10 justify-content-end">
+            <div className="d-flex mb-14 justify-content-end">
                 <Button variant="positive" onClick={() => history.push(`${match.path}/add`)}>
                     컴포넌트 등록
                 </Button>

@@ -12,11 +12,11 @@ import { changeLatestDomainId } from '@store/auth';
 const ReservedSearch = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { latestDomainId, domainList, search: storeSearch } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
-        search: store.reserved.search,
+    const { latestDomainId, domainList } = useSelector(({ auth }) => ({
+        latestDomainId: auth.latestDomainId,
+        domainList: auth.domainList,
     }));
+    const { search: storeSearch } = useSelector(({ reserved }) => reserved);
     const [search, setSearch] = useState(initialState.search);
 
     /**
@@ -74,7 +74,7 @@ const ReservedSearch = ({ match }) => {
     }, [dispatch, latestDomainId, search]);
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             <MokaInput as="select" className="mb-2" value={search.domainId} onChange={handleChangeSearchOption} name="domainId">
                 {domainList.map((domain) => (
                     <option key={domain.domainId} value={domain.domainId}>

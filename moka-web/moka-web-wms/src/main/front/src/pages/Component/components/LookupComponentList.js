@@ -167,8 +167,8 @@ const LookupComponentList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 컴포넌트" bodyClassName="d-flex flex-column">
-            <Form className="mb-2">
+        <MokaCard title="관련 컴포넌트" bodyClassName="d-flex flex-column">
+            <Form className="mb-14">
                 {/* 위치그룹 */}
                 <MokaInput
                     as="select"
@@ -224,7 +224,7 @@ const LookupComponentList = (props) => {
             </Form>
 
             {/* 버튼 그룹 */}
-            <div className="d-flex mb-10 justify-content-end">
+            <div className="d-flex mb-14 justify-content-end">
                 <Button variant="positive" onClick={() => window.open('/component/add')}>
                     컴포넌트 등록
                 </Button>

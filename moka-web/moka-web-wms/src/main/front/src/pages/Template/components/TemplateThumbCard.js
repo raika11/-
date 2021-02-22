@@ -130,7 +130,7 @@ const TemplateThumbCard = forwardRef((props, ref) => {
     };
 
     return (
-        <div ref={ref} className="p-03" style={{ width, height }}>
+        <div ref={ref} className="p-1" style={{ width, height }}>
             <div className={clsx('border rounded d-flex flex-direction-column h-100 w-100', { 'thumb-card-selected': selected })}>
                 <div className="position-relative overflow-hidden flex-fill cursor-pointer">
                     <div className="w-100 h-100 absolute-top">

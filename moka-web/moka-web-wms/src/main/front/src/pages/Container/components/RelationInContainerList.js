@@ -107,10 +107,10 @@ const RelationInContainerList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 컨테이너" bodyClassName="d-flex flex-column">
+        <MokaCard title="관련 컨테이너" bodyClassName="d-flex flex-column">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-14">
                     <MokaInput as="select" value={search.domainId || undefined} onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}>
                         {domainList.map((domain) => (
                             <option key={domain.domainId} value={domain.domainId}>
@@ -122,7 +122,7 @@ const RelationInContainerList = (props) => {
             )}
 
             {/* 버튼 */}
-            <div className="d-flex justify-content-end mb-2">
+            <div className="d-flex justify-content-end mb-14">
                 <Button variant="positive" onClick={() => window.open('/container/add')}>
                     컨테이너 등록
                 </Button>

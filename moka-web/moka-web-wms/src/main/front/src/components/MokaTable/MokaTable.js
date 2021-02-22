@@ -137,7 +137,6 @@ const defaultProps = {
  * ag-grid의 rowClassRules
  */
 const rowClassRules = {
-    // 'usedyn-n': (params) => params.data.usedYn === 'N',
     'deskingyn-y': (params) => params.data.deskingYn === 'Y',
 };
 

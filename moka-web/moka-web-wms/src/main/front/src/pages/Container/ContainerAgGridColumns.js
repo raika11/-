@@ -13,6 +13,9 @@ export default [
         flex: 1,
         width: 268,
         tooltipField: 'containerName',
+        cellClassRules: {
+            'usedyn-n': (params) => params.data.usedYn === 'N',
+        },
     },
     {
         headerName: '',

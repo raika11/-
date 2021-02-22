@@ -93,6 +93,11 @@
         .ag-cell {
             padding-left: 5px;
             padding-right: 5px;
+
+            // usedyn-n cell
+            &.usedyn-n {
+                @include disabled-font;
+            }
         }
 
         .user-select-text {
@@ -109,11 +114,6 @@
 
             .ag-row-last {
                 border-bottom-style: none;
-            }
-
-            // usedyn-n row
-            &.usedyn-n {
-                @include disabled-font;
             }
 
             // deskingyn-y row

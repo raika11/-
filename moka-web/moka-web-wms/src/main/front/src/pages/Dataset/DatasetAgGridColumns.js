@@ -15,6 +15,9 @@ export const columnDefs = [
         tooltipField: 'datasetName',
         width: 190,
         flex: 1,
+        cellClassRules: {
+            'usedyn-n': (params) => params.data.usedYn === 'N',
+        },
     },
     {
         headerName: '',

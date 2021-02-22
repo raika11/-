@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.common.code;
+package jmnet.moka.core.common.sns;
 
 /**
  * SNS 상태 코드

@@ -4,4 +4,5 @@ jmnet.moka.core.common.logger.ActionLoggerConfiguration,\
 jmnet.moka.core.common.ftp.MokaFtpConfiguration,\
 jmnet.moka.core.common.rest.RestTemplateConfiguration,\
 jmnet.moka.core.common.brightcove.BrightcoveProperties,\
-jmnet.moka.core.common.slack.MokaSlackConfiguration
+jmnet.moka.core.common.slack.MokaSlackConfiguration,\
+jmnet.moka.core.common.sns.MokaSnsConfiguration

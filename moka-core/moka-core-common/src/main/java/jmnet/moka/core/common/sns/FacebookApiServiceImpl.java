@@ -1,19 +1,14 @@
-package jmnet.moka.core.tps.mvc.sns.service;
+package jmnet.moka.core.common.sns;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.Map;
 import jmnet.moka.common.utils.MapBuilder;
-import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
-import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 /**
  * <pre>
@@ -28,7 +23,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-12-08 12:01
  */
 @Slf4j
-@Service("facebookApiService")
 public class FacebookApiServiceImpl implements SnsApiService {
 
     @Value("${sns.share.article-url}")
@@ -43,34 +37,17 @@ public class FacebookApiServiceImpl implements SnsApiService {
     @Value("${sns.facebook.page-id}")
     private String facebookPageId;
 
-    @Value("${sns.facebook.token-code}")
-    private String facebookTokenCode;
-
-
-
-    private final RestTemplateHelper restTemplateHelper;
-
-    private final CodeMgtService codeMgtService;
-
-    public FacebookApiServiceImpl(RestTemplateHelper restTemplateHelper, CodeMgtService codeMgtService) {
-        this.restTemplateHelper = restTemplateHelper;
-        this.codeMgtService = codeMgtService;
-    }
-
-
+    @Autowired
+    private RestTemplateHelper restTemplateHelper;
 
     @Override
     public Map<String, Object> publish(SnsPublishDTO snsPublish)
             throws Exception {
         String articleServiceUrl = articleUrl + snsPublish.getTotalId();
 
-        CodeMgt tokenCode = codeMgtService
-                .findByDtlCd(facebookTokenCode)
-                .orElseThrow(() -> new NoDataException("Not Found Facebook Token"));
-
         ResponseEntity<String> responseEntity = restTemplateHelper.post(facebookApiUrl, MapBuilder
                 .getInstance()
-                .add("access_token", tokenCode.getCdNm())
+                .add("access_token", snsPublish.getTokenCode())
                 .add("id", articleServiceUrl)
                 .add("scrape", true)
                 .getMultiValueMap());
@@ -79,7 +56,7 @@ public class FacebookApiServiceImpl implements SnsApiService {
 
         ResponseEntity<String> content = restTemplateHelper.post(articleFeedUrl, MapBuilder
                 .getInstance()
-                .add("access_token", tokenCode.getCdNm())
+                .add("access_token", snsPublish.getTokenCode())
                 .add("message", snsPublish.getMessage())
                 .add("link", articleServiceUrl)
                 .getMultiValueMap());
@@ -98,15 +75,11 @@ public class FacebookApiServiceImpl implements SnsApiService {
     public Map<String, Object> delete(SnsDeleteDTO snsDelete)
             throws Exception {
 
-        CodeMgt tokenCode = codeMgtService
-                .findByDtlCd(facebookTokenCode)
-                .orElseThrow(() -> new NoDataException("Not Found Facebook Token"));
-
         String url = new StringBuilder(facebookApiUrl)
                 .append("/")
                 .append(snsDelete.getSnsId())
                 .append("?access_token=")
-                .append(tokenCode)
+                .append(snsDelete.getTokenCode())
                 .toString();
         ResponseEntity<String> responseEntity = restTemplateHelper.delete(url);
 

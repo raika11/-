@@ -1,12 +1,11 @@
-package jmnet.moka.core.tps.mvc.sns.dto;
+package jmnet.moka.core.common.sns;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Min;
-import jmnet.moka.core.tps.common.code.SnsTypeCode;
-import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +49,8 @@ public class SnsPublishDTO implements Serializable {
     @ApiModelProperty("SNS 유형")
     @Builder.Default
     private SnsTypeCode snsType = SnsTypeCode.FB;
+
+
+    private String tokenCode;
 
 }

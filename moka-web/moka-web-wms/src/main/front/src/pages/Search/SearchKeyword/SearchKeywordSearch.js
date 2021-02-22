@@ -101,7 +101,6 @@ const SearchKeywordSearch = () => {
      */
     const handleSearch = () => {
         const targetDt = moment(search.endDt).subtract('1', 'y').format('YYYY-MM-DD');
-        console.log(targetDt);
         if (moment(search.startDt).format('YYYY-MM-DD') < targetDt) {
             setSearch({ ...search, startDt: null, endDt: null });
             messageBox.alert('검색 기간은 1년을 넘길 수 없습니다. 기간을 다시 설정해 주세요.');

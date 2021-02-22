@@ -94,12 +94,10 @@ const MemberChildMenuAuth = () => {
             bodyClassName="rc-tree-card-body member"
             className="w-100"
             footerClassName="justify-content-center"
-            footerButtons={
-                memberId && [
-                    { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                    { text: '새로고침', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
-                ]
-            }
+            footerButtons={[
+                { text: '수정', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                { text: '새로고침', variant: 'negative', onClick: handleClickCancel },
+            ]}
             footer
         >
             <Row style={{ padding: '0 20px 0 20px' }}>

@@ -41,8 +41,6 @@ const SEOMetaSearch = () => {
             endDt: moment(search.endDt).endOf('day').format(DB_DATEFORMAT),
             page: 0,
         };
-        console.log(ns.startDt);
-        console.log(ns.endDt);
         dispatch(changeSeoMetaSearchOptions(ns));
         dispatch(getSeoMetaList(ns));
     };

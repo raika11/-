@@ -28,7 +28,7 @@ export const ColumnDefs = [
         width: 120,
     },
     {
-        headerName: '등록일시\n등록자',
+        headerName: '등록자\n등록일시',
         field: 'registItem',
         width: 120,
         cellRendererFramework: (params) => <RegistItemRenderer regDt={params.value.regDt} regName={params.value.regName} />,

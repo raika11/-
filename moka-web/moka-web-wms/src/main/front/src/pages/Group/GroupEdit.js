@@ -24,7 +24,7 @@ import toast, { messageBox } from '@utils/toastUtil';
  * 그룹 상세/수정/등록
  * @param history rect-router-dom useHisotry
  */
-const GroupEdit = () => {
+const GroupEdit = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { groupCd: paramCd } = useParams();
@@ -84,7 +84,7 @@ const GroupEdit = () => {
     };
 
     const handleClickCancel = () => {
-        history.push('/group');
+        history.push(`${match.path}`);
     };
 
     /**
@@ -100,7 +100,7 @@ const GroupEdit = () => {
                         // 삭제 성공
                         if (header.success) {
                             toast.success(header.message);
-                            history.push('/group');
+                            history.push(`${match.path}`);
                         }
                         // 삭제 실패
                         else {
@@ -259,7 +259,7 @@ const GroupEdit = () => {
                                 callback: (response) => {
                                     if (response.header.success) {
                                         toast.success('등록하였습니다.');
-                                        history.push(`/group/${groupCd}`);
+                                        history.push(`${match.path}/${groupCd}`);
                                     } else {
                                         toast.fail('실패하였습니다.');
                                     }
@@ -340,18 +340,11 @@ const GroupEdit = () => {
             title={`그룹 ${paramCd ? '수정' : '등록'}`}
             className="w-100 shadow-none"
             footerClassName="justify-content-center"
-            footerButtons={
-                groupCd
-                    ? [
-                          { text: '수정', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                          { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'float-left mr-10 pr-20 pl-20' },
-                          { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
-                      ]
-                    : [
-                          { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'float-left mr-10 pr-20 pl-20' },
-                          { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'float-left mr-0 pr-20 pl-20' },
-                      ]
-            }
+            footerButtons={[
+                { text: groupCd ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                groupCd && { text: '삭제', variant: 'negative', onClick: handleClickDelete, className: 'mr-1' },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel },
+            ].filter((a) => a)}
             footer
         >
             <Form noValidate>
@@ -415,16 +408,6 @@ const GroupEdit = () => {
                         <MokaInputLabel label="등록일시" labelWidth={80} disabled={true} name={regDt} value={group.regDt} />
                     </Col>
                 </Form.Row>
-                {/*<Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                    <Button variant="positive" className="float-left mr-10 pr-20 pl-20" onClick={handleClickSave}>
-                        저장
-                    </Button>
-                    {groupCd && (
-                        <Button variant="gray-150" className="float-left mr-0 pr-20 pl-20" onClick={handleClickDelete}>
-                            삭제
-                        </Button>
-                    )}
-                </Form.Group>*/}
             </Form>
         </MokaCard>
     );

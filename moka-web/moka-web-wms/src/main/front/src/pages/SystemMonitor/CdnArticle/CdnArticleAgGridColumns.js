@@ -26,9 +26,9 @@ export default [
         cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '사용여부',
+        headerName: '사용',
         field: 'usedYn',
-        width: 64,
+        width: 38,
         cellRenderer: 'usedYnRenderer',
     },
 ];

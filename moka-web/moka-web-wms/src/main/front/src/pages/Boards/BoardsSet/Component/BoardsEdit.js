@@ -373,18 +373,20 @@ const BoardsEdit = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardInfoData]);
 
+    console.log(params);
+
     return (
         <MokaCard
-            title={`게시판 ${true ? '수정' : '등록'}`}
+            title={`게시판 ${params.boardId ? '수정' : '등록'}`}
             loading={loading}
             className="flex-fill"
             bodyClassName="d-flex flex-column"
             footer
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-2' },
+                { text: params.boardId ? '수정' : '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-1' },
+                params.boardId && { text: '삭제', variant: 'negative', onClick: () => handleClickDeleteButton(), className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton() },
-                true && { text: '삭제', variant: 'negative', onClick: () => handleClickDeleteButton(), className: 'ml-2' },
             ].filter((a) => a)}
         >
             <BoardsForm

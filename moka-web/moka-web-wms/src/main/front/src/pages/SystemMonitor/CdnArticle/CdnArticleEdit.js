@@ -21,6 +21,9 @@ import {
 } from '@store/cdnArticle';
 import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 
+/**
+ * 트래픽 분산 관리 등록 / 수정
+ */
 const CdnArticleEdit = ({ match }) => {
     const { totalId } = useParams();
     const history = useHistory();
@@ -168,9 +171,9 @@ const CdnArticleEdit = ({ match }) => {
             loading={loading}
             footer
             footerButtons={[
-                { text: totalId ? '수정' : '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancle },
-                totalId && { text: '캐시 삭제', variant: 'negative', onClick: handleClear },
+                { text: totalId ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                totalId && { text: '캐시 삭제', variant: 'negative', className: 'mr-1', onClick: handleClear },
+                { text: '취소', variant: 'negative', onClick: handleClickCancle },
             ].filter((a) => a)}
         >
             <Form>

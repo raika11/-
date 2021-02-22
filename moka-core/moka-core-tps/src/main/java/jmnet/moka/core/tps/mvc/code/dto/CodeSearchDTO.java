@@ -30,9 +30,6 @@ public class CodeSearchDTO extends SearchDTO {
     @ApiModelProperty("사용여부")
     private String usedYn;
 
-    @ApiModelProperty("백오피스 노출여부")
-    private String viewYn;
-
     // 검색 조건의 기본값을 설정
     public CodeSearchDTO() {
         super.setSearchType(TpsConstants.SEARCH_TYPE_ALL);

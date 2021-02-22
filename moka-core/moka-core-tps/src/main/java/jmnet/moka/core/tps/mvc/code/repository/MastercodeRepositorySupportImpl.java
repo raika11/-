@@ -40,15 +40,11 @@ public class MastercodeRepositorySupportImpl extends TpsQueryDslRepositorySuppor
         String searchType = search.getSearchType();
         String keyword = search.getKeyword() == null ? "" : search.getKeyword();
         String usedYn = search.getUsedYn();
-        String viewYn = search.getViewYn();
 
         BooleanBuilder builder = new BooleanBuilder();
 
         if (McpString.isNotEmpty(usedYn) && (usedYn.equals(McpString.YES) || usedYn.equals(McpString.NO))) {
             builder.and(master.usedYn.eq(usedYn));
-        }
-        if (McpString.isNotEmpty(viewYn) && (viewYn.equals(McpString.YES) || viewYn.equals(McpString.NO))) {
-            builder.and(master.viewYn.eq(viewYn));
         }
 
         if (searchType.equals("korname")) {

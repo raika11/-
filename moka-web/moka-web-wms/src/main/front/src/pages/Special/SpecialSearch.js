@@ -85,7 +85,7 @@ const SpecialSearch = ({ match }) => {
                     </MokaInput>
                 </div>
 
-                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                <MokaSearchInput className="flex-fill mr-1" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
 
                 <Button variant="positive" className="flex-shrink-0" onClick={handleClickAdd}>
                     페이지 등록

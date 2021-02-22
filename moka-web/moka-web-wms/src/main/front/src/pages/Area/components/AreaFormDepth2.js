@@ -388,7 +388,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                 {
                     text: temp.areaSeq ? '수정' : '저장',
                     variant: 'positive',
-                    className: 'mr-2',
+                    className: 'mr-1',
                     onClick: handleClickSave,
                 },
                 temp.areaSeq && {

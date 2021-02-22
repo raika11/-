@@ -27,39 +27,39 @@ const ArticleEtc = ({ bulkSiteList, articleService = {} }) => {
                     <div>
                         <MokaInput
                             as="checkbox"
-                            className="mr-2 float-left ft-12"
+                            className="mr-2 float-left"
                             inputProps={{ label: '기사', custom: true, checked: bulkSiteObj['기사']?.bulkYn === 'Y', readOnly: true }}
                         />
                         <MokaInput
                             as="checkbox"
-                            className="float-left ft-12"
+                            className="float-left"
                             inputProps={{ label: '이미지', custom: true, checked: bulkSiteObj['이미지']?.bulkYn === 'Y', readOnly: true }}
                         />
                     </div>
                     <div>
                         <MokaInput
                             as="checkbox"
-                            className="mr-2 float-left ft-12"
+                            className="mr-2 float-left"
                             inputProps={{ label: '네이버', custom: true, checked: bulkSiteObj['네이버']?.bulkYn === 'Y', readOnly: true }}
                         />
                         <MokaInput
                             as="checkbox"
-                            className="mr-2 float-left ft-12"
+                            className="mr-2 float-left"
                             inputProps={{ label: '다음', custom: true, checked: bulkSiteObj['다음']?.bulkYn === 'Y', readOnly: true }}
                         />
                         <MokaInput
                             as="checkbox"
-                            className="mr-2 float-left ft-12"
+                            className="mr-2 float-left"
                             inputProps={{ label: '네이트', custom: true, checked: bulkSiteObj['네이트']?.bulkYn === 'Y', readOnly: true }}
                         />
                         <MokaInput
                             as="checkbox"
-                            className="mr-2 float-left ft-12"
+                            className="mr-2 float-left"
                             inputProps={{ label: '줌', custom: true, checked: bulkSiteObj['줌']?.bulkYn === 'Y', readOnly: true }}
                         />
                         <MokaInput
                             as="checkbox"
-                            className="float-left ft-12"
+                            className="float-left"
                             inputProps={{ label: '기타', custom: true, checked: bulkSiteObj['기타']?.bulkYn === 'Y', readOnly: true }}
                         />
                     </div>
@@ -72,13 +72,13 @@ const ArticleEtc = ({ bulkSiteList, articleService = {} }) => {
                     <div>
                         <MokaInput
                             as="checkbox"
-                            className="mr-2 float-left ft-12"
+                            className="mr-2 float-left"
                             inputProps={{ label: '로그인', checked: articleService?.loginFlag === 'Y', custom: true, readOnly: true }}
                         />
-                        <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: 'AB테스트용', custom: true, readOnly: true }} />
+                        <MokaInput as="checkbox" className="float-left" inputProps={{ label: 'AB테스트용', custom: true, readOnly: true }} />
                     </div>
                     <div>
-                        <MokaInput as="checkbox" className="float-left ft-12" inputProps={{ label: '연재기사(번호: 000)', custom: true, readOnly: true }} />
+                        <MokaInput as="checkbox" className="float-left" inputProps={{ label: '연재기사(번호: 000)', custom: true, readOnly: true }} />
                     </div>
                 </div>
             </Col>

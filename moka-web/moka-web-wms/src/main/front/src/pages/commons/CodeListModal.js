@@ -274,10 +274,10 @@ const CodeListModal = (props) => {
                             </div>
                         </Col>
                         <Col sm={2} className="p-0 d-flex mb-2 align-items-end">
-                            <Button variant="positive" className="w-50 mr-1" onClick={handleOkTrigger}>
+                            <Button variant="positive" className="mr-1" onClick={handleOkTrigger}>
                                 등록
                             </Button>
-                            <Button variant="negative" className="w-50 ml-1" onClick={handleReset}>
+                            <Button variant="negative" onClick={handleReset}>
                                 초기화
                             </Button>
                         </Col>

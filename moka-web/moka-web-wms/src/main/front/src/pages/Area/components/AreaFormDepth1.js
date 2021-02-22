@@ -113,7 +113,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                 {
                     text: temp.areaSeq ? '수정' : '저장',
                     variant: 'positive',
-                    className: 'mr-2',
+                    className: 'mr-1',
                     onClick: handleClickSave,
                 },
                 temp.areaSeq && {

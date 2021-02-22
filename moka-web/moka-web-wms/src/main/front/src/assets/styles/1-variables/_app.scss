@@ -244,18 +244,21 @@ $btn-padding-x: 11px !default;
 $btn-font-size: $h5-font-size !default;
 $btn-font-weight: $font-weight-bold !default;
 $btn-line-height: 21px !default;
+$btn-border-radius: 3px !default;
 
 // Buttons default (sm)
 $btn-padding-y-sm: 2px !default;
 $btn-padding-x-sm: 8px !default;
 $btn-font-size-sm: $h6-font-size !default;
 $btn-line-height-sm: 20px !default;
+$btn-border-radius-sm: 2px !default;
 
 // Buttons default (lg)
 $btn-padding-y-lg: 5px !default;
 $btn-padding-x-lg: 16px !default;
 $btn-font-size-lg: $h3-font-size !default;
 $btn-line-height-lg: 25px !default;
+$btn-border-radius-lg: 4px !default;
 
 // Forms
 $input-bg: $white !default;

@@ -167,8 +167,8 @@ const RcvArticleSearch = () => {
         <Form>
             <Form.Row className="d-flex mb-2">
                 {/* 검색기간 */}
-                <div className="mr-2">
-                    <MokaInput as="select" name="period" className="flex-fill" onChange={handleChangeValue} value={period.join('')}>
+                <div className="flex-shrink-0 mr-2">
+                    <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
                         <option value="1days" data-number="1" data-date="days">
                             1일
                         </option>
@@ -188,13 +188,13 @@ const RcvArticleSearch = () => {
                 </div>
 
                 {/* 시작일 */}
-                <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'start' }} onChange={handleChangeSDate} value={search.startDay} />
+                <div className="mr-2">
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'start', width: 140 }} onChange={handleChangeSDate} value={search.startDay} />
                 </div>
 
                 {/* 종료일 */}
-                <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end' }} onChange={handleChangeEDate} value={search.endDay} />
+                <div className="mr-2">
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }} onChange={handleChangeEDate} value={search.endDay} />
                 </div>
 
                 {/* 상태 */}
@@ -221,7 +221,7 @@ const RcvArticleSearch = () => {
 
                 {/* 매체 */}
                 <ArticleSourceSelector
-                    className="flex-shrink-0 flex-fill"
+                    className="flex-shrink-0"
                     value={sourceList}
                     onChange={(value) => {
                         setSourceList(value);
@@ -233,10 +233,10 @@ const RcvArticleSearch = () => {
                     }}
                 />
             </Form.Row>
-            <Form.Row className="d-flex mb-2 justify-content-between">
+            <Form.Row className="d-flex mb-14 justify-content-between">
                 <MokaSearchInput
                     name="keyword"
-                    className="mr-2 flex-fill"
+                    className="mr-1 flex-fill"
                     value={search.keyword}
                     onChange={handleChangeValue}
                     placeholder="제목을 입력하세요"

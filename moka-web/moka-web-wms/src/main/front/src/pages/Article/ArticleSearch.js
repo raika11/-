@@ -274,7 +274,7 @@ const ArticleSearch = ({ ja, sun }) => {
                     </div>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-2">
+            <Form.Row className="mb-14">
                 {/* 검색조건 */}
                 <Col xs={1} className="p-0">
                     <MokaInput as="select" name="searchType" onChange={handleChangeValue} value={search.searchType}>
@@ -291,16 +291,14 @@ const ArticleSearch = ({ ja, sun }) => {
                     <MokaInput name="keyword" onChange={handleChangeValue} value={search.keyword} onKeyPress={handleKeyPress} placeholder="검색어를 입력하세요" />
                 </Col>
 
-                {/* 분류 전체 */}
-                <Col xs={!ja && !sun ? 4 : 6} className="p-0 pl-2">
-                    <CodeAutocomplete placeholder="분류 전체" value={search.masterCode} onChange={handleChangeMasterCode} />
-                </Col>
+                <Col xs={8} className="p-0 pl-2 d-flex">
+                    {/* 분류 전체 */}
+                    <CodeAutocomplete placeholder="분류 전체" className="flex-fill mr-2" value={search.masterCode} onChange={handleChangeMasterCode} />
 
-                {/* 매체 */}
-                {!ja && !sun && (
-                    <Col xs={2} className="p-0 pl-2 d-flex">
+                    {/* 매체 */}
+                    {!ja && !sun && (
                         <ArticleSourceSelector
-                            className="w-100 flex-shrink-0"
+                            className="flex-shrink-0 mr-1"
                             value={sourceList}
                             onChange={(value) => {
                                 setSourceList(value);
@@ -311,25 +309,23 @@ const ArticleSearch = ({ ja, sun }) => {
                                 }
                             }}
                         />
-                    </Col>
-                )}
+                    )}
 
-                <Col xs={2} className="p-0 pl-2 d-flex">
-                    <Button variant="searching" className="mr-2 w-50" onClick={handleSearch}>
+                    <Button variant="searching" className="mr-1 flex-shrink-0" onClick={handleSearch}>
                         검색
                     </Button>
-                    <Button variant="negative" className="flex-shrink-0 w-50" onClick={handleClickReset}>
+                    <Button variant="negative" className="flex-shrink-0" onClick={handleClickReset}>
                         초기화
                     </Button>
                 </Col>
             </Form.Row>
-            <Form.Row className="d-flex mb-2 justify-content-between align-items-end">
+            <div className="d-flex mb-14 justify-content-between align-items-end">
                 <p className="mb-0">
                     <MokaIcon iconName="fas-circle" className="mr-1 color-info" />
                     벌크전송기사
                 </p>
                 <div className="d-flex"></div>
-            </Form.Row>
+            </div>
         </Form>
     );
 };

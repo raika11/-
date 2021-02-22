@@ -48,6 +48,11 @@ public class BoardInfoRepositorySupportImpl extends TpsQueryDslRepositorySupport
                     .or(qBoardInfo.boardDesc.contains(searchDTO.getKeyword())));
         }
 
+        // 채널 타입으로 검색 기능 추가
+        if (McpString.isNotEmpty(searchDTO.getChannelType())) {
+            query.where(qBoardInfo.channelType.eq(searchDTO.getChannelType()));
+        }
+
         Pageable pageable = searchDTO.getPageable();
         if (McpString.isYes(searchDTO.getUseTotal()) && getQuerydsl() != null) {
             query = getQuerydsl().applyPagination(pageable, query);

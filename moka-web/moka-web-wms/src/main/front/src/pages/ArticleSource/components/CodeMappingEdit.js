@@ -96,10 +96,12 @@ const CodeMappingEdit = (props) => {
     }, [mappingCode]);
 
     return (
-        <div className="pt-3 d-flex flex-column align-items-center">
-            <p>변환 코드 추가: (대소문자 구분합니다)</p>
-            <Form.Row>
-                <Col xs={mappingCode.seqNo ? 12 : 8} className="p-0">
+        <div className="d-flex flex-column">
+            <p className="mb-2" style={{ marginLeft: 90 }}>
+                변환 코드 추가: (대소문자 구분합니다)
+            </p>
+            <Form.Row className="mb-2">
+                <Col xs={mappingCode.seqNo ? 11 : 8} className="p-0">
                     <MokaInputLabel
                         label="매체 분류 코드"
                         labelWidth={80}
@@ -116,48 +118,40 @@ const CodeMappingEdit = (props) => {
                     />
                 </Col>
                 {!mappingCode.seqNo && (
-                    <Col xs={3} className="p-0">
+                    <Col xs={4} className="p-0">
                         <Button variant="outline-table-btn" onClick={checkDuplicatedMappingCode} disabled={disabledBtn}>
                             중복 확인
                         </Button>
                     </Col>
                 )}
             </Form.Row>
-            <p className="mb-0 ft-12">소분류 코드로 입력해주세요,</p>
-            <p className="mb-5 ft-12">마땅한게 없으면 XX 일반코드로(사회일반, 정치일반 등)</p>
-            <div style={{ width: 350 }}>
+            <p className="mb-2" style={{ marginLeft: 90 }}>
+                소분류 코드로 입력해주세요, <br />
+                마땅한게 없으면 XX 일반코드로(사회일반, 정치일반 등)
+            </p>
+            <div style={{ width: 354 }}>
                 <CodeAutocomplete
                     label="분류 코드"
-                    labelWidth={50}
+                    labelWidth={80}
                     name="masterCode"
                     placeholder="분류 선택"
                     value={temp.toCode}
                     onChange={(value) => setTemp({ ...temp, toCode: value })}
                 />
             </div>
-            {!temp.seqNo && (
-                <div className="d-flex mt-5">
-                    <Button className="mr-2" variant="positive" onClick={handleClickSave}>
-                        등록
-                    </Button>
-                    <Button variant="negative" onClick={handleClickCancel}>
-                        취소
-                    </Button>
-                </div>
-            )}
-            {temp.seqNo && (
-                <div className="d-flex mt-5">
-                    <Button className="mr-2" variant="positive" onClick={handleClickSave}>
-                        수정
-                    </Button>
-                    <Button className="mr-2" variant="negative" onClick={handleClickCancel}>
-                        취소
-                    </Button>
-                    <Button variant="negative" onClick={handleClickDelete}>
+            <div className="mt-5 d-flex justify-content-center">
+                <Button className="mr-1" variant="positive" onClick={handleClickSave}>
+                    {temp.seqNo ? '수정' : '저장'}
+                </Button>
+                {temp.seqNo && (
+                    <Button className="mr-1" variant="negative" onClick={handleClickDelete}>
                         삭제
                     </Button>
-                </div>
-            )}
+                )}
+                <Button variant="negative" onClick={handleClickCancel}>
+                    취소
+                </Button>
+            </div>
         </div>
     );
 };

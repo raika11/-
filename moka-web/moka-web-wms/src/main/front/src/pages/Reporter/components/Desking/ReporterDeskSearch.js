@@ -72,7 +72,7 @@ const ReporterDeskSearch = (props) => {
     return (
         <React.Fragment>
             <MokaSearchInput
-                className="mb-2"
+                className="mb-14"
                 value={search.keyword}
                 onChange={handleChangeSearchOption}
                 onSearch={handleSearch}

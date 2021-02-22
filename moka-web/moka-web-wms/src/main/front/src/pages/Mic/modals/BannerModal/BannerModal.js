@@ -198,7 +198,7 @@ const BannerModal = (props) => {
             <Container className="p-0 h-100" fluid>
                 <Row className="m-0 h-100">
                     <Col className="p-0 d-flex flex-column h-100 overflow-hidden flex-shrink-0" style={{ minWidth: 430 }}>
-                        <div className="mb-2 d-flex justify-content-end">
+                        <div className="mb-14 d-flex justify-content-end">
                             <Button variant="positive" onClick={handleAdd}>
                                 등록
                             </Button>

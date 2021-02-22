@@ -224,13 +224,13 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                         text: paramId ? '수정' : '저장',
                         variant: 'positive',
                         type: 'submit',
-                        className: 'mr-2',
+                        className: 'mr-1',
                     },
                     paramId && {
                         text: '삭제',
                         variant: 'negative',
                         onClick: handleClickDelete,
-                        className: 'mr-2',
+                        className: 'mr-1',
                     },
                     {
                         text: '취소',

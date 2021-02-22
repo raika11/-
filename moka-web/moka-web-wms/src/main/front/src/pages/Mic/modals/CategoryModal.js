@@ -186,10 +186,10 @@ const CategoryModal = (props) => {
             ]}
             centered
         >
-            <div className="d-flex mb-2">
+            <div className="d-flex mb-14">
                 <MokaSearchInput
                     placeholder="카테고리명을 입력하세요"
-                    className="mr-2 flex-fill"
+                    className="mr-1 flex-fill"
                     value={keyword}
                     onChange={(e) => {
                         setKeyword(e.target.value);
@@ -198,7 +198,7 @@ const CategoryModal = (props) => {
                     isInvalid={error}
                     onSearch={handleSearch}
                 />
-                <Button variant="negative" className="mr-2" onClick={handleReset}>
+                <Button variant="negative" className="mr-1" onClick={handleReset}>
                     초기화
                 </Button>
                 <Button variant="positive" onClick={handleAdd} disabled={!draggable}>

@@ -194,7 +194,7 @@ const ComponentWorkList = (props) => {
                                     ))}
                                 </MokaInput>
                             </div>
-                            <Button variant="outline-neutral" className="flex-shrink-0" onClick={handleClickPreview}>
+                            <Button variant="outline-neutral" size="sm" className="flex-shrink-0" onClick={handleClickPreview}>
                                 페이지 미리보기
                             </Button>
                         </React.Fragment>

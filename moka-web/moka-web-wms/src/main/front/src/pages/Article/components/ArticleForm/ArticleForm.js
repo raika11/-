@@ -316,40 +316,47 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
-                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
-                // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사수정', className: 'mr-2', onClick: handleClickSave },
-                { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-2', onClick: handleClickCdn },
+                { variant: 'outline-neutral', text: '미리보기', className: 'mr-1', onClick: handlePCPreview },
+                // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-1', onClick: handleMobilePreview },
+                { variant: 'positive', text: '기사수정', className: 'mr-1', onClick: handleClickSave },
+                { variant: 'outline-neutral', text: 'NDArticle Upload', className: 'mr-1', onClick: handleClickCdn },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
             loading={loading}
         >
             <Form className="d-flex flex-column h-100 overflow-y-hidden">
                 {/* 등록정보 (매체, 발행일) + 작업정보 버튼 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0 pr-2" xs={6}>
-                        <MokaInputLabel label="매체" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
+                <div className="mb-2 d-flex">
+                    <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
+                        <MokaInputLabel label="매체" as="none" />
+                        <span className="ft-12">{temp?.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 align-items-center justify-content-between d-flex" xs={6}>
-                        <MokaInputLabel label="발행일" value={temp.pressDateText} inputProps={{ plaintext: true }} disabled />
+                        <div className="d-flex align-items-center">
+                            <MokaInputLabel label="발행일" as="none" />
+                            <span className="ft-12">{temp.pressDateText}</span>
+                        </div>
+
                         <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)} size="sm">
                             작업정보
                         </Button>
                         {/* 작업정보 모달 */}
                         <ArticleHistoryModal totalId={article.totalId} show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
                     </Col>
-                </Form.Row>
+                </div>
 
                 {/* 등록정보 (기사ID, 수신ID) */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0 pr-2" xs={6}>
-                        <MokaInputLabel label="기사ID" value={temp.totalId} inputProps={{ plaintext: true }} disabled />
+                <div className="mb-2 d-flex">
+                    <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
+                        <MokaInputLabel label="기사ID" as="none" />
+                        <span className="ft-12">{temp.totalId}</span>
                     </Col>
 
-                    <Col className="p-0" xs={6}>
-                        <MokaInputLabel label="수신ID" value={temp.rid} inputProps={{ plaintext: true }} disabled />
+                    <Col className="p-0 d-flex align-items-center" xs={6}>
+                        <MokaInputLabel label="수신ID" as="none" />
+                        <span className="ft-12">{temp.rid}</span>
                     </Col>
-                </Form.Row>
+                </div>
 
                 {/* 분류 */}
                 <Form.Row className="mb-2">
@@ -408,7 +415,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 </Form.Row>
 
                 {/* 본문 */}
-                <Form.Row className="mb-2 flex-fill" style={{ height: 295 }}>
+                <Form.Row className="mb-2 flex-fill">
                     <Col className="p-0 d-flex overflow-hidden" xs={12}>
                         <MokaInputLabel label="본문" as="none" />
                         <div className="flex-fill input-border overflow-hidden">

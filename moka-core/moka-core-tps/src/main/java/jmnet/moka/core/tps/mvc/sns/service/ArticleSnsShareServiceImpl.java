@@ -7,12 +7,15 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
-import jmnet.moka.core.tps.common.code.SnsStatusCode;
-import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.common.sns.SnsApiService;
+import jmnet.moka.core.common.sns.SnsDeleteDTO;
+import jmnet.moka.core.common.sns.SnsPublishDTO;
+import jmnet.moka.core.common.sns.SnsStatusCode;
+import jmnet.moka.core.common.sns.SnsTypeCode;
+import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
+import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper;
@@ -20,6 +23,7 @@ import jmnet.moka.core.tps.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.scheduling.annotation.Async;
@@ -49,12 +53,21 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
     private final SnsApiService twitterApiService;
 
+    private final CodeMgtService codeMgtService;
+
+    @Value("${sns.facebook.token-code}")
+    private String facebookTokenCode;
+
+
+
     public ArticleSnsShareServiceImpl(ArticleSnsShareRepository articleSnsShareRepository, ArticleSnsShareMapper articleSnsShareMapper,
-            @Qualifier("facebookApiService") SnsApiService facebookApiService, @Qualifier("twitterApiService") SnsApiService twitterApiService) {
+            @Qualifier("facebookApiService") SnsApiService facebookApiService, @Qualifier("twitterApiService") SnsApiService twitterApiService,
+            CodeMgtService codeMgtService) {
         this.articleSnsShareRepository = articleSnsShareRepository;
         this.articleSnsShareMapper = articleSnsShareMapper;
         this.facebookApiService = facebookApiService;
         this.twitterApiService = twitterApiService;
+        this.codeMgtService = codeMgtService;
     }
 
     @Override
@@ -148,13 +161,25 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
         ArticleSnsShare share = null;
         // insert
-
-        Map<String, Object> result = getSnsAipService(snsPublish.getSnsType()).publish(SnsPublishDTO
+        SnsPublishDTO pubInfo = SnsPublishDTO
                 .builder()
                 .totalId(snsPublish.getTotalId())
                 .snsType(snsPublish.getSnsType())
                 .message(snsPublish.getMessage())
-                .build());
+                .build();
+
+        if (pubInfo
+                .getSnsType()
+                .equals(SnsTypeCode.FB)) {
+            CodeMgt tokenCode = codeMgtService
+                    .findByDtlCd(facebookTokenCode)
+                    .orElseThrow(() -> new NoDataException("Not Found Facebook Token"));
+            pubInfo.setTokenCode(tokenCode.getCdNm());
+        }
+
+        Map<String, Object> result = getSnsAipService(pubInfo.getSnsType()).publish(pubInfo);
+
+
 
         if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
             share = updateArticleSnsShareStatus(ArticleSnsShare
@@ -176,13 +201,24 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
             throws Exception {
         ArticleSnsShare share = null;
 
-        // 삭제
-        Map<String, Object> result = getSnsAipService(snsDelete.getSnsType()).delete(SnsDeleteDTO
+        SnsDeleteDTO delInfo = SnsDeleteDTO
                 .builder()
                 .snsId(snsDelete.getSnsId())
                 .snsType(snsDelete.getSnsType())
                 .totalId(snsDelete.getTotalId())
-                .build());
+                .build();
+
+        if (delInfo
+                .getSnsType()
+                .equals(SnsTypeCode.FB)) {
+            CodeMgt tokenCode = codeMgtService
+                    .findByDtlCd(facebookTokenCode)
+                    .orElseThrow(() -> new NoDataException("Not Found Facebook Token"));
+            delInfo.setTokenCode(tokenCode.getCdNm());
+        }
+
+        // 삭제
+        Map<String, Object> result = getSnsAipService(snsDelete.getSnsType()).delete(delInfo);
 
         if (McpString.isNotEmpty(result.getOrDefault("id", ""))) {
             share = updateArticleSnsShareStatus(ArticleSnsShare

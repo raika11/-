@@ -39,7 +39,7 @@ const propTypes = {
 };
 const defaultProps = {
     label: null,
-    labelWidth: 66,
+    labelWidth: 70,
     as: 'input',
     required: false,
     inputProps: {},

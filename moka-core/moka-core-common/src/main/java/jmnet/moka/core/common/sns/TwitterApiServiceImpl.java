@@ -1,4 +1,4 @@
-package jmnet.moka.core.tps.mvc.sns.service;
+package jmnet.moka.core.common.sns;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.net.URLEncoder;
@@ -12,13 +12,10 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -36,7 +33,6 @@ import org.springframework.util.MultiValueMap;
  * @since 2020-12-08 12:01
  */
 @Slf4j
-@Service("twitterApiService")
 public class TwitterApiServiceImpl implements SnsApiService {
 
     @Value("${sns.share.article-url}")
@@ -60,16 +56,8 @@ public class TwitterApiServiceImpl implements SnsApiService {
     @Value("${sns.twitter.access-token-secret}")
     private String twitterAccessTokenSecret;
 
-    private final RestTemplateHelper restTemplateHelper;
-
-    private final CodeMgtService codeMgtService;
-
-    public TwitterApiServiceImpl(RestTemplateHelper restTemplateHelper, CodeMgtService codeMgtService) {
-        this.restTemplateHelper = restTemplateHelper;
-        this.codeMgtService = codeMgtService;
-    }
-
-
+    @Autowired
+    private RestTemplateHelper restTemplateHelper;
 
     @Override
     public Map<String, Object> publish(SnsPublishDTO snsPublish)

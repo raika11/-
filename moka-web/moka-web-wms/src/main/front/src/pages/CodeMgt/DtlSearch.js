@@ -69,7 +69,7 @@ const DtlSearch = ({ grpCd, grp }) => {
                     <option value="cdNm">코드명</option>
                 </MokaInput>
             </div>
-            <div className="mr-2">
+            <div className="w-25 mr-1">
                 <MokaSearchInput value={search.keyword} name="keyword" onChange={handleChangeValue} onSearch={handleSearch} />
             </div>
             <Button variant="positive" onClick={handleAdd} className="h-100">

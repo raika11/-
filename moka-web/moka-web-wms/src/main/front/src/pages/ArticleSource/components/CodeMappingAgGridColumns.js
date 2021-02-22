@@ -6,7 +6,7 @@ export default [
         width: 140,
     },
     {
-        headerName: 'CMS 분류 코드',
+        headerName: '분류 코드',
         field: 'toCode',
         cellStyle: { fontSize: '12px' },
         flex: 1,

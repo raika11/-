@@ -21,7 +21,7 @@ export const initialState = {
         { id: 'Y', name: '최상단' },
     ],
     agenda: {
-        usedYn: 'N',
+        usedYn: 'Y',
         agndTop: 'N',
         agndType: '0',
         categoryList: [],

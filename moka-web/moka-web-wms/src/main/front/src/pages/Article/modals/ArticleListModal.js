@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { messageBox } from '@utils/toastUtil';
@@ -226,63 +225,62 @@ const ArticleListModal = (props) => {
         <MokaModal title="기사 검색" show={show} onHide={handelHide} size="lg" width={1000} height={800} bodyClassName="d-flex flex-column" draggable>
             <Form>
                 <Form.Row className="mb-2">
-                    {/* 검색 기간, 시작일, 종료일 */}
-                    <Col xs={5} className="p-0 pr-2 d-flex">
-                        <div className="mr-2 flex-shrink-0">
-                            <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
-                                <option value="1days" data-number="1" data-date="days">
-                                    1일
-                                </option>
-                                <option value="3days" data-number="3" data-date="days">
-                                    3일
-                                </option>
-                                <option value="7days" data-number="7" data-date="days">
-                                    1주일
-                                </option>
-                                <option value="1months" data-number="1" data-date="months">
-                                    1개월
-                                </option>
-                                <option value="3months" data-number="3" data-date="months">
-                                    3개월
-                                </option>
-                            </MokaInput>
-                        </div>
-                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="mr-1" onChange={handleChangeSDate} value={search.startServiceDay} />
-                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null }} className="ml-1" onChange={handleChangeEDate} value={search.endServiceDay} />
-                    </Col>
+                    {/* 검색 기간 */}
+                    <div className="mr-2 flex-shrink-0">
+                        <MokaInput as="select" name="period" onChange={handleChangeValue} value={period.join('')}>
+                            <option value="1days" data-number="1" data-date="days">
+                                1일
+                            </option>
+                            <option value="3days" data-number="3" data-date="days">
+                                3일
+                            </option>
+                            <option value="7days" data-number="7" data-date="days">
+                                1주일
+                            </option>
+                            <option value="1months" data-number="1" data-date="months">
+                                1개월
+                            </option>
+                            <option value="3months" data-number="3" data-date="months">
+                                3개월
+                            </option>
+                        </MokaInput>
+                    </div>
+
+                    {/* 시작일, 종료일 */}
+                    <div className="mr-2">
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, width: 140 }} onChange={handleChangeSDate} value={search.startServiceDay} />
+                    </div>
+                    <div className="mr-2">
+                        <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, width: 140 }} onChange={handleChangeEDate} value={search.endServiceDay} />
+                    </div>
 
                     {/* 분류 전체 */}
-                    <Col xs={6} className="p-0 pr-2">
-                        <CodeAutocomplete name="masterCode" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
-                    </Col>
+                    <CodeAutocomplete name="masterCode" className="flex-fill mr-2" placeholder="분류 선택" value={search.masterCode} onChange={handleChangeMasterCode} />
 
                     {/* 검색 버튼 */}
-                    <Col xs={1} className="p-0">
-                        <Button variant="searching" className="w-100 h-100" onClick={handleSearch}>
-                            검색
-                        </Button>
-                    </Col>
+                    <Button variant="searching" className="flex-shrink-0" onClick={handleSearch}>
+                        검색
+                    </Button>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 매체 */}
-                    <Col xs={3} className="p-0 pr-2">
-                        <SourceSelector
-                            value={sourceList}
-                            className="h-100 w-100"
-                            onChange={(value) => {
-                                setSourceList(value);
-                                setValError({ ...valError, sourceList: false });
-                                if (value !== '') {
-                                    setSourceOn(true);
-                                }
-                            }}
-                            isInvalid={valError.sourceList}
-                            sourceType="JOONGANG"
-                        />
-                    </Col>
+                    <SourceSelector
+                        value={sourceList}
+                        className="mr-2"
+                        width={390}
+                        onChange={(value) => {
+                            setSourceList(value);
+                            setValError({ ...valError, sourceList: false });
+                            if (value !== '') {
+                                setSourceOn(true);
+                            }
+                        }}
+                        isInvalid={valError.sourceList}
+                        sourceType="JOONGANG"
+                    />
 
                     {/* 검색 조건 */}
-                    <Col xs={2} className="p-0 pr-2">
+                    <div className="mr-2 flex-shrink-0">
                         <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                             {initialState.searchTypeList.map((searchType) => (
                                 <option key={searchType.id} value={searchType.id}>
@@ -290,19 +288,15 @@ const ArticleListModal = (props) => {
                                 </option>
                             ))}
                         </MokaInput>
-                    </Col>
+                    </div>
 
                     {/* 키워드 */}
-                    <Col xs={6} className="p-0 pr-2">
-                        <MokaInput className="flex-fill" name="keyword" value={search.keyword} placeholder="검색어를 입력하세요" onChange={handleChangeValue} />
-                    </Col>
+                    <MokaInput className="flex-fill mr-2" name="keyword" value={search.keyword} placeholder="검색어를 입력하세요" onChange={handleChangeValue} />
 
                     {/* 초기화 */}
-                    <Col xs={1} className="p-0">
-                        <Button variant="negative" className="w-100 h-100" onClick={handleClickReset}>
-                            초기화
-                        </Button>
-                    </Col>
+                    <Button variant="negative" className="flex-shrink-0" onClick={handleClickReset}>
+                        초기화
+                    </Button>
                 </Form.Row>
             </Form>
             <MokaTable

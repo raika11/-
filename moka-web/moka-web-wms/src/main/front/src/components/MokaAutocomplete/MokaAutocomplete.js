@@ -65,7 +65,7 @@ const propTypes = {
 const defaultProps = {
     isMulti: false,
     closeMenuOnSelect: true,
-    placeholder: '선택한 값이 없습니다.',
+    placeholder: '선택한 값이 없습니다',
     onChange: undefined,
     searchIcon: false,
     onClickSearchIcon: undefined,
@@ -96,6 +96,12 @@ const MokaAutocomplete = forwardRef((props, ref) => {
             ...provided,
             fontSize: '12px',
             fontWeight: 'bold',
+        }),
+        placeholder: (provided, state) => ({
+            ...provided,
+            // $gray-500 색상, 변경 시 여기도 변경해줘야함
+            color: '#ADB1BE',
+            fontSize: '14px',
         }),
     };
 

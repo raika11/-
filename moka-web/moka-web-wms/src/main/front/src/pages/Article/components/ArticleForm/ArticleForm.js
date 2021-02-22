@@ -325,20 +325,32 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
             loading={loading}
         >
             <Form className="d-flex flex-column h-100 overflow-y-hidden">
-                {/* 등록정보 + 작업정보 */}
+                {/* 등록정보 (매체, 발행일) + 작업정보 버튼 */}
                 <Form.Row className="mb-2">
-                    <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="매체" inputClassName="ft-12" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
+                    <Col className="p-0 pr-2" xs={6}>
+                        <MokaInputLabel label="매체" value={temp?.articleSource?.sourceName} inputProps={{ plaintext: true }} disabled />
                     </Col>
-                    <Col className="p-0 d-flex justify-content-end align-items-center" xs={9}>
-                        <MokaInputLabel label="발행일" labelWidth={39} inputClassName="ft-12" value={temp.pressDateText} inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel label="기사ID" labelWidth={39} inputClassName="ft-12" value={temp.totalId} inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel label="수신ID" labelWidth={39} inputClassName="ft-12" value={temp.rid} inputProps={{ plaintext: true }} disabled />
-                        <Button variant="outline-neutral flex-shrink-0" className="ft-12" onClick={() => setHistoryModalShow(true)} size="sm">
+                    <Col className="p-0 align-items-center justify-content-between d-flex" xs={6}>
+                        <MokaInputLabel label="발행일" value={temp.pressDateText} inputProps={{ plaintext: true }} disabled />
+                        <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)} size="sm">
                             작업정보
                         </Button>
+                        {/* 작업정보 모달 */}
+                        <ArticleHistoryModal totalId={article.totalId} show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
                     </Col>
                 </Form.Row>
+
+                {/* 등록정보 (기사ID, 수신ID) */}
+                <Form.Row className="mb-2">
+                    <Col className="p-0 pr-2" xs={6}>
+                        <MokaInputLabel label="기사ID" value={temp.totalId} inputProps={{ plaintext: true }} disabled />
+                    </Col>
+
+                    <Col className="p-0" xs={6}>
+                        <MokaInputLabel label="수신ID" value={temp.rid} inputProps={{ plaintext: true }} disabled />
+                    </Col>
+                </Form.Row>
+
                 {/* 분류 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
@@ -360,14 +372,27 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         <Button variant="outline-neutral" className="w-100" size="sm" onClick={() => setCodeModalShow(true)}>
                             통합분류표
                         </Button>
+
+                        {/* masterCode 모달 */}
+                        <CodeListModal
+                            max={4}
+                            show={codeModalShow}
+                            onHide={() => setCodeModalShow(false)}
+                            value={temp.categoryList}
+                            selection="multiple"
+                            onSave={handleMasterCode}
+                            selectable={['content']}
+                        />
                     </Col>
                 </Form.Row>
+
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
                         <MokaInputLabel label="제목" name="artTitle" className="mb-0" value={temp.artTitle} onChange={handleChangeValue} isInvalid={error.artTitle} required />
                     </Col>
                 </Form.Row>
+
                 {/* 부제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
@@ -381,6 +406,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         />
                     </Col>
                 </Form.Row>
+
                 {/* 기자 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={6}>
@@ -399,6 +425,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         </OverlayTrigger>
                     </Col>
                 </Form.Row>
+
                 {/* 태그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={10}>
@@ -408,12 +435,13 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
                     </Col>
                 </Form.Row>
+
                 {/* 본문 */}
                 <Form.Row className="mb-2 flex-fill" style={{ height: 295 }}>
                     <Col className="p-0 d-flex overflow-hidden" xs={12}>
                         <MokaInputLabel label="본문" as="none" />
                         <div className="flex-fill input-border overflow-hidden">
-                            <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} />
+                            <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} fullWindowButton />
                         </div>
                     </Col>
                 </Form.Row>
@@ -433,20 +461,6 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                         />
                     </Col>
                 </Form.Row>
-
-                {/* masterCode 모달 */}
-                <CodeListModal
-                    max={4}
-                    show={codeModalShow}
-                    onHide={() => setCodeModalShow(false)}
-                    value={temp.categoryList}
-                    selection="multiple"
-                    onSave={handleMasterCode}
-                    selectable={['content']}
-                />
-
-                {/* 작업정보 모달 */}
-                <ArticleHistoryModal totalId={article.totalId} show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
             </Form>
         </MokaCard>
     );

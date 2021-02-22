@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { MokaTable } from '@components';
+import Button from 'react-bootstrap/Button';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { MokaTable } from '@components';
 import { columnDefs } from './DatasetAgGridColumns';
 import { GET_DATASET_LIST, changeSearchOption, getDatasetList, initialState } from '@store/dataset';
 import { useHistory } from 'react-router-dom';
@@ -43,6 +44,15 @@ const DatasetAgGrid = ({ onDelete, match }) => {
      */
     const handleRowClicked = useCallback((rowData) => history.push(`${match.path}/${rowData.datasetSeq}`), [history, match.path]);
 
+    /**
+     * 데이터셋 등록
+     */
+    const handleClickAddDataSet = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        history.push(`${match.path}/add`);
+    };
+
     useEffect(() => {
         setDatasetRows(
             list.map((row) => ({
@@ -61,21 +71,28 @@ const DatasetAgGrid = ({ onDelete, match }) => {
     }, [storeSearch]);
 
     return (
-        <MokaTable
-            className="overflow-hidden flex-fill"
-            columnDefs={columnDefs}
-            size={storeSearch.size}
-            page={storeSearch.page}
-            total={total}
-            rowData={datasetRows}
-            loading={loading}
-            selected={dataset.datasetSeq}
-            onRowNodeId={(rowData) => rowData.id}
-            onChangeSearchOption={handleChangeSearchOption}
-            onRowClicked={handleRowClicked}
-            suppressRefreshCellAfterUpdate
-            preventRowClickCell={['delete']}
-        />
+        <>
+            <div className="d-flex justify-content-end mb-14">
+                <Button variant="positive" onClick={handleClickAddDataSet}>
+                    데이터셋 등록
+                </Button>
+            </div>
+            <MokaTable
+                className="overflow-hidden flex-fill"
+                columnDefs={columnDefs}
+                size={storeSearch.size}
+                page={storeSearch.page}
+                total={total}
+                rowData={datasetRows}
+                loading={loading}
+                selected={dataset.datasetSeq}
+                onRowNodeId={(rowData) => rowData.id}
+                onChangeSearchOption={handleChangeSearchOption}
+                onRowClicked={handleRowClicked}
+                suppressRefreshCellAfterUpdate
+                preventRowClickCell={['delete']}
+            />
+        </>
     );
 };
 

@@ -47,17 +47,9 @@ const defaultProps = {
 const LookupArticlePageList = (props) => {
     const { seq, seqType, show, onLoad } = props;
     const dispatch = useDispatch();
-    const { list, search: storeSearch, total, loading, latestDomainId } = useSelector((store) => ({
-        list: store.articlePage.lookup.list,
-        search: store.articlePage.lookup.search,
-        total: store.articlePage.lookup.total,
-        loading: store.loading[GET_ARTICLE_PAGE_LOOKUP_LIST],
-        latestDomainId: store.auth.latestDomainId,
-    }));
-
-    useEffect(() => {
-        setSearch(storeSearch);
-    }, [storeSearch]);
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE_LOOKUP_LIST]);
+    const { list, search: storeSearch, total } = useSelector(({ articlePage }) => articlePage.lookup);
 
     // state
     const [search, setSearch] = useState(initialState.lookup.search);
@@ -152,6 +144,10 @@ const LookupArticlePageList = (props) => {
     );
 
     useEffect(() => {
+        setSearch(storeSearch);
+    }, [storeSearch]);
+
+    useEffect(() => {
         return () => {
             dispatch(clearLookup());
         };
@@ -184,8 +180,8 @@ const LookupArticlePageList = (props) => {
     }, [show, latestDomainId, dispatch, seq, seqType]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 기사페이지" bodyClassName="d-flex flex-column">
-            <Form className="mb-2">
+        <MokaCard title="관련 기사페이지" bodyClassName="d-flex flex-column">
+            <Form className="mb-14">
                 {/* 검색조건, 키워드 */}
                 <Form.Row>
                     <Col xs={5} className="p-0 pr-2">

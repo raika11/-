@@ -3,6 +3,7 @@ package jmnet.moka.core.tps.mvc.board.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
+import jmnet.moka.core.tps.mvc.board.dto.JpodNoticeSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,14 @@ public interface BoardService {
      * @return 게시물 목록
      */
     Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO);
+
+    /**
+     * J팟 공지사항 목록 조회
+     *
+     * @param searchDTO 검색 조건
+     * @return 게시물 목록
+     */
+    Page<Board> findAllJpodNotice(JpodNoticeSearchDTO searchDTO);
 
     /**
      * 게시물의 하위 게시 목록 건수 조회

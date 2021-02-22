@@ -8,6 +8,7 @@ import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, get
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';
+import commonUtil from '@utils/commonUtil';
 
 const reporterCountConst = [0, 1, 2, 3, 4, 5];
 
@@ -593,41 +594,22 @@ const ChannelEdit = ({ match }) => {
     return (
         <div className="d-flex">
             <MokaCard
-                className="overflow-hidden flex-fill"
+                className="w-100 flex-fill"
                 title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
-                // className="flex-fill"
                 titleClassName="mb-0"
                 loading={loading}
-                width={750}
                 footer
                 footerClassName="d-flex justify-content-center"
-                footerAs={
-                    <>
-                        {(function () {
-                            return (
-                                <Row className="justify-content-md-center text-center">
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="positive" onClick={() => handleClickSaveButton()}>
-                                            저장
-                                        </Button>
-                                    </Col>
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="negative" onClick={() => handleClickCancleButton()}>
-                                            취소
-                                        </Button>
-                                    </Col>
-                                    {/* {!isNaN(Number(selectChnlSeq.current)) && (
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="negative" onClick={() => handleClickDeleteButton()}>
-                                            삭제
-                                        </Button>
-                                    </Col>
-                                )} */}
-                                </Row>
-                            );
-                        })()}
-                    </>
-                }
+                footerButtons={[
+                    {
+                        text: params.chnlSeq === 'add' ? '등록' : '수정',
+                        variant: 'positive',
+                        onClick: handleClickSaveButton,
+                        className: 'mr-05',
+                        useAuth: true,
+                    },
+                    { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton, className: 'mr-05' },
+                ]}
             >
                 <Form className="">
                     {/* 사용여부 */}
@@ -868,12 +850,10 @@ const ChannelEdit = ({ match }) => {
                     {/* 진행자 검색(모달) */}
                     <Form.Row className="mb-2">
                         <MokaInputLabel label={`진행자`} labelWidth={64} as="none" />
-                        <Col xs={1} className="p-0">
-                            <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
-                                검색
+                        <Col xs={4} className="p-0">
+                            <Button xs={12} variant="searching" className="mb-0 mr-2" onClick={() => handleClickSearchRepoterButton()}>
+                                기자 검색
                             </Button>
-                        </Col>
-                        <Col xs={1} className="p-0">
                             <Button variant="positive" onClick={(e) => handleClickRepoterAddButton()}>
                                 추가
                             </Button>
@@ -886,7 +866,7 @@ const ChannelEdit = ({ match }) => {
                                 <div className="d-flex align-items-center form-group">
                                     <div className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ width: '60px' }}></div>
                                 </div>
-                                <Col className="p-0">
+                                <Col className="p-0" xs={11}>
                                     <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
                                         <Col className="d-flex w-100 h-50 align-items-center">
                                             <div style={{ width: '70px' }}>

@@ -1,5 +1,5 @@
 // Fonts
-$font-family-sans-serif: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial !default;
+$font-family-sans-serif: "Poppins", -apple-system, "맑은 고딕", "Malgun Gothic", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial !default;
 $font-weight-light: 200 !default;
 $font-weight-normal: 400 !default;
 $font-weight-bold: 600 !default;
@@ -33,6 +33,7 @@ $spacers: (
     '05': ($spacer-px * 5),
 	10: ($spacer-px * 10),
 	12: ($spacer-px * 12),
+	14: ($spacer-px * 14),
 	20: ($spacer-px * 20),
 	32: ($spacer-px * 32),
 	40: ($spacer-px * 40),

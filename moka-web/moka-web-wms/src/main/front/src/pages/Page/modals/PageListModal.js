@@ -42,11 +42,8 @@ const defaultProps = {
 const PageListModal = (props) => {
     const { show, onHide, title, onClickSave, onClickCancle, selected: defaultSelected, domainId } = props;
     const dispatch = useDispatch();
-
-    const { latestDomainId, loading } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        loading: store.loading[GET_PAGE_LIST_MODAL],
-    }));
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const loading = useSelector(({ loading }) => loading[GET_PAGE_LIST_MODAL]);
 
     // state
     const [search, setSearch] = useState(initialState.search);
@@ -56,11 +53,6 @@ const PageListModal = (props) => {
     const [selectedPage, setSelectedPage] = useState({});
     const [rowData, setRowData] = useState([]);
     const [cnt, setCnt] = useState(0);
-
-    useEffect(() => {
-        // 선택된 값 셋팅
-        setSelected(defaultSelected);
-    }, [defaultSelected]);
 
     /**
      * 리스트 조회 콜백
@@ -84,7 +76,7 @@ const PageListModal = (props) => {
         setRowData([]);
         setTotal(initialState.total);
         setSelected('');
-        setSelected({});
+        setSelectedPage({});
         setError(null);
         setCnt(0);
         onHide();
@@ -149,7 +141,7 @@ const PageListModal = (props) => {
                 const sd = selectedNodes[0].data;
                 if (sd.pageSeq !== selected) {
                     setSelectedPage(sd);
-                    setSelected(sd.templateSeq);
+                    setSelected(sd.pageSeq);
                 }
             }
         },
@@ -176,6 +168,10 @@ const PageListModal = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [latestDomainId, domainId, show, cnt]);
 
+    useEffect(() => {
+        setSelected(defaultSelected);
+    }, [defaultSelected]);
+
     return (
         <MokaModal
             width={600}
@@ -190,41 +186,39 @@ const PageListModal = (props) => {
             footerClassName="justify-content-center"
             draggable
         >
-            <Form>
-                <Form.Row className="mb-2">
-                    {/* 검색 조건 */}
-                    <div className="mr-2 flex-shrink-0">
-                        <MokaInput
-                            as="select"
-                            value={search.searchType}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    searchType: e.target.value,
-                                });
-                            }}
-                        >
-                            {initialState.searchTypeList.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    {/* 키워드 */}
-                    <MokaSearchInput
-                        className="flex-fill"
-                        value={search.keyword}
+            <Form.Row className="mb-14">
+                {/* 검색 조건 */}
+                <div className="mr-2 flex-shrink-0">
+                    <MokaInput
+                        as="select"
+                        value={search.searchType}
                         onChange={(e) => {
                             setSearch({
                                 ...search,
-                                keyword: e.target.value,
+                                searchType: e.target.value,
                             });
                         }}
-                        onSearch={handleSearch}
-                    />
-                </Form.Row>
-            </Form>
+                    >
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </div>
+                {/* 키워드 */}
+                <MokaSearchInput
+                    className="flex-fill"
+                    value={search.keyword}
+                    onChange={(e) => {
+                        setSearch({
+                            ...search,
+                            keyword: e.target.value,
+                        });
+                    }}
+                    onSearch={handleSearch}
+                />
+            </Form.Row>
 
             {/* ag-grid table */}
             <MokaTable

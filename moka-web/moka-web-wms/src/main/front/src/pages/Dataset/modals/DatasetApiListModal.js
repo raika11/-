@@ -77,6 +77,8 @@ const DatsetListModal = (props) => {
         setSearch({});
         setError(null);
         setCnt(0);
+        setSelected('');
+        setSelectedDataset({});
         onHide();
     };
 
@@ -177,42 +179,40 @@ const DatsetListModal = (props) => {
             footerClassName="justify-content-center"
             draggable
         >
-            <Form>
-                <Form.Row className="mb-2">
-                    {/* 검색 조건 */}
-                    <div className="mr-2 flex-shrink-0">
-                        <MokaInput
-                            as="select"
-                            className="mb-0"
-                            value={search.searchType}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    searchType: e.target.value,
-                                });
-                            }}
-                        >
-                            {initialState.apiSearchTypeList.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    {/* 키워드 */}
-                    <MokaSearchInput
-                        className="flex-fill"
-                        value={search.keyword}
+            <Form.Row className="mb-14">
+                {/* 검색 조건 */}
+                <div className="mr-2 flex-shrink-0">
+                    <MokaInput
+                        as="select"
+                        className="mb-0"
+                        value={search.searchType}
                         onChange={(e) => {
                             setSearch({
                                 ...search,
-                                keyword: e.target.value,
+                                searchType: e.target.value,
                             });
                         }}
-                        onSearch={() => handleSearch({ ...search, page: 0 })}
-                    />
-                </Form.Row>
-            </Form>
+                    >
+                        {initialState.apiSearchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </div>
+                {/* 키워드 */}
+                <MokaSearchInput
+                    className="flex-fill"
+                    value={search.keyword}
+                    onChange={(e) => {
+                        setSearch({
+                            ...search,
+                            keyword: e.target.value,
+                        });
+                    }}
+                    onSearch={() => handleSearch({ ...search, page: 0 })}
+                />
+            </Form.Row>
 
             {/* ag-grid table */}
             <MokaTable

@@ -57,15 +57,10 @@ const defaultProps = {};
 const TemplateListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, templateGroup, templateWidth, menus, listType: listTypeProp, topAs } = props;
     const dispatch = useDispatch();
-
-    const { latestDomainId, domainList, tpZoneRows, tpSizeRows, loading, UPLOAD_PATH_URL } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        domainList: store.auth.domainList,
-        tpZoneRows: store.codeMgt.tpZoneRows,
-        tpSizeRows: store.codeMgt.tpSizeRows,
-        loading: store.loading[GET_TEMPLATE_LIST_MODAL],
-        UPLOAD_PATH_URL: store.app.UPLOAD_PATH_URL,
-    }));
+    const { latestDomainId, domainList } = useSelector(({ auth }) => auth);
+    const { tpZoneRows, tpSizeRows } = useSelector(({ codeMgt }) => codeMgt);
+    const loading = useSelector(({ loading }) => loading[GET_TEMPLATE_LIST_MODAL]);
+    const UPLOAD_PATH_URL = useSelector(({ app }) => app.UPLOAD_PATH_URL);
 
     // state
     const [total, setTotal] = useState(0);
@@ -75,18 +70,15 @@ const TemplateListModal = (props) => {
     const [selected, setSelected] = useState('');
     const [selectedTemplate, setSelectedTemplate] = useState({});
 
-    useEffect(() => {
-        // 선택된 값 셋팅
-        setSelected(defaultSelected);
-    }, [defaultSelected]);
-
     /**
      * 모달 닫기
      */
     const handleHide = () => {
         setListType('list');
         setTotal(0);
-        setSearch({});
+        setSearch(initialState.search);
+        setSelected('');
+        setSelectedTemplate({});
         onHide();
     };
 
@@ -258,6 +250,10 @@ const TemplateListModal = (props) => {
     );
 
     useEffect(() => {
+        setSelected(defaultSelected);
+    }, [defaultSelected]);
+
+    useEffect(() => {
         if (show) {
             let tmp = {
                 ...initialState.search,
@@ -310,7 +306,7 @@ const TemplateListModal = (props) => {
             centered
         >
             {topAs}
-            <Form>
+            <Form className="mb-14">
                 <Form.Row className="mb-2">
                     {/* 도메인 */}
                     <Col xs={7} className="p-0 pr-2">
@@ -335,7 +331,7 @@ const TemplateListModal = (props) => {
                         </MokaInput>
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row>
                     {/* 템플릿 사이즈 */}
                     <Col xs={3} className="p-0 pr-2">
                         <MokaInput as="select" value={search.templateWidth} onChange={handleChangeTpSize}>

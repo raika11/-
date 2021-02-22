@@ -41,16 +41,8 @@ const RelationInArticlePageList = (props) => {
     const { show, relSeqType, relSeq } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_RELATION_LIST]);
-    const { domainList, latestDomainId } = useSelector(({ auth }) => ({
-        domainList: auth.domainList,
-        latestDomainId: auth.latestDomainId,
-    }));
-    const { search: storeSearch, list, total, error } = useSelector((store) => ({
-        search: store.relation.search,
-        list: store.relation.list,
-        total: store.relation.total,
-        error: store.relation.error,
-    }));
+    const { domainList, latestDomainId } = useSelector(({ auth }) => auth);
+    const { search: storeSearch, list, total, error } = useSelector(({ relation }) => relation);
 
     // state
     const [search, setSearch] = useState(initialState.search);
@@ -152,10 +144,10 @@ const RelationInArticlePageList = (props) => {
     }, [show, relSeq, relSeqType, dispatch, latestDomainId]);
 
     return (
-        <MokaCard titleClassName="mb-0" title="관련 기사페이지" bodyClassName="d-flex flex-column">
+        <MokaCard title="관련 기사페이지" bodyClassName="d-flex flex-column">
             {/* 도메인 선택 */}
             {relSeqType === ITEM_DS && (
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-14">
                     <MokaInput as="select" value={search.domainId || undefined} onChange={(e) => handleChangeSearchOption({ key: 'domainId', value: e.target.value })}>
                         {domainList.map((domain) => (
                             <option key={domain.domainId} value={domain.domainId}>
@@ -167,7 +159,7 @@ const RelationInArticlePageList = (props) => {
             )}
 
             {/* 버튼 */}
-            <div className="d-flex justify-content-end mb-2">
+            <div className="d-flex justify-content-end mb-14">
                 <Button variant="positive" onClick={() => window.open('/article-page/add')}>
                     기사페이지 등록
                 </Button>

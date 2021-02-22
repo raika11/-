@@ -13,7 +13,7 @@ public class PushAppDeleteServiceImpl implements PushAppDeleteService{
     private PushAppDeleteRepository pushAppDeleteRepository;
 
     @Override
-    public Long countByContentSeq(Long contentSeq) {
-        return pushAppDeleteRepository.countByContentSeq(contentSeq);
+    public Long countByContentSeqAndPushYn(Long contentSeq, String pushYn) {
+        return pushAppDeleteRepository.countByContentSeqAndPushYn(contentSeq, pushYn);
     }
 }

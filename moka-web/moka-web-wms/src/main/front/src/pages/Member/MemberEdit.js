@@ -15,7 +15,7 @@ import { MokaInputLabel } from '@components';
  * 사용자 상세/수정
  * @param history rect-router-dom useHisotry
  */
-const MemberEdit = () => {
+const MemberEdit = ({ match }) => {
     const { memberId: paramId } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -162,14 +162,24 @@ const MemberEdit = () => {
         );
     };
 
-    const handleClickCancle = () => {
-        history.push('/member');
+    const handleClickCancel = () => {
+        history.push(`${match.path}`);
         dispatch(clearMember());
         dispatch(clearMemberMenuAuth());
     };
 
     return (
-        <MokaCard className="w-100" titleClassName="h-100 mb-0" title="사용자 정보" loading={loading}>
+        <MokaCard
+            className="w-100"
+            title="사용자 정보"
+            loading={loading}
+            footer
+            footerClassName="justify-content-center"
+            footerButtons={[
+                { text: '수정', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel },
+            ]}
+        >
             <Form>
                 <MokaInputLabel className="mb-2" label="ID" name="memberId" value={member.memberId} inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 이름 */}
@@ -226,18 +236,6 @@ const MemberEdit = () => {
                 <MokaInputLabel className="mb-2" label="등록일시" value={member.regDt} name="regDt" inputProps={{ plaintext: true, readOnly: true }} />
                 {/* 최종 접속일시 */}
                 <MokaInputLabel className="mb-2" label="최종\n접속일시" value={member.lastLoginDt} name="dept" inputProps={{ plaintext: true, readOnly: true }} />
-
-                {/* 버튼 */}
-                {member.memberId && (
-                    <Form.Group as={Row} className="d-flex pt-20 justify-content-center">
-                        <Button variant="positive" className="float-left pr-20 pl-20" onClick={handleClickSave}>
-                            저장
-                        </Button>
-                        <Button variant="negative" className="ml-05" onClick={handleClickCancle}>
-                            취소
-                        </Button>
-                    </Form.Group>
-                )}
             </Form>
         </MokaCard>
     );

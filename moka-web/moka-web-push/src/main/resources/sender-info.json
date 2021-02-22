@@ -1,4 +1,28 @@
 {
+  "T": {
+    "className": "jmnet.moka.web.push.sender.SenderT",
+    "pushTitle": "속보",
+    "tokenCnt": 1000,
+    "threadPoolCnt": 10
+  },
+  "S": {
+    "className": "jmnet.moka.web.push.sender.SenderS",
+    "pushTitle": "추천기사",
+    "tokenCnt": 1000,
+    "threadPoolCnt": 10
+  },
+  "R": {
+    "className": "jmnet.moka.web.push.sender.SenderR",
+    "pushTitle": "미리보는오늘",
+    "tokenCnt": 1000,
+    "threadPoolCnt": 10
+  },
+  "N": {
+    "className": "jmnet.moka.web.push.sender.SenderN",
+    "pushTitle": "뉴스룸레터",
+    "tokenCnt": 1000,
+    "threadPoolCnt": 10
+  },
   "EXAMPLE_SENDER": {
     "className": "jmnet.moka.web.push.sender.ExampleSender",
     "pushTitle": "푸시 발송 테스트",

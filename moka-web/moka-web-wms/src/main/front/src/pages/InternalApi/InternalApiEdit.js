@@ -38,7 +38,6 @@ const InternalApiEdit = ({ match }) => {
         httpMethodRows: codeMgt.httpMethodRows,
         apiTypeRows: codeMgt.apiTypeRows,
     }));
-    const [btns, setBtns] = useState([]);
     const [temp, setTemp] = useState(initialState.internalApi);
     const [error, setError] = useState({});
     const [paramList, setParamList] = useState([initialState.defaultParam]);
@@ -261,21 +260,6 @@ const InternalApiEdit = ({ match }) => {
     }, [dispatch, seqNo]);
 
     useEffect(() => {
-        if (seqNo) {
-            setBtns([
-                { text: '수정', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancel },
-                { text: '삭제', variant: 'negative', onClick: handleClickDelete },
-            ]);
-        } else {
-            setBtns([
-                { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', onClick: handleClickCancel },
-            ]);
-        }
-    }, [handleClickCancel, handleClickDelete, handleClickSave, seqNo]);
-
-    useEffect(() => {
         setError(invalidListToError(invalidList));
     }, [invalidList]);
 
@@ -298,7 +282,18 @@ const InternalApiEdit = ({ match }) => {
     }, []);
 
     return (
-        <MokaCard title={seqNo ? 'API 정보 수정' : 'API 정보 등록'} loading={loading} className="flex-fill" footerClassName="justify-content-center" footer footerButtons={btns}>
+        <MokaCard
+            title={seqNo ? 'API 정보 수정' : 'API 정보 등록'}
+            loading={loading}
+            className="flex-fill"
+            footerClassName="justify-content-center"
+            footer
+            footerButtons={[
+                { text: seqNo ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                seqNo && { text: '삭제', variant: 'negative', className: 'mr-1', onClick: handleClickDelete },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel },
+            ].filter((a) => a)}
+        >
             <Form>
                 {/* 사용 여부 */}
                 <Form.Row className="mb-2">

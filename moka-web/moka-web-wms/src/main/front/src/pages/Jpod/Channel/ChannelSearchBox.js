@@ -96,7 +96,7 @@ const ChannelSearchBox = ({ match }) => {
                                 // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                                 handleDateChange('startDt', param);
                             }}
-                            inputProps={{ timeFormat: null }}
+                            inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         />
                     </div>
                     <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
@@ -111,7 +111,7 @@ const ChannelSearchBox = ({ match }) => {
                                 // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                                 handleDateChange('endDt', param);
                             }}
-                            inputProps={{ timeFormat: null }}
+                            inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         />
                     </div>
                     <div className="mb-0 pl-1 pr-2">

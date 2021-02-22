@@ -29,16 +29,16 @@ const BasicForm = (props) => {
                 </Col>
                 <Col xs={6} className="p-0 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="outline-neutral" className="mr-2" onClick={() => setCopyModalShow(true)} disabled={btnDisabled}>
+                        <Button variant="outline-neutral" className="mr-1" onClick={() => setCopyModalShow(true)} disabled={btnDisabled}>
                             설정복사
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="positive" className="mr-2" onClick={onClickSave}>
+                        <Button variant="positive" className="mr-1" onClick={onClickSave}>
                             {btnDisabled ? '저장' : '수정'}
                         </Button>
                         {!btnDisabled && (
-                            <Button variant="negative" onClick={onClickDelete} className="mr-2">
+                            <Button variant="negative" onClick={onClickDelete} className="mr-1">
                                 삭제
                             </Button>
                         )}

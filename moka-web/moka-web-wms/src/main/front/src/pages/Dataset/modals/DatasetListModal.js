@@ -36,10 +36,8 @@ const defaultProps = {};
 const DatsetListModal = (props) => {
     const { show, onHide, onClickSave, onClickCancle, selected: defaultSelected, exclude } = props;
     const dispatch = useDispatch();
-    const { latestDomainId, loading } = useSelector((store) => ({
-        latestDomainId: store.auth.latestDomainId,
-        loading: store.loading[GET_DATASET_LIST_MODAL],
-    }));
+    const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
+    const loading = useSelector(({ loading }) => loading[GET_DATASET_LIST_MODAL]);
 
     // state
     const [search, setSearch] = useState(initialState.search);
@@ -77,6 +75,8 @@ const DatsetListModal = (props) => {
         setRowData([]);
         setTotal(initialState.total);
         setError(null);
+        setSelected('');
+        setSelectedDataset({});
         setCnt(0);
         onHide();
     };
@@ -189,41 +189,39 @@ const DatsetListModal = (props) => {
             draggable
             centered
         >
-            <Form>
-                <Form.Row className="mb-2">
-                    {/* 검색 조건 */}
-                    <div className="flex-shrink-0 mr-2">
-                        <MokaInputLabel
-                            as="select"
-                            value={search.searchType}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    searchType: e.target.value,
-                                });
-                            }}
-                        >
-                            {initialState.searchTypeList.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </MokaInputLabel>
-                    </div>
-                    {/* 키워드 */}
-                    <MokaSearchInput
-                        value={search.keyword}
-                        className="flex-fill"
+            <Form.Row className="mb-14">
+                {/* 검색 조건 */}
+                <div className="flex-shrink-0 mr-2">
+                    <MokaInputLabel
+                        as="select"
+                        value={search.searchType}
                         onChange={(e) => {
                             setSearch({
                                 ...search,
-                                keyword: e.target.value,
+                                searchType: e.target.value,
                             });
                         }}
-                        onSearch={handleSearch}
-                    />
-                </Form.Row>
-            </Form>
+                    >
+                        {initialState.searchTypeList.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </MokaInputLabel>
+                </div>
+                {/* 키워드 */}
+                <MokaSearchInput
+                    value={search.keyword}
+                    className="flex-fill"
+                    onChange={(e) => {
+                        setSearch({
+                            ...search,
+                            keyword: e.target.value,
+                        });
+                    }}
+                    onSearch={handleSearch}
+                />
+            </Form.Row>
 
             {/* ag-grid table */}
             <MokaTable

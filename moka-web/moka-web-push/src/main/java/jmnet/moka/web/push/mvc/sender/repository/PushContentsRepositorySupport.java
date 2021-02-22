@@ -1,7 +1,5 @@
 package jmnet.moka.web.push.mvc.sender.repository;
 
-import jmnet.moka.web.push.mvc.sender.dto.PushContentsDTO;
-import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,5 +30,13 @@ public interface PushContentsRepositorySupport {
      * @return 작업 목록
      */
     Page<PushContents> findByRelContentId(Long search, Pageable pageable);
+    /**
+     * 콘텐트 Seq 로 작업 목록 조회
+     *
+     * @param contentSeq   검색조건
+     * @param pageable
+     * @return 작업 목록
+     */
+    Page<PushContents> findByContentSeq(Long contentSeq, Pageable pageable);
 
 }

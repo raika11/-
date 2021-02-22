@@ -38,7 +38,7 @@ const BasicForm = (props) => {
                 <Col xs={6} className="p-0 d-flex justify-content-between">
                     <div className="d-flex">
                         {dataset.autoCreateYn === 'Y' && (
-                            <Button variant="outline-neutral" className="mr-2" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
+                            <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={() => setCopyModalShow(true)}>
                                 복사
                             </Button>
                         )}
@@ -47,11 +47,11 @@ const BasicForm = (props) => {
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="positive mr-2" onClick={onClickSave}>
+                        <Button variant="positive mr-1" onClick={onClickSave}>
                             {btnDisabled ? '저장' : '수정'}
                         </Button>
                         {dataset.autoCreateYn === 'Y' && dataset.datasetSeq && (
-                            <Button variant="negative" className="mr-2" onClick={() => onClickDelete(dataset)}>
+                            <Button variant="negative" className="mr-1" onClick={() => onClickDelete(dataset)}>
                                 삭제
                             </Button>
                         )}

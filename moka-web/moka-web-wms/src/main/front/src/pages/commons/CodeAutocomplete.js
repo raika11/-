@@ -97,10 +97,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     } = props;
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_CODE_KORNAME_LIST]);
-    const { storeSearch, codeList } = useSelector(({ code }) => ({
-        storeSearch: code.korname.search,
-        codeList: code.korname.list,
-    }));
+    const { search: storeSearch, list: kornameList } = useSelector(({ code }) => code.korname);
 
     // state
     const [search, setSearch] = useState(initialState.korname.search);
@@ -170,16 +167,18 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     }, [storeSearch]);
 
     useEffect(() => {
-        if (!codeList) {
+        if (!kornameList) {
             dispatch(getCodeKornameList(changeKornameSearchOption(search)));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (codeList) {
-            const filteredList = codeList.filter((code) => {
-                if (code.masterCode.slice(-5) === '00000') {
+        if (kornameList) {
+            const filteredList = kornameList.filter((code) => {
+                if (code.viewYn === 'N') {
+                    return false;
+                } else if (code.masterCode.slice(-5) === '00000') {
                     return selectable.indexOf('service') > -1 ? true : false;
                 } else if (code.masterCode.slice(-3) === '000') {
                     return selectable.indexOf('section') > -1 ? true : false;
@@ -218,7 +217,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
                 }),
             );
         }
-    }, [labelType, codeList, selectable]);
+    }, [labelType, kornameList, selectable]);
 
     useEffect(() => {
         if (!isMulti) {

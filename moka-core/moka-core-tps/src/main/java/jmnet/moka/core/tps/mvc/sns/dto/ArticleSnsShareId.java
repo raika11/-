@@ -1,7 +1,7 @@
 package jmnet.moka.core.tps.mvc.sns.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.common.sns.SnsTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

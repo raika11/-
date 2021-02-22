@@ -5,7 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.common.sns.SnsTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

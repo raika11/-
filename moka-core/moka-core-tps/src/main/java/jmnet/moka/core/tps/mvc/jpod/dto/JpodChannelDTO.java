@@ -130,19 +130,19 @@ public class JpodChannelDTO implements Serializable {
     private Date regDt;
 
     /**
-     * 채널 에피소드 수, 목록 조회시 사용
+     * 에피소드 사용건수
      */
-    @ApiModelProperty(value = "채널 에피소드 수", hidden = true)
+    @ApiModelProperty(value = "에피소드 사용건수", hidden = true)
     @Builder.Default
     @Transient
-    private Long totalEpsdCnt = 0l;
+    private Long usedCnt = 0l;
 
     /**
-     * 최근 에피소드 회차, 목록 조회시 사용
+     * 에피소드 미사용건수
      */
-    @ApiModelProperty(value = "최근 에피소드 회차", hidden = true)
+    @ApiModelProperty(value = "에피소드 미사용건수", hidden = true)
     @Transient
-    private String lastEpsdNo;
+    private Long unusedCnt = 0l;
 
     @ApiModelProperty("총시즌건수")
     @Min(value = 0, message = "{tps.jpod-channel.error.min.seasonCnt}")

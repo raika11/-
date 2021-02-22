@@ -108,17 +108,18 @@ public class JpodChannel extends jmnet.moka.core.tps.common.entity.BaseAudit imp
     private Integer podtyChnlSrl = 0;
 
     /**
-     * 채널 에피소드 수, 목록 조회시 사용
+     * 에피소드 사용건수
      */
     @Builder.Default
     @Transient
-    private Long totalEpsdCnt = 0l;
+    private Long usedCnt = 0l;
 
     /**
-     * 채널 에피소드 수, 목록 조회시 사용
+     * 에피소드 미사용건수
      */
+    @Builder.Default
     @Transient
-    private String lastEpsdNo;
+    private Long unusedCnt = 0l;
 
     /**
      * 총시즌수

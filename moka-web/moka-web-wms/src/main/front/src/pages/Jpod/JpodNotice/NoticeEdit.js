@@ -139,6 +139,7 @@ const NoticeEdit = ({ match, SelectBoard }) => {
             title={`게시글 ${editTitle === 'add' ? '등록' : '정보'}`}
             titleClassName="mb-0"
             loading={false}
+            width={750}
             footer
             footerClassName="d-flex justify-content-center"
             footerAs={

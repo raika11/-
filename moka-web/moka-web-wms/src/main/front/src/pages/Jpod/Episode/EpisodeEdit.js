@@ -58,7 +58,7 @@ const ChannelEdit = ({ match }) => {
     const loading = useSelector((store) => store.loading[GET_EPISODES_INFO]);
 
     const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
-    const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
+    // const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
 
     // 정보 기본 데이터 리셋시 사용할 함수.
     const resetEditData = () => {
@@ -120,7 +120,7 @@ const ChannelEdit = ({ match }) => {
     };
 
     // 기사 검색 버튼 ( 추후에 추가 예정 )
-    const handleClickArticleButton = () => {};
+    // const handleClickArticleButton = () => {};
 
     // 정보창에서 팟티 에피소드 검색 버튼 클릭. ( 선택한 채널이 없을경우 채널을 선택해 주세요 alert)
     const handleClickPodtyEpisodeButton = () => {
@@ -583,6 +583,7 @@ const ChannelEdit = ({ match }) => {
             className="overflow-hidden flex-fill"
             title={`에피소드 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
             loading={loading}
+            width={750}
             footer
             footerClassName="d-flex justify-content-center"
             footerAs={

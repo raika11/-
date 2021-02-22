@@ -64,8 +64,8 @@ const GrpSearch = () => {
     }, [search.secretYn]);
 
     return (
-        <div className="mb-2">
-            <div className="d-flex mb-2">
+        <div className="mb-14">
+            <div className="d-flex mb-14">
                 <div className="flex-shrink-0 mr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((op) => (

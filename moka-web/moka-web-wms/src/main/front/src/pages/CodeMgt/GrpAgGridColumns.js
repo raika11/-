@@ -12,7 +12,7 @@ export default [
     {
         headerName: '그룹명',
         field: 'cdNm',
-        width: 150,
+        width: 130,
         // wrapText: true,
         flex: 1,
         tooltipField: 'cdNm',

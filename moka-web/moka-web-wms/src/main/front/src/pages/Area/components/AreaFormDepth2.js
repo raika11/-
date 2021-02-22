@@ -386,7 +386,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
             footerClassName="justify-content-center"
             footerButtons={[
                 {
-                    text: '저장',
+                    text: temp.areaSeq ? '수정' : '저장',
                     variant: 'positive',
                     className: 'mr-2',
                     onClick: handleClickSave,
@@ -516,7 +516,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                 <Form.Row style={{ height: 200 }}>
                     <MokaInputLabel label="미리보기\n리소스" labelWidth={81} as="none" />
                     <div className="flex-fill input-border overflow-hidden">
-                        <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} />
+                        <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} fullWindowButton />
                     </div>
                 </Form.Row>
             </div>

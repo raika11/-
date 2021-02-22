@@ -22,9 +22,9 @@ $spacer-card: 24px !default;
 
 $spacers: (
     0: 0,
-    1: ($spacer * 0.25),
-    2: ($spacer * 0.5),
-    3: $spacer,
+    1: ($spacer * 0.25), // 4px
+    2: ($spacer * 0.5),  // 8px
+    3: $spacer,          // 16px
     4: ($spacer * 1.5),
     5: ($spacer * 3),
     6: ($spacer * 4.5),
@@ -35,7 +35,9 @@ $spacers: (
 	12: ($spacer-px * 12),
 	14: ($spacer-px * 14),
 	20: ($spacer-px * 20),
+	24: ($spacer-px * 24),
 	32: ($spacer-px * 32),
+	34: ($spacer-px * 34),
 	40: ($spacer-px * 40),
 	gutter: ($spacer-px * 16),
 	modal: $spacer-modal,

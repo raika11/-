@@ -87,7 +87,7 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3
     return (
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
-                <div className="d-flex justify-content-end mb-2">
+                <div className="d-flex justify-content-end mb-14">
                     <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth1?.area?.areaSeq}>
                         추가
                     </Button>

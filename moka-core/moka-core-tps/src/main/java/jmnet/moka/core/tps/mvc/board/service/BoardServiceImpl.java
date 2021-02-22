@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.mvc.board.dto.BoardSearchDTO;
+import jmnet.moka.core.tps.mvc.board.dto.JpodNoticeSearchDTO;
 import jmnet.moka.core.tps.mvc.board.entity.Board;
 import jmnet.moka.core.tps.mvc.board.entity.BoardAttach;
 import jmnet.moka.core.tps.mvc.board.repository.BoardAttachRepository;
@@ -43,6 +44,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Page<Board> findAllBoard(Integer boardId, BoardSearchDTO searchDTO) {
         return boardRepository.findAllBoard(boardId, searchDTO);
+    }
+
+    @Override
+    public Page<Board> findAllJpodNotice(JpodNoticeSearchDTO searchDTO) {
+        return boardRepository.findAllJpodNotice(searchDTO);
     }
 
     @Override

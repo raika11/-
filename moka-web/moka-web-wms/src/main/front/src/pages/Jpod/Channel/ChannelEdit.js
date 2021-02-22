@@ -486,11 +486,16 @@ const ChannelEdit = ({ match }) => {
     // 해당값을 스테이트에 등록.
     useEffect(() => {
         if (selectPodtyChannel && selectPodtyChannel.castSrl) {
-            const { castSrl, shareUrl } = selectPodtyChannel;
+            console.log(selectPodtyChannel);
+            const { castSrl, shareUrl, getCastName, summary, keywords, crtDt } = selectPodtyChannel;
             setEditData({
                 ...editData,
                 podtyChnlSrl: castSrl,
                 podtyUrl: shareUrl,
+                chnlNm: getCastName,
+                chnlMemo: summary,
+                keywords,
+                chnlSdt: crtDt,
             });
         }
         // 팟티가 선택되었을 경우만 실행.

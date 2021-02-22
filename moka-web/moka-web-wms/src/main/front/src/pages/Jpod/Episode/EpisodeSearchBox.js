@@ -34,8 +34,8 @@ const EpisodeSearchBox = ({ match }) => {
     const handleClickSearchButton = () => {
         let ns = {
             ...searchData,
-            startDt: moment(searchData.startDt).startOf('day').format(DB_DATEFORMAT),
-            endDt: moment(searchData.endDt).endOf('day').format(DB_DATEFORMAT),
+            startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
+            endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
         };
 
         dispatch(changeEpisodesSearchOption(ns));

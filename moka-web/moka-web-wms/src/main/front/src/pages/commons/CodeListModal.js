@@ -69,8 +69,8 @@ const defaultProps = {
 const CodeListModal = (props) => {
     const { show, onHide, title, onSave, onCancel, selection, value, max, selectable, ...rest } = props;
     const dispatch = useDispatch();
-    const loading = useSelector((store) => store.loading[GET_MASTER_CODE_LIST]);
-    const masterCodeList = useSelector((store) => store.code.master.list);
+    const loading = useSelector(({ loading }) => loading[GET_MASTER_CODE_LIST]);
+    const masterCodeList = useSelector(({ code }) => code.master.list);
     const matchPoints = useBreakpoint();
 
     const [serviceList, setServiceList] = useState([]); // 1뎁스 = 대분류 = 서비스코드
@@ -181,7 +181,8 @@ const CodeListModal = (props) => {
                 scl = [],
                 cnl = [];
 
-            masterCodeList.forEach((element) => {
+            const filteredList = masterCodeList.filter((code) => code.viewYn === 'Y');
+            filteredList.forEach((element) => {
                 if (element.masterCode.slice(-5) === '00000') {
                     svl.push(element);
                 } else if (element.masterCode.slice(-3) === '000') {

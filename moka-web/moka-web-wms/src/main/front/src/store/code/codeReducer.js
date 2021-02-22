@@ -6,6 +6,7 @@ import * as act from './codeAction';
  * initialState
  */
 export const initialState = {
+    // 전체 리스트
     master: {
         error: null,
         list: null,

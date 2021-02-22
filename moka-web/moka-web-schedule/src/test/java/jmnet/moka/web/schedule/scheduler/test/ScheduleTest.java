@@ -1,6 +1,8 @@
 package jmnet.moka.web.schedule.scheduler.test;
 
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob;
+import jmnet.moka.web.schedule.support.reserve.ReserveJobHandler;
 import jmnet.moka.web.schedule.support.schedule.ScheduleJobHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -16,6 +18,12 @@ public class ScheduleTest {
 
     @Autowired
     private ScheduleJobHandler handler;
+
+    @Autowired
+    private ReserveJobHandler rhandler;
+
+    @Autowired
+    private SnsShareReserveJob snsShareReserveJob;
 
     @Test
     public void crsRefineApiCallTest() {

@@ -107,17 +107,17 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         query
                 .select(Projections.fields(JpodChannel.class, qJpodChannel.chnlSeq, qJpodChannel.regDt, qJpodChannel.chnlSdt, qJpodChannel.chnlNm,
                         qJpodChannel.chnlMemo, qJpodChannel.chnlImg, qJpodChannel.chnlThumb, qJpodChannel.chnlImgMob, qJpodChannel.podtyChnlSrl,
-                        ExpressionUtils.as(JPAExpressions
+                        qJpodChannel.usedYn, ExpressionUtils.as(JPAExpressions
                                 .select(qJpodEpisode.epsdSeq.count())
                                 .from(qJpodEpisode)
                                 .where(qJpodEpisode.chnlSeq
                                         .eq(qJpodChannel.chnlSeq)
-                                        .and(qJpodChannel.usedYn.eq(MokaConstants.YES))), "usedCnt"), ExpressionUtils.as(JPAExpressions
+                                        .and(qJpodEpisode.usedYn.eq(MokaConstants.YES))), "usedCnt"), ExpressionUtils.as(JPAExpressions
                                 .select(qJpodEpisode.epsdSeq.count())
                                 .from(qJpodEpisode)
                                 .where(qJpodEpisode.chnlSeq
                                         .eq(qJpodChannel.chnlSeq)
-                                        .and(qJpodChannel.usedYn.eq(MokaConstants.NO))), "unusedCnt")))
+                                        .and(qJpodEpisode.usedYn.eq(MokaConstants.NO))), "unusedCnt")))
                 .from(qJpodChannel);
 
 

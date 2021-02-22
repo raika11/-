@@ -96,7 +96,7 @@ export const initialState = {
             epsdNm: '',
             epsdNo: '',
             epsdSeq: 0,
-            jpodType: 'A',
+            jpodType: '',
             katalkImg: '',
             likeCnt: 0,
             playCnt: 0,
@@ -109,6 +109,7 @@ export const initialState = {
             shrImg: '',
             usedYn: 'Y',
             viewCnt: 0,
+            seasonNo: '',
         },
         channel: {
             search: {

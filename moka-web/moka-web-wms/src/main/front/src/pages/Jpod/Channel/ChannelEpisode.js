@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MokaCard, MokaTable } from '@components';
-import { Form, Col, Button, Row } from 'react-bootstrap';
+import { Form, Col, Button } from 'react-bootstrap';
 import { channelEpisodeColumnDefs } from './ChannelListAgGridColumns';
 import { useSelector } from 'react-redux';
 import { DISPLAY_PAGE_NUM } from '@/constants';
@@ -60,40 +60,30 @@ const ChannelEpisode = () => {
 
     return (
         <div className="d-flex">
-            <MokaCard
-                className="overflow-hidden flex-fill"
-                title={`${episodeTitle} 에피소드 목록`}
-                titleClassName="mb-0"
-                loading={false}
-                footerClassName="d-flex justify-content-center"
-                width={750}
-            >
+            <MokaCard className="flex-fill" title={`${episodeTitle} 에피소드 목록`} titleClassName="mb-0" loading={false} footerClassName="d-flex justify-content-center">
                 <Form>
-                    <Form.Row className="d-flex mb-3">
-                        <Col xs={9}>{`등록된 에피소드: 사용(${episodeStat.usedCnt}) 중지(${episodeStat.unusedCnt})`}</Col>
-                        <Col xs={3}>
-                            <Row>
-                                <Col xs={6}>
-                                    <Button variant="searching" onClick={(e) => console.log(e)}>
-                                        에피소드 목록
-                                    </Button>
-                                </Col>
-                                <Col xs={6}>
-                                    <Button variant="positive" onClick={(e) => console.log(e)} className="pr-1">
-                                        에피소드 등록
-                                    </Button>
-                                </Col>
-                            </Row>
+                    <Form.Row className="d-flex justify-content-between mb-2">
+                        <Col xs={6} className="pl-0 d-flex align-items-center">
+                            <Form.Label className="mb-0">{`등록된 에피소드: 사용(${episodeStat.usedCnt}) 중지(${episodeStat.unusedCnt})`}</Form.Label>
+                        </Col>
+                        <Col xs={6} className="d-flex justify-content-end pr-0">
+                            <Button variant="searching" onClick={(e) => window.open('/jpod-episode')} className="mr-1">
+                                에피소드 목록
+                            </Button>
+                            <Button variant="positive" onClick={(e) => window.open('/jpod-episode/add')}>
+                                에피소드 등록
+                            </Button>
                         </Col>
                     </Form.Row>
                 </Form>
-                <Row>
+                <Form.Row>
                     <MokaTable
                         className="overflow-hidden flex-fill"
                         columnDefs={channelEpisodeColumnDefs}
                         rowData={rowData}
                         localeText={{ noRowsToShow: '에피소드가 없습니다.', loadingOoo: '조회 중입니다..' }}
                         rowHeight={80}
+                        agGridHeight={630}
                         onRowNodeId={(data) => data.epsdSeq}
                         onRowClicked={(e) => handleClickListRow(e)}
                         loading={loading}
@@ -102,7 +92,7 @@ const ChannelEpisode = () => {
                         onChangeSearchOption={handleChangeSearchOption}
                         selected={selectEpsdSeq}
                     />
-                </Row>
+                </Form.Row>
             </MokaCard>
         </div>
     );

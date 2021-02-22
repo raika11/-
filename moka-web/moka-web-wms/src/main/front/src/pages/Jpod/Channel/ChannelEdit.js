@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
 import { Form, Col, Button, Row } from 'react-bootstrap';
 import moment from 'moment';
 // import { DB_DATEFORMAT } from '@/constants';
@@ -66,7 +66,7 @@ const ChannelEdit = ({ match }) => {
                 memDiv: '',
                 memMemo: '',
                 memNm: '',
-                memRepSeq: '',
+                memRepSeq: '0',
                 nickNm: '',
                 seqNo: '',
             },
@@ -103,7 +103,19 @@ const ChannelEdit = ({ match }) => {
         dispatch(clearReporter());
         setEditData(initialState.channel.channelInfo);
         //resetReporter();
-        setEditSelectRepoters([]);
+        setEditSelectRepoters([
+            {
+                chnlSeq: '',
+                desc: '',
+                epsdSeq: '',
+                memDiv: '',
+                memMemo: '',
+                memNm: '',
+                memRepSeq: '0',
+                nickNm: '',
+                seqNo: '',
+            },
+        ]);
         setEditDays([]);
         setImgfile(null);
         setThumbfile(null);
@@ -181,7 +193,7 @@ const ChannelEdit = ({ match }) => {
     const handleClickReporterDelete = (index) => {
         // 삭제를 누르면 배열에서 삭제 후 마지막을 디폴트 값으로 채움
         let tempList = editSelectRepoters.filter((e, i) => i !== index);
-        /*tempList = [
+        tempList = [
             ...tempList,
             {
                 chnlSeq: '',
@@ -190,11 +202,11 @@ const ChannelEdit = ({ match }) => {
                 memDiv: '',
                 memMemo: '',
                 memNm: '',
-                memRepSeq: '',
+                memRepSeq: '0',
                 nickNm: '',
                 seqNo: '',
             },
-        ];*/
+        ];
         setEditSelectRepoters(tempList);
     };
 
@@ -210,7 +222,7 @@ const ChannelEdit = ({ match }) => {
             return true;
         }
 
-        const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
+        const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '0' && e.nickNm === '' && e.seqNo === '');
         if (tmpCh.length === reporterCountConst.length) {
             messageBox.alert('진행자를 1명 이상 선택해 주세요.', () => {});
             return true;
@@ -438,7 +450,7 @@ const ChannelEdit = ({ match }) => {
                 return;
             }
 
-            const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
+            const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && (e.memRepSeq === '0' || e.memRepSeq === '') && e.nickNm === '' && e.seqNo === '');
 
             // 추가 버튼을 눌렀을경우 데이터가 없이 폼이 있기 떄문에
             // 데이터가 없는 폼이 있으면 해당 폼에 입력 아니면 추가.
@@ -450,7 +462,7 @@ const ChannelEdit = ({ match }) => {
                     editSelectRepoters.map((e) => {
                         const { memMemo, memNm, memRepSeq, nickNm, seqNo } = e;
 
-                        if (status === false && memMemo === '' && memNm === '' && memRepSeq === '' && nickNm === '' && seqNo === '') {
+                        if (status === false && memMemo === '' && memNm === '' && (memRepSeq === '0' || memRepSeq === '') && nickNm === '' && seqNo === '') {
                             status = true;
                             return selectReporter;
                         } else {
@@ -692,30 +704,27 @@ const ChannelEdit = ({ match }) => {
                         </Form.Row>
                     )}
 
-                    <Form.Row className="mb-2">
-                        <Col xs={8} className="p-0">
+                    <Form.Row>
+                        <Col xs={9} className="p-0 mb-2">
                             {/* 시즌명 */}
                             <MokaInputLabel
                                 label={`시즌명`}
                                 labelWidth={64}
-                                className="mb-2 pr-2"
+                                className="pr-2"
                                 inputClassName="resize-none"
-                                inputProps={{ rows: 6 }}
                                 id="seasonNm"
                                 name="seasonNm"
                                 value={editData.seasonNm}
                                 onChange={(e) => handleChangeChannelEditData(e)}
                             />
                         </Col>
-                        <Col xs={4} className="p-0">
+                        <Col xs={3} className="p-0">
                             {/* 총시즌 */}
                             <MokaInputLabel
                                 label={`총시즌`}
                                 type="number"
-                                labelWidth={30}
-                                className="mb-2"
+                                labelWidth={40}
                                 inputClassName="resize-none"
-                                inputProps={{ rows: 6 }}
                                 id="seasonCnt"
                                 name="seasonCnt"
                                 value={editData.seasonCnt}
@@ -723,6 +732,17 @@ const ChannelEdit = ({ match }) => {
                             />
                         </Col>
                     </Form.Row>
+
+                    {editData.seasonNm && (
+                        <Form.Row className="mb-2">
+                            <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
+                            {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
+                            <Col className="p-0">
+                                * {editData.seasonNm}
+                                {editData.seasonCnt}
+                            </Col>
+                        </Form.Row>
+                    )}
 
                     {/* 채널 소개 */}
                     <Form.Row className="mb-2">
@@ -874,7 +894,7 @@ const ChannelEdit = ({ match }) => {
                                 </div>
                                 <Col className="p-0" xs={11}>
                                     <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
-                                        <Col className="d-flex w-100 h-50 align-items-center">
+                                        <Col className="d-flex h-50 align-items-center" xs={11}>
                                             <div style={{ width: '70px' }}>
                                                 <MokaInput
                                                     name="memRepSeq"
@@ -918,11 +938,12 @@ const ChannelEdit = ({ match }) => {
                                                 </Button>
                                             </div>
                                         </Col>
-                                        <Col xs={12} className="p-0 h-50 d-flex align-items-center">
+                                        <Col xs={11} className="p-0 h-50 d-flex align-items-center">
                                             <Col xs={12}>
                                                 <MokaInput
                                                     name="desc"
                                                     className="ft-12"
+                                                    style={{ height: '40px' }}
                                                     value={element.desc}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`설명`}
@@ -937,7 +958,7 @@ const ChannelEdit = ({ match }) => {
 
                     <hr />
                     <Form.Row className="mb-2">
-                        <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={64} />
+                        <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={65} />
                     </Form.Row>
 
                     {/* 이미지 */}
@@ -948,6 +969,7 @@ const ChannelEdit = ({ match }) => {
                             name="chnlImgMobFile"
                             isInvalid={null}
                             inputClassName="flex-fill"
+                            labelWidth={65}
                             label={
                                 <React.Fragment>
                                     커버이미지
@@ -974,7 +996,7 @@ const ChannelEdit = ({ match }) => {
                                     <Button
                                         className="mt-0"
                                         size="sm"
-                                        variant="positive"
+                                        variant="gray-700"
                                         onClick={(e) => {
                                             imgFileRef1.current.rootRef.onClick(e);
                                         }}
@@ -1002,7 +1024,7 @@ const ChannelEdit = ({ match }) => {
                     </Form.Row>
                     {/* 모바일용 */}
                     <Form.Row className="mb-2">
-                        <Col xs={7}>
+                        <Col xs={7} className="pl-0">
                             <MokaInputLabel
                                 as="imageFile"
                                 className="mb-2"
@@ -1036,7 +1058,7 @@ const ChannelEdit = ({ match }) => {
                                         <Button
                                             className="mt-0"
                                             size="sm"
-                                            variant="positive"
+                                            variant="gray-700"
                                             onClick={(e) => {
                                                 imgFileRef3.current.rootRef.onClick(e);
                                                 // imgFileRef3.current.deleteFile();
@@ -1068,7 +1090,7 @@ const ChannelEdit = ({ match }) => {
                             />
                         </Col>
                         {/* 썸네일 이미지 */}
-                        <Col xs={5} className="p-0 pt-1 pl-1">
+                        <Col xs={5} className="pt-0">
                             <MokaInputLabel
                                 as="imageFile"
                                 className="w-100 mb-2"
@@ -1102,7 +1124,7 @@ const ChannelEdit = ({ match }) => {
                                         <Button
                                             className="mt-0"
                                             size="sm"
-                                            variant="positive"
+                                            variant="gray-700"
                                             onClick={(e) => {
                                                 // e.preventDefault();
                                                 // e.stopPropagation();

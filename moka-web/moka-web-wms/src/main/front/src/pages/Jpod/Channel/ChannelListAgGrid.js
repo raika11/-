@@ -49,8 +49,8 @@ const ChannelListAgGrid = ({ match }) => {
             setRowData(
                 data.map((element) => {
                     let chnlSdt = element.chnlSdt && element.chnlSdt.length > 10 ? element.chnlSdt.substr(0, 10) : element.chnlSdt;
-                    const totalEpsdCnt = element.totalEpsdCnt ? element.totalEpsdCnt : 0;
-                    const lastEpsdNo = element.lastEpsdNo ? element.lastEpsdNo : 0;
+                    const totalEpsdCnt = element.usedCnt ? element.usedCnt : 0;
+                    const lastEpsdNo = element.unusedCnt ? element.unusedCnt : 0;
                     return {
                         chnlSeq: element.chnlSeq,
                         chnlSdt: chnlSdt,

@@ -1,11 +1,13 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
-import jmnet.moka.web.push.mvc.sender.dto.PushContentsDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
 import org.springframework.data.domain.Page;
+
+import java.util.Optional;
 
 /**
  * 작업 Service
@@ -44,4 +46,20 @@ public interface PushContentsService {
      * @return 작업
      */
     PushContentsProc savePushContentsProc(PushContentsProc pushContentsProc);
+
+    /**
+     * 예약 작업 테이블에 del_yn을 'N'으로 변경
+     *
+     * @param pushContents 작업
+     * @return 작업
+     */
+    PushContents saveDelYn(PushContents pushContents);
+
+    /**
+     * 푸시 컨텐츠 조회
+     *
+     * @param search 작업 정보
+     * @return 작업목록
+     */
+    Page<PushContents> findPushContents(PushContentSeqSearchDTO search);
 }

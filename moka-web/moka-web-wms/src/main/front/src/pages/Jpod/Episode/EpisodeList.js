@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 const EpisodeList = ({ match }) => {
     const params = useParams();
     return (
-        <MokaCard width={798} className="mr-gutter" title={`에피소드 리스트`} bodyClassName="d-flex flex-column">
+        <MokaCard width={898} className="mr-gutter" title={`에피소드 리스트`}>
             <EpisodeSearchBox match={match} />
             <EpisodeListAgGrid match={match} params={params} />
         </MokaCard>

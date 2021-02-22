@@ -396,8 +396,8 @@ $transition-appearance-slow: background .6s ease-in-out, color .6s ease-in-out !
 $transition-appearance-fast: background .1s ease-in-out, color .1s ease-in-out !default;
 
 // Modals
-$modal-footer-margin-between: 8px !default;
-$modal-spacer-y: $spacer-modal - $modal-footer-margin-between !default;
+$modal-footer-margin-between: 0px !default;
+$modal-spacer-y: $spacer-modal - 8px !default;
 $modal-spacer-x: $spacer-modal !default;
 $modal-content-border-width: 0 !default;
 $modal-header-border-width: 1px !default;

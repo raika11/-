@@ -33,7 +33,7 @@ const CustomToggle = forwardRef(({ children, onClick, isInvalid }, ref) => {
             <MokaInputGroup
                 value={children}
                 inputProps={{ readOnly: true }}
-                inputClassName="bg-white ft-12 cursor-pointer border-right-0"
+                inputClassName="bg-white cursor-pointer border-right-0"
                 isInvalid={isInvalid}
                 append={
                     <div
@@ -188,9 +188,9 @@ const EditThumbImageTypeDropdown = (props) => {
 
             <Dropdown.Menu as={CustomMenu}>
                 <MokaInput
-                    id={'All'}
+                    id="imgtype-all"
                     onChange={handleChangeValue}
-                    className="mb-2 ft-12"
+                    className="mb-2"
                     as="checkbox"
                     inputProps={{ label: '전체', custom: true, checked: imageValue === 'All' || toggleText === '전체' }}
                 />
@@ -205,7 +205,7 @@ const EditThumbImageTypeDropdown = (props) => {
                                 id={type.name}
                                 name="imageTypeList"
                                 onChange={handleChangeValue}
-                                className="mb-2 ft-12"
+                                className="mb-2"
                                 as="checkbox"
                                 inputProps={{ label: type.label, custom: true, checked: chkTrue(type.name) }}
                             />

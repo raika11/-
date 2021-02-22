@@ -227,7 +227,7 @@ const EditThumbModal = (props) => {
         >
             <DndProvider backend={HTML5Backend}>
                 <MokaCardTabs
-                    height={481}
+                    height={480}
                     className="shadow-none w-100"
                     tabs={[
                         // 아카이브 탭

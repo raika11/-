@@ -152,6 +152,7 @@ const MokaModal = (props) => {
         size,
         ...rest
     } = props;
+    const toastFooter = size === 'sm' || size === 'md';
 
     /**
      * draggable 껍데기 컴포넌트 생성
@@ -214,12 +215,12 @@ const MokaModal = (props) => {
             {buttons && (
                 <Modal.Footer
                     className={clsx(footerClassName, {
-                        'toast-footer': size === 'sm' || size === 'md',
+                        'toast-footer': toastFooter,
                     })}
                     style={footerStyle}
                 >
-                    {buttons.map(({ variant, text, ...rest }, idx) => (
-                        <Button key={`${text}-${idx}`} variant={variant} data-color={variant} {...rest}>
+                    {buttons.map(({ variant, text, className, ...rest }, idx) => (
+                        <Button key={`${text}-${idx}`} variant={variant} data-color={variant} className={clsx({ 'mr-1': !toastFooter }, className)} {...rest}>
                             {text}
                         </Button>
                     ))}

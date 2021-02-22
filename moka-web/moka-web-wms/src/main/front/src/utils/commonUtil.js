@@ -230,12 +230,16 @@ function makeRCTreeData(serverData) {
  * @param {String} text 타이틀
  */
 const euckrBytes = (text) => {
-    const euckrLength = ((s, b = 0, i = 0, c = 0) => {
-        // eslint-disable-next-line no-cond-assign
-        for (i = 0; (c = s.charCodeAt(i++)); b += c >= 128 ? 2 : 1);
-        return b;
-    })(text);
-    return euckrLength;
+    if (text) {
+        const euckrLength = ((s, b = 0, i = 0, c = 0) => {
+            // eslint-disable-next-line no-cond-assign
+            for (i = 0; (c = s.charCodeAt(i++)); b += c >= 128 ? 2 : 1);
+            return b;
+        })(text);
+        return euckrLength;
+    } else {
+        return 0;
+    }
 };
 
 const dateFormat = (date, format) => {

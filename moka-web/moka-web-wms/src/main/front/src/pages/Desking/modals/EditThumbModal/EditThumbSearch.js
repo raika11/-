@@ -47,12 +47,11 @@ const EditThumbSearch = () => {
     }, [dispatch]);
 
     return (
-        <Form className="d-flex mb-2">
-            <div className="mr-2" style={{ width: 62 }}>
+        <Form className="d-flex mb-14">
+            <div className="mr-2 flex-shrink-0">
                 <MokaInput
                     as="select"
                     value={period}
-                    className="ft-12"
                     onChange={(e) => {
                         setPeriod(e.target.value);
 
@@ -76,10 +75,10 @@ const EditThumbSearch = () => {
                 </MokaInput>
             </div>
 
-            <div className="mr-2" style={{ width: 140 }}>
+            <div className="mr-2">
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null }}
+                    inputProps={{ timeFormat: null, width: 140 }}
                     value={startDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -97,10 +96,10 @@ const EditThumbSearch = () => {
                 />
             </div>
 
-            <div className="mr-2" style={{ width: 140 }}>
+            <div className="mr-2">
                 <MokaInput
                     as="dateTimePicker"
-                    inputProps={{ timeFormat: null }}
+                    inputProps={{ timeFormat: null, width: 140 }}
                     value={finishDate}
                     onChange={(date) => {
                         if (typeof date === 'object') {
@@ -118,7 +117,7 @@ const EditThumbSearch = () => {
                 />
             </div>
 
-            <div className="mr-2 d-flex align-items-center" style={{ width: 160 }}>
+            <div className="mr-2" style={{ width: 160 }}>
                 <EditThumbOriginDropdown
                     originValue={search.originCode}
                     onChange={(value) => {
@@ -133,7 +132,7 @@ const EditThumbSearch = () => {
                 />
             </div>
 
-            <div className="mr-2 d-flex align-items-center" style={{ width: 160 }}>
+            <div className="mr-2" style={{ width: 160 }}>
                 <EditThumbImageTypeDropdown
                     imageValue={search.imageType}
                     onChange={(value) => {
@@ -148,8 +147,8 @@ const EditThumbSearch = () => {
                 />
             </div>
 
-            <div className="mr-2" style={{ width: 150 }}>
-                <MokaInput as="select" className="mr-2 ft-12" value={search.searchKey} onChange={(e) => setSearch({ ...search, searchKey: e.target.value })}>
+            <div className="mr-2 flex-shrink-0">
+                <MokaInput as="select" value={search.searchKey} onChange={(e) => setSearch({ ...search, searchKey: e.target.value })}>
                     {searchKeyList.map((key) => (
                         <option key={key.id} value={key.id}>
                             {key.name}
@@ -160,7 +159,6 @@ const EditThumbSearch = () => {
 
             <MokaSearchInput
                 className="flex-fill"
-                inputClassName="ft-12"
                 value={search.searchValue}
                 onChange={(e) => {
                     setSearch({

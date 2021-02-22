@@ -108,7 +108,7 @@ const SnsMetaEdit = () => {
             ];
         }
         if (validSaveData(data, 'send')) {
-            dispatch(clearSnsMetaList());
+            /*dispatch(clearSnsMetaList());*/
             dispatch(
                 publishSnsMeta({
                     totalId: edit.totalId,
@@ -130,7 +130,7 @@ const SnsMetaEdit = () => {
         ];
 
         if (validSaveData(data)) {
-            dispatch(clearSnsMetaList());
+            /*dispatch(clearSnsMetaList());*/
             dispatch(
                 saveSnsMeta({
                     totalId: edit.totalId,

@@ -91,7 +91,7 @@ public class MessageGatewayController {
          * todo 1. 파라미터 Validation
          * - 푸시 유형별 파라미터 Valid 정보가 다양할 것으로 판단 됨
          */
-        validCodeData(sendDTO);
+        //validCodeData(sendDTO);
 
         //앱 일련번호
         Long appSeq = sendDTO.getJobSeq();
@@ -165,10 +165,6 @@ public class MessageGatewayController {
 
         List<PushContentsDTO> dtoList = modelMapper.map(returnValue.getContent(), PushContentsDTO.TYPE);
 
-        System.out.println("dtoList.size()="+dtoList.size());
-        System.out.println("getContentSeq="+dtoList.get(0).getContentSeq());
-        System.out.println("getUsedYn="+dtoList.get(0).getUsedYn());
-
         Long contentSeq = dtoList.get(0).getContentSeq().longValue();
         Integer cnt = 0;
 
@@ -195,7 +191,8 @@ public class MessageGatewayController {
             }
         }
 
-        //deleteJob(contentSeq);
+        //예약 발송 취소 처리
+        deleteJob(contentSeq);
 
         /**
          * pushSenderHandler에 푸시 처리 요청
@@ -225,21 +222,67 @@ public class MessageGatewayController {
     @ApiOperation(value = "예약 취소")
     @DeleteMapping
     public ResponseEntity<?> deleteJob(@ApiParam("Task 일련번호") @PathVariable("jobTaskSeq") @Min(value = 0) Long jobTaskSeq)
-            throws MokaException {
+            throws Exception {
 
         /**
          * todo 4. 요청한 취소 정보가 취소 가능한 작업인지 확인
          */
-        Long deleteYn = pushAppDeleteService.countByContentSeq(jobTaskSeq);
+        String pushYn = "N";
+        Long deleteYn = pushAppDeleteService.countByContentSeqAndPushYn(jobTaskSeq, pushYn);
 
-        // 취소 처리
-        boolean success = pushSenderHandler.removeReservePushJob(jobTaskSeq);
+        if(deleteYn == 0){
+            throw new InvalidDataException("예약 발송 취소할 작업이 없습니다.");
+        }
+        PushContentSeqSearchDTO searchContentSeq = new PushContentSeqSearchDTO();
 
-        log.debug("예약 발송 취소 테스트");
+        //푸시기사 일련번호로 등롣된 푸시기사 정보 조회
+        searchContentSeq.setContentSeq(jobTaskSeq);
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+        try{
+            Page<PushContents> returnValue = pushContentsService.findPushContents(searchContentSeq);
 
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            List<PushContentsDTO> dtoList = modelMapper.map(returnValue.getContent(), PushContentsDTO.TYPE);
+
+            PushContentsDTO contentsItem = new PushContentsDTO();
+
+            // 예약 취소 상태 처리 값 셋팅
+            contentsItem.setUsedYn("N");
+
+            // 취소 처리할 푸시기사 기존 정보 셋팅
+            contentsItem.setContentSeq(dtoList.get(0).getContentSeq().longValue());
+            contentsItem.setPushYn(dtoList.get(0).getPushYn());
+            contentsItem.setPushType(dtoList.get(0).getPushType());
+            contentsItem.setIconType(dtoList.get(0).getIconType());
+            contentsItem.setPicYn(dtoList.get(0).getPicYn());
+            contentsItem.setSendEmail(dtoList.get(0).getSendEmail());
+            contentsItem.setRsvDt(dtoList.get(0).getRsvDt());
+            contentsItem.setRegId(dtoList.get(0).getRegId());
+            contentsItem.setRegDt(dtoList.get(0).getRegDt());
+            contentsItem.setModDt(dtoList.get(0).getModDt());
+            contentsItem.setModId(dtoList.get(0).getModId());
+            contentsItem.setRelContentId(dtoList.get(0).getRelContentId());
+            contentsItem.setRelUrl(dtoList.get(0).getRelUrl());
+            contentsItem.setImgUrl(dtoList.get(0).getImgUrl());
+            contentsItem.setPushImgUrl(dtoList.get(0).getPushImgUrl());
+            contentsItem.setTitle(dtoList.get(0).getTitle());
+            contentsItem.setSubTitle(dtoList.get(0).getSubTitle());
+            contentsItem.setContent(dtoList.get(0).getContent());
+
+            PushContents pushContents = modelMapper.map(contentsItem, PushContents.class);
+
+            boolean success = pushSenderHandler.removeReservePushJob(pushContents);
+
+            log.debug("예약 발송 취소");
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO 예약 발송 취소 ]", e);
+            throw new Exception(String.valueOf(e));
+
+        }
     }
 
     private void validCodeData(PushSendDTO sendDTO) throws InvalidDataException {

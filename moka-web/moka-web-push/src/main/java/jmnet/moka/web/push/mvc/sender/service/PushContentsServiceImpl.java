@@ -1,6 +1,7 @@
 package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,5 +39,13 @@ public class PushContentsServiceImpl implements PushContentsService{
     @Override
     public PushContentsProc savePushContentsProc(PushContentsProc pushContentsProc) {
         return pushContentsProcRepository.save(pushContentsProc);
+    }
+    @Override
+    public PushContents saveDelYn(PushContents pushContents) {
+        return pushContentsRepository.save(pushContents);
+    }
+    @Override
+    public Page<PushContents> findPushContents(PushContentSeqSearchDTO search) {
+        return pushContentsRepository.findByContentSeq(search.getContentSeq(), search.getPageable());
     }
 }

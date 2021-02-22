@@ -6,7 +6,7 @@ import moment from 'moment';
 import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta, saveSnsMeta, publishSnsMeta, getSnsMetaList, clearSnsMetaList } from '@store/snsManage';
 import { MokaCard, MokaInputLabel, MokaInput, MokaImage } from '@components';
 import commonUtil from '@utils/commonUtil';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
 import { DB_DATEFORMAT, snsNames } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
@@ -152,6 +152,11 @@ const SnsMetaEdit = () => {
         for (const item of data) {
             const snsTypeEng = item.snsType.toLowerCase();
             const snsKor = snsNames[snsTypeEng];
+
+            if (!item.usedYn) {
+                toast.warning(`사용안함으로 설정되어 있습니다. 사용유무 변경후 다시 전송해 주세요(${snsKor})`);
+                return false;
+            }
 
             if (commonUtil.isEmpty(item.title)) {
                 toast.warning(`${snsKor} 제목을 입력해 주세요.`);

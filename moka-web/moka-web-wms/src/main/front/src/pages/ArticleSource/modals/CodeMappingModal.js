@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { MokaModal } from '@/components';
 import {
     initialState,
@@ -44,7 +45,10 @@ const CodeMappingModal = (props) => {
     /**
      * 신규 등록 버튼
      */
-    const handleClickAdd = () => {
+    const handleClickAdd = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         dispatch(clearMappingCode());
         setShowEdit(true);
     };
@@ -93,23 +97,27 @@ const CodeMappingModal = (props) => {
         <MokaModal
             show={show}
             onHide={handleHide}
-            size="xl"
+            size="lg"
             headerClassName="p-3 border border-top-0 border-left-0 border-right-0"
-            bodyClassName="p-2"
+            bodyClassName="d-flex flex-column"
             titleAs={
                 <div className="w-100 d-flex align-items-center">
-                    <p className="mb-0 mr-3 ft-12">매체 코드 : {data.sourceCode}</p>
-                    <p className="mb-0 mr-3 ft-12">매체명 : {data.sourceName}</p>
+                    <p className="mb-0 mr-2">매체 코드 : {data.sourceCode}</p>
+                    <p className="mb-0 mr-2">매체명 : {data.sourceName}</p>
+                    {/* 등록 */}
+                    <Button variant="outline-table-btn" onClick={handleClickAdd} style={{ position: 'absolute', left: 230 }}>
+                        등록
+                    </Button>
                 </div>
             }
-            width={720}
+            width={900}
             height={600}
             id="code_mapping_modal"
             draggable
         >
-            <Container fluid>
-                <Row>
-                    <Col xs={6}>
+            <Container fluid className="p-0 flex-fill">
+                <Row className="m-0">
+                    <Col xs={6} className="p-0 pt-2 pr-gutter">
                         <AgGrid
                             show={show}
                             data={data}
@@ -118,12 +126,13 @@ const CodeMappingModal = (props) => {
                             mappingList={mappingList}
                             search={search}
                             mappingCode={mappingCode}
-                            handleClickAdd={handleClickAdd}
                             handleRowClicked={handleRowClicked}
                             handleChangeSearchOption={handleChangeSearchOption}
                         />
                     </Col>
-                    <Col xs={6}>{showEdit && <Edit data={data} mappingCode={mappingCode} onHide={handleHide} />}</Col>
+                    <Col xs={6} className="p-0 pt-2">
+                        {showEdit && <Edit data={data} mappingCode={mappingCode} onHide={handleHide} />}
+                    </Col>
                 </Row>
             </Container>
         </MokaModal>

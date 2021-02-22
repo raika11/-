@@ -77,7 +77,7 @@
     <description>미리보기용 편집기사 목록을 반환한다.</description>
     <parameter>
       <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
-      <regId require="Y">[0-9|A-z]{1,20}</regId>
+      <regId desc="작업자ID" require="Y">[0-9|A-z]{1,20}</regId>
     </parameter>
     <request dmlType="sp" setNames="_DATA,RDATA">dps.article.deskingWork</request>
     <request type="script" resultName="_TOTAL">

@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';
 import commonUtil from '@utils/commonUtil';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const reporterCountConst = [0, 1, 2, 3, 4, 5];
 
@@ -207,6 +209,10 @@ const ChannelEdit = ({ match }) => {
                 seqNo: '',
             },
         ];
+        setEditSelectRepoters(tempList);
+    };
+    const handleClickReporterColumnDelete = (index) => {
+        let tempList = editSelectRepoters.filter((e, i) => i !== index);
         setEditSelectRepoters(tempList);
     };
 
@@ -892,65 +898,80 @@ const ChannelEdit = ({ match }) => {
                                 <div className="d-flex align-items-center form-group">
                                     <div className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ width: '60px' }}></div>
                                 </div>
-                                <Col className="p-0" xs={11}>
-                                    <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
-                                        <Col className="d-flex h-50 align-items-center" xs={11}>
-                                            <div style={{ width: '70px' }}>
-                                                <MokaInput
-                                                    name="memRepSeq"
-                                                    className="ft-12"
-                                                    value={element.memRepSeq}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`기자번호`}
-                                                    disabled={true}
-                                                />
-                                            </div>
-                                            <div style={{ width: '160px' }}>
-                                                <MokaInput
-                                                    name="memNm"
-                                                    className="ft-12"
-                                                    value={element.memNm}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`기자명`}
-                                                />
-                                            </div>
-                                            <div className="pl-3" style={{ width: '115px' }}>
-                                                <MokaInput
-                                                    name="memMemo"
-                                                    className="ft-12"
-                                                    value={element.memMemo}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`직책`}
-                                                />
-                                            </div>
-                                            <div className="pl-3" style={{ width: '115px' }}>
-                                                <MokaInput
-                                                    name="nickNm"
-                                                    className="ft-12"
-                                                    value={element.nickNm}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`닉네임`}
-                                                />
-                                            </div>
-                                            <div className="pl-3" style={{ width: '70px' }}>
-                                                <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
-                                                    삭제
-                                                </Button>
-                                            </div>
-                                        </Col>
-                                        <Col xs={11} className="p-0 h-50 d-flex align-items-center">
-                                            <Col xs={12}>
-                                                <MokaInput
-                                                    name="desc"
-                                                    className="ft-12"
-                                                    style={{ height: '40px' }}
-                                                    value={element.desc}
-                                                    onChange={(e) => handleChangeReporters({ e, index })}
-                                                    placeholder={`설명`}
-                                                />
+                                <Col className="p-0" xs={11} style={{ backgroundColor: '#f4f7f9' }}>
+                                    <Form.Row>
+                                        <Col className="p-0" style={{ height: '100px' }} xs={11}>
+                                            <Col className="d-flex h-50 align-items-center" xs={12}>
+                                                <div style={{ width: '70px' }}>
+                                                    <MokaInput
+                                                        name="memRepSeq"
+                                                        className="ft-12"
+                                                        value={element.memRepSeq}
+                                                        onChange={(e) => handleChangeReporters({ e, index })}
+                                                        placeholder={`기자번호`}
+                                                        disabled={true}
+                                                    />
+                                                </div>
+                                                <div style={{ width: '160px' }}>
+                                                    <MokaInput
+                                                        name="memNm"
+                                                        className="ft-12"
+                                                        value={element.memNm}
+                                                        onChange={(e) => handleChangeReporters({ e, index })}
+                                                        placeholder={`기자명`}
+                                                    />
+                                                </div>
+                                                <div className="pl-3" style={{ width: '115px' }}>
+                                                    <MokaInput
+                                                        name="memMemo"
+                                                        className="ft-12"
+                                                        value={element.memMemo}
+                                                        onChange={(e) => handleChangeReporters({ e, index })}
+                                                        placeholder={`직책`}
+                                                    />
+                                                </div>
+                                                <div className="pl-3" style={{ width: '115px' }}>
+                                                    <MokaInput
+                                                        name="nickNm"
+                                                        className="ft-12"
+                                                        value={element.nickNm}
+                                                        onChange={(e) => handleChangeReporters({ e, index })}
+                                                        placeholder={`닉네임`}
+                                                    />
+                                                </div>
+                                                <div className="pl-3" style={{ width: '70px' }}>
+                                                    <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
+                                                        삭제
+                                                    </Button>
+                                                </div>
+                                            </Col>
+                                            <Col xs={12} className="p-0 h-50 d-flex align-items-center">
+                                                <Col xs={12}>
+                                                    <MokaInput
+                                                        name="desc"
+                                                        className="ft-12"
+                                                        style={{ height: '40px' }}
+                                                        value={element.desc}
+                                                        onChange={(e) => handleChangeReporters({ e, index })}
+                                                        placeholder={`설명`}
+                                                    />
+                                                </Col>
                                             </Col>
                                         </Col>
-                                    </Col>
+                                        <Col xs={1}>
+                                            <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                                                <MokaOverlayTooltipButton
+                                                    tooltipId="tooltip-table-editc-button"
+                                                    tooltipText={'삭제'}
+                                                    variant="white"
+                                                    className="border-0 p-0 moka-table-button bg-transparent shadow-none"
+                                                    onClick={() => handleClickReporterColumnDelete(index)}
+                                                >
+                                                    <MokaIcon iconName={'fas-minus-circle'} />
+                                                </MokaOverlayTooltipButton>
+                                            </div>
+                                        </Col>
+                                    </Form.Row>
                                 </Col>
                             </Form.Row>
                         );

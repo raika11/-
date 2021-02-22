@@ -11,8 +11,8 @@ const ChannelTab = ({ match }) => {
         <MokaIconTabs
             foldable={false}
             tabWidth={750}
-            className="flex-fill"
-            tabContentClass="flex-fill"
+            // className="overflow-hidden flex-fill"
+            // tabContentClass="overflow-hidden flex-fill"
             onSelectNave={(idx) => setActiveTabIdx(idx)}
             tabs={[
                 /**

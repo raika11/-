@@ -129,6 +129,10 @@ const NoticeEdit = ({ match, SelectBoard }) => {
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        console.log(params);
+    }, [params]);
     return (
         <MokaCard
             className="overflow-hidden flex-fill"

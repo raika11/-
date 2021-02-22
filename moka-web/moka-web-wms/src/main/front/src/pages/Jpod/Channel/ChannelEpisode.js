@@ -59,49 +59,52 @@ const ChannelEpisode = () => {
     }, [channelInfo]);
 
     return (
-        <MokaCard
-            className="overflow-hidden flex-fill w-100"
-            title={`${episodeTitle} 에피소드 목록`}
-            titleClassName="mb-0"
-            loading={false}
-            footerClassName="d-flex justify-content-center"
-        >
-            <Form>
-                <Form.Row className="d-flex mb-3">
-                    <Col xs={9}>{`등록된 에피소드: 사용(${episodeStat.usedCnt}) 중지(${episodeStat.unusedCnt})`}</Col>
-                    <Col xs={3}>
-                        <Row>
-                            <Col xs={6}>
-                                <Button variant="searching" onClick={(e) => console.log(e)}>
-                                    에피소드 목록
-                                </Button>
-                            </Col>
-                            <Col xs={6}>
-                                <Button variant="positive" onClick={(e) => console.log(e)} className="pr-1">
-                                    에피소드 등록
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Form.Row>
-            </Form>
-            <Row>
-                <MokaTable
-                    className="overflow-hidden flex-fill"
-                    columnDefs={channelEpisodeColumnDefs}
-                    rowData={rowData}
-                    localeText={{ noRowsToShow: '에피소드가 없습니다.', loadingOoo: '조회 중입니다..' }}
-                    rowHeight={80}
-                    onRowNodeId={(data) => data.epsdSeq}
-                    onRowClicked={(e) => handleClickListRow(e)}
-                    loading={loading}
-                    paging={false}
-                    displayPageNum={DISPLAY_PAGE_NUM}
-                    onChangeSearchOption={handleChangeSearchOption}
-                    selected={selectEpsdSeq}
-                />
-            </Row>
-        </MokaCard>
+        <div className="d-flex">
+            <MokaCard
+                className="overflow-hidden flex-fill"
+                title={`${episodeTitle} 에피소드 목록`}
+                titleClassName="mb-0"
+                loading={false}
+                footerClassName="d-flex justify-content-center"
+                width={750}
+            >
+                <Form>
+                    <Form.Row className="d-flex mb-3">
+                        <Col xs={9}>{`등록된 에피소드: 사용(${episodeStat.usedCnt}) 중지(${episodeStat.unusedCnt})`}</Col>
+                        <Col xs={3}>
+                            <Row>
+                                <Col xs={6}>
+                                    <Button variant="searching" onClick={(e) => console.log(e)}>
+                                        에피소드 목록
+                                    </Button>
+                                </Col>
+                                <Col xs={6}>
+                                    <Button variant="positive" onClick={(e) => console.log(e)} className="pr-1">
+                                        에피소드 등록
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Form.Row>
+                </Form>
+                <Row>
+                    <MokaTable
+                        className="overflow-hidden flex-fill"
+                        columnDefs={channelEpisodeColumnDefs}
+                        rowData={rowData}
+                        localeText={{ noRowsToShow: '에피소드가 없습니다.', loadingOoo: '조회 중입니다..' }}
+                        rowHeight={80}
+                        onRowNodeId={(data) => data.epsdSeq}
+                        onRowClicked={(e) => handleClickListRow(e)}
+                        loading={loading}
+                        paging={false}
+                        displayPageNum={DISPLAY_PAGE_NUM}
+                        onChangeSearchOption={handleChangeSearchOption}
+                        selected={selectEpsdSeq}
+                    />
+                </Row>
+            </MokaCard>
+        </div>
     );
 };
 

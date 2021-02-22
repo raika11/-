@@ -591,381 +591,384 @@ const ChannelEdit = ({ match }) => {
     }, []);
 
     return (
-        <MokaCard
-            className="overflow-hidden flex-fill w-100"
-            title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
-            titleClassName="mb-0"
-            loading={loading}
-            footer
-            footerClassName="d-flex justify-content-center"
-            footerAs={
-                <>
-                    {(function () {
-                        return (
-                            <Row className="justify-content-md-center text-center">
-                                <Col className="mp-0 pr-0">
-                                    <Button variant="positive" onClick={() => handleClickSaveButton()}>
-                                        저장
-                                    </Button>
-                                </Col>
-                                <Col className="mp-0 pr-0">
-                                    <Button variant="negative" onClick={() => handleClickCancleButton()}>
-                                        취소
-                                    </Button>
-                                </Col>
-                                {/* {!isNaN(Number(selectChnlSeq.current)) && (
+        <div className="d-flex">
+            <MokaCard
+                // className="overflow-hidden flex-fill"
+                title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
+                className="flex-fill"
+                titleClassName="mb-0"
+                loading={loading}
+                width={750}
+                footer
+                footerClassName="d-flex justify-content-center"
+                footerAs={
+                    <>
+                        {(function () {
+                            return (
+                                <Row className="justify-content-md-center text-center">
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="positive" onClick={() => handleClickSaveButton()}>
+                                            저장
+                                        </Button>
+                                    </Col>
+                                    <Col className="mp-0 pr-0">
+                                        <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                            취소
+                                        </Button>
+                                    </Col>
+                                    {/* {!isNaN(Number(selectChnlSeq.current)) && (
                                     <Col className="mp-0 pr-0">
                                         <Button variant="negative" onClick={() => handleClickDeleteButton()}>
                                             삭제
                                         </Button>
                                     </Col>
                                 )} */}
-                            </Row>
-                        );
-                    })()}
-                </>
-            }
-        >
-            <Form className="mb-gutter">
-                {/* 사용여부 */}
-                <Form.Row className="mb-2">
-                    <Col xs={5} className="p-0">
-                        <MokaInputLabel
-                            as="switch"
-                            name="usedYn"
-                            id="usedYn"
-                            label="사용여부"
-                            inputProps={{ checked: editData.usedYn === 'Y' ? true : false }}
-                            onChange={(e) => handleChangeChannelEditData(e)}
-                        />
-                    </Col>
-                </Form.Row>
-                {/* 팟티 채널 */}
-                <Form.Row className="mb-2">
-                    <Col xs={10} className="p-0">
-                        <MokaInputLabel
-                            label={`팟티\n(채널연결)`}
-                            labelWidth={64}
-                            className="mb-0"
-                            id="podtyChnlSrl"
-                            name="podtyChnlSrl"
-                            placeholder=""
-                            value={editData.podtyChnlSrl === '0' ? '' : editData.podtyChnlSrl}
-                            inputProps={{ readOnly: true }}
-                            onChange={(e) => handleChangeChannelEditData(e)}
-                        />
-                    </Col>
-                    <Col xs={2} className="p-0 pt-1 pl-1 text-right">
-                        <Button variant="searching" className="mb-0" onClick={() => handleClickPadtySearch()}>
-                            팟티검색
-                        </Button>
-                    </Col>
-                </Form.Row>
-                {/* 외부 채널 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0">
-                        <MokaInputLabel
-                            label={`팟티 채널\n(URL)`}
-                            labelWidth={64}
-                            className="mb-0"
-                            id="podtyUrl"
-                            name="podtyUrl"
-                            placeholder=""
-                            value={editData.podtyUrl}
-                            onChange={(e) => handleChangeChannelEditData(e)}
-                        />
-                    </Col>
-                </Form.Row>
-                {/* 채널명 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0">
-                        <MokaInputLabel
-                            label={`채널명`}
-                            labelWidth={64}
-                            className="mb-0"
-                            id="chnlNm"
-                            name="chnlNm"
-                            placeholder=""
-                            value={editData.chnlNm}
-                            onChange={(e) => handleChangeChannelEditData(e)}
-                        />
-                    </Col>
-                </Form.Row>
-                {editData.episodeStat && (
+                                </Row>
+                            );
+                        })()}
+                    </>
+                }
+            >
+                <Form className="">
+                    {/* 사용여부 */}
                     <Form.Row className="mb-2">
-                        <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
-                        {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
-                        <Col className="p-0">{`* 등록된 에피소드: 사용(${editData.episodeStat.usedCnt ? editData.episodeStat.usedCnt : 0}) | 중지(${
-                            editData.episodeStat.unusedCnt ? editData.episodeStat.unusedCnt : 0
-                        }) * 마지막 회차 정보 : ${editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``}`}</Col>
+                        <Col xs={5} className="p-0">
+                            <MokaInputLabel
+                                as="switch"
+                                name="usedYn"
+                                id="usedYn"
+                                label="사용여부"
+                                inputProps={{ checked: editData.usedYn === 'Y' ? true : false }}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
                     </Form.Row>
-                )}
+                    {/* 팟티 채널 */}
+                    <Form.Row className="mb-2">
+                        <Col xs={10} className="p-0">
+                            <MokaInputLabel
+                                label={`팟티\n(채널연결)`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="podtyChnlSrl"
+                                name="podtyChnlSrl"
+                                placeholder=""
+                                value={editData.podtyChnlSrl === '0' ? '' : editData.podtyChnlSrl}
+                                inputProps={{ readOnly: true }}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                        <Col xs={2} className="p-0 pt-1 pl-1 text-right">
+                            <Button variant="searching" className="mb-0" onClick={() => handleClickPadtySearch()}>
+                                팟티검색
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                    {/* 외부 채널 */}
+                    <Form.Row className="mb-2">
+                        <Col className="p-0">
+                            <MokaInputLabel
+                                label={`팟티 채널\n(URL)`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="podtyUrl"
+                                name="podtyUrl"
+                                placeholder=""
+                                value={editData.podtyUrl}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                    </Form.Row>
+                    {/* 채널명 */}
+                    <Form.Row className="mb-2">
+                        <Col className="p-0">
+                            <MokaInputLabel
+                                label={`채널명`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="chnlNm"
+                                name="chnlNm"
+                                placeholder=""
+                                value={editData.chnlNm}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                    </Form.Row>
+                    {editData.episodeStat && (
+                        <Form.Row className="mb-2">
+                            <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
+                            {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
+                            <Col className="p-0">{`* 등록된 에피소드: 사용(${editData.episodeStat.usedCnt ? editData.episodeStat.usedCnt : 0}) | 중지(${
+                                editData.episodeStat.unusedCnt ? editData.episodeStat.unusedCnt : 0
+                            }) * 마지막 회차 정보 : ${editData.episodeStat.lastEpsoNo ? editData.episodeStat.lastEpsoNo : ``}`}</Col>
+                        </Form.Row>
+                    )}
 
-                <Form.Row className="mb-2">
-                    <Col xs={8} className="p-0">
-                        {/* 시즌명 */}
-                        <MokaInputLabel
-                            label={`시즌명`}
-                            labelWidth={64}
-                            className="mb-2 pr-2"
-                            inputClassName="resize-none"
-                            inputProps={{ rows: 6 }}
-                            id="seasonNm"
-                            name="seasonNm"
-                            value={editData.seasonNm}
-                            onChange={(e) => handleChangeChannelEditData(e)}
-                        />
-                    </Col>
-                    <Col xs={4} className="p-0">
-                        {/* 총시즌 */}
-                        <MokaInputLabel
-                            label={`총시즌`}
-                            type="number"
-                            labelWidth={30}
-                            className="mb-2"
-                            inputClassName="resize-none"
-                            inputProps={{ rows: 6 }}
-                            id="seasonCnt"
-                            name="seasonCnt"
-                            value={editData.seasonCnt}
-                            onChange={(e) => handleChangeChannelEditData(e)}
-                        />
-                    </Col>
-                </Form.Row>
+                    <Form.Row className="mb-2">
+                        <Col xs={8} className="p-0">
+                            {/* 시즌명 */}
+                            <MokaInputLabel
+                                label={`시즌명`}
+                                labelWidth={64}
+                                className="mb-2 pr-2"
+                                inputClassName="resize-none"
+                                inputProps={{ rows: 6 }}
+                                id="seasonNm"
+                                name="seasonNm"
+                                value={editData.seasonNm}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                        <Col xs={4} className="p-0">
+                            {/* 총시즌 */}
+                            <MokaInputLabel
+                                label={`총시즌`}
+                                type="number"
+                                labelWidth={30}
+                                className="mb-2"
+                                inputClassName="resize-none"
+                                inputProps={{ rows: 6 }}
+                                id="seasonCnt"
+                                name="seasonCnt"
+                                value={editData.seasonCnt}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                    </Form.Row>
 
-                {/* 채널 소개 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0">
-                        <MokaInputLabel
-                            label={`채널 소개`}
-                            labelWidth={64}
-                            as="textarea"
-                            className="mb-2"
-                            inputClassName="resize-none"
-                            inputProps={{ rows: 6 }}
-                            id="chnlMemo"
-                            name="chnlMemo"
-                            value={editData.chnlMemo}
-                            onChange={(e) => handleChangeChannelEditData(e)}
+                    {/* 채널 소개 */}
+                    <Form.Row className="mb-2">
+                        <Col className="p-0">
+                            <MokaInputLabel
+                                label={`채널 소개`}
+                                labelWidth={64}
+                                as="textarea"
+                                className="mb-2"
+                                inputClassName="resize-none"
+                                inputProps={{ rows: 6 }}
+                                id="chnlMemo"
+                                name="chnlMemo"
+                                value={editData.chnlMemo}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                    </Form.Row>
+                    <Form.Row className="mb-2">
+                        {/* 개설일 */}
+                        <Col xs={5} className="p-0 pr-2">
+                            <MokaInputLabel
+                                label={`개설일`}
+                                labelWidth={64}
+                                as="dateTimePicker"
+                                className="mb-0"
+                                name="chnlSdt"
+                                id="chnlSdt"
+                                value={editData.chnlSdt}
+                                onChange={(param) => {
+                                    // const selectDate = param._d;
+                                    // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
+                                    handleDateChange('chnlSdt', param);
+                                }}
+                                inputProps={{ timeFormat: null }}
+                            />
+                        </Col>
+                        {/* 종료일 */}
+                        <Col xs={5} className="p-0">
+                            <MokaInputLabel
+                                label={`종료일`}
+                                labelWidth={64}
+                                as="dateTimePicker"
+                                className="mb-0"
+                                name="chnlEdt"
+                                id="chnlEdt"
+                                value={editData.chnlEdt}
+                                onChange={(param) => {
+                                    handleDateChange('chnlEdt', param);
+                                }}
+                                inputProps={{ timeFormat: null }}
+                            />
+                        </Col>
+                    </Form.Row>
+                    {/* 방송요일 */}
+                    <Form.Row className="mb-2">
+                        <MokaInputLabel label={`방송요일`} labelWidth={64} as="none" />
+                        <MokaInput
+                            as="checkbox"
+                            name="day0"
+                            id="day0"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '매일', custom: true, checked: editDays.includes('day0') }}
                         />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    {/* 개설일 */}
-                    <Col xs={5} className="p-0 pr-2">
-                        <MokaInputLabel
-                            label={`개설일`}
-                            labelWidth={64}
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="chnlSdt"
-                            id="chnlSdt"
-                            value={editData.chnlSdt}
-                            onChange={(param) => {
-                                // const selectDate = param._d;
-                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
-                                handleDateChange('chnlSdt', param);
-                            }}
-                            inputProps={{ timeFormat: null }}
+                        <MokaInput
+                            as="checkbox"
+                            name="day1"
+                            id="day1"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '월', custom: true, checked: editDays.includes('day1') }}
                         />
-                    </Col>
-                    {/* 종료일 */}
-                    <Col xs={5} className="p-0">
-                        <MokaInputLabel
-                            label={`종료일`}
-                            labelWidth={64}
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="chnlEdt"
-                            id="chnlEdt"
-                            value={editData.chnlEdt}
-                            onChange={(param) => {
-                                handleDateChange('chnlEdt', param);
-                            }}
-                            inputProps={{ timeFormat: null }}
+                        <MokaInput
+                            as="checkbox"
+                            name="day2"
+                            id="day2"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '화', custom: true, checked: editDays.includes('day2') }}
                         />
-                    </Col>
-                </Form.Row>
-                {/* 방송요일 */}
-                <Form.Row className="mb-2">
-                    <MokaInputLabel label={`방송요일`} labelWidth={64} as="none" />
-                    <MokaInput
-                        as="checkbox"
-                        name="day0"
-                        id="day0"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '매일', custom: true, checked: editDays.includes('day0') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day1"
-                        id="day1"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '월', custom: true, checked: editDays.includes('day1') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day2"
-                        id="day2"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '화', custom: true, checked: editDays.includes('day2') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day3"
-                        id="day3"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '수', custom: true, checked: editDays.includes('day3') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day4"
-                        id="day4"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '목', custom: true, checked: editDays.includes('day4') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day5"
-                        id="day5"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '금', custom: true, checked: editDays.includes('day5') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day6"
-                        id="day6"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '토', custom: true, checked: editDays.includes('day6') }}
-                    />
-                    <MokaInput
-                        as="checkbox"
-                        name="day7"
-                        id="day7"
-                        onChange={(e) => handleChannelDay(e)}
-                        inputProps={{ label: '일', custom: true, checked: editDays.includes('day7') }}
-                    />
-                </Form.Row>
-                {/* 테그 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0">
-                        <MokaInputLabel
-                            label={`태그`}
-                            labelWidth={64}
-                            className="mb-0"
-                            id="keywords"
-                            name="keywords"
-                            placeholder=""
-                            value={editData.keywords}
-                            onChange={(e) => handleChangeChannelEditData(e)}
+                        <MokaInput
+                            as="checkbox"
+                            name="day3"
+                            id="day3"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '수', custom: true, checked: editDays.includes('day3') }}
                         />
-                    </Col>
-                </Form.Row>
-                <hr />
-                {/* 진행자 검색(모달) */}
-                <Form.Row className="mb-2">
-                    <MokaInputLabel label={`진행자`} labelWidth={64} as="none" />
-                    <Col xs={1} className="p-0">
-                        <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
-                            검색
-                        </Button>
-                    </Col>
-                    <Col xs={1} className="p-0">
-                        <Button variant="positive" onClick={(e) => handleClickRepoterAddButton()}>
-                            추가
-                        </Button>
-                    </Col>
-                </Form.Row>
-                {/* 기본 6개 를 뿌려준다. */}
-                {editSelectRepoters.map((element, index) => {
-                    return (
-                        <Form.Row className="mb-2" key={index}>
-                            <div className="d-flex align-items-center form-group">
-                                <div className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ width: '60px' }}></div>
-                            </div>
-                            <Col className="p-0">
-                                <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
-                                    <Col className="d-flex w-100 h-50 align-items-center">
-                                        <div style={{ width: '70px' }}>
-                                            <MokaInput
-                                                name="memRepSeq"
-                                                className="ft-12"
-                                                value={element.memRepSeq}
-                                                onChange={(e) => handleChangeReporters({ e, index })}
-                                                placeholder={`기자번호`}
-                                                disabled={true}
-                                            />
-                                        </div>
-                                        <div style={{ width: '160px' }}>
-                                            <MokaInput
-                                                name="memNm"
-                                                className="ft-12"
-                                                value={element.memNm}
-                                                onChange={(e) => handleChangeReporters({ e, index })}
-                                                placeholder={`기자명`}
-                                            />
-                                        </div>
-                                        <div className="pl-3" style={{ width: '115px' }}>
-                                            <MokaInput
-                                                name="memMemo"
-                                                className="ft-12"
-                                                value={element.memMemo}
-                                                onChange={(e) => handleChangeReporters({ e, index })}
-                                                placeholder={`직책`}
-                                            />
-                                        </div>
-                                        <div className="pl-3" style={{ width: '115px' }}>
-                                            <MokaInput
-                                                name="nickNm"
-                                                className="ft-12"
-                                                value={element.nickNm}
-                                                onChange={(e) => handleChangeReporters({ e, index })}
-                                                placeholder={`닉네임`}
-                                            />
-                                        </div>
-                                        <div className="pl-3" style={{ width: '70px' }}>
-                                            <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
-                                                삭제
-                                            </Button>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} className="p-0 h-50 d-flex align-items-center">
-                                        <Col xs={12}>
-                                            <MokaInput
-                                                name="desc"
-                                                className="ft-12"
-                                                value={element.desc}
-                                                onChange={(e) => handleChangeReporters({ e, index })}
-                                                placeholder={`설명`}
-                                            />
+                        <MokaInput
+                            as="checkbox"
+                            name="day4"
+                            id="day4"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '목', custom: true, checked: editDays.includes('day4') }}
+                        />
+                        <MokaInput
+                            as="checkbox"
+                            name="day5"
+                            id="day5"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '금', custom: true, checked: editDays.includes('day5') }}
+                        />
+                        <MokaInput
+                            as="checkbox"
+                            name="day6"
+                            id="day6"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '토', custom: true, checked: editDays.includes('day6') }}
+                        />
+                        <MokaInput
+                            as="checkbox"
+                            name="day7"
+                            id="day7"
+                            onChange={(e) => handleChannelDay(e)}
+                            inputProps={{ label: '일', custom: true, checked: editDays.includes('day7') }}
+                        />
+                    </Form.Row>
+                    {/* 테그 */}
+                    <Form.Row className="mb-2">
+                        <Col className="p-0">
+                            <MokaInputLabel
+                                label={`태그`}
+                                labelWidth={64}
+                                className="mb-0"
+                                id="keywords"
+                                name="keywords"
+                                placeholder=""
+                                value={editData.keywords}
+                                onChange={(e) => handleChangeChannelEditData(e)}
+                            />
+                        </Col>
+                    </Form.Row>
+                    <hr />
+                    {/* 진행자 검색(모달) */}
+                    <Form.Row className="mb-2">
+                        <MokaInputLabel label={`진행자`} labelWidth={64} as="none" />
+                        <Col xs={1} className="p-0">
+                            <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickSearchRepoterButton()}>
+                                검색
+                            </Button>
+                        </Col>
+                        <Col xs={1} className="p-0">
+                            <Button variant="positive" onClick={(e) => handleClickRepoterAddButton()}>
+                                추가
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                    {/* 기본 6개 를 뿌려준다. */}
+                    {editSelectRepoters.map((element, index) => {
+                        return (
+                            <Form.Row className="mb-2" key={index}>
+                                <div className="d-flex align-items-center form-group">
+                                    <div className="px-0 mb-0 position-relative flex-shrink-0 form-label" style={{ width: '60px' }}></div>
+                                </div>
+                                <Col className="p-0">
+                                    <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
+                                        <Col className="d-flex w-100 h-50 align-items-center">
+                                            <div style={{ width: '70px' }}>
+                                                <MokaInput
+                                                    name="memRepSeq"
+                                                    className="ft-12"
+                                                    value={element.memRepSeq}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`기자번호`}
+                                                    disabled={true}
+                                                />
+                                            </div>
+                                            <div style={{ width: '160px' }}>
+                                                <MokaInput
+                                                    name="memNm"
+                                                    className="ft-12"
+                                                    value={element.memNm}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`기자명`}
+                                                />
+                                            </div>
+                                            <div className="pl-3" style={{ width: '115px' }}>
+                                                <MokaInput
+                                                    name="memMemo"
+                                                    className="ft-12"
+                                                    value={element.memMemo}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`직책`}
+                                                />
+                                            </div>
+                                            <div className="pl-3" style={{ width: '115px' }}>
+                                                <MokaInput
+                                                    name="nickNm"
+                                                    className="ft-12"
+                                                    value={element.nickNm}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`닉네임`}
+                                                />
+                                            </div>
+                                            <div className="pl-3" style={{ width: '70px' }}>
+                                                <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
+                                                    삭제
+                                                </Button>
+                                            </div>
+                                        </Col>
+                                        <Col xs={12} className="p-0 h-50 d-flex align-items-center">
+                                            <Col xs={12}>
+                                                <MokaInput
+                                                    name="desc"
+                                                    className="ft-12"
+                                                    value={element.desc}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`설명`}
+                                                />
+                                            </Col>
                                         </Col>
                                     </Col>
                                 </Col>
-                            </Col>
-                        </Form.Row>
-                    );
-                })}
+                            </Form.Row>
+                        );
+                    })}
 
-                <hr />
-                <Form.Row className="mb-2">
-                    <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={64} />
-                </Form.Row>
+                    <hr />
+                    <Form.Row className="mb-2">
+                        <MokaInputLabel className="pr-0" as="none" label="첨부파일" labelWidth={64} />
+                    </Form.Row>
 
-                {/* 이미지 */}
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        as="imageFile"
-                        className="w-100 mb-2"
-                        name="chnlImgMobFile"
-                        isInvalid={null}
-                        inputClassName="flex-fill"
-                        label={
-                            <React.Fragment>
-                                커버이미지
-                                <br />
-                                (1920*360)
-                                <br />
-                                {/* <Button
+                    {/* 이미지 */}
+                    <Form.Row className="mb-2">
+                        <MokaInputLabel
+                            as="imageFile"
+                            className="w-100 mb-2"
+                            name="chnlImgMobFile"
+                            isInvalid={null}
+                            inputClassName="flex-fill"
+                            label={
+                                <React.Fragment>
+                                    커버이미지
+                                    <br />
+                                    (1920*360)
+                                    <br />
+                                    {/* <Button
                                     className="mt-1"
                                     size="sm"
                                     variant="negative"
@@ -982,52 +985,52 @@ const ChannelEdit = ({ match }) => {
                                 >
                                     삭제
                                 </Button> */}
-                                <Button
-                                    className="mt-0"
-                                    size="sm"
-                                    variant="positive"
-                                    onClick={(e) => {
-                                        imgFileRef1.current.rootRef.onClick(e);
-                                    }}
-                                >
-                                    신규등록
-                                </Button>
-                            </React.Fragment>
-                        }
-                        ref={imgFileRef1}
-                        inputProps={{
-                            height: 80,
-                            // width: 600, // width: '100%' number type 에러남.
-                            img: editData.chnlImg,
-                            selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
-                            deleteButton: true,
-                        }}
-                        onChange={(file) =>
-                            handleChangeFIle({
-                                name: 'chnlImgFile',
-                                file: file,
-                            })
-                        }
-                        labelClassName="justify-content-end"
-                    />
-                </Form.Row>
-                {/* 모바일용 */}
-                <Form.Row className="mb-2">
-                    <Col xs={7}>
-                        <MokaInputLabel
-                            as="imageFile"
-                            className="mb-2"
-                            name="chnlThumbFile"
-                            isInvalid={null}
-                            inputClassName="flex-fill"
-                            labelWidth={65}
-                            label={
-                                <React.Fragment>
-                                    모바일용
-                                    <br />
-                                    (750*330)
-                                    <br />
-                                    {/* <Button
+                                    <Button
+                                        className="mt-0"
+                                        size="sm"
+                                        variant="positive"
+                                        onClick={(e) => {
+                                            imgFileRef1.current.rootRef.onClick(e);
+                                        }}
+                                    >
+                                        신규등록
+                                    </Button>
+                                </React.Fragment>
+                            }
+                            ref={imgFileRef1}
+                            inputProps={{
+                                height: 80,
+                                // width: 600, // width: '100%' number type 에러남.
+                                img: editData.chnlImg,
+                                selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
+                                deleteButton: true,
+                            }}
+                            onChange={(file) =>
+                                handleChangeFIle({
+                                    name: 'chnlImgFile',
+                                    file: file,
+                                })
+                            }
+                            labelClassName="justify-content-end"
+                        />
+                    </Form.Row>
+                    {/* 모바일용 */}
+                    <Form.Row className="mb-2">
+                        <Col xs={7}>
+                            <MokaInputLabel
+                                as="imageFile"
+                                className="mb-2"
+                                name="chnlThumbFile"
+                                isInvalid={null}
+                                inputClassName="flex-fill"
+                                labelWidth={65}
+                                label={
+                                    <React.Fragment>
+                                        모바일용
+                                        <br />
+                                        (750*330)
+                                        <br />
+                                        {/* <Button
                                         className="mt-1"
                                         size="sm"
                                         variant="negative"
@@ -1044,56 +1047,56 @@ const ChannelEdit = ({ match }) => {
                                     >
                                         삭제
                                     </Button> */}
-                                    <Button
-                                        className="mt-0"
-                                        size="sm"
-                                        variant="positive"
-                                        onClick={(e) => {
-                                            imgFileRef3.current.rootRef.onClick(e);
-                                            // imgFileRef3.current.deleteFile();
-                                            setThumbfile(null);
-                                            setEditData({
-                                                ...editData,
-                                                chnlImgMob: null,
-                                            });
-                                        }}
-                                    >
-                                        신규등록
-                                    </Button>
-                                </React.Fragment>
-                            }
-                            ref={imgFileRef3}
-                            inputProps={{
-                                height: 80,
-                                // width: 400, // width: '100%' number type 에러남.
-                                img: editData.chnlImgMob,
-                                deleteButton: true,
-                            }}
-                            onChange={(file) =>
-                                handleChangeFIle({
-                                    name: 'chnlImgMobFile',
-                                    file: file,
-                                })
-                            }
-                            labelClassName="justify-content-end"
-                        />
-                    </Col>
-                    {/* 썸네일 이미지 */}
-                    <Col xs={5} className="p-0 pt-1 pl-1">
-                        <MokaInputLabel
-                            as="imageFile"
-                            className="w-100 mb-2"
-                            name="chnlImgMobFile"
-                            id="chnlImgMobFile"
-                            isInvalid={null}
-                            inputClassName="d-flex flex-fill"
-                            label={
-                                <React.Fragment>
-                                    썸네일
-                                    <br />
-                                    (150*150)
-                                    <br />
-                                    {/* <Button
+                                        <Button
+                                            className="mt-0"
+                                            size="sm"
+                                            variant="positive"
+                                            onClick={(e) => {
+                                                imgFileRef3.current.rootRef.onClick(e);
+                                                // imgFileRef3.current.deleteFile();
+                                                setThumbfile(null);
+                                                setEditData({
+                                                    ...editData,
+                                                    chnlImgMob: null,
+                                                });
+                                            }}
+                                        >
+                                            신규등록
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                                ref={imgFileRef3}
+                                inputProps={{
+                                    height: 80,
+                                    // width: 400, // width: '100%' number type 에러남.
+                                    img: editData.chnlImgMob,
+                                    deleteButton: true,
+                                }}
+                                onChange={(file) =>
+                                    handleChangeFIle({
+                                        name: 'chnlImgMobFile',
+                                        file: file,
+                                    })
+                                }
+                                labelClassName="justify-content-end"
+                            />
+                        </Col>
+                        {/* 썸네일 이미지 */}
+                        <Col xs={5} className="p-0 pt-1 pl-1">
+                            <MokaInputLabel
+                                as="imageFile"
+                                className="w-100 mb-2"
+                                name="chnlImgMobFile"
+                                id="chnlImgMobFile"
+                                isInvalid={null}
+                                inputClassName="d-flex flex-fill"
+                                label={
+                                    <React.Fragment>
+                                        썸네일
+                                        <br />
+                                        (150*150)
+                                        <br />
+                                        {/* <Button
                                         className="mt-1"
                                         size="sm"
                                         variant="negative"
@@ -1110,58 +1113,59 @@ const ChannelEdit = ({ match }) => {
                                     >
                                         삭제
                                     </Button> */}
-                                    <Button
-                                        className="mt-0"
-                                        size="sm"
-                                        variant="positive"
-                                        onClick={(e) => {
-                                            // e.preventDefault();
-                                            // e.stopPropagation();
-                                            imgFileRef2.current.rootRef.onClick(e);
-                                            setMobfile(null);
-                                            setEditData({
-                                                ...editData,
-                                                chnlThumb: null,
-                                            });
-                                        }}
-                                    >
-                                        신규등록
-                                    </Button>
-                                </React.Fragment>
-                            }
-                            ref={imgFileRef2}
-                            inputProps={{
-                                height: 80,
-                                img: editData.chnlThumb,
-                                deleteButton: true,
-                            }}
-                            onChange={(file) =>
-                                handleChangeFIle({
-                                    name: 'chnlThumbFile',
-                                    file: file,
-                                })
-                            }
-                            // labelClassName="justify-content-end"
-                        />
-                    </Col>
-                </Form.Row>
-            </Form>
-            {/* 팟티 채널 모달 창. */}
-            <PodtyChannelModal
-                show={podtyChannelModalState}
-                onHide={() => {
-                    setPodtyChannelModalState(false);
-                }}
-            />
-            {/* 진행자(기자) 검색 모달 창. */}
-            <RepoterModal
-                show={repoterModalState}
-                selectType={`CM`}
-                onHide={() => {
-                    setRepoterModalState(false);
-                }}
-            />
-        </MokaCard>
+                                        <Button
+                                            className="mt-0"
+                                            size="sm"
+                                            variant="positive"
+                                            onClick={(e) => {
+                                                // e.preventDefault();
+                                                // e.stopPropagation();
+                                                imgFileRef2.current.rootRef.onClick(e);
+                                                setMobfile(null);
+                                                setEditData({
+                                                    ...editData,
+                                                    chnlThumb: null,
+                                                });
+                                            }}
+                                        >
+                                            신규등록
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                                ref={imgFileRef2}
+                                inputProps={{
+                                    height: 80,
+                                    img: editData.chnlThumb,
+                                    deleteButton: true,
+                                }}
+                                onChange={(file) =>
+                                    handleChangeFIle({
+                                        name: 'chnlThumbFile',
+                                        file: file,
+                                    })
+                                }
+                                // labelClassName="justify-content-end"
+                            />
+                        </Col>
+                    </Form.Row>
+                </Form>
+                {/* 팟티 채널 모달 창. */}
+                <PodtyChannelModal
+                    show={podtyChannelModalState}
+                    onHide={() => {
+                        setPodtyChannelModalState(false);
+                    }}
+                />
+                {/* 진행자(기자) 검색 모달 창. */}
+                <RepoterModal
+                    show={repoterModalState}
+                    selectType={`CM`}
+                    onHide={() => {
+                        setRepoterModalState(false);
+                    }}
+                />
+            </MokaCard>
+        </div>
     );
 };
 

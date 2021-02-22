@@ -11,7 +11,7 @@ export const columnDefs = [
     {
         headerName: '출고일',
         field: 'serviceDt',
-        width: 120,
+        width: 150,
     },
     {
         headerName: '제목',

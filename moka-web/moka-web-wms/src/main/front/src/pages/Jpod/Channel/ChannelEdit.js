@@ -593,9 +593,9 @@ const ChannelEdit = ({ match }) => {
     return (
         <div className="d-flex">
             <MokaCard
-                // className="overflow-hidden flex-fill"
+                className="overflow-hidden flex-fill"
                 title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
-                className="flex-fill"
+                // className="flex-fill"
                 titleClassName="mb-0"
                 loading={loading}
                 width={750}

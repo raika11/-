@@ -45,7 +45,7 @@ const ChannelListAgGrid = ({ match }) => {
 
     useEffect(() => {
         setRowData([]);
-        const inirGridRow = (data) => {
+        const initGridRow = (data) => {
             setRowData(
                 data.map((element) => {
                     let chnlSdt = element.chnlSdt && element.chnlSdt.length > 10 ? element.chnlSdt.substr(0, 10) : element.chnlSdt;
@@ -59,29 +59,29 @@ const ChannelListAgGrid = ({ match }) => {
                         chnlMemo: element.chnlMemo,
                         usedYn: element.usedYn,
                         roundinfo: `${totalEpsdCnt}/${lastEpsdNo}`,
-                        subscribe: ``,
+                        subscribe: 0,
                     };
                 }),
             );
         };
 
         if (list.length > 0) {
-            inirGridRow(list);
+            initGridRow(list);
         }
     }, [list]);
 
     return (
         <MokaTable
-            className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={80}
+            agGridHeight={630}
             onRowNodeId={(data) => data.chnlSeq}
             onRowClicked={(e) => handleClickListRow(e)}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
+            rowHeight={46}
             displayPageNum={DISPLAY_PAGE_NUM}
             onChangeSearchOption={handleChangeSearchOption}
             selected={params.chnlSeq}

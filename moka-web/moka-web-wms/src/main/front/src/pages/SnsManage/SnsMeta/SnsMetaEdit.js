@@ -23,7 +23,7 @@ const SnsMetaEdit = () => {
     const [articlePreviewModalShow, setArticlePreviewModalShow] = useState(false);
     const [edit, setEdit] = useState(initialState.meta.meta);
     const [showEditThumbModal, setShowEditThumbModal] = useState(false);
-    const [thumbFileName, setThumbFileName] = useState(false);
+    const [thumbFileName, setThumbFileName] = useState(null);
     const [editSnsType, setEditSnsType] = useState('');
 
     const { meta, errors, cdNm: fbToken, loading, search } = useSelector((store) => {
@@ -338,7 +338,7 @@ const SnsMetaEdit = () => {
                     </Col>
                 </Form.Row>
 
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-1">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
@@ -351,36 +351,71 @@ const SnsMetaEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-
                 <Form.Row className="mb-2">
-                    <div className="d-flex w-100">
-                        <MokaInputLabel
-                            as="none"
-                            labelWidth={70}
-                            label={
-                                <React.Fragment>
-                                    <p className="mb-gutter">
-                                        SNS 이미지
-                                        <br />
-                                        850*350px
-                                    </p>
-                                    <Button variant="gray-700" size="sm" onClick={() => handleEditThumbClick('fb', edit.fb.imgUrl)} className="w-100 mb-1">
-                                        신규등록
-                                    </Button>
-                                    <Button variant="outline-gray-700" size="sm" className="w-100" onClick={() => handleEditClick('fb', edit.fb.imgUrl)}>
-                                        편집
-                                    </Button>
-                                </React.Fragment>
-                            }
-                        />
-                        <div className="d-flex flex-column flex-fill">
-                            <MokaImageInput className="mb-1 input-border" img={edit.fb.imgUrl} width={414} deleteButton={true} />
-                            <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
+                    <Col xs={12} className="p-0 d-flex justify-content-end">
+                        <span>1줄 25자 기준</span>
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={7} className="p-0">
+                        <div className="d-flex w-100">
+                            <MokaInputLabel
+                                as="none"
+                                labelWidth={70}
+                                label={
+                                    <React.Fragment>
+                                        <p className="mb-gutter">
+                                            SNS 이미지
+                                            <br />
+                                            850*350px
+                                        </p>
+                                        <Button variant="gray-700" size="sm" onClick={() => handleEditThumbClick('fb', edit.fb.imgUrl)} className="w-100 mb-1">
+                                            신규등록
+                                        </Button>
+                                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={() => handleEditClick('fb', edit.fb.imgUrl)}>
+                                            편집
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                            />
+                            <div className="d-flex flex-column flex-fill">
+                                <MokaImageInput className="mb-1 input-border" img={edit.fb.imgUrl} width={192} height={108} deleteButton={true} />
+                                <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
+                            </div>
                         </div>
-                    </div>
+                    </Col>
+                    <Col xs={5} className="align-contents-center">
+                        <Form.Row className="d-flex pt-4">
+                            <Col xs={12} className="d-flex w-100 align-items-center">
+                                <MokaInputLabel as="none" label="예약" labelWidth={70} />
+                                <MokaInput
+                                    as="checkbox"
+                                    name="fb-isReserve"
+                                    id="fb-isReserve"
+                                    className="p-0"
+                                    onChange={handleChangeCheckedValue}
+                                    inputProps={{ label: '예약 노출', checked: edit.fb.isReserve, custom: true }}
+                                />
+                            </Col>
+                        </Form.Row>
+                        <Form.Row className="d-flex pt-2">
+                            <Col xs={12}>
+                                <MokaInput
+                                    as="dateTimePicker"
+                                    name="fb-reserveDt"
+                                    value={edit.fb.reserveDt}
+                                    onChange={(e) => {
+                                        handleChangeTextValue({ target: { name: 'fb-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
+                                    }}
+                                    inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm' }}
+                                    disabled={!edit.fb.isReserve}
+                                />
+                            </Col>
+                        </Form.Row>
+                    </Col>
                 </Form.Row>
 
-                <Form.Row className="mb-2">
+                {/*<Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
                         <MokaInputLabel as="none" label="예약" labelWidth={70} />
                         <MokaInput
@@ -402,7 +437,7 @@ const SnsMetaEdit = () => {
                             disabled={!edit.fb.isReserve}
                         />
                     </div>
-                </Form.Row>
+                </Form.Row>*/}
             </Form>
 
             <hr className="divider" />
@@ -458,7 +493,7 @@ const SnsMetaEdit = () => {
                     </Col>
                 </Form.Row>
 
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-1">
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
@@ -471,8 +506,70 @@ const SnsMetaEdit = () => {
                         />
                     </Col>
                 </Form.Row>
-
                 <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0 d-flex justify-content-end">
+                        <span>1줄 25자 기준</span>
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={7} className="p-0">
+                        <div className="d-flex w-100">
+                            <MokaInputLabel
+                                as="none"
+                                labelWidth={70}
+                                label={
+                                    <React.Fragment>
+                                        <p className="mb-gutter">
+                                            SNS 이미지
+                                            <br />
+                                            850*350px
+                                        </p>
+                                        <Button variant="gray-700" size="sm" onClick={() => handleEditThumbClick('tw', edit.tw.imgUrl)} className="w-100 mb-1">
+                                            신규등록
+                                        </Button>
+                                        <Button variant="outline-gray-700" size="sm" className="w-100" onClick={() => handleEditClick('tw', edit.tw.imgUrl)}>
+                                            편집
+                                        </Button>
+                                    </React.Fragment>
+                                }
+                            />
+                            <div className="d-flex flex-column flex-fill">
+                                <MokaImageInput className="mb-1 input-border" img={edit.tw.imgUrl} width={192} height={108} deleteButton={true} />
+                                <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
+                            </div>
+                        </div>
+                    </Col>
+                    <Col xs={5} className="align-contents-center">
+                        <Form.Row className="d-flex pt-4">
+                            <Col xs={12} className="d-flex w-100 align-items-center">
+                                <MokaInputLabel as="none" label="예약" labelWidth={70} />
+                                <MokaInput
+                                    as="checkbox"
+                                    name="tw-isReserve"
+                                    id="tw-isReserve"
+                                    className="mr-2"
+                                    onChange={handleChangeCheckedValue}
+                                    inputProps={{ label: '예약 노출', checked: edit.tw.isReserve, custom: true }}
+                                />
+                            </Col>
+                        </Form.Row>
+                        <Form.Row className="d-flex pt-2">
+                            <Col xs={12}>
+                                <MokaInput
+                                    as="dateTimePicker"
+                                    name="tw-reserveDt"
+                                    value={edit.tw.reserveDt}
+                                    onChange={(e) => {
+                                        handleChangeTextValue({ target: { name: 'tw-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
+                                    }}
+                                    inputProps={{ dateFormat: 'YYYY-MM-DD', timeFormat: 'HH:mm', inputClassName: 'ft-12' }}
+                                    disabled={!edit.tw.isReserve}
+                                />
+                            </Col>
+                        </Form.Row>
+                    </Col>
+                </Form.Row>
+                {/*<Form.Row className="mb-2">
                     <div className="d-flex w-100">
                         <MokaInputLabel
                             as="none"
@@ -522,7 +619,7 @@ const SnsMetaEdit = () => {
                             disabled={!edit.tw.isReserve}
                         />
                     </div>
-                </Form.Row>
+                </Form.Row>*/}
             </Form>
 
             <DefaultInputModal

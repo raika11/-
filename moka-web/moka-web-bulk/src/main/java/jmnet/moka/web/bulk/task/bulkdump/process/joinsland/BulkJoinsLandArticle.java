@@ -91,7 +91,7 @@ public class BulkJoinsLandArticle extends BulkArticle {
         }
 
         //이후 HTML 모든태그를 제거함
-        contentHtmlDaum = contentHtmlDaum.replaceAll("[<][a-zA-Z/](.|\n)*?[>]", "");
+        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum);
 
         // region 다음카카오 TV팟, tag_photobundle 처리
         // 카카오 TV팟 <iframe> 태그구간 원본치환
@@ -158,8 +158,5 @@ public class BulkJoinsLandArticle extends BulkArticle {
             final String naverDesc = BulkTagUtil.specialHtmlTag(imgDesc.replace( "\"", "" ));
             getImageBlockXmlNaver().concat(String.format("<image href=\"%s\" caption_content=\"%s\"/>\r\n", imgSrc, naverDesc));
         }
-    }
-
-    public void processContent_JHotClick() {
     }
 }

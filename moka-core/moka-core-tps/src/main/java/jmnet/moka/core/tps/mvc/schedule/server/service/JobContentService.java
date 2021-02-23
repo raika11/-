@@ -36,7 +36,7 @@ public interface JobContentService {
      * @param jobContent 작업
      * @return 작업
      */
-    JobContent saveJobContent(JobContent jobContent);
+    JobContent insertJobContent(JobContent jobContent);
 
     /**
      * 작업 수정

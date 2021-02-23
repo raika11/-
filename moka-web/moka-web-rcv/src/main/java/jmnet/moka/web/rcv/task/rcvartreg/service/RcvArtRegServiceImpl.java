@@ -51,8 +51,8 @@ public class RcvArtRegServiceImpl implements RcvArtRegService{
     }
 
     @Override
-    public void getUspRcvCodeConvSelByRid(JamArticleTotalVo articleTotal) {
-        rcvArtRegMapper.callUspRcvCodeConvSelByRid(articleTotal);
+    public List<Map<String, String>> getUspRcvCodeConvSelByRid(JamArticleTotalVo articleTotal) {
+        return rcvArtRegMapper.callUspRcvArticleCodeSel(articleTotal);
     }
 
     @Override

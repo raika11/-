@@ -23,7 +23,7 @@ const Work = (props) => {
             {/* 작업 등록, 수정 */}
             <Switch>
                 <Route path={[`${match.path}/work-list/add`, `${match.path}/work-list/:seqNo`]}>
-                    <div className="d-flex flex-column" style={{ width: 688 }}>
+                    <div className="flex-fill">
                         <WorkEdit />
                     </div>
                 </Route>

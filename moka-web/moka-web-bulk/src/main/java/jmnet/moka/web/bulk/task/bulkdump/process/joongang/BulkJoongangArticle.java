@@ -11,7 +11,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
-import jmnet.moka.web.bulk.service.SmsUtilService;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.base.TaskManager;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.MediaFullName;
@@ -19,6 +19,7 @@ import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.util.BulkBrightCoveUtil;
+import jmnet.moka.web.bulk.util.BulkJsoupUtil;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
 import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
@@ -26,6 +27,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  * <pre>
@@ -69,7 +73,7 @@ public class BulkJoongangArticle extends BulkArticle {
         getSubTitle().setData(newsVo.getSubTitle());
         getArtReporter().setData(newsVo.getArtReporter());
 
-        if (!newsVo.getEmail().isEmpty()) {
+        if ( newsVo.getEmail() != null && !newsVo.getEmail().isEmpty()) {
             getEmail().setData(newsVo.getEmail());
         }
 
@@ -202,7 +206,7 @@ public class BulkJoongangArticle extends BulkArticle {
     public void processContentTag_ab_photofix() {
         // 2020.03.20 포토 fix 개별 이미지로 추출
         if( getContentHtml().toString().contains("ab_photofix")) {
-            final String photofixPattern = "(?i)<div(\\s*?)class=\"ab_photofix\">.*?background-image:url\\('(?<src>.*?)'.*?<p class=\"caption\">(?<alt>.*?)</p></div>";
+            final String photofixPattern = "(?i)<div(\\s*?)class=\"ab_photofix\">.*?background-image:url\\('(?<src>.*?)'.*?<p class=\"caption\">(?<alt>.*?)</p>(\\s*?)</div>";
             getContentHtml().replaceAll(photofixPattern, "<img alt=\"$3\" src=\"$2\"/>" );
         }
     }
@@ -523,7 +527,7 @@ public class BulkJoongangArticle extends BulkArticle {
             adBoxArticleHeader.appendReplacement(sb, replace);
         } while( adBoxArticleHeader.find() );
         adBoxArticleHeader.appendTail(sb);
-        contentNaver = sb.toString();
+        contentNaver = sb.toString().replace("division_right", "division_left"); // 기존 룰에 맞춘다.
 
         // <span class="dim" style="display: none;">■</span> 유형 전부 지우기 - 아티클박스 관련 전부 지운다.
         contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)</div>", "");
@@ -665,18 +669,18 @@ public class BulkJoongangArticle extends BulkArticle {
         }
     }
 
-    public void processContent_Ovp(TaskManager taskManager) {
+    public boolean processContent_Ovp(TotalVo<BulkDumpTotalVo> totalVo, TaskManager taskManager) {
         final MokaBulkConfiguration bulkConfiguration = taskManager.getBulkConfiguration();
-        final SmsUtilService smsUtilService = taskManager.getSmsUtilService();
+        final SlackMessageService slackMessageService = taskManager.getSlackMessageService();
 
         if( !hasVideoList() )
-            return;
+            return true;
 
         final List<BulkDumpNewsMMDataVo> ovpList = getBulkDumpNewsVideoList();
         final String accessToken = BulkBrightCoveUtil.getAccessToken(bulkConfiguration.getBrightCoveConfig());
         if( McpString.isNullOrEmpty( accessToken )) {
-            smsUtilService.sendSms(String.format("브라이트코브 토큰 요청 에러 totalId=[%s] [%s]", getTotalId(), getTitle()));
-            return;
+            slackMessageService.sendSms( "BulkDumpOvp", totalVo.logError(String.format("브라이트코브 토큰 요청 에러 totalId=[%s] [%s]", getTotalId(), getTitle())));
+            return false;
         }
 
         StringBuilder naverOvpImgList = new StringBuilder();
@@ -706,8 +710,8 @@ public class BulkJoongangArticle extends BulkArticle {
 
             final String videoUrl = BulkBrightCoveUtil.getVideoUrl(bulkConfiguration.getBrightCoveConfig(), accessToken, ovp.getAssetId());
             if( McpString.isNullOrEmpty(videoUrl)) {
-                smsUtilService.sendSms(String.format("브라이트코브 API 요청 에러 totalId=[%s] [%s] AssetId=[%s]", getTotalId(), getTitle(), ovp.getAssetId()));
-                continue;
+                slackMessageService.sendSms("BulkDumpOvp", totalVo.logError(String.format("브라이트코브 API 요청 에러 totalId=[%s] [%s] AssetId=[%s]", getTotalId(), getTitle(), ovp.getAssetId())));
+                return false;
             }
             log.trace(" BrightCove getVideoUrl Success {}", videoUrl);
 
@@ -724,6 +728,8 @@ public class BulkJoongangArticle extends BulkArticle {
         if( getImageBlockXmlNaver().isEmpty()) {
             getImageBlockXmlNaver().setData( naverOvpImgList.toString() );
         }
+
+        return true;
     }
 
     private static final Pattern PATTERN_ContentTag_daumVod = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id[^>].*?>(\\s*?)</div>", Pattern.CASE_INSENSITIVE );
@@ -777,7 +783,7 @@ public class BulkJoongangArticle extends BulkArticle {
             contentHtmlDaum = contentHtmlDaum.replace("\r\n<strong>Q :", "\r\n\r\n<strong>Q :");
         }
 
-        contentHtmlDaum = contentHtmlDaum.replaceAll("[<][a-zA-Z/](.|\n)*?[>]", "");
+        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum);
 
         // region 다음카카오 TV팟, tag_photobundle 처리
         // 카카오 TV팟 <iframe> 태그구간 원본치환
@@ -852,102 +858,52 @@ public class BulkJoongangArticle extends BulkArticle {
         return contentHtmlDaum;
     }
 
-    public void processContent_JHotClick() {
-    }
-
-    public void processContent_CopyRight() {
-    }
-
     public void processContentTag_ab_ds_timeline() {
-        /*
+        final String contentHtml = getContentHtml().toString();
+        if(!contentHtml.contains("ab_ds_timeline"))
+            return;
+
         // timeline 아티클 처리 미리 처리
-        if ((m_article.m_content_html).IndexOf("ab_ds_timeline") >= 0)
-        {
-            //string timelinePattern = string.Empty;
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(m_article.m_content_html);
-            foreach (var nodeDep1 in htmlDoc.DocumentNode.ChildNodes)
-            {
-                if (nodeDep1.NodeType == HtmlNodeType.Element)
-                {
-                    if (nodeDep1.GetAttributeValue("class", "").Contains("ab_ds_timeline"))
-                    {
-                        nodeDep1.InnerHtml = nodeDep1.InnerHtml.Replace("<!-- 사진, 영상이 있을때 chat_box_photo 추가 -->", string.Empty);
-                        nodeDep1.InnerHtml = m_util.ReplaceTag(nodeDep1.InnerHtml, "h2", "b");
-                        nodeDep1.InnerHtml = m_util.ReplaceTag(nodeDep1.InnerHtml, "strong", "b");
-                        nodeDep1.InnerHtml = m_util.ReplaceHTMLSpecialChars(nodeDep1.InnerHtml, "div,img,b");
-                        //nodeDep1.SetAttributeValue("style", "padding-bottom:16px;line-height:26px;letter-spacing:0px;font-family:돋움,dotum,sans-serif;");
-                        foreach (var nodeDep2 in nodeDep1.ChildNodes)
-                        {
-                            if (nodeDep2.GetAttributeValue("class", "").Contains("ab_photo"))
-                            {
-                                foreach (var nodeDep3 in nodeDep2.ChildNodes)
-                                {
-                                    if (nodeDep3.NodeType != HtmlNodeType.Element)
-                                    {
-                                        nodeDep3.InnerHtml = string.Empty;
-                                    }
-                                }
-                            }
+        Document document = Jsoup.parseBodyFragment(contentHtml);
+        document.outputSettings().prettyPrint(false);
+        Element body = document.body();
+        for(Element elementTimeLine : body.getElementsByClass("ab_ds_timeline") ){
+            String innerHtml = elementTimeLine.html().replace("<!-- 사진, 영상이 있을때 chat_box_photo 추가 -->", "");
+            innerHtml = BulkTagUtil.replaceTag(innerHtml, "h2", "b");
+            innerHtml = BulkTagUtil.replaceTag(innerHtml, "strong", "b");
+            innerHtml = BulkTagUtil.replaceHTMLSpecialChars(innerHtml, "div,img,b");
+            elementTimeLine = elementTimeLine.html(innerHtml);
 
-                            if (nodeDep2.GetAttributeValue("class", "").Contains("timeline_box"))
-                            {
-                                //nodeDep2.SetAttributeValue("style", "padding:24px 20px 0px;border:1px solid rgb(221,221,221);border-image:none;overflow:hidden;clear:both;");
-                                //nodeDep2.InnerHtml = "「" + nodeDep2.InnerHtml + "」";
-                                nodeDep2.InnerHtml = "\r\n" + nodeDep2.InnerHtml + "\r\n";
+            for( Element elementSub : elementTimeLine.getElementsByClass("ab_photo")){
+                BulkJsoupUtil.removeNotElement( elementSub );
+            }
 
-                                foreach (var nodeDep3 in nodeDep2.ChildNodes)
-                                {
-                                    if (nodeDep3.NodeType == HtmlNodeType.Element)
-                                    {
-                                        if (nodeDep3.GetAttributeValue("class", "").Contains("date"))
-                                        {
-                                            nodeDep3.InnerHtml = "■" + nodeDep3.InnerHtml;
-                                            nodeDep3.SetAttributeValue("style", "position:relative;margin-top:17px;margin-bottom:16px;padding-top:15px;padding-bottom:14px;border-top:1px solid #444446;border-bottom:1px solid #ebebeb;color:#3e3e40;font-size:20px;line-height:1.5;width:100%;");
-                                        }
-                                        if (nodeDep3.GetAttributeValue("class", "").Contains("ad_go_article"))
-                                        {
-                                            nodeDep3.InnerHtml = string.Empty;
-                                        }
-                                        if (nodeDep3.GetAttributeValue("class", "").Contains("timeline_box_content"))
-                                        {
-                                            foreach (var nodeDep4 in nodeDep3.ChildNodes)
-                                            {
-                                                if (nodeDep4.NodeType == HtmlNodeType.Element)
-                                                {
-                                                    if (nodeDep4.GetAttributeValue("class", "").Contains("chat_profile"))
-                                                    {
-                                                        //var removeNode = nodeDep4.SelectSingleNode("//div[@class='time_profile_img']");
-                                                        //if (removeNode != null || !string.IsNullOrEmpty(removeNode.InnerText))
-                                                        //{
-                                                        //    nodeDep4.RemoveChild(removeNode);
-                                                        //}
-                                                        foreach (var nodeDep5 in nodeDep4.ChildNodes)
-                                                        {
-                                                            if (nodeDep5.GetAttributeValue("class", "").Contains("time_profile_img"))
-                                                            {
-                                                                nodeDep5.RemoveAllChildren();
-                                                            }
-                                                            if (nodeDep5.GetAttributeValue("class", "").Contains("time_profile"))
-                                                            {
-                                                                nodeDep5.SetAttributeValue("style", "color:rgb(166,152,134);line-height:1.5;font-size:14px;margin-bottom:1px;");
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+            for (Element elementSub : elementTimeLine.getElementsByClass("timeline_box")) {
+                elementSub.html( "\r\n" + elementSub.html() + "\r\n");
+
+                for( Element elementData : elementSub.getElementsByClass("date") ) {
+                    elementData.html( "■" + elementData.html())
+                               .attr("style", "position:relative;margin-top:17px;margin-bottom:16px;padding-top:15px;padding-bottom:14px;border-top:1px solid #444446;border-bottom:1px solid #ebebeb;color:#3e3e40;font-size:20px;line-height:1.5;width:100%;");
+                }
+                for( Element elementData : elementSub.getElementsByClass("ad_go_article")){
+                    BulkJsoupUtil.removeNotElement( elementData );
+                }
+
+                for( Element elementData : elementSub.getElementsByClass("timeline_box_content")){
+                    for( Element elementChat : elementData.getElementsByClass("chat_profile")) {
+                        for( Element elementChatSub : elementChat.getElementsByClass("time_profile_img")){
+                            BulkJsoupUtil.remove( elementChatSub, true );
+                            elementChatSub.attr("style", "color:rgb(166,152,134);line-height:1.5;font-size:14px;margin-bottom:1px;");
+                        }
+
+                        for( Element elementChatSub : elementChat.getElementsByClass("time_profile")){
+                            elementChatSub.attr("style", "color:rgb(166,152,134);line-height:1.5;font-size:14px;margin-bottom:1px;");
                         }
                     }
                 }
             }
-
-            m_article.m_content_html = htmlDoc.DocumentNode.OuterHtml;
         }
-         */
+        getContentHtml().setData(body.html());
     }
 }
 

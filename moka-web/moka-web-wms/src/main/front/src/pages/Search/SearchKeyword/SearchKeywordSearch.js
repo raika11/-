@@ -188,7 +188,7 @@ const SearchKeywordSearch = () => {
     }, [dispatch]);
 
     return (
-        <div className="mb-2">
+        <div className="mb-14">
             <Form.Row>
                 <Col xs={6} className="p-0 pr-2 d-flex">
                     <div className="flex-shrink-0 mr-2">
@@ -221,7 +221,7 @@ const SearchKeywordSearch = () => {
                 <Col xs={6} className="p-0 d-flex">
                     <MokaSearchInput
                         name="keyword"
-                        className="mr-2 flex-fill"
+                        className="mr-1 flex-fill"
                         onChange={handleChangeValue}
                         value={search.keyword}
                         onSearch={handleSearch}

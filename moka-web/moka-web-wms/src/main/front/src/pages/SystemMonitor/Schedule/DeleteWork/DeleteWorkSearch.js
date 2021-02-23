@@ -35,43 +35,37 @@ const DeleteWorkSearch = () => {
     };
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             <div className="mb-2 d-flex align-items-center">
                 {/* 기타코드에서 가져옴 'GEN_CATE' */}
-                <div style={{ width: 150 }}>
-                    <MokaInputLabel label="분류" labelWidth={30} as="select" name="group" className="mr-2" value={search.group} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
-                    </MokaInputLabel>
-                </div>
-                <div style={{ width: 150 }}>
-                    <MokaInputLabel label="주기" labelWidth={30} as="select" name="cycle" className="mr-2" value={search.cycle} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
-                        <option value="30s">30초</option>
-                        <option value="1m">1분</option>
-                        <option value="2m">2분</option>
-                        <option value="5m">5분</option>
-                        <option value="10m">10분</option>
-                        <option value="20m">20분</option>
-                        <option value="30m">30분</option>
-                        <option value="1h">1시간</option>
-                        <option value="12h">12시간</option>
-                        <option value="24h">24시간</option>
-                    </MokaInputLabel>
-                </div>
-                <MokaInputLabel label="타입" labelWidth={30} as="select" name="type" className="mr-2" value={search.type} onChange={handleChangeValue}>
+                <MokaInputLabel label="분류" as="select" name="group" className="mr-2 flex-fill" value={search.group} onChange={handleChangeValue}>
+                    <option value="all">전체</option>
+                </MokaInputLabel>
+                <MokaInputLabel label="주기" as="select" name="cycle" className="mr-2 flex-fill" value={search.cycle} onChange={handleChangeValue}>
+                    <option value="all">전체</option>
+                    <option value="30s">30초</option>
+                    <option value="1m">1분</option>
+                    <option value="2m">2분</option>
+                    <option value="5m">5분</option>
+                    <option value="10m">10분</option>
+                    <option value="20m">20분</option>
+                    <option value="30m">30분</option>
+                    <option value="1h">1시간</option>
+                    <option value="12h">12시간</option>
+                    <option value="24h">24시간</option>
+                </MokaInputLabel>
+                <MokaInputLabel label="타입" as="select" name="type" className="mr-2 flex-fill" value={search.type} onChange={handleChangeValue}>
                     <option value="all">전체</option>
                     <option value="ftp">FTP</option>
                     <option value="copyNetwork">네트워크 복사</option>
                 </MokaInputLabel>
-                <div style={{ width: 180 }}>
-                    <MokaInputLabel label="배포 서버" labelWidth={50} as="select" name="server" className="mr-2" value={search.server} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
-                    </MokaInputLabel>
-                </div>
+                <MokaInputLabel label="배포 서버" as="select" name="server" value={search.server} onChange={handleChangeValue}>
+                    <option value="all">전체</option>
+                </MokaInputLabel>
             </div>
-            <div className="mb-2 d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center justify-content-between">
                 <div className="d-flex">
-                    <div className="mr-2" style={{ width: 100 }}>
+                    <div style={{ width: 150 }} className="mr-2">
                         <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                             <option value="all">전체</option>
                             <option value="url">URL</option>
@@ -84,7 +78,7 @@ const DeleteWorkSearch = () => {
                     </div>
                 </div>
                 <div className="d-flex">
-                    <Button variant="searching" className="mr-2">
+                    <Button variant="searching" className="mr-1">
                         검색
                     </Button>
                     <Button variant="outline-neutral" onClick={handleClickReset}>

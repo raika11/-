@@ -13,7 +13,7 @@ package jmnet.moka.web.bulk.task.bulkdump.process.basic;
  * @since 2021-01-27 027 오후 2:16
  */
 public class MediaFullName {
-    public static final String getJoongangMediaFullName( String targetCode ) {
+    public static String getJoongangMediaFullName( String targetCode ) {
         switch(targetCode){
             case "A":
                 return "중앙일보::속보";

@@ -6,19 +6,16 @@ export default [
     {
         headerName: '번호',
         field: 'seqNo',
-        cellStyle: { fontSize: '12px' },
         width: 45,
     },
     {
         headerName: '분류',
         field: 'group',
-        cellStyle: { fontSize: '12px' },
         width: 50,
     },
     {
         headerName: '주기',
         field: 'cycle',
-        cellStyle: { fontSize: '12px' },
         width: 50,
     },
     {
@@ -32,7 +29,6 @@ export default [
     {
         headerName: '삭제 정보',
         field: 'info',
-        cellStyle: { fontSize: '12px' },
         width: 240,
         cellRendererFramework: (row) => <WorkDelRenderer {...row} />,
     },

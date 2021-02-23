@@ -44,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -458,6 +459,25 @@ public class MicAgendaRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO INSERT ANSWER REL]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO INSERT ANSWER REL]", e, true);
+            throw new Exception(msg("tps.common.error.update"), e);
+        }
+    }
+
+    @ApiOperation(value = "포스트 답변 부가정보 삭제")
+    @DeleteMapping(value = "/answers/{answSeq}/rel")
+    public ResponseEntity<?> deleteMicAnswerRel(@ApiParam(value = "답변순번", required = true) @PathVariable("answSeq")
+    @Min(value = 0, message = "tps.answer.error.min.answSeq") Long answSeq)
+            throws Exception {
+
+        try {
+            micAnswerService.deleteAllMicAnswerRel(answSeq);
+
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, msg("tps.common.success.update"));
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE ANSWER REL]", e);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE ANSWER REL]", e, true);
             throw new Exception(msg("tps.common.error.update"), e);
         }
     }

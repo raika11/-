@@ -30,7 +30,7 @@ const RunStateSearch = () => {
     };
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             <div className="mb-2 d-flex align-items-center justify-content-between">
                 {/* 기타코드에서 가져옴 'GEN_CATE' */}
                 <div style={{ width: 150 }}>
@@ -86,7 +86,7 @@ const RunStateSearch = () => {
                     </div>
                 </div>
                 <div className="d-flex">
-                    <Button variant="searching" className="mr-2">
+                    <Button variant="searching" className="mr-1">
                         검색
                     </Button>
                     <Button variant="outline-neutral" onClick={handleClickReset}>

@@ -2,6 +2,7 @@ package jmnet.moka.web.bulk.task.bulkdump.process.joongang;
 
 import java.net.URLConnection;
 import java.util.List;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.MediaFullName;
@@ -82,6 +83,8 @@ public class BulkJoongangArticleEx extends BulkArticle {
 
     public void processContent_ImageBlock() {
         for( BulkDumpNewsMMDataVo mmData : this.getBulkDumpNewsImageList()) {
+            if(McpString.isNullOrEmpty(mmData.getUrl()))
+                continue;
             final String imgName = FilenameUtils.getName( mmData.getUrl() );
             final String mimeType = processContent_ImageBlock_GetMimeType( imgName );
 

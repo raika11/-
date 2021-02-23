@@ -67,7 +67,7 @@ const PageSearch = ({ match }) => {
     }, [dispatch, latestDomainId, search]);
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             {/* 도메인 선택 */}
             <Form.Row className="mb-2">
                 <MokaInput as="select" name="domainId" value={search.domainId} onChange={handleChangeValue}>

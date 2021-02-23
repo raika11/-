@@ -164,7 +164,7 @@ public class JamXmlProcessHelper {
                 articleTotal.logError("동영상 대표 이미지 업로드(PDS) 실패");
             }
         } else {
-            articleTotal.logError("동영상 대표 이미지 다운로드 실패");
+            articleTotal.logError("동영상 대표 이미지 다운로드 실패 {}", item.getPoster());
         }
 
         if (!success) {

@@ -44,7 +44,7 @@ const ArticleHistoryModal = (props) => {
     useEffect(() => {
         setRowData(
             historyList.map((hist) => {
-                const masterCodeText = hist.masterCodeList
+                const masterCodeText = (hist.masterCodeList || '')
                     .split(',')
                     .filter((code) => code !== '')
                     .reduce((fullText, code) => {

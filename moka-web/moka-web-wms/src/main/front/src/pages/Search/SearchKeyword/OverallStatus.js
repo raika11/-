@@ -42,13 +42,13 @@ const OverallStatus = () => {
 
     return (
         <>
-            <div className="mb-2">
+            <div className="mb-14">
                 <Row className="m-0 justify-content-between align-items-end">
                     <Col xs={6} className="p-0">
                         최종 갱신시각 : {searchDate}
                     </Col>
                     <Col xs={6} className="p-0 text-right">
-                        <Button variant="outline-neutral" className="mr-2" onClick={handleOpenKD}>
+                        <Button variant="outline-neutral" className="mr-1" onClick={handleOpenKD}>
                             검색어 사전
                         </Button>
                         <a
@@ -67,7 +67,7 @@ const OverallStatus = () => {
                 loading={loading}
                 columnDefs={columnDefs}
                 rowData={rowData}
-                className="ag-grid-align-center mb-card"
+                className="ag-grid-align-center mb-14"
                 agGridHeight={70}
                 onRowNodeId={(row) => row.idx}
             />

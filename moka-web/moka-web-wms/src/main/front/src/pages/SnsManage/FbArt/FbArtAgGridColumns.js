@@ -16,11 +16,10 @@ export default [
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {
-        headerName: '사진',
+        headerName: '이미지',
         field: 'imgUrl',
         cellRenderer: 'imageRenderer',
-        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
-        width: 90,
+        width: 78,
     },
     {
         headerName: 'SNS제목',
@@ -58,7 +57,7 @@ export default [
         },
     },
     {
-        headerName: '사용여부',
+        headerName: '사용',
         field: 'usedYn',
         width: 64,
         cellRenderer: 'usedYnRenderer',

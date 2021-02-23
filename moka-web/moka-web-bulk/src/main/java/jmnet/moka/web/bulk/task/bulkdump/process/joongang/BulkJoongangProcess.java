@@ -7,6 +7,7 @@ import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpResult;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
@@ -42,9 +43,9 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
     }
 
     @Override
-    protected boolean doProcess_InsertUpdate(BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_InsertUpdate(TotalVo<BulkDumpTotalVo> totalVo, BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         if( !dumpService.doGetBulkNewstableJoongang( article ) )
-            return false;
+            return BulkDumpResult.SKIP_DATABASE;
 
         article.processContentTag_ab_ds_timeline();
 
@@ -151,18 +152,17 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
 
         // #region 우얄라 & 브라이트코브 동영상 처리
         if( article.getTargetCode().equals("SOY") && article.isOvpArticle()) {
-            article.processContent_Ovp( bulkDumpTask.getTaskManager() );
+            if( !article.processContent_Ovp( totalVo, bulkDumpTask.getTaskManager() ) )
+                return BulkDumpResult.TIMEOUT_OVP;
         }
 
-        article.processContent_JHotClick();
+        article.processContent_JHotClick(10);
 
-        article.processContent_CopyRight();
-
-        return true;
+        return BulkDumpResult.SUCCESS;
     }
 
     @Override
-    protected boolean doProcess_Delete(BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         article.getMedia1().setData( article.getTargetCode().substring(2, 3));
         article.getMedia3().setData( article.getMedia2().toString() + article.getMedia1().toString() );
 
@@ -170,6 +170,6 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
         article.getContCode2().setData("000");
         article.getContCode3().setData("000");
 
-        return true;
+        return BulkDumpResult.SUCCESS;
     }
 }

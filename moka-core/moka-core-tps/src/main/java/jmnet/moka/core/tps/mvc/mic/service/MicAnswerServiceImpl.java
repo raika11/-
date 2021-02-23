@@ -211,4 +211,9 @@ public class MicAnswerServiceImpl implements MicAnswerService {
 
         return uploaded;
     }
+
+    @Override
+    public void deleteAllMicAnswerRel(Long answSeq) {
+        micMapper.deleteAllMicAnswerRel(answSeq);
+    }
 }

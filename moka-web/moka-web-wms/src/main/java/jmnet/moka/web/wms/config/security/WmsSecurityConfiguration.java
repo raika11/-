@@ -117,6 +117,8 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()    // Cross-Site Request Forgery 공격 방지
                 .cors()
                 .and()
+                .headers().httpStrictTransportSecurity().disable()
+                .and()
                 .sessionManagement()
                 .sessionFixation()
                 .none()

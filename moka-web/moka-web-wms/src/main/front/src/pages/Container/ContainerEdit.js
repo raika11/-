@@ -15,25 +15,15 @@ import { GET_CONTAINER, DELETE_CONTAINER, SAVE_CONTAINER, changeInvalidList, sav
 const ContainerEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const loading = useSelector((store) => store.loading[GET_CONTAINER] || store.loading[DELETE_CONTAINER] || store.loading[SAVE_CONTAINER]);
+    const loading = useSelector(({ loading }) => loading[GET_CONTAINER] || loading[DELETE_CONTAINER] || loading[SAVE_CONTAINER]);
     const latestDomainId = useSelector((store) => store.auth.latestDomainId);
-    const { container, inputTag, invalidList } = useSelector((store) => ({
-        container: store.container.container,
-        inputTag: store.container.inputTag,
-        invalidList: store.container.invalidList,
-    }));
+    const { container, inputTag, invalidList } = useSelector(({ container }) => container);
 
     // state
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [containerSeq, setContainerSeq] = useState('');
     const [containerName, setContainerName] = useState('');
     const [error, setError] = useState({});
-
-    useEffect(() => {
-        // 컨테이너 데이터 셋팅
-        setContainerSeq(container.containerSeq || '');
-        setContainerName(container.containerName || '');
-    }, [container]);
 
     /**
      * 항목별 값 변경
@@ -70,10 +60,6 @@ const ContainerEdit = ({ onDelete, match }) => {
         return !isInvalid;
     };
 
-    useEffect(() => {
-        setError(invalidListToError(invalidList));
-    }, [invalidList]);
-
     /**
      * 컨테이너 등록
      * @param {object} container 컨테이너
@@ -90,11 +76,11 @@ const ContainerEdit = ({ onDelete, match }) => {
                         if (body?.list) {
                             const bodyChk = body.list.filter((e) => e.field === 'containerBody');
                             if (bodyChk.length > 0) {
-                                messageBox.alert('Tems 문법 사용이 비정상적으로 사용되었습니다\n수정 확인후 다시 저장해 주세요', () => {});
+                                messageBox.alert('Tems 문법 사용이 비정상적으로 사용되었습니다\n수정 후 다시 저장해 주세요', () => {});
                                 return;
                             }
                         }
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),
@@ -157,66 +143,71 @@ const ContainerEdit = ({ onDelete, match }) => {
     /**
      * 삭제 버튼
      */
-    const handleClickDelete = () => {
-        onDelete(container);
-    };
+    const handleClickDelete = () => onDelete(container);
 
     /**
      * 취소버튼
      */
-    const handleClickCancle = () => {
-        history.push(match.path);
-    };
+    const handleClickCancle = () => history.push(match.path);
 
     useEffect(() => {
         container.containerSeq ? setBtnDisabled(false) : setBtnDisabled(true);
         setError({});
     }, [container.containerSeq]);
 
+    useEffect(() => {
+        setContainerSeq(container.containerSeq || '');
+        setContainerName(container.containerName || '');
+    }, [container]);
+
+    useEffect(() => {
+        setError(invalidListToError(invalidList));
+    }, [invalidList]);
+
     return (
         <MokaCard titleClassName="h-100 mb-0" title={`컨테이너 ${container.containerSeq ? '수정' : '등록'}`} loading={loading}>
-            <Form>
-                {/* 버튼 그룹 */}
-                <Form.Group className="mb-3 d-flex justify-content-end">
-                    <div className="d-flex">
-                        <Button variant="positive" className="mr-1" onClick={handleClickSave}>
-                            저장
+            {/* 버튼 그룹 */}
+            <Form.Group className="mb-3 d-flex justify-content-end">
+                <div className="d-flex">
+                    <Button variant="positive" className="mr-1" onClick={handleClickSave}>
+                        {container.containerSeq ? '수정' : '저장'}
+                    </Button>
+                    {container.containerSeq && (
+                        <Button variant="negative" className="mr-1" disabled={btnDisabled} onClick={handleClickDelete}>
+                            삭제
                         </Button>
-                        {container.containerSeq && (
-                            <Button variant="negative" className="mr-1" disabled={btnDisabled} onClick={handleClickDelete}>
-                                삭제
-                            </Button>
-                        )}
-                        <Button variant="negative" onClick={handleClickCancle}>
-                            취소
-                        </Button>
-                    </div>
-                </Form.Group>
-                {/* 컨테이너ID */}
-                <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
-                {/* 컨테이너명 */}
-                <MokaInputLabel
-                    className="mb-2"
-                    label="컨테이너명"
-                    name="containerName"
-                    placeholder="컨테이너명을 입력하세요"
-                    value={containerName}
-                    onChange={handleChangeValue}
-                    isInvalid={error.containerName}
-                    required
-                />
-                {/* 입력태그 */}
-                <MokaInputGroup
-                    label="입력태그"
-                    as="textarea"
-                    value={inputTag}
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 2 }}
-                    className="mb-2"
-                    disabled
-                    append={<MokaCopyTextButton copyText={inputTag} />}
-                />
-            </Form>
+                    )}
+                    <Button variant="negative" onClick={handleClickCancle}>
+                        취소
+                    </Button>
+                </div>
+            </Form.Group>
+
+            {/* 컨테이너ID */}
+            <MokaInputLabel className="mb-2" label="컨테이너ID" name="containerSeq" value={containerSeq} inputProps={{ plaintext: true, readOnly: true }} />
+
+            {/* 컨테이너명 */}
+            <MokaInputLabel
+                className="mb-2"
+                label="컨테이너명"
+                name="containerName"
+                placeholder="컨테이너명을 입력하세요"
+                value={containerName}
+                onChange={handleChangeValue}
+                isInvalid={error.containerName}
+                required
+            />
+
+            {/* 입력태그 */}
+            <MokaInputGroup
+                label="입력태그"
+                as="textarea"
+                value={inputTag}
+                inputProps={{ rows: 2 }}
+                className="mb-2"
+                disabled
+                append={<MokaCopyTextButton copyText={inputTag} />}
+            />
         </MokaCard>
     );
 };

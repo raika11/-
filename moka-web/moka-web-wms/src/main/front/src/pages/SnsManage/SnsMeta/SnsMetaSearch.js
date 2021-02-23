@@ -73,8 +73,8 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
     }, [searchOptions]);
 
     return (
-        <Form>
-            <Form.Row className="mb-2">
+        <Form className="mb-14">
+            <Form.Row>
                 <div style={{ width: 110 }} className="mr-2 flex-shrink-0">
                     <MokaInput
                         as="select"
@@ -144,7 +144,7 @@ const SnsMetaSearch = ({ searchOptions, onSearch, onReset }) => {
                         } = event;
                         handleChangeValue(name, value);
                     }}
-                    className="mr-2 flex-fill"
+                    className="mr-1 flex-fill"
                     onSearch={handleClickSearch}
                 />
                 {/* 초기화 버튼 */}

@@ -360,8 +360,6 @@ const DirectLinkEdit = ({ history, match }) => {
                         <MokaInputLabel
                             as="textarea"
                             label="내용"
-                            className="mb-0"
-                            inputClassName="resize-none"
                             name="linkContent"
                             value={temp.linkContent}
                             onChange={handleChangeValue}

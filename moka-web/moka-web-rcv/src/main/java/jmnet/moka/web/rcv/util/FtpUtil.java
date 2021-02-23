@@ -71,6 +71,7 @@ public class FtpUtil {
                     inputStream = new FileInputStream(new File(sourceFileList.get(i)));
                     success = ftp.storeFile(tmpFileName, inputStream);
                     inputStream.close();
+                    inputStream = null;
 
                     if (checkFileExists(ftp, uploadFileNameList.get(i))) {
                         ftp.deleteFile(uploadFileNameList.get(i));

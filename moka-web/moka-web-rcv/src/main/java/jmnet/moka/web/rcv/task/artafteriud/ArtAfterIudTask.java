@@ -81,6 +81,8 @@ public class ArtAfterIudTask extends Task<DBTaskInputData> {
 
         article.getId().setValue(RcvUtil.getMapStringData(map,"JAM_ID" ));
         articleTotal.setRid( RcvUtil.getMapStringData(map,"RID" ) );
+        articleTotal.setSourceCode( RcvUtil.getMapStringData(map,"SOURCE_CODE" ) );
+        article.setPcTitle( RcvUtil.getMapStringData(map,"ART_TITLE" ) );
 
         switch ( article.getIud() ){
             case "U":

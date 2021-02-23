@@ -111,13 +111,38 @@
       "description": "Description for bulk.brightCove.accessTokenUrl."
     },
     {
-      "name": "bulk.brightcove.videoSourceUrl",
-      "type": "java.lang.String",
-      "description": "Description for bulk.brightcove.videoSourceUrl."
-    },
-    {
       "name": "bulk.brightcove.videoLimitSize",
       "type": "java.lang.String",
       "description": "Description for bulk.brightcove.videoLimitSize."
+    },
+    {
+      "name": "bulk.brightcove.apiUrl",
+      "type": "java.lang.String",
+      "description": "Description for bulk.brightcove.apiUrl."
+    },
+    {
+      "name": "bulk.slack.timer.firstlimitcount",
+      "type": "java.lang.String",
+      "description": "Description for bulk.slack.timer.firstlimitcount."
+    },
+    {
+      "name": "bulk.slack.timer.waitingtime",
+      "type": "java.lang.String",
+      "description": "Description for bulk.slack.timer.waitingtime."
+    },
+    {
+      "name": "bulk.slack.timer.limitwaitingtime",
+      "type": "java.lang.String",
+      "description": "Description for bulk.slack.timer.limitwaitingtime."
+    },
+    {
+      "name": "bulk.slack.timer.pausetime",
+      "type": "java.lang.String",
+      "description": "#Slack Message 멈춤 시간."
+    },
+    {
+      "name": "bulk.slack.channelname",
+      "type": "java.lang.String",
+      "description": "#Slack channel Name."
     }
   ] }

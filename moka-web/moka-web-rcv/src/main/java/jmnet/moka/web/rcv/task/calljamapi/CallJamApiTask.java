@@ -57,12 +57,23 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
     @Override
     protected boolean doVerifyData(DBTaskInputData taskInputData) {
         if( taskInputData.getInputData().size() == 0 ) {
-            final CallJamApiService callJamApiService = getTaskManager().getCallJamApiService();
-            log.info( "{} TB_JAM_RCV_ART_HIST -> TB_JAM_RCV_ART_HIST_SUCC 이전 작업 완료", getTaskName() );
-            callJamApiService.deleteReceiveJobStep();
+            deleteReceiveJobStep();
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void doIdleProcess() {
+        super.doIdleProcess();
+
+        deleteReceiveJobStep();
+    }
+
+    private void deleteReceiveJobStep() {
+        final CallJamApiService callJamApiService = getTaskManager().getCallJamApiService();
+        log.info( "{} TB_JAM_RCV_ART_HIST -> TB_JAM_RCV_ART_HIST_SUCC 이전 작업 완료", getTaskName() );
+        callJamApiService.deleteReceiveJobStep();
     }
 
     @Override

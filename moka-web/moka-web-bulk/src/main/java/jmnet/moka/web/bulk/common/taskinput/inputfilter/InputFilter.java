@@ -28,6 +28,7 @@ public abstract class InputFilter {
         load(node, xu);
     }
 
+    @SuppressWarnings("RedundantThrows")
     protected void load(Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
     }

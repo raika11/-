@@ -77,6 +77,20 @@ public interface MicAnswerService {
     boolean updateMicAnswer(MicAnswerVO micAnswerVO)
             throws IOException;
 
+    /**
+     * 답변 등록
+     *
+     * @param micAnswerVO 답변정보
+     * @return 등록성공여부
+     * @throws IOException 예외
+     */
     boolean insertMicAnswer(MicAnswerVO micAnswerVO)
             throws IOException;
+
+    /**
+     * 답변 부가정보 삭제
+     *
+     * @param answSeq 답변순번
+     */
+    void deleteAllMicAnswerRel(Long answSeq);
 }

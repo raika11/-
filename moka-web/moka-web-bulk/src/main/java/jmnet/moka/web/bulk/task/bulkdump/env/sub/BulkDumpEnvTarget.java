@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,28 +29,4 @@ public class BulkDumpEnvTarget implements Serializable {
 
     @XmlAttribute(name = "TargetName")
     private String targetName;
-
-    @XmlElement(name = "CrTxt")
-    private String crTxt;
-
-    @XmlElement(name = "CrHtml")
-    private String crHtml;
-
-    @XmlElement(name = "CrHtmlNaver")
-    private String crHtmlNaver;
-
-    public void init() {
-        crTxt = initMember(crTxt);
-        crHtml = initMember(crTxt);
-        crHtmlNaver = initMember(crHtmlNaver);
-    }
-
-    private String initMember(String text) {
-        if (text == null) {
-            return "";
-        }
-        return text
-                .replace("{_TAB_}", "\t")
-                .replace("{_CRLF_}", "\r\n");
-    }
 }

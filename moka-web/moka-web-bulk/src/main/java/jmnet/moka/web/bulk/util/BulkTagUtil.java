@@ -242,4 +242,41 @@ public class BulkTagUtil {
                 .replace("“", "&#34;")
                 .replace("”", "&#34;");
     }
+
+    public static String replaceTag(String str, String tagIn, String tagOut) {
+        return str.replaceAll( "(</?)" + tagIn + "((?:\\s+.*?)?>)", "$1" + tagOut + "$2");
+    }
+
+    public static String replaceHTMLSpecialChars(String str, String allowTag) {
+        String pattern = "<(/?)(?!/####)([^<|>]+)?>";
+        String[] allowTags = allowTag.split(",");
+        StringBuilder sb = new StringBuilder();
+        for (String tag : allowTags)
+            sb.append("|").append(tag.trim()).append("(?!\\w)");
+
+        pattern = pattern.replace("####", sb.toString());
+
+        return str.replaceAll( pattern, "");
+    }
+
+    public static String strip(String str) {
+        return str.replaceAll("[<][a-zA-Z/](.|\n)*?[>]", "");
+    }
+
+    public static String standardBulkClearingTagImage(String str) {
+        str = restoreSpecialHtmlTag(str);
+        str = ripTag(str, "<!--@img_tag_s@-->", "<!--@img_tag_e@-->");
+        str = ripTag(str, "<table", "/table>");
+        str = ripTag(str, "<form", "/form>");
+        str = str.replaceAll("<html(.*|)<body([^>]*)>", "")
+                 .replaceAll("</body(.*)</html>(.*)", "")
+                 .replaceAll("<(style|script|title|link)(.*)</(style|script|title)>", "")
+                 .replaceAll("<[/]*(script|style|title|xmp)>", "")
+                 .replaceAll("([a-z0-9]*script:)", "")
+                 .replaceAll("<[/]*(IMG)[^>]*>", "")
+                 .replaceAll("<([?%])", "")
+                 .replaceAll("([?%])>", "");
+        str = ripTag(str, "<!--", "-->");
+        return str;
+    }
 }

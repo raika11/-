@@ -145,6 +145,7 @@ public abstract class Task<T> extends TaskBase {
         log.info( " >> {} 정상적으로 작업 대기 중입니다.", getTaskName());
     }
 
+    @SuppressWarnings("EmptyMethod")
     protected void stopServer() {
     }
 }

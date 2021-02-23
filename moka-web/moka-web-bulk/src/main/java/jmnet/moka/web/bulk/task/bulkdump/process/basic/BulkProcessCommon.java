@@ -25,29 +25,31 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
     }
 
     @Override
-    public void doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpTask bulkDumpTask, BulkDumpService dumpService, BulkDumpJobTotalVo dumpJobTotal) {
+    public BulkDumpResult doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpTask bulkDumpTask, BulkDumpService dumpService, BulkDumpJobTotalVo dumpJobTotal) {
         T newArticle = newArticle( totalVo );
         BulkArticle article = (BulkArticle) newArticle;
 
         doProcess_Ready(newArticle, dumpService);
 
-        boolean isSuccess = false;
+        article.setBulkDumpEnvCopyright( dumpService.getBulkCopyright(article.getBulkDumpEnvTarget()));
+
+        BulkDumpResult result = BulkDumpResult.SUCCESS;
         switch (article.getIud().toString()) {
             case "D":
-                isSuccess = doProcess_Delete( newArticle, bulkDumpTask, dumpService );
+                result = doProcess_Delete( totalVo, newArticle, bulkDumpTask, dumpService );
                 break;
             case "I":
             case "U":
-                isSuccess = doProcess_InsertUpdate( newArticle, bulkDumpTask, dumpService );
+                result = doProcess_InsertUpdate( totalVo, newArticle, bulkDumpTask, dumpService );
         }
-        if(!isSuccess)
-            return;
+        if(result != BulkDumpResult.SUCCESS)
+            return result;
 
-        BulkDumpProcess.doProcess(totalVo, article, getBulkDumpEnv(), bulkDumpTask, dumpJobTotal);
+        return BulkDumpProcess.doProcess(totalVo, article, getBulkDumpEnv(), bulkDumpTask, dumpJobTotal);
     }
 
     protected abstract T newArticle( TotalVo<BulkDumpTotalVo> totalVo );
     protected abstract void doProcess_Ready(T article, BulkDumpService dumpService);
-    protected abstract boolean doProcess_InsertUpdate(T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
-    protected abstract boolean doProcess_Delete(T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
+    protected abstract BulkDumpResult doProcess_InsertUpdate(TotalVo<BulkDumpTotalVo> totalVo, T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
+    protected abstract BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
 }

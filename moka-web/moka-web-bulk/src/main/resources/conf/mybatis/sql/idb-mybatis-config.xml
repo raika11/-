@@ -16,7 +16,9 @@
     <typeAliases>
         <package name="jmnet.moka.web.bulk.common.vo" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.vo" />
+        <package name="jmnet.moka.web.bulk.task.bulkdump.env.sub" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.process" />
+        <package name="jmnet.moka.web.bulk.task.bulkdump.process.basic" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.process.joongang" />
         <package name="jmnet.moka.web.bulk.task.bulkdump.process.joinsland" />
     </typeAliases>

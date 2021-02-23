@@ -2,67 +2,56 @@ export default [
     {
         headerName: '분류',
         field: 'type',
-        cellStyle: { fontSize: '12px' },
         flex: 1,
     },
     {
         headerName: '30초',
         field: 'ths',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '1분',
         field: 'om',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '2분',
         field: 'tm',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '5분',
         field: 'fim',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '10분',
         field: 'tem',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '20분',
         field: 'twm',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '30분',
         field: 'thm',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '60분',
         field: 'sim',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '12시간',
         field: 'twh',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
     {
         headerName: '1일',
         field: 'day',
-        cellStyle: { fontSize: '12px' },
         width: 65,
     },
 ];

@@ -1,6 +1,5 @@
 package jmnet.moka.web.rcv.task.base;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;

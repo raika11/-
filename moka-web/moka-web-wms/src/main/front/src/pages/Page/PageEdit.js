@@ -459,7 +459,6 @@ const PageEdit = ({ onDelete }) => {
                 {/* 설명 */}
                 <MokaInputLabel
                     className="mb-2"
-                    inputClassName="resize-none"
                     as="textarea"
                     label="설명"
                     value={temp.description}

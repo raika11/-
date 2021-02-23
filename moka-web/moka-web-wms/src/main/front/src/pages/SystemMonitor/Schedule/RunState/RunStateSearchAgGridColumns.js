@@ -7,19 +7,16 @@ export default [
     {
         headerName: '번호',
         field: 'seqNo',
-        cellStyle: { fontSize: '12px' },
         width: 50,
     },
     {
         headerName: '분류',
         field: 'group',
-        cellStyle: { fontSize: '12px' },
         width: 60,
     },
     {
         headerName: '주기',
         field: 'cycle',
-        cellStyle: { fontSize: '12px' },
         width: 60,
     },
     {
@@ -33,14 +30,12 @@ export default [
     {
         headerName: '결과/시간(ms)',
         field: 'stateDt',
-        cellStyle: { fontSize: '12px' },
         width: 100,
         cellRendererFramework: (row) => <WorkDateRenderer {...row} />,
     },
     {
         headerName: '마지막 실행 정보',
         field: 'lastInfo',
-        cellStyle: { fontSize: '12px' },
         width: 150,
         cellRendererFramework: (row) => <WorkErrorRenderer {...row} />,
         tooltipField: 'error',

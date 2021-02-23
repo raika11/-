@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.vo.TotalVo;
-import jmnet.moka.web.rcv.task.jamxml.vo.sub.CategoryVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemMultiOvpVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ReporterVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.TotalBasicInfo;
@@ -65,7 +65,9 @@ public class JamArticleTotalVo extends TotalVo<JamArticleVo> {
     private String curCompType;
     private int curCompId;
     private ItemVo curItem;
+    private ItemMultiOvpVo curMultiOvp;
     private int isSrc;
+    private int insertMode;
 
     public JamArticleTotalVo(JamArticleVo value) {
         super(value);

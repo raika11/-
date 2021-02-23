@@ -179,21 +179,13 @@ const CdnArticleEdit = ({ match }) => {
             <Form>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            label="사용여부"
-                            labelWidth={76}
-                            as="switch"
-                            id="usedYn"
-                            name="usedYn"
-                            inputProps={{ checked: temp.usedYn === 'Y' }}
-                            onChange={handleChangeValue}
-                        />
+                        <MokaInputLabel label="사용여부" as="switch" id="usedYn" name="usedYn" inputProps={{ checked: temp.usedYn === 'Y' }} onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     {/* 기사ID */}
                     <Col xs={4} className="p-0">
-                        <MokaInputLabel label="기사" labelWidth={76} value={temp.totalId} inputClassName="bg-white" isInvalid={error.totalId} disabled required />
+                        <MokaInputLabel label="기사" value={temp.totalId} inputClassName="bg-white" isInvalid={error.totalId} disabled required />
                     </Col>
                     {/* 기사 제목 (수정불가) */}
                     <Col xs={totalId ? 8 : 6} className="p-0 pl-2">
@@ -210,31 +202,22 @@ const CdnArticleEdit = ({ match }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel
-                            label="메모"
-                            labelWidth={76}
-                            as="textarea"
-                            name="description"
-                            value={temp.description}
-                            onChange={handleChangeValue}
-                            inputProps={{ rows: 7 }}
-                            inputClassName="resize-none"
-                        />
+                        <MokaInputLabel label="메모" as="textarea" name="description" value={temp.description} onChange={handleChangeValue} inputProps={{ rows: 7 }} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="CDN NEWS" labelWidth={76} inputClassName="bg-white" value={temp.cdnUrlNews} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="CDN NEWS" inputClassName="bg-white" value={temp.cdnUrlNews} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="CDN MNEWS" labelWidth={76} inputClassName="bg-white" value={temp.cdnUrlMnews} inputProps={{ plaintext: true }} disabled />
+                        <MokaInputLabel label="CDN MNEWS" inputClassName="bg-white" value={temp.cdnUrlMnews} inputProps={{ plaintext: true }} disabled />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0 d-flex align-items-center">
-                        <MokaInputLabel label="등록정보" labelWidth={76} as="none" />
+                        <MokaInputLabel label="등록정보" as="none" />
                         <p className="mb-0 mr-2">{temp.regId}</p>
                         <p className="mb-0">{temp.regDt}</p>
                     </Col>

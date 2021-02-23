@@ -20,8 +20,7 @@ export default [
         field: 'thumbnail',
         headerClass: 'ag-grid-sns-meta-header',
         cellRenderer: 'imageRenderer',
-        cellStyle: { paddingTop: '1px', paddingBottom: '1px' },
-        width: 90,
+        width: 78,
     },
     {
         headerName: '기사제목',

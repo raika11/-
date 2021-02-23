@@ -6,7 +6,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpEnvCopyright;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_box_article;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_ds_timeline;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_photo_center;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_photo_left;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_photo_right;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_photofix;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_ab_sub_heading;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_eGul;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_emphasis;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_jhot_click;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_tag_interview;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_tag_photobundle;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_tag_photoslide;
+import jmnet.moka.web.bulk.task.bulkdump.process.testdata.TestData_tag_quotation;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
+import jmnet.moka.web.bulk.util.BulkTagUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -25,6 +42,13 @@ import org.junit.Test;
 @SuppressWarnings("ALL")
 @Slf4j
 public class BulkJoongangArticleTest {
+    BulkJoongangArticle bulkJoongangArticle;
+
+    public BulkJoongangArticleTest() {
+        this.bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
+        this.bulkJoongangArticle.getTotalId().setData("기사토탈Id");
+    }
+
     @Test
     public void processContentTag_ab_dynamic_chart() {
         final String testString = "before Text" +
@@ -43,69 +67,6 @@ public class BulkJoongangArticleTest {
                 "middle Text" +
                 "<img alt=\"\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202004/26/Second.jpg\"/>after Test";
 
-        log.info(bulkJoongangArticle.getContentHtml().toString());
-        assertEquals(bulkJoongangArticle.getContentHtml().toString(), successString);
-    }
-
-    @Test
-    public void processContentTag_tag_photoslide() {
-
-        final String testString = "&nbsp;Before Text<br /> " +
-                "<div class=\"tag_photoslide\">" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image01.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image02.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image03.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image04.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image05.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "</div><br /><br /><div class=\"article_msn_ad\" id=\"__inline_ms_da_ad__\" style=\"padding-top:0px;margin-top:0px;\"></div><span id=\"spnAddLinkArticleContent\"></span>" +
-                "&nbsp;Middle Text<br /> " +
-                "<div class=\"tag_photoslide\">" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image11.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image12.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image13.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image14.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "<div class=\"ab_photo photo_center\" style=\"width: 580px;\"><div class=\"image\"><img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image15.jpg\"><span class=\"mask\"></span></div><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "</div><br /><br /><div class=\"article_msn_ad\" id=\"__inline_ms_da_ad__\" style=\"padding-top:0px;margin-top:0px;\"></div><span id=\"spnAddLinkArticleContent\"></span>" +
-                "&nbsp;after Text<br /> ";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getContentHtml().setData(testString);
-        bulkJoongangArticle.processContentTag_tag_photoslide();
-
-        final String successString = "&nbsp;Before Text<br /> <img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image01.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image02.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image03.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image04.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image05.jpg\">\r\n"
-                + "<br /><br /><div class=\"article_msn_ad\" id=\"__inline_ms_da_ad__\" style=\"padding-top:0px;margin-top:0px;\"></div><span id=\"spnAddLinkArticleContent\"></span>&nbsp;Middle Text<br /> <img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image11.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image12.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image13.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image14.jpg\">\r\n"
-                + "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202010/16/image15.jpg\">\r\n"
-                + "<br /><br /><div class=\"article_msn_ad\" id=\"__inline_ms_da_ad__\" style=\"padding-top:0px;margin-top:0px;\"></div><span id=\"spnAddLinkArticleContent\"></span>&nbsp;after Text<br /> ";
-
-        log.info(bulkJoongangArticle.getContentHtml().toString());
-        assertEquals(bulkJoongangArticle.getContentHtml().toString(), successString);
-    }
-
-    @Test
-    public void processContentTag_ab_photofix() {
-        // 실제 테스트 데이터 찾지 못함..
-        final String testString = "before Text" +
-                "<div class=\"ab_photofix\"> <style background-image:url('https://pds.joins.com/news/component/htmlphoto_mmdata/202012/11/image01.jpg')></style><span class=\"mask\"></span><p class=\"caption\">차이나랩 카드뉴스</p></div>" +
-                "middle Text" +
-                "<div class=\"ab_photofix\"> <style background-image:url('https://pds.joins.com/news/component/htmlphoto_mmdata/202012/11/image02.jpg')></style><span class=\"mask\"></span><p class=\"caption\">차이나랩 카드뉴스2</p></div>" +
-                "end Text ";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getContentHtml().setData(testString);
-        bulkJoongangArticle.processContentTag_ab_photofix();
-
-        final String successString = "before Text" +
-                "<img alt=\"차이나랩 카드뉴스\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202012/11/image01.jpg\"/>" +
-                "middle Text" +
-                "<img alt=\"차이나랩 카드뉴스2\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/202012/11/image02.jpg\"/>" +
-                "end Text ";
         log.info(bulkJoongangArticle.getContentHtml().toString());
         assertEquals(bulkJoongangArticle.getContentHtml().toString(), successString);
     }
@@ -167,23 +128,6 @@ public class BulkJoongangArticleTest {
     }
 
     @Test
-    public void processContentTag_tag_interview() {
-        final String testString = "before Text " +
-                "<div class=\"tag_interview\"><div class=\"tag_question\">코로나19를 가까이에서 본 것 같습니다.</div></div>   " +
-                "<div class=\"tag_interview\"><div class=\"tag_answer\">“나라고 코로나 블루가 없는 건 아니에요. 불안, 스트레스, 우울증이 있어요. 근데 음악이 나를 살렸어요. 엄청 살렸어요. 근데 참 희한하죠. 이럴 때 혼자 피아노 치고, 프로듀싱도 하고 뭔가 만들어낼 수 있는 성악가가 많지는 않을텐데요. 어렸을 때 엄마가 하도 강요해서 하루 8시간씩 피아노 쳤던 게 이번에 도움이 된 거에요.”</div></div>   " +
-                "middle Text " +
-                "<div class=\"tag_interview\"><div class=\"tag_question\">음악이 어떻게 살리던가요.</div></div>   " +
-                "<div class=\"tag_interview\"><div class=\"tag_answer\">“아주 중요한 문제에요. 음악을 딱 들으면 그 시대, 사회, 역사가 들리잖아요. 클래식 음악만 그런 건 아니에요. BTS, 블랙핑크도 저는 공부하면서 들어요. 현실이랑 다른 경험을 하면 편안해지죠. 마법적인 힘이에요. 그래서 온라인 콘서트를 통해서라도 사람들을 어루만져주고, ‘괜찮아, 잘될거야’하고 이야기해주고 싶었어요. 제 미션으로 생각하죠.”</div></div>" +
-                "end Text ";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getContentHtml().setData(testString);
-        bulkJoongangArticle.processContentTag_tag_interview();
-
-        log.info(bulkJoongangArticle.getContentHtml().toString());
-    }
-
-    @Test
     public void processContentTag_ab_related_article() {
         final String testString = "before Text " +
                 "<div class=\"ab_related_article\"><div class=\"hd\"><strong>관련기사 1</strong></div><div class=\"bd\"><ul class=\"text_type\"><li><strong class=\"headline\"><a href=\"https://news.joins.com/article/23254351\">[인사] 중앙그룹 1</a></strong></li></ul></div></div>" +
@@ -198,21 +142,6 @@ public class BulkJoongangArticleTest {
         final String successString = "before Text middle Text end Text ";
         log.info(bulkJoongangArticle.getContentHtml().toString());
         assertEquals(bulkJoongangArticle.getContentHtml().toString(), successString);
-    }
-
-    @Test
-    public void processImageBulkFlag() {
-        final String testString = "\r\n\r\n\r\n<div id=\"adiContents\" itemprop=\"articleBody\">\n"
-                + "\t\t\t\t\t\t\t<div class=\"tag_photobundle\"> <img alt=\"4월18일부터 20일까지 중앙일보가 연속보도한 &#39;평창 올림픽 현지 실태 시리즈&#39;\" caption=\"4월18일부터 20일까지 중앙일보가 연속보도한 &#39;평창 올림픽 현지 실태 시리즈&#39;\" index=\"0\" iscoverimage=\"false\" link=\"\" linktarget=\"\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/201707/11/b842c6fe-175c-4301-b1a7-bc2623bf42d4.jpg\" wrappercss=\"photo_center\" wrapperwidth=\"580px\"/> <img alt=\"4월18일부터 20일까지 중앙일보가 연속보도한 &#39;평창 올림픽 현지 실태 시리즈&#39;\" caption=\"4월18일부터 20일까지 중앙일보가 연속보도한 &#39;평창 올림픽 현지 실태 시리즈&#39;\" index=\"1\" iscoverimage=\"false\" link=\"\" linktarget=\"\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/201707/11/4e05bdd7-f6ac-4763-a868-46eb233f989d.jpg\" wrappercss=\"photo_center\" wrapperwidth=\"580px\"/> <img alt=\"4월18일부터 20일까지 중앙일보가 연속보도한 &#39;평창 올림픽 현지 실태 시리즈&#39;\" caption=\"4월18일부터 20일까지 중앙일보가 연속보도한 &#39;평창 올림픽 현지 실태 시리즈&#39;\" index=\"2\" iscoverimage=\"false\" link=\"\" linktarget=\"\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/201707/11/db5313fe-5b43-4978-86e2-c734a7a498a4.jpg\" wrappercss=\"photo_center\" wrapperwidth=\"580px\"/>  </div>"
-                + "한국체육기자연맹(회장 정희돈)은 2017년 2분기 체육기자상 수상작으로 기획부문에 중앙일보 박린, 김지한, 김원 기자가 공동으로 취재한 '평창올림픽 현지 실태 시리즈'와 JTBC 전영희 기자의 '만취난동 한화 김동선 솜방망이 처벌 논란' 등 두 편을 선정했다고 11일 밝혔다. 보도부문에는 스포츠서울 장강훈 기자의 '한화 김성근 감독 전격 경질, 이상군 대행체제'가 수상작으로 뽑혔다.<br />&nbsp;<br />박린 기자 등은 지난 4월 평창동계올림픽을 300여일 앞두고 평창 현지를 찾아가 미흡한 준비실태를 3회에 걸쳐 고발했다. 숙박업소들의 바가지 요금, 외국인이 알아보기 힘든 메뉴판, 대책없는 대중교통 등 문제점들을 꼼꼼하게 취재하고 개선책을 제시했다. 전영희 기자는 김승연 한화 회장의 셋째 아들인 승마선수 김동선에 대한 솜방망이 처벌과 체육연금 부당 수령 등의 기사를 4회에 걸쳐 추적보도함으로써 체육계의 공정성에 대한 문제의식을 환기시켰다는 평을 받았다.<br />&nbsp;<br />장강훈 기자는 올시즌 프로야구 최대의 이슈 가운데 하나였던 김성근 전 한화 감독의 거취문제를 가장 먼저 기사로 다뤄 폭발적인 반응을 일으켰다. 시상식은 오는 17일 오후 3시 프레스센터 19층 기자클럽에서 열린다.<br />김효경 기자 kaypubb@joongang.co.kr<br /><br /><div class=\"article_msn_ad\" id=\"__inline_ms_da_ad__\" style=\"padding-top:0px;margin-top:0px;\"></div><br /><span id=\"spnAddLinkArticleContent\"></span>\n"
-                + "\t\t\t\t\t\t</div>";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.setImageBulkFlag("N");
-        bulkJoongangArticle.getContentHtml().setData(testString);
-        bulkJoongangArticle.processImageBulkFlag();
-
-        log.info(bulkJoongangArticle.getContentHtml().toString());
     }
 
     @Test
@@ -262,9 +191,14 @@ public class BulkJoongangArticleTest {
                 "<div class=\"tag_vod\" data-id=\"6219382066001?ro=1&rc=2\" data-service=\"ovp\" data-thumPath=\"\"        data-old-type=\"ooyala\" ></div>" +
                 "end Text ";
 
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testString, "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
 
         Map<String, String> daumVideoMap = new HashMap<>();
         Map<String, String> daumVideoKakaoTvMap = new HashMap<>();
@@ -292,102 +226,216 @@ public class BulkJoongangArticleTest {
                 "<div class=\"tag_vod\" data-id=\"6219382066001?ro=1&rc=2\" data-service=\"ovp\" data-thumPath=\"\"        data-old-type=\"ooyala\" ></div>" +
                 "end Text ";
 
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
-
         bulkJoongangArticle.processContentZum();
 
         log.info(bulkJoongangArticle.getContentHtmlZum().toString());
     }
 
     @Test
-    public void processContentNaverXml() {
-        final String testString = "before Text " +
-                "<div class=\"image\"><img alt=\"기사 이미지\" data-src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/201509/21/image01.jpg\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/201509/21/image01.jpg\"  data-type=\"article\" ><span class=\"mask\"></span></div></div>　<br> <br>타오 [사진 웨이보 영상 캡처]" +
-                "<div class=\"tag_vod\" data-id=\"https://www.youtube.com/embed/SfQNwPK5PWM\" data-service=\"youtube\" data-thumPath=\"\"        data-old-type=\"\" ></div>" +
-                "<div class=\"tag_vod\" data-id=\"https://www.naver케스트/확인안됨.wmv\" data-service=\"navercast\" data-thumPath=\"\"        data-old-type=\"\" ></div>" +
-                "middle Text " +
-                "<table class=\"ab_table\">\t<tbody>\t\t<tr>\t\t\t<td><b>브랜드</b></td>\t\t\t<td><b>제조사</b></td>\t\t</tr>\t\t<tr>\t\t\t<td>003</td>\t\t\t<td>오카모토</td>\t\t</tr>\t</tbody></table>" +
-                "<iframe frameborder=\"0\" height=\"360px\" scrolling=\"no\" src=\"http://videofarm.daum.net/controller/video/viewer/Video.html?vid=s2999EVEVEO3KsoeG0e1Em1&amp;play_loc=undefined\" title=\"쉽지 않은 동메달 그랜드 슬램, 박은철 선수 통한 &#91;우리동네 예체능&#93; 166회 20160726\" width=\"640px\"></iframe>" +
-                "<div class=\"tag_photobundle\"> <img alt=\"기사 이미지\" caption=\"4월18일\" index=\"0\" iscoverimage=\"false\" link=\"\" linktarget=\"\" src=\"https://pds.joins.com/news/component/htmlphoto_mmdata/201707/11/image01.jpg\" wrappercss=\"photo_center\" wrapperwidth=\"580px\"/>  </div>" +
-                "<iframe class=\"ab_map\" frameborder=\"0\" height=\"480\" src=\"https://www.google.com/maps/embed/v1/place?q=미국령+군소+제도+팔미라+아톨+팔미라 아톨&key=AIzaSyCV7E_6L86jxQhEdkYL4umEfgWG8cjxTqw\" width=\"100%\"></iframe>" +
-                "<div class=\"tag_vod\" data-id=\"6219382066001?ro=1&rc=2\" data-service=\"ovp\" data-thumPath=\"\"        data-old-type=\"ooyala\" ></div>" +
-                "end Text " +
-                "<div class=\"tag_vod\" data-id=\"6219382066001?ro=1&rc=2\" data-service=\"ovp\" data-thumPath=\"\"        data-old-type=\"ooyala\" ></div>" +
-                "<div class=\"ab_box_article\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"><span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span><div class=\"ab_box_titleline\"></div></div><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\">&lsquo;노브래지어1 챌린지&rsquo;에 동참한</div><div class=\"tag_quotation\">ID 'bend***'</div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div>" +
-                "e 글 중심 중간 " +
-                "<div class=\"ab_box_article\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"><span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span><div class=\"ab_box_titleline\"></div></div><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\">&lsquo;노브래지어2 챌린지&rsquo;에 동참한</div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div>";
+    public void processContentNaverXml_ad_box_article() {
+        final TestData testData = new TestData_ab_box_article();
+        testData.test( bulkJoongangArticle.processContentNaverXmlTag_ab_box_article(testData.getTestString()) );
+    }
 
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
+    @Test
+    public void processContentTag_ab_ds_timeline() {
+        final TestData testData = new TestData_ab_ds_timeline();
+        bulkJoongangArticle.getContentHtml().setData(testData.getTestString());
+        bulkJoongangArticle.processContentTag_ab_ds_timeline();
+        testData.test( bulkJoongangArticle.getContentHtml().getData() );
+    }
 
-        bulkJoongangArticle.processContentNaverXml(testString);
-
-        //log.info("before ==> {}", bulkJoongangArticle.getContentHtmlZum().toString());
+    @Test
+    public void processContent_JHotClick() {
+        final TestData testData = new TestData_jhot_click();
+        bulkJoongangArticle.setBulkDumpEnvCopyright( new BulkDumpEnvCopyright());
+        bulkJoongangArticle.getBulkDumpEnvCopyright().setJhotClick(testData.getTestString());
+        bulkJoongangArticle.processContent_JHotClick(10);
     }
 
     @Test
     public void processContentNaverXmlTag_ab_box_article_eGul() {
-        final String testString = "first\r\n" +
-                "<div class=\"ab_box_article ab_division division_left\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#네이버</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><b><a href=\"https://news.naver.com/main/read.nhn?mode=LSD&amp;mid=sec&amp;sid1=102&amp;oid=052&amp;aid=0001534777\" target=\"_blank\">저건 오히려</a></b></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"만삭 아내를 위해 남편이 해야 될 일 아닌가? 만삭이면 애도 언제 나올지도 모르는 데다 숨쉬기도 힘들고 양말도 혼자 못 신는데 가족 구성원이 해야지. 쓸데없는 거 빼고 성별 바꿔서 올려라.\"<br> <br/> <div class=\"tag_quotation\"> ID 'xmfl****' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_right\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#다음</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><b><a href=\"https://news.v.daum.net/v/20210105210848961\" target=\"_blank\">이건 남자들도</a></b><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"화내야 하네. 속옷 하나 못 챙겨 입고 생필품 하나 못 챙기고, 와이프 없으면 상한 반찬 먹다 굶어 죽는 사람으로 표현해놨네.\" <br/> <div class=\"tag_quotation\"> &nbsp;ID '하늘잃은 하얀새' </div>  &nbsp; <br/>  &nbsp; <br/> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_left\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#에펨코리아</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><a href=\"https://www.fmkorea.com/3309033121\" target=\"_blank\"><b>개인 블로그에나&nbsp;</b></a><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"올릴 정보를 정부가 운영하는 홈페이지에 올려.\" <br/>  &nbsp; <br/> <div class=\"tag_quotation\"> ID '하늘bb' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_right\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#인스티즈</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><a href=\"https://www.instiz.net/pt/6898783?page=1\" target=\"_blank\"><b>분명 문제제기한</b></a><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"직원들 있었을 텐데 다 묵살한 듯.\" <br/>  &nbsp; <br/> <div class=\"tag_quotation\"> ID '핑크복숭아'&nbsp; </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_left\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#다음</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><b><a href=\"https://news.v.daum.net/v/20210106103212029\" target=\"_blank\">몸매 관리는</a></b><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"개인의 선택이지, 무슨 임신 전 작은 옷을 걸어놓고 자극 받으래. 애 낳고 출산 전과 다른 몸 상태로 산후 우울증 오는 건 알고 있나. 출산 전 옷 보면서 자극? 우울감이 먼저 오겠다.\" <br/> <div class=\"tag_quotation\"> ID '554670734' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_right\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#네이버</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><a href=\"https://news.naver.com/main/read.nhn?mode=LSD&amp;mid=sec&amp;sid1=102&amp;oid=011&amp;aid=0003852177\" target=\"_blank\" style=\"\"><b>이런 나라에서</b></a><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"결혼한다는 것은 미친 짓입니다. 여성들이 독신을 꿈꾸는 이유가 다 있는 겁니다.\" <br/> <div class=\"tag_quotation\"> ID 'kwy1****' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><hr>  장유경 인턴기자&nbsp;  <br/> <div class=\"ab_box_article \"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">지금 커뮤니티에서 큰 화제가 되고 있는 이슈들입니다. 제목을 클릭하면 원글로 이동합니다.</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\">&nbsp;커뮤니티 HOT 이슈는...</div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> &nbsp; <br/>  &nbsp; <br/>  1. 인스티즈 <b></b><b><a href=\"https://www.instiz.net/pt/6897683?page=1&amp;srt=3&amp;k=\">〈지금 트위터에서 핫 이슈가 되고 있는 경상도 엄마 트윗〉</a></b> <br/>  &nbsp; <br/>  2. 네이트판<a href=\"https://pann.nate.com/talk/356671318\" target=\"_blank\"><b> 〈올해 30살 된 아이돌들〉</b></a> <br/>  &nbsp; <br/>  3. 클리앙<a href=\"https://www.clien.net/service/board/park/15769683?od=T33&amp;po=3&amp;category=&amp;groupCd=community\" target=\"_blank\"><b> 〈부엉이 변신 모습〉</b></a> <br/>  &nbsp; <br/>  4. 뽐뿌 <a href=\"http://www.ppomppu.co.kr/zboard/view.php?id=humor&amp;no=424192\" target=\"_blank\"><b>〈아들 기죽이기 싫었던 아버지〉</b></a> <br/>  &nbsp; <br/>  5. 보배드림 <a href=\"https://www.bobaedream.co.kr/view?code=best&amp;No=383829&amp;vdate=\" target=\"_blank\"><b>〈옛날 지하철 표 구매법〉</b></a> <br/> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div>" +
-                "\r\n\r\nmiddle\r\n" +
-                "<div class=\"ab_box_article ab_division division_left\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#네이거</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><b><a href=\"https://news.naver.com/main/read.nhn?mode=LSD&amp;mid=sec&amp;sid1=102&amp;oid=052&amp;aid=0001534777\" target=\"_blank\">저건 오히려</a></b></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"만삭 아내를 위해 남편이 해야 될 일 아닌가? 만삭이면 애도 언제 나올지도 모르는 데다 숨쉬기도 힘들고 양말도 혼자 못 신는데 가족 구성원이 해야지. 쓸데없는 거 빼고 성별 바꿔서 올려라.\"<br> <br/> <div class=\"tag_quotation\"> ID 'xmfl****' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_right\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#다음</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><b><a href=\"https://news.v.daum.net/v/20210105210848961\" target=\"_blank\">이건 남자들도</a></b><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"화내야 하네. 속옷 하나 못 챙겨 입고 생필품 하나 못 챙기고, 와이프 없으면 상한 반찬 먹다 굶어 죽는 사람으로 표현해놨네.\" <br/> <div class=\"tag_quotation\"> &nbsp;ID '하늘잃은 하얀새' </div>  &nbsp; <br/>  &nbsp; <br/> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_left\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#에펨코리아</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><a href=\"https://www.fmkorea.com/3309033121\" target=\"_blank\"><b>개인 블로그에나&nbsp;</b></a><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"올릴 정보를 정부가 운영하는 홈페이지에 올려.\" <br/>  &nbsp; <br/> <div class=\"tag_quotation\"> ID '하늘bb' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_right\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#인스티즈</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><a href=\"https://www.instiz.net/pt/6898783?page=1\" target=\"_blank\"><b>분명 문제제기한</b></a><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"직원들 있었을 텐데 다 묵살한 듯.\" <br/>  &nbsp; <br/> <div class=\"tag_quotation\"> ID '핑크복숭아'&nbsp; </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_left\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#다음</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><b><a href=\"https://news.v.daum.net/v/20210106103212029\" target=\"_blank\">몸매 관리는</a></b><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"개인의 선택이지, 무슨 임신 전 작은 옷을 걸어놓고 자극 받으래. 애 낳고 출산 전과 다른 몸 상태로 산후 우울증 오는 건 알고 있나. 출산 전 옷 보면서 자극? 우울감이 먼저 오겠다.\" <br/> <div class=\"tag_quotation\"> ID '554670734' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><div class=\"ab_box_article ab_division division_right\"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">#네이버</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\"><a href=\"https://news.naver.com/main/read.nhn?mode=LSD&amp;mid=sec&amp;sid1=102&amp;oid=011&amp;aid=0003852177\" target=\"_blank\" style=\"\"><b>이런 나라에서</b></a><br></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> \"결혼한다는 것은 미친 짓입니다. 여성들이 독신을 꿈꾸는 이유가 다 있는 겁니다.\" <br/> <div class=\"tag_quotation\"> ID 'kwy1****' </div> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div><hr>  장유경 인턴기자&nbsp;  <br/> <div class=\"ab_box_article \"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">지금 커뮤니티에서 큰 화제가 되고 있는 이슈들입니다. 제목을 클릭하면 원글로 이동합니다.</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\">&nbsp;커뮤니티 HOT 이슈는...</div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> &nbsp; <br/>  &nbsp; <br/>  1. 인스티즈 <b></b><b><a href=\"https://www.instiz.net/pt/6897683?page=1&amp;srt=3&amp;k=\">〈지금 트위터에서 핫 이슈가 되고 있는 경상도 엄마 트윗〉</a></b> <br/>  &nbsp; <br/>  2. 네이트판<a href=\"https://pann.nate.com/talk/356671318\" target=\"_blank\"><b> 〈올해 30살 된 아이돌들〉</b></a> <br/>  &nbsp; <br/>  3. 클리앙<a href=\"https://www.clien.net/service/board/park/15769683?od=T33&amp;po=3&amp;category=&amp;groupCd=community\" target=\"_blank\"><b> 〈부엉이 변신 모습〉</b></a> <br/>  &nbsp; <br/>  4. 뽐뿌 <a href=\"http://www.ppomppu.co.kr/zboard/view.php?id=humor&amp;no=424192\" target=\"_blank\"><b>〈아들 기죽이기 싫었던 아버지〉</b></a> <br/>  &nbsp; <br/>  5. 보배드림 <a href=\"https://www.bobaedream.co.kr/view?code=best&amp;No=383829&amp;vdate=\" target=\"_blank\"><b>〈예엣날 지하철 표 구매법〉</b></a> <br/> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div>" +
-                "\r\n\r\nlast";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
-
-        log.info( "output {}", bulkJoongangArticle.processContentNaverXmlTag_ab_box_article_eGul(testString) );
-    }
-
-    @Test
-    public void processContentNaverXml_ad_box_article() {
-        final String testString = "first\r\n" +
-                "<div class=\"ab_box_article \"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">지금 커뮤니티에서 큰 화제가 되고 있는 이슈들입니다. 제목을 클릭하면 원글로 이동합니다.</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\">&nbsp;커뮤니티 HOT 이슈는...</div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> &nbsp; <br/>  &nbsp; <br/>  1. 인스티즈 <b></b><b><a href=\"https://www.instiz.net/pt/6897683?page=1&amp;srt=3&amp;k=\">〈지금 트위터에서 핫 이슈가 되고 있는 경상도 엄마 트윗〉</a></b> <br/>  &nbsp; <br/>  2. 네이트판<a href=\"https://pann.nate.com/talk/356671318\" target=\"_blank\"><b> 〈올해 30살 된 아이돌들〉</b></a> <br/>  &nbsp; <br/>  3. 클리앙<a href=\"https://www.clien.net/service/board/park/15769683?od=T33&amp;po=3&amp;category=&amp;groupCd=community\" target=\"_blank\"><b> 〈부엉이 변신 모습〉</b></a> <br/>  &nbsp; <br/>  4. 뽐뿌 <a href=\"http://www.ppomppu.co.kr/zboard/view.php?id=humor&amp;no=424192\" target=\"_blank\"><b>〈아들 기죽이기 싫었던 아버지〉</b></a> <br/>  &nbsp; <br/>  5. 보배드림 <a href=\"https://www.bobaedream.co.kr/view?code=best&amp;No=383829&amp;vdate=\" target=\"_blank\"><b>〈옛날 지하철 표 구매법〉</b></a> <br/> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div>" +
-                "\r\n\r\nmiddle\r\n" +
-                "<div class=\"ab_box_article \"><div class=\"ab_box_inner\"><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div><div class=\"ab_box_title\"> <span class=\"ab_box_bullet\"></span> <span class=\"dim\" style=\"display: none;\">■</span> <div class=\"ab_box_titleline\">지금 커뮤니티에서 큰 화제가 되고 있는 이슈들입니다. 제목을 클릭하면 원글로 이동합니다.</div></div><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><span class=\"dim\" style=\"display: none;\">「</span><div class=\"ab_box_content\"><div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div><div class=\"ab_sub_headingline\">&nbsp;커뮤니티 HOT 이슈는...</div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div> &nbsp; <br/>  &nbsp; <br/>  1. 인스티즈 <b></b><b><a href=\"https://www.instiz.net/pt/6897683?page=1&amp;srt=3&amp;k=\">〈지금 트위터에서 핫 이슈가 되고 있는 경상도 엄마 트윗〉</a></b> <br/>  &nbsp; <br/>  2. 네이트판<a href=\"https://pann.nate.com/talk/356671318\" target=\"_blank\"><b> 〈올해 30살 된 아이돌들〉</b></a> <br/>  &nbsp; <br/>  3. 클리앙<a href=\"https://www.clien.net/service/board/park/15769683?od=T33&amp;po=3&amp;category=&amp;groupCd=community\" target=\"_blank\"><b> 〈부엉이 변신 모습〉</b></a> <br/>  &nbsp; <br/>  4. 뽐뿌 <a href=\"http://www.ppomppu.co.kr/zboard/view.php?id=humor&amp;no=424192\" target=\"_blank\"><b>〈아들 기죽이기 싫었던 아버지〉</b></a> <br/>  &nbsp; <br/>  5. 보배드림 <a href=\"https://www.bobaedream.co.kr/view?code=best&amp;No=383829&amp;vdate=\" target=\"_blank\"><b>〈예엣날 지하철 표 구매법〉</b></a> <br/> </div><span class=\"dim\" style=\"display: none;\">」</span><div class=\"dim\" style=\"display: none;\"><br />&nbsp;</div></div></div>" +
-                "\r\n\r\nlast";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
-
-        log.info( "output {}", bulkJoongangArticle.processContentNaverXmlTag_ab_box_article(testString) );
-    }
-
-    @Test
-    public void processContentNaverXmlTag_etc() {
-        final String testString = "first\r\n"
-                + "  <div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div>\r\n"
-                + "  <div class=\"ab_sub_headingline\"><h2>  중간제목 스타일적용&nbsp;  </h2></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div>   &nbsp;  <br/>\r\n"
-                + "middle\r\n"
-                + "  <div class=\"ab_sub_heading\"><div class=\"dim\" style=\"display: none;\"><br/>&nbsp;</div><div class=\"dim\" style=\"display: none;\">━<br>&nbsp;</div>\r\n"
-                + "  <div class=\"ab_sub_headingline\"><h2>  중간제목 스타일적용&nbsp;  </h2></div><div class=\"dim\" style=\"display: none;\"><br>&nbsp;</div></div>   &nbsp;  <br/>\r\n"
-                + "last\r\n";
-
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
-
-        log.info( "output {}", bulkJoongangArticle.processContentNaverXmlTag_etc(testString) );
+        final TestData testData = new TestData_eGul();
+        testData.test(
+                bulkJoongangArticle.processContentNaverXmlTag_etc(
+                bulkJoongangArticle.processContentNaverXmlTag_ab_box_article(
+                bulkJoongangArticle.processContentNaverXmlTag_ab_box_article_eGul(testData.getTestString())) ));
     }
 
     @Test
     public void processContentNaverXmlTag_ab_emphasis() {
-        final String testString = "first\n"
-                + "  <div class=\"ab_emphasis\"><span class=\"ab_emphasis_dim_lt\">「</span><p class=\"ab_emphasis_content\">  \"세계의 공장? 까짓 거 안 해. 우리끼리 잘 살 수 있어.\"  </p><span class=\"ab_emphasis_dim_rt\">」</span></div>\n"
-                + "middle\n"
-                + "  <div class=\"ab_emphasis\"><span class=\"ab_emphasis_dim_lt\">「</span><p class=\"ab_emphasis_content\">  \"세계의 공장? 까짓 거 안 해. 우리끼리 잘 살 수 있어.\"  </p><span class=\"ab_emphasis_dim_rt\">」</span></div>\n"
-                + "last\n";
+        final TestData testData = new TestData_emphasis();
 
-        BulkJoongangArticle bulkJoongangArticle = new BulkJoongangArticle(new TotalVo<BulkDumpTotalVo>(new BulkDumpTotalVo()));
-        bulkJoongangArticle.getTotalId().setData("기사토탈Id");
-        bulkJoongangArticle.getContentHtml().setData(testString);
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
 
-        log.info( "output {}", bulkJoongangArticle.processContentNaverXmlTag_ab_emphasis(testString) );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule( tmpContentHtml, "<p class=\"caption\">", "</p>");
+        tmpContentHtml = tmpContentHtml.replace("<h2>", "")
+                .replace("</h2>", "");
 
+        testData.test(
+                bulkJoongangArticle.processContentNaverXmlTag_etc(
+                bulkJoongangArticle.processContentNaverXmlTag_ab_emphasis(tmpContentHtml)));
+    }
+
+    @Test
+    public void processContentTag_ab_photofix() {
+        final TestData testData = new TestData_ab_photofix();
+
+        bulkJoongangArticle.getContentHtml().setData(testData.getTestString());
+        bulkJoongangArticle.processContentTag_ab_photofix();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void processImageBulkFlag() {
+        final TestData testData = new TestData_tag_photobundle();
+
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
+
+        bulkJoongangArticle.setImageBulkFlag("Y");
+        bulkJoongangArticle.getContentHtml().setData(tmpContentHtml);
+        bulkJoongangArticle.processImageBulkFlag();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void process_ab_photo_center() {
+        final TestData testData = new TestData_ab_photo_center();
+
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule( tmpContentHtml, "<p class=\"caption\">", "</p>");
+
+        bulkJoongangArticle.setImageBulkFlag("Y");
+        bulkJoongangArticle.getContentHtml().setData(tmpContentHtml);
+        bulkJoongangArticle.processImageBulkFlag();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void processContentNaverXmlTag_etc() {
+        final TestData testData = new TestData_ab_sub_heading();
+
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
+
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule( tmpContentHtml, "<p class=\"caption\">", "</p>");
+        tmpContentHtml = tmpContentHtml.replace("<h2>", "")
+                                       .replace("</h2>", "");
+
+        testData.test(bulkJoongangArticle.processContentNaverXmlTag_etc(tmpContentHtml) );
+    }
+
+    @Test
+    public void processContentTag_tag_photoslide() {
+        final TestData testData = new TestData_tag_photoslide();
+
+        bulkJoongangArticle.getContentHtml().setData(testData.getTestString());
+        bulkJoongangArticle.processContentTag_tag_photoslide();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void process_ab_photo_left() {
+        final TestData testData = new TestData_ab_photo_left();
+
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule( tmpContentHtml, "<p class=\"caption\">", "</p>");
+
+        bulkJoongangArticle.setImageBulkFlag("Y");
+        bulkJoongangArticle.getContentHtml().setData(tmpContentHtml);
+        bulkJoongangArticle.processImageBulkFlag();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void process_ab_photo_right() {
+        final TestData testData = new TestData_ab_photo_right();
+
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule( tmpContentHtml, "<p class=\"caption\">", "</p>");
+
+        bulkJoongangArticle.setImageBulkFlag("Y");
+        bulkJoongangArticle.getContentHtml().setData(tmpContentHtml);
+        bulkJoongangArticle.processImageBulkFlag();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void processContentTag_tag_interview() {
+        final TestData testData = new TestData_tag_interview();
+
+        bulkJoongangArticle.getContentHtml().setData(testData.getTestString());
+        bulkJoongangArticle.processContentTag_tag_interview();
+
+        testData.test(bulkJoongangArticle.getContentHtml().toString());
+    }
+
+    @Test
+    public void processContentNaverXml() {
+        final TestData testData = new TestData_tag_quotation();
+
+        String tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(testData.getTestString(), "class=\"ab_photo photo_center", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, " wrappercss=\"photo_center\"", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "style=\"width:", "px;\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px\"", 50 );
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule(tmpContentHtml, "wrapperwidth=", "px;\"", 50 );
+        tmpContentHtml = tmpContentHtml.replaceAll("(?i)<(\\s)*iframe(\\s)*class(\\s)*=(\\s)*\"ab_map\".*?<(\\s)*/(\\s)*iframe(\\s)*>", "");
+        tmpContentHtml = BulkTagUtil.ripTagWithOrderRule( tmpContentHtml, "<p class=\"caption\">", "</p>");
+
+
+        bulkJoongangArticle.getContentHtml().setData(tmpContentHtml);
+
+        bulkJoongangArticle.processContentNaverXml(tmpContentHtml);
+
+        testData.test(bulkJoongangArticle.getContentHtmlNaver().toString());
     }
 }

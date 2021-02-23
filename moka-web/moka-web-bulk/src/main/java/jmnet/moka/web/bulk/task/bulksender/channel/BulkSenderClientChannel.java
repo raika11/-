@@ -41,9 +41,11 @@ public class BulkSenderClientChannel {
     public void stopChannel() {
         if( executor != null ) {
             try {
-                executor.awaitTermination( 100, TimeUnit.MILLISECONDS );
-                if( !executor.isTerminated())
+                if( !executor.isTerminated()) {
                     executor.shutdownNow();
+                    if (!Thread.interrupted())
+                        executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

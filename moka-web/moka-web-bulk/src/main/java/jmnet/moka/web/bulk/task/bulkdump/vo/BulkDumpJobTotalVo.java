@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvCP;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpResult;
 import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJobFileVo;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkUtil;
@@ -124,15 +125,15 @@ public class BulkDumpJobTotalVo implements Serializable {
         return true;
     }
 
-    public boolean exportDumpJobTotal(String dumpEnvCP, ObjectMapper mapper) {
+    public BulkDumpResult exportDumpJobTotal(String dumpEnvCP, ObjectMapper mapper) {
         final String jobFile = Paths.get(dumpEnvCP, getBulkJobFileName("json")).toString();
         if( jobFile == null )
-            return false;
+            return BulkDumpResult.FAIL_DUMP_CP_TOTAL;
         try {
             mapper.writeValue( new File(jobFile), this );
         } catch (IOException ignore) {
-            return false;
+            return BulkDumpResult.FAIL_DUMP_CP_TOTAL;
         }
-        return true;
+        return BulkDumpResult.SUCCESS;
     }
 }

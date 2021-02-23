@@ -3,10 +3,12 @@ package jmnet.moka.web.bulk.task.bulkdump.service;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
+import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import jmnet.moka.web.bulk.task.bulkdump.process.joinsland.BulkJoinsLandArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
 import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpEnvCopyright;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 
 /**
@@ -29,6 +31,8 @@ public interface BulkDumpService  {
     void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message);
 
     void insertBulkPortalLog( TotalVo<BulkDumpTotalVo> totalVo );
+
+    BulkDumpEnvCopyright getBulkCopyright( BulkDumpEnvTarget bulkDumpEnvTarget );
 
     boolean doGetBulkNewstableJoongang( BulkJoongangArticle article );
     boolean doGetBulkNewstableJoongangEx( BulkJoongangArticleEx article );

@@ -63,6 +63,12 @@ public class BulkDumpTotalVo implements Serializable {
     private int curPortalSenderStatus;
     private String curPortalContent;
 
+    private boolean fromWaitQueue;
+    public BulkDumpTotalVo setFromWaitQueue( boolean fromWaitQueue ) {
+        this.fromWaitQueue = fromWaitQueue;
+        return this;
+    }
+
     public boolean isDdrefValid() {
         //noinspection ConstantConditions,LoopStatementThatDoesntLoop
         do {

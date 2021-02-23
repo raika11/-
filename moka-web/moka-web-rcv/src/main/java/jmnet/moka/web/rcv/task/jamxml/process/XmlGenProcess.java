@@ -4,6 +4,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.task.base.TaskManager;
+import jmnet.moka.web.rcv.task.jamxml.service.PurgeService;
 import jmnet.moka.web.rcv.task.jamxml.service.XmlGenService;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
@@ -31,6 +32,9 @@ public class XmlGenProcess {
             articleTotal.getMainData().getWorkerInfo().setWorkerId("SYSTEM");
 
         XmlGenComponentManager componentManager = new XmlGenComponentManager(taskInputData, articleTotal, taskManager.getRcvConfiguration());
+
+        boolean purge = true;
+
         final String operation = article.getIud().trim();
         switch (operation) {
             case "I":
@@ -47,11 +51,17 @@ public class XmlGenProcess {
                     }
                 }
                 xmlGenService.insertUpdateArticleData(articleTotal, componentManager);
+                purge = !(articleTotal.getInsertMode() > 0);
                 break;
             }
             case "D":
                 xmlGenService.deleteArticleData( articleTotal );
                 break;
+        }
+
+        if( purge ) {
+            final PurgeService purgeService = taskManager.getPurgeService();
+            purgeService.purgeProcess(taskInputData, articleTotal, taskManager.getRcvConfiguration());
         }
     }
 }

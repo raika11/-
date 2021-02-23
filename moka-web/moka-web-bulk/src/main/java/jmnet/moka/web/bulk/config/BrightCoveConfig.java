@@ -26,6 +26,10 @@ public class BrightCoveConfig {
     private String clientId;
     private String clientSecret;
     private String accessTokenUrl;
-    private String videoSourceUrl;
+    private String apiUrl;
     private int videoLimitSize;
+
+    public String getVideoSourceUrl() {
+        return this.apiUrl + "/sources";
+    }
 }

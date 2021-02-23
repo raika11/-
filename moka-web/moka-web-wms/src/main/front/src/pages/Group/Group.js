@@ -14,13 +14,16 @@ const MemberGroupList = React.lazy(() => import('./GroupList'));
 const GroupEdit = React.lazy(() => import('./GroupEdit'));
 const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
 
+/**
+ * 그룹 관리
+ */
 const Group = ({ match }) => {
     // 히스토리셋팅
     const history = useHistory();
     const dispatch = useDispatch();
 
     // 마스터 그리드 클릭시 초기화 이벤트
-    const handleClickAddGroup = (e) => {
+    const handleClickAddGroup = () => {
         history.push(`${match.path}/add`);
     };
 
@@ -34,13 +37,13 @@ const Group = ({ match }) => {
         <div className="d-flex">
             <Helmet>
                 <title>사용자 그룹관리</title>
-                <meta name="description" content="사용자 그룹관리 페이지 입니다." />
+                <meta name="description" content="사용자 그룹관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             {/*리스트*/}
             <MokaCard title="사용자 그룹관리" width={480} className="mr-gutter" bodyClassName="d-flex flex-column">
-                <div className="mb-2 d-flex justify-content-end">
+                <div className="mb-14 d-flex justify-content-end">
                     <Button variant="positive" onClick={handleClickAddGroup}>
                         등록
                     </Button>
@@ -75,6 +78,7 @@ const Group = ({ match }) => {
                                 { title: '그룹정보', text: 'Info' },
                                 { title: '사용자 목록', icon: <MokaIcon iconName="fal-file-alt" /> },
                             ]}
+                            foldable={false}
                         />
                     )}
                 />

@@ -17,7 +17,7 @@ const GroupChildMemberAgGrid = ({ list, paging, total, page, size, onChangeSearc
 
     return (
         <MokaTable
-            className="article-list overflow-hidden flex-fill"
+            className="ag-grid-rect-checkbox overflow-hidden flex-fill"
             onChangeSearchOption={onChangeSearchOption}
             onRowNodeId={(rowData) => rowData.memberId}
             columnDefs={columnDefs}

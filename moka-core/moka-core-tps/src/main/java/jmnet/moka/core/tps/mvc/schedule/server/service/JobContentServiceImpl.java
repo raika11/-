@@ -60,7 +60,7 @@ public class JobContentServiceImpl implements JobContentService{
     }
 
     @Override
-    public JobContent saveJobContent(JobContent jobContent) {
+    public JobContent insertJobContent(JobContent jobContent) {
         JobContent result = jobContentRepository.save(jobContent);
         try{
             String url = "";

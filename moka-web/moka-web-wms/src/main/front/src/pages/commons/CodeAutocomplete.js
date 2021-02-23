@@ -140,24 +140,29 @@ const CodeAutocomplete = forwardRef((props, ref) => {
         }
     };
 
-    const handleClickSearchIcon = () => {
-        setModalShow(!modalShow);
-    };
+    /**
+     * 검색 아이콘 클릭
+     */
+    const handleClickSearchIcon = () => setModalShow(!modalShow);
 
     /**
      * 코드목록 모달에서 저장 버튼 클릭
      * @param {any} result 단일일 때 object, 여러개일 때 array
      */
     const handleClickSave = (result) => {
-        if (!isMulti) {
-            const findOp = options.find((op) => String(op.value) === String(result.masterCode));
-            if (findOp) {
-                handleChangeValue(findOp);
+        if (result) {
+            if (!isMulti) {
+                const findOp = options.find((op) => String(op.value) === String(result.masterCode));
+                if (findOp) {
+                    handleChangeValue(findOp);
+                } else {
+                    handleChangeValue(null);
+                }
             } else {
-                handleChangeValue(null);
+                // 멀티일 경우 (list 채로 보냄)
+                handleChangeValue(result);
             }
         } else {
-            // 멀티일 경우 (list 채로 보냄)
             handleChangeValue(result);
         }
     };

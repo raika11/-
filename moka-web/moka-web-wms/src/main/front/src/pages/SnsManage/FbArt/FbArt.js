@@ -21,7 +21,7 @@ const FbArt = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" header={false} bodyClassName="d-flex flex-column">
+            <MokaCard width={1030} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" title="Facebook 전송기사">
                 <Suspense fallback={<MokaLoader />}>
                     <FbArtList />
                 </Suspense>

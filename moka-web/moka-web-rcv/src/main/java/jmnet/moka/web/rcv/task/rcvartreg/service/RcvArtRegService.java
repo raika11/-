@@ -25,7 +25,7 @@ public interface RcvArtRegService {
 
     void setUspRcvArticleIudDelete(Map<String, Object> compMap);
 
-    void getUspRcvCodeConvSelByRid(JamArticleTotalVo articleTotal);
+    List<Map<String, String>> getUspRcvCodeConvSelByRid(JamArticleTotalVo articleTotal);
 
     void getRcvArticleReporters(JamArticleTotalVo articleTotal);
 

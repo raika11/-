@@ -4,6 +4,7 @@ import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpResult;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 
@@ -39,9 +40,9 @@ public class BulkSundayProcess extends BulkProcessCommon<BulkSundayArticle> {
     }
 
     @Override
-    protected boolean doProcess_InsertUpdate(BulkSundayArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_InsertUpdate(TotalVo<BulkDumpTotalVo> totalVo, BulkSundayArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         if( !dumpService.doGetBulkNewstableSunday( article ) )
-            return false;
+            return BulkDumpResult.SKIP_DATABASE;
 
         // HTML 버전도 치환되었던것들 되돌리기 위해서(<br> 태그 \n 개행으로 변환처리포함)
         article.processContent_clearTag();
@@ -68,13 +69,13 @@ public class BulkSundayProcess extends BulkProcessCommon<BulkSundayArticle> {
         if( article.getBulkDumpNewsImageList().size() > 0)
             article.processContent_ImageBulkYn();
 
-        article.processContent_JHotClick();
+        article.processContent_JHotClick(7);
 
-        return true;
+        return BulkDumpResult.SUCCESS;
     }
 
     @Override
-    protected boolean doProcess_Delete(BulkSundayArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
-        return true;
+    protected BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, BulkSundayArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+        return BulkDumpResult.SUCCESS;
     }
 }

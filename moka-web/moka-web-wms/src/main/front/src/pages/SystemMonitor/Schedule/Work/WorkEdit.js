@@ -169,11 +169,11 @@ const WorkEdit = () => {
                     </>
                 )}
                 <div className="d-flex justify-content-center">
-                    <Button variant="positive" className="mr-2">
+                    <Button variant="positive" className="mr-1">
                         {seqNo ? '수정' : '등록'}
                     </Button>
                     {seqNo && (
-                        <Button variant="negative" className="mr-2">
+                        <Button variant="negative" className="mr-1">
                             삭제
                         </Button>
                     )}

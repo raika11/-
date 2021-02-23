@@ -35,13 +35,12 @@
     ]]>
   </delete>
 
-  <select id="callUspRcvCodeConvSelByRid" parameterType="JamArticleTotalVo" statementType="CALLABLE">
+  <select id="callUspRcvArticleCodeSel" parameterType="JamArticleTotalVo" resultType="HashMap"
+    statementType="CALLABLE">
     <![CDATA[
     {
-      call USP_RCV_CODE_CONV_SEL_BY_RID(
-      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{curMasterCode, mode=OUT, jdbcType=VARCHAR, javaType=string}
+      call USP_RCV_ARTICLE_CODE_SEL(
+      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string}
       )
       }
     ]]>

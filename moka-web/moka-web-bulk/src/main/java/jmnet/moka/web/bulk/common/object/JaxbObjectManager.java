@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import jmnet.moka.web.bulk.common.vo.BasicVo;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJHot;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,6 +30,7 @@ public class JaxbObjectManager {
     static {
         try {
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(BulkDumpEnv.class));
+            listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(BulkDumpJHot.class));
         } catch (JAXBException e) {
             log.error("JaxbObjectManager Exeption {}", e.getMessage());
             e.printStackTrace();

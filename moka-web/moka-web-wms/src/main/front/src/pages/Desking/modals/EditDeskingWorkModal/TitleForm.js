@@ -63,12 +63,12 @@ const TitleForm = ({ show, mappingData, temp, onChange, fontListType, error }) =
                     className="mb-0 w-100"
                     value={temp[field]}
                     onChange={onChange}
-                    isInvalid={errorCheck && error[field]}
+                    isInvalid={errorCheck && error?.[field]}
                     {...mappingProps}
                 />
             </Col>
             <Col xs={1} className="p-0 pl-1 ft-12 d-flex align-items-end flex-nowrap text-break">
-                {temp[field] && util.euckrBytes(temp[field])}byte
+                {util.euckrBytes(temp[field])}byte
             </Col>
         </Form.Row>
     );

@@ -28,6 +28,10 @@ public class MapString {
         this.key = key;
     }
 
+    public String getData() {
+        return toString();
+    }
+
     @Override
     public String toString() {
         if( data == null )

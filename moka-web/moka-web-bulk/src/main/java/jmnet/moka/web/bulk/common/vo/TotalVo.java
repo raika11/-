@@ -65,21 +65,26 @@ public class TotalVo <T> extends BasicVo {
         return ret;
     }
 
-    public void logError( String errorMessage ) {
+    public String logError( String errorMessage ) {
         log.error(errorMessage);
         this.infoMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + errorMessage);
         this.errorMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + errorMessage);
+        return errorMessage;
     }
 
-    public void logError(String s, Object...message) {
-        logError(BulkStringUtil.format(s, message));
+    public String logError(String s, Object...message) {
+        return logError(BulkStringUtil.format(s, message));
     }
 
-    public void logInfo( String infoMessage ) {
+    public String logInfo( String infoMessage ) {
         log.info(infoMessage);
         this.infoMessageList.add(McpDate.dateStr(new Date(), McpDate.DATETIME_FORMAT + " ") + infoMessage );
+
+        return infoMessage;
     }
-    public void logInfo(String s, Object...message) {
-        logInfo(BulkStringUtil.format(s, message));
+
+    @SuppressWarnings("UnusedReturnValue")
+    public String logInfo(String s, Object...message) {
+        return logInfo(BulkStringUtil.format(s, message));
     }
 }

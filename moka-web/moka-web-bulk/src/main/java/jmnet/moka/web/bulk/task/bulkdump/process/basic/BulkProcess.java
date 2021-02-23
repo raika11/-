@@ -27,6 +27,6 @@ public abstract class BulkProcess {
         this.bulkDumpEnv = bulkDumpEnv;
     }
 
-    public abstract void doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpTask bulkDumpTask, BulkDumpService dumpService,
+    public abstract BulkDumpResult doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpTask bulkDumpTask, BulkDumpService dumpService,
             BulkDumpJobTotalVo dumpJobTotal);
 }

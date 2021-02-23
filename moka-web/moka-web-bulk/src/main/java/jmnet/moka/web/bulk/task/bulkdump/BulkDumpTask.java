@@ -3,6 +3,7 @@ package jmnet.moka.web.bulk.task.bulkdump;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
+import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.task.Task;
 import jmnet.moka.web.bulk.common.taskinput.TaskInput;
@@ -39,6 +40,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
     private final BulkDumpClientChannel bulkDumpClientChannel;
     private int currentSeqNo = 0;
     private BulkDumpEnv bulkDumpEnv;
+    private int ovpWaitTime;
 
     public BulkDumpTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
@@ -55,6 +57,13 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
         if (McpString.isNullOrEmpty(bulkDumpEnvFile)) {
             throw new BulkException("bulkDumpEnvFile 환경 값 설정이 잘못되었습니다.");
         }
+
+        this.ovpWaitTime = TimeHumanizer.parse(xu.getString(node, "./@ovpWaitTime", "10m"));
+        if (this.ovpWaitTime < 50) {
+            this.ovpWaitTime = 1000;
+        }
+
+
         this.bulkDumpEnv = BulkDumpEnv.loadFromFile(bulkDumpEnvFile);
     }
 

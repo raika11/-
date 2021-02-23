@@ -415,8 +415,6 @@ const ColumnistEdit = ({ history, match }) => {
                         <MokaInputLabel
                             as="textarea"
                             label="약력정보"
-                            className="mb-0"
-                            inputClassName="resize-none custom-scroll"
                             name="profile"
                             id="profile"
                             value={selectRepoterData.profile && selectRepoterData.profile}

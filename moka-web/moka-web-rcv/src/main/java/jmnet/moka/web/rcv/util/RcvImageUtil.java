@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.imageio.ImageIO;
+import jmnet.moka.web.rcv.util.GifDecoder.GifImage;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -83,7 +85,60 @@ public class RcvImageUtil {
         }
     }
 
-    public static boolean resizeMaxWidthHeight(String targetImage, String sourceUrl, int maxWidth, int maxHeight) {
+    public static boolean resizeMaxWidthHeight_sub( File targetFile, BufferedImage sourceImage, int maxWidth, int maxHeight  )
+            throws IOException {
+        final double ratioWidth = (double) maxWidth / sourceImage.getWidth();
+        final double ratioHeight = (double) maxHeight / sourceImage.getHeight();
+
+        int newWidth;
+        int newHeight;
+        if (ratioWidth < ratioHeight) {
+            newWidth = maxWidth;
+            newHeight = (int) (sourceImage.getHeight() * ratioWidth + 0.5);
+        } else {
+            newWidth = (int) (sourceImage.getWidth() * ratioHeight + 0.5);
+            newHeight = maxHeight;
+        }
+
+        BufferedImage output = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics g = output.createGraphics();
+        //g.drawImage(image, 0, 0, newWidth, newHeight, null);
+        g.drawImage( sourceImage, 0, 0, newWidth, newHeight, Color.WHITE, null);
+        g.dispose();
+
+        ImageIO.write(output, "JPG", targetFile);
+
+        return true;
+    }
+
+    private static BufferedImage getBufferedImageFromGifDecoder( File sourceFile ) {
+        try (InputStream inputStream = new FileInputStream(sourceFile)) {
+            //noinspection LoopStatementThatDoesntLoop,ConstantConditions
+            do {
+                final GifImage gif = GifDecoder.read(inputStream);
+                if (gif == null)
+                    break;
+                if (gif.getFrameCount() == 0)
+                    break;
+                return gif.getFrame(0);
+            }while( false );
+            return null;
+        } catch ( Exception e ) {
+            return null;
+        }
+    }
+
+    private static BufferedImage getBufferedImageFromFile( String sourceFileName )
+            throws IOException {
+        File sourceFile = new File(sourceFileName);
+        try (InputStream inputStream = new FileInputStream(sourceFile)) {
+            return ImageIO.read(inputStream);
+        } catch (ArrayIndexOutOfBoundsException ignore) {
+            return getBufferedImageFromGifDecoder(sourceFile);
+        }
+    }
+
+    public static boolean resizeMaxWidthHeight(String targetImage, String sourceFileName, int maxWidth, int maxHeight) {
         try {
             File file = new File(targetImage);
             if (file.exists()) {
@@ -91,30 +146,11 @@ public class RcvImageUtil {
                     return false;
                 }
             }
-            BufferedImage image = ImageIO.read(new URL(sourceUrl));
 
-            final double ratioWidth = (double) maxWidth / image.getWidth();
-            final double ratioHeight = (double) maxHeight / image.getHeight();
-
-            int newWidth;
-            int newHeight;
-            if (ratioWidth < ratioHeight) {
-                newWidth = maxWidth;
-                newHeight = (int) (image.getHeight() * ratioWidth + 0.5);
-            } else {
-                newWidth = (int) (image.getWidth() * ratioHeight + 0.5);
-                newHeight = maxHeight;
-            }
-
-            BufferedImage output = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-            Graphics g = output.createGraphics();
-            //g.drawImage(image, 0, 0, newWidth, newHeight, null);
-            g.drawImage( image, 0, 0, newWidth, newHeight, Color.WHITE, null);
-            g.dispose();
-
-            ImageIO.write(output, "JPG", file);
-            return true;
-
+            final BufferedImage image = getBufferedImageFromFile( sourceFileName );
+            if( image == null )
+                return false;
+            return resizeMaxWidthHeight_sub( file, image, maxWidth, maxHeight );
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();

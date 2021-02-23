@@ -31,8 +31,7 @@ const DetailPagingForm = (props) => {
                 <div style={{ width: 220 }} className="mr-40">
                     {/* 리스트 노출건수 */}
                     <MokaInputLabel
-                        label="리스트노출건수"
-                        labelWidth={90}
+                        label="리스트 노출건수"
                         labelClassName="ml-0 font-weight-normal"
                         className="mb-0"
                         type="number"
@@ -45,8 +44,7 @@ const DetailPagingForm = (props) => {
 
                 {/* 페이징 사용여부 */}
                 <MokaInputLabel
-                    label="페이징사용여부"
-                    labelWidth={90}
+                    label="페이징 사용여부"
                     labelClassName="ml-0 font-weight-normal"
                     className="mb-0"
                     id="paging-yn"
@@ -67,8 +65,9 @@ const DetailPagingForm = (props) => {
                     {component.pagingYn === 'Y' && (
                         <Form.Row>
                             {/* 이전 다음 */}
-                            <Col xs={4} className="d-flex p-0 align-items-center">
+                            <div className="d-flex flex-shrink-0 mr-32">
                                 <MokaInput
+                                    className="mr-3"
                                     as="radio"
                                     id="paging-type-n"
                                     name="pagingType"
@@ -84,44 +83,36 @@ const DetailPagingForm = (props) => {
                                     inputProps={{ label: '더보기', custom: true, checked: component.pagingType === 'M' }}
                                     onChange={(e) => setComponent({ ...component, pagingType: e.target.value })}
                                 />
-                            </Col>
+                            </div>
                             {/* 최대 페이지수 / 표출 페이지수 */}
                             {component.pagingType === 'N' && (
-                                <>
-                                    <Col xs={4} className="d-flex p-0 pr-2">
-                                        <MokaInputLabel
-                                            className="mb-0"
-                                            label="최대 페이지수"
-                                            labelWidth={96}
-                                            type="number"
-                                            value={component.maxPageCount}
-                                            onChange={(e) => setComponent({ ...component, maxPageCount: e.target.value })}
-                                        />
-                                    </Col>
-                                    <Col xs={4} className="d-flex p-0">
-                                        <MokaInputLabel
-                                            className="mb-0"
-                                            label="표출 페이지수"
-                                            labelWidth={96}
-                                            type="number"
-                                            value={component.dispPageCount}
-                                            onChange={(e) => setComponent({ ...component, dispPageCount: e.target.value })}
-                                        />
-                                    </Col>
-                                </>
+                                <div className="d-flex">
+                                    <MokaInputLabel
+                                        className="mr-40"
+                                        label="최대 페이지수"
+                                        type="number"
+                                        value={component.maxPageCount}
+                                        onChange={(e) => setComponent({ ...component, maxPageCount: e.target.value })}
+                                    />
+                                    <MokaInputLabel
+                                        className="mb-0"
+                                        label="표출 페이지수"
+                                        type="number"
+                                        value={component.dispPageCount}
+                                        onChange={(e) => setComponent({ ...component, dispPageCount: e.target.value })}
+                                    />
+                                </div>
                             )}
                             {/* 호출 건수 (더보기 건수) */}
                             {component.pagingType === 'M' && (
-                                <Col xs={4} className="d-flex p-0">
+                                <div>
                                     <MokaInputLabel
-                                        className="mb-0"
                                         label="호출 건수"
-                                        labelWidth={80}
                                         type="number"
                                         value={component.moreCount}
                                         onChange={(e) => setComponent({ ...component, moreCount: e.target.value })}
                                     />
-                                </Col>
+                                </div>
                             )}
                         </Form.Row>
                     )}

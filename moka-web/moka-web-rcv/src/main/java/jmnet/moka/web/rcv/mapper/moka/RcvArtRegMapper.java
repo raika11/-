@@ -25,7 +25,7 @@ public interface RcvArtRegMapper {
     void callUspRcvArticleIudComplete( JamArticleTotalVo articleTotal );
     void callUspRcvArticleIudDelete(Map<String, Object> compMap);
 
-    void callUspRcvCodeConvSelByRid( JamArticleTotalVo articleTotal );
+    List<Map<String, String>> callUspRcvArticleCodeSel( JamArticleTotalVo articleTotal );
     List<Map<String, String>> callUspRcvArticleReporterSelByRid(JamArticleTotalVo articleTotal);
     List<Map<String, String>> selectRcvArticleComponent(Map<String, Object> compMap);
     List<Map<String, String>> selectRcvArticleKeyword(JamArticleTotalVo articleTotal);

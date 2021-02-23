@@ -1,12 +1,15 @@
 package jmnet.moka.web.rcv.task.jamxml.service;
 
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
+import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.mapper.moka.XmlGenMapper;
 import jmnet.moka.web.rcv.task.jamxml.process.XmlGenComponentManager;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.DescVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemMultiOvpVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.RelArtVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ReporterVo;
@@ -42,6 +45,7 @@ public class XmlGenServiceImpl implements XmlGenService {
     @Transactional
     public void deleteArticleData(JamArticleTotalVo articleTotal)
             throws RcvDataAccessException {
+
         xmlGenMapper.callUpaArticleBasicDelByJamIdOrRid(articleTotal);
         xmlGenMapper.callUpaArticleHistoryIns(articleTotal);
         afterProcessArticleData( articleTotal );
@@ -237,6 +241,13 @@ public class XmlGenServiceImpl implements XmlGenService {
                 articleTotal.setCurIndex(++curIndex);
                 articleTotal.setCurItem(item);
                 xmlGenMapper.callUpa15ArticleMultiIns(articleTotal);
+            }
+        }
+
+        if( componentManager.getMultiOvpItems().size() > 0 ) {
+            for(ItemMultiOvpVo itemMultiOvp : componentManager.getMultiOvpItems()) {
+                articleTotal.setCurMultiOvp(itemMultiOvp);
+                xmlGenMapper.callUpa15ArticleMultiOvpIns(articleTotal);
             }
         }
     }

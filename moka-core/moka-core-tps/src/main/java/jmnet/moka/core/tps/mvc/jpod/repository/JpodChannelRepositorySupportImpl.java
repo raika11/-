@@ -107,7 +107,7 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         query
                 .select(Projections.fields(JpodChannel.class, qJpodChannel.chnlSeq, qJpodChannel.regDt, qJpodChannel.chnlSdt, qJpodChannel.chnlNm,
                         qJpodChannel.chnlMemo, qJpodChannel.chnlImg, qJpodChannel.chnlThumb, qJpodChannel.chnlImgMob, qJpodChannel.podtyChnlSrl,
-                        qJpodChannel.usedYn, ExpressionUtils.as(JPAExpressions
+                        qJpodChannel.usedYn, qJpodChannel.seasonCnt, qJpodChannel.seasonNm, qJpodChannel.podtyUrl, ExpressionUtils.as(JPAExpressions
                                 .select(qJpodEpisode.epsdSeq.count())
                                 .from(qJpodEpisode)
                                 .where(qJpodEpisode.chnlSeq

@@ -164,7 +164,7 @@ const RcvArticleSearch = () => {
     }, [sourceOn]);
 
     return (
-        <Form>
+        <Form className="mb-14">
             <Form.Row className="d-flex mb-2">
                 {/* 검색기간 */}
                 <div className="flex-shrink-0 mr-2">
@@ -233,7 +233,7 @@ const RcvArticleSearch = () => {
                     }}
                 />
             </Form.Row>
-            <Form.Row className="d-flex mb-14 justify-content-between">
+            <Form.Row className="d-flex justify-content-between">
                 <MokaSearchInput
                     name="keyword"
                     className="mr-1 flex-fill"

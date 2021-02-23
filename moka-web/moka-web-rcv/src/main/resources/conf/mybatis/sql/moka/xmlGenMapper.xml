@@ -27,7 +27,8 @@
       #{mainData.id.orgId, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{mainData.pcTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
       #{mainData.subTitle, mode=IN, jdbcType=NVARCHAR, javaType=string},
-      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{insertMode, mode=OUT, jdbcType=INTEGER, javaType=int}
       )
       }
     ]]>
@@ -38,9 +39,10 @@
     statementType="CALLABLE">
     <![CDATA[
     {
-      call UPA_ARTICLE_BASIC_DEL_BY_JAMID_OR_RID(
+      call UPA_ARTICLE_BASIC_DEL_BY_JAMID_OR_RID_OR_TOTALID(
       #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
       )
       }
     ]]>
@@ -246,7 +248,40 @@
       #{curItem.thumbImg, mode=IN, jdbcType=VARCHAR, javaType=string},
       '',
       '',
-      #{mainData.workerInfo.workerId, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{mainData.workerInfo.workerId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curItem.multiSeq, mode=OUT, jdbcType=INTEGER, javaType=int}
+      )
+      }
+    ]]>
+  </insert>
+
+  <insert id="callUpa15ArticleMultiOvpIns" parameterType="JamArticleTotalVo"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_15RE_ARTICLE_MULTI_OVP_INS(
+      #{curMultiOvp.ovpId, mode=IN, jdbcType=BIGINT, javaType=long},
+      #{curMultiOvp.item.multiSeq, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{curMultiOvp.adYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.reuseYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.ovpTitle, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.ovpDesc, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.duration, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.tagList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.imgUrl, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.fileSize, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.ratio, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.origin, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.mediaSource, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.mediaForm, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.mediaGenre, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.category, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.relIssue, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.periodYn, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.sDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.eDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.regId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{curMultiOvp.regName, mode=IN, jdbcType=VARCHAR, javaType=string}
       )
       }
     ]]>

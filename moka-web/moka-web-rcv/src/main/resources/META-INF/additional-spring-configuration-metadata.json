@@ -234,5 +234,10 @@
       "name": "rcv.slack.channelname",
       "type": "java.lang.String",
       "description": "Description for rcv.slack.channelname."
+    },
+    {
+      "name": "logging.logTail.waitingtime",
+      "type": "java.lang.String",
+      "description": "Description for logging.logTail.waitingtime."
     }
   ] }

@@ -144,5 +144,10 @@
       "name": "bulk.slack.channelname",
       "type": "java.lang.String",
       "description": "#Slack channel Name."
+    },
+    {
+      "name": "logging.logTail.waitingtime",
+      "type": "java.lang.String",
+      "description": "Description for logging.logTail.waitingtime."
     }
   ] }

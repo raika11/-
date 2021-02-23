@@ -12,7 +12,7 @@ export const getAreaList = ({ search }) => {
 // 편집영역 목록 정렬 application/json
 export const putAreaListSrot = ({ parentAreaSeq, areaSeqList }) => {
     return instance
-        .put(parentAreaSeq ? `/api/areas/sort/${parentAreaSeq}` : '/api/areas/sort', areaSeqList, {
+        .put(parentAreaSeq ? `/api/areas/sort/${parentAreaSeq}` : '/api/areas/sort/0', areaSeqList, {
             headers: {
                 'Content-Type': 'application/json',
             },

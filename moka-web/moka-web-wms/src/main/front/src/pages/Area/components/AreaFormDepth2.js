@@ -128,7 +128,15 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
             return;
         }
 
-        let save = { ...temp, sourceCode, page: { pageSeq: page.pageSeq }, parent: { areaSeq: parent.areaSeq }, domain: { domainId: domain.domainId }, previewRsrc };
+        let save = {
+            ...temp,
+            depth: selectedDepth,
+            sourceCode,
+            page: { pageSeq: page.pageSeq },
+            parent: { areaSeq: parent.areaSeq },
+            domain: { domainId: domain.domainId },
+            previewRsrc,
+        };
         if (temp.areaDiv === ITEM_CP) {
             save.container = null;
             save.areaComps = null;
@@ -368,6 +376,12 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
         setLoadCnt(0);
         setError({});
     }, [area, parent]);
+
+    useEffect(() => {
+        if (domain.domainId) {
+            setModalDomainId(domain.domainId);
+        }
+    }, [domain, setModalDomainId]);
 
     useEffect(() => {
         // 모달한테 전달받은 page,pageSeq 변경 시, areaDiv 변경 시, 선택한 폼 변경 시 CP, CT 리스트 조회

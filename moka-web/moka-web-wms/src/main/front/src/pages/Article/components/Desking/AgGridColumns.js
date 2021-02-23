@@ -34,7 +34,7 @@ export default [
     },
     {
         headerName: 'ID\n기사유형',
-        width: 75,
+        width: 83,
         // width: 93,
         field: 'artIdType',
         cellStyle: {
@@ -44,7 +44,7 @@ export default [
             '-webkit-line-clamp': 2,
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
-            paddingTop: '5px',
+            paddingTop: '3px',
         },
         tooltipField: 'artTypeName',
         cellClass: 'user-select-text',
@@ -62,10 +62,10 @@ export default [
     {
         headerName: '',
         width: 36,
+        maxWidth: 36,
         field: 'groupNumber',
         // 편집 그룹 + 동영상(OVP/YOUTUBE/둘다)
         cellRenderer: 'GroupNumberRenderer',
-        cellStyle: { width: '36px' },
     },
     {
         headerName: '제목',
@@ -80,7 +80,7 @@ export default [
             lineHeight: '20px',
             height: '50px',
             display: '-webkit-box',
-            paddingTop: '5px',
+            paddingTop: '4px',
             '-webkit-line-clamp': 2,
             '-webkit-box-orient': 'vertical',
             overflow: 'hidden',
@@ -114,7 +114,7 @@ export default [
     },
     {
         headerName: '출고시간\n수정시간',
-        width: 87,
+        width: 92,
         field: 'articleDt',
         cellClassRules: {
             'pre-wrap-cell': () => true,

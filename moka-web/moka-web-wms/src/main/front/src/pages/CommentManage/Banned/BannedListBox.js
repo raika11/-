@@ -157,7 +157,7 @@ const BannedListBox = () => {
                     if (element.regMember) {
                         regMemberId = element.regMember.memberId;
                         regMemberNm = element.regMember.memberNm;
-                        regMemberInfo = `${element.regMember.memberId} / ${element.regMember.memberNm}`;
+                        regMemberInfo = `${element.regMember.memberNm}(${element.regMember.memberId})`;
                     }
 
                     let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 16) : element.regDt;

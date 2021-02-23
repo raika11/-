@@ -4,9 +4,9 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { getSnsMeta, GET_SNS_META, initialState, clearSnsMeta, saveSnsMeta, publishSnsMeta, getSnsMetaList, clearSnsMetaList } from '@store/snsManage';
-import { MokaCard, MokaInputLabel, MokaInput, MokaImage } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput, MokaImageInput } from '@components';
 import commonUtil from '@utils/commonUtil';
-import toast, { messageBox } from '@utils/toastUtil';
+import toast from '@utils/toastUtil';
 import SnsPreviewModal from '@pages/SnsManage/SnsMeta/modal/SnsPreviewModal';
 import { DB_DATEFORMAT, snsNames } from '@/constants';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
@@ -154,7 +154,7 @@ const SnsMetaEdit = () => {
             const snsKor = snsNames[snsTypeEng];
 
             if (!item.usedYn) {
-                toast.warning(`사용안함으로 설정되어 있습니다. 사용유무 변경후 다시 전송해 주세요(${snsKor})`);
+                toast.warning(`사용안함으로 설정되어 있습니다. 사용여부 변경후 다시 전송해 주세요(${snsKor})`);
                 return false;
             }
 
@@ -261,10 +261,10 @@ const SnsMetaEdit = () => {
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '전송', variant: 'positive', onClick: () => handleClickPublish('all'), className: 'mr-2' },
-                { text: '임시저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
-                { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-2' },
-                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-2' },
+                { text: '전송', variant: 'positive', onClick: () => handleClickPublish('all'), className: 'mr-1' },
+                { text: '임시저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-1' },
+                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-1' },
             ]}
             footer
         >
@@ -310,8 +310,8 @@ const SnsMetaEdit = () => {
                         as="switch"
                         name="fb-usedYn"
                         id="fb-usedYn"
-                        label="사용유무"
-                        labelWidth={68}
+                        label="사용여부"
+                        labelWidth={70}
                         onChange={handleChangeCheckedValue}
                         inputProps={{ label: '', checked: edit.fb.usedYn }}
                     />
@@ -319,7 +319,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="타이틀" labelWidth={68} name="fb-title" onChange={handleChangeTextValue} value={edit.fb.title} />
+                        <MokaInputLabel label="타이틀" labelWidth={70} name="fb-title" onChange={handleChangeTextValue} value={edit.fb.title} />
                     </Col>
                 </Form.Row>
 
@@ -329,10 +329,11 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="fb-summary"
                             label="설명\n(리드문)"
-                            labelWidth={68}
+                            labelWidth={70}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.fb.summary}
+                            inputProps={{ rows: 4 }}
                         />
                     </Col>
                 </Form.Row>
@@ -343,7 +344,7 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="fb-postMessage"
                             label="메시지"
-                            labelWidth={68}
+                            labelWidth={70}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.fb.postMessage}
@@ -355,7 +356,7 @@ const SnsMetaEdit = () => {
                     <div className="d-flex w-100">
                         <MokaInputLabel
                             as="none"
-                            labelWidth={68}
+                            labelWidth={70}
                             label={
                                 <React.Fragment>
                                     <p className="mb-gutter">
@@ -373,7 +374,7 @@ const SnsMetaEdit = () => {
                             }
                         />
                         <div className="d-flex flex-column flex-fill">
-                            <MokaImage className="mb-1 input-border" img={edit.fb.imgUrl} width={414} />
+                            <MokaImageInput className="mb-1 input-border" img={edit.fb.imgUrl} width={414} deleteButton={true} />
                             <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                         </div>
                     </div>
@@ -381,7 +382,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
-                        <MokaInputLabel as="none" label="예약" labelWidth={68} />
+                        <MokaInputLabel as="none" label="예약" labelWidth={70} />
                         <MokaInput
                             as="checkbox"
                             name="fb-isReserve"
@@ -428,8 +429,8 @@ const SnsMetaEdit = () => {
                         as="switch"
                         name="tw-usedYn"
                         id="tw-usedYn"
-                        label="사용유무"
-                        labelWidth={68}
+                        label="사용여부"
+                        labelWidth={70}
                         variant="positive"
                         onChange={handleChangeCheckedValue}
                         inputProps={{ label: '', checked: edit.tw.usedYn }}
@@ -438,7 +439,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="타이틀" labelWidth={68} name="tw-title" onChange={handleChangeTextValue} value={edit.tw.title} />
+                        <MokaInputLabel label="타이틀" labelWidth={70} name="tw-title" onChange={handleChangeTextValue} value={edit.tw.title} />
                     </Col>
                 </Form.Row>
 
@@ -448,10 +449,11 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="tw-summary"
                             label="설명\n(리드문)"
-                            labelWidth={68}
+                            labelWidth={70}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.tw.summary}
+                            inputProps={{ rows: 4 }}
                         />
                     </Col>
                 </Form.Row>
@@ -462,7 +464,7 @@ const SnsMetaEdit = () => {
                             as="textarea"
                             name="tw-postMessage"
                             label="메시지"
-                            labelWidth={68}
+                            labelWidth={70}
                             inputClassName="resize-none custom-scroll"
                             onChange={handleChangeTextValue}
                             value={edit.tw.postMessage}
@@ -474,7 +476,7 @@ const SnsMetaEdit = () => {
                     <div className="d-flex w-100">
                         <MokaInputLabel
                             as="none"
-                            labelWidth={68}
+                            labelWidth={70}
                             label={
                                 <React.Fragment>
                                     <p className="mb-gutter">
@@ -492,7 +494,7 @@ const SnsMetaEdit = () => {
                             }
                         />
                         <div className="d-flex flex-column flex-fill">
-                            <MokaImage className="mb-1 input-border" img={edit.tw.imgUrl} width={414} />
+                            <MokaImageInput className="mb-1 input-border" img={edit.tw.imgUrl} width={414} deleteButton={true} />
                             <p className="text-danger mb-0">1200*628 이미지 용량 제한: 1MB.</p>
                         </div>
                     </div>
@@ -500,7 +502,7 @@ const SnsMetaEdit = () => {
 
                 <Form.Row>
                     <div className="d-flex w-100 align-items-center">
-                        <MokaInputLabel as="none" label="예약" labelWidth={68} />
+                        <MokaInputLabel as="none" label="예약" labelWidth={70} />
                         <MokaInput
                             as="checkbox"
                             name="tw-isReserve"

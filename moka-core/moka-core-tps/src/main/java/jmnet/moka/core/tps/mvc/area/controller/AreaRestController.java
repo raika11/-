@@ -120,39 +120,7 @@ public class AreaRestController extends AbstractCommonController {
                 });
 
         try {
-            // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
-            // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
-            AreaCompLoadDTO areaCompLoadDTO = new AreaCompLoadDTO();
-            Map<String, Object> check = areaService.checkAreaComp(area);
-            if ((long) check.get("byPage") < 0) {
-                areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
-                areaCompLoadDTO.setByPageMessage(msg("tps.areaComp.error.bypage"));
-            }
-            if ((long) check.get("byContainer") < 0) {
-                areaCompLoadDTO.setByContainer(true);  // true이면 해당 컨테이너 미존재
-                areaCompLoadDTO.setByContainerMessage(msg("tps.areaComp.error.bycontainer"));
-            }
-            if ((long) check.get("byContainerComp") < 0) {
-                areaCompLoadDTO.setByContainerComp(true); // true이면 해당 컨테이너내에 컴포넌트 미존재
-                areaCompLoadDTO.setByContainerCompMessage(msg("tps.areaComp.error.bycontainer-comp"));
-            }
-
-            AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
-            if (area.getParent() != null) {
-                ParentAreaDTO parentDto = modelMapper.map(area.getParent(), ParentAreaDTO.class);
-                areaDTO.setParent(parentDto);
-            }
-
-            // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (areaDTO
-                    .getAreaDiv()
-                    .equals(MokaConstants.ITEM_COMPONENT)) {
-                areaService.compsToComp(areaDTO);
-            }
-
-            ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK);
-            resultMapDTO.addBodyAttribute("area", areaDTO);
-            resultMapDTO.addBodyAttribute("areaCompLoad", areaCompLoadDTO);
+            ResultMapDTO resultMapDTO = getAreaInfo(area, null);
             tpsLogger.success(true);
             return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
         } catch (Exception e) {
@@ -160,6 +128,45 @@ public class AreaRestController extends AbstractCommonController {
             tpsLogger.error(ActionType.SELECT, "[FAIL TO LOAD AREA]", e, true);
             throw new Exception(msg("tps.area.error.select"), e);
         }
+    }
+
+    private ResultMapDTO getAreaInfo(Area area, String message)
+            throws Exception {
+        // 컨테이너의 관련cp변경시 에러표현하고, 로딩시키지는 않는다.
+        // 페이지의 컨테이너의 컴포넌트가 변경된 경우도 에러표현하고, 로딩시키지는 않는다.
+        AreaCompLoadDTO areaCompLoadDTO = new AreaCompLoadDTO();
+        Map<String, Object> check = areaService.checkAreaComp(area);
+        if ((long) check.get("byPage") < 0) {
+            areaCompLoadDTO.setByPage(true);  // true이면 해당 컴포넌트 미존재
+            areaCompLoadDTO.setByPageMessage(msg("tps.areaComp.error.bypage"));
+        }
+        if ((long) check.get("byContainer") < 0) {
+            areaCompLoadDTO.setByContainer(true);  // true이면 해당 컨테이너 미존재
+            areaCompLoadDTO.setByContainerMessage(msg("tps.areaComp.error.bycontainer"));
+        }
+        if ((long) check.get("byContainerComp") < 0) {
+            areaCompLoadDTO.setByContainerComp(true); // true이면 해당 컨테이너내에 컴포넌트 미존재
+            areaCompLoadDTO.setByContainerCompMessage(msg("tps.areaComp.error.bycontainer-comp"));
+        }
+
+        AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
+        if (area.getParent() != null) {
+            ParentAreaDTO parentDto = modelMapper.map(area.getParent(), ParentAreaDTO.class);
+            areaDTO.setParent(parentDto);
+        }
+
+        // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
+        if (areaDTO
+                .getAreaDiv()
+                .equals(MokaConstants.ITEM_COMPONENT)) {
+            areaService.compsToComp(areaDTO);
+        }
+
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK, message);
+        resultMapDTO.addBodyAttribute("area", areaDTO);
+        resultMapDTO.addBodyAttribute("areaCompLoad", areaCompLoadDTO);
+
+        return resultMapDTO;
     }
 
     /**
@@ -214,23 +221,11 @@ public class AreaRestController extends AbstractCommonController {
             // 편집영역 등록
             Area returnVal = areaService.insertArea(area);
 
-            AreaDTO returnValDTO = modelMapper.map(returnVal, AreaDTO.class);
-            if (returnVal.getParent() != null) {
-                ParentAreaDTO parentDto = modelMapper.map(returnVal.getParent(), ParentAreaDTO.class);
-                returnValDTO.setParent(parentDto);
-            }
-
-            // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (returnValDTO
-                    .getAreaDiv()
-                    .equals(MokaConstants.ITEM_COMPONENT)) {
-                areaService.compsToComp(returnValDTO);
-            }
-
             String message = msg("tps.common.success.insert");
-            ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(returnValDTO, message);
+            ResultMapDTO resultMapDTO = getAreaInfo(returnVal, message);
+
             tpsLogger.success(ActionType.INSERT, true);
-            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO INSERT AREA]", e);
@@ -303,23 +298,11 @@ public class AreaRestController extends AbstractCommonController {
             // 편집영역 수정
             Area returnVal = areaService.updateArea(area);
 
-            AreaDTO returnValDTO = modelMapper.map(returnVal, AreaDTO.class);
-            if (returnVal.getParent() != null) {
-                ParentAreaDTO parentDto = modelMapper.map(returnVal.getParent(), ParentAreaDTO.class);
-                returnValDTO.setParent(parentDto);
-            }
-
-            // 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
-            if (returnValDTO
-                    .getAreaDiv()
-                    .equals(MokaConstants.ITEM_COMPONENT)) {
-                areaService.compsToComp(returnValDTO);
-            }
-
             String message = msg("tps.common.success.update");
-            ResultDTO<AreaDTO> resultDTO = new ResultDTO<AreaDTO>(returnValDTO, message);
+            ResultMapDTO resultMapDTO = getAreaInfo(returnVal, message);
+
             tpsLogger.success(ActionType.UPDATE, true);
-            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+            return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("[FAIL TO UPDATE AREA]", e);

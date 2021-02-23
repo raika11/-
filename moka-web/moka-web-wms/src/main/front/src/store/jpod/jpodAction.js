@@ -111,6 +111,13 @@ export const saveJpodEpisode = createAction(SAVE_JPOD_EPISODE, ({ chnlSeq, epsdS
 export const CHANGE_JPOD_NOTICE_SEARCH_OPTION = 'jpod/CHANGE_JPOD_NOTICE_SEARCH_OPTION';
 export const changeJpodNoticeSearchOption = createAction(CHANGE_JPOD_NOTICE_SEARCH_OPTION, (actions) => actions);
 
+// 선택한 보드 정보( 설정 정보들 저장)
+export const CLEAR_SELECT_BOARD = 'jpod/CLEAR_SELECT_BOARD';
+export const clearSelectBoard = createAction(CLEAR_SELECT_BOARD);
+
+export const CHANGE_SELECT_BOARD = 'jpod/CHANGE_SELECT_BOARD';
+export const changeSelectBoard = createAction(CHANGE_SELECT_BOARD, (actions) => actions);
+
 // j팟 게시판 목록 가지고 오기.
 export const [GET_JPOD_BOARD, GET_JPOD_BOARD_SUCCESS, GET_JPOD_BOARD_FAILURE] = createRequestActionTypes('jpod/GET_JPOD_BOARD');
 export const getJpodBoard = createAction(GET_JPOD_BOARD);

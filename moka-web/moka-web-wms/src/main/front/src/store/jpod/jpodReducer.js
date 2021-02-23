@@ -110,6 +110,9 @@ export const initialState = {
         boardList: [],
         channelList: [],
         noticeInfo: {},
+        selectBoard: {
+            answYn: 'N',
+        },
     },
     reporter: {
         total: 0,
@@ -335,6 +338,16 @@ export default handleActions(
         [jpodAction.GET_BOARD_CONTENTS_SUCCESS]: (state, { payload: { body } }) => {
             return produce(state, (draft) => {
                 draft.jpodNotice.noticeInfo = body;
+            });
+        },
+        [jpodAction.CHANGE_SELECT_BOARD]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.jpodNotice.selectBoard = payload;
+            });
+        },
+        [jpodAction.CLEAR_SELECT_BOARD]: (state) => {
+            return produce(state, (draft) => {
+                draft.jpodNotice.selectBoard = initialState.jpodNotice.selectBoard;
             });
         },
     },

@@ -82,6 +82,7 @@ const NoticeListSearchBox = ({ match }) => {
         setChannelLists(channelList);
     }, [channelList]);
 
+    // 공지 목록 가지고 오기.
     useEffect(() => {
         dispatch(getJpodNotice());
         // eslint-disable-next-line react-hooks/exhaustive-deps

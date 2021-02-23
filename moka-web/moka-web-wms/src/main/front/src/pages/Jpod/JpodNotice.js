@@ -37,7 +37,13 @@ const JpodChannel = ({ match }) => {
 
             <Switch>
                 <Route
-                    path={[`${match.path}`, `${match.path}/add`, `${match.path}/:boardId/:boardSeq`]}
+                    path={[
+                        `${match.path}`,
+                        `${match.path}/:boardId`,
+                        `${match.path}/:boardId/:boardSeq`,
+                        `${match.path}/:boardId/:boardSeq/reply`,
+                        `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                    ]}
                     exact
                     render={() => (
                         <Suspense fallback={<MokaLoader />}>
@@ -50,7 +56,16 @@ const JpodChannel = ({ match }) => {
             {/* 등록 / 수정창 */}
             <Switch>
                 <Suspense fallback={<MokaLoader />}>
-                    <Route path={[`${match.path}/add`, `${match.path}/:boardId/:boardSeq`]} exact render={(props) => <NoticeEdit {...props} match={match} />} />
+                    <Route
+                        path={[
+                            `${match.path}/add`,
+                            `${match.path}/:boardId/:boardSeq`,
+                            `${match.path}/:boardId/:boardSeq/reply`,
+                            `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                        ]}
+                        exact
+                        render={(props) => <NoticeEdit {...props} match={match} />}
+                    />
                 </Suspense>
             </Switch>
         </div>

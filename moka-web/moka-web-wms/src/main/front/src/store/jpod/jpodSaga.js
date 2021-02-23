@@ -344,17 +344,7 @@ function* getJpodBoardSaga() {
         } = response.data;
 
         if (success === true) {
-            let tempList = list.map((data) => {
-                return {
-                    boardId: data.boardId,
-                    boardName: data.boardName,
-                    boardType: data.boardType,
-                    channelType: data.channelType,
-                    editorYn: data.editorYn,
-                };
-            });
-
-            yield put({ type: jpodAction.GET_JPOD_BOARD_SUCCESS, payload: tempList });
+            yield put({ type: jpodAction.GET_JPOD_BOARD_SUCCESS, payload: list });
         } else {
             toast.error(message);
         }

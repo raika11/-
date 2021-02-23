@@ -190,6 +190,13 @@ export const putMicAnswerRel = ({ answSeq, answerRel }) => {
         });
 };
 
+// 답변 부가정보 삭제
+export const deleteMicAnswerRel = (answSeq) => {
+    return instance.delete(`/api/mics/answers/${answSeq}/rel`).catch((err) => {
+        throw err;
+    });
+};
+
 // 답변 최상위 수정
 export const putMicAnswerTop = ({ answSeq, answTop }) => {
     return instance.put(`/api/mics/answers/${answSeq}/top?${qs.stringify({ answTop })}`).catch((err) => {

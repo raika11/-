@@ -43,7 +43,7 @@ export const columnDefs = [
                 headerName: '종료일',
                 field: 'modDt',
                 width: 130,
-                cellStyle: { lineHeight: '16px' },
+                cellStyle: { lineHeight: '18px' },
                 cellRendererFramework: (param) => {
                     return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
                 },
@@ -76,46 +76,45 @@ export const columnDefs = [
         },
     },
     {
-        headerName: '입력날짜',
-        field: 'regDt',
+        headerName: '등록자',
+        field: 'regMember',
         cellStyle: { fontSize: '12px' },
         children: [
             {
-                headerName: '수정날짜',
-                field: 'modDt',
+                headerName: '등록일시',
+                field: 'regDt',
                 width: 130,
-                cellStyle: { lineHeight: '16px' },
+                cellStyle: { lineHeight: '18px' },
                 cellRendererFramework: (param) => {
-                    return <MultiRowColumnComponent values={[param.data.regDt, param.value]} />;
+                    const regMember = param.data.regMember;
+                    let regMemberIdNm = '';
+                    if (regMember instanceof Object) {
+                        regMemberIdNm = `${regMember.memberId}(${regMember.memberNm})`;
+                    }
+                    return <MultiRowColumnComponent values={[regMemberIdNm, param.value]} />;
                 },
             },
         ],
     },
     {
-        headerName: '등록자',
-        field: 'regMember',
+        headerName: '수정자',
+        field: 'modMember',
         width: 70,
         children: [
             {
-                headerName: '수정자',
-                field: 'modMember',
-                width: 100,
-                cellStyle: { lineHeight: '16px' },
+                headerName: '수정일시',
+                field: 'modDt',
+                width: 130,
+                cellStyle: { lineHeight: '18px' },
                 cellRendererFramework: (param) => {
-                    const regMember = param.data.regMember;
                     const modMember = param.data.modMember;
-
-                    let regMemberIdNm = '';
-                    if (regMember instanceof Object) {
-                        regMemberIdNm = `${regMember.memberId}(${regMember.memberNm})`;
-                    }
 
                     let modMemberIdNm = '';
                     if (modMember instanceof Object) {
                         modMemberIdNm = `${modMember.memberId}(${modMember.memberNm})`;
                     }
 
-                    return <MultiRowColumnComponent values={[regMemberIdNm, modMemberIdNm]} />;
+                    return <MultiRowColumnComponent values={[modMemberIdNm, param.value]} />;
                 },
             },
         ],

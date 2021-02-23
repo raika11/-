@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import commonUtil from '@utils/commonUtil';
 import produce from 'immer';
 import { initialState } from '@store/survey/poll/pollReducer';
+import { AuthButton } from '@pages/Auth/AuthButton';
 
 const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
     const [options, setOptions] = useState(initialState.search);
@@ -41,7 +42,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
     }, [searchOptions]);
 
     return (
-        <Form className="pb-2">
+        <Form className="mb-14">
             <Form.Row className="mb-2">
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput
@@ -104,7 +105,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                 <Col xs={3} className="p-0  pr-2">
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
+                        className="mb-0 is-not-position-center"
                         name="startDt"
                         value={options.startDt}
                         onChange={(param) => {
@@ -112,15 +113,15 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                             if (selectDate) {
                                 selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                             }
-                            handleChangeValue('startDt', selectDate);
+                            handleChangeValue('startDt', param);
                         }}
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, timeDefault: 'start' }}
                     />
                 </Col>
                 <Col xs={3} className="p-0 pr-2">
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
+                        className="mb-0 is-not-position-center right"
                         name="endDt"
                         value={options.endDt}
                         onChange={(param) => {
@@ -128,13 +129,14 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                             if (selectDate) {
                                 selectDate = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                             }
-                            handleChangeValue('endDt', selectDate);
+                            handleChangeValue('endDt', param);
                         }}
-                        inputProps={{ timeFormat: null }}
+                        closeOnSelect={true}
+                        inputProps={{ timeFormat: null, timeDefault: 'end' }}
                     />
                 </Col>
             </Form.Row>
-            <Form.Row className="justify-content-between mb-2">
+            <Form.Row className="justify-content-between">
                 <Col xs={8} className="p-0">
                     <Form.Row>
                         <Col xs={3} className="p-0 pr-2">
@@ -152,7 +154,7 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                                 <option value="pollSeq">투표 ID</option>
                             </MokaInput>
                         </Col>
-                        <Col xs={7} className="p-0 pr-2">
+                        <Col xs={7} className="p-0 mr-1">
                             <MokaSearchInput
                                 name="keyword"
                                 value={options.keyword}
@@ -164,16 +166,16 @@ const PollSearch = ({ searchOptions, codes, onSearch, onAdd, onReset }) => {
                             />
                         </Col>
                         <Col xs={2} className="p-0">
-                            <Button variant="negative" onClick={handleClickReset}>
+                            <Button variant="negative h-100" onClick={handleClickReset}>
                                 초기화
                             </Button>
                         </Col>
                     </Form.Row>
                 </Col>
                 <Col xs={2} className="p-0  pr-2 text-right">
-                    <Button variant="positive" onClick={onAdd}>
+                    <AuthButton variant="positive h-100" onClick={onAdd}>
                         등록
-                    </Button>
+                    </AuthButton>
                 </Col>
             </Form.Row>
         </Form>

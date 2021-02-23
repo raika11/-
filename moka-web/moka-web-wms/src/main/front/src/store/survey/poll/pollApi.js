@@ -14,7 +14,7 @@ export const getPoll = (id) => {
     });
 };
 
-export const pullPoll = (id, param) => {
+export const putPoll = (id, param) => {
     return instance
         .put(`/api/polls/${id}`, param, {
             headers: {

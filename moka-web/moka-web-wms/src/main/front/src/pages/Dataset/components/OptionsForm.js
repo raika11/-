@@ -35,8 +35,6 @@ const OptionsForm = (props) => {
                     label="설명"
                     as="textarea"
                     name="description"
-                    labelWidth={90}
-                    className="mb-0"
                     inputClassName="resize-none"
                     inputProps={{ rows: 7 }}
                     value={dataset.description}

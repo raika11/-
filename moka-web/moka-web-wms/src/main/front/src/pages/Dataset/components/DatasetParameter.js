@@ -46,7 +46,7 @@ const DatasetParameter = (props) => {
     };
 
     /**
-     *
+     * 자동완성폼 입력값 변경
      * @param {Object} event javascript event
      * @param {String} name 자동완성 컴포넌트 이름
      * @param value 변경 할 값
@@ -61,67 +61,57 @@ const DatasetParameter = (props) => {
         }
     };
 
-    const isHintAutocomplete = useCallback(
-        /**
-         * 파라미터의 힌트가 자동완성될 수 있는지 체크
-         * @param hints hints
-         * @returns {boolean} 자동완성 여부
-         */
-        (hints) => {
-            if (hints === API_PARAM_HINT_DATASET_SEQ) return true;
-            if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
-            if (hints === API_PARAM_HINT_BUSE_ID) return true;
-            if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
-            if (hints === API_PARAM_HINT_GIJA_ID) return true;
-            if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
-            if (hints === API_PARAM_HINT_SERIES_ID) return true;
-            if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
-            if (hints === API_PARAM_HINT_CODE_ID) return true;
-            if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
-            return false;
-        },
-        [],
-    );
+    /**
+     * 파라미터의 힌트가 자동완성될 수 있는지 체크
+     * @param hints hints
+     * @returns {boolean} 자동완성 여부
+     */
+    const isHintAutocomplete = useCallback((hints) => {
+        if (hints === API_PARAM_HINT_DATASET_SEQ) return true;
+        if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
+        if (hints === API_PARAM_HINT_BUSE_ID) return true;
+        if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
+        if (hints === API_PARAM_HINT_GIJA_ID) return true;
+        if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
+        if (hints === API_PARAM_HINT_SERIES_ID) return true;
+        if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
+        if (hints === API_PARAM_HINT_CODE_ID) return true;
+        if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
+        return false;
+    }, []);
 
-    // 파라미터의 힌트가 복수인지 체크
-    const isHintMultiple = useCallback(
-        /**
-         * 파라미터의 힌트가 복수인지 체크
-         * @param hints hints
-         * @returns {boolean} 복수 여부
-         */
-        (hints) => {
-            if (hints === API_PARAM_HINT_DATASET_SEQ) return false;
-            if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
-            if (hints === API_PARAM_HINT_BUSE_ID) return false;
-            if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
-            if (hints === API_PARAM_HINT_GIJA_ID) return false;
-            if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
-            if (hints === API_PARAM_HINT_SERIES_ID) return false;
-            if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
-            if (hints === API_PARAM_HINT_CODE_ID) return false;
-            if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
-            return false;
-        },
-        [],
-    );
+    /**
+     * 파라미터의 힌트가 복수인지 체크
+     * @param hints hints
+     * @returns {boolean} 복수 여부
+     */
+    const isHintMultiple = useCallback((hints) => {
+        if (hints === API_PARAM_HINT_DATASET_SEQ) return false;
+        if (hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return true;
+        if (hints === API_PARAM_HINT_BUSE_ID) return false;
+        if (hints === `${API_PARAM_HINT_BUSE_ID}s`) return true;
+        if (hints === API_PARAM_HINT_GIJA_ID) return false;
+        if (hints === `${API_PARAM_HINT_GIJA_ID}s`) return true;
+        if (hints === API_PARAM_HINT_SERIES_ID) return false;
+        if (hints === `${API_PARAM_HINT_SERIES_ID}s`) return true;
+        if (hints === API_PARAM_HINT_CODE_ID) return false;
+        if (hints === `${API_PARAM_HINT_CODE_ID}s`) return true;
+        return false;
+    }, []);
 
-    const getDataType = useCallback(
-        /**
-         * 자동완성 hints 타입을 구분
-         * @param hints 복수 hints / 단수 hints
-         * @returns {string} hints 타입
-         */
-        (hints) => {
-            if (hints === API_PARAM_HINT_DATASET_SEQ || hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return API_PARAM_HINT_DATASET_SEQ;
-            if (hints === API_PARAM_HINT_BUSE_ID || hints === `${API_PARAM_HINT_BUSE_ID}s`) return API_PARAM_HINT_BUSE_ID;
-            if (hints === API_PARAM_HINT_GIJA_ID || hints === `${API_PARAM_HINT_GIJA_ID}s`) return API_PARAM_HINT_GIJA_ID;
-            if (hints === API_PARAM_HINT_SERIES_ID || hints === `${API_PARAM_HINT_SERIES_ID}s`) return API_PARAM_HINT_SERIES_ID;
-            if (hints === API_PARAM_HINT_CODE_ID || hints === `${API_PARAM_HINT_CODE_ID}s`) return API_PARAM_HINT_CODE_ID;
-            return '';
-        },
-        [],
-    );
+    /**
+     * 자동완성 hints 타입을 구분
+     * @param hints 복수 hints / 단수 hints
+     * @returns {string} hints 타입
+     */
+    const getDataType = useCallback((hints) => {
+        if (hints === API_PARAM_HINT_DATASET_SEQ || hints === `${API_PARAM_HINT_DATASET_SEQ}s`) return API_PARAM_HINT_DATASET_SEQ;
+        if (hints === API_PARAM_HINT_BUSE_ID || hints === `${API_PARAM_HINT_BUSE_ID}s`) return API_PARAM_HINT_BUSE_ID;
+        if (hints === API_PARAM_HINT_GIJA_ID || hints === `${API_PARAM_HINT_GIJA_ID}s`) return API_PARAM_HINT_GIJA_ID;
+        if (hints === API_PARAM_HINT_SERIES_ID || hints === `${API_PARAM_HINT_SERIES_ID}s`) return API_PARAM_HINT_SERIES_ID;
+        if (hints === API_PARAM_HINT_CODE_ID || hints === `${API_PARAM_HINT_CODE_ID}s`) return API_PARAM_HINT_CODE_ID;
+        return '';
+    }, []);
 
     useEffect(() => {
         if (!loading) {
@@ -170,7 +160,6 @@ const DatasetParameter = (props) => {
                         label={desc || ' '}
                         className="flex-fill"
                         as="autocomplete"
-                        labelWidth={90}
                         inputProps={{ options: options[type], closeMenuOnSelect: true, isMulti: isMultiple, searchIcon: false }}
                         required={required}
                         value={value}
@@ -187,8 +176,7 @@ const DatasetParameter = (props) => {
                 renderer = (
                     <MokaInputLabel
                         label={desc || ' '}
-                        labelWidth={90}
-                        className="flex-fill mb-0"
+                        className="flex-fill"
                         value={value}
                         onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}
                         required={required}

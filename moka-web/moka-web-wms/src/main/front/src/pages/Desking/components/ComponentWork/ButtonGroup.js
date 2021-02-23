@@ -19,7 +19,7 @@ import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from
  * 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, setLoading } = props;
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, deskingPart, setLoading } = props;
     const dispatch = useDispatch();
     // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
@@ -326,6 +326,7 @@ const ButtonGroup = (props) => {
                 areaSeq={areaSeq}
                 component={component}
                 agGridIndex={agGridIndex}
+                deskingPart={deskingPart}
                 componentAgGridInstances={componentAgGridInstances}
             />
 

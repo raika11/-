@@ -1,10 +1,23 @@
 package jmnet.moka.web.push.mvc.sender.entity;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 푸시기사 정보
@@ -141,4 +154,12 @@ public class PushContents implements Serializable {
      */
     @Column(name = "CONTENT", nullable = false)
     private String content;
+
+    /**
+     * 앱별 전송 상태 정보
+     */
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pushContents", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
+    private Set<PushContentsProc> appProcs = new LinkedHashSet<PushContentsProc>();
+
 }

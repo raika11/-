@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
-import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.web.push.mvc.sender.dto.*;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
+import jmnet.moka.web.push.mvc.sender.entity.PushContentsProcPK;
 import jmnet.moka.web.push.mvc.sender.service.PushAppDeleteService;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
 import lombok.extern.slf4j.Slf4j;
@@ -186,6 +186,14 @@ public class MessageGatewayController {
 
             try {
                 PushContentsProc pushContentsProc = modelMapper.map(contentsProcItem, PushContentsProc.class);
+
+                PushContentsProcPK pushContentsProcPK = PushContentsProcPK
+                        .builder()
+                        .contentSeq(contentSeq)
+                        .appSeq(appSeq.intValue())
+                        .build();
+                pushContentsProc.setId(pushContentsProcPK);
+
                 PushContentsProc returnProcValue = pushContentsService.savePushContentsProc(pushContentsProc);
                 log.debug("[SUCCESS TO INSERT PUSH CONTENTSPROC]");
             } catch (Exception e) {
@@ -194,16 +202,14 @@ public class MessageGatewayController {
             }
         }
 
-        //예약 발송 취소 처리
-        //deleteJob(contentSeq);
-
         /**
          * pushSenderHandler에 푸시 처리 요청
          */
-        MobPushItem pushItem = MobPushItem
+        PushContents pushItem = PushContents
                 .builder()
                 .pushType(sendDTO.getPushType())
-                .pushItemSeq(contentSeq)
+                .contentSeq(contentSeq)
+               // .rsvDt(McpDate.date("yyyyMMdd", sendDTO.getReserveDt().toString()))
                // .pushItemSeq((long) Math.random())
                 .build();
         boolean success = pushSenderHandler.addPushJob(pushItem);

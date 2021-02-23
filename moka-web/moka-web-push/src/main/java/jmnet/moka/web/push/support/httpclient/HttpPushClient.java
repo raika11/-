@@ -1,7 +1,7 @@
 package jmnet.moka.web.push.support.httpclient;
 
 import java.io.IOException;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.message.PushHttpResponse;
 
@@ -28,6 +28,6 @@ public interface HttpPushClient {
      * @param nrl        전송 완료 Listener
      * @throws IOException 예외 처리
      */
-    public void push(MobPushToken pushToken, FcmMessage fcmMessage, PushHttpResponseListener nrl)
+    public void push(PushAppToken pushToken, FcmMessage fcmMessage, PushHttpResponseListener nrl)
             throws IOException;
 }

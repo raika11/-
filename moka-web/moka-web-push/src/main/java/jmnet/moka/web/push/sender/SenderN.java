@@ -1,6 +1,6 @@
 package jmnet.moka.web.push.sender;
 
-import jmnet.moka.web.push.mvc.sender.entity.MobPushToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.sender.AbstractPushSender;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class SenderN extends AbstractPushSender {
     }
 
     @Override
-    protected List<MobPushToken> findAllToken(int pageIdx) {
+    protected List<PushAppToken> findAllToken(int pageIdx) {
         return null;
     }
 

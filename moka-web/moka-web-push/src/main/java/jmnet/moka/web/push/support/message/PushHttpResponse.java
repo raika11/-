@@ -5,7 +5,7 @@ package jmnet.moka.web.push.support.message;
 
 import java.util.List;
 import java.util.Map;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +34,7 @@ import lombok.ToString;
 public class PushHttpResponse {
 
 
-    private MobPushToken pushToken;
+    private PushAppToken pushToken;
 
     private int statusCode;
 
@@ -46,13 +46,13 @@ public class PushHttpResponse {
 
 
 
-    public MobPushToken getPushToken() {
+    public PushAppToken getPushToken() {
         return pushToken;
     }
 
 
 
-    public void setPushToken(MobPushToken pushToken) {
+    public void setPushToken(PushAppToken pushToken) {
         this.pushToken = pushToken;
     }
 

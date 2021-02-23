@@ -122,8 +122,6 @@ const AgGrid = forwardRef((props, ref) => {
                 showTotalString={false}
                 onChangeSearchOption={onChangeSearchOption}
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
-                dragManaged={false}
-                animateRows={false}
                 rowSelection="multiple"
             />
             <ChangeArtTitleModal show={modalShow} onHide={() => setModalShow(false)} artData={selected} onSave={afterChangeTitle} />

@@ -2,8 +2,8 @@ import React, { Suspense, useEffect, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { initialState, deleteArea, clearStore, getAreaListModal } from '@store/area';
+import { AREA_HOME } from '@/constants';
 import toast, { messageBox } from '@utils/toastUtil';
-
 import AreaAgGridDepth1 from './AreaAgGridDepth1';
 import AreaAgGridDepth2 from './AreaAgGridDepth2';
 import AreaAgGridDepth3 from './AreaAgGridDepth3';
@@ -21,7 +21,8 @@ const Area = () => {
     const [listDepth1, setListDepth1] = useState([]);
     const [listDepth2, setListDepth2] = useState([]);
     const [listDepth3, setListDepth3] = useState([]);
-    const [flag, setFlag] = useState({ depth1: it, depth2: it, depth3: it });
+    const [flag, setFlag] = useState({ depth1: it, depth2: it, depth3: it }); // 리스트 조회 플래그
+    const [sourceCode, setSourceCode] = useState(AREA_HOME[0].value);
 
     /**
      * 삭제
@@ -38,11 +39,16 @@ const Area = () => {
                         if (header.success && body) {
                             toast.success(header.message);
                             const nt = new Date().getTime();
-                            depth === 1
-                                ? setFlag({ ...flag, depth1: nt, depth2: nt, depth3: nt })
-                                : depth === 2
-                                ? setFlag({ ...flag, depth2: nt, depth3: nt })
-                                : setFlag({ ...flag, depth3: nt });
+                            if (depth === 1) {
+                                setFlag({ depth1: nt, depth2: nt, depth3: nt });
+                                setAreaDepth1(initialState.initData);
+                            } else if (depth === 2) {
+                                setFlag({ ...flag, depth2: nt, depth3: nt });
+                                setAreaDepth2(initialState.initData);
+                            } else {
+                                setFlag({ ...flag, depth3: nt });
+                                setAreaDepth3(initialState.initData);
+                            }
                         } else {
                             messageBox.alert(header.message);
                         }
@@ -64,6 +70,7 @@ const Area = () => {
                 getAreaListModal({
                     search: {
                         parentAreaSeq: area.areaSeq,
+                        sourceCode,
                     },
                     callback: ({ header, body }) => {
                         if (header.success) {
@@ -87,7 +94,7 @@ const Area = () => {
                 }),
             );
         },
-        [dispatch, executeDel],
+        [dispatch, executeDel, sourceCode],
     );
 
     useEffect(() => {
@@ -106,28 +113,42 @@ const Area = () => {
 
             {/* 편집영역 리스트 */}
             <AreaAgGridDepth1
+                sourceCode={sourceCode}
+                setSourceCode={setSourceCode}
                 areaDepth1={areaDepth1}
-                setAreaDepth1={setAreaDepth1}
+                setAreaDepth1={(data) => {
+                    setAreaDepth1(data);
+                    setAreaDepth2(initialState.initData);
+                    setAreaDepth3(initialState.initData);
+                    const nt = new Date().getTime();
+                    setFlag({ ...flag, depth2: nt, depth3: nt });
+                }}
                 listDepth1={listDepth1}
-                setListDepth1={setListDepth1}
+                setListDepth1={(list) => {
+                    setListDepth1(list);
+                    setListDepth2([]);
+                    setListDepth3([]);
+                }}
                 flag={flag}
-                setFlag={setFlag}
-                setAreaDepth2={setAreaDepth2}
-                setAreaDepth3={setAreaDepth3}
                 onDelete={handleClickDelete}
             />
             <AreaAgGridDepth2
+                sourceCode={sourceCode}
                 areaDepth1={areaDepth1}
                 areaDepth2={areaDepth2}
                 flag={flag}
                 setFlag={setFlag}
                 listDepth2={listDepth2}
                 setListDepth2={setListDepth2}
-                setAreaDepth2={setAreaDepth2}
-                setAreaDepth3={setAreaDepth3}
+                setAreaDepth2={(data) => {
+                    setAreaDepth2(data);
+                    setAreaDepth3(initialState.initData);
+                    setFlag({ ...flag, depth3: new Date().getTime() });
+                }}
                 onDelete={handleClickDelete}
             />
             <AreaAgGridDepth3
+                sourceCode={sourceCode}
                 areaDepth2={areaDepth2}
                 areaDepth3={areaDepth3}
                 flag={flag}
@@ -141,6 +162,7 @@ const Area = () => {
             {/* 편집영역 등록/수정 */}
             <Suspense>
                 <AreaEdit
+                    sourceCode={sourceCode}
                     onDelete={handleClickDelete}
                     areaDepth1={areaDepth1}
                     areaDepth2={areaDepth2}

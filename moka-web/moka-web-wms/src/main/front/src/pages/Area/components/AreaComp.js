@@ -31,8 +31,8 @@ const AreaComp = ({ areaComp, areaComps, index, onChange, disabled, setAreaComps
 
     return (
         <Form.Row className="mb-2" key={areaComp.component?.componentSeq}>
-            <div className="flex-shrink-0 mr-2" style={{ width: 86 }}>
-                <MokaInput value="컴포넌트" className="ft-13" disabled />
+            <div className="flex-shrink-0 mr-2" style={{ width: 74 }}>
+                <MokaInput value="컴포넌트" disabled />
             </div>
             <MokaInput value={areaComp.component?.componentName} inputProps={{ readOnly: true }} />
             {areaComp.component?.dataType === 'DESK' && (
@@ -41,7 +41,7 @@ const AreaComp = ({ areaComp, areaComps, index, onChange, disabled, setAreaComps
                 </Button>
             )}
             <div className="ml-2 flex-shrink-0">
-                <MokaInput as="select" name="compAlign" className="ft-13" value={areaComp.compAlign} onChange={(e) => onChange(e, index)} disabled={disabled}>
+                <MokaInput as="select" name="compAlign" value={areaComp.compAlign} onChange={(e) => onChange(e, index)} disabled={disabled}>
                     <option value={AREA_COMP_ALIGN_LEFT}>Left 영역</option>
                     <option value={AREA_COMP_ALIGN_RIGHT}>Right 영역</option>
                 </MokaInput>

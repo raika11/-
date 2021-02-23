@@ -5,7 +5,8 @@ import Form2 from './components/AreaFormDepth2';
 import { messageBox } from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
-const AreaEdit = ({ onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listDepth2, listDepth3, flag }) => {
+const AreaEdit = (props) => {
+    const { onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listDepth2, listDepth3, flag, sourceCode } = props;
     const selectedDepth = useSelector(({ area }) => area.selectedDepth);
     const [modalShow, setModalShow] = useState(false);
     const [modalDomainId, setModalDomainId] = useState();
@@ -28,18 +29,18 @@ const AreaEdit = ({ onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listD
 
     useEffect(() => {
         if (selectedDepth === 1) {
-            setPage(areaDepth1?.area?.page || {});
+            setPage(areaDepth1.area?.page || {});
         } else if (selectedDepth === 2) {
-            setPage(areaDepth2?.area?.page || {});
+            setPage(areaDepth2.area?.page || {});
         } else if (selectedDepth === 3) {
-            setPage(areaDepth3?.area?.page || {});
+            setPage(areaDepth3.area?.page || {});
         }
     }, [areaDepth1.area, areaDepth2.area, areaDepth3.area, selectedDepth]);
 
     return (
         <React.Fragment>
             {/* 1뎁스 폼 */}
-            {selectedDepth === 1 && <Form1 onDelete={onDelete} area={areaDepth1} setFlag={setFlag} child={listDepth2} flag={flag} />}
+            {selectedDepth === 1 && <Form1 onDelete={onDelete} area={areaDepth1} setFlag={setFlag} child={listDepth2} flag={flag} sourceCode={sourceCode} />}
             {/* 2뎁스 폼 */}
             {selectedDepth === 2 && (
                 <Form2
@@ -50,10 +51,11 @@ const AreaEdit = ({ onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listD
                     setPage={setPage}
                     depth={selectedDepth}
                     child={listDepth3}
-                    parent={areaDepth1?.area}
+                    parent={areaDepth1.area}
                     area={areaDepth2}
                     flag={flag}
                     setFlag={setFlag}
+                    sourceCode={sourceCode}
                 />
             )}
             {/* 3뎁스 폼 */}
@@ -66,15 +68,16 @@ const AreaEdit = ({ onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listD
                     setPage={setPage}
                     depth={selectedDepth}
                     child={[]}
-                    parent={areaDepth2?.area}
+                    parent={areaDepth2.area}
                     area={areaDepth3}
                     flag={flag}
                     setFlag={setFlag}
+                    sourceCode={sourceCode}
                 />
             )}
 
             {/* 페이지 검색 모달 */}
-            <PageListModal show={modalShow} onHide={() => setModalShow(false)} onClickSave={handleClickSave} domainId={modalDomainId} />
+            <PageListModal show={modalShow} selected={page?.pageSeq} onHide={() => setModalShow(false)} onClickSave={handleClickSave} domainId={modalDomainId} />
         </React.Fragment>
     );
 };

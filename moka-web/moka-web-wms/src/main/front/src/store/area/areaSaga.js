@@ -12,6 +12,11 @@ const getAreaListModal = createRequestSaga(act.GET_AREA_LIST_MODAL, api.getAreaL
 const getAreaModal = createRequestSaga(act.GET_AREA_MODAL, api.getArea, true);
 
 /**
+ * 편집영역 트리 정렬
+ */
+const putAreaListSort = createRequestSaga(act.PUT_AREA_LIST_SORT, api.putAreaListSrot, false);
+
+/**
  * 저장/수정
  * @param {object} param0.payload.area area 데이터
  * @param {func} param0.payload.callback 콜백
@@ -81,6 +86,7 @@ const getAreaTree = createRequestSaga(act.GET_AREA_TREE, api.getAreaTree);
 
 export default function* saga() {
     yield takeEvery(act.GET_AREA_LIST_MODAL, getAreaListModal);
+    yield takeLatest(act.PUT_AREA_LIST_SORT, putAreaListSort);
     yield takeEvery(act.GET_AREA_MODAL, getAreaModal);
     yield takeLatest(act.SAVE_AREA, saveArea);
     yield takeLatest(act.DELETE_AREA, deleteArea);

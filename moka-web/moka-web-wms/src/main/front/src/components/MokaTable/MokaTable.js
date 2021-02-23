@@ -81,11 +81,6 @@ const propTypes = {
      */
     dragStyle: PropTypes.bool,
     /**
-     * 드래그 기능을 직접 구현하는지 (false시 ag-grid의 unmanaged drag 기능이 동작)
-     * @default
-     */
-    dragManaged: PropTypes.bool,
-    /**
      * 추가적인 frameworkComponents
      */
     frameworkComponents: PropTypes.object,
@@ -114,21 +109,23 @@ const propTypes = {
 };
 
 const defaultProps = {
-    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
-    loading: false,
+    // paging default
     paging: true,
-    dragStyle: false,
-    dragManaged: false,
-    header: true,
     total: 0,
     page: 0,
     size: PAGESIZE_OPTIONS[0],
     pageSizes: PAGESIZE_OPTIONS,
-    sizeType: '',
     displayPageNum: DISPLAY_PAGE_NUM,
+    sizeType: '',
+    // ag-grid default
+    localeText: { noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' },
     preventRowClickCell: [],
+    loading: false,
+    dragStyle: false,
+    header: true,
     rowSelection: 'single',
     headerHeight: 35,
+    rowDragManaged: false,
     animateRows: false,
     suppressRefreshCellAfterUpdate: false,
 };
@@ -160,13 +157,11 @@ const MokaTable = forwardRef((props, ref) => {
         headerHeight,
         rowHeight,
         frameworkComponents,
-        animateRows,
         setGridInstance: setParentGridInstance,
         suppressRefreshCellAfterUpdate,
         onRowDataUpdated,
         refreshCellsParams,
         dragStyle,
-        dragManaged,
         // 페이지네이션 props
         paginationClassName,
         paging,
@@ -307,7 +302,6 @@ const MokaTable = forwardRef((props, ref) => {
             >
                 {loading && <MokaLoader />}
                 <AgGridReact
-                    suppressMoveWhenRowDragging={dragManaged}
                     suppressMovableColumns
                     suppressRowClickSelection
                     {...rest}

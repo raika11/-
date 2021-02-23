@@ -177,3 +177,8 @@ export const BULKS_CODE = {
         bulk_div: 'H',
     },
 };
+
+export const AREA_HOME = [
+    { name: '홈 섹션편집', value: 3 },
+    { name: '선데이 홈 섹션편집', value: 61 },
+]; // 편집영역 메뉴에 따른 리스트 조회 별도 저리

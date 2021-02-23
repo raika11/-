@@ -13,6 +13,9 @@ import SpecialEditForm from './components/SpecialEditForm';
 moment.locale('ko');
 const textReg = /[\*'"]/;
 
+/**
+ * 디지털스페셜 등록/수정
+ */
 const SpecialEdit = ({ match }) => {
     const dispatch = useDispatch();
     const { seqNo } = useParams();

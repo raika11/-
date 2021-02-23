@@ -6,6 +6,9 @@ import { DIGITAL_SPECIAL_URL } from '@/constants';
 import { EditThumbModal } from '@pages/Desking/modals';
 import { MokaInput, MokaInputLabel, MokaCopyTextButton, MokaInputGroup } from '@components';
 
+/**
+ * 폼 상세
+ */
 const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) => {
     const [articleUrl, setArticleUrl] = useState('');
     const [arcShow, setArcShow] = useState(false);
@@ -101,13 +104,13 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
         <Form>
             <Form.Row>
                 {/* 이미지등록 */}
-                <Col xs={4} className="p-0 pr-4 d-flex flex-column">
-                    <MokaInputLabel as="none" label="이미지 등록(290*180)" labelWidth={120} required className="mb-1" />
+                <Col xs={4} className="p-0 pr-32 d-flex flex-column">
+                    <MokaInputLabel as="none" label="이미지 등록(290*180)" labelClassName="w-100" required className="mb-1" />
                     <MokaInput
                         as="imageFile"
                         inputProps={{
                             width: '100%',
-                            height: 170,
+                            height: 160,
                             img: special.imgUrl,
                             deleteButton: true,
                             setFileValue: handleFileValue,
@@ -132,13 +135,13 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                         />
                     </div>
                 </Col>
-                {/* 사용여부/검색여부/리스트노출 */}
+
                 <Col xs={8} className="p-0 d-flex flex-column">
+                    {/* 사용여부/검색여부/리스트노출 */}
                     <Form.Row className="d-flex align-items-center justify-content-between mb-2">
                         <Col xs={4} className="p-0">
                             <MokaInputLabel
                                 label="사용여부"
-                                labelWidth={72}
                                 as="switch"
                                 name="usedYn"
                                 id="usedYn-switch"
@@ -149,7 +152,6 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                         <Col xs={4} className="p-0">
                             <MokaInputLabel
                                 label="검색여부"
-                                labelWidth={72}
                                 as="switch"
                                 name="schYn"
                                 id="schYn-switch"
@@ -160,7 +162,6 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                         <Col xs={4} className="p-0">
                             <MokaInputLabel
                                 label="리스트 노출"
-                                labelWidth={72}
                                 as="switch"
                                 name="listYn"
                                 id="listYn-switch"
@@ -169,45 +170,44 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             />
                         </Col>
                     </Form.Row>
+
                     {/* 페이지코드/회차 */}
                     <Form.Row className="mb-2">
-                        <Col xs={7} className="p-0 pr-20">
-                            <MokaInputLabel
-                                label="페이지 코드"
-                                labelWidth={72}
-                                as="select"
-                                name="pageCd"
-                                value={special.pageCd}
-                                onChange={handleChangeValue}
-                                isInvalid={error.pageCd}
-                                invalidMessage={error.pageCdMessage}
-                                required
-                            >
-                                <option hidden>선택</option>
-                                {ptRows &&
-                                    ptRows.map((code) => (
-                                        <option key={code.id} value={code.id}>
-                                            {code.name}
-                                        </option>
-                                    ))}
-                            </MokaInputLabel>
-                        </Col>
-                        <Col xs={5} className="p-0 pl-20">
-                            <MokaInputLabel
-                                label="회차"
-                                labelWidth={23}
-                                name="ordinal"
-                                required
-                                value={special.ordinal}
-                                isInvalid={error.ordinal}
-                                invalidMessage={error.ordinalMessage}
-                                onChange={handleChangeValue}
-                            />
-                        </Col>
+                        <MokaInputLabel
+                            className="flex-shrink-0"
+                            label="페이지 코드"
+                            as="select"
+                            name="pageCd"
+                            value={special.pageCd}
+                            onChange={handleChangeValue}
+                            isInvalid={error.pageCd}
+                            invalidMessage={error.pageCdMessage}
+                            required
+                        >
+                            <option hidden>선택</option>
+                            {ptRows &&
+                                ptRows.map((code) => (
+                                    <option key={code.id} value={code.id}>
+                                        {code.name}
+                                    </option>
+                                ))}
+                        </MokaInputLabel>
+
+                        <MokaInputLabel
+                            label="회차"
+                            className="ml-40"
+                            name="ordinal"
+                            required
+                            value={special.ordinal}
+                            isInvalid={error.ordinal}
+                            invalidMessage={error.ordinalMessage}
+                            onChange={handleChangeValue}
+                        />
                     </Form.Row>
+
                     {/* 검색키워드 */}
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="검색 키워드" labelWidth={72} className="mb-2" as="none" />
+                        <MokaInputLabel label="검색 키워드" className="mb-2" as="none" />
                         <div className="w-100 d-flex flex-column">
                             <MokaInput
                                 name="schKwd"
@@ -220,9 +220,10 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             <p className="m-0 ft-12 text-neutral">*'" 포함 특수문자 사용금지</p>
                         </div>
                     </Form.Row>
+
                     {/* 제목 */}
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label="제목" labelWidth={72} className="mb-2" required as="none" />
+                        <MokaInputLabel label="제목" className="mb-2" required as="none" />
                         <div className="w-100 d-flex flex-column">
                             <MokaInput
                                 name="pageTitle"
@@ -235,13 +236,13 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             <p className="m-0 ft-12 text-neutral">*'" 포함 특수문자 사용금지</p>
                         </div>
                     </Form.Row>
+
                     {/* 서비스시작일/서비스종료일 */}
                     <Form.Row className="mb-2">
                         <Col xs={6} className="p-0 pr-10">
                             <MokaInputLabel
                                 label="서비스 시작일"
                                 as="dateTimePicker"
-                                labelWidth={72}
                                 name="pageSdate"
                                 inputProps={{ timeFormat: null }}
                                 value={special.pageSdate}
@@ -254,7 +255,6 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                             <MokaInputLabel
                                 label="서비스 종료일"
                                 as="dateTimePicker"
-                                labelWidth={72}
                                 name="pageEdate"
                                 inputProps={{ timeFormat: null }}
                                 value={special.pageEdate}
@@ -266,10 +266,10 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                     </Form.Row>
                 </Col>
             </Form.Row>
+
             {/* PC URL */}
             <MokaInputLabel
                 label="PC URL"
-                labelWidth={110}
                 className="mb-2"
                 name="pcUrl"
                 value={special.pcUrl}
@@ -278,10 +278,10 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 invalidMessage={error.pcUrlMessage}
                 required
             />
+
             {/* Mob URL */}
             <MokaInputLabel
                 label="Mobile URL"
-                labelWidth={110}
                 className="mb-2"
                 name="mobUrl"
                 value={special.mobUrl}
@@ -290,58 +290,56 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 invalidMessage={error.mobUrlMessage}
                 required
             />
+
             {/* 중계페이지 URL */}
             <MokaInputGroup
                 label="중계페이지 URL"
-                labelWidth={110}
                 value={articleUrl}
                 className="mb-2"
                 append={<MokaCopyTextButton copyText={articleUrl} successText="태그가 복사 되었습니다" />}
                 disabled
             />
+
             {/* 광고추적 PC URL */}
             <MokaInputLabel
                 label="광고추척 PC URL"
-                labelWidth={110}
                 className="mb-2"
                 placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) http://dgate.opap.co.kr/imp/?ssn=566&adsn=7478&cresn=5362`}
                 name="joinsAdTag"
                 value={special.joinsAdTag}
                 onChange={handleChangeValue}
             />
+
             {/* 광고추적 Mobile URL */}
             <MokaInputLabel
                 label="광고추적 Mobile URL"
-                labelWidth={110}
                 className="mb-2"
                 placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) http://dgate.opap.co.kr/imp/?ssn=566&adsn=7478&cresn=5362`}
                 name="joinsAdTagMob"
                 value={special.joinsAdTagMob}
                 onChange={handleChangeValue}
             />
+
             {/* 구글 웹로그 코드 */}
             <MokaInputLabel
                 label="구글 웹로그 코드"
-                labelWidth={110}
                 className="mb-2"
                 placeholder={`입력이 없을 경우 공통 소스로 수정됩니다. ex) UA-40895666-10`}
                 name="googleTag"
                 value={special.googleTag}
                 onChange={handleChangeValue}
             />
+
             {/* 페이지 설명 */}
             <MokaInputLabel
                 label={
                     <>
-                        페이지 설명 <br />
+                        페이지 설명
                         <br />
-                        <p className="p-0 m-0 text-positive">
-                            *'" 포함 <br /> 특수문자 사용금지
-                        </p>
+                        <span className="text-neutral">*'" 포함 특수문자 사용금지</span>
                     </>
                 }
                 as="textarea"
-                labelWidth={110}
                 className="mb-2"
                 inputProps={{ rows: 3 }}
                 name="pageDesc"
@@ -350,17 +348,11 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                 isInvalid={error.pageDesc}
                 invalidMessage={error.pageDescMessage}
             />
+
             {/* 부서명 */}
             <Form.Row className="mb-2">
                 <Col xs={5} className="p-0">
-                    <MokaInputLabel
-                        label="부서명"
-                        labelWidth={110}
-                        name="repDeptName"
-                        value={special.repDeptName}
-                        onChange={handleChangeValue}
-                        disabled={special.repDeptNameSelect !== 'self'}
-                    />
+                    <MokaInputLabel label="부서명" name="repDeptName" value={special.repDeptName} onChange={handleChangeValue} disabled={special.repDeptNameSelect !== 'self'} />
                 </Col>
                 <Col xs={2} className="p-0 pl-2">
                     <MokaInput as="select" name="repDeptNameSelect" value={special.repDeptNameSelect} onChange={handleChangeValue}>
@@ -374,16 +366,17 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                     </MokaInput>
                 </Col>
             </Form.Row>
+
             {/* 개발담당자 정보 */}
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0 pr-40">
-                    <MokaInputLabel label="개발 담당자 이름" labelWidth={110} name="devName" value={special.devName} onChange={handleChangeValue} />
+                    <MokaInputLabel label="개발 담당자 이름" name="devName" value={special.devName} onChange={handleChangeValue} />
                 </Col>
                 <Col xs={5} className="p-0">
-                    <MokaInputLabel label="이메일" labelWidth={35} className="m-0" name="devEmail" value={special.devEmail} onChange={handleChangeValue} />
+                    <MokaInputLabel label="이메일" className="m-0" name="devEmail" value={special.devEmail} onChange={handleChangeValue} />
                 </Col>
                 <Col xs={3} className="p-0 pl-40">
-                    <MokaInputLabel label="전화번호" labelWidth={49} className="m-0" name="devPhone" value={special.devPhone} onChange={handleChangeValue} />
+                    <MokaInputLabel label="전화번호" className="m-0" name="devPhone" value={special.devPhone} onChange={handleChangeValue} />
                 </Col>
             </Form.Row>
 
@@ -392,19 +385,19 @@ const SpecialEditForm = ({ special, onChange, error, setError, ptRows, depts }) 
                     {/* 등록 정보 */}
                     <Form.Row className="mb-2">
                         <Col xs={4} className="p-0">
-                            <MokaInputLabel label="등록자" labelWidth={110} name="regId" value={special.regId} inputProps={{ plaintext: true, readOnly: true }} />
+                            <MokaInputLabel label="등록자" name="regId" value={special.regId} inputProps={{ plaintext: true, readOnly: true }} />
                         </Col>
                         <Col xs={8} className="p-0">
-                            <MokaInputLabel label="등록일시" labelWidth={70} name="regDt" value={special.regDt} inputProps={{ plaintext: true, readOnly: true }} />
+                            <MokaInputLabel label="등록일시" name="regDt" value={special.regDt} inputProps={{ plaintext: true, readOnly: true }} />
                         </Col>
                     </Form.Row>
                     {/* 수정 정보 */}
                     <Form.Row>
                         <Col xs={4} className="p-0">
-                            <MokaInputLabel label="수정자" labelWidth={110} name="modId" value={special.modId} inputProps={{ plaintext: true, readOnly: true }} />
+                            <MokaInputLabel label="수정자" name="modId" value={special.modId} inputProps={{ plaintext: true, readOnly: true }} />
                         </Col>
                         <Col xs={8} className="p-0">
-                            <MokaInputLabel label="수정일시" labelWidth={70} name="modDt" value={special.modDt} inputProps={{ plaintext: true, readOnly: true }} />
+                            <MokaInputLabel label="수정일시" name="modDt" value={special.modDt} inputProps={{ plaintext: true, readOnly: true }} />
                         </Col>
                     </Form.Row>
                 </React.Fragment>

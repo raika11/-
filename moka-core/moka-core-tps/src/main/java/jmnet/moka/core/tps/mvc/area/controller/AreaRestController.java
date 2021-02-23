@@ -447,9 +447,8 @@ public class AreaRestController extends AbstractCommonController {
      * @throws Exception            편집영역오류 그외 모든 에러
      */
     @ApiOperation(value = "편집영역 정렬")
-    @PutMapping(value = "/sort", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> putAreaSort(
-            @ApiParam("부모편집영역 일련번호") @PathVariable("parentAreaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long parentAreaSeq,
+    @PutMapping(value = "/sort/{parentAreaSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> putAreaSort(@ApiParam("부모편집영역 일련번호") @PathVariable("parentAreaSeq") Long parentAreaSeq,
             @ApiParam("편집영역 일련번호 목록") @RequestBody @Valid List<Long> areaSeqList)
             throws InvalidDataException, Exception {
         try {

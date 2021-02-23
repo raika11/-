@@ -23,7 +23,7 @@ export const UserInfoRenderer = ({ value }) => {
         <>
             {/*<Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>{memId}</Col>*/}
             <Col className="d-flex pl-0" style={{ lineHeight: '1.1em' }}>
-                {memId} / {memNm}
+                {memNm}({memId})
             </Col>
         </>
     );

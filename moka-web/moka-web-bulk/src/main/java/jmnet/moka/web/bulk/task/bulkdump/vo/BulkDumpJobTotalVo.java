@@ -62,9 +62,6 @@ public class BulkDumpJobTotalVo implements Serializable {
     @JsonIgnore
     private List<BulkDumpJobVo> bulkDumpJobs;
 
-    @JsonIgnore
-    private AtomicInteger serialNumber;
-
     private boolean isNotFinalDump;
 
     public static BulkDumpJobTotalVo makeBulkDumpJobTotal(int dumpSeqNo, String totalId, String dirDump) {
@@ -78,8 +75,13 @@ public class BulkDumpJobTotalVo implements Serializable {
                 .sourceFileNames(new ArrayList<>())
                 .jobFileNames(new ArrayList<>())
                 .bulkDumpJobs( new ArrayList<>())
-                .serialNumber( new AtomicInteger(0))
                 .build();
+    }
+
+    @JsonIgnore
+    private static AtomicInteger serialNumber = new AtomicInteger(0);
+    public static int getSerialNumber() {
+        return serialNumber.incrementAndGet();
     }
 
     public String getBulkJobFileName(String fileExt) {
@@ -105,10 +107,6 @@ public class BulkDumpJobTotalVo implements Serializable {
         }
         dumpJob.getSourceJobFiles().add( new BulkDumpJobFileVo( downloadFileName, filename));
         return true;
-    }
-
-    public int getSerialNumber() {
-        return serialNumber.incrementAndGet();
     }
 
     public boolean exportDumpJob(BulkDumpEnvCP dumpEnvCP, BulkDumpJobVo dumpJob, ObjectMapper mapper) {

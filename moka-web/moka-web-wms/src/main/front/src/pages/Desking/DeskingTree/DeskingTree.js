@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
+import { AREA_HOME } from '@/constants';
 import { GET_AREA_TREE, getAreaTree, clearTree } from '@store/area/areaAction';
 import { getComponentWorkList, changeArea, clearList } from '@store/desking/deskingAction';
 import DeskingTreeView from './DeskingTreeView';
@@ -24,7 +25,14 @@ const DeskingTree = ({ setComponentAgGridInstances }) => {
     }));
 
     useEffect(() => {
-        dispatch(getAreaTree({ search: null, callback: null }));
+        dispatch(
+            getAreaTree({
+                search: {
+                    sourceCode: AREA_HOME[0].value,
+                },
+                callback: null,
+            }),
+        );
     }, [dispatch]);
 
     useEffect(() => {

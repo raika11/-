@@ -634,10 +634,10 @@ const ChannelEdit = ({ match }) => {
                         text: params.chnlSeq === 'add' ? '등록' : '수정',
                         variant: 'positive',
                         onClick: handleClickSaveButton,
-                        className: 'mr-05',
+                        className: 'mr-1',
                         useAuth: true,
                     },
-                    { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton, className: 'mr-05' },
+                    { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton },
                 ]}
             >
                 <Form className="">
@@ -659,7 +659,7 @@ const ChannelEdit = ({ match }) => {
                         <Col xs={10} className="p-0">
                             <MokaInputLabel
                                 label={`팟티\n(채널연결)`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 className="mb-0"
                                 id="podtyChnlSrl"
                                 name="podtyChnlSrl"
@@ -680,7 +680,7 @@ const ChannelEdit = ({ match }) => {
                         <Col className="p-0">
                             <MokaInputLabel
                                 label={`팟티 채널\n(URL)`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 className="mb-0"
                                 id="podtyUrl"
                                 name="podtyUrl"
@@ -695,7 +695,7 @@ const ChannelEdit = ({ match }) => {
                         <Col className="p-0">
                             <MokaInputLabel
                                 label={`채널명`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 className="mb-0"
                                 id="chnlNm"
                                 name="chnlNm"
@@ -720,7 +720,7 @@ const ChannelEdit = ({ match }) => {
                             {/* 시즌명 */}
                             <MokaInputLabel
                                 label={`시즌명`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 className="pr-2"
                                 inputClassName="resize-none"
                                 id="seasonNm"
@@ -760,7 +760,7 @@ const ChannelEdit = ({ match }) => {
                         <Col className="p-0">
                             <MokaInputLabel
                                 label={`채널 소개`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 as="textarea"
                                 className="mb-2"
                                 inputClassName="resize-none"
@@ -777,7 +777,7 @@ const ChannelEdit = ({ match }) => {
                         <Col xs={5} className="p-0 pr-2">
                             <MokaInputLabel
                                 label={`개설일`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 as="dateTimePicker"
                                 className="mb-0"
                                 name="chnlSdt"
@@ -795,7 +795,7 @@ const ChannelEdit = ({ match }) => {
                         <Col xs={5} className="p-0">
                             <MokaInputLabel
                                 label={`종료일`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 as="dateTimePicker"
                                 className="mb-0"
                                 name="chnlEdt"
@@ -810,7 +810,7 @@ const ChannelEdit = ({ match }) => {
                     </Form.Row>
                     {/* 방송요일 */}
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label={`방송요일`} labelWidth={64} as="none" />
+                        <MokaInputLabel label={`방송요일`} labelWidth={70} as="none" />
                         <MokaInput
                             as="checkbox"
                             name="day0"
@@ -873,7 +873,7 @@ const ChannelEdit = ({ match }) => {
                         <Col className="p-0">
                             <MokaInputLabel
                                 label={`태그`}
-                                labelWidth={64}
+                                labelWidth={70}
                                 className="mb-0"
                                 id="keywords"
                                 name="keywords"
@@ -886,7 +886,7 @@ const ChannelEdit = ({ match }) => {
                     <hr />
                     {/* 진행자 검색(모달) */}
                     <Form.Row className="mb-2">
-                        <MokaInputLabel label={`진행자`} labelWidth={64} as="none" />
+                        <MokaInputLabel label={`진행자`} labelWidth={70} as="none" />
                         <Col xs={4} className="p-0">
                             <Button xs={12} variant="searching" className="mb-0 mr-2" onClick={() => handleClickSearchRepoterButton()}>
                                 기자 검색

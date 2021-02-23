@@ -12,7 +12,7 @@ const WorkDescRenderer = forwardRef(({ data }, ref) => {
     return (
         <div className="d-flex flex-column justify-content-center h-100">
             <div>
-                <a target="_blank" className="mb-0 ft-12" rel="noopener noreferrer" href={data.totalId}>
+                <a target="_blank" className="mb-0" rel="noopener noreferrer" href={data.totalId}>
                     {data.url}
                 </a>
             </div>

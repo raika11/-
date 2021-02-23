@@ -353,7 +353,6 @@ const GroupEdit = ({ match }) => {
                         <MokaInputLabel
                             label="그룹코드"
                             required
-                            labelWidth={80}
                             name="groupCd"
                             value={groupCd}
                             onChange={handleChangeValue}
@@ -364,7 +363,7 @@ const GroupEdit = ({ match }) => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="d-flex mb-2 text-align-center">
-                    <MokaInputLabel label=" " labelWidth={80} as="none" />
+                    <MokaInputLabel label=" " as="none" />
                     <Form.Label className="text-danger">
                         <div>* 한번입력하면 변경하실 수 없습니다.</div>
                         <div style={{ textIndent: 8 }}>신중히 입력하시기 바랍니다.</div>
@@ -375,7 +374,6 @@ const GroupEdit = ({ match }) => {
                         <MokaInputLabel
                             label="그룹명"
                             required
-                            labelWidth={80}
                             name="groupNm"
                             value={groupNm}
                             onChange={handleChangeValue}
@@ -389,7 +387,6 @@ const GroupEdit = ({ match }) => {
                         <MokaInputLabel
                             label="그룹 한글명"
                             required
-                            labelWidth={80}
                             name="groupKorNm"
                             value={groupKorNm}
                             onChange={handleChangeValue}
@@ -400,12 +397,12 @@ const GroupEdit = ({ match }) => {
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="등록자" labelWidth={80} disabled={true} name={regId} value={regId} />
+                        <MokaInputLabel label="등록자" disabled={true} name={regId} value={regId} />
                     </Col>
                 </Form.Row>
                 <Form.Row>
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="등록일시" labelWidth={80} disabled={true} name={regDt} value={group.regDt} />
+                        <MokaInputLabel label="등록일시" disabled={true} name={regDt} value={group.regDt} />
                     </Col>
                 </Form.Row>
             </Form>

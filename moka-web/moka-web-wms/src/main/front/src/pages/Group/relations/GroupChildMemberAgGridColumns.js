@@ -1,4 +1,3 @@
-export const localeText = { noRowsToShow: '조회 결과가 없습니다.', loadingOoo: '조회 중입니다..' };
 export const columnDefs = [
     {
         colId: 'checkbox',
@@ -11,7 +10,6 @@ export const columnDefs = [
     {
         headerName: '이름',
         field: 'memberNm',
-        //cellStyle: { textAlign: 'center' },
         width: 80,
     },
     {

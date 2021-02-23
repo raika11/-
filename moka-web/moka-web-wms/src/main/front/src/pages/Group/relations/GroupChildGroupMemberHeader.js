@@ -1,21 +1,23 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 const GroupChildGroupMemberHeader = ({ onClick }) => {
     return (
-        <Row style={{ marginLeft: 0, marginRight: 0 }}>
-            <Col xs={4} className="p-0 pr-2">
-                <div className="mb-3 d-flex align-items-center">
-                    <Button variant="dark" onClick={onClick}>
+        <Container fluid className="p-0 mb-14">
+            <Row className="m-0 align-items-center">
+                <Col className="p-0">
+                    <Button variant="negative" onClick={onClick}>
                         선택 삭제
                     </Button>
-                </div>
-            </Col>
-            <Col xs={4} className="d-flex justify-content-center align-items-center">
-                <h5>현 사용자</h5>
-            </Col>
-        </Row>
+                </Col>
+                <Col className="p-0">
+                    <h5 className="mb-0">현 사용자</h5>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

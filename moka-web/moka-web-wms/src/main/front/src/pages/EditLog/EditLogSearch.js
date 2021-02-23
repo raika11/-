@@ -113,7 +113,7 @@ const EditLogSearch = () => {
     }, [dispatch]);
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             <Form.Row className="mb-2">
                 <Col xs={4} className="p-0 pr-2">
                     <MokaInput as="dateTimePicker" name="startDt" inputProps={{ timeFormat: null }} value={search.startDt} onChange={handleChangeSD} />
@@ -133,7 +133,7 @@ const EditLogSearch = () => {
                 </Col>
             </Form.Row>
 
-            <Form.Row className="mb-3">
+            <Form.Row className="mb-14">
                 <Col xs={2} className="p-0">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
@@ -144,8 +144,8 @@ const EditLogSearch = () => {
                     </MokaInput>
                 </Col>
                 <Col xs={10} className="d-flex p-0 pl-2">
-                    <MokaSearchInput name="keyword" className="flex-fill" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
-                    <Button variant="negative" className="flex-shrink-0 ml-2" onClick={handleReset}>
+                    <MokaSearchInput name="keyword" className="flex-fill mr-1" value={search.keyword} onChange={handleChangeValue} onSearch={handleSearch} />
+                    <Button variant="negative" className="flex-shrink-0" onClick={handleReset}>
                         초기화
                     </Button>
                 </Col>

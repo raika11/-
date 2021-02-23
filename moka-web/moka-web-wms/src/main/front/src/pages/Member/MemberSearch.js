@@ -63,7 +63,7 @@ const MemberSearch = () => {
     };
 
     return (
-        <Form className="mb-3">
+        <Form className="mb-14">
             <Form.Group as={Row}>
                 <Col xs={3} className="p-0 pr-2">
                     <MokaInput as="select" value={search.status} onChange={handleChangeSearchOption} name="searchStatus">

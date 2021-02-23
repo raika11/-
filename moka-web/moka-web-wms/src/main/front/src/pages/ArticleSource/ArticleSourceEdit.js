@@ -229,22 +229,13 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                     <Col xs={6} className="p-0">
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel
-                                    label="매체(CP)명"
-                                    labelWidth={110}
-                                    value={temp.sourceName}
-                                    name="sourceName"
-                                    onChange={handleChangeValue}
-                                    isInvalid={error.sourceName}
-                                    required
-                                />
+                                <MokaInputLabel label="매체(CP)명" value={temp.sourceName} name="sourceName" onChange={handleChangeValue} isInvalid={error.sourceName} required />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2 align-items-center">
                             <Col xs={6} className="p-0">
                                 <MokaInputLabel
                                     label="매체 코드"
-                                    labelWidth={110}
                                     className="mr-2"
                                     value={temp.sourceCode}
                                     name="sourceCode"
@@ -264,22 +255,22 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="CP 관리자" labelWidth={110} value={temp.cpAdmin} name="cpAdmin" onChange={handleChangeValue} />
+                                <MokaInputLabel label="CP 관리자" value={temp.cpAdmin} name="cpAdmin" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="CP 연락처" labelWidth={110} value={temp.cpPhone} name="cpPhone" onChange={handleChangeValue} />
+                                <MokaInputLabel label="CP 연락처" value={temp.cpPhone} name="cpPhone" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="CP 메일" labelWidth={110} value={temp.cpEmail} name="cpEmail" onChange={handleChangeValue} />
+                                <MokaInputLabel label="CP 메일" value={temp.cpEmail} name="cpEmail" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="XML포맷 출처" labelWidth={110} as="select" value={temp.joinsXmlFormat} name="joinsXmlFormat" onChange={handleChangeValue}>
+                                <MokaInputLabel label="XML포맷 출처" as="select" value={temp.joinsXmlFormat} name="joinsXmlFormat" onChange={handleChangeValue}>
                                     <option value="Y">조인스</option>
                                     <option value="N">CP 업체</option>
                                 </MokaInputLabel>
@@ -287,7 +278,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="본문 이미지" labelWidth={110} as="select" value={temp.receiveImgYn} name="receiveImgYn" onChange={handleChangeValue}>
+                                <MokaInputLabel label="본문 이미지" as="select" value={temp.receiveImgYn} name="receiveImgYn" onChange={handleChangeValue}>
                                     <option value="Y">이미지 FTP 수신</option>
                                     <option value="N">외부 이미지</option>
                                 </MokaInputLabel>
@@ -295,65 +286,49 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
-                                <MokaInputLabel label="업체 IP 정보(구분)" labelWidth={110} value={temp.cpRegIp} name="cpRegIp" onChange={handleChangeValue} />
+                                <MokaInputLabel label="업체 IP 정보(구분)" value={temp.cpRegIp} name="cpRegIp" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
-                                <MokaInputLabel label="FTP 경로" labelWidth={110} value={temp.cpXmlPath} name="cpXmlPath" onChange={handleChangeValue} />
+                                <MokaInputLabel label="FTP 경로" value={temp.cpXmlPath} name="cpXmlPath" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
-                                <MokaInputLabel label="기본 URL" labelWidth={110} value={temp.sourceBaseurl} name="sourceBaseurl" onChange={handleChangeValue} />
+                                <MokaInputLabel label="기본 URL" value={temp.sourceBaseurl} name="sourceBaseurl" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={11} className="p-0">
-                                <MokaInputLabel label="이미지 URL" labelWidth={110} value={temp.sourceImageUrl} name="sourceImageUrl" onChange={handleChangeValue} />
+                                <MokaInputLabel label="이미지 URL" value={temp.sourceImageUrl} name="sourceImageUrl" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                     </Col>
                     <Col xs={6} className="p-0">
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel
-                                    label="매체 타입"
-                                    labelWidth={110}
-                                    value={temp.sourceType}
-                                    name="sourceType"
-                                    onChange={handleChangeValue}
-                                    isInvalid={error.sourceType}
-                                    required
-                                />
+                                <MokaInputLabel label="매체 타입" value={temp.sourceType} name="sourceType" onChange={handleChangeValue} isInvalid={error.sourceType} required />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel
-                                    label="서버 구분"
-                                    labelWidth={110}
-                                    value={temp.serverGubun}
-                                    name="serverGubun"
-                                    onChange={handleChangeValue}
-                                    isInvalid={error.serverGubun}
-                                />
+                                <MokaInputLabel label="서버 구분" value={temp.serverGubun} name="serverGubun" onChange={handleChangeValue} isInvalid={error.serverGubun} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="매체 기타" labelWidth={110} value={temp.sourceEtc} name="sourceEtc" onChange={handleChangeValue} />
+                                <MokaInputLabel label="매체 기타" value={temp.sourceEtc} name="sourceEtc" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
                             <Col xs={9} className="p-0">
-                                <MokaInputLabel label="내부관리자" labelWidth={110} value={temp.localAdmin} name="localAdmin" onChange={handleChangeValue} />
+                                <MokaInputLabel label="내부관리자" value={temp.localAdmin} name="localAdmin" onChange={handleChangeValue} />
                             </Col>
                         </Form.Row>
                         <div className="d-flex flex-column justify-content-between" style={{ height: 265 }}>
                             <MokaInputLabel
-                                label="편집 필요 여부"
-                                labelWidth={110}
+                                label="편집 \n필요 여부"
                                 as="switch"
                                 name="artEditYn"
                                 id="switch-artEditYn"
@@ -362,7 +337,6 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="CP수신 여부"
-                                labelWidth={110}
                                 as="switch"
                                 name="rcvUsedYn"
                                 id="switch-rcvUsedYn"
@@ -371,7 +345,6 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                             />
                             <MokaInputLabel
                                 label="벌크 여부"
-                                labelWidth={110}
                                 as="switch"
                                 name="bulkFlag"
                                 id="switch-bulkFlag"
@@ -379,8 +352,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 onChange={handleChangeValue}
                             />
                             <MokaInputLabel
-                                label="중앙 사용 여부"
-                                labelWidth={110}
+                                label="중앙 \n사용 여부"
                                 as="switch"
                                 name="joongangUse"
                                 id="switch-joongangUse"
@@ -388,8 +360,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 onChange={handleChangeValue}
                             />
                             <MokaInputLabel
-                                label="JSTORE 사용 여부"
-                                labelWidth={110}
+                                label="JSTORE \n사용 여부"
                                 as="switch"
                                 name="jstoreUse"
                                 id="switch-jstoreUse"
@@ -397,8 +368,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 onChange={handleChangeValue}
                             />
                             <MokaInputLabel
-                                label="CONSALES 사용 여부"
-                                labelWidth={110}
+                                label="CONSALES \n사용 여부"
                                 as="switch"
                                 name="consalesUse"
                                 id="switch-consalesUse"
@@ -406,8 +376,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 onChange={handleChangeValue}
                             />
                             <MokaInputLabel
-                                label="일간 사용 여부"
-                                labelWidth={110}
+                                label="일간 \n사용 여부"
                                 as="switch"
                                 name="ilganUse"
                                 id="switch-ilganUse"
@@ -415,8 +384,7 @@ const ArticleSourceEdit = forwardRef((props, ref) => {
                                 onChange={handleChangeValue}
                             />
                             <MokaInputLabel
-                                label="소셜 전송 여부"
-                                labelWidth={110}
+                                label="소셜 \n전송 여부"
                                 as="switch"
                                 name="socialUse"
                                 id="switch-socialUse"

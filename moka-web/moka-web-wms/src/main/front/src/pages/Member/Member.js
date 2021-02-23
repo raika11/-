@@ -67,6 +67,7 @@ const Member = ({ match }) => {
                                     { title: '로그인 이력', icon: <MokaIcon iconName="fal-history" /> },
                                     { title: '메뉴권한', icon: <MokaIcon iconName="fal-file-alt" /> },
                                 ]}
+                                foldable={false}
                             />
                         </React.Fragment>
                     )}

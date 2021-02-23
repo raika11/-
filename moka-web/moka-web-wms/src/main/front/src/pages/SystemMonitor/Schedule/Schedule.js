@@ -19,7 +19,7 @@ const Schedule = ({ match }) => {
             </Helmet>
 
             <MokaCardTabs
-                width={1596}
+                className="w-100"
                 navWidth={120}
                 tabContentClass="h-100"
                 tabs={[<RunState match={match} />, <Work match={match} />, <DeleteWork match={match} />, <DeployServer match={match} />]}

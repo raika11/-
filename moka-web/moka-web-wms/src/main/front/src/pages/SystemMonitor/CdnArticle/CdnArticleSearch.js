@@ -48,8 +48,8 @@ const CdnArticleSearch = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <Form className="mb-2">
-            <Form.Row className="mb-2 d-flex">
+        <Form className="mb-14">
+            <Form.Row className="mb-14 d-flex">
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((type) => (
@@ -60,7 +60,7 @@ const CdnArticleSearch = ({ match }) => {
                     </MokaInput>
                 </Col>
                 <Col xs={10} className="p-0 d-flex">
-                    <MokaSearchInput value={search.keyword} name="keyword" className="mr-2 flex-fill" onChange={handleChangeValue} onSearch={handleSearch} />
+                    <MokaSearchInput value={search.keyword} name="keyword" className="mr-1 flex-fill" onChange={handleChangeValue} onSearch={handleSearch} />
                     <Button variant="negative" className="flex-shrink-0" onClick={handleReset}>
                         초기화
                     </Button>

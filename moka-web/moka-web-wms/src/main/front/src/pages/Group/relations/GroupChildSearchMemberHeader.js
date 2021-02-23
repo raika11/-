@@ -19,16 +19,16 @@ const GroupChildSearchMemberHeader = ({ onSearch, onClick }) => {
     };
 
     return (
-        <Form>
-            <Form.Row style={{ marginLeft: 0, marginRight: 0 }}>
-                <Col xs={3} className="p-0 pr-2">
-                    <div className="mb-3 d-flex align-items-center">
-                        <Button variant="dark" onClick={onClick}>
+        <Form className="mb-14">
+            <Form.Row>
+                <Col xs={3} className="p-0">
+                    <div className="d-flex align-items-center">
+                        <Button variant="positive" onClick={onClick}>
                             선택 추가
                         </Button>
                     </div>
                 </Col>
-                <Col xs={2} className="p-0">
+                <Col xs={2} className="p-0 pr-2">
                     <MokaInput
                         as="select"
                         name="searchType"
@@ -42,7 +42,7 @@ const GroupChildSearchMemberHeader = ({ onSearch, onClick }) => {
                         <option value="memberNm">이름</option>
                     </MokaInput>
                 </Col>
-                <Col xs={7}>
+                <Col xs={7} className="p-0">
                     <MokaSearchInput
                         name="keyword"
                         value={values.keyword}

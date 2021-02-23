@@ -47,7 +47,7 @@ const DeleteWorkEdit = () => {
     };
 
     return (
-        <Form>
+        <Form className="d-flex flex-column">
             <div className="mb-2" style={{ width: 200 }}>
                 <MokaInputLabel label="분류" name="group" value={data.group} inputProps={{ readOnly: true }} />
             </div>
@@ -77,10 +77,10 @@ const DeleteWorkEdit = () => {
             <MokaInputLabel label="설명" className="mb-2" name="desc" value={data.desc} inputProps={{ readOnly: true }} />
             <MokaInputLabel label="삭제 정보" name="delInfo" className="mb-4" value={`${data.delDt} ${data.delAdmin}`} inputProps={{ readOnly: true }} />
             <div className="d-flex justify-content-center">
-                <Button variant="positive" className="mr-2" onClick={handleClickRestore}>
+                <Button variant="positive" className="mr-1" onClick={handleClickRestore}>
                     복원
                 </Button>
-                <Button variant="negative" className="mr-2" onClick={handleClickCancel}>
+                <Button variant="negative" onClick={handleClickCancel}>
                     취소
                 </Button>
             </div>

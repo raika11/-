@@ -6,32 +6,28 @@ export default [
     {
         headerName: '번호',
         field: 'seqNo',
-        cellStyle: { fontSize: '12px' },
         width: 45,
     },
     {
         headerName: '별칭',
         field: 'alias',
-        cellStyle: { fontSize: '12px' },
         width: 180,
     },
     {
         headerName: 'IP / HOST',
         field: 'ipHost',
-        cellStyle: { fontSize: '12px' },
         cellRendererFramework: (row) => <WorkIpHostRenderer {...row} />,
         flex: 1,
     },
     {
         headerName: '계정 정보',
         field: 'id',
-        cellStyle: { fontSize: '12px' },
         width: 180,
     },
     {
         headerName: '등록 / 수정 정보',
         field: 'info',
-        cellStyle: { fontSize: '12px', lineHeight: '18px', height: '40px' },
+        cellStyle: { lineHeight: '18px', height: '40px' },
         width: 240,
         autoHeight: true,
         cellRendererFramework: (row) => <WorkStateRenderer {...row} />,

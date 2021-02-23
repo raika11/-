@@ -75,31 +75,33 @@ const SearchKeywordDetail = ({ match }) => {
                 },
             ]}
         >
-            <Form.Row className="mb-2">
-                <Col xs={8} className="p-0 pr-2">
-                    <MokaInputLabel label="검색어" inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
-                </Col>
-                <Col xs={2} className="p-0">
-                    <MokaInputLabel
-                        as="radio"
-                        inputProps={{ custom: true, label: '일자별', checked: type === 'DATE' }}
-                        name="type"
-                        value="DATE"
-                        id="type-1"
-                        onChange={handleChangeValue}
-                    />
-                </Col>
-                <Col xs={2} className="p-0">
-                    <MokaInputLabel
-                        as="radio"
-                        inputProps={{ custom: true, label: '영역별', checked: type === 'TAB' }}
-                        name="type"
-                        value="TAB"
-                        id="type-2"
-                        onChange={handleChangeValue}
-                    />
-                </Col>
-            </Form.Row>
+            <Form className="mb-14">
+                <Form.Row>
+                    <Col xs={8} className="p-0 pr-2">
+                        <MokaInputLabel label="검색어" inputClassName="font-weight-bold" inputProps={{ plaintext: true }} value={keyword} disabled />
+                    </Col>
+                    <Col xs={2} className="p-0">
+                        <MokaInputLabel
+                            as="radio"
+                            inputProps={{ custom: true, label: '일자별', checked: type === 'DATE' }}
+                            name="type"
+                            value="DATE"
+                            id="type-1"
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                    <Col xs={2} className="p-0">
+                        <MokaInputLabel
+                            as="radio"
+                            inputProps={{ custom: true, label: '영역별', checked: type === 'TAB' }}
+                            name="type"
+                            value="TAB"
+                            id="type-2"
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                </Form.Row>
+            </Form>
 
             <SearchKeywordDetailAgGrid type={type} />
         </MokaCard>

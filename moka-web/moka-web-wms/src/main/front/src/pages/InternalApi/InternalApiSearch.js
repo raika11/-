@@ -65,8 +65,8 @@ const InternalApiSearch = ({ match }) => {
     }, [dispatch]);
 
     return (
-        <div className="mb-2">
-            <Form.Row className="mb-2">
+        <Form className="mb-14">
+            <Form.Row>
                 <Col xs={4} className="d-flex p-0 pr-2">
                     <MokaInput as="select" name="apiMethod" value={search.apiMethod} onChange={handleChangeValue}>
                         <option value="">방식 전체</option>
@@ -87,7 +87,7 @@ const InternalApiSearch = ({ match }) => {
                         </MokaInput>
                     </div>
                 </Col>
-                <Col xs={8} className="d-flex p-0">
+                <Col xs={8} className="mb-14 d-flex p-0">
                     <div className="flex-shrink-0 mr-2">
                         <MokaInput as="select" name="searchType" value={search.searchType} onChange={handleChangeValue}>
                             {initialState.searchTypeList.map((type) => (
@@ -98,24 +98,24 @@ const InternalApiSearch = ({ match }) => {
                         </MokaInput>
                     </div>
                     <MokaSearchInput
-                        className="flex-fill"
+                        className="flex-fill mr-1"
                         name="keyword"
                         value={search.keyword}
                         placeholder="검색어를 입력하세요"
                         onChange={handleChangeValue}
                         onSearch={handleSearch}
                     />
-                    <Button variant="outline-neutral" className="ml-2 flex-shrink-0" onClick={handleClickReset}>
+                    <Button variant="outline-neutral" className="flex-shrink-0" onClick={handleClickReset}>
                         초기화
                     </Button>
                 </Col>
             </Form.Row>
-            <div className="float-right">
+            <div className="d-flex justify-content-end">
                 <Button variant="positive" onClick={handleClickAdd}>
                     등록
                 </Button>
             </div>
-        </div>
+        </Form>
     );
 };
 

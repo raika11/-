@@ -40,8 +40,8 @@ const DeleteWorkSearch = () => {
     };
 
     return (
-        <Form className="mb-2">
-            <div className="mb-2 d-flex align-items-center justify-content-between">
+        <Form className="mb-14">
+            <div className="mb-14 d-flex align-items-center justify-content-between">
                 <div className="d-flex">
                     <div className="mr-2" style={{ width: 200 }}>
                         <MokaInputLabel label="별칭" name="alias" value={search.alias} onChange={handleChangeValue} />
@@ -51,7 +51,7 @@ const DeleteWorkSearch = () => {
                     </div>
                 </div>
                 <div className="d-flex">
-                    <Button variant="searching" className="mr-2">
+                    <Button variant="searching" className="mr-1">
                         검색
                     </Button>
                     <Button variant="outline-neutral" onClick={handleClickReset}>

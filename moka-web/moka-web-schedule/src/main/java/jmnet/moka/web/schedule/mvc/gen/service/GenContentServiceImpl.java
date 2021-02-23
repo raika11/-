@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
+import jmnet.moka.web.schedule.mvc.gen.repository.GenContentHistoryRepository;
 import jmnet.moka.web.schedule.mvc.gen.repository.GenContentRepository;
-import jmnet.moka.web.schedule.mvc.gen.repository.GenStatusHistoryRepository;
+import jmnet.moka.web.schedule.support.StatusFlagType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class GenContentServiceImpl implements GenContentService {
     private GenContentRepository jobContentRepository;
 
     @Autowired
-    private GenStatusHistoryRepository genStatusHistoryRepository;
+    private GenContentHistoryRepository genStatusHistoryRepository;
 
     @Override
     public List<GenContent> findAllJobContent() {
@@ -43,23 +44,33 @@ public class GenContentServiceImpl implements GenContentService {
     }
 
     @Override
-    public GenStatusHistory findGenStatusHistory(Long jobSeq) {
-        return genStatusHistoryRepository.findFirstByJobSeqAndDelYnOrderBySeqNoDesc(jobSeq, "N");
+    public GenContentHistory findGenContentHistory(Long jobSeq) {
+        return genStatusHistoryRepository.findFirstByJobSeqAndDelYnOrderBySeqNoDesc(jobSeq, MokaConstants.NO);
     }
 
     @Override
-    public Optional<GenStatusHistory> findGenStatusHistoryById(Long seqNo) {
-        return genStatusHistoryRepository.findBySeqNoAndDelYnAndStatus(seqNo, "N", "0");
+    public Optional<GenContentHistory> findGenContentHistoryById(Long seqNo) {
+        return genStatusHistoryRepository.findBySeqNoAndDelYnAndStatus(seqNo, MokaConstants.NO, StatusFlagType.READY);
     }
 
     @Override
-    public GenStatusHistory updateGenStatusHistory(GenStatusHistory genStatusHistory) {
+    public GenContentHistory insertGenContentHistory(GenContentHistory genStatusHistory) {
         return genStatusHistoryRepository.save(genStatusHistory);
     }
 
     @Override
-    public GenContent findJobContentByWorkType(String workType) {
-        return jobContentRepository.findFirstByCategoryAndUsedYn(workType, MokaConstants.YES);
+    public long countGenContentHistoryByJobTaskId(String jobTaskId) {
+        return genStatusHistoryRepository.countByJobTaskId(jobTaskId);
+    }
+
+    @Override
+    public GenContentHistory updateGenContentHistory(GenContentHistory genStatusHistory) {
+        return genStatusHistoryRepository.save(genStatusHistory);
+    }
+
+    @Override
+    public Optional<GenContent> findJobContentByJobCd(String jobCd) {
+        return jobContentRepository.findFirstByJobCdAndUsedYn(jobCd, MokaConstants.YES);
     }
 
 }

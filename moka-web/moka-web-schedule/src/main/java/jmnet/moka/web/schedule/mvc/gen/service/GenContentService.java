@@ -3,7 +3,7 @@ package jmnet.moka.web.schedule.mvc.gen.service;
 import java.util.List;
 import java.util.Optional;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
 
 /**
  * <pre>
@@ -53,14 +53,28 @@ public interface GenContentService {
      *
      * @return 스케줄 상세
      */
-    GenStatusHistory findGenStatusHistory(Long jobSeq);
+    GenContentHistory findGenContentHistory(Long jobSeq);
 
     /**
      * 예약이력 일련번호로 reserved 정보 조회
      *
      * @return 예약이력
      */
-    Optional<GenStatusHistory> findGenStatusHistoryById(Long jobSeq);
+    Optional<GenContentHistory> findGenContentHistoryById(Long jobSeq);
+
+    /**
+     * 예약이력 task id로 이력 정보 조회
+     *
+     * @return 예약이력
+     */
+    GenContentHistory insertGenContentHistory(GenContentHistory genStatusHistory);
+
+    /**
+     * 예약이력 task id로 이력 정보 조회
+     *
+     * @return 예약이력
+     */
+    long countGenContentHistoryByJobTaskId(String jobTaskId);
 
 
     /**
@@ -68,7 +82,7 @@ public interface GenContentService {
      *
      * @return 예약이력
      */
-    GenStatusHistory updateGenStatusHistory(GenStatusHistory genStatusHistory);
+    GenContentHistory updateGenContentHistory(GenContentHistory genStatusHistory);
 
 
     /**
@@ -76,5 +90,5 @@ public interface GenContentService {
      *
      * @return 스케줄 정보
      */
-    GenContent findJobContentByWorkType(String workType);
+    Optional<GenContent> findJobContentByJobCd(String workType);
 }

@@ -1,6 +1,7 @@
 package jmnet.moka.web.schedule.mvc.gen.repository;
 
 import java.util.List;
+import java.util.Optional;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
@@ -34,9 +35,10 @@ public interface GenContentRepository extends JpaRepository<GenContent, Long> {
     /**
      * WorkType에 해당하는 Gen Content 조회. 테이블 변경시 메소드명 변경 필요
      *
+     * @param jobCd  작업 유형
      * @param usedYn 사용 여부
      * @return Gen Content
      */
     @EntityGraph(attributePaths = {"genTarget", "genStatus"}, type = EntityGraphType.LOAD)
-    GenContent findFirstByCategoryAndUsedYn(String workType, String usedYn);
+    Optional<GenContent> findFirstByJobCdAndUsedYn(String jobCd, String usedYn);
 }

@@ -21,7 +21,7 @@ const ArticleEtc = ({ bulkSiteList, articleService = {} }) => {
 
     return (
         <Form.Row className="mb-2">
-            <Col xs={7} className="d-flex p-0">
+            <Col xs={6} className="d-flex p-0">
                 <MokaInputLabel label="벌크" as="none" />
                 <div className="d-flex flex-column flex-fill">
                     <div>
@@ -65,9 +65,9 @@ const ArticleEtc = ({ bulkSiteList, articleService = {} }) => {
                     </div>
                 </div>
             </Col>
-            <Col xs={5} className="d-flex p-0">
+            <Col xs={6} className="d-flex p-0">
                 <hr className="vertical-divider" />
-                <MokaInputLabel label="종류" labelWidth={30} as="none" />
+                <MokaInputLabel label="종류" as="none" />
                 <div className="d-flex flex-column flex-fill">
                     <div>
                         <MokaInput

@@ -173,15 +173,15 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                 <div className="mb-2 d-flex">
                     <Col className="p-0 d-flex align-items-center" xs={4}>
                         <MokaInputLabel label="매체" as="none" />
-                        <span className="ft-12 user-select-text">{article.articleSource?.sourceName}</span>
+                        <span className="ft-14 user-select-text">{article.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 d-flex align-items-center" xs={4}>
                         <MokaInputLabel label="발행일" as="none" />
-                        <span className="ft-12 user-select-text">{pressDt}</span>
+                        <span className="ft-14 user-select-text">{pressDt}</span>
                     </Col>
                     <Col className="p-0 d-flex align-items-center" xs={4}>
                         <MokaInputLabel label="수신ID" as="none" />
-                        <span className="ft-12 user-select-text">{article.rid}</span>
+                        <span className="ft-14 user-select-text">{article.rid}</span>
                     </Col>
                 </div>
 
@@ -244,8 +244,8 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                 </Form.Row>
 
                 {/* 태그 */}
-                <Form.Row>
-                    <Col className="p-0" xs={10}>
+                <Form.Row className="mb-2">
+                    <Col className="p-0 " xs={10}>
                         <MokaInputLabel label="태그" name="tagList" className="mb-0" value={tagStr} onChange={handleChangeValue} inputProps={{ onBlur: handleBlurTag }} />
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
@@ -254,11 +254,12 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
                 </Form.Row>
 
                 {/* 본문(단순 보기) */}
-                <Form.Row className="flex-fill mb-2">
-                    <Col className="p-0 d-flex" xs={12}>
-                        <MokaInputLabel label="본문" className="mb-0" as="none" />
-                        <div className="flex-fill overflow-hidden overflow-y-scroll input-border p-2 user-select-text" dangerouslySetInnerHTML={{ __html: article.content }} />
-                    </Col>
+                <Form.Row className="flex-fill">
+                    <MokaInputLabel label="본문" className="mb-0" as="none" />
+                    <div
+                        className="flex-fill overflow-hidden custom-scroll overflow-y-scroll input-border p-3 user-select-text"
+                        dangerouslySetInnerHTML={{ __html: article.content }}
+                    />
                 </Form.Row>
 
                 {/* masterCode 모달 */}

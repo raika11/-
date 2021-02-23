@@ -61,6 +61,10 @@ public class AreaDTO implements Serializable {
     @Builder.Default
     private Integer depth = 1;
 
+    @ApiModelProperty("출처")
+    @NotNull(message = "{tps.area.error.notnull.sourceCode}")
+    private String sourceCode;
+
     @ApiModelProperty("사용여부(Y:사용, N:미사용)")
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.area.error.pattern.usedYn}")
     @Builder.Default

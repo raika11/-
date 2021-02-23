@@ -10,10 +10,10 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
+import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.Area;
 import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 import jmnet.moka.core.tps.mvc.area.entity.QArea;
-import org.springframework.data.domain.Sort;
 
 /**
  * Description: 편집영역 QueryDSL 구현체
@@ -30,17 +30,19 @@ public class AreaRepositorySupportImpl extends TpsQueryDslRepositorySupport impl
     }
 
     @Override
-    public List<AreaSimple> findByParent(Long parentAreaSeq) {
+    public List<AreaSimple> findByParent(AreaSearchDTO search) {
         QArea area = QArea.area;
 
+        Long parentAreaSeq = search.getParentAreaSeq();
+
         BooleanBuilder builder = new BooleanBuilder();
+        builder.and(area.sourceCode.eq(search.getSourceCode()));
         if (parentAreaSeq == null) {
             builder.and(area.parent.areaSeq.isNull());
         } else {
             builder.and(area.parent.areaSeq.eq(parentAreaSeq));
         }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "codeOrd");
         JPQLQuery<AreaSimple> query = queryFactory
                 .select(Projections.fields(AreaSimple.class, area.areaSeq.as("areaSeq"), area.depth.as("depth"), area.usedYn.as("usedYn"),
                         area.ordNo.as("ordNo"), area.areaNm.as("areaNm")))

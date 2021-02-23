@@ -47,8 +47,8 @@ public interface AreaMapper extends BaseMapper<AreaDTO, AreaSearchDTO> {
     /**
      * 사용중인 편집영역 조회
      *
-     * @param usedYn 사용여부
+     * @param map sourceCode 매체 usedYn     사용여부
      * @return 편집영역 목록
      */
-    List<AreaVO> findAllArea(String usedYn);
+    List<AreaVO> findAllArea(Map<String, Object> map);
 }

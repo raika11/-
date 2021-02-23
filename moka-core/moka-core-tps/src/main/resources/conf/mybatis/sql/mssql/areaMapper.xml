@@ -9,35 +9,36 @@
 
   <select id="findSubNodes" parameterType="hashMap" resultType="Long" statementType="CALLABLE">
     {call UPA_WMS_AREA_TOPDOWN_LIST_SEL(
-    #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-    ) }
+      #{domainId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
 
   <!-- 편집영역에 존재하는 컴포넌트가 페이지에 존재하는 조사한다. -->
   <select id="checkAreaComp" parameterType="hashMap" resultType="java.lang.Long"
     statementType="CALLABLE">
-		{call UPA_WMS_AREA_COMP_CHK(
-			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{byPage, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{byContainer, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{byContainerComp, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
-		) }
+    {call UPA_WMS_AREA_COMP_CHK(
+      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{byPage, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{byContainer, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{byContainerComp, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
   <select id="deleteByAreaSeq" parameterType="hashMap" resultType="java.lang.Long"
     statementType="CALLABLE">
-		{#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_AREA_COMP_DEL(
-			#{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-		) }
+    {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_AREA_COMP_DEL(
+      #{areaSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
   <select id="findAllArea" parameterType="string" resultType="AreaVO"
     statementType="CALLABLE">
-		{call UPA_WMS_AREA_LIST_SEL(
-			#{useYn, mode=IN, jdbcType=VARCHAR, javaType=string}
-		) }
+    {call UPA_WMS_AREA_LIST_SEL(
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{useYn, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
   </select>
 
 </mapper>

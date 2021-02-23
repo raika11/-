@@ -5,6 +5,7 @@
 package jmnet.moka.core.tps.mvc.area.repository;
 
 import java.util.List;
+import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
 import jmnet.moka.core.tps.mvc.area.entity.AreaSimple;
 
 /**
@@ -17,8 +18,8 @@ public interface AreaRepositorySupport {
     /**
      * 부모편집영역별 편집영역 목록 조회
      *
-     * @param parentAreaSeq 부모편집영역
+     * @param search 검색조건
      * @return 편집영역목록
      */
-    List<AreaSimple> findByParent(Long parentAreaSeq);
+    List<AreaSimple> findByParent(AreaSearchDTO search);
 }

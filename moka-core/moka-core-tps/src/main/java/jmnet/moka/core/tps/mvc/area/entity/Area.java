@@ -80,6 +80,12 @@ public class Area extends BaseAudit {
     private Integer depth = 1;
 
     /**
+     * 출처
+     */
+    @Column(name = "SOURCE_CODE", nullable = false)
+    private String sourceCode;
+
+    /**
      * 사용여부(Y:사용, N:미사용)
      */
     @Column(name = "USED_YN")
@@ -187,15 +193,19 @@ public class Area extends BaseAudit {
      * @return 동일한게 있으면 true
      */
     public boolean isEqualComp(AreaComp comp) {
-        if ( comp == null) return false;
+        if (comp == null) {
+            return false;
+        }
         Optional<AreaComp> find = areaComps
                 .stream()
                 .filter(c -> {
-                    if (c!=null && c
+                    if (c != null && c
                             .getComponent()
-                            .getComponentSeq().longValue() == comp
+                            .getComponentSeq()
+                            .longValue() == comp
                             .getComponent()
-                            .getComponentSeq().longValue()) {
+                            .getComponentSeq()
+                            .longValue()) {
                         return true;
                     } else {
                         return false;

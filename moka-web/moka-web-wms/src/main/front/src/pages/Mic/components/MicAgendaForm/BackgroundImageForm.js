@@ -46,12 +46,15 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
                 as="imageFile"
                 ref={pcImgRef}
                 className="mr-2"
-                labelWidth={90}
                 label={
                     <React.Fragment>
                         배경이미지
                         <br />
-                        <span className="color-danger">PC (800*600px)</span>
+                        <span className="color-danger">
+                            PC
+                            <br />
+                            800*600px
+                        </span>
                         <Button
                             variant="gray-700"
                             size="sm"
@@ -69,12 +72,14 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
             <MokaInputLabel
                 as="imageFile"
                 ref={mImgRef}
-                labelWidth={90}
                 label={
                     <React.Fragment>
                         배경이미지
                         <br />
-                        <span className="color-danger">M (600*500px)</span>
+                        <span className="color-danger">
+                            M<br />
+                            600*500px
+                        </span>
                         <Button
                             variant="gray-700"
                             size="sm"

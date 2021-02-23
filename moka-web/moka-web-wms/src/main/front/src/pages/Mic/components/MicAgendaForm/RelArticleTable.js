@@ -77,7 +77,7 @@ const RelArticleTable = ({ agenda, gridInstance, setGridInstance }) => {
     return (
         <React.Fragment>
             <div className="mb-2 d-flex">
-                <MokaInputLabel label="관련 정보" labelWidth={90} as="none" />
+                <MokaInputLabel label="관련 정보" as="none" />
                 <Button variant="searching" onClick={() => setShow(true)}>
                     기사 검색
                 </Button>

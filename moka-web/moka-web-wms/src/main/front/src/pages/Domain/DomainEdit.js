@@ -215,6 +215,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
             <MokaCard
                 title={`도메인 ${paramId ? '수정' : '등록'}`}
                 width={820}
+                className="w-100"
                 headerClassName="d-flex justify-content-between align-item-center"
                 loading={loading}
                 footer

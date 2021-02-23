@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import { Helmet } from 'react-helmet';
 import { MokaCard } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
@@ -97,29 +98,28 @@ const Domain = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard
-                className="mr-gutter"
-                height={CARD_DEFAULT_HEIGHT}
-                headerClassName="d-flex justify-content-between align-item-center"
-                bodyClassName="d-flex flex-column"
-                title="도메인 관리"
-                width={480}
-            >
-                <div className="mb-14 d-flex justify-content-end">
-                    <Button variant="positive" onClick={handleAddClickDomain}>
-                        도메인 등록
-                    </Button>
-                </div>
-                <Suspense>
-                    <DomainList onDelete={handleClickDelete} match={match} />
-                </Suspense>
-            </MokaCard>
+            <Col xs={5} className="p-0 pr-gutter">
+                <MokaCard className="w-100" height={CARD_DEFAULT_HEIGHT} bodyClassName="d-flex flex-column" title="도메인 관리">
+                    <div className="mb-14 d-flex justify-content-end">
+                        <Button variant="positive" onClick={handleAddClickDomain}>
+                            도메인 등록
+                        </Button>
+                    </div>
+                    <Suspense>
+                        <DomainList onDelete={handleClickDelete} match={match} />
+                    </Suspense>
+                </MokaCard>
+            </Col>
 
             {/* 도메인 정보 */}
             <Route
                 path={[`${match.path}/add`, `${match.path}/:domainId`]}
                 exact
-                render={() => <DomainEdit onDelete={handleClickDelete} baseUrl={match.path} loading={loading} />}
+                render={() => (
+                    <Col xs={7} className="p-0">
+                        <DomainEdit onDelete={handleClickDelete} baseUrl={match.path} loading={loading} />
+                    </Col>
+                )}
             />
         </div>
     );

@@ -115,7 +115,7 @@ public class BulkDumpProcess {
             }
 
             if (iud.equals("D")) {
-                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormatDelete(), dumpJobTotal, dumpJob, slackMessageService)) {
+                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormatDelete(), dumpJobTotal, dumpJob)) {
                     break;
                 }
             } else {
@@ -124,7 +124,7 @@ public class BulkDumpProcess {
                 if (!isOvpDownloadSuccess) {
                     return BulkDumpResult.TIMEOUT_OVP;
                 }
-                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormat(), dumpJobTotal, dumpJob, slackMessageService)) {
+                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormat(), dumpJobTotal, dumpJob)) {
                     break;
                 }
             }
@@ -151,7 +151,8 @@ public class BulkDumpProcess {
         return BulkDumpResult.FAIL_DUMP_CP_PROCESS;
     }
 
-    private static boolean doProcess_CpProcessWriteSwitchTags(BulkDumpEnvCP dumpEnvCP, BulkArticle article, String format, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob, SlackMessageService slackMessageService) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private static boolean doProcess_CpProcessWriteSwitchTags(BulkDumpEnvCP dumpEnvCP, BulkArticle article, String format, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob) {
         boolean success;
 
         final String cpFormat = doProcess_CpProcessSwitchTags( article, format, dumpEnvCP.getType());

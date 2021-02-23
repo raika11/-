@@ -4,7 +4,7 @@ import { columnDefs } from './EpisodeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearSelectArticleList } from '@store/survey/quiz';
-import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getEpisodesInfo } from '@store/jpod';
+import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getChannelInfo, getEpisodesInfo } from '@store/jpod';
 
 /**
  * J팟 관리 - 에피소드 AgGrid
@@ -27,6 +27,7 @@ const EpisodeListAgGrid = ({ match }) => {
         history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
         dispatch(clearSelectArticleList());
         dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
+        dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
     };
 
     // grid 에서 상태 변경시 리스트를 가지고 오기.

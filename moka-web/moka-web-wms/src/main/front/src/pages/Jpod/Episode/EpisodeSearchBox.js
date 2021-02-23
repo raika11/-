@@ -18,7 +18,7 @@ const EpisodeSearchBox = ({ match }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.jpod.episode.episodes.search);
-    const channel_list = useSelector((store) => store.jpod.episode.channel.list);
+    const channelList = useSelector((store) => store.jpod.episode.channel.list);
     const [searchData, setSearchData] = useState(initialState.episode.episodes.search);
 
     // 검색 항목 변경시 스테이트 업데이트.
@@ -89,7 +89,7 @@ const EpisodeSearchBox = ({ match }) => {
                 <Col className="p-0 pr-2" xs={2}>
                     <MokaInput as="select" name="chnlSeq" id="chnlSeq" value={searchData.chnlSeq} onChange={handleSearchChange}>
                         <option value="">채널 전체</option>
-                        {channel_list.map((item) => (
+                        {channelList.map((item) => (
                             <option key={item.chnlSeq} value={item.chnlSeq}>
                                 {item.chnlNm}
                             </option>

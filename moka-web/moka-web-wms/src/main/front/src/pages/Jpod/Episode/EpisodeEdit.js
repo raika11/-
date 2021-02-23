@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup } from '@components';
 import { PodtyEpisodeModal, RepoterModal, PodCastModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_EPISODES_INFO, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
+import { initialState, GET_EPISODES_INFO, getChannelInfo, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
 import { clearSelectArticleList, selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
@@ -42,6 +42,7 @@ const ChannelEdit = ({ match }) => {
     const [katalkImgFile, setKatalkImgFile] = useState(null); // 선택한 썸네일 용 이미지 스테이트
 
     const [editData, setEditData] = useState(initialState.episode.episodeInfo); // 기본 에피소드 정보.
+    const [seasonCnt, setSeasonCnt] = useState(0);
 
     const [podtyEpisodeModalState, setPodtyEpisodeModalState] = useState(false); // 팟티 에피소드 모달 상태용
     const [reporterModalState, setReporterModalState] = useState(false); // 기자검색 모달용 스테이트.
@@ -51,7 +52,8 @@ const ChannelEdit = ({ match }) => {
     const [editSelectEGRepoters, setEditSelectEGRepoters] = useState([]); // 선택된 진행자 게스트를(3명) 담아둘 스테이트
 
     // store 연결
-    const channel_list = useSelector((store) => store.jpod.episode.channel.list);
+    const channelList = useSelector((store) => store.jpod.episode.channel.list);
+    const channelInfo = useSelector((store) => store.jpod.channel.channelInfo);
     const episodeInfo = useSelector((store) => store.jpod.episode.episodeInfo);
     const selectReporter = useSelector((store) => store.jpod.selectReporter);
     const selectPodtyEpisode = useSelector((store) => store.jpod.selectPodtyEpisode);
@@ -77,6 +79,8 @@ const ChannelEdit = ({ match }) => {
                 ...editData,
                 usedYn: checked ? 'Y' : 'N',
             });
+        } else if (name === 'seasonCnt') {
+            setSeasonCnt(value);
         } else if (name === 'jpodType') {
             setEditData({
                 ...editData,
@@ -397,6 +401,15 @@ const ChannelEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (channelList.indexOf((c) => Number(editData.chnlSeq) === c.chnlSeq) > 0) {
+            const targetIdx = channelList.findIndex((c) => Number(editData.chnlSeq) === c.chnlSeq);
+            setSeasonCnt(channelList[targetIdx].seasonCnt);
+            dispatch(getChannelInfo({ chnlSeq: Number(editData.chnlSeq) }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editData.chnlSeq]);
+
     // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
     useEffect(() => {
         if (selectChnlSeq.current !== params.chnlSeq) {
@@ -561,7 +574,7 @@ const ChannelEdit = ({ match }) => {
         return (
             <React.Fragment>
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`관련 기사`} labelWidth={95} as="none" />
+                    <MokaInputLabel label={`관련 기사`} as="none" />
                     <Button
                         variant="searching"
                         className="mr-2"
@@ -608,7 +621,6 @@ const ChannelEdit = ({ match }) => {
                             name="usedYn"
                             id="usedYn"
                             label="사용"
-                            labelWidth={95}
                             inputProps={{ checked: editData.usedYn === 'Y' ? true : false }}
                             onChange={handleEditDataChange}
                         />
@@ -617,9 +629,9 @@ const ChannelEdit = ({ match }) => {
                 {/* 채널 선택. */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" labelWidth={95} value={editData.chnlSeq} onChange={handleChangeChnl}>
+                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={handleChangeChnl}>
                             <option value="">채널 전체</option>
-                            {channel_list.map((item) => (
+                            {channelList.map((item) => (
                                 <option key={item.chnlSeq} value={item.chnlSeq} data-podtychnlsrl={item.podtyChnlSrl}>
                                     {item.chnlNm}
                                 </option>
@@ -632,7 +644,6 @@ const ChannelEdit = ({ match }) => {
                     <Col xs={9} className="p-0">
                         <MokaInputLabel
                             label={`팟티\n(에피소드 연결)`}
-                            labelWidth={95}
                             className="mb-0"
                             id="podtyEpsdSrl"
                             name="podtyEpsdSrl"
@@ -650,22 +661,12 @@ const ChannelEdit = ({ match }) => {
                 {/* 에피소드 명 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
-                        <MokaInputLabel
-                            label={`에피소드명`}
-                            labelWidth={95}
-                            className="mb-0"
-                            id="epsdNm"
-                            name="epsdNm"
-                            placeholder=""
-                            value={editData.epsdNm}
-                            onChange={handleEditDataChange}
-                        />
+                        <MokaInputLabel label={`에피소드명`} className="mb-0" id="epsdNm" name="epsdNm" placeholder="" value={editData.epsdNm} onChange={handleEditDataChange} />
                     </Col>
                 </Form.Row>
                 {/* 에피소드 내용 */}
                 <MokaInputLabel
                     label={`에피소드 내용`}
-                    labelWidth={95}
                     as="textarea"
                     className="mb-2"
                     inputClassName="resize-none"
@@ -678,19 +679,10 @@ const ChannelEdit = ({ match }) => {
                 {/* 시즌 회차. */}
                 <Form.Row className="mb-2 align-items-center">
                     <div style={{ width: 350 }}>
-                        <MokaInputLabel
-                            label={`시즌 및 회차`}
-                            labelWidth={95}
-                            className="mr-2"
-                            as="select"
-                            id="seasonNo"
-                            name="seasonNo"
-                            value={editData.seasonNo}
-                            onChange={handleEditDataChange}
-                        >
+                        <MokaInputLabel label={`시즌 및 회차`} className="mr-2" as="select" id="sesonCnt" value={seasonCnt} onChange={handleEditDataChange}>
                             <option value="">시즌 선택</option>
-                            {Number(editData.seasonNo) > 0 &&
-                                [...Array(Number(editData.seasonNo))].map((n, idx) => {
+                            {seasonCnt > 0 &&
+                                [...Array(seasonCnt)].map((n, idx) => {
                                     return (
                                         <option key={idx} value={idx + 1}>
                                             시즌 {idx + 1}
@@ -700,18 +692,14 @@ const ChannelEdit = ({ match }) => {
                         </MokaInputLabel>
                     </div>
                     <div style={{ width: 150 }}>
-                        <MokaInputLabel label={`회차`} labelWidth={30} className="mr-2" name="epsdNo" id="epsdNo" value={editData.epsdNo} onChange={(e) => console.log(e)} />
+                        <MokaInputLabel label={`회차`} className="mr-2" name="epsdNo" id="epsdNo" value={editData.epsdNo} onChange={(e) => console.log(e)} />
                     </div>
-                    <p className="mb-0">
-                        마지막 회차:
-                        {/* {editData.epsdNo && `${editData.epsdNo}회`} */}
-                    </p>
+                    <p className="mb-0">마지막 회차: {channelInfo.episodeStat.lastEpsoNo ? `${channelInfo.episodeStat.lastEpsoNo}회` : ''}</p>
                 </Form.Row>
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label={`방송일`}
-                            labelWidth={95}
                             as="dateTimePicker"
                             className="mb-0"
                             name="epsdDate"
@@ -727,22 +715,13 @@ const ChannelEdit = ({ match }) => {
                 {/* 태그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
-                        <MokaInputLabel
-                            label={`태그`}
-                            labelWidth={95}
-                            className="mb-0"
-                            id="keywords"
-                            name="keywords"
-                            placeholder=""
-                            value={editData.keywords}
-                            onChange={handleEditDataChange}
-                        />
+                        <MokaInputLabel label={`태그`} className="mb-0" id="keywords" name="keywords" placeholder="" value={editData.keywords} onChange={handleEditDataChange} />
                     </Col>
                 </Form.Row>
                 {/* 팟캐스트 구분( 오디오, 비디오 ) */}
                 <Form.Row className="mb-2">
                     <div className="d-flex w-100 align-items-center">
-                        <MokaInputLabel as="none" label="팟캐스트 구분" labelWidth={95} />
+                        <MokaInputLabel as="none" label="팟캐스트 구분" />
                         <Col xs={2} className="p-0">
                             <MokaInputLabel
                                 as="radio"
@@ -780,7 +759,7 @@ const ChannelEdit = ({ match }) => {
                 <hr className="vertical-divider" />
                 {/* 팟캐스트 파일 등록. */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" label="url" labelWidth={95} />
+                    <MokaInputLabel as="none" label="url" />
                     <div className="px-2 flex-fill d-flex align-items-center" style={{ backgroundColor: '#f4f7f9', height: '50px' }}>
                         <MokaInput name="epsdFile" className="mr-2" id="epsdFile" value={editData.epsdFile} onChange={handleEditDataChange} />
                         <div>
@@ -806,7 +785,6 @@ const ChannelEdit = ({ match }) => {
                                     id="shrImgFile"
                                     isInvalid={null}
                                     inputClassName="flex-fill"
-                                    labelWidth={95}
                                     label={
                                         <React.Fragment>
                                             메타이미지
@@ -900,7 +878,7 @@ const ChannelEdit = ({ match }) => {
                 <hr className="vertical-divider" />
                 {/* 진행자( 고정 패널 ) */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`출연진(고정패널)`} labelWidth={95} as="none" />
+                    <MokaInputLabel label={`출연진(고정패널)`} as="none" />
                     <Button
                         variant="searching"
                         className="mr-2"
@@ -919,7 +897,7 @@ const ChannelEdit = ({ match }) => {
                 {editSelectCPRepoters.map((element, index) => {
                     return (
                         <Form.Row className="mb-2" key={index}>
-                            <MokaInputLabel label=" " labelWidth={95} as="none" />
+                            <MokaInputLabel label=" " as="none" />
                             <div className="px-2 flex-fill d-flex flex-column justify-content-center" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
                                 <div className="mb-2 d-flex align-items-center justify-content-between">
                                     <MokaInputGroup
@@ -960,7 +938,7 @@ const ChannelEdit = ({ match }) => {
                 })}
                 <hr className="vertical-divider" />
                 <Form.Row className="mb-2">
-                    <MokaInputLabel label={`출연진(게스트)`} labelWidth={95} as="none" />
+                    <MokaInputLabel label={`출연진(게스트)`} as="none" />
                     <Button
                         variant="searching"
                         className="mr-2"
@@ -979,7 +957,7 @@ const ChannelEdit = ({ match }) => {
                 {editSelectEGRepoters.map((element, index) => {
                     return (
                         <Form.Row className="mb-2" key={index}>
-                            <MokaInputLabel label=" " labelWidth={95} as="none" />
+                            <MokaInputLabel label=" " as="none" />
                             <Col className="p-0">
                                 <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
                                     <Col className="d-flex w-100 h-50 align-items-center">

@@ -33,7 +33,12 @@ export const initialState = {
             chnlImgFile: '', // 커버 이미지
             chnlThumbFile: '', // 썸네일
             chnlImgMobFile: '', // 모바일.
-            episodeState: {
+            regDt: '',
+            seasonCnt: 0,
+            seasonNm: null,
+            keywords: [],
+            members: [],
+            episodeStat: {
                 lastEpsoNo: null,
                 unusedCnt: 0,
                 usedCnt: 0,
@@ -60,6 +65,7 @@ export const initialState = {
             },
         },
         episodeInfo: {
+            articles: [],
             chnlSeq: '',
             epsdDate: '',
             epsdFile: null,
@@ -69,24 +75,25 @@ export const initialState = {
             epsdSeq: 0,
             jpodType: '',
             katalkImg: '',
+            keywords: [],
             likeCnt: 0,
+            members: [],
             playCnt: 0,
             playTime: '',
             podtyEpsdSrl: 0,
             podtyChnlSrl: '',
             replyCnt: 0,
             scbCnt: 0,
+            seasonNo: 0,
             shareCnt: 0,
             shrImg: '',
             usedYn: 'Y',
             viewCnt: 0,
-            seasonNo: '',
         },
         channel: {
             search: {
                 page: 0,
                 sort: 'chnlSeq,desc',
-                // size: PAGESIZE_OPTIONS[0],
                 usedYn: 'Y',
                 useTotal: 'Y',
             },

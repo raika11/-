@@ -43,8 +43,10 @@ const NoticeEdit = ({ match }) => {
 
     const resetEditData = () => {
         setEditData({});
+        setUploadFiles([]);
         dispatch(clearBoardContents());
         dispatch(clearSelectBoard());
+        fileinputRef.current = null;
     };
 
     // 게시글 데이터 변경시 스테이트 업데이트.

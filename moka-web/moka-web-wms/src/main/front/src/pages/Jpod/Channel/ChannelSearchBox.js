@@ -141,7 +141,7 @@ const ChannelSearchBox = ({ match }) => {
                     </div>
                     <div className="mr-0 pl-1 pr-2">
                         <Button variant="positive" onClick={() => handleNewButton()}>
-                            채널등록
+                            등록
                         </Button>
                     </div>
                 </Form.Row>

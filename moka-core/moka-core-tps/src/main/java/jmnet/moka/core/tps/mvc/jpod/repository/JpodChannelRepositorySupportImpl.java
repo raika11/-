@@ -8,6 +8,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.jpod.dto.JpodChannelSearchDTO;
 import jmnet.moka.core.tps.mvc.jpod.entity.JpodChannel;
@@ -106,13 +107,17 @@ public class JpodChannelRepositorySupportImpl extends TpsQueryDslRepositorySuppo
         query
                 .select(Projections.fields(JpodChannel.class, qJpodChannel.chnlSeq, qJpodChannel.regDt, qJpodChannel.chnlSdt, qJpodChannel.chnlNm,
                         qJpodChannel.chnlMemo, qJpodChannel.chnlImg, qJpodChannel.chnlThumb, qJpodChannel.chnlImgMob, qJpodChannel.podtyChnlSrl,
-                        ExpressionUtils.as(JPAExpressions
+                        qJpodChannel.usedYn, ExpressionUtils.as(JPAExpressions
                                 .select(qJpodEpisode.epsdSeq.count())
                                 .from(qJpodEpisode)
-                                .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "totalEpsdCnt"), ExpressionUtils.as(JPAExpressions
-                                .select(qJpodEpisode.epsdNo.max())
+                                .where(qJpodEpisode.chnlSeq
+                                        .eq(qJpodChannel.chnlSeq)
+                                        .and(qJpodEpisode.usedYn.eq(MokaConstants.YES))), "usedCnt"), ExpressionUtils.as(JPAExpressions
+                                .select(qJpodEpisode.epsdSeq.count())
                                 .from(qJpodEpisode)
-                                .where(qJpodEpisode.chnlSeq.eq(qJpodChannel.chnlSeq)), "lastEpsdNo")))
+                                .where(qJpodEpisode.chnlSeq
+                                        .eq(qJpodChannel.chnlSeq)
+                                        .and(qJpodEpisode.usedYn.eq(MokaConstants.NO))), "unusedCnt")))
                 .from(qJpodChannel);
 
 

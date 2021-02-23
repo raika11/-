@@ -29,10 +29,6 @@ public class SenderS extends AbstractPushSender {
     public FcmMessage makePushMessage(Long pushItemSeq) {
 
         log.debug("추천기사 - 푸시 전송을 위한 작업 처리 : {}", pushItemSeq);
-
-        /**
-         * TODO 1. 업무별 푸시 메시지 생성 로직 구현
-         */
         return FcmMessage
                 .builder()
                 .build();
@@ -42,18 +38,11 @@ public class SenderS extends AbstractPushSender {
 
     @Override
     protected Long findLastTokenSeq(Integer appSeq) {
-        /**
-         * TODO 2. 대상 토큰 중 가장 큰 토큰 일련번호 조회
-         * - 페이징 처리에 사용
-         */
         return 10000l;
     }
 
     @Override
     protected List<MobPushToken> findAllToken(int pageIdx) {
-        /**
-         * TODO 3. 토큰 목록 조회
-         */
         return null;
     }
 

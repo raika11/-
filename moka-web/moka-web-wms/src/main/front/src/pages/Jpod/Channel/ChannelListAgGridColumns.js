@@ -86,8 +86,10 @@ export const channelEpisodeColumnDefs = [
     {
         headerName: '에피소드 명',
         field: 'epsdNm',
+        tooltipField: 'epsdNm',
         width: 100,
-        cellStyle: { display: 'flex', alignItems: 'center' },
+        flex: 1,
+        cellStyle: {},
     },
     {
         headerName: '설명',

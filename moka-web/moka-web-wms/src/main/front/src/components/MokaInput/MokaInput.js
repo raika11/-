@@ -216,6 +216,7 @@ const MokaInput = forwardRef((props, ref) => {
     // autocomplete
     else if (as === 'autocomplete') {
         Type = MokaAutocomplete;
+        contextProps = { ...contextProps, className };
     }
     // dateTimePicker
     else if (as === 'dateTimePicker') {

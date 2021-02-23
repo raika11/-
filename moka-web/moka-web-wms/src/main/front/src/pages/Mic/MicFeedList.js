@@ -190,7 +190,7 @@ const MicFeedList = ({ show: currentTab }) => {
     return (
         <MokaCard title={` ❛ ${agenda.agndKwd} ❜ 관리자 피드 목록`} className="w-100" bodyClassName="d-flex flex-column">
             <h1 className="color-primary mb-0">❛ {agenda.agndTitle} ❜</h1>
-            <div className="mb-2 d-flex justify-content-end">
+            <div className="mb-14 d-flex justify-content-end">
                 <Button variant="positive" onClick={handleAddFeed}>
                     등록
                 </Button>

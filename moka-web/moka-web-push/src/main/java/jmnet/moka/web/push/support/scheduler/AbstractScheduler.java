@@ -58,5 +58,5 @@ public abstract class AbstractScheduler implements Scheduler {
     /**
      * 각 Job별 기능 구현
      */
-    public abstract void invoke();
+    public abstract void invoke() throws Exception;
 }

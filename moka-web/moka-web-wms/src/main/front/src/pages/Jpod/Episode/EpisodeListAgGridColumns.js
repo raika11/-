@@ -46,7 +46,7 @@ export const columnDefs = [
             overflow: 'hidden',
             cursor: 'pointer',
         },
-        tooltipField: 'epsdMemo',
+        // tooltipField: 'epsdMemo',
     },
     {
         headerName: '방송일',

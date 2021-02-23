@@ -244,18 +244,21 @@ $btn-padding-x: 11px !default;
 $btn-font-size: $h5-font-size !default;
 $btn-font-weight: $font-weight-bold !default;
 $btn-line-height: 21px !default;
+$btn-border-radius: 3px !default;
 
 // Buttons default (sm)
 $btn-padding-y-sm: 2px !default;
 $btn-padding-x-sm: 8px !default;
 $btn-font-size-sm: $h6-font-size !default;
 $btn-line-height-sm: 20px !default;
+$btn-border-radius-sm: 2px !default;
 
 // Buttons default (lg)
 $btn-padding-y-lg: 5px !default;
 $btn-padding-x-lg: 16px !default;
 $btn-font-size-lg: $h3-font-size !default;
 $btn-line-height-lg: 25px !default;
+$btn-border-radius-lg: 4px !default;
 
 // Forms
 $input-bg: $white !default;
@@ -393,8 +396,8 @@ $transition-appearance-slow: background .6s ease-in-out, color .6s ease-in-out !
 $transition-appearance-fast: background .1s ease-in-out, color .1s ease-in-out !default;
 
 // Modals
-$modal-footer-margin-between: 8px !default;
-$modal-spacer-y: $spacer-modal - $modal-footer-margin-between !default;
+$modal-footer-margin-between: 0px !default;
+$modal-spacer-y: $spacer-modal - 8px !default;
 $modal-spacer-x: $spacer-modal !default;
 $modal-content-border-width: 0 !default;
 $modal-header-border-width: 1px !default;

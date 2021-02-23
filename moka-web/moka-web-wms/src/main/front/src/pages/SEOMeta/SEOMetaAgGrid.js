@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { columnDefs } from '@pages/SEOMeta/SEOMetaAgGridColumn';
-import { changeSeoMetaSearchOptions, GET_SEO_META_LIST } from '@store/seoMeta';
+import { changeSeoMetaSearchOptions, GET_SEO_META_LIST, getSeoMetaList } from '@store/seoMeta';
 
 /**
  * SEO 메타 AgGrid
@@ -11,20 +11,21 @@ import { changeSeoMetaSearchOptions, GET_SEO_META_LIST } from '@store/seoMeta';
 const SEOMetaAgGrid = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { list, search, total, totalId, loading } = useSelector(
-        (store) => ({
-            list: store.seoMeta.list,
-            search: store.seoMeta.search,
-            total: store.seoMeta.total,
-            totalId: store.seoMeta.seoMeta.totalId,
-            loading: store.loading[GET_SEO_META_LIST],
-        }),
-        shallowEqual,
-    );
+    const list = useSelector((store) => store.seoMeta.list);
+    const search = useSelector((store) => store.seoMeta.search);
+    const total = useSelector((store) => store.seoMeta.total);
+    const totalId = useSelector((store) => store.seoMeta.seoMeta.totalId);
+    const loading = useSelector((store) => store.loading[GET_SEO_META_LIST]);
+
     const [rowData, setRowData] = useState([]);
 
-    const handleChangeSearchOptions = (option) => {
-        dispatch(changeSeoMetaSearchOptions({ ...search, [option.key]: option.value }));
+    const handleChangeSearchOption = ({ key, value }) => {
+        let temp = { ...search, [key]: value };
+        if (key !== 'page') {
+            temp['page'] = 0;
+        }
+        dispatch(changeSeoMetaSearchOptions(temp));
+        dispatch(getSeoMetaList(temp));
     };
 
     const handleClickDetailView = useCallback(
@@ -46,25 +47,23 @@ const SEOMetaAgGrid = ({ match }) => {
     }, [handleClickDetailView, list]);
 
     return (
-        <>
-            <MokaTable
-                columnDefs={columnDefs}
-                agGridHeight={625}
-                rowData={rowData}
-                size={search.size}
-                page={search.page}
-                total={total}
-                onRowNodeId={(row) => row.totalId}
-                onChangeSearchOption={handleChangeSearchOptions}
-                onRowClicked={(data, param) => {
-                    if (param.type === 'cellClicked' && param.column.colId === 'artTitle') {
-                        window.open(`https://mnews.joins.com/article/${data.totalId}`, 'articlePop', 'width=500');
-                    }
-                }}
-                selected={totalId}
-                loading={loading}
-            />
-        </>
+        <MokaTable
+            columnDefs={columnDefs}
+            agGridHeight={625}
+            rowData={rowData}
+            size={search.size}
+            page={search.page}
+            total={total}
+            onRowNodeId={(row) => row.totalId}
+            onChangeSearchOption={handleChangeSearchOption}
+            onRowClicked={(data, param) => {
+                if (param.type === 'cellClicked' && param.column.colId === 'artTitle') {
+                    window.open(`https://mnews.joins.com/article/${data.totalId}`, 'articlePop', 'width=500');
+                }
+            }}
+            selected={totalId}
+            loading={loading}
+        />
     );
 };
 

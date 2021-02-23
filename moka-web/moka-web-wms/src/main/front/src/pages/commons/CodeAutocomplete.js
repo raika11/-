@@ -176,9 +176,7 @@ const CodeAutocomplete = forwardRef((props, ref) => {
     useEffect(() => {
         if (kornameList) {
             const filteredList = kornameList.filter((code) => {
-                if (code.viewYn === 'N') {
-                    return false;
-                } else if (code.masterCode.slice(-5) === '00000') {
+                if (code.masterCode.slice(-5) === '00000') {
                     return selectable.indexOf('service') > -1 ? true : false;
                 } else if (code.masterCode.slice(-3) === '000') {
                     return selectable.indexOf('section') > -1 ? true : false;

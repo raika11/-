@@ -2,11 +2,11 @@ package jmnet.moka.core.tps.mvc.sns.service;
 
 import java.util.Optional;
 import jmnet.moka.core.common.exception.NoDataException;
-import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.common.sns.SnsDeleteDTO;
+import jmnet.moka.core.common.sns.SnsPublishDTO;
+import jmnet.moka.core.common.sns.SnsTypeCode;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareSearchDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.core.tps.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;

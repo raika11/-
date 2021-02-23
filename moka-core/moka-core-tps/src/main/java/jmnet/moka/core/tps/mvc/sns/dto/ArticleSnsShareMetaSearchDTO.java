@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import jmnet.moka.common.data.support.SearchDTO;
-import jmnet.moka.core.tps.common.code.SnsTypeCode;
+import jmnet.moka.core.common.sns.SnsTypeCode;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

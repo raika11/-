@@ -6,8 +6,8 @@ import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
  * <pre>
  * ReserveJob Job interface
  * Project : moka
- * Package : jmnet.moka.web.push.support.reserve
- * ClassName : ReserveJob
+ * Package : jmnet.moka.web.push.support.sender
+ * ClassName : Sender
  * Created : 2021-02-05 ince
  * </pre>
  *

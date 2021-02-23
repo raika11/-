@@ -151,8 +151,8 @@ const MicAgendaEdit = ({ match, setActiveTabIdx }) => {
             footerClassName="justify-content-center"
             footer
             footerButtons={[
-                { text: agndSeq ? '수정' : '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
-                { text: '취소', variant: 'negative', className: 'mr-2', onClick: handleClickCancel },
+                { text: agndSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ]}
             loading={loading}
         >

@@ -2,6 +2,7 @@ package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushContentUsedYnSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
@@ -62,4 +63,12 @@ public interface PushContentsService {
      * @return 작업목록
      */
     Page<PushContents> findPushContents(PushContentSeqSearchDTO search);
+
+    /**
+     * 푸시 컨텐츠 조회
+     *
+     * @param search 작업 정보
+     * @return 작업목록
+     */
+    Page<PushContents> findAllByUsedYn(PushContentUsedYnSearchDTO search);
 }

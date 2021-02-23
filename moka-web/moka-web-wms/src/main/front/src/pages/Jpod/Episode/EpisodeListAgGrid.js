@@ -4,7 +4,7 @@ import { columnDefs } from './EpisodeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearSelectArticleList } from '@store/survey/quiz';
-import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, clearEpisodeInfo, getEpisodesInfo } from '@store/jpod';
+import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getEpisodesInfo } from '@store/jpod';
 
 /**
  * J팟 관리 - 에피소드 AgGrid
@@ -26,7 +26,6 @@ const EpisodeListAgGrid = ({ match }) => {
     const handleClickListRow = ({ chnlSeq, epsdSeq }) => {
         history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
         dispatch(clearSelectArticleList());
-        dispatch(clearEpisodeInfo());
         dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
     };
 

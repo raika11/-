@@ -1,8 +1,6 @@
-package jmnet.moka.core.tps.mvc.sns.service;
+package jmnet.moka.core.common.sns;
 
 import java.util.Map;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsDeleteDTO;
-import jmnet.moka.core.tps.mvc.sns.dto.SnsPublishDTO;
 
 /**
  * <pre>

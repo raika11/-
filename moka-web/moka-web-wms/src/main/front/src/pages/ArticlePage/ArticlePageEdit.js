@@ -273,7 +273,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="outline-neutral" className="mr-2" disabled={btnDisabled} onClick={handleClickW3COpen}>
+                        <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3COpen}>
                             W3C
                         </Button>
                         <Button variant="outline-neutral" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
@@ -281,11 +281,11 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="positive" className="mr-2" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                             전송
                         </Button>
                         {!btnDisabled && (
-                            <Button variant="negative" className="mr-2" onClick={(e) => onDelete(articlePage)}>
+                            <Button variant="negative" className="mr-1" onClick={(e) => onDelete(articlePage)}>
                                 삭제
                             </Button>
                         )}

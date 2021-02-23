@@ -234,7 +234,7 @@ const EditDeskingWorkModal = (props) => {
                             <Form.Row key={partKey} className="mb-2">
                                 <div className="d-flex">
                                     <MokaInputLabel as="none" label="대표\n이미지" labelClassName="pr-3" className="mb-0" />
-                                    <MokaImage img={temp.irImg} width={216} height={150} />
+                                    <MokaImage img={temp.irImg} width={216} />
                                 </div>
                                 <div className="d-flex flex-column justify-content-end ml-2">
                                     <Button variant="gray-700" size="sm" onClick={() => setShowModal(true)} className="mb-2">

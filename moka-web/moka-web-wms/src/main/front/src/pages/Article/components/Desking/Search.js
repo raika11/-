@@ -78,13 +78,18 @@ const Search = (props) => {
                 </div>
 
                 {/* 시작일 */}
-                <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'start' }} onChange={handleChangeSDate} value={search.startServiceDay} />
+                <div className="mr-2">
+                    <MokaInput
+                        as="dateTimePicker"
+                        inputProps={{ timeFormat: null, timeDefault: 'start', width: 140 }}
+                        onChange={handleChangeSDate}
+                        value={search.startServiceDay}
+                    />
                 </div>
 
                 {/* 종료일 */}
-                <div style={{ width: 138 }} className="mr-2">
-                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end' }} onChange={handleChangeEDate} value={search.endServiceDay} />
+                <div className="mr-2">
+                    <MokaInput as="dateTimePicker" inputProps={{ timeFormat: null, timeDefault: 'end', width: 140 }} onChange={handleChangeEDate} value={search.endServiceDay} />
                 </div>
 
                 {/* 검색 조건 */}
@@ -99,14 +104,14 @@ const Search = (props) => {
                 </div>
 
                 {/* 키워드 */}
-                <MokaSearchInput className="flex-fill mr-2" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={onSearch} />
+                <MokaSearchInput className="flex-fill mr-1" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={onSearch} />
 
                 {/* 초기화 */}
                 <Button variant="negative" className="flex-shrink-0" onClick={onReset}>
                     초기화
                 </Button>
             </Form.Row>
-            <Form.Row className="d-flex mb-2 justify-content-between">
+            <Form.Row className="d-flex mb-14 justify-content-between">
                 <div className="d-flex">
                     {/* 분류 */}
                     <div style={{ width: 340 }} className="mr-2">

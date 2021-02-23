@@ -30,6 +30,7 @@ public interface PushContentsRepositorySupport {
      * @return 작업 목록
      */
     Page<PushContents> findByRelContentId(Long search, Pageable pageable);
+
     /**
      * 콘텐트 Seq 로 작업 목록 조회
      *
@@ -38,5 +39,14 @@ public interface PushContentsRepositorySupport {
      * @return 작업 목록
      */
     Page<PushContents> findByContentSeq(Long contentSeq, Pageable pageable);
+
+    /**
+     * 콘텐트 Seq 로 작업 목록 조회
+     *
+     * @param usedYn   검색조건
+     * @param pageable
+     * @return 작업 목록
+     */
+    Page<PushContents> findAllByUsedYn(String usedYn, Pageable pageable);
 
 }

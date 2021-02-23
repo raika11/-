@@ -161,24 +161,29 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             footer
             footerClassName="d-flex justify-content-center"
             footerButtons={[
-                { variant: 'outline-neutral', text: '미리보기', className: 'mr-2', onClick: handlePCPreview },
-                // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-2', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사등록', className: 'mr-2', onClick: onRegister, disabled: article.iudYn === 'Y' },
+                { variant: 'outline-neutral', text: '미리보기', className: 'mr-1', onClick: handlePCPreview },
+                // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-1', onClick: handleMobilePreview },
+                { variant: 'positive', text: '기사등록', className: 'mr-1', onClick: onRegister, disabled: article.iudYn === 'Y' },
                 { variant: 'negative', text: '취소', onClick: onCancle },
             ]}
             loading={loading}
         >
             <Form className="d-flex flex-column h-100">
                 {/* 수신 정보 */}
-                <Form.Row className="mb-2">
-                    <Col className="p-0" xs={3}>
-                        <MokaInputLabel label="매체" value={article.articleSource?.sourceName} className="mb-0" inputProps={{ plaintext: true }} disabled />
+                <div className="mb-2 d-flex">
+                    <Col className="p-0 d-flex align-items-center" xs={4}>
+                        <MokaInputLabel label="매체" as="none" />
+                        <span className="ft-12">{article.articleSource?.sourceName}</span>
                     </Col>
-                    <Col className="p-0 d-flex justify-content-end" xs={9}>
-                        <MokaInputLabel label="발행일" labelWidth={40} value={pressDt} inputProps={{ plaintext: true }} disabled />
-                        <MokaInputLabel label="수신ID" labelWidth={40} value={article.rid} inputProps={{ plaintext: true }} disabled />
+                    <Col className="p-0 d-flex align-items-center" xs={4}>
+                        <MokaInputLabel label="발행일" as="none" />
+                        <span className="ft-12">{pressDt}</span>
                     </Col>
-                </Form.Row>
+                    <Col className="p-0 d-flex align-items-center" xs={4}>
+                        <MokaInputLabel label="수신ID" as="none" />
+                        <span className="ft-12">{article.rid}</span>
+                    </Col>
+                </div>
 
                 {/* 분류 */}
                 <Form.Row className="mb-2 flex-shrink-0">

@@ -5,6 +5,10 @@ import ArticleSourceModal from '@pages/Article/modals/ArticleSourceModal';
 
 const propTypes = {
     /**
+     * button width
+     */
+    width: PropTypes.number,
+    /**
      * 매체의 타입
      */
     sourceType: PropTypes.oneOf(['DESKING', 'JOONGANG', 'CONSALES', 'JSTORE', 'SOCIAL', 'BULK', 'RCV']),
@@ -14,12 +18,12 @@ const defaultProps = {
 };
 
 const ArticleSourceSelector = (props) => {
-    const { className, value, onChange, sourceType } = props;
+    const { className, value, onChange, sourceType, width } = props;
     const [show, setShow] = useState(false);
 
     return (
         <React.Fragment>
-            <Button variant="outline-neutral" className={className} onClick={() => setShow(true)}>
+            <Button variant="outline-neutral" className={className} style={{ width }} onClick={() => setShow(true)}>
                 매체설정하기
             </Button>
 

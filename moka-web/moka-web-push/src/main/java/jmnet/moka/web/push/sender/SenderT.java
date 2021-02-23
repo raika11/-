@@ -1,6 +1,6 @@
 package jmnet.moka.web.push.sender;
 
-import jmnet.moka.web.push.mvc.sender.entity.MobPushToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.sender.AbstractPushSender;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,15 @@ import java.util.List;
 @Service
 public class SenderT extends AbstractPushSender {
 
-
     @Override
     public FcmMessage makePushMessage(Long pushItemSeq) {
 
-        log.debug("속보 - 푸시 전송을 위한 작업 처리 : {}", pushItemSeq);
+        log.debug("속보 - 푸시 전송을 위한 작업 처리 :makePushMessage {}", pushItemSeq);
+
+        /**
+         * TODO 1. 업무별 푸시 메시지 생성 로직 구현
+         */
+
         return FcmMessage
                 .builder()
                 .build();
@@ -38,11 +42,20 @@ public class SenderT extends AbstractPushSender {
 
     @Override
     protected Long findLastTokenSeq(Integer appSeq) {
+        log.debug("속보 - 푸시 전송을 위한 작업 처리 :findLastTokenSeq  {}", appSeq);
+        /**
+         * TODO 2. 대상 토큰 중 가장 큰 토큰 일련번호 조회
+         * - 페이징 처리에 사용
+         */
         return 10000l;
     }
 
     @Override
-    protected List<MobPushToken> findAllToken(int pageIdx) {
+    protected List<PushAppToken> findAllToken(int pageIdx) {
+        log.debug("속보 - 푸시 전송을 위한 작업 처리 :findAllToken  {}", pageIdx);
+        /**
+         * TODO 3. 토큰 목록 조회
+         */
         return null;
     }
 

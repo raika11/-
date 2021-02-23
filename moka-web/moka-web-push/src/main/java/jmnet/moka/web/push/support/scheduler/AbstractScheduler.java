@@ -44,15 +44,15 @@ public abstract class AbstractScheduler implements Scheduler {
 
     @Override
     public void doTask(PushSchedulerJob info) {
-        init(info);
-        try {
-            invoke();
+     /*   init(info);
+
+        try { invoke();
         } catch (Exception ex) {
             logger.error("schedule invoke error ", ex);
         } finally {
             finish();
         }
-
+        */
     }
 
     /**

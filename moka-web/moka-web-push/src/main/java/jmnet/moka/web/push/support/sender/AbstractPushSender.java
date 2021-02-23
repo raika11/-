@@ -14,12 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import jmnet.moka.common.utils.McpDate;
-import jmnet.moka.web.push.mvc.sender.entity.MobApp;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushToken;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushWord;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushWordProc;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushWordProcPK;
+import jmnet.moka.web.push.mvc.sender.entity.*;
 import jmnet.moka.web.push.support.NamingThreadFactory;
 import jmnet.moka.web.push.support.code.StatusFlagType;
 import jmnet.moka.web.push.support.httpclient.PushHttpClientBuilder;
@@ -34,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * <pre>
  * 예약 Job 공통 기능
  * Project : moka
- * Package : jmnet.moka.web.push.support.schedule
+ * Package : jmnet.moka.web.push.support.sender
  * ClassName : AbstractScheduleJob
  * Created : 2021-02-05 ince
  * </pre>
@@ -54,17 +49,23 @@ public abstract class AbstractPushSender implements Sender {
 
     @Override
     public void init(PushSenderJob pushSenderJob) {
+
+        log.debug("init:", pushSenderJob);
         this.pushSenderJob = pushSenderJob;
     }
 
 
 
     @Override
-    public void doTask(MobPushItem pushItem) {
+    public void doTask(PushContents pushItem) {
 
+        log.debug("[doTask]   ===============================================================" );
         try {
-            if (pushItem.getPushTime() != null) {
-                Thread.sleep(McpDate.term(pushItem.getReserveDt()));
+            //예약일시 체크
+            if (pushItem.getRsvDt() != null) {
+                log.debug("===============================================================");
+                log.debug("doTask:", pushItem.getContentSeq());
+                Thread.sleep(McpDate.term(pushItem.getRsvDt()));
             }
 
             /**
@@ -72,7 +73,10 @@ public abstract class AbstractPushSender implements Sender {
              *  - 데이터 존재 여부 삭제 상태 체크
              *  - status_flag 체크
              */
-            MobPushWord contents = findPushContents(pushItem.getPushItemSeq());
+            log.debug("pushItem.getContentSeq()=", pushItem.getContentSeq());
+            PushContents contents = findPushContents(pushItem.getContentSeq());
+
+            log.debug("contents=", contents);
 
             if (contents != null && contents
                     .getAppProcs()
@@ -81,7 +85,7 @@ public abstract class AbstractPushSender implements Sender {
                  *  TODO 2. 푸시 메세지 생성
                  *  - 각 업무마다 프로세스 차이 존재
                  */
-                FcmMessage pushMessage = makePushMessage(pushItem.getPushItemSeq());
+                FcmMessage pushMessage = makePushMessage(pushItem.getContentSeq());
 
                 /**
                  *  TODO 3. 전송 시작
@@ -103,28 +107,30 @@ public abstract class AbstractPushSender implements Sender {
      * @param pushItemSeq 푸시 일련번호
      * @return 푸시 컨텐츠 정보
      */
-    protected MobPushWord findPushContents(Long pushItemSeq) {
+    protected PushContents findPushContents(Long pushItemSeq) {
 
-        Set<MobPushWordProc> procs = new HashSet<>();
-        procs.add(MobPushWordProc
+        log.debug("findPushContents=", pushItemSeq);
+
+        Set<PushContentsProc> procs = new HashSet<>();
+        procs.add(PushContentsProc
                 .builder()
-                .id(MobPushWordProcPK
+                .id(PushContentsProcPK
                         .builder()
                         .appSeq(1)
-                        .wordSeq(pushItemSeq)
+                        .contentSeq(pushItemSeq)
                         .build())
                 .build());
-        procs.add(MobPushWordProc
+        procs.add(PushContentsProc
                 .builder()
-                .id(MobPushWordProcPK
+                .id(PushContentsProcPK
                         .builder()
                         .appSeq(2)
-                        .wordSeq(pushItemSeq)
+                        .contentSeq(pushItemSeq)
                         .build())
                 .build());
-        return MobPushWord
+        return PushContents
                 .builder()
-                .wordSeq(pushItemSeq)
+                .contentSeq(pushItemSeq)
                 .appProcs(procs)
                 .build();
     }
@@ -142,7 +148,9 @@ public abstract class AbstractPushSender implements Sender {
      * @param contents    푸시 컨텐츠
      * @param pushMessage 푸시 메시지
      */
-    protected void send(MobPushWord contents, FcmMessage pushMessage) {
+    protected void send(PushContents contents, FcmMessage pushMessage) {
+        log.debug("AbstractPushSender send : {}", contents.getRelContentId());
+
         ExecutorService executorService;
         executorService = null;
         CompletionService<Boolean> completionService = null;
@@ -156,7 +164,7 @@ public abstract class AbstractPushSender implements Sender {
 
         Map<Future<Boolean>, Integer> futureMap = new HashMap<>();
         try {
-            for (MobPushWordProc proc : contents.getAppProcs()) {
+            for (PushContentsProc proc : contents.getAppProcs()) {
                 int appSeq = proc
                         .getId()
                         .getAppSeq();
@@ -167,10 +175,11 @@ public abstract class AbstractPushSender implements Sender {
                      * - 페이징 처리를 위한 max값 
                      */
                     Long lastTokenSeq = findLastTokenSeq(appSeq);
+                    log.debug("lastTokenSeq=", lastTokenSeq);
                     /**
                      * TODO 5. 앱별 푸시 쓰레드 생성
                      */
-                    log.debug("appSeq : {}", appSeq);
+                    log.debug("appSeq=", appSeq);
                     futureMap.put(completionService.submit(() -> {
                         int pageIdx = 0;
                         while (lastTokenSeq >= (pageIdx = tokenIdx.getAndAdd(pushSenderJob.getTokenCnt()))) {
@@ -182,7 +191,7 @@ public abstract class AbstractPushSender implements Sender {
                             log.debug(Thread
                                     .currentThread()
                                     .getName() + " appSeq : {},  pageIdx : {}", appSeq, pageIdx);
-                            List<MobPushToken> puthTokens = findAllToken(pageIdx);
+                            List<PushAppToken> puthTokens = findAllToken(pageIdx);
 
                             // 토큰 푸시 메세지 발송
                             PushResponseMessage response = sendMessage(puthTokens, pushMessage);
@@ -216,20 +225,20 @@ public abstract class AbstractPushSender implements Sender {
             /**
              * TODO 7. 앱별 푸시 전송 결과 update
              */
-            for (MobPushWordProc proc : contents.getAppProcs()) {
+            for (PushContentsProc proc : contents.getAppProcs()) {
                 int appSeq = proc
                         .getId()
                         .getAppSeq();
                 if (errorSendingSet.contains(appSeq)) {
-                    updateFailed(contents.getWordSeq(), appSeq);
+                    updateFailed(contents.getContentSeq(), appSeq);
                 } else {
-                    updateDone(contents.getWordSeq(), appSeq);
+                    updateDone(contents.getContentSeq(), appSeq);
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
-            updateFailed(contents.getWordSeq(), null);
+            updateFailed(contents.getContentSeq(), null);
         } catch (Exception e) {
-            updateFailed(contents.getWordSeq(), null);
+            updateFailed(contents.getContentSeq(), null);
         } finally {
             try {
                 executorService.awaitTermination(500, TimeUnit.MILLISECONDS);
@@ -327,7 +336,7 @@ public abstract class AbstractPushSender implements Sender {
      * @param pushMessage 푸시 메시지
      * @return 전송 결과
      */
-    protected PushResponseMessage sendMessage(List<MobPushToken> puthTokens, FcmMessage pushMessage) {
+    protected PushResponseMessage sendMessage(List<PushAppToken> puthTokens, FcmMessage pushMessage) {
         /**
          * TODO 10. 메세지 발송 로직 구현
          */
@@ -337,7 +346,7 @@ public abstract class AbstractPushSender implements Sender {
     /**
      * 푸시 메시지별 토큰의 이력 정보를 등록한다.
      */
-    protected void insertMobPushTokenHist() {
+    protected void insertPushAppTokenHist() {
         /**
          * TODO 11. 푸시 토큰 이력 생성 로직 구현
          */
@@ -346,7 +355,7 @@ public abstract class AbstractPushSender implements Sender {
     /**
      * 푸시 메시지별 토큰의 이력 정보를 갱신한다.
      */
-    protected void updateMobPushTokenHist() {
+    protected void updatePushAppTokenHist() {
         /**
          * TODO 12. 푸시 토큰 이력 갱신 로직 구현
          */
@@ -358,7 +367,7 @@ public abstract class AbstractPushSender implements Sender {
      *
      * @param pushTokensMemberList 삭제 해야 할 토큰 목록
      */
-    protected void deleteTokens(List<MobPushToken> pushTokensMemberList) {
+    protected void deleteTokens(List<PushAppToken> pushTokensMemberList) {
         /**
          * TODO 13. 에러난 토큰 삭제 로직 구현
          */
@@ -371,7 +380,7 @@ public abstract class AbstractPushSender implements Sender {
      * @param pageIdx 페이지 Index
      * @return 토큰 목록
      */
-    protected abstract List<MobPushToken> findAllToken(int pageIdx);
+    protected abstract List<PushAppToken> findAllToken(int pageIdx);
 
     /**
      * FCM에 푸시 요청

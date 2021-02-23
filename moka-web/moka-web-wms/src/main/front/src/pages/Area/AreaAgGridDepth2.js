@@ -1,18 +1,19 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaTable } from '@components';
-import { initialState, getAreaListModal, changeSelectedDepth, getAreaModal } from '@store/area';
-import { messageBox } from '@utils/toastUtil';
+import { initialState, getAreaListModal, changeSelectedDepth, getAreaModal, putAreaListSort } from '@store/area';
+import toast, { messageBox } from '@utils/toastUtil';
+import { getDisplayedRows } from '@utils/agGridUtil';
 import columnDefs from './AreaAgGridColumns';
 
 /**
  * 편집영역 > 두번째 리스트
  */
-const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3, onDelete, flag, setFlag, listDepth2, setListDepth2 }) => {
+const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, sourceCode, onDelete, flag, listDepth2, setListDepth2 }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const reset = useRef(null);
+    const [gridInstance, setGridInstance] = useState(null);
 
     /**
      * 리스트 조회
@@ -24,6 +25,7 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3
                 getAreaListModal({
                     search: {
                         parentAreaSeq: areaDepth1?.area?.areaSeq,
+                        sourceCode,
                         depth: 2,
                     },
                     callback: ({ header, body }) => {
@@ -44,14 +46,7 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3
         } else {
             setListDepth2([]);
         }
-    }, [areaDepth1.area, dispatch, onDelete, setListDepth2]);
-
-    useEffect(() => {
-        if (reset.current !== flag.depth2) {
-            getList();
-            reset.current = flag.depth2;
-        }
-    }, [getList, flag.depth2]);
+    }, [areaDepth1.area, dispatch, onDelete, sourceCode, setListDepth2]);
 
     /**
      * 목록에서 Row클릭
@@ -63,8 +58,6 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3
                 callback: ({ header, body }) => {
                     if (header.success) {
                         setAreaDepth2(body);
-                        setAreaDepth3(initialState.initData);
-                        setFlag({ ...flag, depth3: new Date().getTime() });
                         dispatch(changeSelectedDepth(2));
                     } else {
                         messageBox.alert(header.message);
@@ -79,33 +72,78 @@ const AreaAgGridDepth2 = ({ areaDepth1, areaDepth2, setAreaDepth2, setAreaDepth3
      */
     const handleClickAdd = () => {
         setAreaDepth2(initialState.initData);
-        setAreaDepth3(initialState.initData);
         dispatch(changeSelectedDepth(2));
-        setFlag({ ...flag, depth3: new Date().getTime() });
     };
+
+    /**
+     * 순서 바꿔서 저장
+     */
+    const handleChangeOrd = () => {
+        const displayedRows = getDisplayedRows(gridInstance.api);
+        const areaSeqList = displayedRows.map((d) => d.areaSeq);
+        dispatch(
+            putAreaListSort({
+                areaSeqList,
+                parentAreaSeq: areaDepth1?.area?.areaSeq,
+                callback: ({ header }) => {
+                    if (!header.success) {
+                        messageBox.alert(header.message);
+                    } else {
+                        toast.success(header.message);
+                    }
+                },
+            }),
+        );
+    };
+
+    /**
+     * 드래그 후 ordNo 정렬
+     * @param {object} params grid instance
+     */
+    const handleDragEnd = (params) => {
+        const displayedRows = getDisplayedRows(params.api);
+        const ordered = displayedRows.map((data, idx) => ({
+            ...data,
+            ordNo: idx + 1,
+        }));
+        params.api.applyTransaction({ update: ordered });
+    };
+
+    useEffect(() => {
+        getList();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [flag.depth2]);
 
     return (
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
                 <div className="d-flex justify-content-end mb-14">
-                    <Button variant="positive" onClick={handleClickAdd} disabled={!areaDepth1?.area?.areaSeq}>
+                    <Button variant="positive" onClick={handleClickAdd} className="mr-1" disabled={!areaDepth1?.area?.areaSeq}>
                         등록
+                    </Button>
+
+                    <Button variant="positive" disabled={!areaDepth1?.area?.areaSeq} onClick={handleChangeOrd}>
+                        저장
                     </Button>
                 </div>
 
                 <MokaTable
+                    setGridInstance={setGridInstance}
                     className="overflow-hidden flex-fill"
                     rowData={listDepth2}
                     columnDefs={columnDefs}
                     selected={areaDepth2?.area?.areaSeq}
-                    header={false}
                     paging={false}
-                    dragging={false}
+                    onRowDragEnd={handleDragEnd}
                     onRowNodeId={(data) => data.areaSeq}
                     onRowClicked={handleRowClicked}
                     loading={loading}
                     preventRowClickCell={['delete']}
-                    suppressRefreshCellAfterUpdate
+                    suppressRowClickSelection
+                    suppressMoveWhenRowDragging
+                    rowDragManaged
+                    animateRows
+                    dragStyle
                 />
             </MokaCard>
         </React.Fragment>

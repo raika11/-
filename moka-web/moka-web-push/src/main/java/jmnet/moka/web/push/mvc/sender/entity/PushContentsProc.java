@@ -1,10 +1,20 @@
 package jmnet.moka.web.push.mvc.sender.entity;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 /**
  * 푸시기사 정보
@@ -21,17 +31,10 @@ public class PushContentsProc implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 콘텐트 일련번호
+     * id
      */
-    @Id
-    @Column(name = "CONTENT_SEQ", nullable = false)
-    private Long contentSeq;
-
-    /**
-     *  앱 일련번호
-     */
-    @Column(name = "APP_SEQ")
-    private Long appSeq;
+    @EmbeddedId
+    private PushContentsProcPK id;
 
     /**
      * 전송 상태
@@ -80,4 +83,12 @@ public class PushContentsProc implements Serializable {
      */
     @Column(name = "END_DT")
     private Date endDt;
+
+    /**
+     * 종료일시
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONTENT_SEQ", referencedColumnName = "CONTENT_SEQ", insertable = false, updatable = false)
+    private PushContents pushContents;
+
 }

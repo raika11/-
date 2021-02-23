@@ -29,7 +29,7 @@ const TourSet = () => {
                 </Helmet>
 
                 {/* 휴일 지정 목록 */}
-                <MokaCard width={790} titleClassName="mb-0" className="mr-gutter" bodyClassName="d-flex flex-column" title="휴일 지정(매년 반복)">
+                <MokaCard width={790} className="mr-gutter" bodyClassName="d-flex flex-column" title="휴일 지정(매년 반복)">
                     <HolidayList />
                 </MokaCard>
 

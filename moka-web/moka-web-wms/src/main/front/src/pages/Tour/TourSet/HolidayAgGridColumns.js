@@ -5,13 +5,11 @@ export default [
     {
         headerName: '휴일명',
         field: 'denyTitle',
-        cellStyle: { fontSize: '12px' },
         width: 320,
     },
     {
         headerName: '날짜',
         field: 'denyDate',
-        cellStyle: { fontSize: '12px' },
         width: 320,
     },
     {

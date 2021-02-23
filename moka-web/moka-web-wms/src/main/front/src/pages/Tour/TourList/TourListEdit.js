@@ -219,7 +219,6 @@ const TourListEdit = forwardRef(({ match }, ref) => {
             <MokaInputLabel
                 as="textarea"
                 label="견학 목적"
-                className="mb-2"
                 inputClassName=" resize-none"
                 inputProps={{ rows: 4 }}
                 value={temp.tourPurpose}

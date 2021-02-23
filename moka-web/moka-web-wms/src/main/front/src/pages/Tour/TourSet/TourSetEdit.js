@@ -112,14 +112,14 @@ const TourSetEdit = () => {
 
     return (
         <MokaCard
-            width={790}
+            className="flex-fill"
             title="견학 기본설정"
             footer
             footerButtons={[
                 {
                     text: '저장',
                     variant: 'positive',
-                    className: 'mr-2',
+                    className: 'mr-1',
                     onClick: handleClickSave,
                 },
                 {
@@ -202,9 +202,7 @@ const TourSetEdit = () => {
                     <MokaInputLabel label="견학가능\n요일" as="none" />
                     <MokaInputLabel
                         label="일"
-                        labelWidth={13}
                         labelClassName="ml-0"
-                        className="mb-0"
                         as="switch"
                         name="sunday"
                         id="tour-sun-switch"
@@ -216,8 +214,6 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="월"
-                        labelWidth={13}
-                        className="mb-0"
                         as="switch"
                         name="monday"
                         id="tour-mon-switch"
@@ -229,8 +225,6 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="화"
-                        labelWidth={13}
-                        className="mb-0"
                         as="switch"
                         name="tuesday"
                         id="tour-tue-switch"
@@ -242,8 +236,6 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="수"
-                        labelWidth={13}
-                        className="mb-0"
                         as="switch"
                         name="wednesday"
                         id="tour-wed-switch"
@@ -255,8 +247,6 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="목"
-                        labelWidth={13}
-                        className="mb-0"
                         as="switch"
                         name="thursday"
                         id="tour-thu-switch"
@@ -268,8 +258,6 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="금"
-                        labelWidth={13}
-                        className="mb-0"
                         as="switch"
                         name="friday"
                         id="tour-fri-switch"
@@ -281,8 +269,6 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="토"
-                        labelWidth={13}
-                        className="mb-0"
                         as="switch"
                         name="saturday"
                         id="tour-sat-switch"

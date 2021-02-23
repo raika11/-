@@ -2,19 +2,16 @@ export default [
     {
         headerName: '번호',
         field: 'tourSeq',
-        cellStyle: { fontSize: '12px' },
         width: 50,
     },
     {
         headerName: '견학일',
         field: 'tourDate',
-        cellStyle: { fontSize: '12px' },
-        width: 80,
+        width: 100,
     },
     {
         headerName: '단체명',
         field: 'tourGroupNm',
-        cellStyle: { fontSize: '12px' },
         width: 300,
         tooltipField: 'tourGroupNm',
         flex: 1,
@@ -22,26 +19,22 @@ export default [
     {
         headerName: '인원',
         field: 'tourPersons',
-        cellStyle: { fontSize: '12px' },
         width: 40,
     },
     {
         headerName: '신청자',
         field: 'writerNm',
-        cellStyle: { fontSize: '12px' },
         width: 60,
         tooltipField: 'writerNm',
     },
     {
         headerName: '연락처',
         field: 'writerPhone',
-        cellStyle: { fontSize: '12px' },
-        width: 100,
+        width: 120,
     },
     {
         headerName: '상태',
         field: 'tourStatus',
-        cellStyle: { fontSize: '12px' },
         width: 50,
         cellRendererFramework: ({ data }) => {
             let status = '';
@@ -61,7 +54,6 @@ export default [
     {
         headerName: '등록일',
         field: 'regDt',
-        cellStyle: { fontSize: '12px' },
-        width: 80,
+        width: 100,
     },
 ];

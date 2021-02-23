@@ -26,7 +26,7 @@ const TourMonth = () => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <MokaCard width={1596} titleClassName="mb-0" title="월별 현황">
+            <MokaCard width={1596} title="월별 현황">
                 <TourMonthCalendar />
             </MokaCard>
         </>

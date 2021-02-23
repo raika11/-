@@ -155,6 +155,7 @@ public class DefaultView extends AbstractView {
                     if (cachedItem != null) {
                         writer.append(cachedItem);
                     } else {
+                        this.setCodesAndMenus(domainId, item, mergeContext);
                         sb = templateMerger.merge(domainId, itemType, itemId, mergeContext);
                         writer.append(sb);
                         this.cacheManager.set(cacheType, cacheKey, sb.toString());
@@ -187,9 +188,13 @@ public class DefaultView extends AbstractView {
     private void setCodesAndMenus(String domainId, MergeItem item, MergeContext mergeContext)
             throws TemplateMergeException, TemplateParseException, DataLoadException {
         String category = item.getString(ItemConstants.PAGE_CATEGORY);
-        if (category == null) {
-            return;
+        if ( category == null) { // 페이지가 아닌 아이템에 파라미터로 들어올 경우
+            HttpParamMap httpParamMap = (HttpParamMap) mergeContext.get(MokaConstants.MERGE_CONTEXT_PARAM);
+            category = httpParamMap.get(MokaConstants.PARAM_CATEGORY);
         }
+//        if (category == null) {
+//            return;
+//        }
         DataLoader loader = this.templateMerger
                 .getTemplateMerger(domainId)
                 .getDataLoader();

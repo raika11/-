@@ -228,9 +228,9 @@ const ChannelEdit = ({ match }) => {
             return true;
         }
 
-        const tmpCh = editSelectRepoters.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '0' && e.nickNm === '' && e.seqNo === '');
-        if (tmpCh.length === reporterCountConst.length) {
-            messageBox.alert('진행자를 1명 이상 선택해 주세요.', () => {});
+        const tmpCh = editSelectRepoters.filter((e) => e.memNm === '');
+        if (tmpCh.length === editSelectRepoters.length) {
+            messageBox.alert('진행자를 1명 이상 등록해 주세요.', () => {});
             return true;
         }
 
@@ -265,7 +265,7 @@ const ChannelEdit = ({ match }) => {
         editSelectRepoters.map((element, index) => {
             const memDiv = !element.memDiv || element.memDiv === undefined ? 'CM' : element.memDiv;
             const memNm = !element.memNm || element.memNm === undefined ? '' : element.memNm;
-            const memRepSeq = !element.memRepSeq || element.memRepSeq === undefined ? '' : element.memRepSeq;
+            const memRepSeq = !element.memRepSeq || element.memRepSeq === undefined ? '0' : element.memRepSeq;
             const nickNm = !element.nickNm || element.nickNm === undefined ? '' : element.nickNm;
             const memMemo = !element.memMemo || element.memMemo === undefined ? '' : element.memMemo;
             const desc = !element.desc || element.desc === undefined ? '' : element.desc;

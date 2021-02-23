@@ -214,12 +214,12 @@ const CommentSearch = ({ selectBannedItem }) => {
                         onChange={(e) => handleChangeSearchInput(e)}
                         onSearch={(e) => handleClickSearchButton(e)}
                         name="keyword"
-                        className="flex-fill mr-2"
+                        className="flex-fill mr-1"
                     />
-                    <Button variant="outline-neutral" className="flex-shrink-0 mr-2" onClick={() => handleClickReloadButton()}>
-                        새로고침
+                    <Button variant="negative" className="flex-shrink-0 mr-1" onClick={() => handleClickReloadButton()}>
+                        초기화
                     </Button>
-                    <AuthButton variant="positive" className="mr-2 flex-shrink-0" onClick={() => handleClickBlockButton()}>
+                    <AuthButton variant="primary" className="mr-1 flex-shrink-0" onClick={() => handleClickBlockButton()}>
                         등록
                     </AuthButton>
                     <AuthButton variant="negative" className="flex-shrink-0" onClick={() => handleCLickDeleteButton()}>

@@ -87,7 +87,7 @@ const HolidayAgGrid = () => {
 
     return (
         <>
-            <div className="mb-2 d-flex justify-content-end">
+            <div className="mb-14 d-flex justify-content-end">
                 <Button variant="positive" onClick={handleClickAdd}>
                     휴일 등록
                 </Button>

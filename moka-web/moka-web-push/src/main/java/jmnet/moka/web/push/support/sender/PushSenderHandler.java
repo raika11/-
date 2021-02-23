@@ -11,6 +11,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.push.config.PropertyHolder;
 import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
+import jmnet.moka.web.push.mvc.sender.entity.PushApp;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.service.PushContentsService;
 import lombok.extern.slf4j.Slf4j;
@@ -106,19 +107,21 @@ public class PushSenderHandler {
      *
      * @param pushItem job 정보
      */
-    public boolean addPushJob(MobPushItem pushItem) {
+    public boolean addPushJob(PushContents pushItem) {
         boolean result = false;
 
+        String pushType = pushItem.getPushType();
         System.out.println("==========================================");
         System.out.println("getPushType="+pushItem.getPushType());
-        System.out.println("scheduleMap="+scheduleMap.get("T"));
-        System.out.println("scheduleMap="+scheduleMap.get("S"));
-        System.out.println("scheduleMap="+scheduleMap.get("R"));
-        System.out.println("scheduleMap="+scheduleMap.get("N"));
-        System.out.println("toString="+scheduleMap.toString());
+
+        if(pushType.equals("T")){   pushItem.setPushType("senderT");    }
+        if(pushType.equals("S")){   pushItem.setPushType("senderS");    }
+        if(pushType.equals("R")){   pushItem.setPushType("senderR");    }
+        if(pushType.equals("N")){   pushItem.setPushType("senderN");    }
 
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
-            System.out.println("getPushItemSeq="+pushItem.getPushItemSeq());
+            System.out.println("getContentSeq   ="+pushItem.getContentSeq());
+            System.out.println("getRsvDt        ="+pushItem.getRsvDt());
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
                     .doTask(pushItem));

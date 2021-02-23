@@ -43,8 +43,10 @@ const NoticeEdit = ({ match }) => {
 
     const resetEditData = () => {
         setEditData({});
+        setUploadFiles([]);
         dispatch(clearBoardContents());
         dispatch(clearSelectBoard());
+        fileinputRef.current = null;
     };
 
     // 게시글 데이터 변경시 스테이트 업데이트.
@@ -112,6 +114,10 @@ const NoticeEdit = ({ match }) => {
 
     // 수정 버튼 클릭 철.
     const handleClickUpdateButton = () => {
+        if (checkValidation()) {
+            return;
+        }
+
         delete editData.regInfo;
         delete editData.modInfo;
 
@@ -280,8 +286,8 @@ const NoticeEdit = ({ match }) => {
             let tempFile = event.target.files[0].name.split('.');
             let tempFileExt = tempFile[1];
 
-            if (editData.boardInfo.allowFileExt.split(',').indexOf(tempFileExt) < 0) {
-                messageBox.alert(`해당 게시판의 첨부 파일은 (${editData.boardInfo.allowFileExt}) 만 등록 가능합니다.`, () => {});
+            if (selectBoard.allowFileExt.replace(/ /g, '').split(',').indexOf(tempFileExt) < 0) {
+                messageBox.alert(`해당 게시판의 첨부 파일은 (${selectBoard.allowFileExt}) 만 등록 가능합니다.`, () => {});
             } else {
                 extCheck = true;
             }
@@ -838,11 +844,13 @@ const NoticeEdit = ({ match }) => {
                                     return (
                                         <Form.Row className="mb-2">
                                             <Suspense>
-                                                <BoardsSummernote
-                                                    contentValue={replyEditData.content}
-                                                    editChange={(value) => setReplyEditContents(value)}
-                                                    editImageUpload={(e) => SummernoteImageUpload(e)}
-                                                />
+                                                <Col>
+                                                    <BoardsSummernote
+                                                        contentValue={replyEditData.content}
+                                                        editChange={(value) => setReplyEditContents(value)}
+                                                        editImageUpload={(e) => SummernoteImageUpload(e)}
+                                                    />
+                                                </Col>
                                             </Suspense>
                                         </Form.Row>
                                     );

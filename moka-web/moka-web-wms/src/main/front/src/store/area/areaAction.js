@@ -16,6 +16,12 @@ export const [GET_AREA_TREE, GET_AREA_TREE_SUCCESS, GET_AREA_TREE_FAILURE] = cre
 export const getAreaTree = createAction(GET_AREA_TREE, ({ search, callback }) => ({ search, callback }));
 
 /**
+ * 편집영역 트리 정렬
+ */
+export const PUT_AREA_LIST_SORT = 'area/PUT_AREA_LIST_SORT';
+export const putAreaListSort = createAction(PUT_AREA_LIST_SORT, ({ parentAreaSeq, areaSeqList, callback }) => ({ parentAreaSeq, areaSeqList, callback }));
+
+/**
  * 모달 데이터 조회
  */
 export const GET_AREA_LIST_MODAL = 'area/GET_AREA_LIST_MODAL';

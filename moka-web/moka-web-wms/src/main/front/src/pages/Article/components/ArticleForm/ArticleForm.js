@@ -329,12 +329,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="매체" as="none" />
-                        <span className="ft-12 user-select-text">{temp?.articleSource?.sourceName}</span>
+                        <span className="ft-14 user-select-text">{temp?.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 align-items-center justify-content-between d-flex" xs={6}>
                         <div className="d-flex align-items-center">
                             <MokaInputLabel label="발행일" as="none" />
-                            <span className="ft-12 user-select-text">{temp.pressDateText}</span>
+                            <span className="ft-14 user-select-text">{temp.pressDateText}</span>
                         </div>
 
                         <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)} size="sm">
@@ -349,12 +349,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="기사ID" as="none" />
-                        <span className="ft-12 user-select-text">{temp.totalId}</span>
+                        <span className="ft-14 user-select-text">{temp.totalId}</span>
                     </Col>
 
                     <Col className="p-0 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="수신ID" as="none" />
-                        <span className="ft-12 user-select-text">{temp.rid}</span>
+                        <span className="ft-14 user-select-text">{temp.rid}</span>
                     </Col>
                 </div>
 
@@ -437,13 +437,11 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 </Form.Row>
 
                 {/* 본문 */}
-                <Form.Row className="mb-2 flex-fill">
-                    <Col className="p-0 d-flex overflow-hidden" xs={12}>
-                        <MokaInputLabel label="본문" as="none" />
-                        <div className="flex-fill input-border overflow-hidden">
-                            <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} fullWindowButton />
-                        </div>
-                    </Col>
+                <Form.Row className="mb-2 flex-fill" style={{ height: 250 }}>
+                    <MokaInputLabel label="본문" as="none" />
+                    <div className="flex-fill input-border overflow-hidden">
+                        <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} fullWindowButton />
+                    </div>
                 </Form.Row>
 
                 {/* 벌크 사이트 리스트, 조회 (AB테스트 등) */}

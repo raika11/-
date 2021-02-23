@@ -253,13 +253,13 @@ const BannedListSearch = ({ pathName }) => {
                 <MokaSearchInput value={searchData.keyword} onChange={(e) => handleChangeSearchInput(e)} onSearch={() => handleClickSearchButton()} name="keyword" />
             </div>
             <div className="d-inline-block float-right">
-                <Button variant="positive" className="mr-2" onClick={() => setDefaultInputModalState(true)}>
+                <Button variant="positive" className="mr-1" onClick={() => setDefaultInputModalState(true)}>
                     등록
                 </Button>
-                <Button variant="negative" className="mr-2" onClick={() => handleOnClickApplyButton()}>
+                <Button variant="negative" className="mr-1" onClick={() => handleOnClickApplyButton()}>
                     적용하기
                 </Button>
-                <Button variant="negative" className="mr-2" onClick={() => handleOnClickMemoryButton()}>
+                <Button variant="negative" onClick={() => handleOnClickMemoryButton()}>
                     메모리
                 </Button>
             </div>

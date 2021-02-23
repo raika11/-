@@ -4,16 +4,16 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import toast, { messageBox } from '@utils/toastUtil';
 import { MokaInputLabel, MokaCard } from '@components';
-import { saveArea, DELETE_AREA, SAVE_AREA } from '@store/area';
+import { initialState, saveArea, DELETE_AREA, SAVE_AREA } from '@store/area';
 
 /**
  * 편집영역 1뎁스 등록/수정
  */
-const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
+const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) => {
     const dispatch = useDispatch();
     const domainList = useSelector(({ auth }) => auth.domainList);
     const loading = useSelector(({ loading }) => loading[DELETE_AREA] || loading[SAVE_AREA]);
-    const [temp, setTemp] = useState({});
+    const [temp, setTemp] = useState(initialState.initData.area);
     const [domain, setDomain] = useState({});
     const [error, setError] = useState({});
 
@@ -54,8 +54,11 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                     if (header.success) {
                         toast.success(header.message);
                         reloadList();
+                        if (!area.areaSeq) {
+                            setTemp(initialState.initData.area);
+                        }
                     } else {
-                        toast.fail(header.message);
+                        messageBox.alert(header.message);
                     }
                 },
             }),
@@ -68,6 +71,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
     const handleClickSave = () => {
         const save = {
             ...temp,
+            sourceCode,
             container: null,
             page: null,
             parent: null,
@@ -129,7 +133,6 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                     <MokaInputLabel
                         className="mb-0"
                         as="switch"
-                        labelWidth={87}
                         label="사용여부"
                         id="usedYn"
                         name="usedYn"
@@ -142,7 +145,6 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                     <Col xs={8} className="p-0 pr-40">
                         <MokaInputLabel
                             className="mb-0"
-                            labelWidth={87}
                             label="그룹 영역명"
                             placeholder="그룹 영역명을 입력하세요"
                             value={temp.areaNm}
@@ -151,7 +153,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                         />
                     </Col>
                     <Col xs={4} className="p-0">
-                        <MokaInputLabel className="mb-0" labelWidth={46} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                        <MokaInputLabel className="mb-0" label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                     </Col>
                 </Form.Row>
                 {/* 도메인 */}
@@ -160,7 +162,6 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child }) => {
                     as="select"
                     label="도메인"
                     name="domainId"
-                    labelWidth={87}
                     value={domain.domainId}
                     onChange={handleChangeValue}
                     disabled={temp.areaSeq ? true : false}

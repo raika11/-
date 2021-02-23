@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.push.config.PropertyHolder;
-import jmnet.moka.web.push.mvc.sender.entity.MobPushToken;
+import jmnet.moka.web.push.mvc.sender.entity.PushAppToken;
 import jmnet.moka.web.push.support.message.FcmMessage;
 import jmnet.moka.web.push.support.message.PushHttpResponse;
 import okhttp3.Call;
@@ -69,7 +69,7 @@ public class HttpPushFcmClient implements HttpPushClient {
         }
     }
 
-    public void push(MobPushToken pushToken, FcmMessage fcmMessage, PushHttpResponseListener nrl)
+    public void push(PushAppToken pushToken, FcmMessage fcmMessage, PushHttpResponseListener nrl)
             throws IOException {
         final Request request = buildRequest(fcmMessage);
 
@@ -143,7 +143,7 @@ public class HttpPushFcmClient implements HttpPushClient {
         return rb.build();
     }
 
-    protected PushHttpResponse parseResponse(MobPushToken pushToken, FcmMessage fcmMessage, Response response)
+    protected PushHttpResponse parseResponse(PushAppToken pushToken, FcmMessage fcmMessage, Response response)
             throws IOException {
         return new PushHttpResponse(pushToken, response.code(), response
                 .headers()

@@ -114,7 +114,7 @@ export default [
     },
     {
         headerName: '출고시간\n수정시간',
-        width: 85,
+        width: 87,
         field: 'articleDt',
         cellClassRules: {
             'pre-wrap-cell': () => true,

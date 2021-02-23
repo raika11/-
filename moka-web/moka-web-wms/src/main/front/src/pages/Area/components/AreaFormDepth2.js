@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { ITEM_CP, ITEM_CT, AREA_COMP_ALIGN_LEFT, AREA_ALIGN_V, AREA_ALIGN_H } from '@/constants';
 import { MokaCard, MokaInputLabel, MokaSearchInput, MokaInput } from '@components';
 import { MokaEditorCore } from '@components/MokaEditor';
-import { SAVE_AREA, DELETE_AREA, GET_AREA_MODAL, saveArea, changeInvalidList } from '@store/area';
+import { initialState, SAVE_AREA, DELETE_AREA, GET_AREA_MODAL, saveArea, changeInvalidList } from '@store/area';
 import { initialState as componentState, getComponentListModal } from '@store/component';
 import { initialState as containerState, getContainerListModal } from '@store/container';
 import toast, { messageBox } from '@utils/toastUtil';
@@ -18,18 +18,21 @@ import AreaComp from './AreaComp';
 import ComponentLoadBox from './ComponentLoadBox';
 import ContainerLoadBox from './ContainerLoadBox';
 
-const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete, child, parent, area, setFlag, flag }) => {
+/**
+ * 편집영역 2뎁스, 3뎁스 폼
+ */
+const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, onDelete, child, parent, area, setFlag, flag, sourceCode }) => {
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[SAVE_AREA] || loading[DELETE_AREA] || loading[GET_AREA_MODAL]);
     const { invalidList, selectedDepth } = useSelector(({ area }) => area);
-    const [temp, setTemp] = useState({}); // 수정가능한 데이터
+    const [temp, setTemp] = useState(initialState.initData.area); // 수정가능한 데이터
     const [previewRsrc, setPreviewRsrc] = useState(''); // 미리보기 리소스
     const [domain, setDomain] = useState({}); // 도메인
     const [container, setContainer] = useState({}); // 선택한 컨테이너 담고 있는 state
     const [component, setComponent] = useState({}); // 선택한 컴포넌트 담고 있는 state
     const [areaComp, setAreaComp] = useState({}); // areaDiv === ITEM_CP 일 때 areaComp 1개
     const [areaComps, setAreaComps] = useState([]); // areaDiv === ITEM_CT 일 때 DB에 저장되는 areaComp 리스트
-    const [areaCompLoad, setAreaCompLoad] = useState({});
+    const [areaCompLoad, setAreaCompLoad] = useState(initialState.initData.areaCompLoad);
     const [loadCnt, setLoadCnt] = useState(0);
     const [contOptions, setContOptions] = useState([]); // 컨테이너 options
     const [compOptions, setCompOptions] = useState([]); // 컴포넌트 options
@@ -100,6 +103,9 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                     if (header.success) {
                         toast.success(header.message);
                         setFlag({ ...flag, [`depth${depth}`]: new Date().getTime() });
+                        if (!save.areaSeq) setInit();
+                    } else {
+                        messageBox.alert(header.message);
                     }
                 },
             }),
@@ -122,7 +128,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
             return;
         }
 
-        let save = { ...temp, page: { pageSeq: page.pageSeq }, parent: { areaSeq: parent.areaSeq }, domain: { domainId: domain.domainId }, previewRsrc };
+        let save = { ...temp, sourceCode, page: { pageSeq: page.pageSeq }, parent: { areaSeq: parent.areaSeq }, domain: { domainId: domain.domainId }, previewRsrc };
         if (temp.areaDiv === ITEM_CP) {
             save.container = null;
             save.areaComps = null;
@@ -322,34 +328,43 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
         [areaComp, areaComps, error, handleCompLoad, temp],
     );
 
-    useEffect(() => {
-        return () => {
-            setTemp({});
-            setPreviewRsrc('');
-            setLoadCnt(0);
-            setError({});
-            setCompOptions([]);
-            setContOptions([]);
-            setComponent({});
-            setContainer({});
-            setAreaComps([]);
-            setAreaComp({});
-        };
-    }, []);
+    /**
+     * 초기화
+     */
+    const setInit = useCallback(() => {
+        setTemp(initialState.initData.area);
+        setAreaCompLoad(initialState.initData.areaCompLoad);
+        setPreviewRsrc('');
+        setAreaComp({});
+        setAreaComps([]);
+        setComponent({});
+        setContainer({});
+        setPage({});
+        setLoadCnt(0);
+        setError({});
+        setCompOptions([]);
+        setContOptions([]);
+    }, [setPage]);
 
     useEffect(() => {
-        // 데이터 초기화
-        const ar = area.area || {};
+        return () => {
+            setInit();
+        };
+    }, [setInit]);
+
+    useEffect(() => {
+        // 데이터 셋팅
+        const ar = area.area || initialState.initData.area;
         const ac = ar.areaComp || {};
         const acs = ar.areaComps || [];
         setTemp(ar);
+        setAreaCompLoad(area.areaCompLoad || initialState.initData.areaCompLoad);
         setPreviewRsrc(ar.previewRsrc);
-        setAreaCompLoad(area.areaCompLoad || {});
         setAreaComp(ac);
         setAreaComps(acs);
         setComponent(ac.component || {});
         setContainer(ar.container || {});
-        ar?.domain?.domainId ? setDomain(ar.domain) : setDomain(parent.domain);
+        setDomain(parent?.domain);
         setLoadCnt(0);
         setError({});
     }, [area, parent]);
@@ -365,13 +380,6 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, temp.areaDiv, selectedDepth]);
-
-    useEffect(() => {
-        // 도메인 변경 => 페이지 선택 모달에 도메인값 전달
-        if (domain?.domainId) {
-            setModalDomainId(domain?.domainId);
-        }
-    }, [domain, setModalDomainId]);
 
     useEffect(() => {
         setError(invalidListToError(invalidList));
@@ -405,7 +413,6 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                         as="switch"
                         id="usedYn"
                         name="usedYn"
-                        labelWidth={81}
                         label="사용여부"
                         className="mb-0"
                         inputProps={{ checked: temp.usedYn === 'Y' }}
@@ -416,31 +423,24 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                 {/* 부모 정보 노출 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="p-0 pr-40">
-                        <MokaInputLabel
-                            name="parent"
-                            labelWidth={81}
-                            label={depth === 2 ? '그룹 영역' : '중분류 영역'}
-                            value={parent.areaNm}
-                            onChange={handleChangeValue}
-                            disabled
-                        />
+                        <MokaInputLabel name="parent" label={depth === 2 ? '그룹 영역' : '중분류 영역'} value={parent.areaNm} onChange={handleChangeValue} disabled />
                     </Col>
                     <Col xs={4} className="p-0">
-                        <MokaInputLabel labelWidth={46} label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
+                        <MokaInputLabel label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                     </Col>
                 </Form.Row>
 
                 {/* 도메인 */}
-                <MokaInputLabel className="mb-2" label="도메인" labelWidth={81} value={domain.domainUrl} disabled />
+                <MokaInputLabel className="mb-2" label="도메인" value={domain.domainUrl} disabled />
 
                 {/* 영역명 */}
-                <MokaInputLabel className="mb-2" label="영역명" labelWidth={81} name="areaNm" value={temp.areaNm} onChange={handleChangeValue} isInvalid={error.areaNm} required />
+                <MokaInputLabel className="mb-2" label="영역명" name="areaNm" value={temp.areaNm} onChange={handleChangeValue} isInvalid={error.areaNm} required />
 
                 <hr className="divider" />
 
                 {/* 페이지 검색 */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel as="none" className="mb-0" label="페이지" labelWidth={81} required />
+                    <MokaInputLabel as="none" className="mb-0" label="페이지" required />
                     <MokaSearchInput
                         className="w-100"
                         inputClassName="bg-white"
@@ -454,12 +454,12 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
                 </Form.Row>
 
                 {/* api 입력 */}
-                <MokaInputLabel name="afterApi" label="API" className="mb-2" labelWidth={81} value={temp.afterApi} onChange={handleChangeValue} />
+                <MokaInputLabel name="afterApi" label="API" className="mb-2" value={temp.afterApi} onChange={handleChangeValue} />
 
                 {/* 컴포넌트/컨테이너 선택 */}
                 <Form.Row className="mb-2 d-flex">
-                    <div className="flex-shrink-0 mr-2" style={{ width: 86 }}>
-                        <MokaInput as="select" name="areaDiv" className="ft-13" value={temp.areaDiv} onChange={handleChangeValue}>
+                    <div className="flex-shrink-0 mr-2" style={{ width: 74 }}>
+                        <MokaInput as="select" name="areaDiv" value={temp.areaDiv} onChange={handleChangeValue}>
                             <option value={ITEM_CP}>컴포넌트</option>
                             <option value={ITEM_CT}>컨테이너</option>
                         </MokaInput>
@@ -482,7 +482,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
 
                     {/* 일반형/가로형 선택 */}
                     <div className="ml-2 flex-shrink-0">
-                        <MokaInput as="select" name="areaAlign" className="ft-13" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
+                        <MokaInput as="select" name="areaAlign" value={temp.areaAlign} onChange={handleChangeValue} disabled={temp.areaDiv === ITEM_CP}>
                             <option value={AREA_ALIGN_V}>일반형</option>
                             {temp.areaDiv === ITEM_CT && <option value={AREA_ALIGN_H}>가로형</option>}
                         </MokaInput>
@@ -514,7 +514,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, depth, onDelete,
 
                 {/* 미리보기 리소스 */}
                 <Form.Row style={{ height: 200 }}>
-                    <MokaInputLabel label="미리보기\n리소스" labelWidth={81} as="none" />
+                    <MokaInputLabel label="미리보기\n리소스" as="none" />
                     <div className="flex-fill input-border overflow-hidden">
                         <MokaEditorCore defaultValue={temp.previewRsrc} value={previewRsrc} onBlur={(value) => setPreviewRsrc(value)} fullWindowButton />
                     </div>

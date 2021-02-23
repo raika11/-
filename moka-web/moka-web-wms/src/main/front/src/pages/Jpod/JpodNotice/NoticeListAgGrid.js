@@ -27,10 +27,8 @@ const NoticeListAgGrid = ({ match }) => {
     // 목록 클릭 했을때.
     const handleClickListRow = ({ boardId, boardSeq }) => {
         // 로딩이 끝났을 경우만 데이터를 가지고 올수 있게.
-        if (loading === false) {
-            history.push(`${match.path}/${boardId}/${boardSeq}`);
-            dispatch(getBoardContents({ boardId: boardId, boardSeq: boardSeq }));
-        }
+        history.push(`${match.path}/${boardId}/${boardSeq}`);
+        dispatch(getBoardContents({ boardId: boardId, boardSeq: boardSeq }));
     };
 
     // grid 에서 상태 변경시 리스트를 가지고 오기.
@@ -45,19 +43,25 @@ const NoticeListAgGrid = ({ match }) => {
 
     // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
     useEffect(() => {
-        const { boardId, boardSeq } = params;
-        if (!isNaN(boardId) && selectBoardId.current !== boardId) {
-            selectBoardId.current = boardId;
+        if (!isNaN(params.boardId) && selectBoardId.current !== params.boardId) {
+            selectBoardId.current = params.boardId;
         }
 
-        if (!isNaN(boardSeq) && selectBoardSeq.current !== boardSeq) {
-            selectBoardSeq.current = boardSeq;
-            dispatch(getBoardContents({ boardId: selectBoardId.current, boardSeq: boardSeq }));
+        if (!isNaN(params.boardSeq) && selectBoardSeq.current !== params.boardSeq) {
+            selectBoardSeq.current = params.boardSeq;
         } else if (history.location.pathname === `${match.path}/add` && selectBoardSeq.current !== 'add') {
             selectBoardSeq.current = 'add';
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
+
+    // 최초 로딩시에만 게시판 정보가 있으면 정보 가지고 오기.
+    useEffect(() => {
+        if (params.boardId && params.boardId) {
+            dispatch(getBoardContents({ boardId: params.boardId, boardSeq: params.boardSeq }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setRowData([]);

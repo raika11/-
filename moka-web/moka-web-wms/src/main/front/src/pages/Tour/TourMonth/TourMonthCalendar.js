@@ -190,6 +190,14 @@ const TourMonthCalendar = () => {
                 themeSystem="bootstrap"
                 initialView="dayGridMonth"
                 initialDate={moment().format(DB_DATEFORMAT)}
+                customButtons={{
+                    customPrev: {
+                        text: 'prev',
+                        click: () => {
+                            alert('clicked the custom button!');
+                        },
+                    },
+                }}
                 // 달력 상단의 버튼, 제목을 정의
                 headerToolbar={{
                     left: 'prev',

@@ -585,7 +585,6 @@ const ChannelEdit = ({ match }) => {
         <MokaCard
             className="overflow-hidden flex-fill"
             title={`에피소드 ${selectChnlSeq.current === 'add' ? '등록' : '수정'}`}
-            titleClassName="mb-0"
             loading={loading}
             footer
             footerClassName="justify-content-center"

@@ -1,6 +1,7 @@
 package jmnet.moka.web.push.support.sender;
 
 import jmnet.moka.web.push.mvc.sender.entity.MobPushItem;
+import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 
 /**
  * <pre>
@@ -28,5 +29,5 @@ public interface Sender {
      *
      * @param pushItem 예약 정보
      */
-    void doTask(MobPushItem pushItem);
+    void doTask(PushContents pushItem);
 }

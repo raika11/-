@@ -9,6 +9,19 @@ export const getAreaList = ({ search }) => {
     });
 };
 
+// 편집영역 목록 정렬 application/json
+export const putAreaListSrot = ({ parentAreaSeq, areaSeqList }) => {
+    return instance
+        .put(parentAreaSeq ? `/api/areas/sort/${parentAreaSeq}` : '/api/areas/sort', areaSeqList, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
+
 // 편집영역 조회
 export const getArea = ({ areaSeq }) => {
     return instance.get(`/api/areas/${areaSeq}`).catch((err) => {

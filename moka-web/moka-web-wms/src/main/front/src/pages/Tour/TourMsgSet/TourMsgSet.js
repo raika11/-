@@ -90,14 +90,13 @@ const MessageSettings = () => {
                 bodyClassName="d-flex flex-column"
                 footer
                 footerButtons={[
-                    { text: '저장', variant: 'positive', className: 'mr-2', onClick: handleClickSave },
+                    { text: '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                     { text: '취소', variant: 'negative', onClick: handleClickCancel },
                 ]}
                 footerClassName="justify-content-center"
             >
                 <MokaInputLabel
                     label="견학 신청/안내\n'신청 방법'"
-                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -108,8 +107,7 @@ const MessageSettings = () => {
                     // isInvalid={}
                 />
                 <MokaInputLabel
-                    label="견학 신청/안내\'견학 신청'"
-                    labelWidth={92}
+                    label="견학 신청/안내\n'견학 신청'"
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -121,7 +119,6 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\n'견학 시 유의사항'"
-                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -133,7 +130,6 @@ const MessageSettings = () => {
                 />
                 <MokaInputLabel
                     label="견학 신청/안내\n'관람 및 주차 안내'"
-                    labelWidth={92}
                     className="mb-2"
                     as="textarea"
                     inputClassName="resize-none"
@@ -144,7 +140,7 @@ const MessageSettings = () => {
                     // isInvalid={}
                 />
                 <div className="d-flex flex-fill">
-                    <MokaInputLabel label="질의응답\n'자주하는 질문'" labelWidth={92} as="none" />
+                    <MokaInputLabel label="질의응답\n'자주하는 질문'" as="none" />
                     <div className="flex-fill input-border overflow-hidden">
                         <MokaEditorCore value={mgObj.E} onBlur={handleBlur} />
                     </div>

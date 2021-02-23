@@ -10,7 +10,9 @@ const SourceRenderer = forwardRef((params, ref) => {
         <div className="d-flex align-items-center h-auto">
             {params.data.bulkflag === 'Y' && <MokaIcon iconName="fas-circle" className="color-info mr-1" />}
             <span>
-                {params.data.sourceName} - {params.data.contentKorname}
+                {params.data.sourceName}
+                <br />
+                {params.data.contentKorname}
             </span>
         </div>
     );

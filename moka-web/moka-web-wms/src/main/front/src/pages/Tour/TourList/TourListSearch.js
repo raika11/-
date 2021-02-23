@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@/components';
 import { initialState, clearSearch, getTourApplyList, changeSearchOption } from '@/store/tour';
@@ -44,11 +45,11 @@ const TourListSearch = () => {
     }, [dispatch]);
 
     return (
-        <Form>
-            <Form.Row className="mb-2 d-flex">
-                <div style={{ width: 140 }}>
+        <Form className="mb-14">
+            <Form.Row>
+                <Col xs={5} className="p-0 pr-2 d-flex">
                     <MokaInput
-                        className="mb-0 mr-2"
+                        className="mr-2"
                         as="dateTimePicker"
                         value={search.startTourDay}
                         inputProps={{ timeFormat: null }}
@@ -60,10 +61,7 @@ const TourListSearch = () => {
                             }
                         }}
                     />
-                </div>
-                <div style={{ width: 140 }}>
                     <MokaInput
-                        className="mb-0 mr-2"
                         as="dateTimePicker"
                         value={search.endTourDay}
                         inputProps={{ timeFormat: null }}
@@ -75,16 +73,14 @@ const TourListSearch = () => {
                             }
                         }}
                     />
-                </div>
-                <div className="flex-fill">
-                    <MokaSearchInput
-                        className="mr-2"
-                        placeholder="신청자 또는 단체명을 입력해주세요"
-                        onSearch={handleClickSearch}
-                        value={search.keyword}
-                        onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
-                    />
-                </div>
+                </Col>
+                <MokaSearchInput
+                    className="mr-1 flex-fill"
+                    placeholder="신청자 또는 단체명을 입력해주세요"
+                    onSearch={handleClickSearch}
+                    value={search.keyword}
+                    onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
+                />
                 <Button variant="negative" onClick={handleClickReset}>
                     초기화
                 </Button>

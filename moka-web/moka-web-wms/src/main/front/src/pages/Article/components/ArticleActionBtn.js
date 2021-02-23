@@ -26,7 +26,7 @@ const ArticleActionBtn = forwardRef((params, ref) => {
             <Button
                 size="sm"
                 variant="outline-table-btn"
-                className="mr-1 px-1 flex-shrink-0"
+                className="px-1 flex-shrink-0"
                 disabled={data.serviceFlag !== 'Y' || data.iud === 'E'}
                 onClick={() => data.handleClickStop(data)}
             >

@@ -46,7 +46,7 @@ export const columnDefs = [
         },
     },
     {
-        headerName: ' ID / 이름',
+        headerName: '등록자',
         field: 'userInfo',
         tooltipField: 'userId',
         width: 150,
@@ -148,7 +148,7 @@ export const BannedColumnDefs = {
             cellStyle: { display: 'flex', alignItems: 'center', height: '50px' },
         },
         {
-            headerName: '등록자/ID',
+            headerName: '등록자',
             field: 'regMemberInfo',
             tooltipField: 'regMemberInfo',
             width: 150,
@@ -210,7 +210,7 @@ export const BannedColumnDefs = {
             cellStyle: { display: 'flex', alignItems: 'center', height: '50px' },
         },
         {
-            headerName: '등록자/ID',
+            headerName: '등록자',
             field: 'regMemberInfo',
             tooltipField: 'regMemberInfo',
             width: 150,
@@ -273,7 +273,7 @@ export const BannedColumnDefs = {
             cellStyle: { display: 'flex', alignItems: 'center', height: '50px' },
         },
         {
-            headerName: '등록자/ID',
+            headerName: '등록자',
             field: 'regMemberInfo',
             tooltipField: 'regMemberInfo',
             width: 150,

@@ -287,11 +287,11 @@ const ArticleSearch = ({ ja, sun }) => {
                 </Col>
 
                 {/* 검색어 */}
-                <Col xs={3} className="p-0 pl-2">
+                <Col xs={4} className="p-0 pl-2">
                     <MokaInput name="keyword" onChange={handleChangeValue} value={search.keyword} onKeyPress={handleKeyPress} placeholder="검색어를 입력하세요" />
                 </Col>
 
-                <Col xs={8} className="p-0 pl-2 d-flex">
+                <Col xs={7} className="p-0 pl-2 d-flex">
                     {/* 분류 전체 */}
                     <CodeAutocomplete placeholder="분류 전체" className="flex-fill mr-2" value={search.masterCode} onChange={handleChangeMasterCode} />
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Image } from 'react-bootstrap';
+import { Form, Button, Image, Col } from 'react-bootstrap';
 import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -171,190 +171,196 @@ const ReporterEdit = ({ match }) => {
             <hr className="divider" />
 
             <Form>
-                <Form.Row className="d-flex">
-                    <div className="w-50">
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
                         <MokaInputLabel
                             label="이름"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.repName || '-' }}
                             value={temp.repName || '-'}
                             name="repName"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
-                        <MokaInputLabel
-                            label="소속 1"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            value={temp.r1CdNm || '-'}
-                            name="r1Cd"
-                            className="mb-2"
-                            labelClassName="ml-0"
-                        />
-                        <MokaInputLabel
-                            label="소속 3"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            value={temp.r3CdNm || '-'}
-                            name="r3Cd"
-                            className="mb-2"
-                            labelClassName="ml-0"
-                        />
-                        <MokaInputLabel
-                            label="타입코드"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            value={temp.jplusRepDiv || '-'}
-                            name="jplusRepDiv"
-                            className="mb-2"
-                            labelClassName="ml-0"
-                        />
-                        <MokaInputLabel
-                            label="중앙 ID"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            value={temp.joinsId || '-'}
-                            name="joinsId"
-                            className="mb-2"
-                            labelClassName="ml-0"
-                        />
-                        <MokaInputLabel
-                            label="페이스북"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            value={temp.snsFb || '-'}
-                            name="snsFb"
-                            className="mb-2"
-                            labelClassName="ml-0"
-                        />
-                        <MokaInputLabel
-                            label="인스타그램"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            value={temp.snsIn || '-'}
-                            name="snsIn"
-                            className="mb-2"
-                            labelClassName="ml-0"
-                        />
-                    </div>
-                    <div className="w-50">
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="표시 직책"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.repTitle || '-' }}
                             value={temp.repTitle || '-'}
                             name="repTitle"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="소속 1"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.r1CdNm || '-' }}
+                            value={temp.r1CdNm || '-'}
+                            name="r1Cd"
+                        />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="소속 2"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.r2CdNm || '-' }}
                             value={temp.r2CdNm || '-'}
                             name="r2Cd"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="소속 3"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.r3CdNm || '-' }}
+                            value={temp.r3CdNm || '-'}
+                            name="r3Cd"
+                        />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="소속 4"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.r4CdNm || '-' }}
                             value={temp.r4CdNm || '-'}
                             name="r4Cd"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="타입코드"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.jplusRepDiv || '-' }}
+                            value={temp.jplusRepDiv || '-'}
+                            name="jplusRepDiv"
+                        />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="집배신 이메일"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.repEmail1 || '-' }}
                             value={temp.repEmail1 || '-'}
                             name="repEmail1"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="중앙 ID"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.joinsId || '-' }}
+                            value={temp.joinsId || '-'}
+                            name="joinsId"
+                        />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="분야"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.repField || '-' }}
                             value={temp.repField || '-'}
                             name="repField"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="페이스북"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.snsFb || '-' }}
+                            value={temp.snsFb || '-'}
+                            name="snsFb"
+                        />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="트위터"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.snsTw || '-' }}
                             value={temp.snsTw || '-'}
                             name="snsTw"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="인스타그램"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.snsIn || '-' }}
+                            value={temp.snsIn || '-'}
+                            name="snsIn"
+                        />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="블로그"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.joinsBlog || '-' }}
                             value={temp.joinsBlog || '-'}
                             name="joinsBlog"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
-                    </div>
+                    </Col>
                 </Form.Row>
-
-                <MokaInputLabel
-                    label="JNET ID"
-                    labelWidth={110}
-                    inputProps={{ plaintext: true, readOnly: true }}
-                    value={temp.jnetId || '-'}
-                    name="jnetId"
-                    className="mb-2"
-                    labelClassName="ml-0"
-                />
-
-                <Form.Row className="d-flex">
-                    <div className="w-50">
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
+                        <MokaInputLabel
+                            label="JNET ID"
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.jnetId || '-' }}
+                            value={temp.jnetId || '-'}
+                            name="jnetId"
+                        />
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
                         <MokaInputLabel
                             label="JNET 이메일1"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.rMail1 || '-' }}
                             value={temp.rMail1 || '-'}
                             name="repEmail1"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="JNET 이메일3"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.rMail3 || '-' }}
                             value={temp.rMail3 || '-'}
                             name=""
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
-                    </div>
-                    <div className="w-50">
+                    </Col>
+                </Form.Row>
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="pl-0">
                         <MokaInputLabel
                             label="JNET 이메일2"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.rMail2 || '-' }}
                             value={temp.rMail2 || '-'}
                             name="repEmail2"
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
+                    </Col>
+                    <Col xs={6}>
                         <MokaInputLabel
                             label="JNET 이메일4"
-                            labelWidth={110}
-                            inputProps={{ plaintext: true, readOnly: true }}
+                            labelWidth={70}
+                            inputProps={{ plaintext: true, readOnly: true, style: { textOverflow: 'ellipsis' }, title: temp.rMail4 || '-' }}
                             value={temp.rMail4 || '-'}
                             name=""
-                            className="mb-2"
-                            labelClassName="ml-0"
                         />
-                    </div>
+                    </Col>
                 </Form.Row>
 
                 <MokaInputLabel as="none" className="mb-2" label="기자 한마디" labelClassName="ml-0" />

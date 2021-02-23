@@ -1,14 +1,21 @@
 package jmnet.moka.core.tms.mvc.domain;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.servlet.http.HttpServletRequest;
+import jmnet.moka.common.cache.CacheManager;
+import jmnet.moka.common.cache.HazelcastCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.item.DomainItem;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
@@ -25,15 +32,36 @@ public abstract class AbstractDomainResolver implements DomainResolver {
     protected static final ReservedMap EMPTY_RESERVED_MAP = new ReservedMap(0L);
     protected HashMap<String, DomainItem> domainItemMapByUrl;
     protected HashMap<String, DomainItem> domainItemMapById;
-    protected HashMap<String, ReservedMap> allReservedMap;
+    protected ConcurrentMap<String, ReservedMap> allReservedMap;
     protected List<DomainItem> domainItemList;
     protected boolean domainLoaded = false;
 
-    public AbstractDomainResolver() {
+    public AbstractDomainResolver(GenericApplicationContext appContext) {
         this.domainItemList = new ArrayList<DomainItem>(8);
         this.domainItemMapByUrl = new HashMap<String, DomainItem>(64);
         this.domainItemMapById = new HashMap<String, DomainItem>(64);
-        this.allReservedMap = new HashMap<String, ReservedMap>(64);
+//        this.allReservedMap = new HashMap<String, ReservedMap>(64);
+
+        HazelcastInstance hzInstance = null;
+        HazelcastCache hzCache = null;
+        try {
+            CacheManager cacheManager = appContext.getBean(CacheManager.class);
+            if (cacheManager != null) {
+                hzCache = (HazelcastCache) cacheManager.getCache(HazelcastCache.class);
+                hzInstance = hzCache
+                        .getHazelcastDelegator()
+                        .getHazelcastInstance();
+            }
+        } catch (Exception e) {
+            logger.warn("Load hazelcast Instance fail :{}", e.getMessage());
+        }
+
+        if (hzInstance != null) {
+            this.allReservedMap = hzInstance.getMap("ReservedMap");
+//            hzCache.getHazelcastDelegator().addListener((IMap<String,String>)this.allReservedMap);
+        } else {
+            this.allReservedMap = new ConcurrentHashMap<>(64);
+        }
     }
 
     public DomainItem getDomainInfoByUrl(String domainUrl) {

@@ -146,7 +146,7 @@ public class TmsAutoConfiguration {
         DomainResolver domainResolver;
         long reservedExpireTime = TimeHumanizer.parseLong(this.reservedExpireTimeStr, ITEM_EXPIRE_TIME);
         HttpProxyDataLoader httpProxyDataLoader = appContext.getBean(HttpProxyDataLoader.class, itemApiHost, itemApiPath);
-        domainResolver = new DpsDomainResolver(httpProxyDataLoader, reservedExpireTime);
+        domainResolver = new DpsDomainResolver(appContext, httpProxyDataLoader, reservedExpireTime);
         return domainResolver;
     }
 

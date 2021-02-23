@@ -85,7 +85,7 @@ public class PreviewConfiguration {
         DomainResolver domainResolver = null;
         long reservedExpireTime = TimeHumanizer.parseLong("0", 0L);
         HttpProxyDataLoader httpProxyDataLoader = itemDataLoader();
-        domainResolver = new DpsDomainResolver(httpProxyDataLoader, reservedExpireTime);
+        domainResolver = new DpsDomainResolver(appContext, httpProxyDataLoader, reservedExpireTime);
         return domainResolver;
     }
 

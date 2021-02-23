@@ -17,6 +17,7 @@ import jmnet.moka.core.tms.exception.TmsException;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.template.loader.DpsItemFactory;
 import jmnet.moka.core.tms.template.loader.DpsTemplateLoader;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <pre>
@@ -34,8 +35,8 @@ public class DpsDomainResolver extends AbstractDomainResolver {
     private static final DpsItemFactory dpsItemFactory = new DpsItemFactory();
     private long reservedExpireTime;
 
-    public DpsDomainResolver(HttpProxyDataLoader httpProxyDataLoader, long reservedExpireTime) {
-        super();
+    public DpsDomainResolver(GenericApplicationContext appContext, HttpProxyDataLoader httpProxyDataLoader, long reservedExpireTime) {
+        super(appContext);
         try {
             this.httpProxyDataLoader = httpProxyDataLoader;
             this.reservedExpireTime = reservedExpireTime;

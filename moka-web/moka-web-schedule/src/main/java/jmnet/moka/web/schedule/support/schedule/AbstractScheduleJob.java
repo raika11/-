@@ -1,8 +1,13 @@
 package jmnet.moka.web.schedule.support.schedule;
 
+import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.MalformedServerReplyException;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author ince
  * @since 2021-02-05 17:38
  */
+@Slf4j
 public abstract class AbstractScheduleJob implements ScheduleJob {
     private static final Logger logger = LoggerFactory.getLogger(AbstractScheduleJob.class);
-
-    protected GenContent scheduleInfo;
 
     /**
      * DB 처리용
@@ -35,6 +39,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      */
     @Autowired
     protected RestTemplateHelper restTemplateHelper;
+
+    @Autowired
+    private MokaCrypt mokaCrypt;
+
+    protected GenContent scheduleInfo;
+
 
 
     /**
@@ -84,6 +94,57 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
          * 2. ftp 접속 정보 : GetTarget 클래스 이용
          * 3. 저장 경로 : scheduleInfo 객체의 targetPath 속성 값
          */
+
+        log.debug("before rss upload : {}", scheduleInfo.getJobSeq());
+        log.debug("before rss upload : {}", scheduleInfo.getSendType());
+        log.debug("before rss upload : {}", scheduleInfo.getCallUrl());
+        log.debug("before rss upload : {}", scheduleInfo.getFtpPassive());
+        log.debug("before rss upload : {}", scheduleInfo.getFtpPort());
+
+
+        if(scheduleInfo.getSendType() != null && scheduleInfo.getSendType().equals("FTP")){
+            testFtp(rss);
+        }
+
+
+        log.debug("after rss upload");
+
+
         return false;
+    }
+
+    private void testFtp(String rss){
+
+        try{
+            FTPClient ftpClient = new FTPClient();
+            //Passive Mode (ftp서버가 기본포트가 아닌 경우)
+            if(scheduleInfo.getFtpPassive() != null && scheduleInfo.getFtpPassive().equals("Y")){
+                ftpClient.connect(scheduleInfo.getCallUrl(), Math.toIntExact(scheduleInfo.getFtpPort()));
+            }
+            else{
+                ftpClient.connect(scheduleInfo.getCallUrl());
+            }
+
+            //FTP 연결성공
+            if(FTPReply.isPositiveCompletion(ftpClient.getReplyCode())){
+                boolean loginResponse = ftpClient.login(scheduleInfo.getGenTarget().getAccessId(), mokaCrypt.decrypt(scheduleInfo.getGenTarget().getAccessPwd()));
+                log.debug("ftp login : {}", loginResponse);
+
+                ftpClient.changeWorkingDirectory(scheduleInfo.getTargetPath());
+
+                boolean logoutResponse = ftpClient.logout();
+                log.debug("ftp logout : {}", logoutResponse);
+
+                ftpClient.disconnect();
+            }
+            //FTP 연결실패
+            else{
+                ftpClient.disconnect();
+                log.error("ftp connect failed : {}", scheduleInfo.getCallUrl());
+            }
+
+        }catch (Exception e){
+            log.error("ftp error : {}", e);
+        }
     }
 }

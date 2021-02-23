@@ -13,6 +13,10 @@ import { unescapeHtmlArticle } from '@utils/convertUtil';
  * +)
  * unescape === true 이면 unescapeHtmlArticle 처리
  */
+const defaultProps = {
+    urlRegex: /[Uu]rl$/,
+};
+
 const TextForm = ({ mappingData, urlRegex, temp, onChange, error, unescape = false }) => {
     const { as, field, label, errorCheck, ...mappingProps } = mappingData;
     const isUrl = urlRegex.test(field);
@@ -29,7 +33,7 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error, unescape = fal
                     className="mb-0 w-100"
                     value={unescape ? unescapeHtmlArticle(temp[field]) : temp[field]}
                     onChange={onChange}
-                    isInvalid={errorCheck && error[field]}
+                    isInvalid={errorCheck && error?.[field]}
                     {...mappingProps}
                 />
             </Col>
@@ -44,5 +48,7 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error, unescape = fal
         </Form.Row>
     );
 };
+
+TextForm.defaultProps = defaultProps;
 
 export default TextForm;

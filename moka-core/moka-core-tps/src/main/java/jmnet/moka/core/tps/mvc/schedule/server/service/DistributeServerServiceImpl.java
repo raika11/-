@@ -44,7 +44,7 @@ public class DistributeServerServiceImpl implements DistributeServerService{
     }
 
     @Override
-    public DistributeServer saveDistributeServer(DistributeServer distServer){
+    public DistributeServer insertDistributeServer(DistributeServer distServer){
         return distServerRepository.save(distServer);
     }
 

@@ -329,12 +329,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="매체" as="none" />
-                        <span className="ft-12">{temp?.articleSource?.sourceName}</span>
+                        <span className="ft-12 user-select-text">{temp?.articleSource?.sourceName}</span>
                     </Col>
                     <Col className="p-0 align-items-center justify-content-between d-flex" xs={6}>
                         <div className="d-flex align-items-center">
                             <MokaInputLabel label="발행일" as="none" />
-                            <span className="ft-12">{temp.pressDateText}</span>
+                            <span className="ft-12 user-select-text">{temp.pressDateText}</span>
                         </div>
 
                         <Button variant="outline-neutral flex-shrink-0" onClick={() => setHistoryModalShow(true)} size="sm">
@@ -349,12 +349,12 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 <div className="mb-2 d-flex">
                     <Col className="p-0 pr-2 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="기사ID" as="none" />
-                        <span className="ft-12">{temp.totalId}</span>
+                        <span className="ft-12 user-select-text">{temp.totalId}</span>
                     </Col>
 
                     <Col className="p-0 d-flex align-items-center" xs={6}>
                         <MokaInputLabel label="수신ID" as="none" />
-                        <span className="ft-12">{temp.rid}</span>
+                        <span className="ft-12 user-select-text">{temp.rid}</span>
                     </Col>
                 </div>
 
@@ -414,16 +414,6 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                     </Col>
                 </Form.Row>
 
-                {/* 본문 */}
-                <Form.Row className="mb-2 flex-fill">
-                    <Col className="p-0 d-flex overflow-hidden" xs={12}>
-                        <MokaInputLabel label="본문" as="none" />
-                        <div className="flex-fill input-border overflow-hidden">
-                            <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} fullWindowButton />
-                        </div>
-                    </Col>
-                </Form.Row>
-
                 {/* 기자 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={6}>
@@ -450,6 +440,16 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                     </Col>
                     <Col className="p-0 pl-2 d-flex align-items-center" xs={2}>
                         <p className="mb-0 ml-2 ft-12">콤마(,) 구분입력</p>
+                    </Col>
+                </Form.Row>
+
+                {/* 본문 */}
+                <Form.Row className="mb-2 flex-fill">
+                    <Col className="p-0 d-flex overflow-hidden" xs={12}>
+                        <MokaInputLabel label="본문" as="none" />
+                        <div className="flex-fill input-border overflow-hidden">
+                            <MokaEditorCore defaultValue={temp.artContent?.artContent} value={content} onBlur={handleContentBlur} fullWindowButton />
+                        </div>
                     </Col>
                 </Form.Row>
 

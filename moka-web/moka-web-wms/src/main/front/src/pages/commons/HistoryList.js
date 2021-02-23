@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
@@ -39,16 +39,7 @@ const HistoryList = (props) => {
     const { show, seq, seqType, onLoad } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[GET_HISTORY_LIST]);
-    const { search: storeSearch, total, list } = useSelector(
-        (store) => ({
-            search: store.history.search,
-            total: store.history.total,
-            list: store.history.list,
-        }),
-        shallowEqual,
-    );
-
-    // state
+    const { search: storeSearch, total, list } = useSelector(({ history }) => history);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
 
@@ -131,12 +122,6 @@ const HistoryList = (props) => {
     );
 
     useEffect(() => {
-        return () => {
-            dispatch(clearStore());
-        };
-    }, [dispatch]);
-
-    useEffect(() => {
         if (show && seq) {
             dispatch(
                 getHistoryList(
@@ -166,59 +151,64 @@ const HistoryList = (props) => {
         setSearch(storeSearch);
     }, [storeSearch]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(clearStore());
+        };
+    }, [dispatch]);
+
     return (
         <MokaCard title="히스토리" bodyClassName="d-flex flex-column">
-            <Form>
-                {/* 날짜 검색 */}
-                <Form.Row className="mb-2">
-                    {/* 검색조건 */}
-                    <Col xs={4} className="p-0 pr-2">
-                        <MokaInput
-                            as="select"
-                            value={search.searchType || undefined}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    searchType: e.target.value,
-                                });
-                            }}
-                        >
-                            {initialState.searchTypeList.map((searchType) => (
-                                <option value={searchType.id} key={searchType.id}>
-                                    {searchType.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </Col>
-                    <Col xs={8} className="p-0">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0 w-100"
-                            inputProps={{
-                                timeFormat: null,
-                                timeDefault: 'start',
-                            }}
-                            value={moment(search.regDt, DB_DATEFORMAT)}
-                            onChange={handleDate}
-                        />
-                    </Col>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    {/* 키워드 */}
-                    <Col xs={12} className="p-0 mb-0">
-                        <MokaSearchInput
-                            value={search.keyword}
-                            onChange={(e) => {
-                                setSearch({
-                                    ...search,
-                                    keyword: e.target.value,
-                                });
-                            }}
-                            onSearch={handleSearch}
-                        />
-                    </Col>
-                </Form.Row>
-            </Form>
+            {/* 날짜 검색 */}
+            <Form.Row className="mb-2">
+                {/* 검색조건 */}
+                <Col xs={4} className="p-0 pr-2">
+                    <MokaInput
+                        as="select"
+                        value={search.searchType || undefined}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                searchType: e.target.value,
+                            });
+                        }}
+                    >
+                        {initialState.searchTypeList.map((searchType) => (
+                            <option value={searchType.id} key={searchType.id}>
+                                {searchType.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </Col>
+                <Col xs={8} className="p-0">
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="mb-0 w-100"
+                        inputProps={{
+                            timeFormat: null,
+                            timeDefault: 'start',
+                        }}
+                        value={moment(search.regDt, DB_DATEFORMAT)}
+                        onChange={handleDate}
+                    />
+                </Col>
+            </Form.Row>
+            <Form.Row className="mb-14">
+                {/* 키워드 */}
+                <Col xs={12} className="p-0 mb-0">
+                    <MokaSearchInput
+                        value={search.keyword}
+                        onChange={(e) => {
+                            setSearch({
+                                ...search,
+                                keyword: e.target.value,
+                            });
+                        }}
+                        onSearch={handleSearch}
+                    />
+                </Col>
+            </Form.Row>
+
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columDefs}

@@ -39,7 +39,6 @@ public class BulkSenderClientHandler implements Runnable{
     private final File dirScan;
     private final FileTaskInput fileTaskInput;
     private final ObjectMapper objectMapper;
-    private final SlackMessageService slackMessageService;
     private final BulkSenderService bulkSenderService;
 
     public BulkSenderClientHandler(BulkDumpEnvCP bulkDumpEnvCP, BulkSenderTask bulkSenderTask) {
@@ -50,7 +49,6 @@ public class BulkSenderClientHandler implements Runnable{
 
         final TaskManager taskManager = bulkSenderTask.getTaskManager();
         this.objectMapper = taskManager.getObjectMapper();
-        this.slackMessageService = taskManager.getSlackMessageService();
         this.bulkSenderService = taskManager.getBulkSenderService();
     }
 

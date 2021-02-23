@@ -128,6 +128,7 @@ const ComponentWork = (props) => {
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
                 setLoading={setLoading}
+                deskingPart={deskingPart}
                 // handleForm={() => setFormShow(true)}
             />
 

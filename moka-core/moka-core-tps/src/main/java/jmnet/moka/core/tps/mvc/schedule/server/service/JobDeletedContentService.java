@@ -20,7 +20,7 @@ public interface JobDeletedContentService {
      * @param jobDeletedContent 삭제된 작업
      * @return 삭제된 작업
      */
-    JobDeletedContent saveJobDeletedContent(JobDeletedContent jobDeletedContent);
+    JobDeletedContent insertJobDeletedContent(JobDeletedContent jobDeletedContent);
 
     /**
      * 삭제된 작업 목록 조회

@@ -17,8 +17,6 @@ import mapping, { fontSizeObj } from '@pages/Desking/deskingPartMapping';
 import imageEditer from '@utils/imageEditorUtil';
 import commonUtil from '@utils/commonUtil';
 
-const urlRegex = /[Uu]rl$/;
-
 /**
  * 데스킹 기사정보 편집 모달 컴포넌트
  */
@@ -48,7 +46,7 @@ const EditDeskingWorkModal = (props) => {
     // state
     const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
     const [fileValue, setFileValue] = useState(null); // 파일
-    const [fontListType, setFontListType] = useState(''); // 제목의 폰트 타입
+    const [fontListType, setFontListType] = useState(null); // 제목의 폰트 타입
     const [error, setError] = useState({});
     const [showModal, setShowModal] = useState(false); // 새이미지 등록 팝업 모달
     const [specialChar, setSpecialChar] = useState(''); // 약물
@@ -81,10 +79,11 @@ const EditDeskingWorkModal = (props) => {
     };
 
     /**
-     * 값 변경
+     * 입력값 변경
+     * @param {object} e 이벤트
      */
-    const handleChangeValue = ({ target }) => {
-        const { name, value } = target;
+    const handleChangeValue = (e) => {
+        const { name, value } = e.target;
         setTemp({ ...temp, [name]: value });
     };
 
@@ -162,6 +161,8 @@ const EditDeskingWorkModal = (props) => {
         if (list.length !== filtered.length) {
             const fontPart = list.find((part) => fontSizeObj[part]);
             setFontListType(fontPart);
+        } else {
+            setFontListType(null);
         }
     }, [deskingPartStr]);
 
@@ -261,17 +262,7 @@ const EditDeskingWorkModal = (props) => {
                     } else if (partKey === 'VOD_URL') {
                         return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
                     } else if (mappingData) {
-                        return (
-                            <TextForm
-                                key={partKey}
-                                unescape={partKey === 'BODY_HEAD'}
-                                mappingData={mappingData}
-                                temp={temp}
-                                urlRegex={urlRegex}
-                                onChange={handleChangeValue}
-                                error={error}
-                            />
-                        );
+                        return <TextForm key={partKey} unescape={partKey === 'BODY_HEAD'} mappingData={mappingData} temp={temp} onChange={handleChangeValue} error={error} />;
                     } else {
                         return null;
                     }

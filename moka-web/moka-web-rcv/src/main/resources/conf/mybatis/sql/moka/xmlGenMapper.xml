@@ -39,9 +39,10 @@
     statementType="CALLABLE">
     <![CDATA[
     {
-      call UPA_ARTICLE_BASIC_DEL_BY_JAMID_OR_RID(
+      call UPA_ARTICLE_BASIC_DEL_BY_JAMID_OR_RID_OR_TOTALID(
       #{mainData.id.value, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string}
+      #{rid, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int}
       )
       }
     ]]>

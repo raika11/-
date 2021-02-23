@@ -45,6 +45,7 @@ public class XmlGenServiceImpl implements XmlGenService {
     @Transactional
     public void deleteArticleData(JamArticleTotalVo articleTotal)
             throws RcvDataAccessException {
+
         xmlGenMapper.callUpaArticleBasicDelByJamIdOrRid(articleTotal);
         xmlGenMapper.callUpaArticleHistoryIns(articleTotal);
         afterProcessArticleData( articleTotal );

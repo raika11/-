@@ -32,7 +32,7 @@ public class JobDeletedContentServiceImpl implements JobDeletedContentService{
     }
 
     @Override
-    public JobDeletedContent saveJobDeletedContent(JobDeletedContent jobDeletedContent) {
+    public JobDeletedContent insertJobDeletedContent(JobDeletedContent jobDeletedContent) {
         return jobDeletedContentRepository.save(jobDeletedContent);
     }
 

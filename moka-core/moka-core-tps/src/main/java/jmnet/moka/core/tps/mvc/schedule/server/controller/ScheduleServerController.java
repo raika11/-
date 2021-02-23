@@ -201,7 +201,7 @@ public class ScheduleServerController extends AbstractCommonController {
             JobContent jobContent = modelMapper.map(jobContentSaveDTO, JobContent.class);
             jobContent.setRegId(getUserId(principal));  //등록자ID 추가
 
-            JobContent returnValue = jobContentService.saveJobContent(jobContent);
+            JobContent returnValue = jobContentService.insertJobContent(jobContent);
             JobContentDTO dto = modelMapper.map(returnValue, JobContentDTO.class);
 
             String message = msg("tps.common.success.insert");
@@ -380,7 +380,7 @@ public class ScheduleServerController extends AbstractCommonController {
             JobContent jobContent = modelMapper.map(jobDeletedContent, JobContent.class);
             jobContent.setUsedYn("Y");
             jobContent.setRegId(getUserId(principal));  //복원자 ID 추가
-            //jobContentService.saveJobContent(jobContent);
+            //jobContentService.insertJobContent(jobContent);
 
             //삭제된 작업 복원 + 복원된 작업 삭제(트랜잭션)
             jobDeletedContentService.deletedJobDeletedContent(jobContent, jobDeletedContent);
@@ -485,7 +485,7 @@ public class ScheduleServerController extends AbstractCommonController {
             setPassword(distServer);    //패스워드 암호화
             distServer.setRegId(getUserId(principal));  //등록자ID 추가
 
-            DistributeServer returnValue = distServerService.saveDistributeServer(distServer);
+            DistributeServer returnValue = distServerService.insertDistributeServer(distServer);
             DistributeServerDTO dto = modelMapper.map(returnValue, DistributeServerDTO.class);
 
             String message = msg("tps.common.success.insert");

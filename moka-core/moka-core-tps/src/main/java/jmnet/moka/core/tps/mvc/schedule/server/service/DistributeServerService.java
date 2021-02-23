@@ -46,7 +46,7 @@ public interface DistributeServerService {
      * @param distServer 배포서버
      * @return 배포서버 목록
      */
-    DistributeServer saveDistributeServer(DistributeServer distServer);
+    DistributeServer insertDistributeServer(DistributeServer distServer);
 
     /**
      * 배포서버 수정

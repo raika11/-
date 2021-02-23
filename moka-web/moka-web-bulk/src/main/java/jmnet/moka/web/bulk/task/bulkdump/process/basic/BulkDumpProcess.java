@@ -15,7 +15,7 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.code.SenderStatus;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.exception.BulkException;
-import jmnet.moka.web.bulk.service.SmsUtilService;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvCP;
@@ -29,7 +29,6 @@ import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJobFileVo;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
 
 /**
@@ -45,15 +44,14 @@ import org.apache.commons.io.Charsets;
  * @since 2021-01-21 021 오후 2:55
  */
 
-@Slf4j
 public class BulkDumpProcess {
-    public static boolean doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkArticle article, BulkDumpEnv bulkDumpEnv, BulkDumpTask bulkDumpTask, BulkDumpJobTotalVo dumpJobTotal) {
+    public static BulkDumpResult doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkArticle article, BulkDumpEnv bulkDumpEnv, BulkDumpTask bulkDumpTask, BulkDumpJobTotalVo dumpJobTotal) {
         final BulkDumpEnvGlobal dumpEnvGlobal = bulkDumpEnv.getBulkDumpEnvGlobal();
-        final SmsUtilService smsUtilService = bulkDumpTask.getTaskManager().getSmsUtilService();
+        final SlackMessageService slackMessageService = bulkDumpTask.getTaskManager().getSlackMessageService();
         final ObjectMapper objectMapper = bulkDumpTask.getTaskManager().getObjectMapper();
         final BulkDumpService dumpService = bulkDumpTask.getTaskManager().getBulkDumpService();
 
-        boolean success = true;
+        BulkDumpResult result = BulkDumpResult.SUCCESS;
 
         final String backIud = article.getIud().toString();
         for(BulkDumpEnvCP dumpEnvCP : bulkDumpEnv.getDumpEnvCPs() ) {
@@ -65,9 +63,11 @@ public class BulkDumpProcess {
             if( !McpString.isNullOrEmpty(dumpEnvCP.getSendSiteCode()) ) {
                 if( !article.getIud().toString().equals("D")) {
                     // IUD 가 "D" 가 아닐 경우 bulkSendSite 와 bulkDelSite 에 항목이 있는 지 체크
-                    if( Arrays.stream(article.getBulkSendSite().split(",")).filter(c -> c.equals(dumpEnvCP.getSendSiteCode())).findAny().orElse(null) == null) {
-                        if( !isDelSite ) {
-                            continue;
+                    if( article.getBulkSendSite() != null ) {
+                        if( Arrays.stream(article.getBulkSendSite().split(",")).filter(c -> c.equals(dumpEnvCP.getSendSiteCode())).findAny().orElse(null) == null) {
+                            if( !isDelSite ) {
+                                continue;
+                            }
                         }
                     }
                 }
@@ -86,18 +86,20 @@ public class BulkDumpProcess {
 
             final BulkDumpJobVo dumpJob = BulkDumpJobVo.makeBulkDumpJob( dumpEnvCP, dumpJobTotal, dumpEnvCP.getDir() );
 
-            success &= doProcess_CpProcess( totalVo, dumpEnvCP, article, dumpJobTotal, dumpJob, bulkDumpTask, dumpService, smsUtilService );
+            result = doProcess_CpProcess( totalVo, dumpEnvCP, article, dumpJobTotal, dumpJob, bulkDumpTask, dumpService, slackMessageService);
+            if( result != BulkDumpResult.SUCCESS)
+                return result;
         }
 
         if( !dumpJobTotal.isNotFinalDump() )
-            success &= dumpJobTotal.exportDumpJobTotal(dumpEnvGlobal.getDirDump(), objectMapper);
+            result = dumpJobTotal.exportDumpJobTotal(dumpEnvGlobal.getDirDump(), objectMapper);
 
-        return success;
+        return result;
     }
 
     private static final Pattern PATTERN_CpFormat = Pattern.compile("(\\{_.*?_})", Pattern.CASE_INSENSITIVE);
-    private static boolean doProcess_CpProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpEnvCP dumpEnvCP, BulkArticle article, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob,
-            BulkDumpTask bulkDumpTask, BulkDumpService dumpService, SmsUtilService smsUtilService) {
+    private static BulkDumpResult doProcess_CpProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpEnvCP dumpEnvCP, BulkArticle article, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob,
+            BulkDumpTask bulkDumpTask, BulkDumpService dumpService, SlackMessageService slackMessageService) {
         final ObjectMapper objectMapper = bulkDumpTask.getTaskManager().getObjectMapper();
 
         //noinspection ConstantConditions,LoopStatementThatDoesntLoop
@@ -107,21 +109,22 @@ public class BulkDumpProcess {
                 switch (iud) {
                     case "D": case "U":
                         // 중앙데일리 다음카카오 검색제휴, 기사 송고 C(생성)지원, 수정/삭제는 벌크 생성제외. - 2016.08.24 by sean.
-                        log.info( "BULK Job Action '{}' aid ={} PATH ({}) for {} was skip created.", iud, article.getTotalId(), dumpEnvCP.getDir(), dumpEnvCP.getName());
-                        return true;
+                        totalVo.logInfo( "BULK Job Action '{}' aid ={} PATH ({}) for {} was skip created.", iud, article.getTotalId(), dumpEnvCP.getDir(), dumpEnvCP.getName());
+                        return BulkDumpResult.SUCCESS;
                 }
             }
 
             if (iud.equals("D")) {
-                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormatDelete(), dumpJobTotal, dumpJob, smsUtilService)) {
+                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormatDelete(), dumpJobTotal, dumpJob, slackMessageService)) {
                     break;
                 }
             } else {
-                final boolean isOvpDownloadSuccess = doProcess_CpProcessOvpDownload(dumpEnvCP, article, dumpJobTotal, dumpJob, smsUtilService);
+                final boolean isOvpDownloadSuccess = doProcess_CpProcessOvpDownload(totalVo, dumpEnvCP, article, dumpJobTotal, dumpJob,
+                        slackMessageService);
                 if (!isOvpDownloadSuccess) {
-                    break;
+                    return BulkDumpResult.TIMEOUT_OVP;
                 }
-                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormat(), dumpJobTotal, dumpJob, smsUtilService)) {
+                if (!doProcess_CpProcessWriteSwitchTags(dumpEnvCP, article, dumpEnvCP.getFormat(), dumpJobTotal, dumpJob, slackMessageService)) {
                     break;
                 }
             }
@@ -130,7 +133,7 @@ public class BulkDumpProcess {
             BulkTagUtil.getMatchesMarkTagList( PATTERN_CpFormat, dumpJob.getCpFormat(), "notMatched",  notReplacedMap );
             if( notReplacedMap.size() > 0 ) {
                 final String joined = String.join( ",", new HashSet<>(notReplacedMap.values()) );
-                log.error( "BULK Job Action '{}' aid ={} TAG ({}) for {} has not matched tag list", iud, article.getTotalId(), joined, dumpEnvCP.getName());
+                totalVo.logError( "BULK Job Action '{}' aid ={} TAG ({}) for {} has not matched tag list", iud, article.getTotalId(), joined, dumpEnvCP.getName());
             }
 
             if( !dumpJobTotal.exportDumpJob(dumpEnvCP, dumpJob, objectMapper) )
@@ -143,38 +146,13 @@ public class BulkDumpProcess {
 
             dumpService.insertBulkPortalLog(totalVo);
 
-
-            /*
-            strBuffer = m_util.m_szCpFormat_IU[i].ToString();
-            m_util.m_szCpFormat_IU[i] = SwitchTags(strBuffer, m_util.m_szCpName[i].ToString(), m_util.m_szCpContentType[i].ToString(), m_util.m_szNewsML_PID[i].ToString());
-
-            int nResult = Write(m_util.m_szCpName[i].ToString(), m_util.m_szCpRegKey[i].ToString(), m_util.m_szCpRegName[i].ToString(),
-                downDir, m_util.m_szCpFileExt[i].ToString(), m_util.m_szCpFormat_IU[i].ToString(), m_util.m_szNewsMLFileName[i].ToString(), m_util.m_szEncodeType[i].ToString(), ref strFileName);
-            if (nResult == 0)
-            {
-                nSuccess++;
-                //동영상 다운로드 실패 파일메일 전송
-                if(isOoyala == true && isOoyalaDownloadSuccess == false &&
-                    (m_util.m_szCpName[i].ToString().Trim() == "NAVER_JA_VOD" || m_util.m_szCpName[i].ToString().Trim() == "DAUM_JA_VOD"))
-                {
-                    m_util.SendSMS(m_article.m_sms_recv_no, string.Format("BULK 동영상 다운로드 실패 메일발송, AID:{0},{1}",
-                        m_article.m_aid, m_article.m_title), m_log);
-                    m_util.SendMailWithArticleFile(strFileName,
-                        strFileName.Substring(strFileName.LastIndexOf("\\")+1), m_article, strDownloadMsg, m_log);
-                }
-            }
-            else
-            {
-                nFailure--;
-            }
-             */
-
-            return true;
+            return BulkDumpResult.SUCCESS;
         }while( false );
-        return false;    }
+        return BulkDumpResult.FAIL_DUMP_CP_PROCESS;
+    }
 
-    private static boolean doProcess_CpProcessWriteSwitchTags(BulkDumpEnvCP dumpEnvCP, BulkArticle article, String format, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob, SmsUtilService smsUtilService) {
-        boolean success = false;
+    private static boolean doProcess_CpProcessWriteSwitchTags(BulkDumpEnvCP dumpEnvCP, BulkArticle article, String format, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob, SlackMessageService slackMessageService) {
+        boolean success;
 
         final String cpFormat = doProcess_CpProcessSwitchTags( article, format, dumpEnvCP.getType());
         String fileName = dumpJobTotal.getBulkJobFileName(dumpEnvCP.getFileExt());
@@ -201,6 +179,7 @@ public class BulkDumpProcess {
 
             success = true;
         } catch (Exception e) {
+            success = false;
             e.printStackTrace();
         } finally {
             if (bs != null) {
@@ -217,7 +196,7 @@ public class BulkDumpProcess {
     private static String doProcess_CpProcessSwitchTags(BulkArticle article, String format, String type) {
         for( String key : article.getDataMap().keySet() ){
             MapString mapString = article.getDataMap().get(key);
-            format = format.replace( key, mapString.getData() );
+            format = format.replace( key, mapString.toString() );
         }
 
         format = format.replace( "{_NOWYYMMDDHHMMSS_}", McpDate.dateStr(new Date(), "yyyyMMddHHmmss") );
@@ -288,7 +267,7 @@ public class BulkDumpProcess {
         return format;
     }
 
-    private static boolean doProcess_CpProcessOvpDownload(BulkDumpEnvCP dumpEnvCP, BulkArticle article, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob, SmsUtilService smsUtilService) {
+    private static boolean doProcess_CpProcessOvpDownload(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpEnvCP dumpEnvCP, BulkArticle article, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob, SlackMessageService slackMessageService) {
         //noinspection ConstantConditions,LoopStatementThatDoesntLoop
         do {
             if( !"Y".equals(dumpEnvCP.getDnVideo() ))
@@ -306,16 +285,16 @@ public class BulkDumpProcess {
                 if( cpName.contains("JTBC") ) {
                     final String targetFilename = BulkStringUtil.format("{}.mp4", videoData.getVideoId());
                     final String videoUrl = "http://jcms.jtbc.joins.com/nas/newsvod/" + videoData.getVideoUrl();
-                    doProcess_CpProcessOvpDownload_sub(dumpEnvCP, dumpJobTotal, dumpJob, smsUtilService, videoData, videoUrl, targetFilename);
+                    doProcess_CpProcessOvpDownload_sub(totalVo, dumpEnvCP, dumpJobTotal, dumpJob, slackMessageService, videoData, videoUrl, targetFilename);
                     break;
                 }
                 else if( cpName.contains("NAVER") && article.getTargetCode().equals("SOY") ) {
                     final String targetFilename = BulkStringUtil.format("{}_{}.mp4", videoData.getVideoId(), loopCount);
-                    downloadSuccess &= doProcess_CpProcessOvpDownload_sub(dumpEnvCP, dumpJobTotal, dumpJob, smsUtilService, videoData, videoData.getVideoUrl(), targetFilename);
+                    downloadSuccess &= doProcess_CpProcessOvpDownload_sub(totalVo, dumpEnvCP, dumpJobTotal, dumpJob, slackMessageService, videoData, videoData.getVideoUrl(), targetFilename);
                 }
                 else if ( (cpName.contains("DAUM") || cpName.contains("EMPAS")) && article.isOvpArticle()){
                     final String targetFilename = BulkStringUtil.format("{}.mp4", videoData.getVideoId());
-                    downloadSuccess &= doProcess_CpProcessOvpDownload_sub(dumpEnvCP, dumpJobTotal, dumpJob, smsUtilService, videoData, videoData.getVideoUrl(), targetFilename);
+                    downloadSuccess &= doProcess_CpProcessOvpDownload_sub(totalVo, dumpEnvCP, dumpJobTotal, dumpJob, slackMessageService, videoData, videoData.getVideoUrl(), targetFilename);
                     break;
                 }
             }
@@ -325,16 +304,16 @@ public class BulkDumpProcess {
         return true;
     }
 
-    private static boolean doProcess_CpProcessOvpDownload_sub(BulkDumpEnvCP dumpEnvCP, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob,
-            SmsUtilService smsUtilService, BulkDumpNewsMMDataVo videoData, String videoUrl, String targetFilename) {
+    private static boolean doProcess_CpProcessOvpDownload_sub(TotalVo<BulkDumpTotalVo> totalVo, BulkDumpEnvCP dumpEnvCP, BulkDumpJobTotalVo dumpJobTotal, BulkDumpJobVo dumpJob,
+            SlackMessageService slackMessageService, BulkDumpNewsMMDataVo videoData, String videoUrl, String targetFilename) {
 
         final long startTime = System.currentTimeMillis();
         final boolean downloadSuccess = dumpJobTotal.downloadData( dumpJob, videoData, videoUrl, "mp4", targetFilename );
         if( downloadSuccess )
-            log.info("BULK VIDEO FILE ({}) time taken({}ms) for ({}) was successfully created.", videoData.getVideoUrl(), System.currentTimeMillis() - startTime, dumpEnvCP.getName() );
+            totalVo.logInfo("BULK VIDEO FILE ({}) time taken({}ms) for ({}) was successfully created.", videoData.getVideoUrl(), System.currentTimeMillis() - startTime, dumpEnvCP.getName() );
         else {
-            log.error("BULK VIDEO FILE ({}) for ({}) was failed !!.", videoData.getVideoUrl(), dumpEnvCP.getName());
-            smsUtilService.sendSms(BulkStringUtil.format("BULK VIDEO FILE ({}) for ({}) was failed !!.", videoData.getVideoUrl(), dumpEnvCP.getName()));
+            totalVo.logError("BULK VIDEO FILE ({}) for ({}) was failed !!.", videoData.getVideoUrl(), dumpEnvCP.getName());
+            slackMessageService.sendSms( "BulkDumpOvp", BulkStringUtil.format("BULK VIDEO FILE ({}) for ({}) was failed !!.", videoData.getVideoUrl(), dumpEnvCP.getName()));
         }
         return downloadSuccess;
     }

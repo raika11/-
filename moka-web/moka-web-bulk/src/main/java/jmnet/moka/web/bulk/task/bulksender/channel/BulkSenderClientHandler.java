@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import jmnet.moka.web.bulk.code.SenderStatus;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
-import jmnet.moka.web.bulk.service.SmsUtilService;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.base.TaskManager;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvCP;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobVo;
@@ -39,7 +39,7 @@ public class BulkSenderClientHandler implements Runnable{
     private final File dirScan;
     private final FileTaskInput fileTaskInput;
     private final ObjectMapper objectMapper;
-    private final SmsUtilService smsUtilService;
+    private final SlackMessageService slackMessageService;
     private final BulkSenderService bulkSenderService;
 
     public BulkSenderClientHandler(BulkDumpEnvCP bulkDumpEnvCP, BulkSenderTask bulkSenderTask) {
@@ -50,7 +50,7 @@ public class BulkSenderClientHandler implements Runnable{
 
         final TaskManager taskManager = bulkSenderTask.getTaskManager();
         this.objectMapper = taskManager.getObjectMapper();
-        this.smsUtilService = taskManager.getSmsUtilService();
+        this.slackMessageService = taskManager.getSlackMessageService();
         this.bulkSenderService = taskManager.getBulkSenderService();
     }
 

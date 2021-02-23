@@ -10,14 +10,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.common.object.JaxbObjectManager;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJHot;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
+import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJHotArticle;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -33,6 +38,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Slf4j
 public abstract class BulkArticle implements Serializable {
     private static final long serialVersionUID = -5366226728536193452L;
 
@@ -41,6 +47,7 @@ public abstract class BulkArticle implements Serializable {
     private final TotalVo<BulkDumpTotalVo> totalVo;
     private final BulkDumpTotalVo bulkDumpTotal;
     private BulkDumpEnvTarget bulkDumpEnvTarget;
+    private BulkDumpEnvCopyright bulkDumpEnvCopyright;
 
     private Date insDt;
     private String sourceCode;
@@ -140,6 +147,15 @@ public abstract class BulkArticle implements Serializable {
     private final MapString naverBreakingNewsTime = MapString.newMapString( dataMap, "{_NAVER_PUSHTIME_}");
     private final MapString naverOnTheSceneReporting = MapString.newMapString( dataMap, "{_NAVER_SITE_}");
 
+    private final MapString issue = MapString.newMapString( dataMap, "{_ISSUE_}"); // 사용하는 곳은 없음
+    private final MapString iudDNaverUrl = MapString.newMapString( dataMap, "{_D_URL_}"); // 사용하는 곳은 없음
+
+    private final MapString copyrightText = MapString.newMapString( dataMap, "{_CRT_}");
+    private final MapString copyrightHtml = MapString.newMapString( dataMap, "{_CRH_}");
+    private final MapString copyrightHtmlNaver = MapString.newMapString( dataMap, "{_CRH_NAVER_}");
+    private final MapString jhotNaver = MapString.newMapString( dataMap, "{_JHOT_NAVER_}");
+    private final MapString jhot = MapString.newMapString( dataMap, "{_JHOT_}");
+
     private List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList;
     private List<BulkDumpNewsMMDataVo> bulkDumpNewsImageList;
     private List<BulkDumpNewsMMDataVo> bulkDumpNewsVideoList;
@@ -182,8 +198,8 @@ public abstract class BulkArticle implements Serializable {
         }
         else
         {
-            this.iud2.setData(this.iud.getData());
-            this.iud3.setData(this.iud.getData());
+            this.iud2.setData(this.iud.toString());
+            this.iud3.setData(this.iud.toString());
         }
 
         this.yy.setData(McpDate.dateStr(getInsDt(), "yyyy"));
@@ -194,6 +210,25 @@ public abstract class BulkArticle implements Serializable {
         this.ss.setData(McpDate.dateStr(getInsDt(), "ss"));
 
         this.insertDate.setData( McpDate.dateStr(getInsDt(), "yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public void setBulkDumpEnvCopyright( BulkDumpEnvCopyright bulkDumpEnvCopyright ) {
+        this.bulkDumpEnvCopyright = bulkDumpEnvCopyright;
+
+        if( !McpString.isNullOrEmpty(bulkDumpEnvCopyright.getCrHtml())) {
+
+            bulkDumpEnvCopyright.setCrHtml(bulkDumpEnvCopyright.getCrHtml()
+                                                               .replace("{_TAB_}", "\t")
+                                                               .replace("{_CRLF_}", "\r\n"));
+            this.copyrightText.setData(bulkDumpEnvCopyright.getCrHtml());
+            this.copyrightHtml.setData(bulkDumpEnvCopyright.getCrHtml());
+        }
+
+        if( !McpString.isNullOrEmpty(bulkDumpEnvCopyright.getCrHtmlNaver())) {
+            this.copyrightHtmlNaver.setData(bulkDumpEnvCopyright.getCrHtml()
+                                                                .replace("{_TAB_}", "\t")
+                                                                .replace("{_CRLF_}", "\r\n"));
+        }
     }
 
     public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
@@ -289,5 +324,81 @@ public abstract class BulkArticle implements Serializable {
         getContentHtmlEx4().replaceAll(regex, replacement);
         getContentHtmlCyworld().replaceAll(regex, replacement);
         getContentHtmlNate().replaceAll(regex, replacement);
+    }
+
+    public void processContent_JHotClick( int maxCount ) {
+        if( McpString.isNullOrEmpty(getBulkDumpEnvCopyright().getJhotClick()))
+            return;
+
+        try {
+            final BulkDumpJHot bulkDumpJHot = (BulkDumpJHot) JaxbObjectManager.getBasicVoFromString( getBulkDumpEnvCopyright().getJhotClick(), BulkDumpJHot.class );
+            if( bulkDumpJHot == null )
+                return;
+            if( bulkDumpJHot.getArticles() == null )
+                return;
+            if( bulkDumpJHot.getArticles().size() == 0 )
+                return;
+
+            getRelatedNewsDaum().concat("<RELATED_NEWS>\r\n");
+
+            int cnt = 0;
+            int naver_cnt = 0;
+
+            StringBuilder sb = new StringBuilder();
+            StringBuilder sbNaver = new StringBuilder();
+
+            for( BulkDumpJHotArticle article : bulkDumpJHot.getArticles()) {
+                if (McpString.isNullOrEmpty(article.getTitle()))
+                    continue;
+
+                if (cnt >= maxCount) break;
+
+                final String link = article.getLink() == null ? "" : article.getLink();
+
+                final String extension = link.substring(link.lastIndexOf(".") + 1);
+                final String separator = (extension.contains("?")) ? "&" : "?";     // 물음표(?)가 있는 경우와 없는 경우 구분
+
+                //중복된 기사는 핫클릭 영역에서 제외
+                if (!getTotalId().toString().equals(article.getTotalId()))
+                {
+                    //5개까지 출력
+                    if (naver_cnt <= 4)
+                    {
+                        sb
+                                .append("▶ <a href=\"")
+                                .append(link)
+                                .append(separator)
+                                .append("cloc=bulk\" target=\"_blank\">")
+                                .append(article.getTitle())
+                                .append("</a>\r\n\r\n");
+                        sbNaver
+                                .append("<relNews title=\"")
+                                .append(BulkTagUtil.specialHtmlTag(BulkTagUtil.standardBulkClearingTagImage(BulkTagUtil.strip(article.getTitle()))))
+                                .append("\" href=\"")
+                                .append(BulkTagUtil.specialHtmlTag(link + separator))
+                                .append("cloc=bulk\" />\r\n");
+
+                        getRelatedNewsZum().concat("<related_news title=\""
+                                + BulkTagUtil.standardBulkClearingTagImage(BulkTagUtil.specialHtmlTag(BulkTagUtil.strip(article.getTitle().replace("\"", "'").replace("&", "&amp;"))))
+                                + "\"><![CDATA[" + BulkTagUtil.specialHtmlTag(link) + "]]></related_news>\r\n");
+
+                        naver_cnt++;
+                    }
+                    //다음카카오 중앙일보 기사는 10개 추천뉴스 노출
+                    getRelatedNewsDaum().concat("<NEWS>\r\n");
+                    getRelatedNewsDaum().concat("<TITLE><![CDATA[" + article.getTitle() + "]]></TITLE>\r\n");
+                    getRelatedNewsDaum().concat("<URL><![CDATA[" + link + "]]></URL>\r\n");
+                    getRelatedNewsDaum().concat("</NEWS>\r\n");
+                    cnt++;
+                }
+            }
+            getRelatedNewsDaum().concat("</RELATED_NEWS>\r\n");
+
+            getJhot().setData("\r\n\r\n<b>[J-Hot]</b>\r\n\r\n" + sb.toString() );
+            getJhotNaver().setData( sbNaver.toString() );
+        } catch (Exception e) {
+            log.error("jHotClick Error");
+            e.printStackTrace();
+        }
     }
 }

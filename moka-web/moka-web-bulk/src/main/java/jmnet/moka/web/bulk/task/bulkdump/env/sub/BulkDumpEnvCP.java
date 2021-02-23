@@ -78,11 +78,22 @@ public class BulkDumpEnvCP implements Serializable {
             throw new BulkException(BulkStringUtil.format("[{}]-{} Input Path can't create", this.name, this.comment ) );
         }
 
-        if (!McpString.isNullOrEmpty(format))
-            format = format.replace("{_TAB_}", "\t").replace("{_CRLF_}", "\r\n");
+        if (!McpString.isNullOrEmpty(format)) {
+            format = format
+                    .replace("{_TAB_}", "\t")
+                    .replace("{_CRLF_}", "\r\n")
+                    .replace("{_CDATA_S_}", "<![CDATA[")
+                    .replace("{_CDATA_E_}", "]]>");
 
-        if (!McpString.isNullOrEmpty(formatDelete))
-            formatDelete = formatDelete.replace("{_TAB_}", "\t").replace("{_CRLF_}", "\r\n");
+        }
+
+        if (!McpString.isNullOrEmpty(formatDelete)) {
+            formatDelete = formatDelete
+                    .replace("{_TAB_}", "\t")
+                    .replace("{_CRLF_}", "\r\n")
+                    .replace("{_CDATA_S_}", "<![CDATA[")
+                    .replace("{_CDATA_E_}", "]]>");
+        }
 
         if( this.sendSiteCode == null)
             this.sendSiteCode = "";

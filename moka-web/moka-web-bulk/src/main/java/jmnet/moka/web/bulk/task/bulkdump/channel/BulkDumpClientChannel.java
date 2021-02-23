@@ -28,7 +28,7 @@ import org.w3c.dom.Node;
 @Slf4j
 public class BulkDumpClientChannel  {
     private final ThreadPoolExecutor executor;
-    private final LinkedBlockingDeque<BulkDumpTotalVo> clientQueue = new LinkedBlockingDeque<>();
+    private final BulkDumpClientChannelQueueManager queueManager;
 
     private final AtomicInteger waitExecutorCount;
 
@@ -38,22 +38,20 @@ public class BulkDumpClientChannel  {
         if (dumpClientCount == 0) {
             throw new BulkException("bulkDumpClientCount 환경 값 설정이 잘못되었습니다.");
         }
+
+        this.queueManager = new BulkDumpClientChannelQueueManager(dumpClientCount);
+
         this.executor = new ThreadPoolExecutor( dumpClientCount, dumpClientCount, 100, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(dumpClientCount),
                 (r, executor) -> log.info("BulkDumpClientChannel pool is full {}", executor.getQueue().size() ) );
         this.waitExecutorCount = new AtomicInteger(dumpClientCount);
 
         for( int i=0 ; i<dumpClientCount ; i++) {
-            this.executor.execute(new BulkDumpClientHandler(this, bulkDumpTask));
+            this.executor.execute(new BulkDumpClientHandler(this, this.queueManager.getQueue(i), bulkDumpTask, i));
         }
     }
 
     public void enqueue( BulkDumpTotalVo bulkDumpTotalVo) {
-        clientQueue.add(bulkDumpTotalVo);
-    }
-
-    public BulkDumpTotalVo takeQueue()
-            throws InterruptedException {
-        return clientQueue.take();
+        queueManager.enqueue(bulkDumpTotalVo);
     }
 
     public void incrementWaitExecutorCount() {
@@ -67,17 +65,17 @@ public class BulkDumpClientChannel  {
     public void stopChannel() {
         if( executor != null ) {
             try {
-                executor.awaitTermination( 100, TimeUnit.MILLISECONDS );
-                if( !executor.isTerminated())
+                if( !executor.isTerminated()) {
                     executor.shutdownNow();
+                    if (!Thread.interrupted())
+                        executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
     public int getWaitExecutorCount() {
-        if( clientQueue.size() > 0 )
-            return 0;
         if( this.waitExecutorCount != null )
             return waitExecutorCount.get();
         return 0;

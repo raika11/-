@@ -12,7 +12,7 @@ package jmnet.moka.web.bulk.service;
  * @author sapark
  * @since 2021-01-13 013 오후 5:10
  */
-public interface SmsUtilService {
-    void sendSms(String message);
+public interface SlackMessageService {
+    void sendSms(String title, String message);
     void pause();
 }

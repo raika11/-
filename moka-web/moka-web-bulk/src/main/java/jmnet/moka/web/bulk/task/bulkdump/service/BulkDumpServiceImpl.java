@@ -6,10 +6,12 @@ import java.util.Map;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.mapper.idb.BulkDumpIdbMapper;
+import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvTarget;
 import jmnet.moka.web.bulk.task.bulkdump.process.joinsland.BulkJoinsLandArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticle;
 import jmnet.moka.web.bulk.task.bulkdump.process.joongang.BulkJoongangArticleEx;
 import jmnet.moka.web.bulk.task.bulkdump.process.sunday.BulkSundayArticle;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpEnvCopyright;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
@@ -80,6 +82,11 @@ public class BulkDumpServiceImpl implements BulkDumpService {
     @Override
     public void insertBulkPortalLog(TotalVo<BulkDumpTotalVo> totalVo) {
         this.bulkDumpIdbMapper.callUspBulkPortalLogInsByDump(totalVo);
+    }
+
+    @Override
+    public BulkDumpEnvCopyright getBulkCopyright(BulkDumpEnvTarget bulkDumpEnvTarget) {
+        return this.bulkDumpIdbMapper.callUspBulkCopyrightSel(bulkDumpEnvTarget);
     }
 
     @Override

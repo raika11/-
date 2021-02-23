@@ -25,6 +25,19 @@
     ]]>
   </delete>
 
+  <select id="callUspBulkCopyrightSel" parameterType="BulkDumpEnvTarget" resultType="BulkDumpEnvCopyright"
+    statementType="CALLABLE">
+    <![CDATA[
+    {
+      call USP_BULK_COPYRIGHT_SEL(
+      #{targetName, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </select>
+
+
+
   <select id="callUspBulkNewstableJoongangSel" parameterType="BulkJoongangArticle"
     resultType="BulkDumpNewsVo" statementType="CALLABLE">
     <![CDATA[

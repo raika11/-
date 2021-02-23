@@ -7,11 +7,14 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.common.object.JaxbObjectManager;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkArticle;
+import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJHot;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
+import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJHotArticle;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -176,7 +179,7 @@ public class BulkSundayArticle extends BulkArticle {
             contentHtmlDaum = contentHtmlDaum.replace("\r\n<strong>Q :", "\r\n\r\n<strong>Q :");
         }
 
-        contentHtmlDaum = contentHtmlDaum.replaceAll("[<][a-zA-Z/](.|\n)*?[>]", "");
+        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum);
 
         //다음카카오 이미지정렬(tag_photobundle)  케이스
         for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
@@ -288,8 +291,5 @@ public class BulkSundayArticle extends BulkArticle {
         //<div class="ab_box_article">.....</div> 아티클 빈박스 지우기
         final String emptyBoxDelPattern = "<div(\\s*)class.*\\bab_box_article\\b[^>]+>(\\s*)<div[^>]+>(\\s*)<div[^>]+>.*<span[^>]+>(\\s*)</span>(\\s*)<div(\\s*)class.*\\bab_box_titleline\\b[^>]+>[^>]+>[^>]+>(\\s*)<div(\\s*)class.*\\bab_box_content\\b[^>]+>(\\s*)(&nbsp;(\\s*)<br/>)?(\\s*)</div>[^/div>]+/div>(\\s*)[^/div]+/div>";
         processContent_replaceAll( emptyBoxDelPattern, "" );
-    }
-
-    public void processContent_JHotClick() {
     }
 }

@@ -79,12 +79,6 @@ public class BulkDumpEnv extends BasicVo {
 
     public void init()
             throws BulkException {
-        if( this.bulkDumpEnvGlobal != null ) {
-            for (BulkDumpEnvTarget bulkDumpEnvTarget : bulkDumpEnvGlobal.getDumpEnvTargets()) {
-                bulkDumpEnvTarget.init();
-            }
-        }
-
         if( this.dumpEnvCPs != null ) {
             for( BulkDumpEnvCP cp : this.dumpEnvCPs ) {
                 cp.init();

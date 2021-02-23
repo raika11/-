@@ -30,28 +30,4 @@ public class BulkDumpEnvTarget implements Serializable {
 
     @XmlAttribute(name = "TargetName")
     private String targetName;
-
-    @XmlElement(name = "CrTxt")
-    private String crTxt;
-
-    @XmlElement(name = "CrHtml")
-    private String crHtml;
-
-    @XmlElement(name = "CrHtmlNaver")
-    private String crHtmlNaver;
-
-    public void init() {
-        crTxt = initMember(crTxt);
-        crHtml = initMember(crTxt);
-        crHtmlNaver = initMember(crHtmlNaver);
-    }
-
-    private String initMember(String text) {
-        if (text == null) {
-            return "";
-        }
-        return text
-                .replace("{_TAB_}", "\t")
-                .replace("{_CRLF_}", "\r\n");
-    }
 }

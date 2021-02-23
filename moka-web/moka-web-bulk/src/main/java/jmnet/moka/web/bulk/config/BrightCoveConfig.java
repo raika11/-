@@ -1,5 +1,8 @@
 package jmnet.moka.web.bulk.config;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,6 +29,10 @@ public class BrightCoveConfig {
     private String clientId;
     private String clientSecret;
     private String accessTokenUrl;
-    private String videoSourceUrl;
+    private String apiUrl;
     private int videoLimitSize;
+
+    public String getVideoSourceUrl() {
+        return this.apiUrl + "/sources";
+    }
 }

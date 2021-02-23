@@ -4,6 +4,7 @@ import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkProcessCommon;
+import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpResult;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 
@@ -41,9 +42,9 @@ public class BulkJoinsLandProcess extends BulkProcessCommon<BulkJoinsLandArticle
     }
 
     @Override
-    protected boolean doProcess_InsertUpdate(BulkJoinsLandArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_InsertUpdate(TotalVo<BulkDumpTotalVo> totalVo, BulkJoinsLandArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         if( !dumpService.doGetBulkNewstableJoinsLand( article ) )
-            return false;
+            return BulkDumpResult.SKIP_DATABASE;
 
         article.getContCode2().setData("000");
         article.getContCode3().setData("000");
@@ -56,17 +57,17 @@ public class BulkJoinsLandProcess extends BulkProcessCommon<BulkJoinsLandArticle
         if( article.getBulkDumpNewsImageList().size() > 0)
             article.processContent_ImageBulkYn();
 
-        article.processContent_JHotClick();
+        article.processContent_JHotClick(10);
 
-        return true;
+        return BulkDumpResult.SUCCESS;
     }
 
     @Override
-    protected boolean doProcess_Delete(BulkJoinsLandArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, BulkJoinsLandArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
         article.getContCode1().setData("000");
         article.getContCode2().setData("000");
         article.getContCode3().setData("000");
 
-        return true;
+        return BulkDumpResult.SUCCESS;
     }
 }

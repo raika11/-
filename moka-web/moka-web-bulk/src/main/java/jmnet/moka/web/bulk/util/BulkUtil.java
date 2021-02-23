@@ -7,12 +7,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
-import jmnet.moka.common.utils.McpString;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * <pre>

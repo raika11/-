@@ -1,8 +1,5 @@
 package jmnet.moka.web.bulk.config;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

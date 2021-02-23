@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.config.BrightCoveConfig;
-import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsMMDataVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

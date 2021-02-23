@@ -1,7 +1,6 @@
 package jmnet.moka.web.bulk.task.bulkdump.vo.sub;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;

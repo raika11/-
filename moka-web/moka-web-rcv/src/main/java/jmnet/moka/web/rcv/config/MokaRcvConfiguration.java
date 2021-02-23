@@ -2,6 +2,7 @@ package jmnet.moka.web.rcv.config;
 
 import jmnet.moka.web.rcv.task.base.TaskManager;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -48,9 +49,22 @@ public class MokaRcvConfiguration {
     @Value("${rcv.jamapiurl.ilg}")
     private String jamApiUrlIlg;
 
+    @Value("${rcv.purge.dpstargets}")
+    private String[] dpsTargets;
+
+    @Value("${rcv.purge.tmstargets}")
+    private String[] tmsTargets;
+
+    @Value("${rcv.purge.defaultApiPath}")
+    private String defaultApiPath;
+
     @Bean
     @ConfigurationProperties(prefix = "rcv.pds.ftp")
     public FtpConfig getPdsFtpConfig() { return new FtpConfig(); }
+
+    @Bean
+    @ConfigurationProperties(prefix = "rcv.brightcove")
+    public BrightCoveConfig getBrightCoveConfig() { return new BrightCoveConfig(); }
 
 //    @Bean
 //    @ConfigurationProperties(prefix = "rcv.pdsback.ftp")

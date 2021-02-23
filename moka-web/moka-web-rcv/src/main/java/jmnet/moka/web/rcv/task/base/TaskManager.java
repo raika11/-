@@ -1,10 +1,7 @@
 package jmnet.moka.web.rcv.task.base;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,17 +10,17 @@ import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
-import jmnet.moka.web.rcv.service.SmsUtilService;
+import jmnet.moka.web.rcv.service.SlackMessageService;
 import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
 import jmnet.moka.web.rcv.task.calljamapi.service.CallJamApiService;
-import jmnet.moka.web.rcv.task.joinsland.service.JoinsLandService;
-import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
 import jmnet.moka.web.rcv.task.cpxml.service.CpXmlService;
 import jmnet.moka.web.rcv.task.jamxml.service.JamXmlService;
+import jmnet.moka.web.rcv.task.jamxml.service.PurgeService;
 import jmnet.moka.web.rcv.task.jamxml.service.XmlGenService;
+import jmnet.moka.web.rcv.task.joinsland.service.JoinsLandService;
+import jmnet.moka.web.rcv.task.pubxml.service.PubXmlService;
 import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
 import jmnet.moka.web.rcv.task.weathershko.service.WeatherShkoService;
-import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +77,10 @@ public class TaskManager {
     JoinsLandService joinsLandService;
 
     @Autowired
-    SmsUtilService smsUtilService;
+    SlackMessageService slackMessageService;
+
+    @Autowired
+    PurgeService purgeService;
 
     public TaskManager(MokaRcvConfiguration rcvConfiguration) {
         this.rcvConfiguration = rcvConfiguration;
@@ -134,7 +134,7 @@ public class TaskManager {
         }
     }
 
-    public void sendErrorSMS(String message) {
-        smsUtilService.sendSms(message);
+    public void sendErrorSMS(String title, String message) {
+        slackMessageService.sendSms(title, message);
     }
 }

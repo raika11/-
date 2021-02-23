@@ -163,10 +163,18 @@ public class JamXmlTask extends Task<FileXmlTaskInputData<JamArticleTotalVo, Jam
                 jamXmlService.selectMasterCodeByContCode(articleTotal);
                 if (McpString.isNullOrEmpty(articleTotal.getCurMasterCode()))
                     continue;
+
+                boolean found = false;
+                for( String code : articleTotal.getMasterCodeList()) {
+                    if( code.equals(articleTotal.getCurMasterCode())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if(found)
+                    continue;
                 articleTotal.getMasterCodeList().add(articleTotal.getCurMasterCode());
             }
-            if( article.getCategoies().size() == 0 )
-                break;
             return true;
         }while( false );
 
@@ -189,7 +197,7 @@ public class JamXmlTask extends Task<FileXmlTaskInputData<JamArticleTotalVo, Jam
                 final JamArticleVo article = articleTotal.getMainData();
                 if(article != null && !McpString.isNullOrEmpty(article.getIud())) {
                     jamXmlService.insertReceiveJobStep(articleTotal, articleTotal.getErrorMessageList());
-                    getTaskManager().sendErrorSMS(String.format("[JamRecv] XML 처리 오류 [%s]", taskInputData.getFile()));
+                    getTaskManager().sendErrorSMS( getTaskName(), String.format("[JamRecv] XML 처리 오류 [%s]", taskInputData.getFile()));
                 }
             }
         }

@@ -90,14 +90,14 @@ public class MokaRcvRestController {
     @GetMapping("/sms/smsTest")
     public String doSmsTest() {
         log.info("doSmsTest");
-        taskManager.getSmsUtilService().sendSms("sms" + McpDate.dateTimeStr(new Date()));
+        taskManager.getSlackMessageService().sendSms("smsTest", "sms" + McpDate.dateTimeStr(new Date()));
         return "doSmsTest";
     }
 
     @GetMapping("/sms/smsPause")
     public String doSmsPause() {
         log.info("doSmsPause");
-        taskManager.getSmsUtilService().pause();
+        taskManager.getSlackMessageService().pause();
         return "doSmsTest";
     }
 }

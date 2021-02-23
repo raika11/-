@@ -3,6 +3,7 @@ package jmnet.moka.web.rcv.task.rcvartreg.process;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -53,12 +54,23 @@ public class RcvArtRegToJamArticleTotalProcess {
             return null;
 
         /* 자동치환 분류코드표 (포털, 일단)은 범위에 들어가지 않는다. */
-        rcvArtRegService.getUspRcvCodeConvSelByRid( articleTotal );
-        if( McpString.isNullOrEmpty( articleTotal.getCurMasterCode() )) {
+        List<Map<String, String>> codeList = rcvArtRegService.getUspRcvCodeConvSelByRid( articleTotal );
+        if( codeList == null ) {
             taskInputData.logError("Rid=[{}] code not mapping move to TB_RCV_ARTICLE_BASIC_NOTMATCH ", articleTotal.getRid());
             return null;
         }
-        articleTotal.getMasterCodeList().add(articleTotal.getCurMasterCode());
+
+        for( Map<String, String> mapCode : codeList ) {
+            final String masterCode = RcvUtil.getMapStringData(mapCode, "MASTER_CODE" );
+            if( McpString.isNullOrEmpty(masterCode) )
+                continue;
+            articleTotal.getMasterCodeList().add(masterCode);
+        }
+
+        if( articleTotal.getMasterCodeList().size() == 0 ){
+            taskInputData.logError("Rid=[{}] code not mapping move to TB_RCV_ARTICLE_BASIC_NOTMATCH 2", articleTotal.getRid());
+            return null;
+        }
 
 /*
         ** 노컷(NOCUT) 이미지 캡션 추가 ..

@@ -73,4 +73,6 @@ public class ItemVo implements Serializable {
     private String link;
     private String thumbImg;
     private String etc;
+
+    private int multiSeq;
 }

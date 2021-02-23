@@ -164,5 +164,75 @@
       "name": "idb.spring.datasource.auto-commit",
       "type": "java.lang.String",
       "description": "Description for idb.spring.datasource.auto-commit."
+    },
+    {
+      "name": "rcv.brightcove.account",
+      "type": "java.lang.String",
+      "description": "Description for rcv.brightcove.account."
+    },
+    {
+      "name": "rcv.brightcove.clientId",
+      "type": "java.lang.String",
+      "description": "Description for rcv.brightcove.clientId."
+    },
+    {
+      "name": "rcv.brightcove.clientSecret",
+      "type": "java.lang.String",
+      "description": "Description for rcv.brightcove.clientSecret."
+    },
+    {
+      "name": "rcv.brightcove.accessTokenUrl",
+      "type": "java.lang.String",
+      "description": "Description for rcv.brightcove.accessTokenUrl."
+    },
+    {
+      "name": "rcv.brightcove.apiUrl",
+      "type": "java.lang.String",
+      "description": "Description for rcv.brightcove.apiUrl."
+    },
+    {
+      "name": "rcv.brightcove.videoLimitSize",
+      "type": "java.lang.String",
+      "description": "Description for rcv.brightcove.videoLimitSize."
+    },
+    {
+      "name": "rcv.purge.dpstargets",
+      "type": "java.lang.String",
+      "description": "Description for rcv.purge.dpstargets."
+    },
+    {
+      "name": "rcv.purge.tmstargets",
+      "type": "java.lang.String",
+      "description": "Description for rcv.purge.tmstargets."
+    },
+    {
+      "name": "rcv.purge.defaultApiPath",
+      "type": "java.lang.String",
+      "description": "Description for rcv.purge.defaultApiPath."
+    },
+    {
+      "name": "rcv.slack.timer.firstlimitcount",
+      "type": "java.lang.String",
+      "description": "Description for rcv.slack.timer.firstlimitcount."
+    },
+    {
+      "name": "rcv.slack.timer.waitingtime",
+      "type": "java.lang.String",
+      "description": "Description for rcv.slack.timer.waitingtime."
+    },
+    {
+      "name": "rcv.slack.timer.limitwaitingtime",
+      "type": "java.lang.String",
+      "description": "Description for rcv.slack.timer.limitwaitingtime."
+    },
+    {
+      "name": "rcv.slack.timer.pausetime",
+      "type": "java.lang.String",
+      "description": "Description for rcv.slack.timer.pausetime."
+    },
+    {
+      "name": "rcv.slack.channelname",
+      "type": "java.lang.String",
+      "description": "Description for rcv.slack.channelname."
     }
   ] }

@@ -36,6 +36,15 @@ public class RcvUtil {
         return 0;
     }
 
+    public static long parseLong(String s) {
+        try {
+            return Long.parseLong(s);
+        } catch (Exception e) {
+            // no
+        }
+        return 0;
+    }
+
     @SuppressWarnings("rawtypes")
     public static String getMapStringData( Map map, String key ){
         return getMapStringData(map, key, false);
@@ -166,6 +175,7 @@ public class RcvUtil {
         return null;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static String sendUrlGetRequest(String urlAddress) {
         return sendUrlRequest( urlAddress, "", true);
     }

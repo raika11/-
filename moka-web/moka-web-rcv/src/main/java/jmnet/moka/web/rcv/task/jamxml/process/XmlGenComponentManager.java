@@ -6,10 +6,12 @@ import java.util.List;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemMultiOvpVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.util.FtpUtil;
+import jmnet.moka.web.rcv.util.RcvBrightCoveUtil;
 import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.Getter;
@@ -41,6 +43,7 @@ public class XmlGenComponentManager {
     private final List<ItemVo> raItems = new ArrayList<>();
     private final List<ItemVo> rlItems = new ArrayList<>();
     private final List<ItemVo> multiItems = new ArrayList<>();
+    private final List<ItemMultiOvpVo> multiOvpItems = new ArrayList<>();
 
     public XmlGenComponentManager(TaskInputData taskInputData, JamArticleTotalVo articleTotal,
             MokaRcvConfiguration rcvConfiguration) {
@@ -68,7 +71,7 @@ public class XmlGenComponentManager {
 
             switch (type) {
                 case "HP":
-                    if (item.getThumbnail().equals("Y")) {
+                    if (item.getThumbnail() != null && item.getThumbnail().equals("Y")) {
                         hpItems.add(0, item);
                     } else {
                         hpItems.add(item);
@@ -85,6 +88,12 @@ public class XmlGenComponentManager {
                     if (!McpString.isNullOrEmpty(item.getPoster())) {
                         addItems.add(item);
                     }
+
+                    ItemMultiOvpVo itemMultiOvpVo = RcvBrightCoveUtil.getArticleMultiOvpInfo( this.rcvConfiguration.getBrightCoveConfig(), item.getUrl(), item );
+                    if( itemMultiOvpVo != null )
+                        multiOvpItems.add(itemMultiOvpVo);
+                    else
+                        taskInputData.logError( " can't load MultiOvpInfo {}", item.getUrl() );
                     multiItems.add(item);
                     break;
                 default:
@@ -117,7 +126,6 @@ public class XmlGenComponentManager {
             case "D":
             case "S": {
                 if (!McpString.isNullOrEmpty(article.getCoverImg().getPcUrl())) {
-
                     //noinspection serial
                     this.multiItems.add( new ItemVo(){
                         {
@@ -130,7 +138,6 @@ public class XmlGenComponentManager {
                 }
 
                 if (!McpString.isNullOrEmpty(article.getCoverImg().getMoUrl())) {
-
                     //noinspection serial
                     this.multiItems.add( new ItemVo(){
                         {
@@ -172,21 +179,27 @@ public class XmlGenComponentManager {
         final String fileUrl = RcvUtil.getJamMiddleUrlPath(item.getUrl()); //  /news/component/htmlphoto_mmdata/202009/08/
         final String fileName = FilenameUtils.getName(item.getUrl());
 
+        final String downloadFileName = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
+        if( !RcvImageUtil.downloadImage(item.getUrl(), downloadFileName) ) {
+            this.articleTotal.logError("thumbnail 을 만들기 위한 {} download 실패", item.getUrl());
+            return;
+        }
+
         final String thumbFileName_120 = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
         final String thumbFileName_250 = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
         final String thumbFileName_350 = taskInputData.getTempFileName(rcvConfiguration.getTempDir());
 
         // 기존 소스에서는 Thumbnail 실패 시 무시..
         do {
-            if (!RcvImageUtil.resizeMaxWidthHeight(thumbFileName_120, item.getUrl(), 120, 92)) {
+            if (!RcvImageUtil.resizeMaxWidthHeight(thumbFileName_120, downloadFileName, 120, 92)) {
                 this.articleTotal.logError("thumbFileName_120 생성 에러 {}", item.getUrl());
                 break;
             }
-            if (!RcvImageUtil.resizeMaxWidthHeight(thumbFileName_250, item.getUrl(), 250, 192)) {
+            if (!RcvImageUtil.resizeMaxWidthHeight(thumbFileName_250, downloadFileName, 250, 192)) {
                 this.articleTotal.logError("thumbFileName_250 생성 에러 {} ", item.getUrl());
                 break;
             }
-            if (!RcvImageUtil.resizeMaxWidthHeight(thumbFileName_350, item.getUrl(), 350, 269)) {
+            if (!RcvImageUtil.resizeMaxWidthHeight(thumbFileName_350, downloadFileName, 350, 269)) {
                 this.articleTotal.logError("thumbFileName_350 생성 에러 {}", item.getUrl());
                 break;
             }

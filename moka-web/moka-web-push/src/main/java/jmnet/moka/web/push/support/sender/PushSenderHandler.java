@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
  * <pre>
  * ReserveJobHandler
  * Project : moka
- * Package : jmnet.moka.web.push.support.reserve
- * ClassName : ReserveJobHandler
+ * Package : jmnet.moka.web.push.support.sender
+ * ClassName : PushSenderHandler
  * Created : 2021-02-08 ince
  * </pre>
  *
@@ -109,7 +109,16 @@ public class PushSenderHandler {
     public boolean addPushJob(MobPushItem pushItem) {
         boolean result = false;
 
+        System.out.println("==========================================");
+        System.out.println("getPushType="+pushItem.getPushType());
+        System.out.println("scheduleMap="+scheduleMap.get("T"));
+        System.out.println("scheduleMap="+scheduleMap.get("S"));
+        System.out.println("scheduleMap="+scheduleMap.get("R"));
+        System.out.println("scheduleMap="+scheduleMap.get("N"));
+        System.out.println("toString="+scheduleMap.toString());
+
         if (scheduleMap.containsKey(pushItem.getPushType())) {// 작업 유형 존재할 경우 실행
+            System.out.println("getPushItemSeq="+pushItem.getPushItemSeq());
             pushSendJobTaskExecutor.execute(() -> scheduleMap
                     .get(pushItem.getPushType())
                     .doTask(pushItem));

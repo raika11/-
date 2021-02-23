@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
  * <pre>
  *
  * Project : moka
- * Package : jmnet.moka.web.push.support.scheduler
+ * Package : jmnet.moka.web.push.support
  * ClassName : PushSchedule
  * Created : 2021-02-09 ince
  * </pre>

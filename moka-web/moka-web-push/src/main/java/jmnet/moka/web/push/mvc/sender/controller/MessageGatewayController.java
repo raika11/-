@@ -2,9 +2,12 @@ package jmnet.moka.web.push.mvc.sender.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.web.push.mvc.sender.dto.*;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
@@ -192,7 +195,7 @@ public class MessageGatewayController {
         }
 
         //예약 발송 취소 처리
-        deleteJob(contentSeq);
+        //deleteJob(contentSeq);
 
         /**
          * pushSenderHandler에 푸시 처리 요청
@@ -220,10 +223,11 @@ public class MessageGatewayController {
      * @throws MokaException 일반적인 오류 처리
      */
     @ApiOperation(value = "예약 취소")
-    @DeleteMapping
-    public ResponseEntity<?> deleteJob(@ApiParam("Task 일련번호") @PathVariable("jobTaskSeq") @Min(value = 0) Long jobTaskSeq)
+    @DeleteMapping("/{jobTaskSeq}")
+    public ResponseEntity<?> deleteJob(HttpServletRequest request,
+                                       @ApiParam("Task 일련번호") @PathVariable("jobTaskSeq")
+                                       @Min(value = 0, message = "Task 일련번호는 0보다 커야 합니다.") Long jobTaskSeq)
             throws Exception {
-
         /**
          * todo 4. 요청한 취소 정보가 취소 가능한 작업인지 확인
          */

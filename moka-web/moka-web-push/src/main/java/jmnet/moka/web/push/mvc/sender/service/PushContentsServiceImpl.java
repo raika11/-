@@ -2,6 +2,7 @@ package jmnet.moka.web.push.mvc.sender.service;
 
 import jmnet.moka.web.push.mvc.sender.dto.PushAppSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushContentSeqSearchDTO;
+import jmnet.moka.web.push.mvc.sender.dto.PushContentUsedYnSearchDTO;
 import jmnet.moka.web.push.mvc.sender.dto.PushRelContentIdSearchDTO;
 import jmnet.moka.web.push.mvc.sender.entity.PushContents;
 import jmnet.moka.web.push.mvc.sender.entity.PushContentsProc;
@@ -44,8 +45,14 @@ public class PushContentsServiceImpl implements PushContentsService{
     public PushContents saveDelYn(PushContents pushContents) {
         return pushContentsRepository.save(pushContents);
     }
+
     @Override
     public Page<PushContents> findPushContents(PushContentSeqSearchDTO search) {
         return pushContentsRepository.findByContentSeq(search.getContentSeq(), search.getPageable());
+    }
+
+    @Override
+    public Page<PushContents> findAllByUsedYn(PushContentUsedYnSearchDTO search) {
+        return pushContentsRepository.findAllByUsedYn(search.getUsedYn(), search.getPageable());
     }
 }

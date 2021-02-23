@@ -12,6 +12,9 @@ import commonUtil from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { API_BASE_URL, W3C_URL } from '@/constants';
 
+/**
+ * 기사페이지 등록/수정
+ */
 const ArticlePageEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -269,98 +272,97 @@ const ArticlePageEdit = ({ onDelete, match }) => {
 
     return (
         <MokaCard title={`기사페이지 ${articlePage.artPageSeq ? '수정' : '등록'}`} loading={loading}>
-            <Form>
-                {/* 버튼 그룹 */}
-                <Form.Group className="mb-3 d-flex justify-content-between">
-                    <div className="d-flex">
-                        <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3COpen}>
-                            W3C
+            {/* 버튼 그룹 */}
+            <Form.Group className="mb-3 d-flex justify-content-between">
+                <div className="d-flex">
+                    <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3COpen}>
+                        W3C
+                    </Button>
+                    <Button variant="outline-neutral" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
+                        미리보기
+                    </Button>
+                </div>
+                <div className="d-flex">
+                    <Button variant="positive" className="mr-1" onClick={handleClickSave}>
+                        {articlePage.artPageSeq ? '수정' : '저장'}
+                    </Button>
+                    {!btnDisabled && (
+                        <Button variant="negative" className="mr-1" onClick={(e) => onDelete(articlePage)}>
+                            삭제
                         </Button>
-                        <Button variant="outline-neutral" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
-                            미리보기
-                        </Button>
-                    </div>
-                    <div className="d-flex">
-                        <Button variant="positive" className="mr-1" onClick={handleClickSave}>
-                            전송
-                        </Button>
-                        {!btnDisabled && (
-                            <Button variant="negative" className="mr-1" onClick={(e) => onDelete(articlePage)}>
-                                삭제
-                            </Button>
-                        )}
-                        <Button variant="negative" onClick={handleClickCancle}>
-                            취소
-                        </Button>
-                    </div>
-                </Form.Group>
-                {/* 기사페이지ID */}
-                {articlePage.artPageSeq && (
-                    <Form.Row className="mb-2">
-                        <MokaInputLabel
-                            label="기사페이지ID"
-                            value={temp.artPageSeq}
-                            name="artPageSeq"
-                            onChange={handleChangeValue}
-                            className="w-100"
-                            labelWidth={84}
-                            placeholder="기사페이지ID를 입력하세요"
-                            isInvalid={error.artPageName}
-                            inputProps={{ plaintext: true, readOnly: true }}
-                            required
-                        />
-                    </Form.Row>
-                )}
-                {/* 기사페이지명 */}
+                    )}
+                    <Button variant="negative" onClick={handleClickCancle}>
+                        취소
+                    </Button>
+                </div>
+            </Form.Group>
+
+            {/* 기사페이지ID */}
+            {articlePage.artPageSeq && (
                 <Form.Row className="mb-2">
                     <MokaInputLabel
-                        label="기사페이지명"
-                        value={temp.artPageName}
-                        name="artPageName"
+                        label="기사페이지ID"
+                        value={temp.artPageSeq}
+                        name="artPageSeq"
                         onChange={handleChangeValue}
                         className="w-100"
-                        labelWidth={84}
-                        placeholder="기사페이지명을 입력하세요"
+                        placeholder="기사페이지ID를 입력하세요"
                         isInvalid={error.artPageName}
-                        inputProps={{ autoComplete: 'off' }}
+                        inputProps={{ plaintext: true, readOnly: true }}
                         required
                     />
                 </Form.Row>
-                {/* 기사타입 */}
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        as="select"
-                        label="기사타입"
-                        value={temp.artType}
-                        name="artType"
-                        onChange={handleChangeArtType}
-                        className="w-100"
-                        labelWidth={84}
-                        placeholder="기사타입을 선택하세요."
-                        required
-                        isInvalid={error.pageServiceName}
-                    >
-                        {articleTypeRows &&
-                            articleTypeRows.map((type) => (
-                                <option key={type.dtlCd} value={type.dtlCd}>
-                                    {type.cdNm}
-                                </option>
-                            ))}
-                    </MokaInputLabel>
-                </Form.Row>
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        label="기사ID"
-                        value={previewTotalId}
-                        name="previewTotalId"
-                        onChange={handleChangeValue}
-                        className="w-100"
-                        labelWidth={84}
-                        placeholder="기사ID를 입력하세요."
-                        inputProps={{ autoComplete: 'off' }}
-                    />
-                </Form.Row>
-            </Form>
+            )}
+
+            {/* 기사페이지명 */}
+            <Form.Row className="mb-2">
+                <MokaInputLabel
+                    label="기사페이지명"
+                    value={temp.artPageName}
+                    name="artPageName"
+                    onChange={handleChangeValue}
+                    className="w-100"
+                    placeholder="기사페이지명을 입력하세요"
+                    isInvalid={error.artPageName}
+                    inputProps={{ autoComplete: 'off' }}
+                    required
+                />
+            </Form.Row>
+
+            {/* 기사타입 */}
+            <Form.Row className="mb-2">
+                <MokaInputLabel
+                    as="select"
+                    label="기사타입"
+                    value={temp.artType}
+                    name="artType"
+                    onChange={handleChangeArtType}
+                    className="w-100"
+                    placeholder="기사타입을 선택하세요."
+                    required
+                    isInvalid={error.pageServiceName}
+                >
+                    {articleTypeRows &&
+                        articleTypeRows.map((type) => (
+                            <option key={type.dtlCd} value={type.dtlCd}>
+                                {type.cdNm}
+                            </option>
+                        ))}
+                </MokaInputLabel>
+            </Form.Row>
+
+            {/* 미리보기용 기사ID */}
+            <Form.Row className="mb-2">
+                <MokaInputLabel
+                    label="기사ID"
+                    value={previewTotalId}
+                    name="previewTotalId"
+                    onChange={handleChangeValue}
+                    className="w-100"
+                    placeholder="기사ID를 입력하세요."
+                    inputProps={{ autoComplete: 'off' }}
+                />
+            </Form.Row>
         </MokaCard>
     );
 };

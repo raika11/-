@@ -219,7 +219,7 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
 
                 {/* 부제목 */}
                 <div className="mb-2 w-100">
-                    <MokaInputLabel as="textarea" label="부제목" inputClassName="resize-none" value={article.subTitle} inputProps={{ rows: 2 }} disabled />
+                    <MokaInputLabel as="textarea" label="부제목" value={article.subTitle} inputProps={{ rows: 2 }} disabled />
                 </div>
 
                 {/* 기자 */}

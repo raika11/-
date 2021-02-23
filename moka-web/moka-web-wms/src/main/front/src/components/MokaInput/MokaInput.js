@@ -191,7 +191,7 @@ const MokaInput = forwardRef((props, ref) => {
     }
     // textarea
     else if (as === 'textarea') {
-        contextProps = { ...contextProps, as };
+        contextProps = { ...contextProps, className: clsx('resize-none custom-scroll', className), as };
     }
     // 라디오
     else if (as === 'radio') {

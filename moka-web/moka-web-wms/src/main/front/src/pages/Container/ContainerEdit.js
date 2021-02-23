@@ -203,7 +203,6 @@ const ContainerEdit = ({ onDelete, match }) => {
                 label="입력태그"
                 as="textarea"
                 value={inputTag}
-                inputClassName="resize-none"
                 inputProps={{ rows: 2 }}
                 className="mb-2"
                 disabled

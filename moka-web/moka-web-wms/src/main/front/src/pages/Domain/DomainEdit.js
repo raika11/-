@@ -364,7 +364,7 @@ const DomainEditTest = ({ history, onDelete, baseUrl, loading }) => {
                 </Form.Row>
 
                 {/* 메모 */}
-                <MokaInputLabel as="textarea" label="메모" className="mb-2" inputClassName="resize-none" inputProps={{ rows: 3 }} ref={register} name="description" uncontrolled />
+                <MokaInputLabel as="textarea" label="메모" className="mb-2" inputProps={{ rows: 3 }} ref={register} name="description" uncontrolled />
             </MokaCard>
         </form>
     );

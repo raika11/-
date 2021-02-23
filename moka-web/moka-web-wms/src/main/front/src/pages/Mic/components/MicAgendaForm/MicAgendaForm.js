@@ -174,7 +174,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 labelWidth={90}
                 className="mb-2"
                 as="textarea"
-                inputClassName="resize-none custom-scroll"
                 inputProps={{ rows: 3 }}
                 name="agndMemo"
                 value={agenda.agndMemo}
@@ -189,7 +188,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 labelWidth={90}
                 className="mb-2"
                 as="textarea"
-                inputClassName="resize-none custom-scroll"
                 inputProps={{ rows: 3 }}
                 name="agndComment"
                 value={agenda.agndComment}
@@ -202,7 +200,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 labelWidth={90}
                 className="mb-2"
                 as="textarea"
-                inputClassName="resize-none custom-scroll"
                 inputProps={{ rows: 3 }}
                 name="agndLead"
                 value={agenda.agndLead}
@@ -215,7 +212,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 labelWidth={90}
                 className="mb-2"
                 as="textarea"
-                inputClassName="resize-none custom-scroll"
                 inputProps={{ rows: 3 }}
                 name="agndMov"
                 value={agenda.agndMov}

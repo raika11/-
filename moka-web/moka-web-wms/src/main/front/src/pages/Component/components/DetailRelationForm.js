@@ -191,7 +191,6 @@ const DetailRelationForm = (props) => {
                 as="textarea"
                 className="mb-2"
                 name="delWords"
-                inputClassName="resize-none"
                 inputProps={{ rows: 4 }}
                 value={component.delWords}
                 onChange={handleChangeValue}

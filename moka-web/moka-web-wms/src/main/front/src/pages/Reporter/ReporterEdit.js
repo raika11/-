@@ -358,7 +358,7 @@ const ReporterEdit = ({ match }) => {
                 </Form.Row>
 
                 <MokaInputLabel as="none" className="mb-2" label="기자 한마디" labelClassName="ml-0" />
-                <MokaInput as="textarea" value={temp.repTalk} readOnly rows={3} className="resize-none bg-white p-3" />
+                <MokaInput as="textarea" value={temp.repTalk} readOnly rows={3} className="bg-white p-3" />
             </Form>
         </>
     );

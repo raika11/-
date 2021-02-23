@@ -2,6 +2,7 @@ import React, { Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { Switch, Route, useHistory } from 'react-router-dom';
+import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import { GET_RESERVED, SAVE_RESERVED, DELETE_RESERVED } from '@store/reserved';
 import { messageBox } from '@utils/toastUtil';
@@ -64,18 +65,24 @@ const Reserved = ({ match }) => {
             </Helmet>
 
             {/* 예약어 목록 */}
-            <MokaCard width={412} className="mr-gutter" bodyClassName="d-flex flex-column" title="예약어 검색">
-                <Suspense>
-                    <ReservedList match={match} onDelete={handleClickDelete} />
-                </Suspense>
-            </MokaCard>
+            <Col xs={5} className="p-0 pr-gutter">
+                <MokaCard width={412} className="w-100" bodyClassName="d-flex flex-column" title="예약어 검색">
+                    <Suspense>
+                        <ReservedList match={match} onDelete={handleClickDelete} />
+                    </Suspense>
+                </MokaCard>
+            </Col>
 
             {/* 예약어 정보 */}
             <Switch>
                 <Route
                     path={[`${match.path}/add`, `${match.path}/:reservedSeq`]}
                     exact
-                    render={() => <ReservedEdit match={match} onDelete={handleClickDelete} loading={loading} />}
+                    render={() => (
+                        <Col xs={7} className="p-0">
+                            <ReservedEdit match={match} onDelete={handleClickDelete} loading={loading} />
+                        </Col>
+                    )}
                 />
             </Switch>
         </div>

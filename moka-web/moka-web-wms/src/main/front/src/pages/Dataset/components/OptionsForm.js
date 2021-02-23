@@ -31,15 +31,7 @@ const OptionsForm = (props) => {
                         loading={loading}
                     />
                 )}
-                <MokaInputLabel
-                    label="설명"
-                    as="textarea"
-                    name="description"
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 7 }}
-                    value={dataset.description}
-                    onChange={handleChangeValue}
-                />
+                <MokaInputLabel label="설명" as="textarea" name="description" inputProps={{ rows: 7 }} value={dataset.description} onChange={handleChangeValue} />
             </Form>
         </React.Fragment>
     );

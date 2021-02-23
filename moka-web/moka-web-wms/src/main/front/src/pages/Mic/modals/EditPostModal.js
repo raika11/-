@@ -262,7 +262,6 @@ const EditPostModal = (props) => {
                     label="동영상\n소스코드"
                     labelWidth={72}
                     as="textarea"
-                    inputClassName="resize-none custom-scroll"
                     inputProps={{ rows: 3 }}
                     name="relUrl"
                     value={post.answerRel?.relUrl}
@@ -300,7 +299,6 @@ const EditPostModal = (props) => {
                         labelWidth={72}
                         as="textarea"
                         className="my-2"
-                        inputClassName="resize-none custom-scroll"
                         inputProps={{ rows: 3 }}
                         name="artSummary"
                         value={post.answerRel?.artSummary}

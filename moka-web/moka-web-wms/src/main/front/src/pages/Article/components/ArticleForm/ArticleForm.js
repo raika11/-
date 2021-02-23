@@ -403,14 +403,7 @@ const ArticleForm = ({ totalId, reporterList, onSave, inRcv, onCancle, returnUrl
                 {/* 부제목 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0" xs={12}>
-                        <MokaInputLabel
-                            as="textarea"
-                            label="부제목"
-                            name="artSubTitle"
-                            value={temp.artSubTitle}
-                            inputClassName="bg-white resize-none custom-scroll"
-                            onChange={handleChangeValue}
-                        />
+                        <MokaInputLabel as="textarea" label="부제목" name="artSubTitle" value={temp.artSubTitle} inputClassName="bg-white" onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
 

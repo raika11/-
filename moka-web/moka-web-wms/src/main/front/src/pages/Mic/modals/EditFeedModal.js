@@ -238,16 +238,7 @@ const EditFeedModal = (props) => {
                 <MokaInputLabel label="제목" labelWidth={72} className="mb-2" name="answTitle" value={feed.answTitle} onChange={handleChangeValue} />
 
                 {/* 내용 */}
-                <MokaInputLabel
-                    label="내용"
-                    labelWidth={72}
-                    as="textarea"
-                    inputClassName="resize-none custom-scroll"
-                    inputProps={{ rows: 3 }}
-                    name="answMemo"
-                    value={feed.answMemo}
-                    onChange={handleChangeValue}
-                />
+                <MokaInputLabel label="내용" labelWidth={72} as="textarea" inputProps={{ rows: 3 }} name="answMemo" value={feed.answMemo} onChange={handleChangeValue} />
 
                 {/* 피드 타입별 입력(이미지) */}
                 {feed.answerRel?.relDiv === 'I' && (
@@ -277,7 +268,6 @@ const EditFeedModal = (props) => {
                         label="동영상\n소스코드"
                         labelWidth={72}
                         as="textarea"
-                        inputClassName="resize-none custom-scroll"
                         inputProps={{ rows: 3 }}
                         name="relUrl"
                         value={feed.answerRel?.relUrl}
@@ -315,7 +305,6 @@ const EditFeedModal = (props) => {
                             labelWidth={72}
                             as="textarea"
                             className="my-2"
-                            inputClassName="resize-none custom-scroll"
                             inputProps={{ rows: 3 }}
                             name="artSummary"
                             value={feed.answerRel?.artSummary}

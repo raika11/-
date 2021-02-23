@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './NoticeListAgGridColumns';
 import { useParams, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { GET_BOARD_CONTENTS_LIST } from '@store/jpod';
+import { GET_JPOD_NOTICE, getBoardContents } from '@store/jpod';
 
 const NoticeListAgGrid = ({ match }) => {
-    // const dispatch = useDispatch();
     const params = useParams();
+    const dispatch = useDispatch();
+    const selectBoardId = useRef(null);
+    const selectBoardSeq = useRef(null);
+
     // 스토어 연결.
     const { search, loading, list, total } = useSelector((store) => ({
-        search: store.jpod.jpodBoard.jpodBoards.search,
-        list: store.jpod.jpodBoard.jpodBoards.list,
-        total: store.jpod.jpodBoard.jpodBoards.total,
-        loading: store.loading[GET_BOARD_CONTENTS_LIST],
+        search: store.jpod.jpodNotice.jpodNotices.search,
+        list: store.jpod.jpodNotice.jpodNotices.list,
+        total: store.jpod.jpodNotice.jpodNotices.total,
+        loading: store.loading[GET_JPOD_NOTICE],
     }));
 
     const history = useHistory();
     const [rowData, setRowData] = useState([]);
 
     // 목록 클릭 했을때.
-    const handleClickListRow = ({ boardSeq }) => {
-        history.push(`${match.path}/${boardSeq}`);
-        // dispatch(clearChannelInfo());
-        // dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
-        // dispatch(getChEpisodes({ chnlSeq: chnlSeq }));
+    const handleClickListRow = ({ boardId, boardSeq }) => {
+        history.push(`${match.path}/${boardId}/${boardSeq}`);
+        dispatch(getBoardContents({ boardId: selectBoardId.current, boardSeq: boardSeq }));
     };
 
     // grid 에서 상태 변경시 리스트를 가지고 오기.
@@ -35,36 +36,23 @@ const NoticeListAgGrid = ({ match }) => {
         if (key !== 'page') {
             temp['page'] = 0;
         }
-        // dispatch(changeJpodSearchOption(temp));
-        // dispatch(getChannels());
     };
 
-    // useEffect(() => {
-    //     setRowData([]);
-    //     const inirGridRow = (data) => {
-    //         setRowData(
-    //             data.map((element) => {
-    //                 let chnlSdt = element.chnlSdt && element.chnlSdt.length > 10 ? element.chnlSdt.substr(0, 10) : element.chnlSdt;
-    //                 const totalEpsdCnt = element.totalEpsdCnt ? element.totalEpsdCnt : 0;
-    //                 const lastEpsdNo = element.lastEpsdNo ? element.lastEpsdNo : 0;
-    //                 return {
-    //                     chnlSeq: element.chnlSeq,
-    //                     chnlSdt: chnlSdt,
-    //                     chnlThumb: element.chnlThumb,
-    //                     chnlNm: element.chnlNm,
-    //                     chnlMemo: element.chnlMemo,
-    //                     usedYn: element.usedYn,
-    //                     roundinfo: `${totalEpsdCnt}/${lastEpsdNo}`,
-    //                     subscribe: ``,
-    //                 };
-    //             }),
-    //         );
-    //     };
+    // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
+    useEffect(() => {
+        const { boardId, boardSeq } = params;
 
-    //     if (list.length > 0) {
-    //         inirGridRow(list);
-    //     }
-    // }, [list]);
+        if (!isNaN(boardId) && selectBoardId.current !== boardId) {
+            selectBoardId.current = boardId;
+        }
+
+        if (!isNaN(boardSeq) && selectBoardSeq.current !== boardSeq) {
+            selectBoardSeq.current = boardSeq;
+        } else if (history.location.pathname === `${match.path}/add` && selectBoardSeq.current !== 'add') {
+            selectBoardSeq.current = 'add';
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params]);
 
     useEffect(() => {
         setRowData([]);
@@ -73,12 +61,14 @@ const NoticeListAgGrid = ({ match }) => {
                 data.map((element) => {
                     let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 10) : element.regDt;
                     return {
+                        boardId: element.boardId,
                         boardSeq: element.boardSeq,
                         chName: element.boardInfo.boardName,
                         title: element.title,
                         regName: element.regName,
                         regDt: regDt,
                         viewCnt: element.viewCnt,
+                        chnlNm: element.jpodChannel.chnlNm,
                     };
                 }),
             );
@@ -101,7 +91,7 @@ const NoticeListAgGrid = ({ match }) => {
             size={search.size}
             displayPageNum={DISPLAY_PAGE_NUM}
             onChangeSearchOption={handleChangeSearchOption}
-            selected={params.noticeSeq}
+            selected={params.boardSeq}
         />
     );
 };

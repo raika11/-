@@ -150,3 +150,30 @@ export const RCV_ARTICLE_SOURCE_LIST_KEY = 'rcvArticleSourceList';
 
 // 미리보기 도메인ID
 export const PREVIEW_DOMAIN_ID = '1000';
+
+/**
+ * 벌크 관련 구분 코드.
+ *
+ * 중앙일보 : bulk_source = '3'
+ * 중앙썬데이 : bulk_source = '60'
+ * 네이버 벌크 : bulk_div = 'N'
+ * 핫클릭 : bulk_div = 'H'
+ */
+export const BULKS_CODE = {
+    'bulkn-ja': {
+        bulk_source: '3', // 출처
+        bulk_div: 'N', // 벌크 구분
+    },
+    'bulkn-su': {
+        bulk_source: '61', // 출처
+        bulk_div: 'N',
+    },
+    'bulkh-ja': {
+        bulk_source: '3', // 출처
+        bulk_div: 'H',
+    },
+    'bulkh-su': {
+        bulk_source: '61', // 출처
+        bulk_div: 'H',
+    },
+};

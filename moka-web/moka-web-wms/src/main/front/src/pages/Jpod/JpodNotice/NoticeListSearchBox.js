@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { MokaInput, MokaSearchInput } from '@components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DB_DATEFORMAT } from '@/constants';
 import moment from 'moment';
-import { initialState, changeJpodSearchOption, getChannels, getEpisodeGubunChannels, getBoardContentsList, getBoardChannelList } from '@store/jpod';
+
+import { initialState, changeJpodNoticeSearchOption, getJpodNotice } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
-const NoticeListSearchBox = ({ match, SelectBoard }) => {
-    const [searchData, setSearchData] = useState(initialState.channel.jpod.search);
+const NoticeListSearchBox = ({ match }) => {
+    const [searchData, setSearchData] = useState(initialState.jpodNotice.jpodNotices.search);
     const history = useHistory();
     const dispatch = useDispatch();
-    const [channalList, setChannalList] = useState([]); // 채넌 선택.
+    const [channelLists, setChannelLists] = useState([]); // 채널 선택.
 
-    // const { channel_list } = useSelector((store) => ({
-    //     channel_list: store.jpod.episode.channel.list,
-    // }));
+    const { channelList } = useSelector((store) => ({
+        channelList: store.jpod.jpodNotice.channelList,
+    }));
 
     // 검색 항목 변경시 스테이트 업데이트.
     const handleSearchChange = (e) => {
@@ -30,21 +31,19 @@ const NoticeListSearchBox = ({ match, SelectBoard }) => {
     // 검색 버튼 처리.
     const handleClickSearchButton = () => {
         dispatch(
-            changeJpodSearchOption({
+            changeJpodNoticeSearchOption({
                 ...searchData,
                 startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
                 endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
             }),
         );
-        dispatch(getChannels());
+        dispatch(getJpodNotice());
     };
 
     // 초기화 버튼 클릭.
     const handleClickSearchResetButton = () => {
-        setSearchData(initialState.channel.jpod.search);
-        dispatch(changeJpodSearchOption(initialState.channel.jpod.search));
-        // history.push(`${match.path}`);
-        // dispatch(getChannels());
+        setSearchData(initialState.jpodNotice.jpodNotices.search);
+        dispatch(changeJpodNoticeSearchOption(initialState.jpodNotice.jpodNotices.search));
     };
 
     // 등록 버튼
@@ -78,21 +77,13 @@ const NoticeListSearchBox = ({ match, SelectBoard }) => {
         });
     };
 
-    // 최초 로딩시 목록 가져오기.
+    // 검색 및 본문에 작성시 필요한 J팟 채널 목록 설정.
     useEffect(() => {
-        dispatch(getEpisodeGubunChannels()); // 채널 목록.
+        setChannelLists(channelList);
+    }, [channelList]);
 
-        dispatch(
-            getBoardChannelList({
-                type: 'BOARD_DIVC1',
-                callback: (element) => {
-                    setChannalList(element);
-                },
-            }),
-        );
-
-        dispatch(getBoardContentsList({ boardId: SelectBoard.boardId }));
-
+    useEffect(() => {
+        dispatch(getJpodNotice());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -108,8 +99,6 @@ const NoticeListSearchBox = ({ match, SelectBoard }) => {
                             id="startDt"
                             value={searchData.startDt}
                             onChange={(param) => {
-                                // const selectDate = param._d;
-                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                                 handleDateChange('startDt', param);
                             }}
                             inputProps={{ timeFormat: null }}
@@ -123,8 +112,6 @@ const NoticeListSearchBox = ({ match, SelectBoard }) => {
                             id="endDt"
                             value={searchData.endDt}
                             onChange={(param) => {
-                                // const selectDate = param._d;
-                                // const date = moment(new Date(selectDate.getFullYear(), selectDate.getMonth(), selectDate.getDate(), 0, 0, 0)).format(DB_DATEFORMAT);
                                 handleDateChange('endDt', param);
                             }}
                             inputProps={{ timeFormat: null }}
@@ -137,9 +124,9 @@ const NoticeListSearchBox = ({ match, SelectBoard }) => {
                         </MokaInput>
                     </div>
                     <div className="mb-0 pl-1 pr-2">
-                        <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
+                        <MokaInput as="select" name="channelId" id="channelId" value={searchData.channelId} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             <option value="">j팟 채널 전체</option>
-                            {channalList.map((item, index) => (
+                            {channelLists.map((item, index) => (
                                 <option key={index} value={item.value}>
                                     {item.name}
                                 </option>

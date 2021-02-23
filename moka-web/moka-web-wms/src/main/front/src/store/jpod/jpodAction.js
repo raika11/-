@@ -106,13 +106,26 @@ export const [SAVE_JPOD_EPISODE, SAVE_JPOD_EPISODE_SUCCESS, SAVE_JPOD_EPISODE_FA
 export const saveJpodEpisode = createAction(SAVE_JPOD_EPISODE, ({ chnlSeq, epsdSeq, episodeinfo, callback }) => ({ chnlSeq, epsdSeq, episodeinfo, callback }));
 
 // 공지 게시판.
-// 게시글 목록 가지고 오기.
-export const [GET_BOARD_CONTENTS_LIST, GET_BOARD_CONTENTS_LIST_SUCCESS, GET_BOARD_CONTENTS_LIST_LIST_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CONTENTS_LIST');
-export const getBoardContentsList = createAction(GET_BOARD_CONTENTS_LIST, ({ boardId }) => ({ boardId }));
+
+// 검색 옵션 처리.
+export const CHANGE_JPOD_NOTICE_SEARCH_OPTION = 'jpod/CHANGE_JPOD_NOTICE_SEARCH_OPTION';
+export const changeJpodNoticeSearchOption = createAction(CHANGE_JPOD_NOTICE_SEARCH_OPTION, (actions) => actions);
+
+// j팟 게시판 목록 가지고 오기.
+export const [GET_JPOD_BOARD, GET_JPOD_BOARD_SUCCESS, GET_JPOD_BOARD_FAILURE] = createRequestActionTypes('jpod/GET_JPOD_BOARD');
+export const getJpodBoard = createAction(GET_JPOD_BOARD);
+
+// j팟 공지 게시글 목록 가지고 오기.
+export const [GET_JPOD_NOTICE, GET_JPOD_NOTICE_SUCCESS, GET_JPOD_NOTICE_FAILURE] = createRequestActionTypes('jpod/GET_JPOD_NOTICE');
+export const getJpodNotice = createAction(GET_JPOD_NOTICE);
 
 export const [GET_BOARD_CONTENTS, GET_BOARD_CONTENTS_SUCCESS, GET_BOARD_CONTENTS_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CONTENTS');
 export const getBoardContents = createAction(GET_BOARD_CONTENTS, ({ boardId, boardSeq }) => ({ boardId, boardSeq }));
 
+// 에피소드 정보 초기화.
+export const CLEAR_BOARD_CONTENTS = 'jpod/CLEAR_BOARD_CONTENTS';
+export const clearBoardContents = createAction(CLEAR_BOARD_CONTENTS);
+
 // 게시판 channalType 별 목록 가지고 오기. ( store 를 거치지 않고 call back 으로 목록 전달.)
-export const [GET_BOARD_CHANNEL_LIST] = createRequestActionTypes('jpod/GET_BOARD_CHANNEL_LIST');
-export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST, ({ type, callback }) => ({ type, callback }));
+export const [GET_BOARD_CHANNEL_LIST, GET_BOARD_CHANNEL_LIST_SUCCESS, GET_BOARD_CHANNEL_LIST_FAILURE] = createRequestActionTypes('jpod/GET_BOARD_CHANNEL_LIST');
+export const getBoardChannelList = createAction(GET_BOARD_CHANNEL_LIST);

@@ -7,6 +7,7 @@ package jmnet.moka.core.tps.mvc.area.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaNode;
 import jmnet.moka.core.tps.mvc.area.dto.AreaSearchDTO;
@@ -74,9 +75,10 @@ public interface AreaService {
     /**
      * 편집영역 목록 조회(트리용)
      *
-     * @return
+     * @param sourceCode 매체
+     * @return 트리
      */
-    AreaNode makeTree();
+    AreaNode makeTree(String sourceCode);
 
     /**
      * 컴포넌트타입일 경우, areaComps-> areaComp로 컴포넌트 정보 이동
@@ -93,4 +95,13 @@ public interface AreaService {
      * @return
      */
     AreaDTO compToComps(AreaDTO areaDTO);
+
+    /**
+     * 편집영역 정렬
+     *
+     * @param parentAreaSeq 부모 편집영역 일련번호
+     * @param areaSeqList   편집영역 목록
+     */
+    void updateAreaSort(Long parentAreaSeq, List<Long> areaSeqList)
+            throws NoDataException;
 }

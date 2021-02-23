@@ -21,6 +21,9 @@ public class PropertyHolder {
     @Value("${reserved.action:true}")
     private boolean reservedAction;
 
+    @Value("${reserved-task.permit.time-limit.minutes:3}")
+    private Integer permitLimitMinutes;
+
     /**
      * @return the scheduleAction
      */
@@ -33,6 +36,13 @@ public class PropertyHolder {
      */
     public boolean getReservedAction() {
         return reservedAction;
+    }
+
+    /**
+     * @return the permitLimitMinutes
+     */
+    public Integer getPermitLimitMinutes() {
+        return permitLimitMinutes;
     }
 
     /**

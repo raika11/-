@@ -84,7 +84,7 @@ const ChannelSearchBox = ({ match }) => {
         <>
             <Form>
                 <Form.Row className="d-flex mb-3">
-                    <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
+                    <div style={{ width: 160 }} className="pr-2">
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0"
@@ -99,7 +99,7 @@ const ChannelSearchBox = ({ match }) => {
                             inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         />
                     </div>
-                    <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
+                    <div style={{ width: 160 }} className="pr-2">
                         <MokaInput
                             as="dateTimePicker"
                             className="mb-0"
@@ -114,7 +114,7 @@ const ChannelSearchBox = ({ match }) => {
                             inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         />
                     </div>
-                    <div className="mb-0 pl-1 pr-2">
+                    <div className="pr-2">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             <option value="">전체</option>
                             {selectItem.usedYn.map((item, index) => (
@@ -124,7 +124,7 @@ const ChannelSearchBox = ({ match }) => {
                             ))}
                         </MokaInput>
                     </div>
-                    <div className="mb-0 pl-1 pr-2" style={{ width: 260 }}>
+                    <div className=" pr-1" style={{ width: 300 }}>
                         <MokaSearchInput
                             id="keyword"
                             name="keyword"
@@ -134,12 +134,12 @@ const ChannelSearchBox = ({ match }) => {
                             onSearch={() => handleClickSearchButton()}
                         />
                     </div>
-                    <div className="mr-0 pl-1 pr-2">
+                    <div className="pr-1">
                         <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
                             초기화
                         </Button>
                     </div>
-                    <div className="mr-0 pl-1 pr-2">
+                    <div>
                         <Button variant="positive" onClick={() => handleNewButton()}>
                             등록
                         </Button>

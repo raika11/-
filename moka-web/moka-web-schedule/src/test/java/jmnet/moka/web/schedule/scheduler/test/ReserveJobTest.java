@@ -4,7 +4,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.sns.SnsPublishDTO;
 import jmnet.moka.core.common.sns.SnsTypeCode;
 import jmnet.moka.core.common.util.ResourceMapper;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
 import jmnet.moka.web.schedule.mvc.reserve.service.SnsShareReserveJob;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class ReserveJobTest {
     public void snsShareReserveJobTest()
             throws Exception {
 
-        GenStatusHistory history = GenStatusHistory
+        GenContentHistory history = GenContentHistory
                 .builder()
                 .jobSeq(11l)
                 .paramDesc(ResourceMapper

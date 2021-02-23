@@ -10,6 +10,7 @@ package jmnet.moka.core.tps.mvc.area.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.core.tps.common.TpsConstants;
@@ -44,6 +45,10 @@ public class AreaSearchDTO extends SearchDTO {
     @ApiModelProperty("도메인")
     @Pattern(regexp = "[0-9]{4}$", message = "{tps.domain.error.pattern.domainId}")
     private String domainId;
+
+    @ApiModelProperty("출처")
+    @NotNull(message = "{tps.area.error.notnull.sourceCode}")
+    private String sourceCode;
 
     /**
      * 생성자: 검색 조건의 기본값을 설정

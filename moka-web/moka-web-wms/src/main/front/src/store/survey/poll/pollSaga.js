@@ -16,9 +16,9 @@ function toOptionCodes(list) {
     }));
 }
 
-function* getPollCodes({ type, payload }) {
+function* getPollCodes({ type, payload: grpCd }) {
     try {
-        const response = yield call(codeMgtApi.getUseDtlList, payload);
+        const response = yield call(codeMgtApi.getUseDtlList, { grpCd });
         if (response.data.header.success) {
             const codes = toOptionCodes(response.data.body.list);
             yield put({ type: `${type}_SUCCESS`, payload: codes });
@@ -123,6 +123,7 @@ function* getPoll({ type, payload }) {
 
 function* savePoll({ type, payload }) {
     yield put(startLoading(type));
+
     const formData = pollObjectToFormData(payload.data);
 
     try {
@@ -140,11 +141,12 @@ function* savePoll({ type, payload }) {
 
 function* updatePoll({ type, payload }) {
     yield put(startLoading(type));
+    console.log(payload);
     const pollSeq = payload.data.pollSeq;
     const formData = pollObjectToFormData(payload.data);
 
     try {
-        const response = yield call(pollApi.pullPoll, pollSeq, formData);
+        const response = yield call(pollApi.putPoll, pollSeq, formData);
         if (payload.callback instanceof Function) {
             payload.callback(response.data);
         }

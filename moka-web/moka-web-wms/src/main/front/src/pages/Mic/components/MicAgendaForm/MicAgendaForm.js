@@ -77,7 +77,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             <Form.Row className="mb-2">
                 <MokaInputLabel
                     label="사용 여부"
-                    labelWidth={90}
                     className="mr-3"
                     as="switch"
                     name="usedYn"
@@ -90,7 +89,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 />
                 <MokaInputLabel
                     label="최상단 여부"
-                    labelWidth={90}
                     as="switch"
                     name="agndTop"
                     id="agndTop"
@@ -107,14 +105,13 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                 <MokaInputLabel
                     label="공개일"
                     className="mr-40"
-                    labelWidth={90}
                     as="dateTimePicker"
                     value={agenda.agndServiceDt}
                     inputProps={{ timeFormat: null, width: 136 }}
                     name="agndServiceDt"
                     onChange={handleDate}
                 />
-                <MokaInputLabel label="타입" labelWidth={26} as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
+                <MokaInputLabel label="타입" as="select" name="agndType" value={agenda.agndType} onChange={handleChangeValue}>
                     <option value="0">일반</option>
                     <option value="">그외</option>
                 </MokaInputLabel>
@@ -122,7 +119,7 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
 
             {/* 기사화 단계, 관련기사 URL */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="기사화 단계" labelWidth={90} className="mr-40" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
+                <MokaInputLabel label="기사화 단계" className="mr-40" as="select" name="artProgress" value={agenda.artProgress} onChange={handleChangeValue}>
                     <option hidden>선택</option>
                     {AGENDA_ARTICLE_PROGRESS.map((progress) => (
                         <option key={progress.code} value={progress.code}>
@@ -130,13 +127,12 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
                         </option>
                     ))}
                 </MokaInputLabel>
-                <MokaInputLabel label="관련기사 URL" labelWidth={71} className="flex-fill" name="artLink" value={agenda.artLink} onChange={handleChangeValue} />
+                <MokaInputLabel label="관련기사 URL" className="flex-fill" name="artLink" value={agenda.artLink} onChange={handleChangeValue} />
             </Form.Row>
 
             {/* 카테고리 */}
             <MokaInputLabel
                 label="카테고리"
-                labelWidth={90}
                 className="mb-2"
                 as="autocomplete"
                 name="category"
@@ -146,32 +142,22 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             />
 
             {/* 아젠다키워드 */}
-            <MokaInputLabel label="아젠다" labelWidth={90} className="mb-1" name="agndKwd" value={agenda.agndKwd} onChange={handleChangeValue} />
+            <MokaInputLabel label="아젠다" className="mb-1" name="agndKwd" value={agenda.agndKwd} onChange={handleChangeValue} />
             <div className="d-flex mb-2">
-                <MokaInputLabel label=" " labelWidth={90} as="none" className="mb-0" />
+                <MokaInputLabel label=" " as="none" className="mb-0" />
                 <p className="mb-0 color-secondary">※ 예) 가계부채</p>
             </div>
 
             {/* 아젠다 제목 */}
-            <MokaInputLabel
-                label="아젠다 제목"
-                labelWidth={90}
-                className="mb-1"
-                name="agndTitle"
-                value={agenda.agndTitle}
-                onChange={handleChangeValue}
-                isInvalid={error.agndTitle}
-                required
-            />
+            <MokaInputLabel label="아젠다 제목" className="mb-1" name="agndTitle" value={agenda.agndTitle} onChange={handleChangeValue} isInvalid={error.agndTitle} required />
             <div className="d-flex mb-2">
-                <MokaInputLabel label=" " labelWidth={90} as="none" />
+                <MokaInputLabel label=" " as="none" />
                 <p className="mb-0 color-secondary">※ 예) # 가계부채에 대한 # 당신의 생각은 어떠신가요?</p>
             </div>
 
             {/* 아젠다 본문 */}
             <MokaInputLabel
                 label="아젠다 본문"
-                labelWidth={90}
                 className="mb-2"
                 as="textarea"
                 inputProps={{ rows: 3 }}
@@ -185,7 +171,6 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             {/* 아젠다 코멘트 */}
             <MokaInputLabel
                 label="아젠다 코멘트"
-                labelWidth={90}
                 className="mb-2"
                 as="textarea"
                 inputProps={{ rows: 3 }}
@@ -195,32 +180,14 @@ const MicAgendaForm = ({ AGENDA_ARTICLE_PROGRESS = [], agenda, onChange, categor
             />
 
             {/* 아젠다 리드 */}
-            <MokaInputLabel
-                label="아젠다 리드"
-                labelWidth={90}
-                className="mb-2"
-                as="textarea"
-                inputProps={{ rows: 3 }}
-                name="agndLead"
-                value={agenda.agndLead}
-                onChange={handleChangeValue}
-            />
+            <MokaInputLabel label="아젠다 리드" className="mb-2" as="textarea" inputProps={{ rows: 3 }} name="agndLead" value={agenda.agndLead} onChange={handleChangeValue} />
 
             {/* 동영상 코드 */}
-            <MokaInputLabel
-                label="동영상\nHTML 코드"
-                labelWidth={90}
-                className="mb-2"
-                as="textarea"
-                inputProps={{ rows: 3 }}
-                name="agndMov"
-                value={agenda.agndMov}
-                onChange={handleChangeValue}
-            />
+            <MokaInputLabel label="동영상\nHTML 코드" className="mb-2" as="textarea" inputProps={{ rows: 3 }} name="agndMov" value={agenda.agndMov} onChange={handleChangeValue} />
 
             {/* 찬반 투표 */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="찬반 투표" labelWidth={90} className="flex-fill mr-2" value={agenda.pollSeq} disabled />
+                <MokaInputLabel label="찬반 투표" className="flex-fill mr-2" value={agenda.pollSeq} disabled />
                 <Button variant="searching" className="flex-shrink-0" onClick={() => setShow(true)}>
                     투표 찾기
                 </Button>

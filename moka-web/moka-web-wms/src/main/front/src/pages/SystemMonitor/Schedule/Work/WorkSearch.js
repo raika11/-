@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { MokaIcon, MokaInput, MokaInputLabel } from '@/components';
+import { MokaIcon, MokaInput } from '@/components';
 
 /**
  * 스케줄 서버 관리 > 작업 목록 검색
@@ -14,7 +14,7 @@ const WorkSearch = () => {
         cycle: 'all',
         type: 'all',
         server: 'all',
-        usedYn: 'Y',
+        usedYn: 'all',
         searchType: 'all',
         keyword: '',
     });
@@ -49,11 +49,11 @@ const WorkSearch = () => {
             <Form className="mb-14">
                 <div className="mb-2 d-flex align-items-center justify-content-between">
                     {/* 기타코드에서 가져옴 'GEN_CATE' */}
-                    <MokaInputLabel label="분류" labelWidth={30} as="select" name="group" className="mr-2 flex-fill" value={search.group} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
-                    </MokaInputLabel>
-                    <MokaInputLabel label="주기" labelWidth={30} as="select" name="cycle" className="mr-2 flex-fill" value={search.cycle} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
+                    <MokaInput as="select" name="group" className="mr-2" value={search.group} onChange={handleChangeValue}>
+                        <option value="all">분류 전체</option>
+                    </MokaInput>
+                    <MokaInput as="select" name="cycle" className="mr-2" value={search.cycle} onChange={handleChangeValue}>
+                        <option value="all">주기 전체</option>
                         <option value="30s">30초</option>
                         <option value="1m">1분</option>
                         <option value="2m">2분</option>
@@ -64,20 +64,20 @@ const WorkSearch = () => {
                         <option value="1h">1시간</option>
                         <option value="12h">12시간</option>
                         <option value="24h">24시간</option>
-                    </MokaInputLabel>
-                    <MokaInputLabel label="타입" labelWidth={30} as="select" name="type" className="mr-2 flex-fill" value={search.type} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
+                    </MokaInput>
+                    <MokaInput as="select" name="type" className="mr-2" value={search.type} onChange={handleChangeValue}>
+                        <option value="all">타입 전체</option>
                         <option value="ftp">FTP</option>
                         <option value="copyNetwork">네트워크 복사</option>
-                    </MokaInputLabel>
-                    <MokaInputLabel label="배포 서버" labelWidth={50} as="select" name="server" className="mr-2 flex-fill" value={search.server} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
-                    </MokaInputLabel>
-                    <MokaInputLabel label="사용" labelWidth={30} as="select" name="usedYn" className="flex-fill" value={search.usedYn} onChange={handleChangeValue}>
-                        <option value="all">전체</option>
+                    </MokaInput>
+                    <MokaInput as="select" name="server" className="mr-2" value={search.server} onChange={handleChangeValue}>
+                        <option value="all">배포 서버 전체</option>
+                    </MokaInput>
+                    <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue}>
+                        <option value="all">사용 전체</option>
                         <option value="Y">사용</option>
                         <option value="N">중지</option>
-                    </MokaInputLabel>
+                    </MokaInput>
                 </div>
                 <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex">

@@ -1,13 +1,26 @@
 package jmnet.moka.web.schedule.mvc.gen.entity;
 
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.web.schedule.support.StatusFlagType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  * <pre>
@@ -28,7 +41,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 @Table(name = "TB_GEN_CONTENT_HIST")
-public class GenStatusHistory {
+public class GenContentHistory {
 
     /**
      * 이력 일련번호
@@ -48,13 +61,16 @@ public class GenStatusHistory {
      * 0 실행전, 1 완료, 9 실행중, 2~8 에러 번호
      */
     @Column(name = "STATUS_FLAG", nullable = false)
-    private String status;
+    @Enumerated(value = EnumType.ORDINAL)
+    @Builder.Default
+    private StatusFlagType status = StatusFlagType.READY;
 
     /**
      * 삭제여부
      */
     @Column(name = "DEL_YN")
-    private String delYn;
+    @Builder.Default
+    private String delYn = MokaConstants.NO;
 
     /**
      * 예약 일시
@@ -79,4 +95,19 @@ public class GenStatusHistory {
      */
     @Column(name = "PARAM_DESC")
     private String paramDesc;
+
+    /**
+     * 예약 요청
+     */
+    @Column(name = "JOB_TASK_ID")
+    private String jobTaskId;
+
+    /**
+     * job정보
+     */
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "JOB_SEQ", insertable = false, updatable = false)
+    private GenContent genContent;
+
 }

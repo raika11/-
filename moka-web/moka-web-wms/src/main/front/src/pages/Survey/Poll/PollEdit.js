@@ -510,7 +510,7 @@ const PollEdit = ({ onDelete }) => {
                             minHeight="300px"
                             titleAs={
                                 <Form.Row>
-                                    <Col xs={11}>
+                                    <Col xs={12}>
                                         <MokaInputLabel
                                             as="textarea"
                                             name="title"
@@ -521,11 +521,6 @@ const PollEdit = ({ onDelete }) => {
                                             label="Q."
                                             labelWidth={20}
                                         />
-                                    </Col>
-                                    <Col xs={1} className="d-flex align-items-center">
-                                        <Button variant="white" className="flex-fill" onClick={handleClickHasLink}>
-                                            <MokaIcon iconName="fal-link" />
-                                        </Button>
                                     </Col>
                                 </Form.Row>
                             }

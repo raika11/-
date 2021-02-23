@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.core.common.MokaConstants;
+import jmnet.moka.core.common.exception.NoDataException;
+import jmnet.moka.core.common.mvc.MessageByLocale;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.area.dto.AreaCompDTO;
 import jmnet.moka.core.tps.mvc.area.dto.AreaDTO;
@@ -45,10 +47,13 @@ public class AreaServiceImpl implements AreaService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private MessageByLocale messageByLocale;
+
     @Override
     public List<AreaSimple> findAllArea(AreaSearchDTO search) {
         //        return areaRepository.findByParent_AreaSeqOrderByOrdNo(search.getParentAreaSeq());
-        return areaRepository.findByParent(search.getParentAreaSeq());
+        return areaRepository.findByParent(search);
     }
 
     @Override
@@ -82,8 +87,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public void deleteArea(Area area) {
-        String domainId = area.getDomain()
-                              .getDomainId();
+        String domainId = area
+                .getDomain()
+                .getDomainId();
 
         Long areaSeq = area.getAreaSeq();
 
@@ -116,8 +122,11 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public AreaNode makeTree() {
-        List<AreaVO> areaList = areaMapper.findAllArea(MokaConstants.YES);
+    public AreaNode makeTree(String sourceCode) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("sourceCode", sourceCode);
+        paramMap.put("useYn", MokaConstants.YES);
+        List<AreaVO> areaList = areaMapper.findAllArea(paramMap);
         return areaList.isEmpty() ? null : makeTree(areaList);
     }
 
@@ -148,8 +157,9 @@ public class AreaServiceImpl implements AreaService {
 
     private void deleteOneArea(Long areaSeq) {
         findAreaBySeq(areaSeq).ifPresent(area -> {
-            log.info("[DELETE AREA] domainId : {} areaSeq : {}", area.getDomain()
-                                                                     .getDomainId(), area.getAreaSeq());
+            log.info("[DELETE AREA] domainId : {} areaSeq : {}", area
+                    .getDomain()
+                    .getDomainId(), area.getAreaSeq());
 
             // 삭제
             areaRepository.deleteById(area.getAreaSeq());
@@ -163,12 +173,15 @@ public class AreaServiceImpl implements AreaService {
      * @return
      */
     public AreaDTO compsToComp(AreaDTO areaDTO) {
-        if (areaDTO.getAreaDiv()
-                   .equals(MokaConstants.ITEM_COMPONENT)) {
-            if (areaDTO.getAreaComps()
-                       .size() > 0) {
-                areaDTO.setAreaComp(areaDTO.getAreaComps()
-                                           .get(0));
+        if (areaDTO
+                .getAreaDiv()
+                .equals(MokaConstants.ITEM_COMPONENT)) {
+            if (areaDTO
+                    .getAreaComps()
+                    .size() > 0) {
+                areaDTO.setAreaComp(areaDTO
+                        .getAreaComps()
+                        .get(0));
                 areaDTO.setAreaComps(null);
             }
         }
@@ -182,8 +195,9 @@ public class AreaServiceImpl implements AreaService {
      * @return
      */
     public AreaDTO compToComps(AreaDTO areaDTO) {
-        if (areaDTO.getAreaDiv()
-                   .equals(MokaConstants.ITEM_COMPONENT)) {
+        if (areaDTO
+                .getAreaDiv()
+                .equals(MokaConstants.ITEM_COMPONENT)) {
             if (areaDTO.getAreaComp() != null) {
                 AreaCompDTO comp = areaDTO.getAreaComp();
                 if (comp.getArea() == null) {
@@ -194,5 +208,21 @@ public class AreaServiceImpl implements AreaService {
             }
         }
         return areaDTO;
+    }
+
+    @Override
+    public void updateAreaSort(Long parentAreaSeq, List<Long> areaSeqList)
+            throws NoDataException {
+        Integer ordNo = 1;
+        for (Long areaSeq : areaSeqList) {
+            Area area = areaRepository
+                    .findById(areaSeq)
+                    .orElseThrow(() -> {
+                        String message = messageByLocale.get("tps.common.error.no-data");
+                        return new NoDataException(message);
+                    });
+            area.setOrdNo(ordNo);
+            ordNo++;
+        }
     }
 }

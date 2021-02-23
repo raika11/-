@@ -1,7 +1,15 @@
 package jmnet.moka.web.schedule.mvc.gen.entity;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -124,11 +132,13 @@ public class GenContent {
      * JOB_TYPE
      */
     @Column(name = "JOB_TYPE")
-    //@Transient
     private String jobType;
 
-    @Transient
-    private String workType;
+    /**
+     * JOB_CD
+     */
+    @Column(name = "JOB_CD")
+    private String jobCd;
 
 
 }

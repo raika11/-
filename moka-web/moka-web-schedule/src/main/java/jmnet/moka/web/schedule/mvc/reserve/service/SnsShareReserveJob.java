@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Optional;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.sns.SnsApiService;
 import jmnet.moka.core.common.sns.SnsDeleteDTO;
@@ -14,12 +13,13 @@ import jmnet.moka.core.common.sns.SnsTypeCode;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.schedule.mvc.common.entity.CommonCode;
 import jmnet.moka.web.schedule.mvc.common.repository.repository.CommonCodeRepository;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
-import jmnet.moka.web.schedule.mvc.gen.repository.GenStatusHistoryRepository;
-import jmnet.moka.web.schedule.mvc.reserve.dto.ReserveJobDTO;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
+import jmnet.moka.web.schedule.mvc.gen.repository.GenContentHistoryRepository;
 import jmnet.moka.web.schedule.mvc.sns.entity.ArticleSnsShare;
 import jmnet.moka.web.schedule.mvc.sns.entity.ArticleSnsSharePK;
 import jmnet.moka.web.schedule.mvc.sns.repository.ArticleSnsShareRepository;
+import jmnet.moka.web.schedule.support.StatusFlagType;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class SnsShareReserveJob extends AbstractReserveJob {
     private CommonCodeRepository commonCodeRepository;
 
     @Autowired
-    private GenStatusHistoryRepository genStatusHistoryRepository;
+    private GenContentHistoryRepository genStatusHistoryRepository;
 
     @Autowired
     private ArticleSnsShareRepository articleSnsShareRepository;
@@ -61,36 +61,36 @@ public class SnsShareReserveJob extends AbstractReserveJob {
     private String facebookTokenCode;
 
     @Override
-    public void invoke(ReserveJobDTO reserveJob, Long taskSeq) {
-        log.debug("비동기 예약 작업 처리 : {}", reserveJob.getJobSeq());
-
+    public GenContentHistory invoke(GenContentHistory history) {
+        log.debug("비동기 예약 작업 처리 : {}", history.getJobSeq());
+        StatusFlagType statusFlagType = StatusFlagType.DONE;
         /**
          * todo 1. 작업 테이블에서 조회하여 이미 완료 되었거나, 삭제 된 작업이 아닌 경우 진행 시작
          * - AbstractReserveJob에 공통 메소드 생성하여 사용할 수 있도록 조치 필요
          */
         try {
-            GenStatusHistory task = genStatusHistoryRepository
-                    .findBySeqNoAndDelYnAndStatus(taskSeq, MokaConstants.NO, "0")
-                    .orElseThrow(() -> new NoDataException("No Data"));
+            GenContent genContent = history.getGenContent();
 
             /**
              * todo 2. 작업 테이블의 파라미터 정보를 Map 형태로 전환하여, procedure 또는 업무별 service 객체 호출
              * - 각 업무 담당자가 해당 영역 코딩은 구현할 예정
              */
-            ArticleSnsShare ArticleSnsShare = reserveJob
-                    .getWorkType()
-                    .equals("SNS_PUBLISH") ? publishSnsArticleSnsShare(task) : deleteSnsArticleSnsShare(task);
+            ArticleSnsShare ArticleSnsShare = genContent
+                    .getJobCd()
+                    .equals("SNS_PUBLISH") ? publishSnsArticleSnsShare(history) : deleteSnsArticleSnsShare(history);
 
         } catch (NoDataException ex) {
             log.error("[GEN STATUS HISTORY ERROR]", ex.toString());
-
+            statusFlagType = StatusFlagType.DELETE_TASK;
         } catch (Exception ex) {
             log.error("[GEN STATUS HISTORY ERROR]", ex.toString());
+            statusFlagType = StatusFlagType.ERROR_SERVER;
         }
-
+        history.setStatus(statusFlagType);
+        return history;
     }
 
-    public ArticleSnsShare publishSnsArticleSnsShare(GenStatusHistory task)
+    public ArticleSnsShare publishSnsArticleSnsShare(GenContentHistory task)
             throws Exception {
 
         SnsPublishDTO pubInfo = ResourceMapper
@@ -128,7 +128,7 @@ public class SnsShareReserveJob extends AbstractReserveJob {
         return share;
     }
 
-    public ArticleSnsShare deleteSnsArticleSnsShare(GenStatusHistory task)
+    public ArticleSnsShare deleteSnsArticleSnsShare(GenContentHistory task)
             throws Exception {
         ArticleSnsShare share = null;
 

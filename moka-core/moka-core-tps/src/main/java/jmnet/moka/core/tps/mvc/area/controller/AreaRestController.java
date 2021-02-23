@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
@@ -43,6 +44,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Description: 편집영역 API
@@ -423,15 +425,46 @@ public class AreaRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "편집영역 목록조회(트리용)")
     @GetMapping("/tree")
-    public ResponseEntity<?> getAreaTree() {
+    public ResponseEntity<?> getAreaTree(@ApiParam(value = "편집영역 매체", required = true) @RequestParam(value = "sourceCode")
+    @NotNull(message = "{tps.area.error.notnull.sourceCode}") String sourceCode) {
 
-        AreaNode areaNode = areaService.makeTree();
+        AreaNode areaNode = areaService.makeTree(sourceCode);
 
         ResultDTO<List<AreaNode>> resultDto = new ResultDTO<List<AreaNode>>(areaNode.getNodes());
 
         tpsLogger.success(true);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    /**
+     * 편집영역 정렬
+     *
+     * @param parentAreaSeq 부모편집영역 일련번호
+     * @param areaSeqList   편집영역 일련번호 목록
+     * @return
+     * @throws InvalidDataException 데이터유효성에러
+     * @throws Exception            편집영역오류 그외 모든 에러
+     */
+    @ApiOperation(value = "편집영역 정렬")
+    @PutMapping(value = "/sort", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> putAreaSort(
+            @ApiParam("부모편집영역 일련번호") @PathVariable("parentAreaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long parentAreaSeq,
+            @ApiParam("편집영역 일련번호 목록") @RequestBody @Valid List<Long> areaSeqList)
+            throws InvalidDataException, Exception {
+        try {
+            areaService.updateAreaSort(parentAreaSeq, areaSeqList);
+
+            String message = msg("tps.common.success.update");
+            ResultDTO<Boolean> resultDTO = new ResultDTO<Boolean>(true, message);
+            tpsLogger.success(ActionType.UPDATE, true);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("[FAIL TO UPDATE AREA SORT]", e);
+            tpsLogger.error(ActionType.UPDATE, "[FAIL TO UPDATE AREA SORT]", e, true);
+            throw new Exception(msg("tps.area.error.save"), e);
+        }
     }
 
 }

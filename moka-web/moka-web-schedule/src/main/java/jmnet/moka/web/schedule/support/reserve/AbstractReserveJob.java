@@ -1,15 +1,14 @@
 package jmnet.moka.web.schedule.support.reserve;
 
+import java.util.Date;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
-import jmnet.moka.web.schedule.mvc.gen.entity.GenStatusHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
-import jmnet.moka.web.schedule.mvc.reserve.dto.ReserveJobDTO;
+import jmnet.moka.web.schedule.support.StatusFlagType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
 
 /**
  * <pre>
@@ -25,8 +24,6 @@ import java.util.Date;
  */
 public abstract class AbstractReserveJob implements ReserveJob {
     private static final Logger logger = LoggerFactory.getLogger(AbstractReserveJob.class);
-
-    protected GenStatusHistory scheduleHistory;
 
     @Autowired
     protected GenContentService jobContentService;
@@ -47,36 +44,49 @@ public abstract class AbstractReserveJob implements ReserveJob {
     /**
      * 마무리 처리
      */
-    public void finish(Long taskSeq) {
+    public void finish(GenContentHistory history) {
         // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
 
         //실행 완료 시 상태변경 후 저장
-        scheduleHistory.setStatus("1");
-        scheduleHistory.setEndDt(new Date());
-        jobContentService.updateGenStatusHistory(scheduleHistory);
+        history.setEndDt(new Date());
+        jobContentService.updateGenContentHistory(history);
+
+        logger.debug("reserved jobseq : {} , complete : {}", history.getSeqNo(), history
+                .getStatus()
+                .name());
     }
 
     @Override
-    public void asyncTask(ReserveJobDTO reserveJob, Long taskSeq) {
+    public void asyncTask(GenContentHistory history, Long taskSeq) {
 
+        GenContentHistory scheduleHistory = null;
         try {
-            logger.debug("reserved jobseq : {} , sleep : {}", reserveJob.getJobSeq(), McpDate.term(reserveJob.getReserveDt()));
-            Thread.sleep(McpDate.term(reserveJob.getReserveDt()));
+            logger.debug("reserved jobseq : {} , sleep : {}", history.getSeqNo(), McpDate.term(history.getReserveDt()));
+            Thread.sleep(McpDate.term(history.getReserveDt()));
 
             //실행 전 유효한 작업예약 인지 체크
             scheduleHistory = jobContentService
-                    .findGenStatusHistoryById(reserveJob.getSeqNo())
+                    .findGenContentHistoryById(history.getSeqNo())
                     .orElseThrow();
 
-            invoke(reserveJob, taskSeq);
+            //실행 전 상태변경 후 저장
+            scheduleHistory.setStartDt(McpDate.now());
+            scheduleHistory.setStatus(StatusFlagType.PROCESSING);
+            scheduleHistory = jobContentService.updateGenContentHistory(scheduleHistory);
+            logger.debug("start task jobseq : {}", history.getSeqNo());
 
-            //실행 후 상태변경 후 저장
-            scheduleHistory.setStatus("9");
-            jobContentService.updateGenStatusHistory(scheduleHistory);
+            // 각 예약 작업 처리
+            invoke(scheduleHistory);
+
         } catch (Exception ex) {
+            /**
+             * todo 2. 에러발생시 status 5로 update
+             */
+            scheduleHistory.setStatus(StatusFlagType.ERROR_SERVER);
             logger.error("reserved invoke error ", ex);
         } finally {
-            finish(taskSeq);
+            // 마무리
+            finish(scheduleHistory);
         }
 
     }
@@ -84,5 +94,5 @@ public abstract class AbstractReserveJob implements ReserveJob {
     /**
      * 각 Job별 기능 구현
      */
-    public abstract void invoke(ReserveJobDTO reserveJob, Long taskSeq);
+    public abstract GenContentHistory invoke(GenContentHistory history);
 }

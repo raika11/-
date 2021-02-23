@@ -1,6 +1,6 @@
 package jmnet.moka.web.schedule.support.reserve;
 
-import jmnet.moka.web.schedule.mvc.reserve.dto.ReserveJobDTO;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
 
 /**
  * <pre>
@@ -19,8 +19,8 @@ public interface ReserveJob {
     /**
      * 비동기 작업 처리
      *
-     * @param reserveJob 예약 정보
-     * @param taskSeq    작업 일련번호
+     * @param history 예약 정보
+     * @param taskSeq 작업 일련번호
      */
-    void asyncTask(ReserveJobDTO reserveJob, Long taskSeq);
+    void asyncTask(GenContentHistory history, Long taskSeq);
 }

@@ -1,13 +1,13 @@
 package jmnet.moka.web.schedule.mvc.reserve.dto;
 
 import java.util.Date;
-import jmnet.moka.core.common.MokaConstants;
+import javax.validation.constraints.NotEmpty;
+import jmnet.moka.core.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <pre>
@@ -28,16 +28,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Builder
 public class ReserveJobDTO {
 
-    private Long seqNo;
+    @NotEmpty
+    private String jobCd;
 
-    private Long jobSeq;
+    @NotEmpty
+    private String jobTaskId;
 
-    private String status;
-
-    private String workType;
-
+    @NotEmpty
     private String paramDesc;
 
-    @DateTimeFormat(pattern = MokaConstants.JSON_DATE_FORMAT)
+    @DTODateTimeFormat
     private Date reserveDt;
 }

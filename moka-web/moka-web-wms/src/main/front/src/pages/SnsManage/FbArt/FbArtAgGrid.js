@@ -22,7 +22,7 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             className="flex-fill overflow-hidden"
             columnDefs={columnDefs}
             rowData={rows}
-            rowHeight={49}
+            rowHeight={46}
             onRowNodeId={(row) => row.id}
             onRowClicked={handleClickListRow}
             loading={loading}

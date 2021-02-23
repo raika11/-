@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { snsNames } from '@/constants';
@@ -8,7 +8,7 @@ import { clearSnsMeta, GET_SNS_META, getSnsMeta, getSnsSendArticleList, initialS
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import imageEditer from '@utils/imageEditorUtil';
-import { MokaCard, MokaInputLabel, MokaInput, MokaImage } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput, MokaImage, MokaImageInput } from '@components';
 import { EditThumbModal } from '@pages/Desking/modals';
 
 const FbArtEdit = () => {
@@ -123,7 +123,7 @@ const FbArtEdit = () => {
                 {
                     text: '저장',
                     variant: 'positive',
-                    className: 'mr-2',
+                    className: 'mr-1',
                     onClick: handleClickPublish,
                     useAuth: true,
                 },
@@ -132,19 +132,19 @@ const FbArtEdit = () => {
         >
             {/* 기사정보 */}
             <div>
-                <Row className="m-0">
+                {/*<Row className="m-0">
                     <Col xs={4} className="p-0 pr-12"></Col>
                     <Col xs={8} className="p-0 text-neutral">
                         <span className="ft-12">ID {edit.totalId}</span>
                     </Col>
-                </Row>
+                </Row>*/}
 
                 <Row className="m-0 mb-2">
-                    <Col xs={4} className="p-0 pr-12 d-flex align-items-center">
-                        <p className="mb-0 h4 font-weight-bold color-gray-800">원본 기사</p>
-                    </Col>
-                    <Col xs={8} className="p-0">
-                        <MokaInput value={edit.article.title} inputProps={{ plaintext: true }} className="font-weight-bold" disabled />
+                    <Col xs={12} className="p-0 pr-12 d-flex align-items-center">
+                        <Form.Label className="mb-0 h4 font-weight-bold color-gray-800 mr-12" style={{ width: '70px' }}>
+                            원본 기사
+                        </Form.Label>
+                        <span className="ft-12 text-neutral">ID {edit.totalId}</span>
                     </Col>
                 </Row>
 
@@ -153,6 +153,10 @@ const FbArtEdit = () => {
                         <MokaImage width={155} img={edit.article.imgUrl} />
                     </Col>
                     <Col xs={8} className="p-0">
+                        {/*<MokaInput value={edit.article.title} inputProps={{ plaintext: true }} className="font-weight-bold pt-0" disabled />*/}
+                        <div className="flex-fill font-weight-bold pt-0 form-control-plaintext" title={edit.article.title}>
+                            {edit.article.title}
+                        </div>
                         <MokaInput as="textarea" className="resize-none custom-scroll bg-white" value={edit.article.summary} inputProps={{ readOnly: true, rows: 6 }} />
                     </Col>
                 </Row>
@@ -169,7 +173,7 @@ const FbArtEdit = () => {
                     <Col xs={8} className="p-0">
                         <MokaInputLabel
                             labelClassName="ft-13"
-                            label="사용유무"
+                            label="사용여부"
                             labelWidth={50}
                             as="switch"
                             name="usedYn"
@@ -186,7 +190,7 @@ const FbArtEdit = () => {
                 <Row className="m-0 mb-2">
                     <Col xs={4} className="p-0 pr-12 d-flex flex-column justify-content-between">
                         <div className="d-flex flex-column justify-content-start">
-                            <MokaImage width={155} img={edit.fb.imgUrl} className="mb-1" />
+                            <MokaImageInput width={155} img={edit.fb.imgUrl} className="mb-1" deleteButton={true} />
                             <p className="text-danger mb-0">SNS 이미지 (850*350px)</p>
                         </div>
                         <div>

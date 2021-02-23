@@ -93,6 +93,7 @@ export const initialState = {
             sendEmail: null,
             emailSendYn: 'N',
             exceptItem: null,
+            channelId: '',
         },
     },
     listmenu: {

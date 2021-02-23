@@ -138,8 +138,8 @@ export const saveBrightOvp = ({ ovpdata }) => {
         });
 };
 
-export const getBoardContentsList = ({ boardId, search }) => {
-    return instance.get(`/api/boards/${boardId}/contents?${qs.stringify(search)}`).catch((err) => {
+export const getNoticesList = ({ search }) => {
+    return instance.get(`/api/boards/jpod-notices?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };
@@ -154,6 +154,12 @@ export const getBoardContentsInfo = ({ boardId, boardSeq }) => {
 // 보드 채널 목록 가지고 오기 ( JPOD )
 export const getBoardJpodChannalList = () => {
     return instance.get(`/api/jpods?usedYn=Y`).catch((err) => {
+        throw err;
+    });
+};
+
+export const getBoardInfo = ({ search }) => {
+    return instance.get(`/api/board-info?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

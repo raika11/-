@@ -2,16 +2,16 @@ export const localeText = { noRowsToShow: '조회 결과가 없습니다.', load
 export const columnDefs = [
     {
         headerName: '번호',
-        field: 'boardSeq',
+        field: 'boardId',
         width: 50,
         cellStyle: { fontSize: '14px', display: 'flex', alignItems: 'center' },
     },
     {
         headerName: '채널명',
-        field: 'chName',
+        field: 'chnlNm',
         width: 200,
         cellStyle: { fontSize: '14px', display: 'flex', alignItems: 'center' },
-        tooltipField: 'chName',
+        tooltipField: 'chnlNm',
     },
     {
         headerName: '제목',

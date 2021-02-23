@@ -130,7 +130,7 @@ const TourSetEdit = () => {
             footerClassName="justify-content-center"
         >
             <Form>
-                <Form.Row className="mb-3">
+                <Form.Row className="mb-2">
                     <MokaInputLabel
                         label="견학신청"
                         as="switch"
@@ -143,7 +143,7 @@ const TourSetEdit = () => {
                         onChange={handleChangeSwitch}
                     />
                 </Form.Row>
-                <Form.Row className="mb-3 d-flex align-items-center">
+                <Form.Row className="mb-2 d-flex align-items-center">
                     <MokaInputLabel label="신청기간" as="none" />
                     <p className="mb-0 mr-2 ft-12">오늘자 기준</p>
                     <div style={{ width: 80 }}>
@@ -171,7 +171,7 @@ const TourSetEdit = () => {
                     </div>
                     <p className="mb-0 mx-2 ft-12">일 후까지 신청 가능</p>
                 </Form.Row>
-                <Form.Row className="mb-3 d-flex align-items-center">
+                <Form.Row className="mb-2 d-flex align-items-center">
                     <MokaInputLabel label="신청인원" as="none" />
                     <div style={{ width: 80 }}>
                         <MokaInput as="select" name="minVisitor" value={temp.minVisitor} onChange={handleChangeValue}>
@@ -198,7 +198,7 @@ const TourSetEdit = () => {
                     </div>
                     <p className="mb-0 mx-2 ft-12">명 이하</p>
                 </Form.Row>
-                <Form.Row className="mb-3">
+                <Form.Row>
                     <MokaInputLabel label="견학가능\n요일" as="none" />
                     <MokaInputLabel
                         label="일"

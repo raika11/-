@@ -17,7 +17,8 @@ public enum BulkDumpResult {
     SKIP_DATABASE(2),
     TIMEOUT_OVP(-10),
     FAIL_DUMP_CP_PROCESS(-5),
-    FAIL_DUMP_CP_TOTAL(-6);
+    FAIL_DUMP_CP_TOTAL(-6),
+    FAIL(-1);
 
     @SuppressWarnings("FieldCanBeLocal")
     final private int result;

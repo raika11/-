@@ -3,12 +3,14 @@ package jmnet.moka.web.bulk.task.base;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.bulk.code.OpCode;
 import jmnet.moka.web.bulk.common.task.Task;
 import jmnet.moka.web.bulk.task.base.TaskManager;
 import jmnet.moka.web.bulk.util.XMLUtil;
@@ -93,26 +95,28 @@ public class TaskGroup {
         log.debug("Task count : {} load", this.tasks.size());
     }
 
-    public void operation(int opCode, String id, Map<String, Object> responseMap)
+    public boolean operation(OpCode opCode, String target, Map<String, String> param, Map<String, Object> responseMap)
             throws InterruptedException {
-        final boolean isIdNull = McpString.isNullOrEmpty(id);
-        for (Task<?> task : this.tasks) {
-            if (!isIdNull) {
-                if (!Long.toString(task.getThreadId()).equals(id)) {
-                    continue;
-                }
-            }
-            task.operation(opCode, responseMap);
-        }
-    }
 
-    public void operation(int opCode, Type type)
-            throws InterruptedException {
-        for (Task<?> task : this.tasks) {
-            if( task.getClass() == type ) {
-                task.operation(opCode);
-                break;
-            }
+        boolean success = false;
+        boolean allTarget = McpString.isNullOrEmpty(target) || "all".equals(target);
+
+        Map<String, Object> response = responseMap;
+
+        if( opCode == OpCode.list ) {
+            allTarget = true;
+            response = new HashMap<>();
+            responseMap.put(getName(), response);
         }
+
+        for (Task<?> task : this.tasks) {
+            if (!allTarget) {
+                final String className = task.getClass().getSimpleName();
+                if( !className.equalsIgnoreCase( target ) )
+                    continue;
+            }
+            success |= task.operation(opCode, param, response, "all".equals(target));
+        }
+        return success;
     }
 }

@@ -41,7 +41,7 @@ public class MokaRcvServletContextListener implements ServletContextListener {
         }
 
         try {
-            taskManager.operation(OpCode.SERVE);
+            taskManager.operation(OpCode.start);
         } catch (InterruptedException e) {
             // no operation
         }
@@ -51,7 +51,7 @@ public class MokaRcvServletContextListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
 
         try {
-            taskManager.operation(OpCode.STOP);
+            taskManager.operation(OpCode.stop);
         } catch (InterruptedException e) {
             // no operation
         }

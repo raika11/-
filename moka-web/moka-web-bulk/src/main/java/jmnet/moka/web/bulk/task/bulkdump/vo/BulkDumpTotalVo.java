@@ -64,6 +64,8 @@ public class BulkDumpTotalVo implements Serializable {
     private String curPortalContent;
 
     private boolean fromWaitQueue;
+    private long dumpStartTime = System.currentTimeMillis();
+
     public BulkDumpTotalVo setFromWaitQueue( boolean fromWaitQueue ) {
         this.fromWaitQueue = fromWaitQueue;
         return this;

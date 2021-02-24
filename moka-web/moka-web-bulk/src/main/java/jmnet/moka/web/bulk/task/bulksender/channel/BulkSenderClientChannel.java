@@ -1,10 +1,13 @@
 package jmnet.moka.web.bulk.task.bulksender.channel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulksender.BulkSenderTask;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -20,8 +23,10 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2021-01-26 026 오후 3:46
  */
 @Slf4j
+@Getter
 public class BulkSenderClientChannel {
     private final ThreadPoolExecutor executor;
+    private final List<BulkSenderClientHandler> clientHandlerList = new ArrayList<>();
 
     public BulkSenderClientChannel(BulkDumpEnv bulkDumpEnv, BulkSenderTask bulkSenderTask) {
         final int cpCount = bulkDumpEnv.getDumpEnvCPs().size();
@@ -31,7 +36,9 @@ public class BulkSenderClientChannel {
                                     .getQueue()
                                     .size()));
             for (int i = 0; i < cpCount; i++) {
-                this.executor.execute(new BulkSenderClientHandler(bulkDumpEnv.getDumpEnvCPs().get(i), bulkSenderTask));
+                final BulkSenderClientHandler bulkSenderClientHandler = new BulkSenderClientHandler(bulkDumpEnv.getDumpEnvCPs().get(i), bulkSenderTask);
+                clientHandlerList.add(bulkSenderClientHandler);
+                this.executor.execute(bulkSenderClientHandler);
             }
         }
         else

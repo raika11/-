@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.task.jamxml;
 
+import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.task.Task;
@@ -201,6 +202,13 @@ public class JamXmlTask extends Task<FileXmlTaskInputData<JamArticleTotalVo, Jam
                 }
             }
         }
+    }
+
+    @Override
+    protected Map<String, Object> status(Map<String, Object> map) {
+        super.status(map);
+        map.put("sourceCode", sourceCode);
+        return map;
     }
 }
 

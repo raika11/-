@@ -163,4 +163,11 @@ public class PubXmlTask extends Task<FileXmlTaskInputData<PubNewsMLTotalVo, PubN
 
         taskInputData.doAfterProcess();
     }
+
+    @Override
+    protected Map<String, Object> status(Map<String, Object> map) {
+        super.status(map);
+        map.put("sourceCode", sourceCode);
+        return map;
+    }
 }

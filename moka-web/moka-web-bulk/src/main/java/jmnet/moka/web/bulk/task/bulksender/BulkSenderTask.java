@@ -2,22 +2,39 @@ package jmnet.moka.web.bulk.task.bulksender;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
+import jmnet.moka.common.TimeHumanizer;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.bulk.code.OpCode;
 import jmnet.moka.web.bulk.common.task.Task;
 import jmnet.moka.web.bulk.common.taskinput.TaskInput;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.exception.BulkDataAccessException;
 import jmnet.moka.web.bulk.exception.BulkException;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.base.TaskGroup;
 import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
+import jmnet.moka.web.bulk.task.bulkdump.env.sub.BulkDumpEnvCP;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulksender.channel.BulkSenderClientChannel;
+import jmnet.moka.web.bulk.task.bulksender.channel.BulkSenderClientHandler;
 import jmnet.moka.web.bulk.task.bulksender.service.BulkSenderService;
 import jmnet.moka.web.bulk.taskinput.FileTaskInput;
 import jmnet.moka.web.bulk.taskinput.FileTaskInputData;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
+import jmnet.moka.web.bulk.util.BulkUtil;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +57,9 @@ import org.w3c.dom.Node;
 @Getter
 public class BulkSenderTask extends Task<FileTaskInputData> {
     private BulkSenderClientChannel bulkSenderClientChannel;
+
+    private int allertLimitFileCount;
+    private int allertLimitFileTime;
 
     public BulkSenderTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
@@ -67,14 +87,20 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
         if( fileTaskInput == null )
             throw new BulkException("FileTaskInput 환경 값 설정이 잘못되었습니다.");
 
-        final String dirInput = bulkDumpEnv
-                .getBulkDumpEnvGlobal().getDirDump();
+        final String dirInput = bulkDumpEnv.getBulkDumpEnvGlobal().getDirDump();
         if (McpString.isNullOrEmpty(dirInput)) {
             throw new BulkException("Input Path is Blank");
         }
         if (!BulkFileUtil.createDirectories(dirInput)) {
             throw new BulkException("Input Path can't create");
         }
+
+        this.allertLimitFileCount = BulkUtil.parseInt(xu.getString(node, "./@allertLimitFileCount", "30"));
+        this.allertLimitFileTime = TimeHumanizer.parse(xu.getString(node, "./@allertLimitFileTime", "20m"));
+        if (this.allertLimitFileTime < 50) {
+            this.allertLimitFileTime = 60000;
+        }
+
         fileTaskInput.setDirScan(new File(dirInput));
         fileTaskInput.loadDirect(node, xu);
     }
@@ -121,8 +147,89 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
     @Override
     protected void stopServer() {
         super.stopServer();
-
         if( bulkSenderClientChannel != null )
             bulkSenderClientChannel.stopChannel();
+    }
+
+    @Override
+    protected Map<String, Object> status(Map<String, Object> map) {
+        super.status(map);
+
+        if( bulkSenderClientChannel != null ){
+            List<Map<String, Object>> cpList = new ArrayList<>();
+            map.put("cpList", cpList);
+
+            for(BulkSenderClientHandler clientHandler : bulkSenderClientChannel.getClientHandlerList() ) {
+                Map<String, Object> cpData = new HashMap<>();
+                cpList.add( cpData );
+
+                final BulkDumpEnvCP bulkDumpEnvCP = clientHandler.getBulkDumpEnvCP();
+                cpData.put("cpname", bulkDumpEnvCP.getName());
+                cpData.put("comment", bulkDumpEnvCP.getComment());
+                cpData.put("dir", bulkDumpEnvCP.getDir());
+                cpData.put("pause", clientHandler.isPause());
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public void processMonitor() {
+        super.processMonitor();
+
+        final SlackMessageService slackMessageService = getTaskManager().getSlackMessageService();
+
+        log.info("{} processMonitor", getTaskName());
+        for(BulkSenderClientHandler clientHandler : bulkSenderClientChannel.getClientHandlerList() ) {
+            List<File> files = clientHandler.getDirScanFiles();
+            if( files != null ) {
+                StringBuilder sb = new StringBuilder( String.format( "[%s]  ", clientHandler.getBulkDumpEnvCP().getName()) );
+                boolean alert = false;
+                if( files.size() > this.allertLimitFileCount ) {
+                    alert = true;
+                    sb.append( String.format("전송 기사 %d개 대기 !!  ", files.size() ) );
+                }
+                if( files.size() > 0 ) {
+                    try {
+                        Path path = files.get(0).toPath();
+                        BasicFileAttributes fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+
+                        final FileTime tmCreate =  fileAttributes.creationTime();
+                        if( System.currentTimeMillis() - tmCreate.toMillis() > this.allertLimitFileTime ) {
+                            alert = true;
+                            sb.append( String.format(", [%s] 생성된 기사 %s 대기 !!", McpDate.dateStr(new Date(tmCreate.toMillis()), McpDate.DATETIME_FORMAT), path.toString() ) );
+                        }
+                    } catch (IOException ignore) {
+                    }
+                }
+                if( alert ) {
+                    final String message = sb.toString();
+                    log.error( "{} monitoring Allert {}", getTaskName(), message );
+                    slackMessageService.sendSms( String.format("%s monitor", getTaskName()), message);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean operation(OpCode opCode, Map<String, String> param, Map<String, Object> responseMap, boolean allFromWeb)
+            throws InterruptedException {
+
+        if( bulkSenderClientChannel != null ) {
+            if (opCode == OpCode.resume || opCode == OpCode.pause) {
+                if (param.containsKey("cpname")) {
+                    final String cpName = param.get("cpname");
+                    for(BulkSenderClientHandler clientHandler : bulkSenderClientChannel.getClientHandlerList() ) {
+                        final BulkDumpEnvCP bulkDumpEnvCP = clientHandler.getBulkDumpEnvCP();
+                        if( bulkDumpEnvCP.getName().equals(cpName) ) {
+                            clientHandler.setPause( opCode == OpCode.pause );
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+        return super.operation(opCode, param, responseMap, allFromWeb);
     }
 }

@@ -17,6 +17,8 @@ import jmnet.moka.web.bulk.taskinput.FileTaskInput;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkFtpUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
+@Getter
+@Setter
 public class BulkSenderClientHandler implements Runnable{
     private final BulkDumpEnvCP bulkDumpEnvCP;
     private final BulkSenderTask bulkSenderTask;
@@ -40,6 +44,9 @@ public class BulkSenderClientHandler implements Runnable{
     private final FileTaskInput fileTaskInput;
     private final ObjectMapper objectMapper;
     private final BulkSenderService bulkSenderService;
+    private final SlackMessageService slackMessageService;
+
+    private boolean isPause = false;
 
     public BulkSenderClientHandler(BulkDumpEnvCP bulkDumpEnvCP, BulkSenderTask bulkSenderTask) {
         this.bulkDumpEnvCP = bulkDumpEnvCP;
@@ -50,13 +57,23 @@ public class BulkSenderClientHandler implements Runnable{
         final TaskManager taskManager = bulkSenderTask.getTaskManager();
         this.objectMapper = taskManager.getObjectMapper();
         this.bulkSenderService = taskManager.getBulkSenderService();
+        this.slackMessageService = taskManager.getSlackMessageService();
+    }
+
+    public List<File> getDirScanFiles() {
+        return BulkFileUtil.getDirScanFiles(this.dirScan, this.fileTaskInput.getFileFilter(), this.fileTaskInput.getFileWaitTime());
     }
 
     @Override
     public void run() {
         while( !Thread.interrupted()) {
             try {
-                List<File> files = BulkFileUtil.getDirScanFiles( this.dirScan, this.fileTaskInput.getFileFilter(), this.fileTaskInput.getFileWaitTime() );
+                if( isPause ){
+                    sleep(bulkSenderTask.getSleepTime());
+                    continue;
+                }
+
+                List<File> files = getDirScanFiles();
                 if( files == null ) {
                     sleep(bulkSenderTask.getSleepTime());
                     continue;
@@ -83,8 +100,9 @@ public class BulkSenderClientHandler implements Runnable{
                                     BulkStringUtil.format("{} Bulk Sender Error !! {}", bulkDumpJob.getCpName(), f.getName()), true);
                     }
                     catch (Exception e) {
-                        log.error("BulkSenderClientHandler Exception {} {}", f.getName(), e.getMessage());
+                        log.error("BulkSenderClientHandler Exception [{}] {} {}", bulkDumpEnvCP.getName(), f.getName(), e.getMessage());
                         e.printStackTrace();
+                        slackMessageService.sendSms("BulkSenderClient Exception", BulkStringUtil.format("BulkSenderClientHandler Exception [{}] {} {}", bulkDumpEnvCP.getName(), f.getName(), e.getMessage()));
                     }
                 }
             } catch (Exception e) {

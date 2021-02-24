@@ -2,18 +2,23 @@ package jmnet.moka.web.rcv.controller;
 
 import com.google.common.base.Charsets;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.sun.istack.Nullable;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.utils.McpString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 /**
@@ -43,13 +48,41 @@ public class MokaLogTailController {
     public static class LogTailerListener extends TailerListenerAdapter {
         final private  ResponseBodyEmitter emitter;
         final private ExecutorService executorService;
-        public LogTailerListener(ResponseBodyEmitter emitter, ExecutorService executorService) {
+        final String include;
+        final String exclude;
+
+        public LogTailerListener(ResponseBodyEmitter emitter, ExecutorService executorService, String include, String exclude) {
             this.emitter = emitter;
             this.executorService = executorService;
+            this.include = include;
+            this.exclude = exclude;
         }
         public void handle(String line) {
             try {
-                this.emitter.send(line + "\n");
+                boolean produce = true;
+                if( !McpString.isNullOrEmpty(this.exclude) ) {
+                    for( String exclude : this.exclude.split(";") ){
+                        if( line.contains(exclude) ) {
+                            produce = false;
+                            break;
+                        }
+                    }
+                }
+
+                if( produce ) {
+                    if( !McpString.isNullOrEmpty(this.include) ) {
+                        produce = false;
+                        for( String include : this.include.split(";") ){
+                            if( line.contains(include) ) {
+                                produce = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if( produce )
+                    this.emitter.send(line + "\n");
             } catch (Exception ignore) {
                 this.emitter.complete();
                 this.executorService.shutdownNow();
@@ -58,17 +91,34 @@ public class MokaLogTailController {
     }
 
     @GetMapping(value = "/logTail")
-    public ResponseBodyEmitter logTail(HttpServletResponse response){
+    public ResponseBodyEmitter logTail(
+            HttpServletRequest request, HttpServletResponse response ){
         response.setContentType("text/plain;charset=UTF-8");
 
+        Map<String, String[]> map = request.getParameterMap();
+
+        String include = null;
+        String exclude = null;
+
+        if( map.containsKey("include")) {
+            String[] value = map.get("include");
+            if( value.length > 0 )
+                include = value[0];
+        }
+        if( map.containsKey("exclude")) {
+            String[] value = map.get("exclude");
+            if( value.length > 0 )
+                exclude = value[0];
+        }
+
         final ResponseBodyEmitter emitter = new ResponseBodyEmitter(this.logTailWaitTime);
-        final ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("logTail-thread-%d").build();
-        final ExecutorService executorService = Executors.newSingleThreadExecutor(namedThreadFactory);
-        final LogTailerListener listener = new LogTailerListener(emitter, executorService);
+        final ExecutorService executorService = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("logTail-thread-%d").build());
 
         final String logFileName = Paths.get(this.logPath, this.logFile).toString();
-        executorService.execute( new Tailer(new File(logFileName), Charsets.UTF_8, listener, 100L, true, true, 4096) );
-
+        executorService.execute(
+                new Tailer(
+                        new File(logFileName), Charsets.UTF_8,
+                        new LogTailerListener(emitter, executorService, include, exclude), 100L, true, true, 4096) );
         return emitter;
     }
 }

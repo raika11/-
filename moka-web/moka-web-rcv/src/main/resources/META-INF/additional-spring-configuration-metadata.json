@@ -239,5 +239,10 @@
       "name": "logging.logTail.waitingtime",
       "type": "java.lang.String",
       "description": "Description for logging.logTail.waitingtime."
+    },
+    {
+      "name": "rcv.taskmanager.allow.ips",
+      "type": "java.lang.String",
+      "description": "Description for rcv.taskmanager.allow.ips."
     }
   ] }

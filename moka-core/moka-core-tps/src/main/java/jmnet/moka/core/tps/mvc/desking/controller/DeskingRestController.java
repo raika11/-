@@ -59,6 +59,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -580,7 +581,7 @@ public class DeskingRestController extends AbstractCommonController {
     public ResponseEntity<?> putDeskingWork(@ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq")
     @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
             @ApiParam("편집기사워크") @Valid DeskingWorkDTO deskingWorkDTO, @ApiParam(hidden = true) Principal principal,
-            @ApiParam("편집영역 일련번호(필수)") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
+            @ApiParam("편집영역 일련번호(필수)") @RequestParam("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq)
             throws InvalidDataException, NoDataException, Exception {
 
         // 데이터 검증
@@ -748,7 +749,7 @@ public class DeskingRestController extends AbstractCommonController {
     public ResponseEntity<?> postDeskingWork(HttpServletRequest request, @ApiParam("컴포넌트워크 일련번호(필수)") @PathVariable("componentWorkSeq")
     @Min(value = 0, message = "{tps.desking.error.min.componentWorkSeq}") Long componentWorkSeq,
             @ApiParam("데이타셋 일련번호(필수)") @PathVariable("datasetSeq") @Min(value = 0, message = "{tps.dataset.error.min.datasetSeq}") Long datasetSeq,
-            @ApiParam("편집영역 일련번호(필수)") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq,
+            @ApiParam("편집영역 일련번호(필수)") @RequestParam("areaSeq") @Min(value = 0, message = "{tps.area.error.min.areaSeq}") Long areaSeq,
             @ApiParam("더미기사") @ModelAttribute @Valid DeskingWorkDTO deskingWorkDTO, @ApiParam(hidden = true) Principal principal)
             throws Exception {
 

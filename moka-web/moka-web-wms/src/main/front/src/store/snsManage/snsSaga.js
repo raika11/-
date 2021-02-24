@@ -14,7 +14,7 @@ function toSaveSnsMeta(data) {
     data.forEach((data) => {
         params[data.snsType] = {
             usedYn: data.usedYn === true ? 'Y' : 'N',
-            reserveDt: data.reserveDt,
+            reserveDt: !commonUtil.isEmpty(data.reserveDt) ? moment(data.reserveDt).format(DB_DATEFORMAT) : data.reserveDt,
             snsPostMsg: data.postMessage,
             imgUrl: data.imgUrl,
             artTitle: data.title,
@@ -218,7 +218,7 @@ function* publishSnsMeta({ type, payload }) {
                         const response = yield call(api.postSnsPublish, {
                             totalId: payload.totalId,
                             message: snsData.snsPostMsg,
-                            reserveDt: snsData.reserveDt,
+                            reserveDt: !commonUtil.isEmpty(snsData.reserveDt) ? moment(snsData.reserveDt).format(DB_DATEFORMAT) : snsData.reserveDt,
                             snsType: snsData.snsType,
                         });
                         if (payload.callback instanceof Function) {

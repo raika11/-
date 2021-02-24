@@ -84,7 +84,7 @@ const BulknListSearchBox = (props) => {
     return (
         <>
             <Form.Row className="mb-14">
-                <Col xs={3} className="p-0 mr-1">
+                <Col xs={3} className="p-0 mr-2">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"

@@ -53,7 +53,7 @@ const TitleForm = ({ show, mappingData, temp, onChange, deskingPart, error }) =>
                                     <MokaInput as="select" size="sm" name="titleSize" value={temp.titleSize} onChange={onChange}>
                                         <option value="">선택</option>
                                         {fontList.map((font, idx) => (
-                                            <option key={idx} value={font.id}>
+                                            <option key={idx} value={font.cdNm}>
                                                 {font.name}
                                             </option>
                                         ))}

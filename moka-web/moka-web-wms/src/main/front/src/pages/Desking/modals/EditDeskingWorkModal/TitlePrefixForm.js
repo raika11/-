@@ -36,7 +36,7 @@ const TitlePrefixForm = ({ show, temp, deskingPart, onChange }) => {
                     <option value="">선택</option>
                     {dsPreRows &&
                         dsPreRows.map((code) => (
-                            <option key={code.id} value={code.id}>
+                            <option key={code.id} value={code.cdNmEtc1}>
                                 {code.name}
                             </option>
                         ))}

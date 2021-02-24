@@ -33,6 +33,6 @@ export const columnDefs = [
         cellClassRules: cellClassRules,
         // suppressKeyboardEvent: suppressKeyboardEvent,
         cellRendererFramework: ({ value }) => <ItemRenderer {...value} />,
-        cellStyle: { fontSize: '12px', lineHeight: '40px', paddingTop: '7px', alignItems: 'center' },
+        cellStyle: { fontSize: '14px', lineHeight: '40px', paddingTop: '7px', alignItems: 'center' },
     },
 ];

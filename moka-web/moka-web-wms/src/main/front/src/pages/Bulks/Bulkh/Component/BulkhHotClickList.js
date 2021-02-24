@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MokaCard } from '@components';
-import { Col, Row, Form, Container, Card } from 'react-bootstrap';
+import { Col, Row, Form, Card } from 'react-bootstrap';
 import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
@@ -130,8 +130,8 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
             let sendDt = send.regDt && send.regDt.length > 10 ? send.regDt.substr(0, 16) : send.regDt;
             let waitDt = wait.regDt && wait.regDt.length > 10 ? wait.regDt.substr(0, 16) : wait.regDt;
             setTopTitleItem({
-                send: send && send.regId ? `${send.regId} | 전송 ${sendDt}` : '',
-                wait: wait && wait.regId ? `${wait.regId} | 대기 ${waitDt}` : '',
+                send: send && send.regMember && send.regMember.memberId ? `${send.regMember.memberId} | 전송 ${sendDt}` : '',
+                wait: wait && wait.regMember && wait.regMember.memberId ? `${wait.regMember.memberId} | 대기 ${waitDt}` : '',
             });
 
             // 현재 url 기준으로 선택되어 있지 않으면 대기 기준으로 최근것을 불러 오기.
@@ -139,7 +139,6 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 dispatch(getHotclickList({ bulkartSeq: wait.bulkartSeq }));
             }
         };
-
         setTopTitle(topTitle);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [topTitle]);
@@ -150,53 +149,36 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 width={380}
                 loading={loading}
                 className={'custom-scroll mr-gutter flex-fill'}
-                footer
                 titleAs={
                     <>
                         <Row>
-                            <Col className="align-self-center justify-content-start" xs={3}>
+                            <Col className="justify-content-start" xs={3}>
                                 {/* <MokaInputLabel label="아티클 핫클릭" labelWidth={90} className="h5" as="none" /> */}
                                 <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
                                     {`아티클 핫클릭`}
                                 </Card.Title>
                             </Col>
-                            <Col className="align-self-center justify-content-end mb-0 p-0" xs={7}>
-                                <Col className="align-self-top justify-content-end text-right">{topTitleItem.send}</Col>
-                                <Col className="align-self-bottom justify-content-end text-right">
+                            <Col xs={7} className="pr-0">
+                                <Col className="align-self-top text-right p-0">{topTitleItem.send}</Col>
+                                <Col className="align-self-bottom text-right p-0">
                                     <Form.Label className="text-danger">{topTitleItem.wait}</Form.Label>
                                 </Col>
                             </Col>
-                            <Col className="align-self-top justify-content-start mb-0 p-0" xs={2}>
-                                <Button variant="outline-neutral" style={{ width: '72px', height: '31px' }} onClick={() => handleClickHistoryModalButton()}>
+                            <Col xs={2} className="pt-1">
+                                <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={() => handleClickHistoryModalButton()}>
                                     편집정보
                                 </Button>
                             </Col>
                         </Row>
                     </>
                 }
-                footerAs={
-                    <>
-                        <Container>
-                            <Row>
-                                <Col xs={2}>
-                                    <Button variant="outline-neutral" onClick={() => handleClickResendButton()}>
-                                        재전송
-                                    </Button>
-                                </Col>
-                                <Col xs={8} className="justify-content-end text-right pr-0">
-                                    <Button variant="positive" onClick={() => handleClickSaveButton('publish')}>
-                                        전송
-                                    </Button>
-                                </Col>
-                                <Col xs={2}>
-                                    <Button variant="positive" onClick={() => handleClickSaveButton('save')}>
-                                        임시저장
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </>
-                }
+                footer
+                footerClassName="justify-content-center"
+                footerButtons={[
+                    { text: '재전송', variant: 'outline-neutral', onClick: () => handleClickResendButton(), className: 'mr-1' },
+                    { text: '전송', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
+                    { text: '임시저장', variant: 'positive', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
+                ]}
             >
                 <Row>
                     <Col className="w-100 text-center">

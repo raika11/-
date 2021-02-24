@@ -96,10 +96,16 @@ public class GenContent {
     private String ftpPassive;
 
     /**
-     * 배포경로
+     * 작업경로
      */
     @Column(name = "TARGET_PATH")
     private String targetPath;
+
+    /**
+     * 작업파일 명
+     */
+    @Column(name = "TARGET_FILE_NAME")
+    private String targetFileName;
 
     /**
      * URL

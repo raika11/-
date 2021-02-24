@@ -66,8 +66,11 @@ public class JobContentSaveDTO implements Serializable {
     @ApiModelProperty("URL")
     private String callUrl;
 
-    @ApiModelProperty("배포경로")
+    @ApiModelProperty("저장경로")
     private String targetPath;
+
+    @ApiModelProperty("저장파일 명")
+    private String targetFileName;
 
     @ApiModelProperty("설명")
     private String jobDesc;

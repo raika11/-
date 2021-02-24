@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.jpod.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PodtyEpisodeVO {
 
     /**
@@ -90,8 +92,6 @@ public class PodtyEpisodeVO {
      */
     @Getter
     private String shareUrl;
-
-
 
     /**
      * 파일 url

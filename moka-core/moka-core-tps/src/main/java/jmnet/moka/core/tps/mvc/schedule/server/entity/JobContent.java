@@ -97,10 +97,16 @@ public class JobContent extends BaseAudit {
     private String ftpPassive;
 
     /**
-     * 배포경로
+     * 저장경로
      */
     @Column(name = "TARGET_PATH")
     private String targetPath;
+
+    /**
+     * 저장파일 명
+     */
+    @Column(name = "TARGET_FILE_NAME")
+    private String targetFileName;
 
     /**
      * URL

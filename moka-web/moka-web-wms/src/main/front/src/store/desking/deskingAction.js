@@ -149,7 +149,8 @@ export const postSavePublishComponentWork = createAction(POST_SAVE_PUBLISH_COMPO
  * 공백 기사 추가
  */
 export const POST_DESKING_WORK = 'desking/POST_DESKING_WORK';
-export const postDeskingWork = createAction(POST_DESKING_WORK, ({ componentWorkSeq, datasetSeq, deskingWork, callback }) => ({
+export const postDeskingWork = createAction(POST_DESKING_WORK, ({ areaSeq, componentWorkSeq, datasetSeq, deskingWork, callback }) => ({
+    areaSeq,
     componentWorkSeq,
     datasetSeq,
     deskingWork,

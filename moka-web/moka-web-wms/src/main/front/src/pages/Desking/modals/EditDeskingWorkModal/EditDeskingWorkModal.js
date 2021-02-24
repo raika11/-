@@ -88,6 +88,8 @@ const EditDeskingWorkModal = (props) => {
 
         // temp -> 리스트 변환 후 루프돌며 mapping의 regex에 따라 error 처리
         Object.keys(temp).forEach((camelKey) => {
+            if (deskingPart.indexOf(camelKey) < 0) return false;
+
             const mappingData = mappingList.find((m) => m.field === camelKey);
             if (!mappingData) return false;
 
@@ -144,10 +146,10 @@ const EditDeskingWorkModal = (props) => {
                 // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
                 setTemp({
                     ...deskingWorkData,
-                    title: unescapeHtmlArticle(deskingWorkData.title || ''),
-                    subTitle: unescapeHtmlArticle(deskingWorkData.subTitle || ''),
-                    bodyHead: unescapeHtmlArticle(deskingWorkData.bodyHead || ''),
-                    nameplate: unescapeHtmlArticle(deskingWorkData.nameplate || ''),
+                    title: unescapeHtmlArticle(deskingWorkData.title),
+                    subTitle: unescapeHtmlArticle(deskingWorkData.subTitle),
+                    bodyHead: unescapeHtmlArticle(deskingWorkData.bodyHead),
+                    nameplate: unescapeHtmlArticle(deskingWorkData.nameplate),
                     irImg,
                 });
             })();

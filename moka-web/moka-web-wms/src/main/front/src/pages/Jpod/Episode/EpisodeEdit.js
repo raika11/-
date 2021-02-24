@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
+import produce from 'immer';
 import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup } from '@components';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaIcon } from '@components';
 import { PodtyEpisodeModal, RepoterModal, PodCastModal } from '@pages/Jpod/JpodModal';
-import { initialState, GET_EPISODES_INFO, getChannelInfo, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
+import { initialState, GET_EPISODES_INFO, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
 import { clearSelectArticleList, selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
@@ -30,18 +33,18 @@ const reporterInit = {
 /**
  * J팟 관리 - 에피소드 등록 / 수정
  */
-const ChannelEdit = ({ match }) => {
+const ChannelEdit = (props) => {
+    const { match } = props;
+    const { chnlSeq, epsdSeq } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
-    const params = useParams();
-    const selectChnlSeq = useRef(null); // URL 채널 값 담아둘 ref
-    const selectEpsdSeq = useRef(null); // url 에 선택된 에피소드 고유값 담아둘곳.
     const imgFileRef1 = useRef(null); // 메타 이미지 ref
     const imgFileRef2 = useRef(null); // 썸네일 이미지 ref
     const [shrImgFile, setShrImgFile] = useState(null); // 선택한 이미지 파일용 스테이트
     const [katalkImgFile, setKatalkImgFile] = useState(null); // 선택한 썸네일 용 이미지 스테이트
 
     const [editData, setEditData] = useState(initialState.episode.episodeInfo); // 기본 에피소드 정보.
+    const [podtyChnlSrl, setPodtyChnlSrl] = useState('');
     const [seasonCnt, setSeasonCnt] = useState(0);
 
     const [podtyEpisodeModalState, setPodtyEpisodeModalState] = useState(false); // 팟티 에피소드 모달 상태용
@@ -54,10 +57,10 @@ const ChannelEdit = ({ match }) => {
     // store 연결
     const channelList = useSelector((store) => store.jpod.episode.channel.list);
     const channelInfo = useSelector((store) => store.jpod.channel.channelInfo);
+    // const search = useSelector((store) => store.jpod.episode.episodes.search);
     const episodeInfo = useSelector((store) => store.jpod.episode.episodeInfo);
     const selectReporter = useSelector((store) => store.jpod.selectReporter);
     const selectPodtyEpisode = useSelector((store) => store.jpod.selectPodtyEpisode);
-    const search = useSelector((store) => store.jpod.episode.episodes.search);
     const selectBrightOvp = useSelector((store) => store.jpod.selectBrightOvp);
     const loading = useSelector((store) => store.loading[GET_EPISODES_INFO]);
 
@@ -94,23 +97,6 @@ const ChannelEdit = ({ match }) => {
         }
     };
 
-    const handleChangeChnl = (e) => {
-        try {
-            const { podtychnlsrl } = e.target.selectedOptions[0].dataset;
-            setEditData({
-                ...editData,
-                podtyChnlSrl: String(podtychnlsrl),
-                chnlSeq: e.target.value,
-            });
-        } catch (err) {
-            setEditData({
-                ...editData,
-                podtyChnlSrl: null,
-                chnlSeq: '',
-            });
-        }
-    };
-
     // 이미지 파일 변경시 해당 스테이트 업데이트.
     const handleChangeFIle = ({ name, file }) => {
         switch (name) {
@@ -133,8 +119,9 @@ const ChannelEdit = ({ match }) => {
         if (!editData.chnlSeq || editData.chnlSeq === '') {
             messageBox.alert('채널을 선택해 주세요.', () => {});
             return;
+        } else {
+            setPodtyEpisodeModalState(true);
         }
-        setPodtyEpisodeModalState(true);
     };
 
     // 진행자(기자) 검색 모달 버튼
@@ -169,7 +156,7 @@ const ChannelEdit = ({ match }) => {
 
         var formData = new FormData();
 
-        const selectChnlSeq = editData.chnlSeq; // 업데이트 시 사용할 에피소트 고유 번호.
+        // const selectChnlSeq = editData.chnlSeq; // 업데이트 시 사용할 에피소트 고유 번호.
 
         // 사용유무
         formData.append(`usedYn`, editData.usedYn); // 사용유무
@@ -265,8 +252,8 @@ const ChannelEdit = ({ match }) => {
 
         dispatch(
             saveJpodEpisode({
-                chnlSeq: selectChnlSeq,
-                epsdSeq: selectEpsdSeq.current === 'add' ? null : selectEpsdSeq.current,
+                chnlSeq: chnlSeq,
+                epsdSeq: epsdSeq,
                 episodeinfo: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
@@ -318,6 +305,25 @@ const ChannelEdit = ({ match }) => {
         } else if (gubun === 'EG') {
             // 게스트일 경우
             setEditSelectEGRepoters(tempList);
+        }
+    };
+
+    // 진행자 행 삭제 버튼
+    const handleClickReporterRowDelete = (gubun, index) => {
+        // 고정 패널 일경우
+        if (gubun === 'CP') {
+            setEditSelectCPRepoters(
+                produce(editSelectCPRepoters, (draft) => {
+                    draft.splice(index, 1);
+                }),
+            );
+        } else if (gubun === 'EG') {
+            // 게스트일 경우
+            setEditSelectEGRepoters(
+                produce(editSelectEGRepoters, (draft) => {
+                    draft.splice(index, 1);
+                }),
+            );
         }
     };
 
@@ -378,59 +384,33 @@ const ChannelEdit = ({ match }) => {
         }
     };
 
-    // 기자 검색 모달 창에서 기자를 선택 하면 store 에 업데이트를 해주고
-    // 스토어가 변경 되면 진행자 스테이트를 업데이트 해줌.
     useEffect(() => {
-        if (selectReporter) {
-            if (selectReporter.selectType === 'CP') {
-                reportCombine(editSelectCPRepoters, setEditSelectCPRepoters);
-            } else if (selectReporter.selectType === 'EG') {
-                reportCombine(editSelectEGRepoters, setEditSelectEGRepoters);
-            }
+        // 최초 로딩시에 에피소드 정보를 가지고 와야 할떄. ( url params가 존재하고, 스토어에 에피소드 정보가 없을 때)
+        if (chnlSeq && epsdSeq && episodeInfo.chnlSeq === '') {
+            dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
         }
-        // 기자 선택 스토어가 변경 되었을 경우만 실행.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectReporter]);
-
-    // 최초 로딩 및 렌더링 직후 진행자 배열을 초기화 해준다.
-    useEffect(() => {
-        setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
-        setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
-
-        dispatch(clearSelectArticleList());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (channelList.indexOf((c) => Number(editData.chnlSeq) === c.chnlSeq) > 0) {
-            const targetIdx = channelList.findIndex((c) => Number(editData.chnlSeq) === c.chnlSeq);
+        // 선택된 채널의 시즌 정보를 가져와 시즌 목록 생성
+        const targetIdx = channelList.findIndex((c) => editData.chnlSeq === c.chnlSeq);
+        if (targetIdx > -1) {
             setSeasonCnt(channelList[targetIdx].seasonCnt);
-            dispatch(getChannelInfo({ chnlSeq: Number(editData.chnlSeq) }));
+            setPodtyChnlSrl(channelList[targetIdx].podtyChnlSrl);
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editData.chnlSeq]);
 
-    // url 이 변경 되었을 경우 처리. ( 에피소드 고유 번호 및 add )
     useEffect(() => {
-        if (selectChnlSeq.current !== params.chnlSeq) {
-            selectChnlSeq.current = params.chnlSeq;
-        }
-
-        if (!isNaN(Number(params.epsdSeq)) && selectEpsdSeq.current !== params.epsdSeq) {
-            selectEpsdSeq.current = params.epsdSeq;
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]);
-
-    // store 에서 에피소드 값이 변경이 되변 정보 스테이트를 업데이트 해준다.
-    useEffect(() => {
+        // store 에서 에피소드 값이 변경이 되변 정보 스테이트를 업데이트 해준다.
         const setBasic = (element) => {
             // 에피소드 기본 데이터.
             setEditData({
                 usedYn: element.usedYn,
                 chnlSeq: element.chnlSeq,
                 podtyEpsdSrl: element.podtyEpsdSrl,
-                podtyChnlSrl: element.podtyChnlSrl,
                 epsdNm: element.epsdNm,
                 epsdMemo: element.epsdMemo,
                 epsdNo: element.epsdNo,
@@ -454,36 +434,36 @@ const ChannelEdit = ({ match }) => {
 
         // 진행자 리스트.
         const setMember = (element) => {
-            const list_cp = element.filter((e) => e.memDiv === 'CP'); // 고정 패널.
+            const listCp = element.filter((e) => e.memDiv === 'CP'); // 고정 패널.
             setEditSelectCPRepoters(
                 reporterCountConst.map((index) => {
                     return {
-                        chnlSeq: list_cp[index] && list_cp[index].chnlSeq ? list_cp[index].chnlSeq : '',
-                        desc: list_cp[index] && list_cp[index].desc ? list_cp[index].desc : '',
-                        epsdSeq: list_cp[index] && list_cp[index].epsdSeq ? list_cp[index].epsdSeq : '',
-                        memDiv: list_cp[index] && list_cp[index].memDiv ? list_cp[index].memDiv : '',
-                        memMemo: list_cp[index] && list_cp[index].memMemo ? list_cp[index].memMemo : '',
-                        memNm: list_cp[index] && list_cp[index].memNm ? list_cp[index].memNm : '',
-                        memRepSeq: list_cp[index] && list_cp[index].memRepSeq ? list_cp[index].memRepSeq : '',
-                        nickNm: list_cp[index] && list_cp[index].nickNm ? list_cp[index].nickNm : '',
-                        seqNo: list_cp[index] && list_cp[index].seqNo ? list_cp[index].seqNo : '',
+                        chnlSeq: listCp[index]?.chnlSeq || '',
+                        desc: listCp[index]?.desc || '',
+                        epsdSeq: listCp[index]?.epsdSeq || '',
+                        memDiv: listCp[index]?.memDiv || '',
+                        memMemo: listCp[index]?.memMemo || '',
+                        memNm: listCp[index]?.memNm || '',
+                        memRepSeq: listCp[index]?.memRepSeq || '',
+                        nickNm: listCp[index]?.nickNm || '',
+                        seqNo: listCp[index]?.seqNo || '',
                     };
                 }),
             );
 
-            const list_eg = element.filter((e) => e.memDiv === 'EG'); // 게스트.
+            const listEg = element.filter((e) => e.memDiv === 'EG'); // 게스트.
             setEditSelectEGRepoters(
                 reporterCountConst.map((index) => {
                     return {
-                        chnlSeq: list_eg[index] && list_eg[index].chnlSeq ? list_eg[index].chnlSeq : '',
-                        desc: list_eg[index] && list_eg[index].desc ? list_eg[index].desc : '',
-                        epsdSeq: list_eg[index] && list_eg[index].epsdSeq ? list_eg[index].epsdSeq : '',
-                        memDiv: list_eg[index] && list_eg[index].memDiv ? list_eg[index].memDiv : '',
-                        memMemo: list_eg[index] && list_eg[index].memMemo ? list_eg[index].memMemo : '',
-                        memNm: list_eg[index] && list_eg[index].memNm ? list_eg[index].memNm : '',
-                        memRepSeq: list_eg[index] && list_eg[index].memRepSeq ? list_eg[index].memRepSeq : '',
-                        nickNm: list_eg[index] && list_eg[index].nickNm ? list_eg[index].nickNm : '',
-                        seqNo: list_eg[index] && list_eg[index].seqNo ? list_eg[index].seqNo : '',
+                        chnlSeq: listEg[index]?.chnlSeq || '',
+                        desc: listEg[index]?.desc || '',
+                        epsdSeq: listEg[index]?.epsdSeq || '',
+                        memDiv: listEg[index]?.memDiv || '',
+                        memMemo: listEg[index]?.memMemo || '',
+                        memNm: listEg[index]?.memNm || '',
+                        memRepSeq: listEg[index]?.memRepSeq || '',
+                        nickNm: listEg[index]?.nickNm || '',
+                        seqNo: listEg[index]?.seqNo || '',
                     };
                 }),
             );
@@ -532,8 +512,39 @@ const ChannelEdit = ({ match }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [episodeInfo]);
 
-    // 브라이트 코브 값이 선택되서 store 가 변경되면 정보창에서 변경 시켜 준다.
     useEffect(() => {
+        // 팟티 에피소드검색 모달에서 선택시 해당 값을 정보창에도 변경 시켜준다.
+        if (Object.keys(selectPodtyEpisode).length > 0) {
+            setEditData({ ...editData, podtyEpsdSrl: selectPodtyEpisode.podtyepsdsrl, epsdNm: selectPodtyEpisode.title, epsdMemo: selectPodtyEpisode.summary });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectPodtyEpisode]);
+
+    useEffect(() => {
+        // 기자 검색 모달 창에서 기자를 선택 하면 store 에 업데이트를 해주고
+        // 스토어가 변경 되면 진행자 스테이트를 업데이트 해줌.
+        if (selectReporter) {
+            if (selectReporter.selectType === 'CP') {
+                reportCombine(editSelectCPRepoters, setEditSelectCPRepoters);
+            } else if (selectReporter.selectType === 'EG') {
+                reportCombine(editSelectEGRepoters, setEditSelectEGRepoters);
+            }
+        }
+        // 기자 선택 스토어가 변경 되었을 경우만 실행.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectReporter]);
+
+    useEffect(() => {
+        // 최초 로딩 및 렌더링 직후 진행자 배열을 초기화 해준다.
+        setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
+        setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
+
+        dispatch(clearSelectArticleList());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // 브라이트 코브 값이 선택되서 store 가 변경되면 정보창에서 변경 시켜 준다.
         if (selectBrightOvp.id && selectBrightOvp.name) {
             setEditData({
                 ...editData,
@@ -542,33 +553,6 @@ const ChannelEdit = ({ match }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectBrightOvp]);
-
-    // 에피소드 리스트에서 채널 선택후 검색 하면 정보 창에도 해당 채널로 변경을 시켜준다 ( 등록 상태 일때)
-    useEffect(() => {
-        if (selectChnlSeq.current === 'add' && editData.chnlSeq !== search.chnlSeq) {
-            setEditData({
-                ...editData,
-                chnlSeq: search.chnlSeq,
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search]);
-
-    // 최초 로딩시에 에피소드 정보를 가지고 와야 할떄. ( url 에 에피소드 정보를 포함하고 페이지를 로딩 할떄..)
-    useEffect(() => {
-        if (selectChnlSeq.current && selectEpsdSeq.current && !isNaN(Number(selectChnlSeq.current)) && !isNaN(Number(selectEpsdSeq.current))) {
-            dispatch(getEpisodesInfo({ chnlSeq: selectChnlSeq.current, epsdSeq: selectEpsdSeq.current }));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // 팟티 에피소드검색 모달에서 선택시 해당 값을 정보창에도 변경 시켜준다.
-    useEffect(() => {
-        if (Object.keys(selectPodtyEpisode).length > 0) {
-            setEditData({ ...editData, podtyEpsdSrl: selectPodtyEpisode.podtyepsdsrl, epsdNm: selectPodtyEpisode.title, epsdMemo: selectPodtyEpisode.summary });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectPodtyEpisode]);
 
     const sortGridSearchFrom = ({ HandleSearchClick, HandleAddClick }) => {
         return (
@@ -592,19 +576,17 @@ const ChannelEdit = ({ match }) => {
         );
     };
 
-    console.log(editData);
-
     return (
         <MokaCard
             className="overflow-hidden flex-fill"
-            title={`에피소드 ${selectChnlSeq.current === 'add' ? '등록' : '수정'}`}
+            title={`에피소드 ${chnlSeq && epsdSeq ? '수정' : '등록'}`}
             loading={loading}
             footer
             footerClassName="justify-content-center"
             footerAs={
                 <>
                     <Button variant="positive" className="mr-1" onClick={handleClickSaveButton}>
-                        {selectChnlSeq.current === 'add' ? '저장' : '수정'}
+                        {chnlSeq && epsdSeq ? '수정' : '저장'}
                     </Button>
                     <Button variant="negative" onClick={handleClickCancleButton}>
                         취소
@@ -629,10 +611,10 @@ const ChannelEdit = ({ match }) => {
                 {/* 채널 선택. */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={handleChangeChnl}>
+                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={handleEditDataChange}>
                             <option value="">채널 전체</option>
                             {channelList.map((item) => (
-                                <option key={item.chnlSeq} value={item.chnlSeq} data-podtychnlsrl={item.podtyChnlSrl}>
+                                <option key={item.chnlSeq} value={item.chnlSeq}>
                                     {item.chnlNm}
                                 </option>
                             ))}
@@ -680,7 +662,7 @@ const ChannelEdit = ({ match }) => {
                 <Form.Row className="mb-2 align-items-center">
                     <div style={{ width: 350 }}>
                         <MokaInputLabel label={`시즌 및 회차`} className="mr-2" as="select" id="sesonCnt" value={seasonCnt} onChange={handleEditDataChange}>
-                            <option value="">시즌 선택</option>
+                            <option value="">{seasonCnt === 0 ? '-' : '시즌 선택'}</option>
                             {seasonCnt > 0 &&
                                 [...Array(seasonCnt)].map((n, idx) => {
                                     return (
@@ -692,7 +674,7 @@ const ChannelEdit = ({ match }) => {
                         </MokaInputLabel>
                     </div>
                     <div style={{ width: 150 }}>
-                        <MokaInputLabel label={`회차`} className="mr-2" name="epsdNo" id="epsdNo" value={editData.epsdNo} onChange={(e) => console.log(e)} />
+                        <MokaInputLabel label={`회차`} className="mr-2" name="epsdNo" id="epsdNo" value={editData.epsdNo} onChange={handleEditDataChange} />
                     </div>
                     <p className="mb-0">마지막 회차: {channelInfo.episodeStat.lastEpsoNo ? `${channelInfo.episodeStat.lastEpsoNo}회` : ''}</p>
                 </Form.Row>
@@ -701,7 +683,6 @@ const ChannelEdit = ({ match }) => {
                         <MokaInputLabel
                             label={`방송일`}
                             as="dateTimePicker"
-                            className="mb-0"
                             name="epsdDate"
                             id="epsdDate"
                             value={editData.epsdDate}
@@ -898,46 +879,67 @@ const ChannelEdit = ({ match }) => {
                     return (
                         <Form.Row className="mb-2" key={index}>
                             <MokaInputLabel label=" " as="none" />
-                            <div className="px-2 flex-fill d-flex flex-column justify-content-center" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
-                                <div className="mb-2 d-flex align-items-center justify-content-between">
-                                    <MokaInputGroup
-                                        name="memRepSeq"
-                                        value={element.memRepSeq}
-                                        onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })}
-                                        placeholder={`ID:`}
-                                        className="mb-2"
-                                        disabled
-                                        append={
+                            <div className="px-2 flex-fill d-flex align-items-center justify-content-center" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
+                                <Col xs={11} className="p-0 d-flex flex-column">
+                                    <div className="mb-2 d-flex align-items-center justify-content-center ">
+                                        <MokaInput
+                                            name="memRepSeq"
+                                            style={{ width: 120 }}
+                                            value={element.memRepSeq}
+                                            onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })}
+                                            placeholder={`ID:`}
+                                            disabled
+                                        />
+                                        <MokaInput
+                                            name="memNm"
+                                            className="mr-2"
+                                            value={element.memNm}
+                                            onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })}
+                                            placeholder={`기자명`}
+                                        />
+                                        <div className="mr-2">
                                             <MokaInput
-                                                name="memNm"
-                                                className="mr-2"
-                                                value={element.memNm}
+                                                name="memMemo"
+                                                value={element.memMemo}
                                                 onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })}
-                                                placeholder={`기자명`}
+                                                placeholder={`직책`}
                                             />
-                                        }
-                                    />
-                                    <div className="mr-2">
-                                        <MokaInput name="memMemo" value={element.memMemo} onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })} placeholder={`직책`} />
+                                        </div>
+                                        <div className="mr-2">
+                                            <MokaInput
+                                                name="nickNm"
+                                                value={element.nickNm}
+                                                onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })}
+                                                placeholder={`닉네임`}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete('CP', index)}>
+                                                삭제
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className="mr-2">
-                                        <MokaInput name="nickNm" value={element.nickNm} onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })} placeholder={`닉네임`} />
+                                    <div className="d-flex">
+                                        <MokaInput name="desc" value={element.desc} onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })} placeholder={`설명`} />
                                     </div>
-                                    <div>
-                                        <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete('CP', index)}>
-                                            삭제
+                                </Col>
+                                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <OverlayTrigger overlay={<Tooltip id="tooltip-table-del-button">삭제</Tooltip>}>
+                                        <Button
+                                            variant="white"
+                                            className="border-0 p-0 moka-table-button bg-transparent shadow-none"
+                                            onClick={() => handleClickReporterRowDelete('CP', index)}
+                                        >
+                                            <MokaIcon iconName="fal-minus-circle" />
                                         </Button>
-                                    </div>
-                                </div>
-                                <div className="d-flex">
-                                    <MokaInput name="desc" value={element.desc} onChange={(e) => handleChangeReporters({ gubun: 'CP', e, index })} placeholder={`설명`} />
+                                    </OverlayTrigger>
                                 </div>
                             </div>
                         </Form.Row>
                     );
                 })}
                 <hr className="vertical-divider" />
-                <Form.Row className="mb-1">
+                <Form.Row className="mb-2">
                     <MokaInputLabel label={`출연진(게스트)`} as="none" />
                     <Button
                         variant="searching"
@@ -958,27 +960,25 @@ const ChannelEdit = ({ match }) => {
                     return (
                         <Form.Row className="mb-2" key={index}>
                             <MokaInputLabel label=" " as="none" />
-                            <Col className="p-0">
-                                <Col className="p-0" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
-                                    <Col className="d-flex w-100 h-50 align-items-center">
-                                        <div style={{ width: '70px' }}>
-                                            <MokaInput
-                                                name="memRepSeq"
-                                                value={element.memRepSeq}
-                                                onChange={(e) => handleChangeReporters({ gubun: 'EG', e, index })}
-                                                placeholder={`기자번호`}
-                                                disabled={true}
-                                            />
-                                        </div>
-                                        <div>
-                                            <MokaInput
-                                                name="memNm"
-                                                value={element.memNm}
-                                                onChange={(e) => handleChangeReporters({ gubun: 'EG', e, index })}
-                                                placeholder={`기자명`}
-                                            />
-                                        </div>
-                                        <div className="pl-3">
+                            <div className="px-2 flex-fill d-flex align-items-center justify-content-center" style={{ backgroundColor: '#f4f7f9', height: '100px' }}>
+                                <Col xs={11} className="p-0 d-flex flex-column">
+                                    <div className="mb-2 d-flex align-items-center justify-content-center ">
+                                        <MokaInput
+                                            name="memRepSeq"
+                                            style={{ width: 120 }}
+                                            value={element.memRepSeq}
+                                            onChange={(e) => handleChangeReporters({ gubun: 'EG', e, index })}
+                                            placeholder={`ID:`}
+                                            disabled
+                                        />
+                                        <MokaInput
+                                            name="memNm"
+                                            className="mr-2"
+                                            value={element.memNm}
+                                            onChange={(e) => handleChangeReporters({ gubun: 'EG', e, index })}
+                                            placeholder={`기자명`}
+                                        />
+                                        <div className="mr-2">
                                             <MokaInput
                                                 name="memMemo"
                                                 value={element.memMemo}
@@ -986,7 +986,7 @@ const ChannelEdit = ({ match }) => {
                                                 placeholder={`직책`}
                                             />
                                         </div>
-                                        <div className="pl-3">
+                                        <div className="mr-2">
                                             <MokaInput
                                                 name="nickNm"
                                                 value={element.nickNm}
@@ -994,19 +994,28 @@ const ChannelEdit = ({ match }) => {
                                                 placeholder={`닉네임`}
                                             />
                                         </div>
-                                        <div className="pl-3">
+                                        <div>
                                             <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete('EG', index)}>
                                                 삭제
                                             </Button>
                                         </div>
-                                    </Col>
-                                    <Col xs={12} className="p-0 h-50 d-flex align-items-center">
-                                        <Col xs={12}>
-                                            <MokaInput name="desc" value={element.desc} onChange={(e) => handleChangeReporters({ gubun: 'EG', e, index })} placeholder={`설명`} />
-                                        </Col>
-                                    </Col>
+                                    </div>
+                                    <div className="d-flex">
+                                        <MokaInput name="desc" value={element.desc} onChange={(e) => handleChangeReporters({ gubun: 'EG', e, index })} placeholder={`설명`} />
+                                    </div>
                                 </Col>
-                            </Col>
+                                <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <OverlayTrigger overlay={<Tooltip id="tooltip-table-del-button">삭제</Tooltip>}>
+                                        <Button
+                                            variant="white"
+                                            className="border-0 p-0 moka-table-button bg-transparent shadow-none"
+                                            onClick={() => handleClickReporterRowDelete('EG', index)}
+                                        >
+                                            <MokaIcon iconName="fal-minus-circle" />
+                                        </Button>
+                                    </OverlayTrigger>
+                                </div>
+                            </div>
                         </Form.Row>
                     );
                 })}
@@ -1023,7 +1032,7 @@ const ChannelEdit = ({ match }) => {
             {/* 팟티 에피소드 검색 */}
             <PodtyEpisodeModal
                 show={podtyEpisodeModalState}
-                podtyChnlSrl={editData.podtyChnlSrl}
+                podtyChnlSrl={podtyChnlSrl}
                 onHide={() => {
                     setPodtyEpisodeModalState(false);
                 }}

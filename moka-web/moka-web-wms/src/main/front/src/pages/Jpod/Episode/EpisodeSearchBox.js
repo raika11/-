@@ -14,7 +14,8 @@ import toast from '@utils/toastUtil';
 /**
  * J팟 관리 - 에피소드 리스트 검색
  */
-const EpisodeSearchBox = ({ match }) => {
+const EpisodeSearchBox = (props) => {
+    const { match } = props;
     const history = useHistory();
     const dispatch = useDispatch();
     const storeSearch = useSelector((store) => store.jpod.episode.episodes.search);
@@ -51,8 +52,8 @@ const EpisodeSearchBox = ({ match }) => {
 
     // 등록 버튼 클릭.
     const handleNewButton = () => {
-        history.push(`${match.path}/add`);
         dispatch(clearEpisodeInfo());
+        history.push(`${match.path}/add`);
     };
 
     // 최초 로딩시 목록 가져오기.
@@ -86,7 +87,7 @@ const EpisodeSearchBox = ({ match }) => {
     return (
         <Form className="mb-14">
             <Form.Row className="mb-2">
-                <Col className="p-0 pr-2" xs={2}>
+                <Col className="p-0 pr-2" xs={3}>
                     <MokaInput as="select" name="chnlSeq" id="chnlSeq" value={searchData.chnlSeq} onChange={handleSearchChange}>
                         <option value="">채널 전체</option>
                         {channelList.map((item) => (
@@ -127,9 +128,9 @@ const EpisodeSearchBox = ({ match }) => {
                         }}
                     />
                 </Col>
-                <Col className="p-0 pr-2" xs={1}>
-                    <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={handleSearchChange}>
-                        <option value="">전체</option>
+                <Col className="p-0 d-flex" xs={2}>
+                    <MokaInput as="select" className="mr-2" name="usedYn" id="useYn" value={searchData.usedYn} onChange={handleSearchChange}>
+                        <option value="">사용 여부 전체</option>
                         {selectItem.usedYn.map((item, index) => (
                             <option key={index} value={item.value}>
                                 {item.name}
@@ -137,28 +138,23 @@ const EpisodeSearchBox = ({ match }) => {
                         ))}
                     </MokaInput>
                 </Col>
-                <Col className="p-0" xs={1}>
-                    <Button className="w-100" variant="outline-neutral" onClick={handleClickSearchResetButton}>
-                        초기화
-                    </Button>
-                </Col>
+                <Button variant="outline-neutral" onClick={handleClickSearchResetButton}>
+                    초기화
+                </Button>
             </Form.Row>
-            <Form.Row className="justify-content-between">
-                <Col className="p-0" xs={9}>
-                    <MokaSearchInput
-                        id="keyword"
-                        name="keyword"
-                        placeholder={'에피소드명 / 태그를 입력해 주세요'}
-                        value={searchData.keyword}
-                        onChange={handleSearchChange}
-                        onSearch={handleClickSearchButton}
-                    />
-                </Col>
-                <Col className="p-0 text-right" xs={3}>
-                    <Button variant="positive" onClick={handleNewButton}>
-                        에피소드 등록
-                    </Button>
-                </Col>
+            <Form.Row>
+                <MokaSearchInput
+                    id="keyword"
+                    className="mr-1 flex-fill"
+                    name="keyword"
+                    placeholder={'에피소드명 / 태그를 입력해 주세요'}
+                    value={searchData.keyword}
+                    onChange={handleSearchChange}
+                    onSearch={handleClickSearchButton}
+                />
+                <Button variant="positive" onClick={handleNewButton}>
+                    에피소드 등록
+                </Button>
             </Form.Row>
         </Form>
     );

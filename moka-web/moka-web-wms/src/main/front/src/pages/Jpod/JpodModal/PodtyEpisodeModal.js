@@ -8,8 +8,8 @@ import { GET_PODTY_EPISODE_LIST, getPodtyEpisodeList, selectPodtyEpisode, change
  * 팟티 에피소드 검색 모달.
  */
 const PodtyEpisodeModal = (props) => {
-    const dispatch = useDispatch();
     const { show, onHide, podtyChnlSrl } = props;
+    const dispatch = useDispatch();
     const [rowData, setRowData] = useState([]);
 
     const list = useSelector((store) => store.jpod.podtyEpisode.list);
@@ -43,7 +43,7 @@ const PodtyEpisodeModal = (props) => {
 
     // 모달창이 열리면 팟티 목록 가져오고, 닫으면 목록 초기화.
     useEffect(() => {
-        if (show === true) {
+        if (show) {
             // dispatch(clearPodtyEpisode());
             dispatch(getPodtyEpisodeList());
         }

@@ -27,28 +27,21 @@ const JpodEpisode = ({ match }) => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            {/* 리스트 */}
-            {/* <Switch>
-                <Route
-                    path={[`${match.path}`, `${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
-                    exact
-                    render={() => ( */}
             <Suspense>
                 <EpisodeList match={match} />
             </Suspense>
-            {/* )}
-                />
-            </Switch> */}
 
             {/* 등록 / 수정 */}
             <Switch>
-                <Suspense>
-                    <Route
-                        path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
-                        exact
-                        render={(props) => <EpisodeEdit {...props} match={match} />}
-                    />
-                </Suspense>
+                <Route
+                    path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
+                    exact
+                    render={(props) => (
+                        <Suspense>
+                            <EpisodeEdit {...props} match={match} />
+                        </Suspense>
+                    )}
+                />
             </Switch>
         </div>
     );

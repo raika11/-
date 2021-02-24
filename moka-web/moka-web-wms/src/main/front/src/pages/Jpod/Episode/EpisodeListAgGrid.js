@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { columnDefs } from './EpisodeListAgGridColumns';
 import { clearSelectArticleList } from '@store/survey/quiz';
@@ -11,12 +11,12 @@ import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getChannelInfo, 
  */
 const EpisodeListAgGrid = ({ match }) => {
     const dispatch = useDispatch();
-    const params = useParams();
     const history = useHistory();
     // 스토어 연결.
     const total = useSelector((store) => store.jpod.episode.episodes.total);
     const search = useSelector((store) => store.jpod.episode.episodes.search);
     const list = useSelector((store) => store.jpod.episode.episodes.list);
+    const episodeInfo = useSelector((store) => store.jpod.episode.episodeInfo);
     const loading = useSelector((store) => store.loading[GET_EPISODES]);
 
     // const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
@@ -24,10 +24,12 @@ const EpisodeListAgGrid = ({ match }) => {
 
     // 목록 클릭 했을때.
     const handleClickListRow = ({ chnlSeq, epsdSeq }) => {
-        history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
+        if (chnlSeq !== episodeInfo.chnlSeq) {
+            dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+        }
         dispatch(clearSelectArticleList());
         dispatch(getEpisodesInfo({ chnlSeq: chnlSeq, epsdSeq: epsdSeq }));
-        dispatch(getChannelInfo({ chnlSeq: chnlSeq }));
+        history.push(`${match.path}/${chnlSeq}/${epsdSeq}`);
     };
 
     // grid 에서 상태 변경시 리스트를 가지고 오기.
@@ -56,7 +58,7 @@ const EpisodeListAgGrid = ({ match }) => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            selected={params.epsdSeq}
+            selected={episodeInfo.epsdSeq}
         />
     );
 };

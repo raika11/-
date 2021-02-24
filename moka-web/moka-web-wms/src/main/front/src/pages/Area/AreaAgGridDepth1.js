@@ -11,7 +11,8 @@ import columnDefs from './AreaAgGridColumns';
 /**
  * 편집영역 > 첫번째 리스트
  */
-const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, sourceCode, setSourceCode, onDelete, flag, listDepth1, setListDepth1 }) => {
+const AreaAgGridDepth1 = (props) => {
+    const { areaDepth1, setAreaDepth1, sourceCode, setSourceCode, onDelete, flag, listDepth1, setListDepth1, setListDepth2, setListDepth3 } = props;
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [gridInstance, setGridInstance] = useState(null);
@@ -72,6 +73,16 @@ const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, sourceCode, setSourceCode
     };
 
     /**
+     * sourceCode 변경
+     */
+    const changeSourceCode = (e) => {
+        setSourceCode(e.target.value);
+        // depth2, 3 리스트 초기화
+        setListDepth2([]);
+        setListDepth3([]);
+    };
+
+    /**
      * 순서 바꿔서 저장
      */
     const handleChangeOrd = () => {
@@ -113,7 +124,7 @@ const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, sourceCode, setSourceCode
         <React.Fragment>
             <MokaCard header={false} width={280} className="mr-10" bodyClassName="d-flex flex-column">
                 <div className="mb-14">
-                    <MokaInput as="select" value={sourceCode} onChange={(e) => setSourceCode(e.target.value)}>
+                    <MokaInput as="select" value={sourceCode} onChange={changeSourceCode}>
                         {AREA_HOME.map(({ name, value }) => (
                             <option key={value} value={value}>
                                 {name}

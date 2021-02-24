@@ -124,12 +124,9 @@ const Area = () => {
                     setFlag({ ...flag, depth2: nt, depth3: nt });
                 }}
                 listDepth1={listDepth1}
-                // setListDepth1={(list) => {
-                //     setListDepth1(list);
-                //     setListDepth2([]);
-                //     setListDepth3([]);
-                // }}
                 setListDepth1={setListDepth1}
+                setListDepth2={setListDepth2}
+                setListDepth3={setListDepth3}
                 flag={flag}
                 onDelete={handleClickDelete}
             />

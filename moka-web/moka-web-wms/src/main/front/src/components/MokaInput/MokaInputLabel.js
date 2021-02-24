@@ -35,7 +35,7 @@ const propTypes = {
      * none -> label만 그림 (input 없음),
      * 나머지 타입은 MokaInput 확인
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'none', 'autocomplete', 'dateTimePicker']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'file', 'imageFile', 'none', 'autocomplete', 'dateTimePicker']),
 };
 const defaultProps = {
     label: null,

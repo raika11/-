@@ -4,36 +4,30 @@
 
 .rdt {
     position: relative;
-}
-.rdtPicker {
-    display: none;
-    position: fixed;
-    padding: 4px;
-    margin-top: 1px;
-    z-index: 99;
-    background: $white;
-    width: auto;
-    min-width: 270px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: $box-shadow-lg;
-    border-radius: $border-radius;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-}
-.is-not-position-center .rdtPicker {
-    position: absolute;
-    top: 31px;
-    left: 0;
-    transform: none;
-}
 
-.is-not-position-center.right .rdtPicker {
-    position: absolute;
-    top: 31px;
-    left: initial;
-    right: 0;
-    transform: none;
+    .rdtPicker {
+        display: none;
+        position: absolute;
+        width: 250px;
+        padding: 4px;
+        margin-top: 1px;
+        z-index: 99;
+        background: $white;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: $border-radius;
+        box-shadow: $box-shadow-lg;
+    }
+
+    &.center-fixed .rdtPicker {
+        position: fixed;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+    }
+
+    &.right .rdtPicker {
+        right: 0px;
+    }
 }
 
 .rdtOpen .rdtPicker {

@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 // import { useDispatch } from 'react-redux';
 import produce from 'immer';
 import { Helmet } from 'react-helmet';
-import InputMask from 'react-input-mask';
 import { useForm } from 'react-hook-form';
 import toast, { messageBox } from '@/utils/toastUtil';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -16,8 +13,6 @@ import Carousel from 'react-bootstrap/Carousel';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import {
-    MokaPrependLinkInput,
-    MokaDateTimePicker,
     MokaIconTabs,
     MokaCard,
     MokaAlertWithButtons,
@@ -30,7 +25,6 @@ import {
     MokaModal,
     MokaCardTabs,
     NewIcon,
-    MokaInputLabel,
 } from '@components';
 import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { SourceSelector } from '@pages/commons';
@@ -38,13 +32,11 @@ import { SourceSelector } from '@pages/commons';
 import { options } from './data';
 import bg from '@assets/images/bg.jpeg';
 import ThemeEx from './ThemeEx';
+import InputEx from './InputEx';
 
 const Dashboard = () => {
     const { register, handleSubmit, errors, control } = useForm();
-
-    // state
     const [expansionState, setExpansionState] = useState([true, false, true]);
-    const [checked, setChecked] = useState(true);
     const [multiSelectValue, setMultiSelectValue] = useState([]);
     const [serror, setSerror] = useState(false);
     const [hookData, setHookData] = useState({});
@@ -183,196 +175,14 @@ const Dashboard = () => {
                     className="mr-gutter"
                     fill
                     tabs={[
-                        <Form>
+                        <div>
                             {/* 테마 예제 */}
                             <ThemeEx />
-                        </Form>,
-                        <Form>
-                            {/* Form 예제 */}
-                            {/* text input */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>1) 기본 텍스트 인풋</Form.Label>
-                                <Form.Control placeholder="입력창입니다" />
-                            </Form.Group>
-
-                            {/* inline text input */}
-                            <Form.Group as={Row} className="mb-2">
-                                <Col xs={2} className="p-0 pr-2">
-                                    <Form.Label>* 인라인1</Form.Label>
-                                </Col>
-                                <Col xs={10} className="p-0">
-                                    <Form.Control placeholder="입력창입니다" />
-                                </Col>
-                            </Form.Group>
-
-                            <Form.Row className="mb-3">
-                                <Form.Label column xs={2} className="p-0 pr-2">
-                                    * 인라인2
-                                </Form.Label>
-                                <Col xs={10} className="p-0">
-                                    <Form.Control placeholder="입력창입니다" />
-                                </Col>
-                            </Form.Row>
-
-                            {/* textarea */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>2) Textarea</Form.Label>
-                                <Form.Control as="textarea" />
-                            </Form.Group>
-
-                            {/* select */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>3) Select</Form.Label>
-                                <Form.Control as="select" className="mb-1">
-                                    <option value="">기본 셀렉트</option>
-                                    <option>옵션1</option>
-                                    <option>옵션2</option>
-                                </Form.Control>
-                                <Form.Control as="select" custom className="mb-1">
-                                    <option value="">커스텀 셀렉트</option>
-                                    <option>옵션1</option>
-                                    <option>옵션2</option>
-                                </Form.Control>
-                                {/* <MokaAutocomplete options={options} /> */}
-                            </Form.Group>
-
-                            {/* checkbox */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>4) Checkbox</Form.Label>
-                                <Form.Check label="default checkbox" type="checkbox" name="checkbox-test" />
-                                <Form.Check label="default checkbox2" type="checkbox" name="checkbox-test" checked={checked} onChange={() => setChecked(!checked)} />
-                                <Form.Check custom id="c-c-t" checked={checked} onChange={() => setChecked(!checked)} label="커스텀(id 필수)" />
-                            </Form.Group>
-
-                            {/* radiobutton */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>5) Radiobutton</Form.Label>
-                                <Form.Check type="radio" label="default radio" name="radio" />
-                                <Form.Check type="radio" label="default radio2" name="radio" />
-                                <Form.Check custom type="radio" name="radio" id="c-r" label="커스텀(id 필수)" />
-                            </Form.Group>
-
-                            {/* Switch */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>6) Switch (기본이 custom)</Form.Label>
-                                <Form.Check type="switch" label="default check" id="custom-switch" />
-                                <Form.Check type="switch" label="default check" id="d-custom-switch" disabled />
-                            </Form.Group>
-
-                            {/* File */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>7) 파일</Form.Label>
-                                <Form.File id="custom-file" label="Custom file input" custom />
-                            </Form.Group>
-
-                            {/* Input Mask */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>8) InputMask</Form.Label>
-                                <InputMask mask="(999) 9999-9999">{(inputProps) => <Form.Control {...inputProps} />}</InputMask>
-                            </Form.Group>
-
-                            {/* 달력 */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>9) Datetime picker</Form.Label>
-                                <Form.Row className="mb-3">
-                                    <Col xs={12} className="d-flex align-items-center p-0">
-                                        <MokaInputLabel label="기본 달력" labelWidth={200} as="dateTimePicker" className="w-100" placeholder="날짜를 선택해주세요" />
-                                    </Col>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Form.Label>
-                                        <h2>9-0) 기본 설정</h2>
-                                        <br />- 검색 및 상세 Container 내의 달력 Component는 아래 9-1에 정의된 클래스(is-not-position-center)를 추가한다.
-                                        <br />- 검색 및 상세 Container 내의 달력 Component는 아래 9-2에 정의된 props의 옵션을 true로 설정한다.
-                                        <br />- 단, 시간을 선택하는 달력 Component가 있을 경우 9-2에 정의된 props를 적용하지 않는다.
-                                        <br />- 검색 및 상세 Container 내의 달력을 이용할 경우 상황에 따라 오른쪽으로 위치로 조정해 준다(right 클래스 추가).
-                                        <br />- 오른쪽으로 위치를 조정해야 하는 상황의 예: 달력이 부모 Container를 넘어서 가로 스크롤이 생기는 경우
-                                    </Form.Label>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Form.Label>
-                                        9-1) 달력 위치 조정
-                                        <br />- 해당 컴포넌트에 is-not-position-center class를 추가해준다
-                                        <br />- 날짜입력창의 우측에 표기할 경우 right class도 추가해 준다.
-                                        <br />- ex) className="is-not-position-center right"
-                                    </Form.Label>
-                                </Form.Row>
-                                <Form.Row className="mb-3">
-                                    <Col xs={12} className="d-flex align-items-center p-0">
-                                        <MokaInputLabel
-                                            label="9-1-1) 날짜 입력창 하단 좌측"
-                                            labelWidth={200}
-                                            as="dateTimePicker"
-                                            className="w-100 is-not-position-center"
-                                            placeholder="날짜를 선택해주세요"
-                                            onChange={(date) => {
-                                                console.log(date);
-                                            }}
-                                            timeFormat={false}
-                                        />
-                                    </Col>
-                                </Form.Row>
-                                <Form.Row className="mb-3">
-                                    <Col xs={12} className="d-flex align-items-center p-0">
-                                        <MokaInputLabel
-                                            label="9-1-2) 날짜 입력창 하단 우측"
-                                            labelWidth={200}
-                                            as="dateTimePicker"
-                                            className="w-100 is-not-position-center right"
-                                            placeholder="날짜를 선택해주세요"
-                                            onChange={(date) => {
-                                                console.log(date);
-                                            }}
-                                            timeFormat={false}
-                                        />
-                                    </Col>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Form.Label>
-                                        9-2) 날짜 선택 이후 달력 닫기
-                                        <br />- 해당 컴포넌트에 closeOnSelect props를 전달해 준다 true일 경우 닫기 false일 경우 창 유지
-                                        <br />- default: false
-                                    </Form.Label>
-                                </Form.Row>
-                                <Form.Row className="mb-3">
-                                    <Col xs={12} className="d-flex align-items-center p-0">
-                                        <MokaInputLabel
-                                            label="9-2-1) 날짜 선택 이후 달력 닫기"
-                                            labelWidth={200}
-                                            as="dateTimePicker"
-                                            className="w-100"
-                                            placeholder="날짜를 선택해주세요"
-                                            onChange={(date) => {
-                                                console.log(date);
-                                            }}
-                                            closeOnSelect={true}
-                                            timeFormat={false}
-                                        />
-                                    </Col>
-                                </Form.Row>
-                                <MokaDateTimePicker className="mb-3" dateFormat={false} />
-                                <MokaDateTimePicker className="mb-3" timeFormat={false} />
-                            </Form.Group>
-
-                            {/* 앞에 뭐 들어가는 input */}
-                            <Form.Group className="mb-2">
-                                <Form.Label>10) Input Group</Form.Label>
-                                <MokaPrependLinkInput
-                                    className="mb-3"
-                                    to="/404"
-                                    linkText="ID : 3"
-                                    inputList={[
-                                        {
-                                            placeholder: '템플릿위치그룹',
-                                            disabled: true,
-                                            className: 'bg-white',
-                                        },
-                                        { placeholder: '템플릿명', disabled: true },
-                                    ]}
-                                />
-                                {/* <MokaSearchInput variant="warning" onSearch={() => toast.success('성공')} /> */}
-                            </Form.Group>
-                        </Form>,
+                        </div>,
+                        <div>
+                            {/* Input 예제 */}
+                            <InputEx />
+                        </div>,
                         <div>
                             {/* 점보트론 */}
                             <Form.Label>11) Jumbotron</Form.Label>
@@ -405,7 +215,7 @@ const Dashboard = () => {
                             </Carousel>
                         </div>,
                     ]}
-                    tabNavs={['테마 색상', 'input 예제', '점보트론', '캐러셀']}
+                    tabNavs={['테마 색상', 'Input 예제', '점보트론', '캐러셀']}
                 />
 
                 {/* 탭 예제 */}

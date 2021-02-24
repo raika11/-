@@ -25,12 +25,13 @@ export const propTypes = {
      * switch -> react-bootstrap/Form.Check
      * checkbox -> react-bootstrap/Form.Check
      * textarea -> react-bootstrap/Form.Control
+     * file -> react-bootstrap/Form.File
      * imageFile -> MokaImageInput
      * autocomplete -> MokaAutocomplete
      * dateTimePicker -> MokaDateTimePicker
      * ---------------------------------------------------------------------------------------------
      */
-    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'imageFile', 'autocomplete', 'dateTimePicker']),
+    as: PropTypes.oneOf(['input', 'select', 'radio', 'switch', 'checkbox', 'textarea', 'file', 'imageFile', 'autocomplete', 'dateTimePicker']),
     /**
      * input의 type
      */
@@ -208,6 +209,10 @@ const MokaInput = forwardRef((props, ref) => {
         Type = Form.Check;
         contextProps = { ...contextProps, type: as };
     }
+    // 파일
+    else if (as === 'file') {
+        Type = Form.File;
+    }
     // imageFile(드롭가능한 이미지 파일)
     else if (as === 'imageFile') {
         Type = MokaImageInput;
@@ -221,7 +226,7 @@ const MokaInput = forwardRef((props, ref) => {
     // dateTimePicker
     else if (as === 'dateTimePicker') {
         Type = MokaDateTimePicker;
-        contextProps = { ...contextProps, className, placeholder, closeOnSelect };
+        contextProps = { closeOnSelect, ...contextProps, className, placeholder };
     }
     // 기본 input
     else {

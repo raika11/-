@@ -146,7 +146,7 @@ const EditGrpModal = ({ show, onHide, grpCd }) => {
      * 그룹코드 삭제
      */
     const handleClickDelete = () => {
-        messageBox.confirm('선택하신 그룹코드의 하위 코드도 전부 삭제됩니다.\n그룹코드을 삭제하시겠습니까?', () => {
+        messageBox.confirm('선택하신 그룹코드의 하위 코드도 전부 삭제됩니다.\n그룹코드를 삭제하시겠습니까?', () => {
             dispatch(
                 deleteGrp({
                     seqNo: grp.seqNo,

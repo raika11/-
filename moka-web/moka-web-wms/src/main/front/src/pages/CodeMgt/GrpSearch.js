@@ -84,7 +84,7 @@ const GrpSearch = () => {
                     id="secret-check"
                     name="secretYn"
                     onChange={handleChangeValue}
-                    inputProps={{ label: '숨김 코드', custom: true, checked: search.secretYn === 'all' }}
+                    inputProps={{ label: '숨김 여부', custom: true, checked: search.secretYn === 'all' }}
                 />
                 <Button variant="positive" onClick={handleAddClick}>
                     그룹 등록

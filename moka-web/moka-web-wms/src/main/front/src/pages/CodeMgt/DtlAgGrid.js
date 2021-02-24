@@ -53,24 +53,26 @@ const DtlAgGrid = ({ grpCd }) => {
     useEffect(() => {
         setRowData(
             list.map((data) => {
-                const worker = data.modMember
+                const [workInfo, worker] = data.modDt
                     ? ((data) => {
                           let w = `${data.modMember?.memberNm || ''}`;
-                          if (data.modMember?.memberId) {
-                              w += `(${data.modMember?.memberId || ''})`;
-                          }
-                          return w;
+                          w += data.modMember?.memberId ? `(${data.modMember?.memberId})` : '';
+                          let winfo = w + '\n';
+                          winfo += (data.modDt || '').slice(0, -3);
+                          return [winfo, w];
                       })(data)
                     : ((data) => {
-                          let w = `${data.regMember?.memberNm || ''}`;
-                          if (data.regMember?.memberId) {
-                              w += `(${data.regMember?.memberId || ''})`;
-                          }
-                          return w;
+                          //   let w = `${data.regMember?.memberNm || ''}`;
+                          //   w += data.regMember?.memberId ? `(${data.regMember?.memberId})` : '';
+                          //   let winfo = w + '\n';
+                          //   winfo += (data.regDt || '').slice(0, -3);
+                          //   return [winfo, w];
+                          return ['', ''];
                       })(data);
 
                 return {
                     ...data,
+                    workInfo,
                     worker,
                     grpCd: grpCd,
                 };
@@ -84,6 +86,8 @@ const DtlAgGrid = ({ grpCd }) => {
             <MokaTable
                 className="overflow-hidden flex-fill"
                 columnDefs={columnDefs}
+                rowHeight={43}
+                headerHeight={50}
                 rowData={rowData}
                 onRowNodeId={(dtl) => dtl.seqNo}
                 onRowClicked={handleRowClicked}

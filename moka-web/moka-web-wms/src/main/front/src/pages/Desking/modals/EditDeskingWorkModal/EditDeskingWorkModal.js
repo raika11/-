@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { messageBox } from '@utils/toastUtil';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { GET_BULK_CHAR, GET_DS_FONT_IMGD, GET_DS_FONT_IMGW, GET_DS_FONT_VODD, GET_DS_ICON, GET_DS_PRE, GET_DS_PRE_LOC, GET_DS_TITLE_LOC } from '@store/codeMgt';
 import { PUT_DESKING_WORK, POST_DESKING_WORK } from '@store/desking';
 import { MokaModal } from '@components';
@@ -143,6 +144,10 @@ const EditDeskingWorkModal = (props) => {
                 // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
                 setTemp({
                     ...deskingWorkData,
+                    title: unescapeHtmlArticle(deskingWorkData.title || ''),
+                    subTitle: unescapeHtmlArticle(deskingWorkData.subTitle || ''),
+                    bodyHead: unescapeHtmlArticle(deskingWorkData.bodyHead || ''),
+                    nameplate: unescapeHtmlArticle(deskingWorkData.nameplate || ''),
                     irImg,
                 });
             })();
@@ -235,7 +240,7 @@ const EditDeskingWorkModal = (props) => {
                 }
                 // 그 외
                 else if (mappingData) {
-                    return <TextForm key={partKey} unescape={partKey === 'BODY_HEAD'} mappingData={mappingData} temp={temp} onChange={handleChangeValue} error={error} />;
+                    return <TextForm key={partKey} mappingData={mappingData} temp={temp} onChange={handleChangeValue} error={error} />;
                 } else {
                     return null;
                 }

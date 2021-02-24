@@ -83,7 +83,10 @@ public class BulkRepositorySupportImpl extends TpsQueryDslRepositorySupport impl
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        QueryResults<Bulk> list = query.fetchResults();
+        QueryResults<Bulk> list = query
+                .leftJoin(qBulk.regMember)
+                .fetchJoin()
+                .fetchResults();
         return new PageImpl<Bulk>(list.getResults(), pageable, list.getTotal());
     }
 

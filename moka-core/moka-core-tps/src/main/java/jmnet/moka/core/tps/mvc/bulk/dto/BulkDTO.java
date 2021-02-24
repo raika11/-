@@ -95,7 +95,7 @@ public class BulkDTO implements Serializable {
     private Date regDt;
 
     /**
-     * varchar  30  YES 등록자정보
+     * 등록자정보
      */
     @ApiModelProperty(hidden = true)
     private MemberSimpleInfo regMember;

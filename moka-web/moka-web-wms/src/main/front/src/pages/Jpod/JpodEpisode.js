@@ -28,23 +28,23 @@ const JpodEpisode = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <Switch>
+            {/* <Switch>
                 <Route
                     path={[`${match.path}`, `${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
                     exact
-                    render={() => (
-                        <Suspense>
-                            <EpisodeList match={match} />
-                        </Suspense>
-                    )}
+                    render={() => ( */}
+            <Suspense>
+                <EpisodeList match={match} />
+            </Suspense>
+            {/* )}
                 />
-            </Switch>
+            </Switch> */}
 
-            {/* 등록 / 수정창 */}
+            {/* 등록 / 수정 */}
             <Switch>
                 <Suspense>
                     <Route
-                        path={[`${match.path}/:chnlSeq/:epsdSeq`, `${match.path}/:chnlSeq`, `${match.path}/add`]}
+                        path={[`${match.path}/add`, `${match.path}/:chnlSeq`, `${match.path}/:chnlSeq/:epsdSeq`]}
                         exact
                         render={(props) => <EpisodeEdit {...props} match={match} />}
                     />

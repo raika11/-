@@ -1,5 +1,6 @@
 package jmnet.moka.web.schedule.support.schedule;
 
+import com.google.common.io.Closeables;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
@@ -13,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * <pre>
@@ -84,7 +88,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     public abstract void invoke();
 
     /**
-     * rss 문자열을 받아 ftp 서버로 전송한다.
+     * rss 문자열을 받아 ftp 서버 / nd 로 전송한다.
      *
      * @param rss
      * @return
@@ -99,31 +103,42 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
         log.debug("before rss upload : {}", scheduleInfo.getJobSeq());
         log.debug("before rss upload : {}", scheduleInfo.getSendType());
-        log.debug("before rss upload : {}", scheduleInfo.getCallUrl());
+        log.debug("before rss upload : {}", scheduleInfo.getGenTarget().getServerIp());
         log.debug("before rss upload : {}", scheduleInfo.getFtpPassive());
         log.debug("before rss upload : {}", scheduleInfo.getFtpPort());
         log.debug("before rss upload : {}", scheduleInfo.getTargetPath());
+        log.debug("before rss upload : {}", scheduleInfo.getTargetFileName());
 
         boolean result = false;
 
         if(scheduleInfo.getSendType() != null && scheduleInfo.getSendType().equals("FTP")){
-            result = testFtp(rss);
+            result = uploadFtpString(rss);
         }
 
         return result;
     }
 
-    private boolean testFtp(String rss){
+
+    /**
+     * rss 문자열을 받아 파일 생성 + FTP 서버에 업로드실행
+     *
+     * @param rss
+     * @return true/false
+     */
+    private boolean uploadFtpString(String rss){
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        FileInputStream fis = null;
 
         try{
             FTPClient ftpClient = new FTPClient();
             //Passive Mode (ftp서버가 기본포트가 아닌 경우)
             if(scheduleInfo.getFtpPassive() != null && scheduleInfo.getFtpPassive().equals("Y")){
-                ftpClient.connect(scheduleInfo.getCallUrl(), Math.toIntExact(scheduleInfo.getFtpPort()));
+                ftpClient.connect(scheduleInfo.getGenTarget().getServerIp(), Math.toIntExact(scheduleInfo.getFtpPort()));
                 ftpClient.enterLocalPassiveMode();
             }
             else{
-                ftpClient.connect(scheduleInfo.getCallUrl());
+                ftpClient.connect(scheduleInfo.getGenTarget().getServerIp());
             }
 
             //FTP 연결성공
@@ -142,17 +157,19 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 //File tempFile = File.createTempFile("test",".rss", new File("c:\\Temp"));
 
                 //임시파일에 RSS 스트링 데이터 입력
-                FileWriter fw = new FileWriter(tempFile);
-                BufferedWriter bw = new BufferedWriter(fw);
+                fw = new FileWriter(tempFile);
+                bw = new BufferedWriter(fw);
                 bw.write(rss);
                 bw.flush();
+
                 bw.close();
                 fw.close();
 
                 //임시파일을 FTP에 업로드
-                FileInputStream fis = new FileInputStream(tempFile);
-                boolean uploadResponse = ftpClient.storeFile("test.rss", fis);
+                fis = new FileInputStream(tempFile);
+                boolean uploadResponse = ftpClient.storeFile(scheduleInfo.getTargetFileName(), fis);
                 log.debug("ftp upload : {}", uploadResponse);
+
                 fis.close();
 
                 //FTP 로그아웃
@@ -166,6 +183,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 boolean deleteResponse = tempFile.delete();
                 log.debug("ftp delete tempFile : {}", deleteResponse);
 
+
+                //FTP 업로드 실패 시
+                if(!uploadResponse){
+                    return false;
+                }
+
             }
             //FTP 연결실패
             else{
@@ -174,11 +197,30 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 return false;
             }
 
-        }catch (Exception e){
-            log.error("ftp error : {}", e);
+        }
+        catch (Exception e){
+            log.error("uploadFtpString error : {}", e);
             return false;
+        }
+        finally{
+            close(bw);
+            close(fw);
+            close(fis);
         }
 
         return true;
+    }
+
+    public static void close(Closeable c){
+        if(c == null){
+            return;
+        }
+
+        try{
+            c.close();
+        }
+        catch (IOException e) {
+            log.error("ftp file error : {}", e);
+        }
     }
 }

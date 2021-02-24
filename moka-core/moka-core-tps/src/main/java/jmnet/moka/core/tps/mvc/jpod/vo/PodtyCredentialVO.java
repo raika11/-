@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.jpod.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PodtyCredentialVO {
 
     /**
@@ -44,4 +46,9 @@ public class PodtyCredentialVO {
      * 상세 메세지
      */
     private String detail;
+
+    /**
+     * 환경
+     */
+    private String env;
 }

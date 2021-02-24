@@ -329,9 +329,10 @@ const PollEdit = ({ onDelete }) => {
                             label="투표기간"
                             name="startDt"
                             value={edit.startDt}
-                            onChange={(data) => {
-                                handleChangeValue({ name: 'startDt', value: moment(data._d).format(DB_DATEFORMAT) });
+                            onChange={(date) => {
+                                handleChangeValue({ name: 'startDt', value: date });
                             }}
+                            inputProps={{ closeOnSelect: false }}
                         />
                     </Col>
                     <span>~</span>
@@ -339,10 +340,12 @@ const PollEdit = ({ onDelete }) => {
                         <MokaInput
                             as="dateTimePicker"
                             name="endDt"
+                            className="right"
                             value={edit.endDt}
-                            onChange={(data) => {
-                                handleChangeValue({ name: 'endDt', value: moment(data._d).format(DB_DATEFORMAT) });
+                            onChange={(date) => {
+                                handleChangeValue({ name: 'endDt', value: date });
                             }}
+                            inputProps={{ closeOnSelect: false }}
                         />
                     </Col>
                 </Form.Row>

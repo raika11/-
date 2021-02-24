@@ -84,8 +84,8 @@ const EpisodeSearchBox = ({ match }) => {
     }, [searchData.startDt, searchData.endDt]);
 
     return (
-        <Form>
-            <Form.Row className="mb-2 d-flex">
+        <Form className="mb-14">
+            <Form.Row className="mb-2">
                 <Col className="p-0 pr-2" xs={2}>
                     <MokaInput as="select" name="chnlSeq" id="chnlSeq" value={searchData.chnlSeq} onChange={handleSearchChange}>
                         <option value="">채널 전체</option>
@@ -96,7 +96,7 @@ const EpisodeSearchBox = ({ match }) => {
                         ))}
                     </MokaInput>
                 </Col>
-                <Col className="p-0 pr-2 d-flex" xs={4}>
+                <Col className="p-0 pr-2 d-flex" xs={5}>
                     <MokaInput
                         as="dateTimePicker"
                         className="mr-2"
@@ -114,7 +114,6 @@ const EpisodeSearchBox = ({ match }) => {
                     />
                     <MokaInput
                         as="dateTimePicker"
-                        className="mb-0"
                         name="endDt"
                         id="endDt"
                         value={searchData.endDt}
@@ -128,7 +127,7 @@ const EpisodeSearchBox = ({ match }) => {
                         }}
                     />
                 </Col>
-                <Col className="p-0 pr-2" xs={2}>
+                <Col className="p-0 pr-2" xs={1}>
                     <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={handleSearchChange}>
                         <option value="">전체</option>
                         {selectItem.usedYn.map((item, index) => (
@@ -144,7 +143,7 @@ const EpisodeSearchBox = ({ match }) => {
                     </Button>
                 </Col>
             </Form.Row>
-            <Form.Row className="mb-2 d-flex justify-content-between">
+            <Form.Row className="justify-content-between">
                 <Col className="p-0" xs={9}>
                     <MokaSearchInput
                         id="keyword"

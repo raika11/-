@@ -141,9 +141,14 @@ function* savePoll({ type, payload }) {
 
 function* updatePoll({ type, payload }) {
     yield put(startLoading(type));
-    console.log(payload);
+
     const pollSeq = payload.data.pollSeq;
-    const formData = pollObjectToFormData(payload.data);
+    const formData = pollObjectToFormData(
+        produce(payload.data, (draft) => {
+            draft.startDt = moment(payload.data.startDt).format(DB_DATEFORMAT);
+            draft.endDt = moment(payload.data.endDt).format(DB_DATEFORMAT);
+        }),
+    );
 
     try {
         const response = yield call(pollApi.putPoll, pollSeq, formData);

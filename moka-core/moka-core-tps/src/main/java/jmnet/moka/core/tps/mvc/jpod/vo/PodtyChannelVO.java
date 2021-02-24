@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.jpod.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.Map;
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PodtyChannelVO {
 
     /**
@@ -37,52 +39,42 @@ public class PodtyChannelVO {
 
     private String castName;
 
-    /**
-     * 채널 명
-     */
-
     private String artistName;
 
     /**
-     * 채널 명
+     * 키워드
      */
-
     private String keywords;
 
     /**
-     * 채널 명
+     * 요약
      */
-
     private String summary;
 
     /**
-     * 채널 명
+     * 생성일
      */
-
     private Long crtDt;
 
     /**
-     * 채널 명
+     * 공유url
      */
-
     private String shareUrl;
 
     /**
-     * 채널 명
+     * 카테고리
      */
-
     private String simpodCategory;
 
     /**
-     * 채널 명
+     * image url
      */
-
     private Map<String, String> imgUrlMap;
 
-    /**
-     * 채널 명
-     */
 
+    /**
+     * 트랙 수
+     */
     private Integer trackCnt;
 
     @JsonProperty("cast_srl")

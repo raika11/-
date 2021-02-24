@@ -7,9 +7,7 @@ import toast, { messageBox } from '@/utils/toastUtil';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Jumbotron from 'react-bootstrap/Jumbotron';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Carousel from 'react-bootstrap/Carousel';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import {
@@ -30,7 +28,6 @@ import { CARD_DEFAULT_HEIGHT } from '@/constants';
 import { SourceSelector } from '@pages/commons';
 // import { changeTheme } from '@store/layout/layoutAction';
 import { options } from './data';
-import bg from '@assets/images/bg.jpeg';
 import ThemeEx from './ThemeEx';
 import InputEx from './InputEx';
 
@@ -183,39 +180,8 @@ const Dashboard = () => {
                             {/* Input 예제 */}
                             <InputEx />
                         </div>,
-                        <div>
-                            {/* 점보트론 */}
-                            <Form.Label>11) Jumbotron</Form.Label>
-                            <Jumbotron>
-                                <h1>TEST</h1>
-                                <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                                <p>
-                                    <Button variant="searching">Learn more</Button>
-                                </p>
-                            </Jumbotron>
-                        </div>,
-                        <div>
-                            {/* 캐러셀 */}
-                            <Form.Label>12) Carousel</Form.Label>
-                            <Carousel>
-                                <Carousel.Item>
-                                    <img className="d-block w-100" src={bg} alt="t" />
-                                    <Carousel.Caption>
-                                        <h3>First slide label</h3>
-                                        <p>서브 텍스트</p>
-                                    </Carousel.Caption>
-                                </Carousel.Item>
-                                <Carousel.Item>
-                                    <img className="d-block w-100" src={bg} alt="t" />
-                                    <Carousel.Caption>
-                                        <h3>Second slide label</h3>
-                                        <p>서브 텍스트</p>
-                                    </Carousel.Caption>
-                                </Carousel.Item>
-                            </Carousel>
-                        </div>,
                     ]}
-                    tabNavs={['테마 색상', 'Input 예제', '점보트론', '캐러셀']}
+                    tabNavs={['테마 색상', 'Input 예제']}
                 />
 
                 {/* 탭 예제 */}

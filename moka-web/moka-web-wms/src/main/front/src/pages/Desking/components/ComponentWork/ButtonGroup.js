@@ -13,13 +13,13 @@ import ReserveComponentWork from './ReserveComponentWork';
 import StatusBadge from './StatusBadge';
 // import TemplateListModal from '@pages/Template/modals/TemplateListModal';
 // import TemplateHtmlModal from '@pages/Template/modals/TemplateHtmlModal';
-import { AddSpaceModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
+import { EditDeskingWorkModal, RegisterModal, EditListNumberModal, EditHtmlModal } from '@pages/Desking/modals';
 
 /**
  * 컴포넌트 워크의 버튼 그룹 컴포넌트
  */
 const ButtonGroup = (props) => {
-    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, deskingPart, setLoading } = props;
+    const { areaSeq, component, agGridIndex, componentAgGridInstances, workStatus, deskingPart, setLoading, onSaveDummy } = props;
     const dispatch = useDispatch();
     // const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [viewN, setViewN] = useState(false);
@@ -29,7 +29,7 @@ const ButtonGroup = (props) => {
         html: false,
         template: false,
         tems: false,
-        space: false,
+        dummy: false,
         register: false,
         listNumber: false,
     });
@@ -113,7 +113,7 @@ const ButtonGroup = (props) => {
     /**
      * 공백추가
      */
-    const handleOpenAddSpace = useCallback(() => handleModalShow('space', true), [handleModalShow]);
+    const handleOpenAddSpace = useCallback(() => handleModalShow('dummy', true), [handleModalShow]);
 
     /**
      * 기사이동
@@ -319,15 +319,14 @@ const ButtonGroup = (props) => {
             {/* 템플릿 소스보기 (보여주지 않음) */}
             {/* <TemplateHtmlModal show={modalShow.tems} onHide={() => handleModalShow('tems', false)} templateSeq={selectedTemplate} editable={false} /> */}
 
-            {/* 공백 추가 */}
-            <AddSpaceModal
-                show={modalShow.space}
-                onHide={() => handleModalShow('space', false)}
-                areaSeq={areaSeq}
+            {/* 공백기사 추가 */}
+            <EditDeskingWorkModal
+                show={modalShow.dummy}
+                onHide={() => handleModalShow('dummy', false)}
                 component={component}
-                agGridIndex={agGridIndex}
                 deskingPart={deskingPart}
-                componentAgGridInstances={componentAgGridInstances}
+                onSave={onSaveDummy}
+                isDummy
             />
 
             {/* 기사 이동 */}

@@ -8,12 +8,9 @@ import { MokaInputLabel, MokaInput } from '@components';
 /**
  * 말머리 폼
  */
-const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
+const TitlePrefixForm = ({ show, temp, deskingPart, onChange }) => {
     const dispatch = useDispatch();
-    const { dsPreRows, dsPreLocRows } = useSelector((store) => ({
-        dsPreRows: store.codeMgt.dsPreRows,
-        dsPreLocRows: store.codeMgt.dsPreLocRows,
-    }));
+    const { dsPreRows, dsPreLocRows } = useSelector(({ codeMgt }) => codeMgt);
     const [filteredLocRows, setFilteredLocRows] = useState([]);
 
     useEffect(() => {
@@ -28,14 +25,14 @@ const TitlePrefixForm = ({ show, temp, deskingPartStr, onChange }) => {
 
     useEffect(() => {
         if (dsPreLocRows) {
-            setFilteredLocRows(dsPreLocRows.filter((loc) => deskingPartStr.indexOf(loc.cdNmEtc1) > -1));
+            setFilteredLocRows(dsPreLocRows.filter((loc) => deskingPart.indexOf(loc.cdNmEtc1) > -1));
         }
-    }, [deskingPartStr, dsPreLocRows]);
+    }, [deskingPart, dsPreLocRows]);
 
     return (
         <Form.Row className="mb-2">
             <Col xs={4} className="p-0">
-                <MokaInputLabel as="select" label="말머리" labelClassName="pr-3" className="mb-0 w-100" value={temp.titlePrefix} name="titlePrefix" onChange={onChange}>
+                <MokaInputLabel as="select" label="말머리" className="w-100" value={temp.titlePrefix} name="titlePrefix" onChange={onChange}>
                     <option value="">선택</option>
                     {dsPreRows &&
                         dsPreRows.map((code) => (

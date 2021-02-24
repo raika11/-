@@ -88,7 +88,7 @@ const RelArticleTable = ({ agenda, gridInstance, setGridInstance }) => {
                 header={false}
                 animateRows
                 rowDragManaged
-                rowHeight={95}
+                rowHeight={84}
                 rowData={rowData}
                 onRowNodeId={(data) => data.ordNo}
                 columnDefs={columnDefs}

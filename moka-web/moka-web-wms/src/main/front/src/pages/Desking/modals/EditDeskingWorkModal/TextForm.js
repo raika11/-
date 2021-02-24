@@ -28,7 +28,6 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error, unescape = fal
                 <MokaInputLabel
                     as={as}
                     label={label}
-                    labelClassName="pr-3"
                     name={field}
                     className="mb-0 w-100"
                     value={unescape ? unescapeHtmlArticle(temp[field]) : temp[field]}

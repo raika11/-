@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { getBulkChar, GET_BULK_CHAR } from '@store/codeMgt';
-import { MokaImage, MokaInput, MokaInputLabel, MokaModal } from '@components';
+import { MokaImage, MokaInputLabel, MokaModal } from '@components';
 import { postDeskingWork } from '@store/desking';
 import { messageBox } from '@utils/toastUtil';
 import TitleForm from './EditDeskingWorkModal/TitleForm';

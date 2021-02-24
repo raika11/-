@@ -1,32 +1,63 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import toast from '@utils/toastUtil';
-import { getBulkChar, GET_BULK_CHAR, GET_DS_FONT_IMGD, GET_DS_FONT_IMGW, GET_DS_FONT_VODD, GET_DS_ICON, GET_DS_PRE, GET_DS_PRE_LOC, GET_DS_TITLE_LOC } from '@store/codeMgt';
-import { PUT_DESKING_WORK } from '@store/desking';
-import { MokaInputLabel, MokaImage, MokaModal } from '@components';
+import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { messageBox } from '@utils/toastUtil';
+import { GET_BULK_CHAR, GET_DS_FONT_IMGD, GET_DS_FONT_IMGW, GET_DS_FONT_VODD, GET_DS_ICON, GET_DS_PRE, GET_DS_PRE_LOC, GET_DS_TITLE_LOC } from '@store/codeMgt';
+import { PUT_DESKING_WORK, POST_DESKING_WORK } from '@store/desking';
+import { MokaModal } from '@components';
+import ImageForm from './ImageForm';
+import SpecialCharForm from './SpecialCharForm';
 import IconForm from './IconForm';
 import TitleForm from './TitleForm';
 import TextForm from './TextForm';
 import TitleLocForm from './TitleLocForm';
 import TitlePrefixForm from './TitlePrefixForm';
 import VodUrlForm from './VodUrlForm';
-import { EditThumbModal } from '@pages/Desking/modals';
 import mapping, { fontSizeObj } from '@pages/Desking/deskingPartMapping';
-import imageEditer from '@utils/imageEditorUtil';
-import commonUtil from '@utils/commonUtil';
+
+const propTypes = {
+    /**
+     * 기사워크 정보
+     */
+    deskingWorkData: PropTypes.shape({
+        /**
+         * 기사인 경우 기사아이디와 동일, 공백기사인 경우 D로 시작하는 컨텐츠ID
+         */
+        contentId: PropTypes.string,
+    }),
+    /**
+     * 컴포넌트 정보
+     */
+    component: PropTypes.shape({}),
+    /**
+     * 편집영역에서 설정한 수정할 수 있는 파트, 파트에 따라 폼이 달라진다
+     */
+    deskingPart: PropTypes.string,
+    /**
+     * 공백기사 여부 (기본값 false)
+     * @default
+     */
+    isDummy: PropTypes.bool,
+    /**
+     * 저장 함수
+     */
+    onSave: PropTypes.func.isRequired,
+};
+
+const defaultProps = {
+    deskingWorkData: {},
+    isDummy: false,
+};
 
 /**
  * 데스킹 기사정보 편집 모달 컴포넌트
  */
 const EditDeskingWorkModal = (props) => {
-    const { show, onHide, deskingWorkData, component, onSave, deskingPart: deskingPartStr } = props;
-    const dispatch = useDispatch();
-
+    const { show, onHide, deskingWorkData, component, onSave, deskingPart, isDummy } = props;
     const loading = useSelector(
         ({ loading }) =>
             loading[PUT_DESKING_WORK] ||
+            loading[POST_DESKING_WORK] ||
             loading[GET_BULK_CHAR] ||
             loading[GET_DS_FONT_IMGD] ||
             loading[GET_DS_FONT_IMGW] ||
@@ -40,20 +71,14 @@ const EditDeskingWorkModal = (props) => {
     //     IR_URL: store.app.IR_URL,
     //     PHOTO_ARCHIVE_URL: store.app.PHOTO_ARCHIVE_URL,
     // }));
-    const bulkCharRows = useSelector((store) => store.codeMgt.bulkCharRows);
-    const imgFileRef = useRef(null);
 
     // state
-    const [deskingPart, setDeskingPart] = useState([]); // area의 deskingPart 리스트
-    const [fileValue, setFileValue] = useState(null); // 파일
-    const [fontListType, setFontListType] = useState(null); // 제목의 폰트 타입
+    const [parts, setParts] = useState([]); // area의 deskingPart 리스트
     const [error, setError] = useState({});
-    const [showModal, setShowModal] = useState(false); // 새이미지 등록 팝업 모달
-    const [specialChar, setSpecialChar] = useState(''); // 약물
     const [temp, setTemp] = useState({}); // 폼 데이터
 
     /**
-     * validate
+     * 유효성 검증
      */
     const validate = () => {
         let invalid = false,
@@ -88,103 +113,45 @@ const EditDeskingWorkModal = (props) => {
     };
 
     /**
-     * 저장
+     * 수정/저장
      */
     const handleClickSave = () => {
         if (validate()) {
-            onSave(
-                {
-                    ...temp,
-                    thumbnailFile: fileValue || null,
-                },
-                ({ header }) => {
-                    if (!header.success) {
-                        toast.fail(header.message);
-                    } else {
-                        handleHide();
-                    }
-                },
-            );
+            onSave(temp, ({ header }) => {
+                if (!header.success) {
+                    messageBox.alert(header.message);
+                } else {
+                    handleHide();
+                }
+            });
         }
     };
 
     /**
-     * 닫기
+     * 모달 닫기
      */
     const handleHide = useCallback(() => {
         setTemp({});
-        if (imgFileRef.current) {
-            imgFileRef.current.deleteFile();
-        }
         setError({});
-        setFileValue(null);
         onHide();
     }, [onHide]);
 
-    /**
-     * 대표 이미지 thumbName
-     */
-    const handleThumbFileApply = (data, file) => {
-        setTemp({ ...temp, thumbFileName: data, irImg: data });
-        setFileValue(file);
-    };
-
-    /**
-     * 이미지 편집
-     */
-    const handleEditClick = () => {
-        imageEditer.create(
-            temp.thumbFileName,
-            (imageSrc) => {
-                (async () => {
-                    await fetch(imageSrc)
-                        .then((r) => r.blob())
-                        .then((blobFile) => {
-                            const file = commonUtil.blobToFile(blobFile, deskingWorkData.seq);
-                            setFileValue(file);
-                            setTemp({ ...temp, irImg: imageSrc, thumbFileName: imageSrc });
-                        });
-                })();
-            },
-            { cropWidth: 300, cropHeight: 300 },
-        );
-    };
-
     useEffect(() => {
-        // deskingPart 안에서 폰트사이즈 분리
-        if (!deskingPartStr || deskingPartStr === '') return;
-
-        const list = deskingPartStr.split(',');
-        const filtered = list.filter((part) => !fontSizeObj[part]);
-        setDeskingPart(filtered);
-
-        if (list.length !== filtered.length) {
-            const fontPart = list.find((part) => fontSizeObj[part]);
-            setFontListType(fontPart);
-        } else {
-            setFontListType(null);
-        }
-    }, [deskingPartStr]);
-
-    useEffect(() => {
-        // 기사 deskingWorkData 셋팅
-        if (show && deskingWorkData) {
-            // 이미지경로
-            let irImg = deskingWorkData.thumbFileName;
-            // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
-            setTemp({
-                ...deskingWorkData,
-                irImg,
-            });
-        }
+        show &&
+            (() => {
+                const irImg = deskingWorkData?.thumbFileName;
+                // `${IR_URL}?t=k&w=216&h=150u=//${deskingWorkData.thumbFileName}`
+                setTemp({
+                    ...deskingWorkData,
+                    irImg,
+                });
+            })();
     }, [deskingWorkData, show]);
 
     useEffect(() => {
-        // 기타코드 로드
-        if (show) {
-            !bulkCharRows ? dispatch(getBulkChar()) : setSpecialChar(bulkCharRows.find((char) => char.dtlCd === 'bulkChar').cdNm);
-        }
-    }, [bulkCharRows, dispatch, show]);
+        // 폰트사이즈를 제외한 파트리스트
+        setParts((deskingPart || '').split(',').filter((partKey) => !fontSizeObj[partKey]));
+    }, [deskingPart]);
 
     useEffect(() => {
         return () => {
@@ -196,92 +163,88 @@ const EditDeskingWorkModal = (props) => {
     return (
         <MokaModal
             titleAs={
-                <div className="w-100 d-flex flex-column">
-                    <div className="p-0 d-flex h2 mb-0">
-                        <p className="m-0 mr-2">{deskingWorkData.rel ? `0${deskingWorkData.relOrd}`.substr(-2) : `0${deskingWorkData.contentOrd}`.substr(-2)}</p>
-                        <p className="m-0">{deskingWorkData.title}</p>
+                !isDummy && (
+                    <div className="w-100 d-flex flex-column">
+                        <div className="d-flex h2 mb-0 user-select-text">
+                            <p className="m-0 mr-2">{deskingWorkData.rel ? `0${deskingWorkData.relOrd}`.substr(-2) : `0${deskingWorkData.contentOrd}`.substr(-2)}</p>
+                            <p className="m-0">{deskingWorkData.title}</p>
+                        </div>
+                        <div className="d-flex user-select-text">
+                            <p className="m-0 mr-3">ID: {deskingWorkData.contentId}</p>
+                            <p className="m-0">
+                                (cp{component.componentSeq} {component.componentName})
+                            </p>
+                        </div>
                     </div>
-                    <div className="p-0 d-flex">
-                        <p className="m-0 mr-3">ID: {deskingWorkData.contentId}</p>
-                        <p className="m-0">
-                            (cp{component.componentSeq} {component.componentName})
-                        </p>
-                    </div>
-                </div>
+                )
             }
+            title={isDummy ? '공백 기사' : undefined}
             width={650}
             size="lg"
             show={show}
             onHide={onHide}
             buttons={[
-                { variant: 'positive', text: '저장', onClick: handleClickSave },
+                { variant: 'positive', text: isDummy ? '저장' : '수정', onClick: handleClickSave },
                 { variant: 'negative', text: '취소', onClick: handleHide },
             ]}
             footerClassName="d-flex justify-content-center"
             bodyClassName="custom-scroll"
             loading={loading}
             id={`cid-${deskingWorkData.contentId}`}
-            draggable
         >
-            <Form>
-                {deskingPart.map((partKey) => {
-                    const mappingData = mapping[partKey];
+            {parts.map((partKey) => {
+                const mappingData = mapping[partKey];
 
-                    // 제목(기타코드), 대표이미지, 약물(기타코드), 아이콘(기타코드), 말머리(기타코드), 제목/부제위치(기타코드), 영상은 예외처리
-                    if (partKey === 'TITLE') {
-                        return <TitleForm key={partKey} show={show} mappingData={mappingData} onChange={handleChangeValue} temp={temp} fontListType={fontListType} error={error} />;
-                    } else if (partKey === 'THUMB_FILE_NAME') {
-                        return (
-                            <Form.Row key={partKey} className="mb-2">
-                                <div className="d-flex">
-                                    <MokaInputLabel as="none" label="대표\n이미지" labelClassName="pr-3" className="mb-0" />
-                                    <MokaImage img={temp.irImg} width={216} />
-                                </div>
-                                <div className="d-flex flex-column justify-content-end ml-2">
-                                    <Button variant="gray-700" size="sm" onClick={() => setShowModal(true)} className="mb-2">
-                                        신규등록
-                                    </Button>
-                                    <Button variant="outline-gray-700" size="sm" onClick={handleEditClick}>
-                                        편집
-                                    </Button>
-                                </div>
-                            </Form.Row>
-                        );
-                    } else if (partKey === 'SPECIAL_CHAR') {
-                        return (
-                            <Form.Row key={partKey} className="mb-2">
-                                <MokaInputLabel label="약물" labelClassName="pr-3" className="mb-0 w-100" value={specialChar} inputProps={{ plaintext: true, readOnly: true }} />
-                            </Form.Row>
-                        );
-                    } else if (partKey === 'ICON_FILE_NAME') {
-                        return <IconForm show={show} key={partKey} temp={temp} setTemp={setTemp} onChange={handleChangeValue} />;
-                    } else if (partKey === 'TITLE_PREFIX') {
-                        return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} deskingPartStr={deskingPartStr} />;
-                    } else if (partKey === 'TITLE_LOC') {
-                        return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
-                    } else if (partKey === 'VOD_URL') {
-                        return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
-                    } else if (mappingData) {
-                        return <TextForm key={partKey} unescape={partKey === 'BODY_HEAD'} mappingData={mappingData} temp={temp} onChange={handleChangeValue} error={error} />;
-                    } else {
-                        return null;
-                    }
-                })}
-            </Form>
-
-            {/* 대표이미지 신규등록 모달 */}
-            <EditThumbModal
-                show={showModal}
-                cropHeight={component?.cropHeight}
-                cropWidth={component?.cropWidth}
-                onHide={() => setShowModal(false)}
-                contentId={deskingWorkData.contentId}
-                saveFileName={String(deskingWorkData.seq)}
-                thumbFileName={temp.thumbFileName}
-                apply={handleThumbFileApply}
-            />
+                // 제목 + 폰트사이즈(기타코드)
+                if (partKey === 'TITLE') {
+                    return <TitleForm key={partKey} show={show} mappingData={mappingData} onChange={handleChangeValue} deskingPart={deskingPart} temp={temp} error={error} />;
+                }
+                // 대표이미지
+                else if (partKey === 'THUMB_FILE_NAME') {
+                    return (
+                        <ImageForm
+                            key={partKey}
+                            component={component}
+                            contentId={!isDummy ? deskingWorkData?.contentId : undefined} // 데스킹워크의 contentId (있으면 대표이미지 변경 모달에서 본문 내 이미지 조회)
+                            mappingData={mappingData}
+                            onChange={({ thumbnailFile, imageSrc }) => setTemp({ ...temp, irImg: imageSrc, thumbnailFile, thumbFileName: imageSrc })}
+                            temp={temp}
+                            fileName={deskingWorkData.seq}
+                        />
+                    );
+                }
+                // 약물(기타코드)
+                else if (partKey === 'SPECIAL_CHAR') {
+                    return <SpecialCharForm show={show} key={partKey} />;
+                }
+                // 아이콘(기타코드)
+                else if (partKey === 'ICON_FILE_NAME') {
+                    return <IconForm show={show} key={partKey} temp={temp} setTemp={setTemp} onChange={handleChangeValue} />;
+                }
+                // 말머리(기타코드)
+                else if (partKey === 'TITLE_PREFIX') {
+                    return <TitlePrefixForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} deskingPart={deskingPart} />;
+                }
+                // 제목/부제위치(기타코드)
+                else if (partKey === 'TITLE_LOC') {
+                    return <TitleLocForm show={show} key={partKey} temp={temp} onChange={handleChangeValue} />;
+                }
+                // 영상
+                else if (partKey === 'VOD_URL') {
+                    return <VodUrlForm show={show} key={partKey} temp={temp} setTemp={setTemp} />;
+                }
+                // 그 외
+                else if (mappingData) {
+                    return <TextForm key={partKey} unescape={partKey === 'BODY_HEAD'} mappingData={mappingData} temp={temp} onChange={handleChangeValue} error={error} />;
+                } else {
+                    return null;
+                }
+            })}
         </MokaModal>
     );
 };
+
+EditDeskingWorkModal.propTypes = propTypes;
+EditDeskingWorkModal.defaultProps = defaultProps;
 
 export default EditDeskingWorkModal;

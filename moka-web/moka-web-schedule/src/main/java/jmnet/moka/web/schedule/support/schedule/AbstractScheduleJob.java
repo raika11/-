@@ -5,12 +5,14 @@ import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.net.MalformedServerReplyException;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.*;
 
 /**
  * <pre>
@@ -100,26 +102,25 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
         log.debug("before rss upload : {}", scheduleInfo.getCallUrl());
         log.debug("before rss upload : {}", scheduleInfo.getFtpPassive());
         log.debug("before rss upload : {}", scheduleInfo.getFtpPort());
+        log.debug("before rss upload : {}", scheduleInfo.getTargetPath());
 
+        boolean result = false;
 
         if(scheduleInfo.getSendType() != null && scheduleInfo.getSendType().equals("FTP")){
-            testFtp(rss);
+            result = testFtp(rss);
         }
 
-
-        log.debug("after rss upload");
-
-
-        return false;
+        return result;
     }
 
-    private void testFtp(String rss){
+    private boolean testFtp(String rss){
 
         try{
             FTPClient ftpClient = new FTPClient();
             //Passive Mode (ftp서버가 기본포트가 아닌 경우)
             if(scheduleInfo.getFtpPassive() != null && scheduleInfo.getFtpPassive().equals("Y")){
                 ftpClient.connect(scheduleInfo.getCallUrl(), Math.toIntExact(scheduleInfo.getFtpPort()));
+                ftpClient.enterLocalPassiveMode();
             }
             else{
                 ftpClient.connect(scheduleInfo.getCallUrl());
@@ -127,24 +128,57 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
             //FTP 연결성공
             if(FTPReply.isPositiveCompletion(ftpClient.getReplyCode())){
-                boolean loginResponse = ftpClient.login(scheduleInfo.getGenTarget().getAccessId(), mokaCrypt.decrypt(scheduleInfo.getGenTarget().getAccessPwd()));
+                //FTP 로그인
+                boolean loginResponse = ftpClient.login(scheduleInfo.getGenTarget().getAccessId(),
+                        mokaCrypt.decrypt(scheduleInfo.getGenTarget().getAccessPwd()));
                 log.debug("ftp login : {}", loginResponse);
 
                 ftpClient.changeWorkingDirectory(scheduleInfo.getTargetPath());
+                ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
+                //현재 임시파일 저장공간 지정이 없는 관계로 현재 패키지 위치에서 생성/삭제
+                String tempPath = AbstractScheduleJob.class.getResource("").getPath();
+                File tempFile = File.createTempFile("test",".rss", new File(tempPath));
+                //File tempFile = File.createTempFile("test",".rss", new File("c:\\Temp"));
+
+                //임시파일에 RSS 스트링 데이터 입력
+                FileWriter fw = new FileWriter(tempFile);
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(rss);
+                bw.flush();
+                bw.close();
+                fw.close();
+
+                //임시파일을 FTP에 업로드
+                FileInputStream fis = new FileInputStream(tempFile);
+                boolean uploadResponse = ftpClient.storeFile("test.rss", fis);
+                log.debug("ftp upload : {}", uploadResponse);
+                fis.close();
+
+                //FTP 로그아웃
                 boolean logoutResponse = ftpClient.logout();
                 log.debug("ftp logout : {}", logoutResponse);
 
+                //FTP 접속종료
                 ftpClient.disconnect();
+
+                //임시파일 삭제
+                boolean deleteResponse = tempFile.delete();
+                log.debug("ftp delete tempFile : {}", deleteResponse);
+
             }
             //FTP 연결실패
             else{
                 ftpClient.disconnect();
                 log.error("ftp connect failed : {}", scheduleInfo.getCallUrl());
+                return false;
             }
 
         }catch (Exception e){
             log.error("ftp error : {}", e);
+            return false;
         }
+
+        return true;
     }
 }

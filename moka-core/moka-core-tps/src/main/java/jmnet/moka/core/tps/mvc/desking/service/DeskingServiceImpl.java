@@ -1177,9 +1177,9 @@ public class DeskingServiceImpl implements DeskingService {
             deskingWorkDTO.setNameplate(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getNameplate()));
         }
 
-        if (McpString.isNotEmpty(deskingWorkDTO.getTitlePrefix())) {
-            deskingWorkDTO.setTitlePrefix(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getTitlePrefix()));
-        }
+        //        if (McpString.isNotEmpty(deskingWorkDTO.getTitlePrefix())) {
+        //            deskingWorkDTO.setTitlePrefix(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getTitlePrefix()));
+        //        }
 
         if (McpString.isNotEmpty(deskingWorkDTO.getBodyHead())) {
             deskingWorkDTO.setBodyHead(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getBodyHead()));

@@ -9,7 +9,8 @@ import { initialState, saveArea, DELETE_AREA, SAVE_AREA } from '@store/area';
 /**
  * 편집영역 1뎁스 등록/수정
  */
-const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) => {
+const AreaFormDepth1 = (props) => {
+    const { onDelete, area, flag, setFlag, child, listDepth1, sourceCode, setAreaDepth1 } = props;
     const dispatch = useDispatch();
     const domainList = useSelector(({ auth }) => auth.domainList);
     const loading = useSelector(({ loading }) => loading[DELETE_AREA] || loading[SAVE_AREA]);
@@ -54,9 +55,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) =>
                     if (header.success) {
                         toast.success(header.message);
                         reloadList();
-                        if (!area.areaSeq) {
-                            setTemp(initialState.initData.area);
-                        }
+                        setAreaDepth1(body);
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -71,6 +70,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) =>
     const handleClickSave = () => {
         const save = {
             ...temp,
+            ordNo: temp.areaSeq ? temp.ordNo : listDepth1.length + 1, // 수정 등록 분기쳐서 ordNo 셋팅
             sourceCode,
             container: null,
             page: null,
@@ -103,7 +103,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) =>
     useEffect(() => {
         const target = area?.area || {};
         setTemp(target);
-        setDomain(target.domain || {});
+        setDomain(target?.domain);
     }, [area]);
 
     return (
@@ -114,17 +114,8 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) =>
             footer
             footerClassName="justify-content-center"
             footerButtons={[
-                {
-                    text: temp.areaSeq ? '수정' : '저장',
-                    variant: 'positive',
-                    className: 'mr-1',
-                    onClick: handleClickSave,
-                },
-                temp.areaSeq && {
-                    text: '삭제',
-                    variant: 'negative',
-                    onClick: handleClickDelete,
-                },
+                { text: temp.areaSeq ? '수정' : '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                temp.areaSeq && { text: '삭제', variant: 'negative', onClick: handleClickDelete },
             ].filter((a) => a)}
         >
             <div>
@@ -140,6 +131,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) =>
                         onChange={handleChangeValue}
                     />
                 </Form.Row>
+
                 {/* 그룹영역명 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="p-0 pr-40">
@@ -156,6 +148,7 @@ const AreaFormDepth1 = ({ onDelete, area, flag, setFlag, child, sourceCode }) =>
                         <MokaInputLabel className="mb-0" label="영역코드" value={temp.areaSeq} inputProps={{ readOnly: true }} />
                     </Col>
                 </Form.Row>
+
                 {/* 도메인 */}
                 <MokaInputLabel
                     className="mb-2"

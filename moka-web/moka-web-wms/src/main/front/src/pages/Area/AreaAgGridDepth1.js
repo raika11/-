@@ -106,7 +106,6 @@ const AreaAgGridDepth1 = ({ areaDepth1, setAreaDepth1, sourceCode, setSourceCode
 
     useEffect(() => {
         getList();
-        setAreaDepth1(initialState.initData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [flag.depth1, sourceCode]);
 

@@ -6,7 +6,7 @@ import { messageBox } from '@utils/toastUtil';
 import { PageListModal } from '@pages/Page/modals';
 
 const AreaEdit = (props) => {
-    const { onDelete, areaDepth1, areaDepth2, areaDepth3, setFlag, listDepth2, listDepth3, flag, sourceCode } = props;
+    const { areaDepth1, areaDepth2, areaDepth3, listDepth2, listDepth3, ...rest } = props;
     const selectedDepth = useSelector(({ area }) => area.selectedDepth);
     const [modalShow, setModalShow] = useState(false);
     const [modalDomainId, setModalDomainId] = useState();
@@ -40,39 +40,35 @@ const AreaEdit = (props) => {
     return (
         <React.Fragment>
             {/* 1뎁스 폼 */}
-            {selectedDepth === 1 && <Form1 onDelete={onDelete} area={areaDepth1} setFlag={setFlag} child={listDepth2} flag={flag} sourceCode={sourceCode} />}
+            {selectedDepth === 1 && <Form1 {...rest} child={listDepth2} area={areaDepth1} />}
             {/* 2뎁스 폼 */}
             {selectedDepth === 2 && (
                 <Form2
+                    {...rest}
                     setModalShow={setModalShow}
                     setModalDomainId={setModalDomainId}
-                    onDelete={onDelete}
                     page={page}
                     setPage={setPage}
                     depth={selectedDepth}
                     child={listDepth3}
+                    list={listDepth2}
                     parent={areaDepth1.area}
                     area={areaDepth2}
-                    flag={flag}
-                    setFlag={setFlag}
-                    sourceCode={sourceCode}
                 />
             )}
             {/* 3뎁스 폼 */}
             {selectedDepth === 3 && (
                 <Form2
+                    {...rest}
                     setModalShow={setModalShow}
                     setModalDomainId={setModalDomainId}
-                    onDelete={onDelete}
                     page={page}
                     setPage={setPage}
                     depth={selectedDepth}
                     child={[]}
                     parent={areaDepth2.area}
                     area={areaDepth3}
-                    flag={flag}
-                    setFlag={setFlag}
-                    sourceCode={sourceCode}
+                    list={listDepth3}
                 />
             )}
 

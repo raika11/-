@@ -21,10 +21,27 @@ import ContainerLoadBox from './ContainerLoadBox';
 /**
  * 편집영역 2뎁스, 3뎁스 폼
  */
-const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, onDelete, child, parent, area, setFlag, flag, sourceCode }) => {
+const AreaFormDepth2 = (props) => {
+    const {
+        setModalShow, // 페이지 선택 모달
+        setModalDomainId,
+        page,
+        setPage,
+        depth,
+        onDelete,
+        child,
+        parent,
+        area,
+        setFlag,
+        flag,
+        sourceCode,
+        setAreaDepth2,
+        setAreaDepth3,
+        list,
+    } = props;
     const dispatch = useDispatch();
     const loading = useSelector(({ loading }) => loading[SAVE_AREA] || loading[DELETE_AREA] || loading[GET_AREA_MODAL]);
-    const { invalidList, selectedDepth } = useSelector(({ area }) => area);
+    const { invalidList } = useSelector(({ area }) => area);
     const [temp, setTemp] = useState(initialState.initData.area); // 수정가능한 데이터
     const [previewRsrc, setPreviewRsrc] = useState(''); // 미리보기 리소스
     const [domain, setDomain] = useState({}); // 도메인
@@ -103,7 +120,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
                     if (header.success) {
                         toast.success(header.message);
                         setFlag({ ...flag, [`depth${depth}`]: new Date().getTime() });
-                        if (!save.areaSeq) setInit();
+                        depth === 2 ? setAreaDepth2(body) : setAreaDepth3(body);
                     } else {
                         messageBox.alert(header.message);
                     }
@@ -130,9 +147,10 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
 
         let save = {
             ...temp,
-            depth: selectedDepth,
+            depth, // depth 변경
+            ordNo: temp.areaSeq ? temp.ordNo : list.length + 1, // 수정 등록 분기쳐서 ordNo 셋팅
             sourceCode,
-            page: { pageSeq: page.pageSeq },
+            page: { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl },
             parent: { areaSeq: parent.areaSeq },
             domain: { domainId: domain.domainId },
             previewRsrc,
@@ -163,7 +181,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
     /**
      * 삭제 버튼
      */
-    const handleClickDelete = () => onDelete(temp, selectedDepth);
+    const handleClickDelete = () => onDelete(temp, depth);
 
     /**
      * 컨테이너의 컴포넌트 목록 조회
@@ -373,9 +391,10 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
         setComponent(ac.component || {});
         setContainer(ar.container || {});
         setDomain(parent?.domain);
+        setPage(ar.page);
         setLoadCnt(0);
         setError({});
-    }, [area, parent]);
+    }, [area, parent, setPage]);
 
     useEffect(() => {
         if (domain.domainId) {
@@ -393,7 +412,7 @@ const AreaFormDepth2 = ({ setModalShow, setModalDomainId, page, setPage, depth, 
             setContOptions([]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, temp.areaDiv, selectedDepth]);
+    }, [page, temp.areaDiv, depth]);
 
     useEffect(() => {
         setError(invalidListToError(invalidList));

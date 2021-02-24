@@ -71,14 +71,14 @@ public class IpAllowAspect {
 
         log.warn("Requested Remote Address={}", remoteAddr);
         if( response != null)
-            responseBlocked(methodName, response);
+            responseBlocked(methodName, remoteAddr, response);
         return null;
     }
 
-    private void responseBlocked(String methodName, HttpServletResponse response) {
+    private void responseBlocked(String methodName, String remoteAddr, HttpServletResponse response) {
         try {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            ResultDTO<String> resultDTO = new ResultDTO<String>(HttpStatus.FORBIDDEN, "Access Denied");
+            ResultDTO<String> resultDTO = new ResultDTO<String>(HttpStatus.FORBIDDEN, "Access Denied " + remoteAddr);
             Writer writer = response.getWriter();
             writer.write(ResourceMapper.getDefaultObjectMapper().writeValueAsString(resultDTO));
             writer.close();

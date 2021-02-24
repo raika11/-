@@ -17,7 +17,7 @@ export default [
         tooltipField: 'email',
     },
     {
-        headerName: '상태정보',
+        headerName: '사용',
         field: 'status',
         width: 63,
         cellRenderer: 'usedYnRenderer',

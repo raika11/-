@@ -98,7 +98,7 @@ public interface ArticleSnsShareService {
      * @param snsPublish SNS 공유
      * @return
      */
-    void reservePublishSnsArticleSnsShare(SnsPublishDTO snsPublish)
+    String reservePublishSnsArticleSnsShare(SnsPublishDTO snsPublish)
             throws Exception;
 
     /**
@@ -107,7 +107,7 @@ public interface ArticleSnsShareService {
      * @param snsDelete SNS 공유 제거
      * @return
      */
-    void reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
+    String reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
             throws Exception;
 
 

@@ -16,6 +16,7 @@ import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.common.utils.exception.FileFormatException;
+import jmnet.moka.core.common.dto.InvalidDataDTO;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
@@ -23,6 +24,7 @@ import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
 import jmnet.moka.core.common.sns.SnsDeleteDTO;
 import jmnet.moka.core.common.sns.SnsPublishDTO;
 import jmnet.moka.core.common.sns.SnsTypeCode;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.common.util.ImageUtil;
@@ -403,16 +405,37 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
                     .orElseThrow(() -> new NoDataException(noContentMessage));
 
             boolean reserved = false;
+            boolean success = true;
+            String successMsg = "";
+
             if (snsPublish.getReserveDt() != null && McpDate.term(snsPublish.getReserveDt()) > 0) {
                 reserved = true;
-                articleSnsShareService.reservePublishSnsArticleSnsShare(snsPublish);
+                String result = articleSnsShareService.reservePublishSnsArticleSnsShare(snsPublish);
+                ResultDTO<?> reserveResult = ResourceMapper
+                        .getDefaultObjectMapper()
+                        .readValue(result, ResultDTO.class);
+                success = reserveResult
+                        .getHeader()
+                        .isSuccess();
+                if (!success) {
+                    successMsg = reserveResult
+                            .getHeader()
+                            .getMessage();
+                }
+
             } else {
                 articleSnsShareService.publishSnsArticleSnsShare(snsPublish);
             }
-            String successMsg = reserved ? msg("tps.sns.success.save.feed-reserve") : msg("tps.sns.success.save.facebook-instance-article");
+            if (McpString.isEmpty(successMsg)) {
+                if (success) {
+                    successMsg = reserved ? msg("tps.sns.success.save.feed-reserve") : msg("tps.sns.success.save.feed");
+                } else {
+                    successMsg = reserved ? msg("tps.sns.error.save.feed-reserve") : msg("tps.sns.error.save.feed");
+                }
+            }
             // 결과리턴
 
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, successMsg);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, successMsg);
 
 
             // 액션 로그에 성공 로그 출력
@@ -424,7 +447,7 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             log.error("[FAIL TO INSERT FACEBOOK INSTANCE ARTICLE]", e);
             // 액션 로그에 오류 내용 출력
             tpsLogger.error(ActionType.INSERT, e);
-            throw new Exception(msg("tps.sns.error.save.facebook-instance-article"), e);
+            throw new Exception(msg("tps.sns.error.save.feed-reserve"), e);
         }
     }
 
@@ -445,20 +468,41 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
         try {
 
             boolean reserved = false;
+            boolean success = true;
+            String successMsg = "";
+            InvalidDataDTO invalidDataDTO = null;
             if (snsDelete.getReserveDt() != null && McpDate.term(snsDelete.getReserveDt()) > 0) {
                 reserved = true;
-                articleSnsShareService.reserveDeleteSnsArticleSnsShare(snsDelete);
+                String result = articleSnsShareService.reserveDeleteSnsArticleSnsShare(snsDelete);
+                ResultDTO<?> reserveResult = ResourceMapper
+                        .getDefaultObjectMapper()
+                        .readValue(result, ResultDTO.class);
+
+                success = reserveResult
+                        .getHeader()
+                        .isSuccess();
+                if (!success) {
+                    successMsg = reserveResult
+                            .getHeader()
+                            .getMessage();
+                }
             } else {
                 articleSnsShareService.deleteSnsArticleSnsShare(snsDelete);
             }
 
-            String successMsg = reserved ? msg("tps.sns.success.delete.feed-reserve") : msg("tps.sns.success.delete.facebook-instance-article");
+            if (McpString.isEmpty(successMsg)) {
+                if (success) {
+                    successMsg = reserved ? msg("tps.sns.success.delete.feed-reserve") : msg("tps.sns.success.delete.feed");
+                } else {
+                    successMsg = reserved ? msg("tps.sns.error.save.feed-reserve") : msg("tps.sns.error.delete.feed");
+                }
+            }
 
             // 액션 로그에 성공 로그 출력
             tpsLogger.success(ActionType.UPDATE, successMsg);
 
             // 결과리턴
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(true, successMsg);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, successMsg);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception e) {

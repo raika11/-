@@ -19,7 +19,7 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
             <MokaImage className="mr-3 flex-shrink-0 border" width={120} height={98} img={data.imgUrl || '//pds.joins.com/news/search_direct_link/000.jpg'} inputBorder={false} />
 
             {/* 우측 컨텐츠 */}
-            <div className="flex-fill overflow-hidden color-searching">
+            <div className="flex-fill overflow-hidden color-searching" style={{ fontSize: '14px' }}>
                 <h3 className="w-100">
                     {data.linkTitle}&nbsp;(&nbsp;
                     <a
@@ -39,10 +39,10 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                 <p className="text-truncate w-100">{data.linkContent}</p>
                 <div className="d-flex justify-content-between w-100">
                     <div className="d-flex flex-fill">
-                        <div style={{ width: 282 }}>
+                        <div style={{ width: 272 }}>
                             <p className="mb-0">시작일&nbsp;{data.viewSdate}</p>
                         </div>
-                        <div style={{ width: 282 }}>
+                        <div style={{ width: 272 }}>
                             <p className="mb-0">종료일&nbsp;{data.viewEdate}</p>
                         </div>
                     </div>
@@ -58,12 +58,12 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                     </p>
                 </div>
                 <div className="d-flex">
-                    <div style={{ width: 282 }}>
+                    <div style={{ width: 272 }}>
                         <p className="mb-0">
                             등록일&nbsp;{(data.regDt || '').slice(0, -3)}&nbsp;{data.regId}
                         </p>
                     </div>
-                    <div style={{ width: 282 }}>
+                    <div style={{ width: 272 }}>
                         {data.modDt && (
                             <p className="mb-0">
                                 수정일&nbsp;{(data.modDt || '').slice(0, -3)}&nbsp;{data.modId}

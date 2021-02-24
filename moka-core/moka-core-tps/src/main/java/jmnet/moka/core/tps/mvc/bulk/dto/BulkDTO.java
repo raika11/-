@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.entity.MemberSimpleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -94,11 +95,10 @@ public class BulkDTO implements Serializable {
     private Date regDt;
 
     /**
-     * varchar  30  YES 등록자
+     * varchar  30  YES 등록자정보
      */
     @ApiModelProperty(hidden = true)
-    @Length(max = 30, message = "{tps.bulk.error.length.regId}")
-    private String regId;
+    private MemberSimpleInfo regMember;
 
 
     /**

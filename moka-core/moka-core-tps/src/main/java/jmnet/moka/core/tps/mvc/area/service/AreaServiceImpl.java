@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.mvc.MessageByLocale;
@@ -25,6 +26,7 @@ import jmnet.moka.core.tps.mvc.area.vo.AreaVO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,14 @@ public class AreaServiceImpl implements AreaService {
     @Autowired
     private MessageByLocale messageByLocale;
 
+    private final EntityManager entityManager;
+
+    @Autowired
+    public AreaServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+
     @Override
     public List<AreaSimple> findAllArea(AreaSearchDTO search) {
         //        return areaRepository.findByParent_AreaSeqOrderByOrdNo(search.getParentAreaSeq());
@@ -64,7 +74,10 @@ public class AreaServiceImpl implements AreaService {
     @Override
     @Transactional
     public Area insertArea(Area area) {
-        return areaRepository.save(area);
+        Area returnVal = areaRepository.save(area);
+        // entity에 빠진 정보 재조회
+        // entityManager.refresh(returnVal);
+        return returnVal;
     }
 
     @Override

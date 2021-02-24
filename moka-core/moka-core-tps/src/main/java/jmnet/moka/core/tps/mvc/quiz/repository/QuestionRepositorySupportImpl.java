@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.quiz.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -13,6 +14,7 @@ import jmnet.moka.core.tps.mvc.quiz.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <pre>
@@ -80,5 +82,17 @@ public class QuestionRepositorySupportImpl extends TpsQueryDslRepositorySupport 
         QueryResults<Question> list = query.fetchResults();
 
         return new PageImpl<Question>(list.getResults(), pageable, list.getTotal());
+    }
+
+    @Override
+    @Transactional
+    public long deleteQuestionBySeq(Long questionSeq) {
+        QQuizChoice qQuizChoice = QQuizChoice.quizChoice;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qQuizChoice.id.questionSeq.eq(questionSeq));
+        return delete(qQuizChoice)
+                .where(builder)
+                .execute();
     }
 }

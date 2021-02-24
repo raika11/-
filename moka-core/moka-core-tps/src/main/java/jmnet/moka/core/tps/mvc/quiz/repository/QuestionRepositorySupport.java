@@ -25,4 +25,12 @@ public interface QuestionRepositorySupport {
      * @return 검색 결과
      */
     Page<Question> findAllQuestion(SearchDTO search);
+
+    /**
+     * 질문내 보기 모두 삭제
+     *
+     * @param questionSeq 질문번호
+     * @return 성공건수
+     */
+    long deleteQuestionBySeq(Long questionSeq);
 }

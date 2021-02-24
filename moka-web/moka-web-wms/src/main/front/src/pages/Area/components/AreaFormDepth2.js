@@ -150,9 +150,9 @@ const AreaFormDepth2 = (props) => {
             depth, // depth 변경
             ordNo: temp.areaSeq ? temp.ordNo : list.length + 1, // 수정 등록 분기쳐서 ordNo 셋팅
             sourceCode,
+            domain,
             page: { pageSeq: page.pageSeq, pageName: page.pageName, pageUrl: page.pageUrl },
             parent: { areaSeq: parent.areaSeq },
-            domain: { domainId: domain.domainId },
             previewRsrc,
         };
         if (temp.areaDiv === ITEM_CP) {

@@ -29,7 +29,8 @@ const AreaFormDepth1 = (props) => {
         } else if (name === 'areaNm') {
             setTemp({ ...temp, areaNm: value });
         } else if (name === 'domainId') {
-            setDomain({ domainId: e.target.value });
+            const { name, url } = e.target.selectedOptions[0].dataset;
+            setDomain({ domainId: e.target.value, domainName: name, domainUrl: url });
             setError({ domainId: false });
         }
     };
@@ -163,7 +164,7 @@ const AreaFormDepth1 = (props) => {
                 >
                     <option hidden>도메인을 선택하세요</option>
                     {domainList.map((d) => (
-                        <option key={d.domainId} value={d.domainId}>
+                        <option key={d.domainId} value={d.domainId} data-name={d.domainName} data-url={d.domainUrl}>
                             {d.domainName} ({d.domainUrl})
                         </option>
                     ))}

@@ -36,6 +36,7 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
+import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
@@ -50,6 +51,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -205,6 +208,18 @@ public class AppRestController {
 
         // 링크 타켓 유형
         result.put("LINK_TARGET", LinkTargetCode.toList());
+
+
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        if (authentication != null) {
+            // 링크 타켓 유형
+
+            UserDTO userDTO = (UserDTO) authentication.getDetails();
+            result.put("USER_NAME", userDTO.getUserName());
+        }
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);
 

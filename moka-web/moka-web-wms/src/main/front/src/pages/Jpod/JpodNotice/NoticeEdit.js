@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput, MokaTableEditCancleButton } from '@components';
-import { Form, Col, Button, Row } from 'react-bootstrap';
+import { Form, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -14,6 +14,9 @@ import { uploadBoardContentImage, updateBoardContents, saveBoardReply, saveBoard
 import BoardRepoterSelect from '@pages/Boards/BoardsList/BoardsEdit/BoardRepoterSelect';
 import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummernote';
 
+/**
+ * J팟 관리 - 공지 게시판 수정 / 등록
+ */
 const NoticeEdit = ({ match }) => {
     const history = useHistory();
     const params = useParams();
@@ -460,79 +463,55 @@ const NoticeEdit = ({ match }) => {
 
     return (
         <MokaCard
-            width={550}
+            className="flex-fill"
             title={editState.title}
             loading={loading}
-            className="flex-fill"
             bodyClassName="d-flex flex-column"
             footer
             footerClassName="justify-content-center"
             footerAs={
                 <>
-                    {/* 하단 버튼 처리. */}
-                    {(function () {
-                        // 하단 버튼 등록 일때.
-                        if (editState.mode === 'new') {
-                            return (
-                                <Row className="justify-content-md-center text-center">
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="positive" onClick={() => handleClickContentsSaveButton()}>
-                                            저장
-                                        </Button>
-                                    </Col>
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="negative" onClick={() => handleClickCancleButton()}>
-                                            취소
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            );
-                            // 하단 버튼 보기, 수정 일때.
-                        } else if (editState.mode === 'modify') {
-                            return (
-                                <Row className="justify-content-md-center text-center">
-                                    {selectBoard.answYn === 'Y' && (
-                                        <Col className="mp-0 pr-0">
-                                            <Button variant="negative" onClick={() => handleClickReplayButton()}>
-                                                답변
-                                            </Button>
-                                        </Col>
-                                    )}
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="positive" onClick={() => handleClickUpdateButton()}>
-                                            수정
-                                        </Button>
-                                    </Col>
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="negative" onClick={() => handleClickDeleteButton()}>
-                                            삭제
-                                        </Button>
-                                    </Col>
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="negative" onClick={() => handleClickCancleButton()}>
-                                            취소
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            );
-                            // 하단 버튼 답글 일때.
-                        } else if (editState.mode === 'reply') {
-                            return (
-                                <Row className="justify-content-md-center text-center">
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="positive" onClick={() => handleClickReplaySaveButton()}>
-                                            저장
-                                        </Button>
-                                    </Col>
-                                    <Col className="mp-0 pr-0">
-                                        <Button variant="negative" onClick={() => handleClickReplayCancleButton()}>
-                                            취소
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            );
-                        }
-                    })()}
+                    {editState.mode === 'new' && (
+                        // 하단 버튼 등록 일때
+                        <>
+                            <Button variant="positive" className="mr-1" onClick={() => handleClickContentsSaveButton()}>
+                                저장
+                            </Button>
+                            <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                취소
+                            </Button>
+                        </>
+                    )}
+                    {editState.mode === 'modify' && (
+                        // 하단 버튼 보기, 수정 일때
+                        <>
+                            {selectBoard.answYn === 'Y' && (
+                                <Button variant="negative" className="mr-1" onClick={() => handleClickReplayButton()}>
+                                    답변
+                                </Button>
+                            )}
+                            <Button variant="positive" className="mr-1" onClick={() => handleClickUpdateButton()}>
+                                수정
+                            </Button>
+                            <Button variant="negative" className="mr-1" onClick={() => handleClickDeleteButton()}>
+                                삭제
+                            </Button>
+                            <Button variant="negative" onClick={() => handleClickCancleButton()}>
+                                취소
+                            </Button>
+                        </>
+                    )}
+                    {editState.mode === 'reply' && (
+                        // 하단 버튼 답글 일때
+                        <>
+                            <Button variant="positive" className="mr-1" onClick={() => handleClickReplaySaveButton()}>
+                                저장
+                            </Button>
+                            <Button variant="negative" onClick={() => handleClickReplayCancleButton()}>
+                                취소
+                            </Button>
+                        </>
+                    )}
                 </>
             }
         >

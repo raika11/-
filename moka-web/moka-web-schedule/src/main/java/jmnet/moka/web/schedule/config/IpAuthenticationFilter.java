@@ -35,6 +35,7 @@ public class IpAuthenticationFilter extends BasicAuthenticationFilter {
         super(authenticationManager);
         whitelist.add("172.29.58.*");
         whitelist.add("192.168.0.1");
+        whitelist.add("127.0.0.1");
         whitelist.add("0:0:0:0:0:0:0:1");
     }
 

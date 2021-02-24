@@ -32,7 +32,7 @@ const PreviewRenderer = ({ bulkartSeq }) => {
 
     return (
         <>
-            <Button variant="outline-table-btn" className="mr-05" onClick={() => handleClickPreviewButton()}>
+            <Button variant="outline-table-btn" size="sm" onClick={() => handleClickPreviewButton()}>
                 미리보기
             </Button>
         </>

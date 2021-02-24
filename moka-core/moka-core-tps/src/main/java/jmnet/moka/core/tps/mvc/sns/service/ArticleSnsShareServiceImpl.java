@@ -3,15 +3,19 @@ package jmnet.moka.core.tps.mvc.sns.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.core.common.exception.NoDataException;
+import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.core.common.sns.SnsApiService;
 import jmnet.moka.core.common.sns.SnsDeleteDTO;
 import jmnet.moka.core.common.sns.SnsPublishDTO;
 import jmnet.moka.core.common.sns.SnsStatusCode;
 import jmnet.moka.core.common.sns.SnsTypeCode;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.mvc.codemgt.entity.CodeMgt;
 import jmnet.moka.core.tps.mvc.codemgt.service.CodeMgtService;
 import jmnet.moka.core.tps.mvc.sns.dto.ArticleSnsShareMetaSearchDTO;
@@ -22,11 +26,12 @@ import jmnet.moka.core.tps.mvc.sns.mapper.ArticleSnsShareMapper;
 import jmnet.moka.core.tps.mvc.sns.repository.ArticleSnsShareRepository;
 import jmnet.moka.core.tps.mvc.sns.vo.ArticleSnsShareItemVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -57,6 +62,15 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
     @Value("${sns.facebook.token-code}")
     private String facebookTokenCode;
+
+    @Value("${moka.schedule-server.reserved-task.url}")
+    private String reservedTaskUrl;
+
+    /**
+     * 외부 API URL 호출용
+     */
+    @Autowired
+    protected RestTemplateHelper restTemplateHelper;
 
 
 
@@ -244,15 +258,29 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
      * @param snsPublish SNS 공유 정보
      * @throws MokaException
      */
-    @Async
-    public void reservePublishSnsArticleSnsShare(SnsPublishDTO snsPublish)
+    //@Async
+    public String reservePublishSnsArticleSnsShare(SnsPublishDTO snsPublish)
             throws Exception {
+        String result = null;
         try {
-            Thread.sleep(McpDate.term(snsPublish.getReserveDt()));
-            publishSnsArticleSnsShare(snsPublish);
+            String jobCd = TpsConstants.SNS_RESERVED_PUBLISH_JOB_CD;
+            String paramDesc = ResourceMapper
+                    .getDefaultObjectMapper()
+                    .writeValueAsString(snsPublish);
+            ResponseEntity<String> responseEntity = restTemplateHelper.post(reservedTaskUrl, MapBuilder
+                    .getInstance()
+                    .add("jobCd", TpsConstants.SNS_RESERVED_PUBLISH_JOB_CD)
+                    .add("jobTaskId", jobCd + "_" + snsPublish.getTotalId())
+                    .add("paramDesc", paramDesc)
+                    .add("reserveDt", McpDate.dateTimeStr(snsPublish.getReserveDt()))
+                    .getMultiValueMap());
+
+            result = responseEntity.getBody();
+
         } catch (InterruptedException ie) {
             log.error("SNS Share publish failed : {}", snsPublish.getTotalId(), ie);
         }
+        return result;
     }
 
     /**
@@ -261,15 +289,27 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
      * @param snsDelete SNS 삭제 정보
      * @throws MokaException
      */
-    @Async
-    public void reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
+    public String reserveDeleteSnsArticleSnsShare(SnsDeleteDTO snsDelete)
             throws Exception {
+        String result = null;
         try {
-            Thread.sleep(McpDate.term(snsDelete.getReserveDt()));
-            deleteSnsArticleSnsShare(snsDelete);
+            String jobCd = TpsConstants.SNS_RESERVED_DELETE_JOB_CD;
+            String paramDesc = ResourceMapper
+                    .getDefaultObjectMapper()
+                    .writeValueAsString(snsDelete);
+            ResponseEntity<String> responseEntity = restTemplateHelper.post(reservedTaskUrl, MapBuilder
+                    .getInstance()
+                    .add("jobCd", TpsConstants.SNS_RESERVED_DELETE_JOB_CD)
+                    .add("jobTaskId", jobCd + "_" + snsDelete.getTotalId())
+                    .add("paramDesc", paramDesc)
+                    .add("reserveDt", McpDate.dateTimeStr(snsDelete.getReserveDt()))
+                    .getMultiValueMap());
+
+            result = responseEntity.getBody();
         } catch (InterruptedException ie) {
             log.error("SNS Share delete failed : {}", snsDelete.getSnsId(), ie);
         }
+        return result;
     }
 
     private SnsApiService getSnsAipService(SnsTypeCode snsTypeCode) {

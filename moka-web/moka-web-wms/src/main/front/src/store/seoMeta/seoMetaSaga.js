@@ -44,7 +44,7 @@ function toSnsMetaViewData({ snsShare, article }) {
     // 기사정보
     const { totalId, artSummary, artTitle, keywords } = article;
     // SNS 정보
-    const { artKeyword: jaKeyword, artTitle: jaMetaTitle, artSummary: jaMetaSummary, regDt, usedYn } = snsShare;
+    const { artKeyword: jaKeyword, artTitle: jaMetaTitle, artSummary: jaMetaSummary, regDt, usedYn, id } = snsShare;
     let keyword = '';
     if (!commonUtil.isEmpty(keywords)) {
         keyword = keywords
@@ -60,6 +60,7 @@ function toSnsMetaViewData({ snsShare, article }) {
         keyword,
         addKeyword: commonUtil.isEmpty(jaKeyword) ? '' : jaKeyword,
         usedYn: commonUtil.isEmpty(usedYn) ? 'Y' : usedYn,
+        isInsert: commonUtil.isEmpty(id),
     };
 }
 

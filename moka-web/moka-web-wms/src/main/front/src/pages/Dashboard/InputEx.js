@@ -129,15 +129,15 @@ const InputEx = () => {
             <hr className="divider" />
 
             <p className="mb-2 text-positive font-weight-bold">날짜 선택 후 달력 닫기</p>
-            <p className="mb-2 text-dark font-weight-bold">closeOnSelect, 기본 false이므로 false일 때 굳이 명시할 필요 없다. 필요 시에만 inputProps에 추가한다</p>
+            <p className="mb-2 text-dark font-weight-bold">closeOnSelect, 기본 true이므로 true일 때 굳이 명시할 필요 없다. 필요 시에만 inputProps에 추가한다</p>
 
             <MokaInputLabel
-                label="달력 닫기"
+                label="달력 닫지 않기"
                 as="dateTimePicker"
                 value={temp.date}
                 className="mb-2"
                 onChange={handleChangeDate}
-                inputProps={{ closeOnSelect: true, timeFormat: null }}
+                inputProps={{ closeOnSelect: false, timeFormat: null }}
             />
 
             <hr className="divider" />

@@ -1,8 +1,8 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { MokaCard } from '@components';
 import EpisodeSearchBox from './EpisodeSearchBox';
 import EpisodeListAgGrid from './EpisodeListAgGrid';
-import { useParams } from 'react-router-dom';
 
 /**
  * J팟 관리 - 에피소드 리스트

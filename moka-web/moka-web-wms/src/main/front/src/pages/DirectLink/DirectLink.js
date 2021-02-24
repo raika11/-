@@ -1,11 +1,11 @@
 import React, { useEffect, Suspense } from 'react';
-import { Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { useDispatch } from 'react-redux';
+import { Route } from 'react-router-dom';
 import { MokaCard } from '@components';
 import { clearStore } from '@store/directLink';
-
 import DirectLinkEdit from './DirectLinkEdit';
+
 const DirectLinkList = React.lazy(() => import('./DirectLinkList'));
 
 /**
@@ -24,7 +24,7 @@ const DirectLink = ({ match }) => {
         <div className="d-flex">
             <Helmet>
                 <title>사이트 바로 가기</title>
-                <meta name="description" content="사이트 바로 가기 관리페이지입니다." />
+                <meta name="description" content="사이트 바로 가기 관리 페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 

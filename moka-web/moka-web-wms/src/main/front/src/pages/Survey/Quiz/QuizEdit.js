@@ -577,32 +577,24 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             loading={save_loading}
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '미리보기', variant: 'positive', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-05' },
-                { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
-                { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-05' },
+                { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-1' },
+                { text: '미리보기', variant: 'outline-neutral', onClick: () => messageBox.alert('서비스 준비중입니다.', () => {}), className: 'mr-1' },
+                { text: '취소', variant: 'negative', onClick: () => history.push('/quiz'), className: 'mr-1' },
             ]}
             width={750}
         >
             <Form>
-                <Form.Row className="mb-2 p-2">
-                    <Col xs={9}>
+                <Form.Row>
+                    <Col xs={9} className="p-0">
                         <Form.Row className="mb-2">
-                            <Col xs={6}>
-                                <MokaInputLabel
-                                    label="서비스 상태"
-                                    as="select"
-                                    labelWidth={66}
-                                    onChange={(e) => handleChangeEditData(e)}
-                                    id="quizSts"
-                                    name="quizSts"
-                                    value={quizInfo.quizSts}
-                                >
+                            <Col xs={6} className="p-0">
+                                <MokaInputLabel label="서비스 상태" as="select" onChange={(e) => handleChangeEditData(e)} id="quizSts" name="quizSts" value={quizInfo.quizSts}>
                                     <option value="P">일시중지</option>
                                     <option value="Y">서비스중</option>
                                     <option value="N">서비스 종료</option>
                                 </MokaInputLabel>
                             </Col>
-                            <Col xs={3} className="pr-0">
+                            <Col xs={3} className="p-0">
                                 <MokaInputLabel
                                     as="switch"
                                     label="로그인"
@@ -613,7 +605,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                     onChange={(e) => handleChangeEditData(e)}
                                 />
                             </Col>
-                            <Col xs={3} className="pl-0 pr-0">
+                            <Col xs={3} className="p-0">
                                 <MokaInputLabel
                                     as="switch"
                                     label="댓글"
@@ -626,25 +618,16 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={12}>
-                                <MokaInputLabel
-                                    label="퀴즈 제목"
-                                    labelWidth={66}
-                                    required={true}
-                                    value={quizInfo.title}
-                                    onChange={(e) => handleChangeEditData(e)}
-                                    id="title"
-                                    name="title"
-                                />
+                            <Col xs={12} className="p-0">
+                                <MokaInputLabel label="퀴즈 제목" required={true} value={quizInfo.title} onChange={(e) => handleChangeEditData(e)} id="title" name="title" />
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={12}>
+                            <Col xs={12} className="p-0">
                                 <MokaInputLabel
                                     as="textarea"
                                     className="mb-2"
                                     label="퀴즈 설명"
-                                    labelWidth={66}
                                     inputClassName="resize-none"
                                     inputProps={{ rows: 3 }}
                                     id="quizDesc"
@@ -655,11 +638,10 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={6}>
+                            <Col xs={6} className="p-0">
                                 <MokaInputLabel
                                     as="select"
                                     label="결과 유형"
-                                    labelWidth={66}
                                     required={true}
                                     onChange={(e) => handleChangeEditData(e)}
                                     id="quizType"
@@ -674,7 +656,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Col>
                         </Form.Row>
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={3} className="p-0">
                         <Form.Row>
                             <Col xs={12} className="d-flex align-items-center">
                                 <Form.Label className="px-0 mb-0 position-relative flex-shrink-0">퀴즈 커버 이미지</Form.Label>
@@ -688,11 +670,11 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                     labelWidth={90}
                                     inputProps={{ img: quizInfo.imgUrl, width: 150, height: 84, setFileValue: setImageFileValue, deleteButton: true }}
                                 />
-                                <Col className="d-flex justify-content-start pl-0 pt-2">
+                                <Col className="d-flex justify-content-center pl-0 pt-2">
                                     <Button
                                         className="mt-0"
                                         size="sm"
-                                        variant="positive"
+                                        variant="gray-700"
                                         onClick={(e) => {
                                             imgFileRef.current.rootRef.onClick(e);
                                         }}
@@ -792,12 +774,12 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                         <Col xs={3}>
                             <Form.Row className="d-flex justify-content-end">
                                 <div className="d-felx pr-1">
-                                    <Button variant="positive" onClick={() => handleClickNewQuestionsButton()}>
+                                    <Button variant="positive" onClick={handleClickNewQuestionsButton}>
                                         생성
                                     </Button>
                                 </div>
                                 <div className="d-felx">
-                                    <Button variant="searching" onClick={() => handleClickSearchQuestionsButton()}>
+                                    <Button variant="searching" onClick={handleClickSearchQuestionsButton}>
                                         문항 검색
                                     </Button>
                                 </div>

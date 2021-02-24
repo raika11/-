@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DATA_TYPE_DESK } from '@/constants';
 import { MokaLoader } from '@components';
-import { putDeskingWork, deleteDeskingWorkList } from '@store/desking';
+import { postDeskingWork, putDeskingWork, deleteDeskingWorkList } from '@store/desking';
 import ButtonGroup from './ButtonGroup';
 import DeskingWorkAgGrid from './DeskingWorkAgGrid';
 import { EditDeskingWorkModal } from '@pages/Desking/modals';
@@ -69,11 +69,11 @@ const ComponentWork = (props) => {
     };
 
     /**
-     * 편집기사 저장 (put)
+     * 편집기사 수정 (put)
      * @param {object} deskingWork 저장할 편집기사 데이터
      * @param {func} callback 저장 후 실행
      */
-    const handleClickSave = (deskingWork, callback) => {
+    const handleClickPut = (deskingWork, callback) => {
         let saveData = deskingWork;
         delete saveData.onRowClicked;
         delete saveData.onSave;
@@ -85,6 +85,27 @@ const ComponentWork = (props) => {
                 componentWorkSeq: component.seq,
                 areaSeq,
                 deskingWork: saveData,
+                callback,
+            }),
+        );
+    };
+
+    /**
+     * 편집기사 추가 (post)
+     * @param {object} deskingWork 저장할 편집기사 데이터
+     * @param {func} callback 저장 후 실행
+     */
+    const handleClickPost = (deskingWork, callback) => {
+        dispatch(
+            postDeskingWork({
+                componentWorkSeq: component.seq,
+                datasetSeq: component.datasetSeq,
+                areaSeq,
+                deskingWork: {
+                    ...deskingWork,
+                    contentOrd: 1,
+                    contentType: 'D',
+                },
                 callback,
             }),
         );
@@ -128,6 +149,7 @@ const ComponentWork = (props) => {
                 componentAgGridInstances={componentAgGridInstances}
                 workStatus={workStatus[component.seq]}
                 setLoading={setLoading}
+                onSaveDummy={handleClickPost}
                 deskingPart={deskingPart}
                 // handleForm={() => setFormShow(true)}
             />
@@ -141,7 +163,7 @@ const ComponentWork = (props) => {
                     setComponentAgGridInstances={setComponentAgGridInstances}
                     deskingPart={deskingPart}
                     onRowClicked={handleRowClicked}
-                    onSave={handleClickSave}
+                    onSave={handleClickPut}
                     onDelete={handleClickDelete}
                 />
             )}
@@ -158,7 +180,7 @@ const ComponentWork = (props) => {
                     onHide={() => setEditModalShow(false)}
                     deskingWorkData={deskingWorkData}
                     component={component}
-                    onSave={handleClickSave}
+                    onSave={handleClickPut}
                     deskingPart={deskingPart}
                 />
             )}

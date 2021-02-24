@@ -9,6 +9,7 @@ import moment from 'moment';
 import { invalidListToError } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel } from '@components';
 import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList } from '@store/directLink';
+import { EditThumbModal } from '../Desking/modals';
 
 const DATEFORMAT = 'YYYY-MM-DD';
 const URL_ERROR = '정확한 URL을 입력하세요';
@@ -327,7 +328,7 @@ const DirectLinkEdit = ({ history, match }) => {
             footerClassName="justify-content-center"
             footerButtons={[
                 {
-                    text: '저장',
+                    text: linkSeq ? '수정' : '저장',
                     variant: 'positive',
                     onClick: handleClickSave,
                     className: 'mr-2',
@@ -407,43 +408,36 @@ const DirectLinkEdit = ({ history, match }) => {
                 </Form.Row>
 
                 {/* 계속 노출 */}
-                <Form.Row className="mb-2">
-                    <Col xs={3} className="p-0">
-                        <MokaInputLabel
-                            as="switch"
-                            className="mb-0 h-100"
-                            id="dateFixYn"
-                            name="dateFixYn"
-                            label="계속노출"
-                            inputProps={{ checked: dateFixYn === 'Y' }}
-                            onChange={handleChangeValue}
-                        />
-                    </Col>
-                    {/* 시작일/종료일 */}
-                    <Col xs={9} className="p-0 d-flex">
-                        <MokaInputLabel
-                            label="시작일"
-                            labelWidth={45}
-                            as="dateTimePicker"
-                            name="viewSdate"
-                            value={temp.viewSdate}
-                            onChange={handleSDate}
-                            className="mr-1"
-                            inputProps={{ timeFormat: null }}
-                            disabled={dateDisabled}
-                        />
-                        <MokaInputLabel
-                            label="종료일"
-                            labelWidth={45}
-                            as="dateTimePicker"
-                            name="viewEdate"
-                            value={temp.viewEdate}
-                            onChange={handleEDate}
-                            className="ml-1"
-                            inputProps={{ timeFormat: null }}
-                            disabled={dateDisabled}
-                        />
-                    </Col>
+                <Form.Row className="mb-2 align-items-center">
+                    <MokaInputLabel
+                        as="switch"
+                        className="mr-2"
+                        id="dateFixYn"
+                        name="dateFixYn"
+                        label="계속노출"
+                        inputProps={{ checked: dateFixYn === 'Y' }}
+                        onChange={handleChangeValue}
+                    />
+                    <MokaInputLabel
+                        label="시작일"
+                        as="dateTimePicker"
+                        name="viewSdate"
+                        value={temp.viewSdate}
+                        onChange={handleSDate}
+                        className="mr-1"
+                        inputProps={{ timeFormat: null }}
+                        disabled={dateDisabled}
+                    />
+                    <MokaInputLabel
+                        label="종료일"
+                        as="dateTimePicker"
+                        name="viewEdate"
+                        value={temp.viewEdate}
+                        onChange={handleEDate}
+                        className="ml-1"
+                        inputProps={{ timeFormat: null }}
+                        disabled={dateDisabled}
+                    />
                 </Form.Row>
 
                 {/* 이미지 */}
@@ -458,6 +452,7 @@ const DirectLinkEdit = ({ history, match }) => {
                         <MokaInputLabel
                             as="imageFile"
                             name="imageUrl"
+                            ref={imgFileRef}
                             label={
                                 <React.Fragment>
                                     이미지
@@ -465,28 +460,18 @@ const DirectLinkEdit = ({ history, match }) => {
                                     (60*50)
                                     <br />
                                     <Button
-                                        className="mt-1"
+                                        variant="gray-700"
                                         size="sm"
-                                        variant="negative"
+                                        className="mt-2"
                                         onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            imgFileRef.current.deleteFile();
-                                            setTemp({ ...temp, imgUrl: null });
+                                            imgFileRef.current.rootRef.onClick(e);
                                         }}
                                     >
-                                        삭제
+                                        신규등록
                                     </Button>
                                 </React.Fragment>
                             }
-                            ref={imgFileRef}
-                            inputProps={{
-                                width: '100%',
-                                height: 90,
-                                img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null,
-                                selectAccept: ['image/jpeg'], // 이미지중 업로드 가능한 타입 설정.
-                                setFileValue,
-                            }}
+                            inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, height: 90, setFileValue, deleteButton: true }}
                             labelClassName="justify-content-end"
                             isInvalid={error.directLinkThumbnailFile}
                             invalidMessage={error.directLinkThumbnailFileMessage}
@@ -496,7 +481,7 @@ const DirectLinkEdit = ({ history, match }) => {
                 </Form.Row>
 
                 {/* 노출고정 */}
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <Col xs={5} className="p-0">
                         <MokaInputLabel label="노출고정" as="select" className="mb-0" name="fixYn" value={temp.fixYn} onChange={handleChangeValue}>
                             <option value="N">검색시만 노출</option>

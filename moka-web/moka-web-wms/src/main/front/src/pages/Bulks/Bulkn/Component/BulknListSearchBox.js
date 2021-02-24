@@ -83,47 +83,45 @@ const BulknListSearchBox = (props) => {
 
     return (
         <>
-            <Form>
-                <Form.Row className="d-flex mb-3">
-                    <Col xs={3} className="d-flex justify-content-center align-items-center">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="startDt"
-                            id="startDt"
-                            value={searchData.startDt}
-                            // onChange={(e) => handleDateChange('startDt', e)}
-                            onChange={(param) => {
-                                handleDateChange('startDt', param);
-                            }}
-                            inputProps={{ timeFormat: null, timeDefault: 'start' }}
-                        />
-                    </Col>
-                    <Col xs={3} className="justify-content-center align-items-center pr-2">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0 pr-1"
-                            name="endDt"
-                            id="endDt"
-                            value={searchData.endDt}
-                            onChange={(param) => {
-                                handleDateChange('endDt', param);
-                            }}
-                            inputProps={{ timeFormat: null, timeDefault: 'end' }}
-                        />
-                    </Col>
-                    <Col xs={2} className="justify-content-center text-left">
-                        <Button variant="searching" onClick={() => handleClickSearchButton()}>
-                            검색
-                        </Button>
-                    </Col>
-                    <Col xs={4} className="pr-2 text-right">
-                        <Button variant="positive" onClick={() => handleClickNewButton()}>
-                            등록
-                        </Button>
-                    </Col>
-                </Form.Row>
-            </Form>
+            <Form.Row className="mb-14">
+                <Col xs={3} className="p-0 mr-1">
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="mb-0"
+                        name="startDt"
+                        id="startDt"
+                        value={searchData.startDt}
+                        // onChange={(e) => handleDateChange('startDt', e)}
+                        onChange={(param) => {
+                            handleDateChange('startDt', param);
+                        }}
+                        inputProps={{ timeFormat: null, timeDefault: 'start' }}
+                    />
+                </Col>
+                <Col xs={3} className="p-0 mr-1">
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="mb-0"
+                        name="endDt"
+                        id="endDt"
+                        value={searchData.endDt}
+                        onChange={(param) => {
+                            handleDateChange('endDt', param);
+                        }}
+                        inputProps={{ timeFormat: null, timeDefault: 'end' }}
+                    />
+                </Col>
+                <Col xs={2} className="p-0">
+                    <Button variant="searching" onClick={() => handleClickSearchButton()}>
+                        검색
+                    </Button>
+                </Col>
+                <Col xs={4} className="text-right">
+                    <Button variant="positive" onClick={() => handleClickNewButton()}>
+                        등록
+                    </Button>
+                </Col>
+            </Form.Row>
         </>
     );
 };

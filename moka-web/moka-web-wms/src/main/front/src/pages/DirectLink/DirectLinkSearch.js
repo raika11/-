@@ -50,7 +50,7 @@ const DirectLinkSearch = ({ match, history }) => {
     }, [dispatch]);
 
     return (
-        <Form.Row className="mb-2">
+        <Form.Row className="mb-14">
             {/* 사용여부 */}
             <div className="flex-shrink-0 mr-2">
                 <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue} className="mb-0">
@@ -61,7 +61,7 @@ const DirectLinkSearch = ({ match, history }) => {
 
             {/* 노출고정 */}
             <div className="flex-shrink-0 mr-2">
-                <MokaInputLabel label="노출고정" labelWidth={47} as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue}>
+                <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue}>
                     <option value="N">검색시만 노출</option>
                     <option value="Y">항상노출</option>
                 </MokaInputLabel>

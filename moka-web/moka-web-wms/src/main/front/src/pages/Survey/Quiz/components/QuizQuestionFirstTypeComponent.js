@@ -107,7 +107,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                 {/* <div className="mb-2 p-2 bg-gray-150"> */}
                 <Form.Row>
                     <div className="d-felx m-0 pr-2">
-                        <AgGripIcon className="pt-2 bg-gray-150" />
+                        <AgGripIcon className="pt-2" />
                     </div>
                     <Col xs={11}>
                         <MokaInputLabel
@@ -131,7 +131,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                     </Col>
                     <div className="d-felx pt-1">
                         {/* <MokaOverlayTooltipButton tooltipText="더보기" variant="bg-gray-150" className="p-0 bg-gray-150"> */}
-                        <MokaOverlayTooltipButton tooltipText="더보기" className="p-0">
+                        <MokaOverlayTooltipButton tooltipText="더보기" variant="bg-gray-150" className="p-0">
                             <Dropdown style={{ position: 'unset' }}>
                                 <Dropdown.Toggle as={DropdownToggle} id="dropdown-desking-edit" />
                                 <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
@@ -153,7 +153,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                                     id={`answer_${questionIndex}`}
                                     name="answer"
                                     value={questionsList[questionIndex].answer}
-                                    onChange={(e) => handleChangeEditData(e)}
+                                    onChange={handleChangeEditData}
                                 />
                             </Col>
                         </Form.Row>
@@ -187,11 +187,11 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                             labelWidth={90}
                             inputProps={{ img: questionsList[questionIndex].imgUrl, width: 150, height: 150, setFileValue: setImageFileValue, deleteButton: true }}
                         />
-                        <Col className="d-flex justify-content-start pl-0 pt-2">
+                        <Col className="d-flex justify-content-center pl-0 pt-2">
                             <Button
                                 className="mt-0"
                                 size="sm"
-                                variant="positive"
+                                variant="gray-700"
                                 onClick={(e) => {
                                     imgFileRef.current.rootRef.onClick(e);
                                 }}

@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { GET_JPOD_NOTICE, getBoardContents, changeJpodNoticeSearchOption, getJpodNotice } from '@store/jpod';
 
+/**
+ * J팟 관리 - 공지 게시판 AgGrid
+ */
 const NoticeListAgGrid = ({ match }) => {
     const params = useParams();
     const dispatch = useDispatch();

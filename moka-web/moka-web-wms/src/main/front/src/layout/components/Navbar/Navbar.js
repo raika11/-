@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Breadcrumb from './Breadcrumb';
@@ -10,6 +10,12 @@ import { toggleSidebar } from '@store/layout/layoutAction';
 
 const MokaNavbar = (props) => {
     const dispatch = useDispatch();
+    const { AUTH } = useSelector(
+        (store) => ({
+            AUTH: store.app.AUTH,
+        }),
+        shallowEqual,
+    );
 
     /**
      * 사이드바 토글 버튼
@@ -32,7 +38,7 @@ const MokaNavbar = (props) => {
                 </div>
 
                 <div className="d-flex align-items-center h-100">
-                    <Profile />
+                    <Profile info={AUTH} />
                     <hr className="vertical-divider" />
                     <NavButtons />
                 </div>

@@ -577,7 +577,7 @@ const ChannelEdit = ({ match }) => {
                     <MokaInputLabel label={`관련 기사`} as="none" />
                     <Button
                         variant="searching"
-                        className="mr-2"
+                        className="mr-1"
                         onClick={() => {
                             HandleSearchClick();
                         }}
@@ -881,7 +881,7 @@ const ChannelEdit = ({ match }) => {
                     <MokaInputLabel label={`출연진(고정패널)`} as="none" />
                     <Button
                         variant="searching"
-                        className="mr-2"
+                        className="mr-1"
                         onClick={() => {
                             setSelectRepoterType('CP');
                             handleClickSearchRepoterButton();
@@ -937,11 +937,11 @@ const ChannelEdit = ({ match }) => {
                     );
                 })}
                 <hr className="vertical-divider" />
-                <Form.Row className="mb-2">
+                <Form.Row className="mb-1">
                     <MokaInputLabel label={`출연진(게스트)`} as="none" />
                     <Button
                         variant="searching"
-                        className="mr-2"
+                        className="mr-1"
                         onClick={() => {
                             setSelectRepoterType('EG');
                             handleClickSearchRepoterButton();

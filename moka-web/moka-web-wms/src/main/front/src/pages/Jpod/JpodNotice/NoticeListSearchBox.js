@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
-import { MokaInput, MokaSearchInput } from '@components';
-import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { DB_DATEFORMAT } from '@/constants';
+import { useHistory } from 'react-router-dom';
 import moment from 'moment';
-
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import { MokaInput, MokaSearchInput } from '@components';
+import { DB_DATEFORMAT } from '@/constants';
 import { initialState, changeJpodNoticeSearchOption, getJpodNotice } from '@store/jpod';
 import toast from '@utils/toastUtil';
 
+/**
+ * J팟 관리 - 공지 게시판 검색
+ */
 const NoticeListSearchBox = ({ match }) => {
     const [searchData, setSearchData] = useState(initialState.jpodNotice.jpodNotices.search);
     const history = useHistory();
@@ -89,76 +93,66 @@ const NoticeListSearchBox = ({ match }) => {
     }, []);
 
     return (
-        <>
-            <Form>
-                <Form.Row className="d-flex mb-3">
-                    <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="startDt"
-                            id="startDt"
-                            value={searchData.startDt}
-                            onChange={(param) => {
-                                handleDateChange('startDt', param);
-                            }}
-                            inputProps={{ timeFormat: null }}
-                        />
-                    </div>
-                    <div style={{ width: 160 }} className="mb-0 pl-1 pr-2">
-                        <MokaInput
-                            as="dateTimePicker"
-                            className="mb-0"
-                            name="endDt"
-                            id="endDt"
-                            value={searchData.endDt}
-                            onChange={(param) => {
-                                handleDateChange('endDt', param);
-                            }}
-                            inputProps={{ timeFormat: null }}
-                        />
-                    </div>
-                    <div className="mb-0 pl-1 pr-2">
-                        <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
-                            <option value={`Y`}>{`서비스`}</option>
-                            <option value={`N`}>{`삭제`}</option>
-                        </MokaInput>
-                    </div>
-                    <div className="mb-0 pl-1 pr-2">
-                        <MokaInput as="select" name="channelId" id="channelId" value={searchData.channelId} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
-                            <option value="">j팟 채널 전체</option>
-                            {channelLists.map((item, index) => (
-                                <option key={index} value={item.value}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </MokaInput>
-                    </div>
-                    <div className="mr-0 pl-1 pr-2">
-                        <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
-                            초기화
-                        </Button>
-                    </div>
-                </Form.Row>
-                <Form.Row className="d-flex mb-3">
-                    <Col xs={11}>
-                        <MokaSearchInput
-                            id="keyword"
-                            name="keyword"
-                            placeholder={'제목, 내용, 등록자 명'}
-                            value={searchData.keyword}
-                            onChange={(e) => handleSearchChange(e)}
-                            onSearch={() => handleClickSearchButton()}
-                        />
-                    </Col>
-                    <Col xs={1}>
-                        <Button variant="positive" onClick={() => handleNewButton()}>
-                            등록
-                        </Button>
-                    </Col>
-                </Form.Row>
-            </Form>
-        </>
+        <Form className="mb-14">
+            <Form.Row className="mb-2">
+                <Col xs={5} className="p-0 pr-2 d-flex">
+                    <MokaInput
+                        as="dateTimePicker"
+                        className="mr-2"
+                        name="startDt"
+                        id="startDt"
+                        value={searchData.startDt}
+                        onChange={(param) => {
+                            handleDateChange('startDt', param);
+                        }}
+                        inputProps={{ timeFormat: null }}
+                    />
+                    <MokaInput
+                        as="dateTimePicker"
+                        name="endDt"
+                        id="endDt"
+                        value={searchData.endDt}
+                        onChange={(param) => {
+                            handleDateChange('endDt', param);
+                        }}
+                        inputProps={{ timeFormat: null }}
+                    />
+                </Col>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
+                        <option value={`Y`}>{`서비스`}</option>
+                        <option value={`N`}>{`삭제`}</option>
+                    </MokaInput>
+                </Col>
+                <Col xs={2} className="p-0 pr-2">
+                    <MokaInput as="select" name="channelId" id="channelId" value={searchData.channelId} onChange={(e) => handleSearchChange(e)}>
+                        <option value="">j팟 채널 전체</option>
+                        {channelLists.map((item, index) => (
+                            <option key={index} value={item.value}>
+                                {item.name}
+                            </option>
+                        ))}
+                    </MokaInput>
+                </Col>
+                <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
+                    초기화
+                </Button>
+            </Form.Row>
+            <Form.Row>
+                <MokaSearchInput
+                    id="keyword"
+                    className="mr-1 flex-fill"
+                    name="keyword"
+                    placeholder={'제목, 내용, 등록자 명'}
+                    value={searchData.keyword}
+                    onChange={(e) => handleSearchChange(e)}
+                    onSearch={() => handleClickSearchButton()}
+                />
+                <Button variant="positive" onClick={() => handleNewButton()}>
+                    등록
+                </Button>
+            </Form.Row>
+        </Form>
     );
 };
 

@@ -102,10 +102,10 @@ const RelArticleRenderer = forwardRef((params, ref) => {
                 </Button>
             </div>
             {/* 썸네일 이미지 */}
-            <MokaImage img={article.artThumb} width={97.7} />
+            <MokaImage img={article.artThumb} width={115} />
             {/* 기사 ID, 제목 노출 */}
             <div className="flex-fill ml-3">
-                <MokaInputLabel label="기사ID" labelWidth={40} name="totalId" value={article.totalId} disabled />
+                <MokaInputLabel label="기사ID" className="mb-1" labelWidth={40} name="totalId" value={article.totalId} disabled />
                 <MokaInputLabel label="제목" labelWidth={40} name="artTitle" value={article.artTitle} onChange={handleChangeTitle} inputProps={{ onBlur: handleChangeBlur }} />
             </div>
             {/* 기사 삭제버튼 */}

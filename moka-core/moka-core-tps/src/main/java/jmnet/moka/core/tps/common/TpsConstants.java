@@ -203,4 +203,8 @@ public class TpsConstants extends MokaConstants {
     // 사이트 코드 포토아카이브 연동시 사용
     public static final String SITE_CD = "JAI";
 
+    // SNS 예약 게시 JOB_CODE
+    public static final String SNS_RESERVED_PUBLISH_JOB_CD = "SNS_PUBLISH";
+    // SNS 게시 삭제 예약 JOB_CODE
+    public static final String SNS_RESERVED_DELETE_JOB_CD = "SNS_DELETE";
 }

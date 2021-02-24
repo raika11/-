@@ -2,6 +2,7 @@ package jmnet.moka.web.schedule.mvc.reserve.dto;
 
 import java.util.Date;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import jmnet.moka.core.common.dto.DTODateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,7 @@ public class ReserveJobDTO {
     @NotEmpty
     private String paramDesc;
 
+    @NotNull
     @DTODateTimeFormat
     private Date reserveDt;
 }

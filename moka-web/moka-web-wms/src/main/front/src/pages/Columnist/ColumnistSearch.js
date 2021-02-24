@@ -75,7 +75,7 @@ const ColumnistSearch = ({ match }) => {
     }, []);
 
     return (
-        <Form.Row className="mb-2">
+        <Form.Row className="mb-14">
             {/* 상태정보 */}
             <Col xs={2} className="p-0 pr-2">
                 <MokaInputLabel as="select" name="status" value={search.status} onChange={handleChangeValue} className="mb-0">
@@ -93,11 +93,11 @@ const ColumnistSearch = ({ match }) => {
                     value={search.keyword}
                     onChange={handleChangeValue}
                     onSearch={handleSearch}
-                    className="flex-fill mr-2"
+                    className="flex-fill mr-1"
                 />
 
                 {/* 초기화 버튼 */}
-                <Button variant="negative" onClick={handleSearchReset} className="mr-2 flex-shrink-0">
+                <Button variant="negative" onClick={handleSearchReset} className="mr-1 flex-shrink-0">
                     초기화
                 </Button>
 

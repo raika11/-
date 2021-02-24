@@ -297,7 +297,7 @@ const ColumnistEdit = ({ history, match }) => {
                     onClick: handleClickSaveButton,
                     variant: 'positive',
                     disabled: editDisabled.editBoxButton,
-                    className: 'mr-2',
+                    className: 'mr-1',
                     useAuth: true,
                 },
                 {

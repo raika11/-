@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { MokaInput, MokaInputLabel } from '@components';
-import { unescapeHtmlArticle } from '@utils/convertUtil';
 
 /**
  * deskingPartMapping에서 text 형식의 기본 리스트
@@ -28,10 +27,9 @@ const TextForm = ({ mappingData, urlRegex, temp, onChange, error, unescape = fal
                 <MokaInputLabel
                     as={as}
                     label={label}
-                    labelClassName="pr-3"
                     name={field}
                     className="mb-0 w-100"
-                    value={unescape ? unescapeHtmlArticle(temp[field]) : temp[field]}
+                    value={temp[field]}
                     onChange={onChange}
                     isInvalid={errorCheck && error?.[field]}
                     {...mappingProps}

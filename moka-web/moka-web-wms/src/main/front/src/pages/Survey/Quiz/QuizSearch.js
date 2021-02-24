@@ -38,8 +38,8 @@ const QuizSearch = ({ onAdd }) => {
     }, []);
 
     return (
-        <Form className="pb-2">
-            <Form.Row className="mb-2">
+        <Form className="mb-14">
+            <Form.Row>
                 <Col xs={2} className="p-0 pr-2">
                     <MokaInput as="select" name="searchType" value={searchData.searchType} onChange={(e) => handleChangeValue(e)}>
                         <option value="all">전체</option>
@@ -47,12 +47,12 @@ const QuizSearch = ({ onAdd }) => {
                         <option value="quizSeq">그룹ID</option>
                     </MokaInput>
                 </Col>
-                <Col xs={8} className="p-0 pr-2">
+                <Col xs={9} className="p-0 pr-1">
                     <MokaSearchInput value={searchData.keyword} id="keyword" name="keyword" onChange={(e) => handleChangeValue(e)} onSearch={() => handleClickSearchButton()} />
                 </Col>
-                <Col xs={2} className="d-flex p-0 justify-content-end">
+                <Col xs={1} className="d-flex p-0">
                     <Button variant="positive" onClick={onAdd}>
-                        퀴즈등록
+                        등록
                     </Button>
                 </Col>
             </Form.Row>

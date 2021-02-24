@@ -145,7 +145,7 @@ const SortAgGrid = ({ SearchForm }) => {
                     return (
                         <Form.Group>
                             <Form.Row>
-                                <Col xs={12}>
+                                <Col xs={12} className="p-0">
                                     <Form.Group>
                                         <Form.Label className="pr-2 mb-0">관련 기사</Form.Label>
                                         <Button variant="positive" onClick={() => setArticleListModalState(true)} className="mr-2">
@@ -164,7 +164,7 @@ const SortAgGrid = ({ SearchForm }) => {
 
             <Form.Group>
                 <Form.Row>
-                    <Col xs={12}>
+                    <Col xs={12} className="p-0">
                         <div className="ag-theme-moka-dnd-grid position-relative overflow-hidden flex-fill">
                             <AgGridReact
                                 immutableData

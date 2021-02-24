@@ -355,7 +355,7 @@ ${bulkArticleRow
                         return (
                             <div key={index} className="mb-2 pb-2">
                                 <Form.Row>
-                                    <MokaInputLabel label="타이틀" as="none" labelWidth={35} />
+                                    <MokaInputLabel label="타이틀" as="none" />
                                     {/* <Col xs={1} className="justify-content-center align-items-center"></Col> */}
                                     <div className="mr-2">
                                         <MokaInput
@@ -382,7 +382,6 @@ ${bulkArticleRow
                                             name="title"
                                             id="title"
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                            labelWidth={87}
                                             value={bulkArticleRow[index] ? bulkArticleRow[index].title : ''}
                                             disabled={editState}
                                         />
@@ -392,7 +391,6 @@ ${bulkArticleRow
                                             name="title_length"
                                             id="title_length"
                                             label={`${bulkArticleRow[index] ? bulkArticleRow[index].title_length : 0}자`}
-                                            labelWidth={30}
                                             as="none"
                                             className="pt-1"
                                         />
@@ -400,16 +398,15 @@ ${bulkArticleRow
                                 </Form.Row>
 
                                 <Form.Row className="pt-3">
-                                    <MokaInputLabel label="url" as="none" labelWidth={30} />
-                                    <Col xs={11} className="justify-content-center align-items-center">
-                                        <MokaInputLabel
-                                            name="url"
-                                            id="url"
-                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                            value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
-                                            disabled={editState}
-                                        />
-                                    </Col>
+                                    <MokaInputLabel label="url" as="none" />
+                                    <MokaInputLabel
+                                        name="url"
+                                        id="url"
+                                        className="w-100"
+                                        onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                        value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
+                                        disabled={editState}
+                                    />
                                 </Form.Row>
                                 <hr />
                             </div>

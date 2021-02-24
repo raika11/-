@@ -16,8 +16,8 @@ export const ColumnDefs = [
         cellStyle: { alignItems: 'center' },
     },
     {
-        headerName: '작성자',
-        field: 'regId',
+        headerName: '등록자',
+        field: 'regInfo',
         width: 150,
         flex: 1,
         cellStyle: { alignItems: 'center' },

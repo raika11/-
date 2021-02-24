@@ -148,7 +148,7 @@ const SEOMetaSearch = () => {
                 </div>
 
                 {/* 검색어 */}
-                <MokaSearchInput className="mr-2 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleClickSearch} />
+                <MokaSearchInput className="mr-1 flex-fill" name="keyword" value={search.keyword} onChange={handleChangeValue} onSearch={handleClickSearch} />
 
                 {/* 초기화 */}
                 <Button variant="negative" onClick={handleClickReset} className="flex-shrink-0">

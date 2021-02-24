@@ -7,8 +7,6 @@ import { clearSeoMeta, getSeoMeta, getSeoMetaList, initialState, saveSeoMeta, GE
 import produce from 'immer';
 import toast from '@utils/toastUtil';
 
-const labelWidth = 50;
-
 /**
  * SEO 메타 정보
  */
@@ -64,21 +62,20 @@ const SEOMetaEdit = () => {
             className="flex-fill"
             footerClassName="justify-content-center"
             footerButtons={[
-                { text: '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-2' },
-                { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-2' },
+                { text: edit.isInsert ? '저장' : '수정', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                { text: '취소', variant: 'negative', onClick: handleClickCancel },
             ]}
             footer
             loading={loading}
         >
             <Form className="pb-2">
                 <Form.Row className="mb-2">
-                    <Col xs={12}>
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="switch"
                             name="usedYn"
                             id="usedYn"
-                            label="사용유무"
-                            labelWidth={labelWidth}
+                            label="사용여부"
                             inputProps={{ checked: edit.usedYn === 'Y' }}
                             onChange={(e) => {
                                 const { name, checked } = e.target;
@@ -89,11 +86,10 @@ const SEOMetaEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={12}>
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             label="제목"
                             name="title"
-                            labelWidth={labelWidth}
                             value={edit.title}
                             onChange={(e) => {
                                 const { name, value } = e.target;
@@ -103,12 +99,11 @@ const SEOMetaEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={12}>
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             label="설명"
                             name="summary"
-                            labelWidth={labelWidth}
                             inputProps={{ rows: 8 }}
                             inputClassName="resize-none"
                             value={edit.summary}
@@ -120,16 +115,15 @@ const SEOMetaEdit = () => {
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={12}>
-                        <MokaInputLabel label="키워드" name="keyword" labelWidth={labelWidth} value={edit.keyword} disabled={true} />
+                    <Col xs={12} className="p-0">
+                        <MokaInputLabel label="키워드" name="keyword" value={edit.keyword} disabled={true} />
                     </Col>
                 </Form.Row>
                 <Form.Row className="mb-2">
-                    <Col xs={12}>
+                    <Col xs={12} className="p-0">
                         <MokaInputLabel
-                            label="추가\n키워드"
+                            label="추가 키워드"
                             name="addKeyword"
-                            labelWidth={labelWidth}
                             value={edit.addKeyword}
                             onChange={(e) => {
                                 const { name, value } = e.target;

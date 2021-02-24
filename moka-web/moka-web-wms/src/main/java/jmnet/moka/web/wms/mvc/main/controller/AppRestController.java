@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.utils.MapBuilder;
@@ -222,6 +225,16 @@ public class AppRestController {
 
         tpsLogger.success(ActionType.SELECT);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    // https통신에서 ip주소로 접속시 host 검증을 하지 않도록 설정
+    static {
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
 
     /**

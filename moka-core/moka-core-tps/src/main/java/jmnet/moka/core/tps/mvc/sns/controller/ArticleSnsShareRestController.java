@@ -25,6 +25,7 @@ import jmnet.moka.core.common.sns.SnsDeleteDTO;
 import jmnet.moka.core.common.sns.SnsPublishDTO;
 import jmnet.moka.core.common.sns.SnsTypeCode;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.util.ArticleEscapeUtil;
 import jmnet.moka.core.tps.common.util.ImageUtil;
@@ -411,16 +412,21 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             if (snsPublish.getReserveDt() != null && McpDate.term(snsPublish.getReserveDt()) > 0) {
                 reserved = true;
                 String result = articleSnsShareService.reservePublishSnsArticleSnsShare(snsPublish);
-                ResultDTO<?> reserveResult = ResourceMapper
-                        .getDefaultObjectMapper()
-                        .readValue(result, ResultDTO.class);
-                success = reserveResult
-                        .getHeader()
-                        .isSuccess();
-                if (!success) {
-                    successMsg = reserveResult
+                if (TpsConstants.SERVER_REFUSED.equals(result)) {
+                    success = false;
+                    successMsg = msg("tps.common.error.schedule-server.refused");
+                } else {
+                    ResultDTO<?> reserveResult = ResourceMapper
+                            .getDefaultObjectMapper()
+                            .readValue(result, ResultDTO.class);
+                    success = reserveResult
                             .getHeader()
-                            .getMessage();
+                            .isSuccess();
+                    if (!success) {
+                        successMsg = reserveResult
+                                .getHeader()
+                                .getMessage();
+                    }
                 }
 
             } else {
@@ -474,17 +480,23 @@ public class ArticleSnsShareRestController extends AbstractCommonController {
             if (snsDelete.getReserveDt() != null && McpDate.term(snsDelete.getReserveDt()) > 0) {
                 reserved = true;
                 String result = articleSnsShareService.reserveDeleteSnsArticleSnsShare(snsDelete);
-                ResultDTO<?> reserveResult = ResourceMapper
-                        .getDefaultObjectMapper()
-                        .readValue(result, ResultDTO.class);
+                if (TpsConstants.SERVER_REFUSED.equals(result)) {
+                    success = false;
+                    successMsg = msg("tps.common.error.schedule-server.refused");
+                } else {
+                    ResultDTO<?> reserveResult = ResourceMapper
+                            .getDefaultObjectMapper()
+                            .readValue(result, ResultDTO.class);
 
-                success = reserveResult
-                        .getHeader()
-                        .isSuccess();
-                if (!success) {
-                    successMsg = reserveResult
+
+                    success = reserveResult
                             .getHeader()
-                            .getMessage();
+                            .isSuccess();
+                    if (!success) {
+                        successMsg = reserveResult
+                                .getHeader()
+                                .getMessage();
+                    }
                 }
             } else {
                 articleSnsShareService.deleteSnsArticleSnsShare(snsDelete);

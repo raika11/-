@@ -33,6 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 /**
  * <pre>
@@ -279,6 +280,11 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
 
         } catch (InterruptedException ie) {
             log.error("SNS Share publish failed : {}", snsPublish.getTotalId(), ie);
+        } catch (Exception ie) {
+            log.error("SNS Share publish failed : {}", snsPublish.getTotalId(), ie);
+            if (ie instanceof ResourceAccessException) {
+                result = TpsConstants.SERVER_REFUSED;
+            }
         }
         return result;
     }
@@ -308,6 +314,11 @@ public class ArticleSnsShareServiceImpl implements ArticleSnsShareService {
             result = responseEntity.getBody();
         } catch (InterruptedException ie) {
             log.error("SNS Share delete failed : {}", snsDelete.getSnsId(), ie);
+        } catch (Exception ie) {
+            log.error("SNS Share publish failed : {}", snsDelete.getTotalId(), ie);
+            if (ie instanceof ResourceAccessException) {
+                result = TpsConstants.SERVER_REFUSED;
+            }
         }
         return result;
     }

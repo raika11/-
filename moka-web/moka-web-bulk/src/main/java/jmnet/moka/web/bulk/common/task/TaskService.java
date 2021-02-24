@@ -1,6 +1,7 @@
 package jmnet.moka.web.bulk.common.task;
 
 import java.util.Map;
+import jmnet.moka.web.bulk.code.OpCode;
 
 /**
  * <pre>
@@ -16,8 +17,7 @@ import java.util.Map;
  */
 
 interface TaskService {
-    void operation(int opCode) throws InterruptedException;
-    void operation(int opCode, Map<String, Object> responseMap) throws InterruptedException;
+    boolean operation(OpCode opCode, Map<String, String> param, Map<String, Object> responseMap, boolean equals) throws InterruptedException;
     boolean isAlive();
     boolean isPaused();
 }

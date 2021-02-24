@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.rcv.code.OpCode;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.service.SlackMessageService;
 import jmnet.moka.web.rcv.task.artafteriud.service.ArtAfterIudService;
@@ -115,23 +116,18 @@ public class TaskManager {
         return true;
     }
 
-    public void operation(int opCode)
+    public void operation(OpCode opCode)
             throws InterruptedException {
-        operation(opCode, "", null);
+        operation(opCode, "", null, null);
     }
 
-    public void operation(int opCode, String id, Map<String, Object> responseMap)
+    public boolean operation(OpCode opCode, String target, Map<String, String> param, Map<String, Object> responseMap)
             throws InterruptedException {
+        boolean success = false;
         for (TaskGroup taskGroup : this.taskGroups) {
-            taskGroup.operation(opCode, id, responseMap);
+            success |= taskGroup.operation(opCode, target, param, responseMap );
         }
-    }
-
-    public void operation(int opCode, Type type)
-            throws InterruptedException {
-        for (TaskGroup taskGroup : this.taskGroups) {
-            taskGroup.operation(opCode, type);
-        }
+        return success;
     }
 
     public void sendErrorSMS(String title, String message) {

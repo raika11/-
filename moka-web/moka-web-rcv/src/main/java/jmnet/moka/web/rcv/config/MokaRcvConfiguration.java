@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.config;
 
+import jmnet.moka.web.rcv.aspect.IpAllowAspect;
 import jmnet.moka.web.rcv.task.base.TaskManager;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,5 +74,13 @@ public class MokaRcvConfiguration {
     @Bean
     TaskManager taskManager() {
         return new TaskManager(this);
+    }
+
+    @Value("${rcv.taskmanager.allow.ips}")
+    private String commandAllowIps;
+
+    @Bean
+    public IpAllowAspect ipAllowAspect() {
+        return new IpAllowAspect(commandAllowIps);
     }
 }

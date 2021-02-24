@@ -4,6 +4,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import jmnet.moka.web.bulk.code.DumpStatus;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.bulkdump.BulkDumpTask;
 import jmnet.moka.web.bulk.task.bulkdump.process.BulkDumpClientProcess;
 import jmnet.moka.web.bulk.task.bulkdump.process.basic.BulkDumpResult;
@@ -72,7 +73,7 @@ public class BulkDumpClientHandler implements Runnable {
         final BulkDumpService bulkDumpService = bulkDumpTask.getTaskManager().getBulkDumpService();
 
         while( !Thread.interrupted()) {
-            TotalVo<BulkDumpTotalVo> totalVo = null;
+            TotalVo<BulkDumpTotalVo> totalVo;
 
             try {
                 bulkDumpTotalVo = takeQueue();
@@ -83,27 +84,39 @@ public class BulkDumpClientHandler implements Runnable {
 
                 totalVo = new TotalVo<>(bulkDumpTotalVo);
 
-                bulkDumpService.insertBulkLog( totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.ProcessingJhot : DumpStatus.Processing,
-                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Start", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
+                insertBulkLog( bulkDumpService, totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.ProcessingJhot : DumpStatus.Processing,
+                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Start", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index) );
 
                 int retryCount = bulkDumpTask.getRetryCount();
 
-                boolean delUspBulkDdref = false;
+                boolean delUspBulkDdref;
                 BulkDumpResult result;
                 do {
-                    result = BulkDumpClientProcess.doProcess(totalVo, this.bulkDumpTask);
-                    if( result == BulkDumpResult.SUCCESS || result == BulkDumpResult.SKIP_DATABASE ) {
-                        delUspBulkDdref = true;
-                        break;
-                    } else if (result == BulkDumpResult.TIMEOUT_OVP) {
-                        if (bulkDumpTotalVo.isFromWaitQueue()) {
-                            waitDumpClientQueue.addFirst(bulkDumpTotalVo);
-                        } else {
-                            waitDumpClientQueue.add(bulkDumpTotalVo);
+                    delUspBulkDdref = true;
+                    try {
+                        result = BulkDumpClientProcess.doProcess(totalVo, this.bulkDumpTask);
+                        if( result == BulkDumpResult.SUCCESS || result == BulkDumpResult.SKIP_DATABASE ) {
+                            break;
+                        } else if (result == BulkDumpResult.TIMEOUT_OVP) {
+                            if( System.currentTimeMillis() - bulkDumpTotalVo.getDumpStartTime() > bulkDumpTask.getOvpWaitTime() ) {
+                                insertBulkLog(bulkDumpService, totalVo, DumpStatus.Error,
+                                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp Expired !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
+                                break;
+                            }
+                            else {
+                                if (bulkDumpTotalVo.isFromWaitQueue()) {
+                                    waitDumpClientQueue.addFirst(bulkDumpTotalVo);
+                                } else {
+                                    waitDumpClientQueue.add(bulkDumpTotalVo);
+                                }
+                                insertBulkLog(bulkDumpService, totalVo, DumpStatus.TimeOutOvp,
+                                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
+                                delUspBulkDdref = false;
+                            }
+                            break;
                         }
-                        bulkDumpService.insertBulkLog(totalVo, DumpStatus.TimeOutOvp,
-                                BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
-                        break;
+                    }catch ( Exception ignore) {
+                        result = BulkDumpResult.FAIL;
                     }
 
                     if (--retryCount > 0) {
@@ -117,28 +130,52 @@ public class BulkDumpClientHandler implements Runnable {
                     bulkDumpService.delUspBulkDdref(bulkDumpTotalVo);
 
                 if( result == BulkDumpResult.SUCCESS ) {
-                    bulkDumpService.insertBulkLog(totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.CompleteJhot : DumpStatus.Complete,
+                    insertBulkLog(bulkDumpService, totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.CompleteJhot : DumpStatus.Complete,
                             BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} End", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
                 } else if( result == BulkDumpResult.SKIP_DATABASE ) {
-                    bulkDumpService.insertBulkLog(totalVo, DumpStatus.SkipDatabase,
+                    insertBulkLog(bulkDumpService, totalVo, DumpStatus.SkipDatabase,
                             BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Skip Database", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
-                }
-                else
-                    bulkDumpService.insertBulkLog(totalVo, DumpStatus.Error,
+                } else if( result != BulkDumpResult.TIMEOUT_OVP)
+                    insertBulkLog(bulkDumpService, totalVo, DumpStatus.Error,
                             BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Error !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
 
             } catch (InterruptedException interrupt) {
                 log.info("BulkDumpClientHandler interrupt");
             } catch (Exception e) {
-                if (totalVo != null) {
-                    bulkDumpService.insertBulkLog(totalVo, DumpStatus.Error,
-                            BulkStringUtil.format("BulkDumpClientHandler Exception {}", e.getMessage()), true);
-                }
                 log.error("BulkDumpClientHandler Exception {}", e.getMessage());
                 e.printStackTrace();
             } finally {
                 this.bulkDumpClientChannel.incrementWaitExecutorCount();
             }
         }
+    }
+
+    private void insertBulkLog(BulkDumpService bulkDumpService, TotalVo<BulkDumpTotalVo> totalVo, int status, String message)
+            throws InterruptedException {
+        insertBulkLog( bulkDumpService, totalVo, status, message, false );
+    }
+
+    private void insertBulkLog(BulkDumpService bulkDumpService, TotalVo<BulkDumpTotalVo> totalVo, int status, String message, boolean isError)
+            throws InterruptedException {
+        int retryCount = bulkDumpTask.getRetryCount();
+        do {
+            try {
+                bulkDumpService.insertBulkLog(totalVo, status, message, isError);
+                break;
+            }catch (Exception e) {
+                log.error("BulkDumpClientHandler insertBulkLog Exception {}", e.getMessage());
+            }
+
+            if (--retryCount > 0) {
+                totalVo.logError("BulkDump Exception retry {} ", bulkDumpTask.getRetryCount() - retryCount + 1);
+                Thread.sleep(bulkDumpTask.getSleepTime());
+            }
+        } while (retryCount > 0);
+
+        if( status != DumpStatus.Error )
+            return;
+
+        final SlackMessageService slackMessageService = bulkDumpTask.getTaskManager().getSlackMessageService();
+        slackMessageService.sendSms( "Bulk Dump", message);
     }
 }

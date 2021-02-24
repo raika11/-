@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.config;
 
+import jmnet.moka.web.bulk.aspect.IpAllowAspect;
 import jmnet.moka.web.bulk.task.base.TaskManager;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,5 +43,13 @@ public class MokaBulkConfiguration {
     @Bean
     TaskManager taskManager() {
         return new TaskManager(this);
+    }
+
+    @Value("${bulk.taskmanager.allow.ips}")
+    private String commandAllowIps;
+
+    @Bean
+    public IpAllowAspect ipAllowAspect() {
+        return new IpAllowAspect(commandAllowIps);
     }
 }

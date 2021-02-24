@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.common.task;
 
+import java.util.HashMap;
 import java.util.Map;
 import jmnet.moka.web.bulk.code.OpCode;
 import jmnet.moka.web.bulk.util.ThreadUtil;
@@ -39,17 +40,12 @@ public abstract class TaskBase implements Runnable, TaskService {
         return thread.getId();
     }
 
-    @Override
-    public void operation(int opCode)
-            throws InterruptedException {
-        operation( opCode, null);
-    }
-
-    @Override
-    public void operation(int opCode, Map<String, Object> responseMap)
-            throws InterruptedException {
+    public boolean operation(OpCode opCode, Map<String, String> param, Map<String, Object> responseMap, boolean allFromWeb)
+        throws InterruptedException {
         switch (opCode) {
-            case OpCode.SERVE: {
+            case start: {
+                if( allFromWeb ) return false;
+
                 if (!this.isAlive()) {
                     this.thread = ThreadUtil.create(getTaskName(), this);
                     this.thread.setDaemon(false);
@@ -57,7 +53,9 @@ public abstract class TaskBase implements Runnable, TaskService {
                 }
                 break;
             }
-            case OpCode.STOP: {
+            case stop: {
+                if( allFromWeb ) return false;
+
                 if (!this.isEnd) {
                     this.isEnd = true;
                     this.thread.interrupt();
@@ -67,13 +65,12 @@ public abstract class TaskBase implements Runnable, TaskService {
                 }
                 break;
             }
-            case OpCode.PAUSE: {
+            case pause: {
                 if (!this.isPause) {
                     this.isPause = true;
                 }
-                break;
             }
-            case OpCode.RESUME: {
+            case resume: {
                 if (this.isPaused()) {
                     if (this.isPause) {
                         this.isPause = false;
@@ -81,21 +78,28 @@ public abstract class TaskBase implements Runnable, TaskService {
                 }
                 break;
             }
-            case OpCode.LISTTASK: {
+            case list: {
                 if (responseMap != null) {
-                    responseMap.put(getTaskName(), Long.toString(getThreadId()));
+                    responseMap.put(getTaskName(), status(new HashMap<>()));
                 }
                 break;
             }
-            case OpCode.FORCE_EXECUTE: {
-                if (this.isAlive() && !this.isPaused() ) {
+            case forceexecute: {
+                if (this.isAlive() && !this.isPaused()) {
                     isForcedExecute = true;
                 }
                 break;
             }
-            default:
-                break;
         }
+        return true;
+    }
+
+    protected Map<String, Object> status( Map<String, Object> map) {
+        map.put("name", getTaskName());
+        map.put("isAlive", isAlive());
+        map.put("isPaused", isPause());
+        map.put("threadId", getThreadId());
+        return map;
     }
 
     @Override
@@ -131,4 +135,6 @@ public abstract class TaskBase implements Runnable, TaskService {
             }
         }
     }
+
+    public void processMonitor() {}
 }

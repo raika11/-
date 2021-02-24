@@ -2,6 +2,7 @@ package jmnet.moka.web.rcv.task.cpxml;
 
 import java.nio.file.Path;
 import java.util.Date;
+import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
@@ -251,6 +252,13 @@ public class CpXmlTask extends Task<FileXmlTaskInputData<CpArticleTotalVo, CpArt
 
         taskInputData.doAfterProcess();
 
-        getTaskManager().operation(OpCode.FORCE_EXECUTE, RcvArtRegTask.class);
+        getTaskManager().operation(OpCode.forceexecute, RcvArtRegTask.class.getSimpleName(), null, null);
+    }
+
+    @Override
+    protected Map<String, Object> status(Map<String, Object> map) {
+        super.status(map);
+        map.put("sourceCode", sourceCode);
+        return map;
     }
 }

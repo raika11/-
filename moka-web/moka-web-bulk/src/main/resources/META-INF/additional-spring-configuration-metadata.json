@@ -149,5 +149,10 @@
       "name": "logging.logTail.waitingtime",
       "type": "java.lang.String",
       "description": "Description for logging.logTail.waitingtime."
+    },
+    {
+      "name": "bulk.taskmanager.allow.ips",
+      "type": "java.lang.String",
+      "description": "Description for bulk.taskmanager.allow.ips."
     }
   ] }

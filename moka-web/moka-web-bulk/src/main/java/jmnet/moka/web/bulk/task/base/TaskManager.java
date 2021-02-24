@@ -2,7 +2,6 @@ package jmnet.moka.web.bulk.task.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.bulk.code.OpCode;
 import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
 import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
@@ -92,26 +92,22 @@ public class TaskManager {
         return true;
     }
 
-    public void operation(int opCode)
-            throws InterruptedException {
-        operation(opCode, "", null);
-    }
-
-    public void operation(int opCode, String id, Map<String, Object> responseMap)
-            throws InterruptedException {
-        for (TaskGroup taskGroup : this.taskGroups) {
-            taskGroup.operation(opCode, id, responseMap);
-        }
-    }
-
-    public void operation(int opCode, Type type)
-            throws InterruptedException {
-        for (TaskGroup taskGroup : this.taskGroups) {
-            taskGroup.operation(opCode, type);
-        }
-    }
 
     public void sendErrorSMS( String title, String message) {
         slackMessageService.sendSms( title, message);
+    }
+
+    public void operation(OpCode opCode)
+            throws InterruptedException {
+        operation(opCode, "", null, null);
+    }
+
+    public boolean operation(OpCode opCode, String target, Map<String, String> param, Map<String, Object> responseMap)
+            throws InterruptedException {
+        boolean success = false;
+        for (TaskGroup taskGroup : this.taskGroups) {
+            success |= taskGroup.operation(opCode, target, param, responseMap );
+        }
+        return success;
     }
 }

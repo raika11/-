@@ -15,4 +15,9 @@
     name="등록기사 After Iud"
     intervalTime="10s">
   </Task>
+
+  <Task class="jmnet.moka.web.rcv.task.monitor.MonitorTask"
+    name="모니터링"
+    intervalTime="5m">
+  </Task>
 </TaskGroup>

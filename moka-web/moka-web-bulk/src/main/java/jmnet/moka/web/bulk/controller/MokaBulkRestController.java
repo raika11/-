@@ -42,46 +42,34 @@ public class MokaBulkRestController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
-    @GetMapping("/taskmanager/pause")
-    public Map<String, Object> doPause(@RequestParam Map<String, String> param) {
-        log.info("doPause");
-
-        try {
-            this.taskManager.operation(OpCode.PAUSE, param.get("id"), null);
-        } catch (InterruptedException e) {
-            // no
-        }
-
+    @GetMapping("/taskmanager")
+    public Map<String, Object> operation(@RequestParam Map<String, String> param) {
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("success", true);        // success
-        return responseMap;
-    }
+        boolean success = false;
+        //noinspection ConstantConditions
+        do {
+            if( !param.containsKey("opcode") ) {
+                responseMap.put("errorMessage", "No opcode !!");
+                break;
+            }
+            if( !param.containsKey("target") ) {
+                responseMap.put("errorMessage", "No Target !!");
+                break;
+            }
 
-    @GetMapping("/taskmanager/resume")
-    public Map<String, Object> doResume() {
-        log.info("doResume");
+            final String opCode = param.get("opcode");
+            final String target = param.get("target");
+            try {
+                success = taskManager.operation( OpCode.valueOf(opCode), target, param, responseMap);
+            }catch (IllegalArgumentException e) {
+                responseMap.put("errorMessage", "opcode not found");
+            }catch (Exception e) {
+                responseMap.put("errorMessage", "exception occur !!");
+            }
+        }while( false );
 
-        try {
-            this.taskManager.operation(OpCode.RESUME);
-        } catch (InterruptedException e) {
-            // no
-        }
+        responseMap.put("success", success);
 
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("success", true);        // success
-        return responseMap;
-    }
-
-    @GetMapping("/taskmanager/listtask")
-    public Map<String, Object> doListTask() {
-        log.info("doListTask");
-
-        Map<String, Object> responseMap = new HashMap<>();
-        try {
-            this.taskManager.operation(OpCode.LISTTASK, "", responseMap);
-        } catch (InterruptedException e) {
-            // no operation
-        }
         return responseMap;
     }
 }

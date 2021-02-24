@@ -73,8 +73,6 @@ public class SlackMessageServiceImpl implements SlackMessageService {
                                 String title = "";
                                 String sendMessage = "";
                                 Object[] objList = messageList.toArray();
-                                messageList.clear();
-
                                 int count = 0;
                                 for( Object obj : objList ) {
                                     SlackMessageVo message = (SlackMessageVo) obj;
@@ -91,6 +89,7 @@ public class SlackMessageServiceImpl implements SlackMessageService {
                                         break;
                                     }
                                 }
+                                messageList.clear();
 
                                 if (lastSendGap <= 0) {
                                     lastSendGap = lastSendGap + GAP_TIME_START;

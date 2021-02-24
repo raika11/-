@@ -114,11 +114,12 @@ public class RelationServiceImpl implements RelationService {
         if (itemType.equals(MokaConstants.ITEM_TEMPLATE) || itemType.equals(MokaConstants.ITEM_DATASET)) {
 
             // 관련 컴포넌트가 있는지 확인한다
-            RelationSearchDTO search = RelationSearchDTO.builder()
-                                                        .relSeq(seq)
-                                                        .relSeqType(itemType)
-                                                        .relType(MokaConstants.ITEM_COMPONENT)
-                                                        .build();
+            RelationSearchDTO search = RelationSearchDTO
+                    .builder()
+                    .relSeq(seq)
+                    .relSeqType(itemType)
+                    .relType(MokaConstants.ITEM_COMPONENT)
+                    .build();
             if (this.isRelated(search)) {
                 return true;
             }
@@ -128,11 +129,12 @@ public class RelationServiceImpl implements RelationService {
                 MokaConstants.ITEM_COMPONENT) || itemType.equals(MokaConstants.ITEM_AD)) {
 
             // 관련 컨테이너가 있는지 확인한다
-            RelationSearchDTO search = RelationSearchDTO.builder()
-                                                        .relSeq(seq)
-                                                        .relSeqType(itemType)
-                                                        .relType(MokaConstants.ITEM_CONTAINER)
-                                                        .build();
+            RelationSearchDTO search = RelationSearchDTO
+                    .builder()
+                    .relSeq(seq)
+                    .relSeqType(itemType)
+                    .relType(MokaConstants.ITEM_CONTAINER)
+                    .build();
             if (this.isRelated(search)) {
                 return true;
             }
@@ -142,11 +144,12 @@ public class RelationServiceImpl implements RelationService {
                 MokaConstants.ITEM_COMPONENT) || itemType.equals(MokaConstants.ITEM_AD) || itemType.equals(MokaConstants.ITEM_CONTAINER)) {
 
             // 관련 본문스킨이 있는지 확인한다
-            RelationSearchDTO search = RelationSearchDTO.builder()
-                                                        .relSeq(seq)
-                                                        .relSeqType(itemType)
-                                                        .relType(MokaConstants.ITEM_ARTICLE_PAGE)
-                                                        .build();
+            RelationSearchDTO search = RelationSearchDTO
+                    .builder()
+                    .relSeq(seq)
+                    .relSeqType(itemType)
+                    .relType(MokaConstants.ITEM_ARTICLE_PAGE)
+                    .build();
             if (this.isRelated(search)) {
                 return true;
             }
@@ -156,11 +159,12 @@ public class RelationServiceImpl implements RelationService {
                 MokaConstants.ITEM_COMPONENT) || itemType.equals(MokaConstants.ITEM_AD) || itemType.equals(MokaConstants.ITEM_CONTAINER)) {
 
             // 관련 페이지가 있는지 확인한다
-            RelationSearchDTO search = RelationSearchDTO.builder()
-                                                        .relSeq(seq)
-                                                        .relSeqType(itemType)
-                                                        .relType(MokaConstants.ITEM_PAGE)
-                                                        .build();
+            RelationSearchDTO search = RelationSearchDTO
+                    .builder()
+                    .relSeq(seq)
+                    .relSeqType(itemType)
+                    .relType(MokaConstants.ITEM_PAGE)
+                    .build();
             if (this.isRelated(search)) {
                 return true;
             }
@@ -223,59 +227,63 @@ public class RelationServiceImpl implements RelationService {
      * @param domainId 도메인아이디
      * @return 유무
      */
-    public Boolean isRelatedDomain(String domainId) {
+    public String isRelatedDomain(String domainId) {
 
         // 템플릿 체크
         if (templateService.countTemplateByDomainId(domainId) > 0) {
-            return true;
+            return MokaConstants.ITEM_TEMPLATE;
         }
 
         // 컴포넌트 체크
         if (componentService.countComponentByDomainId(domainId) > 0) {
-            return true;
+            return MokaConstants.ITEM_COMPONENT;
         }
 
         // 컨테이너 체크
         if (containerService.countContainerByDomainId(domainId) > 0) {
-            return true;
+            return MokaConstants.ITEM_CONTAINER;
         }
 
         // 페이지 체크
-        RelationSearchDTO search = RelationSearchDTO.builder()
-                                                    .relSeqType(MokaConstants.ITEM_DOMAIN)
-                                                    .domainId(domainId)
-                                                    .build();
+        RelationSearchDTO search = RelationSearchDTO
+                .builder()
+                .relSeqType(MokaConstants.ITEM_DOMAIN)
+                .domainId(domainId)
+                .build();
         search.setDefaultSort("pageSeq,desc");
         Page<jmnet.moka.core.tps.mvc.page.entity.Page> pages = pageService.findPageByDomainId(domainId, search.getPageable());
 
-        if (pages.getContent()
-                 .size() > 1) {
-            return true;
-        } else if (pages.getContent()
-                        .size() == 1) {
-            jmnet.moka.core.tps.mvc.page.entity.Page one = pages.getContent()
-                                                                .get(0);
+        if (pages
+                .getContent()
+                .size() > 1) {
+            return MokaConstants.ITEM_PAGE;
+        } else if (pages
+                .getContent()
+                .size() == 1) {
+            jmnet.moka.core.tps.mvc.page.entity.Page one = pages
+                    .getContent()
+                    .get(0);
             if (one.getParent() != null) {
                 // 루트 페이지 체크
-                return true;
+                return MokaConstants.ITEM_PAGE;
             }
         }
 
-        // 콘텐츠스킨 체크
+        // 기사페이지 체크
         if (articlePageService.countArticlePageByDomainId(domainId) > 0) {
-            return true;
+            return MokaConstants.ITEM_ARTICLE_PAGE;
         }
 
         // 광고 체크
         if (adService.countByDomainId(domainId) > 0) {
-            return true;
+            return MokaConstants.ITEM_AD;
         }
 
         // 예약어 체크
         if (reservedService.countReservedByDomainId(domainId) > 0) {
-            return true;
+            return MokaConstants.ITEM_RESERVED;
         }
 
-        return false;
+        return "";
     }
 }

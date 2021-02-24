@@ -13,6 +13,8 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
+import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
@@ -266,11 +268,35 @@ public class DomainRestController extends AbstractCommonController {
                 .orElseThrow(() -> new NoDataException(message));
 
         // 관련 데이터 조회
-        boolean isRelated = relationService.isRelatedDomain(domainId);
+        String related = relationService.isRelatedDomain(domainId);
 
-        // 결과리턴
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(isRelated);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        String msg = "";
+        if (MokaConstants.ITEM_TEMPLATE.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.tp");
+        }
+        if (MokaConstants.ITEM_COMPONENT.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.cp");
+        }
+        if (MokaConstants.ITEM_CONTAINER.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.ct");
+        }
+        if (MokaConstants.ITEM_PAGE.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.pg");
+        }
+        if (MokaConstants.ITEM_ARTICLE_PAGE.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.ap");
+        }
+        if (MokaConstants.ITEM_AD.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.ad");
+        }
+        if (MokaConstants.ITEM_RESERVED.equals(related)) {
+            msg = msg("tps.domain.error.delete.exist-related.rs");
+        }
+
+        ResultMapDTO resultMapDTO = new ResultMapDTO(HttpStatus.OK, message);
+        resultMapDTO.addBodyAttribute("related", McpString.isNotEmpty(related));
+        resultMapDTO.addBodyAttribute("message", msg);
+        return new ResponseEntity<>(resultMapDTO, HttpStatus.OK);
     }
 
     /**
@@ -298,7 +324,8 @@ public class DomainRestController extends AbstractCommonController {
 
         // 관련 데이터 조회
         try {
-            if (relationService.isRelatedDomain(domainId)) {
+            String related = relationService.isRelatedDomain(domainId);
+            if (McpString.isNotEmpty(related)) {
                 // 액션 로그에 실패 로그 출력
                 tpsLogger.fail(ActionType.DELETE, msg("tps.domain.error.delete.exist-related", request));
                 throw new Exception(msg("tps.domain.error.delete.exist-related", request));

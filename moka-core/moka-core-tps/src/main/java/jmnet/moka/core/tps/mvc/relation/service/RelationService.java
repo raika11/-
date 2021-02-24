@@ -37,5 +37,5 @@ public interface RelationService {
 
     Boolean hasRelations(Long seq, String itemType);
 
-    Boolean isRelatedDomain(String domainId);
+    String isRelatedDomain(String domainId);
 }

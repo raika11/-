@@ -63,7 +63,6 @@ export default {
         field: 'subTitle',
         label: '부제',
         inputProps: {
-            className: 'resize-none custom-scroll',
             rows: 2,
         },
     },
@@ -73,7 +72,6 @@ export default {
         field: 'bodyHead',
         label: '리드문',
         inputProps: {
-            className: 'resize-none custom-scroll',
             rows: 5,
         },
     },

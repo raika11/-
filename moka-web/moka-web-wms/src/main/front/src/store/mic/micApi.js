@@ -176,18 +176,23 @@ export const putMicAnswer = ({ answer }) => {
         });
 };
 
-// 답변 부가정보 수정 (폼데이터)
+// 답변 부가정보 수정 (폼데이터) => 폼 데이터가 비워져있으면 delete로 연결한다
 export const putMicAnswerRel = ({ answSeq, answerRel }) => {
-    // 실제로는 post api라서 post...
-    return instance
-        .post(`/api/mics/answers/${answSeq}/rel`, objectToFormData(answerRel), {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .catch((err) => {
-            throw err;
-        });
+    const formData = objectToFormData(answerRel);
+
+    const result =
+        [...formData.values()].length > 0
+            ? // 실제로는 post api라서 post...
+              instance.post(`/api/mics/answers/${answSeq}/rel`, formData, {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              })
+            : instance.delete(`/api/mics/answers/${answSeq}/rel`);
+
+    return result.catch((err) => {
+        throw err;
+    });
 };
 
 // 답변 부가정보 삭제

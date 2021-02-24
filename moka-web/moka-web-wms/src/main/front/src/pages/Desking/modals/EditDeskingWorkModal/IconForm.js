@@ -10,20 +10,12 @@ import { MokaInputLabel } from '@components';
  */
 const IconForm = ({ show, temp, setTemp, onChange }) => {
     const dispatch = useDispatch();
-    const { dsIconRows } = useSelector((store) => ({
-        dsIconRows: store.codeMgt.dsIconRows,
-    }));
+    const { dsIconRows } = useSelector(({ codeMgt }) => codeMgt);
 
     useEffect(() => {
         if (!show) return;
         !dsIconRows && dispatch(getDsIcon());
     }, [dispatch, dsIconRows, show]);
-
-    useEffect(() => {
-        if (!temp.iconFileName && dsIconRows) {
-            setTemp({ ...temp, iconFileName: dsIconRows[1].id });
-        }
-    }, [temp, dsIconRows, setTemp]);
 
     return (
         <Form.Row className="mb-2">

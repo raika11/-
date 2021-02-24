@@ -99,6 +99,7 @@ const defaultProps = {
     type: 'text',
     inputProps: {},
     uncontrolled: false,
+    closeOnSelect: true,
 };
 
 /**

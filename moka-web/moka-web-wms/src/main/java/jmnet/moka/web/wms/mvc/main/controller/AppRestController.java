@@ -36,7 +36,6 @@ import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.helper.EditFormHelper;
 import jmnet.moka.core.tps.mvc.articlesource.entity.ArticleSource;
 import jmnet.moka.core.tps.mvc.articlesource.service.ArticleSourceService;
-import jmnet.moka.core.tps.mvc.auth.dto.UserDTO;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentOrderType;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatCode;
@@ -215,10 +214,8 @@ public class AppRestController {
                 .getContext()
                 .getAuthentication();
         if (authentication != null) {
-            // 링크 타켓 유형
-
-            UserDTO userDTO = (UserDTO) authentication.getDetails();
-            result.put("USER_NAME", userDTO.getUserName());
+            // 로그인 계정 정보
+            result.put("AUTH", authentication.getDetails());
         }
 
         ResultMapDTO resultDTO = new ResultMapDTO(result);

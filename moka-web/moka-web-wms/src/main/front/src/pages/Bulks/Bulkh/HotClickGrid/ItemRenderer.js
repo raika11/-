@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTableEditCancleButton } from '@components';
@@ -35,16 +35,32 @@ const ItemRenderer = ({ itemIndex, title, url }) => {
 
     return (
         <>
-            <Row>
-                <Col className="align-self-center justify-content-start mb-0 pr-0 pl-2 w-100">{itemIndex + 1}</Col>
-                <Col className="d-felx" xs={10}>
-                    <MokaInputLabel name="title" label="타이틀" onChange={(e) => handleChangeBulkinputBox(e)} labelWidth={30} value={title} className="col mb-0 pl-0 pr-0" />
-                    <MokaInputLabel name="url" label="url" onChange={(e) => handleChangeBulkinputBox(e)} labelWidth={30} value={url} className="col mb-0 pl-0 pr-0" />
-                </Col>
-                <Col className="d-felx align-self-center text-left mb-0 pl-0">
-                    <MokaTableEditCancleButton onClick={handleClickCancleButton} />
-                </Col>
-            </Row>
+            <Form>
+                <Row>
+                    <Col className="align-self-center mb-0 pr-0 pl-2 w-100">{itemIndex + 1}</Col>
+                    <Col xs={10}>
+                        <MokaInputLabel
+                            name="title"
+                            label="타이틀"
+                            labelClassName="ft-14 text-left"
+                            onChange={(e) => handleChangeBulkinputBox(e)}
+                            value={title}
+                            className="mb-2 pl-0 pr-0"
+                        />
+                        <MokaInputLabel
+                            name="url"
+                            label="url"
+                            labelClassName="ft-14 text-left"
+                            onChange={(e) => handleChangeBulkinputBox(e)}
+                            value={url}
+                            className="mb-2 pl-0 pr-0"
+                        />
+                    </Col>
+                    <Col className="d-felx align-self-center text-left mb-0 pl-0">
+                        <MokaTableEditCancleButton onClick={handleClickCancleButton} />
+                    </Col>
+                </Row>
+            </Form>
         </>
     );
 };

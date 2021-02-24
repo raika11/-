@@ -184,7 +184,7 @@ function* changeBulkusedSaga({ payload: { bulkartSeq, callback } }) {
     let response;
 
     try {
-        const { bulkartDiv, sourceCode } = yield select((store) => store.bulks);
+        // const { bulkartDiv, sourceCode } = yield select((store) => store.bulks);
 
         response = yield call(putChangeBulkused, {
             bulkartSeq: bulkartSeq,
@@ -254,8 +254,8 @@ function* getHotClickTopTitleSaga() {
         yield put({
             type: GET_HOTCLICK_TITLE_SUCCESS,
             payload: {
-                send: Array.isArray(sendResultList) ? sendResultList[0] : sendResultList, // 결과가 한개만 내려옴.
-                wait: Array.isArray(waitResultList) ? waitResultList[0] : waitResultList, // 결과가 한개만 내려옴.
+                send: Array.isArray(sendResultList) ? sendResultList[0] : sendResultList,
+                wait: Array.isArray(waitResultList) ? waitResultList[0] : waitResultList,
             },
         });
     } catch (e) {

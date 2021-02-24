@@ -8,6 +8,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.exception.DuplicateIdException;
 import jmnet.moka.core.common.exception.MokaException;
+import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.web.schedule.config.PropertyHolder;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,39 +67,42 @@ public class ReserveJobController {
      * @throws MokaException 일반적인 오류 처리
      */
     @ApiOperation(value = "신규 Job 추가")
-    @PostMapping
-    public ResponseEntity<?> postJob(@Valid ReserveJobDTO reserveJob)
-            throws MokaException {
-
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postJob(@Valid ReserveJobDTO reserveJob) {
+        boolean success = false;
         log.debug("jobCd : " + reserveJob.getJobCd());
         log.debug("reserveJob : " + reserveJob.getJobTaskId());
+        try {
+            if (jobContentService.countGenContentHistoryByJobTaskId(reserveJob.getJobTaskId()) > 0) {
+                throw new DuplicateIdException("동일 예약 작업 ID 존재");
+            }
 
-        if (jobContentService.countGenContentHistoryByJobTaskId(reserveJob.getJobTaskId()) > 0) {
-            throw new DuplicateIdException("동일 예약 작업 ID 존재");
+            if (McpDate.term(reserveJob.getReserveDt(), McpDate.minutePlus(McpDate.now(), propertyHolder.getPermitLimitMinutes())) < 0) {
+                throw new MokaException("예약작업 등록 처리 가능 시간 초과");
+            }
+
+            GenContent genContent = jobContentService
+                    .findJobContentByJobCd(reserveJob.getJobCd())
+                    .orElseThrow(() -> new NoDataException("스케줄 정보가 존재하지 않습니다."));
+
+            GenContentHistory history = modelMapper.map(reserveJob, GenContentHistory.class);
+
+            history.setJobSeq(genContent.getJobSeq());
+            history.setGenContent(genContent);
+            history = jobContentService.insertGenContentHistory(history);
+
+
+            success = handler.addReserveJob(history);
+
+            log.debug("예약작업 Job 추가 테스트");
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success);
+
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception ex) {
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, ex.toString());
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
         }
-
-        if (McpDate.term(reserveJob.getReserveDt(), McpDate.minutePlus(McpDate.now(), propertyHolder.getPermitLimitMinutes())) < 0) {
-            throw new MokaException("예약작업 등록 처리 가능 시간 초과");
-        }
-
-        GenContent genContent = jobContentService
-                .findJobContentByJobCd(reserveJob.getJobCd())
-                .orElseThrow();
-
-        GenContentHistory history = modelMapper.map(reserveJob, GenContentHistory.class);
-
-        history.setJobSeq(genContent.getJobSeq());
-        history.setGenContent(genContent);
-        history = jobContentService.insertGenContentHistory(history);
-
-
-        handler.addReserveJob(history);
-
-        log.debug("예약작업 Job 추가 테스트");
-
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(true, "success");
-
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     /**
@@ -112,11 +117,11 @@ public class ReserveJobController {
     public ResponseEntity<?> deleteJob(@ApiParam("Task 일련번호") @PathVariable("jobTaskSeq") @Min(value = 0) Long jobTaskSeq)
             throws MokaException {
 
-        handler.removeReserveJob(jobTaskSeq);
+        boolean success = handler.removeReserveJob(jobTaskSeq);
 
         log.debug("예약작업 Job 실행취소 테스트");
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(true, "success");
+        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }

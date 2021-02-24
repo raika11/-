@@ -11,7 +11,7 @@ export const columnDefs = [
         tooltipField: 'title',
     },
     {
-        headerName: '작업자',
+        headerName: '등록자',
         field: 'regMemberInfo',
         width: 120,
         tooltipField: 'regMemberInfo',

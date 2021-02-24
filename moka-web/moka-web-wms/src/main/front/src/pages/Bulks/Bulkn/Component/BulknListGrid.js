@@ -50,6 +50,7 @@ const BulknListGrid = () => {
                     return {
                         ...element,
                         sendDt: sendDt,
+                        regInfo: `${element.regMember.memberNm}(${element.regMember.memberId})`,
                         used: {
                             bulkartSeq: element.bulkartSeq,
                             status: element.status,

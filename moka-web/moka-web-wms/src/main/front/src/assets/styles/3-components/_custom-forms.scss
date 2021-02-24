@@ -3,12 +3,10 @@
     display: flex;
     align-items: center;
 
-    .custom-control-label::before {
-        top: 0.1rem;
-    }
-
-    .custom-control-label::after {
-        top: 0.1rem;
+    .custom-control-label {
+        &::before, &::after {
+            top: 0.1rem;
+        }
     }
 }
 
@@ -16,14 +14,19 @@
     font-size: 12px;
 }
 
+.custom-checkbox {
+    .custom-control-label {
+        &::before, &::after {
+            top: 0.13625rem;
+        }
+    }
+}
+
 .custom-switch {
     .custom-control-label {
         margin-top: 1px;
 
-        &::before {
-            margin-top: -1px;
-        }
-        &::after {
+        &::before, &::after {
             margin-top: -1px;
         }
     }

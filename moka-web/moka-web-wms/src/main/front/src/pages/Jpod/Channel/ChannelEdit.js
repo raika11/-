@@ -245,7 +245,6 @@ const ChannelEdit = ({ match }) => {
     // 저장버튼
     const handleClickSaveButton = () => {
         // post 데이터를 조합 하기 힘들어서 redux 타기전에 폼값을 만듬.
-
         // 벨리데이션 체크.
         if (checkValidation()) {
             return;
@@ -486,7 +485,6 @@ const ChannelEdit = ({ match }) => {
     // 해당값을 스테이트에 등록.
     useEffect(() => {
         if (selectPodtyChannel && selectPodtyChannel.castSrl) {
-            console.log(selectPodtyChannel);
             const { castSrl, shareUrl, getCastName, summary, keywords, crtDt } = selectPodtyChannel;
             setEditData({
                 ...editData,
@@ -495,7 +493,7 @@ const ChannelEdit = ({ match }) => {
                 chnlNm: getCastName,
                 chnlMemo: summary,
                 keywords,
-                chnlSdt: crtDt,
+                chnlSdt: moment(crtDt),
             });
         }
         // 팟티가 선택되었을 경우만 실행.
@@ -748,10 +746,7 @@ const ChannelEdit = ({ match }) => {
                         <Form.Row className="mb-2">
                             <div className="pl-2" style={{ width: '60px', minWidth: '60px', marginRight: '12px', marginLeft: '8px' }}></div>
                             {/* <Col className="p-0">* 등록된 에피소드: 사용(201) | 중지(1) * 마지막 회차 정보 : E.99</Col> */}
-                            <Col className="p-0">
-                                * {editData.seasonNm}
-                                {editData.seasonCnt}
-                            </Col>
+                            <Col className="p-0">* {`${editData.seasonNm} ${editData.seasonCnt}`}</Col>
                         </Form.Row>
                     )}
 

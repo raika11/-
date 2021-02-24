@@ -50,21 +50,27 @@ const GrpAgGrid = ({ match }) => {
         if (list.length > 0) {
             setRowData(
                 list.map((data) => {
-                    const worker = data.modDt
+                    const [workInfo, worker] = data.modDt
                         ? ((data) => {
-                              let w = `${data.modMember?.memberNm || ''}\n`;
-                              w += (data.modDt || '').slice(0, -3);
-                              return w;
+                              let w = `${data.modMember?.memberNm || ''}`;
+                              w += data.modMember?.memberId ? `(${data.modMember?.memberId})` : '';
+                              let winfo = w + '\n';
+                              winfo += (data.modDt || '').slice(0, -3);
+                              return [winfo, w];
                           })(data)
                         : ((data) => {
-                              let w = `${data.regMember?.memberNm || ''}\n`;
-                              w += (data.regDt || '').slice(0, -3);
-                              return w;
+                              //   let w = `${data.regMember?.memberNm || ''}`;
+                              //   w += data.regMember?.memberId ? `(${data.regMember?.memberId})` : '';
+                              //   let winfo = w + '\n';
+                              //   winfo += (data.regDt || '').slice(0, -3);
+                              //   return [winfo, w];
+                              return ['', ''];
                           })(data);
 
                     return {
                         ...data,
                         worker,
+                        workInfo,
                         edit: (data) => {
                             setShow(true);
                             setSelectedGrpCd(data.grpCd);

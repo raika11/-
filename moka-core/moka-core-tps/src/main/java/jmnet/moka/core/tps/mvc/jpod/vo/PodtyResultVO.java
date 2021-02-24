@@ -1,5 +1,6 @@
 package jmnet.moka.core.tps.mvc.jpod.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PodtyResultVO<T> {
 
     /**
@@ -56,4 +58,9 @@ public class PodtyResultVO<T> {
      * 페이징 정보
      */
     private Map<String, Object> pager;
+
+    /**
+     * 환경
+     */
+    private String env;
 }

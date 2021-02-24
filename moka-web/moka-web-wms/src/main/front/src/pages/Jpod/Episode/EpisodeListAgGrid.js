@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { columnDefs } from './EpisodeListAgGridColumns';
-import { useParams, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { clearSelectArticleList } from '@store/survey/quiz';
 import { GET_EPISODES, changeEpisodesSearchOption, getEpisodes, getChannelInfo, getEpisodesInfo } from '@store/jpod';
 
@@ -19,8 +19,8 @@ const EpisodeListAgGrid = ({ match }) => {
     const list = useSelector((store) => store.jpod.episode.episodes.list);
     const loading = useSelector((store) => store.loading[GET_EPISODES]);
 
-    const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
-    const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
+    // const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
+    // const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
 
     // 목록 클릭 했을때.
     const handleClickListRow = ({ chnlSeq, epsdSeq }) => {

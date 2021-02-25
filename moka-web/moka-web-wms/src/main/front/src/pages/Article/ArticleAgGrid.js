@@ -137,7 +137,7 @@ const ArticleAgGrid = ({ match, ja }) => {
                     regDt: moment(data.serviceDaytime, DB_DATEFORMAT).format('MM-DD HH:mm'),
                     myunPan,
                     handleRowClicked,
-                    vodFullLink: `${OVP_PREVIEW_URL}?videoId=${data.jtbcvodLink}`,
+                    vodFullLink: `${OVP_PREVIEW_URL}${(data.ovpLink || '').replaceAll('?', '&')}`,
                     ja, // 편집그룹 표기 유무
                     handleClickDelete,
                     handleClickStop,

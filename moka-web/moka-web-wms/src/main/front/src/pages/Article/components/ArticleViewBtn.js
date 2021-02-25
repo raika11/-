@@ -41,8 +41,8 @@ const ArticleViewBtn = forwardRef(({ data }, ref) => {
             {/* copy */}
             <ArticleTableCopyBtn className="mr-1" artTitle={data.artTitle} artUrl={data.artUrl} />
 
-            {/* jtbcvod */}
-            {data.jtbcvodYn === 'Y' && (
+            {/* ovpYn */}
+            {data.ovpYn === 'Y' && (
                 <Button size="sm" variant="outline-table-btn px-1" onClick={() => setPreviewOn(true)} className="flex-shrink-0">
                     B
                 </Button>

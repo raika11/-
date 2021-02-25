@@ -46,7 +46,7 @@ const GroupNumberRenderer = forwardRef((params, ref) => {
 
             {/* ovp 미리보기 */}
             <MokaModal show={previewOn} onHide={() => setPreviewOn(false)} width={500} size="md" title="영상보기" centered>
-                <iframe src={`${OVP_PREVIEW_URL}${data.ovpLink}`} title="미리보기" frameBorder="0" className="w-100" style={{ height: 300 }} />
+                <iframe src={`${OVP_PREVIEW_URL}${(data.ovpLink || '').replaceAll('?', '&')}`} title="미리보기" frameBorder="0" className="w-100" style={{ height: 300 }} />
             </MokaModal>
         </div>
     );

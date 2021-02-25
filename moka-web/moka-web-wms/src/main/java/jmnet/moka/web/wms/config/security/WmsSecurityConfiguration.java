@@ -5,6 +5,7 @@ package jmnet.moka.web.wms.config.security;
 
 import com.hazelcast.core.HazelcastInstance;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
@@ -32,6 +33,8 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.frameoptions.StaticAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -118,6 +121,11 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .headers().httpStrictTransportSecurity().disable()
+                .frameOptions().disable().addHeaderWriter(
+                    new XFrameOptionsHeaderWriter(
+                            new StaticAllowFromStrategy(URI.create("*"))
+                    )
+                )
                 .and()
                 .sessionManagement()
                 .sessionFixation()

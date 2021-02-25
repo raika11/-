@@ -157,7 +157,7 @@ const BannedListSearch = ({ pathName }) => {
     }, []);
 
     return (
-        <Form className="mb-10">
+        <Form className="mb-14">
             {(function () {
                 // 차단 IP 관리 일 경우.
                 if (pageGubun === 'I') {

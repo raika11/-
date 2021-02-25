@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, forwardRef, useImperativeHandl
 import { MokaInputLabel } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTableEditCancleButton } from '@components';
-import { changeHotClickList, clearHotclicklist } from '@store/bulks';
+import { changeHotClickList, changeHotClickListItem, clearHotclicklist } from '@store/bulks';
 
 const ItemRenderer = forwardRef((props, ref) => {
     const dispatch = useDispatch();
@@ -20,6 +20,10 @@ const ItemRenderer = forwardRef((props, ref) => {
     const handleChangeBulkinputBox = (e) => {
         const { name, value } = e.target;
         setItem({ ...item, [name]: value });
+        if (data.onChange instanceof Function) {
+            data.onChange({ ...item, [name]: value });
+        }
+        /*data.onChnage({ ...item, [name]: value });*/
     };
 
     /**
@@ -56,6 +60,7 @@ const ItemRenderer = forwardRef((props, ref) => {
         setItem(data?.item);
     }, [data]);
 
+    console.log(item.itemIndex, 'render');
     return (
         <div className="h-100 w-100 d-flex py-1">
             <div className="flex-fill">

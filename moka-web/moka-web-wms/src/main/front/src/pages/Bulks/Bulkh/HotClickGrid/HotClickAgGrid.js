@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { columnDefs } from './HotClickAgGridColumns';
 import { getRow, getRowIndex, getDisplayedRows } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, findNextMainRow, clearHoverStyle, clearNextStyle } from '@utils/deskingUtil';
-import { changeHotClickList } from '@store/bulks';
+import { changeHotClickList, changeHotClickListItem } from '@store/bulks';
+import useDebounce from '@hooks/useDebounce';
 
 let hoverBox = makeHoverBox();
 
@@ -147,6 +148,10 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
         [dispatch, hotClickList, rowData],
     );
 
+    const handleChangeListItem = useDebounce((item) => {
+        dispatch(changeHotClickListItem(item));
+    });
+
     useEffect(() => {
         // 스토어가 변경 되면 grid 리스트를 업데이트.
         const SetRowData = async (data) => {
@@ -161,6 +166,7 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
                         title: e.title,
                         url: e.url,
                     },
+                    onChange: handleChangeListItem,
                 })),
             );
         };

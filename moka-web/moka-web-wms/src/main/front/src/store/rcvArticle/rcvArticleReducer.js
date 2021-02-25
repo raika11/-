@@ -40,6 +40,17 @@ export const initialState = {
         title: '',
     },
     invalidList: [],
+    jopanList: [],
+    jopanTotal: 0,
+    jopanSearch: {
+        page: 0,
+        size: PAGESIZE_OPTIONS[0],
+        section: 'all',
+        pressDate: '',
+        ho: '',
+        myun: '',
+    },
+    jopan: {},
 };
 
 export default handleActions(
@@ -53,12 +64,25 @@ export default handleActions(
             });
         },
         /**
+         * 조판 검색조건 변경
+         */
+        [act.CHANGE_JOPAN_SEARCH_OPTION]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.jopanSearch = payload;
+            });
+        },
+        /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
         [act.CLEAR_RCV_ARTICLE]: (state) => {
             return produce(state, (draft) => {
                 draft.rcvArticle = initialState.rcvArticle;
+            });
+        },
+        [act.CLEAR_JOPAN]: (state) => {
+            return produce(state, (draft) => {
+                draft.jopan = initialState.jopan;
             });
         },
         /**
@@ -88,6 +112,31 @@ export default handleActions(
          */
         // [act.POST_RCV_ARTICLE_SUCCESS]: () => {},
         // [act.POST_RCV_ARTICLE_FAILURE]: () => {},
+        /**
+         * 조판 목록 조회
+         */
+        [act.GET_JOPAN_LIST_SUCCESS]: (state, { payload: { body } }) => {
+            return produce(state, (draft) => {
+                draft.jopanList = body.list;
+                draft.jopanTotal = body.totalCnt;
+                draft.error = initialState.error;
+            });
+        },
+        [act.GET_JOPAN_LIST_FAILURE]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.jopanList = initialState.jopanList;
+                draft.jopanTotal = initialState.jopanTotal;
+                draft.error = payload;
+            });
+        },
+        /**
+         * 조판 정보 변경
+         */
+        [act.CHANGE_JOPAN]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.jopan = payload;
+            });
+        },
     },
     initialState,
 );

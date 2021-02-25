@@ -68,6 +68,7 @@ const SystemMonitor = React.lazy(() => retry(() => import('@pages/SystemMonitor'
 const BulkMonitor = React.lazy(() => retry(() => import('@pages/BulkMonitor')));
 const InternalApi = React.lazy(() => retry(() => import('@pages/InternalApi')));
 const Package = React.lazy(() => retry(() => import('@pages/Package')));
+const Jopan = React.lazy(() => retry(() => import('@pages/Jopan')));
 
 const routes = [
     {
@@ -705,6 +706,17 @@ const routes = [
         component: JpodNotice,
         layout: SidebarOpenLayout,
         nonResponsive: true,
+        exact: false,
+        strict: true,
+    },
+    {
+        path: '/ja-jopan',
+        name: 'ja-jopan',
+        displayName: '중앙일보 조판',
+        component: Jopan,
+        layout: SidebarOpenLayout,
+        side: true,
+        nonResponsive: false,
         exact: false,
         strict: true,
     },

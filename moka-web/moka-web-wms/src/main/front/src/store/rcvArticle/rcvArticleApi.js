@@ -34,3 +34,10 @@ export const postRcvArticleWithRid = ({ rid }) => {
         throw err;
     });
 };
+
+// 조판 목록 조회
+export const getJopanList = ({ search }) => {
+    return instance.get(`/api/rcv-articles/jopans?${qs.stringify(search)}`).catch((err) => {
+        throw err;
+    });
+};

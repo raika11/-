@@ -64,10 +64,16 @@ const postRcvArticle = createRegisterSaga(act.POST_RCV_ARTICLE, api.postRcvArtic
  */
 const postRcvArticleWithRid = createRegisterSaga(act.POST_RCV_ARTICLE_WITH_RID, api.postRcvArticleWithRid);
 
+/**
+ * 조판 목록 조회
+ */
+const getJopanList = createRequestSaga(act.GET_JOPAN_LIST, api.getJopanList);
+
 export default function* saga() {
     yield takeLatest(act.GET_RCV_ARTICLE_LIST, getRcvArticleList);
     yield takeLatest(act.GET_RCV_ARTICLE, getRcvArticle);
     yield takeLatest(act.GET_RCV_ARTICLE_MODAL, getRcvArticleModal);
     yield takeLatest(act.POST_RCV_ARTICLE, postRcvArticle);
     yield takeLatest(act.POST_RCV_ARTICLE_WITH_RID, postRcvArticleWithRid);
+    yield takeLatest(act.GET_JOPAN_LIST, getJopanList);
 }

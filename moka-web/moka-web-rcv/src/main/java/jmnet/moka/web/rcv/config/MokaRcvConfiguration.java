@@ -3,7 +3,6 @@ package jmnet.moka.web.rcv.config;
 import jmnet.moka.web.rcv.aspect.IpAllowAspect;
 import jmnet.moka.web.rcv.task.base.TaskManager;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.ConfigurationProperties;

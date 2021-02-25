@@ -24,14 +24,6 @@ public class RcvJsonUtil {
         return jsonObject.getString(key);
     }
 
-    @SuppressWarnings("SameParameterValue")
-    public static int getJsonInt( JSONObject jsonObject, String key )
-            throws JSONException {
-        if( !jsonObject.has(key) )
-            return 0;
-        return jsonObject.getInt(key);
-    }
-
     public static JSONObject getJsonObject( JSONObject jsonObject, String key )
             throws JSONException {
         if( !jsonObject.has(key) )

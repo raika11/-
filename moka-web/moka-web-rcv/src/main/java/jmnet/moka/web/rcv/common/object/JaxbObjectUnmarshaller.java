@@ -20,7 +20,7 @@ import jmnet.moka.web.rcv.common.vo.BasicVo;
  */
 public interface JaxbObjectUnmarshaller {
     BasicVo getBasicVoFromXml(File file)
-            throws XMLStreamException, JAXBException;
+            throws XMLStreamException;
      BasicVo getBasicVoFromString(String string)
              throws XMLStreamException, JAXBException;
 

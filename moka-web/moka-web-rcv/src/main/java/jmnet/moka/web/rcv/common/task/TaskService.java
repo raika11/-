@@ -16,6 +16,7 @@ import jmnet.moka.web.rcv.code.OpCode;
  * @since 2020-10-27 027 오후 5:50
  */
 
+@SuppressWarnings("unused")
 interface TaskService {
     boolean operation(OpCode opCode, Map<String, String> param, Map<String, Object> responseMap, boolean allFromWeb) throws InterruptedException;
     boolean isAlive();

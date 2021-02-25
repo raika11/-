@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJobFileVo;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
-import org.apache.commons.io.Charsets;
 
 /**
  * <pre>
@@ -170,7 +170,7 @@ public class BulkDumpProcess {
             }
             bs = new BufferedOutputStream(new FileOutputStream(tmpFileName));
             if ("U8".equals(dumpEnvCP.getEncodeType()))
-                bs.write(cpFormat.getBytes(Charsets.UTF_8));
+                bs.write(cpFormat.getBytes(StandardCharsets.UTF_8));
             else {
                 bs.write(cpFormat.getBytes(Charset.defaultCharset()));
             }

@@ -1,8 +1,6 @@
 package jmnet.moka.web.rcv.taskinput;
 
-import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
-import jmnet.moka.web.rcv.exception.RcvException;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import org.w3c.dom.Node;
 
@@ -20,8 +18,6 @@ import org.w3c.dom.Node;
  */
 public abstract class ObjectTaskInput extends TaskInput {
     @Override
-    public void load(Node node, XMLUtil xu)
-            throws XPathExpressionException, RcvException {
-
+    public void load(Node node, XMLUtil xu){
     }
 }

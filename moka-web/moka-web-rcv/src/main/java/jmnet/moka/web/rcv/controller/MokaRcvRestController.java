@@ -76,6 +76,7 @@ public class MokaRcvRestController {
     }
 
     @GetMapping("/sms/smsTest")
+    @SuppressWarnings("SameReturnValue")
     public String doSmsTest() {
         log.info("doSmsTest");
         taskManager.getSlackMessageService().sendSms("smsTest", "sms" + McpDate.dateTimeStr(new Date()));
@@ -83,6 +84,7 @@ public class MokaRcvRestController {
     }
 
     @GetMapping("/sms/smsPause")
+    @SuppressWarnings("SameReturnValue")
     public String doSmsPause() {
         log.info("doSmsPause");
         taskManager.getSlackMessageService().pause();

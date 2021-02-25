@@ -136,6 +136,7 @@ public abstract class TaskBase implements Runnable, TaskService {
         }
     }
 
+    @SuppressWarnings("EmptyMethod")
     public void processMonitor() {
     }
 }

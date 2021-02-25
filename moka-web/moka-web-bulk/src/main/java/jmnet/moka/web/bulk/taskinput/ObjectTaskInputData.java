@@ -1,7 +1,5 @@
 package jmnet.moka.web.bulk.taskinput;
 
-import java.util.List;
-import java.util.Map;
 import jmnet.moka.web.bulk.common.taskinput.TaskInputData;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
 import lombok.Getter;

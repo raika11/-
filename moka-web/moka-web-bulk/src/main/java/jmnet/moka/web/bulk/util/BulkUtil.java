@@ -44,8 +44,6 @@ public class BulkUtil {
         return map.get(key).toString();
     }
 
-    private static final SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-
     private static String sendUrlRequest( String urlAddress, String json, boolean isGet ) {
         try {
             URL url = new URL(urlAddress);
@@ -82,14 +80,6 @@ public class BulkUtil {
         } catch (IOException ignore) {
         }
         return null;
-    }
-
-    public static String sendUrlGetRequest(String urlAddress) {
-        return sendUrlRequest( urlAddress, "", true);
-    }
-
-    public static String SendUrlPostRequest( String urlAddress, String json ) {
-        return sendUrlRequest( urlAddress, json, false);
     }
 
     public static boolean downloadData(String sourceUrl, String targetFilename) {

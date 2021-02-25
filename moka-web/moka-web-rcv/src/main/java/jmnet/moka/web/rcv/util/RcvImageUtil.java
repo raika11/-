@@ -85,6 +85,7 @@ public class RcvImageUtil {
         }
     }
 
+    @SuppressWarnings("SameReturnValue")
     public static boolean resizeMaxWidthHeight_sub( File targetFile, BufferedImage sourceImage, int maxWidth, int maxHeight  )
             throws IOException {
         final double ratioWidth = (double) maxWidth / sourceImage.getWidth();

@@ -1,12 +1,12 @@
 package jmnet.moka.web.rcv.util;
 
+import java.nio.charset.StandardCharsets;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.config.BrightCoveConfig;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemMultiOvpVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.Charsets;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +39,7 @@ public class RcvBrightCoveUtil {
                 headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
                 headers.add("Authorization", "Basic " + new String(Base64.encodeBase64(String
                         .format("%s:%s", brightCoveConfig.getClientId(), brightCoveConfig.getClientSecret())
-                        .getBytes(Charsets.UTF_8))));
+                        .getBytes(StandardCharsets.UTF_8))));
                 HttpEntity<String> request = new HttpEntity<>("", headers);
                 ResponseEntity<String> response = rt.exchange(brightCoveConfig.getAccessTokenUrl(), HttpMethod.POST, request, String.class);
                 if (response.getStatusCode() == HttpStatus.OK) {

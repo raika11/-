@@ -577,7 +577,12 @@ public class BulkJoongangArticle extends BulkArticle {
         contentNaver = contentNaver.replaceAll("(?i)<div(\\s *?)class=\"(\\bdim\\b)[^>]+>(\\s*?)(.*?)</div>", "");
         contentNaver = contentNaver.replaceAll("(?i)<span(\\s*?)class=\"(\\bdim\\b)[^>]+>.</span>", "");
 
-        // ab_box_titleline, ab_box_content 에 대한 처리를 하는 루틴은 있었으나 정규식이 동작하지 않음
+        final Pattern PATTERN_ContentTag_naverAdBoxTail = Pattern.compile("<div(\\s*?)(.*?)(\\bab_box_article\\b)[^\"]\"[^>]+>(\\s*?)(.*?)(\\bab_box_inner\\b)[^>]+>(\\s*)(.*?)(\\bab_box_bullet\\b)(\\s*?)(.*?)[^>]+>(\\s*?)</span>(\\s*?)(?<abBoxTitleline><div(\\s*?)class.+(\\bab_box_titleline\\b)[^>]+>)(\\s*?)(.*?)(</div>?)(\\s*?)(.*?)(</div>?)(\\s*?)(.*?)(?<aBboxContent><div(\\s*?)class.+(\\bab_box_content\\b)[^>]+>)", Pattern.CASE_INSENSITIVE);
+        contentNaver = BulkTagUtil.regexReplaceGroup(contentNaver, PATTERN_ContentTag_naverAdBoxTail, "abBoxTitleline", "<div class=\"ab_box_titleline\" style=\"font-weight:bold;\">" );
+
+        final Pattern PATTERN_ContentTag_naverAdBoxContent = Pattern.compile("<div(\\s*?)(.*?)(\\bab_box_article\\b)[^\"]\"[^>]+>(\\s*?)(.*?)(\\bab_box_inner\\b)[^>]+>(\\s*)(.*?)(\\bab_box_bullet\\b)(\\s*?)(.*?)[^>]+>(</span>?)(\\s*?)(.*?)(\\bab_box_article\\b)[^>]+>(\\s*?)(.*?)(</div>?)(\\s*?)(.*?)(</div>?)(\\s*?)(.*?)(?<aBboxContent><div(\\s*?)class.+(\\bab_box_content\\b)[^>]+>)", Pattern.CASE_INSENSITIVE);
+        contentNaver = BulkTagUtil.regexReplaceGroup(contentNaver, PATTERN_ContentTag_naverAdBoxContent, "aBboxContent", "<div class=\"ab_box_content\" style=\"color:rgb(60,62,64);line-height:1.8;font-size:16px;\">" );
+
         return contentNaver;
     }
 
@@ -740,8 +745,10 @@ public class BulkJoongangArticle extends BulkArticle {
             Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
         //카카오다음 전용변수(m_content_html_ig_daum)
         String contentHtmlDaum = getContentHtml().toString()
-                                                 .replaceAll("(?i)<!--@img_tag_s@-->.*?<!--@img_tag_e@-->", "")
-                                                 .replaceAll("(?i)<p class=\"caption\">", "</p>");
+                                                 .replaceAll("(?i)<!--@img_tag_s@-->.*?<!--@img_tag_e@-->", "");
+
+        // 카카오 다음을 처리하면서 내부에는 getContentHtml caption 도 처리한다.
+        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule(getContentHtml().toString(), "(?i)<p class=\"caption\">", "</p>"));
 
         contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"" );
 

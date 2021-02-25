@@ -1,14 +1,10 @@
 package jmnet.moka.web.rcv.task.jamxml.service;
 
-import jmnet.moka.common.utils.dto.ResultDTO;
-import jmnet.moka.common.utils.dto.ResultHeaderDTO;
-import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
 import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 

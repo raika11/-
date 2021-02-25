@@ -51,5 +51,6 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
     protected abstract T newArticle( TotalVo<BulkDumpTotalVo> totalVo );
     protected abstract void doProcess_Ready(T article, BulkDumpService dumpService);
     protected abstract BulkDumpResult doProcess_InsertUpdate(TotalVo<BulkDumpTotalVo> totalVo, T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
+    @SuppressWarnings("SameReturnValue")
     protected abstract BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
 }

@@ -100,7 +100,7 @@ public class BulkDumpClientHandler implements Runnable {
                         } else if (result == BulkDumpResult.TIMEOUT_OVP) {
                             if( System.currentTimeMillis() - bulkDumpTotalVo.getDumpStartTime() > bulkDumpTask.getOvpWaitTime() ) {
                                 insertBulkLog(bulkDumpService, totalVo, DumpStatus.Error,
-                                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp Expired !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
+                                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp Expired !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index), true);
                                 break;
                             }
                             else {
@@ -137,7 +137,7 @@ public class BulkDumpClientHandler implements Runnable {
                             BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Skip Database", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
                 } else if( result != BulkDumpResult.TIMEOUT_OVP)
                     insertBulkLog(bulkDumpService, totalVo, DumpStatus.Error,
-                            BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Error !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
+                            BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Error !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index), true);
 
             } catch (InterruptedException interrupt) {
                 log.info("BulkDumpClientHandler interrupt");

@@ -14,6 +14,7 @@ import jmnet.moka.web.bulk.util.BulkTagUtil;
  * @author sapark
  * @since 2021-02-15 015 오후 2:25
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class TestData_ab_photo_center extends TestData{
     @Override
     public String getTestString() {

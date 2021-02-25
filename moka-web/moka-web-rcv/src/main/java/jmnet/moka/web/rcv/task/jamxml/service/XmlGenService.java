@@ -1,7 +1,5 @@
 package jmnet.moka.web.rcv.task.jamxml.service;
 
-import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
-import jmnet.moka.web.rcv.config.MokaRcvConfiguration;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
 import jmnet.moka.web.rcv.task.jamxml.process.XmlGenComponentManager;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;

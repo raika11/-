@@ -21,6 +21,7 @@ import java.util.List;
  * @author sapark
  * @since 2021-02-16 016 오전 11:22
  */
+@SuppressWarnings("unused")
 public class GifDecoder {
     static final class BitReader {
         private int bitPos; // Next bit to read
@@ -67,6 +68,7 @@ public class GifDecoder {
             tbl = new int[4096][1];
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         private int add(final int[] indices) {
             if (nextCode < 4096) {
                 if (nextCode == nextCodeLimit && codeSize < 12) {
@@ -79,6 +81,7 @@ public class GifDecoder {
             return codeSize;
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         private int clear() {
             codeSize = initCodeSize;
             br.setNumBits(codeSize);
@@ -106,6 +109,7 @@ public class GifDecoder {
         }
     }
 
+    @SuppressWarnings("InnerClassMayBeStatic")
     final class GifFrame {
         // Graphic control extension (optional)
         // Disposal: 0=NO_ACTION, 1=NO_DISPOSAL, 2=RESTORE_BG, 3=RESTORE_PREV
@@ -133,6 +137,7 @@ public class GifDecoder {
         private BufferedImage img; // Full drawn image, not just the frame area
     }
 
+    @SuppressWarnings("unused")
     public final class GifImage {
         public String header; // Bytes 0-5, GIF87a or GIF89a
         private int w; // Unsigned 16 Bit, least significant byte first
@@ -150,6 +155,7 @@ public class GifDecoder {
         public String appAuthCode = ""; // 3 Bytes at in[i+11], usually "2.0"
         public int repetitions = 0; // 0: infinite loop, N: number of loops
         private BufferedImage img = null; // Currently drawn frame
+        @SuppressWarnings("FieldCanBeLocal")
         private int[] prevPx = null; // Previous frame's pixels
         private final BitReader bits = new BitReader();
         private final CodeTable codes = new CodeTable();
@@ -525,6 +531,7 @@ public class GifDecoder {
      * @throws IOException
      *             If the GIF header/trailer is missing, incomplete or unknown
      */
+    @SuppressWarnings("SameReturnValue")
     static int readHeader(final byte[] in, final GifImage img) throws IOException {
         if (in.length < 6) { // Check first 6 bytes
             throw new IOException("Image is truncated.");
@@ -545,6 +552,7 @@ public class GifDecoder {
      *            Index of the first byte of this block, i.e. the minCodeSize
      * @return data
      */
+    @SuppressWarnings("UnusedAssignment")
     static int readImgData(final GifFrame fr, final byte[] in, int i) {
         final int fileSize = in.length;
         final int minCodeSize = in[i++] & 0xFF; // Read code size, go to block
@@ -623,12 +631,6 @@ public class GifDecoder {
         return ++i;
     }
 
-    /**
-     * @param img
-     * @param i
-     *            Start index of this block.
-     * @return Index of the first byte after this block.
-     */
     static int readLogicalScreenDescriptor(final GifImage img, final byte[] in, final int i) {
         img.w = in[i] & 0xFF | (in[i + 1] & 0xFF) << 8; // 16 bit, LSB 1st
         img.h = in[i + 2] & 0xFF | (in[i + 3] & 0xFF) << 8; // 16 bit

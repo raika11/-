@@ -20,8 +20,6 @@ import org.w3c.dom.Node;
  */
 public abstract class ObjectTaskInput extends TaskInput {
     @Override
-    public void load(Node node, XMLUtil xu)
-            throws XPathExpressionException, BulkException {
-
+    public void load(Node node, XMLUtil xu){
     }
 }

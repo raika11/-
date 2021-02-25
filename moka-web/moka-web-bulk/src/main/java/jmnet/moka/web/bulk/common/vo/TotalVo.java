@@ -72,6 +72,7 @@ public class TotalVo <T> extends BasicVo {
         return errorMessage;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public String logError(String s, Object...message) {
         return logError(BulkStringUtil.format(s, message));
     }

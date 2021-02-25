@@ -100,7 +100,7 @@ public class SlackMessageServiceImpl implements SlackMessageService {
 
                                 log.info("sendMessage/sendMessage : [{}] 초 뒤에 전송\n{}  ", lastSendGap / 1000, sendMessage );
 
-                                slackHelper.sendMessage(SlackChannel.valueOf(this.channelName), sendMessage, title);
+                                this.slackHelper.sendMessage(SlackChannel.valueOf(this.channelName), sendMessage, title);
 
                                 lastSendDt = currentTime;
                                 messageList.clear();

@@ -1,9 +1,9 @@
 package jmnet.moka.core.tps.mvc.article.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.article.entity.ArticleClickcnt;
 import jmnet.moka.core.tps.mvc.article.entity.QArticleClickcnt;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2021-01-12 08:59
  */
-public class ArticleClickcntRepositorySupportImpl extends QuerydslRepositorySupport implements ArticleClickcntRepositorySupport {
+public class ArticleClickcntRepositorySupportImpl extends TpsQueryDslRepositorySupport implements ArticleClickcntRepositorySupport {
     public ArticleClickcntRepositorySupportImpl() {
         super(ArticleClickcnt.class);
     }

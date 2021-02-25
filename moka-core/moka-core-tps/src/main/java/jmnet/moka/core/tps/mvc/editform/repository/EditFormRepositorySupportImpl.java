@@ -5,12 +5,12 @@ import com.querydsl.jpa.JPQLQuery;
 import java.util.Objects;
 import jmnet.moka.common.data.support.SearchDTO;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.editform.entity.EditForm;
 import jmnet.moka.core.tps.mvc.editform.entity.QEditForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2021-01-19 14:12
  */
-public class EditFormRepositorySupportImpl extends QuerydslRepositorySupport implements EditFormRepositorySupport {
+public class EditFormRepositorySupportImpl extends TpsQueryDslRepositorySupport implements EditFormRepositorySupport {
 
     public EditFormRepositorySupportImpl() {
         super(EditForm.class);

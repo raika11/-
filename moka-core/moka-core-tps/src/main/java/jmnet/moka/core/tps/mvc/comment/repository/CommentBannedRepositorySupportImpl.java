@@ -7,6 +7,7 @@ import java.util.Optional;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.TpsConstants;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.codemgt.entity.QCodeSimple;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentBannedType;
 import jmnet.moka.core.tps.mvc.comment.dto.CommentBannedSearchDTO;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**
  * <pre>
@@ -31,7 +31,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author ince
  * @since 2021-01-08 15:45
  */
-public class CommentBannedRepositorySupportImpl extends QuerydslRepositorySupport implements CommentBannedRepositorySupport {
+public class CommentBannedRepositorySupportImpl extends TpsQueryDslRepositorySupport implements CommentBannedRepositorySupport {
 
     public CommentBannedRepositorySupportImpl(JPAQueryFactory queryFactory) {
         super(CommentBanned.class);

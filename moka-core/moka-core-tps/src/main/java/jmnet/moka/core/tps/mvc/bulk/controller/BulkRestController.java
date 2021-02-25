@@ -11,6 +11,7 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
@@ -137,6 +138,14 @@ public class BulkRestController extends AbstractCommonController {
 
         ResultListDTO<BulkArticleDTO> resultListMessage = new ResultListDTO<>();
 
+        Bulk bulk = naverBulkService
+                .findById(bulkartSeq)
+                .orElseThrow(() -> {
+                    return new NoDataException(msg("tps.bulk.error.no-data"));
+                });
+
+        BulkDTO bulkDTO = modelMapper.map(bulk, BulkDTO.class);
+
         // 조회
         List<BulkArticle> returnValue = naverBulkService.findAllByBulkartSeq(bulkartSeq);
 
@@ -163,7 +172,9 @@ public class BulkRestController extends AbstractCommonController {
         resultListMessage.setList(columnistList);
 
         // 결과값 셋팅
-        ResultDTO<ResultListDTO<BulkArticleDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        ResultMapDTO resultDto = new ResultMapDTO();
+        resultDto.addBodyAttribute("bulk", bulkDTO);
+        resultDto.addBodyResultListDTO(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);

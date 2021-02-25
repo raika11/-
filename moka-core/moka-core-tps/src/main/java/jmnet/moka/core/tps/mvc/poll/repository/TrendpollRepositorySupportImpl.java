@@ -7,6 +7,7 @@ import com.querydsl.jpa.JPQLQuery;
 import java.util.List;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.member.entity.QMemberInfo;
 import jmnet.moka.core.tps.mvc.poll.code.PollCode.PollStatusCode;
 import jmnet.moka.core.tps.mvc.poll.dto.TrendpollSearchDTO;
@@ -17,7 +18,6 @@ import jmnet.moka.core.tps.mvc.poll.entity.Trendpoll;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ince
  * @since 2021-01-13 11:28
  */
-public class TrendpollRepositorySupportImpl extends QuerydslRepositorySupport implements TrendpollRepositorySupport {
+public class TrendpollRepositorySupportImpl extends TpsQueryDslRepositorySupport implements TrendpollRepositorySupport {
 
     public TrendpollRepositorySupportImpl() {
         super(Trendpoll.class);

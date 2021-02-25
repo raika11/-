@@ -2,10 +2,10 @@ package jmnet.moka.core.tps.mvc.comment.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.comment.code.CommentCode.CommentStatusType;
 import jmnet.moka.core.tps.mvc.comment.entity.Comment;
 import jmnet.moka.core.tps.mvc.comment.entity.QComment;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ince
  * @since 2021-01-08 15:03
  */
-public class CommentRepositorySupportImpl extends QuerydslRepositorySupport implements CommentRepositorySupport {
+public class CommentRepositorySupportImpl extends TpsQueryDslRepositorySupport implements CommentRepositorySupport {
 
     public CommentRepositorySupportImpl(JPAQueryFactory queryFactory) {
         super(Comment.class);

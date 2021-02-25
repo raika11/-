@@ -748,7 +748,7 @@ public class BulkJoongangArticle extends BulkArticle {
                                                  .replaceAll("(?i)<!--@img_tag_s@-->.*?<!--@img_tag_e@-->", "");
 
         // 카카오 다음을 처리하면서 내부에는 getContentHtml caption 도 처리한다.
-        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule(getContentHtml().toString(), "(?i)<p class=\"caption\">", "</p>"));
+        getContentHtml().setData(BulkTagUtil.ripTagWithOrderRule(getContentHtml().toString(), "<p class=\"caption\">", "</p>"));
 
         contentHtmlDaum = contentHtmlDaum.replaceAll("(?i)<(\\s*?)/(\\s*?)div(\\s*?)><(\\s*?)div(\\s*?)class=\"tag_vod\"", "</div>\r\n<div class=\"tag_vod\"" );
 

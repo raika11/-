@@ -84,7 +84,7 @@ export const initialState = {
             list: [],
             search: {
                 page: 0,
-                size: 15,
+                size: 20,
                 bulkartDiv: '',
                 sourceCode: '',
                 status: 'publish',
@@ -235,6 +235,8 @@ export default handleActions(
                 draft.bulkh.historyList.totalCnt = initialState.bulkh.historyList.totalCnt;
                 draft.bulkh.historyList.list = initialState.bulkh.historyList.list;
                 draft.bulkh.historyList.article = initialState.bulkh.historyList.article;
+                draft.bulkh.historyList.search.page = initialState.bulkh.historyList.search.page;
+                draft.bulkh.historyList.search.size = initialState.bulkh.historyList.search.size;
             });
         },
 

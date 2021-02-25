@@ -172,7 +172,7 @@ public class BulkRestController extends AbstractCommonController {
         resultListMessage.setList(columnistList);
 
         // 결과값 셋팅
-        ResultMapDTO resultDto = new ResultMapDTO();
+        ResultMapDTO resultDto = new ResultMapDTO(HttpStatus.OK);
         resultDto.addBodyAttribute("bulk", bulkDTO);
         resultDto.addBodyResultListDTO(resultListMessage);
         tpsLogger.success(ActionType.SELECT);

@@ -121,11 +121,6 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .headers().httpStrictTransportSecurity().disable()
-                .frameOptions().disable().addHeaderWriter(
-                    new XFrameOptionsHeaderWriter(
-                            new StaticAllowFromStrategy(URI.create("*"))
-                    )
-                )
                 .and()
                 .sessionManagement()
                 .sessionFixation()

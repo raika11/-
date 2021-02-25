@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import produce from 'immer';
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInputLabel } from '@components';
-import { previewPage, w3cArticlePage } from '@store/merge';
-import { initialState, getPreviewTotalId, existsArtType, changeArticlePage, saveArticlePage, changeInvalidList } from '@store/articlePage';
+import { checkSyntax, w3cArticlePage } from '@store/merge';
+import {
+    initialState,
+    getPreviewTotalId,
+    existsArtType,
+    changeArticlePage,
+    saveArticlePage,
+    changeInvalidList,
+    GET_ARTICLE_PAGE,
+    SAVE_ARTICLE_PAGE,
+    DELETE_ARTICLE_PAGE,
+} from '@store/articlePage';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
 import { invalidListToError } from '@utils/convertUtil';
@@ -18,27 +26,36 @@ import { API_BASE_URL, W3C_URL } from '@/constants';
 const ArticlePageEdit = ({ onDelete, match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const loading = useSelector(
-        ({ loading }) =>
-            loading['articlePage/GET_ARTICLE_PAGE'] ||
-            loading['articlePage/POST_ARTICLE_PAGE'] ||
-            loading['articlePage/PUT_ARTICLE_PAGE'] ||
-            loading['articlePage/DELETE_ARTICLE_PAGE'] ||
-            loading['merge/PREVIEW_PAGE'] ||
-            loading['merge/W3C_PAGE'],
-    );
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_PAGE] || loading[SAVE_ARTICLE_PAGE] || loading[DELETE_ARTICLE_PAGE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
     const { articlePage, artPageBody, invalidList } = useSelector(({ articlePage }) => articlePage);
-
-    // state
-    const [temp, setTemp] = useState(initialState.articlePage);
-    const [error, setError] = useState({
-        artPageName: false,
-        artType: false,
-    });
+    const [temp, setTemp] = useState(initialState.articlePage); // 입력값 state
+    const [error, setError] = useState({}); // 에러 state
     const [btnDisabled, setBtnDisabled] = useState(true);
-    const [previewTotalId, setPreviewTotalId] = useState('');
+    const [previewTotalId, setPreviewTotalId] = useState(''); // 미리보기용 기사ID
+
+    /**
+     * 기사타입별 최신 totalId 조회
+     */
+    const getTotalId = useCallback(
+        (artType) => {
+            dispatch(
+                getPreviewTotalId({
+                    artType: artType,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            !body && toast.warning('미리보기용 기사ID가 존재하지 않습니다.');
+                            setPreviewTotalId(body || '');
+                        } else {
+                            messageBox.alert('미리보기용 기사ID 조회에 실패하였습니다.');
+                        }
+                    },
+                }),
+            );
+        },
+        [dispatch],
+    );
 
     /**
      * 입력값 변경
@@ -48,41 +65,19 @@ const ArticlePageEdit = ({ onDelete, match }) => {
             const { name, value } = target;
             if (name === 'artPageName') {
                 setTemp({ ...temp, artPageName: value });
-                setError({ ...error, artPageName: false });
             } else if (name === 'previewTotalId') {
                 setPreviewTotalId(value);
+            } else if (name === 'artType') {
+                setTemp({ ...temp, artType: value });
+                getTotalId(value);
+            }
+
+            if (error[name]) {
+                setError({ ...error, [name]: false });
             }
         },
-        [error, temp],
+        [error, temp, getTotalId],
     );
-
-    const changeArtType = useCallback(
-        (artType) => {
-            dispatch(
-                getPreviewTotalId({
-                    artType: artType,
-                    callback: (response) => {
-                        if (response.header.success) {
-                            if (response.body === null) {
-                                toast.error('미리보기용 기사ID가 존재하지 않습니다.');
-                            }
-                            setPreviewTotalId(response.body);
-                        } else {
-                            toast.error('미리보기용 기사ID 조회에 실패하였습니다.');
-                        }
-                    },
-                }),
-            );
-        },
-        [dispatch],
-    );
-
-    const handleChangeArtType = ({ target }) => {
-        const { value } = target;
-        setTemp({ ...temp, artType: value });
-        setError({ ...error, artType: false });
-        changeArtType(value);
-    };
 
     /**
      * 유효성 검사
@@ -107,7 +102,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     );
 
     /**
-     * 기사페이지 저장 호출
+     * 저장 콜백
      * @param {object} tmp 기사페이지
      */
     const saveCallback = useCallback(
@@ -142,29 +137,24 @@ const ArticlePageEdit = ({ onDelete, match }) => {
      */
     const submitPage = useCallback(
         (tmp) => {
-            if (tmp.artPageSeq) {
-                saveCallback(tmp);
-            } else {
-                dispatch(
-                    existsArtType({
-                        payload: {
-                            domainId: latestDomainId,
-                            artType: tmp.artType,
-                        },
-                        callback: (response) => {
-                            const { header, body } = response;
-                            if (body) {
-                                setError({ ...error, artType: true });
-                                messageBox.alert(header.message);
-                            } else {
-                                saveCallback(tmp);
-                            }
-                        },
-                    }),
-                );
-            }
+            // 본인을 제외한 기사페이지 중 동일한 기사타입이 있는지 체크
+            dispatch(
+                existsArtType({
+                    domainId: latestDomainId,
+                    artType: tmp.artType,
+                    artPageSeq: articlePage.artPageSeq,
+                    callback: ({ header, body }) => {
+                        if (body) {
+                            setError({ ...error, artType: true });
+                            messageBox.alert(header.message);
+                        } else {
+                            saveCallback(tmp);
+                        }
+                    },
+                }),
+            );
         },
-        [dispatch, error, latestDomainId, saveCallback],
+        [articlePage.artPageSeq, dispatch, error, latestDomainId, saveCallback],
     );
 
     /**
@@ -194,50 +184,46 @@ const ArticlePageEdit = ({ onDelete, match }) => {
      */
     const handleClickPreviewOpen = useCallback(() => {
         if (previewTotalId) {
-            const option = {
-                content: artPageBody,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        const item = {
-                            ...produce(articlePage, (draft) => {
-                                draft.artPageBody = artPageBody;
-                            }),
-                            totalId: previewTotalId,
-                        };
-                        commonUtil.popupPreview(`${API_BASE_URL}/preview/article-page`, item);
-                    } else {
-                        toast.fail(header.message || '미리보기에 실패하였습니다');
-                    }
-                },
-            };
-            dispatch(previewPage(option));
+            dispatch(
+                checkSyntax({
+                    content: artPageBody,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            commonUtil.popupPreview(`${API_BASE_URL}/preview/article-page`, {
+                                ...articlePage,
+                                artPageBody,
+                                totalId: previewTotalId,
+                            });
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
         } else {
             messageBox.alert('기사ID를 입력하세요');
         }
     }, [artPageBody, articlePage, dispatch, previewTotalId]);
 
     /**
-     * HTML검사(W3C) 팝업 : syntax체크 -> 머지결과 -> HTML검사
+     * w3c 검사
      */
-    const handleClickW3COpen = useCallback(() => {
+    const handleClickW3C = useCallback(() => {
         if (previewTotalId) {
-            const tempPage = produce(articlePage, (draft) => {
-                draft.artPageBody = artPageBody;
-            });
-
-            const option = {
-                content: artPageBody,
-                articlePage: tempPage,
-                totalId: previewTotalId,
-                callback: ({ header, body }) => {
-                    if (header.success) {
-                        commonUtil.popupPreview(W3C_URL, { fragment: body }, 'multipart/form-data');
-                    } else {
-                        toast.fail(header.message || 'W3C검사에 실패했습니다');
-                    }
-                },
-            };
-            dispatch(w3cArticlePage(option));
+            dispatch(
+                w3cArticlePage({
+                    content: artPageBody,
+                    articlePage: { ...articlePage, artPageBody },
+                    totalId: previewTotalId,
+                    callback: ({ header, body }) => {
+                        if (header.success) {
+                            commonUtil.popupPreview(W3C_URL, { fragment: body }, true);
+                        } else {
+                            messageBox.alert(header.message || 'W3C검사에 실패했습니다');
+                        }
+                    },
+                }),
+            );
         } else {
             messageBox.alert('기사ID를 입력하세요');
         }
@@ -252,7 +238,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
         if (articlePage.artPageSeq) {
             setBtnDisabled(false);
         } else {
-            changeArtType(initialState.articlePage.artType);
+            getTotalId(initialState.articlePage.artType);
             setBtnDisabled(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -261,6 +247,7 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     useEffect(() => {
         setTemp(articlePage);
         setPreviewTotalId(articlePage.previewTotalId);
+        setError({});
     }, [articlePage]);
 
     useEffect(() => {
@@ -273,9 +260,9 @@ const ArticlePageEdit = ({ onDelete, match }) => {
     return (
         <MokaCard title={`기사페이지 ${articlePage.artPageSeq ? '수정' : '등록'}`} loading={loading}>
             {/* 버튼 그룹 */}
-            <Form.Group className="mb-3 d-flex justify-content-between">
+            <div className="mb-2 d-flex justify-content-between">
                 <div className="d-flex">
-                    <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3COpen}>
+                    <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3C}>
                         W3C
                     </Button>
                     <Button variant="outline-neutral" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
@@ -295,74 +282,66 @@ const ArticlePageEdit = ({ onDelete, match }) => {
                         취소
                     </Button>
                 </div>
-            </Form.Group>
+            </div>
 
             {/* 기사페이지ID */}
             {articlePage.artPageSeq && (
-                <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        label="기사페이지ID"
-                        value={temp.artPageSeq}
-                        name="artPageSeq"
-                        onChange={handleChangeValue}
-                        className="w-100"
-                        placeholder="기사페이지ID를 입력하세요"
-                        isInvalid={error.artPageName}
-                        inputProps={{ plaintext: true, readOnly: true }}
-                        required
-                    />
-                </Form.Row>
+                <MokaInputLabel
+                    label="기사페이지ID"
+                    value={temp.artPageSeq}
+                    name="artPageSeq"
+                    onChange={handleChangeValue}
+                    className="mb-2"
+                    placeholder="기사페이지ID를 입력하세요"
+                    isInvalid={error.artPageName}
+                    inputProps={{ plaintext: true, readOnly: true }}
+                    required
+                />
             )}
 
             {/* 기사페이지명 */}
-            <Form.Row className="mb-2">
-                <MokaInputLabel
-                    label="기사페이지명"
-                    value={temp.artPageName}
-                    name="artPageName"
-                    onChange={handleChangeValue}
-                    className="w-100"
-                    placeholder="기사페이지명을 입력하세요"
-                    isInvalid={error.artPageName}
-                    inputProps={{ autoComplete: 'off' }}
-                    required
-                />
-            </Form.Row>
+            <MokaInputLabel
+                label="기사페이지명"
+                value={temp.artPageName}
+                name="artPageName"
+                onChange={handleChangeValue}
+                className="mb-2"
+                placeholder="기사페이지명을 입력하세요"
+                isInvalid={error.artPageName}
+                inputProps={{ autoComplete: 'off' }}
+                required
+            />
 
             {/* 기사타입 */}
-            <Form.Row className="mb-2">
-                <MokaInputLabel
-                    as="select"
-                    label="기사타입"
-                    value={temp.artType}
-                    name="artType"
-                    onChange={handleChangeArtType}
-                    className="w-100"
-                    placeholder="기사타입을 선택하세요."
-                    required
-                    isInvalid={error.pageServiceName}
-                >
-                    {articleTypeRows &&
-                        articleTypeRows.map((type) => (
-                            <option key={type.dtlCd} value={type.dtlCd}>
-                                {type.cdNm}
-                            </option>
-                        ))}
-                </MokaInputLabel>
-            </Form.Row>
+            <MokaInputLabel
+                as="select"
+                label="기사타입"
+                value={temp.artType}
+                name="artType"
+                isInvalid={error.artType}
+                onChange={handleChangeValue}
+                className="mb-2"
+                placeholder="기사타입을 선택하세요"
+                required
+            >
+                {articleTypeRows &&
+                    articleTypeRows.map((type) => (
+                        <option key={type.dtlCd} value={type.dtlCd}>
+                            {type.cdNm}
+                        </option>
+                    ))}
+            </MokaInputLabel>
 
             {/* 미리보기용 기사ID */}
-            <Form.Row className="mb-2">
-                <MokaInputLabel
-                    label="기사ID"
-                    value={previewTotalId}
-                    name="previewTotalId"
-                    onChange={handleChangeValue}
-                    className="w-100"
-                    placeholder="기사ID를 입력하세요."
-                    inputProps={{ autoComplete: 'off' }}
-                />
-            </Form.Row>
+            <MokaInputLabel
+                label="기사ID"
+                value={previewTotalId}
+                name="previewTotalId"
+                onChange={handleChangeValue}
+                className="mb-2"
+                placeholder="미리보기용 기사ID를 입력하세요"
+                inputProps={{ autoComplete: 'off' }}
+            />
         </MokaCard>
     );
 };

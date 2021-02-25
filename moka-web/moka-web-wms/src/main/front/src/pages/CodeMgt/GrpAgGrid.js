@@ -59,12 +59,11 @@ const GrpAgGrid = ({ match }) => {
                               return [winfo, w];
                           })(data)
                         : ((data) => {
-                              //   let w = `${data.regMember?.memberNm || ''}`;
-                              //   w += data.regMember?.memberId ? `(${data.regMember?.memberId})` : '';
-                              //   let winfo = w + '\n';
-                              //   winfo += (data.regDt || '').slice(0, -3);
-                              //   return [winfo, w];
-                              return ['', ''];
+                              let w = `${data.regMember?.memberNm || ''}`;
+                              w += data.regMember?.memberId ? `(${data.regMember?.memberId})` : '';
+                              let winfo = w + '\n';
+                              winfo += (data.regDt || '').slice(0, -3);
+                              return [winfo, w];
                           })(data);
 
                     return {

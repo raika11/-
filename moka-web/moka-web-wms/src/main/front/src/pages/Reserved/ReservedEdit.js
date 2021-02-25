@@ -198,7 +198,7 @@ const ReservedEdit = ({ match, onDelete, loading }) => {
                         {reserved.reservedSeq ? '수정' : '저장'}
                     </Button>
                     {reserved.reservedSeq && (
-                        <Button variant="negative" className="mr-1" onClick={() => onDelete(reserved)}>
+                        <Button variant="negative" className="mr-1" onClick={() => onDelete(temp)}>
                             삭제
                         </Button>
                     )}

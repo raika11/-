@@ -59,18 +59,15 @@ export function* getPreviewTotalId({ payload: { artType, callback } }) {
 
 /**
  * 동일기사페이지 유형 존재여부
- * @param {string} param0.payload.payload 검색조건
- * @param {func} param0.payload.callback 콜백
  */
-function* existsArtType({ payload: { payload, callback } }) {
-    console.log(payload);
+function* existsArtType({ payload: { domainId, artType, callback } }) {
     const ACTION = act.EXISTS_ARTICLE_TYPE;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(api.existsArtType, payload);
+        const response = yield call(api.existsArtType, { domainId, artType });
         console.log(response);
         callbackData = response.data;
     } catch (e) {

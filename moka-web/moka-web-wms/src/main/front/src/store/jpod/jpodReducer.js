@@ -81,7 +81,6 @@ export const initialState = {
             playCnt: 0,
             playTime: '',
             podtyEpsdSrl: 0,
-            podtyChnlSrl: '',
             replyCnt: 0,
             scbCnt: 0,
             seasonNo: 0,
@@ -138,7 +137,7 @@ export const initialState = {
         list: [],
     },
     podtyEpisode: {
-        castSrl: 0,
+        castSrl: '',
         total: 0,
         list: [],
     },

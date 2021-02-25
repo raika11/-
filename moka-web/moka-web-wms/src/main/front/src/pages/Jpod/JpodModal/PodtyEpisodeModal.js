@@ -15,11 +15,6 @@ const PodtyEpisodeModal = (props) => {
     const list = useSelector((store) => store.jpod.podtyEpisode.list);
     const loading = useSelector((store) => store.loading[GET_PODTY_EPISODE_LIST]);
 
-    // 닫기 버튼
-    const handleClickHide = () => {
-        onHide();
-    };
-
     // 목록 클릭 store 를 업데이트후 모달창 닫기.
     const handleClickListRow = ({ info }) => {
         dispatch(selectPodtyEpisode(info));
@@ -41,26 +36,19 @@ const PodtyEpisodeModal = (props) => {
         );
     }, [list, podtyChnlSrl]);
 
-    // 모달창이 열리면 팟티 목록 가져오고, 닫으면 목록 초기화.
     useEffect(() => {
+        // 모달창이 열리면 팟티 목록 가져오고, 닫으면 목록 초기화.
         if (show) {
-            // dispatch(clearPodtyEpisode());
             dispatch(getPodtyEpisodeList());
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]);
+    }, [dispatch, show]);
 
-    // 에피소드 정보에서 채널 선택해서 스토어 변경되면 Castsrl 값 설정.
     useEffect(() => {
+        // 에피소드 정보에서 채널 선택해서 스토어 변경되면 Castsrl 값 설정.
         if (podtyChnlSrl) {
-            if (podtyChnlSrl === '0') {
-                return;
-            } else {
-                dispatch(changePodtyEpisodeCastsrl(podtyChnlSrl));
-            }
+            dispatch(changePodtyEpisodeCastsrl(podtyChnlSrl));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [podtyChnlSrl]);
+    }, [dispatch, podtyChnlSrl]);
 
     return (
         <MokaModal
@@ -68,11 +56,11 @@ const PodtyEpisodeModal = (props) => {
             width={1200}
             height={820}
             show={show}
-            onHide={handleClickHide}
+            onHide={onHide}
             title={`팟티 에피소드 리스트`}
             bodyClassName="overflow-y-hidden h-100"
             footerClassName="d-flex justify-content-center"
-            buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}
+            buttons={[{ text: '닫기', variant: 'negative', onClick: onHide }]}
             draggable
         >
             <MokaTable

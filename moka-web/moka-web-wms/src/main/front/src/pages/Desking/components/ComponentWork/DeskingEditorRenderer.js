@@ -117,14 +117,14 @@ const DeskingEditorRenderer = forwardRef((params, ref) => {
                 {editable && (
                     <React.Fragment>
                         {editMode && (
-                            <div className="edit">
-                                <MokaInput
-                                    as={data.rel ? 'input' : 'textarea'}
-                                    className="resize-none"
-                                    value={editValue}
-                                    onChange={(e) => setEditValue(e.target.value)}
-                                    isInvalid={error}
-                                />
+                            <div
+                                className="edit"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <MokaInput as={data.rel ? 'input' : 'textarea'} value={editValue} onChange={(e) => setEditValue(e.target.value)} isInvalid={error} />
                             </div>
                         )}
                         <div style={{ height: 23, width: 23 }}>

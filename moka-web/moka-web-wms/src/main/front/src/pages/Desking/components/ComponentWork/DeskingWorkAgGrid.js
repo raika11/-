@@ -32,39 +32,6 @@ const DeskingWorkAgGrid = (props) => {
     const [onTitle, setOnTitle] = useState(false);
     const [draggingNodeData, setDraggingNodeData] = useState(null);
 
-    useEffect(() => {
-        if (!deskingWorks) return;
-        if (component?.viewYn === 'N') return;
-
-        setRowData(
-            deskingWorks.map((desking) => {
-                // 이미지 IR_URL
-                let irThumbFileName = '';
-                if (desking.thumbFileName) {
-                    // 일시적으로 IR_URL 연결 제거
-                    // const npLink = desking.thumbFileName.replace(/^https*:\/\//, '');
-                    // irThumbFileName = `${IR_URL}?t=k&w=100&h=100u=//${npLink}`;
-                    irThumbFileName = desking.thumbFileName;
-                }
-
-                return {
-                    ...desking,
-                    gridType: 'DESKING',
-                    componentWorkSeq: component.seq,
-                    title: unescapeHtmlArticle(desking.title),
-                    contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
-                    relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
-                    irThumbFileName,
-                    onRowClicked,
-                    onSave,
-                    onDelete,
-                    deskingPart,
-                };
-            }),
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [deskingWorks]);
-
     /**
      * cell별 설정에 따라서 RowClick 호출
      * @param {object} params ag-grid data
@@ -344,12 +311,12 @@ const DeskingWorkAgGrid = (props) => {
      */
     const handleDragMove = useCallback(
         (params) => {
-            const draggingNode = getRow(params.event);
-            if (!draggingNode) return;
+            const overNode = getRow(params.event);
+            if (!overNode) return;
 
-            const draggingIdx = draggingNode.getAttribute('row-index');
-            const overNodeData = params.overNode.data;
-            setHoverNode(draggingNode);
+            const draggingIdx = overNode.getAttribute('row-index');
+            const gridOverNodeData = params.overNode.data;
+            setHoverNode(overNode);
 
             if (hoverNode && hoverNode.getAttribute('row-index') !== draggingIdx) {
                 clearHoverStyle(hoverNode);
@@ -358,17 +325,17 @@ const DeskingWorkAgGrid = (props) => {
 
             if (params.node.data.rel) {
                 // 관련기사 드래그)
-                if (overNodeData.parentContentId === params.node.data.parentContentId) {
-                    draggingNode.classList.add('hover');
-                } else if (overNodeData.contentId === params.node.data.parentContentId) {
-                    draggingNode.classList.add('change');
+                if (gridOverNodeData.parentContentId === params.node.data.parentContentId) {
+                    overNode.classList.add('hover');
+                } else if (gridOverNodeData.contentId === params.node.data.parentContentId) {
+                    overNode.classList.add('change');
                 }
             } else {
                 // 주기사 드래그
-                if (!overNodeData.rel && (!overNodeData.relSeqs || overNodeData.relSeqs.length < 1)) {
-                    draggingNode.classList.add('hover');
+                if (!gridOverNodeData.rel && (!gridOverNodeData.relSeqs || gridOverNodeData.relSeqs.length < 1)) {
+                    overNode.classList.add('hover');
                 } else {
-                    const nextRow = findNextMainRow(draggingNode);
+                    const nextRow = findNextMainRow(overNode);
                     addNextRowStyle(nextRow);
                     nextRow.node && setNextNode(nextRow.node);
                 }
@@ -561,8 +528,41 @@ const DeskingWorkAgGrid = (props) => {
             params.api.removeRowDropZone(dropzone);
             params.api.addRowDropZone(dropzone);
         },
-        [agGridIndex, component.datasetSeq, component.seq, componentAgGridInstances, dispatch, draggingNodeData, mainToMain, setComponentAgGridInstances],
+        [agGridIndex, component, componentAgGridInstances, dispatch, draggingNodeData, mainToMain, setComponentAgGridInstances],
     );
+
+    useEffect(() => {
+        if (!deskingWorks) return;
+        if (component?.viewYn === 'N') return;
+
+        setRowData(
+            deskingWorks.map((desking) => {
+                // 이미지 IR_URL
+                let irThumbFileName = '';
+                if (desking.thumbFileName) {
+                    // 일시적으로 IR_URL 연결 제거
+                    // const npLink = desking.thumbFileName.replace(/^https*:\/\//, '');
+                    // irThumbFileName = `${IR_URL}?t=k&w=100&h=100u=//${npLink}`;
+                    irThumbFileName = desking.thumbFileName;
+                }
+
+                return {
+                    ...desking,
+                    gridType: 'DESKING',
+                    componentWorkSeq: component.seq,
+                    title: unescapeHtmlArticle(desking.title),
+                    contentOrdEx: desking.rel ? '' : `0${desking.contentOrd}`.substr(-2),
+                    relOrdEx: desking.rel ? `0${desking.relOrd}`.substr(-2) : '',
+                    irThumbFileName,
+                    onRowClicked,
+                    onSave,
+                    onDelete,
+                    deskingPart,
+                };
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deskingWorks]);
 
     return (
         <div className={clsx('ag-theme-moka-dnd-grid desking-grid position-relative px-1', { 'naver-channel': isNaverChannel })}>

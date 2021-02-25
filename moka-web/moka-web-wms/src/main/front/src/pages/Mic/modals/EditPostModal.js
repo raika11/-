@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { GET_MIC_POST, SAVE_MIC_POST } from '@store/mic';
 import { MokaModal, MokaInputLabel, MokaImage } from '@components';
@@ -17,6 +18,7 @@ import { EditThumbModal } from '@pages/Desking/modals';
 const EditPostModal = (props) => {
     const { show, onHide, agenda, post, onChange, onSave, onDelete } = props;
     const loading = useSelector(({ loading }) => loading[GET_MIC_POST] || loading[SAVE_MIC_POST]);
+    const ANSWER_REL_DIV = useSelector(({ app }) => app.ANSWER_REL_DIV || []);
     const [error, setError] = useState({});
     const [arcShow, setArcShow] = useState(false);
     const imgRef = useRef(null);
@@ -34,9 +36,11 @@ const EditPostModal = (props) => {
             onChange({
                 key: 'answerRel',
                 value: {
+                    answSeq: post.answSeq,
                     relDiv: value,
                 },
             });
+            setError({});
         } else if (name === 'relUrl') {
             onChange({
                 key: 'answerRel',
@@ -73,16 +77,20 @@ const EditPostModal = (props) => {
     /**
      * 이미지파일 변경
      * @param {*} data 파일데이터
+     * @param {string} imgLinkField 데이터가 없을 때 데이터 날릴 이미지링크 필드
      */
-    const handleImgFile = (data) => {
+    const handleImgFile = (data, imgLinkField) => {
         onChange({
             key: 'answerRel',
             value: {
                 ...post.answerRel,
                 artThumbnailFile: data,
-                artThumbnail: !data ? null : post.answerRel?.artThumbnail,
+                [imgLinkField]: !data ? null : post.answerRel[imgLinkField],
             },
         });
+        if (error[imgLinkField]) {
+            setError({ ...error, [imgLinkField]: false });
+        }
     };
 
     /**
@@ -200,11 +208,11 @@ const EditPostModal = (props) => {
             centered
             loading={loading}
         >
-            <h3 className="mb-3 color-primary">{agenda.agndTitle}</h3>
+            <h3 className="mb-3 color-primary">❛ {agenda.agndTitle} ❜</h3>
 
             {/* 작성자(수정불가) */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="작성자" labelWidth={72} as="none" />
+                <MokaInputLabel label="작성자" as="none" />
                 <span
                     className={clsx('mt-1 icon', {
                         i_kk: post.loginSns === 'K',
@@ -218,9 +226,23 @@ const EditPostModal = (props) => {
                 </span>
             </Form.Row>
 
+            {/* 포스트 */}
+            <Form.Row className="mb-2">
+                <Col xs={5} className="p-0">
+                    <MokaInputLabel label="포스트타입" as="select" name="relDiv" value={post.answerRel?.relDiv} onChange={handleChangeValue}>
+                        <option hidden>선택</option>
+                        {ANSWER_REL_DIV.map((div) => (
+                            <option value={div.code} key={div.code}>
+                                {div.name}
+                            </option>
+                        ))}
+                    </MokaInputLabel>
+                </Col>
+            </Form.Row>
+
             {/* 단문(수정불가) */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="단문" labelWidth={72} as="none" />
+                <MokaInputLabel label="단문" as="none" />
                 <div style={{ maxHeight: 150 }} className="custom-scroll w-100 p-2 input-border pre-wrap user-select-text ft-14">
                     {post.answMemo}
                 </div>
@@ -228,7 +250,7 @@ const EditPostModal = (props) => {
 
             {/* 장문(수정불가) */}
             <Form.Row className="mb-2">
-                <MokaInputLabel label="장문" labelWidth={72} as="none" />
+                <MokaInputLabel label="장문" as="none" />
                 <div style={{ maxHeight: 140 }} className="custom-scroll pr-2 pre-wrap user-select-text d-flex align-items-center ft-14">
                     {post.answMemoLong}
                 </div>
@@ -239,7 +261,6 @@ const EditPostModal = (props) => {
                 <MokaInputLabel
                     className="mt-2"
                     ref={imgRef}
-                    labelWidth={72}
                     label={
                         <React.Fragment>
                             이미지
@@ -260,7 +281,6 @@ const EditPostModal = (props) => {
                 <MokaInputLabel
                     className="mt-2"
                     label="동영상\n소스코드"
-                    labelWidth={72}
                     as="textarea"
                     inputProps={{ rows: 3 }}
                     name="relUrl"
@@ -276,7 +296,6 @@ const EditPostModal = (props) => {
                 <React.Fragment>
                     <MokaInputLabel
                         label="페이지 URL"
-                        labelWidth={72}
                         name="relUrl"
                         value={post.answerRel?.relUrl}
                         className="flex-fill my-2"
@@ -287,7 +306,6 @@ const EditPostModal = (props) => {
                     <MokaInputLabel
                         className="mb-2"
                         label="페이지 제목"
-                        labelWidth={72}
                         name="artTitle"
                         value={post.answerRel?.artTitle}
                         onChange={handleChangeValue}
@@ -296,7 +314,6 @@ const EditPostModal = (props) => {
                     />
                     <MokaInputLabel
                         label="페이지 요약"
-                        labelWidth={72}
                         as="textarea"
                         className="my-2"
                         inputProps={{ rows: 3 }}
@@ -307,7 +324,6 @@ const EditPostModal = (props) => {
                     <div className="d-flex">
                         <MokaInputLabel
                             as="none"
-                            labelWidth={72}
                             label={
                                 <React.Fragment>
                                     페이지 이미지

@@ -1,67 +1,40 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import produce from 'immer';
 import { AgGridReact } from 'ag-grid-react';
-import { columnDefs, rowClassRules } from './HotClickAgGridColumns';
-import { getRow } from '@utils/agGridUtil';
-import { findWork, makeHoverBox, findNextMainRow } from '@utils/deskingUtil';
 import { useSelector, useDispatch } from 'react-redux';
+import { columnDefs } from './HotClickAgGridColumns';
+import { getRow, getRowIndex, getDisplayedRows } from '@utils/agGridUtil';
+import { findWork, makeHoverBox, findNextMainRow, clearHoverStyle, clearNextStyle } from '@utils/deskingUtil';
 import { changeHotClickList } from '@store/bulks';
-const hoverCssName = 'hover';
-const nextCssName = 'next';
-
-// const AgGridReact = React.lazy(() => import('ag-grid-react'));
 
 let hoverBox = makeHoverBox();
 
-// 드래그 완료시 타겟 css 처리. ( 초기화. )
-const clearNextStyle = (node) => {
-    if (node) {
-        node.classList.remove(nextCssName);
-        node.classList.remove(hoverCssName);
-    }
-};
-
-// 드래그 완료시 타겟 css 처리. ( 초기화. )
-const clearHoverStyle = (node) => {
-    if (node) {
-        node.classList.remove(hoverCssName);
-        node.classList.remove('ag-row-hover');
-        node.classList.remove('change');
-    }
-};
-
-// 드래그시 타겟 css 변경 처리.
-const addNextRowStyle = (nextRow) => {
-    if (nextRow.type === 'none') return;
-    if (nextRow.type === nextCssName) {
-        nextRow.node.classList.add(nextCssName);
-    } else if (nextRow.type === 'last') {
-        nextRow.node.classList.remove(hoverCssName);
-        nextRow.node.classList.add(nextCssName);
-    } else if (nextRow.type === 'last-rel') {
-        nextRow.node.classList.add(hoverCssName);
-    }
-};
-
+/**
+ * 아티클 핫클릭 ag-grid
+ */
 const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
     const dispatch = useDispatch();
     const { hotClickList } = useSelector((store) => ({
         hotClickList: store.bulks.bulkh.hotclickList.list,
     }));
-
     const [rowData, setRowData] = useState([]);
     // const [gridApi, setGridApi] = useState();
     const [, setGridInstance] = useState(null);
     const [hoverNode, setHoverNode] = useState(null);
     const [nextNode, setNextNode] = useState(null);
 
-    // 그리드 옵션, 드래그핼때 필요함.
-    const OnGridReady = (params) => {
+    /**
+     * 그리드 생성 시 실행
+     */
+    const handleGridReady = (params) => {
         // setGridApi(params.api);
         setComponentAgGridInstances(params);
         setGridInstance(params);
     };
 
-    // 드래그 시작.
+    /**
+     * 드래그 시작
+     */
     const onRowDragEnter = useCallback((params) => {
         const workElement = findWork(params.api.gridOptionsWrapper.layoutElements[0]);
         if (!workElement) return null;
@@ -70,54 +43,72 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
         params.node.setSelected(true);
     }, []);
 
-    // 드래그 가 끝났을떄.
-    const onRowDragEnd = useCallback(
+    /**
+     * 드래그 영역 밖으로 벗어난 경우, hover css 초기화.
+     */
+    const onRowDragLeave = useCallback(
         (params) => {
             clearHoverStyle(hoverNode);
             clearNextStyle(nextNode);
             findWork(params.api.gridOptionsWrapper.layoutElements[0]).removeChild(hoverBox);
-
-            const paramsNode = params.node;
-            const paramsOverNode = params.overNode;
-
-            // 위치변경 이벤트가 발생 하면 실제 데이터를 재배열 해준다.
-            let tempRowData = rowData.map((e) => e);
-            let tmp = tempRowData[paramsOverNode.data.dataIndex];
-            tempRowData[paramsOverNode.data.dataIndex] = tempRowData[paramsNode.data.dataIndex];
-            tempRowData[paramsNode.data.dataIndex] = tmp;
-
-            setRowData(tempRowData);
-        },
-        [hoverNode, nextNode, rowData],
-    );
-
-    // 드래그 이벤트 중일때. css 로 변경중 처리를 하기 위해.
-    const onRowDragMove = useCallback(
-        (params) => {
-            const draggingNode = getRow(params.event);
-            if (!draggingNode) return;
-
-            const draggingIdx = draggingNode.getAttribute('row-index');
-            const overNodeData = params.overNode.data;
-            setHoverNode(draggingNode);
-
-            if (hoverNode && hoverNode.getAttribute('row-index') !== draggingIdx) {
-                clearHoverStyle(hoverNode);
-                clearNextStyle(nextNode);
-            }
-
-            if (!overNodeData.rel && (!overNodeData.relSeqs || overNodeData.relSeqs.length < 1)) {
-                draggingNode.classList.add(hoverCssName);
-            } else {
-                const nextRow = findNextMainRow(draggingNode);
-                addNextRowStyle(nextRow);
-                nextRow.node && setNextNode(nextRow.node);
-            }
         },
         [hoverNode, nextNode],
     );
 
-    // 그리드 위치가 변경 되고 state 에 순서가 현재랑 다를 경우만 store 의 리스트도 같이 변경 해준다. ( 저장 할때 변경된 순서로 api 호출.)
+    /**
+     * 드래그 종료
+     */
+    const onRowDragEnd = useCallback(
+        (params) => {
+            const draggingNode = params.node;
+            let overNode = params.api.getDisplayedRowAtIndex(getRowIndex(params.event));
+            const sameNode = draggingNode === overNode;
+
+            onRowDragLeave(params);
+            if (sameNode) {
+                return;
+            }
+
+            // 위치변경 이벤트가 발생 하면 실제 데이터를 재배열 해준다. => 2개만 바꾸는게 아니라 전체 데이터가 다 밀려야함.
+            const displayedRows = getDisplayedRows(params.api);
+            const result = produce(displayedRows, (draft) => {
+                // draggingNode 먼저 제거
+                draft.splice(draggingNode.rowIndex, 1);
+                // overNode 위치에 draggingNode 추가
+                draft.splice(overNode.rowIndex + 1, 0, draggingNode.data);
+            });
+
+            setRowData(result);
+        },
+        [onRowDragLeave],
+    );
+
+    /**
+     * 드래그 중 (css 변경)
+     */
+    const onRowDragMove = useCallback(
+        (params) => {
+            const overNode = getRow(params.event);
+            if (!overNode) return;
+
+            const overNodeIndex = overNode.getAttribute('row-index');
+            setHoverNode(overNode);
+
+            if (hoverNode && hoverNode.getAttribute('row-index') !== overNodeIndex) {
+                clearHoverStyle(hoverNode);
+                clearNextStyle(nextNode);
+            }
+
+            overNode.classList.add('hover');
+            const nextRow = findNextMainRow(overNode);
+            nextRow.node && setNextNode(nextRow.node);
+        },
+        [hoverNode, nextNode],
+    );
+
+    /**
+     * 그리드 위치가 변경 되고 state 에 순서가 현재랑 다를 경우만 store 의 리스트도 같이 변경 해준다. ( 저장 할때 변경된 순서로 api 호출.)
+     */
     const handleRowDataUpdated = useCallback(
         (params) => {
             // 순서가 변경 되었을 경우에.
@@ -156,29 +147,21 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
         [dispatch, hotClickList, rowData],
     );
 
-    // 드레그 영역 밖으로 벗어 났을경우 hover css 초기화.
-    const onRowDragLeave = (params) => {
-        clearHoverStyle(hoverNode);
-        clearNextStyle(nextNode);
-        findWork(params.api.gridOptionsWrapper.layoutElements[0]).removeChild(hoverBox);
-    };
-
-    // 스토어가 변경 되면 grid 리스트를 업데이트.
     useEffect(() => {
+        // 스토어가 변경 되면 grid 리스트를 업데이트.
         const SetRowData = async (data) => {
             setRowData(
-                data.map(function (e, index) {
-                    return {
-                        dataIndex: index,
-                        totalId: e.totalId,
+                data.map((e, index) => ({
+                    dataIndex: index,
+                    ordNo: `0${index + 1}`.substr(-2),
+                    totalId: e.totalId,
+                    title: e.title,
+                    item: {
+                        itemIndex: index,
                         title: e.title,
-                        item: {
-                            itemIndex: index,
-                            title: e.title,
-                            url: e.url,
-                        },
-                    };
-                }),
+                        url: e.url,
+                    },
+                })),
             );
         };
 
@@ -186,31 +169,28 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
     }, [hotClickList]);
 
     return (
-        <div className="ag-theme-moka-dnd-grid desking-grid bulk-hot-click w-100">
+        <div className="h-100 overflow-hidden ag-theme-moka-dnd-grid desking-grid bulk-hot-click">
             <AgGridReact
                 key="grid"
                 immutableData
-                onGridReady={OnGridReady}
+                onGridReady={handleGridReady}
                 rowData={rowData}
                 getRowNodeId={(params) => params.dataIndex}
-                deltaRowDataMode={true}
                 columnDefs={columnDefs}
                 localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
                 onRowDragEnter={onRowDragEnter}
                 onRowDragEnd={onRowDragEnd}
                 onRowDragMove={onRowDragMove}
                 onRowDragLeave={onRowDragLeave}
-                rowSelection="multiple"
-                animateRows={true}
-                rowDragManaged={true}
+                animateRows
+                rowDragManaged={false}
                 enableMultiRowDragging
                 suppressRowClickSelection
                 suppressMoveWhenRowDragging
                 suppressHorizontalScroll
                 onRowDataUpdated={handleRowDataUpdated}
                 headerHeight={0}
-                rowClassRules={rowClassRules}
-                rowHeight={100}
+                rowHeight={84}
             />
         </div>
     );

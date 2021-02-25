@@ -52,7 +52,7 @@ const DirectLinkSearch = ({ match, history }) => {
     return (
         <Form.Row className="mb-14">
             {/* 사용여부 */}
-            <div className="flex-shrink-0 mr-2">
+            <div className="flex-shrink-0 mr-3">
                 <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue} className="mb-0">
                     <option value="Y">사용</option>
                     <option value="N">미사용</option>

@@ -385,11 +385,12 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         .ag-root-wrapper {
             .ag-row {
                 &.next::before {
-                    top: 95px;
+                    top: 79px;
+                    bottom: -3px;
                 }
 
                 &.hover::before {
-                    top: 95px;
+                    top: 79px;
                 }
             }
         }

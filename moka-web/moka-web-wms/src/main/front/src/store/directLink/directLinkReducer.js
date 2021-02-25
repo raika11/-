@@ -25,7 +25,7 @@ export const initialState = {
         viewSDate: null,
         viewEDate: null,
         usedYn: 'Y',
-        fixYn: 'Y',
+        fixYn: 'N',
         linkType: 'N',
     },
     directLinkError: null,

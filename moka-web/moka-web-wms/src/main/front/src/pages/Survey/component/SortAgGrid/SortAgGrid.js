@@ -7,6 +7,7 @@ import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
 import { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
+import { unescapeHtmlArticle } from '@utils/convertUtil';
 
 const SortAgGrid = ({ SearchForm }) => {
     const dispatch = useDispatch();
@@ -100,7 +101,7 @@ const SortAgGrid = ({ SearchForm }) => {
 
             let newItem = {
                 contentId: modalArticle.totalId,
-                title: modalArticle.artTitle,
+                title: unescapeHtmlArticle(modalArticle.artTitle),
                 linkUrl: `https://news.joins.com/article/${modalArticle.totalId}`,
             };
 

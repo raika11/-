@@ -90,7 +90,7 @@ export const DeleteButtonRenderer = (props) => {
     return (
         <>
             {status === 'A' ? (
-                <MokaOverlayTooltipButton tooltipText="삭제" variant="white" className="p-0">
+                <MokaOverlayTooltipButton tooltipText="삭제" variant="outline-table-btn" className="p-0">
                     <Dropdown style={{ position: 'unset' }}>
                         <Dropdown.Toggle as={DropdownToggle} id={`dropdown-comment-edit-${cmtSeq}`} />
                         <Dropdown.Menu>{createDropdownItem()}</Dropdown.Menu>
@@ -131,7 +131,7 @@ export const InfoItemRenderer = (props) => {
 export const DateItemRenderer = (props) => {
     const { value } = props;
     const firstTime = value && value.length > 10 ? value.substr(0, 10) : value;
-    const thirdTime = value && value.length > 10 ? value.substr(10, 9) : value;
+    const thirdTime = value && value.length > 10 ? value.substr(10, 6) : value;
     return (
         <>
             <Col className="d-felx pl-0" style={{ lineHeight: '25px' }}>

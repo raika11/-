@@ -56,6 +56,7 @@ const CommentAgGrid = (props) => {
                     }}
                     onGridReady={onGridReady}
                     rowData={rowData ? rowData : []}
+                    rowHeight={32}
                     getRowNodeId={getRowNodeId}
                     columnDefs={columnDefs}
                     localeText={localeText}

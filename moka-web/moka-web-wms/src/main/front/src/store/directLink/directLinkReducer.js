@@ -103,11 +103,6 @@ export default handleActions(
                 draft.directLinkError = initialState.directLinkError;
             });
         },
-        [act.DELETE_DIRECT_LINK_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.directLinkError = payload;
-            });
-        },
     },
     initialState,
 );

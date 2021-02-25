@@ -4,12 +4,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import toast from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import moment from 'moment';
 import { invalidListToError } from '@utils/convertUtil';
 import { MokaCard, MokaInputLabel } from '@components';
-import { clearDirectLink, getDirectLink, GET_DIRECT_LINK, SAVE_DIRECT_LINK, saveDirectLink, changeDirectLink, changeInvalidList } from '@store/directLink';
-import { EditThumbModal } from '../Desking/modals';
+import {
+    clearDirectLink,
+    getDirectLink,
+    GET_DIRECT_LINK,
+    SAVE_DIRECT_LINK,
+    saveDirectLink,
+    changeDirectLink,
+    changeInvalidList,
+    deleteDirectLink,
+    DELETE_DIRECT_LINK,
+} from '@store/directLink';
 
 const DATEFORMAT = 'YYYY-MM-DD';
 const URL_ERROR = '정확한 URL을 입력하세요';
@@ -21,13 +30,10 @@ const DirectLinkEdit = ({ history, match }) => {
     const dispatch = useDispatch();
     const { linkSeq } = useParams();
     const imgFileRef = useRef(null);
-    const [dateFixYn, setDateFixYn] = useState('Y'); // 계속노출 서정.
+    const [dateFixYn, setDateFixYn] = useState('Y'); // 계속노출.
     const [dateDisabled, setDateDisabled] = useState(true); // 계속 노출시 datePiker disable
-    const loading = useSelector(({ loading }) => loading[GET_DIRECT_LINK] || loading[SAVE_DIRECT_LINK]);
-    const { directLink, invalidList } = useSelector((store) => ({
-        directLink: store.directLink.directLink,
-        invalidList: store.directLink.invalidList,
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_DIRECT_LINK] || loading[SAVE_DIRECT_LINK] || loading[DELETE_DIRECT_LINK]);
+    const { directLink, invalidList } = useSelector(({ directLink }) => directLink);
 
     // state
     const [temp, setTemp] = useState({});
@@ -166,7 +172,7 @@ const DirectLinkEdit = ({ history, match }) => {
     };
 
     /**
-     * 저장 버튼 클릭
+     * 저장
      */
     const handleClickSave = () => {
         let saveData = {
@@ -195,67 +201,51 @@ const DirectLinkEdit = ({ history, match }) => {
         }
 
         if (validate(saveData)) {
-            if (linkSeq) {
-                updateDirectLink(saveData); // 업데이트
-            } else {
-                insertDirectLink(saveData); // 저장
-            }
+            dispatch(
+                saveDirectLink({
+                    type: linkSeq ? 'update' : 'insert',
+                    actions: [changeDirectLink(saveData)],
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                        } else {
+                            messageBox.alert(header.message);
+                        }
+                    },
+                }),
+            );
         }
     };
 
     /**
-     * 수정
-     * @param {object} tmp 데이터
+     * 삭제
      */
-    const updateDirectLink = (tmp) => {
-        dispatch(
-            saveDirectLink({
-                type: 'update',
-                actions: [
-                    changeDirectLink({
-                        ...tmp,
+    const handleDelete = () => {
+        messageBox.confirm(
+            '사이트 바로가기 정보를 삭제하시겠습니까?',
+            () => {
+                dispatch(
+                    deleteDirectLink({
+                        linkSeq,
+                        callback: ({ header }) => {
+                            if (header.success) {
+                                toast.success(header.message);
+                                history.push(match.path);
+                            } else {
+                                messageBox.alert(header.message);
+                            }
+                        },
                     }),
-                ],
-                callback: (response) => {
-                    if (response.header.success) {
-                        toast.success('수정하였습니다.');
-                    } else {
-                        toast.fail('실패하였습니다.');
-                    }
-                },
-            }),
-        );
-    };
-
-    /**
-     * 등록
-     * @param {object} tmp 데이터
-     */
-    const insertDirectLink = (tmp) => {
-        dispatch(
-            saveDirectLink({
-                type: 'insert',
-                actions: [
-                    changeDirectLink({
-                        ...tmp,
-                    }),
-                ],
-                callback: (response) => {
-                    if (response.header.success) {
-                        toast.success('등록하였습니다.');
-                        history.push(`${match.path}/${response.body.linkSeq}`);
-                    } else {
-                        toast.fail('실패하였습니다.');
-                    }
-                },
-            }),
+                );
+            },
+            () => {},
         );
     };
 
     /**
      * 취소
      */
-    const handleClickCancleButton = () => history.push(match.path);
+    const handleCancle = () => history.push(match.path);
 
     useEffect(() => {
         /**
@@ -265,11 +255,19 @@ const DirectLinkEdit = ({ history, match }) => {
             dispatch(
                 getDirectLink({
                     linkSeq: linkSeq,
+                    callback: ({ header }) => {
+                        if (!header.success) {
+                            messageBox.alert(header.message, () => {
+                                history.push(match.path);
+                            });
+                        }
+                    },
                 }),
             );
         } else {
             dispatch(clearDirectLink());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, linkSeq]);
 
     useEffect(() => {
@@ -327,18 +325,10 @@ const DirectLinkEdit = ({ history, match }) => {
             footer
             footerClassName="justify-content-center"
             footerButtons={[
-                {
-                    text: linkSeq ? '수정' : '저장',
-                    variant: 'positive',
-                    onClick: handleClickSave,
-                    className: 'mr-2',
-                },
-                {
-                    text: '취소',
-                    variant: 'negative',
-                    onClick: handleClickCancleButton,
-                },
-            ]}
+                { text: linkSeq ? '수정' : '저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
+                linkSeq && { text: '삭제', variant: 'negative', onClick: handleDelete, className: 'mr-1' },
+                { text: '취소', variant: 'negative', onClick: handleCancle },
+            ].filter((a) => a)}
         >
             <Form className="mb-gutter">
                 {/* 사용여부 */}
@@ -459,19 +449,12 @@ const DirectLinkEdit = ({ history, match }) => {
                                     <br />
                                     (60*50)
                                     <br />
-                                    <Button
-                                        variant="gray-700"
-                                        size="sm"
-                                        className="mt-2"
-                                        onClick={(e) => {
-                                            imgFileRef.current.rootRef.onClick(e);
-                                        }}
-                                    >
+                                    <Button variant="gray-700" size="sm" className="mt-2" onClick={(e) => imgFileRef.current.rootRef.onClick(e)}>
                                         신규등록
                                     </Button>
                                 </React.Fragment>
                             }
-                            inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, height: 90, setFileValue, deleteButton: true }}
+                            inputProps={{ img: temp.imgUrl ? `${temp.imgUrl}?${temp.linkSeq}` : null, width: 115, height: 90, setFileValue, deleteButton: true }}
                             labelClassName="justify-content-end"
                             isInvalid={error.directLinkThumbnailFile}
                             invalidMessage={error.directLinkThumbnailFileMessage}

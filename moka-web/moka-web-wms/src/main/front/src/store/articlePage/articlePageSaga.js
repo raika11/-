@@ -60,14 +60,15 @@ export function* getPreviewTotalId({ payload: { artType, callback } }) {
 /**
  * 동일기사페이지 유형 존재여부
  */
-function* existsArtType({ payload: { domainId, artType, callback } }) {
+function* existsArtType({ payload }) {
+    const { callback } = payload;
     const ACTION = act.EXISTS_ARTICLE_TYPE;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const response = yield call(api.existsArtType, { domainId, artType });
+        const response = yield call(api.existsArtType, payload);
         console.log(response);
         callbackData = response.data;
     } catch (e) {

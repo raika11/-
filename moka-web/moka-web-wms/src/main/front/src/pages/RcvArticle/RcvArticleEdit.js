@@ -13,14 +13,14 @@ import { unescapeHtmlArticle } from '@utils/convertUtil';
 import { API_BASE_URL } from '@/constants';
 
 const RcvArticleEdit = ({ match }) => {
-    const { rid, isRcv } = useParams();
+    const { rid, registerable } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
     const loading = useSelector((store) => store.loading[GET_RCV_ARTICLE] || store.loading[POST_RCV_ARTICLE]);
     const { search, rcvArticle } = useSelector(({ rcvArticle }) => rcvArticle);
     const articleTypeRows = useSelector((store) => store.codeMgt.articleTypeRows);
     const allReporter = useSelector((store) => store.reporter.allReporter); // 전체 기자리스트
-    const [register, setRegister] = useState(false); // 등록된 기사이면 등록폼으로 연결
+    const [registed, setRegisted] = useState(false); // 등록된 기사이면 등록폼으로 연결
     const [reporterList, setReporterList] = useState([]);
     const [temp, setTemp] = useState(initialState.rcvArticle);
     const [error, setError] = useState({});
@@ -84,7 +84,8 @@ const RcvArticleEdit = ({ match }) => {
     }, [articleTypeRows, dispatch]);
 
     useEffect(() => {
-        setRegister(false);
+        // 수신 => 등록 간의 시간 차이가 존재...
+        setRegisted(false);
     }, [rid]);
 
     useEffect(() => {
@@ -93,15 +94,18 @@ const RcvArticleEdit = ({ match }) => {
             dispatch(
                 getRcvArticle({
                     rid,
-                    callback: ({ header }) => {
+                    callback: ({ header, body }) => {
                         if (!header.success) {
-                            messageBox.alert(header.message);
-                            history.push(match.path);
-                        }
-                        if (isRcv === 'N') {
-                            setRegister(true);
+                            messageBox.alert(header.message, () => {
+                                history.push(match.path);
+                            });
                         } else {
-                            setRegister(false);
+                            if (registerable === 'Y') {
+                                setRegisted(false);
+                            } else {
+                                // 등록기사 키가 있으면 ===> 등록기사 폼으로 연결
+                                !body.totalId || body.totalId === 0 ? setRegisted(false) : setRegisted(true);
+                            }
                         }
                     },
                 }),
@@ -109,7 +113,7 @@ const RcvArticleEdit = ({ match }) => {
         } else {
             dispatch(clearRcvArticle());
         }
-    }, [dispatch, history, match.path, rid, isRcv]);
+    }, [dispatch, history, match.path, rid, registerable]);
 
     useEffect(() => {
         // 기자 리스트 조회
@@ -121,16 +125,17 @@ const RcvArticleEdit = ({ match }) => {
             setReporterList(
                 allReporter.map((reporter) => ({
                     ...reporter,
-                    value: register ? reporter.repSeq : `${reporter.repName}/${reporter.repEmail1}`,
+                    value: registed ? reporter.repSeq : `${reporter.repName}/${reporter.repEmail1}`,
                     label: reporter.repName,
                 })),
             );
         }
-    }, [allReporter, dispatch, register]);
+    }, [allReporter, dispatch, registed]);
 
     useEffect(() => {
         return () => {
             dispatch(clearRcvArticle());
+            setRegisted(false);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -155,7 +160,8 @@ const RcvArticleEdit = ({ match }) => {
 
     return (
         <React.Fragment>
-            {register ? (
+            {/* 등록된 기사이면 등록기사 폼으로 연결한다 */}
+            {registed ? (
                 <ArticleForm
                     totalId={rcvArticle.totalId}
                     returnUrl="/rcv-article"
@@ -177,6 +183,7 @@ const RcvArticleEdit = ({ match }) => {
                     onCancle={handleCancle}
                     onPreview={handleClickPreviewOpen}
                     onRegister={handleRegister}
+                    registerable={registerable}
                 />
             )}
         </React.Fragment>

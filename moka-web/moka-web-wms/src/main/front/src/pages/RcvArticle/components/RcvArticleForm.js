@@ -9,7 +9,7 @@ import { CodeListModal, CodeAutocomplete } from '@pages/commons';
 import { MokaInputLabel, MokaCard, MokaInput, MokaIcon } from '@components';
 import { PREVIEW_DOMAIN_ID } from '@/constants';
 
-const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview, onRegister, error, setError }) => {
+const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, onPreview, onRegister, error, setError, registerable }) => {
     const [selectedMasterCode, setSelectedMasterCode] = useState([]); // 마스터코드 리스트
     const [selectedReporter, setSelectedReporter] = useState([]); // 기자 리스트
     const [repStr, setRepStr] = useState('');
@@ -163,9 +163,9 @@ const RcvArticleForm = ({ reporterList, article, onChange, loading, onCancle, on
             footerButtons={[
                 { variant: 'outline-neutral', text: '미리보기', className: 'mr-1', onClick: handlePCPreview },
                 // { variant: 'outline-neutral', text: '모바일 미리보기', className: 'mr-1', onClick: handleMobilePreview },
-                { variant: 'positive', text: '기사등록', className: 'mr-1', onClick: onRegister, disabled: article.iudYn === 'Y' },
+                registerable === 'Y' && { variant: 'positive', text: '기사등록', className: 'mr-1', onClick: onRegister },
                 { variant: 'negative', text: '취소', onClick: onCancle },
-            ]}
+            ].filter((a) => a)}
             loading={loading}
         >
             <Form className="d-flex flex-column h-100">

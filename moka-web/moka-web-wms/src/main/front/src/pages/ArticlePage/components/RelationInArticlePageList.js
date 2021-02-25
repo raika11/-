@@ -7,7 +7,7 @@ import { MokaCard, MokaTable, MokaInput } from '@components';
 import { initialState, GET_RELATION_LIST, getRelationList, changeSearchOption, clearStore } from '@store/relation';
 import { getPreviewTotalId } from '@store/articlePage';
 import toast from '@utils/toastUtil';
-import { previewPage } from '@store/merge';
+import { checkSyntax } from '@store/merge';
 import util from '@utils/commonUtil';
 import { ITEM_TP, ITEM_CP, ITEM_CT, ITEM_DS } from '@/constants';
 import columnDefs from './RelationInArticlePageListColumns';
@@ -93,7 +93,7 @@ const RelationInArticlePageList = (props) => {
                                         }
                                     },
                                 };
-                                dispatch(previewPage(option));
+                                dispatch(checkSyntax(option));
                             }
                         } else {
                             toast.error('미리보기용 기사ID 조회에 실패하였습니다.');

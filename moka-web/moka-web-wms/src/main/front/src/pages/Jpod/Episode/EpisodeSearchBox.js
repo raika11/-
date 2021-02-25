@@ -35,6 +35,7 @@ const EpisodeSearchBox = (props) => {
     const handleClickSearchButton = () => {
         let ns = {
             ...searchData,
+            page: 0,
             startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
             endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
         };

@@ -84,7 +84,7 @@ const BulknListSearchBox = (props) => {
     return (
         <>
             <Form.Row className="mb-14">
-                <Col xs={3} className="p-0 mr-2">
+                <Col xs={3} className="p-0 pr-2">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -98,7 +98,7 @@ const BulknListSearchBox = (props) => {
                         inputProps={{ timeFormat: null, timeDefault: 'start' }}
                     />
                 </Col>
-                <Col xs={3} className="p-0 mr-1">
+                <Col xs={3} className="p-0 pr-2">
                     <MokaInput
                         as="dateTimePicker"
                         className="mb-0"
@@ -116,7 +116,7 @@ const BulknListSearchBox = (props) => {
                         검색
                     </Button>
                 </Col>
-                <Col xs={4} className="text-right">
+                <Col xs={4} className="text-right p-0">
                     <Button variant="positive" onClick={() => handleClickNewButton()}>
                         등록
                     </Button>

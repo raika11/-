@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaSearchInput, MokaCard, MokaInputLabel } from '@components';
 import { getPageType } from '@store/codeMgt';
-import { previewPage, w3cPage, PREVIEW_PAGE, W3C_PAGE } from '@store/merge';
+import { checkSyntax, w3cPage, CHECK_SYNTAX, W3C_PAGE } from '@store/merge';
 import { initialState, changePage, savePage, GET_PAGE, DELETE_PAGE, SAVE_PAGE, changeInvalidList } from '@store/page';
 import toast, { messageBox } from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
@@ -22,7 +22,7 @@ import { PageListModal } from '@pages/Page/modals';
 const PageEdit = ({ onDelete }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[PREVIEW_PAGE] || loading[W3C_PAGE]);
+    const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[CHECK_SYNTAX] || loading[W3C_PAGE]);
     const { PAGE_TYPE_HTML, EXCLUDE_PAGE_SERVICE_NAME_LIST } = useSelector(({ app }) => app);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
     const pageTypeRows = useSelector(({ codeMgt }) => codeMgt.pageTypeRows);
@@ -239,20 +239,21 @@ const PageEdit = ({ onDelete }) => {
      * 미리보기 팝업
      */
     const handleClickPreviewOpen = useCallback(() => {
-        const option = {
-            content: pageBody,
-            callback: ({ header, body }) => {
-                if (header.success) {
-                    const item = produce(page, (draft) => {
-                        draft.pageBody = pageBody;
-                    });
-                    commonUtil.popupPreview(`${API_BASE_URL}/preview/page`, item);
-                } else {
-                    toast.fail(header.message || '미리보기에 실패하였습니다');
-                }
-            },
-        };
-        dispatch(previewPage(option));
+        dispatch(
+            checkSyntax({
+                content: pageBody,
+                callback: ({ header, body }) => {
+                    if (header.success) {
+                        const item = produce(page, (draft) => {
+                            draft.pageBody = pageBody;
+                        });
+                        commonUtil.popupPreview(`${API_BASE_URL}/preview/page`, item);
+                    } else {
+                        toast.fail(header.message || '미리보기에 실패하였습니다');
+                    }
+                },
+            }),
+        );
     }, [dispatch, page, pageBody]);
 
     /**

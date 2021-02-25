@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { MokaCard, MokaInputLabel, MokaInput, MokaInputGroup, MokaIcon } from '@components';
+import { MokaCard, MokaInputLabel, MokaInput, MokaIcon } from '@components';
 import { PodtyEpisodeModal, RepoterModal, PodCastModal } from '@pages/Jpod/JpodModal';
 import { initialState, GET_EPISODES_INFO, saveJpodEpisode, getEpisodesInfo, clearEpisodeInfo, getEpisodes } from '@store/jpod';
 import { clearSelectArticleList, selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
@@ -67,14 +67,18 @@ const ChannelEdit = (props) => {
     const selectArticleItem = useSelector((store) => store.quiz.selectArticle.item);
     // const selectArticleList = useSelector((store) => store.quiz.selectArticle.list);
 
-    // 정보 기본 데이터 리셋시 사용할 함수.
+    /**
+     * 정보 기본 데이터 리셋시 사용할 함수.
+     */
     const resetEditData = () => {
         setEditData(initialState.episode.episodeInfo);
         setEditSelectCPRepoters([]);
         setEditSelectEGRepoters([]);
     };
 
-    // 정보 창에서 값 변경시 스테이트에 저장.
+    /**
+     * 정보 창에서 값 변경시 스테이트에 저장.
+     */
     const handleEditDataChange = (e) => {
         const { name, value, checked } = e.target;
         if (name === 'usedYn') {
@@ -97,7 +101,9 @@ const ChannelEdit = (props) => {
         }
     };
 
-    // 이미지 파일 변경시 해당 스테이트 업데이트.
+    /**
+     * 이미지 파일 변경시 해당 스테이트 업데이트.
+     */
     const handleChangeFIle = ({ name, file }) => {
         switch (name) {
             case 'shrImgFile':
@@ -111,10 +117,27 @@ const ChannelEdit = (props) => {
         }
     };
 
+    /**
+     * 채널 셀렉트 박스 선택시 팟티 채널 셋팅
+     */
+    const handleChangeChnl = (e) => {
+        const { value } = e.target;
+        try {
+            const { podtychnlsrl } = e.target.selectedOptions[0].dataset;
+            setEditData({ ...editData, chnlSeq: value });
+            setPodtyChnlSrl(String(podtychnlsrl));
+        } catch (err) {
+            setEditData({ ...editData, chnlSeq: '' });
+            setPodtyChnlSrl('');
+        }
+    };
+
     // 기사 검색 버튼 ( 추후에 추가 예정 )
     // const handleClickArticleButton = () => {};
 
-    // 정보창에서 팟티 에피소드 검색 버튼 클릭. ( 선택한 채널이 없을경우 채널을 선택해 주세요 alert)
+    /**
+     * 정보창에서 팟티 에피소드 검색 버튼 클릭. ( 선택한 채널이 없을경우 채널을 선택해 주세요 alert)
+     */
     const handleClickPodtyEpisodeButton = () => {
         if (!editData.chnlSeq || editData.chnlSeq === '') {
             messageBox.alert('채널을 선택해 주세요.', () => {});
@@ -124,17 +147,23 @@ const ChannelEdit = (props) => {
         }
     };
 
-    // 진행자(기자) 검색 모달 버튼
+    /**
+     * 진행자(기자) 검색 모달 버튼
+     */
     const handleClickSearchRepoterButton = () => {
         setReporterModalState(true);
     };
 
-    // 파일 등록시 사용할 모달창
+    /**
+     * 파일 등록시 사용할 모달창
+     */
     const handleClickAddPodCast = () => {
         setPodCastModalState(true);
     };
 
-    // 벨리데이션
+    /**
+     * 벨리데이션
+     */
     const checkValidation = () => {
         if (!editData.chnlSeq || editData.chnlSeq === '') {
             messageBox.alert('채널을 선택해 주세요.', () => {});
@@ -144,7 +173,9 @@ const ChannelEdit = (props) => {
         return false;
     };
 
-    // 정보 저장 버튼
+    /**
+     * 정보 저장 버튼
+     */
     const handleClickSaveButton = () => {
         // 벨리데이션 체크.
         if (checkValidation()) {
@@ -158,24 +189,27 @@ const ChannelEdit = (props) => {
 
         // const selectChnlSeq = editData.chnlSeq; // 업데이트 시 사용할 에피소트 고유 번호.
 
-        // 사용유무
-        formData.append(`usedYn`, editData.usedYn); // 사용유무
         formData.append(`chnlSeq`, editData.chnlSeq); // 채널
-        formData.append(`podtyEpsdSrl`, editData.podtyEpsdSrl); // 채널 파티.
-        formData.append(`epsdNm`, editData.epsdNm); // 에피소드 명.
-        formData.append(`epsdMemo`, editData.epsdMemo); // 에피소드 내용.
-        formData.append(`epsdNo`, editData.epsdNo); // 회차.
-        formData.append(`epsdDate`, moment(editData.epsdDate).format('YYYY-MM-DD'));
+        formData.append(`epsdSeq`, editData.epsdSeq); // 채널
 
-        formData.append(`epsdFile`, editData.epsdFile); // 등록 파일?.
-        formData.append(`playTime`, editData.playTime); // 재생시간.
-        formData.append(`jpodType`, editData.jpodType); // 팟캐스트 타입.
+        formData.append(`epsdNo`, editData.epsdNo); // 에피소드 회차
+        formData.append(`usedYn`, editData.usedYn); // 사용유무
+        formData.append(`playTime`, editData.playTime); // 재생시간
+        formData.append(`epsdDate`, moment(editData.epsdDate).format('YYYY-MM-DD')); // 에피소드 등록일
+        formData.append(`podtyEpsdSrl`, editData.podtyEpsdSrl); // 파티 에피소드SRL
+        formData.append(`jpodType`, editData.jpodType); // 팟캐스트 타입
+
+        formData.append(`epsdNm`, editData.epsdNm); // 에피소드 명
+        formData.append(`epsdFile`, editData.epsdFile); // 에피소드 파일 링크
+        formData.append(`epsdMemo`, editData.epsdMemo); // 에피소드 소개
+        formData.append(`seasonNo`, editData.seasonNo); // 시즌 번호
 
         if (editData.shrImg) {
             formData.append(`shrImg`, editData.shrImg); // 이미지
         }
+
         if (editData.katalkImg) {
-            formData.append(`katalkImg`, editData.katalkImg); // 카카오톡 이미지.
+            formData.append(`katalkImg`, editData.katalkImg); // 카카오톡 이미지
         }
 
         // 태그
@@ -252,8 +286,8 @@ const ChannelEdit = (props) => {
 
         dispatch(
             saveJpodEpisode({
-                chnlSeq: chnlSeq,
-                epsdSeq: epsdSeq,
+                chnlSeq: Number(editData.chnlSeq),
+                epsdSeq: Number(editData.epsdSeq),
                 episodeinfo: formData,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
@@ -281,18 +315,24 @@ const ChannelEdit = (props) => {
         );
     };
 
-    // 진행자 3명이상 추가 할떄 alert 띄워 주는 함수.
+    /**
+     * 진행자 3명이상 추가 할떄 alert 띄워 주는 함수.
+     */
     const handleRepoterAddAlert = () => {
         messageBox.alert(`${reporterCountConst.length}명 이상 등록할수 없습니다.`);
         return;
     };
 
-    // 취소 버튼 클릭시 URL 이동.
+    /**
+     * 취소 버튼 클릭시 URL 이동.
+     */
     const handleClickCancleButton = () => {
         history.push(`${match.path}`);
     };
 
-    // 진행자 삭제 버튼 처리.
+    /**
+     * 진행자 삭제 버튼 처리.
+     */
     const handleClickReporterDelete = (gubun, index) => {
         let tempReporterList = gubun === 'CP' ? editSelectCPRepoters : editSelectEGRepoters;
 
@@ -308,7 +348,9 @@ const ChannelEdit = (props) => {
         }
     };
 
-    // 진행자 행 삭제 버튼
+    /**
+     * 진행자 행 삭제 버튼
+     */
     const handleClickReporterRowDelete = (gubun, index) => {
         // 고정 패널 일경우
         if (gubun === 'CP') {
@@ -327,7 +369,9 @@ const ChannelEdit = (props) => {
         }
     };
 
-    // 진행자(기자) 내용 수정 처리.
+    /**
+     * 진행자(기자) 내용 수정 처리.
+     */
     const handleChangeReporters = ({ gubun, e, index }) => {
         const { name, value } = e.target;
         if (gubun === 'CP') {
@@ -337,7 +381,9 @@ const ChannelEdit = (props) => {
         }
     };
 
-    // 진행자 추가 버튼 클릭 처리.
+    /**
+     * 진행자 추가 버튼 클릭 처리.
+     */
     const handleClickRepoterAddButton = (gubun) => {
         if (gubun === 'CP') {
             if (editSelectCPRepoters.length === reporterCountConst.length) {
@@ -354,7 +400,9 @@ const ChannelEdit = (props) => {
         }
     };
 
-    // 진행자 배열 조합
+    /**
+     * 진행자 배열 조합
+     */
     const reportCombine = (reporpter, setFunc) => {
         // 리스트 중에 값이 없는 필드가 있는지 체크.
         const tmpCh = reporpter.filter((e) => e.memMemo === '' && e.memNm === '' && e.memRepSeq === '' && e.nickNm === '' && e.seqNo === '');
@@ -397,7 +445,7 @@ const ChannelEdit = (props) => {
         const targetIdx = channelList.findIndex((c) => editData.chnlSeq === c.chnlSeq);
         if (targetIdx > -1) {
             setSeasonCnt(channelList[targetIdx].seasonCnt);
-            setPodtyChnlSrl(channelList[targetIdx].podtyChnlSrl);
+            setPodtyChnlSrl(String(channelList[targetIdx].podtyChnlSrl));
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -515,7 +563,14 @@ const ChannelEdit = (props) => {
     useEffect(() => {
         // 팟티 에피소드검색 모달에서 선택시 해당 값을 정보창에도 변경 시켜준다.
         if (Object.keys(selectPodtyEpisode).length > 0) {
-            setEditData({ ...editData, podtyEpsdSrl: selectPodtyEpisode.podtyepsdsrl, epsdNm: selectPodtyEpisode.title, epsdMemo: selectPodtyEpisode.summary });
+            setEditData({
+                ...editData,
+                podtyEpsdSrl: selectPodtyEpisode.episodeSrl,
+                epsdNm: selectPodtyEpisode.title,
+                epsdMemo: selectPodtyEpisode.summary,
+                epsdFile: selectPodtyEpisode.enclosure,
+                playTime: selectPodtyEpisode.duration,
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectPodtyEpisode]);
@@ -610,11 +665,11 @@ const ChannelEdit = (props) => {
                 </Form.Row>
                 {/* 채널 선택. */}
                 <Form.Row className="mb-2">
-                    <Col xs={5} className="p-0">
-                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={handleEditDataChange}>
+                    <Col xs={6} className="p-0">
+                        <MokaInputLabel label="채널명" as="select" id="chnlSeq" name="chnlSeq" value={editData.chnlSeq} onChange={handleChangeChnl}>
                             <option value="">채널 전체</option>
                             {channelList.map((item) => (
-                                <option key={item.chnlSeq} value={item.chnlSeq}>
+                                <option key={item.chnlSeq} value={item.chnlSeq} data-podtychnlsrl={item.podtyChnlSrl}>
                                     {item.chnlNm}
                                 </option>
                             ))}
@@ -661,7 +716,7 @@ const ChannelEdit = (props) => {
                 {/* 시즌 회차. */}
                 <Form.Row className="mb-2 align-items-center">
                     <div style={{ width: 350 }}>
-                        <MokaInputLabel label={`시즌 및 회차`} className="mr-2" as="select" id="sesonCnt" value={seasonCnt} onChange={handleEditDataChange}>
+                        <MokaInputLabel label={`시즌 및 회차`} className="mr-2" as="select" name="seasonNo" id="seasonNo" value={editData.seasonNo} onChange={handleEditDataChange}>
                             <option value="">{seasonCnt === 0 ? '-' : '시즌 선택'}</option>
                             {seasonCnt > 0 &&
                                 [...Array(seasonCnt)].map((n, idx) => {

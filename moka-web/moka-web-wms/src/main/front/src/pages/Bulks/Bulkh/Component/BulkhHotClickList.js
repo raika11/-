@@ -158,13 +158,13 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                                     {`아티클 핫클릭`}
                                 </Card.Title>
                             </Col>
-                            <Col xs={7} className="pr-0">
+                            <Col xs={7}>
                                 <Col className="align-self-top text-right p-0">{topTitleItem.send}</Col>
                                 <Col className="align-self-bottom text-right p-0">
                                     <Form.Label className="text-danger">{topTitleItem.wait}</Form.Label>
                                 </Col>
                             </Col>
-                            <Col xs={2} className="pt-1">
+                            <Col xs={2} className="p-0 pt-1">
                                 <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={() => handleClickHistoryModalButton()}>
                                     편집정보
                                 </Button>

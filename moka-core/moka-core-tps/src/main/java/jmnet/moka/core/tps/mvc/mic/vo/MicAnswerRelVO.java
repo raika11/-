@@ -62,7 +62,7 @@ public class MicAnswerRelVO implements Serializable {
     /**
      * 관련 URL
      */
-    @NotNull(message = "{tps.answer-rel.error.notnull.relUrl}")
+    //    @NotNull(message = "{tps.answer-rel.error.notnull.relUrl}")
     @Length(max = 500, message = "{tps.answer-rel.error.len.relUrl}")
     @Column(name = "REL_URL", nullable = false)
     private String relUrl;
@@ -84,7 +84,7 @@ public class MicAnswerRelVO implements Serializable {
     /**
      * 관련기사 제목
      */
-    @NotNull(message = "{tps.answer-rel.error.notnull.artTitle}")
+    //    @NotNull(message = "{tps.answer-rel.error.notnull.artTitle}")
     @Length(max = 510, message = "{tps.answer-rel.error.len.artTitle}")
     @Column(name = "ART_TITLE")
     private String artTitle;

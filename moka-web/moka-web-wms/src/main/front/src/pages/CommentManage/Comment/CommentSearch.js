@@ -110,7 +110,7 @@ const CommentSearch = ({ selectBannedItem }) => {
     }, []);
 
     return (
-        <Form className="mb-3">
+        <Form className="mb-14">
             <Form.Row>
                 <Col xs={1} className="p-0 pr-2">
                     <MokaInput as="select" value={searchData.groupId} onChange={(e) => handleChangeSearchInput(e)} name="groupId" id="groupId">

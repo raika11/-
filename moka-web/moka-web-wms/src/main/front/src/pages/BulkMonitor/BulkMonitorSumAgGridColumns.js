@@ -54,12 +54,9 @@ export default [
             },
             {
                 headerName: '기타',
-                field: 'etc',
+                field: 'remarkSenderCnt',
                 width: 70,
                 cellStyle: { textAlign: 'center' },
-                cellRendererFramework: (params) => {
-                    return params.data.remarkSenderCnt + params.data.senderCnt + params.data.totalCnt;
-                },
             },
         ],
     },

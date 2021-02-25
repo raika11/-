@@ -193,7 +193,7 @@ const BulkMonitorSearch = () => {
                             }
                         }}
                     />
-                    <Button variant="searching" className="mr-2" onClick={handleClickSearch}>
+                    <Button variant="searching" className="mr-1" onClick={handleClickSearch}>
                         검색
                     </Button>
                     <Button variant="outline-neutral" onClick={handleClickReset}>

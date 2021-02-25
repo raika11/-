@@ -9,6 +9,7 @@ import jmnet.moka.core.tps.config.TpsQueryDslRepositorySupport;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
 import jmnet.moka.core.tps.mvc.directlink.entity.DirectLink;
 import jmnet.moka.core.tps.mvc.directlink.entity.QDirectLink;
+import jmnet.moka.core.tps.mvc.member.entity.QMemberSimpleInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,8 @@ public class DirectLinkRepositorySupportImpl extends TpsQueryDslRepositorySuppor
     @Override
     public Page<DirectLink> findAllDirectLink(DirectLinkSearchDTO searchDTO) {
         QDirectLink qDirectLink = QDirectLink.directLink;
-
+        QMemberSimpleInfo regMember = QMemberSimpleInfo.memberSimpleInfo;
+        QMemberSimpleInfo modMember = QMemberSimpleInfo.memberSimpleInfo;
 
         JPQLQuery<DirectLink> query = from(qDirectLink);
         // 사용여부
@@ -83,7 +85,10 @@ public class DirectLinkRepositorySupportImpl extends TpsQueryDslRepositorySuppor
             query = getQuerydsl().applyPagination(pageable, query);
         }
 
-        QueryResults<DirectLink> list = query.fetchResults();
+        QueryResults<DirectLink> list = query
+                .leftJoin(qDirectLink.regMember, regMember)
+                .leftJoin(qDirectLink.modMember, modMember)
+                .fetchResults();
 
         return new PageImpl<DirectLink>(list.getResults(), pageable, list.getTotal());
     }

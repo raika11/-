@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tps.common.dto.DTODateTimeFormat;
+import jmnet.moka.core.tps.mvc.member.dto.MemberSimpleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -143,10 +144,16 @@ public class DirectLinkDTO implements Serializable {
     private Date regDt;
 
     /**
-     * 등록자아이디
+     * 등록자
      */
     @ApiModelProperty(hidden = true)
-    private String regId;
+    private MemberSimpleDTO regMember;
+
+    /**
+     * 수정자
+     */
+    @ApiModelProperty(hidden = true)
+    private MemberSimpleDTO modMember;
 
     /**
      * 수정일자
@@ -155,11 +162,6 @@ public class DirectLinkDTO implements Serializable {
     @DTODateTimeFormat
     private Date modDt;
 
-    /**
-     * 수정자아이디
-     */
-    @ApiModelProperty(hidden = true)
-    private String modId;
 }
 
 

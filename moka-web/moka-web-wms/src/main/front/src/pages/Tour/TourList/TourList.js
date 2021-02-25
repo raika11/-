@@ -12,40 +12,6 @@ import TourListEdit from './TourListEdit';
  */
 const TourList = ({ match }) => {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const editRef = useRef();
-
-    /**
-     * 수정 버튼
-     */
-    const handleClickSave = () => {
-        if (editRef.current) {
-            editRef.current.onSave();
-        }
-    };
-
-    /**
-     * 삭제 버튼
-     */
-    const handleClickDelete = () => {
-        if (editRef.current) {
-            editRef.current.onDelete();
-        }
-    };
-
-    /**
-     * 취소 버튼
-     */
-    const handleClickCancel = () => {
-        history.push(match.url);
-    };
-
-    /**
-     * 메일 미리보기 버튼
-     */
-    const handleClickPreview = () => {
-        window.open(``, '메일 미리보기');
-    };
 
     useEffect(() => {
         return () => {
@@ -69,45 +35,7 @@ const TourList = ({ match }) => {
 
             {/* 견학 신청서 */}
             <Switch>
-                <Route
-                    path={[`${match.url}/:tourSeq`]}
-                    exact
-                    render={() => (
-                        <MokaCard
-                            className="flex-fill"
-                            title="견학 신청서"
-                            footerClassName="justify-content-center"
-                            footer
-                            footerButtons={[
-                                {
-                                    text: '수정',
-                                    variant: 'positive',
-                                    className: 'mr-1',
-                                    onClick: handleClickSave,
-                                },
-                                {
-                                    text: '삭제',
-                                    variant: 'negative',
-                                    className: 'mr-1',
-                                    onClick: handleClickDelete,
-                                },
-                                {
-                                    text: '메일 미리보기',
-                                    variant: 'outline-neutral',
-                                    className: 'mr-1',
-                                    onClick: handleClickPreview,
-                                },
-                                {
-                                    text: '취소',
-                                    variant: 'negative',
-                                    onClick: handleClickCancel,
-                                },
-                            ]}
-                        >
-                            <TourListEdit match={match} ref={editRef} />
-                        </MokaCard>
-                    )}
-                />
+                <Route path={[`${match.url}/:tourSeq`]} exact render={() => <TourListEdit match={match} />} />
             </Switch>
         </div>
     );

@@ -127,10 +127,10 @@ const ArticleList = (props) => {
         setPeriod([2, 'days']);
         setSearch({
             ...initialSearch,
+            page: search.page,
             masterCode: selectedComponent.schCodeId || null,
             startServiceDay: moment(nd).subtract(2, 'days').startOf('day'),
             endServiceDay: moment(nd).endOf('day'),
-            page: 0,
         });
     };
 

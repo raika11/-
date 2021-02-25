@@ -85,10 +85,10 @@ const RcvArticleSearch = () => {
         dispatch(
             changeSearchOption({
                 ...initialState.search,
+                page: search.page,
                 startDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
                 endDay: moment(date).format(DB_DATEFORMAT),
                 sourceList,
-                page: 0,
             }),
         );
     };

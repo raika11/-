@@ -96,6 +96,7 @@ const ArticleSearch = ({ ja, sun }) => {
         dispatch(
             changeSearchOption({
                 ...initialState.search,
+                page: search.page,
                 startServiceDay: moment(date).subtract(0, 'days').startOf('day').format(DB_DATEFORMAT),
                 endServiceDay: moment(date).format(DB_DATEFORMAT),
                 sourceList,

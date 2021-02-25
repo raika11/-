@@ -40,7 +40,10 @@ const AgGrid = forwardRef((props, ref) => {
     /**
      * 기사 제목 저장 후 리스트 다시 조회
      */
-    const afterChangeTitle = () => getArticleList();
+    const afterChangeTitle = () => {
+        getArticleList();
+        setModalShow(false);
+    };
 
     useEffect(() => {
         setRowData(

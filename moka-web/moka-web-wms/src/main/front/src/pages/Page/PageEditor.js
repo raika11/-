@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { MokaCardEditor } from '@components';
 import { changeLatestDomainId } from '@store/auth';
-import { W3C_PAGE, PREVIEW_PAGE } from '@store/merge';
+import { W3C_PAGE, CHECK_SYNTAX } from '@store/merge';
 import { getPage, changePageBody, GET_PAGE, SAVE_PAGE, DELETE_PAGE } from '@store/page';
 
 /**
@@ -13,14 +13,9 @@ const PageEditor = (props) => {
     const { expansion, onExpansion } = props;
     const { pageSeq } = useParams();
     const dispatch = useDispatch();
-    const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[PREVIEW_PAGE] || loading[W3C_PAGE]);
+    const loading = useSelector(({ loading }) => loading[GET_PAGE] || loading[SAVE_PAGE] || loading[DELETE_PAGE] || loading[CHECK_SYNTAX] || loading[W3C_PAGE]);
     const latestDomainId = useSelector(({ auth }) => auth.latestDomainId);
-    const { pageBody, page, invalidList, inputTag } = useSelector((store) => ({
-        pageBody: store.page.pageBody,
-        page: store.page.page,
-        invalidList: store.page.invalidList,
-        inputTag: store.page.inputTag,
-    }));
+    const { pageBody, page, invalidList, inputTag } = useSelector(({ page }) => page);
 
     // state
     const [title, setTitle] = useState('페이지 수정');
@@ -34,9 +29,7 @@ const PageEditor = (props) => {
     const handleBlur = (value) => dispatch(changePageBody(value));
 
     useEffect(() => {
-        /**
-         * 타이틀 변경
-         */
+        // 타이틀 변경
         if (page.pageSeq) {
             setTitle(`페이지 수정(${page.pageSeq}_${page.pageName})`);
         } else {

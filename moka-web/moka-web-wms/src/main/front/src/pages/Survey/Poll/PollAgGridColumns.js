@@ -128,6 +128,7 @@ export const columnDefs = [
             return (
                 param.data.isDelete && (
                     <MokaTableDeleteButton
+                        {...param}
                         onClick={() => {
                             messageBox.confirm(`<b>(${param.data.id})'${param.data.title}'</b>을(를)\n <em style="color:red">정말 삭제하시겠습니까?</em>`, () => {
                                 //console.log(param);

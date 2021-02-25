@@ -14,19 +14,6 @@ export const initialState = {
 export default handleActions(
     {
         /**
-         * 미리보기 랜더링
-         */
-        // [act.PREVIEW_PAGE_SUCCESS]: (state) => {
-        //     return produce(state, (draft) => {
-        //         draft.error = initialState.error;
-        //     });
-        // },
-        // [act.PREVIEW_PAGE_FAILURE]: (state, { payload: error }) => {
-        //     return produce(state, (draft) => {
-        //         draft.error = error;
-        //     });
-        // },
-        /**
          * 스토어 데이터 초기화
          */
         [act.CLEAR_STORE]: () => initialState,
@@ -49,19 +36,6 @@ export default handleActions(
                 draft.error = error;
             });
         },
-        /**
-         * W3C검사
-         */
-        // [act.W3C_PAGE_SUCCESS]: (state) => {
-        //     return produce(state, (draft) => {
-        //         draft.error = initialState.error;
-        //     });
-        // },
-        // [act.W3C_PAGE_FAILURE]: (state, { payload: error }) => {
-        //     return produce(state, (draft) => {
-        //         draft.error = error;
-        //     });
-        // },
     },
     initialState,
 );

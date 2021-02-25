@@ -7,16 +7,11 @@ import Tooltip from 'react-bootstrap/Tooltip';
 
 const propTypes = {
     /**
-     * row data
-     */
-    data: PropTypes.object,
-    /**
      * 버튼 클릭 함수
      */
     onClick: PropTypes.func,
 };
 const defaultProps = {
-    data: null,
     onClick: null,
 };
 
@@ -24,7 +19,7 @@ const defaultProps = {
  * 테이블에 들어가는 load 버튼
  */
 const MokaTableLoadButton = forwardRef((props, ref) => {
-    const { data, onClick } = props;
+    const { onClick } = props;
 
     useImperativeHandle(ref, () => ({
         refresh: () => false,
@@ -36,10 +31,10 @@ const MokaTableLoadButton = forwardRef((props, ref) => {
             e.preventDefault();
 
             if (onClick) {
-                onClick(data);
+                onClick(props?.node?.data);
             }
         },
-        [data, onClick],
+        [props, onClick],
     );
 
     return (

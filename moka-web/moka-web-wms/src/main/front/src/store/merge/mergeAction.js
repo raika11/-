@@ -2,13 +2,19 @@ import { createAction } from 'redux-actions';
 import { createRequestActionTypes } from '@store/commons/saga';
 
 /**
- * 페이지 미리보기
+ * syntax 체크
  */
-export const PREVIEW_PAGE = 'merge/PREVIEW_PAGE';
-export const previewPage = createAction(PREVIEW_PAGE, ({ content, callback }) => ({
+export const CHECK_SYNTAX = 'merge/CHECK_SYNTAX';
+export const checkSyntax = createAction(CHECK_SYNTAX, ({ content, callback }) => ({
     content,
     callback,
 }));
+
+/**
+ * 기사페이지 미리보기
+ */
+export const PREVIEW_ARTICLE_PAGE = 'merge/PREVIEW_ARTICLE_PAGE';
+export const previewArticlePage = createAction(PREVIEW_ARTICLE_PAGE, ({ articlePage, totalId, callback }) => ({ articlePage, totalId, callback }));
 
 /**
  * 컴포넌트 미리보기

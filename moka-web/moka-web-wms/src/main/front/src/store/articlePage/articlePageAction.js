@@ -43,7 +43,7 @@ export const getArticlePageLookupList = createAction(GET_ARTICLE_PAGE_LOOKUP_LIS
 export const getArticlePageLookup = createAction(GET_ARTICLE_PAGE_LOOKUP, ({ artPageSeq, callback }) => ({ artPageSeq, callback }));
 
 export const EXISTS_ARTICLE_TYPE = 'articlePage/EXISTS_ARTICLE_TYPE';
-export const existsArtType = createAction(EXISTS_ARTICLE_TYPE, ({ payload, callback }) => ({ payload, callback }));
+export const existsArtType = createAction(EXISTS_ARTICLE_TYPE, ({ domainId, artType, callback }) => ({ domainId, artType, callback }));
 
 /**
  * 데이터 변경

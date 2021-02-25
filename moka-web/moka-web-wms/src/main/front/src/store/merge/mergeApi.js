@@ -1,8 +1,8 @@
 import qs from 'qs';
 import instance from '@store/commons/axios';
 
-// 페이지 문법체크
-export const postSyntax = ({ content }) => {
+// TEMS 문법체크
+export const checkSyntax = ({ content }) => {
     const queryString = qs.stringify({ content });
     return instance.post('/api/merge/syntax', queryString).catch((err) => {
         throw err;

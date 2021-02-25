@@ -15,7 +15,7 @@ import {
     GET_ARTICLE_PAGE_LOOKUP_LIST,
 } from '@store/articlePage';
 import columnDefs from './LookupArticlePageListColumns';
-import { previewPage } from '@store/merge';
+import { checkSyntax } from '@store/merge';
 import util from '@utils/commonUtil';
 import toast from '@utils/toastUtil';
 
@@ -131,7 +131,7 @@ const LookupArticlePageList = (props) => {
                                         }
                                     },
                                 };
-                                dispatch(previewPage(option));
+                                dispatch(checkSyntax(option));
                             }
                         } else {
                             toast.error('미리보기용 기사ID 조회에 실패하였습니다.');

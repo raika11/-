@@ -25,6 +25,7 @@ import {
     CLEAR_HISTORY_DETAIL,
     GET_HOTCLICK_LIST_SUCCESS,
     CLEAR_HOTCLICK_LIST,
+    CHANGE_HOT_CLICK_LIST_ITEM,
 } from './bulksAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -229,6 +230,13 @@ export default handleActions(
                 draft.bulkh.hotclickList.list = payload;
             });
         },
+
+        [CHANGE_HOT_CLICK_LIST_ITEM]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.hotclickList.list[payload.itemIndex] = payload;
+            });
+        },
+
         // 핫클릭 히스토리 클리어.
         [CLEAR_HOTCLICK_HISTORYLIST]: (state) => {
             return produce(state, (draft) => {

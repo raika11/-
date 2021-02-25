@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Form } from 'react-bootstrap';
+import { Button, Col, Form } from 'react-bootstrap';
 import { MokaInput } from '@components';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 
@@ -12,6 +12,7 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
     return (
         <Form.Row className="text-center align-items-center w-100">
             <Col xs={5}>
+                <div>보기 1</div>
                 <PollPhotoComponent
                     width={110}
                     height={110}
@@ -22,7 +23,6 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
                 >
                     150 x 150
                 </PollPhotoComponent>
-                <div>보기 1</div>
                 {(hasUrl || items[0].linkUrl) && (
                     <MokaInput
                         name="linkUrl"
@@ -39,6 +39,7 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
                 VS
             </Col>
             <Col xs={5}>
+                <div>보기 2</div>
                 <PollPhotoComponent
                     width={110}
                     height={110}
@@ -49,7 +50,6 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
                 >
                     150 x 150
                 </PollPhotoComponent>
-                <div>보기 2</div>
                 {(hasUrl || items[1].linkUrl) && (
                     <MokaInput
                         name="linkUrl"

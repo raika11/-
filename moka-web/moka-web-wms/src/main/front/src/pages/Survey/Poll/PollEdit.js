@@ -88,29 +88,44 @@ const PollEdit = ({ onDelete }) => {
     };
 
     const handleClickSave = () => {
-        if (commonUtil.isEmpty(edit.pollSeq)) {
-            dispatch(
-                savePoll({
-                    data: edit,
-                    callback: (response) => {
-                        history.push(`/poll/${response.body.pollSeq}`);
-                        dispatch(getPollList({ search }));
-                        toast.result(response);
-                    },
-                }),
-            );
-        } else {
-            dispatch(
-                updatePoll({
-                    data: edit,
-                    callback: (response) => {
-                        dispatch(getPoll({ pollSeq: response.body.pollSeq }));
-                        dispatch(getPollList({ search }));
-                        toast.result(response);
-                    },
-                }),
-            );
+        if (validate(edit)) {
+            if (commonUtil.isEmpty(edit.pollSeq)) {
+                dispatch(
+                    savePoll({
+                        data: edit,
+                        callback: (response) => {
+                            history.push(`/poll/${response.body.pollSeq}`);
+                            dispatch(getPollList({ search }));
+                            toast.result(response);
+                        },
+                    }),
+                );
+            } else {
+                dispatch(
+                    updatePoll({
+                        data: edit,
+                        callback: (response) => {
+                            dispatch(getPoll({ pollSeq: response.body.pollSeq }));
+                            dispatch(getPollList({ search }));
+                            toast.result(response);
+                        },
+                    }),
+                );
+            }
         }
+    };
+
+    const validate = (data) => {
+        if (commonUtil.isEmpty(data.startDt)) {
+            toast.warning('투표 시작일을 입력해 주세요');
+            return false;
+        }
+
+        if (commonUtil.isEmpty(data.endDt)) {
+            toast.warning('투표 종료일을 입력해 주세요');
+            return false;
+        }
+        return true;
     };
 
     const handleClickHasLink = () => {

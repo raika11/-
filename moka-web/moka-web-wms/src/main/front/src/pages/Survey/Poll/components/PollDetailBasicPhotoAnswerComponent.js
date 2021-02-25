@@ -28,6 +28,7 @@ const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) 
     }, [item]);
     return (
         <div className="d-inline-flex flex-column">
+            <div className="text-center">{`보기 ${index + 1}`}</div>
             <PollPhotoComponent
                 key={index}
                 width="100px"
@@ -39,7 +40,6 @@ const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) 
             >
                 150x150
             </PollPhotoComponent>
-            <div className="text-center">{`보기 ${index + 1}`}</div>
         </div>
     );
 };

@@ -298,8 +298,8 @@ public class BulkJoongangArticle extends BulkArticle {
                 while( matcherContent.find() ) {
                     Matcher matcherQuestion = PATTERN_ContentTag_quiz_question_screen_open_Question.matcher(matcherContent.group());
                     if( matcherQuestion.find()) {
-                        quizText.append(matcherQuestion.group("seq"))
-                                .append(matcherQuestion.group("question"))
+                        quizText.append(matcherQuestion.group("seq").trim())
+                                .append(matcherQuestion.group("question").trim())
                                 .append("\r\n");
                     }
                 }

@@ -116,10 +116,11 @@ public interface ArticlePageService {
     /**
      * 같은 기사페이지 일련번호에 기사 타입이 중복으로 있는지 체크
      *
-     * @param domainId 도메인ID
-     * @param artType  기사 유형
+     * @param domainId   도메인ID
+     * @param artType    기사 유형
+     * @param artPageSeq 기사페이지순번
      */
-    boolean existArtType(String domainId, String artType);
+    boolean existArtType(String domainId, String artType, Long artPageSeq);
 
     /**
      * 도메인,유형에 해당하는 기사페이지 조회

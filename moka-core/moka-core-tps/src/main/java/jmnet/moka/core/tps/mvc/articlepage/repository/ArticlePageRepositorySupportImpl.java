@@ -74,4 +74,26 @@ public class ArticlePageRepositorySupportImpl extends TpsQueryDslRepositorySuppo
 
         return new PageImpl<ArticlePage>(list.getResults(), pageable, list.getTotal());
     }
+
+    @Override
+    public Long countByArtType(String domainId, String artType, Long exclude_artPageSeq) {
+        QArticlePage articlePage = QArticlePage.articlePage;
+        QDomain domain = QDomain.domain;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        // WHERE 조건
+        builder.and(articlePage.domain.domainId.eq(domainId));
+        builder.and(articlePage.artType.eq(artType));
+
+        if (exclude_artPageSeq != null && exclude_artPageSeq > 0) {
+            builder.and(articlePage.artPageSeq.ne(exclude_artPageSeq));
+        }
+
+        JPQLQuery<ArticlePage> query = queryFactory.selectFrom(articlePage);
+        return query
+                .innerJoin(articlePage.domain, domain)
+                .where(builder)
+                .fetchCount();
+    }
 }

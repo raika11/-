@@ -166,7 +166,7 @@ public class ArticlePageRestController extends AbstractCommonController {
 
             if (actionType == ActionType.INSERT && articlePageService.existArtType(articlePageDTO
                     .getDomain()
-                    .getDomainId(), articlePageDTO.getArtType())) {
+                    .getDomainId(), articlePageDTO.getArtType(), artPageSeq)) {
                 String message = msg("tps.article-page.error.duplicate.artType");
                 invalidList.add(new InvalidDataDTO("artPageBody", message));
             }
@@ -346,12 +346,10 @@ public class ArticlePageRestController extends AbstractCommonController {
      */
     @ApiOperation(value = "동일 기사 유형 존재 여부")
     @GetMapping("/exists-type")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "domainId", value = "도메인 ID", required = true, dataType = "String", paramType = "query", defaultValue = "1000"),
-            @ApiImplicitParam(name = "artType", value = "기사 유형", required = true, dataType = "String", paramType = "query", defaultValue = "B")})
-    public ResponseEntity<?> existsArtType(@Valid @SearchParam ArticlePageSearchDTO search) {
+    public ResponseEntity<?> existsArtType(@Valid @SearchParam ArticlePageSearchDTO search,
+            @ApiParam(value = "제외 기사페이지 일련번호", required = false) @RequestParam(value = "artPageSeq", required = false) Long artPageSeq) {
 
-        boolean duplicated = articlePageService.existArtType(search.getDomainId(), search.getArtType());
+        boolean duplicated = articlePageService.existArtType(search.getDomainId(), search.getArtType(), artPageSeq);
         String message = "";
         if (duplicated) {
             message = msg("tps.article-page.error.duplicate.artType");

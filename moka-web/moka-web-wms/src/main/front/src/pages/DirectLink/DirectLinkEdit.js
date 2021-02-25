@@ -21,7 +21,7 @@ import {
 } from '@store/directLink';
 
 const DATEFORMAT = 'YYYY-MM-DD';
-const URL_ERROR = '정확한 URL을 입력하세요';
+const URL_ERROR = '입력한 링크가 URL 형식과 맞지 않습니다';
 
 /**
  * 사이트 바로 가기 등록/수정창
@@ -92,7 +92,7 @@ const DirectLinkEdit = ({ history, match }) => {
         if (!directLink.linkTitle) {
             errList.push({
                 field: 'linkTitle',
-                reason: '제목을 입력해 주세요.',
+                reason: '제목을 입력하세요',
             });
             isInvalid = isInvalid || true;
         }
@@ -101,7 +101,7 @@ const DirectLinkEdit = ({ history, match }) => {
         if (!directLink.linkContent) {
             errList.push({
                 field: 'linkContent',
-                reason: '내용을 입력해 주세요.',
+                reason: '내용을 입력하세요',
             });
             isInvalid = isInvalid || true;
         }
@@ -110,7 +110,7 @@ const DirectLinkEdit = ({ history, match }) => {
         if (!directLink.linkUrl) {
             errList.push({
                 field: 'linkUrl',
-                reason: '링크를 입력해 주세요.',
+                reason: '링크를 입력하세요',
             });
             isInvalid = isInvalid || true;
         } else {
@@ -128,7 +128,7 @@ const DirectLinkEdit = ({ history, match }) => {
         if (!directLink.linkKwd) {
             errList.push({
                 field: 'linkKwd',
-                reason: '키워드를 입력해 주세요.',
+                reason: '키워드를 입력하세요',
             });
             isInvalid = isInvalid || true;
         }
@@ -137,7 +137,7 @@ const DirectLinkEdit = ({ history, match }) => {
         if (linkSeq && directLink.directLinkThumbnailFile === null && directLink.imgUrl === '') {
             errList.push({
                 field: 'directLinkThumbnailFile',
-                reason: '이미지를 선택해 주세요.',
+                reason: '이미지를 선택하세요',
             });
             isInvalid = isInvalid || true;
         }
@@ -341,7 +341,16 @@ const DirectLinkEdit = ({ history, match }) => {
                 {/* 제목 */}
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="제목" className="mb-0" name="linkTitle" value={temp.linkTitle} onChange={handleChangeValue} isInvalid={error.linkTitle} />
+                        <MokaInputLabel
+                            label="제목"
+                            className="mb-0"
+                            name="linkTitle"
+                            value={temp.linkTitle}
+                            onChange={handleChangeValue}
+                            isInvalid={error.linkTitle}
+                            invalidMessage={error.linkTitleMessage}
+                            required
+                        />
                     </Col>
                 </Form.Row>
 
@@ -355,7 +364,9 @@ const DirectLinkEdit = ({ history, match }) => {
                             value={temp.linkContent}
                             onChange={handleChangeValue}
                             isInvalid={error.linkContent}
+                            invalidMessage={error.linkContentMessage}
                             inputProps={{ rows: 5 }}
+                            required
                         />
                     </Col>
                 </Form.Row>
@@ -371,6 +382,7 @@ const DirectLinkEdit = ({ history, match }) => {
                             onChange={handleChangeValue}
                             isInvalid={error.linkUrl}
                             invalidMessage={error.linkUrlMessage}
+                            required
                         />
                     </Col>
                     <Col xs={3} className="p-0 pl-2">
@@ -382,18 +394,25 @@ const DirectLinkEdit = ({ history, match }) => {
 
                 {/* 링크타입 */}
                 <Form.Row className="mb-2">
-                    <Col xs={5} className="p-0">
-                        <MokaInputLabel label="LINK 타입" as="select" className="mb-0" name="linkType" value={temp.linkType} onChange={handleChangeValue}>
-                            <option value="N">새창</option>
-                            <option value="S">본창</option>
-                        </MokaInputLabel>
-                    </Col>
+                    <MokaInputLabel label="LINK 타입" as="select" className="mb-0" name="linkType" value={temp.linkType} onChange={handleChangeValue}>
+                        <option value="N">새창</option>
+                        <option value="S">본창</option>
+                    </MokaInputLabel>
                 </Form.Row>
 
                 {/* 키워드 */}
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel label="키워드" className="mb-0" name="linkKwd" value={temp.linkKwd} onChange={handleChangeValue} isInvalid={error.linkKwd} />
+                        <MokaInputLabel
+                            label="키워드"
+                            className="mb-0"
+                            name="linkKwd"
+                            value={temp.linkKwd}
+                            onChange={handleChangeValue}
+                            isInvalid={error.linkKwd}
+                            invalidMessage={error.linkKwdMessage}
+                            required
+                        />
                     </Col>
                 </Form.Row>
 

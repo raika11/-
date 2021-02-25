@@ -25,9 +25,8 @@ export const getPreviewTotalId = (artType) => {
 };
 
 // 동일 기사 유형 존재 여부
-export const existsArtType = (payload) => {
-    const queryString = qs.stringify(payload);
-    console.log(queryString);
+export const existsArtType = ({ domainId, artType, artPageSeq }) => {
+    const queryString = qs.stringify({ domainId, artType, artPageSeq });
     return instance.get(`/api/article-pages/exists-type?${queryString}`).catch((err) => {
         throw err;
     });

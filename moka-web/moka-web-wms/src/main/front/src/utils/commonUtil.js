@@ -336,7 +336,6 @@ const popupPreview = (targetUrl, params, enctype = null) => {
     };
 
     addObject(undefined, params);
-
     document.getElementsByTagName('body')[0].appendChild(form);
     form.submit();
     form.remove();

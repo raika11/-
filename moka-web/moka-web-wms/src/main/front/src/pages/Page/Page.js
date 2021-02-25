@@ -20,7 +20,7 @@ const LookupPageList = React.lazy(() => import('@pages/Page/components/LookupPag
 const LookupContainerList = React.lazy(() => import('@pages/Container/components/LookupContainerList'));
 const LookupComponentList = React.lazy(() => import('@pages/Component/components/LookupComponentList'));
 const LookupTemplateList = React.lazy(() => import('@pages/Template/components/LookupTemplateList'));
-const PageChildAdList = React.lazy(() => import('./relations/PageChildAdList'));
+const LookupAdList = React.lazy(() => import('@pages/Ad/components/LookupAdList'));
 const HistoryList = React.lazy(() => import('@pages/commons/HistoryList'));
 
 /**
@@ -251,7 +251,7 @@ const Page = ({ match }) => {
                                         <LookupTemplateList show={activeTabIdx === 4} seqType={ITEM_PG} seq={page.pageSeq} onAppend={handleAppendTag} />
                                     </Suspense>,
                                     <Suspense fallback={<MokaLoader />}>
-                                        <PageChildAdList />
+                                        <LookupAdList />
                                     </Suspense>,
                                     <Suspense fallback={<MokaLoader />}>
                                         <HistoryList show={activeTabIdx === 6} seqType={ITEM_PG} seq={page.pageSeq} onLoad={handleClickHistLoad} />

@@ -403,6 +403,7 @@ const SnsMetaEdit = () => {
                                 <MokaInput
                                     as="dateTimePicker"
                                     name="fb-reserveDt"
+                                    className="right"
                                     value={edit.fb.reserveDt}
                                     onChange={(e) => {
                                         handleChangeTextValue({ target: { name: 'fb-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });
@@ -558,6 +559,7 @@ const SnsMetaEdit = () => {
                                 <MokaInput
                                     as="dateTimePicker"
                                     name="tw-reserveDt"
+                                    className="right"
                                     value={edit.tw.reserveDt}
                                     onChange={(e) => {
                                         handleChangeTextValue({ target: { name: 'tw-reserveDt', value: new Date(moment(e._d).format(DB_DATEFORMAT)) } });

@@ -5,24 +5,25 @@ export default [
     {
         headerName: 'No',
         field: 'seq',
-        width: 70,
+        width: 65,
         tooltipField: 'seq',
     },
     {
         headerName: '작업일시',
         field: 'regDt',
-        width: 150,
+        width: 140,
     },
     {
         headerName: '작업자',
         field: 'regId',
-        width: 90,
+        width: 100,
+        tooltipField: 'regId',
         flex: 1,
     },
     {
         headerName: '불러오기',
         field: 'load',
-        width: 64,
+        width: 62,
         cellRendererFramework: (row) => {
             const { data } = row;
             return <MokaTableLoadButton {...row} onClick={data.handleClickLoad} />;

@@ -7,9 +7,14 @@ import * as api from './mergeApi';
 import * as act from './mergeAction';
 
 /**
- * 미리보기
+ * TEMS 문법 체크
  */
-const previewPageSaga = createRequestSaga(act.PREVIEW_PAGE, api.postSyntax, true);
+const checkSyntax = createRequestSaga(act.CHECK_SYNTAX, api.checkSyntax, true);
+
+/**
+ * 기사 페이지 미리보기
+ */
+const previewArticlePage = createRequestSaga(act.PREVIEW_ARTICLE_PAGE, api.postPreviewAP, true);
 
 /**
  * 페이지 W3C검사
@@ -21,7 +26,7 @@ function* w3cPageSaga(action) {
     const { content, page, callback } = action.payload;
 
     try {
-        const resSyntax = yield call(api.postSyntax, { content });
+        const resSyntax = yield call(api.checkSyntax, { content });
         callbackData = resSyntax.data;
 
         if (resSyntax.data.header.success) {
@@ -63,7 +68,7 @@ function* w3cArticlePageSaga(action) {
     const { content, articlePage, totalId, callback } = action.payload;
 
     try {
-        const resSyntax = yield call(api.postSyntax, { content });
+        const resSyntax = yield call(api.checkSyntax, { content });
         callbackData = resSyntax.data;
 
         if (resSyntax.data.header.success) {
@@ -111,11 +116,12 @@ const previewAreaModal = createRequestSaga(act.PREVIEW_AREA_MODAL, api.getPrevie
 
 /** saga */
 export default function* saga() {
-    yield takeLatest(act.PREVIEW_PAGE, previewPageSaga);
+    yield takeLatest(act.CHECK_SYNTAX, checkSyntax);
     yield takeLatest(act.W3C_PAGE, w3cPageSaga);
     yield takeLatest(act.W3C_ARTICLE_PAGE, w3cArticlePageSaga);
     yield takeLatest(act.PREVIEW_COMPONENT, previewComponent);
     yield takeLatest(act.PREVIEW_COMPONENT_MODAL, previewComponentModal);
     yield takeLatest(act.PREVIEW_AREA, previewArea);
     yield takeLatest(act.PREVIEW_AREA_MODAL, previewAreaModal);
+    yield takeLatest(act.PREVIEW_ARTICLE_PAGE, previewArticlePage);
 }

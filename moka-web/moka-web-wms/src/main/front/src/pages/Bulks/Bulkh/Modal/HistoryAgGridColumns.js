@@ -22,13 +22,13 @@ export const historyColumnDefs = [
 
 export const historyDetailColumnDefs = [
     {
-        headerName: '순서',
+        headerName: '순서',
         field: 'ordNo',
         width: 70,
         headerClass: 'ag-grid-sns-meta-header',
     },
     {
-        headerName: '기사제목',
+        headerName: '기사제목',
         headerClass: 'ag-grid-sns-meta-header',
         field: 'title',
         width: 90,

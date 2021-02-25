@@ -137,26 +137,24 @@ const ArticlePageEdit = ({ onDelete, match }) => {
      */
     const submitPage = useCallback(
         (tmp) => {
-            if (tmp.artPageSeq) {
-                saveCallback(tmp);
-            } else {
-                dispatch(
-                    existsArtType({
-                        domainId: latestDomainId,
-                        artType: tmp.artType,
-                        callback: ({ header, body }) => {
-                            if (body) {
-                                setError({ ...error, artType: true });
-                                messageBox.alert(header.message);
-                            } else {
-                                saveCallback(tmp);
-                            }
-                        },
-                    }),
-                );
-            }
+            // 본인을 제외한 기사페이지 중 동일한 기사타입이 있는지 체크
+            dispatch(
+                existsArtType({
+                    domainId: latestDomainId,
+                    artType: tmp.artType,
+                    artPageSeq: articlePage.artPageSeq,
+                    callback: ({ header, body }) => {
+                        if (body) {
+                            setError({ ...error, artType: true });
+                            messageBox.alert(header.message);
+                        } else {
+                            saveCallback(tmp);
+                        }
+                    },
+                }),
+            );
         },
-        [dispatch, error, latestDomainId, saveCallback],
+        [articlePage.artPageSeq, dispatch, error, latestDomainId, saveCallback],
     );
 
     /**

@@ -113,11 +113,6 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
-    <dependency>
-      <groupId>jmnet.moka.core</groupId>
-      <artifactId>moka-core-mail</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
 
     <!-- RESTful API를 호출하기 위한 라이브러리 -->
     <!-- <dependency>

@@ -354,10 +354,29 @@ ${bulkArticleRow
                     {[0, 1, 2].map(function (e, index) {
                         return (
                             <div key={index} className="mb-2 pb-2">
-                                <Form.Row>
-                                    <MokaInputLabel label="타이틀" as="none" />
+                                <Form.Row className="mb-2">
+                                    <Col xs={3} className="p-0">
+                                        <MokaInputLabel
+                                            label="타이틀"
+                                            as="select"
+                                            name="symbol"
+                                            id="symbol"
+                                            value={bulkArticleRow[index] ? bulkArticleRow[index].symbol : ''}
+                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                        >
+                                            <option hidden>선택</option>
+                                            {symbol
+                                                .split(' ')
+                                                .filter((e) => e !== '')
+                                                .map((item, index) => (
+                                                    <option key={index} value={item}>
+                                                        {item}
+                                                    </option>
+                                                ))}
+                                        </MokaInputLabel>
+                                    </Col>
                                     {/* <Col xs={1} className="justify-content-center align-items-center"></Col> */}
-                                    <div className="mr-2">
+                                    {/*<div className="mr-2">
                                         <MokaInput
                                             as="select"
                                             name="symbol"
@@ -376,8 +395,8 @@ ${bulkArticleRow
                                                     </option>
                                                 ))}
                                         </MokaInput>
-                                    </div>
-                                    <Col xs={9} className="justify-content-center align-items-center">
+                                    </div>*/}
+                                    <Col xs={8} className="pr-0">
                                         <MokaInputLabel
                                             name="title"
                                             id="title"
@@ -386,27 +405,29 @@ ${bulkArticleRow
                                             disabled={editState}
                                         />
                                     </Col>
-                                    <Col xs={1} className="justify-content-center align-items-center">
+                                    <Col xs={1}>
                                         <MokaInputLabel
                                             name="title_length"
                                             id="title_length"
                                             label={`${bulkArticleRow[index] ? bulkArticleRow[index].title_length : 0}자`}
                                             as="none"
-                                            className="pt-1"
+                                            className="h-100 align-items-center d-flex"
                                         />
                                     </Col>
                                 </Form.Row>
 
-                                <Form.Row className="pt-3">
-                                    <MokaInputLabel label="url" as="none" />
-                                    <MokaInputLabel
-                                        name="url"
-                                        id="url"
-                                        className="w-100"
-                                        onChange={(e) => handleChangeBulkinputBox(e, index)}
-                                        value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
-                                        disabled={editState}
-                                    />
+                                <Form.Row>
+                                    <Col xs={11} className="p-0">
+                                        <MokaInputLabel
+                                            name="url"
+                                            id="url"
+                                            label="url"
+                                            className="w-100"
+                                            onChange={(e) => handleChangeBulkinputBox(e, index)}
+                                            value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
+                                            disabled={editState}
+                                        />
+                                    </Col>
                                 </Form.Row>
                                 <hr />
                             </div>

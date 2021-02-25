@@ -34,10 +34,10 @@ const Bulkh = () => {
                     path={[`/${bulkPathName}`, `/${bulkPathName}/:seqNo`]}
                     exact
                     render={() => (
-                        <>
+                        <Suspense>
                             <BulkhHotClickList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
                             <BulkhArticleList componentAgGridInstances={componentAgGridInstances} />
-                        </>
+                        </Suspense>
                     )}
                 />
             </Switch>

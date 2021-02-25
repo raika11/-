@@ -119,7 +119,6 @@ const AgGrid = forwardRef((props, ref) => {
                 total={total}
                 page={search.page}
                 size={search.size}
-                showTotalString={false}
                 onChangeSearchOption={onChangeSearchOption}
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 rowSelection="multiple"

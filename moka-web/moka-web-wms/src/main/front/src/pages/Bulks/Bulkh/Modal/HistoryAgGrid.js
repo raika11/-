@@ -41,7 +41,7 @@ const HistoryAgGrid = () => {
                 let regDt = element.regDt && element.regDt.length > 10 ? element.regDt.substr(0, 16) : element.regDt;
                 return {
                     bulkartSeq: element.bulkartSeq,
-                    regId: element.regId,
+                    regMember: `${element.regMember.memberNm}(${element.regMember.memberId})`,
                     regDt: regDt,
                 };
             }),

@@ -13,16 +13,10 @@ export const historyColumnDefs = [
         flex: 1,
     },
     {
-        headerName: '작업자',
-        field: 'regId',
+        headerName: '등록자',
+        field: 'regMember',
         headerClass: 'ag-grid-sns-meta-header',
-        width: 80,
-    },
-    {
-        headerName: 'ID',
-        field: 'regId',
-        headerClass: 'ag-grid-sns-meta-header',
-        width: 80,
+        width: 150,
     },
 ];
 

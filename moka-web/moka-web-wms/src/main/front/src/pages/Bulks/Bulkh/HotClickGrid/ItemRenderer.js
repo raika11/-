@@ -60,7 +60,6 @@ const ItemRenderer = forwardRef((props, ref) => {
         setItem(data?.item);
     }, [data]);
 
-    console.log(item.itemIndex, 'render');
     return (
         <div className="h-100 w-100 d-flex py-1">
             <div className="flex-fill">

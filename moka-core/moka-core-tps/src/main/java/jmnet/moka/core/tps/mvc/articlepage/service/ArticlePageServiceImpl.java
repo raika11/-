@@ -332,8 +332,8 @@ public class ArticlePageServiceImpl implements ArticlePageService {
     }
 
     @Override
-    public boolean existArtType(String domainId, String artType) {
-        return articlePageRepository.countByDomainDomainIdAndArtType(domainId, artType) > 0;
+    public boolean existArtType(String domainId, String artType, Long artPageSeq) {
+        return articlePageRepository.countByArtType(domainId, artType, artPageSeq) > 0;
     }
 
     @Override

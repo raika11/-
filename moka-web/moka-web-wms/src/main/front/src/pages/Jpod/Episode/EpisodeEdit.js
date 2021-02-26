@@ -16,7 +16,8 @@ import toast, { messageBox } from '@utils/toastUtil';
 import SortAgGrid from '@pages/Survey/component/SortAgGrid';
 
 // 진행 기본 3명을 보여주기 위해 기본 init 데이터로 배열 3개를 추가 해줌.
-const reporterCountConst = [0, 1, 2];
+// const reporterCountConst = [0, 1, 2];
+const reporterCountConst = 3;
 // 진행자 선택 삭제시에 필요한 Object
 const reporterInit = {
     chnlSeq: '',
@@ -319,7 +320,7 @@ const ChannelEdit = (props) => {
      * 진행자 3명이상 추가 할떄 alert 띄워 주는 함수.
      */
     const handleRepoterAddAlert = () => {
-        messageBox.alert(`${reporterCountConst.length}명 이상 등록할수 없습니다.`);
+        messageBox.alert(`${reporterCountConst}명 이상 등록할수 없습니다.`);
         return;
     };
 
@@ -484,34 +485,34 @@ const ChannelEdit = (props) => {
         const setMember = (element) => {
             const listCp = element.filter((e) => e.memDiv === 'CP'); // 고정 패널.
             setEditSelectCPRepoters(
-                reporterCountConst.map((index) => {
+                listCp.map((element, index) => {
                     return {
-                        chnlSeq: listCp[index]?.chnlSeq || '',
-                        desc: listCp[index]?.desc || '',
-                        epsdSeq: listCp[index]?.epsdSeq || '',
-                        memDiv: listCp[index]?.memDiv || '',
-                        memMemo: listCp[index]?.memMemo || '',
-                        memNm: listCp[index]?.memNm || '',
-                        memRepSeq: listCp[index]?.memRepSeq || '',
-                        nickNm: listCp[index]?.nickNm || '',
-                        seqNo: listCp[index]?.seqNo || '',
+                        chnlSeq: element?.chnlSeq || '',
+                        desc: element?.desc || '',
+                        epsdSeq: element?.epsdSeq || '',
+                        memDiv: element?.memDiv || '',
+                        memMemo: element?.memMemo || '',
+                        memNm: element?.memNm || '',
+                        memRepSeq: element?.memRepSeq || '',
+                        nickNm: element?.nickNm || '',
+                        seqNo: element?.seqNo || '',
                     };
                 }),
             );
 
             const listEg = element.filter((e) => e.memDiv === 'EG'); // 게스트.
             setEditSelectEGRepoters(
-                reporterCountConst.map((index) => {
+                listEg.map((element, index) => {
                     return {
-                        chnlSeq: listEg[index]?.chnlSeq || '',
-                        desc: listEg[index]?.desc || '',
-                        epsdSeq: listEg[index]?.epsdSeq || '',
-                        memDiv: listEg[index]?.memDiv || '',
-                        memMemo: listEg[index]?.memMemo || '',
-                        memNm: listEg[index]?.memNm || '',
-                        memRepSeq: listEg[index]?.memRepSeq || '',
-                        nickNm: listEg[index]?.nickNm || '',
-                        seqNo: listEg[index]?.seqNo || '',
+                        chnlSeq: element?.chnlSeq || '',
+                        desc: element?.desc || '',
+                        epsdSeq: element?.epsdSeq || '',
+                        memDiv: element?.memDiv || '',
+                        memMemo: element?.memMemo || '',
+                        memNm: element?.memNm || '',
+                        memRepSeq: element?.memRepSeq || '',
+                        nickNm: element?.nickNm || '',
+                        seqNo: element?.seqNo || '',
                     };
                 }),
             );
@@ -591,8 +592,8 @@ const ChannelEdit = (props) => {
 
     useEffect(() => {
         // 최초 로딩 및 렌더링 직후 진행자 배열을 초기화 해준다.
-        setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
-        setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
+        // setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
+        // setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
 
         dispatch(clearSelectArticleList());
         // eslint-disable-next-line react-hooks/exhaustive-deps

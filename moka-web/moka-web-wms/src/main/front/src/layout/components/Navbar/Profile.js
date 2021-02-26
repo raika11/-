@@ -21,8 +21,8 @@ const Profile = ({ className, info }) => {
     return (
         <div className={clsx('d-flex', 'align-items-center', 'position-relative', className)}>
             <div className="d-flex flex-direction-column align-items-end mr-3">
-                <p className="h5 mb-0">{info.userName}</p>
-                <p className="mb-0">로그인</p>
+                <p className="h5 mb-0">{info.userId}</p>
+                <p className="mb-0">{info.userName}</p>
             </div>
             <Image
                 width="40"

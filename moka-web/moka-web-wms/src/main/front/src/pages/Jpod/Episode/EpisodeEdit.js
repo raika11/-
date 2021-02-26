@@ -387,13 +387,13 @@ const ChannelEdit = (props) => {
      */
     const handleClickRepoterAddButton = (gubun) => {
         if (gubun === 'CP') {
-            if (editSelectCPRepoters.length === reporterCountConst.length) {
+            if (editSelectCPRepoters.length === reporterCountConst) {
                 handleRepoterAddAlert();
                 return;
             }
             setEditSelectCPRepoters([...editSelectCPRepoters, reporterInit]);
         } else if (gubun === 'EG') {
-            if (editSelectEGRepoters.length === reporterCountConst.length) {
+            if (editSelectEGRepoters.length === reporterCountConst) {
                 handleRepoterAddAlert();
                 return;
             }
@@ -410,7 +410,7 @@ const ChannelEdit = (props) => {
 
         // 빈 필드가 없으면 추가.
         if (tmpCh.length === 0) {
-            if (reporpter.length === reporterCountConst.length) {
+            if (reporpter.length === reporterCountConst) {
                 handleRepoterAddAlert();
                 return;
             }
@@ -485,7 +485,7 @@ const ChannelEdit = (props) => {
         const setMember = (element) => {
             const listCp = element.filter((e) => e.memDiv === 'CP'); // 고정 패널.
             setEditSelectCPRepoters(
-                listCp.map((element, index) => {
+                listCp.map((element) => {
                     return {
                         chnlSeq: element?.chnlSeq || '',
                         desc: element?.desc || '',
@@ -502,7 +502,7 @@ const ChannelEdit = (props) => {
 
             const listEg = element.filter((e) => e.memDiv === 'EG'); // 게스트.
             setEditSelectEGRepoters(
-                listEg.map((element, index) => {
+                listEg.map((element) => {
                     return {
                         chnlSeq: element?.chnlSeq || '',
                         desc: element?.desc || '',
@@ -592,9 +592,6 @@ const ChannelEdit = (props) => {
 
     useEffect(() => {
         // 최초 로딩 및 렌더링 직후 진행자 배열을 초기화 해준다.
-        // setEditSelectCPRepoters(reporterCountConst.map(() => reporterInit));
-        // setEditSelectEGRepoters(reporterCountConst.map(() => reporterInit));
-
         dispatch(clearSelectArticleList());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

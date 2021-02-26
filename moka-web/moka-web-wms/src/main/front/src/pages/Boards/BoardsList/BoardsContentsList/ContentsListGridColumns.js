@@ -35,6 +35,7 @@ export const ColumnDefs = [
         field: 'registItem',
         cellStyle: { fontSize: '12px', lineHeight: '18px' },
         width: 120,
+        cellRendererFramework: (params) => <RegistItemRenderer regDt={params.value.regDt} regName={params.value.regName} regId={params.value.regId} />,
     },
     {
         headerName: '조회수',

@@ -91,7 +91,6 @@ const BulknEdit = (props) => {
     useEffect(() => {
         // 등록 상태.
         if (bulkartSeq === null) {
-            console.log(3);
             setBulkArticleRow(rowInit);
             setTempButton(false);
         }
@@ -118,7 +117,6 @@ const BulknEdit = (props) => {
             });
 
             if (bulk.usedYn === 'N') {
-                console.log(1);
                 setTempButton(false);
             } else {
                 tempButton === false && setTempButton(true);

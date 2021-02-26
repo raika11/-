@@ -414,8 +414,8 @@ const NoticeEdit = ({ match }) => {
                 regDt: data.regDt,
                 modDt: data.modDt,
                 editorYn: data.boardInfo && data.boardInfo.editorYn,
-                regInfo: data.regDt && data.regDt.length > 16 ? `등록 일시: ${data.regDt.substr(0, 16)} ${data.regName}` : '',
-                modInfo: data.modDt && data.modDt.length > 16 ? `등록 일시: ${data.modDt.substr(0, 16)} ${data.regName}` : '',
+                regInfo: data.regDt && data.regDt.length > 16 ? `등록 일시: ${data.regDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
+                modInfo: data.modDt && data.modDt.length > 16 ? `등록 일시: ${data.modDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
             });
 
             dispatch(changeSelectBoard(data.boardInfo));
@@ -460,6 +460,13 @@ const NoticeEdit = ({ match }) => {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [replyEditContents]);
+
+    useEffect(() => {
+        if (params && params.boardId && params.boardSeq) {
+            dispatch(getBoardContents({ boardId: params.boardId, boardSeq: params.boardSeq }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <MokaCard
@@ -522,10 +529,10 @@ const NoticeEdit = ({ match }) => {
                         <Form>
                             {editState.mode === 'modify' && (
                                 <Form.Row>
-                                    <Col xs={6} style={{ fontSize: '1px' }}>
+                                    <Col xs={6} className="ft-12">
                                         {`${editData.regInfo ? editData.regInfo : ''}`}
                                     </Col>
-                                    <Col xs={6} style={{ fontSize: '1px' }}>
+                                    <Col xs={6} className="ft-12">
                                         {`${editData.modInfo ? editData.modInfo : ''}`}
                                     </Col>
                                 </Form.Row>
@@ -741,7 +748,7 @@ const NoticeEdit = ({ match }) => {
                                                     <MokaInputLabel label={`첨부파일`} as="none" className="mb-2" />
                                                 </Col>
                                                 <Col xs={8} className="p-0 text-right">
-                                                    <div className="file btn btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
+                                                    <div className="file btn btn-sm btn-primary" style={{ position: 'relative', overflow: 'hidden' }}>
                                                         등록
                                                         <input
                                                             type="file"

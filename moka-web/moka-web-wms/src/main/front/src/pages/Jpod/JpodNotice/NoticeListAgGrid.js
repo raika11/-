@@ -60,7 +60,7 @@ const NoticeListAgGrid = ({ match }) => {
 
     // 최초 로딩시에만 게시판 정보가 있으면 정보 가지고 오기.
     useEffect(() => {
-        if (params.boardId && params.boardId) {
+        if (params.boardId && params.boardSeq) {
             dispatch(getBoardContents({ boardId: params.boardId, boardSeq: params.boardSeq }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,7 +94,7 @@ const NoticeListAgGrid = ({ match }) => {
             className="overflow-hidden flex-fill"
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={50}
+            rowHeight={40}
             onRowNodeId={(data) => data.boardSeq}
             onRowClicked={(e) => handleClickListRow(e)}
             loading={loading}

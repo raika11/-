@@ -134,7 +134,7 @@ const NoticeListSearchBox = ({ match }) => {
                         ))}
                     </MokaInput>
                 </Col>
-                <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
+                <Button variant="negative" onClick={() => handleClickSearchResetButton()}>
                     초기화
                 </Button>
             </Form.Row>

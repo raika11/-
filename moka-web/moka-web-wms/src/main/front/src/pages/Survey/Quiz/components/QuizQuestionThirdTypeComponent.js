@@ -253,9 +253,9 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                             as="imageFile"
                             ref={imgFileRef}
                             labelWidth={90}
-                            inputProps={{ img: questionsList[questionIndex].imgUrl, width: 150, height: 150, setFileValue: setImageFileValue, deleteButton: true }}
+                            inputProps={{ img: questionsList[questionIndex].imgUrl, width: 150, height: 84, setFileValue: setImageFileValue, deleteButton: true }}
                         />
-                        <Col className="d-flex justify-content-center pl-0 pt-2">
+                        <Col className="d-flex pl-0 pt-2">
                             <Button
                                 className="mt-0"
                                 size="sm"

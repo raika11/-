@@ -40,5 +40,5 @@ export const saveDirectLink = createAction(SAVE_DIRECT_LINK, ({ type, actions, c
 /**
  * 삭제
  */
-export const [DELETE_DIRECT_LINK, DELETE_DIRECT_LINK_SUCCESS, DELETE_DIRECT_LINK_FAILURE] = createRequestActionTypes('directLink/DELETE_DIRECT_LINK');
+export const [DELETE_DIRECT_LINK, DELETE_DIRECT_LINK_SUCCESS] = createRequestActionTypes('directLink/DELETE_DIRECT_LINK');
 export const deleteDirectLink = createAction(DELETE_DIRECT_LINK, ({ linkSeq, callback }) => ({ linkSeq, callback }));

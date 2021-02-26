@@ -34,4 +34,7 @@ public class BulkDumpEnvCopyright implements Serializable {
 
     @JsonProperty(value = "CR_HTML")
     private String crHtml;
+
+    @JsonProperty(value = "CR_TXT")
+    private String crTxt;
 }

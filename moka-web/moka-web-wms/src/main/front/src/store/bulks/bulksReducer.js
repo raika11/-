@@ -25,6 +25,7 @@ import {
     CLEAR_HISTORY_DETAIL,
     GET_HOTCLICK_LIST_SUCCESS,
     CLEAR_HOTCLICK_LIST,
+    CHANGE_HOT_CLICK_LIST_ITEM,
 } from './bulksAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
 
@@ -84,7 +85,7 @@ export const initialState = {
             list: [],
             search: {
                 page: 0,
-                size: 15,
+                size: 20,
                 bulkartDiv: '',
                 sourceCode: '',
                 status: 'publish',
@@ -230,12 +231,21 @@ export default handleActions(
                 draft.bulkh.hotclickList.list = payload;
             });
         },
+
+        [CHANGE_HOT_CLICK_LIST_ITEM]: (state, { payload }) => {
+            return produce(state, (draft) => {
+                draft.bulkh.hotclickList.list[payload.itemIndex] = payload;
+            });
+        },
+
         // 핫클릭 히스토리 클리어.
         [CLEAR_HOTCLICK_HISTORYLIST]: (state) => {
             return produce(state, (draft) => {
                 draft.bulkh.historyList.totalCnt = initialState.bulkh.historyList.totalCnt;
                 draft.bulkh.historyList.list = initialState.bulkh.historyList.list;
                 draft.bulkh.historyList.article = initialState.bulkh.historyList.article;
+                draft.bulkh.historyList.search.page = initialState.bulkh.historyList.search.page;
+                draft.bulkh.historyList.search.size = initialState.bulkh.historyList.search.size;
             });
         },
 

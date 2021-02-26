@@ -41,8 +41,8 @@ const RcvArticleAgGrid = () => {
      */
     const handleRowClicked = useCallback(
         (data) => {
-            const isRcv = !data.serviceDaytime && data.iudYn === 'N';
-            history.push(`/rcv-article/${data.rid}/${isRcv ? 'Y' : 'N'}`);
+            const registerable = !data.serviceDaytime && data.iudYn === 'N';
+            history.push(`/rcv-article/${data.rid}/${registerable ? 'Y' : 'N'}`);
         },
         [history],
     );

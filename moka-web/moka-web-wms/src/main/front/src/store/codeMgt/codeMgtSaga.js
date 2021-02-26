@@ -292,6 +292,7 @@ const getArticleType = createReadOnlySaga(act.GET_SERVICE_TYPE, 'articleTypeRows
 const getPt = createReadOnlySaga(act.GET_PT, 'ptRows', constants.CODETYPE_PT);
 const getChannelTp = createReadOnlySaga(act.GET_CHANNEL_TP, 'channelTpRows', constants.CODETYPE_CHANNEL_TP);
 const getPressCate1 = createReadOnlySaga(act.GET_PRESS_CATE1, 'pressCate1Rows', constants.CODETYPE_PRESS_CATE1);
+const getPressCate61 = createReadOnlySaga(act.GET_PRESS_CATE61, 'pressCate61Rows', constants.CODETYPE_PRESS_CATE61);
 const getHttpMethod = createReadOnlySaga(act.GET_HTTP_METHOD, 'httpMethodRows', constants.CODETYPE_HTTP_METHOD);
 const getApiType = createReadOnlySaga(act.GET_API_TYPE, 'apiTypeRows', constants.CODETYPE_API_TYPE);
 const getTourAge = createReadOnlySaga(act.GET_TOUR_AGE, 'tourAgeRows', constants.CODETYPE_TOUR_AGE);
@@ -334,6 +335,7 @@ export default function* codeMgt() {
     yield takeLatest(act.GET_PT, getPt);
     yield takeLatest(act.GET_CHANNEL_TP, getChannelTp);
     yield takeLatest(act.GET_PRESS_CATE1, getPressCate1);
+    yield takeLatest(act.GET_PRESS_CATE61, getPressCate61);
     yield takeLatest(act.GET_HTTP_METHOD, getHttpMethod);
     yield takeLatest(act.GET_API_TYPE, getApiType);
     yield takeLatest(act.GET_TOUR_AGE, getTourAge);

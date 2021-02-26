@@ -11,7 +11,7 @@ import { GET_SPECIAL, getSpecial, clearSpecial, getSpecialDeptList, saveSpecial,
 import SpecialEditForm from './components/SpecialEditForm';
 
 moment.locale('ko');
-const textReg = /[\*'"]/;
+const textReg = /[\*'"\<\>]+/;
 
 /**
  * 디지털스페셜 등록/수정
@@ -85,10 +85,16 @@ const SpecialEdit = ({ match }) => {
                 isInvalid = isInvalid || true;
             }
             // 제목 체크
-            if (!REQUIRED_REGEX.test(saveObj.pageTitle) || textReg.test(saveObj.pageTitle)) {
+            if (!saveObj.pageTitle || !REQUIRED_REGEX.test(saveObj.pageTitle)) {
                 errList.push({
                     field: 'pageTitle',
                     reason: '제목을 입력하세요',
+                });
+                isInvalid = isInvalid || true;
+            } else if (textReg.test(saveObj.pageTitle)) {
+                errList.push({
+                    field: 'pageTitle',
+                    reason: '특수문자를 입력할 수 없습니다',
                 });
                 isInvalid = isInvalid || true;
             }

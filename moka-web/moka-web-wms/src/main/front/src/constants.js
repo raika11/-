@@ -66,6 +66,8 @@ export const CODETYPE_PT = 'PT';
 export const CODETYPE_CHANNEL_TP = 'CHANNEL_TP';
 // 공통코드 : 등록기사 출판 카테고리
 export const CODETYPE_PRESS_CATE1 = 'PRESS_CATE1';
+// 공통코드 : 중앙선데이 조판 출판 카테고리
+export const CODETYPE_PRESS_CATE61 = 'PRESS_CATE61';
 // 공통코드 : HTTP 메소드
 export const CODETYPE_HTTP_METHOD = 'HTTP_METHOD';
 // 공통코드 : API 타입

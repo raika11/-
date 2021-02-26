@@ -1,10 +1,12 @@
 package jmnet.moka.web.schedule.support.schedule;
 
-import com.google.common.io.Closeables;
 import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
+import jmnet.moka.web.schedule.mvc.gen.repository.GenStatusRepository;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
+import jmnet.moka.web.schedule.mvc.gen.service.GenStatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -14,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -40,6 +40,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     @Autowired
     protected GenContentService jobContentService;
 
+    @Autowired
+    protected GenStatusService jobStatusService;
+
+    @Autowired
+    private GenStatusRepository genStatusRepository;
+
     /**
      * 외부 API URL 호출용
      */
@@ -51,6 +57,8 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
     protected GenContent scheduleInfo;
 
+    protected GenStatus scheduleResult;
+
 
 
     /**
@@ -60,6 +68,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      */
     protected void init(GenContent info) {
         scheduleInfo = info;
+
+        //info에 해당하는 genStatus가 없는 경우 생성
+        scheduleResult = info.getGenStatus();
+        if(scheduleResult == null){
+            scheduleResult = jobStatusService.insertGenStatus(info.getJobSeq());
+        }
     }
 
     /**
@@ -67,6 +81,26 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
      */
     public void finish() {
         // todo 1. 처리 결과 TB_GEN_STATUS 테이블에 update 등 마무리 처리
+
+        //현재 genResult + lastExecdt 만 입력 중
+        scheduleResult.setLastExecDt(new Date());
+        scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
+
+        log.debug("finish : {}", scheduleResult.getGenResult());
+    }
+
+    /**
+     * finish()에서 처리할 스케줄 실행 결과 값 입력
+     */
+    protected void setFinish(boolean success){
+        if(success){
+            //schedule 실행 결과가 성공
+            scheduleResult.setGenResult(200L);
+        }
+        else{
+            //schedule 실행 결과가 실패
+            scheduleResult.setSendResult(500L);
+        }
     }
 
     @Override
@@ -153,7 +187,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
                 //현재 임시파일 저장공간 지정이 없는 관계로 현재 패키지 위치에서 생성/삭제
                 String tempPath = AbstractScheduleJob.class.getResource("").getPath();
-                File tempFile = File.createTempFile("test",".rss", new File(tempPath));
+                File tempFile = File.createTempFile("temp",".rss", new File(tempPath));
                 //File tempFile = File.createTempFile("test",".rss", new File("c:\\Temp"));
 
                 //임시파일에 RSS 스트링 데이터 입력
@@ -193,7 +227,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
             //FTP 연결실패
             else{
                 ftpClient.disconnect();
-                log.error("ftp connect failed : {}", scheduleInfo.getCallUrl());
+                log.error("ftp connect failed : {}", scheduleInfo.getGenTarget().getServerIp());
                 return false;
             }
 

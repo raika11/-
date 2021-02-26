@@ -40,7 +40,10 @@ const AgGrid = forwardRef((props, ref) => {
     /**
      * 기사 제목 저장 후 리스트 다시 조회
      */
-    const afterChangeTitle = () => getArticleList();
+    const afterChangeTitle = () => {
+        getArticleList();
+        setModalShow(false);
+    };
 
     useEffect(() => {
         setRowData(
@@ -119,7 +122,6 @@ const AgGrid = forwardRef((props, ref) => {
                 total={total}
                 page={search.page}
                 size={search.size}
-                showTotalString={false}
                 onChangeSearchOption={onChangeSearchOption}
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 rowSelection="multiple"

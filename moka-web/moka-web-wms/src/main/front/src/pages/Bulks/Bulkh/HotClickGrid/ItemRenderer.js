@@ -1,23 +1,35 @@
-import React, { useCallback } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { MokaInputLabel } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTableEditCancleButton } from '@components';
-import { changeHotClickList, clearHotclicklist } from '@store/bulks';
+import { changeHotClickList, changeHotClickListItem, clearHotclicklist } from '@store/bulks';
 
-const ItemRenderer = ({ itemIndex, title, url }) => {
+const ItemRenderer = forwardRef((props, ref) => {
     const dispatch = useDispatch();
     const { hotClickList } = useSelector((store) => ({
         hotClickList: store.bulks.bulkh.hotclickList.list,
     }));
 
-    // 임시.
-    const handleChangeBulkinputBox = () => {
-        return;
+    const [data, setData] = useState(props.node.data);
+    const [item, setItem] = useState({});
+
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
+    const handleChangeBulkinputBox = (e) => {
+        const { name, value } = e.target;
+        setItem({ ...item, [name]: value });
+        if (data.onChange instanceof Function) {
+            data.onChange({ ...item, [name]: value });
+        }
+        /*data.onChnage({ ...item, [name]: value });*/
     };
 
-    // 삭제 버튼 클릭시 store 변경 처리.
-    const handleClickCancleButton = useCallback(() => {
+    /**
+     * 삭제 버튼 클릭시 store 변경 처리
+     */
+    const handleClickCancle = useCallback(() => {
         // 삭제 하고 난후에 바로 state 를 업데이트 하면 grid row 렌더링과 곂쳐 져서 에러가 남.
         // 시간을 주고 업데이트를 시킴
         dispatch(clearHotclicklist());
@@ -25,44 +37,40 @@ const ItemRenderer = ({ itemIndex, title, url }) => {
         dispatch(
             changeHotClickList(
                 hotClickList.filter(function (e, index) {
-                    return index !== itemIndex;
+                    return index !== item.itemIndex;
                 }),
             ),
         );
         // }, 20);
         // #3
-    }, [dispatch, hotClickList, itemIndex]);
+    }, [dispatch, hotClickList, item.itemIndex]);
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: (props) => {
+                setData(props.node.data);
+                return true;
+            },
+        }),
+        [],
+    );
+
+    useEffect(() => {
+        setItem(data?.item);
+    }, [data]);
 
     return (
-        <>
-            <Form>
-                <Row>
-                    <Col className="align-self-center mb-0 pr-0 pl-2 w-100">{itemIndex + 1}</Col>
-                    <Col xs={10}>
-                        <MokaInputLabel
-                            name="title"
-                            label="타이틀"
-                            labelClassName="ft-14 text-left"
-                            onChange={(e) => handleChangeBulkinputBox(e)}
-                            value={title}
-                            className="mb-2 pl-0 pr-0"
-                        />
-                        <MokaInputLabel
-                            name="url"
-                            label="url"
-                            labelClassName="ft-14 text-left"
-                            onChange={(e) => handleChangeBulkinputBox(e)}
-                            value={url}
-                            className="mb-2 pl-0 pr-0"
-                        />
-                    </Col>
-                    <Col className="d-felx align-self-center text-left mb-0 pl-0">
-                        <MokaTableEditCancleButton onClick={handleClickCancleButton} />
-                    </Col>
-                </Row>
-            </Form>
-        </>
+        <div className="h-100 w-100 d-flex py-1">
+            <div className="flex-fill">
+                <MokaInputLabel name="title" label="타이틀" onChange={handleChangeBulkinputBox} value={item.title} className="mb-1" />
+                <MokaInputLabel name="url" label="URL" onChange={handleChangeBulkinputBox} value={item.url} />
+            </div>
+            <div className="h-100" style={{ width: 23 }}>
+                <MokaTableEditCancleButton onClick={handleClickCancle} />
+            </div>
+        </div>
     );
-};
+});
 
 export default ItemRenderer;

@@ -38,6 +38,9 @@ public class MokaConstants {
     /* Jpa PersistanceUnit Names */
     public static final String PERSISTANCE_UNIT_COMMENT = "COMMENT-PersistenceUnit";
 
+    /* Jpa PersistanceUnit Names */
+    public static final String PERSISTANCE_UNIT_MAIL = "MAIL-PersistenceUnit";
+
     /* moka-core-template 확장 */
     public static String ATTR_REL_CP = "relCp";
     public static String ATTR_MATCH = "match";

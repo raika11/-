@@ -790,7 +790,7 @@ public class BulkJoongangArticle extends BulkArticle {
             contentHtmlDaum = contentHtmlDaum.replace("\r\n<strong>Q :", "\r\n\r\n<strong>Q :");
         }
 
-        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum);
+        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum).trim();
 
         // region 다음카카오 TV팟, tag_photobundle 처리
         // 카카오 TV팟 <iframe> 태그구간 원본치환

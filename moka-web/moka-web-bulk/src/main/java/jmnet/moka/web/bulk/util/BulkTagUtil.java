@@ -135,14 +135,14 @@ public class BulkTagUtil {
         str = ripTag(str, "<table", "/table>");
         str = ripTag(str, "<form", "/form>");
 
-        str = str.replace("(?i)<html(.*|)<body([^>]*)>", "")
-                .replace("(?i)</body(.*)</html>(.*)", "")
-                .replace("(?i)<(style|script|title|link)(.*)</(style|script|title)>", "")
-                .replace("(?i)<[/]*(script|style|title|xmp)>", "")
-                .replace("(?i)([a-z0-9]*script:)", "")
-                .replace("(?i)<[/]*(A|ABBR|ACRONYM|ADDRESS|APPLET|AREA|B|BASE|BASEFONT|BGSOUND|BDO|BIG|BLINK|BLOCKQUOTE|BODY|BR|BUTTON|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|COMMENT|DD|DEL|DFN|DIR|DIV|DL|DT|EM|EMBED|FIELDSET|FONT|FORM|FRAME|FRAMESET|H1|H2|H3|H4|H5|H6|HEAD|HR|HTA:APPLICATION|HTML|IFRAME|IMG|INPUT|INS|ISINDEX|jsp:declaration|jsp:directive|jsp:expression|jsp:fallback|jsp:forward|jsp:getProperty|jsp:include|jsp:param|jsp:params|jsp:plugin|jsp:root|jsp:scriptlet|jsp:setProperty|jsp:useBean|KBD|LABEL|LEGEND|LI|LINK|LISTING|MAP|MARQUEE|MENU|META|MULTICOL|NEXTID|NOBR|NOFRAMES|NOSCRIPT|OBJECT|OL|OPTGROUP|OPTION|P|PARAM|PLAINTEXT|PRE|Q|SAMP|SCRIPT|SELECT|SERVER|SMALL|SOUND|SPACER|SPAN|STRIKE|STRONG|STYLE|SUB|SUP|TABLE|TBODY|TD|TEXTAREA|TEXTFLOW|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL|VAR|WBR|XMP)[^>]*>","")
-                .replace("(?i)<(\\?|%)", "")
-                .replace("(?i)(\\?|%)>", "");
+        str = str.replaceAll("(?i)<html(.*|)<body([^>]*)>", "")
+                .replaceAll("(?i)</body(.*)</html>(.*)", "")
+                .replaceAll("(?i)<(style|script|title|link)(.*)</(style|script|title)>", "")
+                .replaceAll("(?i)<[/]*(script|style|title|xmp)>", "")
+                .replaceAll("(?i)([a-z0-9]*script:)", "")
+                .replaceAll("(?i)<[/]*(A|ABBR|ACRONYM|ADDRESS|APPLET|AREA|B|BASE|BASEFONT|BGSOUND|BDO|BIG|BLINK|BLOCKQUOTE|BODY|BR|BUTTON|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|COMMENT|DD|DEL|DFN|DIR|DIV|DL|DT|EM|EMBED|FIELDSET|FONT|FORM|FRAME|FRAMESET|H1|H2|H3|H4|H5|H6|HEAD|HR|HTA:APPLICATION|HTML|IFRAME|IMG|INPUT|INS|ISINDEX|jsp:declaration|jsp:directive|jsp:expression|jsp:fallback|jsp:forward|jsp:getProperty|jsp:include|jsp:param|jsp:params|jsp:plugin|jsp:root|jsp:scriptlet|jsp:setProperty|jsp:useBean|KBD|LABEL|LEGEND|LI|LINK|LISTING|MAP|MARQUEE|MENU|META|MULTICOL|NEXTID|NOBR|NOFRAMES|NOSCRIPT|OBJECT|OL|OPTGROUP|OPTION|P|PARAM|PLAINTEXT|PRE|Q|SAMP|SCRIPT|SELECT|SERVER|SMALL|SOUND|SPACER|SPAN|STRIKE|STRONG|STYLE|SUB|SUP|TABLE|TBODY|TD|TEXTAREA|TEXTFLOW|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL|VAR|WBR|XMP)[^>]*>","")
+                .replaceAll("(?i)<([?%])", "")
+                .replaceAll("(?i)([?%])>", "");
 
         str = ripTag(str, "<!--", "-->");
 

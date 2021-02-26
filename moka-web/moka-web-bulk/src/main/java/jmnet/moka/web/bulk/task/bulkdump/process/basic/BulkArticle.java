@@ -216,12 +216,17 @@ public abstract class BulkArticle implements Serializable {
         this.bulkDumpEnvCopyright = bulkDumpEnvCopyright;
 
         if( !McpString.isNullOrEmpty(bulkDumpEnvCopyright.getCrHtml())) {
-
             bulkDumpEnvCopyright.setCrHtml(bulkDumpEnvCopyright.getCrHtml()
                                                                .replace("{_TAB_}", "\t")
                                                                .replace("{_CRLF_}", "\r\n"));
-            this.copyrightText.setData(bulkDumpEnvCopyright.getCrHtml());
             this.copyrightHtml.setData(bulkDumpEnvCopyright.getCrHtml());
+        }
+
+        if( !McpString.isNullOrEmpty(bulkDumpEnvCopyright.getCrTxt())) {
+            bulkDumpEnvCopyright.setCrTxt(bulkDumpEnvCopyright.getCrTxt()
+                                                               .replace("{_TAB_}", "\t")
+                                                               .replace("{_CRLF_}", "\r\n"));
+            this.copyrightText.setData(bulkDumpEnvCopyright.getCrTxt());
         }
 
         if( !McpString.isNullOrEmpty(bulkDumpEnvCopyright.getCrHtmlNaver())) {

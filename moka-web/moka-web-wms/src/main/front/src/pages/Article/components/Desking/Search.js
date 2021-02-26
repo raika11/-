@@ -144,7 +144,14 @@ const Search = (props) => {
                             그룹지정
                         </Button>
                         {/* 그룹지정 변경 모달 */}
-                        <ChangeArtGroupModal show={modalShow} onHide={() => setModalShow(false)} onSave={onChangeGroupNumber} />
+                        <ChangeArtGroupModal
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                            onSave={() => {
+                                onChangeGroupNumber();
+                                setModalShow(false);
+                            }}
+                        />
                     </React.Fragment>
                 )}
             </Form.Row>

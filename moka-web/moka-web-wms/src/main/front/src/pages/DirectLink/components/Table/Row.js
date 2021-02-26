@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { MokaImage, MokaIcon } from '@components';
 
 const Row = ({ data, onRowClicked, selected, lastRow }) => {
+    const [regInfo, setRegInfo] = useState(''); // 등록자명, 아이디
+    const [modInfo, setModInfo] = useState(''); // 수정자명, 아이디
+
+    useEffect(() => {
+        if (data.regMember) {
+            let w = `${data.regMember?.memberNm || ''}`;
+            w += data.regMember?.memberId ? `(${data.regMember?.memberId})` : '';
+            setRegInfo(w);
+        }
+        if (data.modMember) {
+            let w = `${data.modMember?.memberNm || ''}`;
+            w += data.modMember?.memberId ? `(${data.modMember?.memberId})` : '';
+            setModInfo(w);
+        }
+    }, [data.regMember, data.modMember]);
+
     return (
         <div
             className={clsx('table-row input-border p-2 d-flex cursor-pointer', {
@@ -60,13 +76,13 @@ const Row = ({ data, onRowClicked, selected, lastRow }) => {
                 <div className="d-flex">
                     <div style={{ width: 272 }}>
                         <p className="mb-0">
-                            등록일&nbsp;{(data.regDt || '').slice(0, -3)}&nbsp;{data.regId}
+                            등록일&nbsp;{(data.regDt || '').slice(0, -3)}&nbsp;{regInfo}
                         </p>
                     </div>
                     <div style={{ width: 272 }}>
                         {data.modDt && (
                             <p className="mb-0">
-                                수정일&nbsp;{(data.modDt || '').slice(0, -3)}&nbsp;{data.modId}
+                                수정일&nbsp;{(data.modDt || '').slice(0, -3)}&nbsp;{modInfo}
                             </p>
                         )}
                     </div>

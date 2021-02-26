@@ -176,7 +176,7 @@ public class BulkSundayArticle extends BulkArticle {
             contentHtmlDaum = contentHtmlDaum.replace("\r\n<strong>Q :", "\r\n\r\n<strong>Q :");
         }
 
-        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum);
+        contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum).trim();
 
         //다음카카오 이미지정렬(tag_photobundle)  케이스
         for (String photoBundleKey : daumPhotoBundleMap.keySet()) {

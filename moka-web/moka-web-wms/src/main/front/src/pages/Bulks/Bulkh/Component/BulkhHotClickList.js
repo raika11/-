@@ -148,7 +148,8 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
             <MokaCard
                 width={380}
                 loading={loading}
-                className={'custom-scroll mr-gutter flex-fill'}
+                className="flex-fill mr-gutter"
+                bodyClassName="overflow-hidden"
                 titleAs={
                     <>
                         <Row>
@@ -165,7 +166,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                                 </Col>
                             </Col>
                             <Col xs={2} className="p-0 pt-1">
-                                <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={() => handleClickHistoryModalButton()}>
+                                <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickHistoryModalButton}>
                                     편집정보
                                 </Button>
                             </Col>
@@ -180,18 +181,14 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                     { text: '임시저장', variant: 'positive', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
                 ]}
             >
-                <Row>
-                    <Col className="w-100 text-center">
-                        <div
-                            className={clsx('component-work component-hot-click', 'border-top', 'pt-0', {
-                                disabled: false,
-                            })}
-                            id={`agGrid-0`}
-                        >
-                            <HotClickAgGrid componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-                        </div>
-                    </Col>
-                </Row>
+                <div
+                    className={clsx('h-100 overflow-hidden component-work component-hot-click border-top pt-0', {
+                        disabled: false,
+                    })}
+                    id={`agGrid-0`}
+                >
+                    <HotClickAgGrid componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
+                </div>
             </MokaCard>
             <BulkhHistoryModal show={historyModalShow} onHide={() => setHistoryModalShow(false)} />
         </>

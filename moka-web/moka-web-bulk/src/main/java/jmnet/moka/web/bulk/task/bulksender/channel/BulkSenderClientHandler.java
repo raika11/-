@@ -86,17 +86,17 @@ public class BulkSenderClientHandler implements Runnable{
                             continue;
                         TotalVo<BulkDumpJobVo> totalVo = new TotalVo<>(bulkDumpJob);
 
-                        this.bulkSenderService.insertBulkPortalLog(totalVo, SenderStatus.Processing,
+                        insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Processing,
                                 BulkStringUtil.format("{} Bulk Sender Start {}", bulkDumpJob.getCpName(), f.getName()));
 
                         if( doBulkFtpSend( totalVo ) ) {
                             //noinspection ResultOfMethodCallIgnored
                             f.delete();
-                            this.bulkSenderService.insertBulkPortalLog(totalVo, SenderStatus.Complete,
+                            insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Complete,
                                     BulkStringUtil.format("{} Bulk Sender End {}", bulkDumpJob.getCpName(), f.getName()));
                         }
                         else
-                            this.bulkSenderService.insertBulkPortalLog(totalVo, SenderStatus.Error,
+                            insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Error,
                                     BulkStringUtil.format("{} Bulk Sender Error !! {}", bulkDumpJob.getCpName(), f.getName()), true);
                     }
                     catch (Exception e) {
@@ -140,5 +140,34 @@ public class BulkSenderClientHandler implements Runnable{
         } catch (Exception ex2) {
             // do nothing
         }
+    }
+
+    private void insertBulkPortalLog(BulkSenderService bulkSenderService, TotalVo<BulkDumpJobVo> totalVo, int status, String message)
+            throws InterruptedException {
+        insertBulkPortalLog( bulkSenderService, totalVo, status, message, false );
+    }
+
+    private void insertBulkPortalLog(BulkSenderService bulkSenderService, TotalVo<BulkDumpJobVo> totalVo, int status, String message, boolean isError)
+            throws InterruptedException {
+        int retryCount = bulkSenderTask.getRetryCount();
+        do {
+            try {
+                bulkSenderService.insertBulkPortalLog(totalVo, status, message, isError);
+                break;
+            }catch (Exception e) {
+                log.error("BulkSenderClientHandler insertBulkLog Exception {}", e.getMessage());
+            }
+
+            if (--retryCount > 0) {
+                totalVo.logError("BulkSenderClientHandler Exception retry {} ", bulkSenderTask.getRetryCount() - retryCount + 1);
+                Thread.sleep(bulkSenderTask.getSleepTime());
+            }
+        } while (retryCount > 0);
+
+        if( status != SenderStatus.Error )
+            return;
+
+        final SlackMessageService slackMessageService = bulkSenderTask.getTaskManager().getSlackMessageService();
+        slackMessageService.sendSms( "Bulk Sender", message);
     }
 }

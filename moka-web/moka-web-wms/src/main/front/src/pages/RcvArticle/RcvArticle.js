@@ -35,7 +35,7 @@ const RcvArticle = ({ match }) => {
                 </Suspense>
             </MokaCard>
 
-            <Route path={[`${match.path}/:rid/:isRcv`]} render={() => <RcvArticleEdit match={match} />} />
+            <Route path={[`${match.path}/:rid/:registerable`]} render={() => <RcvArticleEdit match={match} />} />
         </div>
     );
 };

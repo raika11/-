@@ -5,12 +5,13 @@ import moment from 'moment';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInput, MokaInputLabel } from '@/components';
+import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
 import { getTourAge } from '@store/codeMgt';
 import { getTourSetup, putTourApply, getTourApply, deleteTourApply, getTourDenyPossibleList, postResetPwd } from '@/store/tour';
 import toast from '@/utils/toastUtil';
+import { toTourReservationMailPreviewHTML } from '@utils/convertUtil';
 
-const TourListEdit = forwardRef(({ match }, ref) => {
+const TourListEdit = forwardRef(({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const tourApply = useSelector((store) => store.tour.tourApply);
@@ -60,7 +61,7 @@ const TourListEdit = forwardRef(({ match }, ref) => {
     /**
      * 수정
      */
-    const onSave = useCallback(() => {
+    const handleClickSave = useCallback(() => {
         let savetemp = {
             ...temp,
             tourDate: moment(temp.tourDate).format('YYYY-MM-DD HH:mm:ss'),
@@ -83,7 +84,7 @@ const TourListEdit = forwardRef(({ match }, ref) => {
     /**
      * 삭제
      */
-    const onDelete = useCallback(() => {
+    const handleClickDelete = useCallback(() => {
         // messageBox.confirm('코드를 삭제하시겠습니까?', () => {
         dispatch(
             deleteTourApply({
@@ -100,7 +101,21 @@ const TourListEdit = forwardRef(({ match }, ref) => {
         );
         // });
     }, [dispatch, history, match.path, temp.tourSeq]);
+    /**
+     * 취소 버튼
+     */
+    const handleClickCancel = () => {
+        history.push(match.url);
+    };
 
+    /**
+     * 메일 미리보기 버튼
+     */
+    const handleClickPreview = (temp) => {
+        const previewMail = window.open(``, '메일 미리보기');
+        previewMail.document.body.innerHTML = toTourReservationMailPreviewHTML(temp);
+    };
+    /*
     useImperativeHandle(
         ref,
         () => ({
@@ -108,7 +123,7 @@ const TourListEdit = forwardRef(({ match }, ref) => {
             onDelete: onDelete,
         }),
         [onSave, onDelete],
-    );
+    );*/
 
     useEffect(() => {
         if (Object.keys(tourApply).length < 1) {
@@ -150,142 +165,174 @@ const TourListEdit = forwardRef(({ match }, ref) => {
     }, [dispatch, tourSetup]);
 
     return (
-        <Form>
-            <Form.Row className="mb-2">
-                <div style={{ width: 280 }}>
-                    <MokaInputLabel as="select" label="신청 일시" className="mb-0 mr-2" value={temp.tourDate} onChange={handleChangeValue}>
-                        {tourPossibleList.map((date, idx) => (
-                            <option key={idx} value={idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}>
-                                {idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}
-                            </option>
-                        ))}
-                    </MokaInputLabel>
-                </div>
-                <div style={{ width: 120 }}>
-                    <MokaInput as="select" name="tourTime" value={temp.tourTime} onChange={handleChangeValue}>
-                        <option value="10">오전 10시</option>
-                        <option value="14">오후 2시</option>
-                    </MokaInput>
-                </div>
-            </Form.Row>
-            <div style={{ width: 220 }}>
-                <MokaInputLabel as="select" label="신청 상태" className="mb-2" value={temp.tourStatus} name="tourStatus" onChange={handleChangeValue}>
-                    {tourStatus &&
-                        tourStatus.map((s) => (
-                            <option key={s.code} value={s.code}>
-                                {s.name}
-                            </option>
-                        ))}
-                </MokaInputLabel>
-            </div>
-            {temp.tourStatus === 'R' && (
-                <MokaInputLabel
-                    as="textarea"
-                    label="반려 사유"
-                    className="mb-2"
-                    inputClassName="resize-none"
-                    inputProps={{ rows: 4 }}
-                    value={temp.returnReason}
-                    name="returnReason"
-                    onChange={handleChangeValue}
-                />
-            )}
-            <div style={{ width: 400 }}>
-                <MokaInputLabel label="단체명" className="mb-2" name="tourGroupNm" value={temp.tourGroupNm} onChange={handleChangeValue} />
-            </div>
-            <Form.Row className="mb-2">
-                <div style={{ width: 280 }}>
-                    <MokaInputLabel as="select" label="견학 인원" className="mb-0 mr-2" value={temp.tourAge} name="tourAge" onChange={handleChangeValue}>
-                        {tourAgeRows &&
-                            tourAgeRows.map((a) => (
-                                <option key={a.id} value={a.id}>
-                                    {a.name}
+        <MokaCard
+            className="flex-fill"
+            title="견학 신청서"
+            footerClassName="justify-content-center"
+            footer
+            footerButtons={[
+                {
+                    text: '수정',
+                    variant: 'positive',
+                    className: 'mr-1',
+                    onClick: handleClickSave,
+                },
+                {
+                    text: '삭제',
+                    variant: 'negative',
+                    className: 'mr-1',
+                    onClick: handleClickDelete,
+                },
+                {
+                    text: '메일 미리보기',
+                    variant: 'outline-neutral',
+                    className: 'mr-1',
+                    onClick: () => handleClickPreview(temp),
+                },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleClickCancel,
+                },
+            ]}
+        >
+            <Form>
+                <Form.Row className="mb-2">
+                    <div style={{ width: 280 }}>
+                        <MokaInputLabel as="select" label="신청 일시" className="mb-0 mr-2" value={temp.tourDate} onChange={handleChangeValue}>
+                            {tourPossibleList.map((date, idx) => (
+                                <option key={idx} value={idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}>
+                                    {idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}
+                                </option>
+                            ))}
+                        </MokaInputLabel>
+                    </div>
+                    <div style={{ width: 120 }}>
+                        <MokaInput as="select" name="tourTime" value={temp.tourTime} onChange={handleChangeValue}>
+                            <option value="10">오전 10시</option>
+                            <option value="14">오후 2시</option>
+                        </MokaInput>
+                    </div>
+                </Form.Row>
+                <div style={{ width: 220 }}>
+                    <MokaInputLabel as="select" label="신청 상태" className="mb-2" value={temp.tourStatus} name="tourStatus" onChange={handleChangeValue}>
+                        {tourStatus &&
+                            tourStatus.map((s) => (
+                                <option key={s.code} value={s.code}>
+                                    {s.name}
                                 </option>
                             ))}
                     </MokaInputLabel>
                 </div>
-                <div style={{ width: 120 }}>
-                    <MokaInput as="select" name="tourPersons" value={temp.tourPersons} onChange={handleChangeValue}>
-                        {[...Array(personNum)].map((d, idx) => {
-                            return (
-                                <option key={idx} value={idx + tourSetup.tourNumFrom}>
-                                    {idx + tourSetup.tourNumFrom}명
-                                </option>
-                            );
-                        })}
-                    </MokaInput>
-                </div>
-            </Form.Row>
-            <MokaInputLabel
-                as="textarea"
-                label="견학 목적"
-                inputClassName=" resize-none"
-                inputProps={{ rows: 4 }}
-                value={temp.tourPurpose}
-                name="tourPurpose"
-                onChange={handleChangeValue}
-            />
-
-            <hr className="divider" />
-
-            <MokaInputLabel label="신청자 정보" className="mb-2" as="none" />
-            <Form.Row className="mb-2">
-                <MokaInputLabel
-                    label="성명"
-                    className="mb-0 mr-2"
-                    inputProps={{ readOnly: true, plaintext: true }}
-                    name="writerNm"
-                    value={temp.writerNm}
-                    onChange={handleChangeValue}
-                />
-                <MokaInputLabel
-                    label="연락처"
-                    className="mb-0"
-                    inputProps={{ readOnly: true, plaintext: true }}
-                    name="writerPhone"
-                    value={temp.writerPhone}
-                    onChange={handleChangeValue}
-                />
-            </Form.Row>
-            <MokaInputLabel
-                label="이메일"
-                className="mb-2"
-                inputProps={{ readOnly: true, plaintext: true }}
-                name="writerEmail"
-                value={temp.writerEmail}
-                onChange={handleChangeValue}
-            />
-            <Form.Row className="mb-2">
-                <Col xs={6} className="px-0">
+                {temp.tourStatus === 'R' && (
                     <MokaInputLabel
-                        label="비밀번호\n(4자리)"
-                        inputProps={{ readOnly: true }}
-                        className="mb-0 mr-2"
-                        name="writerPwd"
-                        type="password"
-                        value={temp.writerPwd}
+                        as="textarea"
+                        label="반려 사유"
+                        className="mb-2"
+                        inputClassName="resize-none"
+                        inputProps={{ rows: 4 }}
+                        value={temp.returnReason}
+                        name="returnReason"
                         onChange={handleChangeValue}
                     />
-                </Col>
-                <Col xs={6} className="px-0 d-flex align-items-center">
-                    <Button variant="negative" size="sm" onClick={handleClickReset}>
-                        비밀번호 초기화
-                    </Button>
-                </Col>
-            </Form.Row>
+                )}
+                <div style={{ width: 400 }}>
+                    <MokaInputLabel label="단체명" className="mb-2" name="tourGroupNm" value={temp.tourGroupNm} onChange={handleChangeValue} />
+                </div>
+                <Form.Row className="mb-2">
+                    <div style={{ width: 280 }}>
+                        <MokaInputLabel as="select" label="견학 인원" className="mb-0 mr-2" value={temp.tourAge} name="tourAge" onChange={handleChangeValue}>
+                            {tourAgeRows &&
+                                tourAgeRows.map((a) => (
+                                    <option key={a.id} value={a.id}>
+                                        {a.name}
+                                    </option>
+                                ))}
+                        </MokaInputLabel>
+                    </div>
+                    <div style={{ width: 120 }}>
+                        <MokaInput as="select" name="tourPersons" value={temp.tourPersons} onChange={handleChangeValue}>
+                            {[...Array(personNum)].map((d, idx) => {
+                                return (
+                                    <option key={idx} value={idx + tourSetup.tourNumFrom}>
+                                        {idx + tourSetup.tourNumFrom}명
+                                    </option>
+                                );
+                            })}
+                        </MokaInput>
+                    </div>
+                </Form.Row>
+                <MokaInputLabel
+                    as="textarea"
+                    label="견학 목적"
+                    inputClassName=" resize-none"
+                    inputProps={{ rows: 4 }}
+                    value={temp.tourPurpose}
+                    name="tourPurpose"
+                    onChange={handleChangeValue}
+                />
 
-            <hr className="divider" />
+                <hr className="divider" />
 
-            <MokaInputLabel label="담당자 정보" className="mb-2" as="none" />
-            <MokaInputLabel label="부서" className="mb-2" name="chargeDept" value={temp.chargeDept} onChange={handleChangeValue} />
-            <MokaInputLabel label="성명" className="mb-2" name="chargeStaffNm" value={temp.chargeStaffNm} onChange={handleChangeValue} />
-            <MokaInputLabel label="연락처" className="mb-2" name="chargePhone" value={temp.chargePhone} onChange={handleChangeValue} />
+                <MokaInputLabel label="신청자 정보" className="mb-2" as="none" />
+                <Form.Row className="mb-2">
+                    <MokaInputLabel
+                        label="성명"
+                        className="mb-0 mr-2"
+                        inputProps={{ readOnly: true, plaintext: true }}
+                        name="writerNm"
+                        value={temp.writerNm}
+                        onChange={handleChangeValue}
+                    />
+                    <MokaInputLabel
+                        label="연락처"
+                        className="mb-0"
+                        inputProps={{ readOnly: true, plaintext: true }}
+                        name="writerPhone"
+                        value={temp.writerPhone}
+                        onChange={handleChangeValue}
+                    />
+                </Form.Row>
+                <MokaInputLabel
+                    label="이메일"
+                    className="mb-2"
+                    inputProps={{ readOnly: true, plaintext: true }}
+                    name="writerEmail"
+                    value={temp.writerEmail}
+                    onChange={handleChangeValue}
+                />
+                <Form.Row className="mb-2">
+                    <Col xs={6} className="px-0">
+                        <MokaInputLabel
+                            label="비밀번호\n(4자리)"
+                            inputProps={{ readOnly: true }}
+                            className="mb-0 mr-2"
+                            name="writerPwd"
+                            type="password"
+                            value={temp.writerPwd}
+                            onChange={handleChangeValue}
+                        />
+                    </Col>
+                    <Col xs={6} className="px-0 d-flex align-items-center">
+                        <Button variant="negative" size="sm" onClick={handleClickReset}>
+                            비밀번호 초기화
+                        </Button>
+                    </Col>
+                </Form.Row>
 
-            <div className="mt-3 color-secondary">
-                <p className="m-0">※ 최초 한번의 승인/반려 시에만 메일이 발송됩니다.</p>
-                <p className="m-0">※ 신청자의 이메일 정보는 아이디 개념이라 수정할 수 없습니다.</p>
-            </div>
-        </Form>
+                <hr className="divider" />
+
+                <MokaInputLabel label="담당자 정보" className="mb-2" as="none" />
+                <MokaInputLabel label="부서" className="mb-2" name="chargeDept" value={temp.chargeDept} onChange={handleChangeValue} />
+                <MokaInputLabel label="성명" className="mb-2" name="chargeStaffNm" value={temp.chargeStaffNm} onChange={handleChangeValue} />
+                <MokaInputLabel label="연락처" className="mb-2" name="chargePhone" value={temp.chargePhone} onChange={handleChangeValue} />
+
+                <div className="mt-3 color-secondary">
+                    <p className="m-0">※ 최초 한번의 승인/반려 시에만 메일이 발송됩니다.</p>
+                    <p className="m-0">※ 신청자의 이메일 정보는 아이디 개념이라 수정할 수 없습니다.</p>
+                </div>
+            </Form>
+        </MokaCard>
     );
 });
 

@@ -4,6 +4,7 @@
 package jmnet.moka.core.tps.mvc.directlink.service;
 
 import java.util.Optional;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.tps.mvc.directlink.dto.DirectLinkSearchDTO;
@@ -53,6 +54,7 @@ public class DirectLinkServiceImpl implements DirectLinkService {
     @Override
     @Transactional
     public DirectLink updateDirectLink(DirectLink directLink) {
+        directLink.setModDt(McpDate.now());
         return directLinkRepository.save(directLink);
     }
 

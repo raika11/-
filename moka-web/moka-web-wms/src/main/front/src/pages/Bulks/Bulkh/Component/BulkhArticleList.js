@@ -78,7 +78,7 @@ const BulkhArticleList = ({ componentAgGridInstances }) => {
     };
 
     return (
-        <MokaCard titleClassName="mb-0" width={850} loading={null} header={false} className={'custom-scroll mr-gutter flex-fill'}>
+        <MokaCard width={850} loading={null} header={false} className="flex-fill">
             <ArticleList className="flex-fill" selectedComponent={{}} dropTargetAgGrid={componentAgGridInstances} onDragStop={handleArticleDragStop} />
         </MokaCard>
     );

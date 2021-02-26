@@ -211,7 +211,6 @@ const EditFeedModal = (props) => {
                 {/* 사용여부 */}
                 <MokaInputLabel
                     label="사용여부"
-                    labelWidth={72}
                     className="mb-2"
                     id="mic-feed-usedYn"
                     as="switch"
@@ -223,7 +222,7 @@ const EditFeedModal = (props) => {
                 {/* 피드타입 */}
                 <Form.Row className="mb-2">
                     <Col xs={5} className="p-0">
-                        <MokaInputLabel label="피드타입" labelWidth={72} as="select" name="relDiv" value={feed.answerRel?.relDiv} onChange={handleChangeValue}>
+                        <MokaInputLabel label="피드타입" as="select" name="relDiv" value={feed.answerRel?.relDiv} onChange={handleChangeValue}>
                             <option hidden>선택</option>
                             {ANSWER_REL_DIV.map((div) => (
                                 <option value={div.code} key={div.code}>
@@ -235,17 +234,16 @@ const EditFeedModal = (props) => {
                 </Form.Row>
 
                 {/* 제목 */}
-                <MokaInputLabel label="제목" labelWidth={72} className="mb-2" name="answTitle" value={feed.answTitle} onChange={handleChangeValue} />
+                <MokaInputLabel label="제목" className="mb-2" name="answTitle" value={feed.answTitle} onChange={handleChangeValue} />
 
                 {/* 내용 */}
-                <MokaInputLabel label="내용" labelWidth={72} as="textarea" inputProps={{ rows: 3 }} name="answMemo" value={feed.answMemo} onChange={handleChangeValue} />
+                <MokaInputLabel label="내용" as="textarea" inputProps={{ rows: 3 }} name="answMemo" value={feed.answMemo} onChange={handleChangeValue} />
 
                 {/* 피드 타입별 입력(이미지) */}
                 {feed.answerRel?.relDiv === 'I' && (
                     <MokaInputLabel
                         className="mt-2"
                         ref={imgRef}
-                        labelWidth={72}
                         label={
                             <React.Fragment>
                                 이미지
@@ -266,7 +264,6 @@ const EditFeedModal = (props) => {
                     <MokaInputLabel
                         className="mt-2"
                         label="동영상\n소스코드"
-                        labelWidth={72}
                         as="textarea"
                         inputProps={{ rows: 3 }}
                         name="relUrl"
@@ -282,7 +279,6 @@ const EditFeedModal = (props) => {
                     <React.Fragment>
                         <MokaInputLabel
                             label="페이지 URL"
-                            labelWidth={72}
                             name="relUrl"
                             value={feed.answerRel?.relUrl}
                             className="flex-fill my-2"
@@ -293,7 +289,6 @@ const EditFeedModal = (props) => {
                         <MokaInputLabel
                             className="mb-2"
                             label="페이지 제목"
-                            labelWidth={72}
                             name="artTitle"
                             value={feed.answerRel?.artTitle}
                             onChange={handleChangeValue}
@@ -302,7 +297,6 @@ const EditFeedModal = (props) => {
                         />
                         <MokaInputLabel
                             label="페이지 요약"
-                            labelWidth={72}
                             as="textarea"
                             className="my-2"
                             inputProps={{ rows: 3 }}
@@ -313,7 +307,6 @@ const EditFeedModal = (props) => {
                         <div className="d-flex">
                             <MokaInputLabel
                                 as="none"
-                                labelWidth={72}
                                 label={
                                     <React.Fragment>
                                         페이지 이미지

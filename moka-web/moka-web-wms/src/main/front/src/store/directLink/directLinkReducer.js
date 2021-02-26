@@ -25,7 +25,7 @@ export const initialState = {
         viewSDate: null,
         viewEDate: null,
         usedYn: 'Y',
-        fixYn: 'Y',
+        fixYn: 'N',
         linkType: 'N',
     },
     directLinkError: null,
@@ -101,11 +101,6 @@ export default handleActions(
             return produce(state, (draft) => {
                 draft.directLink = initialState.directLink;
                 draft.directLinkError = initialState.directLinkError;
-            });
-        },
-        [act.DELETE_DIRECT_LINK_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.directLinkError = payload;
             });
         },
     },

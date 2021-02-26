@@ -11,6 +11,7 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
+import jmnet.moka.common.utils.dto.ResultMapDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.InvalidDataException;
 import jmnet.moka.core.common.exception.NoDataException;
@@ -137,6 +138,14 @@ public class BulkRestController extends AbstractCommonController {
 
         ResultListDTO<BulkArticleDTO> resultListMessage = new ResultListDTO<>();
 
+        Bulk bulk = naverBulkService
+                .findById(bulkartSeq)
+                .orElseThrow(() -> {
+                    return new NoDataException(msg("tps.bulk.error.no-data"));
+                });
+
+        BulkDTO bulkDTO = modelMapper.map(bulk, BulkDTO.class);
+
         // 조회
         List<BulkArticle> returnValue = naverBulkService.findAllByBulkartSeq(bulkartSeq);
 
@@ -163,7 +172,9 @@ public class BulkRestController extends AbstractCommonController {
         resultListMessage.setList(columnistList);
 
         // 결과값 셋팅
-        ResultDTO<ResultListDTO<BulkArticleDTO>> resultDto = new ResultDTO<>(resultListMessage);
+        ResultMapDTO resultDto = new ResultMapDTO(HttpStatus.OK);
+        resultDto.addBodyAttribute("bulk", bulkDTO);
+        resultDto.addBodyResultListDTO(resultListMessage);
         tpsLogger.success(ActionType.SELECT);
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
@@ -300,7 +311,16 @@ public class BulkRestController extends AbstractCommonController {
             List<BulkArticleDTO> list = validList.getList();
             if (list.size() > 0) {
                 // insert
-                Bulk returnValue = naverBulkService.insertBulk(modelMapper.map(bulkSave, Bulk.class), list);
+                Bulk bulk = modelMapper.map(bulkSave, Bulk.class);
+
+                // 임시저장이면 사용여부 N 저장이면 Y
+                bulk.setUsedYn(MokaConstants.STATUS_SAVE.equals(bulkSave.getStatus()) ? MokaConstants.NO : MokaConstants.YES);
+
+                Bulk returnValue = naverBulkService.insertBulk(bulk, list);
+
+                if (MokaConstants.STATUS_PUBLISH.equals(returnValue.getStatus())) {
+                    naverBulkService.updateArticle(returnValue);
+                }
 
                 // 트랜잭션 완료 후 content 조회 + 입력한 데이터의 content값 변경
                 String content = naverBulkService.getContent(bulkSave);

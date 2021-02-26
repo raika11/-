@@ -42,7 +42,7 @@ public class GenStatus implements Serializable {
      * 작업 번호
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)   //자동생성값이 아니어서 삭제
     @Column(name = "JOB_SEQ", nullable = false)
     private Long jobSeq;
 

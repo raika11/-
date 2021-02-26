@@ -83,6 +83,9 @@ export const getHotclickList = createAction(GET_HOTCLICK_LIST, ({ bulkartSeq }) 
 export const CHANGE_HOTCLICK_LIST = 'bulks/CHANGE_HOTCLICK_LIST';
 export const changeHotClickList = createAction(CHANGE_HOTCLICK_LIST, (actions) => actions);
 
+export const CHANGE_HOT_CLICK_LIST_ITEM = 'bulks/CHANGE_HOT_CLICK_LIST_ITEM';
+export const changeHotClickListItem = createAction(CHANGE_HOT_CLICK_LIST_ITEM);
+
 // 아티클 핫클릭 저장.
 export const [SAVE_HOTCLICK, SAVE_HOTCLICK_SUCCESS, SAVE_HOTCLICK_FAILURE] = createRequestActionTypes('bulks/SAVE_HOTCLICK');
 export const saveHotClick = createAction(SAVE_HOTCLICK, ({ type, hotclicklist, callback }) => ({ type, hotclicklist, callback }));

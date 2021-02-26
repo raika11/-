@@ -66,6 +66,7 @@ const ContentsListGrid = () => {
                         registItem: {
                             regDt: data.modDt && data.modDt.length > 10 ? data.modDt.substr(0, 16) : data.modDt,
                             regName: data.regName,
+                            regId: data.regId,
                         },
                         viewCnt: data.viewCnt,
                         fileItem: {

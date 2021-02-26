@@ -616,6 +616,7 @@ const ChannelEdit = (props) => {
                     <MokaInputLabel label={`관련 기사`} as="none" />
                     <Button
                         variant="searching"
+                        size="sm"
                         className="mr-1"
                         onClick={() => {
                             HandleSearchClick();
@@ -623,7 +624,7 @@ const ChannelEdit = (props) => {
                     >
                         검색
                     </Button>
-                    <Button variant="positive" onClick={() => HandleAddClick()}>
+                    <Button variant="positive" size="sm" onClick={() => HandleAddClick()}>
                         추가
                     </Button>
                 </Form.Row>
@@ -678,27 +679,23 @@ const ChannelEdit = (props) => {
                 </Form.Row>
                 {/* 팟티 에피소드 검색 */}
                 <Form.Row className="mb-2 align-items-center">
-                    <Col xs={9} className="p-0">
-                        <MokaInputLabel
-                            label={`팟티\n(에피소드 연결)`}
-                            className="mb-0"
-                            id="podtyEpsdSrl"
-                            name="podtyEpsdSrl"
-                            placeholder=""
-                            value={editData.podtyEpsdSrl}
-                            onChange={handleEditDataChange}
-                        />
-                    </Col>
-                    <Col xs={3} className="p-0 text-right">
-                        <Button variant="searching" className="mb-0" onClick={handleClickPodtyEpisodeButton}>
-                            팟티 에피소드 검색
-                        </Button>
-                    </Col>
+                    <MokaInputLabel
+                        label={`팟티\n(에피소드 연결)`}
+                        id="podtyEpsdSrl"
+                        className="mr-2 flex-fill"
+                        name="podtyEpsdSrl"
+                        placeholder=""
+                        value={editData.podtyEpsdSrl}
+                        onChange={handleEditDataChange}
+                    />
+                    <Button variant="searching" onClick={handleClickPodtyEpisodeButton}>
+                        팟티 에피소드 검색
+                    </Button>
                 </Form.Row>
                 {/* 에피소드 명 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
-                        <MokaInputLabel label={`에피소드명`} className="mb-0" id="epsdNm" name="epsdNm" placeholder="" value={editData.epsdNm} onChange={handleEditDataChange} />
+                        <MokaInputLabel label={`에피소드명`} id="epsdNm" name="epsdNm" placeholder="" value={editData.epsdNm} onChange={handleEditDataChange} />
                     </Col>
                 </Form.Row>
                 {/* 에피소드 내용 */}
@@ -751,7 +748,7 @@ const ChannelEdit = (props) => {
                 {/* 태그 */}
                 <Form.Row className="mb-2">
                     <Col className="p-0">
-                        <MokaInputLabel label={`태그`} className="mb-0" id="keywords" name="keywords" placeholder="" value={editData.keywords} onChange={handleEditDataChange} />
+                        <MokaInputLabel label={`태그`} id="keywords" name="keywords" placeholder="" value={editData.keywords} onChange={handleEditDataChange} />
                     </Col>
                 </Form.Row>
                 {/* 팟캐스트 구분( 오디오, 비디오 ) */}
@@ -770,7 +767,6 @@ const ChannelEdit = (props) => {
                                 name="jpodType"
                                 onChange={handleEditDataChange}
                                 value="A"
-                                className="mb-0 h-100"
                                 required
                             />
                         </Col>
@@ -786,13 +782,12 @@ const ChannelEdit = (props) => {
                                 name="jpodType"
                                 onChange={handleEditDataChange}
                                 value="V"
-                                className="mb-0 h-100"
                                 required
                             />
                         </Col>
                     </div>
                 </Form.Row>
-                <hr className="vertical-divider" />
+                <hr className="divider" />
                 {/* 팟캐스트 파일 등록. */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel as="none" label="url" />
@@ -911,12 +906,13 @@ const ChannelEdit = (props) => {
                         </Form.Row>
                     </>
                 )}
-                <hr className="vertical-divider" />
+                <hr className="divider" />
                 {/* 진행자( 고정 패널 ) */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`출연진(고정패널)`} as="none" />
                     <Button
                         variant="searching"
+                        size="sm"
                         className="mr-1"
                         onClick={() => {
                             setSelectRepoterType('CP');
@@ -925,7 +921,7 @@ const ChannelEdit = (props) => {
                     >
                         검색
                     </Button>
-                    <Button variant="positive" onClick={() => handleClickRepoterAddButton('CP')}>
+                    <Button variant="positive" size="sm" onClick={() => handleClickRepoterAddButton('CP')}>
                         추가
                     </Button>
                 </Form.Row>
@@ -969,7 +965,7 @@ const ChannelEdit = (props) => {
                                             />
                                         </div>
                                         <div>
-                                            <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete('CP', index)}>
+                                            <Button variant="searching" onClick={() => handleClickReporterDelete('CP', index)}>
                                                 삭제
                                             </Button>
                                         </div>
@@ -993,11 +989,12 @@ const ChannelEdit = (props) => {
                         </Form.Row>
                     );
                 })}
-                <hr className="vertical-divider" />
+                <hr className="divider" />
                 <Form.Row className="mb-2">
                     <MokaInputLabel label={`출연진(게스트)`} as="none" />
                     <Button
                         variant="searching"
+                        size="sm"
                         className="mr-1"
                         onClick={() => {
                             setSelectRepoterType('EG');
@@ -1006,7 +1003,7 @@ const ChannelEdit = (props) => {
                     >
                         검색
                     </Button>
-                    <Button variant="positive" onClick={() => handleClickRepoterAddButton('EG')}>
+                    <Button variant="positive" size="sm" onClick={() => handleClickRepoterAddButton('EG')}>
                         추가
                     </Button>
                 </Form.Row>
@@ -1050,7 +1047,7 @@ const ChannelEdit = (props) => {
                                             />
                                         </div>
                                         <div>
-                                            <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete('EG', index)}>
+                                            <Button variant="searching" onClick={() => handleClickReporterDelete('EG', index)}>
                                                 삭제
                                             </Button>
                                         </div>
@@ -1074,7 +1071,7 @@ const ChannelEdit = (props) => {
                         </Form.Row>
                     );
                 })}
-                <hr className="vertical-divider" />
+                <hr className="divider" />
                 {/* <Form.Row className="mb-2">
                     <MokaInputLabel label={`관련기사`} labelWidth={95} as="none" />
                     <Button xs={12} variant="searching" className="mb-0" onClick={() => handleClickArticleButton()}>

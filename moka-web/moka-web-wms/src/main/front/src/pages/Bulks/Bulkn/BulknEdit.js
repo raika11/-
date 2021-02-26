@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MokaCard, MokaInputLabel, MokaInput } from '@components';
+import { MokaCard, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';

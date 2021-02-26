@@ -3,7 +3,7 @@ import { Form, Col } from 'react-bootstrap';
 import { MokaInputLabel } from '@components';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useDispatch } from 'react-redux';
-import { changeBulkused, clearBulksArticle, getBulkList } from '@store/bulks';
+import { changeBulkused, getBulkList } from '@store/bulks';
 
 // grid 서비스 부분 렌더.
 const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.web.rcv.code.OpCode;
 import jmnet.moka.web.rcv.common.task.Task;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
 import jmnet.moka.web.rcv.exception.RcvDataAccessException;
@@ -169,5 +170,22 @@ public class PubXmlTask extends Task<FileXmlTaskInputData<PubNewsMLTotalVo, PubN
         super.status(map);
         map.put("sourceCode", sourceCode);
         return map;
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    @Override
+    public boolean operation(OpCode opCode, Map<String, String> param, Map<String, Object> responseMap, boolean allFromWeb)
+            throws InterruptedException {
+        if (opCode == OpCode.resume || opCode == OpCode.pause) {
+            if (param.containsKey("sourceCode")) {
+                final String sourceCode = param.get("sourceCode");
+                if( this.sourceCode.equals(sourceCode) ) {
+                    setPause(opCode == OpCode.pause);
+                    return true;
+                }
+            }
+            return false;
+        }
+        return super.operation(opCode, param, responseMap, allFromWeb);
     }
 }

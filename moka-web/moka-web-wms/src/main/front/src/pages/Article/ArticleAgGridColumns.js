@@ -10,7 +10,7 @@ export default [
         width: 150,
         wrapText: true,
         autoHeight: true,
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle: { lineHeight: '18px', display: 'flex', alignItems: 'center' },
         cellRendererFramework: SourceRenderer,
     },
     {
@@ -26,7 +26,7 @@ export default [
         flex: 1,
         width: 100,
         tooltipField: 'artTitle',
-        cellStyle: { lineHeight: '21px', display: 'flex', alignItems: 'center' },
+        cellStyle: { lineHeight: '18px', display: 'flex', alignItems: 'center' },
         wrapText: true,
         autoHeight: true,
         cellRendererFramework: TitleRenderer,

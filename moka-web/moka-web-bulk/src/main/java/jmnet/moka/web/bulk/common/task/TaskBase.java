@@ -100,6 +100,7 @@ public abstract class TaskBase implements Runnable, TaskService {
         map.put("isAlive", isAlive());
         map.put("isPaused", isPause());
         map.put("threadId", getThreadId());
+        map.put("target", this.getClass().getSimpleName());
         return map;
     }
 

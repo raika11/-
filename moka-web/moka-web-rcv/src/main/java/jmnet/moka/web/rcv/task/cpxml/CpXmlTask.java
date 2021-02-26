@@ -261,4 +261,21 @@ public class CpXmlTask extends Task<FileXmlTaskInputData<CpArticleTotalVo, CpArt
         map.put("sourceCode", sourceCode);
         return map;
     }
+
+    @SuppressWarnings("DuplicatedCode")
+    @Override
+    public boolean operation(OpCode opCode, Map<String, String> param, Map<String, Object> responseMap, boolean allFromWeb)
+            throws InterruptedException {
+        if (opCode == OpCode.resume || opCode == OpCode.pause) {
+            if (param.containsKey("sourceCode")) {
+                final String sourceCode = param.get("sourceCode");
+                if( this.sourceCode.equals(sourceCode) ) {
+                    setPause(opCode == OpCode.pause);
+                    return true;
+                }
+            }
+            return false;
+        }
+        return super.operation(opCode, param, responseMap, allFromWeb);
+    }
 }

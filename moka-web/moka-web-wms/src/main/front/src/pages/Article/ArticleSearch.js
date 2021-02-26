@@ -24,7 +24,7 @@ const ArticleSearch = ({ ja, sun }) => {
     const storeSearch = useSelector((store) => store.article.search);
     const pressCate1Rows = useSelector((store) => store.codeMgt.pressCate1Rows);
     const [search, setSearch] = useState(initialState.search);
-    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '60,61' : getLocalItem(ARTICLE_SOURCE_LIST_KEY));
+    const [sourceList, setSourceList] = useState(ja ? '1,3' : sun ? '61' : getLocalItem(ARTICLE_SOURCE_LIST_KEY));
     const [sourceOn, setSourceOn] = useState(false);
     const [error, setError] = useState({});
     const [period, setPeriod] = useState([3, 'months']);
@@ -184,7 +184,7 @@ const ArticleSearch = ({ ja, sun }) => {
         const date = new Date();
         const startServiceDay = moment(date).subtract(period[0], period[1]).startOf('day').format(DB_DATEFORMAT);
         const endServiceDay = moment(date).format(DB_DATEFORMAT);
-        const ns = { ...search, sourceList, startServiceDay, endServiceDay, page: 0 };
+        const ns = { ...initialState.search, sourceList, startServiceDay, endServiceDay, page: 0 };
 
         dispatch(changeSearchOption(ns));
         if (sourceOn) {

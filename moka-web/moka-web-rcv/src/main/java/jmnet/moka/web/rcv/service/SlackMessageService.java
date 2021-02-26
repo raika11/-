@@ -1,5 +1,7 @@
 package jmnet.moka.web.rcv.service;
 
+import java.util.Date;
+
 /**
  * <pre>
  *
@@ -15,4 +17,5 @@ package jmnet.moka.web.rcv.service;
 public interface SlackMessageService {
     void sendSms(String title, String message);
     void pause();
+    Date getPauseTime();
 }

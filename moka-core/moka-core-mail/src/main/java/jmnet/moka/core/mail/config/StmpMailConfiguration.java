@@ -21,6 +21,10 @@ public class StmpMailConfiguration {
     private static final String MAIL_SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required";
     private static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
     private static final String MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
+    private static final String MAIL_SMTP_CONNECTIONTIMEOUT = "mail.smtp.connectiontimeout";
+    private static final String MAIL_SMTP_TIMEOUT = "mail.smtp.timeout";
+    private static final String MAIL_SMTP_WRITETIMEOUT = "mail.smtp.writetimeout";
+
 
 
     @Data
@@ -28,6 +32,9 @@ public class StmpMailConfiguration {
         private boolean auth;
         private boolean startTlsRequired;
         private boolean startTlsEnable;
+        private Long connectiontimeout;
+        private Long timeout;
+        private Long writetimeout;
     }
 
 
@@ -57,6 +64,9 @@ public class StmpMailConfiguration {
         properties.put(MAIL_SMTP_STARTTLS_ENABLE, getSmtp().isStartTlsEnable());
         properties.put(MAIL_SMTP_AUTH, getSmtp().isAuth());
         properties.put(MAIL_DEBUG, true);
+        properties.put(MAIL_SMTP_CONNECTIONTIMEOUT, getSmtp().getConnectiontimeout());
+        properties.put(MAIL_SMTP_TIMEOUT, getSmtp().getTimeout());
+        properties.put(MAIL_SMTP_WRITETIMEOUT, getSmtp().getWritetimeout());
         mailSender.setJavaMailProperties(properties);
         return mailSender;
     }

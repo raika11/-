@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { MokaCard } from '@/components';
 import { clearStore } from '@/store/tour';
 import TourListApplyList from './TourListApplyList';
@@ -10,7 +10,7 @@ import TourListEdit from './TourListEdit';
 /**
  * 견학 신청 목록
  */
-const TourList = ({ match }) => {
+const TourList = ({ match, displayName }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -23,8 +23,8 @@ const TourList = ({ match }) => {
     return (
         <div className="d-flex">
             <Helmet>
-                <title>신청 목록</title>
-                <meta name="description" content="견학 신청 목록 페이지입니다." />
+                <title>{displayName}</title>
+                <meta name="description" content={`견학 ${displayName} 페이지입니다`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 

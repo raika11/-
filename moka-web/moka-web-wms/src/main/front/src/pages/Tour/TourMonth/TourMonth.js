@@ -8,7 +8,7 @@ import TourMonthCalendar from './TourMonthCalendar';
 /**
  * 견학 월별 현황
  */
-const TourMonth = () => {
+const TourMonth = ({ displayName }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -21,8 +21,8 @@ const TourMonth = () => {
     return (
         <>
             <Helmet>
-                <title>월별 현황</title>
-                <meta name="description" content="견학 월별 현황 페이지입니다." />
+                <title>{displayName}</title>
+                <meta name="description" content={`견학 ${displayName} 페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 

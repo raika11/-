@@ -56,12 +56,13 @@ public class MokaBulkRestController {
                 responseMap.put("errorMessage", "No opcode !!");
                 break;
             }
-            if( !param.containsKey("target") ) {
-                responseMap.put("errorMessage", "No Target !!");
-                break;
-            }
-
             final String opCode = param.get("opcode");
+            if( !"list".equals( opCode ) ) {
+                if (!param.containsKey("target")) {
+                    responseMap.put("errorMessage", "No Target !!");
+                    break;
+                }
+            }
             final String target = param.get("target");
             try {
                 success = taskManager.operation( OpCode.valueOf(opCode), target, param, responseMap);

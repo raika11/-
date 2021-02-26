@@ -81,7 +81,7 @@ public abstract class TaskBase implements Runnable, TaskService {
             }
             case list: {
                 if (responseMap != null) {
-                    responseMap.put(getTaskName(), status(new HashMap<>()));
+                    status(responseMap);
                 }
                 break;
             }

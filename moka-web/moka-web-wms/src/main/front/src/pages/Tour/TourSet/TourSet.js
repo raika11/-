@@ -9,7 +9,7 @@ import TourSetEdit from './TourSetEdit';
 /**
  * 견학 기본 설정
  */
-const TourSet = () => {
+const TourSet = ({ displayName }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -23,8 +23,8 @@ const TourSet = () => {
         <>
             <div className="d-flex">
                 <Helmet>
-                    <title>기본 설정</title>
-                    <meta name="description" content="견학 기본 설정 페이지입니다." />
+                    <title>{displayName}</title>
+                    <meta name="description" content={`견학 ${displayName} 페이지입니다.`} />
                     <meta name="robots" content="noindex" />
                 </Helmet>
 

@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
-import { getBulkArticle, GET_BULK_LIST, saveBulkArticle, getBulkList, showPreviewModal } from '@store/bulks';
+import { GET_BULK_LIST, saveBulkArticle, getBulkList, showPreviewModal, getBulkArticle } from '@store/bulks';
 import { changeSpecialCharCode, getSpecialCharCode, saveSpecialCharCode } from '@store/codeMgt';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 import { W3C_URL } from '@/constants';
@@ -39,11 +39,10 @@ const BulknEdit = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const checkBulkSeqNumber = useRef();
+    // const checkBulkSeqNumber = useRef();
     const [modalMShow, setModalMShow] = useState(false);
     // 최초엔 정보 영역이 계속 보여지는 상태여서 disable 기능이 필요했지만
     // 현재는 살아졌다 나타났다 하기 때문에 disable 기능이 필요 없어져서 항상 enable 상태로 변경..
-    const [editState] = useState(false); // edit 상태 true 일때 input 상태가 disable.
     const [bulkArticleRow, setBulkArticleRow] = useState(rowInit); // 선택된 벌크 기사들.
 
     const [tempButton, setTempButton] = useState(false);
@@ -88,48 +87,15 @@ const BulknEdit = (props) => {
         );
     };
 
-    // props 로 전달 받은 edit 상태가 변경 되었을떄 처리.
-    // useEffect(() => {
-    //     const changeEditState = (state) => {
-    //         if (state === 'enable') {
-    //             // setEditState(false);
-    //         } else if (state === 'clear') {
-    //             // clear 는 라우터 이동시 clear
-    //             // setEditState(false);
-    //         } else {
-    //             // setEditState(true);
-    //         }
-    //     };
-    //     changeEditState(props.EditState);
-    // }, [props.EditState]);
-
-    // 리스트 창에서 item 클릭시 변경되는 라우터 로 문구 정보를 가지고 오는 처리.
+    // 현재 선택한 bulkartSeq 가 없을떄 ( 등록 상태.).
     useEffect(() => {
-        // console.log(params.bulkartSeq);
-        // console.log(params, history);
-        // const getCheckGetBulks = (seq) => {
-        //     if (checkBulkSeqNumber.current !== seq) {
-        //         checkBulkSeqNumber.current = seq;
-        //         props.HandleEditEnable();
-        //     }
-        // };
-        // 현재 에디트 상태 일때
-        // if (checkBulkSeqNumber.current !== undefined && params.bulkartSeq === undefined) {
-        // setBulkArticleRow(rowInit);
-        // checkBulkSeqNumber.current = undefined;
-        // } else {
-        // getCheckGetBulks(params.bulkartSeq);
-        // }
-
         // 등록 상태.
-        if (params.bulkartSeq === undefined) {
+        if (bulkartSeq === null) {
             setBulkArticleRow(rowInit);
             setTempButton(false);
         }
-        // console.log(props.bulksURL);
-        // params 값이 변경 될때만 실행 되게.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]);
+    }, [bulkartSeq]);
 
     // Redux Store 에서 벌크 기사가 변경이되면 State 에도 변경처리.
     useEffect(() => {
@@ -243,6 +209,11 @@ const BulknEdit = (props) => {
 
                         // 저장 이 완료 되면 리스트를 다시 가지고오기.
                         dispatch(getBulkList());
+                        dispatch(
+                            getBulkArticle({
+                                bulkartSeq: bulkartSeq,
+                            }),
+                        );
                         history.push(`/${bulkPathName}/${bulkartSeq}`);
                     } else {
                         messageBox.alert(message, () => {});
@@ -306,20 +277,17 @@ ${bulkArticleRow
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // props 로 받은 edit 상태가 변경되면 라우터를 이동 시킴. ( edit disabled 변경.)
+    // 최초 로딩시에 파라미터로 bulkartSeq 값이 있다면 벌크 문구 기사를 가지고 온다.
     useEffect(() => {
-        const initEditState = (state) => {
-            if (state === 'clear') {
-                history.push(`/${bulkPathName}`);
-            }
-        };
-
-        initEditState(props.EditState);
-    }, [bulkPathName, history, props.EditState]);
-
-    // useEffect(() => {
-    //     console.log(bulkArticleRow);
-    // }, [bulkArticleRow]);
+        if (props.match.params && props.match.params.bulkartSeq) {
+            dispatch(
+                getBulkArticle({
+                    bulkartSeq: props.match.params.bulkartSeq,
+                }),
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -337,11 +305,12 @@ ${bulkArticleRow
                     { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
                     { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: tempButton === true ? true : false }, //useAuth: true
                     // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
-                    { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), disabled: editState, className: 'mr-05' },
+                    { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },
                 ]}
             >
                 <Form>
+                    {/* select box 로 변경. */}
                     {/* <Form.Row>
                         <Col xs={10} className="justify-content-center align-items-center">
                             <MokaInputLabel
@@ -412,7 +381,6 @@ ${bulkArticleRow
                                             id="title"
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
                                             value={bulkArticleRow[index] ? bulkArticleRow[index].title : ''}
-                                            disabled={editState}
                                         />
                                     </Col>
                                     <Col xs={1}>
@@ -435,7 +403,6 @@ ${bulkArticleRow
                                             className="w-100"
                                             onChange={(e) => handleChangeBulkinputBox(e, index)}
                                             value={bulkArticleRow[index] ? bulkArticleRow[index].url : ''}
-                                            disabled={editState}
                                         />
                                     </Col>
                                 </Form.Row>

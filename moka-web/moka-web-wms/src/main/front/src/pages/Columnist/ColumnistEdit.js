@@ -324,7 +324,7 @@ const ColumnistEdit = ({ history, match }) => {
                 </Form.Row>
 
                 <Form.Row className="mb-1">
-                    <Col xs={4} className="p-0 d-flex">
+                    <Col xs={7} className="p-0 d-flex">
                         <MokaInputLabel
                             label="기자명"
                             className="mr-2"
@@ -335,8 +335,6 @@ const ColumnistEdit = ({ history, match }) => {
                             disabled={editDisabled.columnistNm}
                             required
                         />
-                    </Col>
-                    <Col xs={3}>
                         <Button variant="searching" className="flex-shrink-0" onClick={handleClickReportSearchbutton} disabled={editDisabled.editBoxButton}>
                             기자검색
                         </Button>
@@ -359,8 +357,6 @@ const ColumnistEdit = ({ history, match }) => {
                             isInvalid={error.repSeq}
                             disabled={editDisabled.repSeq}
                         />
-                    </Col>
-                    <Col xs={3}>
                         <Button variant="negative" className="flex-shrink-0" onClick={handleClickDeleterepSeq} disabled={editDisabled.editBoxButton}>
                             삭제
                         </Button>
@@ -386,7 +382,6 @@ const ColumnistEdit = ({ history, match }) => {
                     <Col xs={6} className="p-0">
                         <MokaInputLabel
                             label="이메일"
-                            className="mb-1"
                             name="email1"
                             value={selectRepoterData.email1}
                             onChange={(e) => tempOnchange(e)}
@@ -400,7 +395,6 @@ const ColumnistEdit = ({ history, match }) => {
                     <Col xs={5} className="p-0">
                         <MokaInputLabel
                             label=""
-                            className="mb-0"
                             name="email2"
                             value={selectRepoterData.email2}
                             onChange={(e) => tempOnchange(e)}

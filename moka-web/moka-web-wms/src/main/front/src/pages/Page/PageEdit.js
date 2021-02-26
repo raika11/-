@@ -320,15 +320,15 @@ const PageEdit = ({ onDelete }) => {
                 {/* 버튼 그룹 */}
                 <Form.Group className="mb-3 d-flex justify-content-between">
                     <div className="d-flex">
-                        <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={handleClickW3COpen}>
+                        <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickW3COpen}>
                             W3C
                         </Button>
-                        <Button variant="outline-neutral" className="mr-05" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
+                        <Button variant="outline-neutral" className="mr-1" disabled={btnDisabled} onClick={handleClickPreviewOpen}>
                             미리보기
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button variant="positive" className="mr-05" onClick={handleClickSave}>
+                        <Button variant="positive" className="mr-1" onClick={handleClickSave}>
                             전송
                         </Button>
                         {page.pageSeq && (

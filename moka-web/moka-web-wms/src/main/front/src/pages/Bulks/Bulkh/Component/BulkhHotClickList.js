@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast, { messageBox } from '@/utils/toastUtil';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstances }) => {
     const history = useHistory();
@@ -91,19 +92,23 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
 
     // 재전송.
     const handleClickResendButton = () => {
-        dispatch(
-            saveHotClickResend({
-                bulkartSeq: selectBulkartSeq.current,
-                callback: ({ header: { success, message } }) => {
-                    if (success === true) {
-                        toast.success(message);
-                        dispatch(getHotClickTitle());
-                    } else {
-                        messageBox.alert(message, () => {});
-                    }
-                },
-            }),
-        );
+        if (!topTitleItem.isWait) {
+            dispatch(
+                saveHotClickResend({
+                    bulkartSeq: selectBulkartSeq.current,
+                    callback: ({ header: { success, message } }) => {
+                        if (success === true) {
+                            toast.success(message);
+                            dispatch(getHotClickTitle());
+                        } else {
+                            messageBox.alert(message, () => {});
+                        }
+                    },
+                }),
+            );
+        } else {
+            messageBox.alert('대기 상태에서는 재전송을 할 수 없습니다.\n전송을 먼저 진행해 주세요.');
+        }
     };
 
     // url 변경 되었을떄 리스트 가지고 오기.
@@ -129,9 +134,11 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
         const setTopTitle = ({ send, wait }) => {
             let sendDt = send.regDt && send.regDt.length > 10 ? send.regDt.substr(0, 16) : send.regDt;
             let waitDt = wait.regDt && wait.regDt.length > 10 ? wait.regDt.substr(0, 16) : wait.regDt;
+            const isWait = moment(send.regDt).diff(wait.regDt) < 0;
             setTopTitleItem({
                 send: send && send.regMember && send.regMember.memberId ? `${send.regMember.memberId} | 전송 ${sendDt}` : '',
                 wait: wait && wait.regMember && wait.regMember.memberId ? `${wait.regMember.memberId} | 대기 ${waitDt}` : '',
+                isWait,
             });
 
             // 현재 url 기준으로 선택되어 있지 않으면 대기 기준으로 최근것을 불러 오기.
@@ -162,7 +169,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                             <Col xs={7}>
                                 <Col className="align-self-top text-right p-0">{topTitleItem.send}</Col>
                                 <Col className="align-self-bottom text-right p-0">
-                                    <Form.Label className="text-danger">{topTitleItem.wait}</Form.Label>
+                                    <span className={clsx('', topTitleItem.isWait && 'text-danger')}>{topTitleItem.wait}</span>
                                 </Col>
                             </Col>
                             <Col xs={2} className="p-0 pt-1">

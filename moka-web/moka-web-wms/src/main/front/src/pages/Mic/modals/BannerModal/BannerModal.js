@@ -195,38 +195,36 @@ const BannerModal = (props) => {
 
     return (
         <MokaModal title="다른 주제 공통 배너 관리" height={685} show={show} onHide={handleHide} size="lg" centered>
-            <Container className="p-0 h-100" fluid>
-                <Row className="m-0 h-100">
-                    <Col className="p-0 d-flex flex-column h-100 overflow-hidden flex-shrink-0" style={{ minWidth: 430 }}>
-                        <div className="mb-14 d-flex justify-content-end">
-                            <Button variant="positive" onClick={handleAdd}>
-                                등록
-                            </Button>
-                        </div>
-                        <MokaTable
-                            className="overflow-hidden flex-fill"
-                            columnDefs={columnDefs}
-                            rowData={rowData}
-                            rowHeight={135}
-                            onRowNodeId={(data) => data.bnnrSeq}
-                            onRowClicked={handleRowClicked}
-                            loading={loading}
-                            total={total}
-                            page={search.page}
-                            size={search.size}
-                            selected={selected?.bnnrSeq}
-                            onChangeSearchOption={handleChangeSearchOption}
-                            preventRowClickCell={['usedYn']}
-                            setGridInstance={setInstance}
-                        />
-                    </Col>
-                    {!!editMode && (
-                        <Col className="p-0">
-                            <BannerForm banner={selected} onCancle={handleClickCancel} loading={formLoading} onSave={handleSave} error={error} setError={setError} />
-                        </Col>
-                    )}
-                </Row>
-            </Container>
+            <div className="h-100 d-flex">
+                <div className="d-flex flex-column h-100 overflow-hidden flex-shrink-0" style={{ minWidth: 430 }}>
+                    <div className="mb-14 d-flex justify-content-end">
+                        <Button variant="positive" onClick={handleAdd}>
+                            등록
+                        </Button>
+                    </div>
+                    <MokaTable
+                        className="overflow-hidden flex-fill"
+                        columnDefs={columnDefs}
+                        rowData={rowData}
+                        rowHeight={135}
+                        onRowNodeId={(data) => data.bnnrSeq}
+                        onRowClicked={handleRowClicked}
+                        loading={loading}
+                        total={total}
+                        page={search.page}
+                        size={search.size}
+                        selected={selected?.bnnrSeq}
+                        onChangeSearchOption={handleChangeSearchOption}
+                        preventRowClickCell={['usedYn']}
+                        setGridInstance={setInstance}
+                    />
+                </div>
+                {!!editMode && (
+                    <div>
+                        <BannerForm banner={selected} onCancle={handleClickCancel} loading={formLoading} onSave={handleSave} error={error} setError={setError} />
+                    </div>
+                )}
+            </div>
         </MokaModal>
     );
 };

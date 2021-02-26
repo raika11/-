@@ -406,7 +406,7 @@ $modal-header-padding: $modal-spacer-y $modal-spacer-x !default;
 $modal-inner-padding: $modal-spacer-x !default;
 $modal-xl: 1200px !default;
 $modal-lg: 900px !default;
-$modal-md: 600px !default;
+$modal-md: inherit !default;	// 기본값
 $modal-sm: 400px !default;
 $modal-transition: transform .25s ease-out !default;
 

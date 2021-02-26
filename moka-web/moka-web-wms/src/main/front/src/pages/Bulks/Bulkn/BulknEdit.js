@@ -92,7 +92,6 @@ const BulknEdit = (props) => {
         // 등록 상태.
         if (bulkartSeq === null) {
             setBulkArticleRow(rowInit);
-            setTempButton(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulkartSeq]);
@@ -116,10 +115,12 @@ const BulknEdit = (props) => {
                 };
             });
 
-            if (bulk.usedYn === 'N') {
+            if (bulkartSeq == null) {
+                setTempButton(false);
+            } else if (bulk.usedYn === 'N') {
                 setTempButton(false);
             } else {
-                tempButton === false && setTempButton(true);
+                setTempButton(true);
             }
 
             setBulkArticleRow(tempList);

@@ -46,12 +46,7 @@ function toSnsMetaViewData({ snsShare, article }) {
             title: unescapeHtmlArticle(commonUtil.setDefaultValue(fbMetaTitle)),
             summary: unescapeHtmlArticle(commonUtil.setDefaultValue(fbMetaSummary)),
             postMessage: unescapeHtmlArticle(commonUtil.setDefaultValue(fbMetaPostMsg)),
-            imgUrl: toMetaImage(
-                commonUtil.setDefaultValue(
-                    fbMetaImage,
-                    'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
-                ),
-            ),
+            imgUrl: toMetaImage(commonUtil.setDefaultValue(fbMetaImage, '/static/media/img_logo@3x.8a207738.png')),
             isReserve: !commonUtil.isEmpty(fbMetaReserveDt),
             reserveDt: fbMetaReserveDt,
         },
@@ -60,12 +55,7 @@ function toSnsMetaViewData({ snsShare, article }) {
             title: unescapeHtmlArticle(commonUtil.setDefaultValue(twMetaTitle)),
             summary: unescapeHtmlArticle(commonUtil.setDefaultValue(twMetaSummary)),
             postMessage: unescapeHtmlArticle(commonUtil.setDefaultValue(twMetaPostMsg)),
-            imgUrl: toMetaImage(
-                commonUtil.setDefaultValue(
-                    twMetaImage,
-                    'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
-                ),
-            ),
+            imgUrl: toMetaImage(commonUtil.setDefaultValue(twMetaImage, '/static/media/img_logo@3x.8a207738.png')),
             isReserve: !commonUtil.isEmpty(twMetaReserveDt),
             reserveDt: twMetaReserveDt,
         },
@@ -73,12 +63,7 @@ function toSnsMetaViewData({ snsShare, article }) {
             serviceFlag: commonUtil.setDefaultValue(serviceFlag, 'N') === 'Y',
             title: unescapeHtmlArticle(commonUtil.setDefaultValue(artTitle)),
             summary: unescapeHtmlArticle(commonUtil.setDefaultValue(artSummary)),
-            imgUrl: toMetaImage(
-                commonUtil.setDefaultValue(
-                    artThumb,
-                    'https://ir.joins.com/?t=k&w=100&h=100u=/news/component/htmlphoto_mmdata/202008/21/317e1fcf-38af-4979-91d5-77d782271002.jpg.tn_120.jpg',
-                ),
-            ),
+            imgUrl: toMetaImage(commonUtil.setDefaultValue(artThumb, '/static/media/img_logo@3x.8a207738.png')),
             regDt: artRegDt,
             snsRegDt: snsRegDt && moment(snsRegDt).format(DB_DATEFORMAT),
         },

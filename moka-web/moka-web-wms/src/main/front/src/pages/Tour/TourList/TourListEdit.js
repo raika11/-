@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -11,7 +11,7 @@ import { getTourSetup, putTourApply, getTourApply, deleteTourApply, getTourDenyP
 import toast from '@/utils/toastUtil';
 import { toTourReservationMailPreviewHTML } from '@utils/convertUtil';
 
-const TourListEdit = forwardRef(({ match }) => {
+const TourListEdit = ({ match }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const tourApply = useSelector((store) => store.tour.tourApply);
@@ -334,6 +334,6 @@ const TourListEdit = forwardRef(({ match }) => {
             </Form>
         </MokaCard>
     );
-});
+};
 
 export default TourListEdit;

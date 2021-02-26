@@ -68,6 +68,7 @@ const JaJopanSearch = () => {
             ...search,
             sourceCode: '1',
         };
+        dispatch(changeJopanSearchOption(ns));
         dispatch(getJopanList({ search: ns }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);

@@ -16,10 +16,8 @@ export const columnDefs = [
     {
         headerName: '이미지',
         field: 'chnlThumb',
-        width: 78,
         cellRenderer: 'imageRenderer',
-        cellStyle: { alignItems: 'center' },
-        // autoHeight: true,
+        width: 78,
     },
     {
         headerName: '채널명',

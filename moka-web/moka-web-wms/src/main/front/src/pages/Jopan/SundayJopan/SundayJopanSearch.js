@@ -68,6 +68,7 @@ const SundayJopanSearch = () => {
             ...search,
             sourceCode: '61',
         };
+        dispatch(changeJopanSearchOption(ns));
         dispatch(getJopanList({ search: ns }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);

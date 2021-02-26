@@ -87,7 +87,7 @@ public class MokaLogTailController {
         }
     }
 
-    @GetMapping(value = "/logTail")
+    @GetMapping(value = "/logTail", produces = "text/plain;charset=UTF-8")
     public ResponseBodyEmitter logTail(
             HttpServletRequest request, HttpServletResponse response ){
         response.setContentType("text/plain;charset=UTF-8");

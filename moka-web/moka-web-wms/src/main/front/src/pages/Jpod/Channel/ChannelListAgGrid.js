@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { MokaTable } from '@components';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 import { columnDefs } from './ChannelListAgGridColumns';
-import ImageRenderer from './ImageRenderer';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -72,20 +71,19 @@ const ChannelListAgGrid = ({ match }) => {
 
     return (
         <MokaTable
+            className="flex-fill overflow-hidden"
             columnDefs={columnDefs}
             rowData={rowData}
-            agGridHeight={630}
+            rowHeight={46}
             onRowNodeId={(data) => data.chnlSeq}
             onRowClicked={(e) => handleClickListRow(e)}
             loading={loading}
             total={total}
             page={search.page}
             size={search.size}
-            rowHeight={46}
             displayPageNum={DISPLAY_PAGE_NUM}
             onChangeSearchOption={handleChangeSearchOption}
             selected={params.chnlSeq}
-            frameworkComponents={{ ImageRenderer: ImageRenderer }}
         />
     );
 };

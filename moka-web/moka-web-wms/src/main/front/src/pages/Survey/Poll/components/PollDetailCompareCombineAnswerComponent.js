@@ -12,16 +12,18 @@ const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) =>
     return (
         <Form.Row className="text-center align-items-center w-100">
             <Col xs={5}>
-                <PollPhotoComponent
-                    width={110}
-                    height={110}
-                    src={items[0].imgUrl}
-                    onChange={(file) => {
-                        handleChangeValue(0, 'imgFile', file, 'file');
-                    }}
-                >
-                    150 x 150
-                </PollPhotoComponent>
+                <div className="d-inline-block text-left">
+                    <PollPhotoComponent
+                        width={110}
+                        height={110}
+                        src={items[0].imgUrl}
+                        onChange={(file) => {
+                            handleChangeValue(0, 'imgFile', file, 'file');
+                        }}
+                    >
+                        150 x 150
+                    </PollPhotoComponent>
+                </div>
                 <MokaInput
                     name="title"
                     value={items[0].title}
@@ -47,16 +49,18 @@ const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) =>
                 VS
             </Col>
             <Col xs={5}>
-                <PollPhotoComponent
-                    width={110}
-                    height={110}
-                    src={items[1].imgUrl}
-                    onChange={(file) => {
-                        handleChangeValue(1, 'imgFile', file, 'file');
-                    }}
-                >
-                    150 x 150
-                </PollPhotoComponent>
+                <div className="d-inline-block text-left">
+                    <PollPhotoComponent
+                        width={110}
+                        height={110}
+                        src={items[1].imgUrl}
+                        onChange={(file) => {
+                            handleChangeValue(1, 'imgFile', file, 'file');
+                        }}
+                    >
+                        150 x 150
+                    </PollPhotoComponent>
+                </div>
                 <MokaInput
                     name="title"
                     value={items[1].title}

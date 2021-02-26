@@ -12,44 +12,48 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
     return (
         <Form.Row className="text-center align-items-center w-100">
             <Col xs={5}>
-                <div>보기 1</div>
-                <PollPhotoComponent
-                    width={110}
-                    height={110}
-                    src={items[0].imgUrl}
-                    onChange={(file) => {
-                        handleChangeValue(0, 'imgFile', file, 'file');
-                    }}
-                >
-                    150 x 150
-                </PollPhotoComponent>
-                {(hasUrl || items[0].linkUrl) && (
-                    <MokaInput
-                        name="linkUrl"
-                        placeholder="url"
-                        value={items[0].linkUrl}
-                        onChange={(e) => {
-                            const { name, value } = e.target;
-                            handleChangeValue(0, name, value);
+                <div className="d-inline-block text-left">
+                    <div>보기 1</div>
+                    <PollPhotoComponent
+                        width={110}
+                        height={110}
+                        src={items[0].imgUrl}
+                        onChange={(file) => {
+                            handleChangeValue(0, 'imgFile', file, 'file');
                         }}
-                    />
-                )}
+                    >
+                        150 x 150
+                    </PollPhotoComponent>
+                    {(hasUrl || items[0].linkUrl) && (
+                        <MokaInput
+                            name="linkUrl"
+                            placeholder="url"
+                            value={items[0].linkUrl}
+                            onChange={(e) => {
+                                const { name, value } = e.target;
+                                handleChangeValue(0, name, value);
+                            }}
+                        />
+                    )}
+                </div>
             </Col>
             <Col xs={2} className="text-center">
                 VS
             </Col>
             <Col xs={5}>
-                <div>보기 2</div>
-                <PollPhotoComponent
-                    width={110}
-                    height={110}
-                    src={items[1].imgUrl}
-                    onChange={(file) => {
-                        handleChangeValue(1, 'imgFile', file, 'file');
-                    }}
-                >
-                    150 x 150
-                </PollPhotoComponent>
+                <div className="d-inline-block text-left">
+                    <div>보기 2</div>
+                    <PollPhotoComponent
+                        width={110}
+                        height={110}
+                        src={items[1].imgUrl}
+                        onChange={(file) => {
+                            handleChangeValue(1, 'imgFile', file, 'file');
+                        }}
+                    >
+                        150 x 150
+                    </PollPhotoComponent>
+                </div>
                 {(hasUrl || items[1].linkUrl) && (
                     <MokaInput
                         name="linkUrl"

@@ -49,6 +49,7 @@ const PollAgGrid = ({ searchOptions, total, pollSeq, rows, loading, onChangeSear
             <MokaTable
                 columnDefs={columnDefs}
                 onRowNodeId={(row) => row.id}
+                headerHeight={50}
                 agGridHeight={585}
                 rowData={rowData}
                 page={searchOptions.page}

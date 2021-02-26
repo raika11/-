@@ -4,7 +4,6 @@ import jmnet.moka.core.common.encrypt.MokaCrypt;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContent;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
-import jmnet.moka.web.schedule.mvc.gen.repository.GenStatusRepository;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
 import jmnet.moka.web.schedule.mvc.gen.service.GenStatusService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +41,6 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
     @Autowired
     protected GenStatusService jobStatusService;
-
-    @Autowired
-    private GenStatusRepository genStatusRepository;
 
     /**
      * 외부 API URL 호출용
@@ -101,6 +97,13 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
             //schedule 실행 결과가 실패
             scheduleResult.setSendResult(500L);
         }
+    }
+
+    /**
+     * finish()에서 처리한 스케쥴 실행 결과 값 전달
+     */
+    public GenStatus getFinish(){
+        return scheduleResult;
     }
 
     @Override

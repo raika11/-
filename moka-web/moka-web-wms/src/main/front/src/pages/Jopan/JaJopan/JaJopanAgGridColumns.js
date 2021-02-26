@@ -5,19 +5,19 @@ export default [
     {
         headerName: '번호',
         field: 'seq',
-        width: 50,
+        width: 40,
         cellStyle: {},
     },
     {
         headerName: '조판날짜',
         field: 'pressDate',
-        width: 100,
+        width: 85,
         cellStyle: {},
     },
     {
         headerName: '호',
         field: 'id.ho',
-        width: 60,
+        width: 50,
         cellStyle: {},
         tooltipField: 'ho',
     },
@@ -31,13 +31,13 @@ export default [
     {
         headerName: '면',
         field: 'id.myun',
-        width: 40,
+        width: 35,
         cellStyle: {},
     },
     {
         headerName: '판',
         field: 'id.pan',
-        width: 40,
+        width: 35,
         cellStyle: {},
     },
     {
@@ -49,15 +49,15 @@ export default [
     {
         headerName: '생성일',
         field: 'regDt',
-        width: 140,
+        width: 135,
         cellStyle: {},
     },
     {
         headerName: '보기',
         field: 'show',
-        width: 60,
-        cellRendererFramework: ({ data }) => {
-            return <ShowButtonRenderer {...data} onClick={() => data.onClick(data)} />;
+        width: 55,
+        cellRendererFramework: (params) => {
+            return <ShowButtonRenderer {...params} onClick={() => params.data.onClick(params.data)} />;
         },
     },
 ];

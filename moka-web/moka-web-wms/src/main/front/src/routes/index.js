@@ -720,6 +720,17 @@ const routes = [
         exact: false,
         strict: true,
     },
+    {
+        path: '/sunday-jopan',
+        name: 'sunday-jopan',
+        displayName: '중앙선데이 조판',
+        component: Jopan,
+        layout: SidebarOpenLayout,
+        side: true,
+        nonResponsive: false,
+        exact: false,
+        strict: true,
+    },
 ];
 
 export default routes;

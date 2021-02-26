@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
 import columnDefs from './JaJopanAgGridColumns';
 import { GET_JOPAN_LIST, changeJopanSearchOption, getJopanList, changeJopan } from '@/store/rcvArticle';
 
-const JaJopanAgGrid = ({ match }) => {
-    const history = useHistory();
+/**
+ * 수신기사 > 중앙일보 조판 AgGrid
+ */
+const JaJopanAgGrid = ({ match, setView }) => {
     const dispatch = useDispatch();
     const total = useSelector((store) => store.rcvArticle.jopanTotal);
     const list = useSelector((store) => store.rcvArticle.jopanList);
     const search = useSelector((store) => store.rcvArticle.jopanSearch);
+    const jopan = useSelector((store) => store.rcvArticle.jopan);
     const loading = useSelector((store) => store.loading[GET_JOPAN_LIST]);
 
     const [rowData, setRowdata] = useState([]);
@@ -42,10 +44,10 @@ const JaJopanAgGrid = ({ match }) => {
      */
     const handleClickShow = useCallback(
         (data) => {
-            history.push(`${match.path}/${data.seq}`);
+            setView(true);
             dispatch(changeJopan(data));
         },
-        [dispatch, history, match.path],
+        [dispatch, setView],
     );
 
     useEffect(() => {
@@ -71,7 +73,7 @@ const JaJopanAgGrid = ({ match }) => {
             page={search.page}
             size={search.size}
             onChangeSearchOption={handleChangeSearchOption}
-            // selected={episodeInfo.epsdSeq}
+            selected={jopan.seq}
             preventRowClickCell={['show']}
         />
     );

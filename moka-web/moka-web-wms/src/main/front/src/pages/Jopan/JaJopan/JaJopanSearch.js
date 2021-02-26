@@ -53,7 +53,7 @@ const JaJopanSearch = () => {
      * 초기화 버튼 검색 조건을 초기화 한다
      */
     const handleClickReset = () => {
-        setSearch(initialState.jopanSearch);
+        setSearch({ ...initialState.jopanSearch, sourceCode: '1' });
     };
 
     useEffect(() => {
@@ -64,7 +64,11 @@ const JaJopanSearch = () => {
     }, [dispatch, pressCate1Rows]);
 
     useEffect(() => {
-        dispatch(getJopanList({ search: search }));
+        let ns = {
+            ...search,
+            sourceCode: '1',
+        };
+        dispatch(getJopanList({ search: ns }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 

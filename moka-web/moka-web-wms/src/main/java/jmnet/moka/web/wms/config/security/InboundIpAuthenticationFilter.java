@@ -56,7 +56,9 @@ public class InboundIpAuthenticationFilter extends BasicAuthenticationFilter {
                             .matcher(userIp)
                             .find();
                 })) {
-            throw new BadCredentialsException("Invalid IP Address");
+            // Continue filter execution
+            chain.doFilter(request, response);
+            return ;
         }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userIp, null, null);
         SecurityContextHolder

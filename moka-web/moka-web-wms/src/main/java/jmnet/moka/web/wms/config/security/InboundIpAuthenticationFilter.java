@@ -60,16 +60,15 @@ public class InboundIpAuthenticationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return ;
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userIp, null, null);
-        SecurityContextHolder
-                .getContext()
-                .setAuthentication(authenticationToken);
-
-        // lastAcessTime을 갱신함
-        request.getSession(false);
-
-        // Continue filter execution
-        chain.doFilter(request, response);
+        if ( request.getHeader("MOKA_SERVER") != null) {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userIp, null, null);
+            SecurityContextHolder
+                    .getContext()
+                    .setAuthentication(authenticationToken);
+        } else {
+            // Continue filter execution
+            chain.doFilter(request, response);
+        }
     }
 
 

@@ -135,7 +135,7 @@ public class SearchKwdLogRestController extends AbstractCommonController {
         SearchKwdLogExcelView excelView = new SearchKwdLogExcelView();
         // 최종 페이지
         int totalPages;
-        int size = 200;
+        int size = 500;
         // 현재 페이지
         AtomicInteger currentPage = new AtomicInteger(0);
 

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 // const BulkhMain = React.lazy(() => import('./Component/BulkhMain'));
 const BulkhHotClickList = React.lazy(() => import('./Component/BulkhHotClickList'));
-const BulkhArticleList = React.lazy(() => import('./Component/BulkhArticleList'));
+const BulkhArticleTab = React.lazy(() => import('./Component/BulkhArticleTab'));
 
 const Bulkh = () => {
     const [componentAgGridInstances, setComponentAgGridInstances] = useState([]);
@@ -36,7 +36,7 @@ const Bulkh = () => {
                     render={() => (
                         <Suspense>
                             <BulkhHotClickList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
-                            <BulkhArticleList componentAgGridInstances={componentAgGridInstances} />
+                            <BulkhArticleTab componentAgGridInstances={componentAgGridInstances} />
                         </Suspense>
                     )}
                 />

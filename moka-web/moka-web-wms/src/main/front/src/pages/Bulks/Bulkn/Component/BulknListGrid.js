@@ -3,7 +3,7 @@ import { ColumnDefs } from './BulknListGridColumns';
 import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBulkList, GET_BULK_LIST, changeSearchOption, clearBulksList } from '@store/bulks';
+import { getBulkList, GET_BULK_LIST, changeSearchOption, clearBulksList, getBulkArticle } from '@store/bulks';
 import { DISPLAY_PAGE_NUM } from '@/constants';
 
 const BulknListGrid = () => {

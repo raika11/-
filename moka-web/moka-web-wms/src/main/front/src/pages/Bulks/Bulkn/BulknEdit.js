@@ -46,6 +46,8 @@ const BulknEdit = (props) => {
     const [editState] = useState(false); // edit 상태 true 일때 input 상태가 disable.
     const [bulkArticleRow, setBulkArticleRow] = useState(rowInit); // 선택된 벌크 기사들.
 
+    const [tempButton, setTempButton] = useState(false);
+
     // 약물 수정 삭제 모달 창.
     // 사용안함.
     // const handleClickSpecialCharModalButton = () => {
@@ -104,20 +106,15 @@ const BulknEdit = (props) => {
     // 리스트 창에서 item 클릭시 변경되는 라우터 로 문구 정보를 가지고 오는 처리.
     useEffect(() => {
         const getCheckGetBulks = (seq) => {
-            // 실제 데이터 가지고 오는
-            const getBulksData = (seq) => {
+            // seq 값이 현재랑 다르면 데이터 가지고 오기.
+            if (checkBulkSeqNumber.current !== seq) {
+                checkBulkSeqNumber.current = seq;
+                props.HandleEditEnable();
                 dispatch(
                     getBulkArticle({
                         bulkartSeq: seq,
                     }),
                 );
-            };
-
-            // seq 값이 현재랑 다르면 데이터 가지고 오기.
-            if (checkBulkSeqNumber.current !== seq) {
-                checkBulkSeqNumber.current = seq;
-                props.HandleEditEnable();
-                getBulksData(seq);
             }
         };
         // 현재 에디트 상태 일때
@@ -134,7 +131,8 @@ const BulknEdit = (props) => {
 
     // Redux Store 에서 벌크 기사가 변경이되면 State 에도 변경처리.
     useEffect(() => {
-        const storeBulkArticleToState = (list) => {
+        const storeBulkArticleToState = (data) => {
+            const { list, bulk } = data;
             let tempList = rowInit.map(function (e, index) {
                 const t_title = list[index] ? list[index].title.replace(/^\s+|\s+$/g, '') : '';
                 const t_url = list[index] ? list[index].url.replace(/^\s+|\s+$/g, '') : '';
@@ -150,10 +148,16 @@ const BulknEdit = (props) => {
                 };
             });
 
+            if (bulk.status === 'save') {
+                setTempButton(false);
+            } else {
+                setTempButton(true);
+            }
+
             setBulkArticleRow(tempList);
         };
-        if (bulkArticle.totalCnt > 0) {
-            storeBulkArticleToState(bulkArticle.list);
+        if (bulkArticle.list) {
+            storeBulkArticleToState(bulkArticle);
         }
 
         // bulkArticle 값이 변경 될때만 실행 되게.
@@ -311,6 +315,10 @@ ${bulkArticleRow
         initEditState(props.EditState);
     }, [bulkPathName, history, props.EditState]);
 
+    // useEffect(() => {
+    //     console.log(bulkArticleRow);
+    // }, [bulkArticleRow]);
+
     return (
         <>
             <MokaCard
@@ -325,7 +333,7 @@ ${bulkArticleRow
                 footerButtons={[
                     { text: 'W3C 검사', variant: 'outline-neutral', onClick: () => handleClickW3ccheck(), className: 'mr-05' },
                     { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton(), className: 'mr-05' }, // , useAuth: true
-                    { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: bulkartSeq ? true : false }, //useAuth: true
+                    { text: '임시저장', variant: 'positive', onClick: () => handleClickTempSaveButton(), className: 'mr-05', disabled: tempButton === true ? true : false }, //useAuth: true
                     // { text: selectSaveButtonNane.current, variant: 'positive', onClick: handleClickSaveButton, className: 'mr-05' },
                     { text: '미리보기', variant: 'outline-neutral', onClick: (e) => handlePreviewModalButton(e), disabled: editState, className: 'mr-05' },
                     { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton(), className: 'mr-05' },

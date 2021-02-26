@@ -19,7 +19,7 @@ export default [
     {
         headerName: '작성자',
         field: 'loginName',
-        width: 120,
+        width: 200,
         tooltipField: 'loginName',
         cellRendererFramework: LoginNameRenderer,
         cellStyle: { display: 'flex', alignItems: 'center', lineHeight: '22px' },

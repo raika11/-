@@ -1,11 +1,15 @@
 package jmnet.moka.web.bulk.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.web.bulk.code.OpCode;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.base.TaskManager;
+import jmnet.moka.web.bulk.util.BulkStringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +74,43 @@ public class MokaBulkRestController {
 
         responseMap.put("success", success);
 
+        return responseMap;
+    }
+
+    @GetMapping("/slack/message")
+    public Map<String, Object> doSmsTest(@RequestParam Map<String, String> param) {
+        String message;
+        if( param.containsKey("message") ){
+            message = BulkStringUtil.format( "[{}] {}", McpDate.dateTimeStr(new Date()), param.get("message"));
+        }else{
+            message = BulkStringUtil.format( "[{}] smsTest", McpDate.dateTimeStr(new Date()));
+        }
+        log.info("doSmsTest Start {}", message);
+
+        taskManager.getSlackMessageService().sendSms("smsTest", message );
+
+        log.info("doSmsTest End {}", message);
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("success", true);
+        responseMap.put("message", message);
+        return responseMap;
+    }
+
+    @GetMapping("/slack/pause")
+    public Map<String, Object> doSmsPause() {
+        final SlackMessageService slackMessageService = taskManager.getSlackMessageService();
+        log.info("doSmsPause Start");
+
+        slackMessageService.pause();
+
+        Date date = slackMessageService.getPauseTime();
+
+        log.info("doSmsPause End.. Due to {}", McpDate.dateStr(date, McpDate.DATETIME_FORMAT));
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("success", true);
+        responseMap.put("duePauseTime", date);
         return responseMap;
     }
 }

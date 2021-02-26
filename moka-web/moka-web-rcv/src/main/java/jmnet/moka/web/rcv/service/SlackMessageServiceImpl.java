@@ -139,4 +139,11 @@ public class SlackMessageServiceImpl implements SlackMessageService {
         pauseGap = System.currentTimeMillis() + GAP_TIME_PAUSE;
         lastSendGap = - (GAP_TIME_START * GAP_TIME_COUNT);
     }
+
+    @Override
+    public Date getPauseTime() {
+        if( pauseGap == 0 )
+            return null;
+        return new Date(pauseGap);
+    }
 }

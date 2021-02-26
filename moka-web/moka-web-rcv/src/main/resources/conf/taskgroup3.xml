@@ -18,12 +18,12 @@
         fileFilter="*.pdf"/> -->
       <inputFilter class="jmnet.moka.web.rcv.taskinput.inputfilter.FtpSenderFilter"
         dirSuccess="/box/rcv/cppub/jajopan/pdf"
-        ftp.ip="127.0.0.1"
-        ftp.user="ftp_tester"
-        ftp.password="ftp_test"
-        ftp.rootDir="/cpXmlPdf"
-        ftp.passive="0"
-        ftp.port="21"
+        ftp.ip="192.168.72.45"
+        ftp.user="mokaftp"
+        ftp.password="ahzk0pvmxlvl"
+        ftp.rootDir="/box/mokaftp/cpXmlPdf"
+        ftp.passive="1"
+        ftp.port="8021"
         fileFilter="*.pdf"/>
       <inputFilter class="jmnet.moka.web.rcv.taskinput.inputfilter.FileCopyFilter"
         dirSuccess="/box/rcv/cppub/jajopan/jpg"
@@ -33,7 +33,7 @@
   <Task class="jmnet.moka.web.rcv.task.pubxml.PubXmlTask"
     name="중앙일보 선데이 조판"
     idx="11"
-    sourceCode="60"
+    sourceCode="61"
     intervalTime="10s">
     <TaskInput dirInput="/box/rcv/cppub/jajopan"
       dirSuccess="/box/rcv/cppub/jajopan/comp"

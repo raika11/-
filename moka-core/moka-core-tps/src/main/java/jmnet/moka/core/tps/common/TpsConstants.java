@@ -209,4 +209,7 @@ public class TpsConstants extends MokaConstants {
     public static final String SNS_RESERVED_DELETE_JOB_CD = "SNS_DELETE";
 
     public static final String SERVER_REFUSED = "refused";
+
+    // 편집예약 JOB_CD
+    public static final String DESKING_JOB_CD = "DESKING_PUBLISH";
 }

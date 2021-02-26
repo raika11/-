@@ -380,6 +380,7 @@ public class DeskingServiceImpl implements DeskingService {
                 .relSeqType(MokaConstants.ITEM_DATASET)
                 .relType(MokaConstants.ITEM_PAGE)
                 .build();
+        search.setSize(9999);
         List<PageVO> pageList = relationService.findAllPage(search);
         String retPage = purgeHelper.tmsPageUpdate(pageList);
         if (McpString.isNotEmpty(retPage)) {
@@ -412,6 +413,14 @@ public class DeskingServiceImpl implements DeskingService {
         // 편집기사 히스토리 추가
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
 
+        // 스케줄링(R) 추가
+        //        ReserveJobDTO reserveJobDTO = ReserveJobDTO
+        //                .builder()
+        //                .jobCd(TpsConstants.DESKING_JOB_CD)
+        //                .jobTaskId("CP_" + componentWorkVO.getComponentSeq())
+        //                .reserveDt(reserveDt)
+        //                .build();
+
     }
 
     private void deleteReserveHist(ComponentWorkVO workVO)
@@ -437,6 +446,9 @@ public class DeskingServiceImpl implements DeskingService {
             throws Exception {
         // 기존예약 삭제
         deleteReserveHist(componentWorkVO);
+
+        // 스케줄링(R) 삭제
+
     }
 
     //    @Override

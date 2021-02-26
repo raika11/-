@@ -6,7 +6,7 @@ const EtcButtonRenderer = ({ value }) => {
         <div className="d-flex align-items-center h-100">
             <Button
                 variant="outline-table-btn"
-                className="mr-2"
+                className="mr-1"
                 onClick={() => {
                     window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${value}`, '', 'width=500,height=500');
                 }}
@@ -16,7 +16,7 @@ const EtcButtonRenderer = ({ value }) => {
             </Button>
             <Button
                 variant="outline-table-btn"
-                className="mr-2"
+                className="mr-1"
                 onClick={() => {
                     window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${value}`);
                 }}

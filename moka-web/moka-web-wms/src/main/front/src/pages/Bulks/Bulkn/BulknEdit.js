@@ -105,26 +105,28 @@ const BulknEdit = (props) => {
 
     // 리스트 창에서 item 클릭시 변경되는 라우터 로 문구 정보를 가지고 오는 처리.
     useEffect(() => {
-        const getCheckGetBulks = (seq) => {
-            // seq 값이 현재랑 다르면 데이터 가지고 오기.
-            if (checkBulkSeqNumber.current !== seq) {
-                checkBulkSeqNumber.current = seq;
-                props.HandleEditEnable();
-                dispatch(
-                    getBulkArticle({
-                        bulkartSeq: seq,
-                    }),
-                );
-            }
-        };
+        // console.log(params.bulkartSeq);
+        // console.log(params, history);
+        // const getCheckGetBulks = (seq) => {
+        //     if (checkBulkSeqNumber.current !== seq) {
+        //         checkBulkSeqNumber.current = seq;
+        //         props.HandleEditEnable();
+        //     }
+        // };
         // 현재 에디트 상태 일때
-        if (checkBulkSeqNumber.current !== undefined && params.bulkartSeq === undefined) {
-            setBulkArticleRow(rowInit);
-            checkBulkSeqNumber.current = undefined;
-        } else {
-            getCheckGetBulks(params.bulkartSeq);
-        }
+        // if (checkBulkSeqNumber.current !== undefined && params.bulkartSeq === undefined) {
+        // setBulkArticleRow(rowInit);
+        // checkBulkSeqNumber.current = undefined;
+        // } else {
+        // getCheckGetBulks(params.bulkartSeq);
+        // }
 
+        // 등록 상태.
+        if (params.bulkartSeq === undefined) {
+            setBulkArticleRow(rowInit);
+            setTempButton(false);
+        }
+        // console.log(props.bulksURL);
         // params 값이 변경 될때만 실행 되게.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);

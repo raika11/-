@@ -37,9 +37,6 @@ const defaultProps = {
     expanded: [],
 };
 
-/**
- * 데스킹 트리 카테고리 컴포넌트
- */
 const DeskingTreeCategory = (props) => {
     const { nodeId, nodeData, selected, children, expanded, onExpansion, onSelected } = props;
     const [open, setOpen] = useState(false);

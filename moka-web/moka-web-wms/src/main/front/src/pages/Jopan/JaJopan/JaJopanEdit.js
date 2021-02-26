@@ -3,85 +3,59 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import instance from '@store/commons/axios';
 import { MokaCard } from '@/components';
-import { API_BASE_URL } from '@/constants';
-import { initialState } from '@/store/rcvArticle';
 
+/**
+ * 수신기사 > 중앙일보 조판 상세정보
+ */
 const JaJopanEdit = () => {
-    const jopan = useSelector(({ rcvArticle }) => rcvArticle);
-    const [temp, setTemp] = useState(initialState.rcvArticle.jopan);
-    const [sourceCode, setSourceCode] = useState('1');
-    const [ho, setHo] = useState(17148);
-    const [pressDate, setPressDate] = useState('2020-09-04%2000:00:00');
-    const [myun, setMyun] = useState('01');
-    const [section, setSection] = useState('D1001');
-    const [revision, setRevision] = useState('01');
+    const jopan = useSelector((store) => store.rcvArticle.jopan);
+    const [temp, setTemp] = useState({});
 
+    const [loading, setLoding] = useState(true);
     const iframeRef = useRef(null);
 
     useEffect(() => {
         // 조판 정보 셋팅
         setTemp({
             ...jopan,
-            sourceCode: jopan.id?.sourceCode || '',
-            ho: jopan.id?.ho || '',
-            myun: jopan.id?.myun || '',
-            section: jopan.id?.section || '',
-            revision: jopan.id?.revision || '',
+            sourceCode: jopan.id.sourceCode || '',
+            ho: jopan.id.ho || '',
+            myun: jopan.id.myun || '',
+            section: jopan.id.section || '',
+            revision: jopan.id.revision || '',
             pressDate: jopan.pressDate ? moment(jopan.pressDate).format('YYYY-MM-DD') : '',
         });
     }, [jopan]);
 
     useEffect(() => {
-        instance.get(`jopan?sourceCode=${sourceCode}&ho=${ho}&pressDate=${pressDate}&myun=${myun}&section=${section}&revision=${revision}`).then(function (response) {
-            if (response.data) {
-                if (!iframeRef.current) return;
-                let doc = iframeRef.current.contentDocument;
-                if (!doc) {
-                    iframeRef.current.src = 'about:blank';
-                    iframeRef.current.onload = function () {
-                        doc = iframeRef.current.contentDocument;
+        instance
+            .get(`jopan?sourceCode=${temp.sourceCode}&ho=${temp.ho}&pressDate=${temp.pressDate}&myun=${temp.myun}&section=${temp.section}&revision=${temp.revision}`)
+            .then(function (response) {
+                if (response.data) {
+                    if (!iframeRef.current) return;
+                    let doc = iframeRef.current.contentDocument;
+                    if (!doc) {
+                        iframeRef.current.src = 'about:blank';
+                        iframeRef.current.onload = function () {
+                            doc = iframeRef.current.contentDocument;
+                            doc.open();
+                            doc.write(response.data);
+                            doc.close();
+                            iframeRef.current.onload = null;
+                        };
+                    } else {
                         doc.open();
-                        doc.write(response.data || '');
+                        doc.write(response.data);
                         doc.close();
-                        iframeRef.current.onload = null;
-                    };
-                } else {
-                    doc.open();
-                    doc.write(response.data || '');
-                    doc.close();
+                    }
+                    setLoding(false);
                 }
-            }
-        });
-    }, [ho, myun, pressDate, revision, section, sourceCode]);
-
-    // useEffect(() => {
-    //     if (!iframeRef.current) return;
-    //     let doc = iframeRef.current.contentDocument;
-    //     if (!doc) {
-    //         iframeRef.current.src = 'about:blank';
-    //         iframeRef.current.onload = function () {
-    //             doc = iframeRef.current.contentDocument;
-    //             doc.open();
-    //             doc.write(previewContent || '');
-    //             doc.close();
-    //             iframeRef.current.onload = null;
-    //         };
-    //     } else {
-    //         doc.open();
-    //         doc.write(temp?.xmlBody ? temp.xmlBody : '');
-    //         doc.close();
-    //     }
-    // }, []);
+            });
+    }, [temp]);
 
     return (
-        <MokaCard className="w-100" bodyClassName="overflow-hidden" header={false}>
-            <iframe
-                ref={iframeRef}
-                className="w-100 h-100"
-                // src={`${API_BASE_URL}/jopan?sourceCode=${sourceCode}&ho=${ho}&pressDate=${pressDate}&myun=${myun}&section=${section}&revision=${revision}`}
-                title="미리보기"
-                frameBorder="0"
-            />
+        <MokaCard className="w-100" bodyClassName="overflow-hidden" header={false} loading={loading}>
+            <iframe ref={iframeRef} className="w-100 h-100" title="미리보기" frameBorder="0" />
         </MokaCard>
     );
 };

@@ -33,11 +33,20 @@ export const initialState = {
             byContainerCompMessage: null,
         },
     },
-    areaError: null,
     invalidList: [],
     selectedDepth: 1,
-    treeError: null,
     tree: null,
+    treeBySeq: {},
+};
+
+const makeTreeBySeq = (list, treeBySeq) => {
+    for (let i = 0; i < list.length; i++) {
+        const node = list[i];
+        treeBySeq[node.areaSeq] = node;
+        if (node.nodes) {
+            makeTreeBySeq(node.nodes, treeBySeq);
+        }
+    }
 };
 
 export default handleActions(
@@ -49,22 +58,19 @@ export default handleActions(
         [act.CLEAR_TREE]: (state) => {
             return produce(state, (draft) => {
                 draft.tree = initialState.tree;
-                draft.treeError = initialState.treeError;
+                draft.treeBySeq = initialState.treeBySeq;
             });
         },
         /**
-         * 편집영역 트리 조회(페이지편집용)
+         * 편집영역 트리 조회 => 페이지 편집에서 사용!!
          */
         [act.GET_AREA_TREE_SUCCESS]: (state, { payload: { body } }) => {
+            const treeBySeq = {};
+            makeTreeBySeq([...body], treeBySeq);
+
             return produce(state, (draft) => {
                 draft.tree = body;
-                draft.areaError = initialState.areaError;
-            });
-        },
-        [act.GET_AREA_TREE_FAILURE]: (state, { payload }) => {
-            return produce(state, (draft) => {
-                draft.tree = initialState.tree;
-                draft.areaError = payload;
+                draft.treeBySeq = treeBySeq;
             });
         },
         /**

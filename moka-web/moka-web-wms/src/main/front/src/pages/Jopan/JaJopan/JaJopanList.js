@@ -5,11 +5,11 @@ import AgGrid from './JaJopanAgGrid';
 /**
  * 수신기사 > 중앙일보 조판 리스트
  */
-const JaJopanList = ({ match }) => {
+const JaJopanList = ({ match, setView }) => {
     return (
         <>
             <Search />
-            <AgGrid match={match} />
+            <AgGrid match={match} setView={setView} />
         </>
     );
 };

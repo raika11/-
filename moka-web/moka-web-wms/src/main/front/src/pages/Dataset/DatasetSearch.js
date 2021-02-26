@@ -5,14 +5,12 @@ import { MokaSearchInput, MokaInput } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getApi } from '@store/codeMgt';
 import { changeSearchOption, getDatasetList, initialState } from '@store/dataset';
-import { useHistory } from 'react-router-dom';
 
 /**
  * 데이터셋 검색 컴포넌트
  */
 const DatasetSearch = ({ match }) => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const apiRows = useSelector(({ codeMgt }) => codeMgt.apiRows);
     const storeSearch = useSelector(({ dataset }) => dataset.search);
     const [search, setSearch] = useState(initialState.search);

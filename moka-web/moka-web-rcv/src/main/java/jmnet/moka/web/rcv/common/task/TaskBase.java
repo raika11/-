@@ -69,6 +69,7 @@ public abstract class TaskBase implements Runnable, TaskService {
                 if (!this.isPause) {
                     this.isPause = true;
                 }
+                break;
             }
             case resume: {
                 if (this.isPaused()) {

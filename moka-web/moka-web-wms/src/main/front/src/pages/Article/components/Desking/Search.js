@@ -33,13 +33,25 @@ const Search = (props) => {
      * 시작일 변경
      * @param {object} date moment object
      */
-    const handleChangeSDate = (date) => onChangeSearchOption({ key: 'startServiceDay', value: typeof date === 'object' ? date : null });
+    const handleChangeSDate = (date) => {
+        if (date !== '') {
+            onChangeSearchOption({ key: 'startServiceDay', value: date });
+        } else {
+            onChangeSearchOption({ key: 'startServiceDay', value: null });
+        }
+    };
 
     /**
      * 종료일 변경
      * @param {object} date moment object
      */
-    const handleChangeEDate = (date) => onChangeSearchOption({ key: 'endServiceDay', value: typeof date === 'object' ? date : null });
+    const handleChangeEDate = (date) => {
+        if (date !== '') {
+            onChangeSearchOption({ key: 'endServiceDay', value: date });
+        } else {
+            onChangeSearchOption({ key: 'endServiceDay', value: null });
+        }
+    };
 
     /**
      * 분류 변경
@@ -143,7 +155,8 @@ const Search = (props) => {
                         <Button variant="outline-neutral" className="flex-shrink-0" onClick={() => setModalShow(true)}>
                             그룹지정
                         </Button>
-                        {/* 그룹지정 변경 모달 */}
+
+                        {/* 편집그룹 변경 모달 */}
                         <ChangeArtGroupModal
                             show={modalShow}
                             onHide={() => setModalShow(false)}

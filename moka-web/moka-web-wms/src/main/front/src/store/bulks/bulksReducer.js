@@ -266,7 +266,7 @@ export default handleActions(
         [GET_HISTORY_DETAIL_SUCCESS]: (state, { payload: { bulkartSeq, body } }) => {
             return produce(state, (draft) => {
                 draft.bulkh.historyList.article.totalCnt = body.totalCnt;
-                draft.bulkh.historyList.article.list = body.list;
+                draft.bulkh.historyList.article.list = body.LIST.list;
                 draft.bulkh.historyList.article.selectSeq = bulkartSeq;
             });
         },
@@ -280,7 +280,7 @@ export default handleActions(
         [GET_HOTCLICK_LIST_SUCCESS]: (state, { payload }) => {
             return produce(state, (draft) => {
                 draft.bulkh.hotclickList.totalCnt = payload.totalCnt;
-                draft.bulkh.hotclickList.list = payload.list;
+                draft.bulkh.hotclickList.list = payload.LIST.list;
             });
         },
     },

@@ -64,7 +64,16 @@ public class RcvArtRegToJamArticleTotalProcess {
             final String masterCode = RcvUtil.getMapStringData(mapCode, "MASTER_CODE" );
             if( McpString.isNullOrEmpty(masterCode) )
                 continue;
-            articleTotal.getMasterCodeList().add(masterCode);
+
+            boolean found = false;
+            for( String code : articleTotal.getMasterCodeList()){
+                if( code.equals(masterCode) ) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+                articleTotal.getMasterCodeList().add(masterCode);
         }
 
         if( articleTotal.getMasterCodeList().size() == 0 ){

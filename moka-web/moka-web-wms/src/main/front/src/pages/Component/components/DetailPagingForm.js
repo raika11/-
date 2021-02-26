@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { MokaInputLabel, MokaInput } from '@components';

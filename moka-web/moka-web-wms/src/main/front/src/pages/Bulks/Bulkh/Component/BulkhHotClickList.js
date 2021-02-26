@@ -156,7 +156,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 width={380}
                 loading={loading}
                 className="flex-fill mr-gutter"
-                bodyClassName="overflow-hidden"
+                bodyClassName="scrollable"
                 titleAs={
                     <>
                         <Row>
@@ -189,7 +189,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 ]}
             >
                 <div
-                    className={clsx('h-100 overflow-hidden component-work component-hot-click border-top pt-0', {
+                    className={clsx('component-work component-hot-click border-top pt-0', {
                         disabled: false,
                     })}
                     id={`agGrid-0`}

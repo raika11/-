@@ -113,7 +113,7 @@ const AgGrid = forwardRef((props, ref) => {
                 className="article-list overflow-hidden flex-fill"
                 setGridInstance={setGridInstance}
                 headerHeight={50}
-                rowHeight={50}
+                rowHeight={48}
                 columnDefs={columnDefs}
                 rowData={rowData}
                 onRowNodeId={(article) => article.totalId}

@@ -29,7 +29,7 @@ export default [
         field: 'sourceName',
         tooltipField: 'sourceName',
         cellStyle: {
-            lineHeight: '50px',
+            lineHeight: '48px',
         },
     },
     {
@@ -78,7 +78,7 @@ export default [
             boxSizing: 'border-box',
             whiteSpace: 'normal',
             lineHeight: '20px',
-            height: '50px',
+            height: '48px',
             display: '-webkit-box',
             paddingTop: '4px',
             '-webkit-line-clamp': 2,
@@ -119,10 +119,7 @@ export default [
         cellClassRules: {
             'pre-wrap-cell': () => true,
         },
-        cellStyle: {
-            height: '50px',
-            lineHeight: '20px',
-        },
+        cellStyle: { lineHeight: '20px' },
     },
     {
         headerName: '기자명',

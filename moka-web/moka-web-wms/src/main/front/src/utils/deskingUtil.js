@@ -140,8 +140,10 @@ export const addNextRowStyle = (nextRow) => {
 export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, currentIndex) => {
     const wrapper = targetGrid.api.gridOptionsWrapper;
     if (!wrapper) return null;
+
     const workElement = findWork(wrapper.layoutElements[0]); // .component-work 찾음
     if (!workElement) return null;
+
     if (workElement.classList.contains('disabled')) {
         sourceGrid.api.removeRowDropZone({ getContainer: () => workElement });
         return null;
@@ -163,11 +165,11 @@ export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, curre
             clearNextStyle(next.node);
         },
         onDragging: (source) => {
-            let draggingRow = getRow(source.event);
+            let overRow = getRow(source.event);
             const scrollBox = classElementFromPoints(source.event, 'scrollable');
             autoScroll(scrollBox, { clientX: source.event.clientX, clientY: source.event.clientY });
 
-            if (!draggingRow) {
+            if (!overRow) {
                 clearNextStyle(next.node);
                 clearHoverStyle(hover.node);
                 workElement.classList.add('hover');
@@ -175,45 +177,45 @@ export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, curre
                 return;
             }
 
-            let draggingIdx = draggingRow.getAttribute('row-index');
+            let draggingIdx = overRow.getAttribute('row-index');
 
             if (hover.idx !== draggingIdx) {
                 clearNextStyle(next.node);
                 clearHoverStyle(hover.node);
                 clearWorkStyle(workElement);
-                hover = { idx: draggingIdx, node: draggingRow };
-                draggingRow.classList.add('ag-row-hover');
+                hover = { idx: draggingIdx, node: overRow };
+                overRow.classList.add('ag-row-hover');
 
                 const selected = targetGrid.api.getSelectedRows();
                 if (selected.length < 1) {
                     // 주기사 추가
-                    if (draggingRow.classList.contains('ag-row-last')) {
-                        draggingRow.classList.add('hover');
+                    if (overRow.classList.contains('ag-row-last')) {
+                        overRow.classList.add('hover');
                     } else {
-                        const nextRow = findNextMainRow(draggingRow);
+                        const nextRow = findNextMainRow(overRow);
                         addNextRowStyle(nextRow);
                         if (nextRow.node) next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
                     }
                 } else {
                     // 관련기사 추가
-                    if (!draggingRow.classList.contains('ag-rel-row')) {
-                        if (draggingRow.classList.contains('ag-row-last')) {
-                            draggingRow.classList.add('hover');
-                        } else if (draggingRow.classList.contains('ag-row-selected')) {
-                            draggingRow.classList.add('hover');
+                    if (!overRow.classList.contains('ag-rel-row')) {
+                        if (overRow.classList.contains('ag-row-last')) {
+                            overRow.classList.add('hover');
+                        } else if (overRow.classList.contains('ag-row-selected')) {
+                            overRow.classList.add('hover');
                         } else {
-                            const nextRow = findNextMainRow(draggingRow);
+                            const nextRow = findNextMainRow(overRow);
                             addNextRowStyle(nextRow);
                             if (nextRow.node) next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
                         }
                     } else {
-                        const mainRow = findPreviousMainRow(draggingRow);
+                        const mainRow = findPreviousMainRow(overRow);
                         if (mainRow.type === 'prev') {
                             const drs = targetGrid.api.getDisplayedRowAtIndex(Number(mainRow.node.getAttribute('row-index')));
                             if (drs.isSelected()) {
-                                draggingRow.classList.add('hover');
+                                overRow.classList.add('hover');
                             } else {
-                                const nextRow = findNextMainRow(draggingRow);
+                                const nextRow = findNextMainRow(overRow);
                                 addNextRowStyle(nextRow);
                                 if (nextRow.node) next = { idx: nextRow.node.getAttribute('row-index'), node: nextRow.node };
                             }

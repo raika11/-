@@ -126,6 +126,8 @@ const AgGrid = forwardRef((props, ref) => {
                 frameworkComponents={{ GroupNumberRenderer: GroupNumberRenderer }}
                 rowSelection="multiple"
             />
+
+            {/* 제목 변경 모달 */}
             <ChangeArtTitleModal show={modalShow} onHide={() => setModalShow(false)} artData={selected} onSave={afterChangeTitle} />
         </React.Fragment>
     );

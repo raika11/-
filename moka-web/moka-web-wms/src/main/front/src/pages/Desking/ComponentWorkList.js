@@ -201,7 +201,7 @@ const ComponentWorkList = (props) => {
                     )}
                 </div>
 
-                <div className="custom-scroll overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
+                <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
                     {leftList.map((areaComp) => render(areaComp))}
                 </div>
             </MokaCard>
@@ -211,7 +211,7 @@ const ComponentWorkList = (props) => {
                 <MokaCard loading={loading} header={false} width={363} className="p-0 position-relative mr-gutter" bodyClassName="p-0 mt-0 overflow-hidden">
                     <div className="d-flex justify-content-end p-2 border-bottom" style={{ height: 45 }}></div>
 
-                    <div className="custom-scroll overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
+                    <div className="custom-scroll scrollable overflow-x-hidden" style={{ height: 'calc(100% - 45px)' }}>
                         {rightList.map((areaComp) => render(areaComp))}
                     </div>
                 </MokaCard>

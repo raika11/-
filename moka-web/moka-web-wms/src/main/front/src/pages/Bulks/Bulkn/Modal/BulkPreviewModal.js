@@ -63,10 +63,12 @@ const BulkPreviewModal = () => {
             //     `;
 
             // 미리 보기 창에 보여줄 html 처리.
+            // console.log(bulkArticle);
+            // return;
             const tempHtmlString = bulkArticle
                 .filter((e) => e.url.length > 0)
                 .map((e) => {
-                    return `${e.symbol.replace(/^\s+|\s+$/g, '')}&nbsp; &nbsp;<a href="${e.url}" target="_joins_nw">${e.title}</a>`;
+                    return `${e.symbol ? e.symbol.replace(/^\s+|\s+$/g, '') : ''}&nbsp; &nbsp;<a href="${e.url}" target="_joins_nw">${e.title}</a>`;
                 });
 
             // 미리 보기 창에 보여줄 xml 처리.

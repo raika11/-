@@ -114,7 +114,7 @@ export const columnDefs = [
             const regMember = param.data.regMember;
             let regMemberIdNm = '';
             if (regMember instanceof Object) {
-                regMemberIdNm = `${regMember.memberId}(${regMember.memberNm})`;
+                regMemberIdNm = `${regMember.memberNm}(${regMember.memberId})`;
             }
             return <MultiRowColumnComponent values={[regMemberIdNm, param.value]} />;
         },
@@ -129,7 +129,7 @@ export const columnDefs = [
 
             let modMemberIdNm = '';
             if (modMember instanceof Object) {
-                modMemberIdNm = `${modMember.memberId}(${modMember.memberNm})`;
+                modMemberIdNm = `${modMember.memberNm}(${modMember.memberId})`;
             }
 
             return <MultiRowColumnComponent values={[modMemberIdNm, param.value]} />;

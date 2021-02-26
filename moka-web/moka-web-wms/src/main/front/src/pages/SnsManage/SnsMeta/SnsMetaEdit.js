@@ -261,10 +261,10 @@ const SnsMetaEdit = () => {
             loading={loading}
             footerClassName="justify-content-center"
             footerButtons={[
+                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-1' },
                 { text: '전송', variant: 'positive', onClick: () => handleClickPublish('all'), className: 'mr-1' },
                 { text: '임시저장', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },
                 { text: '취소', variant: 'negative', onClick: handleClickCancel, className: 'mr-1' },
-                { text: '기사보기', variant: 'outline-neutral', onClick: handleClickArticlePreviewModalShow, className: 'mr-1' },
             ]}
             footer
         >
@@ -272,11 +272,12 @@ const SnsMetaEdit = () => {
             <div className="d-flex mb-2 w-100">
                 <MokaInputLabel label="Facebook" labelWidth={70} className="m-0 h5" as="none" />
                 <div className="d-flex">
-                    <Button variant="outline-neutral" className="mr-1" onClick={handleClickFbTokenModalShow}>
+                    <Button variant="outline-neutral" size="sm" className="mr-1" onClick={handleClickFbTokenModalShow}>
                         토큰 관리
                     </Button>
                     <Button
                         variant="outline-neutral"
+                        size="sm"
                         className="mr-1"
                         onClick={() => window.open(`https://www.facebook.com/sharer.php?u=https://mnews.joins.com/article/${totalId}`, '', 'width=500,height=500')}
                     >
@@ -284,6 +285,7 @@ const SnsMetaEdit = () => {
                     </Button>
                     <Button
                         variant="outline-fb"
+                        size="sm"
                         className="mr-1"
                         onClick={() => {
                             handleClickPublish('fb');
@@ -293,12 +295,13 @@ const SnsMetaEdit = () => {
                     </Button>
                     <Button
                         variant="outline-fb"
+                        size="sm"
                         className="mr-1"
                         onClick={() => window.open(`https://developers.facebook.com/tools/debug/?q=https://mnews.joins.com/article/${totalId}`)}
                     >
                         FB 캐시삭제
                     </Button>
-                    <Button variant="outline-tw" onClick={() => handleClickCopyContent('fb')}>
+                    <Button variant="outline-tw" size="sm" onClick={() => handleClickCopyContent('fb')}>
                         TW로 복사
                     </Button>
                 </div>
@@ -441,19 +444,19 @@ const SnsMetaEdit = () => {
                 </Form.Row>*/}
             </Form>
 
-            <hr className="divider" />
+            <hr className="divider color-gray-300" />
 
             {/* 트위터 */}
             <div className="d-flex mb-2 w-100">
                 <MokaInputLabel label="Twitter" className="m-0 h5" as="none" />
                 <div className="d-flex">
-                    <Button variant="outline-tw" className="mr-1" onClick={() => handleClickPublish('tw')}>
+                    <Button variant="outline-tw" size="sm" className="mr-1" onClick={() => handleClickPublish('tw')}>
                         TW 전송
                     </Button>
-                    <Button variant="outline-tw" className="mr-1" onClick={() => window.open('https://cards-dev.twitter.com/validator')}>
+                    <Button variant="outline-tw" size="sm" className="mr-1" onClick={() => window.open('https://cards-dev.twitter.com/validator')}>
                         TW 캐시삭제
                     </Button>
-                    <Button variant="outline-fb" onClick={() => handleClickCopyContent('tw')}>
+                    <Button variant="outline-fb" size="sm" onClick={() => handleClickCopyContent('tw')}>
                         FB로 복사
                     </Button>
                 </div>

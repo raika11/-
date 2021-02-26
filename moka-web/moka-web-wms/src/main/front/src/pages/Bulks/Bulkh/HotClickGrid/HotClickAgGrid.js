@@ -7,6 +7,7 @@ import { getRow, getRowIndex, getDisplayedRows } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, findNextMainRow, clearHoverStyle, clearNextStyle } from '@utils/deskingUtil';
 import { changeHotClickList, changeHotClickListItem } from '@store/bulks';
 import useDebounce from '@hooks/useDebounce';
+import commonUtil from '@utils/commonUtil';
 
 let hoverBox = makeHoverBox();
 
@@ -154,9 +155,9 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
 
     useEffect(() => {
         // 스토어가 변경 되면 grid 리스트를 업데이트.
-        const SetRowData = async (data) => {
+        /*const SetRowData = async (data) => {
             setRowData(
-                data.map((e, index) => ({
+              hotClickList.map((e, index) => ({
                     dataIndex: index,
                     ordNo: `0${index + 1}`.substr(-2),
                     totalId: e.totalId,
@@ -170,8 +171,27 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
                 })),
             );
         };
-
-        SetRowData(hotClickList);
+        console.log(hotClickList);
+        if (!commonUtil.isEmpty(hotClickList)) {
+            SetRowData(hotClickList);
+        }*/
+        if (!commonUtil.isEmpty(hotClickList)) {
+            console.log(hotClickList);
+            setRowData(
+                hotClickList.map((e, index) => ({
+                    dataIndex: index,
+                    ordNo: `0${index + 1}`.substr(-2),
+                    totalId: e.totalId,
+                    title: e.title,
+                    item: {
+                        itemIndex: index,
+                        title: e.title,
+                        url: e.url,
+                    },
+                    onChange: handleChangeListItem,
+                })),
+            );
+        }
     }, [hotClickList]);
 
     return (

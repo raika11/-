@@ -11,19 +11,19 @@ export const columnDefs = [
         headerName: 'ID',
         field: 'id',
         width: 50,
-        cellStyle: { lineHeight: '65px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
     {
         headerName: '분류',
         field: 'category',
         width: 80,
-        cellStyle: { lineHeight: '65px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
     {
         headerName: '투표 제목',
         field: 'title',
         flex: 1,
-        cellStyle: { lineHeight: '65px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
         cellClass: 'ag-grid-cell-left',
         tooltipField: 'title',
     },
@@ -31,13 +31,13 @@ export const columnDefs = [
         headerName: '상태',
         field: 'status',
         width: 70,
-        cellStyle: { lineHeight: '65px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
     {
         headerName: '시작일',
         field: 'startDt',
         width: 130,
-        cellStyle: { lineHeight: '65px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
         children: [
             {
                 headerName: '종료일',
@@ -54,7 +54,7 @@ export const columnDefs = [
         headerName: '보기',
         field: 'preview',
         width: 50,
-        cellStyle: { lineHeight: '60px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
         cellRendererFramework: (param) => {
             return (
                 <div className="w-100 h-100 d-flex align-items-center justify-content-center">
@@ -78,7 +78,7 @@ export const columnDefs = [
     {
         headerName: '등록자',
         field: 'regMember',
-        cellStyle: { fontSize: '12px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
         children: [
             {
                 headerName: '등록일시',
@@ -123,7 +123,7 @@ export const columnDefs = [
         headerName: '',
         field: 'delete',
         width: 50,
-        cellStyle: { lineHeight: '60px' },
+        cellStyle: { diplay: 'flex', alignItems: 'center' },
         cellRendererFramework: (param) => {
             return (
                 param.data.isDelete && (

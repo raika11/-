@@ -244,8 +244,8 @@ export default handleActions(
                 draft.bulkh.historyList.totalCnt = initialState.bulkh.historyList.totalCnt;
                 draft.bulkh.historyList.list = initialState.bulkh.historyList.list;
                 draft.bulkh.historyList.article = initialState.bulkh.historyList.article;
-                /*draft.bulkh.historyList.search.page = initialState.bulkh.historyList.search.page;
-                draft.bulkh.historyList.search.size = initialState.bulkh.historyList.search.size;*/
+                draft.bulkh.historyList.search.page = initialState.bulkh.historyList.search.page;
+                draft.bulkh.historyList.search.size = initialState.bulkh.historyList.search.size;
             });
         },
 

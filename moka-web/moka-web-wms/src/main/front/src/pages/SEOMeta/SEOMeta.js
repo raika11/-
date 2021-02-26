@@ -27,7 +27,7 @@ const SEOMeta = ({ match }) => {
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            <MokaCard width={1100} className="mr-gutter" title="SEO 메타관리">
+            <MokaCard width={1100} bodyClassName="d-flex flex-column" className="mr-gutter" title="SEO 메타관리">
                 <SEOMetaList match={match} />
             </MokaCard>
 

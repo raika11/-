@@ -49,7 +49,7 @@ const SEOMetaAgGrid = ({ match }) => {
     return (
         <MokaTable
             columnDefs={columnDefs}
-            agGridHeight={625}
+            className="overflow-hidden flex-fill"
             rowData={rowData}
             size={search.size}
             page={search.page}
@@ -58,7 +58,7 @@ const SEOMetaAgGrid = ({ match }) => {
             onChangeSearchOption={handleChangeSearchOption}
             onRowClicked={(data, param) => {
                 if (param.type === 'cellClicked' && param.column.colId === 'artTitle') {
-                    window.open(`https://mnews.joins.com/article/${data.totalId}`, 'articlePop', 'width=500');
+                    window.open(`https://mnews.joins.com/article/${data.totalId}`, 'pop', '');
                 }
             }}
             selected={totalId}

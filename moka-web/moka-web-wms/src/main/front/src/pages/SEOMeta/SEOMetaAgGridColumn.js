@@ -22,7 +22,7 @@ export const columnDefs = [
     {
         headerName: '기능',
         field: 'button',
-        width: 80,
+        width: 55,
         cellRendererFramework: (param) => (
             <Button
                 variant={param.value.variant}

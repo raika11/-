@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.template.exception.DataLoadException;
+import jmnet.moka.common.template.exception.TemplateLoadException;
 import jmnet.moka.common.template.exception.TemplateMergeException;
 import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
@@ -86,6 +87,29 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         context.set(MokaConstants.HTML_WRAP_MERGE_CONTENT, sb);
         this.htmlWrap.evaluate(context, writer);
         return new StringBuilder(writer.toString());
+    }
+
+    public StringBuilder merge(String pageItemId)
+            throws TemplateMergeException, TemplateParseException, DataLoadException, TemplateLoadException {
+        MergeContext mergeContext = new MergeContext(MOKA_FUNCTIONS);
+        PageItem pageItem = (PageItem) this.templateLoader.getItem(MokaConstants.ITEM_PAGE,pageItemId);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_DOMAIN, this.domainItem);
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PAGE, pageItem);
+        mergeContext.set(MokaConstants.MERGE_PATH, pageItem.get(ItemConstants.PAGE_URL));
+
+        // 예약어를 설정한다.
+        ReservedMap reservedMap = domainResolver.getReservedMap(domainId);
+        if (reservedMap != null) {
+            mergeContext.set(MokaConstants.MERGE_CONTEXT_RESERVED, reservedMap);
+        }
+
+        // Htttp 파라미터 설정
+        HttpParamMap httpParamMap = new HttpParamMap();
+        mergeContext.set(MokaConstants.MERGE_CONTEXT_PARAM, httpParamMap);
+        // 카테고리 설정
+        httpParamMap.put(MokaConstants.MERGE_CONTEXT_CATEGORY, pageItem.getString(ItemConstants.PAGE_CATEGORY));
+        this.setCodesAndMenus(pageItem.getString(ItemConstants.PAGE_DOMAIN_ID), pageItem, mergeContext);
+        return super.merge(MokaConstants.ITEM_PAGE, pageItemId, mergeContext);
     }
 
     public StringBuilder merge(PageItem pageItem, MergeItem wrapItem, boolean mergePage)

@@ -13,13 +13,13 @@ const PreviewRenderer = ({ bulkartSeq }) => {
         dispatch(
             getModalBulkArticle({
                 bulkartSeq: bulkartSeq,
-                callback: ({ header: { success, message }, body: { list } }) => {
+                callback: ({ header: { success, message }, body }) => {
                     if (success === true) {
                         dispatch(
                             showPreviewModal({
                                 state: true,
                                 activeKey: 0,
-                                bulkArticle: list,
+                                bulkArticle: body.LIST.list,
                             }),
                         );
                     } else {

@@ -148,7 +148,7 @@ const BulknEdit = (props) => {
                 };
             });
 
-            if (bulk.status === 'save') {
+            if (bulk.usedYn === 'N') {
                 setTempButton(false);
             } else {
                 setTempButton(true);

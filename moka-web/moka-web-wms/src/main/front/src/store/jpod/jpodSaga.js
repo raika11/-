@@ -20,7 +20,7 @@ function* getChEpisodesSaga({ payload: { chnlSeq } }) {
     yield put(startLoading(jpodAction.GET_CH_EPISODES));
     let response;
     try {
-        response = yield call(jpodApi.getEpisodes, { search: { page: 0, sort: 'chnlSeq,desc', size: 4, chnlSeq: chnlSeq } });
+        response = yield call(jpodApi.getEpisodes, { search: { page: 0, sort: 'chnlSeq,desc', size: 20, chnlSeq: chnlSeq } });
         const {
             header: { success, message },
         } = response.data;

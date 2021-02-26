@@ -124,7 +124,7 @@ const ChannelSearchBox = ({ match }) => {
                             ))}
                         </MokaInput>
                     </div>
-                    <div className=" pr-1" style={{ width: 300 }}>
+                    <div className="pr-2" style={{ width: 300 }}>
                         <MokaSearchInput
                             id="keyword"
                             name="keyword"
@@ -134,8 +134,8 @@ const ChannelSearchBox = ({ match }) => {
                             onSearch={() => handleClickSearchButton()}
                         />
                     </div>
-                    <div className="pr-1">
-                        <Button variant="outline-neutral" onClick={() => handleClickSearchResetButton()}>
+                    <div className="pr-2">
+                        <Button variant="negative" onClick={() => handleClickSearchResetButton()}>
                             초기화
                         </Button>
                     </div>

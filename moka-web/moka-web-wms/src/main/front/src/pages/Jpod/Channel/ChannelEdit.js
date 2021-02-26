@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { MokaCard, MokaInputLabel, MokaInput, MokaIcon, MokaOverlayTooltipButton } from '@components';
-import { Form, Col, Button, Row } from 'react-bootstrap';
+import { Form, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 // import { DB_DATEFORMAT } from '@/constants';
 import { PodtyChannelModal, RepoterModal } from '@pages/Jpod/JpodModal';
@@ -8,11 +8,11 @@ import { initialState, GET_REPORTER_LIST, saveJpodChannel, clearChannelInfo, get
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useParams, useHistory } from 'react-router-dom';
-import commonUtil from '@utils/commonUtil';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+// import commonUtil from '@utils/commonUtil';
+// import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+// import Tooltip from 'react-bootstrap/Tooltip';
 
-const reporterCountConst = [0, 1, 2, 3, 4, 5];
+// const reporterCountConst = [0, 1, 2, 3, 4, 5];
 
 const ChannelEdit = ({ match }) => {
     const dispatch = useDispatch();
@@ -82,23 +82,23 @@ const ChannelEdit = ({ match }) => {
     };
 
     // 기본 진행자 스테트 리셋용.
-    const resetReporter = () => {
-        setEditSelectRepoters(
-            reporterCountConst.map(() => {
-                return {
-                    chnlSeq: '',
-                    desc: '',
-                    epsdSeq: '',
-                    memDiv: '',
-                    memMemo: '',
-                    memNm: '',
-                    memRepSeq: '',
-                    nickNm: '',
-                    seqNo: '',
-                };
-            }),
-        );
-    };
+    // const resetReporter = () => {
+    //     setEditSelectRepoters(
+    //         reporterCountConst.map(() => {
+    //             return {
+    //                 chnlSeq: '',
+    //                 desc: '',
+    //                 epsdSeq: '',
+    //                 memDiv: '',
+    //                 memMemo: '',
+    //                 memNm: '',
+    //                 memRepSeq: '',
+    //                 nickNm: '',
+    //                 seqNo: '',
+    //             };
+    //         }),
+    //     );
+    // };
 
     // 기본 데이터 리셋용
     const handleResetEditBasicData = () => {
@@ -443,7 +443,7 @@ const ChannelEdit = ({ match }) => {
             //     toast.warning('진행자는 6명까지 선택 할수 있습니다.');
             //     return;
             // }
-            const duplicateReporter = editSelectRepoters.filter((data) => data.memRepSeq == selectReporter.memRepSeq);
+            const duplicateReporter = editSelectRepoters.filter((data) => data.memRepSeq === selectReporter.memRepSeq);
 
             if (duplicateReporter.length > 0) {
                 toast.warning('중복된 진행자는 등록 할수 없습니다.');
@@ -654,7 +654,7 @@ const ChannelEdit = ({ match }) => {
                     </Form.Row>
                     {/* 팟티 채널 */}
                     <Form.Row className="mb-2">
-                        <Col xs={10} className="p-0">
+                        <Col xs={10} className="p-0 mr-2">
                             <MokaInputLabel
                                 label={`팟티\n(채널연결)`}
                                 labelWidth={70}
@@ -667,11 +667,11 @@ const ChannelEdit = ({ match }) => {
                                 onChange={(e) => handleChangeChannelEditData(e)}
                             />
                         </Col>
-                        <Col xs={2} className="p-0 pt-1 pl-1 text-right">
-                            <Button variant="searching" className="mb-0" onClick={() => handleClickPadtySearch()}>
-                                팟티검색
-                            </Button>
-                        </Col>
+                        {/* <Col xs={1}> */}
+                        <Button variant="searching" className="mb-0" onClick={() => handleClickPadtySearch()}>
+                            팟티검색
+                        </Button>
+                        {/* </Col> */}
                     </Form.Row>
                     {/* 외부 채널 */}
                     <Form.Row className="mb-2">
@@ -757,7 +757,7 @@ const ChannelEdit = ({ match }) => {
                                 label={`채널 소개`}
                                 labelWidth={70}
                                 as="textarea"
-                                className="mb-2"
+                                className="mb-0"
                                 inputClassName="resize-none"
                                 inputProps={{ rows: 6 }}
                                 id="chnlMemo"
@@ -883,10 +883,10 @@ const ChannelEdit = ({ match }) => {
                     <Form.Row className="mb-2">
                         <MokaInputLabel label={`진행자`} labelWidth={70} as="none" />
                         <Col xs={4} className="p-0">
-                            <Button xs={12} variant="searching" className="mb-0 mr-2" onClick={() => handleClickSearchRepoterButton()}>
+                            <Button xs={12} variant="searching" size="sm" className="mb-0 mr-2" onClick={() => handleClickSearchRepoterButton()}>
                                 기자 검색
                             </Button>
-                            <Button variant="positive" onClick={(e) => handleClickRepoterAddButton()}>
+                            <Button variant="positive" size="sm" onClick={(e) => handleClickRepoterAddButton()}>
                                 추가
                             </Button>
                         </Col>
@@ -900,47 +900,47 @@ const ChannelEdit = ({ match }) => {
                                 </div>
                                 <Col className="p-0" xs={11} style={{ backgroundColor: '#f4f7f9' }}>
                                     <Form.Row>
-                                        <Col className="p-0" style={{ height: '100px' }} xs={11}>
+                                        <Col className="p-0 mr-2" style={{ height: '100px' }} xs={11}>
                                             <Col className="d-flex h-50 align-items-center" xs={12}>
+                                                {/* <div style={{ width: '70px' }}> */}
+                                                <MokaInput
+                                                    name="memRepSeq"
+                                                    className="ft-12 mr-2"
+                                                    value={element.memRepSeq}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`기자번호`}
+                                                    disabled={true}
+                                                />
+                                                {/* </div> */}
+                                                {/* <div style={{ width: '160px' }}> */}
+                                                <MokaInput
+                                                    name="memNm"
+                                                    className="ft-12 mr-2"
+                                                    value={element.memNm}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`기자명`}
+                                                />
+                                                {/* </div> */}
+                                                {/* <div className="pl-3" style={{ width: '115px' }}> */}
+                                                <MokaInput
+                                                    name="memMemo"
+                                                    className="ft-12 mr-2"
+                                                    value={element.memMemo}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`직책`}
+                                                />
+                                                {/* </div> */}
+                                                {/* <div className="pl-3" style={{ width: '115px' }}> */}
+                                                <MokaInput
+                                                    name="nickNm"
+                                                    className="ft-12 mr-2"
+                                                    value={element.nickNm}
+                                                    onChange={(e) => handleChangeReporters({ e, index })}
+                                                    placeholder={`닉네임`}
+                                                />
+                                                {/* </div> */}
                                                 <div style={{ width: '70px' }}>
-                                                    <MokaInput
-                                                        name="memRepSeq"
-                                                        className="ft-12"
-                                                        value={element.memRepSeq}
-                                                        onChange={(e) => handleChangeReporters({ e, index })}
-                                                        placeholder={`기자번호`}
-                                                        disabled={true}
-                                                    />
-                                                </div>
-                                                <div style={{ width: '160px' }}>
-                                                    <MokaInput
-                                                        name="memNm"
-                                                        className="ft-12"
-                                                        value={element.memNm}
-                                                        onChange={(e) => handleChangeReporters({ e, index })}
-                                                        placeholder={`기자명`}
-                                                    />
-                                                </div>
-                                                <div className="pl-3" style={{ width: '115px' }}>
-                                                    <MokaInput
-                                                        name="memMemo"
-                                                        className="ft-12"
-                                                        value={element.memMemo}
-                                                        onChange={(e) => handleChangeReporters({ e, index })}
-                                                        placeholder={`직책`}
-                                                    />
-                                                </div>
-                                                <div className="pl-3" style={{ width: '115px' }}>
-                                                    <MokaInput
-                                                        name="nickNm"
-                                                        className="ft-12"
-                                                        value={element.nickNm}
-                                                        onChange={(e) => handleChangeReporters({ e, index })}
-                                                        placeholder={`닉네임`}
-                                                    />
-                                                </div>
-                                                <div className="pl-3" style={{ width: '70px' }}>
-                                                    <Button variant="searching" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
+                                                    <Button variant="searching" size="sm" className="mb-0" onClick={() => handleClickReporterDelete(index)}>
                                                         삭제
                                                     </Button>
                                                 </div>
@@ -1045,7 +1045,7 @@ const ChannelEdit = ({ match }) => {
                     </Form.Row>
                     {/* 모바일용 */}
                     <Form.Row className="mb-2">
-                        <Col xs={7} className="pl-0">
+                        <Col xs={8} className="pl-0">
                             <MokaInputLabel
                                 as="imageFile"
                                 className="mb-2"
@@ -1111,7 +1111,7 @@ const ChannelEdit = ({ match }) => {
                             />
                         </Col>
                         {/* 썸네일 이미지 */}
-                        <Col xs={5} className="pt-0">
+                        <Col xs={4} className="pt-0">
                             <MokaInputLabel
                                 as="imageFile"
                                 className="w-100 mb-2"

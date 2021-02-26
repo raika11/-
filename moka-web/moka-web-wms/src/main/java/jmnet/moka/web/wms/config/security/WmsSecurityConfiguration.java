@@ -5,7 +5,6 @@ package jmnet.moka.web.wms.config.security;
 
 import com.hazelcast.core.HazelcastInstance;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.MokaConstants;
@@ -33,8 +32,6 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.frameoptions.StaticAllowFromStrategy;
-import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -65,6 +62,9 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${tps.upload.path.url}")
     private String urlPathPrefix;
 
+    @Value("${inbound.ips}")
+    private String[] inboundIps;
+
     @Autowired
     private ReactRoutesHandlerMapping reactRoute;
 
@@ -83,6 +83,11 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/*.json");
     }
 
+    @Bean
+    public InboundIpAuthenticationFilter inboundIpAuthenticationFilter()
+            throws Exception {
+        return new InboundIpAuthenticationFilter(this.authenticationManager(), this.inboundIps);
+    }
     @Bean
     public WmsJwtAuthenticationFilter jwtAuthenticationFilter()
             throws Exception {
@@ -113,6 +118,7 @@ public class WmsSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http)
             throws Exception {
+        http.addFilterBefore(inboundIpAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(jwtAuthorizationFilter(), SessionManagementFilter.class);
         http

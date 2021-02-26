@@ -60,6 +60,4 @@ public class StmpMailConfiguration {
         mailSender.setJavaMailProperties(properties);
         return mailSender;
     }
-
-
 }

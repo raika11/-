@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+jmnet.moka.core.mail.config.MailConfiguration,\
+jmnet.moka.core.mail.config.StmpMailConfiguration

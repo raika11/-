@@ -47,9 +47,9 @@ public interface SmtpService {
      * smtp 메일 발송
      *
      * @param stmpSend 메일 발송 정보
-     * @throws MessagingException 메일 메세지 오류처리
+     * @throws Exception 메일 메세지 오류처리
      */
     void send(SmtpSendDTO stmpSend)
-            throws MessagingException;
+            throws Exception;
 
 }

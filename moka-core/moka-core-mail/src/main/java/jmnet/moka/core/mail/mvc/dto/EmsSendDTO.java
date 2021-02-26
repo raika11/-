@@ -3,6 +3,7 @@ package jmnet.moka.core.mail.mvc.dto;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
+import jmnet.moka.common.utils.McpDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +30,8 @@ public class EmsSendDTO implements Serializable {
 
     private String name;
 
-    private Date insertdate;
+    @Builder.Default
+    private Date insertdate = McpDate.now();
 
     private Date sendtime;
 

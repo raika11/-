@@ -115,7 +115,7 @@ const MokaCardTabs = (props) => {
                         {tabs.map((tab, idx) =>
                             tab ? (
                                 <Tab.Pane key={idx} eventKey={idx} className="overflow-hidden h-100">
-                                    <div className="pb-3 pt-20 px-card h-100 custom-scroll">{tab}</div>
+                                    <div className="pb-card pt-20 px-card h-100 custom-scroll">{tab}</div>
                                 </Tab.Pane>
                             ) : (
                                 ''

@@ -14,15 +14,10 @@ const DeskingTree = ({ setComponentAgGridInstances }) => {
     // const { areaSeq: paramAreaSeq } = useParams();
     const history = useHistory();
     const dispatch = useDispatch();
-
-    //state
+    const loading = useSelector(({ loading }) => loading[GET_AREA_TREE]);
+    const tree = useSelector(({ area }) => area.tree);
     const [selected, setSelected] = useState('');
     const [expanded, setExpanded] = useState([]);
-
-    const { tree, loading } = useSelector((store) => ({
-        tree: store.area.tree,
-        loading: store.loading[GET_AREA_TREE],
-    }));
 
     useEffect(() => {
         dispatch(
@@ -99,14 +94,14 @@ const DeskingTree = ({ setComponentAgGridInstances }) => {
             data={tree}
             loading={loading}
             expanded={expanded}
-            onExpansion={(tree) => {
+            onExpansion={(treeItem) => {
                 setExpanded(
                     produce(expanded, (draft) => {
-                        if (expanded.indexOf(String(tree.areaSeq)) > -1) {
-                            const idx = expanded.indexOf(String(tree.areaSeq));
+                        if (expanded.indexOf(String(treeItem.areaSeq)) > -1) {
+                            const idx = expanded.indexOf(String(treeItem.areaSeq));
                             draft.splice(idx, 1);
                         } else {
-                            draft.push(String(tree.areaSeq));
+                            draft.push(String(treeItem.areaSeq));
                         }
                     }),
                 );

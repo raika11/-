@@ -116,7 +116,7 @@ export const toast = {
 
 export const messageBox = {
     alert: (message, ok) => {
-        message = message.replace(/\n/g, '<br />');
+        message = (message || '').replace(/\n/g, '<br />');
         const confirmOption = {
             disableCancel: true,
             okText: '확인',
@@ -145,7 +145,7 @@ export const messageBox = {
         toastr.confirm('', confirmOption);
     },
     confirm: (message, ok, cancel) => {
-        message = message.replace(/\n/g, '<br />');
+        message = (message || '').replace(/\n/g, '<br />');
         const confirmOption = {
             closeButton: true,
             okText: '확인',

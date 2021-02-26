@@ -1,5 +1,7 @@
 package jmnet.moka.web.rcv.common.task;
 
+import java.util.Date;
+import java.util.Map;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.TimeHumanizer;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
@@ -36,6 +38,7 @@ public abstract class Task<T> extends TaskBase {
     private int retryCount;
     private long tickLogTime;
     private long tickLogInterval;
+    private Date lastSuccessDate;
 
     public Task(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, RcvException {
@@ -84,7 +87,18 @@ public abstract class Task<T> extends TaskBase {
 
     protected void doAfterProcess(T taskInputData)
             throws RcvDataAccessException, InterruptedException {
-        ((TaskInputData) taskInputData).deleteTempFiles();
+        final TaskInputData taskInput = (TaskInputData) taskInputData;
+        taskInput.deleteTempFiles();
+        if( taskInput.isSuccess() )
+            lastSuccessDate = new Date();
+    }
+
+    @Override
+    protected Map<String, Object> status( Map<String, Object> map) {
+        super.status(map);
+        if( lastSuccessDate != null )
+            map.put("lastSuccessDate", lastSuccessDate);
+        return map;
     }
 
     @Override

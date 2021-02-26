@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.web.rcv.code.OpCode;
+import jmnet.moka.web.rcv.service.SlackMessageService;
 import jmnet.moka.web.rcv.task.base.TaskManager;
+import jmnet.moka.web.rcv.util.RcvStringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,19 +77,40 @@ public class MokaRcvRestController {
         return responseMap;
     }
 
-    @GetMapping("/sms/smsTest")
-    @SuppressWarnings("SameReturnValue")
-    public String doSmsTest() {
-        log.info("doSmsTest");
-        taskManager.getSlackMessageService().sendSms("smsTest", "sms" + McpDate.dateTimeStr(new Date()));
-        return "doSmsTest";
+    @GetMapping("/slack/message")
+    public Map<String, Object> doSmsTest(@RequestParam Map<String, String> param) {
+        String message;
+        if( param.containsKey("message") ){
+            message = RcvStringUtil.format( "[{}] {}", McpDate.dateTimeStr(new Date()), param.get("message"));
+        }else{
+            message = RcvStringUtil.format( "[{}] smsTest", McpDate.dateTimeStr(new Date()));
+        }
+        log.info("doSmsTest Start {}", message);
+
+        taskManager.getSlackMessageService().sendSms("smsTest", message );
+
+        log.info("doSmsTest End {}", message);
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("success", true);
+        responseMap.put("message", message);
+        return responseMap;
     }
 
-    @GetMapping("/sms/smsPause")
-    @SuppressWarnings("SameReturnValue")
-    public String doSmsPause() {
-        log.info("doSmsPause");
-        taskManager.getSlackMessageService().pause();
-        return "doSmsTest";
+    @GetMapping("/slack/pause")
+    public Map<String, Object> doSmsPause() {
+        final SlackMessageService slackMessageService = taskManager.getSlackMessageService();
+        log.info("doSmsPause Start");
+
+        slackMessageService.pause();
+
+        Date date = slackMessageService.getPauseTime();
+
+        log.info("doSmsPause End.. Due to {}", McpDate.dateStr(date, McpDate.DATETIME_FORMAT));
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("success", true);
+        responseMap.put("duePauseTime", date);
+        return responseMap;
     }
 }

@@ -37,7 +37,7 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
         <div>
             <Figure
                 {...getRootProps({
-                    className: 'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden m-2',
+                    className: 'd-inline-flex align-items-center justify-content-center is-file-dropzone cursor-pointer position-relative bg-white overflow-hidden',
                     onClick: (e) => {
                         if (!commonUtil.isEmpty(file.preview)) {
                             e.stopPropagation();
@@ -72,7 +72,7 @@ const PollPhotoComponent = ({ src, width, height, onChange, children }) => {
                 )}
                 <div className="dropzone-dragover-mask input-border" />
             </Figure>
-            <div className="mb-2 text-center" onClick={open}>
+            <div className="mb-2" onClick={open}>
                 <Button variant="gray-700" size="sm">
                     신규등록
                 </Button>

@@ -34,7 +34,7 @@ public class CryptTest {
     public void cryptTest()
             throws Exception {
         // 암호화
-        String encode = mokaCrypt.encrypt("test");
+        String encode = mokaCrypt.encrypt("testtesttesttest");
         log.debug(encode);
         // 복호화
         log.debug(mokaCrypt.decrypt(encode));

@@ -43,3 +43,32 @@ export const getAllRowData = (gridApi) => {
     gridApi.forEachNode((node) => rowData.push(node.data));
     return rowData;
 };
+
+/**
+ * 커서에 위치한 element 전부 찾음 (javascript function)
+ * @param {object} event drag event
+ * @param {string} className 찾는 element의 클래스명
+ */
+export const classElementFromPoints = (event, className) => document.elementsFromPoint(event.clientX, event.clientY).find((r) => r.classList.contains(className));
+
+/**
+ * 커서에 따른 자동스크롤
+ * x 스크롤도 처리해야하면 그때 추가
+ * @param {node} element html element
+ * @param {object} param1 clientX, clienY (커서 위치)
+ */
+export const autoScroll = (element, { clientX, clientY }) => {
+    if (element) {
+        // elements가 있으면 실행
+        const boxPosition = element.getBoundingClientRect();
+        // const userX = source.event.clientX;
+
+        if (clientY > boxPosition.top && clientY < boxPosition.top + 40) {
+            // 위쪽으로 스크롤
+            element.scrollTop = element.scrollTop - 10;
+        } else if (clientY < boxPosition.bottom && clientY > boxPosition.bottom - 40) {
+            // 아래쪽으로 스크롤
+            element.scrollTop = element.scrollTop + 10;
+        }
+    }
+};

@@ -2,11 +2,15 @@ package jmnet.moka.core.mail.mvc.service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import jmnet.moka.common.utils.BeanConverter;
+import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.mail.mvc.dto.SmtpSendDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 /**
  * <pre>
@@ -20,11 +24,14 @@ import org.springframework.stereotype.Service;
  * @author ince
  * @since 2021-02-25 11:48
  */
-@Service(value = "smtp")
+@Service
 public class SmtpServiceImpl implements SmtpService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
 
     /**
@@ -44,8 +51,8 @@ public class SmtpServiceImpl implements SmtpService {
         helper.setFrom(from);
         helper.setTo(to);
 
-        helper.setSubject("테스트");
-        helper.setText("<html><body><h1>test</h1></body></html>", true);
+        helper.setSubject(title);
+        helper.setText(body, isHtml);
 
         mailSender.send(helper.getMimeMessage());
     }
@@ -64,7 +71,13 @@ public class SmtpServiceImpl implements SmtpService {
 
     @Override
     public void send(SmtpSendDTO stmpSend)
-            throws MessagingException {
+            throws Exception {
+        if (McpString.isNotEmpty(stmpSend.getTemplateName()) && stmpSend.getContext() != null) {
+            Context context = new Context();
+            context.setVariables(BeanConverter.toMap(stmpSend.getContext()));
+            String body = templateEngine.process(stmpSend.getTemplateName(), context);
+            stmpSend.setBody(body);
+        }
         send(stmpSend.getFrom(), stmpSend.getTo(), stmpSend.getTitle(), stmpSend.getBody(), stmpSend.isHtml());
     }
 }

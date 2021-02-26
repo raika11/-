@@ -15,6 +15,8 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.mail.mvc.dto.SmtpSendDTO;
+import jmnet.moka.core.mail.mvc.service.SmtpService;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.mvc.tour.dto.TourApplySearchDTO;
@@ -30,6 +32,7 @@ import jmnet.moka.core.tps.mvc.tour.vo.TourPossibleDenyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourSetupVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -69,11 +72,11 @@ public class TourRestController extends AbstractCommonController {
     @Autowired
     private TourApplyService tourApplyService;
 
-    //@Autowired
-    //private SmtpService smtpService;
+    @Autowired
+    private SmtpService smtpService;
 
-    //@Value("${general.receive-address}")
-    //private String fromEmailAddress;
+    @Value("${general.receive-address}")
+    private String fromEmailAddress;
 
     @ApiOperation(value = "메세지 목록조회")
     @GetMapping("/guides")
@@ -289,7 +292,15 @@ public class TourRestController extends AbstractCommonController {
                         .equals(returnValue.getTourStatus()) && !returnValue
                         .getTourStatus()
                         .equals("S")) { // 이전 정보와 상태값이 다르고 신청상태가 아닌 경우에만 메일 발송
-                    
+                    returnValue.setTourStatusName(getTourStatusName(returnValue.getTourStatus()));
+                    smtpService.send(SmtpSendDTO
+                            .builder()
+                            .from(fromEmailAddress)
+                            .to(new String[] {returnValue.getWriterEmail()})
+                            .templateName("tour-mail")
+                            .context(returnValue)
+                            .title("견학 안내 메일입니다.")
+                            .build());
                 }
                 ResultDTO<TourApplyVO> resultDTO = new ResultDTO<TourApplyVO>(returnValue, msg("tps.common.success.update"));
                 tpsLogger.success(ActionType.UPDATE, true);
@@ -422,6 +433,21 @@ public class TourRestController extends AbstractCommonController {
         ResultDTO<ResultListDTO<TourApplyVO>> resultDTO = new ResultDTO<ResultListDTO<TourApplyVO>>(resultList);
         tpsLogger.success(true);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    private String getTourStatusName(String tourStatus) {
+        String tourStatusName = "";
+        switch (tourStatus) {
+            case "S":
+                tourStatusName = "신청";
+            case "A":
+                tourStatusName = "승인";
+            case "R":
+                tourStatusName = "반려";
+            case "C":
+                tourStatusName = "취소";
+        }
+        return tourStatusName;
     }
 
 }

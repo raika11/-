@@ -32,7 +32,7 @@ const ServiceRenderer = ({ bulkartSeq, usedYn, status }) => {
                 bulkartSeq: bulkartSeq,
                 callback: ({ header: { success, message }, body: { list } }) => {
                     if (success === true) {
-                        dispatch(clearBulksArticle());
+                        // dispatch(clearBulksArticle());
                         dispatch(getBulkList()); // 상태가 변경 되면 리스트를 다시 가시고 오기.
                         toast.success(message);
                     } else {

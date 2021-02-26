@@ -62,6 +62,7 @@ const BulkPreviewModal = () => {
             //     .join(`<br />`)}<br/><br/>
             //     `;
 
+            // 미리 보기 창에 보여줄 html 처리.
             const tempHtmlString = bulkArticle
                 .filter((e) => e.url.length > 0)
                 .map((e) => {
@@ -110,7 +111,6 @@ const BulkPreviewModal = () => {
     const createTabs = () => {
         return tabNavs.map((nav) => {
             if (nav === '미리보기') {
-                // console.log(htmlString);
                 return (
                     <Col xs={12} className="pt-4">
                         {htmlString.length > 0 &&
@@ -137,34 +137,6 @@ const BulkPreviewModal = () => {
                         <div style={{ padding: '8px 0px 5px 0px' }}>{`${copyright.cdNm}`}</div>
                     </Col>
                 );
-                // return (
-                //     <Col xs={12} className="pt-4">
-                //         <div
-                //             className="text-left"
-                //             dangerouslySetInnerHTML={{ __html: htmlString }}
-                //             style={{
-                //                 /* 한 줄 자르기 */
-                //                 // display: 'inline-block',
-                //                 width: '100%',
-                //                 // whiteSpace: 'nowrap',
-                //                 overflow: 'hidden',
-                //                 // textOverflow: 'ellipsis',
-
-                //                 /* 여러 줄 자르기 추가 스타일 */
-                //                 whiteSpace: 'normal',
-                //                 // lineHeight: '1.2',
-                //                 height: '2.6em',
-                //                 textAlign: 'left',
-                //                 wordWrap: 'break-word',
-                //                 display: '-webkit-box',
-                //                 '-webkit-line-clamp': '2',
-                //                 '-webkit-box-orient': 'vertical',
-                //             }}
-                //         />
-                //         <div>{`${copyright.cdNm}`}</div>
-                //         {/* <div className="text-left" dangerouslySetInnerHTML={{ __html: htmlString }} /> */}
-                //     </Col>
-                // );
             } else if (nav === '소스보기') {
                 return (
                     <Col xs={12} className="pt-4">

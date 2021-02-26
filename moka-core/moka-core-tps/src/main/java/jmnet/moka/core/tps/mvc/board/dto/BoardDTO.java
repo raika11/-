@@ -71,6 +71,12 @@ public class BoardDTO {
     private String regName;
 
     /**
+     * 등록자ID
+     */
+    @ApiModelProperty("등록자ID")
+    private String regId;
+
+    /**
      * 뎁스
      */
     @ApiModelProperty(hidden = true)

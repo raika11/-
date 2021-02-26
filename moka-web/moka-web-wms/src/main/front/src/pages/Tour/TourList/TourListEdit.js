@@ -184,15 +184,15 @@ const TourListEdit = forwardRef(({ match }) => {
                     onClick: handleClickDelete,
                 },
                 {
-                    text: '메일 미리보기',
-                    variant: 'outline-neutral',
-                    className: 'mr-1',
-                    onClick: () => handleClickPreview(temp),
-                },
-                {
                     text: '취소',
                     variant: 'negative',
+                    className: 'mr-1',
                     onClick: handleClickCancel,
+                },
+                {
+                    text: '메일 미리보기',
+                    variant: 'outline-neutral',
+                    onClick: () => handleClickPreview(temp),
                 },
             ]}
         >

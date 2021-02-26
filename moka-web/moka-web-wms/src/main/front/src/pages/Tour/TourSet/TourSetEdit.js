@@ -203,6 +203,7 @@ const TourSetEdit = () => {
                     <MokaInputLabel
                         label="일"
                         labelClassName="ml-0"
+                        labelWidth={16}
                         as="switch"
                         name="sunday"
                         id="tour-sun-switch"
@@ -214,6 +215,7 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="월"
+                        labelWidth={16}
                         as="switch"
                         name="monday"
                         id="tour-mon-switch"
@@ -225,6 +227,7 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="화"
+                        labelWidth={16}
                         as="switch"
                         name="tuesday"
                         id="tour-tue-switch"
@@ -236,6 +239,7 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="수"
+                        labelWidth={16}
                         as="switch"
                         name="wednesday"
                         id="tour-wed-switch"
@@ -247,6 +251,7 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="목"
+                        labelWidth={16}
                         as="switch"
                         name="thursday"
                         id="tour-thu-switch"
@@ -258,6 +263,7 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="금"
+                        labelWidth={16}
                         as="switch"
                         name="friday"
                         id="tour-fri-switch"
@@ -269,6 +275,7 @@ const TourSetEdit = () => {
                     />
                     <MokaInputLabel
                         label="토"
+                        labelWidth={16}
                         as="switch"
                         name="saturday"
                         id="tour-sat-switch"

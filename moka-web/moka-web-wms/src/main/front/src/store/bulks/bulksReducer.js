@@ -46,8 +46,8 @@ export const initialState = {
         },
         bulkartSeq: null,
         bulkArticle: {
-            totalCnt: 0,
             list: [],
+            bulk: {},
         },
         bulksError: null,
         invalidList: [],
@@ -189,10 +189,11 @@ export default handleActions(
             });
         },
         // 문구 상세 정보 가기고 오기 성공.
-        [GET_BULK_ARTICLE_SUCCESS]: (state, { payload: { body, bulkartSeq } }) => {
+        [GET_BULK_ARTICLE_SUCCESS]: (state, { payload: { list, bulk } }) => {
             return produce(state, (draft) => {
-                draft.bulkn.bulkartSeq = bulkartSeq;
-                draft.bulkn.bulkArticle = body;
+                draft.bulkn.bulkartSeq = bulk.bulkartSeq;
+                draft.bulkn.bulkArticle.list = list;
+                draft.bulkn.bulkArticle.bulk = bulk;
                 draft.bulkn.bulksError = initialState.bulkn.bulksError;
             });
         },

@@ -50,17 +50,17 @@ function* getBulkArticleSaga({ payload: { bulkartSeq, callback } }) {
 
     try {
         response = yield call(getBulkArticle, getData);
-        callbackData = response.data;
-
         const {
             header: { success },
-            body,
+            body: {
+                LIST: { list },
+                bulk,
+            },
         } = response.data;
         if (success === true) {
-            yield put({ type: GET_BULK_ARTICLE_SUCCESS, payload: response.data, bulkartSeq: bulkartSeq });
-            yield put({ type: GET_BULK_ARTICLE_SUCCESS, payload: { body: response.data.body, bulkartSeq: bulkartSeq } });
+            yield put({ type: GET_BULK_ARTICLE_SUCCESS, payload: { list: list, bulk: bulk } });
         } else {
-            yield put({ type: GET_BULK_ARTICLE_FAILURE, payload: body });
+            yield put({ type: GET_BULK_ARTICLE_FAILURE, payload: response.data.body });
         }
     } catch (e) {
         callbackData = errorResponse(e);

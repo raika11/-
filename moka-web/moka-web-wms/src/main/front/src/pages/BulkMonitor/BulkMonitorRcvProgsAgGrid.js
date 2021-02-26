@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MokaTable } from '@/components';
 import columnDefs from './BulkMonitorRcvProgsAgGridColumns';
 import RcvProgsModal from './modals/RcvProgsModal';
 import RcvProgsBulkLogModal from './modals/RcvProgsBulkLogModal';
 import { unescapeHtml } from '@utils/convertUtil';
-import { GET_BULK_STAT_LIST } from '@/store/bulks';
+import { changeBmSearchOption, GET_BULK_STAT_LIST } from '@/store/bulks';
+import produce from 'immer';
 
 /**
  * 벌크 모니터링 목록
  */
 const BulkMonitorRcvProgsAgGrid = () => {
+    const total = useSelector((store) => store.bulkMonitor.total);
     const search = useSelector((store) => store.bulkMonitor.search);
     const sendList = useSelector((store) => store.bulkMonitor.sendList);
     const loading = useSelector((store) => store.loading[GET_BULK_STAT_LIST]);
@@ -18,6 +20,7 @@ const BulkMonitorRcvProgsAgGrid = () => {
     const [showRcvProgsModal, setShowRcvProgsModal] = useState(false);
     const [showBulkLogModal, setShowBulkLogModal] = useState(false);
     const [modalData, setModalData] = useState({});
+    const dispatch = useDispatch();
 
     const handleClickValue = useCallback((data, type) => {
         setModalData({ ...data, type });
@@ -28,6 +31,17 @@ const BulkMonitorRcvProgsAgGrid = () => {
         setModalData({ ...data });
         setShowBulkLogModal(true);
     }, []);
+
+    const handleChangeSearchOption = (option) => {
+        const { key, value } = option;
+        dispatch(
+            changeBmSearchOption(
+                produce(search, (draft) => {
+                    draft[key] = value;
+                }),
+            ),
+        );
+    };
 
     useEffect(() => {
         // row 생성
@@ -56,8 +70,10 @@ const BulkMonitorRcvProgsAgGrid = () => {
                 loading={loading}
                 page={search.page}
                 size={search.size}
+                total={total}
                 preventRowClickCell={['status', 'naverStatus', 'daumStatus', 'nateStatus', 'zoomStatus', 'kpfStatus', 'bulkLogBtn']}
-                paging={false}
+                onChangeSearchOption={handleChangeSearchOption}
+                /*paging={false}*/
             />
             <RcvProgsModal show={showRcvProgsModal} onHide={() => setShowRcvProgsModal(false)} data={modalData} />
             <RcvProgsBulkLogModal show={showBulkLogModal} onHide={() => setShowBulkLogModal(false)} data={modalData} />

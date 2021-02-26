@@ -93,6 +93,7 @@ const BulkMonitorSearch = () => {
 
     useEffect(() => {
         setSearch(storeSearch);
+        dispatch(getBulkStatList(changeBmSearchOption(storeSearch)));
     }, [storeSearch]);
 
     return (

@@ -311,7 +311,16 @@ public class BulkRestController extends AbstractCommonController {
             List<BulkArticleDTO> list = validList.getList();
             if (list.size() > 0) {
                 // insert
-                Bulk returnValue = naverBulkService.insertBulk(modelMapper.map(bulkSave, Bulk.class), list);
+                Bulk bulk = modelMapper.map(bulkSave, Bulk.class);
+
+                // 임시저장이면 사용여부 N 저장이면 Y
+                bulk.setUsedYn(MokaConstants.STATUS_SAVE.equals(bulkSave.getStatus()) ? MokaConstants.NO : MokaConstants.YES);
+
+                Bulk returnValue = naverBulkService.insertBulk(bulk, list);
+
+                if (MokaConstants.STATUS_PUBLISH.equals(returnValue.getStatus())) {
+                    naverBulkService.updateArticle(returnValue);
+                }
 
                 // 트랜잭션 완료 후 content 조회 + 입력한 데이터의 content값 변경
                 String content = naverBulkService.getContent(bulkSave);

@@ -114,7 +114,7 @@ const ChannelSearchBox = ({ match }) => {
                             inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         />
                     </div>
-                    <div className="pr-2">
+                    <div className="mr-1">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             <option value="">전체</option>
                             {selectItem.usedYn.map((item, index) => (
@@ -124,7 +124,7 @@ const ChannelSearchBox = ({ match }) => {
                             ))}
                         </MokaInput>
                     </div>
-                    <div className="pr-2" style={{ width: 300 }}>
+                    <div className="mr-1" style={{ width: 300 }}>
                         <MokaSearchInput
                             id="keyword"
                             name="keyword"
@@ -134,7 +134,7 @@ const ChannelSearchBox = ({ match }) => {
                             onSearch={() => handleClickSearchButton()}
                         />
                     </div>
-                    <div className="pr-2">
+                    <div className="mr-1">
                         <Button variant="negative" onClick={() => handleClickSearchResetButton()}>
                             초기화
                         </Button>

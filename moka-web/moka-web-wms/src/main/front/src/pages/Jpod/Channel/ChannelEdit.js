@@ -883,7 +883,7 @@ const ChannelEdit = ({ match }) => {
                     <Form.Row className="mb-2">
                         <MokaInputLabel label={`진행자`} labelWidth={70} as="none" />
                         <Col xs={4} className="p-0">
-                            <Button xs={12} variant="searching" size="sm" className="mb-0 mr-2" onClick={() => handleClickSearchRepoterButton()}>
+                            <Button xs={12} variant="searching" size="sm" className="mb-0 mr-1" onClick={() => handleClickSearchRepoterButton()}>
                                 기자 검색
                             </Button>
                             <Button variant="positive" size="sm" onClick={(e) => handleClickRepoterAddButton()}>

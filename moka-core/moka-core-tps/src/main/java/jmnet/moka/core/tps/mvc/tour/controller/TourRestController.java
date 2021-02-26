@@ -15,6 +15,7 @@ import jmnet.moka.common.data.support.SearchParam;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.common.utils.dto.ResultListDTO;
 import jmnet.moka.core.common.logger.LoggerCodes.ActionType;
+import jmnet.moka.core.mail.mvc.service.SmtpService;
 import jmnet.moka.core.tps.common.controller.AbstractCommonController;
 import jmnet.moka.core.tps.common.dto.ValidList;
 import jmnet.moka.core.tps.mvc.tour.dto.TourApplySearchDTO;
@@ -25,11 +26,13 @@ import jmnet.moka.core.tps.mvc.tour.service.TourGuideService;
 import jmnet.moka.core.tps.mvc.tour.service.TourSetupService;
 import jmnet.moka.core.tps.mvc.tour.vo.TourApplyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourDenyVO;
+import jmnet.moka.core.tps.mvc.tour.vo.TourGuideMailVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourGuideVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourPossibleDenyVO;
 import jmnet.moka.core.tps.mvc.tour.vo.TourSetupVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +71,12 @@ public class TourRestController extends AbstractCommonController {
 
     @Autowired
     private TourApplyService tourApplyService;
+
+    @Autowired
+    private SmtpService smtpService;
+
+    @Value("${general.receive-address}")
+    private String fromEmailAddress;
 
     @ApiOperation(value = "메세지 목록조회")
     @GetMapping("/guides")
@@ -258,7 +267,8 @@ public class TourRestController extends AbstractCommonController {
     @ApiOperation(value = "신청 수정")
     @PutMapping(value = "/applys/{tourSeq}", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> putTourApply(@ApiParam(value = "신청순번", required = true) @PathVariable("tourSeq")
-    @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq, @ApiParam("신청정보") @RequestBody @Valid TourApplyVO tourApplyVO)
+    @Min(value = 0, message = "{tps.tour-apply.error.min.tourSeq}") Long tourSeq, @ApiParam("신청정보") @RequestBody @Valid TourApplyVO tourApplyVO,
+            @ApiParam("메일정보") @RequestBody @Valid TourGuideMailVO mailVO)
             throws Exception {
 
         try {
@@ -275,8 +285,15 @@ public class TourRestController extends AbstractCommonController {
                 throw new Exception(msg("tps.tour-apply.error.dup.writerEmail"));
             } else {
                 // 수정
+                TourApplyVO oldApply = tourApplyService.findTourApply(tourApplyVO.getTourSeq());
                 TourApplyVO returnValue = tourApplyService.updateTourApply(tourApplyVO);
-
+                if (!oldApply
+                        .getTourStatus()
+                        .equals(returnValue.getTourStatus()) && !returnValue
+                        .getTourStatus()
+                        .equals("S")) { // 이전 정보와 상태값이 다르고 신청상태가 아닌 경우에만 메일 발송
+                    smtpService.send(fromEmailAddress, returnValue.getWriterEmail(), mailVO.getEmailTitle(), mailVO.getEmailBody());
+                }
                 ResultDTO<TourApplyVO> resultDTO = new ResultDTO<TourApplyVO>(returnValue, msg("tps.common.success.update"));
                 tpsLogger.success(ActionType.UPDATE, true);
                 return new ResponseEntity<>(resultDTO, HttpStatus.OK);

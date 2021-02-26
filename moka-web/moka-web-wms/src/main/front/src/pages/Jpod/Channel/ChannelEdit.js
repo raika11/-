@@ -900,12 +900,12 @@ const ChannelEdit = ({ match }) => {
                                 </div>
                                 <Col className="p-0" xs={11} style={{ backgroundColor: '#f4f7f9' }}>
                                     <Form.Row>
-                                        <Col className="p-0 mr-2" style={{ height: '100px' }} xs={11}>
+                                        <Col className="p-0 mt-1 mr-2" style={{ height: '100px' }} xs={11}>
                                             <Col className="d-flex h-50 align-items-center" xs={12}>
                                                 {/* <div style={{ width: '70px' }}> */}
                                                 <MokaInput
                                                     name="memRepSeq"
-                                                    className="ft-12 mr-2"
+                                                    className="ft-12 m-2"
                                                     value={element.memRepSeq}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`기자번호`}
@@ -915,7 +915,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div style={{ width: '160px' }}> */}
                                                 <MokaInput
                                                     name="memNm"
-                                                    className="ft-12 mr-2"
+                                                    className="ft-12 m-2"
                                                     value={element.memNm}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`기자명`}
@@ -924,7 +924,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div className="pl-3" style={{ width: '115px' }}> */}
                                                 <MokaInput
                                                     name="memMemo"
-                                                    className="ft-12 mr-2"
+                                                    className="ft-12 m-2"
                                                     value={element.memMemo}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`직책`}
@@ -933,7 +933,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div className="pl-3" style={{ width: '115px' }}> */}
                                                 <MokaInput
                                                     name="nickNm"
-                                                    className="ft-12 mr-2"
+                                                    className="ft-12 m-2"
                                                     value={element.nickNm}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`닉네임`}
@@ -945,12 +945,12 @@ const ChannelEdit = ({ match }) => {
                                                     </Button>
                                                 </div>
                                             </Col>
-                                            <Col xs={12} className="p-0 h-50 d-flex align-items-center">
+                                            <Col xs={12} className="p-0 mr-2 h-50 d-flex align-items-center">
                                                 <Col xs={12}>
                                                     <MokaInput
                                                         name="desc"
-                                                        className="ft-12"
-                                                        style={{ height: '40px' }}
+                                                        className="ml-2 mb-2 ft-12"
+                                                        // style={{ height: '40px' }}
                                                         value={element.desc}
                                                         onChange={(e) => handleChangeReporters({ e, index })}
                                                         placeholder={`설명`}

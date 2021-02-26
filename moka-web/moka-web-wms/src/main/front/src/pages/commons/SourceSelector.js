@@ -188,7 +188,7 @@ const SourceSelector = (props) => {
     useEffect(() => {
         if (renderList.length < 1) return;
         if (value || value === '') {
-            // 1,3,60,61 => [1, 3, 60, 61]로 파싱하고, renderList에 포함되어 있는 데이터만 남기도록 필터링한다
+            // 1,3,61 => [1, 3, 61]로 파싱하고, renderList에 포함되어 있는 데이터만 남기도록 필터링한다
             const valueArr = value
                 .split(',')
                 .filter((v) => v !== '')

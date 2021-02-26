@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { MokaCard, MokaIconTabs, MokaLoader } from '@components';
+import { MokaCard, MokaIconTabs } from '@components';
 import { Route } from 'react-router-dom';
 import QuizChildRelationInfo from '@pages/Survey/Quiz/relations/QuizChildRelationInfo';
 
@@ -27,7 +27,7 @@ const Quiz = ({ match }) => {
 
             {/* 리스트 */}
             <MokaCard width={798} className="mr-gutter" titleClassName="mb-0" title="퀴즈 관리">
-                <Suspense fallback={<MokaLoader />}>
+                <Suspense>
                     <QuizList />
                 </Suspense>
             </MokaCard>
@@ -42,10 +42,10 @@ const Quiz = ({ match }) => {
                         tabWidth={750}
                         onSelectNave={(idx) => setActiveTabIdx(idx)}
                         tabs={[
-                            <Suspense fallback={<MokaLoader />}>
+                            <Suspense>
                                 <QuizEdit handleSave={handleSave} setHandleSave={() => setHandleSave(false)} />
                             </Suspense>,
-                            <Suspense fallback={<MokaLoader />}>
+                            <Suspense>
                                 <QuizChildRelationInfo HandleSave={() => handleSaveButtonClick()} />
                             </Suspense>,
                         ]}

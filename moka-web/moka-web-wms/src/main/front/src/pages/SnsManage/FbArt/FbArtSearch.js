@@ -26,7 +26,7 @@ const FbArtSearch = ({ searchOptions, onSearch, onReset }) => {
     return (
         <Form.Row className="mb-14">
             <Col xs={1} className="p-0 mr-2">
-                <MokaInput as="select" value={options.searchType} name="type" onChange={handleChangeValue}>
+                <MokaInput as="select" value={options.searchType} name="searchType" onChange={handleChangeValue}>
                     <option value="articleTitle">제목</option>
                     <option value="totalId">기사ID</option>
                 </MokaInput>

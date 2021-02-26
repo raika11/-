@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 // 삭제 옵션으로 글자색 변경 처리.
 const TitleItemRenderer = ({ paramsValue: { replyFlag, delYn, title } }) => {
     return (
-        <>
+        <div className="h-100 d-flex align-items-center">
             {delYn === 'N' ? (
                 <Row>
                     <Col style={{ width: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{replyFlag ? `ㄴ ${title}` : title}</Col>
@@ -17,7 +17,7 @@ const TitleItemRenderer = ({ paramsValue: { replyFlag, delYn, title } }) => {
                     </Col>
                 </Row>
             )}
-        </>
+        </div>
     );
 };
 

@@ -3,6 +3,7 @@ package jmnet.moka.web.bulk.task.bulksender.channel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import jmnet.moka.web.bulk.code.SenderStatus;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
@@ -47,6 +48,7 @@ public class BulkSenderClientHandler implements Runnable{
     private final SlackMessageService slackMessageService;
 
     private boolean isPause = false;
+    private Date lastSuccessDate;
 
     public BulkSenderClientHandler(BulkDumpEnvCP bulkDumpEnvCP, BulkSenderTask bulkSenderTask) {
         this.bulkDumpEnvCP = bulkDumpEnvCP;
@@ -94,6 +96,7 @@ public class BulkSenderClientHandler implements Runnable{
                             f.delete();
                             insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Complete,
                                     BulkStringUtil.format("{} Bulk Sender End {}", bulkDumpJob.getCpName(), f.getName()));
+                            lastSuccessDate = new Date();
                         }
                         else
                             insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Error,

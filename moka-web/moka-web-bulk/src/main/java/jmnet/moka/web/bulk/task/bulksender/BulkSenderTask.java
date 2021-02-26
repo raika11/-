@@ -168,6 +168,8 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
                 cpData.put("comment", bulkDumpEnvCP.getComment());
                 cpData.put("dir", bulkDumpEnvCP.getDir());
                 cpData.put("pause", clientHandler.isPause());
+                if( clientHandler.getLastSuccessDate() != null )
+                    cpData.put("lastSuccessDate", clientHandler.getLastSuccessDate() );
             }
         }
         return map;

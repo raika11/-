@@ -96,22 +96,28 @@ public class TaskGroup {
     public boolean operation(OpCode opCode, String target, Map<String, String> param, Map<String, Object> responseMap)
             throws InterruptedException {
 
-        boolean success = false;
         boolean allTarget = McpString.isNullOrEmpty(target) || "all".equals(target);
 
-        Map<String, Object> response = responseMap;
-
+        List<Map<String, Object>> arrayMap = null;
         if( opCode == OpCode.list ) {
+            arrayMap = new ArrayList<>();
+            responseMap.put("name", getName());
+            responseMap.put("tasks", arrayMap);
             allTarget = true;
-            response = new HashMap<>();
-            responseMap.put(getName(), response);
         }
 
+        Map<String, Object> response = responseMap;
+        boolean success = false;
         for (Task<?> task : this.tasks) {
             if (!allTarget) {
                 final String className = task.getClass().getSimpleName();
                 if( !className.equalsIgnoreCase( target ) )
                     continue;
+            }
+
+            if( opCode == OpCode.list ) {
+                response = new HashMap<>();
+                arrayMap.add(response);
             }
             success |= task.operation(opCode, param, response, "all".equals(target));
         }

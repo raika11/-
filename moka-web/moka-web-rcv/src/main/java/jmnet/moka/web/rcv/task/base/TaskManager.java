@@ -2,6 +2,7 @@ package jmnet.moka.web.rcv.task.base;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
@@ -122,9 +123,21 @@ public class TaskManager {
 
     public boolean operation(OpCode opCode, String target, Map<String, String> param, Map<String, Object> responseMap)
             throws InterruptedException {
+
+        List<Map<String, Object>> arrayMap = null;
+        if( opCode == OpCode.list ) {
+            arrayMap = new ArrayList<>();
+            responseMap.put("groups", arrayMap);
+        }
+
+        Map<String, Object> response = responseMap;
         boolean success = false;
         for (TaskGroup taskGroup : this.taskGroups) {
-            success |= taskGroup.operation(opCode, target, param, responseMap );
+            if( opCode == OpCode.list ) {
+                response = new HashMap<>();
+                arrayMap.add(response);
+            }
+            success |= taskGroup.operation(opCode, target, param, response );
         }
         return success;
     }

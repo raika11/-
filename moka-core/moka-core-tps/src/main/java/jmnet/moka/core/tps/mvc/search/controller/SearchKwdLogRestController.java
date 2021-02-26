@@ -90,7 +90,7 @@ public class SearchKwdLogRestController extends AbstractCommonController {
         Page<SearchKwdLogVO> returnValue = searchKwdLogService.findAllSearchKwdLogStat(search);
 
         // 리턴값 설정
-        resultListMessage.setTotalCnt(returnValue.getTotalPages());
+        resultListMessage.setTotalCnt(returnValue.getTotalElements());
         resultListMessage.setList(returnValue.getContent());
 
 
@@ -141,6 +141,7 @@ public class SearchKwdLogRestController extends AbstractCommonController {
 
 
         search.setPage(currentPage.getAndAdd(1));
+        search.setSize(size);
         Page<SearchKwdLogVO> list = searchKwdLogService.findAllSearchKwdLogStat(search);
 
         totalPages = list.getTotalPages();

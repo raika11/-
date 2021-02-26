@@ -618,6 +618,7 @@ public class ComponentRestController extends AbstractCommonController {
                 .relSeqType(MokaConstants.ITEM_COMPONENT)
                 .relType(MokaConstants.ITEM_PAGE)
                 .build();
+        search.setSize(9999);
         List<PageVO> pageList = relationService.findAllPage(search);
         String retPage = purgeHelper.tmsPageUpdate(pageList);
         if (McpString.isNotEmpty(retPage)) {

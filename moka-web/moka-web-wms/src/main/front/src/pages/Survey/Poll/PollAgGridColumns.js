@@ -33,7 +33,7 @@ export const columnDefs = [
         width: 70,
         cellStyle: { diplay: 'flex', alignItems: 'center' },
     },
-    {
+    /*{
         headerName: '시작일',
         field: 'startDt',
         width: 130,
@@ -49,6 +49,15 @@ export const columnDefs = [
                 },
             },
         ],
+    },*/
+    {
+        headerName: '시작일\n종료일',
+        field: 'modDt',
+        width: 130,
+        cellStyle: { lineHeight: '18px' },
+        cellRendererFramework: (param) => {
+            return <MultiRowColumnComponent values={[param.data.startDt, param.value]} />;
+        },
     },
     {
         headerName: '보기',
@@ -75,7 +84,7 @@ export const columnDefs = [
             );
         },
     },
-    {
+    /*{
         headerName: '등록자',
         field: 'regMember',
         cellStyle: { diplay: 'flex', alignItems: 'center' },
@@ -95,8 +104,38 @@ export const columnDefs = [
                 },
             },
         ],
+    },*/
+    {
+        headerName: '등록자\n등록일시',
+        field: 'regDt',
+        width: 130,
+        cellStyle: { lineHeight: '18px' },
+        cellRendererFramework: (param) => {
+            const regMember = param.data.regMember;
+            let regMemberIdNm = '';
+            if (regMember instanceof Object) {
+                regMemberIdNm = `${regMember.memberId}(${regMember.memberNm})`;
+            }
+            return <MultiRowColumnComponent values={[regMemberIdNm, param.value]} />;
+        },
     },
     {
+        headerName: '수정자\n수정일시',
+        field: 'modDt',
+        width: 130,
+        cellStyle: { lineHeight: '18px' },
+        cellRendererFramework: (param) => {
+            const modMember = param.data.modMember;
+
+            let modMemberIdNm = '';
+            if (modMember instanceof Object) {
+                modMemberIdNm = `${modMember.memberId}(${modMember.memberNm})`;
+            }
+
+            return <MultiRowColumnComponent values={[modMemberIdNm, param.value]} />;
+        },
+    },
+    /*{
         headerName: '수정자',
         field: 'modMember',
         width: 70,
@@ -118,7 +157,7 @@ export const columnDefs = [
                 },
             },
         ],
-    },
+    },*/
     {
         headerName: '',
         field: 'delete',

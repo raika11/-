@@ -6,7 +6,7 @@ export default [
         headerName: 'ID',
         field: 'id',
         width: 80,
-        tooltipFied: 'id',
+        tooltipField: 'id',
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {

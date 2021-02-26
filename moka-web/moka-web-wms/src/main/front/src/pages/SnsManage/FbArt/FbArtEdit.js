@@ -30,6 +30,7 @@ const FbArtEdit = () => {
     });
 
     const handleChangeEditValue = ({ target: { name, value } }, isCheckedValue = false) => {
+        console.log(edit);
         if (isCheckedValue) {
             value = !edit['fb'].usedYn;
         }
@@ -215,9 +216,9 @@ const FbArtEdit = () => {
                         <MokaInputLabel name="title" onChange={handleChangeEditValue} value={edit.fb.title} className="mb-2" />
                         <MokaInput
                             as="textarea"
-                            name="postMessage"
+                            name="summary"
                             className="resize-none custom-scroll"
-                            value={edit.fb.postMessage}
+                            value={edit.fb.summary}
                             inputProps={{ rows: 5 }}
                             onChange={handleChangeEditValue}
                         />

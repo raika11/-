@@ -93,8 +93,8 @@ const SEOMetaSearch = () => {
     }, [dateType]);
 
     return (
-        <Form>
-            <Form.Row className="mb-2 justify-content-between align-items-center">
+        <Form className="mb-14">
+            <Form.Row className="justify-content-between align-items-center">
                 {/* 날짜 선택 */}
                 <div className="mr-2 flex-shrink-0">
                     <MokaInput as="select" name="dateType" onChange={handleChangeValue} value={dateType}>

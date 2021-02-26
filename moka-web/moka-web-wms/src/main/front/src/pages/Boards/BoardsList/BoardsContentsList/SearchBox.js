@@ -115,7 +115,7 @@ const SearchBox = (props) => {
     }, []);
 
     return (
-        <Form className="mb-2">
+        <Form className="mb-14">
             {/* 날짜 */}
             <Form.Row className="d-flex mb-2">
                 {/* 시작 날짜 */}
@@ -194,7 +194,7 @@ const SearchBox = (props) => {
                 <MokaSearchInput
                     id="keyword"
                     name="keyword"
-                    className="mr-2 flex-fill"
+                    className="mr-1 flex-fill"
                     placeholder={'제목, 내용, 등록자 명'}
                     value={searchData.keyword}
                     onChange={(e) => handleSearchChange(e)}

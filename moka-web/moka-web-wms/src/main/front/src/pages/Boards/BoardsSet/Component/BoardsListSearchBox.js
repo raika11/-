@@ -57,7 +57,7 @@ const BoardsListSearchBox = (props) => {
     }, []);
 
     return (
-        <Form.Row className="d-flex justify-content-between mb-2">
+        <Form.Row className="d-flex justify-content-between mb-14">
             <div className="d-flex flex-fill">
                 <div className="mr-2">
                     <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)}>
@@ -72,7 +72,7 @@ const BoardsListSearchBox = (props) => {
                 <MokaSearchInput
                     id="keyword"
                     name="keyword"
-                    className="mr-2 w-50"
+                    className="mr-1 w-50"
                     placeholder={'게시판명, 설명'}
                     value={searchData.keyword}
                     onChange={(e) => handleSearchChange(e)}

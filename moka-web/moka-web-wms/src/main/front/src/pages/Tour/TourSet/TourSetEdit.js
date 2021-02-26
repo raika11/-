@@ -122,10 +122,10 @@ const TourSetEdit = () => {
                     className: 'mr-1',
                     onClick: handleClickSave,
                 },
-                {
-                    text: '취소',
-                    variant: 'negative',
-                },
+                // {
+                //     text: '취소',
+                //     variant: 'negative',
+                // },
             ]}
             footerClassName="justify-content-center"
         >

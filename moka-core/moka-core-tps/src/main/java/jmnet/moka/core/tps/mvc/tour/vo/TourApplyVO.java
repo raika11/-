@@ -197,4 +197,7 @@ public class TourApplyVO implements Serializable {
     @Column(name = "CONFIRM_DT")
     private Date confirmDt;
 
+    // 상명 명칭
+    private String tourStatusName;
+
 }

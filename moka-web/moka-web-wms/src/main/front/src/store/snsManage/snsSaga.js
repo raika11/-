@@ -4,10 +4,11 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 
 import { finishLoading, startLoading } from '@store/loading';
 import { errorResponse } from '@store/commons/saga';
-import { BLANK_IMAGE_PATH, DB_DATEFORMAT, IR_URL, PDS_URL, snsNames } from '@/constants';
+import { DB_DATEFORMAT, IR_URL, PDS_URL, snsNames } from '@/constants';
 import commonUtil from '@utils/commonUtil';
 import moment from 'moment';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
+
 /************* 메타 **********************/
 function toSaveSnsMeta(data) {
     const params = {};
@@ -138,7 +139,7 @@ function setHasSendSnsIcons({ sendSnsType, fbSendSnsArtId, fbSendSnsArtSts, twSe
 }
 
 function setThumbnail(articleThumbnailUrl, snsThumbnailUrl) {
-    let thumbnail = IR_URL + BLANK_IMAGE_PATH;
+    let thumbnail = null;
     let snsFlag = false;
     if (!commonUtil.isEmpty(articleThumbnailUrl)) {
         if (!commonUtil.isEmpty(snsThumbnailUrl)) {

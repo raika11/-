@@ -27,6 +27,9 @@ const EditImageRenderer = forwardRef((params, ref) => {
         if (e.target.src.replace(window.location.origin, '') !== img_logo) {
             boxRef.current.classList.remove('onerror-image-wrap');
             e.target.classList.remove('onerror-image');
+        } else if (e.target.src === img_logo) {
+            boxRef.current.classList.add('onerror-image-wrap');
+            e.target.classList.add('onerror-image');
         }
     };
 

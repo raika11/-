@@ -7,8 +7,14 @@ import { useSelector } from 'react-redux';
 import { MokaLoader } from '@components';
 
 // const BulknMain = React.lazy(() => import('./BulknMain'));
-const BulknList = React.lazy(() => import('./BulknList'));
-const BulknEdit = React.lazy(() => import('./BulknEdit'));
+// const BulknList = React.lazy(() => import('./BulknList'));
+// const BulknEdit = React.lazy(() => import('./BulknEdit'));
+
+// 2021-03-02 14:44 깜빡이는 문제점이 있다는 의견이 있어서.
+// 벌크 는 같은 페이지가 2개라서 route 설정을 한번 더 타기 때문에 lazy 로더를 결국엔 2번 불러 오게
+// 설정 되어 있어서 최초 Bulks.js 파일에만 lazy 로더를 사용하게 수정.
+import BulknList from './BulknList';
+import BulknEdit from './BulknEdit';
 
 const protoTypes = {
     bulksParams: PropTypes.object.isRequired,

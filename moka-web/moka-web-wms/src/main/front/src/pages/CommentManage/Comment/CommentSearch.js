@@ -109,6 +109,10 @@ const CommentSearch = ({ selectBannedItem }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        console.log(initialState.comments.search);
+    }, []);
+
     return (
         <Form className="mb-14">
             <Form.Row>

@@ -38,7 +38,7 @@ const CommentActionModal = (props) => {
     const handleDeleteComment = (type) => {
         const paramsStatusType = type === 'restore' ? 'A' : 'N';
         const paramsDeleteType = type === 'restore' ? '' : type;
-        dispatch(clearComment());
+        // dispatch(clearComment());
         dispatch(
             deleteComment({
                 cmtSeq: ModalUsage.cmtSeq,

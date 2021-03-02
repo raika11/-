@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { MokaTable } from '@/components';
 import columnDefs from './TourListAgGridColumns';
 import { GET_TOUR_APPLY_LIST, getTourApplyList, changeSearchOption, getTourApply } from '@/store/tour';
+import { BASIC_DATEFORMAT } from '@/constants';
+import moment from 'moment';
 
 /**
  * 신청 목록 AgGrid
@@ -58,7 +60,7 @@ const TourListAgGrid = ({ match }) => {
                 list.map((data) => ({
                     ...data,
                     tourDate: (data.tourDate || '').substr(0, 10),
-                    regDt: (data.regDt || '').substr(0, 10),
+                    regDt: data.regDt ? moment(data.regDt).format(BASIC_DATEFORMAT) : '',
                 })),
             );
         }

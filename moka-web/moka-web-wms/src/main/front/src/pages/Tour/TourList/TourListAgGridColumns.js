@@ -54,6 +54,6 @@ export default [
     {
         headerName: '등록일',
         field: 'regDt',
-        width: 100,
+        width: 130,
     },
 ];

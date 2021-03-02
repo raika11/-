@@ -25,7 +25,9 @@ public class DpsApiConstants {
     public static final String COMMAND_PURGE_STARTSWITH = COMMAND_PREFIX + "/purgeStartsWith"; // API purgeStartsWith
 
 
-    /** TEMS 아이템 관련 : apiPath = sys_api */
+    /**
+     * TEMS 아이템 관련 : apiPath = sys_api
+     */
     public static final String ITEM_DOMAIN = "domain.list";
     public static final String ITEM_RESERVED = "reserved.list";
     public static final String ITEM_PAGE = "page.list";
@@ -42,7 +44,7 @@ public class DpsApiConstants {
      * 기사 관련 API
      **/
     public static final String ARTICLE = "article";
-    public static final String ARTICLE_SECTION_LIST = "article.section.list";
+    public static final String ARTICLE_SECTION_LIST = "category";
 
     /**
      * 편집(데스킹) API
@@ -50,11 +52,15 @@ public class DpsApiConstants {
     public static final String DESKING = "desking";
     public static final String DESKING_WORK = "desking.work";
 
-    /** 메뉴 관련 API **/
+    /**
+     * 메뉴 관련 API
+     **/
     public static final String MENU_CATEGORY = "menu.category";
     public static final String MENU_CODES = "menu.codes";
 
 
-    /** 디지털스페셜 관련 API **/
+    /**
+     * 디지털스페셜 관련 API
+     **/
     public static final String DIGITAL_SPECIAL_LIST = "digitalSpecial.list";
 }

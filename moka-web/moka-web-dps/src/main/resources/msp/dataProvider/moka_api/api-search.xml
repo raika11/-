@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
+
   <api id="search.latest" method="get" expire="5s">
     <description>카테고리의 최신기사를 반환한다.</description>
     <parameter>
       <category desc="카테고리" require="Y">.{1,20}</category>
-      <page desc="페이지번호" default="1">[0-9]{1,3}</page>
-      <listCount type="number" desc="출력건수" default="20">[0-9]{1,2}</listCount>
-      <startCount type="number" desc="페이지번호" default="0"
-        eval="((page le 0 ? 1 :page) - 1)*listCount"/>
     </parameter>
     <request type="module" methodName="getLatestArticle">
       jmnet.moka.core.dps.api.handler.module.SearchEngineModule
     </request>
     <keys>
       category
-      startCount
-      listCount
+      #paging
     </keys>
   </api>
+
 </apiConfig>

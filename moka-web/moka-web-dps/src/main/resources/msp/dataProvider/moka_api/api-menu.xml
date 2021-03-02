@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <apiConfig>
+
   <api id="menu.all" expire="5s">
     <description>전체 메뉴정보를 반환한다.</description>
     <parameter/>
     <request type="module">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
     <keys/>
   </api>
+
   <api id="menu.category" expire="5s">
     <description>카테고리에 해당하는 메뉴정보와 코드정보를 반환한다.</description>
     <parameter>
       <category desc="카테고리">.{1,20}</category>
     </parameter>
-    <request type="module" methodName="getMenuByCategory">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
+    <request type="module" methodName="getMenuByCategory">
+      jmnet.moka.core.dps.api.handler.module.MenuModule
+    </request>
     <keys/>
   </api>
+
   <api id="menu.codes" expire="5s">
     <description>코드정보에 해당하는 메뉴 정보와 카테고리를 반환한다.</description>
     <parameter>
@@ -21,9 +26,12 @@
       <serviceCode desc="서비스코드">([0-9]{4,6}(\,)?){1,10}</serviceCode>
       <sourceCode desc="출처코드">[0-9a-zA-Z]{1,10}</sourceCode>
     </parameter>
-    <request type="module" methodName="getMenuByCodes">jmnet.moka.core.dps.api.handler.module.MenuModule</request>
+    <request type="module" methodName="getMenuByCodes">
+      jmnet.moka.core.dps.api.handler.module.MenuModule
+    </request>
     <keys/>
   </api>
+
   <api id="menu.pc.js" contentType="application/javascript">
     <description>메뉴정보를 js형태로 반환한다.</description>
     <request type="script"><![CDATA[
@@ -34,6 +42,7 @@
       ]]>
     </request>
   </api>
+
   <!--      var merger = new("jmnet.moka.common.template.merge.SimpleTemplateMerger");-->
   <!--      var merger1 = $merger.getInstance();-->
   <!--      var mergeContext = new("jmnet.moka.common.template.merge.MergeContext");-->
@@ -54,14 +63,18 @@
       srcCodes
     </keys>
   </api>
+
   <api id="category.codes" expire="5s">
     <description>Category의 코드정보를 반환한다.</description>
     <parameter>
       <category desc="카테고리">.{1,20}</category>
     </parameter>
-    <request type="module" methodName="getCodes">jmnet.moka.core.dps.api.handler.module.CategoryModule</request>
+    <request type="module" methodName="getCodes">
+      jmnet.moka.core.dps.api.handler.module.CategoryModule
+    </request>
     <keys>
       category
     </keys>
   </api>
+
 </apiConfig>

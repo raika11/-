@@ -49,7 +49,7 @@ export const getAllRowData = (gridApi) => {
  * @param {object} event drag event
  * @param {string} className 찾는 element의 클래스명
  */
-export const classElementFromPoints = (event, className) => document.elementsFromPoint(event.clientX, event.clientY).find((r) => r.classList.contains(className));
+export const classElementsFromPoint = (event, className) => document.elementsFromPoint(event.clientX, event.clientY).find((r) => r.classList.contains(className));
 
 /**
  * 커서에 따른 자동스크롤

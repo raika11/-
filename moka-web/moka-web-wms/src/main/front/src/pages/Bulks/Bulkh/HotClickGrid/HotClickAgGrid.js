@@ -3,7 +3,7 @@ import produce from 'immer';
 import { AgGridReact } from 'ag-grid-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { columnDefs } from './HotClickAgGridColumns';
-import { getRow, getRowIndex, getDisplayedRows, classElementFromPoints, autoScroll } from '@utils/agGridUtil';
+import { getRow, getRowIndex, getDisplayedRows, classElementsFromPoint, autoScroll } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, findNextMainRow, clearHoverStyle, clearNextStyle } from '@utils/deskingUtil';
 import { changeHotClickList, changeHotClickListItem } from '@store/bulks';
 import useDebounce from '@hooks/useDebounce';
@@ -90,7 +90,7 @@ const BulkhHotClicAgGrid = ({ setComponentAgGridInstances }) => {
      */
     const onRowDragMove = useCallback(
         (params) => {
-            const scrollBox = classElementFromPoints(params.event, 'scrollable');
+            const scrollBox = classElementsFromPoint(params.event, 'scrollable');
             autoScroll(scrollBox, { clientX: params.event.clientX, clientY: params.event.clientY });
 
             // node 데이터 분석해서 처리 하는 부분

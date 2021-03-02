@@ -10,7 +10,7 @@ import DeskingEditorRenderer from './DeskingEditorRenderer';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 import toast from '@utils/toastUtil';
 import { putDeskingWorkListSort } from '@store/desking';
-import { getRow, getRowIndex, classElementFromPoints, autoScroll } from '@utils/agGridUtil';
+import { getRow, getRowIndex, classElementsFromPoint, autoScroll } from '@utils/agGridUtil';
 import { findWork, makeHoverBox, getMoveMode, clearHoverStyle, clearNextStyle, clearWorkStyle, findNextMainRow, addNextRowStyle } from '@utils/deskingUtil';
 
 let hoverBox = makeHoverBox();
@@ -311,7 +311,7 @@ const DeskingWorkAgGrid = (props) => {
      */
     const handleDragMove = useCallback(
         (params) => {
-            const scrollBox = classElementFromPoints(params.event, 'scrollable');
+            const scrollBox = classElementsFromPoint(params.event, 'scrollable');
             autoScroll(scrollBox, { clientX: params.event.clientX, clientY: params.event.clientY });
 
             // node 데이터 분석해서 처리 하는 부분

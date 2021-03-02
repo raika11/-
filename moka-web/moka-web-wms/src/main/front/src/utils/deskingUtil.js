@@ -1,4 +1,4 @@
-import { getRow, classElementFromPoints, autoScroll } from '@utils/agGridUtil';
+import { getRow, classElementsFromPoint, autoScroll } from '@utils/agGridUtil';
 
 /**
  * .component-work 찾음
@@ -166,7 +166,7 @@ export const addDeskingWorkDropzone = (onDragStop, sourceGrid, targetGrid, curre
         },
         onDragging: (source) => {
             let overRow = getRow(source.event);
-            const scrollBox = classElementFromPoints(source.event, 'scrollable');
+            const scrollBox = classElementsFromPoint(source.event, 'scrollable');
             autoScroll(scrollBox, { clientX: source.event.clientX, clientY: source.event.clientY });
 
             if (!overRow) {

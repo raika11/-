@@ -445,7 +445,7 @@ body {
             }
         }
 
-        /*2뎁스 padding*/
+        // 2뎁스 padding
         > .tree-category > div ul li .tree-label {
             padding-left: 22px;
         }
@@ -453,7 +453,7 @@ body {
             padding-left: 50px;
         }
 
-        /*3뎁스 padding*/
+        // 3뎁스 padding
         > .tree-category > div ul li div ul .tree-category div ul li .tree-label {
             padding-left: 78px;
         }
@@ -461,18 +461,18 @@ body {
             padding-left: 106px;
         }
 
-        /*4뎁스 padding*/
+        // 4뎁스 padding
         > .tree-category > div ul li div ul div ul .tree-category div ul li .tree-label {
             padding-left: 106px;
         }
 
-        /*5뎁스 padding*/
+        // 5뎁스 padding
         > .tree-category > div ul li div ul div ul li div ul .tree-category div ul li .tree-label {
             padding-left: 134px;
         }
     }
 
-    /** 스크롤바 **/
+    // 스크롤바
     .ps__thumb-y {
         background-color: $gray-300;
     }
@@ -646,7 +646,7 @@ body {
         border-top: 2px solid $positive;
     }
 
-    /* 벌크 핫클릭 예외처리 */
+    // 벌크 핫클릭 예외처리
     &.component-hot-click {
         &.hover::before {
             top: 0px;

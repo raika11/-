@@ -47,12 +47,14 @@ public class MokaLogTailController {
         final private ExecutorService executorService;
         final String include;
         final String exclude;
+        final boolean debugInfo;
 
-        public LogTailerListener(ResponseBodyEmitter emitter, ExecutorService executorService, String include, String exclude) {
+        public LogTailerListener(ResponseBodyEmitter emitter, ExecutorService executorService, String include, String exclude, boolean debugInfo) {
             this.emitter = emitter;
             this.executorService = executorService;
             this.include = include;
             this.exclude = exclude;
+            this.debugInfo = debugInfo;
         }
         public void handle(String line) {
             try {
@@ -78,8 +80,13 @@ public class MokaLogTailController {
                     }
                 }
 
-                if( produce )
+                if( produce ) {
+                    if( !this.debugInfo ) {
+                        line = line.replaceAll("jmnet.moka.web(.*)\\) - ", "");
+                        line = line.replaceAll("org.springframework.(.*)\\) - ", "");
+                    }
                     this.emitter.send(line + "\n");
+                }
             } catch (Exception ignore) {
                 this.emitter.complete();
                 this.executorService.shutdownNow();
@@ -96,6 +103,7 @@ public class MokaLogTailController {
 
         String include = null;
         String exclude = null;
+        boolean debugInfo = false;
 
         if( map.containsKey("include")) {
             String[] value = map.get("include");
@@ -107,6 +115,12 @@ public class MokaLogTailController {
             if( value.length > 0 )
                 exclude = value[0];
         }
+        if( map.containsKey("debugInfo")) {
+            String[] value = map.get("debugInfo");
+            if( value.length > 0 )
+                if( "true".equalsIgnoreCase(value[0]) )
+                    debugInfo = true;
+        }
 
         final ResponseBodyEmitter emitter = new ResponseBodyEmitter(this.logTailWaitTime);
         final ExecutorService executorService = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("logTail-thread-%d").build());
@@ -115,7 +129,7 @@ public class MokaLogTailController {
         executorService.execute(
                 new Tailer(
                         new File(logFileName), Charsets.UTF_8,
-                        new LogTailerListener(emitter, executorService, include, exclude), 100L, true, true, 4096) );
+                        new LogTailerListener(emitter, executorService, include, exclude, debugInfo), 100L, true, true, 4096) );
         return emitter;
     }
 }

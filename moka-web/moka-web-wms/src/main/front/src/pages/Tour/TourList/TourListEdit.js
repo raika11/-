@@ -199,7 +199,7 @@ const TourListEdit = ({ match }) => {
             <Form>
                 <Form.Row className="mb-2">
                     <div style={{ width: 280 }}>
-                        <MokaInputLabel as="select" label="신청 일시" className="mb-0 mr-2" value={temp.tourDate} onChange={handleChangeValue}>
+                        <MokaInputLabel as="select" name="tourDate" label="신청 일시" className="mb-0 mr-2" value={temp.tourDate} onChange={handleChangeValue}>
                             {tourPossibleList.map((date, idx) => (
                                 <option key={idx} value={idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}>
                                     {idx === 0 ? temp.tourDate : date.possDate.substr(0, 10)}

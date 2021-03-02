@@ -83,6 +83,8 @@ const CommentSearch = ({ selectBannedItem }) => {
 
     // 새로 고침 버튼 처리.
     const handleClickReloadButton = () => {
+        dispatch(changeSearchOption(initialState.comments.search));
+        setSearchData(initialState.comments.search);
         dispatch(getCommentList());
     };
 

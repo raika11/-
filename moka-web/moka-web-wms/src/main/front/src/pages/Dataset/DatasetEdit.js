@@ -27,18 +27,10 @@ const DatasetEdit = ({ onDelete, match }) => {
     const history = useHistory();
     const { datasetSeq } = useParams();
     const loading = useSelector(({ loading }) => loading[GET_DATASET] || loading[SAVE_DATASET] || loading[DELETE_DATASET]);
-    const { dataset: storeDataset, search: storeSearch } = useSelector(
-        ({ dataset }) => ({
-            dataset: dataset.dataset,
-            search: dataset.search,
-        }),
-        shallowEqual,
-    );
+    const { dataset: storeDataset, search: storeSearch } = useSelector(({ dataset }) => dataset, shallowEqual);
 
     // state
     const [temp, setTemp] = useState(initialState.dataset);
-    const [dataApiParam, setDataApiParam] = useState('');
-    const [dataApiParamShape, setDataApiParamShape] = useState({});
     const [error, setError] = useState({});
     const [options, setOptions] = useState({
         [API_PARAM_HINT_DATASET_SEQ]: [],
@@ -61,20 +53,24 @@ const DatasetEdit = ({ onDelete, match }) => {
             invalidated = { ...invalidated, datasetName: true };
         }
 
-        for (const key of Object.keys(dataApiParamShape)) {
-            const param = dataApiParamShape[key];
-            if (param.require) {
-                if (dataApiParam && dataApiParam[param.name]) {
-                    if (param.filter) {
-                        const regex = new RegExp(param.filter);
-                        if (!regex.test(dataApiParam[param.name])) {
-                            invalidated = { ...invalidated, [param.name]: true };
-                        }
+        const apiParam = tmp.dataApiParam;
+        const paramDef = tmp.dataApiParamShape?.parameter;
+        if (paramDef) {
+            for (const key of Object.keys(paramDef)) {
+                const keyDef = paramDef[key];
+
+                if (keyDef.require) {
+                    if (!apiParam[key]) {
+                        invalidated = { ...invalidated, [key]: true };
+                    }
+                } else if (keyDef.filter) {
+                    const regex = new RegExp(keyDef.filter);
+                    if (apiParam[key] && !regex.test(apiParam[key])) {
+                        invalidated = { ...invalidated, [key]: true };
                     }
                 } else {
-                    invalidated = { ...invalidated, [param.name]: true };
+                    invalidated = { ...invalidated, [key]: true };
                 }
-                //if (!dataApiParam || !dataApiParam[param.name])
             }
         }
 
@@ -97,12 +93,11 @@ const DatasetEdit = ({ onDelete, match }) => {
         const tmp = {
             ...storeDataset,
             ...temp,
-            dataApiParam: dataApiParam === '' ? dataApiParam : JSON.stringify(dataApiParam),
             apiCodeId: storeSearch.apiCodeId,
-            dataApiParamShape: null,
         };
 
         if (validate(tmp)) {
+            // saga에서 후처리함
             if (tmp.datasetSeq) {
                 updateDataset(tmp);
             } else {
@@ -151,35 +146,25 @@ const DatasetEdit = ({ onDelete, match }) => {
     );
 
     /**
-     * dataApiListPopup 저장 이벤트 핸들러
+     * Api 모달 저장 이벤트
      * @param {Object} selectApi 선택한 API
      * @param {function} hideCallback 숨김 함수
      */
-    const handleClickDatasetListModalSave = (selectApi, hideCallback) => {
+    const handleSaveApi = (selectApi, hideCallback) => {
         const parameters = selectApi.parameter;
+
         if (parameters) {
+            const apiParam = Object.keys(parameters).reduce((all, cu) => ({ ...all, [cu]: parameters[cu].defaultValue }), {});
             setError({ ...error, dataApiUrl: false });
-            let apiParam = null;
-            for (const key of Object.keys(parameters)) {
-                const parameter = parameters[key];
-                if (parameter.defaultValue) {
-                    if (apiParam === null) {
-                        apiParam = {};
-                    }
-
-                    apiParam = { ...apiParam, [parameter.name]: parameter.defaultValue };
-                }
-            }
-
             setTemp({
                 ...temp,
                 dataApi: selectApi.id,
+                dataApiParam: apiParam,
+                dataApiParamShape: selectApi,
             });
-            setDataApiParam(apiParam);
-            setDataApiParamShape(parameters || []);
             hideCallback();
         } else {
-            toast.warning('하나 이상의 자동 데이타셋을 선택해 주세요.');
+            toast.warning('하나 이상의 자동 데이터셋을 선택해 주세요.');
         }
     };
 
@@ -192,7 +177,7 @@ const DatasetEdit = ({ onDelete, match }) => {
     const makeDataApiUrl = (dataApi, dataApiParam) => {
         let dataApiUrl = dataApi;
         if (dataApiParam && Object.keys(dataApiParam).length > 0) {
-            dataApiUrl += `?${qs.stringify(dataApiParam)}`;
+            dataApiUrl += `?${qs.stringify(dataApiParam, { plainObjects: true })}`;
         }
 
         return dataApiUrl;
@@ -308,8 +293,6 @@ const DatasetEdit = ({ onDelete, match }) => {
 
     useEffect(() => {
         setTemp(storeDataset);
-        setDataApiParam(storeDataset.dataApiParam);
-        setDataApiParamShape(storeDataset.dataApiParamShape || {});
         setError({});
     }, [storeDataset]);
 
@@ -327,7 +310,7 @@ const DatasetEdit = ({ onDelete, match }) => {
     }, []);
 
     return (
-        <MokaCard titleClassName="h-100 mb-0 pb-0" width={688} className="mr-gutter custom-scroll flex-fill" title={`데이터셋 ${datasetSeq ? '수정' : '등록'}`} loading={loading}>
+        <MokaCard width={688} className="mr-gutter custom-scroll flex-fill" title={`데이터셋 ${datasetSeq ? '수정' : '등록'}`} loading={loading}>
             <BasicForm
                 dataset={temp}
                 setDataset={setTemp}
@@ -338,21 +321,11 @@ const DatasetEdit = ({ onDelete, match }) => {
                 onClickCopy={handleCopy}
                 error={error}
                 setError={setError}
-                setApi={handleClickDatasetListModalSave}
+                setApi={handleSaveApi}
                 makeDataApiUrl={makeDataApiUrl}
             />
             <hr className="divider" />
-            <OptionsForm
-                dataset={temp}
-                dataApiParamShape={dataApiParamShape}
-                setDataset={setTemp}
-                dataApiParam={dataApiParam}
-                setDataApiParam={setDataApiParam}
-                error={error}
-                setError={setError}
-                options={options}
-                loading={loading}
-            />
+            <OptionsForm dataset={temp} setDataset={setTemp} error={error} setError={setError} options={options} loading={loading} />
         </MokaCard>
     );
 };

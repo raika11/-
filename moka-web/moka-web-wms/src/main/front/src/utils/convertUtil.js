@@ -36,7 +36,12 @@ export const objectToFormData = (val, formData = new FormData(), namespace = '')
  */
 export const unescapeHtml = (str) => {
     if (str && str !== '') {
-        return decode(str);
+        if (typeof decode === 'function') {
+            // decode를 import 못하는 경우가 있어서 예외처리
+            return decode(str);
+        } else {
+            return str;
+        }
     } else return str;
 };
 

@@ -1,0 +1,9 @@
+.close {
+    // fal-times 아이콘으로 변경 (기존의 텍스트 display:none 처리)
+    &::before {
+        font-family: "Font Awesome 5 Pro"; font-weight: 300; content: "\f00d";
+    }
+    span {
+        display: none;
+    }
+}

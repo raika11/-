@@ -43,7 +43,7 @@ const parseApiCoulnm = (state, body) => {
     if (body.dataApiParamShape) {
         const shape = JSON.parse(body.dataApiParamShape);
         if (shape.totalCnt > 0) {
-            dataApiParamShape = { ...shape.list[0].parameter };
+            dataApiParamShape = { ...shape.list[0] };
         }
     }
 

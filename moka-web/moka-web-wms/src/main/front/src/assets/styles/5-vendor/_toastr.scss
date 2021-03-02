@@ -76,7 +76,7 @@
 
         .rrt-buttons-holder {
             border-top: $modal-footer-border-width solid $modal-footer-border-color;
-            @include toast-footer(".rrt-button");
+            @include toast-footer(".rrt-button:not(.close)");
 
             .rrt-button {
                 height: auto;
@@ -91,19 +91,32 @@
                     @include button-color-active($negative);
                 }
 
+                // close button (\node_modules\bootstrap\scss\_close.scss 참고)
                 &.close {
                     padding: 20px;
                     position: absolute;
-                    color: #000;
-                    font-size: 1.3125rem !important;
-                    font-weight: 600 !important;
-                    box-sizing: border-box;
                     top: 0;
                     right: 0;
+                    color: $close-color;
+                    @include font-size($close-font-size);
+                    font-weight: $close-font-weight;
+                    line-height: 1;
+                    text-shadow: $close-text-shadow;
+                    box-sizing: border-box;
+                    opacity: 0.5;
+                    background-color: transparent;
 
-                    @include button-hover(#000, transparent);
-                    @include button-active(#000, transparent);
-                    @include button-focus(#000, transparent);
+                    // Override <a>'s hover style
+                    @include hover() {
+                        color: $close-color;
+                        text-decoration: none;
+                    }
+
+                    &:not(:disabled):not(.disabled) {
+                        @include hover-focus() {
+                          opacity: .75;
+                        }
+                    }
                 }
             }
         }

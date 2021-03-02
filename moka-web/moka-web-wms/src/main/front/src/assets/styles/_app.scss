@@ -58,15 +58,11 @@
 @import '4-utilities/position';
 @import '4-utilities/flex';
 @import '4-utilities/colors';
+@import '4-utilities/close';
 
 // 3rd party plugins
 @import 'react-resizable/css/styles';
 @import "@fullcalendar/bootstrap/main";
-// @import "react-quill/dist/quill.bubble";
-// @import "react-quill/dist/quill.snow";
-// @import "jvectormap-next/jquery-jvectormap";
-// @import "smartwizard/dist/css/smart_wizard";
-// @import "smartwizard/dist/css/smart_wizard_theme_arrows";
 
 // 3rd party plugin styles
 @import '5-vendor/perfect-scrollbar';
@@ -81,8 +77,6 @@
 @import '5-vendor/fullcalendar';
 @import '5-vendor/fontawesome-pro/scss/solid';
 @import '5-vendor/fontawesome-pro/scss/regular';
-// @import '5-vendor/quill';
-// @import '5-vendor/wizard';
 
 // 서울시스템 추가
 @import 'non_responsive';

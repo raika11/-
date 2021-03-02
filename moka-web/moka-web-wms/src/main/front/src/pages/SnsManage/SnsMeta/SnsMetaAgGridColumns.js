@@ -19,7 +19,8 @@ export default [
         headerName: '이미지',
         field: 'thumbnail',
         headerClass: 'ag-grid-sns-meta-header',
-        cellRenderer: 'imageRenderer',
+        cellRenderer: 'editImageRenderer',
+        cellStyle: { lineHeight: '0px' },
         width: 78,
     },
     {

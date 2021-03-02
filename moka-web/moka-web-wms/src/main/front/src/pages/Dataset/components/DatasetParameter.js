@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { MokaInputLabel } from '@components';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
+import { MokaInputLabel } from '@components';
 import { API_PARAM_HINT_DATASET_SEQ, API_PARAM_HINT_BUSE_ID, API_PARAM_HINT_GIJA_ID, API_PARAM_HINT_SERIES_ID, API_PARAM_HINT_CODE_ID } from '@/constants';
 
 const DatasetParameter = (props) => {
-    const { dataApiParamShapes, onChange, dataApiParam, options, isInvalid, onChangeValid, loading } = props;
-    const [fieldInfos, setFieldInfos] = useState(dataApiParamShapes);
+    const { dataApiParamShapes, onChange, dataApiParam, options, isInvalid, onChangeValid } = props;
+    const [fieldInfos, setFieldInfos] = useState([]);
 
     /**
      * 동적으로 생성된 input의 값을 변경한다.
@@ -15,33 +17,33 @@ const DatasetParameter = (props) => {
      */
     const handleChangeValue = (event, name, defaultValue) => {
         const { value } = event.target;
-        /*const { type } = fieldInfos[name];*/
-        let regex = /./;
-        /*if (type === 'number') {
-            regex = /^[0-9\b]+$/;
-        }*/
+        // const { type } = fieldInfos[name];
+        // let regex = /./;
+        // if (type === 'number') {
+        //     regex = /^[0-9\b]+$/;
+        // }
 
-        let tmp = dataApiParam;
+        let tmp = { ...dataApiParam, [name]: value };
+
+        // if (value === '' || regex.test(value)) {
+        //     tmp = {
+        //         ...tmp,
+        //         [name]: value,
+        //     };
+        // }
+        // if (tmp[name] === '') {
+        //     delete tmp[name];
+        //     if (defaultValue) {
+        //         tmp = {
+        //             ...tmp,
+        //             [name]: defaultValue,
+        //         };
+        //     } else {
+        //         delete tmp[name];
+        //     }
+        //}
+
         onChangeValid({ ...isInvalid, [name]: false });
-        if (value === '' || regex.test(value)) {
-            tmp = {
-                ...tmp,
-                [name]: value,
-            };
-        }
-
-        if (tmp[name] === '') {
-            delete tmp[name];
-            /*if (defaultValue) {
-                tmp = {
-                    ...tmp,
-                    [name]: defaultValue,
-                };
-            } else {
-                delete tmp[name];
-            }*/
-        }
-
         onChange(tmp);
     };
 
@@ -52,13 +54,12 @@ const DatasetParameter = (props) => {
      * @param value 변경 할 값
      */
     const handleChangeAutoCompleteValue = (event, name, value) => {
+        const values = [];
         if (value) {
-            const values = [];
             value.map((data) => values.push(data.value));
-            onChange({ ...dataApiParam, [name]: values.join(',') });
-        } else {
-            onChange(value);
         }
+        onChangeValid({ ...isInvalid, [name]: false });
+        onChange({ ...dataApiParam, [name]: values.join(',') });
     };
 
     /**
@@ -113,11 +114,16 @@ const DatasetParameter = (props) => {
         return '';
     }, []);
 
-    useEffect(() => {
-        if (!loading) {
-            setFieldInfos(dataApiParamShapes);
-        }
-    }, [dataApiParamShapes, loading]);
+    /**
+     * 오버레이 라벨 생성
+     */
+    const renderLabel = ({ label, key }) => {
+        return (
+            <OverlayTrigger overlay={<Tooltip id={key}>{key}</Tooltip>} placement="left">
+                <span>{label || key}</span>
+            </OverlayTrigger>
+        );
+    };
 
     /**
      * 동적 입력창 렌더링
@@ -157,12 +163,14 @@ const DatasetParameter = (props) => {
                 renderer = (
                     <MokaInputLabel
                         key={`${name}_label`}
-                        label={desc || ' '}
+                        label={renderLabel({ label: desc, key })}
+                        placeholder={`${desc || key}을(를) 입력하세요`}
                         className="flex-fill"
                         as="autocomplete"
                         inputProps={{ options: options[type], closeMenuOnSelect: true, isMulti: isMultiple, searchIcon: false }}
                         required={required}
                         value={value}
+                        isInvalid={isInvalid[name]}
                         onChange={(value, event) => handleChangeAutoCompleteValue(event, name, value)}
                     />
                 );
@@ -175,8 +183,9 @@ const DatasetParameter = (props) => {
 
                 renderer = (
                     <MokaInputLabel
-                        label={desc || ' '}
+                        label={renderLabel({ label: desc, key })}
                         className="flex-fill"
+                        placeholder={`${desc || key}을(를) 입력하세요`}
                         value={value}
                         onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}
                         required={required}
@@ -192,13 +201,13 @@ const DatasetParameter = (props) => {
         );
     };
 
-    return (
-        <>
-            {Object.keys(fieldInfos).map((key) => {
-                return render(key);
-            })}
-        </>
-    );
+    useEffect(() => {
+        setFieldInfos(dataApiParamShapes || []);
+    }, [dataApiParamShapes]);
+
+    return Object.keys(fieldInfos).map((key) => {
+        return render(key);
+    });
 };
 
 export default DatasetParameter;

@@ -128,7 +128,7 @@ export const messageBox = {
             },
             buttons: [
                 {
-                    text: '×',
+                    text: '',
                     className: 'close',
                     handler: () => {
                         if (ok) {
@@ -163,7 +163,7 @@ export const messageBox = {
             },
             buttons: [
                 {
-                    text: '×',
+                    text: '',
                     className: 'close',
                     handler: () => {
                         if (cancel) {

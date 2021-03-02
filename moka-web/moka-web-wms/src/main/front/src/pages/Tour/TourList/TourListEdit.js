@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { MokaCard, MokaInput, MokaInputLabel } from '@/components';
 import { getTourAge } from '@store/codeMgt';
 import { getTourSetup, putTourApply, getTourApply, deleteTourApply, getTourDenyPossibleList, postResetPwd } from '@/store/tour';
-import toast from '@/utils/toastUtil';
+import toast, { messageBox } from '@/utils/toastUtil';
 import { toTourReservationMailPreviewHTML } from '@utils/convertUtil';
 
 const TourListEdit = ({ match }) => {
@@ -85,21 +85,21 @@ const TourListEdit = ({ match }) => {
      * 삭제
      */
     const handleClickDelete = useCallback(() => {
-        // messageBox.confirm('코드를 삭제하시겠습니까?', () => {
-        dispatch(
-            deleteTourApply({
-                tourSeq: temp.tourSeq,
-                callback: ({ header }) => {
-                    if (header.success) {
-                        toast.success(header.message);
-                        history.push(`${match.path}`);
-                    } else {
-                        toast.fail(header.message);
-                    }
-                },
-            }),
-        );
-        // });
+        messageBox.confirm('해당 신청 내역을 삭제하시겠습니까?', () => {
+            dispatch(
+                deleteTourApply({
+                    tourSeq: temp.tourSeq,
+                    callback: ({ header }) => {
+                        if (header.success) {
+                            toast.success(header.message);
+                            history.push(`${match.path}`);
+                        } else {
+                            toast.fail(header.message);
+                        }
+                    },
+                }),
+            );
+        });
     }, [dispatch, history, match.path, temp.tourSeq]);
     /**
      * 취소 버튼

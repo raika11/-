@@ -2,10 +2,14 @@ import React, { Suspense, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { MokaLoader } from '@components';
 
 // const BulkhMain = React.lazy(() => import('./Component/BulkhMain'));
-const BulkhHotClickList = React.lazy(() => import('./Component/BulkhHotClickList'));
-const BulkhArticleTab = React.lazy(() => import('./Component/BulkhArticleTab'));
+// const BulkhHotClickList = React.lazy(() => import('./Component/BulkhHotClickList'));
+// const BulkhArticleTab = React.lazy(() => import('./Component/BulkhArticleTab'));
+
+import BulkhHotClickList from './Component/BulkhHotClickList';
+import BulkhArticleTab from './Component/BulkhArticleTab';
 
 const Bulkh = () => {
     const [componentAgGridInstances, setComponentAgGridInstances] = useState([]);
@@ -34,7 +38,7 @@ const Bulkh = () => {
                     path={[`/${bulkPathName}`, `/${bulkPathName}/:seqNo`]}
                     exact
                     render={() => (
-                        <Suspense>
+                        <Suspense fallback={<MokaLoader />}>
                             <BulkhHotClickList componentAgGridInstances={componentAgGridInstances} setComponentAgGridInstances={setComponentAgGridInstances} />
                             <BulkhArticleTab componentAgGridInstances={componentAgGridInstances} />
                         </Suspense>

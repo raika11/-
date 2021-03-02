@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MokaCard } from '@components';
-import { Col, Row, Form, Card } from 'react-bootstrap';
+import { Col, Row, Card } from 'react-bootstrap';
 import HotClickAgGrid from '@pages/Bulks/Bulkh/HotClickGrid/HotClickAgGrid';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';

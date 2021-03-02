@@ -91,11 +91,11 @@ const RcvProgsModal = (props) => {
                 {data.type !== 'status' && (
                     <>
                         <p className="mb-2">생성 XML</p>
-                        <MokaInput as="textarea" value={bulkContent} className="mb-2 custom-scroll resize-none" readOnly />
+                        <MokaInput as="textarea" value={bulkContent} className="mb-2 custom-scroll resize-none" readOnly inputProps={{ rows: 14 }} />
                     </>
                 )}
                 <p className="mb-2">메세지</p>
-                <MokaInput as="textarea" value={data.type !== 'status' ? bulkMsg : data.msg} className="custom-scroll resize-none" readOnly />
+                <MokaInput as="textarea" value={data.type !== 'status' ? bulkMsg : data.msg} className="custom-scroll resize-none" readOnly inputProps={{ rows: 13 }} />
             </Form>
         </MokaModal>
     );

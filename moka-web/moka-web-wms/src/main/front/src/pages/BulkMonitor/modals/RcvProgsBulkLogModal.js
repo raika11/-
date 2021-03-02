@@ -98,6 +98,7 @@ const RcvProgsBulkLogModal = (props) => {
                             onRowNodeId={(params) => params.portalDiv}
                             onRowClicked={handleRowClicked}
                             paging={false}
+                            className="mr-2"
                         />
                     </div>
                 </div>
@@ -106,11 +107,11 @@ const RcvProgsBulkLogModal = (props) => {
                         {type !== 'btn' && (
                             <>
                                 <p className="mb-2">생성 XML</p>
-                                <MokaInput as="textarea" value={bulkContent} className="mb-2 custom-scroll resize-none" readOnly />
+                                <MokaInput as="textarea" value={bulkContent} className="mb-2 custom-scroll resize-none" readOnly inputProps={{ rows: 15 }} />
                             </>
                         )}
                         <p className="mb-2">메세지</p>
-                        <MokaInput as="textarea" value={type === 'btn' ? data.msg : bulkMsg} className="custom-scroll resize-none" readOnly />
+                        <MokaInput as="textarea" value={type === 'btn' ? data.msg : bulkMsg} className="custom-scroll resize-none" readOnly inputProps={{ rows: 15 }} />
                     </div>
                 )}
             </div>

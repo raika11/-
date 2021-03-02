@@ -4,9 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { clearStore } from '@store/jpod';
 import { getBoardChannelList, getJpodBoard } from '@store/jpod';
-
-const NoticeList = React.lazy(() => import('./JpodNotice/NoticeList'));
-const NoticeEdit = React.lazy(() => import('./JpodNotice/NoticeEdit'));
+import NoticeList from '@pages/Jpod/JpodNotice/NoticeList';
+import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
 
 /**
  * J팟 관리 - 공지 게시판

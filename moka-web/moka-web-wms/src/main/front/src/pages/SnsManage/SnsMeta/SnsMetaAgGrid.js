@@ -49,7 +49,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             size={searchOptions.size}
             onChangeSearchOption={handleChangeSearchOption}
             selected={selected}
-            preventRowClickCell={['insStatus', 'sendType']}
+            preventRowClickCell={['insStatus']}
             className="ag-grid-align-center overflow-hidden flex-fill"
         />
     );

@@ -3,9 +3,8 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/jpod';
-
-const EpisodeList = React.lazy(() => import('./Episode/EpisodeList'));
-const EpisodeEdit = React.lazy(() => import('./Episode/EpisodeEdit'));
+import EpisodeList from '@pages/Jpod/Episode/EpisodeList';
+import EpisodeEdit from '@pages/Jpod/Episode/EpisodeEdit';
 
 /**
  * J팟 관리 - 에피소드

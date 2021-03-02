@@ -52,7 +52,7 @@ const DirectLinkSearch = ({ match, history }) => {
     return (
         <Form.Row className="mb-14">
             {/* 사용여부 */}
-            <div className="flex-shrink-0 mr-3">
+            <div className="flex-shrink-0 mr-2">
                 <MokaInput as="select" name="usedYn" value={search.usedYn} onChange={handleChangeValue} className="mb-0">
                     <option value="Y">사용</option>
                     <option value="N">미사용</option>
@@ -61,10 +61,10 @@ const DirectLinkSearch = ({ match, history }) => {
 
             {/* 노출고정 */}
             <div className="flex-shrink-0 mr-2">
-                <MokaInputLabel label="노출고정" as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue}>
+                <MokaInput as="select" name="fixYn" value={search.fixYn} onChange={handleChangeValue}>
                     <option value="N">검색시만 노출</option>
                     <option value="Y">항상노출</option>
-                </MokaInputLabel>
+                </MokaInput>
             </div>
 
             {/* 검색조건 */}
@@ -84,7 +84,7 @@ const DirectLinkSearch = ({ match, history }) => {
             {/* 신규등록 버튼 */}
             <div className="d-flex flex-fill justify-content-end h-100">
                 <Button variant="positive" onClick={handleClickAdd}>
-                    신규 등록
+                    등록
                 </Button>
             </div>
         </Form.Row>

@@ -15,7 +15,6 @@ export const bmInitialState = {
         size: PAGESIZE_OPTIONS[0],
         searchType: 'all',
         keyword: '',
-        useTotal: '',
         orgSourceCode: 'all',
         portalDiv: null,
         status: 'Y',

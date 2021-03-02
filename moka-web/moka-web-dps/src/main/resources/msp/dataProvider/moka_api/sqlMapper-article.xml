@@ -154,7 +154,7 @@
   </select>
 
   <!-- digitalSpecial list -->
-  <select id="list" parameterType="hashmap" resultType="map">
+  <select id="digitalSpecial" parameterType="hashmap" resultType="map">
     select *
     from tb_15re_special_page_mgt
     where SEQ_NO = #{digitalSpecialId}

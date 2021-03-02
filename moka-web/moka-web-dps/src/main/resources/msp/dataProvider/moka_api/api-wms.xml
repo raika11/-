@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
-  -->
-
 <apiConfig>
-
   <!--미리보기 편집기사목록 조회. id 수정하지 말것-->
   <api id="desking.work" expire="0">
     <description>미리보기용 편집기사 목록을 조회한다.</description>
@@ -29,17 +24,16 @@
     <parameter>
       <rid desc="수신기사Id">[0-9]{1,9}</rid>
     </parameter>
-    <request resultName="BASIC">dps.wms.rcvArticle.basic</request>
-    <request resultName="CONTENT">dps.wms.rcvArticle.content</request>
-    <request resultName="REPORTER">dps.wms.rcvArticle.reporter</request>
-    <request resultName="MASTERCODE">dps.wms.rcvArticle.mastercode</request>
-    <request resultName="SERVICEMAP">dps.wms.rcvArticle.servicemap</request>
-    <request resultName="KEYWORD">dps.wms.rcvArticle.keyword</request>
-    <request resultName="MULTI">dps.wms.rcvArticle.multi</request>
+    <request resultName="BASIC">dps.wms.rcvArticleBasic</request>
+    <request resultName="CONTENT">dps.wms.rcvArticleContent</request>
+    <request resultName="REPORTER">dps.wms.rcvArticleReporter</request>
+    <request resultName="MASTERCODE">dps.wms.rcvArticleMastercode</request>
+    <request resultName="SERVICEMAP">dps.wms.rcvArticleServicemap</request>
+    <request resultName="KEYWORD">dps.wms.rcvArticleKeyword</request>
+    <request resultName="MULTI">dps.wms.rcvArticleMulti</request>
     <keys>
       rid
     </keys>
   </api>
 
 </apiConfig>
-

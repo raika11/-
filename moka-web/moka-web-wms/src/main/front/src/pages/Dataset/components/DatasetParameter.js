@@ -163,6 +163,7 @@ const DatasetParameter = (props) => {
                     <MokaInputLabel
                         key={`${name}_label`}
                         label={renderLabel({ label: desc, key })}
+                        placeholder={`${desc || key}을(를) 입력하세요`}
                         className="flex-fill"
                         as="autocomplete"
                         inputProps={{ options: options[type], closeMenuOnSelect: true, isMulti: isMultiple, searchIcon: false }}
@@ -182,6 +183,7 @@ const DatasetParameter = (props) => {
                     <MokaInputLabel
                         label={renderLabel({ label: desc, key })}
                         className="flex-fill"
+                        placeholder={`${desc || key}을(를) 입력하세요`}
                         value={value}
                         onChange={(event) => handleChangeValue(event, name, apiDefaultValue)}
                         required={required}

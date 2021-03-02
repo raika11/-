@@ -339,17 +339,18 @@ public class MemberJoinRestController extends AbstractCommonController {
             if (McpDate.term(member.getSmsExp()) < 0) {
                 throw new SmsAuthNumberExpiredException(msg("wms.login.error.unlock-sms-expired"));
             }
-            // 잠금 해제
-            member.setPasswordModDt(McpDate.now());
-            member.setErrCnt(0);
-        } else {
-            String remark = McpString.defaultValue(member.getRemark());
-            if (McpString.isNotEmpty(remark)) {
-                remark += "\n";
-            }
-            remark += "· " + memberRequestDTO.getRequestReason();
-            member.setRemark(remark);
         }
+
+        String remark = McpString.defaultValue(member.getRemark());
+        if (McpString.isNotEmpty(remark)) {
+            remark += "\n";
+        }
+        remark += "· " + memberRequestDTO.getRequestReason();
+        member.setRemark(remark);
+
+        // 잠금 해제
+        member.setPasswordModDt(McpDate.now());
+        member.setErrCnt(0);
 
         member.setStatus(memberRequestDTO
                 .getRequestType()

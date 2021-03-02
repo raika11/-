@@ -7,7 +7,7 @@
       <ids desc="데이타셋 아이디" hints="datasetSeqs" require="Y">^[0-9]{1,6}(,[0-9]{1,6})*$</ids>
       <regId desc="작업자ID" require="Y">[0-9|A-z]{1,20}</regId>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,RDATA">dps.wms.deskingWork</request>
+    <request dmlType="sp" setNames="_DATA,RDATA">dps.backoffice.deskingWork</request>
     <request type="script" resultName="_TOTAL">
       var result = $ac.getAllResult();
       result.get("PARAM_MAP").get("total");
@@ -24,13 +24,13 @@
     <parameter>
       <rid desc="수신기사Id">[0-9]{1,9}</rid>
     </parameter>
-    <request resultName="BASIC">dps.wms.rcvArticleBasic</request>
-    <request resultName="CONTENT">dps.wms.rcvArticleContent</request>
-    <request resultName="REPORTER">dps.wms.rcvArticleReporter</request>
-    <request resultName="MASTERCODE">dps.wms.rcvArticleMastercode</request>
-    <request resultName="SERVICEMAP">dps.wms.rcvArticleServicemap</request>
-    <request resultName="KEYWORD">dps.wms.rcvArticleKeyword</request>
-    <request resultName="MULTI">dps.wms.rcvArticleMulti</request>
+    <request resultName="BASIC">dps.backoffice.rcvArticleBasic</request>
+    <request resultName="CONTENT">dps.backoffice.rcvArticleContent</request>
+    <request resultName="REPORTER">dps.backoffice.rcvArticleReporter</request>
+    <request resultName="MASTERCODE">dps.backoffice.rcvArticleMastercode</request>
+    <request resultName="SERVICEMAP">dps.backoffice.rcvArticleServicemap</request>
+    <request resultName="KEYWORD">dps.backoffice.rcvArticleKeyword</request>
+    <request resultName="MULTI">dps.backoffice.rcvArticleMulti</request>
     <keys>
       rid
     </keys>

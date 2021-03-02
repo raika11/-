@@ -91,7 +91,9 @@
           </otherwise>
         </choose>
       #{page, mode=IN, jdbcType=INTEGER, javaType=integer},
-      #{size, mode=IN, jdbcType=INTEGER, javaType=integer}
+      #{size, mode=IN, jdbcType=INTEGER, javaType=integer},
+      #{useTotal, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
       ) }
   </select>
 

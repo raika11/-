@@ -15,13 +15,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import jmnet.moka.common.utils.MapBuilder;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
+import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.common.utils.dto.ResultHeaderDTO;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.common.exception.NoDataException;
 import jmnet.moka.core.common.ftp.FtpHelper;
 import jmnet.moka.core.common.mvc.MessageByLocale;
+import jmnet.moka.core.common.rest.RestTemplateHelper;
+import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.code.EditStatusCode;
 import jmnet.moka.core.tps.common.dto.HistPublishDTO;
@@ -63,6 +68,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -136,6 +142,16 @@ public class DeskingServiceImpl implements DeskingService {
 
     @Autowired
     private RelationService relationService;
+
+    @Value("${moka.schedule-server.reserved-task.url}")
+    private String reservedTaskUrl;
+
+    /**
+     * 외부 API URL 호출용
+     */
+    @Autowired
+    protected RestTemplateHelper restTemplateHelper;
+
 
     @Autowired
     public DeskingServiceImpl(@Qualifier("tpsEntityManagerFactory") EntityManager entityManager) {
@@ -396,7 +412,6 @@ public class DeskingServiceImpl implements DeskingService {
     @Transactional
     public void reserve(ComponentWorkVO componentWorkVO, String regId, Date reserveDt, Long templateSeq)
             throws Exception {
-
         HistPublishDTO histPublishDTO = HistPublishDTO
                 .builder()
                 .status(EditStatusCode.PUBLISH)
@@ -414,13 +429,36 @@ public class DeskingServiceImpl implements DeskingService {
         insertDeskingHist(componentHist, componentWorkVO.getDeskingWorks(), regId);
 
         // 스케줄링(R) 추가
-        //        ReserveJobDTO reserveJobDTO = ReserveJobDTO
-        //                .builder()
-        //                .jobCd(TpsConstants.DESKING_JOB_CD)
-        //                .jobTaskId("CP_" + componentWorkVO.getComponentSeq())
-        //                .reserveDt(reserveDt)
-        //                .build();
+        ResponseEntity<String> responseEntity = restTemplateHelper.post(reservedTaskUrl, MapBuilder
+                .getInstance()
+                .add("jobCd", TpsConstants.DESKING_JOB_CD)
+                .add("jobTaskId", TpsConstants.DESKING_JOB_CD + "_" + componentWorkVO.getComponentSeq())
+                .add("reserveDt", McpDate.dateTimeStr(reserveDt))
+                .getMultiValueMap());
+        ResultHeaderDTO resultHeader = this.parseResultHeaderDTO(responseEntity);
+        if (!resultHeader.isSuccess()) {
+            throw new Exception("DESKING RESERVE FAILED");
+        }
 
+    }
+
+    private ResultHeaderDTO parseResultHeaderDTO(ResponseEntity responseEntity) {
+        ResultDTO<Object> resultDTO = null;
+        if (responseEntity.hasBody()) {
+            String body = responseEntity
+                    .getBody()
+                    .toString();
+            try {
+                resultDTO = ResourceMapper
+                        .getDefaultObjectMapper()
+                        .readValue(body, ResultDTO.class);
+                return resultDTO.getHeader();
+            } catch (Exception e) {
+                return new ResultHeaderDTO(false, 500, 500, e.getMessage());
+            }
+        } else {
+            return new ResultHeaderDTO(false, 500, 500, "결과를 알 수 없음");
+        }
     }
 
     private void deleteReserveHist(ComponentWorkVO workVO)
@@ -436,7 +474,7 @@ public class DeskingServiceImpl implements DeskingService {
             throw new Exception("Failed to delete RESERVE DATASET error code: " + returnValue);
         }
 
-        // 예약 컴포넌트 삭제제
+        // 예약 컴포넌트 삭제
         componentHistService.deleteByReserveComponentSeq(workVO.getComponentSeq());
     }
 
@@ -448,7 +486,15 @@ public class DeskingServiceImpl implements DeskingService {
         deleteReserveHist(componentWorkVO);
 
         // 스케줄링(R) 삭제
-
+        ResponseEntity<String> responseEntity = restTemplateHelper.delete(reservedTaskUrl, MapBuilder
+                .getInstance()
+                .add("jobCd", TpsConstants.DESKING_JOB_CD)
+                .add("jobTaskId", TpsConstants.DESKING_JOB_CD + "_" + componentWorkVO.getComponentSeq())
+                .getMultiValueMap());
+        ResultHeaderDTO resultHeader = this.parseResultHeaderDTO(responseEntity);
+        if (!resultHeader.isSuccess()) {
+            throw new Exception("DESKING RESERVE DELETE FAILED");
+        }
     }
 
     //    @Override
@@ -1196,6 +1242,31 @@ public class DeskingServiceImpl implements DeskingService {
         if (McpString.isNotEmpty(deskingWorkDTO.getBodyHead())) {
             deskingWorkDTO.setBodyHead(ArticleEscapeUtil.htmlEscape(deskingWorkDTO.getBodyHead()));
         }
+    }
+
+    @Override
+    public void excuteReserve(Long componentSeq, String regId)
+            throws Exception {
+        // 1. component,desking 업데이트
+        Long datasetSeq = (long) 0;
+        Map<String, Object> param = new HashMap<>();
+        param.put("componentSeq", componentSeq);
+        param.put("regId", regId);
+        deskingMapper.excuteReserve(param);
+        if ((int) param.get("datasetSeq") == 0) {
+            throw new Exception("FAIL UPDATE");
+        } else {
+            String str = String.valueOf(param.get("datasetSeq"));
+            datasetSeq = Long.parseLong(str);
+        }
+
+        // 2. purge
+        ComponentWorkVO componentWorkVO = ComponentWorkVO
+                .builder()
+                .componentSeq(componentSeq)
+                .datasetSeq(datasetSeq)
+                .build();
+        this.purge(componentWorkVO);
     }
 }
 

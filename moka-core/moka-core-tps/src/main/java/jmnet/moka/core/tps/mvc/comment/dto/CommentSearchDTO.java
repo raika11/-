@@ -49,9 +49,9 @@ public class CommentSearchDTO extends SearchDTO {
     /**
      * 댓글 상태
      */
-    @ApiModelProperty("댓글 상태")
+    @ApiModelProperty("댓글 상태 A : 노출, N : 관리자삭제, D: 사용자삭제")
     @Builder.Default
-    private CommentStatusType status = CommentStatusType.A;
+    private String status = CommentStatusType.A.getCode();
 
     /**
      * 검색 시작일

@@ -65,15 +65,6 @@
       </choose>
 
       <choose>
-          <when test="searchType == 'reporterName' and keyword != null and keyword != ''">
-              #{keyword},
-          </when>
-          <otherwise>
-              NULL,
-          </otherwise>
-      </choose>
-
-      <choose>
           <when test="portalDiv != 'all' and portalDiv != null and portalDiv != ''">
               #{portalDiv},
           </when>

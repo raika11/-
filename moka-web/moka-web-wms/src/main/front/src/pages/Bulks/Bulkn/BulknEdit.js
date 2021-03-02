@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MokaCard, MokaInputLabel } from '@components';
 import { Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import toast, { messageBox } from '@utils/toastUtil';
 import { GET_BULK_LIST, saveBulkArticle, getBulkList, showPreviewModal, getBulkArticle } from '@store/bulks';

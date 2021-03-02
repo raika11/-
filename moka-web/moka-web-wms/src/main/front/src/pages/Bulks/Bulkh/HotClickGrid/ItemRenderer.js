@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, forwardRef, useImperativeHandl
 import { MokaInputLabel } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaTableEditCancleButton } from '@components';
-import { changeHotClickList, changeHotClickListItem, clearHotclicklist } from '@store/bulks';
+import { changeHotClickList, clearHotclicklist } from '@store/bulks';
 
 const ItemRenderer = forwardRef((props, ref) => {
     const dispatch = useDispatch();

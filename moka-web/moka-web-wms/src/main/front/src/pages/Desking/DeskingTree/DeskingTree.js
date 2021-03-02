@@ -105,7 +105,7 @@ const DeskingTree = ({ setComponentAgGridInstances, match }) => {
                 }
             } else {
                 // 부모노드면!! 트리 확장
-                handleExpansion({ areaSeq });
+                handleExpansion({ areaSeq: item.areaSeq });
             }
         },
         [history, loadWork, areaSeq, match, handleExpansion],

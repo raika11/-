@@ -42,12 +42,6 @@ const DeskingTreeCategory = (props) => {
     const [open, setOpen] = useState(false);
     const controls = `sidebar-collapse-${nodeId}`;
 
-    useEffect(() => {
-        if (expanded.filter((ex) => String(ex) === nodeId).length > 0) {
-            setOpen(true);
-        }
-    }, [expanded, nodeId]);
-
     /**
      * collapse 확장/축소
      */
@@ -77,6 +71,14 @@ const DeskingTreeCategory = (props) => {
             }
         }
     };
+
+    useEffect(() => {
+        if (expanded.filter((ex) => String(ex) === nodeId).length > 0) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    }, [expanded, nodeId]);
 
     return (
         <li className="tree-category" key={nodeId} onClick={handleSelected}>

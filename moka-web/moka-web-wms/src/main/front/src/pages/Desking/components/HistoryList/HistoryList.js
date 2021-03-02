@@ -161,25 +161,23 @@ const HistoryList = (props) => {
 
     return (
         <MokaCard title="히스토리" className="w-100" bodyClassName="d-flex">
-            <div style={{ width: 400 }} className="pr-3">
-                {/* 컴포넌트워크 히스토리 */}
-                <ComponentWorkHistoryList
-                    search={search}
-                    setSearch={setSearch}
-                    componentList={componentList}
-                    onSearch={handleSearch}
-                    selectedComponent={selectedComponent}
-                    selectedComponentHistSeq={selectedComponentHistSeq}
-                    show={show}
-                    loading={componentWorkLoading}
-                    total={total}
-                    rowData={rowData}
-                    onChange={handleChangeSearchOption}
-                    onRowClick={handleRowClicked}
-                    onLoad={handleClickLoad}
-                    isNaverChannel={isNaverChannel}
-                />
-            </div>
+            {/* 컴포넌트워크 히스토리 */}
+            <ComponentWorkHistoryList
+                search={search}
+                setSearch={setSearch}
+                componentList={componentList}
+                onSearch={handleSearch}
+                selectedComponent={selectedComponent}
+                selectedComponentHistSeq={selectedComponentHistSeq}
+                show={show}
+                loading={componentWorkLoading}
+                total={total}
+                rowData={rowData}
+                onChange={handleChangeSearchOption}
+                onRowClick={handleRowClicked}
+                onLoad={handleClickLoad}
+                isNaverChannel={isNaverChannel}
+            />
             <div className="flex-fill">
                 {/* 편집기사 히스토리 */}
                 <DeskingWorkHistoryList loading={deskingWorkLoading} search={search} setSearch={setSearch} total={total} rowData={deskingWorkHistoryList} />

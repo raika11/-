@@ -65,7 +65,7 @@ const ComponentWorkHistoryList = (props) => {
             </Form.Row>
 
             {/* 검색조건, 키워드 */}
-            <Form.Row className="mb-2">
+            <Form.Row className="mb-14">
                 <div className="flex-shrink-0 pr-2">
                     <MokaInput as="select" value={search.searchType} name="searchType" onChange={handleChangeValue}>
                         {initialState.searchTypeList.map((searchType) => (

@@ -178,7 +178,7 @@ const CommentSearch = ({ selectBannedItem }) => {
 
                 <Col xs={2} className="p-0 pr-2 d-flex">
                     <MokaInput as="select" className="mr-1" value={searchData.status} onChange={(e) => handleChangeSearchInput(e)} name="status" id="status">
-                        <option value="">상태전체</option>
+                        <option value="Y">상태전체</option>
                         {COMMENT_STATUS_CODE.map((status, index) => (
                             <option key={index} value={status.code}>
                                 {status.name}

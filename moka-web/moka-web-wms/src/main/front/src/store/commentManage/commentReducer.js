@@ -26,7 +26,7 @@ export const initialState = {
             keyword: '',
             domain: '',
             orderType: 'A',
-            status: '',
+            status: 'Y',
             // startDt: moment().format('YYYY-MM-DD 00:00:00'),
             startDt: moment().format('2020-08-01 00:00:00'),
             endDt: moment().format('YYYY-MM-DD 23:59:00'),

@@ -3,9 +3,8 @@ import { Helmet } from 'react-helmet';
 import { MokaCard, MokaIconTabs } from '@components';
 import { Route } from 'react-router-dom';
 import QuizChildRelationInfo from '@pages/Survey/Quiz/relations/QuizChildRelationInfo';
-
-const QuizList = React.lazy(() => import('@pages/Survey/Quiz/QuizList'));
-const QuizEdit = React.lazy(() => import('@pages/Survey/Quiz/QuizEdit'));
+import QuizList from '@pages/Survey/Quiz/QuizList';
+import QuizEdit from '@pages/Survey/Quiz/QuizEdit';
 
 const Quiz = ({ match }) => {
     const [, setActiveTabIdx] = useState(0);

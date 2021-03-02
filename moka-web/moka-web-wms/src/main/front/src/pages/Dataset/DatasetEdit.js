@@ -69,7 +69,7 @@ const DatasetEdit = ({ onDelete, match }) => {
                         invalidated = { ...invalidated, [key]: true };
                     }
                 } else {
-                    invalidated = { ...invalidated, [key]: true };
+                    invalidated = { ...invalidated, [key]: false };
                 }
             }
         }

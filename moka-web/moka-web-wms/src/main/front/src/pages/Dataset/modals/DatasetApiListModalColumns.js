@@ -9,7 +9,7 @@ export default [
     {
         headerName: '설명',
         field: 'description',
-        width: 370,
+        width: 330,
         flex: 1,
         tooltipField: 'description',
     },

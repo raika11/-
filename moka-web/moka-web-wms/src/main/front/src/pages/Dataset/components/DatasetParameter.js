@@ -58,6 +58,7 @@ const DatasetParameter = (props) => {
         if (value) {
             value.map((data) => values.push(data.value));
         }
+        onChangeValid({ ...isInvalid, [name]: false });
         onChange({ ...dataApiParam, [name]: values.join(',') });
     };
 
@@ -169,6 +170,7 @@ const DatasetParameter = (props) => {
                         inputProps={{ options: options[type], closeMenuOnSelect: true, isMulti: isMultiple, searchIcon: false }}
                         required={required}
                         value={value}
+                        isInvalid={isInvalid[name]}
                         onChange={(value, event) => handleChangeAutoCompleteValue(event, name, value)}
                     />
                 );

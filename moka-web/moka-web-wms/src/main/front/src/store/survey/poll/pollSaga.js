@@ -58,6 +58,11 @@ function* getPollList({ type, payload }) {
                 draft['status'] = ['S', 'T'];
             });
         }
+        search = produce(search, (draft) => {
+            draft['startDt'] = moment(search.startDt).format(DB_DATEFORMAT);
+            draft['endDt'] = moment(search.endDt).format(DB_DATEFORMAT);
+        });
+
         const response = yield call(pollApi.getPollList, { search });
 
         if (response.data.header.success) {
@@ -124,7 +129,12 @@ function* getPoll({ type, payload }) {
 function* savePoll({ type, payload }) {
     yield put(startLoading(type));
 
-    const formData = pollObjectToFormData(payload.data);
+    const formData = pollObjectToFormData(
+        produce(payload.data, (draft) => {
+            draft.startDt = moment(payload.data.startDt).format(DB_DATEFORMAT);
+            draft.endDt = moment(payload.data.endDt).format(DB_DATEFORMAT);
+        }),
+    );
 
     try {
         const response = yield call(pollApi.postPoll, formData);

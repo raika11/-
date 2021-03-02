@@ -7,10 +7,10 @@ import java.util.Map.Entry;
 import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.Collection;
 import jmnet.moka.core.dps.api.handler.module.searchEngine.SearchQueryResult;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 
 public class SearchEngineModule implements ModuleInterface {
     private static final String PARAM_KEY = "Key";
@@ -46,10 +46,10 @@ public class SearchEngineModule implements ModuleInterface {
                 .get("category");
         Integer startCount = (Integer) apiContext
                 .getCheckedParamMap()
-                .get("startCount");
+                .get("start");
         Integer listCount = (Integer) apiContext
                 .getCheckedParamMap()
-                .get("listCount");
+                .get("count");
 
         Map<String, Object> searchParamMap = (Map<String, Object>) getParameterByCategory(categoryKey);
         searchParamMap.put("collection", "news");

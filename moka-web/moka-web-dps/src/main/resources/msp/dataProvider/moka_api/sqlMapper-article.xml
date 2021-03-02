@@ -5,77 +5,96 @@
 
   <!-- article basic -->
   <select id="basic" parameterType="hashmap" resultType="map">
-    select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE from TB_ARTICLE_BASIC A, TB_ARTICLE_SOURCE B
-    where A.SOURCE_CODE = B.SOURCE_CODE AND A.TOTAL_ID=#{totalId}
+    select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE
+    from TB_ARTICLE_BASIC A,
+         TB_ARTICLE_SOURCE B
+    where A.SOURCE_CODE = B.SOURCE_CODE
+      AND A.TOTAL_ID = #{totalId}
   </select>
   <!-- article title -->
   <select id="title" parameterType="hashmap" resultType="map">
-    select TITLE_DIV, TITLE from TB_ARTICLE_TITLE
-    where TOTAL_ID=#{totalId}
+    select TITLE_DIV, TITLE
+    from TB_ARTICLE_TITLE
+    where TOTAL_ID = #{totalId}
   </select>
   <!-- article content -->
   <select id="content" parameterType="hashmap" resultType="map">
-    select * FROM TB_ARTICLE_CONTENT
-    where TOTAL_ID=#{totalId}
+    select *
+    FROM TB_ARTICLE_CONTENT
+    where TOTAL_ID = #{totalId}
   </select>
   <!-- article reporter -->
   <select id="reporter" parameterType="hashmap" resultType="map">
-    select B.* from TB_15RE_ARTICLE_REPORTER A, TB_15RE_REPORTER B
-    where TOTAL_ID = #{totalId} AND A.REP_SEQ = B.REP_SEQ
+    select B.*
+    from TB_15RE_ARTICLE_REPORTER A,
+         TB_15RE_REPORTER B
+    where TOTAL_ID = #{totalId}
+      AND A.REP_SEQ = B.REP_SEQ
     ORDER BY A.ORD_NO ASC
   </select>
   <!-- article mastercode -->
   <select id="mastercode" parameterType="hashmap" resultType="map">
     select B.*
-    from TB_ARTICLE_CODELIST A, TB_MASTERCODE B
-    where TOTAL_ID =#{totalId} AND A.MASTER_CODE = B.MASTER_CODE
-    and A.SERVICE_FLAG='Y'
+    from TB_ARTICLE_CODELIST A,
+         TB_MASTERCODE B
+    where TOTAL_ID = #{totalId}
+      AND A.MASTER_CODE = B.MASTER_CODE
+      and A.SERVICE_FLAG = 'Y'
     order by ORD_NO
   </select>
   <!-- article servicemap -->
   <select id="servicemap" parameterType="hashmap" resultType="map">
     select B.*
-    from TB_ARTICLE_CODELIST A, TB_SERVICE_MAP B
-    where TOTAL_ID = #{totalId} AND A.MASTER_CODE = b.MASTER_CODE
-    and A.SERVICE_CODE = B.SERVICE_CODE
-    and A.SERVICE_FLAG='Y'
+    from TB_ARTICLE_CODELIST A,
+         TB_SERVICE_MAP B
+    where TOTAL_ID = #{totalId}
+      AND A.MASTER_CODE = b.MASTER_CODE
+      and A.SERVICE_CODE = B.SERVICE_CODE
+      and A.SERVICE_FLAG = 'Y'
     order by ORD_NO
   </select>
   <!-- article keyword -->
   <select id="keyword" parameterType="hashmap" resultType="map">
-  SELECT *
-  FROM TB_ARTICLE_KEYWORD
-  WHERE TOTAL_ID = #{totalId}
+    SELECT *
+    FROM TB_ARTICLE_KEYWORD
+    WHERE TOTAL_ID = #{totalId}
   </select>
   <!-- article clickcnt -->
   <select id="clickcnt" parameterType="hashmap" resultType="map">
-  SELECT *
-  FROM TB_15RE_ARTICLE_CLICKCNT
-  WHERE TOTAL_ID = #{totalId}
+    SELECT *
+    FROM TB_15RE_ARTICLE_CLICKCNT
+    WHERE TOTAL_ID = #{totalId}
   </select>
   <!-- article multi -->
   <select id="multi" parameterType="hashmap" resultType="map">
-  select * from TB_15RE_ARTICLE_MULTI
-where TOTAL_ID = #{totalId}
+    select *
+    from TB_15RE_ARTICLE_MULTI
+    where TOTAL_ID = #{totalId}
   </select>
 
   <select id="meta_fb" parameterType="hashmap" resultType="map">
     SELECT TOP 1 B.TOTAL_ID
-    ,(CASE WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com'+REPLACE(B.ART_THUMB,'.tn_120.jpg','') ELSE  M.IMG_URL END) AS IMG_URL
-    ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END) AS ART_TITLE
-    ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
-    , M.ART_KEYWORD
+    ,(CASE
+                       WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com' +
+                                                   REPLACE(B.ART_THUMB, '.tn_120.jpg', '')
+                       ELSE M.IMG_URL END)                                           AS IMG_URL
+         , (CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END)     AS ART_TITLE
+         , (CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
+         , M.ART_KEYWORD
     FROM [DB_NEWS_MOKA].[dbo].[TB_ARTICLE_BASIC] B
-    LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
+      LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
     ON M.TOTAL_ID = B.TOTAL_ID AND M.USED_YN='Y' AND M.SNS_TYPE='FB'
     WHERE B.TOTAL_ID = #{totalId}
   </select>
 
   <select id="meta_tw" parameterType="hashmap" resultType="map">
     SELECT TOP 1 B.TOTAL_ID
-    ,(CASE WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com'+REPLACE(B.ART_THUMB,'.tn_120.jpg','') ELSE  M.IMG_URL END) AS IMG_URL
-         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END) AS ART_TITLE
-         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
+    ,(CASE
+                       WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com' +
+                                                   REPLACE(B.ART_THUMB, '.tn_120.jpg', '')
+                       ELSE M.IMG_URL END)                                           AS IMG_URL
+         , (CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END)     AS ART_TITLE
+         , (CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
          , M.ART_KEYWORD
     FROM [DB_NEWS_MOKA].[dbo].[TB_ARTICLE_BASIC] B
       LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
@@ -85,9 +104,12 @@ where TOTAL_ID = #{totalId}
 
   <select id="meta_ja" parameterType="hashmap" resultType="map">
     SELECT TOP 1 B.TOTAL_ID
-    ,(CASE WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com'+REPLACE(B.ART_THUMB,'.tn_120.jpg','') ELSE  M.IMG_URL END) AS IMG_URL
-         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END) AS ART_TITLE
-         ,(CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
+    ,(CASE
+                       WHEN M.IMG_URL IS NULL THEN 'https://pds.joins.com' +
+                                                   REPLACE(B.ART_THUMB, '.tn_120.jpg', '')
+                       ELSE M.IMG_URL END)                                           AS IMG_URL
+         , (CASE WHEN M.ART_TITLE IS NULL THEN B.ART_TITLE ELSE M.ART_TITLE END)     AS ART_TITLE
+         , (CASE WHEN M.ART_TITLE IS NULL THEN B.ART_SUMMARY ELSE M.ART_SUMMARY END) AS ART_SUMMARY
          , M.ART_KEYWORD
     FROM [DB_NEWS_MOKA].[dbo].[TB_ARTICLE_BASIC] B
       LEFT OUTER JOIN TB_ARTICLE_SNS_SHARE M
@@ -99,49 +121,44 @@ where TOTAL_ID = #{totalId}
   <!-- article list -->
   <select id="list" parameterType="map" resultType="map" resultMap="map,map"
     statementType="CALLABLE">
-		 {call UPU_15RE_ARTICLE_LIST_SEL(
-			#{pageIndex, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			#{pageSize, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			#{serviceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{masterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{keywordList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{usageType, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{contentTypeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{startSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{endSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{startTotalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			#{exceptTotalIdList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{exceptMasterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{exceptSourceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{isExistThumbnail, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{usedTotalCount, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-		) }
-  	</select>
+    {call UPU_15RE_ARTICLE_LIST_SEL(
+      #{pageIndex, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{pageSize, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{serviceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{masterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{keywordList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{usageType, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{contentTypeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{startSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{endSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{startTotalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{exceptTotalIdList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{exceptMasterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{exceptSourceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{isExistThumbnail, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{usedTotalCount, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 
   <!-- desking -->
   <select id="desking" parameterType="map" resultType="map" resultMap="map,map"
     statementType="CALLABLE">
-		 {call USP_WMS_DESKING_LIST_SEL(
-		  #{ids, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			#{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			'Y',
-			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-		) }
-  	</select>
+    {call USP_WMS_DESKING_LIST_SEL(
+      #{ids, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 
-  <!-- desking.work -->
-  <select id="deskingWork" parameterType="map" resultType="map" resultMap="map,map"
-    statementType="CALLABLE">
-		 {call USP_WMS_DESKING_WORK_LIST_SEL(
-		  #{ids, mode=IN, jdbcType=VARCHAR, javaType=string},
-		  #{regId, mode=IN, jdbcType=VARCHAR, javaType=string},
-			#{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			#{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-			'Y',
-			#{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
-		) }
-  	</select>
+  <!-- digitalSpecial list -->
+  <select id="digitalSpecial" parameterType="hashmap" resultType="map">
+    select *
+    from tb_15re_special_page_mgt
+    where SEQ_NO = #{digitalSpecialId}
+      AND USED_YN = 'Y'
+  </select>
 
 </mapper>

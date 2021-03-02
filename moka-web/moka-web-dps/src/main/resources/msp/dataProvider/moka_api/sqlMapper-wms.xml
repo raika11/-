@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--
-  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
-  -->
-
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="dps.rcvArticle">
+<mapper namespace="dps.wms">
+
+  <resultMap id="wmap" type="hashmap"/>
+
+  <!-- desking.work -->
+  <select id="deskingWork" parameterType="hashmap" resultType="hashmap" resultMap="wmap,wmap"
+    statementType="CALLABLE">
+    {call USP_WMS_DESKING_WORK_LIST_SEL(
+      #{ids, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{regId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{total, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
 
   <!-- rcv article basic -->
-  <select id="basic" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleBasic" parameterType="hashmap" resultType="hashmap">
     select A.*, SOURCE_NAME, SOURCE_BASEURL, SOURCE_TYPE, A.TITLE AS ART_TITLE
     from TB_RCV_ARTICLE_BASIC A,
          TB_ARTICLE_SOURCE B
@@ -16,13 +27,13 @@
       AND A.RID = #{rid}
   </select>
   <!-- rcv article content -->
-  <select id="content" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleContent" parameterType="hashmap" resultType="hashmap">
     select CONTENT AS ART_CONTENT
     FROM TB_RCV_ARTICLE_BASIC
     where RID = #{rid}
   </select>
   <!-- rcv article reporter -->
-  <select id="reporter" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleReporter" parameterType="hashmap" resultType="hashmap">
     select B.*
     from TB_RCV_ARTICLE_REPORTER A,
          TB_15RE_REPORTER B
@@ -31,7 +42,7 @@
       AND A.REPORTER_EMAIL = B.REP_EMAIL1
   </select>
   <!-- rcv article mastercode -->
-  <select id="mastercode" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleMastercode" parameterType="hashmap" resultType="hashmap">
     select MAS.*
     from TB_RCV_ARTICLE_CODE RCODE,
          TB_RCV_CODE_CONV RCONV,
@@ -45,7 +56,7 @@
     order by RCODE.CODE_ORD
   </select>
   <!-- rcv article servicemap -->
-  <select id="servicemap" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleServicemap" parameterType="hashmap" resultType="hashmap">
     select B.*
     from TB_SERVICE_MAP B
     where EXISTS(
@@ -63,16 +74,17 @@
             )
   </select>
   <!-- rcv article keyword -->
-  <select id="keyword" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleKeyword" parameterType="hashmap" resultType="hashmap">
     SELECT *
     FROM TB_RCV_ARTICLE_KEYWORD
     WHERE RID = #{rid}
   </select>
   <!-- rcv article multi -->
-  <select id="multi" parameterType="hashmap" resultType="map">
+  <select id="rcvArticleMulti" parameterType="hashmap" resultType="hashmap">
     select *
     from TB_RCV_ARTICLE_COMPONENT
     where RID = #{rid}
   </select>
+
 
 </mapper>

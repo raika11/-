@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017 Joongang Ilbo, Inc. All rights reserved.
+  -->
+
+<apiConfig>
+  <api id="list" expire="1m">
+    <description>기사 목록을 반환한다.</description>
+    <parameter>
+      <title desc="기사제목">.{0,1000}</title>
+      <type desc="기사타입" default="C">^[CYNO]{1}$</type>
+    </parameter>
+    <request>dps.article.list</request>
+    <!--<request total="Y">dps.news.list_total</request>-->
+    <keys>
+      title
+      type
+      #paging
+    </keys>
+  </api>
+</apiConfig>
+

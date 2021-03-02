@@ -202,7 +202,7 @@ function* publishSnsMeta({ type, payload }) {
                         const snsData = data[saveResponse.body.id.snsType];
                         const response = yield call(api.postSnsPublish, {
                             totalId: payload.totalId,
-                            message: snsData.snsPostMsg,
+                            message: snsData.snsType === 'TW' ? snsData.snsPostMsg.replaceAll(/<[^>]*>/g, '').replaceAll(/\n/g, '') : snsData.snsPostMsg,
                             reserveDt: !commonUtil.isEmpty(snsData.reserveDt) ? moment(snsData.reserveDt).format(DB_DATEFORMAT) : snsData.reserveDt,
                             snsType: snsData.snsType,
                         });

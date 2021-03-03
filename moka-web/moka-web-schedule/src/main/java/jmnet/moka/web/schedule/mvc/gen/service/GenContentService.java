@@ -53,7 +53,7 @@ public interface GenContentService {
      *
      * @return 스케줄 상세
      */
-    GenContentHistory findGenContentHistory(Long jobSeq);
+    Optional<GenContentHistory> findGenContentHistory(Long jobSeq);
 
     /**
      * 예약이력 일련번호로 reserved 정보 조회

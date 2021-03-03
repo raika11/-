@@ -70,6 +70,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
         if(scheduleResult == null){
             scheduleResult = jobStatusService.insertGenStatus(info.getJobSeq());
         }
+        //genStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
+        else{
+            scheduleResult.setGenResult(500L);
+            scheduleResult.setLastExecDt(new Date());
+            scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
+        }
     }
 
     /**
@@ -92,10 +98,6 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
         if(success){
             //schedule 실행 결과가 성공
             scheduleResult.setGenResult(200L);
-        }
-        else{
-            //schedule 실행 결과가 실패
-            scheduleResult.setSendResult(500L);
         }
     }
 
@@ -209,6 +211,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
                 fis.close();
 
+
                 //FTP 로그아웃
                 boolean logoutResponse = ftpClient.logout();
                 log.debug("ftp logout : {}", logoutResponse);
@@ -234,12 +237,10 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
                 return false;
             }
 
-        }
-        catch (Exception e){
+        }catch (Exception e){
             log.error("uploadFtpString error : {}", e);
             return false;
-        }
-        finally{
+        }finally{
             close(bw);
             close(fw);
             close(fis);
@@ -255,8 +256,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
         try{
             c.close();
-        }
-        catch (IOException e) {
+        }catch (IOException e) {
             log.error("ftp file error : {}", e);
         }
     }

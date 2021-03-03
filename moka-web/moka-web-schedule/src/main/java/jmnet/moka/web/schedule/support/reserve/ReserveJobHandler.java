@@ -57,7 +57,9 @@ public class ReserveJobHandler {
                 for (GenContent info : scheduleList) {
 
                     //Reserved Job의 예약상태 조회
-                    GenContentHistory genStatusHist = jobContentService.findGenContentHistory(info.getJobSeq());
+                    GenContentHistory genStatusHist = jobContentService
+                            .findGenContentHistory(info.getJobSeq())
+                            .orElseThrow();
                     if (genStatusHist != null) {
                         addReserveJob(genStatusHist);
                     }

@@ -186,7 +186,7 @@ const BulkSiteSelector = (props) => {
         } else {
             // 값이 없을 때는(value === null) 모든 매체 선택
             if (typeof onChange === 'function') {
-                onChange(siteList.map((site) => site.id).join(','));
+                /*onChange(siteList.map((site) => site.id).join(','));*/
             }
         }
     }, [findSite, findSiteIndex, onChange, selectedList, siteList, value]);

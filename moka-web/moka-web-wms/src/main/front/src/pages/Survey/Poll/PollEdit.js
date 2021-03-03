@@ -12,8 +12,6 @@ import commonUtil from '@utils/commonUtil';
 import PollDetailCompareAnswerContainer from '@pages/Survey/Poll/components/PollDetailCompareAnswerContainer';
 import produce from 'immer';
 import useDebounce from '@hooks/useDebounce';
-import moment from 'moment';
-import { DB_DATEFORMAT } from '@/constants';
 import toast from '@utils/toastUtil';
 import { selectArticleItemChange, selectArticleListChange } from '@store/survey/quiz';
 
@@ -27,7 +25,7 @@ const PollEdit = ({ onDelete }) => {
     const [isCompared, setIsCompared] = useState(false);
     const [isSet, setIsSet] = useState(false);
     const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
-    const [hasUrl, setHasUrl] = useState(false);
+    const [hasLink, setHasLink] = useState(false);
 
     const { codes, poll, loading, search } = useSelector((store) => ({
         codes: store.poll.codes,
@@ -129,7 +127,15 @@ const PollEdit = ({ onDelete }) => {
     };
 
     const handleClickHasLink = () => {
-        setHasUrl(!hasUrl);
+        if (hasLink) {
+            console.log(edit);
+            const noneHasLinkItems = edit.pollItems.map((item) => ({
+                ...item,
+                linkUrl: '',
+            }));
+            handleChangeValue({ name: 'pollItems', value: noneHasLinkItems });
+        }
+        setHasLink(!hasLink);
     };
 
     useEffect(() => {
@@ -150,6 +156,7 @@ const PollEdit = ({ onDelete }) => {
             setIsSet(true);
             dispatch(selectArticleListChange(poll.pollRelateContents.filter((content) => content.relType === 'A')));
             dispatch(selectArticleItemChange(poll.pollRelateContents.filter((content) => content.relType === 'A')));
+            setHasLink(poll.pollItems.filter((item) => item.linkUrl !== '' || !commonUtil.isEmpty(item.linkUrl)).length > 0);
         } else {
             setIsSet(false);
         }
@@ -528,7 +535,7 @@ const PollEdit = ({ onDelete }) => {
                             minHeight="300px"
                             titleAs={
                                 <Form.Row>
-                                    <Col xs={12}>
+                                    <Col xs={11}>
                                         <MokaInputLabel
                                             as="textarea"
                                             name="title"
@@ -539,6 +546,11 @@ const PollEdit = ({ onDelete }) => {
                                             label="Q."
                                             labelWidth={20}
                                         />
+                                    </Col>
+                                    <Col xs={1} className="d-flex align-items-center">
+                                        <Button variant="white" className="w-100 p-0" onClick={handleClickHasLink}>
+                                            <MokaIcon iconName={hasLink ? 'fal-unlink' : 'fal-link'} />
+                                        </Button>
                                     </Col>
                                 </Form.Row>
                             }
@@ -553,7 +565,7 @@ const PollEdit = ({ onDelete }) => {
                                             value: items,
                                         });
                                     }}
-                                    hasUrl={hasUrl}
+                                    hasUrl={hasLink}
                                 />
                             )}
                             {edit.pollDiv === 'V' && (
@@ -566,7 +578,7 @@ const PollEdit = ({ onDelete }) => {
                                             value: items,
                                         });
                                     }}
-                                    hasUrl={hasUrl}
+                                    hasUrl={hasLink}
                                 />
                             )}
                         </MokaCard>

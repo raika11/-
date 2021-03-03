@@ -27,6 +27,7 @@ public abstract class TaskInputData {
     private boolean isSuccess = false;
     private List<String> tempFileList = new ArrayList<>();
 
+    @SuppressWarnings("unused")
     public String getTempFileName( String tempDir ) {
         final String tempFileName = BulkFileUtil.getTempFileName(tempDir);
         if( tempFileName != null )

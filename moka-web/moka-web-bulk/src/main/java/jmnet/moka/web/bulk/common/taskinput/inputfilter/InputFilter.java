@@ -1,8 +1,6 @@
 package jmnet.moka.web.bulk.common.taskinput.inputfilter;
 
 import java.io.File;
-import javax.xml.xpath.XPathExpressionException;
-import jmnet.moka.web.bulk.exception.BulkException;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,12 +20,13 @@ import org.w3c.dom.Node;
  */
 @Getter
 @Setter
+@SuppressWarnings("unused")
 public abstract class InputFilter {
-    public InputFilter(Node node, XMLUtil xu)
-            throws XPathExpressionException, BulkException {
+    public InputFilter(Node node, XMLUtil xu){
         load(node, xu);
     }
 
+    @SuppressWarnings("EmptyMethod")
     protected void load(Node node, XMLUtil xu){
     }
 

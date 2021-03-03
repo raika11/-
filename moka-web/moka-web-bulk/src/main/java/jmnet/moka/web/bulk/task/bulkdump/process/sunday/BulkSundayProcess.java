@@ -31,7 +31,7 @@ public class BulkSundayProcess extends BulkProcessCommon<BulkSundayArticle> {
     }
 
     @Override
-    protected void doProcess_Ready(BulkSundayArticle article, BulkDumpService dumpService) {
+    protected void doProcess_Ready(BulkSundayArticle article) {
         article.setBulkDumpEnvTarget(this.bulkDumpEnv.getBulkDumpEnvTargetByTargetName("SD"));
 
         article.getMedia1().setData(article.getSourceCode().substring(2, 3));
@@ -75,7 +75,7 @@ public class BulkSundayProcess extends BulkProcessCommon<BulkSundayArticle> {
     }
 
     @Override
-    protected BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, BulkSundayArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_Delete( BulkSundayArticle article, BulkDumpService dumpService) {
         return BulkDumpResult.SUCCESS;
     }
 }

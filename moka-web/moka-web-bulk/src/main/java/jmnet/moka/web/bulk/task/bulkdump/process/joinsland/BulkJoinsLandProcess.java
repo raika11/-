@@ -31,7 +31,7 @@ public class BulkJoinsLandProcess extends BulkProcessCommon<BulkJoinsLandArticle
     }
 
     @Override
-    protected void doProcess_Ready(BulkJoinsLandArticle article, BulkDumpService dumpService) {
+    protected void doProcess_Ready(BulkJoinsLandArticle article) {
         article.setBulkDumpEnvTarget(this.bulkDumpEnv.getBulkDumpEnvTargetByTargetName("JL"));
 
         article.getMedia1().setData(article.getSourceCode().substring(2, 3));
@@ -63,7 +63,7 @@ public class BulkJoinsLandProcess extends BulkProcessCommon<BulkJoinsLandArticle
     }
 
     @Override
-    protected BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, BulkJoinsLandArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_Delete( BulkJoinsLandArticle article, BulkDumpService dumpService) {
         article.getContCode1().setData("000");
         article.getContCode2().setData("000");
         article.getContCode3().setData("000");

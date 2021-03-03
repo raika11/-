@@ -26,6 +26,7 @@ import org.apache.commons.io.FilenameUtils;
  * @since 2021-02-05 005 오후 9:20
  */
 
+@SuppressWarnings("DuplicatedCode")
 @Getter
 @Setter
 @Slf4j
@@ -131,7 +132,6 @@ public class BulkJoinsLandArticle extends BulkArticle {
         return contentHtmlDaum;
     }
 
-    @SuppressWarnings("DuplicatedCode")
     public void processContent_ImageBulkYn() {
         for( BulkDumpNewsMMDataVo image : getBulkDumpNewsImageList() ) {
             final String imgSrc = image.getUrl();

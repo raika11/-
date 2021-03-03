@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class SlackMessageServiceImpl implements SlackMessageService {
+    @SuppressWarnings("unused")
     final SlackHelper slackHelper;
 
     @SuppressWarnings("FieldCanBeLocal")

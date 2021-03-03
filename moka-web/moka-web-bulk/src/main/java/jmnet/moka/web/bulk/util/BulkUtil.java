@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 /**
@@ -44,6 +43,7 @@ public class BulkUtil {
         return map.get(key).toString();
     }
 
+    @SuppressWarnings("unused")
     private static String sendUrlRequest( String urlAddress, String json, boolean isGet ) {
         try {
             URL url = new URL(urlAddress);

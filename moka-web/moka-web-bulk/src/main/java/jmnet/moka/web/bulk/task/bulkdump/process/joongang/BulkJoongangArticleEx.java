@@ -27,6 +27,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author sapark
  * @since 2021-01-27 027 오후 2:05
  */
+@SuppressWarnings("DuplicatedCode")
 @Getter
 @Setter
 @Slf4j
@@ -37,7 +38,6 @@ public class BulkJoongangArticleEx extends BulkArticle {
         super(totalVo);
     }
 
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public void processBulkDumpNewsVo(BulkDumpNewsVo newsVo, List<BulkDumpNewsMMDataVo> bulkDumpNewsMMDataList) {
         super.processBulkDumpNewsVo(newsVo, bulkDumpNewsMMDataList);

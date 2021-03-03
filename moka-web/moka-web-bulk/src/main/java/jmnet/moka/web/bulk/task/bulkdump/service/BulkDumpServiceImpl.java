@@ -75,6 +75,7 @@ public class BulkDumpServiceImpl implements BulkDumpService {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message) {
         insertBulkLog( totalVo, status, message, false);
     }

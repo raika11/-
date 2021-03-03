@@ -71,6 +71,7 @@ public class BulkFileUtil {
         return StandardCharsets.UTF_8;
     }
 
+    @SuppressWarnings("unused")
     public static String readFromXml( File file )
             throws IOException {
         return BulkFileUtil.readFile(file.toPath(), getFromXml( file) );

@@ -54,6 +54,7 @@ public class FileXmlTaskInputData<P, C> extends TaskInputData {
         }
     }
 
+    @SuppressWarnings("unused")
     public void doAfterProcess() {
         String targetDir = isSuccess() ? getTaskInput().getDirSuccess() : getTaskInput().getDirFailed();
 

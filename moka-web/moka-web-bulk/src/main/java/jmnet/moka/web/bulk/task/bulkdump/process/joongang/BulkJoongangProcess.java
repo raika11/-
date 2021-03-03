@@ -35,7 +35,7 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
     }
 
     @Override
-    protected void doProcess_Ready(BulkJoongangArticle article, BulkDumpService dumpService) {
+    protected void doProcess_Ready(BulkJoongangArticle article) {
         article.setBulkDumpEnvTarget(this.bulkDumpEnv.getBulkDumpEnvTargetByTargetName("JA"));
 
         article.getMedia2().setData( article.getTargetCode().substring(0, 2) );
@@ -162,7 +162,7 @@ public class BulkJoongangProcess extends BulkProcessCommon<BulkJoongangArticle> 
     }
 
     @Override
-    protected BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, BulkJoongangArticle article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService) {
+    protected BulkDumpResult doProcess_Delete( BulkJoongangArticle article, BulkDumpService dumpService) {
         article.getMedia1().setData( article.getTargetCode().substring(2, 3));
         article.getMedia3().setData( article.getMedia2().toString() + article.getMedia1().toString() );
 

@@ -20,7 +20,7 @@ public enum BulkDumpResult {
     FAIL_DUMP_CP_TOTAL(-6),
     FAIL(-1);
 
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     final private int result;
     BulkDumpResult(int result) {
         this.result = result;

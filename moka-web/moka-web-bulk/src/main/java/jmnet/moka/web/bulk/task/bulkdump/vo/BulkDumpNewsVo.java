@@ -17,6 +17,7 @@ import lombok.Setter;
  * @author sapark
  * @since 2020-12-30 030 오전 11:01
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 public class BulkDumpNewsVo implements Serializable {

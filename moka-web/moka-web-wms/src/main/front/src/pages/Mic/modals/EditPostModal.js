@@ -345,7 +345,7 @@ const EditPostModal = (props) => {
                         cropHeight={300}
                         cropWidth={300}
                         onHide={() => setArcShow(false)}
-                        contentId={post.answerRel?.totalId}
+                        totalId={post.answerRel?.totalId}
                         thumbFileName={post.answerRel?.artThumbnail}
                         apply={handleThumbFileApply}
                     />

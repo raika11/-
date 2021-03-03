@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import EditThumbCard from './EditThumbCard';
+import ThumbCard from './ThumbCard';
 import { GET_ARTICLE_IMAGE_LIST, getArticleImageList } from '@store/article';
 import { MokaLoader } from '@/components';
 
@@ -16,8 +16,8 @@ const defaultProps = {};
 /**
  * 기사 내 이미지 목록
  */
-const EditThumbArticleImageList = (props) => {
-    const { contentId, onThumbClick, onRepClick } = props;
+const ArticleImageList = (props) => {
+    const { totalId, onThumbClick, onRepClick } = props;
     const dispatch = useDispatch();
     const imageList = useSelector(({ article }) => article.imageList);
     const loading = useSelector(({ loading }) => loading[GET_ARTICLE_IMAGE_LIST]);
@@ -25,12 +25,8 @@ const EditThumbArticleImageList = (props) => {
     const [renderList, setRenderList] = useState([]);
 
     useEffect(() => {
-        dispatch(
-            getArticleImageList({
-                totalId: contentId,
-            }),
-        );
-    }, [contentId, dispatch]);
+        dispatch(getArticleImageList({ totalId }));
+    }, [totalId, dispatch]);
 
     useEffect(() => {
         setRenderList(
@@ -50,7 +46,7 @@ const EditThumbArticleImageList = (props) => {
             <div className="d-flex flex-wrap align-content-start pt-10 pl-10 overflow-hidden">
                 {loading && <MokaLoader />}
                 {renderList.map((data) => (
-                    <EditThumbCard
+                    <ThumbCard
                         className="mb-10 mr-10"
                         width={'calc(20% - 10px)'}
                         height={188}
@@ -69,7 +65,7 @@ const EditThumbArticleImageList = (props) => {
     );
 };
 
-EditThumbArticleImageList.propTypes = propTypes;
-EditThumbArticleImageList.defaultProps = defaultProps;
+ArticleImageList.propTypes = propTypes;
+ArticleImageList.defaultProps = defaultProps;
 
-export default EditThumbArticleImageList;
+export default ArticleImageList;

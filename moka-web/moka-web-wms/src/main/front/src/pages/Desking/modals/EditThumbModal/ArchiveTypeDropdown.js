@@ -69,7 +69,10 @@ export const propTypes = {
 
 const defaultProps = {};
 
-const EditThumbImageTypeDropdown = (props) => {
+/**
+ * 포토아카이브 타입 dropdown
+ */
+const ArchiveTypeDropdown = (props) => {
     const { className, isInvalid, imageValue, onChange } = props;
     const [imageSelectedList, setImageSelectedList] = useState([]);
     const [imageObj, setImageObj] = useState({});
@@ -215,7 +218,7 @@ const EditThumbImageTypeDropdown = (props) => {
     );
 };
 
-EditThumbImageTypeDropdown.propTypes = propTypes;
-EditThumbImageTypeDropdown.defaultProps = defaultProps;
+ArchiveTypeDropdown.propTypes = propTypes;
+ArchiveTypeDropdown.defaultProps = defaultProps;
 
-export default EditThumbImageTypeDropdown;
+export default ArchiveTypeDropdown;

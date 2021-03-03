@@ -9,7 +9,7 @@ import useDebounce from '@hooks/useDebounce';
 import clsx from 'clsx';
 
 // import { useDrop } from 'react-dnd';
-// import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
+// import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/ThumbCard';
 import SortableItem from '@pages/Survey/component/Sortable/SortableItem';
 
 import { QuizQuestionFirstTypeComponent, QuizQuestionThirdTypeComponent } from '@pages/Survey/Quiz/components';

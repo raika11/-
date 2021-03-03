@@ -5,8 +5,8 @@ import Form from 'react-bootstrap/Form';
 import { MokaInput, MokaSearchInput } from '@components';
 import { DB_DATEFORMAT } from '@/constants';
 import { initialState, getPhotoList, changeSearchOption, getArchiveData } from '@store/photoArchive';
-import EditThumbOriginDropdown from './EditThumbOriginDropdown';
-import EditThumbImageTypeDropdown from './EditThumbImageTypeDropdown';
+import ArchiveOriginDropdown from './ArchiveOriginDropdown';
+import ArchiveTypeDropdown from './ArchiveTypeDropdown';
 
 const periodType = [
     { id: 'all', name: '전체' },
@@ -14,7 +14,10 @@ const periodType = [
     { id: 'week', name: '일주일' },
 ];
 
-const EditThumbSearch = () => {
+/**
+ * 포토 아카이브 검색
+ */
+const ArchiveSearch = () => {
     const dispatch = useDispatch();
     const searchKeyList = useSelector((store) => store.photoArchive.searchKeyList);
     const storeSearch = useSelector((store) => store.photoArchive.search);
@@ -118,7 +121,7 @@ const EditThumbSearch = () => {
             </div>
 
             <div className="mr-2" style={{ width: 160 }}>
-                <EditThumbOriginDropdown
+                <ArchiveOriginDropdown
                     originValue={search.originCode}
                     onChange={(value) => {
                         if (value.indexOf('all') > -1) {
@@ -133,7 +136,7 @@ const EditThumbSearch = () => {
             </div>
 
             <div className="mr-2" style={{ width: 160 }}>
-                <EditThumbImageTypeDropdown
+                <ArchiveTypeDropdown
                     imageValue={search.imageType}
                     onChange={(value) => {
                         if (value.indexOf('All') > -1) {
@@ -172,4 +175,4 @@ const EditThumbSearch = () => {
     );
 };
 
-export default EditThumbSearch;
+export default ArchiveSearch;

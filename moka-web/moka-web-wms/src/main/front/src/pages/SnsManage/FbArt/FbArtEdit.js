@@ -237,7 +237,7 @@ const FbArtEdit = () => {
                 cropHeight={300}
                 cropWidth={300}
                 onHide={() => setShowEditThumbModal(false)}
-                contentId={totalId}
+                totalId={totalId}
                 thumbFileName={edit.fb.imgUrl}
                 saveFileName={moment().format('YYYYMMDDsss')}
                 apply={handleThumbFileApply}

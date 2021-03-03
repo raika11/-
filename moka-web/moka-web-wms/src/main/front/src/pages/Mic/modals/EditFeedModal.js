@@ -328,7 +328,7 @@ const EditFeedModal = (props) => {
                             cropHeight={300}
                             cropWidth={300}
                             onHide={() => setArcShow(false)}
-                            contentId={feed.answerRel?.totalId}
+                            totalId={feed.answerRel?.totalId}
                             thumbFileName={feed.answerRel?.artThumbnail}
                             apply={handleThumbFileApply}
                         />

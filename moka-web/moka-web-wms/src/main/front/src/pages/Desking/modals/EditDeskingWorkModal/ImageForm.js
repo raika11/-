@@ -60,7 +60,7 @@ const ImageForm = ({ component, contentId, partKey, temp, onChange, fileName }) 
                 cropHeight={component?.cropHeight}
                 cropWidth={component?.cropWidth}
                 onHide={() => setShow(false)}
-                contentId={contentId}
+                totalId={contentId}
                 saveFileName={String(fileName)}
                 thumbFileName={temp.thumbFileName}
                 apply={handleThumbFileApply}

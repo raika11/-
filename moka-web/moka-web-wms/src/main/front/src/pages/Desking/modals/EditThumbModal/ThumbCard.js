@@ -77,7 +77,7 @@ export const ItemTypes = {
  * (드래그 가능)
  * https://github.com/react-dnd/react-dnd/issues/1550
  */
-const EditThumbCard = forwardRef((props, ref) => {
+const ThumbCard = forwardRef((props, ref) => {
     const {
         width,
         height,
@@ -308,7 +308,7 @@ const EditThumbCard = forwardRef((props, ref) => {
     );
 });
 
-EditThumbCard.propTypes = propTypes;
-EditThumbCard.defaultProps = defaultProps;
+ThumbCard.propTypes = propTypes;
+ThumbCard.defaultProps = defaultProps;
 
-export default EditThumbCard;
+export default ThumbCard;

@@ -114,7 +114,7 @@ const ChannelSearchBox = ({ match }) => {
                             inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         />
                     </div>
-                    <div className="mr-1">
+                    <div className="mr-2">
                         <MokaInput as="select" name="usedYn" id="useYn" value={searchData.usedYn} onChange={(e) => handleSearchChange(e)} style={{ width: 110 }}>
                             <option value="">전체</option>
                             {selectItem.usedYn.map((item, index) => (

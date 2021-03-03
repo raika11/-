@@ -66,6 +66,23 @@ public class BulkDumpClientHandler implements Runnable {
         return null;
     }
 
+    private boolean isExistQueue( BulkDumpTotalVo bulkDumpTotalVo ) {
+        for (Object obj : this.waitDumpClientQueue.toArray()){
+            BulkDumpTotalVo tmpDumpTotalVo = (BulkDumpTotalVo) obj;
+            if (bulkDumpTotalVo.getContentId().equals(tmpDumpTotalVo.getContentId())) {
+                return true;
+            }
+        }
+
+        for (Object obj : this.bulkDumpClientQueue.toArray()){
+            BulkDumpTotalVo tmpDumpTotalVo = (BulkDumpTotalVo) obj;
+            if (bulkDumpTotalVo.getContentId().equals(tmpDumpTotalVo.getContentId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void run() {
@@ -80,51 +97,54 @@ public class BulkDumpClientHandler implements Runnable {
                 if( bulkDumpTotalVo == null )
                     continue;
 
+                boolean delUspBulkDdref = true;
                 this.bulkDumpClientChannel.decrementWaitExecutorCount();
-
                 totalVo = new TotalVo<>(bulkDumpTotalVo);
 
                 insertBulkLog( bulkDumpService, totalVo, "Y".equals(bulkDumpTotalVo.getJHotYn()) ? DumpStatus.ProcessingJhot : DumpStatus.Processing,
                         BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} Start", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index) );
 
-                int retryCount = bulkDumpTask.getRetryCount();
-
-                boolean delUspBulkDdref;
                 BulkDumpResult result;
-                do {
-                    delUspBulkDdref = true;
-                    try {
-                        result = BulkDumpClientProcess.doProcess(totalVo, this.bulkDumpTask);
-                        if( result == BulkDumpResult.SUCCESS || result == BulkDumpResult.SKIP_DATABASE ) {
-                            break;
-                        } else if (result == BulkDumpResult.TIMEOUT_OVP) {
-                            if( System.currentTimeMillis() - bulkDumpTotalVo.getDumpStartTime() > bulkDumpTask.getOvpWaitTime() ) {
-                                insertBulkLog(bulkDumpService, totalVo, DumpStatus.Error,
-                                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp Expired !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index), true);
+                if( isExistQueue( bulkDumpTotalVo )){
+                    // 동일한 항목 데이터가 들어왔다.
+                    result = BulkDumpResult.SKIP_DATABASE;
+                }
+                else {
+                    int retryCount = bulkDumpTask.getRetryCount();
+                    do {
+                        try {
+                            result = BulkDumpClientProcess.doProcess(totalVo, this.bulkDumpTask);
+                            if( result == BulkDumpResult.SUCCESS || result == BulkDumpResult.SKIP_DATABASE ) {
+                                break;
+                            } else if (result == BulkDumpResult.TIMEOUT_OVP) {
+                                if( System.currentTimeMillis() - bulkDumpTotalVo.getDumpStartTime() > bulkDumpTask.getOvpWaitTime() ) {
+                                    insertBulkLog(bulkDumpService, totalVo, DumpStatus.Error,
+                                            BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp Expired !!", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index), true);
+                                    break;
+                                }
+                                else {
+                                    if (bulkDumpTotalVo.isFromWaitQueue()) {
+                                        waitDumpClientQueue.addFirst(bulkDumpTotalVo);
+                                    } else {
+                                        waitDumpClientQueue.add(bulkDumpTotalVo);
+                                    }
+                                    insertBulkLog(bulkDumpService, totalVo, DumpStatus.TimeOutOvp,
+                                            BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
+                                    delUspBulkDdref = false;
+                                }
                                 break;
                             }
-                            else {
-                                if (bulkDumpTotalVo.isFromWaitQueue()) {
-                                    waitDumpClientQueue.addFirst(bulkDumpTotalVo);
-                                } else {
-                                    waitDumpClientQueue.add(bulkDumpTotalVo);
-                                }
-                                insertBulkLog(bulkDumpService, totalVo, DumpStatus.TimeOutOvp,
-                                        BulkStringUtil.format("BulkDump takeQueue no.={} iud={} totalId={} threadIdx={} TimeOut Ovp", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId(), this.index));
-                                delUspBulkDdref = false;
-                            }
-                            break;
+                        }catch ( Exception ignore) {
+                            result = BulkDumpResult.FAIL;
                         }
-                    }catch ( Exception ignore) {
-                        result = BulkDumpResult.FAIL;
-                    }
 
-                    if (--retryCount > 0) {
-                        totalVo.logError("BulkDump Exception retry {} ", bulkDumpTask.getRetryCount() - retryCount + 1);
-                        //noinspection BusyWait
-                        Thread.sleep(bulkDumpTask.getSleepTime());
-                    }
-                } while (retryCount > 0);
+                        if (--retryCount > 0) {
+                            totalVo.logError("BulkDump Exception retry {} ", bulkDumpTask.getRetryCount() - retryCount + 1);
+                            //noinspection BusyWait
+                            Thread.sleep(bulkDumpTask.getSleepTime());
+                        }
+                    } while (retryCount > 0);
+                }
 
                 if( delUspBulkDdref )
                     bulkDumpService.delUspBulkDdref(bulkDumpTotalVo);

@@ -415,7 +415,7 @@ const NoticeEdit = ({ match }) => {
                 modDt: data.modDt,
                 editorYn: data.boardInfo && data.boardInfo.editorYn,
                 regInfo: data.regDt && data.regDt.length > 16 ? `등록 일시: ${data.regDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
-                modInfo: data.modDt && data.modDt.length > 16 ? `등록 일시: ${data.modDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
+                modInfo: data.modDt && data.modDt.length > 16 ? `수정 일시: ${data.modDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
             });
 
             dispatch(changeSelectBoard(data.boardInfo));

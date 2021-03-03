@@ -24,7 +24,6 @@ import jmnet.moka.core.tms.merge.item.ComponentItem;
 import jmnet.moka.core.tms.merge.item.ContainerItem;
 import jmnet.moka.core.tms.merge.item.DomainItem;
 import jmnet.moka.core.tms.merge.item.PageItem;
-import jmnet.moka.core.tms.merge.item.TemplateItem;
 import jmnet.moka.core.tps.common.TpsConstants;
 import jmnet.moka.core.tps.common.logger.TpsLogger;
 import jmnet.moka.core.tps.config.PreviewConfiguration;
@@ -206,10 +205,11 @@ public class MergeServiceImpl implements MergeService {
             StringBuilder sb = dtm.merge(pageItem, containerItem, true, false, false, true);
 
             //
-            TemplateItem templateItem = new TemplateItem();
-            templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
-            templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
-            StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+            //            TemplateItem templateItem = new TemplateItem();
+            //            templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
+            //            templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
+            //            StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+            String previewRsrc = area.getPreviewRsrc();
 
             content = sb.toString();
 
@@ -234,10 +234,11 @@ public class MergeServiceImpl implements MergeService {
             content = sb.toString();
 
             //
-            TemplateItem templateItem = new TemplateItem();
-            templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
-            templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
-            StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+            //            TemplateItem templateItem = new TemplateItem();
+            //            templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
+            //            templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
+            //            StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+            String previewRsrc = area.getPreviewRsrc();
 
 
             // 미리보기 리소스 추가
@@ -318,12 +319,17 @@ public class MergeServiceImpl implements MergeService {
 
             // 랜더링
             StringBuilder sb = dtm.merge(pageItem, componentItem, false, false, false, true);
-
             String content = sb.toString();
+
+            //            TemplateItem templateItem = new TemplateItem();
+            //            templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
+            //            templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
+            //            StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+            String previewRsrc = area.getPreviewRsrc();
 
             // 미리보기 리소스 추가
             if (content.length() > 0 && resourceYn.equals(MokaConstants.YES)) {
-                content = area.getPreviewRsrc() + content;
+                content = previewRsrc + content;
             }
 
             return content;
@@ -403,14 +409,15 @@ public class MergeServiceImpl implements MergeService {
                 content = sb.toString();
 
                 //
-                TemplateItem templateItem = new TemplateItem();
-                templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
-                templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
-                StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+                //                TemplateItem templateItem = new TemplateItem();
+                //                templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
+                //                templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
+                //                StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+                String previewRsrc = area.getPreviewRsrc();
 
                 // 미리보기 리소스 추가
                 if (content.length() > 0 && previewRsrc.length() > 0) {
-                    content = previewRsrc.toString() + content;
+                    content = previewRsrc + content;
                 }
 
             } else {
@@ -428,14 +435,16 @@ public class MergeServiceImpl implements MergeService {
                 content = sb.toString();
 
                 //
-                TemplateItem templateItem = new TemplateItem();
-                templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
-                templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
-                StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+                //                TemplateItem templateItem = new TemplateItem();
+                //                templateItem.put(ItemConstants.TEMPLATE_ID, "99999999999999999");
+                //                templateItem.put(ItemConstants.TEMPLATE_BODY, area.getPreviewRsrc());
+                //                StringBuilder previewRsrc = dtm.merge(pageItem, templateItem, false, false, false, true);
+                String previewRsrc = area.getPreviewRsrc();
+
 
                 // 미리보기 리소스 추가
                 if (content.length() > 0 && previewRsrc.length() > 0) {
-                    content = previewRsrc.toString() + content;
+                    content = previewRsrc + content;
                 }
             }
 

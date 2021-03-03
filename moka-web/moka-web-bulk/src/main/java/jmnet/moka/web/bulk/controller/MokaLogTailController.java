@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
@@ -85,7 +86,8 @@ public class MokaLogTailController {
                         line = line.replaceAll("jmnet.moka.web(.*)\\) - ", "");
                         line = line.replaceAll("org.springframework.(.*)\\) - ", "");
                     }
-                    this.emitter.send(line + "\n");
+                    // this.emitter.send(line + "\n");
+                    this.emitter.send(line + "\n", MediaType.TEXT_PLAIN);
                 }
             } catch (Exception ignore) {
                 this.emitter.complete();

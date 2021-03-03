@@ -16,11 +16,13 @@ const BoardsSet = () => {
 
     // store boardType 값이 변경 되면 검색 옵션 처리후 리스트를 가지고 옵니다.
     useEffect(() => {
-        const tmpSearchOption = {
-            ...initialState.setmenu.search,
-            boardType: boardType,
-        };
-        dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
+        if (boardType) {
+            const tmpSearchOption = {
+                ...initialState.setmenu.search,
+                boardType: boardType,
+            };
+            dispatch(getSetmenuBoardsList(changeSetMenuSearchOption(tmpSearchOption)));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardType]);
 

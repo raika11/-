@@ -51,21 +51,16 @@ const BoardsListSearchBox = (props) => {
     };
 
     useEffect(() => {
-        // 최초 로딩후 store 에 search 옵션을 가지고 와서 검색 state 값 변경.
-        // boardType store 에 boardType 데이터를 가지고 와서 각각 설정.
-        setSearchData({
-            ...initialState.setmenu.search,
-            boardType: boardType, // store 공통 구분값에서 보드 타입을 가지고 온다. (S: 서비스, A: 관리자)
-        });
-
-        dispatch(
-            changeSetMenuSearchOption({
+        // 공통 구분값 boardType 이 업데이트되면 검색 옵션, store 겁색 옵션 설정.
+        if (boardType) {
+            setSearchData({
                 ...initialState.setmenu.search,
-                boardType: boardType, // store 공통 구분값에서 보드 타입을 가지고 온다. (S: 서비스, A: 관리자)
-            }),
-        );
+                boardType: boardType,
+            });
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [boardType]);
 
     return (
         <Form.Row className="d-flex justify-content-between mb-14">

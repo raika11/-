@@ -11,6 +11,9 @@
       dirFailed="/box/rcv/jam/Joongang_Jopan/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
   <Task class="jmnet.moka.web.rcv.task.jamxml.JamXmlTask"
@@ -23,6 +26,9 @@
       dirFailed="/box/rcv/jam/Joongang_Sokbo/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
   <Task class="jmnet.moka.web.rcv.task.jamxml.JamXmlTask"
@@ -35,6 +41,9 @@
       dirFailed="/box/rcv/jam/Joongang_Sunday/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
 </TaskGroup>

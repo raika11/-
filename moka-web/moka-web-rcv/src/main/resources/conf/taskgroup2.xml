@@ -15,6 +15,9 @@
       dirFailed="/box/rcv/cp/joind_news/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
   <Task class="jmnet.moka.web.rcv.task.cpxml.CpXmlTask"
@@ -31,6 +34,9 @@
       dirFailed="/box/rcv/cp/JTBC/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
 
@@ -43,6 +49,9 @@
       dirFailed="/box/rcv/cp/joinsland/error"
       fileFilter="*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
 
@@ -56,6 +65,9 @@
       dirFailed="/box/rcv/cp/Kweather/error"
       fileFilter="shko.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3"/>
   </Task>
 

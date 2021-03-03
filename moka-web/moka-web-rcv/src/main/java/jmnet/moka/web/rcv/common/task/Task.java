@@ -102,6 +102,16 @@ public abstract class Task<T> extends TaskBase {
     }
 
     @Override
+    public void processMonitor() {
+        super.processMonitor();
+
+        final TaskInput taskInput = getTaskInput();
+        if( taskInput != null ) {
+            taskInput.processMonitor(getTaskManager().getSlackMessageService(), getTaskName());
+        }
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public void run() {
         while (!Thread.currentThread().isInterrupted() && !isEnd()) {

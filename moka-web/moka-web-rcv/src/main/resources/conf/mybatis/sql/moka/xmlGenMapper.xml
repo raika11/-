@@ -71,6 +71,33 @@
     ]]>
   </insert>
 
+  <insert id="callUpaArticleServiceWithAdditionInfoIns" parameterType="JamArticleTotalVo" statementType="CALLABLE">
+    <![CDATA[
+    {
+      call UPA_ARTICLE_SERVICE_INS(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{sourceCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.loginFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.adultFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkimgFlag, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.geoLoc.addrKr, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.geoLoc.lat, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.geoLoc.lng, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{totalBasicInfo.breakingNews, mode=IN, jdbcType=INTEGER, javaType=Integer},
+      #{totalBasicInfo.breakingNewsCnt, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.articleProp.onTheSceneReporting, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.bulkSite, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.articleProp.bulkFlag.delSite, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.additionInfo.artCharCnt, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.additionInfo.workPart.seq, mode=IN, jdbcType=INTEGER, javaType=int},
+      #{mainData.additionInfo.workPart.value, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mainData.additionInfo.artPriority, mode=IN, jdbcType=VARCHAR, javaType=string}
+      )
+      }
+    ]]>
+  </insert>
+
   <insert id="callUpaArticleTitleIns" parameterType="JamArticleTotalVo" statementType="CALLABLE">
     <![CDATA[
     {

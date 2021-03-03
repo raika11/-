@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 public interface XmlGenMapper {
     Integer callUpaArticleBasicInsByJamIdOrRid(JamArticleTotalVo articleTotal);
     void callUpaArticleServiceIns( JamArticleTotalVo articleTotal);
+    void callUpaArticleServiceWithAdditionInfoIns( JamArticleTotalVo articleTotal);
     void callUpaArticleTitleIns( JamArticleTotalVo articleTotal);
     void callUpaArticleCodeListDel( JamArticleTotalVo articleTotal);
     void callUpaArticleCodeListIns( JamArticleTotalVo articleTotal);

@@ -572,15 +572,18 @@ const PollEdit = ({ onDelete }) => {
                                             >
                                                 Q.
                                             </Form.Label>
-                                            <MokaInput
-                                                as="textarea"
-                                                name="title"
-                                                value={edit.title}
-                                                onChange={(e) => {
-                                                    handleChangeValue(e.target);
-                                                }}
-                                                inputProps={{ rows: 3 }}
-                                            />
+                                            <Form.Group className="w-100">
+                                                <MokaInput
+                                                    as="textarea"
+                                                    name="title"
+                                                    value={edit.title}
+                                                    onChange={(e) => {
+                                                        handleChangeValue(e.target);
+                                                    }}
+                                                    inputProps={{ rows: 3 }}
+                                                />
+                                                <div className="color-danger">※ 250자 이내로 입력하세요.</div>
+                                            </Form.Group>
                                         </Form.Group>
                                         {/* <MokaInputLabel
                                             as="textarea"

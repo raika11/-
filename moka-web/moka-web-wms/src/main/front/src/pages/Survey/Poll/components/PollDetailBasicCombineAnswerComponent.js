@@ -36,7 +36,7 @@ const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }
             >
                 150 x 150
             </PollPhotoComponent>
-            <div className="d-inline-flex flex-fill h-100 flex-column">
+            <div className="d-inline-flex flex-fill h-100 flex-column mb-32">
                 <div className="ml-2 mb-2">
                     <MokaInput
                         name="title"

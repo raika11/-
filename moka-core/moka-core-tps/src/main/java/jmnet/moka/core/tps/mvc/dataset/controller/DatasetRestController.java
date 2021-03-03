@@ -48,6 +48,7 @@ import jmnet.moka.core.tps.mvc.relation.service.RelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -89,6 +90,9 @@ public class DatasetRestController extends AbstractCommonController {
 
     @Autowired
     private PurgeHelper purgeHelper;
+
+    @Autowired
+    private ConfigurableEnvironment env;
 
     /**
      * 데이타셋정보 목록조회
@@ -371,6 +375,9 @@ public class DatasetRestController extends AbstractCommonController {
         // apiCodeId -> apiHost, apiPath
         List<CodeMgt> CodeMgts = codeMgtService.findUseList(TpsConstants.DATAAPI);
         Map<String, String> apiInfo = apiCodeHelper.getDataApi(CodeMgts, search.getApiCodeId());
+        if (env.getActiveProfiles().length == 0) {
+            apiInfo.put(TpsConstants.API_HOST, "http://localhost:8081");
+        }
         search.setApiHost(apiInfo.get(TpsConstants.API_HOST));
         search.setApiPath(apiInfo.get(TpsConstants.API_PATH));
 

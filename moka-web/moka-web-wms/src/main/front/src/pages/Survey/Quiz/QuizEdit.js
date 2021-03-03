@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 // import Sortable from '@pages/Survey/component/sortable';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col, Button, Row, Card } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { MokaCard, MokaInputLabel } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import useDebounce from '@hooks/useDebounce';
+import clsx from 'clsx';
 
 // import { useDrop } from 'react-dnd';
 // import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
@@ -147,6 +148,11 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                 }),
             );
         }
+    };
+
+    // 퀴즈 현황 버튼
+    const handleClickQuizStatusButton = () => {
+        messageBox.alert('준비 중입니다.');
     };
 
     // 항목 데이터 초기화.
@@ -571,8 +577,25 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             //         {/* <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p> */}
             //     </div>
             // }
-            title={`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
+            // title={`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
+            titleAs={
+                <>
+                    <Row>
+                        <Col className="justify-content-start" xs={3}>
+                            <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
+                                {`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
+                            </Card.Title>
+                        </Col>
+                        <Col xs={9} className="'mb-0 p-0 text-right">
+                            <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickQuizStatusButton}>
+                                퀴즈 현황
+                            </Button>
+                        </Col>
+                    </Row>
+                </>
+            }
             className="flex-fill"
+            buttons={[{ text: '퀴즈현황', variant: 'outline-neutral', onClick: handleClickSaveButton, className: 'mr-1' }]}
             footer
             loading={save_loading}
             footerClassName="justify-content-center"

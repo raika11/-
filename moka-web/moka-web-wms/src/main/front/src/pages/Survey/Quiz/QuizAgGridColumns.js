@@ -5,7 +5,7 @@ export const columnDefs = [
         width: 50,
     },
     {
-        headerName: '그룹 제목',
+        headerName: '퀴즈 제목',
         field: 'title',
         flex: 1,
         tooltipField: 'title',
@@ -13,7 +13,7 @@ export const columnDefs = [
     {
         headerName: '등록자',
         field: 'regMemberInfo',
-        width: 120,
+        width: 150,
         tooltipField: 'regMemberInfo',
     },
     {

@@ -57,7 +57,9 @@ const Bulkn = ({ bulksParams, bulksURL }) => {
             </Switch> */}
 
             {/* 리스트 창 */}
-            <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
+            <Suspense fallback={<MokaLoader />}>
+                <BulknList HandleEditEnable={handleEditEnable} bulksURL={bulksURL} />
+            </Suspense>
 
             {/* 등록/수정창 */}
             <Route

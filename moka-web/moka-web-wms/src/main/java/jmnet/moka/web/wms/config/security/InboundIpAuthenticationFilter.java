@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jmnet.moka.core.common.util.HttpHelper;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -33,7 +32,7 @@ public class InboundIpAuthenticationFilter extends BasicAuthenticationFilter {
 
     public InboundIpAuthenticationFilter(AuthenticationManager authenticationManager, String[] ips) {
         super(authenticationManager);
-        for ( String ip : ips) {
+        for (String ip : ips) {
             whitelist.add(ip);
         }
     }
@@ -58,17 +57,16 @@ public class InboundIpAuthenticationFilter extends BasicAuthenticationFilter {
                 })) {
             // Continue filter execution
             chain.doFilter(request, response);
-            return ;
+            return;
         }
-        if ( request.getHeader("MOKA_SERVER") != null) {
+        if (request.getHeader("MOKA_SERVER") != null) {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userIp, null, null);
             SecurityContextHolder
                     .getContext()
                     .setAuthentication(authenticationToken);
-        } else {
-            // Continue filter execution
-            chain.doFilter(request, response);
         }
+        chain.doFilter(request, response);
+
     }
 
 

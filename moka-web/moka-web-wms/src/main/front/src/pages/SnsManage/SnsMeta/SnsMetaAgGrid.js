@@ -5,6 +5,7 @@ import produce from 'immer';
 import { MokaTable } from '@components';
 import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import columnDefs from './SnsMetaAgGridColumns';
+import EditImageRenderer from '@pages/SnsManage/SnsMeta/component/EditImageRenderer';
 
 const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
@@ -49,8 +50,9 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             size={searchOptions.size}
             onChangeSearchOption={handleChangeSearchOption}
             selected={selected}
-            preventRowClickCell={['insStatus', 'sendType']}
+            preventRowClickCell={['insStatus']}
             className="ag-grid-align-center overflow-hidden flex-fill"
+            frameworkComponents={{ editImageRenderer: EditImageRenderer }}
         />
     );
 };

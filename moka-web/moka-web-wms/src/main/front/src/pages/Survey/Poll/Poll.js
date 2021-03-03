@@ -8,12 +8,13 @@ import { getPollCategoryCodes, getPollGroupCodes } from '@store/survey/poll/poll
 import { deletePoll, getPollList } from '@store/survey/poll/pollAction';
 import toast from '@utils/toastUtil';
 import { clearStore } from '@store/survey/poll/pollAction';
-
-const PollList = React.lazy(() => import('@pages/Survey/Poll/PollList'));
-const PollEdit = React.lazy(() => import('@pages/Survey/Poll/PollEdit'));
+import { useHistory } from 'react-router-dom';
+import PollList from '@pages/Survey/Poll/PollList';
+import PollEdit from '@pages/Survey/Poll/PollEdit';
 
 const Poll = ({ match }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [activeTabIdx, setActiveTabIdx] = useState(0);
     const { search } = useSelector((store) => ({
         search: store.poll.search,
@@ -26,6 +27,7 @@ const Poll = ({ match }) => {
                 callback: (response) => {
                     dispatch(getPollList({ search }));
                     toast.result(response);
+                    history.push('/poll');
                 },
             }),
         );

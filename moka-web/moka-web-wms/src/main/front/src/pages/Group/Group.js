@@ -7,12 +7,15 @@ import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/group';
 import GroupChildMenuAuth from '@pages/Group/relations/GroupChildMenuAuth';
 import { Col, Row } from 'react-bootstrap';
+import GroupList from '@pages/Group/GroupList';
+import GroupEdit from '@pages/Group/GroupEdit';
+import GroupChildGroupMemberEdit from '@pages/Group/relations/GroupChildGroupMemberEdit';
 
 // relations
 
-const MemberGroupList = React.lazy(() => import('./GroupList'));
+/*const MemberGroupList = React.lazy(() => import('./GroupList'));
 const GroupEdit = React.lazy(() => import('./GroupEdit'));
-const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));
+const GroupChildGroupMemberEdit = React.lazy(() => import('./relations/GroupChildGroupMemberEdit'));*/
 
 /**
  * 그룹 관리
@@ -49,7 +52,7 @@ const Group = ({ match }) => {
                     </Button>
                 </div>
                 <Suspense>
-                    <MemberGroupList />
+                    <GroupList />
                 </Suspense>
             </MokaCard>
             <Switch>

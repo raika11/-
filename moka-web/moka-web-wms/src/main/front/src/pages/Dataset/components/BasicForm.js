@@ -2,16 +2,21 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { MokaInputLabel, MokaSearchInput } from '@components';
+import { MokaInputLabel, MokaSearchInput, MokaInputGroup, MokaCopyTextButton } from '@components';
 import DatasetApiListModal from '../modals/DatasetApiListModal';
 import DefaultInputModal from '@pages/commons/DefaultInputModal';
 
 const BasicForm = (props) => {
     const { dataset, setDataset, onClickOpenDataView, onClickSave, onClickCancle, onClickDelete, error, setError, onClickCopy, setApi, makeDataApiUrl } = props;
+    const [dataApiParamShape, setDataApiParamShape] = useState({});
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [apiModalShow, setApiModalShow] = useState(false);
     const [copyModelShow, setCopyModalShow] = useState(false);
 
+    /**
+     * 입력값 변경
+     * @param {object} e 이벤트
+     */
     const handleChangeValue = (e) => {
         const { name, value } = e.target;
         if (name === 'datasetName') {
@@ -19,6 +24,10 @@ const BasicForm = (props) => {
         }
         setDataset({ ...dataset, [name]: value });
     };
+
+    useEffect(() => {
+        setDataApiParamShape(dataset.dataApiParamShape || {});
+    }, [dataset.dataApiParamShape]);
 
     useEffect(() => {
         if (dataset?.datasetSeq) {
@@ -42,6 +51,17 @@ const BasicForm = (props) => {
                                 복사
                             </Button>
                         )}
+
+                        {/* 복사 모달 */}
+                        <DefaultInputModal
+                            title="데이타셋 복사"
+                            inputData={{ title: '데이타셋명', value: `${dataset.datasetName}_복사`, isInvalid: false }}
+                            show={copyModelShow}
+                            onHide={() => setCopyModalShow(false)}
+                            onSave={onClickCopy}
+                            centered
+                        />
+
                         <Button variant="outline-neutral" disabled={btnDisabled} onClick={onClickOpenDataView}>
                             데이터 보기
                         </Button>
@@ -61,6 +81,7 @@ const BasicForm = (props) => {
                     </div>
                 </Col>
             </Form.Row>
+
             {/* 데이터셋명 */}
             <Form.Row className="mb-2">
                 <Col xs={12} className="p-0">
@@ -75,6 +96,7 @@ const BasicForm = (props) => {
                     />
                 </Col>
             </Form.Row>
+
             {/* 데이터 타입 */}
             <Form.Row>
                 <Col xs={12} className="p-0">
@@ -93,24 +115,29 @@ const BasicForm = (props) => {
                                     isInvalid={error.dataApiUrl}
                                     inputProps={{ readOnly: true }}
                                 />
+
+                                {/* API 모달 */}
+                                <DatasetApiListModal show={apiModalShow} onHide={() => setApiModalShow(false)} onClickSave={setApi} />
                             </Col>
                         </Form.Row>
                     )}
                 </Col>
             </Form.Row>
 
-            {/* API 모달 */}
-            <DatasetApiListModal show={apiModalShow} onHide={() => setApiModalShow(false)} onClickSave={setApi} />
-
-            {/* 복사 모달 */}
-            <DefaultInputModal
-                title="데이타셋 복사"
-                inputData={{ title: '데이타셋명', value: `${dataset.datasetName}_복사`, isInvalid: false }}
-                show={copyModelShow}
-                onHide={() => setCopyModalShow(false)}
-                onSave={onClickCopy}
-                centered
-            />
+            {/* 파라미터 목록(자동형) */}
+            {dataset.autoCreateYn === 'Y' && (
+                <Form.Row className="mt-2">
+                    <MokaInputGroup
+                        className="flex-fill"
+                        label=" "
+                        value={(dataApiParamShape.keyList || []).join(',')}
+                        disabled
+                        append={
+                            <MokaCopyTextButton copyText={decodeURIComponent(makeDataApiUrl(dataset.dataApi, dataset.dataApiParam) || '')} successText="api를 복사하였습니다" />
+                        }
+                    />
+                </Form.Row>
+            )}
         </Form>
     );
 };

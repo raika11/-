@@ -10,14 +10,16 @@ export const getInitData = () => {
 
 // 댓글목록 조회
 export const getCommentList = ({ search }) => {
-    let newSearch = {};
-    Object.keys(search).forEach(function (key) {
-        if (search[key] && search[key] !== '') {
-            newSearch[key] = search[key];
-        }
-    });
+    // console.log(search);
+    // let newSearch = {};
+    // Object.keys(search).forEach(function (key) {
+    //     // console.log(key);
+    //     if (search[key]) {
+    //         newSearch[key] = search[key];
+    //     }
+    // });
 
-    return instance.get(`/api/comments?${qs.stringify(newSearch)}`).catch((err) => {
+    return instance.get(`/api/comments?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

@@ -43,12 +43,12 @@ public class SystemController {
 
 
     /**
-     * 실패 작업 즉시실행
+     * 실패 작업 재실행
      *
      * @param jobSeq job 일련번호
      * @return 실행 결과
      */
-    @ApiOperation(value = "실패 작업 즉시실행")
+    @ApiOperation(value = "실패 작업 재실행")
     @PostMapping("/instant/{jobSeq}")
     public ResponseEntity<?> postJob(@ApiParam("job 일련번호") @PathVariable("jobSeq") @Min(value = 0) Long jobSeq) {
         boolean success = false;
@@ -60,26 +60,23 @@ public class SystemController {
 
             //성공한 작업은 즉시실행 불가처리
             if(genContent.getGenStatus().getGenResult() == 200L){
-                throw new MokaException("실패한 작업만 즉시실행이 가능합니다.");
+                throw new MokaException("실패한 작업만 재실행이 가능합니다.");
             }
 
             success = instantJobHandler.runInstantJob(genContent);
-            log.debug("즉시실행 결과 : {}", success);
+            log.debug("{} 재실행 결과 : {}", jobSeq, success);
 
-            HttpStatus httpStatus = HttpStatus.NOT_ACCEPTABLE;
-            String message = "fail";
-            if(success){
-                httpStatus = HttpStatus.OK;
-                message = "success";
+            //즉시실행 결과가 실패인 경우
+            if(!success){
+                throw new MokaException("재실행이 실패했습니다.");
             }
 
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
-            return new ResponseEntity<>(resultDto, httpStatus);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
         } catch (Exception ex) {
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, ex.toString());
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(400, ex.toString());
             return new ResponseEntity<>(resultDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

@@ -66,19 +66,27 @@
   <select id="importDeskingWorkFromHist"
     parameterType="hashMap" statementType="CALLABLE">
     {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_DESKING_WORK_INS_BY_HIST(
-			#{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{componentHistSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-			#{regId, mode=IN, jdbcType=VARCHAR, javaType=string}
-		) }
+      #{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{componentHistSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{regId, mode=IN, jdbcType=VARCHAR, javaType=string}
+      ) }
   </select>
 
   <!--히스토리에서 예약된 기사 삭제-->
   <select id="deleteByReserveDatasetSeq"
     parameterType="hashMap" resultType="java.lang.Long" statementType="CALLABLE">
     {#{returnValue, mode=OUT, jdbcType=INTEGER, javaType=int} = call UPA_WMS_DESKING_HIST_DEL_BY_RESERVE(
-			#{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
-		) }
+      #{datasetSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
   </select>
 
+  <!--예약편집기사를 서비스에 등록-->
+  <insert id="excuteReserve" parameterType="hashMap" statementType="CALLABLE">
+    { call UPA_WMS_DESKING_RESERVE(
+      #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
+      #{regId, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{datasetSeq, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
+      ) }
+  </insert>
 
 </mapper>

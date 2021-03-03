@@ -52,7 +52,7 @@ export const columnDefs = [
     },*/
     {
         headerName: '시작일\n종료일',
-        field: 'modDt',
+        field: 'endDt',
         width: 130,
         cellStyle: { lineHeight: '18px' },
         cellRendererFramework: (param) => {

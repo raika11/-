@@ -2,58 +2,11 @@ import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './commentAction';
 import { PAGESIZE_OPTIONS } from '@/constants';
-
+import moment from 'moment';
 /**
  * initialState
  */
 export const initialState = {
-    // common: {
-    //     searchGroupId: [
-    //         { id: 'A', name: '전체매체' },
-    //         { id: 'B', name: '포탈' },
-    //         { id: 'C', name: '일간' },
-    //         { id: 'D', name: '중앙' },
-    //         { id: 'E', name: '중앙데일리' },
-    //         { id: 'F', name: '썰전' },
-    //     ],
-    //     searchStatusList: [
-    //         { id: 'A', name: '정상' },
-    //         { id: 'B', name: '사용자 삭제' },
-    //         { id: 'C', name: '관리자 삭제' },
-    //     ],
-    //     searchOrderTypeList: [
-    //         { id: 'A', name: '최신순' },
-    //         { id: 'B', name: '신고순' },
-    //     ],
-    //     searchIdTypeList: [
-    //         { id: 'A', name: '조인스' },
-    //         { id: 'B', name: '카카오' },
-    //         { id: 'C', name: '페이스북' },
-    //         { id: 'D', name: '트위터' },
-    //         { id: 'E', name: '미투데이' },
-    //         { id: 'F', name: '요즘' },
-    //         { id: 'G', name: '기타' },
-    //     ],
-    //     searchTypeList: [
-    //         { id: 'name', name: '이름' },
-    //         { id: 'id', name: 'ID' },
-    //         { id: 'comment', name: '댓글 내용' },
-    //     ],
-    //     tagDiv: [
-    //         { name: `광고`, value: `A` },
-    //         { name: `비방`, value: `B` },
-    //         { name: `욕설`, value: `C` },
-    //         { name: `도배`, value: `B` },
-    //         { name: `음란`, value: `D` },
-    //         { name: `기타`, value: `E` },
-    //     ],
-    //     pageIsearchTypeGubun: [
-    //         { name: `차단IP`, value: `A` },
-    //         { name: `차단내용`, value: `B` },
-    //         { name: `등록자ID`, value: `C` },
-    //         { name: `등록자`, value: `B` },
-    //     ],
-    // },
     common: {
         COMMENT_MEDIA_CODE: [],
         COMMENT_ORDER_CODE: [],
@@ -73,12 +26,12 @@ export const initialState = {
             keyword: '',
             domain: '',
             orderType: 'A',
-            status: '',
-            startDt: '',
-            endDt: '',
+            status: 'Y',
+            startDt: moment().format('YYYY-MM-DD 00:00:00'),
+            endDt: moment().format('YYYY-MM-DD 23:59:00'),
             memType: '',
             groupId: '',
-            contentId: '',
+            // contentId: '',
         },
     },
     banneds: {

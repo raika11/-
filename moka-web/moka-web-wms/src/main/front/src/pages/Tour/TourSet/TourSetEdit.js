@@ -62,6 +62,27 @@ const TourSetEdit = () => {
         );
     };
 
+    const handleClickCancel = () => {
+        if (Object.keys(tourSetup).length > 0) {
+            let weekArr = tourSetup.tourWeekYn.split('');
+
+            setTemp({
+                tourYn: tourSetup.tourYn,
+                minDay: tourSetup.tourDayFrom,
+                maxDay: tourSetup.tourDayTo,
+                minVisitor: tourSetup.tourNumFrom,
+                maxVisitor: tourSetup.tourNumTo,
+                sunday: weekArr[0],
+                monday: weekArr[1],
+                tuesday: weekArr[2],
+                wednesday: weekArr[3],
+                thursday: weekArr[4],
+                friday: weekArr[5],
+                saturday: weekArr[6],
+            });
+        }
+    };
+
     /**
      * input value
      */
@@ -122,10 +143,11 @@ const TourSetEdit = () => {
                     className: 'mr-1',
                     onClick: handleClickSave,
                 },
-                // {
-                //     text: '취소',
-                //     variant: 'negative',
-                // },
+                {
+                    text: '취소',
+                    variant: 'negative',
+                    onClick: handleClickCancel,
+                },
             ]}
             footerClassName="justify-content-center"
         >

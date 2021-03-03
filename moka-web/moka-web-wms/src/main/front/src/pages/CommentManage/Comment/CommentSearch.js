@@ -83,6 +83,8 @@ const CommentSearch = ({ selectBannedItem }) => {
 
     // 새로 고침 버튼 처리.
     const handleClickReloadButton = () => {
+        dispatch(changeSearchOption(initialState.comments.search));
+        setSearchData(initialState.comments.search);
         dispatch(getCommentList());
     };
 
@@ -107,6 +109,10 @@ const CommentSearch = ({ selectBannedItem }) => {
     useEffect(() => {
         dispatch(getCommentList());
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        console.log(initialState.comments.search);
     }, []);
 
     return (
@@ -174,7 +180,7 @@ const CommentSearch = ({ selectBannedItem }) => {
 
                 <Col xs={2} className="p-0 pr-2 d-flex">
                     <MokaInput as="select" className="mr-1" value={searchData.status} onChange={(e) => handleChangeSearchInput(e)} name="status" id="status">
-                        <option value="">상태전체</option>
+                        <option value="Y">상태전체</option>
                         {COMMENT_STATUS_CODE.map((status, index) => (
                             <option key={index} value={status.code}>
                                 {status.name}

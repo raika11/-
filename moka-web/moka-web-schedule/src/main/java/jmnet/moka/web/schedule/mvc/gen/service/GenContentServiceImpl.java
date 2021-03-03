@@ -44,7 +44,7 @@ public class GenContentServiceImpl implements GenContentService {
     }
 
     @Override
-    public GenContentHistory findGenContentHistory(Long jobSeq) {
+    public Optional<GenContentHistory> findGenContentHistory(Long jobSeq) {
         return genStatusHistoryRepository.findFirstByJobSeqAndDelYnOrderBySeqNoDesc(jobSeq, MokaConstants.NO);
     }
 

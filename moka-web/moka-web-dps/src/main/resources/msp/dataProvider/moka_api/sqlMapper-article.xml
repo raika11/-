@@ -118,6 +118,15 @@
   </select>
 
   <resultMap id="map" type="hashmap"/>
+
+  <!-- article basic New -->
+  <select id="articleN" parameterType="map" resultType="map" resultMap="map,map,map,map"
+    statementType="CALLABLE">
+    {call UPU_15RE_ARTICLE_SEL(
+      #{totalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
   <!-- article list -->
   <select id="list" parameterType="map" resultType="map" resultMap="map,map"
     statementType="CALLABLE">

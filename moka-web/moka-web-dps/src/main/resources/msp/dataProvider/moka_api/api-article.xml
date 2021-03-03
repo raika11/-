@@ -4,7 +4,7 @@
   <api id="article">
     <description>기사 상세 정보를 조회한다.</description>
     <parameter>
-      <totalId desc="기사Id">[0-9]{1,9}</totalId>
+      <totalId desc="기사Id" require="Y">[0-9]{1,9}</totalId>
     </parameter>
     <request resultName="BASIC">dps.article.basic</request>
     <request resultName="TITLE">dps.article.title</request>
@@ -23,7 +23,18 @@
     </keys>
   </api>
 
-  <api id="category">
+  <api id="article.n">
+    <description>기사 상세 정보를 조회한다.v2</description>
+    <parameter>
+      <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA,CODE,REPORTER,COMPONENT">dps.article.articleN</request>
+    <keys>
+      totalId
+    </keys>
+  </api>
+
+  <api id="section">
     <description>카테고리별 기사 목록을 조회한다.</description>
     <parameter>
       <pageIndex default="1" type="number" desc="페이지번호">[0-9]{1,9}</pageIndex>

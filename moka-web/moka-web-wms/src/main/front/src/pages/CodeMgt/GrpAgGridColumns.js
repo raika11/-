@@ -41,7 +41,7 @@ export default [
             'pre-cell': () => true,
         },
         tooltipField: 'worker',
-        cellStyle: { lineHeight: '21px' },
+        cellStyle: { lineHeight: '16px' },
     },
     {
         headerName: '',

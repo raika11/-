@@ -4,10 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 import { MokaLoader } from '@components';
 import { useDispatch } from 'react-redux';
 import { clearStore } from '@store/jpod';
-
-const ChannelList = React.lazy(() => import('./Channel/ChannelList'));
-// const ChannelEdit = React.lazy(() => import('./Channel/ChannelEdit'));
-const ChannelTab = React.lazy(() => import('./Channel/ChannelTab'));
+import ChannelList from '@pages/Jpod/Channel/ChannelList';
+import ChannelTab from '@pages/Jpod/Channel/ChannelTab';
 
 const JpodChannel = ({ match }) => {
     const dispatch = useDispatch();

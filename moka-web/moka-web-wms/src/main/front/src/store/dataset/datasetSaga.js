@@ -5,7 +5,7 @@ import { callApiAfterActions, createRequestSaga, errorResponse } from '../common
 import * as datasetAction from './datasetAction';
 import * as datasetAPI from './datasetApi';
 
-const getDatasetList = callApiAfterActions(datasetAction.getDatasetList, datasetAPI.getDatasetList, (store) => store.dataset);
+const getDatasetList = callApiAfterActions(datasetAction.getDatasetList, datasetAPI.getDatasetList, ({ dataset }) => dataset);
 const getDataset = createRequestSaga(datasetAction.GET_DATASET, datasetAPI.getDataset);
 
 /**
@@ -39,7 +39,12 @@ function* saveDataset({ payload: { type, actions, callback } }) {
         }
 
         // 도메인 데이터
-        const dataset = yield select((store) => store.dataset.dataset);
+        let dataset = yield select(({ dataset }) => dataset.dataset);
+        dataset = {
+            ...dataset,
+            dataApiParam: dataset.dataApiParam !== '' ? JSON.stringify(dataset.dataApiParam) : dataset.dataApiParam,
+            dataApiParamShape: null,
+        };
         const response = type === 'insert' ? yield call(datasetAPI.postDataset, { dataset }) : yield call(datasetAPI.putDataset, { dataset });
         callbackData = response.data;
 
@@ -51,9 +56,6 @@ function* saveDataset({ payload: { type, actions, callback } }) {
 
             // 목록 다시 검색
             yield put({ type: datasetAction.GET_DATASET_LIST });
-
-            // auth 도메인 목록 다시 조회
-            //yield put(getDomains(domain.domainId));
         } else {
             yield put({
                 type: datasetAction.GET_DATASET_FAILURE,
@@ -76,6 +78,9 @@ function* saveDataset({ payload: { type, actions, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 삭제
+ */
 function* deleteDataset({ payload: { datasetSeq, callback } }) {
     const ACTION = datasetAction.DELETE_DATASET;
     const SUCCESS = datasetAction.DELETE_DATASET_SUCCESS;
@@ -106,6 +111,9 @@ function* deleteDataset({ payload: { datasetSeq, callback } }) {
     yield put(finishLoading(ACTION));
 }
 
+/**
+ * 복사
+ */
 function* copyDataset({ payload: { datasetSeq, datasetName, callback } }) {
     const ACTION = datasetAction.COPY_DATASET;
     let callbackData = {};

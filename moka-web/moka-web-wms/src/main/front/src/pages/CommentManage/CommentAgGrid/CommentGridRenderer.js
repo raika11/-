@@ -33,10 +33,6 @@ export const UserInfoRenderer = ({ value }) => {
 export const DeleteButtonRenderer = (props) => {
     const { cmtSeq, status, memNm, memId } = props.value;
 
-    // useEffect(() => {
-    //     console.log(props.value);
-    // }, [props.value]);
-
     const [modalUsage, setModalUsage] = useState({
         gubun: '',
         status: status,

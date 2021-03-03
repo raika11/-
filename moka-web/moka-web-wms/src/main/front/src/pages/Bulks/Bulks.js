@@ -50,7 +50,19 @@ const Bulks = ({ match }) => {
         };
     }, [dispatch]);
 
-    return <>{bulksParams.bulk_div !== '' && bulksParams.bulk_div === 'N' ? <Bulkn bulksParams={bulksParams} /> : <Bulkh bulksParams={bulksParams} />}</>;
+    return (
+        <>
+            {bulksParams.bulk_div !== '' && bulksParams.bulk_div === 'N' ? (
+                <>
+                    <Bulkn bulksParams={bulksParams} />
+                </>
+            ) : (
+                <>
+                    <Bulkh bulksParams={bulksParams} />
+                </>
+            )}
+        </>
+    );
 };
 
 const initbulksParams = {

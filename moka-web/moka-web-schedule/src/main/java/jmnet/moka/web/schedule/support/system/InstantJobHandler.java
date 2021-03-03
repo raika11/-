@@ -59,7 +59,7 @@ public class InstantJobHandler {
                 return true;
             }
 
-        }catch (BeansException | ClassNotFoundException e) {
+        }catch (Exception  e) {
             log.error("InstantJobHandler > runScheduleJob fail :{}", e);
         }
 
@@ -70,18 +70,24 @@ public class InstantJobHandler {
         boolean result = false;
         try{
             GenContentHistory history = jobContentService
-                    .findGenContentHistoryById(info.getJobSeq())
+                    .findGenContentHistory(info.getJobSeq())
                     .orElseThrow();
+            log.debug("history seqNo : "+ history.getSeqNo());
+            log.debug("history GenStatus jobSeq : "+ history.getGenContent().getGenStatus().getJobSeq());
+
             AbstractReserveJob job = (AbstractReserveJob) context.getBean(Class.forName(info.getProgrameNm()));
             history = job.invoke(history);
+            log.debug("invoke seqNo : "+ history.getSeqNo());
+            log.debug("invoke GenStatus jobSeq : "+ history.getGenContent().getGenStatus().getJobSeq());
+            job.finish(history);
+
 
             //실행결과가 성공
             if(history.getStatus() == StatusFlagType.DONE){
                 result = true;
             }
-            //ReserveJob 실행 후 history를 갱신해야하면 history update 추가필요
 
-        }catch (BeansException | ClassNotFoundException e) {
+        }catch (Exception e) {
             log.error("InstantJobHandler > runReserveJob fail :{}", e);
         }
 

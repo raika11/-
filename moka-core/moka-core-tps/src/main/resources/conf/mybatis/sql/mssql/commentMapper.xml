@@ -34,7 +34,7 @@
     #{domain, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{orderType, mode=IN, jdbcType=VARCHAR, javaType=jmnet.moka.common.utils.EnumCode},
     #{keyword, mode=IN, jdbcType=VARCHAR, javaType=string},
-    #{status, mode=IN, jdbcType=VARCHAR, javaType=jmnet.moka.common.utils.EnumCode},
+    #{status, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{startDt, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{endDt, mode=IN, jdbcType=VARCHAR, javaType=string},
     #{memType, mode=IN, jdbcType=VARCHAR, javaType=string},

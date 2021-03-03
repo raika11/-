@@ -38,6 +38,9 @@ const BulkMonitorRcvProgsAgGrid = () => {
             changeBmSearchOption(
                 produce(search, (draft) => {
                     draft[key] = value;
+                    if (key === 'size') {
+                        draft['page'] = 0;
+                    }
                 }),
             ),
         );

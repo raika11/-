@@ -35,7 +35,6 @@ public class ReserveJobDTO {
     @NotEmpty
     private String jobTaskId;
 
-    @NotEmpty
     private String paramDesc;
 
     @NotNull

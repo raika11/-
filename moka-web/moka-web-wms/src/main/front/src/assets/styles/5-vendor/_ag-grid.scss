@@ -299,7 +299,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 
-    /* 주기사(기본) left 조정 */
+    // 주기사(기본) left 조정
     .ag-cell[col-id="relOrdEx"] {
         display: none !important;
     }
@@ -320,7 +320,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         left: 122px !important;
     }
 
-    /* 관련기사 left 조정 */
+    // 관련기사 left 조정
     .ag-rel-cell {
         height: 36px !important;
         line-height: 36px !important;
@@ -380,7 +380,7 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 
-    /* 벌크 핫클릭 예외처리 */
+    // 벌크 핫클릭 예외처리
     &.bulk-hot-click {
         .ag-root-wrapper {
             .ag-row {
@@ -396,9 +396,9 @@ $rel-row-hover-color: darken($rel-row-color, 5);
         }
     }
 
-    /* 네이버채널 예외처리 */
+    // 네이버채널 예외처리
     &.naver-channel {
-        /* 주기사(기본) left 조정 */
+        // 주기사(기본) left 조정
         .ag-cell[col-id="contentOrdEx"] {
             left: 24px !important;
         }

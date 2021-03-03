@@ -111,12 +111,12 @@ const BulknListSearchBox = (props) => {
                         inputProps={{ timeFormat: null, timeDefault: 'end' }}
                     />
                 </Col>
-                <Col xs={2} className="p-0">
+                <Col xs={2} className="p-0 align-items-center">
                     <Button variant="searching" onClick={() => handleClickSearchButton()}>
                         검색
                     </Button>
                 </Col>
-                <Col xs={4} className="text-right p-0">
+                <Col xs={4} className="p-0 align-items-center text-right">
                     <Button variant="positive" onClick={() => handleClickNewButton()}>
                         등록
                     </Button>

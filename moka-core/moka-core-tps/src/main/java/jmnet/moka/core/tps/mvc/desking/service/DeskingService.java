@@ -422,4 +422,13 @@ public interface DeskingService {
      * @param deskingWorkDTO 편집기사워크 정보
      */
     void escapeHtml(DeskingWorkDTO deskingWorkDTO);
+
+    /**
+     * 예약편집기사를 서비스에 등록
+     *
+     * @param componentSeq 컴포넌트순번
+     * @param regId        작업자ID
+     */
+    void excuteReserve(Long componentSeq, String regId)
+            throws Exception;
 }

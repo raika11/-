@@ -14,6 +14,9 @@ import produce from 'immer';
 import useDebounce from '@hooks/useDebounce';
 import toast from '@utils/toastUtil';
 import { selectArticleItemChange, selectArticleListChange } from '@store/survey/quiz';
+import moment from 'moment';
+import { BASIC_DATEFORMAT } from '@/constants';
+import clsx from 'clsx';
 
 const tempItem = { imgUrl: null, linkUrl: '', pollSeq: 1897, title: '' };
 
@@ -26,6 +29,7 @@ const PollEdit = ({ onDelete }) => {
     const [isSet, setIsSet] = useState(false);
     const [isPollLayoutInfoModalShow, setIsPollLayoutInfoModalShow] = useState(false);
     const [hasLink, setHasLink] = useState(false);
+    const [pollStatus, setPollStatus] = useState('N');
 
     const { codes, poll, loading, search } = useSelector((store) => ({
         codes: store.poll.codes,
@@ -128,7 +132,6 @@ const PollEdit = ({ onDelete }) => {
 
     const handleClickHasLink = () => {
         if (hasLink) {
-            console.log(edit);
             const noneHasLinkItems = edit.pollItems.map((item) => ({
                 ...item,
                 linkUrl: '',
@@ -136,6 +139,20 @@ const PollEdit = ({ onDelete }) => {
             handleChangeValue({ name: 'pollItems', value: noneHasLinkItems });
         }
         setHasLink(!hasLink);
+    };
+
+    const handleClickPollResult = () => {};
+
+    const dividePollStatus = (startDt, endDt) => {
+        let status = 'N';
+        if (moment().diff(startDt) <= 0 && moment().diff(endDt) >= 0) {
+            console.log(moment().diff(startDt));
+            console.log(moment(startDt));
+            console.log('현황', startDt, endDt);
+        } else if (moment().diff(startDt) > 0 && moment().diff(endDt) < 0) {
+            console.log('결과', startDt, endDt);
+        }
+        return status;
     };
 
     useEffect(() => {
@@ -156,6 +173,7 @@ const PollEdit = ({ onDelete }) => {
             setIsSet(true);
             dispatch(selectArticleListChange(poll.pollRelateContents.filter((content) => content.relType === 'A')));
             dispatch(selectArticleItemChange(poll.pollRelateContents.filter((content) => content.relType === 'A')));
+            setPollStatus(dividePollStatus(poll.startDt, poll.endDt));
             setHasLink(poll.pollItems.filter((item) => item.linkUrl !== '' || !commonUtil.isEmpty(item.linkUrl)).length > 0);
         } else {
             setIsSet(false);
@@ -220,6 +238,15 @@ const PollEdit = ({ onDelete }) => {
             loading={loading}
         >
             <Form>
+                {pollStatus !== 'N' && (
+                    <Form.Row>
+                        <Col xs={12} className="mb-14 d-flex justify-content-end">
+                            <Button variant="outline-neutral" onClick={handleClickPollResult}>
+                                투표 현황
+                            </Button>
+                        </Col>
+                    </Form.Row>
+                )}
                 <Form.Row className="mb-2 justify-content-between">
                     <Col xs={6}>
                         <MokaInputLabel
@@ -484,7 +511,7 @@ const PollEdit = ({ onDelete }) => {
                     )}
                 </Form.Row>
                 <Form.Row className="d-flex justify-content-center mb-2">
-                    <MokaCard height={65} className="w-100" header={false} bodyClassName="pt-3 pb-3 mt-0 mb-0">
+                    <MokaCard height={65} className="w-100 body-bg" header={false} bodyClassName="pt-3 pb-3 mt-0 mb-0">
                         <Form.Row className="align-items-center h-100">
                             <Col xs={2} className="d-flex h-100 align-items-center" style={{ borderRight: '1px solid' }}>
                                 <h4 className="text-center pr-2 mb-0">투표 설정</h4>
@@ -531,12 +558,31 @@ const PollEdit = ({ onDelete }) => {
                 {edit.itemCnt > 0 && isSet && (
                     <Form.Row className="mb-2">
                         <MokaCard
-                            className="flex-fill pl-0 h-100"
+                            className="flex-fill pl-0 h-100 body-bg"
+                            headerClassName="transparent"
                             minHeight="300px"
                             titleAs={
                                 <Form.Row>
-                                    <Col xs={11}>
-                                        <MokaInputLabel
+                                    <Col xs={11} className="pl-10">
+                                        <Form.Group className="d-flex align-items-center">
+                                            <Form.Label
+                                                className={clsx('px-0 mb-0 position-relative flex-shrink-0 ft-12', 'text-center')}
+                                                style={{ width: 50, minWidth: 50, marginRight: 12, fontSize: '30px' }}
+                                                htmlFor="none"
+                                            >
+                                                Q.
+                                            </Form.Label>
+                                            <MokaInput
+                                                as="textarea"
+                                                name="title"
+                                                value={edit.title}
+                                                onChange={(e) => {
+                                                    handleChangeValue(e.target);
+                                                }}
+                                                inputProps={{ rows: 3 }}
+                                            />
+                                        </Form.Group>
+                                        {/* <MokaInputLabel
                                             as="textarea"
                                             name="title"
                                             onChange={(e) => {
@@ -544,12 +590,18 @@ const PollEdit = ({ onDelete }) => {
                                             }}
                                             value={edit.title}
                                             label="Q."
-                                            labelWidth={20}
-                                        />
+                                            labelWidth={50}
+                                            labelClassName="text-center"
+                                        />*/}
                                     </Col>
-                                    <Col xs={1} className="d-flex align-items-center">
-                                        <Button variant="white" className="w-100 p-0" onClick={handleClickHasLink}>
-                                            <MokaIcon iconName={hasLink ? 'fal-unlink' : 'fal-link'} />
+                                    <Col xs={1} className="d-flex align-items-top p-0">
+                                        <Button
+                                            variant="gray-200"
+                                            className="p-0 d-flex justify-content-center align-items-center"
+                                            onClick={handleClickHasLink}
+                                            style={{ width: '20px', height: '20px', color: 'black' }}
+                                        >
+                                            <MokaIcon iconName={hasLink ? 'fal-unlink' : 'fal-link'} style={{ width: '10px', height: '10px' }} />
                                         </Button>
                                     </Col>
                                 </Form.Row>

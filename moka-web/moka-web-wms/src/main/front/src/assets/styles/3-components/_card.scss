@@ -1,6 +1,9 @@
 .card {
   margin-bottom: 0;
   box-shadow: $card-shadow;
+  &.body-bg {
+    background-color:#F5F9FC
+  }
 }
 
 .card-header {
@@ -14,6 +17,9 @@
     svg { 
       font-size: 17px;
     }
+  }
+  &.transparent {
+    background-color: transparent;
   }
 }
 

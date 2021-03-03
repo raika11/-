@@ -6,8 +6,9 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import toast, { messageBox } from '@utils/toastUtil';
 
-import { selectItem } from '@pages/Boards/BoardConst';
-import { GET_BOARD_CONTENTS, clearBoardContents, changeSelectBoard, clearSelectBoard, getJpodNotice, getBoardContents } from '@store/jpod';
+// import { selectItem } from '@pages/Boards/BoardConst';
+// import { GET_BOARD_CONTENTS, clearBoardContents, changeSelectBoard, clearSelectBoard, getJpodNotice, getBoardContents } from '@store/jpod';
+import { GET_BOARD_CONTENTS, getJpodNotice, getBoardContents } from '@store/jpod';
 
 import { uploadBoardContentImage, updateBoardContents, saveBoardReply, saveBoardContents, deleteBoardContents } from '@store/board';
 
@@ -16,6 +17,9 @@ import BoardsSummernote from '@pages/Boards/BoardsList/BoardsEdit/BoardsSummerno
 
 /**
  * J팟 관리 - 공지 게시판 수정 / 등록
+ *
+ * 2021-03-03 15:51 게시판과 같은 UI 형태로 개발 되었다가 간단하게 변경 되어야 한다는 의견으로 인해
+ * 기존 게시판과 같은 코드들중 필요 없는 항목들은 주석처리.
  */
 const NoticeEdit = ({ match }) => {
     const history = useHistory();
@@ -25,10 +29,10 @@ const NoticeEdit = ({ match }) => {
     const dispatch = useDispatch();
     const parentBoardSeq = useRef(null);
 
-    const { noticeInfo, loading, selectBoard, boardList, channelList, noticereply } = useSelector((store) => ({
+    const { noticeInfo, loading, selectBoard, channelList, noticereply } = useSelector((store) => ({
         noticeInfo: store.jpod.jpodNotice.noticeInfo,
         noticereply: store.jpod.jpodNotice.noticereply,
-        boardList: store.jpod.jpodNotice.boardList,
+        // boardList: store.jpod.jpodNotice.boardList,
         channelList: store.jpod.jpodNotice.channelList,
         selectBoard: store.jpod.jpodNotice.selectBoard,
         loading: store.loading[GET_BOARD_CONTENTS],
@@ -47,8 +51,8 @@ const NoticeEdit = ({ match }) => {
     const resetEditData = () => {
         setEditData({});
         setUploadFiles([]);
-        dispatch(clearBoardContents());
-        dispatch(clearSelectBoard());
+        // dispatch(clearBoardContents());
+        // dispatch(clearSelectBoard());
         fileinputRef.current = null;
     };
 
@@ -137,7 +141,6 @@ const NoticeEdit = ({ match }) => {
                 },
                 files: uploadFiles,
                 callback: ({ header: { success, message }, body }) => {
-                    console.log(body);
                     if (success === true) {
                         toast.success(message);
                         history.push(`${match.path}/${body.boardId}/${body.boardSeq}`);
@@ -418,7 +421,7 @@ const NoticeEdit = ({ match }) => {
                 modInfo: data.modDt && data.modDt.length > 16 ? `수정 일시: ${data.modDt.substr(0, 16)} ${data.regName}(${data.regId})` : '',
             });
 
-            dispatch(changeSelectBoard(data.boardInfo));
+            // dispatch(changeSelectBoard(data.boardInfo));
         };
 
         // 정보 조회가 끝났을경우.
@@ -436,7 +439,7 @@ const NoticeEdit = ({ match }) => {
 
     // 라우터 및 에디드 상태가 답변일때 초기화 처리.
     useEffect(() => {
-        resetEditData();
+        // resetEditData();
         if (editState.mode === 'reply' && history.location.pathname === `${match.path}/${boardId.current}/${boardSeq.current}/reply`) {
             setReplyEditData(initialReplyEditState);
         }
@@ -467,6 +470,17 @@ const NoticeEdit = ({ match }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (selectBoard.boardId !== undefined) {
+            setEditData({
+                ...editData,
+                ordNo: 1, // 순서 설정 : 일반.
+                boardId: selectBoard.boardId, // 게시판 ID 값.
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectBoard]);
 
     return (
         <MokaCard
@@ -538,7 +552,7 @@ const NoticeEdit = ({ match }) => {
                                 </Form.Row>
                             )}
                             {/* 채널 선택. */}
-                            <Form.Row className="mb-2">
+                            {/* <Form.Row className="mb-2">
                                 <Col xs={6} className="p-0">
                                     <MokaInputLabel
                                         label="게시판 선택"
@@ -550,9 +564,9 @@ const NoticeEdit = ({ match }) => {
                                             if (e.target.value !== '') {
                                                 const temeBoardId = e.target.value;
                                                 const boardInfo = boardList.filter((e) => e.boardId === Number(temeBoardId));
-                                                dispatch(changeSelectBoard(boardInfo[0]));
+                                                // dispatch(changeSelectBoard(boardInfo[0]));
                                             }
-                                            handleChangeFormData(e);
+                                            // handleChangeFormData(e);
                                         }}
                                     >
                                         <option value="">게시판 전체</option>
@@ -563,8 +577,8 @@ const NoticeEdit = ({ match }) => {
                                         ))}
                                     </MokaInputLabel>
                                 </Col>
-                            </Form.Row>
-                            <Form.Row className="mb-2">
+                            </Form.Row> */}
+                            {/* <Form.Row className="mb-2">
                                 <Col xs={6} className="p-0">
                                     <MokaInputLabel as="select" label="순서" name="ordNo" id="ordNo" value={editData.ordNo} onChange={(e) => handleChangeFormData(e)}>
                                         <option value="">선택</option>
@@ -575,7 +589,7 @@ const NoticeEdit = ({ match }) => {
                                         ))}
                                     </MokaInputLabel>
                                 </Col>
-                            </Form.Row>
+                            </Form.Row> */}
                             {(function () {
                                 // 게시판 등록시 채널을 기자로 선택 했을경우 기자 리스트를 보여줘야 하는데
                                 // 기자 리스트가 너무 많기 떄문에 검색기능을 할수 있게 MokaAutocomplete 를 사용
@@ -635,10 +649,10 @@ const NoticeEdit = ({ match }) => {
                                 }
                             })()}
                             {/* 게시판 등록시 말머리1과 말머리2를 입력했을 경우 말머리1를 선택 할수 있게 */}
-                            {(selectBoard.titlePrefix1 !== null || selectBoard.titlePrefix2 !== null) && (
-                                <Form.Row className="mb-2">
-                                    {/* 말머리1 */}
-                                    {selectBoard.titlePrefix1 !== null && (
+                            {/* {(selectBoard.titlePrefix1 !== null || selectBoard.titlePrefix2 !== null) && ( */}
+                            {/* <Form.Row className="mb-2"> */}
+                            {/* 말머리1 */}
+                            {/* {selectBoard.titlePrefix1 !== null && (
                                         <Col xs={6} className="p-0 pr-20">
                                             <MokaInputLabel
                                                 as="select"
@@ -652,10 +666,10 @@ const NoticeEdit = ({ match }) => {
                                                 <option value={selectBoard.titlePrefix1}>{selectBoard.titlePrefix1}</option>
                                             </MokaInputLabel>
                                         </Col>
-                                    )}
+                                    )} */}
 
-                                    {/* 말머리2*/}
-                                    {selectBoard.titlePrefix2 !== null && (
+                            {/* 말머리2*/}
+                            {/* {selectBoard.titlePrefix2 !== null && (
                                         <Col xs={6} className="p-0 pl-20">
                                             <MokaInputLabel
                                                 as="select"
@@ -669,9 +683,9 @@ const NoticeEdit = ({ match }) => {
                                                 <option value={selectBoard.titlePrefix2}>{selectBoard.titlePrefix2}</option>
                                             </MokaInputLabel>
                                         </Col>
-                                    )}
-                                </Form.Row>
-                            )}
+                                    )} */}
+                            {/* </Form.Row> */}
+                            {/* )} */}
                             {/* 주소 */}
                             {/* 2021-01-06 14:35 추후 논의로 결정하기로. */}
                             {/* <Form.Row className="mb-2">
@@ -703,25 +717,7 @@ const NoticeEdit = ({ match }) => {
                             {/* 내용 */}
                             {(function () {
                                 // 게시판 등록시 에디터 사용 유무로 본문은 에디터로 보여 줍니다.
-                                if (selectBoard.editorYn === 'N' && editState) {
-                                    return (
-                                        <Form.Row className="mb-2">
-                                            <Col className="p-0">
-                                                <MokaInputLabel
-                                                    as="textarea"
-                                                    className="mb-2"
-                                                    inputClassName="resize-none"
-                                                    inputProps={{ rows: 6 }}
-                                                    id="content"
-                                                    name="content"
-                                                    value={editData.content}
-                                                    onChange={(e) => setEditContents(e.target.value)}
-                                                />
-                                            </Col>
-                                        </Form.Row>
-                                    );
-                                } else {
-                                    // 에디터 설정을 안했을 경우는 textarea 로 보여줍니다.
+                                if (selectBoard.editorYn === 'Y') {
                                     return (
                                         <Form.Row className="mb-2">
                                             <Col className="p-0">
@@ -735,9 +731,27 @@ const NoticeEdit = ({ match }) => {
                                             </Col>
                                         </Form.Row>
                                     );
+                                } else {
+                                    // 에디터 설정을 안했을 경우는 textarea 로 보여줍니다.
+                                    return (
+                                        <Form.Row className="mb-2">
+                                            <Col className="p-0">
+                                                <MokaInputLabel
+                                                    as="textarea"
+                                                    className="mb-2"
+                                                    inputClassName="resize-none"
+                                                    inputProps={{ rows: 6 }}
+                                                    id="content"
+                                                    name="content"
+                                                    value={editData.content}
+                                                    onChange={(e) => handleChangeFormData(e)}
+                                                />
+                                            </Col>
+                                        </Form.Row>
+                                    );
                                 }
                             })()}
-                            <hr className="divider" />
+                            {/* <hr className="divider" /> */}
                             {(function () {
                                 // 게시판 등롱시 파일 업로드 활성화 선택시
                                 if (selectBoard.fileYn === 'Y') {

@@ -242,8 +242,13 @@ function* getJpodNoticeSaga() {
 
     let response;
     try {
-        const jpodNotices = yield select((store) => store.jpod.jpodNotice.jpodNotices);
-        response = yield call(jpodApi.getNoticesList, jpodNotices);
+        const search = yield select((store) => store.jpod.jpodNotice.jpodNotices.search);
+        const selectBoard = yield select((store) => store.jpod.jpodNotice.selectBoard);
+
+        response = yield call(jpodApi.getNoticesList, {
+            boardId: selectBoard.boardId,
+            search: search,
+        });
         const {
             header: { success, message },
         } = response.data;

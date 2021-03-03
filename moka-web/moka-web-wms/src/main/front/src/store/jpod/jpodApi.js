@@ -138,8 +138,15 @@ export const saveBrightOvp = ({ ovpdata }) => {
         });
 };
 
-export const getNoticesList = ({ search }) => {
-    return instance.get(`/api/boards/jpod-notices?${qs.stringify(search)}`).catch((err) => {
+// export const getNoticesList = ({ search }) => {
+//     return instance.get(`/api/boards/jpod-notices?${qs.stringify(search)}`).catch((err) => {
+//         throw err;
+//     });
+// };
+
+// 게시판 게시글 리스트.
+export const getNoticesList = ({ boardId, search }) => {
+    return instance.get(`/api/boards/${boardId}/contents?${qs.stringify(search)}`).catch((err) => {
         throw err;
     });
 };

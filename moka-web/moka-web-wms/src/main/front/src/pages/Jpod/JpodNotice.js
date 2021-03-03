@@ -1,9 +1,9 @@
 import React, { useEffect, Suspense } from 'react';
 import { Helmet } from 'react-helmet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { clearStore } from '@store/jpod';
-import { getBoardChannelList, getJpodBoard } from '@store/jpod';
+import { getBoardChannelList, getJpodBoard, changeSelectBoard } from '@store/jpod';
 import NoticeList from '@pages/Jpod/JpodNotice/NoticeList';
 import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
 
@@ -12,6 +12,10 @@ import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
  */
 const JpodChannel = ({ match }) => {
     const dispatch = useDispatch();
+
+    const { boardList } = useSelector((store) => ({
+        boardList: store.jpod.jpodNotice.boardList,
+    }));
 
     useEffect(() => {
         return () => {
@@ -25,6 +29,13 @@ const JpodChannel = ({ match }) => {
         dispatch(getBoardChannelList()); // J팟 채널 목록.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (boardList.length > 0) {
+            dispatch(changeSelectBoard(boardList[0]));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [boardList]);
 
     return (
         <div className="d-flex">

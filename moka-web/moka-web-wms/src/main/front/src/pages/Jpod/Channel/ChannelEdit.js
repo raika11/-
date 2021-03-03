@@ -905,7 +905,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div style={{ width: '70px' }}> */}
                                                 <MokaInput
                                                     name="memRepSeq"
-                                                    className="ft-12 m-2"
+                                                    className="ft-12 mr-2"
                                                     value={element.memRepSeq}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`기자번호`}
@@ -915,7 +915,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div style={{ width: '160px' }}> */}
                                                 <MokaInput
                                                     name="memNm"
-                                                    className="ft-12 m-2"
+                                                    className="ft-12 mr-2"
                                                     value={element.memNm}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`기자명`}
@@ -924,7 +924,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div className="pl-3" style={{ width: '115px' }}> */}
                                                 <MokaInput
                                                     name="memMemo"
-                                                    className="ft-12 m-2"
+                                                    className="ft-12 mr-2"
                                                     value={element.memMemo}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`직책`}
@@ -933,7 +933,7 @@ const ChannelEdit = ({ match }) => {
                                                 {/* <div className="pl-3" style={{ width: '115px' }}> */}
                                                 <MokaInput
                                                     name="nickNm"
-                                                    className="ft-12 m-2"
+                                                    className="ft-12 mr-2"
                                                     value={element.nickNm}
                                                     onChange={(e) => handleChangeReporters({ e, index })}
                                                     placeholder={`닉네임`}
@@ -949,7 +949,7 @@ const ChannelEdit = ({ match }) => {
                                                 <Col xs={12}>
                                                     <MokaInput
                                                         name="desc"
-                                                        className="ml-2 mb-2 ft-12"
+                                                        className="mb-2 ft-12"
                                                         // style={{ height: '40px' }}
                                                         value={element.desc}
                                                         onChange={(e) => handleChangeReporters({ e, index })}

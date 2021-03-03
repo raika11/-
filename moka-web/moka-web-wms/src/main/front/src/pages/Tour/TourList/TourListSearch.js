@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { MokaInput, MokaSearchInput } from '@/components';
 import { initialState, clearSearch, getTourApplyList, changeSearchOption } from '@/store/tour';
+import moment from 'moment';
+import { DB_DATEFORMAT } from '@/constants';
 
 /**
  * 신청 목록 검색
@@ -22,6 +24,8 @@ const TourListSearch = () => {
             getTourApplyList(
                 changeSearchOption({
                     ...search,
+                    startTourDay: moment(search.startTourDay).format(DB_DATEFORMAT),
+                    endTourDay: moment(search.endTourDay).format(DB_DATEFORMAT),
                     page: 0,
                 }),
             ),
@@ -52,7 +56,7 @@ const TourListSearch = () => {
                         className="mr-2"
                         as="dateTimePicker"
                         value={search.startTourDay}
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         onChange={(date) => {
                             if (typeof date === 'object') {
                                 setSearch({ ...search, startTourDay: date });
@@ -64,7 +68,7 @@ const TourListSearch = () => {
                     <MokaInput
                         as="dateTimePicker"
                         value={search.endTourDay}
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         onChange={(date) => {
                             if (typeof date === 'object') {
                                 setSearch({ ...search, endTourDay: date });

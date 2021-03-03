@@ -559,7 +559,8 @@ const PollEdit = ({ onDelete }) => {
                     <Form.Row className="mb-2">
                         <MokaCard
                             className="flex-fill pl-0 h-100 body-bg"
-                            headerClassName="transparent"
+                            headerClassName="transparent pr-0 pl-0"
+                            bodyClassName="pr-0 pl-0"
                             minHeight="300px"
                             titleAs={
                                 <Form.Row>

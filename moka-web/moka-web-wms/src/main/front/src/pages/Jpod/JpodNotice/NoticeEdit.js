@@ -175,7 +175,7 @@ const NoticeEdit = ({ match }) => {
     const handleClickDeleteButton = () => {
         dispatch(
             deleteBoardContents({
-                boardId: boardId.current,
+                boardId: editData.boardId,
                 boardSeq: boardSeq.current,
                 callback: ({ header: { success, message }, body }) => {
                     if (success === true) {

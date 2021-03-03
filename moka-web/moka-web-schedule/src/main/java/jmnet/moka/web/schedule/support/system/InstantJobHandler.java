@@ -8,7 +8,6 @@ import jmnet.moka.web.schedule.support.StatusFlagType;
 import jmnet.moka.web.schedule.support.reserve.AbstractReserveJob;
 import jmnet.moka.web.schedule.support.schedule.AbstractScheduleJob;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -52,11 +51,12 @@ public class InstantJobHandler {
         try{
             AbstractScheduleJob job = (AbstractScheduleJob) context.getBean(Class.forName(info.getProgrameNm()));
             job.doTask(info);
+            //AbstractScheduleJob에 실행결과를 받아오기 위한 부분 추가
             GenStatus scheduleResult = job.getFinish();
 
             //실행결과가 성공
             if(scheduleResult.getGenResult() == 200L){
-                return true;
+                result = true;
             }
 
         }catch (Exception  e) {
@@ -69,6 +69,7 @@ public class InstantJobHandler {
     private boolean runReserveJob(GenContent info){
         boolean result = false;
         try{
+            //조회된 history가 없다면 실행실패
             GenContentHistory history = jobContentService
                     .findGenContentHistory(info.getJobSeq())
                     .orElseThrow();
@@ -76,11 +77,10 @@ public class InstantJobHandler {
             log.debug("history GenStatus jobSeq : "+ history.getGenContent().getGenStatus().getJobSeq());
 
             AbstractReserveJob job = (AbstractReserveJob) context.getBean(Class.forName(info.getProgrameNm()));
+            //info에 해당하는 history를 사용하여 asyncTask 대신 invoke 직접 실행
             history = job.invoke(history);
-            log.debug("invoke seqNo : "+ history.getSeqNo());
-            log.debug("invoke GenStatus jobSeq : "+ history.getGenContent().getGenStatus().getJobSeq());
+            //작업결과로 finish 직접 실행
             job.finish(history);
-
 
             //실행결과가 성공
             if(history.getStatus() == StatusFlagType.DONE){

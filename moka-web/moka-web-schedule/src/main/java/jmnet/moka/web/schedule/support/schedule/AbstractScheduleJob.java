@@ -65,12 +65,12 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     protected void init(GenContent info) {
         scheduleInfo = info;
 
-        //info에 해당하는 genStatus가 없는 경우 생성
+        //info에 해당하는 GenStatus가 없는 경우 생성
         scheduleResult = info.getGenStatus();
         if(scheduleResult == null){
             scheduleResult = jobStatusService.insertGenStatus(info.getJobSeq());
         }
-        //genStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
+        //GenStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
         else{
             scheduleResult.setGenResult(500L);
             scheduleResult.setLastExecDt(new Date());
@@ -93,6 +93,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
     /**
      * finish()에서 처리할 스케줄 실행 결과 값 입력
+     * 각 작업 별 invoke()에서 작업 완료 후 호출 필요
      */
     protected void setFinish(boolean success){
         if(success){
@@ -102,7 +103,8 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
     }
 
     /**
-     * finish()에서 처리한 스케쥴 실행 결과 값 전달
+     * finish()에서 처리한 스케쥴 실행 결과 값 외부로 전달
+     * 스케쥴러에서는 미사용 / 실패작업 재실행 API 에서 사용 중
      */
     public GenStatus getFinish(){
         return scheduleResult;
@@ -150,6 +152,7 @@ public abstract class AbstractScheduleJob implements ScheduleJob {
 
         boolean result = false;
 
+        //FTP
         if(scheduleInfo.getSendType() != null && scheduleInfo.getSendType().equals("FTP")){
             result = uploadFtpString(rss);
         }

@@ -93,15 +93,18 @@ public class ReserveJobController {
 
 
             success = handler.addReserveJob(history);
-
             log.debug("예약작업 Job 추가 테스트");
 
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(success);
+            //실행 결과가 실패인 경우
+            if(!success){
+                throw new MokaException("등록작업이 실패했습니다.");
+            }
 
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success);
             return new ResponseEntity<>(resultDto, HttpStatus.OK);
         } catch (Exception ex) {
-            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, ex.toString());
-            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(400, ex.toString());
+            return new ResponseEntity<>(resultDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -117,12 +120,21 @@ public class ReserveJobController {
     public ResponseEntity<?> deleteJob(@ApiParam("Task 일련번호") @PathVariable("jobTaskSeq") @Min(value = 0) Long jobTaskSeq)
             throws MokaException {
 
-        boolean success = handler.removeReserveJob(jobTaskSeq);
+        try {
+            boolean success = handler.removeReserveJob(jobTaskSeq);
+            log.debug("예약작업 Job 실행취소 테스트");
 
-        log.debug("예약작업 Job 실행취소 테스트");
+            //실행 결과가 실패인 경우
+            if(!success){
+                throw new MokaException("취소작업이 실패했습니다.");
+            }
 
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
 
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+        } catch (Exception ex) {
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(400, ex.toString());
+            return new ResponseEntity<>(resultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

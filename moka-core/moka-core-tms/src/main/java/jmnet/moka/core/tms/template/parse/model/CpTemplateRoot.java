@@ -1,5 +1,7 @@
 package jmnet.moka.core.tms.template.parse.model;
 
+import static jmnet.moka.common.template.Constants.DEFAULT_DATA_NAME;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,7 +236,8 @@ public class CpTemplateRoot extends MokaTemplateRoot {
                     return;
                 }
             }
-
+            // 데이터를 참조할 수 있도록 _RESULT에 추가
+            context.set(DEFAULT_DATA_NAME, jsonResult);
             childContext.set(Constants.CURRENT_DATA_ID, this.item.getItemType() + this.item.getItemId());
             // loop 커스텀태그 없이(혹은 결과가 1건인 경우) 첫번째 데이터를 사용하는 경우를 위해 첫 row를 context에
             childContext.set(Constants.LOOP_INDEX, 0);

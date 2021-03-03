@@ -577,25 +577,25 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             //         {/* <p className="m-0 pl-2 ft-12 text-positive">* 필수 입력항목</p> */}
             //     </div>
             // }
-            // title={`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
-            titleAs={
-                <>
-                    <Row>
-                        <Col className="justify-content-start" xs={3}>
-                            <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
-                                {`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
-                            </Card.Title>
-                        </Col>
-                        <Col xs={9} className="'mb-0 p-0 text-right">
-                            <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickQuizStatusButton}>
-                                퀴즈 현황
-                            </Button>
-                        </Col>
-                    </Row>
-                </>
-            }
+            title={`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
+            // titleAs={
+            //     <>
+            //         <Row>
+            //             <Col className="justify-content-start" xs={3}>
+            //                 <Card.Title as="h2" className={clsx({ 'd-none': false }, 'mb-0')}>
+            //                     {`퀴즈 ${selectQuizSeq.current === 'add' ? '등록' : '수정'}`}
+            //                 </Card.Title>
+            //             </Col>
+            //             <Col xs={9} className="'mb-0 p-0 text-right">
+            //                 <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickQuizStatusButton}>
+            //                     퀴즈 현황
+            //                 </Button>
+            //             </Col>
+            //         </Row>
+            //     </>
+            // }
             className="flex-fill"
-            buttons={[{ text: '퀴즈현황', variant: 'outline-neutral', onClick: handleClickSaveButton, className: 'mr-1' }]}
+            // buttons={[{ text: '퀴즈현황', variant: 'outline-neutral', onClick: handleClickSaveButton, className: 'mr-1' }]}
             footer
             loading={save_loading}
             footerClassName="justify-content-center"
@@ -607,6 +607,21 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             width={750}
         >
             <Form>
+                {/* <Form.Row className="mb-2">
+                    <Col xs={12} className="p-0 text-right">
+                        <Button variant="outline-neutral" size="sm" style={{ width: '72px', height: '31px' }} onClick={handleClickQuizStatusButton}>
+                            퀴즈 현황
+                        </Button>
+                    </Col>
+                </Form.Row> */}
+
+                <Form.Row>
+                    <Col xs={12} className="mb-14 d-flex justify-content-end">
+                        <Button variant="outline-neutral" onClick={handleClickQuizStatusButton}>
+                            투표 현황
+                        </Button>
+                    </Col>
+                </Form.Row>
                 <Form.Row>
                     <Col xs={9} className="p-0">
                         <Form.Row className="mb-2">

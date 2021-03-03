@@ -63,6 +63,8 @@ const TourListAgGrid = ({ match }) => {
                     regDt: data.regDt ? moment(data.regDt).format(BASIC_DATEFORMAT) : '',
                 })),
             );
+        } else {
+            setRowData([]);
         }
     }, [list]);
 

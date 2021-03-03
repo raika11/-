@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.constraints.Min;
 import jmnet.moka.common.utils.dto.ResultDTO;
+import jmnet.moka.core.common.exception.MokaException;
 import jmnet.moka.web.schedule.support.schedule.ScheduleJobHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,19 +46,22 @@ public class ScheduleJobController {
     @ApiOperation(value = "신규 Job 추가")
     @PostMapping("/{jobSeq}")
     public ResponseEntity<?> postJob(@ApiParam("job 일련번호") @PathVariable("jobSeq") @Min(value = 0) Long jobSeq) {
+        try {
+            boolean success = handler.appendJob(jobSeq);
+            log.debug("실행 테스트 : {}", success);
 
-        boolean success = handler.appendJob(jobSeq);
-        log.debug("실행 테스트 : {}", success);
+            //등록 결과가 실패인 경우
+            if(!success){
+                throw new MokaException("작업등록이 실패했습니다.");
+            }
 
-        HttpStatus httpStatus = HttpStatus.NOT_ACCEPTABLE;
-        String message = "fail";
-        if(success){
-            httpStatus = HttpStatus.OK;
-            message = "success";
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(400, ex.toString());
+            return new ResponseEntity<>(resultDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
-        return new ResponseEntity<>(resultDto, httpStatus);
     }
 
     /**
@@ -69,19 +73,22 @@ public class ScheduleJobController {
     @ApiOperation(value = "Job 제거")
     @DeleteMapping("/{jobSeq}")
     public ResponseEntity<?> deleteJob(@ApiParam("job 일련번호") @PathVariable("jobSeq") @Min(value = 0) Long jobSeq) {
+        try {
+            boolean success = handler.removeJob(jobSeq);
 
-        boolean success = handler.removeJob(jobSeq);
+            log.debug("스케줄 Job 제거 테스트 : {}", success);
 
-        log.debug("스케줄 Job 제거 테스트 : {}", success);
+            //삭제 결과가 실패인 경우
+            if(!success){
+                throw new MokaException("작업삭제가 실패했습니다.");
+            }
 
-        HttpStatus httpStatus = HttpStatus.NOT_ACCEPTABLE;
-        String message = "fail";
-        if(success){
-            httpStatus = HttpStatus.OK;
-            message = "success";
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(400, ex.toString());
+            return new ResponseEntity<>(resultDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        ResultDTO<Boolean> resultDto = new ResultDTO<>(success, message);
-        return new ResponseEntity<>(resultDto, httpStatus);
     }
 }

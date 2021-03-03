@@ -58,7 +58,7 @@ public class SystemController {
                     .findJobContentBySeq(jobSeq)
                     .orElseThrow();
 
-            //성공한 작업은 즉시실행 불가처리
+            //성공한 작업은 재실행 불가
             if(genContent.getGenStatus().getGenResult() == 200L){
                 throw new MokaException("실패한 작업만 재실행이 가능합니다.");
             }
@@ -66,7 +66,7 @@ public class SystemController {
             success = instantJobHandler.runInstantJob(genContent);
             log.debug("{} 재실행 결과 : {}", jobSeq, success);
 
-            //즉시실행 결과가 실패인 경우
+            //재실행 결과가 실패인 경우
             if(!success){
                 throw new MokaException("재실행이 실패했습니다.");
             }

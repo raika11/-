@@ -60,10 +60,11 @@ public abstract class AbstractReserveJob implements ReserveJob {
                 .getStatus()
                 .name());
 
+        //실행 완료 시 GenStatus 저장
         GenStatus scheduleResult = history.getGenContent().getGenStatus();
         //현재 genResult + lastExecdt 만 입력 중
         if(history.getStatus() == StatusFlagType.DONE){
-            scheduleResult.setGenResult(200L);
+            scheduleResult.setGenResult(200L);  //성공
         }
         scheduleResult.setLastExecDt(new Date());
         scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
@@ -84,24 +85,23 @@ public abstract class AbstractReserveJob implements ReserveJob {
                     .findGenContentHistoryById(history.getSeqNo())
                     .orElseThrow();
 
-            //실행 전 상태변경 후 저장
+            //실행 전 작업예약 상태변경 후 저장
             scheduleHistory.setStartDt(McpDate.now());
             scheduleHistory.setStatus(StatusFlagType.PROCESSING);
             scheduleHistory = jobContentService.updateGenContentHistory(scheduleHistory);
             logger.debug("start task jobseq : {}", history.getSeqNo());
 
-            //scheduleHistory에 해당하는 genStatus가 없는 경우 생성
+            //history에 해당하는 GenStatus가 없는 경우 생성
             GenStatus scheduleResult = scheduleHistory.getGenContent().getGenStatus();
             if(scheduleResult == null){
-                scheduleResult = jobStatusService.insertGenStatus(scheduleHistory.getJobSeq());
+                jobStatusService.insertGenStatus(scheduleHistory.getJobSeq());
             }
             //genStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
             else{
                 scheduleResult.setGenResult(500L);
                 scheduleResult.setLastExecDt(new Date());
-                scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
+                jobStatusService.updateGenStatus(scheduleResult);
             }
-
 
             // 각 예약 작업 처리
             invoke(scheduleHistory);

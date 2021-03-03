@@ -24,18 +24,18 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
                     >
                         150 x 150
                     </PollPhotoComponent>
-                    {(hasUrl || items[0].linkUrl) && (
-                        <MokaInput
-                            name="linkUrl"
-                            placeholder="url"
-                            value={items[0].linkUrl}
-                            onChange={(e) => {
-                                const { name, value } = e.target;
-                                handleChangeValue(0, name, value);
-                            }}
-                        />
-                    )}
                 </div>
+                {hasUrl && (
+                    <MokaInput
+                        name="linkUrl"
+                        placeholder="url"
+                        value={items[0].linkUrl}
+                        onChange={(e) => {
+                            const { name, value } = e.target;
+                            handleChangeValue(0, name, value);
+                        }}
+                    />
+                )}
             </Col>
             <Col xs={2} className="text-center">
                 VS
@@ -54,7 +54,7 @@ const PollDetailComparePhotoAnswerComponent = ({ items, hasUrl, onChange }) => {
                         150 x 150
                     </PollPhotoComponent>
                 </div>
-                {(hasUrl || items[1].linkUrl) && (
+                {hasUrl && (
                     <MokaInput
                         name="linkUrl"
                         placeholder="url"

@@ -41,7 +41,7 @@ const PollDetailBasicTextAnswerComponent = ({ item, index, hasUrl, onChange }) =
                             />
                         </Col>
                     </Form.Row>
-                    {(hasUrl || !commonUtil.isEmpty(item.linkUrl)) && (
+                    {hasUrl && (
                         <Form.Row className="mb-2">
                             <Col xs={12}>
                                 <MokaInputLabel

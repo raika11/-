@@ -43,7 +43,9 @@ export const initialState = {
             keyword: '',
         },
     },
-    template: {},
+    template: {
+        templateGroup: '',
+    },
     templateError: null,
     templateBody: '',
     inputTag: '',

@@ -90,13 +90,17 @@ const Page = ({ match }) => {
 
             const loop = (targetSeq, paths) => {
                 const target = treeBySeq[targetSeq];
-                if (target.pageSeq !== tree.pageSeq) {
-                    paths.push(String(target.parentPageSeq));
-                    loop(target.parentPageSeq, paths);
-                } else {
-                    if (paths.indexOf(String(target.pageSeq)) < 0) {
-                        paths.push(String(target.pageSeq));
+                if (target) {
+                    if (target.pageSeq !== tree.pageSeq) {
+                        paths.push(String(target.parentPageSeq));
+                        loop(target.parentPageSeq, paths);
+                    } else {
+                        if (paths.indexOf(String(target.pageSeq)) < 0) {
+                            paths.push(String(target.pageSeq));
+                        }
                     }
+                } else {
+                    return;
                 }
             };
 

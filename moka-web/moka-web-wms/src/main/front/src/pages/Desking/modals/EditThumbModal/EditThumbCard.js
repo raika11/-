@@ -146,7 +146,9 @@ const EditThumbCard = forwardRef((props, ref) => {
 
             if (item.move) {
                 // moveCard 함수 실행
-                moveCard(dragIndex, hoverIndex);
+                if (moveCard) {
+                    moveCard(dragIndex, hoverIndex);
+                }
                 item.index = hoverIndex;
             } else {
                 if (setAddIndex) setAddIndex(hoverIndex);
@@ -167,8 +169,8 @@ const EditThumbCard = forwardRef((props, ref) => {
     });
 
     return (
-        <div className={className} style={{ width, height, boxShadow, opacity: isDragging ? 0.5 : 1 }}>
-            <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })}>
+        <div className={className} style={{ width, height, opacity: isDragging ? 0.5 : 1 }}>
+            <div ref={drag(drop(cardRef))} className={clsx('d-flex flex-direction-column h-100 w-100 border rounded', { 'thumb-card-selected': selected })} style={{ boxShadow }}>
                 <div className="position-relative overflow-hidden flex-fill">
                     <div
                         ref={wrapperRef}

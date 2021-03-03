@@ -7,10 +7,6 @@ import { MokaLoader } from '@/components';
 
 const propTypes = {
     /**
-     * 대표 사진 변경 함수
-     */
-    setRepPhoto: PropTypes.func,
-    /**
      * 대표 사진 버튼 click e
      */
     onRepClick: PropTypes.func,
@@ -23,9 +19,9 @@ const defaultProps = {};
 const EditThumbArticleImageList = (props) => {
     const { contentId, onThumbClick, onRepClick } = props;
     const dispatch = useDispatch();
-    const imageList = useSelector((store) => store.article.imageList);
-    const loading = useSelector((store) => store.loading[GET_ARTICLE_IMAGE_LIST]);
-    const PDS_URL = useSelector((store) => store.app.PDS_URL);
+    const imageList = useSelector(({ article }) => article.imageList);
+    const loading = useSelector(({ loading }) => loading[GET_ARTICLE_IMAGE_LIST]);
+    const PDS_URL = useSelector(({ app }) => app.PDS_URL);
     const [renderList, setRenderList] = useState([]);
 
     useEffect(() => {

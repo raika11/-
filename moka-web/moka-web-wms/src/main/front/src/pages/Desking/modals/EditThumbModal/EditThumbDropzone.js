@@ -17,7 +17,7 @@ import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 moment.locale('ko');
 
 const EditThumbDropzone = (props) => {
-    const { collapse, setCollapse, onThumbClick, onRepClick, setRepPhoto } = props;
+    const { collapse, setCollapse, onThumbClick, onRepClick, setRepImg } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
     const cardRef = useRef(null);
@@ -148,7 +148,7 @@ const EditThumbDropzone = (props) => {
             (obj) => {
                 if (!obj.error) {
                     const gifImage = URL.createObjectURL(commonUtil.base64ToBlob(obj.image));
-                    setRepPhoto({
+                    setRepImg({
                         dataType: 'local',
                         id: moment().format('YYYYMMDDsss'),
                         thumbPath: gifImage,

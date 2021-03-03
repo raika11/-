@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { MokaLoader, MokaPagination } from '@components';
 import EditThumbCard from './EditThumbCard';
 import { PAGESIZE_OPTIONS, DISPLAY_PAGE_NUM } from '@/constants';
-import { GET_PHOTO_LIST, getPhotoList, changeSearchOption } from '@store/photoArchive';
+import { GET_PHOTO_LIST, GET_ARCHIVE_DATA, getPhotoList, changeSearchOption } from '@store/photoArchive';
 
 /**
  * 포토아카이브 테이블
@@ -12,15 +12,9 @@ import { GET_PHOTO_LIST, getPhotoList, changeSearchOption } from '@store/photoAr
 const EditThumbTable = (props) => {
     const { onThumbClick, onRepClick } = props;
     const dispatch = useDispatch();
-
     const PHOTO_ARCHIVE_URL = useSelector((store) => store.app.PHOTO_ARCHIVE_URL);
-    const loading = useSelector((store) => store.loading[GET_PHOTO_LIST]);
-    const { total, archiveList, search } = useSelector((store) => ({
-        total: store.photoArchive.total,
-        archiveList: store.photoArchive.list,
-        search: store.photoArchive.search,
-        photo: store.photoArchive.photo,
-    }));
+    const loading = useSelector(({ loading }) => loading[GET_PHOTO_LIST] || loading[GET_ARCHIVE_DATA]);
+    const { total, list: archiveList, search } = useSelector(({ photoArchive }) => photoArchive);
     const [renderList, setRenderList] = useState([]);
 
     /**
@@ -76,6 +70,8 @@ const EditThumbTable = (props) => {
                     ))}
                 </div>
             </div>
+
+            {/* 페이지네이션 */}
             <MokaPagination
                 page={search.page}
                 total={total}

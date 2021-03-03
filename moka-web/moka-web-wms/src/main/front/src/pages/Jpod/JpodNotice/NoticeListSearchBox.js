@@ -19,8 +19,9 @@ const NoticeListSearchBox = ({ match }) => {
     const dispatch = useDispatch();
     const [channelLists, setChannelLists] = useState([]); // 채널 선택.
 
-    const { channelList } = useSelector((store) => ({
+    const { channelList, selectBoard } = useSelector((store) => ({
         channelList: store.jpod.jpodNotice.channelList,
+        selectBoard: store.jpod.jpodNotice.selectBoard,
     }));
 
     // 검색 항목 변경시 스테이트 업데이트.
@@ -88,9 +89,11 @@ const NoticeListSearchBox = ({ match }) => {
 
     // 공지 목록 가지고 오기.
     useEffect(() => {
-        dispatch(getJpodNotice());
+        if (selectBoard.boardId) {
+            dispatch(getJpodNotice());
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [selectBoard]);
 
     return (
         <Form className="mb-14">

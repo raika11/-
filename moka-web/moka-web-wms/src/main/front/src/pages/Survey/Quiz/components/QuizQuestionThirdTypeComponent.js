@@ -2,7 +2,7 @@ import React, { useState, useCallback, forwardRef, useRef } from 'react';
 import { Col, Form, Button } from 'react-bootstrap';
 import { MokaInputLabel, MokaTableDeleteButton, AgGripIcon, MokaOverlayTooltipButton, MokaIcon } from '@components';
 import { useSelector, useDispatch } from 'react-redux';
-import { questionInfoChange, deleteAllQuestion, addQuestionChoices } from '@store/survey/quiz';
+import { questionInfoChange, deleteAllQuestion, addQuestionChoices, deleteQuestion } from '@store/survey/quiz';
 import { DeleteConfirmModal } from '@pages/Survey/Quiz/modals';
 import { messageBox } from '@utils/toastUtil';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -29,13 +29,35 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
     // };
 
     // 전체 삭제.
-    const handleClickAllDeleteButton = useCallback(() => {
-        if (quizSts === 'Y') {
-            setDeleteConfirmModalState(true);
-        } else {
-            dispatch(deleteAllQuestion());
-        }
-    }, [dispatch, quizSts]);
+    // const handleClickAllDeleteButton = useCallback(() => {
+    //     if (quizSts === 'Y') {
+    //         setDeleteConfirmModalState(true);
+    //     } else {
+    //         dispatch(deleteAllQuestion());
+    //     }
+    // }, [dispatch, quizSts]);
+
+    // 문항 전체 삭제.
+    // choices(문항 리스트) 를 초기화 해서 store에 다시 저장.
+    // const handleClickChoicesAllDeleteButton = useCallback(() => {
+    //     let tempData = questionsList[questionIndex];
+    //     dispatch(
+    //         questionInfoChange({
+    //             ...tempData,
+    //             questionIndex: questionIndex,
+    //             choices: [],
+    //         }),
+    //     );
+    // }, [dispatch, questionIndex, questionsList]);
+
+    const handleClickChoicesAllDeleteButton = useCallback(() => {
+        dispatch(
+            deleteQuestion({
+                questionIndex: questionIndex,
+            }),
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // 보기 추가 버튼.
     const handleClickQuestionAddButton = useCallback(() => {
@@ -130,7 +152,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
 
     const createDropdownItem = useCallback(() => {
         const items = [
-            { text: '전체삭제', onClick: () => handleClickAllDeleteButton() },
+            { text: '전체삭제', onClick: () => handleClickChoicesAllDeleteButton() },
             { text: '보기 추가', onClick: () => handleClickQuestionAddButton() },
         ];
 
@@ -143,7 +165,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                 ))}
             </>
         );
-    }, [handleClickAllDeleteButton, handleClickQuestionAddButton]);
+    }, [handleClickChoicesAllDeleteButton, handleClickQuestionAddButton]);
 
     const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
         return (

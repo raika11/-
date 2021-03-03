@@ -15,7 +15,6 @@ import {
     ADD_QUESTION_CHOICES,
     SET_QUESTION,
     CHANGE_QUESTIONS_LIST_SEARCH_OPTION,
-    SELECT_QUESTIONS,
     SELECT_QUESTIONS_SUCCESS,
     GET_QUESTIONS_LIST_SUCCESS,
     CHANGE_QUIZ_LIST_SEARCH_OPTION,
@@ -67,7 +66,7 @@ export const initialState = {
         quizUrl: null,
         regDt: '',
         regMember: { memberId: '', memberNm: '' },
-        replyYn: 'Y',
+        replyYn: 'N',
         title: '',
         voteCnt: 0,
         imgFile: null,
@@ -225,7 +224,7 @@ export default handleActions(
                 draft.selectQuiz = payload;
             });
         },
-        [CLEAR_SELECT_QUIZ]: (state, { payload }) => {
+        [CLEAR_SELECT_QUIZ]: (state) => {
             return produce(state, (draft) => {
                 draft.selectQuiz = initialState.selectQuiz;
             });

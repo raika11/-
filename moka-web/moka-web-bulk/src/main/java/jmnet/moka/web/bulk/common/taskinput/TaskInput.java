@@ -2,6 +2,7 @@ package jmnet.moka.web.bulk.common.taskinput;
 
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.web.bulk.exception.BulkException;
+import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import org.w3c.dom.Node;
 
@@ -22,4 +23,6 @@ public abstract class TaskInput {
             throws XPathExpressionException, BulkException;
 
     public abstract TaskInputData getTaskInputData();
+
+    public void processMonitor(SlackMessageService slackMessageService, String taskName) {}
 }

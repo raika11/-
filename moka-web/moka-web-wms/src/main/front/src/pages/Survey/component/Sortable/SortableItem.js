@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/EditThumbCard';
+import { ItemTypes } from '@pages/Desking/modals/EditThumbModal/ThumbCard';
 
 const SortableItem = ({ id, item, moveItem, findItem }) => {
     const originalIndex = findItem(id).index;

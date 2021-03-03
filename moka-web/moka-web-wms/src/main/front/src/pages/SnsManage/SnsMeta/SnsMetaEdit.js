@@ -642,7 +642,7 @@ const SnsMetaEdit = () => {
                 cropHeight={300}
                 cropWidth={300}
                 onHide={() => setShowEditThumbModal(false)}
-                contentId={totalId}
+                totalId={totalId}
                 thumbFileName={thumbFileName}
                 saveFileName={moment().format('YYYYMMDDsss')}
                 apply={handleThumbFileApply}

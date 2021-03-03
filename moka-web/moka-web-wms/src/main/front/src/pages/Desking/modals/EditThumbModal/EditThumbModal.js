@@ -6,11 +6,11 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MokaModal, MokaCardTabs } from '@components';
 import { clearStore } from '@store/photoArchive';
-import EditThumbSearch from './EditThumbSearch';
-import EditThumbTable from './EditThumbTable';
-import EditThumbArticleImageList from './EditThumbArticleImageList';
-import EditThumbDropzone from './EditThumbDropzone';
-import EditThumbCard from './EditThumbCard';
+import ArchiveSearch from './ArchiveSearch';
+import ArchiveTable from './ArchiveTable';
+import ArticleImageList from './ArticleImageList';
+import GifDropzone from './GifDropzone';
+import ThumbCard from './ThumbCard';
 import ThumbViewModal from './ThumbViewModal';
 import toast from '@utils/toastUtil';
 import commonUtil from '@utils/commonUtil';
@@ -33,6 +33,10 @@ const defaultRepImg = {
     imgProps: {},
 };
 const propTypes = {
+    /**
+     * 기사ID, 기사ID가 있으면 본문 소재도 조회한다
+     */
+    totalId: PropTypes.string,
     /**
      * 크롭Height 기본값
      */
@@ -66,7 +70,7 @@ const EditThumbModal = (props) => {
         // modal props
         show,
         onHide,
-        contentId,
+        totalId,
         cropHeight,
         cropWidth,
         saveFileName,
@@ -245,24 +249,24 @@ const EditThumbModal = (props) => {
                     tabs={[
                         // 아카이브 탭
                         <div className="d-flex h-100 flex-column">
-                            <EditThumbSearch />
-                            <EditThumbTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
+                            <ArchiveSearch />
+                            <ArchiveTable onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
                         </div>,
 
                         // 본문 소재 탭
-                        contentId && (
+                        totalId && (
                             <div className="d-flex h-100 flex-column">
-                                {contentId ? <EditThumbArticleImageList contentId={contentId} onThumbClick={handleThumbClick} onRepClick={handleRepClick} /> : ''}
+                                <ArticleImageList totalId={totalId} onThumbClick={handleThumbClick} onRepClick={handleRepClick} />
                             </div>
                         ),
                     ].filter((a) => a)}
-                    tabNavs={['아카이브', contentId && '본문 소재 리스트'].filter((a) => a)}
+                    tabNavs={['아카이브', totalId && '본문 소재 리스트'].filter((a) => a)}
                     fill
                 />
                 <div className={clsx('deskthumb-gif-list d-flex justify-content-between overflow-hidden', { collapse: collapse })} style={{ backgroundColor: 'F4F5F6' }}>
                     {/* 대표사진 */}
                     <div className="deskthumb-main d-flex justify-content-center align-items-center" style={{ width: 202 }}>
-                        <EditThumbCard
+                        <ThumbCard
                             className="p-2"
                             img={repImg.thumbPath}
                             dataType={repImg.dataType}
@@ -274,7 +278,7 @@ const EditThumbModal = (props) => {
                     </div>
 
                     {/* GIF 생성 드롭존 */}
-                    <EditThumbDropzone
+                    <GifDropzone
                         cropWidth={cropWidth}
                         cropHeight={cropHeight}
                         collapse={collapse}

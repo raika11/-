@@ -4,7 +4,7 @@ import produce from 'immer';
 import Button from 'react-bootstrap/Button';
 import { useDrop } from 'react-dnd';
 import { MokaIcon, MokaInputLabel } from '@components';
-import EditThumbCard, { ItemTypes } from './EditThumbCard';
+import ThumbCard, { ItemTypes } from './ThumbCard';
 import toast from '@utils/toastUtil';
 import gifshot from 'gifshot';
 import moment from 'moment';
@@ -16,7 +16,7 @@ import { ACCEPTED_IMAGE_TYPES } from '@/constants';
 
 moment.locale('ko');
 
-const EditThumbDropzone = (props) => {
+const GifDropzone = (props) => {
     const { collapse, setCollapse, onThumbClick, onRepClick, setRepImg } = props;
     const [imgList, setImgList] = useState([]);
     const [addIndex, setAddIndex] = useState(-1);
@@ -219,7 +219,7 @@ const EditThumbDropzone = (props) => {
                             ''
                         )}
                         {imgList.map((data, idx) => (
-                            <EditThumbCard
+                            <ThumbCard
                                 ref={cardRef}
                                 width={'calc(20% - 8px)'}
                                 height={125}
@@ -243,4 +243,4 @@ const EditThumbDropzone = (props) => {
     );
 };
 
-export default EditThumbDropzone;
+export default GifDropzone;

@@ -137,6 +137,4 @@ public abstract class TaskBase implements Runnable, TaskService {
             }
         }
     }
-
-    public void processMonitor() {}
 }

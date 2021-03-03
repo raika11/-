@@ -2,7 +2,8 @@
   margin-bottom: 0;
   box-shadow: $card-shadow;
   &.body-bg {
-    background-color:#F5F9FC
+    background-color:#F5F9FC;
+    box-shadow: none;
   }
 }
 

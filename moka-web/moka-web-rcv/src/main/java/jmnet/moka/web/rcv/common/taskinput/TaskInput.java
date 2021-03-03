@@ -2,6 +2,7 @@ package jmnet.moka.web.rcv.common.taskinput;
 
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.web.rcv.exception.RcvException;
+import jmnet.moka.web.rcv.service.SlackMessageService;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import org.w3c.dom.Node;
 
@@ -22,4 +23,6 @@ public abstract class TaskInput {
             throws XPathExpressionException, RcvException;
 
     public abstract TaskInputData getTaskInputData();
+
+    public void processMonitor(SlackMessageService slackMessageService, String taskName) {}
 }

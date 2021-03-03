@@ -11,6 +11,9 @@
       dirFailed="/box/rcv/cppub/jajopan/error"
       fileFilter="D001*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3">
       <!--
       <inputFilter class="jmnet.moka.web.rcv.taskinput.inputfilter.FileCopyFilter"
@@ -27,6 +30,7 @@
         fileFilter="*.pdf"/>
       <inputFilter class="jmnet.moka.web.rcv.taskinput.inputfilter.FileCopyFilter"
         dirSuccess="/box/rcv/cppub/jajopan/jpg"
+
         fileFilter="*.jpg"/>
     </TaskInput>
   </Task>
@@ -40,6 +44,9 @@
       dirFailed="/box/rcv/cppub/jajopan/error"
       fileFilter="W005*.xml"
       fileWaitTime="3s"
+      alertLimitUse="1"
+      alertLimitFileCount="50"
+      alertLimitFileTime="20m"
       retryCount="3">
     </TaskInput>
   </Task>

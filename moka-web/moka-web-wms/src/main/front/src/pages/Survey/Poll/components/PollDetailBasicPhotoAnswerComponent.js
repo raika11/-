@@ -51,7 +51,7 @@ const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) 
                             const { name, value, type } = e.target;
                             handleChangeValue(name, value, type);
                         }}
-                        inputProps={{ style: { width: '100px' } }}
+                        inputProps={{ style: { width: '100px' }, title: editItem.linkUrl }}
                     />
                 </div>
             )}

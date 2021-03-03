@@ -1,12 +1,19 @@
 package jmnet.moka.web.rcv.taskinput;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.common.TimeHumanizer;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.object.JaxbObjectManager;
 import jmnet.moka.web.rcv.common.taskinput.TaskInput;
@@ -14,6 +21,7 @@ import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
 import jmnet.moka.web.rcv.common.taskinput.inputfilter.InputFilter;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
 import jmnet.moka.web.rcv.exception.RcvException;
+import jmnet.moka.web.rcv.service.SlackMessageService;
 import jmnet.moka.web.rcv.util.RcvFileUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import jmnet.moka.web.rcv.util.XMLUtil;
@@ -51,6 +59,10 @@ public class FileXmlTaskInput<P, C> extends TaskInput {
     private String sourceBuffer;
     private final List<InputFilter> inputFilters = new ArrayList<>();
 
+    private int alertLimitUse;
+    private int alertLimitFileCount;
+    private int alertLimitFileTime;
+
     public FileXmlTaskInput(Class<P> parentObjectType, Class<C> objectType) {
         this.parentObjectType = parentObjectType;
         this.objectType = objectType;
@@ -84,6 +96,13 @@ public class FileXmlTaskInput<P, C> extends TaskInput {
         fileWaitTime = TimeHumanizer.parse(xu.getString(node, "./@fileWaitTime", "3s"), 3000);
         dirScan = new File(dirInput);
         retryCount = RcvUtil.parseInt(xu.getString(node, "./@retryCount", "3"));
+
+        this.alertLimitUse = RcvUtil.parseInt(xu.getString(node, "./@alertLimitUse", "0"));
+        this.alertLimitFileCount = RcvUtil.parseInt(xu.getString(node, "./@allertLimitFileCount", "30"));
+        this.alertLimitFileTime = TimeHumanizer.parse(xu.getString(node, "./@allertLimitFileTime", "20m"));
+        if (this.alertLimitFileTime < 50) {
+            this.alertLimitFileTime = 60000;
+        }
 
         NodeList nl = node.getChildNodes();
         if (nl == null) {
@@ -173,5 +192,74 @@ public class FileXmlTaskInput<P, C> extends TaskInput {
         }
 
         return new FileXmlTaskInputData<>(file, (C) objectData, this, parentObjectType, objectType);
+    }
+
+    private List<File> getDirScanFiles() {
+        final File[] fileList = this.dirScan.listFiles();
+        if (fileList == null || fileList.length <= 0) {
+            return null;
+        }
+
+        List<File> files = new ArrayList<>();
+        for (File f : fileList) {
+            if (!f.isFile()) {
+                continue;
+            }
+            if (FilenameUtils.wildcardMatch(f.getName(), this.fileFilter)) {
+                if (System.currentTimeMillis() - f.lastModified() < this.fileWaitTime) {
+                    continue;
+                }
+
+                if( f.length() != 0)
+                    files.add(f);
+            }
+        }
+        if( files.size() <= 0 )
+            return null;
+
+        return files;
+    }
+
+    @Override
+    public void processMonitor(SlackMessageService slackMessageService, String taskName) {
+        //noinspection ConstantConditions
+        do{
+            if( this.alertLimitUse < 1 )
+                break;
+
+            List<File> files = getDirScanFiles();
+            if( files == null )
+                break;
+
+            if (files.size() == 0)
+                break;
+
+            StringBuilder sb = new StringBuilder(taskName);
+            boolean alert = false;
+            if (files.size() > this.alertLimitFileCount) {
+                alert = true;
+                sb.append(String.format("  : 전송 기사 %d개 대기 !!  ", files.size()));
+            }
+            try {
+                Path path = files.get(0).toPath();
+                BasicFileAttributes fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+
+                final FileTime tmCreate = fileAttributes.creationTime();
+                if (System.currentTimeMillis() - tmCreate.toMillis() > this.alertLimitFileTime) {
+                    alert = true;
+                    sb.append(String.format("  : [%s] 생성된 기사 %s 대기 !!", McpDate.dateStr(new Date(tmCreate.toMillis()), McpDate.DATETIME_FORMAT),
+                            path.toString()));
+                }
+            } catch (IOException ignore) {
+            }
+
+            if( !alert)
+                break;
+
+            final String message = sb.toString();
+            log.error( "{} monitoring Allert {}", taskName, message );
+            slackMessageService.sendSms(String.format("%s monitor", taskName ), message);
+
+        }while( false );
     }
 }

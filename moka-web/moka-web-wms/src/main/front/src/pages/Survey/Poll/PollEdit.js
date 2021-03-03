@@ -559,7 +559,8 @@ const PollEdit = ({ onDelete }) => {
                     <Form.Row className="mb-2">
                         <MokaCard
                             className="flex-fill pl-0 h-100 body-bg"
-                            headerClassName="transparent"
+                            headerClassName="transparent pr-0 pl-0"
+                            bodyClassName="pr-0 pl-0"
                             minHeight="300px"
                             titleAs={
                                 <Form.Row>
@@ -572,15 +573,18 @@ const PollEdit = ({ onDelete }) => {
                                             >
                                                 Q.
                                             </Form.Label>
-                                            <MokaInput
-                                                as="textarea"
-                                                name="title"
-                                                value={edit.title}
-                                                onChange={(e) => {
-                                                    handleChangeValue(e.target);
-                                                }}
-                                                inputProps={{ rows: 3 }}
-                                            />
+                                            <Form.Group className="w-100">
+                                                <MokaInput
+                                                    as="textarea"
+                                                    name="title"
+                                                    value={edit.title}
+                                                    onChange={(e) => {
+                                                        handleChangeValue(e.target);
+                                                    }}
+                                                    inputProps={{ rows: 3 }}
+                                                />
+                                                <div className="color-danger">※ 250자 이내로 입력하세요.</div>
+                                            </Form.Group>
                                         </Form.Group>
                                         {/* <MokaInputLabel
                                             as="textarea"

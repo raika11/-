@@ -199,11 +199,23 @@ public class DeskingServiceImpl implements DeskingService {
                                     .getDatasetSeq()
                                     .equals(datasetSeq))
                             .sorted((prev, next) -> {
-                                //정렬순서: contentOrd asc, relOrd asc
+                                //정렬순서: contentOrd asc, relOrd asc, parentConentId 없으면 우선
                                 if (prev
                                         .getContentOrd()
                                         .equals(next.getContentOrd())) {
-                                    return (int) (long) (prev.getRelOrd() - next.getRelOrd());
+                                    if (prev
+                                            .getRelOrd()
+                                            .equals(next.getRelOrd())) {
+                                        if (prev.getParentContentId() != null && next.getParentContentId() == null) {
+                                            return 1;
+                                        } else if (prev.getParentContentId() == null && next.getParentContentId() != null) {
+                                            return -1;
+                                        } else {
+                                            return 0;
+                                        }
+                                    } else {
+                                        return (int) (long) (prev.getRelOrd() - next.getRelOrd());
+                                    }
                                 } else {
                                     return prev.getContentOrd() - next.getContentOrd();
                                 }

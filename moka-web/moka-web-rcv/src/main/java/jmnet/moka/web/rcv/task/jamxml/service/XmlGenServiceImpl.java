@@ -74,7 +74,10 @@ public class XmlGenServiceImpl implements XmlGenService {
             articleTotal.setTotalId(totalId);
 
             // TB_ARTICLE_SERVICE
-            xmlGenMapper.callUpaArticleServiceIns(articleTotal);
+            if( article.getAdditionInfo() == null)
+                xmlGenMapper.callUpaArticleServiceIns(articleTotal);
+            else
+                xmlGenMapper.callUpaArticleServiceWithAdditionInfoIns(articleTotal);
 
             // TB_ARTICLE_TITLE
             xmlGenMapper.callUpaArticleTitleIns(articleTotal);

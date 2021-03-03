@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.common.vo.BasicVo;
+import jmnet.moka.web.rcv.task.jamxml.vo.sub.AdditionInfoVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ArticleIdVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ArticlePropVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.BulkFlagVo;
@@ -109,6 +110,9 @@ public class JamArticleVo extends BasicVo {
 
     @XmlElement(name = "worker_info")
     private WorkerInfoVo workerInfo;
+
+    @XmlElement(name = "addtion-info")
+    private AdditionInfoVo additionInfo;
 
     public void initMembers(){
         setMediaCode(new MediaCodeVo());

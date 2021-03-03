@@ -20,8 +20,8 @@
     bulkDumpEnvFile="classpath:conf/bulkdumpenv.xml"
     fileFilter="*.json"
     fileWaitTime="3s"
-    allertLimitFileCount="30"
-    allertLimitFileTime="20m"
+    alertLimitFileCount="30"
+    alertLimitFileTime="20m"
     intervalTime="10s">
   </Task>
 

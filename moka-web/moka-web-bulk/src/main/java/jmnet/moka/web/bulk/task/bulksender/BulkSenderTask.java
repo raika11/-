@@ -58,8 +58,8 @@ import org.w3c.dom.Node;
 public class BulkSenderTask extends Task<FileTaskInputData> {
     private BulkSenderClientChannel bulkSenderClientChannel;
 
-    private int allertLimitFileCount;
-    private int allertLimitFileTime;
+    private int alertLimitFileCount;
+    private int alertLimitFileTime;
 
     public BulkSenderTask(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {
@@ -95,10 +95,10 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
             throw new BulkException("Input Path can't create");
         }
 
-        this.allertLimitFileCount = BulkUtil.parseInt(xu.getString(node, "./@allertLimitFileCount", "30"));
-        this.allertLimitFileTime = TimeHumanizer.parse(xu.getString(node, "./@allertLimitFileTime", "20m"));
-        if (this.allertLimitFileTime < 50) {
-            this.allertLimitFileTime = 60000;
+        this.alertLimitFileCount = BulkUtil.parseInt(xu.getString(node, "./@alertLimitFileCount", "30"));
+        this.alertLimitFileTime = TimeHumanizer.parse(xu.getString(node, "./@alertLimitFileTime", "20m"));
+        if (this.alertLimitFileTime < 50) {
+            this.alertLimitFileTime = 60000;
         }
 
         fileTaskInput.setDirScan(new File(dirInput));
@@ -187,7 +187,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
             if( files != null ) {
                 StringBuilder sb = new StringBuilder( String.format( "[%s]  ", clientHandler.getBulkDumpEnvCP().getName()) );
                 boolean alert = false;
-                if( files.size() > this.allertLimitFileCount ) {
+                if( files.size() > this.alertLimitFileCount) {
                     alert = true;
                     sb.append( String.format("전송 기사 %d개 대기 !!  ", files.size() ) );
                 }
@@ -197,7 +197,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
                         BasicFileAttributes fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
 
                         final FileTime tmCreate =  fileAttributes.creationTime();
-                        if( System.currentTimeMillis() - tmCreate.toMillis() > this.allertLimitFileTime ) {
+                        if( System.currentTimeMillis() - tmCreate.toMillis() > this.alertLimitFileTime) {
                             alert = true;
                             sb.append( String.format(", [%s] 생성된 기사 %s 대기 !!", McpDate.dateStr(new Date(tmCreate.toMillis()), McpDate.DATETIME_FORMAT), path.toString() ) );
                         }

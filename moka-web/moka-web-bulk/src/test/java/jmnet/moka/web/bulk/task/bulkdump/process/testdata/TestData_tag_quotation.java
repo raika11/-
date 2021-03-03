@@ -14,6 +14,7 @@ import jmnet.moka.web.bulk.util.BulkTagUtil;
  * @author sapark
  * @since 2021-02-15 015 오후 3:24
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class TestData_tag_quotation extends TestData{
     @Override
     public String getTestString() {

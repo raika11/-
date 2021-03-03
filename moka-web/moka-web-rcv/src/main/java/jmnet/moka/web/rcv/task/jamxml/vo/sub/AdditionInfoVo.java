@@ -21,6 +21,7 @@ import lombok.Setter;
  * @since 2021-03-03 003 오후 3:49
  */
 
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @XmlRootElement(name = "addtion-info")

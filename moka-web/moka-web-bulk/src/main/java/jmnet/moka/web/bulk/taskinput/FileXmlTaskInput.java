@@ -56,10 +56,12 @@ public class FileXmlTaskInput<P, C> extends TaskInput {
         this.objectType = objectType;
     }
 
+    @SuppressWarnings("unused")
     public void setSourceBuffer(String sourceBuffer) {
         this.sourceBuffer = sourceBuffer;
     }
 
+    @SuppressWarnings("unused")
     public void setFilePreProcess(FileXmlTaskInputFilePreProcess filePreProcess) {
         this.filePreProcess = filePreProcess;
     }

@@ -51,6 +51,7 @@ public class BulkSenderServiceImpl implements BulkSenderService{
     }
 
     @Override
+    @SuppressWarnings("unused")
     public void insertBulkPortalLog(TotalVo<BulkDumpJobVo> totalVo, int status, String message) {
         insertBulkPortalLog(totalVo, status, message, false);
     }

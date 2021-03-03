@@ -20,6 +20,7 @@ import lombok.Setter;
  * @author sapark
  * @since 2021-02-09 009 오후 12:01
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @XmlRootElement(name = "article")

@@ -1,8 +1,6 @@
 package jmnet.moka.web.bulk.taskinput;
 
-import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.web.bulk.common.taskinput.TaskInput;
-import jmnet.moka.web.bulk.exception.BulkException;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import org.w3c.dom.Node;
 

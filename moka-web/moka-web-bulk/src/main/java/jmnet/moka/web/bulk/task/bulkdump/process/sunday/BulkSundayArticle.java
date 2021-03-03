@@ -30,6 +30,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author sapark
  * @since 2021-01-27 027 오후 5:40
  */
+@SuppressWarnings("DuplicatedCode")
 @Getter
 @Setter
 @Slf4j
@@ -140,7 +141,6 @@ public class BulkSundayArticle extends BulkArticle {
 
     private static final Pattern PATTERN_ContentTag_daumPhotoBundle = Pattern.compile("<div class=\"tag_photobundle\">(\\s)*<img.*?>(\\s)*</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumImg = Pattern.compile("<div(\\s*?)(.*?)(\\bab_photo\\sphoto_(center|left|right)\\b)[^>]+>(\\s*?)(.*?)<div(\\s*?)(.*?)(\\bimage\\b)[^>]+>(\\s*?)(.*?)<img[^>]+>(\\s*?)(.*?)</div>(\\s*?)(.*?)</div>", Pattern.CASE_INSENSITIVE);
-    @SuppressWarnings("DuplicatedCode")
     public void processContentDaum() {
         Map<String, String> daumPhotoBundleMap = new HashMap<>();
         Map<String, String> daumImageMap = new HashMap<>();
@@ -242,7 +242,6 @@ public class BulkSundayArticle extends BulkArticle {
         getContentHtmlNaver().setData(BulkTagUtil.ripTag(contentNaver, "<!--@img_tag_s@-->", "<!--@img_tag_e@-->"));
     }
 
-    @SuppressWarnings("DuplicatedCode")
     public void processContent_ImageBulkYn() {
         for( BulkDumpNewsMMDataVo image : getBulkDumpNewsImageList() ) {
             final String imgSrc = image.getUrl();

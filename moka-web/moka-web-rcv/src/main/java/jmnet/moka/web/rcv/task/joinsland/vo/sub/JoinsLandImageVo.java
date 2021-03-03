@@ -20,6 +20,7 @@ import lombok.Setter;
  * @author sapark
  * @since 2021-02-01 001 오전 9:31
  */
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @XmlRootElement(name = "images")

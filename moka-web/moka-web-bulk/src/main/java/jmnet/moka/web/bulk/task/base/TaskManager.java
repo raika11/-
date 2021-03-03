@@ -94,6 +94,7 @@ public class TaskManager {
     }
 
 
+    @SuppressWarnings("unused")
     public void sendErrorSMS( String title, String message) {
         slackMessageService.sendSms( title, message);
     }

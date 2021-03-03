@@ -16,6 +16,7 @@ import java.io.File;
  */
 @SuppressWarnings("SameReturnValue")
 public interface FileXmlTaskInputFilePreProcess {
+    @SuppressWarnings("unused")
     default boolean preProcess(File file) {
         return true;
     }

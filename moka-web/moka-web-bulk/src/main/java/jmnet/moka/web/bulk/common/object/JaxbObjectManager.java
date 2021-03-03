@@ -38,7 +38,7 @@ public class JaxbObjectManager {
     }
 
     public static BasicVo getBasicVoFromXml(File file, Type objectType)
-            throws XMLStreamException, JAXBException {
+            throws XMLStreamException {
         for( JaxbObjectUnmarshaller unmarshaller : listUnmarshallerlist )
             if( unmarshaller.getObjectType() == objectType )
                 return unmarshaller.getBasicVoFromXml(file);

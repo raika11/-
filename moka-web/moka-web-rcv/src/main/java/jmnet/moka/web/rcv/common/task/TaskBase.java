@@ -1,6 +1,5 @@
 package jmnet.moka.web.rcv.common.task;
 
-import java.util.HashMap;
 import java.util.Map;
 import jmnet.moka.web.rcv.code.OpCode;
 import jmnet.moka.web.rcv.util.ThreadUtil;
@@ -95,13 +94,12 @@ public abstract class TaskBase implements Runnable, TaskService {
         return true;
     }
 
-    protected Map<String, Object> status( Map<String, Object> map) {
+    protected void status( Map<String, Object> map) {
         map.put("name", getTaskName());
         map.put("isAlive", isAlive());
         map.put("isPaused", isPause());
         map.put("threadId", getThreadId());
         map.put("target", this.getClass().getSimpleName());
-        return map;
     }
 
     @Override

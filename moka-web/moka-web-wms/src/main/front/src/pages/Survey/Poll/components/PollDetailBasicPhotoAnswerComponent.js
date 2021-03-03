@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import produce from 'immer';
+import { MokaInput } from '@components';
 
 const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) => {
     const [editItem, setEditItem] = useState({ imgUrl: null, imgFile: null });
@@ -40,6 +41,20 @@ const PollDetailBasicPhotoAnswerComponent = ({ item, index, hasUrl, onChange }) 
             >
                 150x150
             </PollPhotoComponent>
+            {hasUrl && (
+                <div>
+                    <MokaInput
+                        name="linkUrl"
+                        placeholder="url"
+                        value={editItem.linkUrl}
+                        onChange={(e) => {
+                            const { name, value, type } = e.target;
+                            handleChangeValue(name, value, type);
+                        }}
+                        inputProps={{ style: { width: '100px' } }}
+                    />
+                </div>
+            )}
         </div>
     );
 };

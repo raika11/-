@@ -4,7 +4,9 @@ import java.util.Date;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.core.common.rest.RestTemplateHelper;
 import jmnet.moka.web.schedule.mvc.gen.entity.GenContentHistory;
+import jmnet.moka.web.schedule.mvc.gen.entity.GenStatus;
 import jmnet.moka.web.schedule.mvc.gen.service.GenContentService;
+import jmnet.moka.web.schedule.mvc.gen.service.GenStatusService;
 import jmnet.moka.web.schedule.support.StatusFlagType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ public abstract class AbstractReserveJob implements ReserveJob {
     protected GenContentService jobContentService;
 
     @Autowired
+    protected GenStatusService jobStatusService;
+
+    @Autowired
     private RestTemplateHelper restTemplateHelper;
 
     protected String success;
@@ -51,9 +56,19 @@ public abstract class AbstractReserveJob implements ReserveJob {
         history.setEndDt(new Date());
         jobContentService.updateGenContentHistory(history);
 
-        logger.debug("reserved jobseq : {} , complete : {}", history.getSeqNo(), history
+        logger.debug("finish history seqno : {} jobSeq : {}, complete : {}", history.getSeqNo(), history.getJobSeq(), history
                 .getStatus()
                 .name());
+
+        GenStatus scheduleResult = history.getGenContent().getGenStatus();
+        //현재 genResult + lastExecdt 만 입력 중
+        if(history.getStatus() == StatusFlagType.DONE){
+            scheduleResult.setGenResult(200L);
+        }
+        scheduleResult.setLastExecDt(new Date());
+        scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
+
+        logger.debug("{} finish : {}", scheduleResult.getJobSeq(), scheduleResult.getGenResult());
     }
 
     @Override
@@ -74,6 +89,19 @@ public abstract class AbstractReserveJob implements ReserveJob {
             scheduleHistory.setStatus(StatusFlagType.PROCESSING);
             scheduleHistory = jobContentService.updateGenContentHistory(scheduleHistory);
             logger.debug("start task jobseq : {}", history.getSeqNo());
+
+            //scheduleHistory에 해당하는 genStatus가 없는 경우 생성
+            GenStatus scheduleResult = scheduleHistory.getGenContent().getGenStatus();
+            if(scheduleResult == null){
+                scheduleResult = jobStatusService.insertGenStatus(scheduleHistory.getJobSeq());
+            }
+            //genStatus가 존재하는 경우 작업시작 전 작업실패 상태로 갱신 (에러발생 시 shutdown 되는 경우로 인해 완료 시 성공처리)
+            else{
+                scheduleResult.setGenResult(500L);
+                scheduleResult.setLastExecDt(new Date());
+                scheduleResult = jobStatusService.updateGenStatus(scheduleResult);
+            }
+
 
             // 각 예약 작업 처리
             invoke(scheduleHistory);

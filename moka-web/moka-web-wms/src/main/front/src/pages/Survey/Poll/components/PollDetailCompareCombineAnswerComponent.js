@@ -33,7 +33,7 @@ const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) =>
                         handleChangeValue(0, name, value, type);
                     }}
                 />
-                {(hasUrl || items[0].linkUrl) && (
+                {hasUrl && (
                     <MokaInput
                         name="linkUrl"
                         placeholder="url"
@@ -70,7 +70,7 @@ const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) =>
                         handleChangeValue(1, name, value, type);
                     }}
                 />
-                {(hasUrl || items[1].linkUrl) && (
+                {hasUrl && (
                     <MokaInput
                         name="linkUrl"
                         placeholder="url"

@@ -37,7 +37,7 @@ const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }
                 150 x 150
             </PollPhotoComponent>
             <div className="d-inline-flex flex-fill h-100 flex-column">
-                <div className="m-2">
+                <div className="ml-2 mb-2">
                     <MokaInput
                         name="title"
                         placeholder={`보기 ${index + 1} (20자 이내로 입력하세요)`}
@@ -48,8 +48,8 @@ const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }
                         }}
                     />
                 </div>
-                {(hasUrl || item.linkUrl) && (
-                    <div className="m-2">
+                {hasUrl && (
+                    <div className="ml-2 mb-2">
                         <MokaInput
                             name="linkUrl"
                             placeholder="url"

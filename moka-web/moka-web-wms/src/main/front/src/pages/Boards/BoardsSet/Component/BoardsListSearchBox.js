@@ -12,7 +12,7 @@ const BoardsListSearchBox = (props) => {
     const dispatch = useDispatch();
 
     // 공통 구분값 URL
-    const { pagePathName, boardType, search } = useSelector((store) => ({
+    const { pagePathName, boardType } = useSelector((store) => ({
         pagePathName: store.board.pagePathName,
         boardType: store.board.boardType,
         search: store.board.setmenu.search,
@@ -52,7 +52,18 @@ const BoardsListSearchBox = (props) => {
 
     useEffect(() => {
         // 최초 로딩후 store 에 search 옵션을 가지고 와서 검색 state 값 변경.
-        setSearchData(search);
+        // boardType store 에 boardType 데이터를 가지고 와서 각각 설정.
+        setSearchData({
+            ...initialState.setmenu.search,
+            boardType: boardType, // store 공통 구분값에서 보드 타입을 가지고 온다. (S: 서비스, A: 관리자)
+        });
+
+        dispatch(
+            changeSetMenuSearchOption({
+                ...initialState.setmenu.search,
+                boardType: boardType, // store 공통 구분값에서 보드 타입을 가지고 온다. (S: 서비스, A: 관리자)
+            }),
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

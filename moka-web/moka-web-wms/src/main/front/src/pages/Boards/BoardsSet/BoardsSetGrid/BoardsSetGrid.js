@@ -42,6 +42,7 @@ const BulkhHotClicAgGrid = () => {
 
     useEffect(() => {
         const setRowDataState = (element) => {
+            setRowData([]);
             setRowData(
                 element.map((data) => {
                     const { boardType } = selectItem;

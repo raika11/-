@@ -373,8 +373,6 @@ const BoardsEdit = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [boardInfoData]);
 
-    console.log(params);
-
     return (
         <MokaCard
             title={`게시판 ${params.boardId ? '수정' : '등록'}`}

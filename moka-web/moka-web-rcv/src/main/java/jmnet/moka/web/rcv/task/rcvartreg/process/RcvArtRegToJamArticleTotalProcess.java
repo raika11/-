@@ -13,6 +13,7 @@ import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
 import jmnet.moka.web.rcv.taskinput.DBTaskInputData;
 import jmnet.moka.web.rcv.util.RcvUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -26,6 +27,7 @@ import jmnet.moka.web.rcv.util.RcvUtil;
  * @author sapark
  * @since 2020-12-01 001 오후 6:19
  */
+@Slf4j
 public class RcvArtRegToJamArticleTotalProcess {
     public static JamArticleTotalVo getJamArticleTotalVo(Map<String, Object> map, RcvArtRegService rcvArtRegService,
             MokaRcvConfiguration rcvConfiguration, DBTaskInputData taskInputData) {
@@ -125,6 +127,9 @@ public class RcvArtRegToJamArticleTotalProcess {
             case "k2":
             case "61":
                 rcvArtRegService.getRcvArticleReporters(articleTotal );
+                break;
+            default:
+                log.trace(" RcvArtRegToJamArticleTotalProcess :: getJamArticleTotalVo no switch");
                 break;
         }
 

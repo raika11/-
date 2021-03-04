@@ -112,7 +112,7 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
             json = "recvResult={\"RECV_RESULT\": ".concat(json.replace("&#39;", "").concat("}"));
 
             log.info("{} {} 호출 시작", getTaskName(), jamApiUrl);
-            final String req = RcvUtil.SendUrlPostRequest( jamApiUrl, json );
+            final String req = RcvUtil.sendUrlPostRequest( jamApiUrl, json );
 
             boolean success = false;
             if(!McpString.isNullOrEmpty(req)) {

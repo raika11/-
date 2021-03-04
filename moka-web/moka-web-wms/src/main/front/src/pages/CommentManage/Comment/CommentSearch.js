@@ -132,7 +132,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                     </MokaInput>
                 </Col>
 
-                <Col xs={2} className="p-0 pr-2 d-flex">
+                <Col xs={3} className="p-0 pr-2 d-flex">
                     <MokaInput
                         as="dateTimePicker"
                         label="시작일"
@@ -193,7 +193,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                         <option value="cont">댓글 내용</option>
                     </MokaInput>
                 </Col>
-                <Col xs={5} className="p-0 d-flex">
+                <Col xs={4} className="p-0 d-flex">
                     <MokaSearchInput
                         value={searchData.keyword}
                         onChange={(e) => handleChangeSearchInput(e)}

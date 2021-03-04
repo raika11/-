@@ -51,7 +51,7 @@
       <thumb desc="썸네일존재" default="N">^[Y|N]{1}$</thumb>
       <total desc="총건수사용" default="Y">^[Y|N]{1}$</total>
     </parameter>
-    <request dmlType="sp" setNames="_DATA">dps.article.list</request>
+    <request dmlType="sp" setNames="_DATA,SOURCES">dps.article.list</request>
     <request type="script" resultName="_TOTAL">
       var result = $ac.getAllResult();
       result.get("PARAM_MAP").get("totalCount");

@@ -63,6 +63,7 @@ public class TaskGroup {
         try {
             nl = xu.getNodeList(doc, "//Task");
         } catch (XPathExpressionException ignore) {
+            log.trace("TaskGroup :: loadTask Exception" );
             return;
         }
 

@@ -125,8 +125,6 @@ public class GifDecoder {
         private int wh; // width * height
         private boolean hasLocColTbl; // Has local color table? 1 Bit
         private boolean interlaceFlag; // Is an interlace image? 1 Bit
-        @SuppressWarnings("unused")
-        private boolean sortFlag; // True if local colors are sorted, 1 Bit
         private int sizeOfLocColTbl; // Size of the local color table, 3 Bits
         private int[] localColTbl; // Local color table (optional)
         // Image data
@@ -144,16 +142,10 @@ public class GifDecoder {
         private int h; // Unsigned 16 Bit, least significant byte first
         private int wh; // Image width * image height
         public boolean hasGlobColTbl; // 1 Bit
-        public int colorResolution; // 3 Bits
-        public boolean sortFlag; // True if global colors are sorted, 1 Bit
         public int sizeOfGlobColTbl; // 2^(val(3 Bits) + 1), see spec
         public int bgColIndex; // Background color index, 1 Byte
-        public int pxAspectRatio; // Pixel aspect ratio, 1 Byte
         public int[] globalColTbl; // Global color table
         private final List<GifFrame> frames = new ArrayList<>(64);
-        public String appId = ""; // 8 Bytes at in[i+3], usually "NETSCAPE"
-        public String appAuthCode = ""; // 3 Bytes at in[i+11], usually "2.0"
-        public int repetitions = 0; // 0: infinite loop, N: number of loops
         private BufferedImage img = null; // Currently drawn frame
         @SuppressWarnings("FieldCanBeLocal")
         private int[] prevPx = null; // Previous frame's pixels
@@ -204,6 +196,7 @@ public class GifDecoder {
                     codes.add(prevValsAndK); // Previous indices + K
                 }
             } catch (final ArrayIndexOutOfBoundsException ignore) {
+                return out;
             }
             return out;
         }
@@ -287,7 +280,7 @@ public class GifDecoder {
          *            Index of the current frame, 0 to N-1
          * @return 32 bit ARGB color in the form 0xAARRGGBB
          */
-        public final int getBackgroundColor() {
+        public int getBackgroundColor() {
             final GifFrame frame = frames.get(0);
             if (frame.hasLocColTbl) {
                 return frame.localColTbl[bgColIndex];
@@ -305,7 +298,7 @@ public class GifDecoder {
          *            Index of the current frame, 0 to N-1
          * @return Delay as number of hundredths (1/100) of a second
          */
-        public final int getDelay(final int index) {
+        public int getDelay(final int index) {
             return frames.get(index).delay;
         }
 
@@ -321,7 +314,7 @@ public class GifDecoder {
          *            is more or less O(0) to retrieve it from the list.
          * @return A BufferedImage for the specified frame.
          */
-        public final BufferedImage getFrame(final int index) {
+        public BufferedImage getFrame(final int index) {
             if (img == null) { // Init
                 img = new BufferedImage(w, h, 2); // 2 = ARGB
                 g = img.createGraphics();
@@ -343,21 +336,21 @@ public class GifDecoder {
         /**
          * @return The number of frames contained in this GIF image
          */
-        public final int getFrameCount() {
+        public int getFrameCount() {
             return frames.size();
         }
 
         /**
          * @return The height of the GIF image
          */
-        public final int getHeight() {
+        public int getHeight() {
             return h;
         }
 
         /**
          * @return The width of the GIF image
          */
-        public final int getWidth() {
+        public int getWidth() {
             return w;
         }
     }
@@ -469,14 +462,11 @@ public class GifDecoder {
      * @return Index of the first byte after this extension
      */
     static int readAppExt(final GifImage img, final byte[] in, int i) {
-        img.appId = new String(in, i + 3, 8); // should be "NETSCAPE"
-        img.appAuthCode = new String(in, i + 11, 3); // should be "2.0"
         i += 14; // Go to sub-block size, it's value should be 3
         final int subBlockSize = in[i] & 0xFF;
         // The only app extension widely used is NETSCAPE, it's got 3 data bytes
         if (subBlockSize == 3) {
             // in[i+1] should have value 01, in[i+5] should be block terminator
-            img.repetitions = in[i + 2] & 0xFF | in[i + 3] & 0xFF << 8; // Short
             return i + 5;
         } // Skip unknown application extensions
         while ((in[i] & 0xFF) != 0) { // While sub-block size != 0
@@ -625,7 +615,6 @@ public class GifDecoder {
         final byte b = in[++i]; // Byte 9 is a packed byte
         fr.hasLocColTbl = (b & 0b10000000) >>> 7 == 1; // Bit 7
         fr.interlaceFlag = (b & 0b01000000) >>> 6 == 1; // Bit 6
-        fr.sortFlag = (b & 0b00100000) >>> 5 == 1; // Bit 5
         final int colTblSizePower = (b & 7) + 1; // Bits 2-0
         fr.sizeOfLocColTbl = 1 << colTblSizePower; // 2^(N+1), As per the spec
         return ++i;
@@ -638,12 +627,9 @@ public class GifDecoder {
         final byte b = in[i + 4]; // Byte 4 is a packed byte
         img.hasGlobColTbl = (b & 0b10000000) >>> 7 == 1; // Bit 7
         final int colResPower = ((b & 0b01110000) >>> 4) + 1; // Bits 6-4
-        img.colorResolution = 1 << colResPower; // 2^(N+1), As per the spec
-        img.sortFlag = (b & 0b00001000) >>> 3 == 1; // Bit 3
         final int globColTblSizePower = (b & 7) + 1; // Bits 0-2
         img.sizeOfGlobColTbl = 1 << globColTblSizePower; // 2^(N+1), see spec
         img.bgColIndex = in[i + 5] & 0xFF; // 1 Byte
-        img.pxAspectRatio = in[i + 6] & 0xFF; // 1 Byte
         return i + 7;
     }
 

@@ -88,11 +88,13 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
         try {
             mapListIlg = mapList.stream().filter( a -> RcvUtil.getMapStringData(a, "SITE_CD").equals("ILG")).collect(Collectors.toList());
         }catch (Exception ignore){
+            log.trace("CallJamApiTask :: doProcess Exception" );
         }
 
         try {
             mapListJai = mapList.stream().filter( a -> !RcvUtil.getMapStringData(a, "SITE_CD").equals("ILG") ).collect(Collectors.toList());
         }catch (Exception ignore){
+            log.trace("CallJamApiTask :: doProcess 2 Exception" );
         }
 
         doProcessSendJamApi( rcvConfiguration.getJamApiUrlIlg(), mapListIlg );
@@ -110,7 +112,7 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
             json = "recvResult={\"RECV_RESULT\": ".concat(json.replace("&#39;", "").concat("}"));
 
             log.info("{} {} 호출 시작", getTaskName(), jamApiUrl);
-            final String req = RcvUtil.SendUrlPostRequest( jamApiUrl, json );
+            final String req = RcvUtil.sendUrlPostRequest( jamApiUrl, json );
 
             boolean success = false;
             if(!McpString.isNullOrEmpty(req)) {

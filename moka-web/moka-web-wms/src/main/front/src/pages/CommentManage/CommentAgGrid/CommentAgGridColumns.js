@@ -79,7 +79,7 @@ export const columnDefs = [
         headerName: '상태',
         field: 'statusText',
         tooltipField: 'statusText',
-        width: 60,
+        width: 80,
         cellStyle: { display: 'flex', alignItems: 'center' },
     },
     {

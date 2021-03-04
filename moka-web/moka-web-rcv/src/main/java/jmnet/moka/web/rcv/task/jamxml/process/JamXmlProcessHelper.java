@@ -16,6 +16,7 @@ import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
 import jmnet.moka.web.rcv.util.FtpUtil;
 import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -30,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author sapark
  * @since 2020-12-04 004 오후 2:41
  */
+@Slf4j
 public class JamXmlProcessHelper {
     static public boolean doProcess_StarImage(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo jamArticleTotalVo,
             TaskManager taskManager, JamXmlService jamXmlService)
@@ -124,6 +126,9 @@ public class JamXmlProcessHelper {
                     }
                 }
             }
+            default:
+                log.trace(" JamXmlProcessHelper :: doProcess_ItemsPreprocess no switch");
+                break;
         }
     }
 

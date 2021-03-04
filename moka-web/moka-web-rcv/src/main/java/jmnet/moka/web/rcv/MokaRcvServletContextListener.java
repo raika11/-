@@ -6,6 +6,7 @@ import jmnet.moka.core.common.logger.ActionLogger;
 import jmnet.moka.core.common.logger.LoggerCodes;
 import jmnet.moka.web.rcv.code.OpCode;
 import jmnet.moka.web.rcv.task.base.TaskManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
  * @author sapark
  * @since 2020-10-27 027 오전 11:42
  */
+@Slf4j
 @Component
 public class MokaRcvServletContextListener implements ServletContextListener {
     private final ActionLogger actionLogger;
@@ -42,8 +44,8 @@ public class MokaRcvServletContextListener implements ServletContextListener {
 
         try {
             taskManager.operation(OpCode.start);
-        } catch (InterruptedException e) {
-            // no operation
+        } catch (InterruptedException ignore) {
+            log.trace("MokaRcvServletContextListener :: contextInitialized Exception" );
         }
     }
 
@@ -52,8 +54,8 @@ public class MokaRcvServletContextListener implements ServletContextListener {
 
         try {
             taskManager.operation(OpCode.stop);
-        } catch (InterruptedException e) {
-            // no operation
+        } catch (InterruptedException ignore) {
+            log.trace("MokaRcvServletContextListener :: contextDestroyed Exception" );
         }
         actionLogger.success("SYSTEM", LoggerCodes.ActionType.SHUTDOWN, System.currentTimeMillis() - startTime);
     }

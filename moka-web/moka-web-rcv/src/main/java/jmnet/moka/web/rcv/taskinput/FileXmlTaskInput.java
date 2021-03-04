@@ -251,6 +251,7 @@ public class FileXmlTaskInput<P, C> extends TaskInput {
                             path.toString()));
                 }
             } catch (IOException ignore) {
+                log.trace("FileXmlTaskInput :: processMonitor Exception" );
             }
 
             if( !alert)

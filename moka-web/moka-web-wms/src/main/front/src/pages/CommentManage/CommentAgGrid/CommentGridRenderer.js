@@ -93,9 +93,9 @@ export const DeleteButtonRenderer = (props) => {
                     </Dropdown>
                 </MokaOverlayTooltipButton>
             ) : (
-                <MokaOverlayTooltipButton tooltipText="복구" variant="white" className="p-0" onClick={() => handleClickRestore()}>
-                    {` 복구 `}
-                </MokaOverlayTooltipButton>
+                <Button variant="outline-table-btn" className="mr-2" size="sm" onClick={() => handleClickRestore()}>
+                    복구
+                </Button>
             )}
             <CommentActionModal
                 ModalUsage={modalUsage}

@@ -35,7 +35,7 @@ public interface DeskingMapper extends BaseMapper<DeskingWorkVO, DeskingWorkSear
     /**
      * 예약편집기사를 서비스에 등록
      *
-     * @param param componentSeq 컴포넌트순번, regId: 작업자ID
+     * @param param componentSeq 컴포넌트순번
      */
     void excuteReserve(Map<String, Object> param);
 }

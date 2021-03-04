@@ -95,6 +95,7 @@ public class TaskManager {
                 return load(xu.getDocument(ResourceMapper.getResouerceResolver().getResource(envFile)), xu);
             }
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException ignored) {
+            log.trace("TaskManager :: loadEnvFile Exception" );
         }
         log.error("TaskManager Can't Load Env File {}", envFile);
 

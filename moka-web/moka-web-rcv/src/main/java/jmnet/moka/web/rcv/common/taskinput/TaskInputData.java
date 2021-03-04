@@ -8,6 +8,7 @@ import java.util.List;
 import jmnet.moka.web.rcv.util.RcvFileUtil;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -23,6 +24,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Slf4j
 public abstract class TaskInputData {
     private boolean isSuccess = false;
     private List<String> tempFileList = new ArrayList<>();
@@ -38,8 +40,8 @@ public abstract class TaskInputData {
         for( String fileName : this.tempFileList ) {
             try {
                 Files.deleteIfExists(Path.of(fileName));
-            } catch (IOException e) {
-                // no
+            } catch (IOException ignore) {
+                log.trace("TaskInputData :: deleteTempFiles Exception" );
             }
         }
         tempFileList.clear();

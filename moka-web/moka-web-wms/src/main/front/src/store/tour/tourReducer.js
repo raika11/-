@@ -1,8 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import * as act from './tourAction';
-import { DB_DATEFORMAT, PAGESIZE_OPTIONS } from '@/constants';
-import moment from 'moment';
+import { PAGESIZE_OPTIONS } from '@/constants';
 
 /**
  * initialState
@@ -19,8 +18,8 @@ export const initialState = {
         page: 0,
         size: PAGESIZE_OPTIONS[0],
         sort: 'tourSeq,desc',
-        startTourDay: moment().startOf('day').subtract(1, 'year').format(DB_DATEFORMAT),
-        endTourDay: moment().endOf('day').format(DB_DATEFORMAT),
+        startTourDay: '',
+        endTourDay: '',
         keyword: '',
     },
     tourApply: {},

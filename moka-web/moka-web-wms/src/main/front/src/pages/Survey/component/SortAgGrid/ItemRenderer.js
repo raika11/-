@@ -84,7 +84,7 @@ const ItemRenderer = ({ value }) => {
                         <Row className="d-felx">
                             <MokaInputLabel
                                 name="title"
-                                id="title"
+                                id={`title-${editData.id}`}
                                 label="타이틀"
                                 onChange={(e) => handleChangeValue(e)}
                                 labelWidth={30}
@@ -95,7 +95,7 @@ const ItemRenderer = ({ value }) => {
                         <Row className="d-felx">
                             <MokaInputLabel
                                 name="linkUrl"
-                                id="linkUrl"
+                                id={`linkUrl-${editData.id}`}
                                 label="url"
                                 onChange={(e) => handleChangeValue(e)}
                                 labelWidth={30}
@@ -103,7 +103,7 @@ const ItemRenderer = ({ value }) => {
                                 className="col mb-0 pl-0 pr-0"
                             />
                             <Col className="d-felx mb-0 pl-1 pr-0" xs={2}>
-                                <MokaInput as="select" name="linkTarget" id="linkTarget" value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
+                                <MokaInput as="select" name="linkTarget" id={`linkTarget-${editData.id}`} value={editData.linkTarget} onChange={(e) => handleChangeValue(e)}>
                                     <option value="S">본창</option>
                                     <option value="N">새창</option>
                                 </MokaInput>

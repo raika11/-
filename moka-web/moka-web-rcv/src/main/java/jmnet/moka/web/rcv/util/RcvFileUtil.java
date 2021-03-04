@@ -17,6 +17,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.exception.RcvException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -30,6 +31,7 @@ import jmnet.moka.web.rcv.exception.RcvException;
  * @author sapark
  * @since 2020-11-05 005 오전 10:49
  */
+@Slf4j
 public class RcvFileUtil {
     public static String readFile( Path path, Charset encoding)
             throws IOException {
@@ -48,6 +50,7 @@ public class RcvFileUtil {
 
             return Charset.forName(xmlStreamReader.getCharacterEncodingScheme());
         } catch (Exception ignore) {
+            log.trace("RcvFileUtil :: getFromXml Exception" );
         }
         finally {
             if( xmlStreamReader != null ) {
@@ -90,7 +93,6 @@ public class RcvFileUtil {
         return false;
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void moveFileToDateDir(File file, String targetDir, String dateStr)
             throws RcvException {
         if (McpString.isNullOrEmpty(targetDir)) {
@@ -113,7 +115,10 @@ public class RcvFileUtil {
         try {
             Files.move(sourcePath, targetFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            file.delete();
+            if( !file.delete() ){
+                throw new RcvException(String.format("파일 이동 중에 에러가 발생하였습니다., 파일을 삭제할 수 없습니다. [%s]->[%s] %s", sourcePath, targetFile, e.getMessage()));
+            }
+
             e.printStackTrace();
             throw new RcvException(String.format("파일 이동 중에 에러가 발생하였습니다. [%s]->[%s] %s", sourcePath, targetFile, e.getMessage()));
         }
@@ -145,7 +150,6 @@ public class RcvFileUtil {
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static String getTempFileName(String tempDir) {
         if (!createDirectories(tempDir)) {
             return null;
@@ -154,7 +158,8 @@ public class RcvFileUtil {
         try {
             File f = File.createTempFile("rcv",null, new File(tempDir));
             String filename = f.getAbsolutePath();
-            f.delete();
+            if( !f.delete())
+                log.trace("RcvFileUtil::getTempFileName file delete Error");
             return filename;
         } catch (IOException e) {
             return null;

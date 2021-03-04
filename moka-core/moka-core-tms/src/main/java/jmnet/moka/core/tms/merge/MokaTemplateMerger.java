@@ -76,7 +76,7 @@ public class MokaTemplateMerger implements TemplateMerger<MergeItem> {
     protected Template wrapItemStart;
     protected Template wrapItemEnd;
     protected Template htmlWrap;
-    private GenericApplicationContext appContext;
+    protected GenericApplicationContext appContext;
     protected String domainId;
     protected Template highlightTemplate;
     protected String highlightJsPath;

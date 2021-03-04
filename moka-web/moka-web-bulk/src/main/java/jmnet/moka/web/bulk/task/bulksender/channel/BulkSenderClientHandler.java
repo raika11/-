@@ -140,8 +140,8 @@ public class BulkSenderClientHandler implements Runnable{
                     break;
                 Thread.sleep(sleepTimer);
             }
-        } catch (Exception ex2) {
-            // do nothing
+        } catch (Exception ignore) {
+            log.trace(" BulkSenderClientHandler :: sleep Exception" );
         }
     }
 

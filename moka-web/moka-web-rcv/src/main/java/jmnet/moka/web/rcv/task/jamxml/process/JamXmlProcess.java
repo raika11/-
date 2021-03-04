@@ -7,6 +7,7 @@ import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -20,6 +21,7 @@ import jmnet.moka.web.rcv.taskinput.FileXmlTaskInputData;
  * @author sapark
  * @since 2020-12-04 004 오후 4:07
  */
+@Slf4j
 public class JamXmlProcess {
     public static void doProcess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData, JamArticleTotalVo articleTotal, TaskManager taskManager)
             throws RcvDataAccessException {
@@ -37,6 +39,9 @@ public class JamXmlProcess {
                 doProcess_InsertUpdate( taskInputData, articleTotal, taskManager );
                 break;
             }
+            default:
+                log.trace(" JamXmlProcess :: doProcess no switch");
+                break;
         }
     }
 

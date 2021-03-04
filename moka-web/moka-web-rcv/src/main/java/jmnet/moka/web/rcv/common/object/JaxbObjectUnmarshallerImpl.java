@@ -54,7 +54,7 @@ public class JaxbObjectUnmarshallerImpl<T> implements JaxbObjectUnmarshaller {
                 if( xsr != null )
                     xsr.close();
             }catch (Exception ignore){
-
+                log.trace("JaxbObjectUnmarshallerImpl :: getBasicVoFromXml Exception" );
             }
             throw new XMLStreamException(e);
         }

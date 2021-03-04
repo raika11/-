@@ -79,8 +79,8 @@ public class RcvImageUtil {
                 if (is != null) {
                     is.close();
                 }
-            } catch (IOException e) {
-                // no
+            } catch (IOException ignore) {
+                log.trace("RcvImageUtil :: downloadImage Exception" );
             }
         }
     }

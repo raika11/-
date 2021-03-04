@@ -39,10 +39,12 @@ const propTypes = {
     totalId: PropTypes.string,
     /**
      * 크롭Height 기본값
+     * @default
      */
     cropHeight: PropTypes.number,
     /**
      * 크롭Width 기본값
+     * @default
      */
     cropWidth: PropTypes.number,
     /**
@@ -60,7 +62,10 @@ const propTypes = {
      */
     apply: PropTypes.func,
 };
-const defaultProps = {};
+const defaultProps = {
+    cropHeight: 300,
+    cropWidth: 300,
+};
 
 /**
  * 포토아카이브 + 대표이미지 편집 모달
@@ -169,7 +174,7 @@ const EditThumbModal = (props) => {
                     },
                 });
             },
-            { cropWidth: 300, cropHeight: 300 },
+            { cropWidth, cropHeight },
         );
     };
 
@@ -177,7 +182,6 @@ const EditThumbModal = (props) => {
      * 모달의 적용 버튼
      */
     const handleClickSave = () => {
-        debugger;
         if (repImg.dataType === 'article') {
             apply(repImg.imageOnlnPath);
             handleHide();

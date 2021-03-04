@@ -209,7 +209,7 @@ const TourListEdit = ({ match }) => {
                     </div>
                     <div style={{ width: 120 }}>
                         <MokaInput as="select" name="tourTime" value={temp.tourTime} onChange={handleChangeValue}>
-                            <option value="10">오전 10시</option>
+                            <option value="10">오전 10시 30분</option>
                             <option value="14">오후 2시</option>
                         </MokaInput>
                     </div>

@@ -199,6 +199,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
                             sb.append( String.format(", [%s] 생성된 기사 %s 대기 !!", McpDate.dateStr(new Date(tmCreate.toMillis()), McpDate.DATETIME_FORMAT), path.toString() ) );
                         }
                     } catch (IOException ignore) {
+                        log.trace(" BulkSenderTask :: processMonitor Exception" );
                     }
                 }
                 if( alert ) {

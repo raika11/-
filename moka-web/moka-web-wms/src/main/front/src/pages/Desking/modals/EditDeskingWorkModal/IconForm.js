@@ -8,7 +8,7 @@ import { MokaInputLabel } from '@components';
 /**
  * 아이콘 폼
  */
-const IconForm = ({ show, temp, setTemp, onChange }) => {
+const IconForm = ({ show, temp, onChange }) => {
     const dispatch = useDispatch();
     const { dsIconRows } = useSelector(({ codeMgt }) => codeMgt);
 

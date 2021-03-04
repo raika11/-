@@ -51,7 +51,7 @@ const defaultProps = {
 };
 
 /**
- * 데스킹 기사정보 편집 모달 컴포넌트
+ * 데스킹 기사정보 편집 모달
  */
 const EditDeskingWorkModal = (props) => {
     const { show, onHide, deskingWorkData, component, onSave, deskingPart, isDummy } = props;
@@ -197,6 +197,7 @@ const EditDeskingWorkModal = (props) => {
             footerClassName="d-flex justify-content-center"
             bodyClassName="custom-scroll"
             loading={loading}
+            draggable
             id={`cid-${deskingWorkData.contentId}`}
         >
             {parts.map((partKey) => {

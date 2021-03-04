@@ -92,7 +92,7 @@ const MessageSettings = ({ displayName }) => {
                 title="견학 메시지 설정"
                 footer
                 footerButtons={[
-                    { text: '저장', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
+                    { text: '수정', variant: 'positive', className: 'mr-1', onClick: handleClickSave },
                     { text: '취소', variant: 'negative', onClick: handleClickCancel },
                 ]}
                 footerClassName="justify-content-center"

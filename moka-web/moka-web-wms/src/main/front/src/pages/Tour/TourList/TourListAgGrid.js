@@ -55,17 +55,13 @@ const TourListAgGrid = ({ match }) => {
     );
 
     useEffect(() => {
-        if (list.length > 0) {
-            setRowData(
-                list.map((data) => ({
-                    ...data,
-                    tourDate: (data.tourDate || '').substr(0, 10),
-                    regDt: data.regDt ? moment(data.regDt).format(BASIC_DATEFORMAT) : '',
-                })),
-            );
-        } else {
-            setRowData([]);
-        }
+        setRowData(
+            list.map((data) => ({
+                ...data,
+                tourDate: data.tourDate?.substr(0, 10),
+                regDt: data.regDt ? moment(data.regDt).format(BASIC_DATEFORMAT) : '',
+            })),
+        );
     }, [list]);
 
     return (

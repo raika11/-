@@ -37,8 +37,8 @@ public class FileXmlTaskInputData<P, C> extends TaskInputData {
             this.totalData = parentObjectType
                     .getDeclaredConstructor(objectType)
                     .newInstance(data);
-        } catch (Exception e) {
-            // no
+        } catch (Exception ignore) {
+            log.trace(" FileXmlTaskInputData :: FileXmlTaskInputData Exception" );
         }
         this.taskInput = taskInput;
     }

@@ -6,6 +6,7 @@ import jmnet.moka.web.bulk.task.bulkdump.env.BulkDumpEnv;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -19,6 +20,7 @@ import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
  * @author sapark
  * @since 2020-12-28 028 오전 9:31
  */
+@Slf4j
 public abstract class BulkProcessCommon<T> extends BulkProcess {
     public BulkProcessCommon(BulkDumpEnv bulkDumpEnv) {
         super(bulkDumpEnv);
@@ -41,6 +43,10 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
             case "I":
             case "U":
                 result = doProcess_InsertUpdate( totalVo, newArticle, bulkDumpTask, dumpService );
+                break;
+            default:
+                log.trace(" BulkProcessCommon :: doProcess no switch");
+                break;
         }
         if(result != BulkDumpResult.SUCCESS)
             return result;

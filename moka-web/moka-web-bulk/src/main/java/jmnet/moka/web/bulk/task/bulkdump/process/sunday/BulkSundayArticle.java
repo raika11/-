@@ -94,6 +94,9 @@ public class BulkSundayArticle extends BulkArticle {
                 case "W5" : strSectionCode = "T"; break;
                 case "W6" : strSectionCode = "V"; break;
                 case "W7" : strSectionCode = "U"; break;
+                default:
+                    log.trace(" BulkSundayArticle :: processBulkDumpNewsVo no switch");
+                    break;
             }
             String myun = newsVo.getMyun();
             if(myun.charAt(0) == '0') {

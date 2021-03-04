@@ -92,8 +92,9 @@ public class BulkSenderClientHandler implements Runnable{
                                 BulkStringUtil.format("{} Bulk Sender Start {}", bulkDumpJob.getCpName(), f.getName()));
 
                         if( doBulkFtpSend( totalVo ) ) {
-                            //noinspection ResultOfMethodCallIgnored
-                            f.delete();
+                            if( !f.delete() ){
+                                log.trace(" BulkSenderClientHandler :: run file Delete failed");
+                            }
                             insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Complete,
                                     BulkStringUtil.format("{} Bulk Sender End {}", bulkDumpJob.getCpName(), f.getName()));
                             lastSuccessDate = new Date();
@@ -108,7 +109,11 @@ public class BulkSenderClientHandler implements Runnable{
                         slackMessageService.sendSms("BulkSenderClient Exception", BulkStringUtil.format("BulkSenderClientHandler Exception [{}] {} {}", bulkDumpEnvCP.getName(), f.getName(), e.getMessage()));
                     }
                 }
-            } catch (Exception e) {
+            } catch (RuntimeException e ){
+                log.error("BulkSenderClientHandler RuntimeException {}", e.getMessage());
+                e.printStackTrace();
+            }
+            catch (Exception e) {
                 log.error("BulkSenderClientHandler Exception {}", e.getMessage());
                 e.printStackTrace();
             }

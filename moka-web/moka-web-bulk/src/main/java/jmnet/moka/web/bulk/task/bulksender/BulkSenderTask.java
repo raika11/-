@@ -131,8 +131,9 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
                         continue;
 
                     BulkFileUtil.deleteFolder( dumpJobTotal.getSourceDir() );
-                    //noinspection ResultOfMethodCallIgnored
-                    f.delete();
+                    if( !f.delete() ){
+                        log.trace(" BulkSenderTask :: doProcess file Delete failed");
+                    }
 
                     bulkSenderService.insertBulkLog( new TotalVo<>(dumpJobTotal),
                             BulkStringUtil.format("Bulk Clean seqNo=[{}] totalId=[{}]", dumpJobTotal.getSeqNo(), dumpJobTotal.getTotalId()) );

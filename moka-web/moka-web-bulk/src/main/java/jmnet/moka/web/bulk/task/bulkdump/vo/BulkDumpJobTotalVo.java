@@ -111,8 +111,6 @@ public class BulkDumpJobTotalVo implements Serializable {
 
     public boolean exportDumpJob(BulkDumpEnvCP dumpEnvCP, BulkDumpJobVo dumpJob, ObjectMapper mapper) {
         final String jobFile = Paths.get(dumpEnvCP.getDir(), getBulkJobFileName("json")).toString();
-        if( jobFile == null )
-            return false;
         try {
             mapper.writeValue( new File(jobFile), dumpJob );
             dumpJob.setJobFileName(jobFile);
@@ -125,8 +123,6 @@ public class BulkDumpJobTotalVo implements Serializable {
 
     public BulkDumpResult exportDumpJobTotal(String dumpEnvCP, ObjectMapper mapper) {
         final String jobFile = Paths.get(dumpEnvCP, getBulkJobFileName("json")).toString();
-        if( jobFile == null )
-            return BulkDumpResult.FAIL_DUMP_CP_TOTAL;
         try {
             mapper.writeValue( new File(jobFile), this );
         } catch (IOException ignore) {

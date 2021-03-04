@@ -138,7 +138,6 @@ public class GifDecoder {
         private BufferedImage img; // Full drawn image, not just the frame area
     }
 
-    @Slf4j
     @SuppressWarnings("unused")
     public final class GifImage {
         public String header; // Bytes 0-5, GIF87a or GIF89a
@@ -206,7 +205,7 @@ public class GifDecoder {
                     codes.add(prevValsAndK); // Previous indices + K
                 }
             } catch (final ArrayIndexOutOfBoundsException ignore) {
-                log.trace("GifImage :: GifImage Exception" );
+                return out;
             }
             return out;
         }

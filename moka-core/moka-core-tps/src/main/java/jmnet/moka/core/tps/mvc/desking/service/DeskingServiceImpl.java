@@ -1257,16 +1257,16 @@ public class DeskingServiceImpl implements DeskingService {
     }
 
     @Override
-    public void excuteReserve(Long componentSeq, String regId)
+    public void excuteReserve(Long componentSeq)
             throws Exception {
         // 1. component,desking 업데이트
         Long datasetSeq = (long) 0;
         Map<String, Object> param = new HashMap<>();
         param.put("componentSeq", componentSeq);
-        param.put("regId", regId);
+        param.put("datasetSeq", datasetSeq);
         deskingMapper.excuteReserve(param);
         if ((int) param.get("datasetSeq") == 0) {
-            throw new Exception("FAIL UPDATE");
+            throw new Exception("FAIL RESERVE EXCUTE");
         } else {
             String str = String.valueOf(param.get("datasetSeq"));
             datasetSeq = Long.parseLong(str);

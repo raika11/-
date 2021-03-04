@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -289,7 +288,7 @@ public class GifDecoder {
          *            Index of the current frame, 0 to N-1
          * @return 32 bit ARGB color in the form 0xAARRGGBB
          */
-        public final int getBackgroundColor() {
+        public int getBackgroundColor() {
             final GifFrame frame = frames.get(0);
             if (frame.hasLocColTbl) {
                 return frame.localColTbl[bgColIndex];
@@ -307,7 +306,7 @@ public class GifDecoder {
          *            Index of the current frame, 0 to N-1
          * @return Delay as number of hundredths (1/100) of a second
          */
-        public final int getDelay(final int index) {
+        public int getDelay(final int index) {
             return frames.get(index).delay;
         }
 
@@ -323,7 +322,7 @@ public class GifDecoder {
          *            is more or less O(0) to retrieve it from the list.
          * @return A BufferedImage for the specified frame.
          */
-        public final BufferedImage getFrame(final int index) {
+        public BufferedImage getFrame(final int index) {
             if (img == null) { // Init
                 img = new BufferedImage(w, h, 2); // 2 = ARGB
                 g = img.createGraphics();
@@ -345,21 +344,21 @@ public class GifDecoder {
         /**
          * @return The number of frames contained in this GIF image
          */
-        public final int getFrameCount() {
+        public int getFrameCount() {
             return frames.size();
         }
 
         /**
          * @return The height of the GIF image
          */
-        public final int getHeight() {
+        public int getHeight() {
             return h;
         }
 
         /**
          * @return The width of the GIF image
          */
-        public final int getWidth() {
+        public int getWidth() {
             return w;
         }
     }

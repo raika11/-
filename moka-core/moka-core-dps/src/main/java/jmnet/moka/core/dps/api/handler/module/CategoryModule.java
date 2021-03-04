@@ -31,8 +31,8 @@ public class CategoryModule implements ModuleInterface {
     public Object invoke(ApiContext apiContext)
             throws Exception {
         Map<String, Object> paramMap = apiContext.getCheckedParamMap();
-        return categoryParser.getCategoryList((String)paramMap.get(MokaConstants.MASTER_CODE_LIST),
-                (String)paramMap.get(MokaConstants.SERVICE_CODE_LIST),(String)paramMap.get(MokaConstants.SOURCE_CODE_LIST) );
+        return categoryParser.getCategoryList((String)paramMap.get(MokaConstants.CATEGORY_MASTER_CODE_LIST),
+                (String)paramMap.get(MokaConstants.CATEGORY_SERVICE_CODE_LIST),(String)paramMap.get(MokaConstants.CATEGORY_SOURCE_CODE_LIST) );
     }
 
     public List<Category> getCategoryList(String masterCodes, String serviceCodes, String sourceCodes) {
@@ -58,10 +58,11 @@ public class CategoryModule implements ModuleInterface {
         Map<String,String> result = new HashMap<>();
         if ( category != null) {
             result.put(MokaConstants.PARAM_CATEGORY, category.getKey());
-            result.put(MokaConstants.MASTER_CODE_LIST, String.join(",", category.getMasterCodeList()));
-            result.put(MokaConstants.SERVICE_CODE_LIST, String.join(",", category.getServiceCodeList()));
-            result.put(MokaConstants.SOURCE_CODE_LIST, String.join(",", category.getSourceCodeList()));
-            result.put(MokaConstants.EXCEPT_SOURCE_CODE_LIST, String.join(",", category.getExceptSourceCodeList()));
+            result.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, String.join(",", category.getMasterCodeList()));
+            result.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, String.join(",", category.getServiceCodeList()));
+            result.put(MokaConstants.CATEGORY_SOURCE_CODE_LIST, String.join(",", category.getSourceCodeList()));
+            result.put(MokaConstants.CATEGORY_EXCEPT_SOURCE_CODE_LIST, String.join(",", category.getExceptSourceCodeList()));
+            result.put(MokaConstants.CATEGORY_TERM, String.join(",", category.getTerm()));
         }
         return result;
     }

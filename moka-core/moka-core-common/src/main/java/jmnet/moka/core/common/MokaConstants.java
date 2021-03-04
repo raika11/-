@@ -176,10 +176,11 @@ public class MokaConstants {
     public static final String DELETE = McpString.DELETE;
 
     /* codes for service & parameter */
-    public static final String MASTER_CODE_LIST = "masterCode";
-    public static final String SERVICE_CODE_LIST = "serviceCode";
-    public static final String SOURCE_CODE_LIST = "sourceCode";
-    public static final String EXCEPT_SOURCE_CODE_LIST = "exSourceCode";
+    public static final String CATEGORY_MASTER_CODE_LIST = "masterCode";
+    public static final String CATEGORY_SERVICE_CODE_LIST = "serviceCode";
+    public static final String CATEGORY_SOURCE_CODE_LIST = "sourceCode";
+    public static final String CATEGORY_EXCEPT_SOURCE_CODE_LIST = "exSourceCode";
+    public static final String CATEGORY_TERM = "term";
 
     /* page service name regx */
     public static final String DIRECT_LINK_SERVICE_NAME_PATTERN = "/(http(s)?:\\/\\/)([a-z0-9\\w]+\\.*)+[a-z0-9]{2,4}/gi";

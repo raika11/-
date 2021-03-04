@@ -263,9 +263,9 @@ public class ArticleView extends AbstractView {
         String serviceCode = functions.joinColumn((List<Map<String, Object>>) articleInfo.get("servicemap"), "SERVICE_CODE");
         String sourceCode = (String) ((Map<String, Object>) articleInfo.get("basic")).get("SOURCE_CODE");
         Map<String, Object> codesParam = new HashMap<>();
-        codesParam.put(MokaConstants.MASTER_CODE_LIST, masterCode);
-        codesParam.put(MokaConstants.SERVICE_CODE_LIST, serviceCode);
-        codesParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
+        codesParam.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, masterCode);
+        codesParam.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, serviceCode);
+        codesParam.put(MokaConstants.CATEGORY_SOURCE_CODE_LIST, sourceCode);
         JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.MENU_CODES, codesParam, true);
         Map<String, Object> map = jsonResult.getData();
         Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);

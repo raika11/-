@@ -68,9 +68,9 @@ public class MenuModule implements ModuleInterface {
 
     public Object getMenuByCodes(ApiContext apiContext) throws Exception {
         Map<String, Object> paramMap = apiContext.getCheckedParamMap();
-        String masterCodes = (String)paramMap.get(MokaConstants.MASTER_CODE_LIST);
-        String serviceCodes = (String)paramMap.get(MokaConstants.SERVICE_CODE_LIST);
-        String sourceCodes = (String)paramMap.get(MokaConstants.SOURCE_CODE_LIST);
+        String masterCodes = (String)paramMap.get(MokaConstants.CATEGORY_MASTER_CODE_LIST);
+        String serviceCodes = (String)paramMap.get(MokaConstants.CATEGORY_SERVICE_CODE_LIST);
+        String sourceCodes = (String)paramMap.get(MokaConstants.CATEGORY_SOURCE_CODE_LIST);
         CategoryModule categoryModule = (CategoryModule) moduleRequestHandler.getModule(CategoryModule.class.getName());
         List<Category> categoryList = categoryModule.getCategoryList(masterCodes,serviceCodes, sourceCodes);
         Map<String, Object> returnMap = new HashMap<>();

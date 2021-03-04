@@ -27,8 +27,6 @@ import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
 import org.apache.commons.jexl3.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Env;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -289,9 +287,9 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         String serviceCode = MOKA_FUNCTIONS.joinColumn((List<Map<String, Object>>) articleInfo.get("servicemap"), "SERVICE_CODE");
         String sourceCode = (String) ((Map<String, Object>) articleInfo.get("basic")).get("SOURCE_CODE");
         Map<String, Object> codesParam = new HashMap<>();
-        codesParam.put(MokaConstants.MASTER_CODE_LIST, masterCode);
-        codesParam.put(MokaConstants.SERVICE_CODE_LIST, serviceCode);
-        codesParam.put(MokaConstants.SOURCE_CODE_LIST, sourceCode);
+        codesParam.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, masterCode);
+        codesParam.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, serviceCode);
+        codesParam.put(MokaConstants.CATEGORY_SOURCE_CODE_LIST, sourceCode);
         JSONResult jsonResult = loader.getJSONResult("menu.codes", codesParam, true);
         Map<String, Object> map = jsonResult.getData();
         Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);

@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 
 const DropdownToggle = forwardRef(({ onClick, id }, ref) => {
     return (
-        <div ref={ref} className="px-2" onClick={onClick} id={id}>
+        <div ref={ref} className="btn-sm" onClick={onClick} id={id}>
             삭제
         </div>
     );

@@ -15,6 +15,7 @@ import jmnet.moka.web.rcv.util.RcvBrightCoveUtil;
 import jmnet.moka.web.rcv.util.RcvImageUtil;
 import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -30,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
  * @since 2020-11-23 023 오후 3:02
  */
 
+@Slf4j
 @Getter
 public class XmlGenComponentManager {
     private final JamArticleTotalVo articleTotal;
@@ -150,6 +152,9 @@ public class XmlGenComponentManager {
                 }
                 break;
             }
+            default:
+                log.trace(" XmlGenComponentManager :: doProcessContentsItem_SeparateItems no switch");
+                break;
         }
     }
 

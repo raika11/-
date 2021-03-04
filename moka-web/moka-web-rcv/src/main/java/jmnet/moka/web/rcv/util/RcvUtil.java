@@ -181,7 +181,7 @@ public class RcvUtil {
         return sendUrlRequest( urlAddress, "", true);
     }
 
-    public static String SendUrlPostRequest( String urlAddress, String json ) {
+    public static String sendUrlPostRequest( String urlAddress, String json ) {
         return sendUrlRequest( urlAddress, json, false);
     }
 }

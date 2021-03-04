@@ -9,6 +9,7 @@ import jmnet.moka.web.rcv.task.jamxml.service.XmlGenService;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleTotalVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.JamArticleVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -22,6 +23,7 @@ import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
  * @author sapark
  * @since 2020-12-04 004 오후 4:13
  */
+@Slf4j
 public class XmlGenProcess {
     public static void doProcess(TaskInputData taskInputData, JamArticleTotalVo articleTotal, TaskManager taskManager)
             throws RcvDataAccessException {
@@ -56,6 +58,9 @@ public class XmlGenProcess {
             }
             case "D":
                 xmlGenService.deleteArticleData( articleTotal );
+                break;
+            default:
+                log.trace(" XmlGenProcess :: doProcess no switch");
                 break;
         }
 

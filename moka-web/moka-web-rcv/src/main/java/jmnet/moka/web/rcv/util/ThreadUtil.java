@@ -17,10 +17,16 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ThreadUtil {
+    private static final Object mutex = new Object();
     private static ThreadGroup THREAD_GROUP;
+
     private static ThreadGroup getThreadGroup() {
-        if( THREAD_GROUP == null )
-            THREAD_GROUP = new ThreadGroup("RCV");
+        if( THREAD_GROUP == null ) {
+            synchronized (mutex) {
+                if (THREAD_GROUP == null)
+                    THREAD_GROUP = new ThreadGroup("RCV");
+            }
+        }
         return THREAD_GROUP;
     }
 

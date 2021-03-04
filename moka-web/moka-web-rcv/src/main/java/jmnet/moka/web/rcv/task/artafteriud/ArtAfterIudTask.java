@@ -100,6 +100,9 @@ public class ArtAfterIudTask extends Task<DBTaskInputData> {
                 xmlGenService.deleteArticleData(articleTotal);
                 articleTotal.logInfo( "{} 기사 totalId=[{}] 수동 삭제 완료", getTaskName(), articleTotal.getTotalId() );
                 break;
+            default:
+                log.trace(" ArtAfterIudTask :: doProcessSub no switch");
+                break;
         }
 
         if( RcvUtil.parseInt(articleTotal.getRid()) > 0 ){

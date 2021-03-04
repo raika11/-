@@ -98,14 +98,15 @@ public class ReserveJobHandler {
     }
 
     /**
-     * 비동기 예약 작업 제거
+     * 비동기 예약 작업 제거(seqNo)
      *
-     * @param reserveJobProcSeq 작업 일련번호
+     * @param reserveJobProcSeq 예약 일련번호
      */
     public boolean removeReserveJob(Long reserveJobProcSeq) {
         boolean result = false;
 
         // todo 3. 예약 작업 테이블에 del_yn을 'N'으로 변경
+        //seqNo로 취소할 작업 검색
         GenContentHistory scheduleHistory = jobContentService
                 .findGenContentHistoryById(reserveJobProcSeq)
                 .orElseThrow();
@@ -117,6 +118,32 @@ public class ReserveJobHandler {
 
             result = true;
         }
+
+        return result;
+    }
+
+    /**
+     * 비동기 예약 작업 제거(jobTaskId)
+     *
+     * @param reserveJobTaskId 예약 JobTaskId
+     */
+    public boolean removeReserveJob(String reserveJobTaskId) {
+        boolean result = false;
+
+        // todo 3. 예약 작업 테이블에 del_yn을 'N'으로 변경
+        //jobTaskId로 취소할 작업 검색
+        GenContentHistory scheduleHistory = jobContentService
+                .findGenContentHistoryByJobTaskId(reserveJobTaskId)
+                .orElseThrow();
+
+        //DEL_YN을 Y로 변경 처리
+        if (scheduleHistory != null) {
+            scheduleHistory.setDelYn("Y");
+            jobContentService.updateGenContentHistory(scheduleHistory);
+
+            result = true;
+        }
+
 
         return result;
     }

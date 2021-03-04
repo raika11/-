@@ -63,6 +63,13 @@ public interface GenContentService {
     Optional<GenContentHistory> findGenContentHistoryById(Long jobSeq);
 
     /**
+     * 예약이력 jobTaskId로 reserved 정보 조회
+     *
+     * @return 예약이력
+     */
+    Optional<GenContentHistory> findGenContentHistoryByJobTaskId(String jobTaskId);
+
+    /**
      * 예약이력 task id로 이력 정보 조회
      *
      * @return 예약이력

@@ -11,4 +11,6 @@ public interface GenContentHistoryRepository extends JpaRepository<GenContentHis
     Optional<GenContentHistory> findFirstByJobSeqAndDelYnOrderBySeqNoDesc(Long jobSeq, String delYn);
 
     Optional<GenContentHistory> findBySeqNoAndDelYnAndStatus(Long seqNo, String DelYn, StatusFlagType status);
+
+    Optional<GenContentHistory> findByJobTaskIdAndDelYnAndStatus(String jobTaskId, String DelYn, StatusFlagType status);
 }

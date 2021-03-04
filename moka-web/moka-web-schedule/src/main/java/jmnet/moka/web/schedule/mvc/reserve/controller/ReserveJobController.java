@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.dto.ResultDTO;
 import jmnet.moka.core.common.exception.DuplicateIdException;
@@ -111,17 +113,47 @@ public class ReserveJobController {
     /**
      * 예약 Job 실행 취소
      *
-     * @param jobTaskSeq Task 일련번호
+     * @param seqNo history 일련번호
      * @return 추가 결과
      * @throws MokaException 일반적인 오류 처리
      */
     @ApiOperation(value = "Job 제거")
-    @DeleteMapping("/{jobTaskSeq}")
-    public ResponseEntity<?> deleteJob(@ApiParam("Task 일련번호") @PathVariable("jobTaskSeq") @Min(value = 0) Long jobTaskSeq)
+    @DeleteMapping("/{seqNo}")
+    public ResponseEntity<?> deleteJobBySeq(@ApiParam("history 일련번호") @PathVariable("seqNo") @Min(value = 0) Long seqNo)
             throws MokaException {
 
         try {
-            boolean success = handler.removeReserveJob(jobTaskSeq);
+            boolean success = handler.removeReserveJob(seqNo);
+            log.debug("예약작업 Job 실행취소 테스트");
+
+            //실행 결과가 실패인 경우
+            if(!success){
+                throw new MokaException("취소작업이 실패했습니다.");
+            }
+
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(success, "success");
+            return new ResponseEntity<>(resultDto, HttpStatus.OK);
+
+        } catch (Exception ex) {
+            ResultDTO<Boolean> resultDto = new ResultDTO<>(400, ex.toString());
+            return new ResponseEntity<>(resultDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 예약 Job 실행 취소
+     *
+     * @param jobTaskId Job Task ID
+     * @return 추가 결과
+     * @throws MokaException 일반적인 오류 처리
+     */
+    @ApiOperation(value = "Job 제거")
+    @DeleteMapping("/jobtaskid/{jobTaskId}")
+    public ResponseEntity<?> deleteJobByTaskId(@ApiParam("Job Task ID") @PathVariable("jobTaskId") @NotNull String jobTaskId)
+            throws MokaException {
+
+        try {
+            boolean success = handler.removeReserveJob(jobTaskId);
             log.debug("예약작업 Job 실행취소 테스트");
 
             //실행 결과가 실패인 경우

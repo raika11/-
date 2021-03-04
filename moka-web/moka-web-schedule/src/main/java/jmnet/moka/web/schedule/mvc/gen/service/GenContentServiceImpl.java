@@ -54,6 +54,11 @@ public class GenContentServiceImpl implements GenContentService {
     }
 
     @Override
+    public Optional<GenContentHistory> findGenContentHistoryByJobTaskId(String jobTaskId) {
+        return genStatusHistoryRepository.findByJobTaskIdAndDelYnAndStatus(jobTaskId, MokaConstants.NO, StatusFlagType.READY);
+    }
+
+    @Override
     public GenContentHistory insertGenContentHistory(GenContentHistory genStatusHistory) {
         return genStatusHistoryRepository.save(genStatusHistory);
     }

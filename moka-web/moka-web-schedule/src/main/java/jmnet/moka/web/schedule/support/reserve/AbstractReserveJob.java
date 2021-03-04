@@ -110,11 +110,16 @@ public abstract class AbstractReserveJob implements ReserveJob {
             /**
              * todo 2. 에러발생시 status 5로 update
              */
-            scheduleHistory.setStatus(StatusFlagType.ERROR_SERVER);
+            // 유효한 작업인 경우 > 실패 설정
+            if(scheduleHistory != null){
+                scheduleHistory.setStatus(StatusFlagType.ERROR_SERVER);
+            }
             logger.error("reserved invoke error ", ex);
         } finally {
-            // 마무리
-            finish(scheduleHistory);
+            // 유효한 작업인경우 > 마무리
+            if(scheduleHistory != null) {
+                finish(scheduleHistory);
+            }
         }
 
     }

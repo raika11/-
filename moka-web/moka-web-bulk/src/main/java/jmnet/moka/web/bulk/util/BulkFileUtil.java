@@ -194,16 +194,16 @@ public class BulkFileUtil {
                             deleteFolder(file.getPath());
                         }
                         if( !file.delete() ){
-                            log.trace(" BulkFileUtil :: doProcess file Delete failed");
+                            log.trace(" BulkFileUtil :: deleteFolder file Delete failed");
                         }
                     }
                 }
                 if( !folder.delete() ){
-                    log.trace(" BulkFileUtil :: doProcess folder Delete failed");
+                    log.trace(" BulkFileUtil :: deleteFolder folder Delete failed");
                 }
             }
         } catch (Exception e) {
-            e.getStackTrace();
+            log.trace(" BulkFileUtil :: deleteFolder Exception failed");
         }
     }
 

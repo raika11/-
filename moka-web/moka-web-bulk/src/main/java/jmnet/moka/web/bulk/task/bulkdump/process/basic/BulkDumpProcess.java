@@ -161,6 +161,10 @@ public class BulkDumpProcess {
         switch ( dumpEnvCP.getName() ) {
             case "MS_JA": case "MS_ISPULS": case "MS_JA_ECO":
                 fileName = String.format( "000%s.%s",  article.getTotalId().toString(), dumpEnvCP.getFileExt() );
+                break;
+            default:
+                log.trace(" BulkDumpProcess :: doProcess_CpProcessWriteSwitchTags no switch");
+                break;
         }
         final String tmpFileName = BulkFileUtil.getTempFileName(dumpJobTotal.getSourceDir(), dumpEnvCP.getFileExt() );
 
@@ -264,6 +268,9 @@ public class BulkDumpProcess {
                 format = format.replace("{_DELURL_}", "http://magazine.joins.com/forbes/article_view.asp?aid=" + article
                         .getTotalId()
                         .toString());
+                break;
+            default:
+                log.trace(" BulkDumpProcess :: doProcess_CpProcessSwitchTags no switch");
                 break;
         }
 

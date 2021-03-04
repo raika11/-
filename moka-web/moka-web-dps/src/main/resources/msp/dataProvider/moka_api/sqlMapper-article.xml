@@ -167,7 +167,7 @@
   <select id="digitalSpecial" parameterType="hashmap" resultType="map">
     select *
     from tb_15re_special_page_mgt
-    where SEQ_NO = #{id}
+    where SEQ_NO = #{digitalSpecialId}
       AND USED_YN = 'Y'
   </select>
 

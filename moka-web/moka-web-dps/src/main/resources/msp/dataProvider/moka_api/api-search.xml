@@ -2,7 +2,7 @@
 <apiConfig>
 
   <api id="search" method="get" expire="5s">
-    <description>카테고리의 최신기사를 반환한다.</description>
+    <description>검색엔진에서 최신기사를 반환한다.</description>
     <parameter>
       <category desc="카테고리" require="Y">.{1,20}</category>
     </parameter>

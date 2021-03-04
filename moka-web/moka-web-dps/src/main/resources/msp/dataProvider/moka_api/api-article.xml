@@ -94,11 +94,11 @@
   <api id="digitalSpecial.info" expire="5s">
     <description>디지털스페셜 정보를 조회한다.</description>
     <parameter>
-      <id desc="디지털스페셜 Id" require="Y">[0-9]{1,20}</id>
+      <digitalSpecialId desc="디지털스페셜 Id" require="Y">[0-9]{1,20}</digitalSpecialId>
     </parameter>
     <request>dps.article.digitalSpecial</request>
     <keys>
-      id
+      digitalSpecialId
     </keys>
   </api>
 

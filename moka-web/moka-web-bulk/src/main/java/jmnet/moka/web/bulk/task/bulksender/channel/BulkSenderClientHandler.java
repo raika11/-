@@ -92,8 +92,9 @@ public class BulkSenderClientHandler implements Runnable{
                                 BulkStringUtil.format("{} Bulk Sender Start {}", bulkDumpJob.getCpName(), f.getName()));
 
                         if( doBulkFtpSend( totalVo ) ) {
-                            //noinspection ResultOfMethodCallIgnored
-                            f.delete();
+                            if( !f.delete() ){
+                                log.trace(" BulkSenderClientHandler :: run file Delete failed");
+                            }
                             insertBulkPortalLog( bulkSenderService, totalVo, SenderStatus.Complete,
                                     BulkStringUtil.format("{} Bulk Sender End {}", bulkDumpJob.getCpName(), f.getName()));
                             lastSuccessDate = new Date();

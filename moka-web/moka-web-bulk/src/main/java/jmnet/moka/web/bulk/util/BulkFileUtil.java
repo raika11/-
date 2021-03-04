@@ -97,7 +97,6 @@ public class BulkFileUtil {
         return false;
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void moveFileToDateDir(File file, String targetDir, String dateStr)
             throws BulkException {
         if (McpString.isNullOrEmpty(targetDir)) {
@@ -120,7 +119,9 @@ public class BulkFileUtil {
         try {
             Files.move(sourcePath, targetFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            file.delete();
+            if( !file.delete() ){
+                log.trace(" BulkFileUtil :: moveFileToDateDir file Delete failed");
+            }
             e.printStackTrace();
             throw new BulkException(String.format("파일 이동 중에 에러가 발생하였습니다. [%s]->[%s] %s", sourcePath, targetFile, e.getMessage()));
         }
@@ -169,15 +170,15 @@ public class BulkFileUtil {
         try {
             File f = File.createTempFile("bulk", extension, new File(tempDir));
             String filename = f.getAbsolutePath();
-            //noinspection ResultOfMethodCallIgnored
-            f.delete();
+            if( !f.delete() ){
+                log.trace(" BulkFileUtil :: getTempFileName file Delete failed");
+            }
             return filename;
         } catch (IOException ignore) {
             return null;
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void deleteFolder(String sourceDir) {
         File folder = new File(sourceDir);
         try {
@@ -186,14 +187,20 @@ public class BulkFileUtil {
                 if( folder_list != null ) {
                     for (File file : folder_list) {
                         if (file.isFile()) {
-                            file.delete();
+                            if( !file.delete() ){
+                                log.trace(" BulkFileUtil :: deleteFolder file Delete failed");
+                            }
                         } else {
                             deleteFolder(file.getPath());
                         }
-                        file.delete();
+                        if( !file.delete() ){
+                            log.trace(" BulkFileUtil :: doProcess file Delete failed");
+                        }
                     }
                 }
-                folder.delete();
+                if( !folder.delete() ){
+                    log.trace(" BulkFileUtil :: doProcess folder Delete failed");
+                }
             }
         } catch (Exception e) {
             e.getStackTrace();
@@ -217,8 +224,9 @@ public class BulkFileUtil {
                 }
 
                 if( f.length() == 0)
-                    //noinspection ResultOfMethodCallIgnored
-                    f.delete();
+                    if( !f.delete() ){
+                        log.trace(" BulkFileUtil :: getDirScanFiles file Delete failed");
+                    }
                 else
                     files.add(f);
             }

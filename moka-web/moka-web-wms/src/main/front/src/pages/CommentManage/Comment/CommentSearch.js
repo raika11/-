@@ -77,7 +77,14 @@ const CommentSearch = ({ selectBannedItem }) => {
 
     // 검색 버튼 처리.
     const handleClickSearchButton = () => {
-        dispatch(changeSearchOption(searchData));
+        // dispatch(changeSearchOption(searchData));
+        dispatch(
+            changeSearchOption({
+                ...searchData,
+                startDt: searchData.startDt ? moment(searchData.startDt).format(DB_DATEFORMAT) : '',
+                endDt: searchData.endDt ? moment(searchData.endDt).format(DB_DATEFORMAT) : '',
+            }),
+        );
         dispatch(getCommentList());
     };
 
@@ -129,47 +136,47 @@ const CommentSearch = ({ selectBannedItem }) => {
                     <MokaInput
                         as="dateTimePicker"
                         label="시작일"
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         className="mr-1"
                         name="startDt"
                         value={searchData.startDt}
                         onChange={(param) => {
-                            let selectDate = param._d;
-                            if (selectDate) {
-                                selectDate = moment()
-                                    .set('year', selectDate.getFullYear())
-                                    .set('month', selectDate.getMonth())
-                                    .set('date', selectDate.getDate())
-                                    .set('hour', 0)
-                                    .set('minute', 0)
-                                    .set('seconds', 0)
-                                    .format(DB_DATEFORMAT);
-                            }
+                            // let selectDate = param._d;
+                            // if (selectDate) {
+                            //     selectDate = moment()
+                            //         .set('year', selectDate.getFullYear())
+                            //         .set('month', selectDate.getMonth())
+                            //         .set('date', selectDate.getDate())
+                            //         .set('hour', 0)
+                            //         .set('minute', 0)
+                            //         .set('seconds', 0)
+                            //         .format(DB_DATEFORMAT);
+                            // }
 
-                            handleDateChange('startDt', selectDate);
+                            handleDateChange('startDt', param);
                         }}
                     />
                     <MokaInput
                         as="dateTimePicker"
                         label="종료일"
-                        inputProps={{ timeFormat: null }}
+                        inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         className="ml-1"
                         name="endDt"
                         value={searchData.endDt}
                         onChange={(param) => {
-                            let selectDate = param._d;
+                            // let selectDate = param._d;
 
-                            if (selectDate) {
-                                selectDate = moment()
-                                    .set('year', selectDate.getFullYear())
-                                    .set('month', selectDate.getMonth())
-                                    .set('date', selectDate.getDate())
-                                    .set('hour', 23)
-                                    .set('minute', 59)
-                                    .set('seconds', 59)
-                                    .format(DB_DATEFORMAT);
-                            }
-                            handleDateChange('endDt', selectDate);
+                            // if (selectDate) {
+                            //     selectDate = moment()
+                            //         .set('year', selectDate.getFullYear())
+                            //         .set('month', selectDate.getMonth())
+                            //         .set('date', selectDate.getDate())
+                            //         .set('hour', 23)
+                            //         .set('minute', 59)
+                            //         .set('seconds', 59)
+                            //         .format(DB_DATEFORMAT);
+                            // }
+                            handleDateChange('endDt', param);
                         }}
                     />
                 </Col>

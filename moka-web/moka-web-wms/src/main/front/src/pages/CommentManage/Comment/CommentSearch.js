@@ -141,18 +141,6 @@ const CommentSearch = ({ selectBannedItem }) => {
                         name="startDt"
                         value={searchData.startDt}
                         onChange={(param) => {
-                            // let selectDate = param._d;
-                            // if (selectDate) {
-                            //     selectDate = moment()
-                            //         .set('year', selectDate.getFullYear())
-                            //         .set('month', selectDate.getMonth())
-                            //         .set('date', selectDate.getDate())
-                            //         .set('hour', 0)
-                            //         .set('minute', 0)
-                            //         .set('seconds', 0)
-                            //         .format(DB_DATEFORMAT);
-                            // }
-
                             handleDateChange('startDt', param);
                         }}
                     />
@@ -164,18 +152,6 @@ const CommentSearch = ({ selectBannedItem }) => {
                         name="endDt"
                         value={searchData.endDt}
                         onChange={(param) => {
-                            // let selectDate = param._d;
-
-                            // if (selectDate) {
-                            //     selectDate = moment()
-                            //         .set('year', selectDate.getFullYear())
-                            //         .set('month', selectDate.getMonth())
-                            //         .set('date', selectDate.getDate())
-                            //         .set('hour', 23)
-                            //         .set('minute', 59)
-                            //         .set('seconds', 59)
-                            //         .format(DB_DATEFORMAT);
-                            // }
                             handleDateChange('endDt', param);
                         }}
                     />

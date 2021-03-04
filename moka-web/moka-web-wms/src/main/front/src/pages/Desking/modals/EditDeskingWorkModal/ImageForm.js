@@ -28,7 +28,7 @@ const ImageForm = ({ component, contentId, partKey, temp, onChange, fileName }) 
                         });
                 })();
             },
-            { cropWidth: 300, cropHeight: 300 },
+            { cropWidth: component?.cropWidth || 300, cropHeight: component?.cropHeight || 300 },
         );
     };
 

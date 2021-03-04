@@ -42,7 +42,7 @@ export const initialState = {
             // sort: 'quizSeq,asc',
             page: 0,
             size: PAGESIZE_OPTIONS[0],
-            searchType: '',
+            searchType: 'title',
             keyword: '',
             // quizSts: '',
             // quizType: '',

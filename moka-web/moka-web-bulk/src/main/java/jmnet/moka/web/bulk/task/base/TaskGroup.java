@@ -11,7 +11,6 @@ import jmnet.moka.common.utils.McpString;
 import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.web.bulk.code.OpCode;
 import jmnet.moka.web.bulk.common.task.Task;
-import jmnet.moka.web.bulk.task.base.TaskManager;
 import jmnet.moka.web.bulk.util.XMLUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -21,12 +22,13 @@ import java.util.Map;
  * @author sapark
  * @since 2020-10-29 029 오후 3:46
  */
+@Slf4j
 public class BulkUtil {
     public static int parseInt(String s) {
         try {
             return Integer.parseInt(s);
         } catch (Exception e) {
-            // no
+            log.trace(" BulkUtil :: parseInt Exception" );
         }
         return 0;
     }
@@ -78,6 +80,7 @@ public class BulkUtil {
                 return sb.toString();
             }
         } catch (IOException ignore) {
+            log.trace(" BulkUtil :: sendUrlRequest Exception" );
         }
         return null;
     }

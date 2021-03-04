@@ -43,6 +43,7 @@ import org.jsoup.nodes.Element;
  * @author sapark
  * @since 2020-12-29 029 오후 3:19
  */
+@SuppressWarnings("DuplicatedCode")
 @Getter
 @Setter
 @Slf4j
@@ -330,8 +331,8 @@ public class BulkJoongangArticle extends BulkArticle {
         contentHtmlCyworld = contentHtmlCyworld.replaceAll( "(?i)[<][p](\\s*?)(class)[^>]+>(\\s*?)(.*?)[^<]+</p>", "")
                                                .replaceAll( "(?i)[「|」]", "");
 
-        for( String imgMapKey : imgMap.keySet() ) {
-            contentHtmlCyworld = contentHtmlCyworld.replace( imgMapKey, imgMap.get(imgMapKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for (Map.Entry<String, String> entry : imgMap.entrySet()) {
+            contentHtmlCyworld = contentHtmlCyworld.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
 
         getContentHtmlCyworld().setData( contentHtmlCyworld.trim());
@@ -360,15 +361,16 @@ public class BulkJoongangArticle extends BulkArticle {
         contentHtmlNate = contentHtmlNate.replaceAll( "(?i)[<][p](\\s*?)(class)[^>]+>(\\s*?)(.*?)[^<]+</p>", "")
                                                .replaceAll( "(?i)[「|」]", "");
 
-        for( String imgMapKey : imgMap.keySet() ) {
-            contentHtmlNate = contentHtmlNate.replace( imgMapKey, imgMap.get(imgMapKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+
+        for( Map.Entry<String, String> entry : imgMap.entrySet() ){
+            contentHtmlNate = contentHtmlNate.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
 
         contentHtmlNate = "<b>" + getSubTitle().toString() + "</b>\r\n\r\n" + contentHtmlNate.trim();
 
-        for( String videoMapKey : videoMap.keySet() ) {
-            contentHtmlNate = contentHtmlNate.replace( videoMapKey,
-                    videoMap.get(videoMapKey).replaceAll(
+        for( Map.Entry<String, String> entry : videoMap.entrySet() ){
+            contentHtmlNate = contentHtmlNate.replace(entry.getValue(),
+                    entry.getValue().replaceAll(
                             "(?i)<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.+youtube.+))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>",
                             "<iframe src=\"$1\" width=\"605\" height=\"339\" allowfullscreen=\"true\"></iframe>"));
         }
@@ -389,8 +391,9 @@ public class BulkJoongangArticle extends BulkArticle {
         Map<String, String> videoMap = new HashMap<>();
         contentHtmlZum = BulkTagUtil.getMatchesMarkTagList(PATTERN_ContentTag_zumVod, contentHtmlZum, "zum_vod_", videoMap );
 
-        for( String videoKey : videoMap.keySet() ) {
-            final String videoStr = videoMap.get(videoKey);
+        for( Map.Entry<String, String> entry : videoMap.entrySet() ){
+            final String videoKey = entry.getKey();
+            final String videoStr = entry.getValue();
             // 네이버 cast
             Matcher matcherNaver = PATTERN_ContentTag_zumVodNaverCast.matcher(videoStr);
             if( matcherNaver.find() ) {
@@ -792,21 +795,22 @@ public class BulkJoongangArticle extends BulkArticle {
 
         // region 다음카카오 TV팟, tag_photobundle 처리
         // 카카오 TV팟 <iframe> 태그구간 원본치환
-        for (String kakaoTvKey : daumVideoKakaoTvMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace(kakaoTvKey, daumVideoKakaoTvMap.get(kakaoTvKey));
+        for( Map.Entry<String, String> entry : daumVideoKakaoTvMap.entrySet() ){
+            contentHtmlDaum = contentHtmlDaum.replace(entry.getKey(), entry.getValue());
         }
 
         //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumPhotoBundleMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for( Map.Entry<String, String> entry : daumPhotoBundleMap.entrySet() ){
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
 
         //다음카카오 이미지정렬 원래 태그로 치환 ///////////////////////////////////////////////////////////////////////////////////////
         contentHtmlDaum = processContentDaum_imageTagReplace( contentHtmlDaum, daumImageMap);
 
         boolean isOnceDaumTagReplace = true;
-        for( String daumVideoKey : daumVideoMap.keySet() ){
-            final String daumVideoStr = daumVideoMap.get(daumVideoKey);
+        for( Map.Entry<String, String> entry : daumVideoMap.entrySet() ){
+            final String daumVideoKey = entry.getKey();
+            final String daumVideoStr = entry.getValue();
 
             // 네이버 cast 삭제
             if( PATTERN_ContentTag_daumVodNaverCast.matcher(daumVideoStr).find() ) {
@@ -857,8 +861,8 @@ public class BulkJoongangArticle extends BulkArticle {
 
     public String processContentDaum_imageTagReplace( String contentHtmlDaum, Map<String, String> daumPhotoBundleMap) {
         //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumPhotoBundleMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for( Map.Entry<String, String> entry : daumPhotoBundleMap.entrySet() ){
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
         return contentHtmlDaum;
     }

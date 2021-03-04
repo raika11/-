@@ -9,6 +9,7 @@ import java.util.List;
 import jmnet.moka.web.bulk.common.vo.TotalVo;
 import jmnet.moka.web.bulk.config.FtpConfig;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpJobVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -25,6 +26,7 @@ import org.apache.commons.net.ftp.FTPClient;
  * @since 2020-11-04 004 오후 6:10
  */
 
+@Slf4j
 public class BulkFtpUtil {
     public static boolean uploadFle(TotalVo<BulkDumpJobVo> totalVo, String cpName, FtpConfig ftpConfig, List<String> sourceFileList, List<String> uploadPathList,
             List<String> uploadFileNameList) {
@@ -79,8 +81,8 @@ public class BulkFtpUtil {
                         if (inputStream != null) {
                             inputStream.close();
                         }
-                    } catch (Exception e) {
-                        // no
+                    } catch (Exception ignore) {
+                        log.trace(" BulkFtpUtil :: uploadFle Exception" );
                     }
                 }
 
@@ -113,8 +115,8 @@ public class BulkFtpUtil {
                     ftp.logout();
                     ftp.disconnect();
                 }
-            } catch (IOException ex) {
-                // no
+            } catch (IOException ignore) {
+                log.trace(" BulkFtpUtil :: uploadFle last Exception" );
             }
         }
 

@@ -62,7 +62,7 @@ public class ThreadUtil {
                     try {
                         t.join(ms);
                     } catch (Exception ex) {
-                        // do nothing
+                        log.trace(" ThreadUtil :: interruptAll Exception" );
                     }
                 }
             }

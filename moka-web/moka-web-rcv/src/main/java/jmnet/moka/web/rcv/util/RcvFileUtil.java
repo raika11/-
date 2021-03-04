@@ -43,7 +43,7 @@ public class RcvFileUtil {
         XMLStreamReader xmlStreamReader = null;
         FileReader fr = null;
         try {
-            fr = new FileReader(file);
+            fr = new FileReader(file, StandardCharsets.UTF_8);
             xmlStreamReader = XMLInputFactory
                     .newInstance()
                     .createXMLStreamReader(fr);
@@ -106,9 +106,12 @@ public class RcvFileUtil {
         createDirectories(targetPath.toString());
 
         final Path sourcePath = file.toPath();
-        Path targetFile = Paths.get(targetPath.toString(), sourcePath
-                .getFileName()
-                .toString());
+        final Path sourceFilename = sourcePath.getFileName();
+        if( McpString.isNullOrEmpty(sourceFilename)) {
+            throw new RcvException(String.format("파일 원본 경로를 확인할 수 없습니다.[%s]", sourcePath.toString()));
+        }
+
+        Path targetFile = Paths.get(targetPath.toString(), sourceFilename.toString());
         if (Files.exists(targetFile)) {
             targetFile = Paths.get(renameFileWithDateTime(targetFile.toString(), McpFile.getExtension(file)));
         }

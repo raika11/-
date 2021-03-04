@@ -124,7 +124,7 @@ public class RcvImageUtil {
                 return gif.getFrame(0);
             }while( false );
             return null;
-        } catch ( Exception e ) {
+        } catch (Exception e ){
             return null;
         }
     }

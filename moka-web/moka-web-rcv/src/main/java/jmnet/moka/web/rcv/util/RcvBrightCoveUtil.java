@@ -37,9 +37,12 @@ public class RcvBrightCoveUtil {
                 RestTemplate rt = new RestTemplate();
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-                headers.add("Authorization", "Basic " + new String(Base64.encodeBase64(String
-                        .format("%s:%s", brightCoveConfig.getClientId(), brightCoveConfig.getClientSecret())
-                        .getBytes(StandardCharsets.UTF_8))));
+                headers.add("Authorization", "Basic " +
+                        new String(
+                                Base64.encodeBase64(
+                                        String.format("%s:%s", brightCoveConfig.getClientId(), brightCoveConfig.getClientSecret())
+                                              .getBytes(StandardCharsets.UTF_8))
+                                , StandardCharsets.UTF_8));
                 HttpEntity<String> request = new HttpEntity<>("", headers);
                 ResponseEntity<String> response = rt.exchange(brightCoveConfig.getAccessTokenUrl(), HttpMethod.POST, request, String.class);
                 if (response.getStatusCode() == HttpStatus.OK) {

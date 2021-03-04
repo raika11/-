@@ -109,30 +109,34 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
 
         try {
             String json = this.objectMapper.writeValueAsString(mapList);
-            json = "recvResult={\"RECV_RESULT\": ".concat(json.replace("&#39;", "").concat("}"));
+            json = "recvResult={\"RECV_RESULT\": ".concat(json
+                    .replace("&#39;", "")
+                    .concat("}"));
 
             log.info("{} {} 호출 시작", getTaskName(), jamApiUrl);
-            final String req = RcvUtil.sendUrlPostRequest( jamApiUrl, json );
+            final String req = RcvUtil.sendUrlPostRequest(jamApiUrl, json);
 
             boolean success = false;
-            if(!McpString.isNullOrEmpty(req)) {
-                @SuppressWarnings("rawtypes")
-                Map reqMap = this.objectMapper.readValue(req, Map.class);
-                if( RcvUtil.getMapStringData( reqMap, "success").toLowerCase().equals("success")){
+            if (!McpString.isNullOrEmpty(req)) {
+                @SuppressWarnings("rawtypes") Map reqMap = this.objectMapper.readValue(req, Map.class);
+                if (RcvUtil
+                        .getMapStringData(reqMap, "success")
+                        .toLowerCase()
+                        .equals("success")) {
                     success = true;
                 }
             }
 
-            if( success ) {
+            if (success) {
                 log.info("{} {} 호출 완료", getTaskName(), jamApiUrl);
                 final CallJamApiService callJamApiService = getTaskManager().getCallJamApiService();
                 callJamApiService.insertReceiveJobStep(mapList);
-            }
-            else
+            } else
                 log.error("{} {} 호출 실패 !!", getTaskName(), jamApiUrl);
-
+        } catch ( RuntimeException e ) {
+            log.error( "Jam Api RuntimeException {}", jamApiUrl);
         } catch (Exception e) {
-            log.error( "Jam Api Error {}", jamApiUrl);
+            log.error( "Jam Api Exception {}", jamApiUrl);
         }
     }
 }

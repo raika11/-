@@ -141,16 +141,20 @@ const PollEdit = ({ onDelete }) => {
         setHasLink(!hasLink);
     };
 
-    const handleClickPollResult = () => {};
+    const handleClickPollResult = () => {
+        let statusKor = '현황';
+        if (pollStatus === 'R') {
+            statusKor = '결과';
+        }
+        toast.info(`투표 ${statusKor} 기능은 준비중 입니다.`);
+    };
 
     const dividePollStatus = (startDt, endDt) => {
         let status = 'N';
-        if (moment().diff(startDt) <= 0 && moment().diff(endDt) >= 0) {
-            console.log(moment().diff(startDt));
-            console.log(moment(startDt));
-            console.log('현황', startDt, endDt);
-        } else if (moment().diff(startDt) > 0 && moment().diff(endDt) < 0) {
-            console.log('결과', startDt, endDt);
+        if (moment().diff(startDt) >= 0 && moment().diff(endDt) <= 0) {
+            status = 'S';
+        } else if (moment().diff(startDt) > 0 && moment().diff(endDt) > 0) {
+            status = 'R';
         }
         return status;
     };
@@ -242,7 +246,7 @@ const PollEdit = ({ onDelete }) => {
                     <Form.Row>
                         <Col xs={12} className="mb-14 d-flex justify-content-end">
                             <Button variant="outline-neutral" onClick={handleClickPollResult}>
-                                투표 현황
+                                투표 {pollStatus === 'S' ? '현황' : '결과'}
                             </Button>
                         </Col>
                     </Form.Row>

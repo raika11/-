@@ -42,11 +42,10 @@ public class InternalDeskingRestController extends AbstractCommonController {
     @ApiOperation(value = "예약편집기사를 서비스에 등록")
     @PostMapping
     public ResponseEntity<?> getComponentWorkList(
-            @ApiParam(value = "편집영역 일련번호", required = true) @RequestParam(value = "componentSeq", required = true) Long componentSeq,
-            @ApiParam(value = "작업자", required = true) @RequestParam(value = "regId", required = true) String regId)
+            @ApiParam(value = "편집영역 일련번호", required = true) @RequestParam(value = "componentSeq", required = true) Long componentSeq)
             throws Exception {
         try {
-            deskingService.excuteReserve(componentSeq, regId);
+            deskingService.excuteReserve(componentSeq);
 
             String message = messageByLocale.get("tps.common.success.insert");
             ResultDTO<Boolean> resultDto = new ResultDTO<Boolean>(true, message);
@@ -55,7 +54,7 @@ public class InternalDeskingRestController extends AbstractCommonController {
         } catch (Exception e) {
             log.error("[FAIL TO SAVE RESERVE DESKING]", e);
             tpsLogger.error(ActionType.INSERT, "[FAIL TO SAVE RESERVE DESKING]", e, true);
-            throw new Exception(msg("tps.desking.error.save"), e);
+            throw new Exception(msg("tps.desking.error.reserve-excute"), e);
         }
     }
 

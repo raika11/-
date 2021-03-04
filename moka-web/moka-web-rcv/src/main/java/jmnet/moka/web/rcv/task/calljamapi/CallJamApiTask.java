@@ -88,11 +88,13 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
         try {
             mapListIlg = mapList.stream().filter( a -> RcvUtil.getMapStringData(a, "SITE_CD").equals("ILG")).collect(Collectors.toList());
         }catch (Exception ignore){
+            log.trace("CallJamApiTask :: doProcess Exception" );
         }
 
         try {
             mapListJai = mapList.stream().filter( a -> !RcvUtil.getMapStringData(a, "SITE_CD").equals("ILG") ).collect(Collectors.toList());
         }catch (Exception ignore){
+            log.trace("CallJamApiTask :: doProcess 2 Exception" );
         }
 
         doProcessSendJamApi( rcvConfiguration.getJamApiUrlIlg(), mapListIlg );

@@ -8,8 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import jmnet.moka.common.utils.McpDate;
@@ -34,8 +32,8 @@ public class RcvUtil {
     public static int parseInt(String s) {
         try {
             return Integer.parseInt(s);
-        } catch (Exception e) {
-            // no
+        } catch (Exception ignore) {
+            log.trace("RcvUtil :: parseInt Exception" );
         }
         return 0;
     }
@@ -43,8 +41,8 @@ public class RcvUtil {
     public static long parseLong(String s) {
         try {
             return Long.parseLong(s);
-        } catch (Exception e) {
-            // no
+        } catch (Exception ignore) {
+            log.trace("RcvUtil :: parseLong Exception" );
         }
         return 0;
     }

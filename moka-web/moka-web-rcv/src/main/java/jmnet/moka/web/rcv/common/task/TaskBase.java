@@ -130,8 +130,8 @@ public abstract class TaskBase implements Runnable, TaskService {
                     }
                     Thread.sleep(sleepTimer);
                 }
-            } catch (Exception ex2) {
-                // do nothing
+            } catch (Exception ignore) {
+                log.trace("TaskBase :: sleep Exception" );
             }
         }
     }

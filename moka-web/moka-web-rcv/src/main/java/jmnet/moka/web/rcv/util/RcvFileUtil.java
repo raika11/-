@@ -17,6 +17,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.rcv.exception.RcvException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -30,6 +31,7 @@ import jmnet.moka.web.rcv.exception.RcvException;
  * @author sapark
  * @since 2020-11-05 005 오전 10:49
  */
+@Slf4j
 public class RcvFileUtil {
     public static String readFile( Path path, Charset encoding)
             throws IOException {
@@ -48,6 +50,7 @@ public class RcvFileUtil {
 
             return Charset.forName(xmlStreamReader.getCharacterEncodingScheme());
         } catch (Exception ignore) {
+            log.trace("RcvFileUtil :: getFromXml Exception" );
         }
         finally {
             if( xmlStreamReader != null ) {

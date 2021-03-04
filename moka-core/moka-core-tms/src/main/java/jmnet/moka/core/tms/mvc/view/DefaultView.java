@@ -204,7 +204,7 @@ public class DefaultView extends AbstractView {
         Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
         Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
         Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
-        mergeContext.set(MokaConstants.PARAM_CATEGORY, MokaConstants.MERGE_CONTEXT_CATEGORY);
+        mergeContext.set(MokaConstants.PARAM_CATEGORY, category);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_CODES, codes);
         mergeContext.set(MokaConstants.MERGE_CONTEXT_MENUS, menus);
     }

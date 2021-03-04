@@ -338,6 +338,7 @@ const PageEdit = ({ onDelete }) => {
                         )}
                     </div>
                 </Form.Group>
+
                 {/* 사용여부,페이지 ID */}
                 <Form.Row className="mb-2">
                     {/* 페이지 ID */}
@@ -349,19 +350,15 @@ const PageEdit = ({ onDelete }) => {
                         <MokaInputLabel as="switch" label="사용여부" id="usedYn" name="usedYn" inputProps={{ checked: temp.usedYn === 'Y' }} onChange={handleChangeValue} />
                     </Col>
                 </Form.Row>
+
                 {/* 페이지 URL */}
                 <Form.Row className="mb-2">
-                    <MokaInputLabel
-                        label="URL"
-                        className="mb-0 w-100"
-                        value={temp.pageUrl}
-                        inputProps={{
-                            plaintext: true,
-                            readOnly: true,
-                            onClick: handleClickOpenService,
-                        }}
-                    />
+                    <MokaInputLabel label="URL" as="none" />
+                    <p className="mb-0 d-flex align-items-center cursor-pointer hover-underline ft-14" onClick={handleClickOpenService}>
+                        <span>{temp.pageUrl}</span>
+                    </p>
                 </Form.Row>
+
                 {/* 페이지명 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel
@@ -375,6 +372,7 @@ const PageEdit = ({ onDelete }) => {
                         required
                     />
                 </Form.Row>
+
                 {/* 서비스명, 서비스타입 */}
                 <Form.Row className="mb-2">
                     <MokaInputLabel
@@ -390,6 +388,7 @@ const PageEdit = ({ onDelete }) => {
                         disabled={!btnDisabled || (temp.parent && temp.parent.pageSeq === null)}
                     />
                 </Form.Row>
+
                 {/* 표출명, 순서 */}
                 <Form.Row className="mb-2">
                     <Col xs={8} className="px-0">
@@ -416,6 +415,7 @@ const PageEdit = ({ onDelete }) => {
                         />
                     </Col>
                 </Form.Row>
+
                 {/* 이동URL */}
                 <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
@@ -441,6 +441,7 @@ const PageEdit = ({ onDelete }) => {
                         />
                     </Col>
                 </Form.Row>
+
                 {/* 파일저장 => 주석처리 */}
                 {/* <Form.Row className="mb-2">
                     <Col xs={4} className="px-0">
@@ -455,8 +456,10 @@ const PageEdit = ({ onDelete }) => {
                         />
                     </Col>
                 </Form.Row> */}
+
                 {/* 키워드 */}
                 <MokaInputLabel className="mb-2" label="키워드" value={temp.kwd} name="kwd" onChange={handleChangeValue} placeholder="키워드를 입력하세요" />
+
                 {/* 설명 */}
                 <MokaInputLabel
                     className="mb-2"
@@ -468,6 +471,7 @@ const PageEdit = ({ onDelete }) => {
                     inputProps={{ rows: 10 }}
                     placeholder="설명을 입력하세요"
                 />
+
                 {/* 경로 파라미터명 */}
                 <MokaInputLabel
                     className="mb-2"
@@ -479,6 +483,7 @@ const PageEdit = ({ onDelete }) => {
                     isInvalid={error.urlParam}
                     invalidMessage={error.urlParamMessage}
                 />
+
                 {/* 카테고리 */}
                 <MokaInputLabel
                     className="mb-2"

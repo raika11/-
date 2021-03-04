@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ThreadUtil {
     private static ThreadGroup THREAD_GROUP;
-    private static ThreadGroup GetThreadGroup() {
+    private static ThreadGroup getThreadGroup() {
         if( THREAD_GROUP == null )
             THREAD_GROUP = new ThreadGroup("RCV");
         return THREAD_GROUP;
@@ -29,7 +29,7 @@ public class ThreadUtil {
     }
 
     public static Thread create(String name, Runnable runnable) {
-        return new Thread(GetThreadGroup(), runnable, runnable
+        return new Thread(getThreadGroup(), runnable, runnable
                 .getClass()
                 .getName() + "[" + name + "]");
     }
@@ -44,7 +44,7 @@ public class ThreadUtil {
 
     public static void interruptAll(String groupName, int ms) {
         if (groupName == null) {
-            groupName = GetThreadGroup().getName();
+            groupName = getThreadGroup().getName();
         }
 
         Map<Thread, StackTraceElement[]> tm = Thread.getAllStackTraces();

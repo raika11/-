@@ -179,8 +179,8 @@ public class BulkSundayArticle extends BulkArticle {
         contentHtmlDaum = BulkTagUtil.strip(contentHtmlDaum).trim();
 
         //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumPhotoBundleMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for (Map.Entry<String, String> entry : daumPhotoBundleMap.entrySet()) {
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
 
         //다음카카오 이미지정렬 원래 태그로 치환 ///////////////////////////////////////////////////////////////////////////////////////
@@ -199,8 +199,8 @@ public class BulkSundayArticle extends BulkArticle {
 
     public String processContentDaum_imageTagReplace( String contentHtmlDaum, Map<String, String> daumImageMap) {
         //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumImageMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumImageMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for (Map.Entry<String, String> entry : daumImageMap.entrySet()) {
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
         return contentHtmlDaum;
     }

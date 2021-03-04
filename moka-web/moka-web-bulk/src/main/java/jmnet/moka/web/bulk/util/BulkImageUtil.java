@@ -78,8 +78,8 @@ public class BulkImageUtil {
                 if (is != null) {
                     is.close();
                 }
-            } catch (IOException e) {
-                // no
+            } catch (IOException ignore) {
+                log.trace(" BulkImageUtil :: downloadImage Exception" );
             }
         }
     }

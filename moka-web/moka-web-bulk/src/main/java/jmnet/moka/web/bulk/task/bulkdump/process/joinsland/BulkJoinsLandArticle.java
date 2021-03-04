@@ -96,18 +96,18 @@ public class BulkJoinsLandArticle extends BulkArticle {
 
         // region 다음카카오 TV팟, tag_photobundle 처리
         // 카카오 TV팟 <iframe> 태그구간 원본치환
-        for (String kakaoTvKey : daumVideoKakaoTvMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace(kakaoTvKey, daumVideoKakaoTvMap.get(kakaoTvKey));
+        for( Map.Entry<String, String> entry : daumVideoKakaoTvMap.entrySet() ) {
+            contentHtmlDaum = contentHtmlDaum.replace(entry.getKey(), entry.getValue());
         }
 
         //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumPhotoBundleMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumPhotoBundleMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for( Map.Entry<String, String> entry : daumPhotoBundleMap.entrySet() ){
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
 
         //원래 img 태그로 치환
-        for (String photoGeneralKey : daumGeneralImageMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoGeneralKey, daumGeneralImageMap.get(photoGeneralKey));
+        for( Map.Entry<String, String> entry : daumGeneralImageMap.entrySet() ){
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue());
         }
 
         //다음카카오 이미지정렬 원래 태그로 치환 ///////////////////////////////////////////////////////////////////////////////////////
@@ -126,8 +126,8 @@ public class BulkJoinsLandArticle extends BulkArticle {
 
     private String processContentDaum_imageTagReplace(String contentHtmlDaum, Map<String, String> daumImageMap) {
         //다음카카오 이미지정렬(tag_photobundle)  케이스
-        for (String photoBundleKey : daumImageMap.keySet()) {
-            contentHtmlDaum = contentHtmlDaum.replace( photoBundleKey, daumImageMap.get(photoBundleKey).replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
+        for( Map.Entry<String, String> entry : daumImageMap.entrySet() ){
+            contentHtmlDaum = contentHtmlDaum.replace( entry.getKey(), entry.getValue().replaceAll(" alt=(\"기사 이미지\")", " alt=\"\""));
         }
         return contentHtmlDaum;
     }

@@ -109,7 +109,11 @@ public class BulkSenderClientHandler implements Runnable{
                         slackMessageService.sendSms("BulkSenderClient Exception", BulkStringUtil.format("BulkSenderClientHandler Exception [{}] {} {}", bulkDumpEnvCP.getName(), f.getName(), e.getMessage()));
                     }
                 }
-            } catch (Exception e) {
+            } catch (RuntimeException e ){
+                log.error("BulkSenderClientHandler RuntimeException {}", e.getMessage());
+                e.printStackTrace();
+            }
+            catch (Exception e) {
                 log.error("BulkSenderClientHandler Exception {}", e.getMessage());
                 e.printStackTrace();
             }

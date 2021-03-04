@@ -61,6 +61,7 @@ public class ApiParser {
 	private static final String ATTR_ID = "id";
 	private static final String ATTR_METHOD = "method";
     private static final String ATTR_EXPIRE = "expire";
+    private static final String ATTR_RESULTWRAP = "resultWrap";
     private static final String ATTR_NAME = "name";
 	private static final String ATTR_PERIOD = "period";
 	private static final String ATTR_TYPE = "type";
@@ -154,6 +155,7 @@ public class ApiParser {
     	Element apiEl = (Element)node;
     	String id = apiEl.getAttribute(ATTR_ID);
     	String methodStr = apiEl.getAttribute(ATTR_METHOD);
+    	String resultUnwrapStr = apiEl.getAttribute(ATTR_RESULTWRAP);
     	HttpMethod method = HttpMethod.GET;
     	if (methodStr.equalsIgnoreCase("post")) {
     	    method = HttpMethod.POST;
@@ -168,7 +170,11 @@ public class ApiParser {
     	String description = descriptionNode.getTextContent(); 
     	String cors =apiEl.getAttribute(ATTR_CORS);
     	String contentType =apiEl.getAttribute(ATTR_CONTENT_TYPE);
-        Api api = new Api(apiConfig, id, method, expire, period, description, contentType, cors);
+    	boolean resultWrap = true;
+    	if ( McpString.isNotEmpty(resultUnwrapStr) && resultUnwrapStr.equalsIgnoreCase("N")) {
+            resultWrap = false;
+        }
+        Api api = new Api(apiConfig, id, method, expire, period, description, contentType, cors, resultWrap);
     	setParameter(api, apiEl);
     	setRequestList(api, apiEl);
         setKeys(api, apiEl);

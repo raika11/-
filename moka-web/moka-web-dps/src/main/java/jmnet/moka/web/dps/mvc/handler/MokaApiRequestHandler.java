@@ -126,21 +126,29 @@ public class MokaApiRequestHandler extends DefaultApiRequestHandler {
 			if (accessControllAllowOrigin != null ) {
 				responseHeaders.set("Access-Control-Allow-Origin", accessControllAllowOrigin);
 			}
+			Api api = apiContext.getApi();
             if (cachedString != null) {
 				//async가 있을 경우에 async만 수행한다.
-				processApi(apiContext, true);
+				if ( api.hasAsyncRequest() ) {
+					processApi(apiContext, true);
+				}
 			} else {
 				ApiResult apiResult = processApi(apiContext);
 				try {
+					Object resultObject = null;
+					if (api.isResultWrap()) {
+						resultObject = apiResult;
+					} else {
+						resultObject = apiResult.unwrap(ApiResult.MAIN_DATA);
+					}
 					if ( apiContext.getApi().getContentType() != null) {
 						responseHeaders.set("Content-Type",apiContext.getApi().getContentType());
-						Object obj = apiResult.get(ApiResult.MAIN_DATA);
 						cachedString =
-								ApiCacheHelper.setCache(apiContext, this.cacheManager, obj);
+								ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
 					} else {
 						responseHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 						cachedString =
-								ApiCacheHelper.setCache(apiContext, this.cacheManager, apiResult);
+								ApiCacheHelper.setCache(apiContext, this.cacheManager, resultObject);
 					}
 				} catch (JsonProcessingException e) {
 					actionLogger.error(remoteIp, ActionType.API,

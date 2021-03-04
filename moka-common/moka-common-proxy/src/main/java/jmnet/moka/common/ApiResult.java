@@ -3,6 +3,7 @@ package jmnet.moka.common;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -59,5 +60,58 @@ public class ApiResult extends LinkedHashMap<String, Object> {
         return apiResult;
     }
 
+
+
+    /**
+     * key에 해당하는 List를 반환한다. List가 아닐 경우 null을 반환한다.
+     * @param dataKey 키
+     * @return key에 해당하는 List
+     */
+    public List<Map<String, Object>> getDataList(String dataKey) {
+        Object dataObject = unwrap(dataKey);
+        if ( dataObject instanceof List) {
+            return (List<Map<String, Object>>)dataObject;
+        }
+        return null;
+    }
+
+    /**
+     * key에 해당하는 List의 첫번째 Object를 반환한다. List가 아닌 경우 null을 반환한다.
+     * @param dataKey 키
+     * @return key에 해당하는 List 의 첫번째 Object
+     */
+    public Map<String, Object> getDataListFirst(String dataKey) {
+        List<Map<String, Object>> dataList = getDataList(dataKey);
+        if ( dataList != null && dataList.size()>0) {
+            return dataList.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * key에 해당하는 Object를 반환한다. List이던 Map이던 상관하지 않는다.
+     * @return key에 해당하는 Object
+     */
+    public Map<String,Object> getData(String dataKey) {
+        Object dataObject = unwrap(dataKey);
+        if ( dataObject instanceof Map) {
+            return (Map<String,Object>)dataObject;
+        }
+        return null;
+    }
+
+    public Object unwrap(String dataKey) {
+        if ( this.containsKey(dataKey)) {
+            if ( dataKey.equals(ApiResult.MAIN_DATA)) {
+                return this.get(ApiResult.MAIN_DATA);
+            } else {
+                Object dataObject =  this.get(dataKey);
+                if ( dataObject instanceof Map) {
+                    return ((Map)dataObject).get(ApiResult.MAIN_DATA);
+                }
+            }
+        }
+        return null;
+    }
 
 }

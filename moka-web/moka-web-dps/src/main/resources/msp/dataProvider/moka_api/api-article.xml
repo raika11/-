@@ -23,12 +23,13 @@
     </keys>
   </api>
 
-  <api id="article.n">
+  <api id="article.n" resultWrap="N">
     <description>기사 상세 정보를 조회한다.v2</description>
     <parameter>
       <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
     </parameter>
     <request dmlType="sp" setNames="_DATA,CODE,REPORTER,COMPONENT">dps.article.articleN</request>
+    <request type="module">jmnet.moka.web.dps.module.article.ArticleModule</request>
     <keys>
       totalId
     </keys>

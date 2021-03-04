@@ -26,24 +26,26 @@ public class Api {
     private boolean hasDbRequest = false;
     private boolean hasAsyncRequest = false;
     private boolean hasCookieParameter = false;
+    private boolean resultWrap = true;
     private List<Request> requestList;
     private List<String> keyList = ApiParser.EMPTY_TOKEN_LIST;
 
     public Api(ApiConfig apiConfig, String id) {
-        this(apiConfig, id, null, 0L, null, null, null, null);
+        this(apiConfig, id, null, 0L, null, null, null, null, false);
     }
 
-    public Api(ApiConfig apiConfig, String id, HttpMethod method, long expire, String period, String description, String contentType, String cors) {
+    public Api(ApiConfig apiConfig, String id, HttpMethod method, long expire, String period, String description, String contentType, String cors, boolean resultWrap) {
         this.apiConfig = apiConfig;
         this.id = id;
         this.method = method;
         this.period = period;
         this.expire = expire;
         this.description = description;
-        this.contentType = McpString.isNotEmpty(contentType)? contentType: null;
-        this.cors = McpString.isNotEmpty(cors)? cors:null;
+        this.contentType = McpString.isNotEmpty(contentType) ? contentType : null;
+        this.cors = McpString.isNotEmpty(cors) ? cors : null;
         this.parameterMap = new LinkedHashMap<String, Parameter>(16);
         this.requestList = new ArrayList<Request>(4);
+        this.resultWrap = resultWrap;
     }
 
     public ApiConfig getApiConfig() {
@@ -54,7 +56,9 @@ public class Api {
         return this.id;
     }
 
-    public HttpMethod getMethod() { return this.method; }
+    public HttpMethod getMethod() {
+        return this.method;
+    }
 
     public long getExpire() {
         return this.expire;
@@ -65,8 +69,9 @@ public class Api {
     }
 
     public void addParamer(Parameter parameter) {
-        if (parameter.getType()
-                     .equals(ApiParser.PARAM_TYPE_COOKIE)) {
+        if (parameter
+                .getType()
+                .equals(ApiParser.PARAM_TYPE_COOKIE)) {
             this.hasCookieParameter = true;
         }
         this.parameterMap.put(parameter.getName(), parameter);
@@ -95,6 +100,10 @@ public class Api {
         return this.hasCookieParameter;
     }
 
+    public boolean isResultWrap() {
+        return this.resultWrap;
+    }
+
     public List<Request> getRequestList() {
         return this.requestList;
     }
@@ -107,19 +116,23 @@ public class Api {
         return this.description;
     }
 
-    public String getContentType() { return this.contentType; }
+    public String getContentType() {
+        return this.contentType;
+    }
 
-    public String getCors() { return this.cors; }
+    public String getCors() {
+        return this.cors;
+    }
 
     public Map<String, Parameter> getParameterMap() {
         return this.parameterMap;
     }
 
-    public void setKeyList(List<String> keyList) {
-        this.keyList = keyList;
-    }
-
     public List<String> getKeyList() {
         return this.keyList;
+    }
+
+    public void setKeyList(List<String> keyList) {
+        this.keyList = keyList;
     }
 }

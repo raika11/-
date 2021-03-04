@@ -7,6 +7,9 @@ import { changeSnsMetaSearchOptions } from '@store/snsManage/snsAction';
 import columnDefs from './SnsMetaAgGridColumns';
 import EditImageRenderer from '@pages/SnsManage/SnsMeta/component/EditImageRenderer';
 
+/**
+ * FB & TW AgGrid
+ */
 const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -41,7 +44,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
         <MokaTable
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={46}
+            rowHeight={50}
             onRowNodeId={(row) => row.id}
             onRowClicked={(row) => handleClickListRow(row)}
             loading={loading}

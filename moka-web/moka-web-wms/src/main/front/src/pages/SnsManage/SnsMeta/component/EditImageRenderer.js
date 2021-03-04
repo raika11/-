@@ -1,6 +1,6 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
 import img_logo from '@assets/images/img_logo.png';
-import { MokaIcon, NewIcon } from '@components';
+import { NewIcon } from '@components';
 
 /**
  * ag-grid 셀에 이미지를 그리는 컴포넌트.

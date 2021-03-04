@@ -43,7 +43,7 @@ public class RcvFileUtil {
         XMLStreamReader xmlStreamReader = null;
         FileReader fr = null;
         try {
-            fr = new FileReader(file, StandardCharsets.UTF_8);
+            fr = new FileReader(file);
             xmlStreamReader = XMLInputFactory
                     .newInstance()
                     .createXMLStreamReader(fr);

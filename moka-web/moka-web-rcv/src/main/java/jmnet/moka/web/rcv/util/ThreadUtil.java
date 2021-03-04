@@ -24,8 +24,8 @@ public class ThreadUtil {
         Runtime.getRuntime().addShutdownHook(new Thread(ThreadUtil::interruptAll));
     }
 
-    public static Thread create( ThreadGroup threadGroup, String name, Runnable runnable) {
-        return new Thread(threadGroup, runnable, runnable
+    public static Thread create( String name, Runnable runnable) {
+        return new Thread(THREAD_GROUP, runnable, runnable
                 .getClass()
                 .getName() + "[" + name + "]");
     }

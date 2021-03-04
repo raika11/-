@@ -108,6 +108,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
                 log.info( "BulkDump Start no.={} iud={} contentId={}", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId());
                 this.bulkDumpClientChannel.enqueue(bulkDumpTotalVo);
             } catch (Exception ignore) {
+                log.trace(" BulkDumpTask :: doProcess Exception" );
             }
         }
     }

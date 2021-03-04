@@ -19,6 +19,7 @@ import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
 import jmnet.moka.web.bulk.exception.BulkException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -33,6 +34,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author sapark
  * @since 2020-11-05 005 오전 10:49
  */
+@Slf4j
 public class BulkFileUtil {
     public static String readFile( Path path, Charset encoding)
             throws IOException {
@@ -51,6 +53,7 @@ public class BulkFileUtil {
 
             return Charset.forName(xmlStreamReader.getCharacterEncodingScheme());
         } catch (Exception ignore) {
+            log.trace("BulkFileUtil :: getFromXml Exception" );
         }
         finally {
             if( xmlStreamReader != null ) {

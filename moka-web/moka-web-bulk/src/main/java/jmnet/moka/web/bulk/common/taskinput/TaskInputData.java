@@ -8,6 +8,7 @@ import java.util.List;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -21,6 +22,7 @@ import lombok.Setter;
  * @author sapark
  * @since 2020-10-29 029 오전 9:48
  */
+@Slf4j
 @Getter
 @Setter
 public abstract class TaskInputData {
@@ -39,8 +41,8 @@ public abstract class TaskInputData {
         for( String fileName : this.tempFileList ) {
             try {
                 Files.deleteIfExists(Path.of(fileName));
-            } catch (IOException e) {
-                // no
+            } catch (IOException ignore) {
+                log.trace( " TaskInputData :: deleteTempFiles exception");
             }
         }
         tempFileList.clear();

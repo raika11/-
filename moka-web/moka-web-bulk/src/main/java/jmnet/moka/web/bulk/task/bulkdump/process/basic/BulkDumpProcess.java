@@ -30,6 +30,7 @@ import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJobFileVo;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -43,7 +44,7 @@ import jmnet.moka.web.bulk.util.BulkTagUtil;
  * @author sapark
  * @since 2021-01-21 021 오후 2:55
  */
-
+@Slf4j
 public class BulkDumpProcess {
     public static BulkDumpResult doProcess(TotalVo<BulkDumpTotalVo> totalVo, BulkArticle article, BulkDumpEnv bulkDumpEnv, BulkDumpTask bulkDumpTask, BulkDumpJobTotalVo dumpJobTotal) {
         final BulkDumpEnvGlobal dumpEnvGlobal = bulkDumpEnv.getBulkDumpEnvGlobal();
@@ -188,6 +189,7 @@ public class BulkDumpProcess {
                     bs.flush();
                     bs.close();
                 } catch (Exception ignore) {
+                    log.trace(" BulkDumpProcess :: doProcess_CpProcessWriteSwitchTags Exception" );
                 }
             }
         }

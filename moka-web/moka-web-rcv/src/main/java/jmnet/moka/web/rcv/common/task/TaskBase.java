@@ -46,7 +46,7 @@ public abstract class TaskBase implements Runnable, TaskService {
                 if( allFromWeb ) return false;
 
                 if (!this.isAlive()) {
-                    this.thread = ThreadUtil.create( ThreadUtil.THREAD_GROUP, getTaskName(), this);
+                    this.thread = ThreadUtil.create( getTaskName(), this);
                     this.thread.setDaemon(false);
                     this.thread.start();
                 }

@@ -34,37 +34,43 @@
     </keys>
   </api>
 
-  <api id="section">
-    <description>카테고리별 기사 목록을 조회한다.</description>
+  <api id="list">
+    <description>기사 목록을 반환한다.</description>
     <parameter>
-      <pageIndex default="1" type="number" desc="페이지번호">[0-9]{1,9}</pageIndex>
-      <pageSize default="20" type="number" desc="기사갯수">[0-9]{1,9}</pageSize>
-      <serviceCodeList default="" desc="서비스코드">.{1,500}</serviceCodeList>
-      <masterCodeList default="" desc="마스터코드">.{1,500}</masterCodeList>
-      <keywordList default="" desc="키워드">.{1,500}</keywordList>
-      <usageType default="" desc="사용형태">.{1,100}</usageType>
-      <contentTypeList default="" desc="컨텐트타입">.{1,100}</contentTypeList>
-      <startSearchDate default="2020-08-21 00:00:00" desc="시작일">.{1,100}</startSearchDate>
-      <endSearchDate default="2020-09-01 23:59:59" desc="종료일">.{1,100}</endSearchDate>
-      <startTotalId default="0" type="number" desc="TOTALID시작">.{1,100}</startTotalId>
-      <exceptTotalIdList default="" desc="TOTALID제외">.{1,100}</exceptTotalIdList>
-      <exceptMasterCodeList default="" desc="마스터코드제외">.{1,100}</exceptMasterCodeList>
-      <exceptSourceCodeList default="" desc="소스코드제외">.{1,100}</exceptSourceCodeList>
-      <isExistThumbnail default="N" desc="썸네일존재">.{1,100}</isExistThumbnail>
-      <usedTotalCount default="Y" desc="총건수사용">.{1,100}</usedTotalCount>
-      <totalCount default="0" type="number" desc="총건수(OUT)">.{1,100}</totalCount>
+      <scodes desc="서비스코드">.{0,1000}</scodes>
+      <mcodes desc="마스터코드">.{0,1000}</mcodes>
+      <keywords desc="키워드">.{0,1000}</keywords>
+      <usage desc="권한" default="P">^[P|T|J|I|O|C|U|R|M|T|S]{1}$</usage>
+      <ctype desc="컨텐츠타입" default="R">^[RPMW]{1}$</ctype>
+      <startdt default="2020-08-21 00:00:00" desc="검색시작일">.{0,1000}</startdt>
+      <enddt default="2020-09-01 23:59:59" desc="검색종료일">.{0,1000}</enddt>
+      <startid default="0" type="number" desc="TOTALID시작">.{0,1000}</startid>
+      <exceptids desc="제외 기사키">.{0,1000}</exceptids>
+      <exceptmcodes desc="제외 마스터코드">.{0,1000}</exceptmcodes>
+      <exceptsources desc="제외 소스코드">.{0,1000}</exceptsources>
+      <thumb desc="썸네일존재" default="N">^[Y|N]{1}$</thumb>
+      <total desc="총건수사용" default="Y">^[Y|N]{1}$</total>
     </parameter>
-    <request dmlType="sp" setNames="_DATA,SOURCES">dps.article.category</request>
+    <request dmlType="sp" setNames="_DATA">dps.article.list</request>
     <request type="script" resultName="_TOTAL">
       var result = $ac.getAllResult();
       result.get("PARAM_MAP").get("totalCount");
     </request>
     <keys>
-      pageIndex
-      pageSize
-      serviceCodeList
-      masterCodeList
-      keywordList
+      scodes
+      mcodes
+      keywords
+      usage
+      ctype
+      startdt
+      enddt
+      startid
+      exceptids
+      exceptmcodes
+      exceptsources
+      thumb
+      total
+      #paging
     </keys>
   </api>
 

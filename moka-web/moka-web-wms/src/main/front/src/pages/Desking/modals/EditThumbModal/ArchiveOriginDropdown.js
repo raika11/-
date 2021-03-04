@@ -69,7 +69,10 @@ export const propTypes = {
 
 const defaultProps = {};
 
-const EditThumbOriginDropdown = (props) => {
+/**
+ * 포토 아카이브 출처 dropdown
+ */
+const ArchiveOriginDropdown = (props) => {
     const { className, isInvalid, originValue, onChange } = props;
     const [originSelectedList, setOriginSelectedList] = useState([]);
     const [originObj, setOriginObj] = useState({});
@@ -215,7 +218,7 @@ const EditThumbOriginDropdown = (props) => {
     );
 };
 
-EditThumbOriginDropdown.propTypes = propTypes;
-EditThumbOriginDropdown.defaultProps = defaultProps;
+ArchiveOriginDropdown.propTypes = propTypes;
+ArchiveOriginDropdown.defaultProps = defaultProps;
 
-export default EditThumbOriginDropdown;
+export default ArchiveOriginDropdown;

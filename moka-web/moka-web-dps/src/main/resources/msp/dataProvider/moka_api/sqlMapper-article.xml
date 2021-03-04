@@ -128,24 +128,24 @@
   </select>
 
   <!-- article list -->
-  <select id="list" parameterType="map" resultType="map" resultMap="map,map"
+  <select id="list" parameterType="hashmap" resultType="hashmap"
     statementType="CALLABLE">
     {call UPU_15RE_ARTICLE_LIST_SEL(
-      #{pageIndex, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{pageSize, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{serviceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{masterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{keywordList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{usageType, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{contentTypeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{startSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{endSearchDate, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{startTotalId, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
-      #{exceptTotalIdList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{exceptMasterCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{exceptSourceCodeList, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{isExistThumbnail, mode=IN, jdbcType=VARCHAR, javaType=string},
-      #{usedTotalCount, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{scodes, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{mcodes, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{keywords, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{usage, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{startdt, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{enddt, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{startid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{exceptids, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{exceptmcode, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{exceptsources, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{thumb, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{total, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }
   </select>

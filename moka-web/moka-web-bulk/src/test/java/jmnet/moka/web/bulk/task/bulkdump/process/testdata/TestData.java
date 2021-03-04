@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2021-02-08 008 오후 2:49
  */
 @Slf4j
-@SuppressWarnings("SpellCheckingInspection")
 public abstract class TestData {
     public abstract String getTestString();
     public abstract String getSuccessString();

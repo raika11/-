@@ -29,14 +29,14 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
         T newArticle = newArticle( totalVo );
         BulkArticle article = (BulkArticle) newArticle;
 
-        doProcess_Ready(newArticle, dumpService);
+        doProcess_Ready(newArticle);
 
         article.setBulkDumpEnvCopyright( dumpService.getBulkCopyright(article.getBulkDumpEnvTarget()));
 
         BulkDumpResult result = BulkDumpResult.SUCCESS;
         switch (article.getIud().toString()) {
             case "D":
-                result = doProcess_Delete( totalVo, newArticle, bulkDumpTask, dumpService );
+                result = doProcess_Delete( newArticle, dumpService );
                 break;
             case "I":
             case "U":
@@ -49,8 +49,8 @@ public abstract class BulkProcessCommon<T> extends BulkProcess {
     }
 
     protected abstract T newArticle( TotalVo<BulkDumpTotalVo> totalVo );
-    protected abstract void doProcess_Ready(T article, BulkDumpService dumpService);
+    protected abstract void doProcess_Ready(T article);
     protected abstract BulkDumpResult doProcess_InsertUpdate(TotalVo<BulkDumpTotalVo> totalVo, T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
     @SuppressWarnings("SameReturnValue")
-    protected abstract BulkDumpResult doProcess_Delete(TotalVo<BulkDumpTotalVo> totalVo, T article, BulkDumpTask bulkDumpTask, BulkDumpService dumpService);
+    protected abstract BulkDumpResult doProcess_Delete( T article, BulkDumpService dumpService);
 }

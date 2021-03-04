@@ -740,7 +740,6 @@ public class BulkJoongangArticle extends BulkArticle {
     private static final Pattern PATTERN_ContentTag_daumVod = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id[^>].*?>(\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumPhotoBundle = Pattern.compile("<div class=\"tag_photobundle\">(\\s)*<img.*?>(\\s)*</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumImg = Pattern.compile("<(\\s*?)img.[^>]+>", Pattern.CASE_INSENSITIVE);
-    @SuppressWarnings("DuplicatedCode")
     public void processContentDaumBefore(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap,
             Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
         //카카오다음 전용변수(m_content_html_ig_daum)
@@ -782,7 +781,6 @@ public class BulkJoongangArticle extends BulkArticle {
     private static final Pattern PATTERN_ContentTag_daumVodKakaoTv = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"kakaotv[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumVodYouTube = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(http.*?youtube.*?))\"(?:\\s*?)data-service=\"youtube[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
     private static final Pattern PATTERN_ContentTag_daumVodOvp = Pattern.compile("<(?:\\s*?)div(?:\\s*?)class=\"tag_vod\".*?data-id=\"(?<url>(.*?))\"(?:\\s*?)data-service=\"(ovp|ooyala)[^>]+>(?:\\s*?)</div>", Pattern.CASE_INSENSITIVE );
-    @SuppressWarnings("DuplicatedCode")
     public void processContentDaumAfter(Map<String, String> daumVideoMap, Map<String, String> daumVideoKakaoTvMap, Map<String, String> daumPhotoBundleMap, Map<String, String> daumImageMap) {
         // 다음기사에 QA인 경우 줄바뀜 추가 2016-02-05 지창현
         String contentHtmlDaum = getContentHtmlDaum().toString();

@@ -28,6 +28,7 @@ public interface BulkDumpService  {
     void delUspBulkDdref( BulkDumpTotalVo bulkDumpTotal );
 
     void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message, boolean isError);
+    @SuppressWarnings("unused")
     void insertBulkLog(TotalVo<BulkDumpTotalVo> totalVo, int status, String message);
 
     void insertBulkPortalLog( TotalVo<BulkDumpTotalVo> totalVo );

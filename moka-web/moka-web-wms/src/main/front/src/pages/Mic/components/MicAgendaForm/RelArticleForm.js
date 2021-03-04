@@ -205,7 +205,7 @@ const RelArticleForm = ({ agenda, onChange }) => {
                             cropHeight={300}
                             cropWidth={300}
                             onHide={() => setArcShow(false)}
-                            contentId={article.totalId}
+                            totalId={article.totalId}
                             thumbFileName={article.artThumb}
                             apply={(imageSrc, file) => handleThumbFileApply(imageSrc, file, idx)}
                         />

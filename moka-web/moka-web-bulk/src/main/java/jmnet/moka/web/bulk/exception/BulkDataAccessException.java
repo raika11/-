@@ -12,7 +12,7 @@ package jmnet.moka.web.bulk.exception;
  * @author sapark
  * @since 2020-11-04 004 오후 2:48
  */
-
+@SuppressWarnings("unused")
 public class BulkDataAccessException extends RuntimeException {
     private static final long serialVersionUID = -8355009172853183938L;
 
@@ -20,7 +20,6 @@ public class BulkDataAccessException extends RuntimeException {
         super(message);
     }
 
-    @SuppressWarnings("unused")
     public BulkDataAccessException(String message, Throwable cause) {
         super(message, cause);
     }

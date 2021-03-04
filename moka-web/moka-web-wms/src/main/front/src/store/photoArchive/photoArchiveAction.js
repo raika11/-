@@ -30,19 +30,19 @@ export const [GET_PHOTO_ORIGINS, GET_PHOTO_ORIGINS_SUCCESS, GET_PHOTO_ORIGINS_FA
 export const getPhotoOrigins = createAction(GET_PHOTO_ORIGINS, () => ({}));
 
 /**
- * 포토 아카이브 사진 유형 목록 조회
+ * 포토 아카이브 유형 목록 조회
  */
 export const [GET_PHOTO_TYPES, GET_PHOTO_TYPES_SUCCESS, GET_PHOTO_TYPES_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO_TYPES');
 export const getPhotoTypes = createAction(GET_PHOTO_TYPES, () => ({}));
 
 /**
- * 포토 아카이브 사진 정보 조회
+ * 포토 아카이브 사진 1건 정보 조회
  */
 export const [GET_PHOTO, GET_PHOTO_SUCCESS, GET_PHOTO_FAILURE] = createRequestActionTypes('photoArchive/GET_PHOTO');
 export const getPhoto = createAction(GET_PHOTO, (photoId) => photoId);
 
 /**
- * 포토 아카이브 사진 목록 출처, 유형 목록 조회한 후 실행
+ * 포토 아카이브 출처, 유형 목록 조회한 후 아카이브 목록 조회 (맨처음 로딩 시 반드시 해당 액션 호출)
  */
 export const GET_ARCHIVE_DATA = 'photoArchive/GET_ARCHIVE_DATA';
 export const getArchiveData = createAction(GET_ARCHIVE_DATA);

@@ -103,7 +103,9 @@ public class QuestionServiceImpl implements QuestionService {
         if (questions != null && questions.size() > 0) {
 
             questions.forEach(question -> {
-                questionRepository.deleteQuestionBySeq(question.getQuestionSeq());
+                if (question.getQuestionSeq() != null) {
+                    questionRepository.deleteQuestionBySeq(question.getQuestionSeq());
+                }
                 questionRepository.save(question);
                 if (question.getChoices() != null && question
                         .getChoices()

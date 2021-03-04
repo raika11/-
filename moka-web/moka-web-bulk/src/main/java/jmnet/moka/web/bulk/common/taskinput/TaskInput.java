@@ -24,5 +24,6 @@ public abstract class TaskInput {
 
     public abstract TaskInputData getTaskInputData();
 
+    @SuppressWarnings({"unused", "EmptyMethod"})
     public void processMonitor(SlackMessageService slackMessageService, String taskName) {}
 }

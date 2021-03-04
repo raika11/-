@@ -7,6 +7,7 @@ import { MokaInput, MokaSearchInput } from '@/components';
 import { initialState, clearSearch, getTourApplyList, changeSearchOption } from '@/store/tour';
 import moment from 'moment';
 import { DB_DATEFORMAT } from '@/constants';
+import { messageBox } from '@utils/toastUtil';
 
 /**
  * 신청 목록 검색
@@ -58,10 +59,15 @@ const TourListSearch = () => {
                         value={search.startTourDay}
                         inputProps={{ timeFormat: null, timeDefault: 'start' }}
                         onChange={(date) => {
-                            if (typeof date === 'object') {
-                                setSearch({ ...search, startTourDay: date });
-                            } else {
+                            if (moment().subtract(1, 'year').diff(date) > 0) {
+                                messageBox.alert('조회 기간은 현재일 기준 최대 1년입니다.');
                                 setSearch({ ...search, startTourDay: null });
+                            } else {
+                                if (typeof date === 'object') {
+                                    setSearch({ ...search, startTourDay: date });
+                                } else {
+                                    setSearch({ ...search, startTourDay: null });
+                                }
                             }
                         }}
                     />
@@ -70,10 +76,15 @@ const TourListSearch = () => {
                         value={search.endTourDay}
                         inputProps={{ timeFormat: null, timeDefault: 'end' }}
                         onChange={(date) => {
-                            if (typeof date === 'object') {
-                                setSearch({ ...search, endTourDay: date });
+                            if (moment().subtract(1, 'year').diff(date) > 0) {
+                                messageBox.alert('조회 기간은 현재일 기준 최대 1년입니다.');
+                                setSearch({ ...search, startTourDay: null });
                             } else {
-                                setSearch({ ...search, endTourDay: null });
+                                if (typeof date === 'object') {
+                                    setSearch({ ...search, endTourDay: date });
+                                } else {
+                                    setSearch({ ...search, endTourDay: null });
+                                }
                             }
                         }}
                     />

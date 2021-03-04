@@ -84,8 +84,8 @@ public class FtpUtil {
                         if (inputStream != null) {
                             inputStream.close();
                         }
-                    } catch (Exception e) {
-                        // no
+                    } catch (Exception ignore) {
+                        log.trace("FtpUtil :: uploadFle Exception" );
                     }
                 }
 
@@ -118,8 +118,8 @@ public class FtpUtil {
                     ftp.logout();
                     ftp.disconnect();
                 }
-            } catch (IOException ex) {
-                // no
+            } catch (IOException ignore) {
+                log.trace("FtpUtil :: uploadFle last Exception" );
             }
         }
 

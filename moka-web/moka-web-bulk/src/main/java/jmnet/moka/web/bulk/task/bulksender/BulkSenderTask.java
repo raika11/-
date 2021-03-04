@@ -152,9 +152,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
     }
 
     @Override
-    protected Map<String, Object> status(Map<String, Object> map) {
-        super.status(map);
-
+    protected void status(Map<String, Object> map) {
         if( bulkSenderClientChannel != null ){
             List<Map<String, Object>> cpList = new ArrayList<>();
             map.put("cpList", cpList);
@@ -172,7 +170,6 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
                     cpData.put("lastSuccessDate", clientHandler.getLastSuccessDate() );
             }
         }
-        return map;
     }
 
     @Override

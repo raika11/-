@@ -12,6 +12,7 @@ package jmnet.moka.web.bulk.task.bulkdump.process.testdata;
  * @author sapark
  * @since 2021-02-09 009 오후 1:10
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class TestData_jhot_click extends TestData {
     @Override
     public String getTestString() {

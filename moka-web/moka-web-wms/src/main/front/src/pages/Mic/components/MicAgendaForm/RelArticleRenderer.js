@@ -121,7 +121,7 @@ const RelArticleRenderer = forwardRef((params, ref) => {
                 cropHeight={300}
                 cropWidth={300}
                 onHide={() => setArcShow(false)}
-                contentId={article.totalId}
+                totalId={article.totalId}
                 thumbFileName={article.artThumb}
                 apply={handleThumbFileApply}
             />

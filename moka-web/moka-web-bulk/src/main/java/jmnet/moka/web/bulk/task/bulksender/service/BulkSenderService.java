@@ -20,5 +20,6 @@ public interface BulkSenderService {
     void insertBulkLog( TotalVo<BulkDumpJobTotalVo> totalVo, String message );
 
     void insertBulkPortalLog( TotalVo<BulkDumpJobVo> totalVo, int status, String message, boolean isError );
+    @SuppressWarnings("unused")
     void insertBulkPortalLog( TotalVo<BulkDumpJobVo> totalVo, int status, String message );
 }

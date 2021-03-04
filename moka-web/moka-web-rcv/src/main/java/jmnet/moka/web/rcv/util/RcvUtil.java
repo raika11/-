@@ -8,10 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpString;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -26,12 +27,13 @@ import org.apache.commons.io.FilenameUtils;
  * @author sapark
  * @since 2020-10-29 029 오후 3:46
  */
+@Slf4j
 public class RcvUtil {
     public static int parseInt(String s) {
         try {
             return Integer.parseInt(s);
-        } catch (Exception e) {
-            // no
+        } catch (Exception ignore) {
+            log.trace("RcvUtil :: parseInt Exception" );
         }
         return 0;
     }
@@ -39,8 +41,8 @@ public class RcvUtil {
     public static long parseLong(String s) {
         try {
             return Long.parseLong(s);
-        } catch (Exception e) {
-            // no
+        } catch (Exception ignore) {
+            log.trace("RcvUtil :: parseLong Exception" );
         }
         return 0;
     }
@@ -69,8 +71,6 @@ public class RcvUtil {
         return content.replace("•", "·");
     }
 
-    private static final SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-
     public static Date getDateFromJamDateString( String input ) {
         //noinspection ConstantConditions
         do {
@@ -79,9 +79,9 @@ public class RcvUtil {
             if( input.length() < 14 )
                 break;
             try {
-                return transFormat.parse(input);
+                return McpDate.date("yyyyMMddHHmmss", input);
             } catch (ParseException ignore) {
-
+                log.trace("RcvUtil :: getDateFromJamDateString Exception" );
             }
         }while( false );
 
@@ -171,6 +171,7 @@ public class RcvUtil {
                 return sb.toString();
             }
         } catch (IOException ignore) {
+            log.trace("RcvUtil :: sendUrlRequest Exception" );
         }
         return null;
     }

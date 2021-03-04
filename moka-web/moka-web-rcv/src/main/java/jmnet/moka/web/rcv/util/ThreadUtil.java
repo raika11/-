@@ -61,8 +61,8 @@ public class ThreadUtil {
                 if (ms > 0) {
                     try {
                         t.join(ms);
-                    } catch (Exception ex) {
-                        // do nothing
+                    } catch (Exception ignore) {
+                        log.trace("ThreadUtil :: interruptAll Exception" );
                     }
                 }
             }

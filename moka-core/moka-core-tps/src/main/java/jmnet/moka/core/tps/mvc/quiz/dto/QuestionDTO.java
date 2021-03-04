@@ -74,7 +74,7 @@ public class QuestionDTO implements Serializable {
      * 문항설명
      */
     @ApiModelProperty(value = "문항설명")
-    @Size(max = 100, message = "{tps.quiz-question.error.size.questionDesc}")
+    @Size(max = 1000, message = "{tps.quiz-question.error.size.questionDesc}")
     private String questionDesc;
 
     /**

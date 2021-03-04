@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class BulkImageUtil {
+    @SuppressWarnings("unused")
     public static boolean combineWatermarkImage(String targetImage, String imageUrl, String watermarkUrl) {
         try {
             File file = new File(targetImage);
@@ -83,6 +84,7 @@ public class BulkImageUtil {
         }
     }
 
+    @SuppressWarnings("unused")
     public static boolean resizeMaxWidthHeight(String targetImage, String sourceUrl, int maxWidth, int maxHeight) {
         try {
             File file = new File(targetImage);

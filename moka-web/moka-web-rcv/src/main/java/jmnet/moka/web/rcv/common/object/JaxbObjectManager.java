@@ -38,6 +38,7 @@ public class JaxbObjectManager {
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(WeatherShkoVo.class) );
             listUnmarshallerlist.add( new JaxbObjectUnmarshallerImpl<>(JoinsLandArticleVo.class) );
         } catch (JAXBException ignore) {
+            log.trace("JaxbObjectManager :: JaxbObjectManager Exception" );
         }
     }
 

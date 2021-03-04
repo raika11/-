@@ -4,6 +4,7 @@ const defaultOptions = {
     wordWrap: true,
     minimap: { enabled: false },
     hover: { enabled: true },
+    tabSize: 4,
 };
 
 export default defaultOptions;

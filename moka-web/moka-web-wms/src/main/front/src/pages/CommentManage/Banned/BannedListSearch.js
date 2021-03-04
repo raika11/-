@@ -163,7 +163,7 @@ const BannedListSearch = ({ pathName }) => {
                 if (pageGubun === 'I') {
                     return (
                         <>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
                                     <option value="">전체</option>
                                     {COMMENT_TAG_DIV_CODE.map((item, index) => (
@@ -173,7 +173,7 @@ const BannedListSearch = ({ pathName }) => {
                                     ))}
                                 </MokaInput>
                             </div>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockIpReason.map((media, index) => (
@@ -188,7 +188,7 @@ const BannedListSearch = ({ pathName }) => {
                 } else if (pageGubun === 'U') {
                     return (
                         <>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.searchMedia} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia" id="searchMedia">
                                     <option value="">전체계정</option>
                                     {COMMENT_SITE_CODE.map((item, index) => (
@@ -198,7 +198,7 @@ const BannedListSearch = ({ pathName }) => {
                                     ))}
                                 </MokaInput>
                             </div>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
                                     <option value="">전체</option>
                                     {COMMENT_TAG_DIV_CODE.map((item, index) => (
@@ -208,7 +208,7 @@ const BannedListSearch = ({ pathName }) => {
                                     ))}
                                 </MokaInput>
                             </div>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockUserReason.map((media, index) => (
@@ -223,7 +223,7 @@ const BannedListSearch = ({ pathName }) => {
                 } else if (pageGubun === 'W') {
                     return (
                         <>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.tagDiv} onChange={(e) => handleChangeSearchInput(e)} name="tagDiv" id="tagDiv">
                                     <option value="">전체</option>
                                     {COMMENT_TAG_DIV_CODE.map((item, index) => (
@@ -233,7 +233,7 @@ const BannedListSearch = ({ pathName }) => {
                                     ))}
                                 </MokaInput>
                             </div>
-                            <div className="mr-10 d-inline-block" style={{ width: 140 }}>
+                            <div className="mr-2 d-inline-block" style={{ width: 140 }}>
                                 <MokaInput as="select" value={searchData.searchType} onChange={(e) => handleChangeSearchInput(e)} name="searchType" id="searchType">
                                     <option value="">전체</option>
                                     {blockWordReason.map((media, index) => (
@@ -249,7 +249,7 @@ const BannedListSearch = ({ pathName }) => {
             })()}
 
             {/* 키워드 및 검색 버튼 */}
-            <div className="mr-10 d-inline-block">
+            <div className="mr-2 d-inline-block">
                 <MokaSearchInput value={searchData.keyword} onChange={(e) => handleChangeSearchInput(e)} onSearch={() => handleClickSearchButton()} name="keyword" />
             </div>
             <div className="d-inline-block float-right">

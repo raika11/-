@@ -1,5 +1,6 @@
 import { call, select, put, takeLatest } from 'redux-saga/effects';
 import { callApiAfterActions, createRequestSaga } from '../commons/saga';
+import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import * as api from './photoArchiveApi';
 import * as act from './photoArchiveAction';
 
@@ -28,6 +29,8 @@ const getPhoto = createRequestSaga(act.GET_PHOTO, api.getPhoto);
  * (origin, type 조회 + 리스트 조회)
  */
 export function* getArchiveData() {
+    yield put(startLoading(act.GET_ARCHIVE_DATA));
+
     try {
         const getOrigins = yield call(api.getPhotoOrigins);
         const getTypes = yield call(api.getPhotoTypes);
@@ -64,6 +67,8 @@ export function* getArchiveData() {
             // 실패 액션
         }
     } catch (err) {}
+
+    yield put(finishLoading(act.GET_ARCHIVE_DATA));
 }
 
 /** saga */

@@ -94,11 +94,10 @@ public abstract class Task<T> extends TaskBase {
     }
 
     @Override
-    protected Map<String, Object> status( Map<String, Object> map) {
+    protected void status( Map<String, Object> map) {
         super.status(map);
         if( lastSuccessDate != null )
             map.put("lastSuccessDate", lastSuccessDate);
-        return map;
     }
 
     public void processMonitor() {

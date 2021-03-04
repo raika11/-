@@ -27,7 +27,10 @@ import jmnet.moka.core.tms.template.parse.model.TpTemplateRoot;
 import org.apache.commons.jexl3.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Env;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.env.Environment;
 
 /**
  * <pre>
@@ -70,7 +73,9 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
                 return;
             }
         }
-        String domainUrl = "http://" + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
+        Environment env = this.appContext.getBean(Environment.class);
+        String[] profiles = env.getActiveProfiles();
+        String domainUrl = (profiles.length == 0?"http://":"https://") + domainItem.get(ItemConstants.DOMAIN_URL) + "/" + pagePath;
         int firstMetaIndex = sb.indexOf("<meta");
         if (firstMetaIndex < 0) {
             firstMetaIndex = sb.indexOf("<META");

@@ -84,7 +84,6 @@
   <insert id="excuteReserve" parameterType="hashMap" statementType="CALLABLE">
     { call UPA_WMS_DESKING_RESERVE(
       #{componentSeq, mode=IN, jdbcType=INTEGER, javaType=java.lang.Long},
-      #{regId, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{datasetSeq, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Long}
       ) }
   </insert>

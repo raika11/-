@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module.menu;
+package jmnet.moka.web.dps.module.menu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

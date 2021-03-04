@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module.searchEngine;
+package jmnet.moka.web.dps.module.searchEngine;
 
 import java.util.ArrayList;
 import java.util.List;

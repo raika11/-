@@ -7,18 +7,15 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import jmnet.moka.core.common.mvc.interceptor.MokaCommonHandlerInterceptor;
-import jmnet.moka.core.common.util.ResourceMapper;
 import jmnet.moka.core.dps.api.ApiParameterChecker;
-import jmnet.moka.core.dps.mvc.ApiRequestHandlerMapping;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.ext.ApiPeriodicTask;
 import jmnet.moka.core.dps.api.ext.ApiPeriodicTaskManager;
 import jmnet.moka.core.dps.api.ext.AsyncRequestTaskManager;
-import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
-import jmnet.moka.core.dps.api.handler.module.category.CategoryParser;
-import jmnet.moka.core.dps.api.handler.module.menu.MenuParser;
 import jmnet.moka.core.dps.api.model.Api;
 import jmnet.moka.core.dps.excepton.ParameterException;
+import jmnet.moka.core.dps.mvc.ApiRequestHandlerMapping;
+import jmnet.moka.core.dps.mvc.forward.ForwardHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +29,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.servlet.HandlerMapping;
@@ -59,71 +54,71 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = {"jmnet.moka.core.dps.api"})
 public class DpsApiAutoConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(DpsApiAutoConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(DpsApiAutoConfiguration.class);
 
-	@Value("${dps.config.base}")
-	private String configBasePath;
-	
+    @Value("${dps.config.base}")
+    private String configBasePath;
+
     @Value("${dps.config.sys.base}")
     private String configSysBasePath;
 
-	@Value("${dps.config.api.xml}")
+    @Value("${dps.config.api.xml}")
     private String apiXmlFileName;
-	
-	@Value("${dps.config.default.xml}")
-	private String defaultConfigXml;
 
-	@Value("${dps.apiRequest.handler.class}")
-	private String apiRequestHandlerClass;
-	@Value("${dps.apiRequest.handler.beanName}")
-	private String apiRequestHandlerBeanName;
-	@Value("${dps.apiRequest.handler.method}")
-	private String apiRequestHandlerMethod;
-	@Value("${dps.config.forward}")
-	private String configForwardPath;
+    @Value("${dps.config.default.xml}")
+    private String defaultConfigXml;
 
-	@Value("${dps.periodicTask.thread.count}")
-	private int periodicTaskThreadCount;
+    @Value("${dps.apiRequest.handler.class}")
+    private String apiRequestHandlerClass;
+    @Value("${dps.apiRequest.handler.beanName}")
+    private String apiRequestHandlerBeanName;
+    @Value("${dps.apiRequest.handler.method}")
+    private String apiRequestHandlerMethod;
+    @Value("${dps.config.forward}")
+    private String configForwardPath;
 
-	@Value("${dps.asyncRequestTask.thread.core.count}")
-	private int asyncRequestTaskThreadCoreCount;
-	@Value("${dps.asyncRequestTask.thread.max.count}")
-	private int asyncRequestTaskThreadMaxCount;
-	@Value("${dps.asyncRequestTask.thread.queue.count}")
-	private int asyncRequestTaskThreadQueueCount;
+    @Value("${dps.periodicTask.thread.count}")
+    private int periodicTaskThreadCount;
+
+    @Value("${dps.asyncRequestTask.thread.core.count}")
+    private int asyncRequestTaskThreadCoreCount;
+    @Value("${dps.asyncRequestTask.thread.max.count}")
+    private int asyncRequestTaskThreadMaxCount;
+    @Value("${dps.asyncRequestTask.thread.queue.count}")
+    private int asyncRequestTaskThreadQueueCount;
 
 
-	@Autowired
+    @Autowired
     private GenericApplicationContext appContext;
-	
+    private final  Contact contact = new Contact("서울시스템", "http://www.ssc.co.kr", "seoul01@ssc.co.kr");
 
-	@Bean(name="apiRequestHelper")
-	public ApiRequestHelper apiRequestHelper() throws Exception {
-        ApiRequestHelper apiRequestHelper =
-                new ApiRequestHelper(configBasePath, configSysBasePath, apiXmlFileName,
-                        defaultConfigXml);
+    @Bean(name = "apiRequestHelper")
+    public ApiRequestHelper apiRequestHelper()
+            throws Exception {
+        ApiRequestHelper apiRequestHelper = new ApiRequestHelper(configBasePath, configSysBasePath, apiXmlFileName, defaultConfigXml);
         logger.debug("ApiRequestHelper loaded..");
         return apiRequestHelper;
-	}
-	
-	@Bean(name="apiParameterChecker")
-    public ApiParameterChecker apiParameterChecker() throws Exception {
+    }
+
+    @Bean(name = "apiParameterChecker")
+    public ApiParameterChecker apiParameterChecker()
+            throws Exception {
         return new ApiParameterChecker(apiRequestHelper());
-	}
-	
-	@Bean(name="dpsHandlerInterceptor")
+    }
+
+    @Bean(name = "dpsHandlerInterceptor")
     @ConditionalOnMissingBean
-	public HandlerInterceptorAdapter dpsHandlerInterceptor() {
-		return new MokaCommonHandlerInterceptor("DPS");
-	}
-	
-    private Contact contact = new Contact("서울시스템", "http://www.ssc.co.kr", "seoul01@ssc.co.kr");
+    public HandlerInterceptorAdapter dpsHandlerInterceptor() {
+        return new MokaCommonHandlerInterceptor("DPS");
+    }
 
     private List<SecurityContext> securityContexts() {
-        List<SecurityReference> securityReferences =
-                Arrays.asList(new SecurityReference("basicAuth", new AuthorizationScope[0]));
-        return Arrays.asList(SecurityContext.builder().securityReferences(securityReferences)
-                .forPaths(PathSelectors.any()).build());
+        List<SecurityReference> securityReferences = Arrays.asList(new SecurityReference("basicAuth", new AuthorizationScope[0]));
+        return Arrays.asList(SecurityContext
+                .builder()
+                .securityReferences(securityReferences)
+                .forPaths(PathSelectors.any())
+                .build());
     }
 
     private List<SecurityScheme> securitySchemes() {
@@ -132,14 +127,20 @@ public class DpsApiAutoConfiguration {
 
     @Bean
     public Docket commandApi() {
-        ApiInfo commandApiInfo = new ApiInfoBuilder().title("DPS Command API")
-                .description("DPS의 관리를 위해 사용되는 api 모음").version("1.0.0")
+        ApiInfo commandApiInfo = new ApiInfoBuilder()
+                .title("DPS Command API")
+                .description("DPS의 관리를 위해 사용되는 api 모음")
+                .version("1.0.0")
                 //                .termsOfServiceUrl(termsOfServiceUrl)
-                .contact(contact).license("Commerce License").licenseUrl("http://joongang.co.kr")
+                .contact(contact)
+                .license("Commerce License")
+                .licenseUrl("http://joongang.co.kr")
                 .build();
-        return new Docket(DocumentationType.SWAGGER_2).securitySchemes(securitySchemes())
+        return new Docket(DocumentationType.SWAGGER_2)
+                .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts())
-                .groupName("commandApi").select()
+                .groupName("commandApi")
+                .select()
                 .apis(RequestHandlerSelectors.basePackage("jmnet.moka.core.dps"))
                 .paths(PathSelectors.ant("/command/**"))
                 .build()
@@ -148,102 +149,86 @@ public class DpsApiAutoConfiguration {
 
     @Bean
     public Docket dataApi() {
-        ApiInfo dataApiInfo = new ApiInfoBuilder().title("DPS Data API")
-                .description("DPS의 데이터를 처리하기 위한 api 모음").version("1.0.0")
+        ApiInfo dataApiInfo = new ApiInfoBuilder()
+                .title("DPS Data API")
+                .description("DPS의 데이터를 처리하기 위한 api 모음")
+                .version("1.0.0")
                 //                .termsOfServiceUrl(termsOfServiceUrl)
-                .contact(contact).license("Commerce License").licenseUrl("http://joongang.co.kr")
+                .contact(contact)
+                .license("Commerce License")
+                .licenseUrl("http://joongang.co.kr")
                 .build();
-        return new Docket(DocumentationType.SWAGGER_2).securitySchemes(securitySchemes())
-                .securityContexts(securityContexts()).groupName("dataApi").select()
+        return new Docket(DocumentationType.SWAGGER_2)
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts())
+                .groupName("dataApi")
+                .select()
                 .apis(RequestHandlerSelectors.basePackage("jmnet.moka.core.dps"))
                 .paths(new Predicate<String>() {
                     @Override
                     public boolean apply(String input) {
                         return !input.startsWith("/command/"); // /command/로 시작하지 않으면..
                     }
-                }).build()
+                })
+                .build()
                 .apiInfo(dataApiInfo);
     }
 
     @Bean
-	public ForwardHandler forwardHandler()
-			throws ParserConfigurationException, XPathExpressionException, IOException {
-    	return new ForwardHandler(this.configForwardPath);
-	}
+    public ForwardHandler forwardHandler()
+            throws ParserConfigurationException, XPathExpressionException, IOException {
+        return new ForwardHandler(this.configForwardPath);
+    }
 
 
-	@Bean(name="apiRequestHandlerMapping")
+    @Bean(name = "apiRequestHandlerMapping")
     public HandlerMapping apiRequestHandlerMapping(@Autowired ForwardHandler forwardHandler)
-			throws ClassNotFoundException, NoSuchMethodException {
+            throws ClassNotFoundException, NoSuchMethodException {
         ApiRequestHandlerMapping handlerMapping =
-                new ApiRequestHandlerMapping(appContext, apiRequestHandlerClass,
-                apiRequestHandlerBeanName, apiRequestHandlerMethod, forwardHandler);
+                new ApiRequestHandlerMapping(appContext, apiRequestHandlerClass, apiRequestHandlerBeanName, apiRequestHandlerMethod, forwardHandler);
         handlerMapping.setInterceptors(dpsHandlerInterceptor());
 
         //RequestMappingHandlerMapping의 Order는 0이므로 이보다 먼저 수행
         handlerMapping.setOrder(-1);
         return handlerMapping;
-	}
+    }
 
-	@Bean(name="pcMenuParser")
-	public MenuParser pcMenuParser()
-			throws ParserConfigurationException, XPathExpressionException, IOException {
-		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
-		Resource resource = patternResolver.getResource("classpath:/Menu.xml");
-		return new MenuParser(resource);
-	}
+    @Bean(name = "periodicTaskScheduler")
+    public ThreadPoolTaskScheduler periodicScheduler() {
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(periodicTaskThreadCount);
+        threadPoolTaskScheduler.setThreadNamePrefix("periodicTaskScheduler");
+        return threadPoolTaskScheduler;
+    }
 
-	@Bean(name="mobileMenuParser")
-	public MenuParser mobileMenuParser()
-			throws ParserConfigurationException, XPathExpressionException, IOException {
-		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
-		Resource resource = patternResolver.getResource("classpath:/Menu_mobile.xml");
-		return new MenuParser(resource);
-	}
+    @Bean(name = "periodicTaskManager")
+    @DependsOn(value = {"apiParameterChecker", "apiRequestHelper"})
+    public ApiPeriodicTaskManager periodicTaskManager()
+            throws Exception {
+        ApiPeriodicTaskManager periodicTaskManager = new ApiPeriodicTaskManager(appContext, periodicScheduler(), apiRequestHelper());
+        return periodicTaskManager;
+    }
 
-	@Bean(name="categoryParser")
-	public CategoryParser categoryParser()
-			throws ParserConfigurationException, XPathExpressionException, IOException {
-		ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
-		Resource resource = patternResolver.getResource("classpath:/CategoryDefinition.xml");
-		return new CategoryParser(resource);
-	}
-
-	@Bean(name = "periodicTaskScheduler")
-	public ThreadPoolTaskScheduler periodicScheduler() {
-		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-		threadPoolTaskScheduler.setPoolSize(periodicTaskThreadCount);
-		threadPoolTaskScheduler.setThreadNamePrefix("periodicTaskScheduler");
-		return threadPoolTaskScheduler;
-	}
-	
-	@Bean(name = "periodicTaskManager")
-	@DependsOn(value= {"apiParameterChecker","apiRequestHelper"})
-	public ApiPeriodicTaskManager periodicTaskManager() throws Exception {
-        ApiPeriodicTaskManager periodicTaskManager =
-                new ApiPeriodicTaskManager(appContext, periodicScheduler(), apiRequestHelper());
-		return periodicTaskManager;
-	}
-	
-	@Bean(name="apiPeriodicTask")
-	@Scope(value="prototype")
-	@DependsOn(value= {"apiParameterChecker","apiRequestHelper"})
-	public ApiPeriodicTask apiPeriodicTask(Api api) throws ParameterException {
+    @Bean(name = "apiPeriodicTask")
+    @Scope(value = "prototype")
+    @DependsOn(value = {"apiParameterChecker", "apiRequestHelper"})
+    public ApiPeriodicTask apiPeriodicTask(Api api)
+            throws ParameterException {
         return new ApiPeriodicTask(appContext, api);
-	}
-	
-	@Bean(name="asyncRequestExecutor")
-	public ThreadPoolTaskExecutor asyncRequestExecutor() {
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(asyncRequestTaskThreadCoreCount);
-		executor.setMaxPoolSize(asyncRequestTaskThreadMaxCount);
-		executor.setQueueCapacity(asyncRequestTaskThreadQueueCount);
-		executor.setWaitForTasksToCompleteOnShutdown(false);
-		return executor;
-	}
-	
-	@Bean(name="asyncRequestTaskManager")
-	public AsyncRequestTaskManager asyncRequestTaskManager() {
-		return new AsyncRequestTaskManager(asyncRequestExecutor());
-	}
+    }
+
+    @Bean(name = "asyncRequestExecutor")
+    public ThreadPoolTaskExecutor asyncRequestExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(asyncRequestTaskThreadCoreCount);
+        executor.setMaxPoolSize(asyncRequestTaskThreadMaxCount);
+        executor.setQueueCapacity(asyncRequestTaskThreadQueueCount);
+        executor.setWaitForTasksToCompleteOnShutdown(false);
+        return executor;
+    }
+
+    @Bean(name = "asyncRequestTaskManager")
+    public AsyncRequestTaskManager asyncRequestTaskManager() {
+        return new AsyncRequestTaskManager(asyncRequestExecutor());
+    }
 }

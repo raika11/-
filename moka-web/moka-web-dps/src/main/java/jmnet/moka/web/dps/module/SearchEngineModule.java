@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module;
+package jmnet.moka.web.dps.module;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +8,10 @@ import jmnet.moka.common.ApiResult;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
-import jmnet.moka.core.dps.api.handler.module.searchEngine.Collection;
-import jmnet.moka.core.dps.api.handler.module.searchEngine.SearchQueryResult;
+import jmnet.moka.web.dps.module.MenuModule;
+import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
+import jmnet.moka.web.dps.module.searchEngine.Collection;
+import jmnet.moka.web.dps.module.searchEngine.SearchQueryResult;
 import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 
 public class SearchEngineModule implements ModuleInterface {
@@ -75,7 +77,8 @@ public class SearchEngineModule implements ModuleInterface {
 
     public Map<String, Object> getParameterByCategory(String categoryKey)
             throws Exception {
-        MenuModule menuModule = (MenuModule) moduleRequestHandler.getModule(MenuModule.class.getName());
+        jmnet.moka.web.dps.module.MenuModule
+                menuModule = (jmnet.moka.web.dps.module.MenuModule) moduleRequestHandler.getModule(MenuModule.class.getName());
         Map<String, Object> paramMapFromMenu = menuModule.getSearchParmeterByCategory(categoryKey);
         Map<String, Object> resultMap = new HashMap<>();
         if (paramMapFromMenu != null) {

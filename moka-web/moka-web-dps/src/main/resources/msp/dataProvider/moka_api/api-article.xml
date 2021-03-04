@@ -29,7 +29,7 @@
       <totalId desc="기사Id" type="number" required="Y">[0-9]{1,9}</totalId>
     </parameter>
     <request dmlType="sp" setNames="_DATA,CODE,REPORTER,COMPONENT">dps.article.articleN</request>
-    <request type="module">jmnet.moka.web.dps.module.article.ArticleModule</request>
+    <request type="module">jmnet.moka.web.dps.module.ArticleModule</request>
     <keys>
       totalId
     </keys>

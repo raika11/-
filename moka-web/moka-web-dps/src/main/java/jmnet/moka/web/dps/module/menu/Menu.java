@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module.menu;
+package jmnet.moka.web.dps.module.menu;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -146,7 +146,7 @@ public class Menu {
         return this.children.size() > 0;
     }
 
-    public Url getUrl(Element menuNode,MenuParser menuParser)
+    public Url getUrl(Element menuNode, MenuParser menuParser)
             throws XPathExpressionException {
         Node urlNode = menuParser.getNode(menuNode,"Url");
         if ( urlNode != null) {
@@ -176,7 +176,7 @@ public class Menu {
         return null;
     }
 
-    public void setCategoryAndSearchParamter(Element menuNode,MenuParser menuParser)
+    public void setCategoryAndSearchParamter(Element menuNode, MenuParser menuParser)
             throws XPathExpressionException {
         String categoryKey = null;
         Node categoryNode = menuParser.getNode(menuNode,"Section/CategoryKeys/string");

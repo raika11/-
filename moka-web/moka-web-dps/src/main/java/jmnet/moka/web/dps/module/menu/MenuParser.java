@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module.menu;
+package jmnet.moka.web.dps.module.menu;
 
 import java.io.IOException;
 import java.util.ArrayList;

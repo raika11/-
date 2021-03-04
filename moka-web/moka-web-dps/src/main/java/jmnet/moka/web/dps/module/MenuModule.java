@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module;
+package jmnet.moka.web.dps.module;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,12 +7,13 @@ import java.util.Map;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
-import jmnet.moka.core.dps.api.handler.module.category.Category;
-import jmnet.moka.core.dps.api.handler.module.category.CategoryParser;
-import jmnet.moka.core.dps.api.handler.module.menu.Menu;
-import jmnet.moka.core.dps.api.handler.module.menu.MenuParser;
+import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
+import jmnet.moka.web.dps.module.category.Category;
+import jmnet.moka.web.dps.module.category.CategoryParser;
+import jmnet.moka.web.dps.module.menu.Menu;
+import jmnet.moka.web.dps.module.menu.MenuParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -59,7 +60,9 @@ public class MenuModule implements ModuleInterface {
     public Object getMenuByCategory(ApiContext apiContext) throws Exception {
         Map<String, Object> paramMap = apiContext.getCheckedParamMap();
         String categoryKey = (String) paramMap.get(MokaConstants.PARAM_CATEGORY);
-        CategoryModule categoryModule = (CategoryModule) moduleRequestHandler.getModule(CategoryModule.class.getName());
+        CategoryModule
+                categoryModule = (CategoryModule) moduleRequestHandler.getModule(
+                CategoryModule.class.getName());
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put(CODES, categoryModule.getCodes(categoryKey));
         returnMap.put(MENUS, getFullMenu(categoryKey));
@@ -71,7 +74,8 @@ public class MenuModule implements ModuleInterface {
         String masterCodes = (String)paramMap.get(MokaConstants.CATEGORY_MASTER_CODE_LIST);
         String serviceCodes = (String)paramMap.get(MokaConstants.CATEGORY_SERVICE_CODE_LIST);
         String sourceCodes = (String)paramMap.get(MokaConstants.CATEGORY_SOURCE_CODE_LIST);
-        CategoryModule categoryModule = (CategoryModule) moduleRequestHandler.getModule(CategoryModule.class.getName());
+        CategoryModule
+                categoryModule = (CategoryModule) moduleRequestHandler.getModule(CategoryModule.class.getName());
         List<Category> categoryList = categoryModule.getCategoryList(masterCodes,serviceCodes, sourceCodes);
         Map<String, Object> returnMap = new HashMap<>();
         if ( categoryList.size() > 0) {

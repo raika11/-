@@ -1,4 +1,4 @@
-package jmnet.moka.core.dps.api.handler.module;
+package jmnet.moka.web.dps.module;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,10 +6,11 @@ import java.util.Map;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.dps.api.ApiContext;
 import jmnet.moka.core.dps.api.ApiRequestHelper;
-import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import jmnet.moka.core.dps.api.handler.ModuleRequestHandler;
-import jmnet.moka.core.dps.api.handler.module.category.Category;
-import jmnet.moka.core.dps.api.handler.module.category.CategoryParser;
+import jmnet.moka.core.dps.api.handler.module.ModuleInterface;
+import jmnet.moka.web.dps.module.category.Category;
+import jmnet.moka.web.dps.module.category.CategoryParser;
+import jmnet.moka.core.dps.mvc.handler.ApiRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

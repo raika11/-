@@ -1,11 +1,19 @@
 package jmnet.moka.web.dps.config;
 
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+import jmnet.moka.core.common.util.ResourceMapper;
+import jmnet.moka.web.dps.module.category.CategoryParser;
+import jmnet.moka.web.dps.module.menu.MenuParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import jmnet.moka.core.common.aspect.CommandControllerIpAllowAspect;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 @Configuration
 public class CustomDpsConfiguration {
@@ -31,4 +39,19 @@ public class CustomDpsConfiguration {
         return new CommandControllerIpAllowAspect(commandAllowIps);
     }
 
+    @Bean(name="pcMenuParser")
+    public MenuParser pcMenuParser()
+            throws ParserConfigurationException, XPathExpressionException, IOException {
+        ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
+        Resource resource = patternResolver.getResource("classpath:/Menu.xml");
+        return new MenuParser(resource);
+    }
+
+    @Bean(name="categoryParser")
+    public CategoryParser categoryParser()
+            throws ParserConfigurationException, XPathExpressionException, IOException {
+        ResourcePatternResolver patternResolver = ResourceMapper.getResouerceResolver();
+        Resource resource = patternResolver.getResource("classpath:/CategoryDefinition.xml");
+        return new CategoryParser(resource);
+    }
 }

@@ -38,7 +38,12 @@ public abstract class Task<T> extends TaskBase {
     private int retryCount;
     private long tickLogTime;
     private long tickLogInterval;
+
     private Date lastSuccessDate;
+    @SuppressWarnings("unused")
+    public Date getLastSuccessDate() {
+        return BulkUtil.getDeepDate(lastSuccessDate);
+    }
 
     public Task(TaskGroup parent, Node node, XMLUtil xu)
             throws XPathExpressionException, BulkException {

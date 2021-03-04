@@ -1,6 +1,7 @@
 package jmnet.moka.web.rcv.taskinput;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Date;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.web.rcv.common.taskinput.TaskInputData;
@@ -63,5 +64,22 @@ public class FileXmlTaskInputData<P, C> extends TaskInputData {
             log.error(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public String getFileName() {
+        //noinspection ConstantConditions,LoopStatementThatDoesntLoop
+        do {
+            if( getFile() == null )
+                break;
+            Path path = getFile().toPath();
+            Path fileName = path.getFileName();
+            if( fileName == null )
+                break;
+
+            return fileName.toString();
+
+        }while( false );
+
+        return "";
     }
 }

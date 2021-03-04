@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author sapark
  * @since 2021-02-16 016 오전 11:22
  */
+@SuppressFBWarnings({"DLS_DEAD_LOCAL_STORE", "DM_DEFAULT_ENCODING"})
 @SuppressWarnings("unused")
 public class GifDecoder {
     static final class BitReader {
@@ -109,6 +111,7 @@ public class GifDecoder {
         }
     }
 
+    @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC")
     @SuppressWarnings("InnerClassMayBeStatic")
     final class GifFrame {
         // Graphic control extension (optional)
@@ -135,6 +138,7 @@ public class GifDecoder {
         private BufferedImage img; // Full drawn image, not just the frame area
     }
 
+    @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC")
     @SuppressWarnings("unused")
     public final class GifImage {
         public String header; // Bytes 0-5, GIF87a or GIF89a

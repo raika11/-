@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  *
  * Project : moka-web-bulk
  * Package : jmnet.moka.web.rcv.service
- * ClassName : SmsUtilServiceImpl
+ * ClassName : SlackMessageServiceImpl
  * Created : 2021-01-13 013 sapark
  * </pre>
  *

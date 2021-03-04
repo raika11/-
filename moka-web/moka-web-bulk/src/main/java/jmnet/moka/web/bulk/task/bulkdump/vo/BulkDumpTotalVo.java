@@ -3,7 +3,7 @@ package jmnet.moka.web.bulk.task.bulkdump.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Date;
-import jmnet.moka.web.bulk.common.taskinput.TaskInputData;
+import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,8 +51,6 @@ public class BulkDumpTotalVo implements Serializable {
     @JsonProperty(value = "JHOT_YN")
     private String jHotYn;
 
-    private TaskInputData taskInputData;
-
     private int dumpStatus;
     private String contentDiv;
 
@@ -92,5 +90,14 @@ public class BulkDumpTotalVo implements Serializable {
         }while (false);
 
         return false;
+    }
+
+    public Date getInsDt() {
+        return BulkUtil.getDeepDate(insDt);
+    }
+
+    @SuppressWarnings("unused")
+    public void setInsDt(Date insDt) {
+        this.insDt = BulkUtil.getDeepDate(insDt);
     }
 }

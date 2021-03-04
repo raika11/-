@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * Project : moka-web-bulk
  * Package : jmnet.moka.web.rcv.service
- * ClassName : SmsUtilService
+ * ClassName : SlackMessageService
  * Created : 2021-01-13 013 sapark
  * </pre>
  *

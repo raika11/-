@@ -102,7 +102,6 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
                 if( !bulkDumpTotalVo.isDdrefValid() )
                     continue;
 
-                bulkDumpTotalVo.setTaskInputData(taskInputData);
                 this.currentSeqNo = Math.max( currentSeqNo, bulkDumpTotalVo.getSeqNo());
 
                 log.info( "BulkDump Start no.={} iud={} contentId={}", bulkDumpTotalVo.getSeqNo(), bulkDumpTotalVo.getIud(), bulkDumpTotalVo.getContentId());

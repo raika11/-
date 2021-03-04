@@ -12,6 +12,7 @@ import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemMultiOvpVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ItemVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.ReporterVo;
 import jmnet.moka.web.rcv.task.jamxml.vo.sub.TotalBasicInfo;
+import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -82,5 +83,13 @@ public class JamArticleTotalVo extends TotalVo<JamArticleVo> {
             sRet = sRet.concat(code);
         }
         return sRet;
+    }
+
+    public Date getServiceDatetime() {
+        return RcvUtil.getDeepDate(serviceDatetime);
+    }
+
+    public void setServiceDatetime(Date serviceDatetime) {
+        this.serviceDatetime = RcvUtil.getDeepDate(serviceDatetime);
     }
 }

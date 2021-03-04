@@ -20,6 +20,7 @@ import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpNewsVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.BulkDumpTotalVo;
 import jmnet.moka.web.bulk.task.bulkdump.vo.sub.BulkDumpJHotArticle;
 import jmnet.moka.web.bulk.util.BulkTagUtil;
+import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,15 @@ public abstract class BulkArticle implements Serializable {
     private BulkDumpEnvCopyright bulkDumpEnvCopyright;
 
     private Date insDt;
+
+    public Date getInsDt() {
+        return BulkUtil.getDeepDate(insDt);
+    }
+
+    public void setInsDt(Date insDt) {
+        this.insDt = BulkUtil.getDeepDate(insDt);
+    }
+
     private String sourceCode;
     private String targetCode;
 

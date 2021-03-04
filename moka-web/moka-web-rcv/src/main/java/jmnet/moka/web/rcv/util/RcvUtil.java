@@ -29,6 +29,10 @@ import org.apache.commons.io.FilenameUtils;
  */
 @Slf4j
 public class RcvUtil {
+    public static Date getDeepDate( Date date ) {
+        return date == null ? null : (Date) date.clone();
+    }
+
     public static int parseInt(String s) {
         try {
             return Integer.parseInt(s);

@@ -168,4 +168,9 @@ public abstract class Task<T> extends TaskBase {
     @SuppressWarnings("EmptyMethod")
     protected void stopServer() {
     }
+
+    @SuppressWarnings("unused")
+    public Date getLastSuccessDate() {
+        return RcvUtil.getDeepDate( lastSuccessDate );
+    }
 }

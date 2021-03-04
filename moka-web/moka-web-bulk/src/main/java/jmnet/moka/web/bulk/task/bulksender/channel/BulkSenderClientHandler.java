@@ -18,6 +18,7 @@ import jmnet.moka.web.bulk.taskinput.FileTaskInput;
 import jmnet.moka.web.bulk.util.BulkFileUtil;
 import jmnet.moka.web.bulk.util.BulkFtpUtil;
 import jmnet.moka.web.bulk.util.BulkStringUtil;
+import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,16 @@ public class BulkSenderClientHandler implements Runnable{
     private final SlackMessageService slackMessageService;
 
     private boolean isPause = false;
+
+    public Date getLastSuccessDate() {
+        return BulkUtil.getDeepDate(lastSuccessDate);
+    }
+
+    @SuppressWarnings("unused")
+    public void setLastSuccessDate(Date lastSuccessDate) {
+        this.lastSuccessDate = BulkUtil.getDeepDate(lastSuccessDate);
+    }
+
     private Date lastSuccessDate;
 
     public BulkSenderClientHandler(BulkDumpEnvCP bulkDumpEnvCP, BulkSenderTask bulkSenderTask) {

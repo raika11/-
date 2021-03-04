@@ -1,10 +1,7 @@
 package jmnet.moka.web.bulk.util;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,9 +9,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import jmnet.moka.common.utils.McpDate;
 import jmnet.moka.common.utils.McpFile;
 import jmnet.moka.common.utils.McpString;
@@ -36,50 +30,6 @@ import org.apache.commons.io.FilenameUtils;
  */
 @Slf4j
 public class BulkFileUtil {
-    public static String readFile( Path path, Charset encoding)
-            throws IOException {
-        byte [] encoded = Files.readAllBytes(path);
-        return new String( encoded, encoding);
-    }
-
-    public static Charset getFromXml( File file ) {
-        XMLStreamReader xmlStreamReader = null;
-        FileReader fr = null;
-        try {
-            fr = new FileReader(file);
-            xmlStreamReader = XMLInputFactory
-                    .newInstance()
-                    .createXMLStreamReader(fr);
-
-            return Charset.forName(xmlStreamReader.getCharacterEncodingScheme());
-        } catch (Exception ignore) {
-            log.trace("BulkFileUtil :: getFromXml Exception" );
-        }
-        finally {
-            if( xmlStreamReader != null ) {
-                try {
-                    xmlStreamReader.close();
-                } catch (XMLStreamException e) {
-                    e.printStackTrace();
-                }
-            }
-            if( fr != null ) {
-                try {
-                    fr.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return StandardCharsets.UTF_8;
-    }
-
-    @SuppressWarnings("unused")
-    public static String readFromXml( File file )
-            throws IOException {
-        return BulkFileUtil.readFile(file.toPath(), getFromXml( file) );
-    }
-
     public static boolean createDirectories(String dir) {
         try {
             if (!McpString.isNullOrEmpty(dir)) {
@@ -110,9 +60,12 @@ public class BulkFileUtil {
         createDirectories(targetPath.toString());
 
         final Path sourcePath = file.toPath();
-        Path targetFile = Paths.get(targetPath.toString(), sourcePath
-                .getFileName()
-                .toString());
+        final Path sourceFilename = sourcePath.getFileName();
+        if( McpString.isNullOrEmpty(sourceFilename)) {
+            throw new BulkException(String.format("파일 원본 경로를 확인할 수 없습니다.[%s]", sourcePath.toString()));
+        }
+
+        Path targetFile = Paths.get(targetPath.toString(), sourceFilename.toString());
         if (Files.exists(targetFile)) {
             targetFile = Paths.get(renameFileWithDateTime(targetFile.toString(), McpFile.getExtension(file)));
         }

@@ -1,7 +1,7 @@
 package jmnet.moka.web.rcv.service.vo;
 
 import java.util.Date;
-import lombok.AllArgsConstructor;
+import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.Getter;
 
 /**
@@ -17,9 +17,18 @@ import lombok.Getter;
  * @since 2021-02-19 019 오후 5:26
  */
 @Getter
-@AllArgsConstructor
 public class SlackMessageVo {
     private final Date date;
     private final String title;
     private final String message;
+
+    public SlackMessageVo(Date date, String title, String message) {
+        this.date = RcvUtil.getDeepDate( date );
+        this.title = title;
+        this.message = message;
+    }
+
+    public Date getDate() {
+        return RcvUtil.getDeepDate( this.date );
+    }
 }

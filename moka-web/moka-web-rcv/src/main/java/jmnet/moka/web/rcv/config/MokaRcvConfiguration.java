@@ -50,10 +50,10 @@ public class MokaRcvConfiguration {
     private String jamApiUrlIlg;
 
     @Value("${rcv.purge.dpstargets}")
-    private String[] dpsTargets;
+    private String dpsTargets;
 
     @Value("${rcv.purge.tmstargets}")
-    private String[] tmsTargets;
+    private String tmsTargets;
 
     @Value("${rcv.purge.defaultApiPath}")
     private String defaultApiPath;

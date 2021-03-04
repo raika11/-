@@ -129,7 +129,7 @@ public class JamXmlTask extends Task<FileXmlTaskInputData<JamArticleTotalVo, Jam
         //        }
          */
         articleTotal.setSourceCode(this.sourceCode);
-        articleTotal.setXmlFileNM(taskInputData.getFile().toPath().getFileName().toString());
+        articleTotal.setXmlFileNM(taskInputData.getFileName());
 
 
         if(!doProcessSelectMasterCode(articleTotal, articleTotal.getMainData(), jamXmlService)) {

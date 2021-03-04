@@ -5,6 +5,7 @@ import jmnet.moka.web.rcv.common.vo.TotalVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpCategoryVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpComponentVo;
 import jmnet.moka.web.rcv.task.cpxml.vo.sub.CpReporterVo;
+import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,5 +45,14 @@ public class CpArticleTotalVo extends TotalVo<CpArticleListVo> {
 
     public CpArticleTotalVo(CpArticleListVo mainData) {
         super(mainData);
+    }
+
+    public void setPressDT(Date pressDT) {
+        this.pressDT = RcvUtil.getDeepDate(pressDT);
+    }
+
+    @SuppressWarnings("unused")
+    public Date getPressDT() {
+        return RcvUtil.getDeepDate(pressDT);
     }
 }

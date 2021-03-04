@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +25,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class BulkUtil {
+    public static Date getDeepDate( Date date ) {
+        return date == null ? null : (Date) date.clone();
+    }
+
     public static int parseInt(String s) {
         try {
             return Integer.parseInt(s);

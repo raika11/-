@@ -1,7 +1,7 @@
 package jmnet.moka.web.bulk.service.vo;
 
 import java.util.Date;
-import lombok.AllArgsConstructor;
+import jmnet.moka.web.bulk.util.BulkUtil;
 import lombok.Getter;
 
 /**
@@ -17,9 +17,18 @@ import lombok.Getter;
  * @since 2021-02-19 019 오후 5:26
  */
 @Getter
-@AllArgsConstructor
 public class SlackMessageVo {
     private final Date date;
     private final String title;
     private final String message;
+
+    public SlackMessageVo(Date date, String title, String message) {
+        this.date = BulkUtil.getDeepDate(date) ;
+        this.title = title;
+        this.message = message;
+    }
+
+    public Date getDate() {
+        return BulkUtil.getDeepDate(date);
+    }
 }

@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,11 +40,12 @@ public class RcvFileUtil {
         return new String( encoded, encoding);
     }
 
+    @SuppressFBWarnings("REC_CATCH_EXCEPTION")
     public static Charset getFromXml( File file ) {
         XMLStreamReader xmlStreamReader = null;
         FileReader fr = null;
         try {
-            fr = new FileReader(file);
+            fr = new FileReader(file, StandardCharsets.UTF_8);
             xmlStreamReader = XMLInputFactory
                     .newInstance()
                     .createXMLStreamReader(fr);

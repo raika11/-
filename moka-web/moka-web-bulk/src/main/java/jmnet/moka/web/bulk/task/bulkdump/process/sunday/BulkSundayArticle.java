@@ -1,5 +1,6 @@
 package jmnet.moka.web.bulk.task.bulkdump.process.sunday;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
  * @author sapark
  * @since 2021-01-27 027 오후 5:40
  */
+@SuppressFBWarnings("VA_FORMAT_STRING_USES_NEWLINE")
 @SuppressWarnings("DuplicatedCode")
 @Getter
 @Setter

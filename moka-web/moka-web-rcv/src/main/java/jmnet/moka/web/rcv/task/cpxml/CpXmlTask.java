@@ -105,7 +105,7 @@ public class CpXmlTask extends Task<FileXmlTaskInputData<CpArticleTotalVo, CpArt
 
         cpArticleTotalVo.setSourceCode(this.sourceCode);
         cpArticleTotalVo.setEditYn(this.editYn);
-        cpArticleTotalVo.setXmlFileNM(taskInputData.getFile().toPath().getFileName().toString());
+        cpArticleTotalVo.setXmlFileNM(taskInputData.getFileName());
         
         final CpXmlService cpXmlService = getTaskManager().getCpXmlService();
 
@@ -152,7 +152,8 @@ public class CpXmlTask extends Task<FileXmlTaskInputData<CpArticleTotalVo, CpArt
             String imageFileName;
             if (this.receiveImage.equals("Y")) {
                 // 로컬이미지 다운로드(FTP 에 이미지파일도 함께 올려주는 경우)
-                imageFileName = Path.of(component.getUrl()).getFileName().toString();
+                final Path fileName = Path.of(component.getUrl()).getFileName();
+                imageFileName = fileName == null ? "" : fileName.toString();
                 localFilePath = Path.of(taskInputData.getTaskInput().getDirScan().getPath(), imageFileName).toString();
                 log.debug("{} local file {}, {}", getTaskName(), imageFileName, localFilePath);
             } else {

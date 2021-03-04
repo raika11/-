@@ -37,8 +37,8 @@ public class PurgeServiceImpl implements PurgeService{
     public void purgeProcess(TaskInputData taskInputData, JamArticleTotalVo articleTotal, MokaRcvConfiguration rcvConfiguration) {
         try{
             final String articleId = Integer.toString(articleTotal.getTotalId() );
-            dpsPurge( taskInputData, rcvConfiguration.getDpsTargets(), rcvConfiguration.getDefaultApiPath(), DPS_API_ID, articleId );
-            tmsArticlePurge( taskInputData, rcvConfiguration.getTmsTargets(), articleId );
+            dpsPurge( taskInputData, rcvConfiguration.getDpsTargets().split(";"), rcvConfiguration.getDefaultApiPath(), DPS_API_ID, articleId );
+            tmsArticlePurge( taskInputData, rcvConfiguration.getTmsTargets().split(";"), articleId );
         }catch (Exception ignore) {
             taskInputData.logError("purge Exception !!");
         }

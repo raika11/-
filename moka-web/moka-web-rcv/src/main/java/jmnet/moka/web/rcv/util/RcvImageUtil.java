@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -112,6 +113,7 @@ public class RcvImageUtil {
         return true;
     }
 
+    @SuppressFBWarnings("REC_CATCH_EXCEPTION")
     private static BufferedImage getBufferedImageFromGifDecoder( File sourceFile ) {
         try (InputStream inputStream = new FileInputStream(sourceFile)) {
             //noinspection LoopStatementThatDoesntLoop,ConstantConditions
@@ -124,7 +126,7 @@ public class RcvImageUtil {
                 return gif.getFrame(0);
             }while( false );
             return null;
-        } catch (Exception e ){
+        } catch ( Exception e) {
             return null;
         }
     }

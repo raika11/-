@@ -3,6 +3,7 @@ package jmnet.moka.web.rcv.task.joinsland.vo;
 import java.util.Date;
 import jmnet.moka.web.rcv.common.vo.TotalVo;
 import jmnet.moka.web.rcv.task.joinsland.vo.sub.JoinsLandImageVo;
+import jmnet.moka.web.rcv.util.RcvUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,15 @@ public class JoinsLandArticleTotalVo extends TotalVo<JoinsLandArticleVo> {
 
     public JoinsLandArticleTotalVo(JoinsLandArticleVo mainData) {
         super(mainData);
+    }
+
+    @SuppressWarnings("unused")
+    public Date getInsDt() {
+        return RcvUtil.getDeepDate(insDt);
+    }
+
+    public void setInsDt(Date insDt) {
+        this.insDt = RcvUtil.getDeepDate(insDt);
     }
 
     private Date insDt;

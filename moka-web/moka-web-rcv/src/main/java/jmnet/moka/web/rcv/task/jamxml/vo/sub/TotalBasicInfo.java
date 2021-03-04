@@ -1,5 +1,6 @@
 package jmnet.moka.web.rcv.task.jamxml.vo.sub;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,7 +30,9 @@ import lombok.Setter;
 @Setter
 @XmlRootElement(name = "totalBasicInfo")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TotalBasicInfo {
+public class TotalBasicInfo implements Serializable {
+    private static final long serialVersionUID = 3118632110669885771L;
+
     private String reporters;
     private String keywords;
     private String masterCodes;

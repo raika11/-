@@ -17,12 +17,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ThreadUtil {
-    public final static ThreadGroup THREAD_GROUP = new ThreadGroup("RCV");
+    public final static ThreadGroup THREAD_GROUP;
 
     static {
-        Runtime
-                .getRuntime()
-                .addShutdownHook(new Thread(ThreadUtil::interruptAll));
+        THREAD_GROUP = new ThreadGroup("RCV");
+        Runtime.getRuntime().addShutdownHook(new Thread(ThreadUtil::interruptAll));
     }
 
     public static Thread create(String name, Runnable runnable) {

@@ -133,6 +133,7 @@
     {call UPU_15RE_ARTICLE_LIST_SEL(
       #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{sources, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{scodes, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{mcodes, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{keywords, mode=IN, jdbcType=VARCHAR, javaType=string},

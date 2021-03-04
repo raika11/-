@@ -62,5 +62,5 @@ public class DpsApiConstants {
     /**
      * 디지털스페셜 관련 API
      **/
-    public static final String DIGITAL_SPECIAL_LIST = "digitalSpecial.info";
+    public static final String DIGITAL_SPECIAL_INFO = "digitalSpecial.info";
 }

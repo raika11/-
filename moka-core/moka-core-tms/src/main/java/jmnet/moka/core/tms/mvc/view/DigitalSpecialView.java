@@ -86,7 +86,7 @@ public class DigitalSpecialView extends AbstractView {
             DataLoader loader = templateMerger.getDataLoader();
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put(MokaConstants.MERGE_CONTEXT_DIGITAL_SPECIAL_ID, digitalSpecialId);
-            JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.DIGITAL_SPECIAL_LIST, paramMap, true);
+            JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.DIGITAL_SPECIAL_INFO, paramMap, true);
             Map map = jsonResult.getDataListFirst();
             if (map == null) {
                 return; // 해당되는 id가 없으면 아무것도 표시하지 않는다.

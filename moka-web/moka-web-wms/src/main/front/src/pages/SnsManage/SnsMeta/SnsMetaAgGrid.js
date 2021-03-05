@@ -44,7 +44,7 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
         <MokaTable
             columnDefs={columnDefs}
             rowData={rowData}
-            rowHeight={50}
+            rowHeight={46}
             onRowNodeId={(row) => row.id}
             onRowClicked={(row) => handleClickListRow(row)}
             loading={loading}

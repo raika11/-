@@ -17,6 +17,7 @@ public enum StatusFlagType {
     DONE("1", "전송완료"),
     ERROR_SERVER("2", "서버오류"),
     DELETE_TASK("3", "삭제 된 테스크"),
+    FAILED_TASK("4", "실행결과 실패"),
     PROCESSING("9", "진행 중");
 
     // 상태코드

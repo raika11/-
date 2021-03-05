@@ -5,7 +5,7 @@ import { initialState, changeSearchOption, getReporterList } from '@store/report
 import ReporterSearchListModal from './modals/ReporterSearchListModal';
 
 /**
- * 기자 목록 검색 컴포넌트
+ * 기자 관리 > 기자 목록 검색
  */
 const ReporterMgrSearch = () => {
     const dispatch = useDispatch();

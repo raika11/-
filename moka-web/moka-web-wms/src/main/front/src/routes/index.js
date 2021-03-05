@@ -240,7 +240,7 @@ const routes = [
     {
         path: '/reporter',
         name: 'reporter',
-        displayName: '기자관리',
+        displayName: '기자 관리',
         component: Reporter,
         layout: SidebarOpenLayout,
         side: true,

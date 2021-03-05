@@ -1,18 +1,20 @@
 import React, { Suspense } from 'react';
 import Helmet from 'react-helmet';
-import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { Route } from 'react-router-dom';
+import clsx from 'clsx';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
 import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
-
 import ReporterEdit from './ReporterEdit';
 const ReporterList = React.lazy(() => import('./ReporterList'));
 
+/**
+ * 기자 관리
+ */
 const Reporter = ({ match, displayName }) => {
     const loading = useSelector(({ loading }) => loading[GET_REPORTER] || loading[CHANGE_REPORTER]);
     const matchPoints = useBreakpoint();
@@ -26,8 +28,8 @@ const Reporter = ({ match, displayName }) => {
             </Helmet>
 
             <Row className="m-0">
+                {/* 기자 목록 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    {/* 기자 목록 */}
                     <MokaCard title="기자 목록" className="w-100" bodyClassName="d-flex flex-column">
                         <Suspense>
                             <ReporterList match={match} />

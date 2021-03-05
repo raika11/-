@@ -26,28 +26,29 @@ const getReporterListModal = createRequestSaga(reporterAction.GET_REPORTER_LIST_
 const getReporterAllList = createRequestSaga(reporterAction.GET_REPORTER_ALL_LIST, reporterAPI.getAllReporterList);
 
 /**
- * 등록/수정
- * @param {string} param0.payload.type insert|update
- * @param {array} param0.payload.actions 선처리 액션들
- * @param {func} param0.payload.callback 콜백
+ * 저장
  */
-function* saveReporter({ payload: { type, actions, callback } }) {
-    const ACTION = reporterAction.CHANGE_REPORTER;
-    let response;
+function* saveReporter({ payload: { reporter, callback } }) {
+    const ACTION = reporterAction.SAVE_REPORTER;
     let callbackData = {};
 
     yield put(startLoading(ACTION));
 
     try {
-        const act = actions[0];
-        yield put({
-            type: act.type,
-            payload: act.payload,
-        });
+        // // actions 먼저 처리
+        // if (actions && actions.length > 0) {
+        //     for (let i = 0; i < actions.length; i++) {
+        //         const act = actions[i];
+        //         yield put({
+        //             type: act.type,
+        //             payload: act.payload,
+        //         });
+        //     }
+        // }
 
         // 기자 데이터
         const reporter = yield select((store) => store.reporter.reporter);
-        response = yield call(reporterAPI.putReporter, { reporter });
+        const response = yield call(reporterAPI.putReporter, { reporter });
         callbackData = response.data;
 
         if (response.data.header.success) {
@@ -58,14 +59,6 @@ function* saveReporter({ payload: { type, actions, callback } }) {
 
             // 목록 다시 검색
             yield put({ type: reporterAction.GET_REPORTER_LIST });
-
-            // auth 도메인 목록 다시 조회
-            //yield put(getreporter(reporter.repSeq));
-        } else {
-            yield put({
-                type: reporterAction.GET_REPORTER_FAILURE,
-                payload: response.data,
-            });
         }
     } catch (e) {
         callbackData = errorResponse(e);

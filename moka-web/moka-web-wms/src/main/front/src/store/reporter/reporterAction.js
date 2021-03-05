@@ -51,4 +51,4 @@ export const changeReporter = createAction(CHANGE_REPORTER, (reporter) => report
  * 저장
  */
 export const SAVE_REPORTER = 'reporter/SAVE_REPORTER';
-export const saveReporter = createAction(SAVE_REPORTER, ({ type, actions, callback }) => ({ type, actions, callback }));
+export const saveReporter = createAction(SAVE_REPORTER, ({ reporter, callback }) => ({ reporter, callback }));

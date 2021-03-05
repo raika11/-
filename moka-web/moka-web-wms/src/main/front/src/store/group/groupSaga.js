@@ -82,7 +82,7 @@ function* duplicateGroupCheck({ payload: { groupCd, callback } }) {
 
 /**
  * 등록/수정
- * @param {string} param0.payload.type insert|update
+ * @param {string} param0.payload.type insert|
  * @param {array} param0.payload.actions 선처리 액션들
  * @param {func} param0.payload.callback 콜백
  */

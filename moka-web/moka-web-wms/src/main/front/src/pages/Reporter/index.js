@@ -1,2 +1,1 @@
-import Reporter from './Reporter';
-export default Reporter;
+export { default } from './Reporter';

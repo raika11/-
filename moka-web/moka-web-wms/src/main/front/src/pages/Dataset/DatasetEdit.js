@@ -174,14 +174,14 @@ const DatasetEdit = ({ onDelete, match }) => {
      * @param {String} dataApiParam dataAPI Parameter
      * @returns {String} dataApiUrl
      */
-    const makeDataApiUrl = (dataApi, dataApiParam) => {
+    const makeDataApiUrl = useCallback((dataApi, dataApiParam) => {
         let dataApiUrl = dataApi;
         if (dataApiParam && Object.keys(dataApiParam).length > 0) {
-            dataApiUrl += `?${qs.stringify(dataApiParam, { plainObjects: true })}`;
+            dataApiUrl += `?${qs.stringify(dataApiParam, { skipNulls: true })}`;
         }
 
         return dataApiUrl;
-    };
+    }, []);
 
     /**
      * 데이터셋 관리 수정

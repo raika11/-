@@ -3,6 +3,11 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { initializeBannedParams, clearStore, getInitData } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
+import useBreakpoint from '@hooks/useBreakpoint';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import clsx from 'clsx';
+import { Col } from 'react-bootstrap';
 
 const BannedList = React.lazy(() => import('./BannedList'));
 
@@ -10,6 +15,7 @@ const BannedList = React.lazy(() => import('./BannedList'));
  * 차단관리
  */
 const Banned = ({ match, ...rest }) => {
+    const matchPoints = useBreakpoint();
     const dispatch = useDispatch();
     const pathName = useRef(null);
     const [pagesParams, setPagesParams] = useState(initpagesParams);
@@ -78,26 +84,30 @@ const Banned = ({ match, ...rest }) => {
     }, []);
 
     return (
-        <div className="d-flex">
-            <Helmet>
-                <title>{`${pagesParams.pageName}`}</title>
-                <meta name="description" content={`${pagesParams.pageName} 페이지 입니다.`} />
-                <meta name="robots" content="noindex" />
-            </Helmet>
+        <Container className="p-0 position-relative" fluid style={!(matchPoints.md || matchPoints.lg) ? { paddingRight: '48px' } : { paddingRight: 0 }}>
+            <Row className="m-0">
+                <Helmet>
+                    <title>{`${pagesParams.pageName}`}</title>
+                    <meta name="description" content={`${pagesParams.pageName} 페이지 입니다.`} />
+                    <meta name="robots" content="noindex" />
+                </Helmet>
 
-            {/* 리스트 */}
-            <Switch>
-                <Route
-                    path={[`/${pagesParams.pagePathName}`]}
-                    exact
-                    render={() => (
-                        <Suspense>
-                            <BannedList {...rest} />
-                        </Suspense>
-                    )}
-                />
-            </Switch>
-        </div>
+                {/* 리스트 */}
+                <Switch>
+                    <Route
+                        path={[`/${pagesParams.pagePathName}`]}
+                        exact
+                        render={() => (
+                            <Col sm={12} md={12} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
+                                <Suspense>
+                                    <BannedList {...rest} />
+                                </Suspense>
+                            </Col>
+                        )}
+                    />
+                </Switch>
+            </Row>
+        </Container>
     );
 };
 

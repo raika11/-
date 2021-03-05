@@ -15,7 +15,7 @@ const BannedList = (props) => {
     return (
         <>
             <MokaCard
-                className="mb-0 flex-fill"
+                className="mb-0 w-100"
                 height={CARD_DEFAULT_HEIGHT}
                 headerClassName="d-flex justify-content-between align-item-center"
                 bodyClassName="d-flex flex-column"

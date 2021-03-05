@@ -59,17 +59,21 @@ public class ApiParameterChecker {
     public Object decideParameter(Api api, Parameter parameter, String paramValue)
             throws ParameterException {
         if (McpString.isEmpty(paramValue)) {
-            if (parameter.getDefaultValue() != null) {
-                return parameter.getDefaultValue();
-            } else if (parameter.isRequire()) {
-                throw new ParameterException(String.format(
-                        "Parameter is required,but default & paramerer value not found : [%s] [%s] [%s] [%s] [%s]",
-                        api.getApiConfig().getPath(), api.getId(), parameter.getName(),
-                        parameter.getDefaultValue(), parameter.getFilter()), api);
+            if (parameter.getType().equals(ApiParser.PARAM_TYPE_STRING)) {
+                if (parameter.getDefaultValue() != null) {
+                    return parameter.getDefaultValue();
+                } else if (parameter.isRequire()) {
+                    throw new ParameterException(String.format("Parameter is required,but default & paramerer value not found : [%s] [%s] [%s] [%s] [%s]",
+                            api
+                                    .getApiConfig()
+                                    .getPath(), api.getId(), parameter.getName(), parameter.getDefaultValue(), parameter.getFilter()), api);
+                }
+            } else { // 숫자나 날짜가 빈스트링 일 경우
+                return null;
             }
 		} else {
 			if ( parameter.getType().equals(ApiParser.PARAM_TYPE_NUMBER)) {
-				return Integer.parseInt(paramValue);
+			    return Integer.parseInt(paramValue);
             } else if (parameter.getType().equals(ApiParser.PARAM_TYPE_DATE)) {
                 try {
                     return MokaConstants.jsonDateFormat().parse(paramValue);

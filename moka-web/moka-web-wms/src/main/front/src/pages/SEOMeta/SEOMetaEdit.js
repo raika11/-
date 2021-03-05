@@ -59,7 +59,7 @@ const SEOMetaEdit = () => {
     return (
         <MokaCard
             title="공유 메타데이터 관리"
-            className="flex-fill"
+            className="w-100"
             footerClassName="justify-content-center"
             footerButtons={[
                 { text: edit.isInsert ? '저장' : '수정', variant: 'positive', onClick: handleClickSave, className: 'mr-1' },

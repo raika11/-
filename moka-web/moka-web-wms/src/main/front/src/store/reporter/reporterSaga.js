@@ -47,7 +47,7 @@ function* saveReporter({ payload: { reporter, callback } }) {
         // }
 
         // 기자 데이터
-        const reporter = yield select((store) => store.reporter.reporter);
+        // const reporter = yield select((store) => store.reporter.reporter);
         const response = yield call(reporterAPI.putReporter, { reporter });
         callbackData = response.data;
 

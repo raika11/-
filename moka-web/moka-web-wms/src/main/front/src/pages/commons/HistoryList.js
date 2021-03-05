@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import moment from 'moment';
 import { ITEM_PG, ITEM_AP, ITEM_TP, ITEM_CT, DB_DATEFORMAT } from '@/constants';
-import { MokaCard, MokaTable, MokaSearchInput, MokaInput } from '@components';
+import { MokaCard, MokaTable, MokaSearchInput, MokaInput, MokaModalEditor } from '@components';
 import { initialState, changeSearchOption, getHistoryList, GET_HISTORY_LIST, clearStore, getHistory } from '@store/history';
 import toast from '@utils/toastUtil';
 import columDefs from './HistoryListColumns';
@@ -42,6 +42,8 @@ const HistoryList = (props) => {
     const { search: storeSearch, total, list } = useSelector(({ history }) => history);
     const [search, setSearch] = useState(initialState.search);
     const [rowData, setRowData] = useState([]);
+    const [selected, setSelected] = useState({});
+    const [modalShow, setModalShow] = useState(false);
 
     /**
      * 날짜 변경
@@ -94,7 +96,22 @@ const HistoryList = (props) => {
     /**
      * row 클릭
      */
-    const handleRowClicked = (data) => {};
+    const handleRowClicked = (data) => {
+        // 히스토리 상세 데이터를 조회한다
+        dispatch(
+            getHistory({
+                seq: data.seq,
+                search: {
+                    seq,
+                    seqType,
+                },
+                callback: (response) => {
+                    setSelected(response.body);
+                    setModalShow(true);
+                },
+            }),
+        );
+    };
 
     /**
      * 로드 버튼 클릭
@@ -222,6 +239,27 @@ const HistoryList = (props) => {
                 size={search.size}
                 onChangeSearchOption={handleChangeSearchOption}
                 preventRowClickCell={['load']}
+            />
+
+            <MokaModalEditor
+                title={selected.regDt || ''}
+                show={modalShow}
+                onHide={() => {
+                    setModalShow(false);
+                    setSelected({});
+                }}
+                defaultValue={selected.body}
+                options={{ readOnly: true }}
+                buttons={[
+                    {
+                        text: '닫기',
+                        variant: 'negative',
+                        onClick: () => {
+                            setModalShow(false);
+                            setSelected({});
+                        },
+                    },
+                ]}
             />
         </MokaCard>
     );

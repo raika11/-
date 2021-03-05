@@ -140,7 +140,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                     </div>
                 </Form.Row>
                 <Form.Row className="pt-3">
-                    <Col xs={9}>
+                    <div className="pl-1 pr-1 flex-fill">
                         <Form.Row className="pt-1">
                             <Col xs={12} className="d-felx m-0 pr-2 pl-4">
                                 {/* 정답 */}
@@ -178,8 +178,8 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                                 />
                             </Col>
                         </Form.Row>
-                    </Col>
-                    <Col xs={3} className="pt-1">
+                    </div>
+                    <div>
                         {/* 이미지 */}
                         <MokaInputLabel
                             as="imageFile"
@@ -199,7 +199,7 @@ const QuizQuestionFirstTypeComponent = ({ questionIndex, quizSts }) => {
                                 신규등록
                             </Button>
                         </Col>
-                    </Col>
+                    </div>
                 </Form.Row>
                 <DeleteConfirmModal
                     show={deleteConfirmModalState}

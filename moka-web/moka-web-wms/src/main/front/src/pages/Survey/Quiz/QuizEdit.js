@@ -594,7 +594,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
             //         </Row>
             //     </>
             // }
-            className="flex-fill"
+            className="w-100"
             // buttons={[{ text: '퀴즈현황', variant: 'outline-neutral', onClick: handleClickSaveButton, className: 'mr-1' }]}
             footer
             loading={save_loading}
@@ -618,12 +618,12 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                 <Form.Row>
                     <Col xs={12} className="mb-14 d-flex justify-content-end">
                         <Button variant="outline-neutral" onClick={handleClickQuizStatusButton}>
-                            투표 현황
+                            퀴즈 현황
                         </Button>
                     </Col>
                 </Form.Row>
                 <Form.Row>
-                    <Col xs={9} className="p-0">
+                    <div className="p-0 flex-fill">
                         <Form.Row className="mb-2">
                             <Col xs={6} className="p-0">
                                 <MokaInputLabel label="서비스 상태" as="select" onChange={(e) => handleChangeEditData(e)} id="quizSts" name="quizSts" value={quizInfo.quizSts}>
@@ -636,6 +636,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                 <MokaInputLabel
                                     as="switch"
                                     label="로그인"
+                                    labelWidth={45}
                                     labelClassName="text-right ml-0"
                                     id="loginYn"
                                     name="loginYn"
@@ -647,6 +648,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                 <MokaInputLabel
                                     as="switch"
                                     label="댓글"
+                                    labelWidth={40}
                                     labelClassName="text-right"
                                     id="replyYn"
                                     name="replyYn"
@@ -676,7 +678,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                             </Col>
                         </Form.Row>
                         <Form.Row className="mb-2">
-                            <Col xs={6} className="p-0">
+                            <Col xs={12} className="p-0">
                                 <MokaInputLabel
                                     as="select"
                                     label="결과 유형"
@@ -693,8 +695,8 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                 </MokaInputLabel>
                             </Col>
                         </Form.Row>
-                    </Col>
-                    <Col xs={3} className="p-0">
+                    </div>
+                    <div className="pl-1">
                         <Form.Row>
                             <Col xs={12} className="d-flex align-items-center">
                                 <Form.Label className="px-0 mb-0 position-relative flex-shrink-0">퀴즈 커버 이미지</Form.Label>
@@ -722,7 +724,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                 </Col>
                             </Col>
                         </Form.Row>
-                    </Col>
+                    </div>
                 </Form.Row>
 
                 {/* 문항 */}
@@ -779,9 +781,9 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
 
                 <Form.Row className="mb-2 p-2" style={{ backgroundColor: '#F5F9FC' }}>
                     <Form.Row className="w-100 justify-content-between">
-                        <Col xs={7}>
+                        <Col xs={9}>
                             <Form.Row>
-                                <Col xs={6} style={{ paddingRight: '40px' }}>
+                                <Col xs={7}>
                                     <MokaInputLabel
                                         as="select"
                                         labelWidth={50}
@@ -795,11 +797,11 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                                         <option value="first">주관식</option>
                                     </MokaInputLabel>
                                 </Col>
-                                <Col xs={6}>
+                                <Col xs={5}>
                                     <MokaInputLabel
                                         type="number"
                                         label="보기 입력 개수"
-                                        labelWidth={70}
+                                        labelWidth={80}
                                         onChange={(e) => handleChangeQuestionsSetup(e)}
                                         id="questionCount"
                                         name="questionCount"
@@ -811,13 +813,13 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
                         </Col>
                         <Col xs={3}>
                             <Form.Row className="d-flex justify-content-end">
-                                <div className="d-felx pr-1">
-                                    <Button variant="positive" onClick={handleClickNewQuestionsButton}>
+                                <div className="d-flex pr-1">
+                                    <Button variant="positive" onClick={handleClickNewQuestionsButton} size="sm">
                                         생성
                                     </Button>
                                 </div>
-                                <div className="d-felx">
-                                    <Button variant="searching" onClick={handleClickSearchQuestionsButton}>
+                                <div className="d-flex">
+                                    <Button variant="searching" onClick={handleClickSearchQuestionsButton} size="sm">
                                         문항 검색
                                     </Button>
                                 </div>

@@ -234,7 +234,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                 </Form.Row>
                 {/* 보기. */}
                 <Form.Row className="pt-3">
-                    <Col xs={9}>
+                    <div className="pl-1 pr-1 flex-fill">
                         {questionsList[questionIndex].choices.map((element, index) => {
                             return (
                                 <Form.Row className="pt-1" key={index}>
@@ -268,9 +268,9 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                                 </Form.Row>
                             );
                         })}
-                    </Col>
+                    </div>
                     {/* 이미지 */}
-                    <Col xs={3}>
+                    <div>
                         <MokaInputLabel
                             as="imageFile"
                             ref={imgFileRef}
@@ -329,7 +329,7 @@ const QuizQuestionThirdTypeComponent = ({ questionIndex, quizSts }) => {
                                 신규등록
                             </Button>
                         </Col> */}
-                    </Col>
+                    </div>
                 </Form.Row>
                 {/* 정답. */}
                 <Form.Row className="pl-4 pt-0">

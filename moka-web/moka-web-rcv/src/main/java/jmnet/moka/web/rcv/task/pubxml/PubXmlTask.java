@@ -128,7 +128,7 @@ public class PubXmlTask extends Task<FileXmlTaskInputData<PubNewsMLTotalVo, PubN
     }
 
     @Override
-    protected void doProcess(FileXmlTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData)
+    public void doProcess(FileXmlTaskInputData<PubNewsMLTotalVo, PubNewsMLVo> taskInputData)
             throws RcvDataAccessException {
         final PubNewsMLTotalVo newsMLTotal = taskInputData.getTotalData();
         if (newsMLTotal.getXmlFileName().isPassProcess()) {

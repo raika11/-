@@ -55,7 +55,7 @@ public class RcvArtRegTask extends Task<DBTaskInputData> {
     }
 
     @Override
-    protected void doProcess(DBTaskInputData taskInputData)
+    public void doProcess(DBTaskInputData taskInputData)
             throws RcvDataAccessException {
         final MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();
 

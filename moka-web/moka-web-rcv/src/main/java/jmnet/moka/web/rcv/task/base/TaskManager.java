@@ -24,6 +24,7 @@ import jmnet.moka.web.rcv.task.rcvartreg.service.RcvArtRegService;
 import jmnet.moka.web.rcv.task.weathershko.service.WeatherShkoService;
 import jmnet.moka.web.rcv.util.XMLUtil;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
@@ -44,6 +45,7 @@ import org.xml.sax.SAXException;
  */
 
 @Getter
+@Setter
 @Slf4j
 public class TaskManager {
     private final MokaRcvConfiguration rcvConfiguration;

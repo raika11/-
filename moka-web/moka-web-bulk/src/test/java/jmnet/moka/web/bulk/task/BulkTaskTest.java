@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import jmnet.moka.web.bulk.config.MokaBulkConfiguration;
 import jmnet.moka.web.bulk.service.SlackMessageService;
 import jmnet.moka.web.bulk.task.bulkdump.service.BulkDumpService;
 import jmnet.moka.web.bulk.task.bulkloader.service.BulkLoaderService;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -31,8 +33,12 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureBefore(MokaBulkConfiguration.class)
 @Getter
 public class BulkTaskTest {
+    @Autowired
+    MokaBulkConfiguration mokaBulkConfiguration;
+
     @Autowired
     ObjectMapper objectMapper;
 

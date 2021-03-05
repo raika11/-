@@ -42,6 +42,7 @@ public class TaskGroup {
     public TaskGroup(TaskManager taskManager, String name){
         this.taskManager = taskManager;
         this.name = name;
+        tasks = new ArrayList<>();
     }
 
     public TaskGroup(Node node, XMLUtil xu, TaskManager taskManager)

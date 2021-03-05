@@ -99,7 +99,7 @@ public class CpXmlTask extends Task<FileXmlTaskInputData<CpArticleTotalVo, CpArt
     }
 
     @Override
-    protected void doProcess(FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
+    public void doProcess(FileXmlTaskInputData<CpArticleTotalVo, CpArticleListVo> taskInputData)
             throws RcvDataAccessException {
         final CpArticleTotalVo cpArticleTotalVo = taskInputData.getTotalData();
 

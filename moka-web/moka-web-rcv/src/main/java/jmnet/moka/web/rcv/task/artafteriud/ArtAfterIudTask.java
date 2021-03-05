@@ -56,7 +56,7 @@ public class ArtAfterIudTask extends Task<DBTaskInputData> {
     }
 
     @Override
-    protected void doProcess(DBTaskInputData taskInputData)
+    public void doProcess(DBTaskInputData taskInputData)
             throws RcvDataAccessException {
 
         for( Map<String, Object> map : taskInputData.getInputData() ) {

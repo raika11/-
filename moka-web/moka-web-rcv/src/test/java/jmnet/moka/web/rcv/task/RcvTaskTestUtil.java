@@ -1,14 +1,15 @@
-package jmnet.moka.web.bulk.task;
+package jmnet.moka.web.rcv.task;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import jmnet.moka.common.utils.McpString;
-import jmnet.moka.web.bulk.common.task.Task;
-import jmnet.moka.web.bulk.task.base.TaskGroup;
-import jmnet.moka.web.bulk.task.base.TaskManager;
-import jmnet.moka.web.bulk.taskinput.DBTaskInputData;
-import jmnet.moka.web.bulk.util.XMLUtil;
+import jmnet.moka.web.rcv.code.OpCode;
+import jmnet.moka.web.rcv.common.task.Task;
+import jmnet.moka.web.rcv.task.base.TaskGroup;
+import jmnet.moka.web.rcv.task.base.TaskManager;
+import jmnet.moka.web.rcv.taskinput.DBTaskInputData;
+import jmnet.moka.web.rcv.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,30 +18,36 @@ import org.w3c.dom.NodeList;
  * <pre>
  *
  * Project : moka-web-bulk
- * Package : jmnet.moka.web.bulk.task
- * ClassName : BulkTaskTestUtil
+ * Package : jmnet.moka.web.rcv.task
+ * ClassName : RcvTaskTestUtil
  * Created : 2021-03-05 005 sapark
  * </pre>
  *
  * @author sapark
- * @since 2021-03-05 005 오후 3:39
+ * @since 2021-03-05 005 오후 3:48
  */
-public class BulkTaskTestUtil {
-    private final BulkTaskTest bulkTaskTest;
+public class RcvTaskTestUtil {
+    private final RcvTaskTest rcvTaskTest;
     private TaskManager taskManager;
 
-    public BulkTaskTestUtil(BulkTaskTest bulkTaskTest) {
-        this.bulkTaskTest = bulkTaskTest;
+    public RcvTaskTestUtil(RcvTaskTest rcvTaskTest) {
+        this.rcvTaskTest = rcvTaskTest;
         initTaskManager();
     }
 
     private void initTaskManager() {
-        this.taskManager = new TaskManager(bulkTaskTest.getMokaBulkConfiguration());
-        this.taskManager.setObjectMapper(bulkTaskTest.getObjectMapper());
-        this.taskManager.setBulkLoaderService(bulkTaskTest.getBulkLoaderService());
-        this.taskManager.setBulkDumpService(bulkTaskTest.getBulkDumpService());
-        this.taskManager.setBulkSenderService(bulkTaskTest.getBulkSenderService());
-        this.taskManager.setSlackMessageService(bulkTaskTest.getSlackMessageService());
+        this.taskManager = new TaskManager(rcvTaskTest.getMokaRcvConfiguration());
+        this.taskManager.setJamXmlService(rcvTaskTest.getJamXmlService());
+        this.taskManager.setXmlGenService(rcvTaskTest.getXmlGenService());
+        this.taskManager.setCpXmlService(rcvTaskTest.getCpXmlService());
+        this.taskManager.setPubXmlService(rcvTaskTest.getPubXmlService());
+        this.taskManager.setRcvArtRegService(rcvTaskTest.getRcvArtRegService());
+        this.taskManager.setCallJamApiService(rcvTaskTest.getCallJamApiService());
+        this.taskManager.setArtAfterIudService(rcvTaskTest.getArtAfterIudService());
+        this.taskManager.setWeatherShkoService(rcvTaskTest.getWeatherShkoService());
+        this.taskManager.setJoinsLandService(rcvTaskTest.getJoinsLandService());
+        this.taskManager.setSlackMessageService(rcvTaskTest.getSlackMessageService());
+        this.taskManager.setPurgeService(rcvTaskTest.getPurgeService());
         this.taskManager.setTaskGroups( new ArrayList<>() );
     }
 
@@ -67,8 +74,8 @@ public class BulkTaskTestUtil {
                 return null;
 
             Task<?> task = (Task<?>) Class.forName(cls)
-                                          .getDeclaredConstructor(TaskGroup.class, Node.class, XMLUtil.class)
-                                          .newInstance(taskGroup, node, xu);
+                                  .getDeclaredConstructor(TaskGroup.class, Node.class, XMLUtil.class)
+                                  .newInstance(taskGroup, node, xu);
             taskGroup.getTasks().add(task);
             return task;
         } catch (Exception e) {
@@ -100,6 +107,25 @@ public class BulkTaskTestUtil {
 
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean processFileTask(String taskConf)
+    {
+        try {
+            Task<?> task = getTask(getTaskGroup(), taskConf);
+            if( task == null )
+                return false;
+
+            taskManager.operation(OpCode.start);
+            Thread.sleep(15000);
+            taskManager.operation(OpCode.stop);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

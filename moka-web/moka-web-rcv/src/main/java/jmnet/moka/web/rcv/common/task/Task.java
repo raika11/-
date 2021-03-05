@@ -82,7 +82,7 @@ public abstract class Task<T> extends TaskBase {
 
     protected abstract boolean doVerifyData(T taskInputData);
 
-    protected abstract void doProcess(T taskInputData)
+    public abstract void doProcess(T taskInputData)
             throws RcvDataAccessException;
 
     protected void doAfterProcess(T taskInputData)
@@ -125,6 +125,7 @@ public abstract class Task<T> extends TaskBase {
                                         break;
                                     } catch (Exception e) {
                                         taskInputData.logError("Exception {}", e);
+                                        e.printStackTrace();
                                     }
 
                                     if (--retryCount > 0) {
@@ -166,7 +167,7 @@ public abstract class Task<T> extends TaskBase {
     }
 
     @SuppressWarnings("EmptyMethod")
-    protected void stopServer() {
+    public void stopServer() {
     }
 
     @SuppressWarnings("unused")

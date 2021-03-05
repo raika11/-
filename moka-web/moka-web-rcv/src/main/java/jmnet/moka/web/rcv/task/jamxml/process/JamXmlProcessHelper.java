@@ -108,7 +108,7 @@ public class JamXmlProcessHelper {
                 break;
             }
             case "HP":{
-                if( rcvConfiguration.getUploadToServiceImage().equals("Y") ) {
+                if ("Y".equals(rcvConfiguration.getUploadToServiceImage())) {
                     final String url = item.getUrl();
                     if( !McpString.isNullOrEmpty(url) ) {
                         final String localFilePath = taskInputData.getTempFileName(rcvConfiguration.getTempDir());

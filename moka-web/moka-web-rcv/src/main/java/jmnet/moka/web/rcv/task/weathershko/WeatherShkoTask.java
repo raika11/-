@@ -60,7 +60,7 @@ public class WeatherShkoTask extends Task<FileXmlTaskInputData<WeatherShkoTotalV
     }
 
     @Override
-    protected void doProcess(FileXmlTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData)
+    public void doProcess(FileXmlTaskInputData<WeatherShkoTotalVo, WeatherShkoVo> taskInputData)
             throws RcvDataAccessException {
         final WeatherShkoTotalVo weatherShkoTotal = taskInputData.getTotalData();
         final WeatherShkoVo weatherShko = weatherShkoTotal.getMainData();

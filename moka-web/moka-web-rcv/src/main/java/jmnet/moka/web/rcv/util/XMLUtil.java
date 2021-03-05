@@ -1,6 +1,8 @@
 package jmnet.moka.web.rcv.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,6 +44,17 @@ public class XMLUtil {
         }
 
         return builder.parse(resource.getInputStream());
+    }
+
+    public Document getDocument(String resource)
+            throws ParserConfigurationException, IOException, SAXException {
+        if (factory == null) {
+            factory = DocumentBuilderFactory.newInstance();
+        }
+        if (builder == null) {
+            builder = factory.newDocumentBuilder();
+        }
+        return builder.parse(new ByteArrayInputStream(resource.getBytes(StandardCharsets.UTF_8)));
     }
 
     public XPath getXPath() {

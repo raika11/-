@@ -76,7 +76,7 @@ public class JoinsLandTask extends Task<FileXmlTaskInputData<JoinsLandArticleTot
     }
 
     @Override
-    protected void doProcess(FileXmlTaskInputData<JoinsLandArticleTotalVo, JoinsLandArticleVo> taskInputData)
+    public void doProcess(FileXmlTaskInputData<JoinsLandArticleTotalVo, JoinsLandArticleVo> taskInputData)
             throws RcvDataAccessException {
         final JoinsLandArticleTotalVo articleTotal = taskInputData.getTotalData();
         final JoinsLandArticleVo article = articleTotal.getMainData();

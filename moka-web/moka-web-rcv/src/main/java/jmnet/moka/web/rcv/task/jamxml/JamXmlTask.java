@@ -110,7 +110,7 @@ public class JamXmlTask extends Task<FileXmlTaskInputData<JamArticleTotalVo, Jam
     }
 
     @Override
-    protected void doProcess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
+    public void doProcess(FileXmlTaskInputData<JamArticleTotalVo, JamArticleVo> taskInputData)
             throws RcvDataAccessException {
 
         final JamXmlService jamXmlService = getTaskManager().getJamXmlService();

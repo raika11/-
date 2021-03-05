@@ -77,7 +77,7 @@ public class CallJamApiTask extends Task<DBTaskInputData> {
     }
 
     @Override
-    protected void doProcess(DBTaskInputData taskInputData)
+    public void doProcess(DBTaskInputData taskInputData)
             throws RcvDataAccessException {
 
         MokaRcvConfiguration rcvConfiguration = getTaskManager().getRcvConfiguration();

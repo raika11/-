@@ -14,21 +14,21 @@ const PackageList = React.lazy(() => import('./PackageList'));
 /**
  * 패키지 관리
  */
-const Package = ({ match }) => {
+const Package = ({ match, displayName }) => {
     const matchPoints = useBreakpoint();
 
     return (
         <Container className="p-0 position-relative" fluid>
             <Helmet>
-                <title>패키지 관리</title>
-                <meta name="description" content="패키지 관리 페이지입니다." />
+                <title>{displayName}</title>
+                <meta name="description" content={`${displayName} 페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             <Row className="m-0">
                 {/* 패키지 목록 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    <MokaCard title="패키지 목록" width={830} className="w-100" bodyClassName="d-flex flex-column">
+                    <MokaCard title="패키지 목록" className="w-100" bodyClassName="d-flex flex-column">
                         <Suspense>
                             <PackageList match={match} />
                         </Suspense>

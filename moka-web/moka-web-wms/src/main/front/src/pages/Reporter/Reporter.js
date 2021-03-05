@@ -13,22 +13,22 @@ import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
 import ReporterEdit from './ReporterEdit';
 const ReporterList = React.lazy(() => import('./ReporterList'));
 
-const Reporter = ({ match }) => {
+const Reporter = ({ match, displayName }) => {
     const loading = useSelector(({ loading }) => loading[GET_REPORTER] || loading[CHANGE_REPORTER]);
     const matchPoints = useBreakpoint();
 
     return (
         <Container className="p-0 position-relative" fluid>
             <Helmet>
-                <title>기자관리</title>
-                <meta name="description" content="기자관리페이지입니다." />
+                <title>{displayName}</title>
+                <meta name="description" content={`${displayName} 페이지입니다.`} />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
             <Row className="m-0">
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
                     {/* 기자 목록 */}
-                    <MokaCard title="기자 목록" width={830} className="w-100" bodyClassName="d-flex flex-column">
+                    <MokaCard title="기자 목록" className="w-100" bodyClassName="d-flex flex-column">
                         <Suspense>
                             <ReporterList match={match} />
                         </Suspense>

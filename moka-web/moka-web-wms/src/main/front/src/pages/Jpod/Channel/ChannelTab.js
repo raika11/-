@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { MokaCard, MokaIconTabs, MokaLoader, MokaIcon } from '@components';
-
+import { MokaIconTabs, MokaIcon } from '@components';
 import ChannelEdit from './ChannelEdit';
 import ChannelEpisode from './ChannelEpisode';
 
@@ -10,9 +9,7 @@ const ChannelTab = ({ match }) => {
     return (
         <MokaIconTabs
             foldable={false}
-            /*tabWidth={750}*/
-            className="flex-fill"
-            // tabContentClass="overflow-hidden flex-fill"
+            className="w-100 flex-fill"
             onSelectNave={(idx) => setActiveTabIdx(idx)}
             tabs={[
                 /**

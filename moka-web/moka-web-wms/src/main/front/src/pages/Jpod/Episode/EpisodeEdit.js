@@ -632,7 +632,7 @@ const ChannelEdit = (props) => {
 
     return (
         <MokaCard
-            className="overflow-hidden flex-fill"
+            className="overflow-hidden w-100 flex-fill"
             title={`에피소드 ${chnlSeq && epsdSeq ? '수정' : '등록'}`}
             loading={loading}
             footer

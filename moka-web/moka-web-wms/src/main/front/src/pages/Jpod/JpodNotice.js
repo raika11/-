@@ -2,7 +2,12 @@ import React, { useEffect, Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
+import clsx from 'clsx';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { clearStore } from '@store/jpod';
+import useBreakpoint from '@hooks/useBreakpoint';
 import { getBoardChannelList, getJpodBoard, changeSelectBoard } from '@store/jpod';
 import NoticeList from '@pages/Jpod/JpodNotice/NoticeList';
 import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
@@ -12,6 +17,7 @@ import NoticeEdit from '@pages/Jpod/JpodNotice/NoticeEdit';
  */
 const JpodChannel = ({ match }) => {
     const dispatch = useDispatch();
+    const matchPoints = useBreakpoint();
 
     const { boardList } = useSelector((store) => ({
         boardList: store.jpod.jpodNotice.boardList,
@@ -38,37 +44,63 @@ const JpodChannel = ({ match }) => {
     }, [boardList]);
 
     return (
-        <div className="d-flex">
+        <Container className="p-0 position-relative" fluid>
             <Helmet>
                 <title>공지게시판 관리</title>
                 <meta name="description" content="공지게시판 관리페이지입니다." />
                 <meta name="robots" content="noindex" />
             </Helmet>
 
-            {/* 리스트 */}
-
-            <Suspense>
-                <NoticeList match={match} />
-            </Suspense>
-
-            {/* 등록 / 수정창 */}
-            <Switch>
-                <Route
-                    path={[
-                        `${match.path}/add`,
-                        `${match.path}/:boardId/:boardSeq`,
-                        `${match.path}/:boardId/:boardSeq/reply`,
-                        `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
-                    ]}
-                    exact
-                    render={(props) => (
-                        <Suspense>
-                            <NoticeEdit {...props} match={match} />
-                        </Suspense>
-                    )}
-                />
-            </Switch>
-        </div>
+            <Row className="m-0">
+                {/* 리스트 */}
+                <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
+                    <Suspense>
+                        <NoticeList match={match} />
+                    </Suspense>
+                </Col>
+                {/* 등록 / 수정 */}
+                {(matchPoints.md || matchPoints.lg) && (
+                    <Col md={5} className="p-0">
+                        <Switch>
+                            <Route
+                                path={[
+                                    `${match.path}/add`,
+                                    `${match.path}/:boardId/:boardSeq`,
+                                    `${match.path}/:boardId/:boardSeq/reply`,
+                                    `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                                ]}
+                                exact
+                                render={() => (
+                                    <Suspense>
+                                        <NoticeEdit match={match} />
+                                    </Suspense>
+                                )}
+                            />
+                        </Switch>
+                    </Col>
+                )}
+                {(matchPoints.xs || matchPoints.sm) && (
+                    <Switch>
+                        <Route
+                            path={[
+                                `${match.path}/add`,
+                                `${match.path}/:boardId/:boardSeq`,
+                                `${match.path}/:boardId/:boardSeq/reply`,
+                                `${match.path}/:boardId/:parentBoardSeq/reply/:boardSeq`,
+                            ]}
+                            exact
+                            render={() => (
+                                <Col xs={7} className="absolute-top-right h-100 overlay-shadow p-0" style={{ zIndex: 2 }}>
+                                    <Suspense>
+                                        <NoticeEdit match={match} />
+                                    </Suspense>
+                                </Col>
+                            )}
+                        />
+                    </Switch>
+                )}
+            </Row>
+        </Container>
     );
 };
 

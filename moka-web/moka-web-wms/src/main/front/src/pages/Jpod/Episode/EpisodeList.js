@@ -8,7 +8,7 @@ import EpisodeListAgGrid from './EpisodeListAgGrid';
  */
 const EpisodeList = ({ match }) => {
     return (
-        <MokaCard width={898} className="mr-gutter" bodyClassName="d-flex flex-column" title={`에피소드 리스트`}>
+        <MokaCard className="w-100" bodyClassName="d-flex flex-column" title={`에피소드 리스트`}>
             <EpisodeSearchBox match={match} />
             <EpisodeListAgGrid match={match} />
         </MokaCard>

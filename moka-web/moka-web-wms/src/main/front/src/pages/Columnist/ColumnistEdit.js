@@ -10,6 +10,9 @@ import toast, { messageBox } from '@utils/toastUtil';
 import { invalidListToError } from '@utils/convertUtil';
 import { GET_COLUMNIST, saveColumnist, changeColumnist, getColumnist, changeInvalidList, clearColumnist } from '@store/columnist';
 
+/**
+ * 칼럼니스트 등록, 수정
+ */
 const ColumnistEdit = ({ history, match }) => {
     const dispatch = useDispatch();
     const { seqNo } = useParams();
@@ -285,9 +288,8 @@ const ColumnistEdit = ({ history, match }) => {
 
     return (
         <MokaCard
-            width={635}
             title={`칼럼니스트 ${columnist && columnist.seqNo && columnist.seqNo !== '' ? '수정' : '등록'}`}
-            titleClassName="mb-0"
+            className="w-100 flex-fill"
             loading={loading}
             footer
             footerClassName="justify-content-center"
@@ -442,29 +444,6 @@ const ColumnistEdit = ({ history, match }) => {
                                 신규등록
                             </Button>
                         </React.Fragment>
-                        /*<React.Fragment>
-                            이미지
-                            <br />
-                            (200*200)
-                            <br />
-                            <Button
-                                className="mt-1"
-                                size="sm"
-                                variant="negative"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    imgFileRef.current.deleteFile();
-                                    setSelectRepoterData({
-                                        ...selectRepoterData,
-                                        profilePhoto: '',
-                                    });
-                                }}
-                                disabled={editDisabled.editBoxButton}
-                            >
-                                삭제
-                            </Button>
-                        </React.Fragment>*/
                     }
                     ref={imgFileRef}
                     inputProps={{

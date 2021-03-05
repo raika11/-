@@ -489,7 +489,7 @@ const NoticeEdit = ({ match }) => {
 
     return (
         <MokaCard
-            className="flex-fill"
+            className="w-100 flex-fill"
             title={editState.title}
             loading={loading}
             bodyClassName="d-flex flex-column"

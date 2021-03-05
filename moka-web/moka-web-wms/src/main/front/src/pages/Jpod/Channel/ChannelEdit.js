@@ -623,7 +623,6 @@ const ChannelEdit = ({ match }) => {
             <MokaCard
                 className="w-100 flex-fill"
                 title={`J팟 채널 ${selectChnlSeq.current === 'add' ? '등록' : '정보'}`}
-                titleClassName="mb-0"
                 loading={loading}
                 footer
                 footerClassName="d-flex justify-content-center"
@@ -635,7 +634,7 @@ const ChannelEdit = ({ match }) => {
                         className: 'mr-1',
                         useAuth: true,
                     },
-                    { text: '취소', variant: 'negative', onClick: () => handleClickCancleButton },
+                    { text: '취소', variant: 'negative', onClick: handleClickCancleButton },
                 ]}
             >
                 <Form className="">

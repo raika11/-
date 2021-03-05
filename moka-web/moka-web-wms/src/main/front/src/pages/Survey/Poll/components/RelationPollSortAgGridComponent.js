@@ -72,7 +72,7 @@ const RelationPollSortAgGridComponent = ({ rows, onChange, onDelete }) => {
                         return params.item.ordNo;
                     }}
                     columnDefs={columnDefs}
-                    localeText={{ noRowsToShow: '편집기사가 없습니다.', loadingOoo: '조회 중입니다..' }}
+                    localeText={{ noRowsToShow: '관련투표가 없습니다.', loadingOoo: '조회 중입니다..' }}
                     onRowDragEnd={handleDragEnd}
                     animateRows
                     rowDragManaged

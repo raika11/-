@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PollPhotoComponent from '@pages/Survey/Poll/components/PollPhotoComponent';
 import { MokaInput } from '@components';
 import produce from 'immer';
+import { Col } from 'react-bootstrap';
 
 const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }) => {
     const [editItem, setEditItem] = useState({ title: '', url: '', imgUrl: '', imgFile: '' });
@@ -25,7 +26,7 @@ const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }
     }, [item]);
 
     return (
-        <div className="d-flex align-items-center" key={index}>
+        <Col xs={12} className="d-flex align-items-center" key={index}>
             <PollPhotoComponent
                 width={110}
                 height={110}
@@ -62,7 +63,7 @@ const PollDetailBasicCombineAnswerComponent = ({ item, index, hasUrl, onChange }
                     </div>
                 )}
             </div>
-        </div>
+        </Col>
     );
 };
 

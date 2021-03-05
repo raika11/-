@@ -28,6 +28,7 @@ const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) =>
                     name="title"
                     value={items[0].title}
                     placeholder="보기 1(20자 이내로 입력하세요.)"
+                    className="mb-1"
                     onChange={(e) => {
                         const { name, value, type } = e.target;
                         handleChangeValue(0, name, value, type);
@@ -65,6 +66,7 @@ const PollDetailCompareCombineAnswerComponent = ({ items, hasUrl, onChange }) =>
                     name="title"
                     value={items[1].title}
                     placeholder="보기 2(20자 이내로 입력하세요.)"
+                    className="mb-1"
                     onChange={(e) => {
                         const { name, value, type } = e.target;
                         handleChangeValue(1, name, value, type);

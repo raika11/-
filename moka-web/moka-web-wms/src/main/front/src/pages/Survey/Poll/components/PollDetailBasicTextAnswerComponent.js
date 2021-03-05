@@ -24,8 +24,8 @@ const PollDetailBasicTextAnswerComponent = ({ item, index, hasUrl, onChange }) =
 
     return (
         <>
-            <Form.Row style={{ alignItems: 'center' }} className="mb-2" key={index}>
-                <Col className="flex-fill">
+            <Form.Row className="mb-2 align-items-center" key={index}>
+                <Col xs={12}>
                     <Form.Row className="mb-2">
                         <Col xs={12}>
                             <MokaInputLabel

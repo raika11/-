@@ -517,7 +517,7 @@ const PollEdit = ({ onDelete }) => {
                 <Form.Row className="d-flex justify-content-center mb-2">
                     <MokaCard height={65} className="w-100 body-bg" header={false} bodyClassName="pt-3 pb-3 mt-0 mb-0">
                         <Form.Row className="align-items-center h-100">
-                            <Col xs={2} className="d-flex h-100 align-items-center" style={{ borderRight: '1px solid' }}>
+                            <Col xs={2} className="d-flex h-100 align-items-center p-0" style={{ borderRight: '1px solid' }}>
                                 <h4 className="text-center pr-2 mb-0">투표 설정</h4>
                             </Col>
                             <Col xs={4}>

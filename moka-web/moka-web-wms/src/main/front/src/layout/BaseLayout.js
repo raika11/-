@@ -32,7 +32,7 @@ const DefaultLayout = ({ children, ...rest }) => {
     const resizeFunction = useCallback(() => {
         if (!nonResponsive) {
             // md의 최소width보다 작을 경우 메뉴가 닫힌다.
-            if (matchPoints.sm || matchPoints.xs) {
+            if (matchPoints.sm || matchPoints.xs || matchPoints.md) {
                 dispatch(closeSidebar());
             } else {
                 dispatch(openSidebar());

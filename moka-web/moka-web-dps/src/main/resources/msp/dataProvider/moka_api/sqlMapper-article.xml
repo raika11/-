@@ -174,4 +174,16 @@
       AND USED_YN = 'Y'
   </select>
 
+  <!--issue-->
+  <select id="issue" parameterType="map" resultType="map" resultMap="map"
+    statementType="CALLABLE">
+    {call UPU_MOKA_PACKAGE_LIST_SEL(
+      #{id, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{page, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      #{count, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
+      'Y',
+      #{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
+      ) }
+  </select>
+
 </mapper>

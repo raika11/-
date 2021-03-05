@@ -109,4 +109,21 @@
     </keys>
   </api>
 
+  <!-- 이슈기사목록-->
+  <api id="issue">
+    <description>패키지 기사목록을 조회한다.</description>
+    <parameter>
+      <id type="number" desc="패키지아이디" require="Y">^[0-9]{1,20}$</id>
+    </parameter>
+    <request dmlType="sp" setNames="_DATA">dps.article.issue</request>
+    <request type="script" resultName="_TOTAL">
+      var result = $ac.getAllResult();
+      result.get("PARAM_MAP").get("totalCount");
+    </request>
+    <keys>
+      id
+      #paging
+    </keys>
+  </api>
+
 </apiConfig>

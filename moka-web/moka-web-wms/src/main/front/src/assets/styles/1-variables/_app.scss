@@ -175,6 +175,11 @@ $ovp: #09A5FC !default;
 $body-bg: #F5F9FC !default;
 $body-color: $gray-800 !default;
 
+// bg-colors
+$bg-colors: (
+	body: $body-bg
+) !default;
+
 // Common
 $border-width: 1px !default;
 

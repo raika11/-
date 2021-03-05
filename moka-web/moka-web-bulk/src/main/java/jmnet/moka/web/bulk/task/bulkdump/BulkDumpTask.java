@@ -91,7 +91,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
     }
 
     @Override
-    protected void doProcess(DBTaskInputData taskInputData)
+    public void doProcess(DBTaskInputData taskInputData)
             throws BulkDataAccessException {
 
         final ObjectMapper objectMapper = getTaskManager().getObjectMapper();
@@ -113,7 +113,7 @@ public class BulkDumpTask extends Task<DBTaskInputData> {
     }
 
     @Override
-    protected void stopServer() {
+    public void stopServer() {
         super.stopServer();
         this.bulkDumpClientChannel.stopChannel();
     }

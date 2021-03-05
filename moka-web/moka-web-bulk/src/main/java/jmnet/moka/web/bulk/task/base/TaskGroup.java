@@ -39,6 +39,11 @@ public class TaskGroup {
     private List<Task<?>> tasks;
     private final TaskManager taskManager;
 
+    public TaskGroup(TaskManager taskManager, String name){
+        this.taskManager = taskManager;
+        this.name = name;
+    }
+
     public TaskGroup(Node node, XMLUtil xu, TaskManager taskManager)
             throws XPathExpressionException, IOException, ParserConfigurationException, SAXException {
         this.taskManager = taskManager;

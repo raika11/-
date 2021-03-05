@@ -47,7 +47,7 @@ public class MonitorTask extends Task<ObjectTaskInputData<TaskManager>> {
     }
 
     @Override
-    protected void doProcess(ObjectTaskInputData<TaskManager> taskInputData)
+    public void doProcess(ObjectTaskInputData<TaskManager> taskInputData)
             throws BulkDataAccessException {
         final TaskManager taskManager = taskInputData.getInputData();
 

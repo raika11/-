@@ -88,7 +88,7 @@ public abstract class Task<T> extends TaskBase {
 
     protected abstract boolean doVerifyData(T taskInputData);
 
-    protected abstract void doProcess(T taskInputData)
+    public abstract void doProcess(T taskInputData)
             throws BulkDataAccessException;
 
     protected void doAfterProcess(T taskInputData)
@@ -171,6 +171,6 @@ public abstract class Task<T> extends TaskBase {
         log.info( " >> {} 정상적으로 작업 대기 중입니다.", getTaskName());
     }
 
-    protected void stopServer() {
+    public void stopServer() {
     }
 }

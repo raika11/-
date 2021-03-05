@@ -27,10 +27,13 @@ import org.w3c.dom.Node;
  */
 @Slf4j
 public class BulkDumpClientChannel  {
-    private final ThreadPoolExecutor executor;
-    private final BulkDumpClientChannelQueueManager queueManager;
+    private ThreadPoolExecutor executor;
+    private BulkDumpClientChannelQueueManager queueManager;
+    private AtomicInteger waitExecutorCount;
 
-    private final AtomicInteger waitExecutorCount;
+    public BulkDumpClientChannel(BulkDumpTask bulkDumpTask) {
+        init( 1, bulkDumpTask);
+    }
 
     public BulkDumpClientChannel(Node node, XMLUtil xu, BulkDumpTask bulkDumpTask)
             throws XPathExpressionException, BulkException {
@@ -38,7 +41,10 @@ public class BulkDumpClientChannel  {
         if (dumpClientCount == 0) {
             throw new BulkException("bulkDumpClientCount 환경 값 설정이 잘못되었습니다.");
         }
+        init( dumpClientCount, bulkDumpTask);
+    }
 
+    private void init( int dumpClientCount, BulkDumpTask bulkDumpTask ) {
         this.queueManager = new BulkDumpClientChannelQueueManager(dumpClientCount);
 
         this.executor = new ThreadPoolExecutor( dumpClientCount, dumpClientCount, 100, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(dumpClientCount),

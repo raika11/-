@@ -69,7 +69,7 @@ public class BulkLoaderTask extends Task<DBTaskInputData> {
     }
 
     @Override
-    protected void doProcess(DBTaskInputData taskInputData)
+    public void doProcess(DBTaskInputData taskInputData)
             throws BulkDataAccessException {
         for(Map<String, Object> map : taskInputData.getInputData()) {
             doProcessSub(map);

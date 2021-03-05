@@ -111,7 +111,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
     }
 
     @Override
-    protected void doProcess(FileTaskInputData taskInputData)
+    public void doProcess(FileTaskInputData taskInputData)
             throws BulkDataAccessException {
         final ObjectMapper objectMapper = getTaskManager().getObjectMapper();
         final BulkSenderService bulkSenderService = getTaskManager().getBulkSenderService();
@@ -146,7 +146,7 @@ public class BulkSenderTask extends Task<FileTaskInputData> {
     }
 
     @Override
-    protected void stopServer() {
+    public void stopServer() {
         super.stopServer();
         if( bulkSenderClientChannel != null )
             bulkSenderClientChannel.stopChannel();

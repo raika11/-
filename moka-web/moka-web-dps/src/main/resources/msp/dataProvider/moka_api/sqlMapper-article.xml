@@ -141,11 +141,13 @@
       #{ctype, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{startdt, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{enddt, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{term, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{startid, mode=IN, jdbcType=INTEGER, javaType=java.lang.Integer},
       #{exceptids, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{exceptmcode, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{exceptsources, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{thumb, mode=IN, jdbcType=VARCHAR, javaType=string},
+      #{todaypress, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{total, mode=IN, jdbcType=VARCHAR, javaType=string},
       #{totalCount, mode=OUT, jdbcType=INTEGER, javaType=java.lang.Integer}
       ) }

@@ -42,9 +42,7 @@ export const getReporterListModal = createAction(GET_REPORTER_LIST_MODAL, ({ sea
 /**
  * 데이터 변경
  */
-export const CHANGE_REPORTER = 'reporter/CHANGE_REPORTER';
 // export const CHANGE_INVALID_LIST = 'reporter/CHANGE_INVALID_LIST';
-export const changeReporter = createAction(CHANGE_REPORTER, (reporter) => reporter);
 // export const changeInvalidList = createAction(CHANGE_INVALID_LIST, (invalidList) => invalidList);
 
 /**

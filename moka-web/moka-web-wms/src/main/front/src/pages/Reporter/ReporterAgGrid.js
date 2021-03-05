@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
 import { MokaTable } from '@components';
 import { columnDefs } from './ReporterAgGridColumns';
 import { changeSearchOption, GET_REPORTER_LIST, getReporterList } from '@store/reporter';

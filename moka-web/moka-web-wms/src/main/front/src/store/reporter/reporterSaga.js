@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 import { startLoading, finishLoading } from '@store/loading/loadingAction';
 import { callApiAfterActions, createRequestSaga, errorResponse } from '../commons/saga';
 
@@ -35,19 +35,7 @@ function* saveReporter({ payload: { reporter, callback } }) {
     yield put(startLoading(ACTION));
 
     try {
-        // // actions 먼저 처리
-        // if (actions && actions.length > 0) {
-        //     for (let i = 0; i < actions.length; i++) {
-        //         const act = actions[i];
-        //         yield put({
-        //             type: act.type,
-        //             payload: act.payload,
-        //         });
-        //     }
-        // }
-
         // 기자 데이터
-        // const reporter = yield select((store) => store.reporter.reporter);
         const response = yield call(reporterAPI.putReporter, { reporter });
         callbackData = response.data;
 

@@ -5,7 +5,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MokaInputLabel, MokaInput, MokaIcon } from '@components';
-import { clearReporter, getReporter, changeReporter, saveReporter } from '@store/reporter';
+import { clearReporter, getReporter, saveReporter } from '@store/reporter';
 import toast, { messageBox } from '@utils/toastUtil';
 
 const ReporterInput = ({ label, value }) => (
@@ -247,7 +247,6 @@ const ReporterEdit = ({ match }) => {
                     className="p-3"
                     value={temp.repTalk}
                     onChange={(e) => {
-                        console.log(e.target.value);
                         setTemp({ ...temp, repTalk: e.target.value });
                     }}
                 />

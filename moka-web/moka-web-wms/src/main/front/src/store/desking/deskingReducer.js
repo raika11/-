@@ -126,7 +126,8 @@ export default handleActions(
                     draft.error = initialState.error;
                     draft.selectedComponent = initialState.selectedComponent;
                 } else {
-                    const { area, desking } = body;
+                    const { area, desking: maybeDesking } = body;
+                    const desking = maybeDesking || [];
                     draft.list = desking;
                     draft.area = area;
                     draft.error = initialState.error;
@@ -142,7 +143,7 @@ export default handleActions(
                     }
 
                     // selectedComponent 설정
-                    let org = draft.selectedComponent.seq ? desking.find((d) => d.seq === draft.selectedComponent.seq) : null;
+                    const org = draft.selectedComponent.seq ? desking.find((d) => d.seq === draft.selectedComponent.seq) : null;
                     if (!org && desking.length > 0) {
                         draft.selectedComponent = desking[0];
                     }

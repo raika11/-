@@ -79,16 +79,19 @@ function* getComponentWorkList({ payload }) {
                 isNaverChannel = true;
                 callbackData.isNaverChannel = isNaverChannel;
 
-                // 컴포넌트가 1개만 있다고 가정 (여러개가 되면 소스 수정해야함)
-                const targetComponent = desking[0];
-                // 임시저장되어있는 템플릿ID 조회
-                const second = yield call(api.getComponentTemplate, { componentSeq: targetComponent?.componentSeq });
-                if (second.data.header.success) {
-                    // 컴포넌트의 원래 템플릿ID와 임시저장된 템플릿ID가 다르면 ====> 컴포넌트워크의 템플릿ID 변경
-                    if (second.data.body.templateSeq !== targetComponent.templateSeq) {
-                        const third = yield call(api.putComponentWorkTemplate, { componentWorkSeq: targetComponent.seq, templateSeq: second.data.body?.templateSeq });
-                        if (third.data.header.success) {
-                            callbackData = { ...callbackData, ...third.data, isNaverChannel };
+                // 페이지에서 컴포넌트를 제외한 경우 null로 옴
+                if (desking) {
+                    // 컴포넌트가 1개만 있다고 가정 (여러개가 되면 소스 수정해야함)
+                    const targetComponent = desking[0];
+                    // 임시저장되어있는 템플릿ID 조회
+                    const second = yield call(api.getComponentTemplate, { componentSeq: targetComponent?.componentSeq });
+                    if (second.data.header.success) {
+                        // 컴포넌트의 원래 템플릿ID와 임시저장된 템플릿ID가 다르면 ====> 컴포넌트워크의 템플릿ID 변경
+                        if (second.data.body.templateSeq !== targetComponent.templateSeq) {
+                            const third = yield call(api.putComponentWorkTemplate, { componentWorkSeq: targetComponent.seq, templateSeq: second.data.body?.templateSeq });
+                            if (third.data.header.success) {
+                                callbackData = { ...callbackData, ...third.data, isNaverChannel };
+                            }
                         }
                     }
                 }

@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { MokaCard } from '@components';
 import useBreakpoint from '@hooks/useBreakpoint';
-import { GET_REPORTER, CHANGE_REPORTER } from '@store/reporter';
+import { GET_REPORTER } from '@store/reporter';
 import ReporterEdit from './ReporterEdit';
 const ReporterList = React.lazy(() => import('./ReporterList'));
 
@@ -16,7 +16,7 @@ const ReporterList = React.lazy(() => import('./ReporterList'));
  * 기자 관리
  */
 const Reporter = ({ match, displayName }) => {
-    const loading = useSelector(({ loading }) => loading[GET_REPORTER] || loading[CHANGE_REPORTER]);
+    const loading = useSelector(({ loading }) => loading[GET_REPORTER]);
     const matchPoints = useBreakpoint();
 
     return (

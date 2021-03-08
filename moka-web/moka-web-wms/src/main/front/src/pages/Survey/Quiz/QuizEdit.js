@@ -152,7 +152,7 @@ const QuizEdit = ({ handleSave, setHandleSave }) => {
 
     // 퀴즈 현황 버튼
     const handleClickQuizStatusButton = () => {
-        messageBox.alert('준비 중입니다.');
+        toast.info('퀴즈현황 기능은 준비중 입니다.');
     };
 
     // 항목 데이터 초기화.

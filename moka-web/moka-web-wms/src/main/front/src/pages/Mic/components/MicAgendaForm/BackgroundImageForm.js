@@ -32,13 +32,13 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
 
     useEffect(() => {
         // 키가 바뀌면 이미지미리보기 제거
-        if (pcImgRef.current) {
+        if (pcImgRef.current && !agenda.agndImg) {
             pcImgRef.current.imageHide();
         }
-        if (mImgRef.current) {
+        if (mImgRef.current && !agenda.agndImgMob) {
             mImgRef.current.imageHide();
         }
-    }, [agenda.agndSeq]);
+    }, [agenda.agndImg, agenda.agndImgMob, agenda.agndSeq]);
 
     return (
         <Form.Row className={className}>
@@ -92,7 +92,7 @@ const BackgroundImageForm = ({ className, agenda, onChange }) => {
                         </Button>
                     </React.Fragment>
                 }
-                inputProps={{ img: agenda.agndMobImg, width: 280, setFileValue: setMFileValue, deleteButton: true }}
+                inputProps={{ img: agenda.agndImgMob, width: 280, setFileValue: setMFileValue, deleteButton: true }}
             />
         </Form.Row>
     );

@@ -1,13 +1,12 @@
 import React, { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
 import { MokaModal, MokaIcon } from '@components';
-import MokaEditor, { propTypes as editorPropTypes } from './MokaEditorCore';
+import MokaEditor from './MokaEditorCore';
 
 const propTypes = {
-    ...editorPropTypes,
+    ...MokaEditor.propTypes,
     /**
      * modal의 width
      */

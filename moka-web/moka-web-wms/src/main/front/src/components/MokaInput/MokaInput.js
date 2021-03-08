@@ -6,7 +6,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Form from 'react-bootstrap/Form';
 import { MokaImageInput, MokaAutocomplete, MokaDateTimePicker } from '@components';
 
-export const propTypes = {
+const propTypes = {
     /**
      * input의 className
      */

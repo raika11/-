@@ -29,7 +29,7 @@ const Special = ({ match }) => {
             </Helmet>
 
             {/* 리스트 */}
-            <MokaCard width={814} className="mr-gutter" titleClassName="mb-0" bodyClassName="d-flex flex-column" title="디지털 스페셜">
+            <MokaCard width={814} className="mr-gutter" bodyClassName="d-flex flex-column" title="디지털 스페셜">
                 <Suspense>
                     <SpecialList match={match} />
                 </Suspense>

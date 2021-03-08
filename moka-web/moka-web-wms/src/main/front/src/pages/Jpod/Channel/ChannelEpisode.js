@@ -60,7 +60,7 @@ const ChannelEpisode = () => {
 
     return (
         <div className="d-flex">
-            <MokaCard className="flex-fill" title={`${episodeTitle} 에피소드 목록`} titleClassName="mb-0" loading={false} footerClassName="d-flex justify-content-center">
+            <MokaCard className="flex-fill" title={`${episodeTitle} 에피소드 목록`} loading={false} footerClassName="d-flex justify-content-center">
                 <Form>
                     <Form.Row className="d-flex justify-content-between mb-2">
                         <Col xs={6} className="pl-0 d-flex align-items-center">

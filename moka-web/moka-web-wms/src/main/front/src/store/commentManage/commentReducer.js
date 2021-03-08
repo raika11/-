@@ -48,6 +48,7 @@ export const initialState = {
                 keyword: '',
                 tagType: '',
                 tagDiv: '',
+                media: '',
             },
             total: 0,
             list: [],

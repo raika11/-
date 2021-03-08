@@ -288,7 +288,7 @@ const MenuEditContainerEdit = (props) => {
     }, [invalidList]);
 
     return (
-        <MokaCard className="w-100" titleClassName="mb-0 pb-0" title="메뉴정보">
+        <MokaCard className="w-100" title="메뉴정보">
             {loading && <div className="opacity-box"></div>}
             <Form>
                 <Form.Row className="mb-2">

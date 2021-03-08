@@ -96,7 +96,6 @@ const Dashboard = () => {
                 <MokaCard
                     className="mr-gutter flex-shrink-0"
                     title="왼쪽 영역"
-                    titleClassName="mb-0"
                     expansion={expansionState[0]}
                     onExpansion={handleListExpansion}
                     foldable
@@ -191,7 +190,7 @@ const Dashboard = () => {
                     height={CARD_DEFAULT_HEIGHT}
                     tabWidth={412}
                     tabs={[
-                        <MokaCard titleClassName="h-100 mb-0" title="Modal 예제">
+                        <MokaCard titleClassName="h-100" title="Modal 예제">
                             <div className="mb-3">
                                 <Form onSubmit={handleSubmit((data) => setHookData(data))} className="mb-3">
                                     <Form.Control name="test-text" ref={register} />
@@ -347,7 +346,7 @@ const Dashboard = () => {
                                 </Button> */}
                             </div>
                         </MokaCard>,
-                        <MokaCard titleClassName="h-100 mb-0" title="이미지drop">
+                        <MokaCard titleClassName="h-100" title="이미지drop">
                             <Form.Group>
                                 <Form.Label>이미지drop 테스트</Form.Label>
                                 <div>
@@ -362,7 +361,7 @@ const Dashboard = () => {
                                 </div>
                             </Form.Group>
                         </MokaCard>,
-                        <MokaCard titleClassName="h-100 mb-0" title="리스트그룹">
+                        <MokaCard titleClassName="h-100" title="리스트그룹">
                             <Form.Group>
                                 <Form.Label>ListGroup</Form.Label>
                                 <ListGroup as="ul">

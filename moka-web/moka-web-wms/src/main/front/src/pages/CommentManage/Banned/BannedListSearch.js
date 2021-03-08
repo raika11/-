@@ -66,7 +66,7 @@ export const blockWordReason = [
 ];
 
 /**
- * 컨테이너 검색 컴포넌트
+ * 댓글 관리 > 차단 목록 검색
  */
 const BannedListSearch = ({ pathName }) => {
     const dispatch = useDispatch();
@@ -77,11 +77,11 @@ const BannedListSearch = ({ pathName }) => {
     });
 
     // 스토어 연결.
-    const { pageGubun, search, COMMENT_SITE_CODE, COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
+    const { pageGubun, storeSearch, COMMENT_SITE_CODE, COMMENT_TAG_DIV_CODE } = useSelector((store) => ({
         COMMENT_SITE_CODE: store.comment.common.COMMENT_SITE_CODE,
         COMMENT_TAG_DIV_CODE: store.comment.common.COMMENT_TAG_DIV_CODE,
         pageGubun: store.comment.banneds.pageGubun,
-        search: store.comment.banneds.commentsBlocks.search,
+        storeSearch: store.comment.banneds.commentsBlocks.search,
     }));
 
     const [searchData, setSearchData] = useState(initialState.banneds.commentsBlocks.search);
@@ -111,8 +111,8 @@ const BannedListSearch = ({ pathName }) => {
         messageBox.alert('서비스 준비 중입니다.');
     };
 
-    // 페이지 구분값이 변경 되었을때 모달에 전달할 구분값 업데이트.
     useEffect(() => {
+        // 페이지 구분값이 변경 되었을때 모달에 전달할 구분값 업데이트.
         setModalUsage({
             ...modalUsage,
             usage: pageGubun,
@@ -120,8 +120,8 @@ const BannedListSearch = ({ pathName }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageGubun]);
 
-    // 최초 로딩시 URL 구분 값으로 검색 옵션( 차단 리스트 에 필요한 구분값.) 설정 및 목록 가지고 오기.
     useEffect(() => {
+        // 최초 로딩시 URL 구분 값으로 검색 옵션( 차단 리스트 에 필요한 구분값.) 설정 및 목록 가지고 오기.
         const initStoreSearch = (pathname) => {
             let tagtype = '';
 
@@ -156,6 +156,10 @@ const BannedListSearch = ({ pathName }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        setSearchData(storeSearch);
+    }, [storeSearch]);
+
     return (
         <Form className="mb-14">
             {(function () {
@@ -189,7 +193,7 @@ const BannedListSearch = ({ pathName }) => {
                     return (
                         <>
                             <div className="mr-2 d-inline-block" style={{ width: 140 }}>
-                                <MokaInput as="select" value={searchData.searchMedia} onChange={(e) => handleChangeSearchInput(e)} name="searchMedia" id="searchMedia">
+                                <MokaInput as="select" value={searchData.media} onChange={(e) => handleChangeSearchInput(e)} name="media" id="media">
                                     <option value="">전체계정</option>
                                     {COMMENT_SITE_CODE.map((item, index) => (
                                         <option key={index} value={item.dtlCd}>

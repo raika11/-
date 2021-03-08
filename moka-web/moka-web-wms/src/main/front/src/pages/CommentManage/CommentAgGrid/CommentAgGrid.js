@@ -36,7 +36,6 @@ const CommentAgGrid = (props) => {
     return (
         <>
             <div className={clsx('ag-theme-moka-grid position-relative overflow-hidden flex-fill ag-grid-comment', { 'ag-header-no': false })}>
-                {/* <div className="ag-theme-moka-desking-grid position-relative px-1"> */}
                 {loading && <MokaLoader />}
                 <AgGridReact
                     immutableData
@@ -58,7 +57,7 @@ const CommentAgGrid = (props) => {
                     rowHeight={32}
                     getRowNodeId={getRowNodeId}
                     columnDefs={columnDefs}
-                    localeText={localeText}
+                    localeText={{ noRowsToShow: '조회 결과가 없습니다', loadingOoo: '조회 중입니다' }}
                     rowSelection="multiple"
                     onRowDoubleClicked={onRowDoubleClicked}
                     onRowClicked={onRowClicked}

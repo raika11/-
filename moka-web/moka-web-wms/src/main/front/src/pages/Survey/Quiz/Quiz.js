@@ -33,7 +33,7 @@ const Quiz = ({ match }) => {
 
                 {/* 리스트 */}
                 <Col sm={12} md={7} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
-                    <MokaCard className="mr-gutter w-100" titleClassName="mb-0" title="퀴즈 관리">
+                    <MokaCard className="mr-gutter w-100" title="퀴즈 관리">
                         <Suspense>
                             <QuizList />
                         </Suspense>

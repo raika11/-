@@ -116,7 +116,7 @@ const QuestionSearchModal = (props) => {
             // buttons={[{ text: '닫기', variant: 'negative', onClick: handleClickHide }]}
             draggable
         >
-            <MokaCard width={798} className="mr-gutter" titleClassName="mb-0" title="퀴즈 관리">
+            <MokaCard width={798} className="mr-gutter" title="퀴즈 관리">
                 <Form className="pb-2">
                     <Form.Row className="mb-2">
                         <Col xs={2} className="p-0">

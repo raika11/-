@@ -295,7 +295,6 @@ ${bulkArticleRow
             <MokaCard
                 loading={loading}
                 title={`네이버 문구 ${bulkartSeq ? '정보' : '등록'}`}
-                titleClassName="mb-0"
                 width={325}
                 className={'mr-gutter flex-fill'}
                 bodyClassName="overflow-hidden"

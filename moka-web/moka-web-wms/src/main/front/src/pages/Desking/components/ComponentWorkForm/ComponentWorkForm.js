@@ -16,7 +16,6 @@ const ComponentWorkForm = (props) => {
             className="h-100 absolute-top-right"
             width={600}
             title={editFormPart?.partTitle}
-            titleClassName="mb-0"
             headerClassName="border-bottom"
             footer
             footerClassName="d-flex justify-content-center border-top"

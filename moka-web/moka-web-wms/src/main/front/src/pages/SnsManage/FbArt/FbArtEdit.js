@@ -25,7 +25,7 @@ const FbArtEdit = () => {
             cdNm: store.codeMgt.specialCharCode.cdNm,
             loading: store.loading[GET_SNS_META],
             errors: store.sns.meta.errors,
-            search: store.sns.meta.search,
+            search: store.sns.sendArticle.search,
         };
     });
 

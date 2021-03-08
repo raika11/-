@@ -31,6 +31,7 @@ const FbArtAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             size={searchOptions.size}
             onChangeSearchOption={handleChangeSearchOption}
             selected={selected}
+            preventRowClickCell={['id']}
         />
     );
 };

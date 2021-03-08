@@ -1,9 +1,13 @@
 package jmnet.moka.core.tms.merge;
 
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jmnet.moka.common.JSONResult;
 import jmnet.moka.common.template.exception.DataLoadException;
 import jmnet.moka.common.template.exception.TemplateLoadException;
@@ -12,6 +16,8 @@ import jmnet.moka.common.template.exception.TemplateParseException;
 import jmnet.moka.common.template.loader.DataLoader;
 import jmnet.moka.common.template.merge.MergeContext;
 import jmnet.moka.common.template.parse.model.TemplateRoot;
+import jmnet.moka.common.utils.McpDate;
+import jmnet.moka.core.common.DpsApiConstants;
 import jmnet.moka.core.common.ItemConstants;
 import jmnet.moka.core.common.MokaConstants;
 import jmnet.moka.core.tms.merge.item.ArticlePageItem;
@@ -42,6 +48,7 @@ import org.springframework.core.env.Environment;
 public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
 
     private static final Logger logger = LoggerFactory.getLogger(MokaPreviewTemplateMerger.class);
+    private static Pattern PATTERN_BR = Pattern.compile("<br\\/?>(\\s|&nbsp;)*?<br\\/?>", Pattern.CASE_INSENSITIVE);
     protected final static MokaFunctions MOKA_FUNCTIONS = new MokaFunctions();
     private DomainItem domainItem;
     private DomainResolver domainResolver;
@@ -224,7 +231,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DataLoader loader = this.getDataLoader();
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(MokaConstants.PARAM_CATEGORY, category);
-        JSONResult jsonResult = loader.getJSONResult("menu.category", paramMap, true);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.MENU_CATEGORY, paramMap, true);
         Map<String, Object> map = jsonResult.getData(); // 서비스 사용 코드들
         Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
         Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
@@ -249,8 +256,10 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DataLoader loader = this.getDataLoader();
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("totalId", totalId.toString());
-        JSONResult jsonResult = loader.getJSONResult("article", paramMap, true);
-        Map<String, Object> articleInfo = rebuildInfo(jsonResult);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
+        Map<String, Object> articleInfo = (Map<String, Object>)jsonResult.get("article");
+        this.insertSubTitle(articleInfo);
+        this.setEPaper(articleInfo,mergeContext);
         mergeContext.set("article", articleInfo);
         mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + totalId.toString());
         this.setCodesAndMenus(loader, articleInfo, mergeContext);
@@ -267,30 +276,106 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         return sb;
     }
 
-    private Map<String, Object> rebuildInfo(JSONResult jsonResult) {
-        Map<String, Object> article = new HashMap<>();
-        article.put("basic", jsonResult.getDataListFirst("BASIC"));
-        article.put("content", jsonResult.getDataList("CONTENT"));
-        article.put("reporter", jsonResult.getDataList("REPORTER"));
-        article.put("meta", jsonResult.getDataList("META"));
-        article.put("mastercode", jsonResult.getDataList("MASTERCODE"));
-        article.put("servicemap", jsonResult.getDataList("SERVICEMAP"));
-        article.put("keyword", jsonResult.getDataList("KEYWORD"));
-        article.put("clickcnt", jsonResult.getDataList("CLICKCNT"));
-        article.put("multi", jsonResult.getDataList("MULTI"));
-        return article;
+    private void insertSubTitle(Map<String, Object> articleInfo) {
+        String content = (String) articleInfo.get("ART_CONTENT");
+        Object subTitleObj = articleInfo.get("ART_SUB_TITLE");
+        if (subTitleObj == null) {
+            return;
+        }
+        Matcher matcher = PATTERN_BR.matcher(content);
+        if (matcher.find()) { // 첫번째에 다음에 추가
+            StringBuffer sb = new StringBuffer(content.length());
+            matcher.appendReplacement(sb, "$0<div class=\"ab_subtitle\"><p>" + (String) subTitleObj + "</p></div>");
+            matcher.appendTail(sb);
+            content = sb.toString();
+            articleInfo.put("ART_CONTENT", content);
+        }
+    }
+
+    private void setEPaper(Map<String, Object> articleInfo, MergeContext mergeContext) {
+        Object source = articleInfo.get("source");
+        if ( source == null || ((Map)source).size() ==0) {return;}
+        Map<String,Object> soruceMap = (Map<String,Object>)source;
+        Object typeSetting = articleInfo.get("typeSetting");
+        if ( typeSetting == null || ((Map)typeSetting).size() ==0) {return;}
+        Map<String,Object> typeSettingMap = (Map<String,Object>)typeSetting;
+        String nowHour = McpDate
+                .nowStr()
+                .substring(0, 13);
+        // 오전 06시 이후 링크 노출
+        Object serviceTimeObj = articleInfo
+                .get("SERVICE_DAYTIME");
+        if ( serviceTimeObj instanceof JSONResult && ((JSONResult)serviceTimeObj).isEmpty()) {
+            return;
+        } else if ( serviceTimeObj == null){
+            return;
+        }
+        String serviceTime = ((String)serviceTimeObj).substring(0, 11) + "06";
+        if (nowHour.compareTo(serviceTime) <= 0) {
+            return;
+        }
+        String sourceCode = soruceMap
+                .get("SOURCE_CODE")
+                .toString();
+        String title = null;
+        String link = null;
+        String pressMyun = typeSettingMap
+                .get("PRESS_MYUN")
+                .toString();
+        String pressCategory = typeSettingMap
+                .get("PRESS_CATEGORY")
+                .toString()
+                .trim();
+        if (pressCategory == null || pressCategory.length() == 0) {
+            return;
+        }
+        if (sourceCode.equals("1")) { // 중앙일보일 경우
+            if (pressCategory.equals("A")) {
+                title = "종합 " + pressMyun + "면";
+            } else if (pressCategory.equals("E")) {
+                title = "경제 " + pressMyun + "면";
+            } else {
+                title = pressMyun + "면";
+            }
+            link = "https://www.joins.com/v2?mseq=11&tid=" + articleInfo
+                    .get("TOTAL_ID")
+                    .toString();
+        } else if (sourceCode.equals("61")) { // 중앙선데이일 경우
+            title = typeSettingMap
+                    .get("PRESS_NUMBER")
+                    .toString() + "호 " + pressMyun + "면";
+            link = "https://www.joins.com/v2?mseq=12&tid=" + articleInfo
+                    .get("TOTAL_ID")
+                    .toString();
+        }
+        // 앱에 대한 처리
+        if (mergeContext.has(MokaConstants.MERGE_CONTEXT_HEADER)) {
+            Map<String, String> headerMap = (Map<String, String>) mergeContext.get(MokaConstants.MERGE_CONTEXT_HEADER);
+            String userAgent = headerMap.get("User-Agent");
+            if (userAgent != null && userAgent.equalsIgnoreCase("joongangilbo")) {
+                try {
+                    link = "joongang://open/browser?url=" + URLEncoder.encode(link, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Map<String, String> epaper = new HashMap<String, String>();
+        epaper.put("title", title);
+        epaper.put("link", link);
+        articleInfo.put("epaper", epaper);
     }
 
     private void setCodesAndMenus(DataLoader loader, Map<String, Object> articleInfo, MergeContext mergeContext)
             throws DataLoadException {
-        String masterCode = MOKA_FUNCTIONS.joinColumn((List<Map<String, Object>>) articleInfo.get("mastercode"), "MASTER_CODE");
-        String serviceCode = MOKA_FUNCTIONS.joinColumn((List<Map<String, Object>>) articleInfo.get("servicemap"), "SERVICE_CODE");
-        String sourceCode = (String) ((Map<String, Object>) articleInfo.get("basic")).get("SOURCE_CODE");
+        String masterCode = MOKA_FUNCTIONS.joinColumn((List<Map<String, Object>>) articleInfo.get("codes"), "MASTER_CODE");
+        String serviceCode = MOKA_FUNCTIONS.joinColumn((List<Map<String, Object>>) articleInfo.get("codes"), "SERVICE_CODE");
+        String sourceCode = (String) ((Map<String, Object>) articleInfo.get("source")).get("SOURCE_CODE");
         Map<String, Object> codesParam = new HashMap<>();
         codesParam.put(MokaConstants.CATEGORY_MASTER_CODE_LIST, masterCode);
         codesParam.put(MokaConstants.CATEGORY_SERVICE_CODE_LIST, serviceCode);
         codesParam.put(MokaConstants.CATEGORY_SOURCE_CODE_LIST, sourceCode);
-        JSONResult jsonResult = loader.getJSONResult("menu.codes", codesParam, true);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.MENU_CODES, codesParam, true);
         Map<String, Object> map = jsonResult.getData();
         Map codes = (Map) map.get(MokaConstants.MERGE_CONTEXT_CODES);
         Map menus = (Map) map.get(MokaConstants.MERGE_CONTEXT_MENUS);
@@ -328,7 +413,7 @@ public class MokaPreviewTemplateMerger extends MokaTemplateMerger {
         DataLoader loader = this.getDataLoader();
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("totalId", totalId.toString());
-        JSONResult jsonResult = loader.getJSONResult("article", paramMap, true);
+        JSONResult jsonResult = loader.getJSONResult(DpsApiConstants.ARTICLE, paramMap, true);
         Map<String, Object> articleInfo = rebuildInfoArticle(jsonResult, categoryList, reporterList, tagList, title, subTitle, content);
         mergeContext.set("article", articleInfo);
         mergeContext.set(MokaConstants.MERGE_PATH, "/article/" + totalId.toString());

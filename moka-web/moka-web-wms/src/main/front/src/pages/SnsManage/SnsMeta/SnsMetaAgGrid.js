@@ -56,6 +56,9 @@ const SnsMetaAgGrid = ({ rows, total, searchOptions, loading, selected }) => {
             preventRowClickCell={['insStatus']}
             className="ag-grid-align-center overflow-hidden flex-fill"
             frameworkComponents={{ editImageRenderer: EditImageRenderer }}
+            refreshCellsParams={{
+                force: true,
+            }}
         />
     );
 };

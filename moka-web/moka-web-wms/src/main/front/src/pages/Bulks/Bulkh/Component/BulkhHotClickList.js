@@ -184,7 +184,7 @@ const BulkhHotClickList = ({ componentAgGridInstances, setComponentAgGridInstanc
                 footerClassName="justify-content-center"
                 footerButtons={[
                     { text: '재전송', variant: 'outline-neutral', onClick: () => handleClickResendButton(), className: 'mr-1' },
-                    { text: '전송', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
+                    { text: '저장', variant: 'positive', onClick: () => handleClickSaveButton('publish'), className: 'mr-1' },
                     { text: '임시저장', variant: 'secondary', onClick: () => handleClickSaveButton('save'), className: 'mr-1' },
                 ]}
             >

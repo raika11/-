@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import defaultOptions from './options';
 import { MokaModal, MokaIcon } from '@components';
-import MokaEditor from './MokaEditorCore';
+import MokaEditor, { propTypes as editorProps } from './MokaEditorCore';
 
 const propTypes = {
-    ...MokaEditor.propTypes,
+    ...editorProps,
     /**
      * modal의 width
      */

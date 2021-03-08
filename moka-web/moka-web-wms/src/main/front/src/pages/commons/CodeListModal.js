@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import produce from 'immer';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import { MokaModal, MokaInput, MokaIcon } from '@components';

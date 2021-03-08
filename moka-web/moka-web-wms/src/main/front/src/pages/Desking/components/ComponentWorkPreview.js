@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { API_BASE_URL, AREA_ALIGN_H } from '@/constants';
+import { API_BASE_URL } from '@/constants';
 import { previewAreaModal, PREVIEW_AREA_MODAL } from '@store/merge';
 import toast from '@utils/toastUtil';
 import { MokaLoader, MokaResizableBox } from '@components';
@@ -15,7 +15,6 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
     const [previewContent, setPreviewContent] = useState(null);
     const loading = useSelector(({ loading }) => loading[PREVIEW_AREA_MODAL]);
     const area = useSelector(({ desking }) => desking.area);
-    const sidebarIsOpen = useSelector(({ layout }) => layout.sidebarIsOpen);
     const iframeRef = useRef(null);
     const flexableRef = useRef(null);
     const [maxSize, setMaxSize] = useState([530, 530]);
@@ -52,10 +51,21 @@ const ComponentWorkPreview = ({ show, componentList, isNaverChannel }) => {
     }, [area.areaSeq, componentList, show, dispatch]);
 
     useEffect(() => {
-        setTimeout(function () {
-            setMaxSize([flexableRef.current.offsetWidth, flexableRef.current.offsetHeight]);
-        }, 200);
-    }, [area.areaAlign, sidebarIsOpen]);
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (let entry of entries) {
+                if (entry.contentBoxSize) {
+                    setMaxSize([entry.contentRect.width, entry.contentRect.height]);
+                }
+            }
+        });
+
+        if (flexableRef.current) resizeObserver.observe(flexableRef.current);
+        else {
+            setTimeout(function () {
+                resizeObserver.observe(flexableRef.current);
+            }, 300);
+        }
+    }, []);
 
     useEffect(() => {
         if (!iframeRef.current) return;

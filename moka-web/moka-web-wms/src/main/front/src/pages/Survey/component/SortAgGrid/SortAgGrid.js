@@ -5,7 +5,7 @@ import ArticleListModal from '@pages/Article/modals/ArticleListModal';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from './SortAgGridColumns';
 import ItemRenderer from './ItemRenderer';
-import { messageBox } from '@utils/toastUtil';
+import toast, { messageBox } from '@utils/toastUtil';
 import { selectArticleListChange, selectArticleItemChange } from '@store/survey/quiz';
 import { unescapeHtmlArticle } from '@utils/convertUtil';
 
@@ -98,6 +98,10 @@ const SortAgGrid = ({ SearchForm }) => {
                 messageBox.alert('중복된 기사가 존재 합니다.');
                 return;
             }
+            if (SearchForm && selectArticleList.length >= 4) {
+                toast.warning('관련기사는 4개 이상 등록 할 수 없습니다.');
+                return;
+            }
 
             let newItem = {
                 contentId: modalArticle.totalId,
@@ -139,7 +143,7 @@ const SortAgGrid = ({ SearchForm }) => {
                 if (SearchForm) {
                     return (
                         <React.Fragment>
-                            <SearchForm HandleSearchClick={() => setArticleListModalState(true)} HandleAddClick={() => handleClickRelationArticleAdd()} />
+                            <SearchForm HandleSearchClick={() => setArticleListModalState(true)} HandleAddClick={handleClickRelationArticleAdd} />
                         </React.Fragment>
                     );
                 } else {

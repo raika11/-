@@ -617,12 +617,26 @@ const ChannelEdit = (props) => {
                         size="sm"
                         className="mr-1"
                         onClick={() => {
-                            HandleSearchClick();
+                            if (selectArticleItem.length >= 4) {
+                                toast.warning('관련기사는 4개를 초과하여 추가 할 수 없습니다.');
+                            } else {
+                                HandleSearchClick();
+                            }
                         }}
                     >
                         검색
                     </Button>
-                    <Button variant="positive" size="sm" onClick={() => HandleAddClick()}>
+                    <Button
+                        variant="positive"
+                        size="sm"
+                        onClick={() => {
+                            if (selectArticleItem.length >= 4) {
+                                toast.warning('관련기사는 4개를 초과하여 추가 할 수 없습니다.');
+                            } else {
+                                HandleAddClick();
+                            }
+                        }}
+                    >
                         추가
                     </Button>
                 </Form.Row>

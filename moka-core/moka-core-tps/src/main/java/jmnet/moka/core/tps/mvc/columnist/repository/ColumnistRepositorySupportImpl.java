@@ -11,6 +11,8 @@ import jmnet.moka.core.tps.mvc.columnist.entity.QColumnist;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 
 /**
  * <pre>
@@ -34,6 +36,7 @@ public class ColumnistRepositorySupportImpl extends TpsQueryDslRepositorySupport
     }
 
     @Override
+    @EntityGraph(attributePaths = {"regMember"}, type = EntityGraphType.LOAD)
     public Page<Columnist> findAllColumnist(ColumnistSearchDTO searchDTO) {
         QColumnist qColumnist = QColumnist.columnist;
         JPQLQuery<Columnist> query = from(qColumnist);

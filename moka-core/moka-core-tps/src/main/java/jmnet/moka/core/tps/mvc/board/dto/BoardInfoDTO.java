@@ -50,13 +50,6 @@ public class BoardInfoDTO {
     @Min(value = 0, message = "{tps.board-info.error.min.boardId}")
     private Integer boardId;
 
-    /**
-     * 게시판명
-     */
-    @ApiModelProperty("게시판명")
-    @NotEmpty(message = "{tps.board-info.error.size.boardName}")
-    @Size(min = 2, max = 100, message = "{tps.board-info.error.size.boardName}")
-    private String boardName;
 
     /**
      * 게시판유형(S:서비스 / A:관리자)
@@ -65,6 +58,16 @@ public class BoardInfoDTO {
     @Builder.Default
     @NotNull(message = "{tps.board-info.error.pattern.boardType}")
     private BoardTypeCode boardType = BoardTypeCode.A;
+
+
+    /**
+     * 채널타입(예:JPOD)
+     */
+    @ApiModelProperty("채널타입(예:JPOD)")
+    @Size(min = 0, max = 24, message = "{tps.board-info.error.size.channelType}")
+    private String channelType;
+
+
 
     /**
      * 사용여부
@@ -78,13 +81,27 @@ public class BoardInfoDTO {
      * 말머리1
      */
     @ApiModelProperty("말머리1")
-    @Size(max = 100, message = "{tps.board-info.error.size.titlePrefix1}")
-    private String titlePrefix1;
+    @Size(max = 20, message = "{tps.board-info.error.size.titlePrefixNm1}")
+    private String titlePrefixNm1;
 
     /**
      * 말머리2
      */
     @ApiModelProperty("말머리2")
+    @Size(max = 20, message = "{tps.board-info.error.size.titlePrefixNm2}")
+    private String titlePrefixNm2;
+
+    /**
+     * 말머리1(텍스트 Comma(,)로 여러 개 입력)
+     */
+    @ApiModelProperty(value = "말머리1(텍스트 Comma(,)로 여러 개 입력)")
+    @Size(max = 100, message = "{tps.board-info.error.size.titlePrefix1}")
+    private String titlePrefix1;
+
+    /**
+     * 말머리2(텍스트 Comma(,)로 여러 개 입력)
+     */
+    @ApiModelProperty(value = "말머리2(텍스트 Comma(,)로 여러 개 입력)")
     @Size(max = 100, message = "{tps.board-info.error.size.titlePrefix2}")
     private String titlePrefix2;
 
@@ -120,6 +137,16 @@ public class BoardInfoDTO {
     @Pattern(regexp = "[0|1]{1}$", message = "{tps.board-info.error.pattern.replyLevel}")
     private String replyLevel = "1";
 
+
+
+    /**
+     * 추천여부 0:사용안함 1:추천/비추천 2:추천만
+     */
+    @ApiModelProperty("추천여부 0:사용안함 1:추천/비추천 2:추천만")
+    @Pattern(regexp = "[0|1|2]{1}$", message = "{tps.board-info.error.pattern.recomFlag}")
+    @Builder.Default
+    private String recomFlag = "0";
+
     /**
      * 에디터여부
      */
@@ -144,6 +171,75 @@ public class BoardInfoDTO {
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.replyYn}")
     private String replyYn = MokaConstants.NO;
 
+
+    /**
+     * 신고여부
+     */
+    @ApiModelProperty("신고여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.declareYn}")
+    @Builder.Default
+    private String declareYn = MokaConstants.NO;
+
+    /**
+     * 캡차여부
+     */
+    @ApiModelProperty("캡차여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.captchaYn}")
+    @Builder.Default
+    private String captchaYn = MokaConstants.NO;
+
+
+    /**
+     * 비밀글여부
+     */
+    @ApiModelProperty(value = "비밀글여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.secretYn}")
+    @Builder.Default
+    private String secretYn = MokaConstants.NO;
+
+    /**
+     * 순서지정여부
+     */
+    @ApiModelProperty(value = "순서지정여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.ordYn}")
+    @Builder.Default
+    private String ordYn = MokaConstants.NO;
+
+    /**
+     * 푸시발송여부(앱공지게시판의 경우)
+     */
+    @ApiModelProperty(value = "푸시발송여부(앱공지게시판의 경우)")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.pushYn}")
+    @Builder.Default
+    private String pushYn = MokaConstants.NO;
+
+
+
+    @ApiModelProperty("이메일수신여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.emailReceiveYn}")
+    @Builder.Default
+    private String emailReceiveYn = MokaConstants.NO;
+
+    @ApiModelProperty("수신이메일(여러명;로 구분)")
+    private String receiveEmail;
+
+    /**
+     * 답변글 푸시발송여부
+     */
+    @ApiModelProperty(value = "답변글 푸시발송여부")
+    @Builder.Default
+    private String answPushYn = MokaConstants.NO;
+
+
+    @ApiModelProperty("답변글 이메일발송여부")
+    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.emailSendYn}")
+    @Builder.Default
+    private String emailSendYn = MokaConstants.NO;
+
+
+    @ApiModelProperty("답변글 이메일발송시 발송자이메일")
+    private String sendEmail;
+
     /**
      * 파일업로드여부
      */
@@ -151,6 +247,7 @@ public class BoardInfoDTO {
     @Builder.Default
     @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.fileYn}")
     private String fileYn = MokaConstants.YES;
+
 
     /**
      * 허용파일개수
@@ -171,41 +268,36 @@ public class BoardInfoDTO {
     /**
      * 허용되는 파일확장자(;로 구분)
      */
-    @ApiModelProperty("허용되는 파일확장자(;로 구분)")
+    @ApiModelProperty("허용되는 파일확장자(,로 구분)")
     @Builder.Default
     //@Pattern(regexp = "zip,|xls,|xlsx,|ppt,|doc,|hwp,|jpg,|png,|gif,", message = "{tps.board-info.error.pattern.allowFileExt}")
     private String allowFileExt = "zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif,";
 
-    /**
-     * 추천여부 0:사용안함 1:추천/비추천 2:추천만
-     */
-    @ApiModelProperty("추천여부 0:사용안함 1:추천/비추천 2:추천만")
-    @Pattern(regexp = "[0|1|2]{1}$", message = "{tps.board-info.error.pattern.recomFlag}")
-    @Builder.Default
-    private String recomFlag = "0";
+    @ApiModelProperty("허용 컬럼(,로 구분)")
+    @Size(min = 2, max = 100, message = "{tps.board-info.error.size.allowItem}")
+    private String allowItem;
+
+    @ApiModelProperty(value = "등록일", hidden = true)
+    @DTODateTimeFormat
+    private Date regDt;
+
 
     /**
-     * 신고여부
+     * 게시판 URL
      */
-    @ApiModelProperty("신고여부")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.declareYn}")
-    @Builder.Default
-    private String declareYn = MokaConstants.NO;
+    @ApiModelProperty("게시판 URL")
+    @Size(min = 0, max = 200, message = "{tps.board-info.error.size.boardUrl}")
+    private String boardUrl;
+
 
     /**
-     * 캡차여부
+     * 게시판명
      */
-    @ApiModelProperty("캡차여부")
-    @Pattern(regexp = "[Y|N]{1}$", message = "{tps.board-info.error.pattern.captchaYn}")
-    @Builder.Default
-    private String captchaYn = MokaConstants.NO;
+    @ApiModelProperty("게시판명")
+    @NotEmpty(message = "{tps.board-info.error.size.boardName}")
+    @Size(min = 2, max = 100, message = "{tps.board-info.error.size.boardName}")
+    private String boardName;
 
-    /**
-     * 채널타입(예:JPOD)
-     */
-    @ApiModelProperty("채널타입(예:JPOD)")
-    @Size(min = 0, max = 24, message = "{tps.board-info.error.size.channelType}")
-    private String channelType;
 
     /**
      * 게시판설명
@@ -213,27 +305,6 @@ public class BoardInfoDTO {
     @ApiModelProperty("게시판설명")
     @Size(min = 0, max = 500, message = "{tps.board-info.error.size.boardDesc}")
     private String boardDesc;
-
-    @ApiModelProperty("이메일수신여부")
-    @Builder.Default
-    private String emailReceiveYn = MokaConstants.NO;
-
-    @ApiModelProperty("수신이메일(여러명;로 구분)")
-    private String receiveEmail;
-
-    @ApiModelProperty("발송이메일")
-    private String sendEmail;
-
-    @ApiModelProperty("이메일발송여부")
-    @Builder.Default
-    private String emailSendYn = MokaConstants.NO;
-
-    @ApiModelProperty("제외컬럼(,)로 연결")
-    @Builder.Default
-    private String exceptItem = "ADDR";
-
-    @DTODateTimeFormat
-    private Date regDt;
 
     /**
      * header

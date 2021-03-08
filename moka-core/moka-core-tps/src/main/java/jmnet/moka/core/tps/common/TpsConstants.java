@@ -212,4 +212,13 @@ public class TpsConstants extends MokaConstants {
 
     // 편집예약 JOB_CD
     public static final String DESKING_JOB_CD = "DESKING_PUBLISH";
+
+    // 게시판 서비스 유형
+    public static final String BOARD_DIVS_CD = "BOARD_DIVS";
+
+    // 게시판 관리자 유형
+    public static final String BOARD_DIVA_CD = "BOARD_DIVA";
+
+    // J팟용 게시판
+    public static final String BOARD_JPOD = "JPOD";
 }

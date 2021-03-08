@@ -132,6 +132,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public long updateOrdNo(Long boardSeq, String ordNo) {
+        return boardRepository.updateOrdNo(boardSeq, ordNo);
+    }
+
+    @Override
     public long updateViewCnt(Long boardSeq) {
         return boardRepository.updateViewCnt(boardSeq);
     }

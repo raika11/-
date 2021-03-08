@@ -43,9 +43,9 @@ public class BoardSearchDTO extends SearchDTO {
     @DTODateTimeFormat
     private Date endDt;
 
-    @ApiModelProperty("사용여부")
+    @ApiModelProperty("삭제여부")
     @Builder.Default
-    private String usedYn = MokaConstants.YES;
+    private String delYn = MokaConstants.NO;
 
     /**
      * 말머리1
@@ -53,6 +53,13 @@ public class BoardSearchDTO extends SearchDTO {
     @ApiModelProperty("말머리1")
     @Max(value = 20, message = "{tps.board.error.size.titlePrefix1}")
     private String titlePrefix1;
+
+    /**
+     * 말머리1
+     */
+    @ApiModelProperty("말머리2")
+    @Max(value = 20, message = "{tps.board.error.size.titlePrefix2}")
+    private String titlePrefix2;
 
     /**
      * 채널ID(예:JPOD 채널SEQ)

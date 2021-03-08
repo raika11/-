@@ -143,13 +143,6 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     private Integer declareCnt = 0;
 
     /**
-     * 사용여부
-     */
-    @Column(name = "USED_YN", nullable = false)
-    @Builder.Default
-    private String usedYn = MokaConstants.YES;
-
-    /**
      * 삭제여부
      */
     @Column(name = "DEL_YN", nullable = false)
@@ -162,12 +155,60 @@ public class Board extends jmnet.moka.core.tps.common.entity.BaseAudit implement
     @Column(name = "CONTENT", nullable = false)
     private String content;
 
-
     /**
      * 비밀번호
      */
     @Column(name = "PWD")
     private String pwd;
+
+    /**
+     * 답변 푸시 수신 여부
+     */
+    @Column(name = "PUSH_RECEIVE_YN")
+    @Builder.Default
+    private String pushReceiveYn = MokaConstants.NO;
+
+    /**
+     * 답변 이메일 수신 여부
+     */
+    @Column(name = "EMAIL_RECEIVE_YN")
+    private String emailReceiveYn;
+
+    /**
+     * app os
+     */
+    @Column(name = "APP_OS")
+    private String appOs;
+
+    /**
+     * 디바이스 구분
+     */
+    @Column(name = "DEV_DIV")
+    private String devDiv;
+
+    /**
+     * 디바이스 푸시 토큰
+     */
+    @Column(name = "TOKEN")
+    private String token;
+
+    /**
+     * 이메일 주소
+     */
+    @Column(name = "EMAIL")
+    private String email;
+
+    /**
+     * 휴대폰 번호
+     */
+    @Column(name = "MOBILE_PHONE")
+    private String mobilePhone;
+
+    /**
+     * 신고페이지 url
+     */
+    @Column(name = "URL")
+    private String url;
 
     /**
      * 비밀번호

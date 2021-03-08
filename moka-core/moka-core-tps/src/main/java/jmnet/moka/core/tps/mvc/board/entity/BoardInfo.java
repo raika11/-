@@ -41,11 +41,6 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Column(name = "BOARDINFO_SEQ", nullable = false)
     private Integer boardId;
 
-    /**
-     * 게시판명
-     */
-    @Column(name = "BOARD_NAME", nullable = false)
-    private String boardName;
 
     /**
      * 게시판유형(S:서비스 / A:관리자)
@@ -55,6 +50,13 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Enumerated(value = EnumType.STRING)
     private BoardTypeCode boardType = BoardTypeCode.A;
 
+
+    /**
+     * 채널타입(예:JPOD)
+     */
+    @Column(name = "CHANNEL_TYPE")
+    private String channelType;
+
     /**
      * 사용여부
      */
@@ -63,13 +65,32 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     private String usedYn = MokaConstants.YES;
 
     /**
-     * 말머리1
+     * 삭제여부
+     */
+    @Column(name = "DEL_YN", nullable = false)
+    @Builder.Default
+    private String delYn = MokaConstants.YES;
+
+    /**
+     * 말머리1 이름
+     */
+    @Column(name = "TITLE_PREFIX_NM1")
+    private String titlePrefixNm1;
+
+    /**
+     * 말머리2 이름
+     */
+    @Column(name = "TITLE_PREFIX_NM2")
+    private String titlePrefixNm2;
+
+    /**
+     * 말머리1(텍스트 Comma(,)로 여러 개 입력)
      */
     @Column(name = "TITLE_PREFIX1")
     private String titlePrefix1;
 
     /**
-     * 말머리2
+     * 말머리2(텍스트 Comma(,)로 여러 개 입력)
      */
     @Column(name = "TITLE_PREFIX2")
     private String titlePrefix2;
@@ -102,6 +123,14 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Builder.Default
     private String replyLevel = "1";
 
+
+    /**
+     * 추천여부 0:사용안함 1:추천/비추천 2:추천만
+     */
+    @Column(name = "RECOM_FLAG")
+    @Builder.Default
+    private String recomFlag = "0";
+
     /**
      * 에디터여부
      */
@@ -122,6 +151,78 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Column(name = "REPLY_YN")
     @Builder.Default
     private String replyYn = MokaConstants.NO;
+
+
+    /**
+     * 신고여부
+     */
+    @Column(name = "DECLARE_YN")
+    @Builder.Default
+    private String declareYn = MokaConstants.NO;
+
+    /**
+     * 캡차여부
+     */
+    @Column(name = "CAPTCHA_YN")
+    @Builder.Default
+    private String captchaYn = MokaConstants.NO;
+
+    /**
+     * 비밀글여부
+     */
+    @Column(name = "SECRET_YN")
+    @Builder.Default
+    private String secretYn = MokaConstants.NO;
+
+    /**
+     * 순서지정여부
+     */
+    @Column(name = "ORD_YN")
+    @Builder.Default
+    private String ordYn = MokaConstants.NO;
+
+    /**
+     * 푸시발송여부(앱공지게시판의 경우)
+     */
+    @Column(name = "PUSH_YN")
+    @Builder.Default
+    private String pushYn = MokaConstants.NO;
+
+
+    /**
+     * 이메일수신여부
+     */
+    @Column(name = "EMAIL_RECEIVE_YN")
+    @Builder.Default
+    private String emailReceiveYn = MokaConstants.NO;
+
+    /**
+     * 수신이메일(여러명;로 구분)
+     */
+    @Column(name = "RECEIVE_EMAIL")
+    private String receiveEmail;
+
+    /**
+     * 답변글 푸시발송여부
+     */
+    @Column(name = "ANSW_PUSH_YN")
+    @Builder.Default
+    private String answPushYn = MokaConstants.NO;
+
+
+    /**
+     * 이메일발송여부
+     */
+    @Column(name = "EMAIL_SEND_YN")
+    @Builder.Default
+    private String emailSendYn = MokaConstants.NO;
+
+
+    /**
+     * 발송이메일
+     */
+    @Column(name = "SEND_EMAIL")
+    private String sendEmail;
 
     /**
      * 파일업로드여부
@@ -151,72 +252,31 @@ public class BoardInfo extends jmnet.moka.core.tps.common.entity.BaseAudit imple
     @Builder.Default
     private String allowFileExt = "zip,xls,xlsx,ppt,doc,hwp,jpg,png,gif,";
 
-    /**
-     * 추천여부 0:사용안함 1:추천/비추천 2:추천만
-     */
-    @Column(name = "RECOM_FLAG")
-    @Builder.Default
-    private String recomFlag = "0";
 
     /**
-     * 신고여부
+     * 허용컬럼(,)로 연결
      */
-    @Column(name = "DECLARE_YN")
-    @Builder.Default
-    private String declareYn = MokaConstants.NO;
+    @Column(name = "ALLOW_ITEM")
+    private String allowItem;
 
     /**
-     * 캡차여부
+     * 게시판 URL
      */
-    @Column(name = "CAPTCHA_YN")
-    @Builder.Default
-    private String captchaYn = MokaConstants.NO;
+    @Column(name = "BOARD_URL")
+    private String boardUrl;
+
 
     /**
-     * 채널타입(예:JPOD)
+     * 게시판명
      */
-    @Column(name = "CHANNEL_TYPE")
-    private String channelType;
+    @Column(name = "BOARD_NAME", nullable = false)
+    private String boardName;
 
     /**
      * 게시판설명
      */
     @Column(name = "BOARD_DESC")
     private String boardDesc;
-
-    /**
-     * 이메일수신여부
-     */
-    @Column(name = "EMAIL_RECEIVE_YN")
-    @Builder.Default
-    private String emailReceiveYn = MokaConstants.NO;
-
-    /**
-     * 수신이메일(여러명;로 구분)
-     */
-    @Column(name = "RECEIVE_EMAIL")
-    private String receiveEmail;
-
-    /**
-     * 발송이메일
-     */
-    @Column(name = "SEND_EMAIL")
-    private String sendEmail;
-
-    /**
-     * 이메일발송여부
-     */
-    @Column(name = "EMAIL_SEND_YN")
-    @Builder.Default
-    private String emailSendYn = MokaConstants.NO;
-
-
-    /**
-     * 제외컬럼(,)로 연결
-     */
-    @Column(name = "EXCEPT_ITEM")
-    @Builder.Default
-    private String exceptItem = "ADDR";
 
     /**
      * header

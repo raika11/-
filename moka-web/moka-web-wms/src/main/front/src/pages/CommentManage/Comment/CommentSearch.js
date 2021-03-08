@@ -15,7 +15,7 @@ import { AuthButton } from '@pages/Auth/AuthButton';
 moment.locale('ko');
 
 /**
- * 컨테이너 검색 컴포넌트
+ * 댓글 관리 > 댓글 목록 검색
  */
 const CommentSearch = ({ selectBannedItem }) => {
     // 차단 모달에 전달해줄 값 설정.
@@ -219,7 +219,7 @@ const CommentSearch = ({ selectBannedItem }) => {
                     selectBannedItem={selectBannedItem}
                     show={defaultInputModalState}
                     onHide={() => {
-                        dispatch(getCommentList());
+                        // dispatch(getCommentList());
                         setDefaultInputModalState(false);
                     }}
                     onSave={(e, i) => {

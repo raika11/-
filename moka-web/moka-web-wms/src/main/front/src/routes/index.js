@@ -416,7 +416,7 @@ const routes = [
     {
         path: '/comment',
         name: 'Comment',
-        displayName: '댓글 관리',
+        displayName: '댓글 목록',
         component: Comment,
         layout: SidebarOpenLayout,
         side: true,

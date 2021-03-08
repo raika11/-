@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
 import { MokaModal } from '@components';
 
-const BenneConfirmModal = (props) => {
+const BannedConfirmModal = (props) => {
     const { show, onHide, ModalUsage } = props;
 
     const [modalState, setModalState] = useState({
@@ -27,25 +26,24 @@ const BenneConfirmModal = (props) => {
             });
         }
     }, [ModalUsage, show]);
+
     return (
         <MokaModal
-            width={600}
+            size="sm"
+            width={400}
             show={show}
             onHide={handleClickHide}
             title={modalState.title}
-            size="md"
             buttons={[
-                { text: '확인', variant: 'positive', onClick: () => handleClickSave() },
-                { text: '취소', variant: 'negative', onClick: () => handleClickHide() },
+                { text: '확인', variant: 'positive', onClick: handleClickSave },
+                { text: '취소', variant: 'negative', onClick: handleClickHide },
             ]}
-            footerClassName="justify-content-center"
+            id="bannedConfirmModal"
             draggable
         >
-            <Form>
-                <Form.Row className="mb-2">{modalState.content}</Form.Row>
-            </Form>
+            <p className="mb-0">{modalState.content}</p>
         </MokaModal>
     );
 };
 
-export default BenneConfirmModal;
+export default BannedConfirmModal;

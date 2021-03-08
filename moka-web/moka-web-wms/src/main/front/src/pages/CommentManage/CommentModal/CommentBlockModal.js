@@ -3,9 +3,9 @@ import { Form, Col } from 'react-bootstrap';
 import { MokaModal, MokaInputLabel, MokaInput } from '@components';
 import toast, { messageBox } from '@utils/toastUtil';
 import { useDispatch, useSelector } from 'react-redux';
+import { saveBlocks, getCommentsBlocks, getCommentList } from '@store/commentManage';
+import { BannedConfirmModal } from '@pages/CommentManage/CommentModal';
 
-import { saveBlocks, getCommentsBlocks } from '@store/commentManage';
-import { BenneConfirmModal } from '@pages/CommentManage/CommentModal';
 /**
  * ModalBody로 Input 한개 있는 Modal
  */
@@ -19,7 +19,7 @@ const CommentBlockModal = (props) => {
 
     const { show, onHide, ModalUsage, selectBannedItem } = props;
     const [editData, setEditData] = useState({
-        BennedType: 'U',
+        BannedType: 'U',
         tagValues: '',
         tagDiv: 'A',
         tagDesc: '',
@@ -50,7 +50,9 @@ const CommentBlockModal = (props) => {
         });
     };
 
-    // 차단 등록 처리
+    /**
+     * 차단 등록 처리
+     */
     const handleSaveBlocks = (formData) => {
         dispatch(
             saveBlocks({
@@ -83,6 +85,7 @@ const CommentBlockModal = (props) => {
                     }
 
                     onHide(); // 모달창 닫기.
+                    dispatch(getCommentList());
                 },
             }),
         );
@@ -94,8 +97,8 @@ const CommentBlockModal = (props) => {
 
         if (gubun === 'comment' && type === 'save') {
             formData.append('usedYn', 'Y');
-            formData.append('tagType', editData.BennedType);
-            if (editData.BennedType === 'U') {
+            formData.append('tagType', editData.BannedType);
+            if (editData.BannedType === 'U') {
                 formData.append(
                     'tagValues',
                     selectBannedItem
@@ -122,9 +125,7 @@ const CommentBlockModal = (props) => {
      * 저장 버튼 클릭 이벤트
      */
     const handleClickSave = () => {
-        // onSave(data);
-
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append('tagType', ModalUsage.usage);
         formData.append('usedYn', 'Y');
 
@@ -135,7 +136,7 @@ const CommentBlockModal = (props) => {
                 return;
             }
 
-            if (editData.BennedType === 'I') {
+            if (editData.BannedType === 'I') {
                 // 차단후 복원된 이력이 있는 ID 입니다. 재차단 하시겠습니까? 어떻게?
                 setConfirmModalUsage({
                     title: '차단 IP 등록',
@@ -143,7 +144,7 @@ const CommentBlockModal = (props) => {
                     gubun: 'comment',
                 });
                 setConfirmModal(true);
-            } else if (editData.BennedType === 'U') {
+            } else if (editData.BannedType === 'U') {
                 // 차단후 복원된 이력이 있는 IP 입니다. 재차단 하시겠습니까?
                 setConfirmModalUsage({
                     title: '차단 ID 등록',
@@ -226,102 +227,70 @@ const CommentBlockModal = (props) => {
 
     return (
         <MokaModal
+            size="md"
             width={600}
             show={show}
             onHide={handleClickHide}
             title={`차단 등록`}
-            size="md"
             buttons={[
                 { text: '저장', variant: 'positive', onClick: handleClickSave },
                 { text: '취소', variant: 'negative', onClick: handleClickHide },
             ]}
-            footerClassName="justify-content-center"
+            id="commentBlockModal"
             draggable
         >
             <Form>
-                {/* <MokaInputLabel label={data.title} labelWidth={90} className="mb-0" value={data.value} onChange={handleChangeValue} isInvalid={data.isInvalid} /> */}
-                <Form.Row className="mb-2">
-                    {(function () {
-                        if (ModalUsage.usage && ModalUsage.usage === `comment`) {
-                            return (
-                                <>
-                                    <Col xs={3} className="p-0">
-                                        <MokaInputLabel
-                                            as="radio"
-                                            className="mb-0 h-100"
-                                            label="차단 종류"
-                                            value="U"
-                                            id="dataset-type1"
-                                            inputProps={{ custom: true, label: 'ID', checked: editData.BennedType === 'U' ? true : false }}
-                                            onChange={(e) => handleChangeValue(e)}
-                                            name="BennedType"
-                                        />
-                                    </Col>
-                                    <Col xs={1} className="p-0 mr-10">
-                                        <MokaInput
-                                            as="radio"
-                                            className="mb-0 h-100 align-items-center d-flex"
-                                            value="I"
-                                            id="dataset-type2"
-                                            inputProps={{ custom: true, label: 'IP', checked: editData.BennedType === 'I' ? true : false }}
-                                            onChange={(e) => handleChangeValue(e)}
-                                            name="BennedType"
-                                        />
-                                    </Col>
-                                </>
-                            );
-                        } else if (ModalUsage.usage && ModalUsage.usage === `U`) {
-                            return (
-                                <>
-                                    <Col className="p-0">
-                                        <MokaInputLabel
-                                            label="차단 ID"
-                                            className="mb-0 h-100"
-                                            id="tagValues"
-                                            name="tagValues"
-                                            value={editData.tagValues}
-                                            onChange={(e) => handleChangeValue(e)}
-                                        />
-                                    </Col>
-                                </>
-                            );
-                        } else if (ModalUsage.usage && ModalUsage.usage === `I`) {
-                            return (
-                                <>
-                                    <Col className="p-0">
-                                        <MokaInputLabel
-                                            label="차단 IP"
-                                            className="mb-0 h-100"
-                                            id="tagValues"
-                                            name="tagValues"
-                                            value={editData.tagValues}
-                                            onChange={(e) => handleChangeValue(e)}
-                                        />
-                                    </Col>
-                                </>
-                            );
-                        } else if (ModalUsage.usage && ModalUsage.usage === `W`) {
-                            return (
-                                <>
-                                    <Col className="p-0">
-                                        <MokaInputLabel
-                                            label="금지어"
-                                            className="mb-0 h-100"
-                                            id="tagValues"
-                                            name="tagValues"
-                                            value={editData.tagValues}
-                                            onChange={(e) => handleChangeValue(e)}
-                                        />
-                                    </Col>
-                                </>
-                            );
-                        }
-                    })()}
+                <Form.Row className="mb-2 align-items-center">
+                    {ModalUsage.usage && ModalUsage.usage === `comment` && (
+                        <>
+                            <Col xs={3} className="p-0 mr-2">
+                                <MokaInputLabel
+                                    as="radio"
+                                    label="차단 종류"
+                                    value="U"
+                                    id="dataset-type1"
+                                    inputProps={{ custom: true, label: 'ID', checked: editData.BannedType === 'U' ? true : false }}
+                                    onChange={handleChangeValue}
+                                    name="BannedType"
+                                />
+                            </Col>
+                            <Col xs={1} className="p-0">
+                                <MokaInput
+                                    as="radio"
+                                    value="I"
+                                    id="dataset-type2"
+                                    inputProps={{ custom: true, label: 'IP', checked: editData.BannedType === 'I' ? true : false }}
+                                    onChange={handleChangeValue}
+                                    name="BannedType"
+                                />
+                            </Col>
+                        </>
+                    )}
+                    {ModalUsage.usage && ModalUsage.usage === `U` && (
+                        <>
+                            <Col className="p-0">
+                                <MokaInputLabel label="차단 ID" id="tagValues" name="tagValues" value={editData.tagValues} onChange={handleChangeValue} />
+                            </Col>
+                        </>
+                    )}
+                    {ModalUsage.usage && ModalUsage.usage === `I` && (
+                        <>
+                            <Col className="p-0">
+                                <MokaInputLabel label="차단 IP" id="tagValues" name="tagValues" value={editData.tagValues} onChange={handleChangeValue} />
+                            </Col>
+                        </>
+                    )}
+                    {ModalUsage.usage && ModalUsage.usage === `W` && (
+                        <>
+                            <Col className="p-0">
+                                <MokaInputLabel label="금지어" id="tagValues" name="tagValues" value={editData.tagValues} onChange={handleChangeValue} />
+                            </Col>
+                        </>
+                    )}
                 </Form.Row>
-
                 <Form.Row className="mb-2">
                     <Col xs={12} className="p-0">
-                        <MokaInputLabel as="select" label="차단사유" name="tagDiv" id="tagDiv" value={editData.tagDiv} onChange={(e) => handleChangeValue(e)}>
+                        <MokaInputLabel as="select" label="차단사유" name="tagDiv" id="tagDiv" value={editData.tagDiv} onChange={handleChangeValue}>
                             {COMMENT_TAG_DIV_CODE.map((item, index) => (
                                 <option key={index} value={item.dtlCd}>
                                     {item.cdNm}
@@ -330,29 +299,27 @@ const CommentBlockModal = (props) => {
                         </MokaInputLabel>
                     </Col>
                 </Form.Row>
-                <Form.Row className="mb-2">
+                <Form.Row>
                     <Col xs={12} className="p-0">
                         <MokaInputLabel
                             as="textarea"
                             label="차단 내용"
-                            className="mb-2"
                             inputClassName="resize-none"
                             inputProps={{ rows: 6 }}
                             id="tagDesc"
                             name="tagDesc"
                             value={editData.tagDesc}
-                            onChange={(e) => handleChangeValue(e)}
+                            onChange={handleChangeValue}
                         />
                     </Col>
                 </Form.Row>
             </Form>
             {confirmModalUsage && (
-                <BenneConfirmModal
+                <BannedConfirmModal
                     ModalUsage={confirmModalUsage}
                     show={confirmModal}
                     onHide={(e) => {
                         ConfirmModalResult(e);
-                        // onHide();
                         setConfirmModal(false);
                     }}
                 />

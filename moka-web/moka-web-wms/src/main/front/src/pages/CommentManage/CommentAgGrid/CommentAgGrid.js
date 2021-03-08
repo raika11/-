@@ -7,9 +7,8 @@ import { localeText } from './CommentAgGridColumns';
 import { DeleteButtonRenderer, DateItemRenderer, UserInfoRenderer, BanneButtonRenderer, HistoryButtonRenderer, CommentItemRenderer } from './CommentGridRenderer';
 
 /**
- * 댓글 AgGrid 목록
- * 기존 그리드와 다르게 높이를 늘렸다 줄였다 해야해서
- * ag그리드를 이용.
+ * 댓글 관리 > 댓글 목록 AgGrid
+ * 기존 그리드와 다르게 가변 행높이 적용
  */
 const CommentAgGrid = (props) => {
     const {

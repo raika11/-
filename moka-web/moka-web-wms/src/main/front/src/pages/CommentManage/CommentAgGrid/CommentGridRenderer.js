@@ -5,7 +5,7 @@ import { MokaIcon, MokaOverlayTooltipButton } from '@components';
 import Dropdown from 'react-bootstrap/Dropdown';
 import toast, { messageBox } from '@utils/toastUtil';
 
-import { CommentActionModal, BenneHistoryModal } from '@pages/CommentManage/CommentModal';
+import { CommentActionModal, BannedHistoryModal } from '@pages/CommentManage/CommentModal';
 import { getCommentsBlocks, blocksUsed, clearBlocksList } from '@store/commentManage';
 import { useDispatch } from 'react-redux';
 
@@ -214,7 +214,7 @@ export const HistoryButtonRenderer = ({ value }) => {
         <div>
             <MokaIcon iconName="fal-history" onClick={() => handleClickHistoryModal()} />
 
-            <BenneHistoryModal
+            <BannedHistoryModal
                 Element={value}
                 show={historyState}
                 onHide={() => {

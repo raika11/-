@@ -4,18 +4,15 @@ import { Switch, Route } from 'react-router-dom';
 import { MokaLoader } from '@components';
 import { Helmet } from 'react-helmet';
 import { clearStore, getInitData } from '@store/commentManage';
-import clsx from 'clsx';
 import { Col, Row } from 'react-bootstrap';
-import useBreakpoint from '@hooks/useBreakpoint';
 import Container from 'react-bootstrap/Container';
 
 const CommentList = React.lazy(() => import('./CommentLIst'));
 
 /**
- * 댓글 관리
+ * 댓글 관리 > 댓글 목록
  */
-const Comment = ({ match }) => {
-    const matchPoints = useBreakpoint();
+const Comment = ({ match, displayName }) => {
     const dispatch = useDispatch();
     const matchPath = useRef(null);
 
@@ -42,8 +39,8 @@ const Comment = ({ match }) => {
         <Container className="p-0 position-relative" fluid>
             <Row className="m-0">
                 <Helmet>
-                    <title>댓글 관리</title>
-                    <meta name="description" content="댓글 관리 페이지 입니다." />
+                    <title>{displayName}</title>
+                    <meta name="description" content={`${displayName} 페이지입니다.`} />
                     <meta name="robots" content="noindex" />
                 </Helmet>
 
@@ -53,7 +50,7 @@ const Comment = ({ match }) => {
                         path={[`${match.path}`, `${match.path}/:commentSeq`]}
                         exact
                         render={() => (
-                            <Col sm={12} md={12} className={clsx('p-0', { 'pr-gutter': matchPoints.md || matchPoints.lg })}>
+                            <Col sm={12} md={12} className="p-0">
                                 <Suspense fallback={<MokaLoader />}>
                                     <CommentList matchPath={matchPath.current} />
                                 </Suspense>
